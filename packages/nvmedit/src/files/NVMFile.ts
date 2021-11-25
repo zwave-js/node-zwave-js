@@ -67,7 +67,6 @@ export class NVMFile {
 		return this.object;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public toJSON(): Record<string, any> {
 		return {
 			"file ID": `0x${this.fileId.toString(16)} (${

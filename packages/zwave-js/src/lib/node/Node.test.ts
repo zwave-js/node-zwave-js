@@ -4,7 +4,9 @@ import {
 	CommandClasses,
 	CommandClassInfo,
 	getCCName,
+	NodeType,
 	nonApplicationCCs,
+	ProtocolVersion,
 	topologicalSort,
 	ValueDB,
 	ValueID,
@@ -36,13 +38,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import {
-	InterviewStage,
-	NodeStatus,
-	NodeType,
-	ProtocolVersion,
-	ZWaveNodeEvents,
-} from "./Types";
+import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {

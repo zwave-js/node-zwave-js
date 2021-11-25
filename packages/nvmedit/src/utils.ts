@@ -1,6 +1,6 @@
 import { NVMFile } from "./files/NVMFile";
-import { type NVMObject, ObjectType, FragmentType } from "./object";
-import { type NVMPage, PageStatus } from "./page";
+import { FragmentType, NVMObject, ObjectType } from "./object";
+import { NVMPage, PageStatus } from "./page";
 
 /** Counts the number of unset bits in the given word */
 export function computeBergerCode(word: number, numBits: number = 32): number {
@@ -95,8 +95,10 @@ export function dumpObject(obj: NVMObject, json: boolean = false): void {
 	console.log(`${prefix}  fragment type: ${FragmentType[obj.fragmentType]}`);
 	if (obj.data) {
 		console.log(
-			`${prefix}  data: ${obj.data.toString("hex")} (${obj.data.length} bytes)`,
+			`${prefix}  data: ${obj.data.toString("hex")} (${
+				obj.data.length
+			} bytes)`,
 		);
 	}
-		console.log();
+	console.log();
 }

@@ -3714,7 +3714,6 @@ protocol version:      ${this._protocolVersion}`;
 		};
 		tryParse("isListening", "boolean");
 		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		if ((this._isFrequentListening as any) === true) {
 			// fallback for legacy cache files
 			this._isFrequentListening = "1000ms";
