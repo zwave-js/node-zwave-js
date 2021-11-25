@@ -860,7 +860,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 					valueId,
 					value,
 					!!this.driver.options.emitValueUpdateAfterSetValue
-						? undefined
+						? { source: "driver" }
 						: { noEvent: true },
 				);
 			}
