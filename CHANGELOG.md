@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Don't cancel scheduled verification polls for `"value updated"` events caused by the `emitValueUpdateAfterSetValue` option
+
 ## 8.7.7 (2021-11-18)
 ### Bugfixes
 * Add driver `emitValueUpdateAfterSetValue` option to emit `"value updated"` events after `setValue`
