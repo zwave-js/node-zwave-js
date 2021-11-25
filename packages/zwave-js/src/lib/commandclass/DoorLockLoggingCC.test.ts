@@ -7,8 +7,8 @@ import {
 	DoorLockLoggingCC,
 	DoorLockLoggingCCRecordGet,
 	DoorLockLoggingCCRecordReport,
-	DoorLockLoggingCCRecordsSupportedGet,
-	DoorLockLoggingCCRecordsSupportedReport,
+	DoorLockLoggingCCRecordsCountGet,
+	DoorLockLoggingCCRecordsCountReport,
 	DoorLockLoggingCommand,
 	EventType,
 } from "./DoorLockLoggingCC";
@@ -25,31 +25,31 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/DoorLockLoggingCC => ", () => {
-	it("the RecordsSupportedGet command should serialize correctly", () => {
-		const cc = new DoorLockLoggingCCRecordsSupportedGet(fakeDriver, {
+	it("the RecordsCountGet command should serialize correctly", () => {
+		const cc = new DoorLockLoggingCCRecordsCountGet(fakeDriver, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
 			Buffer.from([
-				DoorLockLoggingCommand.RecordsSupportedGet, // CC Command
+				DoorLockLoggingCommand.RecordsCountGet, // CC Command
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
 	});
 
-	it("the RecordsSupportedReport command should be deserialized correctly", () => {
+	it("the RecordsCountReport command should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
-				DoorLockLoggingCommand.RecordsSupportedReport, // CC Command
+				DoorLockLoggingCommand.RecordsCountReport, // CC Command
 				0x14, // max records supported (20)
 			]),
 		);
-		const cc = new DoorLockLoggingCCRecordsSupportedReport(fakeDriver, {
+		const cc = new DoorLockLoggingCCRecordsCountReport(fakeDriver, {
 			nodeId: 1,
 			data: ccData,
 		});
 
-		expect(cc.supportedRecordsNumber).toBe(20);
+		expect(cc.recordsCount).toBe(20);
 	});
 
 	it("the RecordGet command should serialize correctly", () => {
@@ -91,7 +91,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 		});
 
 		expect(cc.recordTimestamp).toBe(
-			new Date(1989, 12, 27, 10, 40, 30).toISOString(),
+			new Date(1989, 12 - 1, 27, 10, 40, 30).toISOString(),
 		);
 	});
 
@@ -117,7 +117,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 			node.destroy();
 		});
 
-		it("should send a DoorLockLoggingCC.RecordsSupportedGet", async () => {
+		it("should send a DoorLockLoggingCC.RecordsCountGet", async () => {
 			node.addCC(CommandClasses["Door Lock Logging"], {
 				isSupported: true,
 			});
@@ -127,7 +127,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 			expect(fakeDriver.sendMessage).toBeCalled();
 
 			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
-				cc: DoorLockLoggingCCRecordsSupportedGet,
+				cc: DoorLockLoggingCCRecordsCountGet,
 				nodeId: node.id,
 			});
 		});

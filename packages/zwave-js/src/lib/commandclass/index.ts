@@ -153,8 +153,8 @@ export {
 	DoorLockLoggingCC,
 	DoorLockLoggingCCRecordGet,
 	DoorLockLoggingCCRecordReport,
-	DoorLockLoggingCCRecordsSupportedGet,
-	DoorLockLoggingCCRecordsSupportedReport,
+	DoorLockLoggingCCRecordsCountGet,
+	DoorLockLoggingCCRecordsCountReport,
 	EventType,
 	RecordStatus,
 } from "./DoorLockLoggingCC";

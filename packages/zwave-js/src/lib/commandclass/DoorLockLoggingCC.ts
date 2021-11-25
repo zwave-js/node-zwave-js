@@ -44,7 +44,7 @@ interface DateSegments {
 function segmentsToDate(segments: DateSegments): Date {
 	return new Date(
 		segments.year,
-		segments.month,
+		segments.month - 1, // JS months are 0-based.
 		segments.day,
 		segments.hour,
 		segments.minute,
@@ -54,8 +54,8 @@ function segmentsToDate(segments: DateSegments): Date {
 
 // All the supported commands
 export enum DoorLockLoggingCommand {
-	RecordsSupportedGet = 0x01,
-	RecordsSupportedReport = 0x02,
+	RecordsCountGet = 0x01,
+	RecordsCountReport = 0x02,
 	RecordGet = 0x03,
 	RecordReport = 0x04,
 }
@@ -66,8 +66,8 @@ export enum EventType {
 	UnlockCode = 0x02,
 	LockButton = 0x03,
 	UnlockButton = 0x04,
-	LockCodeOOSchedule = 0x05,
-	UnlockCodeOOSchedule = 0x06,
+	LockCodeOutOfSchedule = 0x05,
+	UnlockCodeOutOfSchedule = 0x06,
 	IllegalCode = 0x07,
 	LockManual = 0x08,
 	UnlockManual = 0x09,
@@ -77,8 +77,8 @@ export enum EventType {
 	UnlockRemoteCode = 0x0d,
 	LockRemote = 0x0e,
 	UnlockRemote = 0x0f,
-	LockRemoteCodeOOSchedule = 0x10,
-	UnlockRemoteCodeOOSchedule = 0x11,
+	LockRemoteCodeOutOfSchedule = 0x10,
+	UnlockRemoteCodeOutOfSchedule = 0x11,
 	RemoteIllegalCode = 0x12,
 	LockManual2 = 0x13,
 	UnlockManual2 = 0x14,
@@ -101,21 +101,21 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 	UnlockCode: "Unlocked via Access Code",
 	LockButton: "Locked via Lock Button",
 	UnlockButton: "Unlocked via Unlock Button",
-	LockCodeOOSchedule: "Lock Attempt via Out of Schedule Access Code",
-	UnlockCodeOOSchedule: "Unlock Attempt via Out of Schedule Access Code",
+	LockCodeOutOfSchedule: "Out of Schedule Lock Attempt via Access Code",
+	UnlockCodeOutOfSchedule: "Out of Schedule Unlock Attempt via Access Code",
 	IllegalCode: "Illegal Access Code Entered",
 	LockManual: "Manually Locked",
 	UnlockManual: "Manually Unlocked",
 	LockAuto: "Auto Locked",
 	UnlockAuto: "Auto Unlocked",
-	LockRemoteCode: "Locked via Remote Out of Schedule Access Code",
-	UnlockRemoteCode: "Unlocked via Remote Out of Schedule Access Code",
+	LockRemoteCode: "Locked via Remote Access Code",
+	UnlockRemoteCode: "Unlocked via Remote Access Code",
 	LockRemote: "Locked via Remote",
 	UnlockRemote: "Unlocked via Remote",
-	LockRemoteCodeOOSchedule:
-		"Lock Attempt via Remote Out of Schedule Access Code",
-	UnlockRemoteCodeOOSchedule:
-		"Unlock Attempt via Remote Out of Schedule Access Code",
+	LockRemoteCodeOutOfSchedule:
+		"Out of Schedule Lock Attempt via Remote Access Code",
+	UnlockRemoteCodeOutOfSchedule:
+		"Out of Schedule Unlock Attempt via Remote Access Code",
 	RemoteIllegalCode: "Illegal Remote Access Code",
 	LockManual2: "Manually Locked (2)",
 	UnlockManual2: "Manually Unlocked (2)",
@@ -147,17 +147,17 @@ export interface Record {
 // @publicAPI
 export enum RecordStatus {
 	Empty = 0x00,
-	HoldsLegalData = 0xfe,
+	HoldsLegalData = 0x01,
 }
 
 /** Returns the ValueID used to store how many Logging Records are supported */
-export function getDoorLockLoggingRecordsSupportedValueID(
+export function getDoorLockLoggingRecordsCountValueID(
 	endpoint: number,
 ): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock Logging"],
 		endpoint,
-		property: "recordsSupported",
+		property: "recordsCount",
 	};
 }
 
@@ -203,7 +203,7 @@ export function getDoorLockLoggingRecordUserCodeID(endpoint: number): ValueID {
 
 function setRecordMetadata(
 	this: DoorLockLoggingCC,
-	supportedRecordsNumber: number | undefined,
+	recordsCount: number | undefined,
 	userCode?: string | Buffer,
 ) {
 	const valueDB = this.getValueDB();
@@ -228,57 +228,22 @@ function setRecordMetadata(
 		});
 	}
 
-	const supportedEventTypes = [
-		EventType.LockCode,
-		EventType.UnlockCode,
-		EventType.LockButton,
-		EventType.UnlockButton,
-		EventType.LockCodeOOSchedule,
-		EventType.UnlockCodeOOSchedule,
-		EventType.IllegalCode,
-		EventType.LockManual,
-		EventType.UnlockManual,
-		EventType.LockAuto,
-		EventType.UnlockAuto,
-		EventType.LockRemoteCode,
-		EventType.UnlockRemoteCode,
-		EventType.LockRemote,
-		EventType.UnlockRemote,
-		EventType.LockRemoteCodeOOSchedule,
-		EventType.UnlockRemoteCodeOOSchedule,
-		EventType.RemoteIllegalCode,
-		EventType.LockManual2,
-		EventType.UnlockManual2,
-		EventType.LockSecured,
-		EventType.LockUnsecured,
-		EventType.UserCodeAdded,
-		EventType.UserCodeDeleted,
-		EventType.AllUserCodesDeleted,
-		EventType.MasterCodeChanged,
-		EventType.UserCodeChanged,
-		EventType.LockReset,
-		EventType.ConfigurationChanged,
-		EventType.LowBattery,
-		EventType.NewBattery,
-		EventType.Unknown,
-	];
-
 	if (!valueDB.hasMetadata(recordEventTypeID)) {
 		valueDB.setMetadata(recordEventTypeID, {
 			...ValueMetadata.ReadOnlyString,
 			label: `record event type`,
 			description: "Event Type for latest logging record",
-			states: enumValuesToMetadataStates(EventType, supportedEventTypes),
+			states: enumValuesToMetadataStates(EventType),
 		});
 	}
 	if (
 		!valueDB.hasMetadata(recordNumberID) &&
-		typeof supportedRecordsNumber != "undefined"
+		typeof recordsCount != "undefined"
 	) {
 		valueDB.setMetadata(recordNumberID, {
 			...ValueMetadata.ReadOnlyNumber,
 			min: 1,
-			max: supportedRecordsNumber,
+			max: recordsCount,
 			label: `record number`,
 			description: "Record Number for latest logging record",
 		});
@@ -309,8 +274,8 @@ function setRecordMetadata(
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
 		switch (cmd) {
-			case DoorLockLoggingCommand.RecordsSupportedGet:
-			case DoorLockLoggingCommand.RecordsSupportedReport:
+			case DoorLockLoggingCommand.RecordsCountGet:
+			case DoorLockLoggingCommand.RecordsCountReport:
 			case DoorLockLoggingCommand.RecordGet:
 			case DoorLockLoggingCommand.RecordReport:
 				return true;
@@ -322,8 +287,8 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		property,
 	}): Promise<unknown> => {
 		switch (property) {
-			case "supportedRecordsNumber":
-				return (await this.getSupportedRecordsNumber())?.[property];
+			case "recordsCount":
+				return (await this.getRecordsCount())?.[property];
 			case "record":
 				// Fetches latest record by default
 				return (await this.getRecord(LATEST_RECORD_NUMBER_KEY))?.[
@@ -334,23 +299,23 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async getSupportedRecordsNumber(): Promise<any> {
+	public async getRecordsCount(): Promise<any> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
-			DoorLockLoggingCommand.RecordsSupportedGet,
+			DoorLockLoggingCommand.RecordsCountGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordsSupportedGet(this.driver, {
+		const cc = new DoorLockLoggingCCRecordsCountGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		const response =
-			await this.driver.sendCommand<DoorLockLoggingCCRecordsSupportedReport>(
+			await this.driver.sendCommand<DoorLockLoggingCCRecordsCountReport>(
 				cc,
 				this.commandOptions,
 			);
 		if (response) {
-			return pick(response, ["supportedRecordsNumber"]);
+			return pick(response, ["recordsCount"]);
 		}
 	}
 
@@ -407,29 +372,29 @@ export class DoorLockLoggingCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: "querying supported records number...",
+			message: "querying records count...",
 			direction: "outbound",
 		});
-		const supportedRecordsNumber = await api.getSupportedRecordsNumber();
+		const recordsCount = await api.getRecordsCount();
 
-		if (!supportedRecordsNumber) {
+		if (!recordsCount) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
-					"Door Lock Logging supported records number query timed out, skipping interview...",
+					"Door Lock Logging records count query timed out, skipping interview...",
 				level: "warn",
 			});
 			return;
 		}
 
-		const supportedNumberLogMessage = `received response for supported records number: ${supportedRecordsNumber}`;
+		const recordsCountLogMessage = `received response for records count: ${recordsCount}`;
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: supportedNumberLogMessage,
+			message: recordsCountLogMessage,
 			direction: "inbound",
 		});
 
-		setRecordMetadata.call(this, supportedRecordsNumber);
+		setRecordMetadata.call(this, recordsCount);
 
 		// Just retrieve the lastest record
 		const record = await api.getRecord(LATEST_RECORD_NUMBER_KEY);
@@ -455,8 +420,8 @@ export class DoorLockLoggingCC extends CommandClass {
 	}
 }
 
-@CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
-export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
+@CCCommand(DoorLockLoggingCommand.RecordsCountReport)
+export class DoorLockLoggingCCRecordsCountReport extends DoorLockLoggingCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -464,35 +429,24 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 
-		this.supportedRecordsNumber = this.payload[0];
+		this.recordsCount = this.payload[0];
 		this.persistValues();
 	}
 
-	@ccValue()
+	@ccValue({ internal: true })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Max logging records stored",
 	})
-	public readonly supportedRecordsNumber: number;
+	public readonly recordsCount: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported records number": this.supportedRecordsNumber,
+				"records count": this.recordsCount,
 			},
 		};
-	}
-
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
-
-		this.getValueDB().setValue(
-			getDoorLockLoggingRecordsSupportedValueID(this.endpointIndex),
-			this.supportedRecordsNumber,
-		);
-
-		return true;
 	}
 }
 
@@ -500,9 +454,9 @@ const convertEventTypeToLabel = (eventType: EventType): string => {
 	return eventTypeLabel[EventType[eventType] as keyof typeof EventType];
 };
 
-@CCCommand(DoorLockLoggingCommand.RecordsSupportedGet)
-@expectedCCResponse(DoorLockLoggingCCRecordsSupportedReport)
-export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
+@CCCommand(DoorLockLoggingCommand.RecordsCountGet)
+@expectedCCResponse(DoorLockLoggingCCRecordsCountReport)
+export class DoorLockLoggingCCRecordsCountGet extends DoorLockLoggingCC {}
 
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
