@@ -1,9 +1,8 @@
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
-import { nvmObjectsToJSON } from "./convert";
+import { nvmToJSON } from "./convert";
 import "./index";
-import { parseNVM } from "./nvm";
 
 void yargs
 	.env("NVMEDIT")
@@ -37,11 +36,7 @@ void yargs
 			}),
 		async (argv) => {
 			const buffer = await fs.readFile(argv.in);
-			const nvm = parseNVM(buffer, argv.verbose);
-			const json = nvmObjectsToJSON(
-				nvm.applicationObjects,
-				nvm.protocolObjects,
-			);
+			const json = nvmToJSON(buffer, argv.verbose);
 			await fs.writeJSON(argv.out, json, { spaces: "\t" });
 			console.error(`NVM written to ${argv.out}`);
 

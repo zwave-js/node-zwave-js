@@ -34,4 +34,6 @@ module.exports = {
 	transform: {
 		"^.+\\.tsx?$": "babel-jest",
 	},
+	// Place snapshots next to test files
+	snapshotResolver: "<rootDir>/test/jest.snapshotResolver.js",
 };

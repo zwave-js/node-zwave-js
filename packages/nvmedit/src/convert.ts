@@ -59,6 +59,7 @@ import {
 	ProtocolVersionFile,
 	ProtocolVersionFileID,
 } from "./files/VersionFiles";
+import { parseNVM } from "./nvm";
 import type { NVMObject } from "./object";
 import { mapToObject } from "./utils";
 
@@ -394,4 +395,10 @@ export function nvmObjectsToJSON(
 	};
 
 	return ret;
+}
+
+/** Reads an NVM buffer and returns its JSON representation */
+export function nvmToJSON(buffer: Buffer, debugLogs: boolean = false): NVMJSON {
+	const nvm = parseNVM(buffer, debugLogs);
+	return nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
 }

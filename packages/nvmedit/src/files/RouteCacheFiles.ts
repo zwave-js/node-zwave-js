@@ -1,6 +1,8 @@
 import {
+	FLiRS,
 	MAX_NODES,
 	MAX_REPEATERS,
+	protocolDataRateMask,
 	RouteProtocolDataRate,
 } from "@zwave-js/core";
 import type { NVMObject } from "../object";
@@ -16,7 +18,13 @@ export const ROUTECACHES_PER_FILE_V1 = 8;
 
 const emptyRouteCache = Buffer.alloc(2 * (MAX_REPEATERS + 1), 0xff);
 
+enum Beaming {
+	"1000ms" = 0x40,
+	"250ms" = 0x20,
+}
+
 export interface Route {
+	beaming: FLiRS;
 	protocolRate: RouteProtocolDataRate;
 	repeaterNodeIDs?: number[];
 }
@@ -28,8 +36,10 @@ export interface RouteCache {
 }
 
 function parseRoute(buffer: Buffer, offset: number): Route {
+	const routeConf = buffer[offset + MAX_REPEATERS];
 	const ret: Route = {
-		protocolRate: buffer[offset + MAX_REPEATERS],
+		beaming: (Beaming[routeConf & 0x60] ?? false) as FLiRS,
+		protocolRate: routeConf & protocolDataRateMask,
 		repeaterNodeIDs: [
 			...buffer.slice(offset, offset + MAX_REPEATERS),
 		].filter((id) => id !== 0),

@@ -18,3 +18,5 @@ export enum RouteProtocolDataRate {
 	ZWave_100k = 0x03,
 	LongRange_100k = 0x04,
 }
+
+export const protocolDataRateMask = 0b111;
