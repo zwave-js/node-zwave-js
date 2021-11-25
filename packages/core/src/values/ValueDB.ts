@@ -21,6 +21,11 @@ export interface TranslatedValueID extends ValueID {
 export interface ValueUpdatedArgs extends ValueID {
 	prevValue: unknown;
 	newValue: unknown;
+	/**
+	 * Whether this value update was caused by the driver itself or the node.
+	 * If not set, it is assumed that the value update was caused by the node.
+	 */
+	source?: "driver" | "node";
 }
 
 export interface ValueAddedArgs extends ValueID {
@@ -131,6 +136,8 @@ export interface SetValueOptions {
 	 * When this is `false`, the value will not be stored and a `value notification` event will be emitted instead (implies `noEvent: false`).
 	 */
 	stateful?: boolean;
+	/** Allows defining the source of a value update */
+	source?: ValueUpdatedArgs["source"];
 }
 
 /**
@@ -225,6 +232,8 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			if (this._db.has(dbKey)) {
 				event = "value updated";
 				(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
+				if (options.source)
+					(cbArg as ValueUpdatedArgs).source = options.source;
 			} else {
 				event = "value added";
 			}
