@@ -4,6 +4,48 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* The state machine handling outgoing messages has been rewritten from scratch, eliminating hard-coded message specific logic and adding the ability to handle sequenced messages. Things like requesting Security S0/S2 nonces and waiting for responses to GET requests now happens outside the state machine.
+* When a Z-Wave controller supports emitting transmit status reports for sent commands, these are now parsed, enabling further evaluation in future releases.
+* Implemented methods to check the health of routes between a node and the controller or other nodes.
+* Added an option to `refreshInfo` that allows resetting the cached info about granted security classes.
+* Added a driver option to emit `"value update"` events after `setValue`
+
+### Bugfixes
+* Before destroying the driver, remember that soft reset is not supported when a stick fails to re-connect
+* Don't handle SIGINT in the driver, let applications take care of it
+* Correctly reset inclusion state after soft reset
+* Assert that node exists before checking security class
+* Store `controllerNodeId` after configuring it during the interview
+* Add Vision Gen5 USB Stick to soft reset blacklist
+* Fixed the JSDoc comments for the `grantSecurityClasses` user callback
+* The `commandsDroppedTX` node statistics are now updated when an outgoing command could not be sent to a node
+
+### Config file changes
+* Disable Basic CC mapping for HeatIt TF016
+* Add REHAU AG RE.GUARD
+* Add device Inteset WR01Z
+* Update Zooz ZEN15 Config to FW 1.6+
+* Add manufacturer Inteset (0x039a)
+* Add fingerprint 0x0303:0x4000 for Fibaro FRG223
+* Add parameter 17 to Zooz ZEN73 (FW 10.0+)
+* Add Ecolink TBZ500 Z-Wave Smart Thermostat
+* Change some parameter units to seconds for Minoston MP20Z
+* Update Spectrum Brands 892 to match style guide / 893 file format
+* Add Spectrum Brands 893 deadbolt
+* Treat Basic Set as event for Merten single switch
+
+### Changes under the hood
+* Upgraded `yarn` to v3.1 and switched from PnP to the new `pnpm` linker
+* Migrate from project-snippets extension to VSCode-native snippets
+* Upgrade to TypeScript 4.5
+* Added documentation for serial-over-tcp connections
+
+## 8.7.7 (2021-11-18)
+### Bugfixes
+* Add driver `emitValueUpdateAfterSetValue` option to emit `"value updated"` events after `setValue`
+
 ## 8.7.6 (2021-11-15)
 ### Bugfixes
 * Update thermostat setpoint metadata when unit changes between reports
