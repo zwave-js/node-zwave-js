@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Don't cancel scheduled verification polls for `"value updated"` events caused by the `emitValueUpdateAfterSetValue` option
+
 ## 8.8.0 (2021-11-25)
 ### Features
 * The state machine handling outgoing messages has been rewritten from scratch, eliminating hard-coded message specific logic and adding the ability to handle sequenced messages. Things like requesting Security S0/S2 nonces and waiting for responses to GET requests now happens outside the state machine.
