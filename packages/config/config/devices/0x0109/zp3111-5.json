@@ -69,7 +69,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 180,
+			"defaultValue": 3,
 			"unsigned": true
 		},
 		{
