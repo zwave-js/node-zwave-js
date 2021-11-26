@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where the driver could get stuck in a loop sending a node to sleep
+
 ## 8.8.1 (2021-11-25)
 ### Bugfixes
 * Don't cancel scheduled verification polls for `"value updated"` events caused by the `emitValueUpdateAfterSetValue` option
