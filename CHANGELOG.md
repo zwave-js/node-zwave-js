@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.8.2 (2021-11-26)
 ### Bugfixes
 * Fixed an issue where the driver could get stuck in a loop sending a node to sleep
 
