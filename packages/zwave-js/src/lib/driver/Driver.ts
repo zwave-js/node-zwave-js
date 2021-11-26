@@ -2470,7 +2470,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			// The handler for the asleep status will move the messages to the wakeup queue
 
 			node.markAsAsleep();
-			return true;
+			return this.mayMoveToWakeupQueue(transaction);
 		} else {
 			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
 			this.controllerLog.logNode(node.id, errorMsg, "warn");
