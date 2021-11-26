@@ -65,7 +65,7 @@
 			"#": "5",
 			"label": "Trigger Interval",
 			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "seconds",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
