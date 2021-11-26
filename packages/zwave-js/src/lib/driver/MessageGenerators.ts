@@ -292,6 +292,11 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 		current: undefined,
 		self: undefined,
 		start: () => {
+			const resetGenerator = () => {
+				generator.current = undefined;
+				generator.self = undefined;
+			};
+
 			async function* gen() {
 				// Determine which message generator implemenation should be used
 				let implementation: MessageGeneratorImplementation =
@@ -339,6 +344,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 									generator.parent as any,
 								)
 							) {
+								resetGenerator();
 								return;
 							} else {
 								resultPromise.reject(
@@ -358,8 +364,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 				}
 
 				resultPromise.resolve(result as TResponse);
-				generator.current = undefined;
-				generator.self = undefined;
+				resetGenerator();
 				return;
 			}
 			generator.self = gen();
