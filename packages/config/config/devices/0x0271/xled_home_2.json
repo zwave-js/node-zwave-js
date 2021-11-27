@@ -132,9 +132,9 @@
 			"#": "16",
 			"label": "MOTION_ DISABLE",
 			"description": "Motion Off behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 2,
-			"maxValue": 209,
+			"valueSize": 0,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0
 		}
 	]
