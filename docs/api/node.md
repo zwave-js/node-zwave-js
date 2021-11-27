@@ -846,6 +846,30 @@ where
 
 The CCs that use this event bring specialized versions of the callback and arguments.
 
+#### `DoorLockLogging CC`
+
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_DoorLockLoggingCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_DoorLockLoggingCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Door Lock Logging"],
+	args: ZWaveNotificationCallbackArgs_DoorLockLoggingCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_DoorLockLoggingCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_DoorLockLoggingCC {
+	record: DoorLockLoggingRecord | undefined;
+}
+```
+
 #### `Entry Control CC`
 
 uses the following signature

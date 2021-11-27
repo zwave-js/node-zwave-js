@@ -90,9 +90,13 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 			data: ccData,
 		});
 
-		expect(cc.recordTimestamp).toBe(
+		expect(cc.record.eventType).toBe(1);
+		expect(cc.record.label).toBe("Locked via Access Code");
+		expect(cc.record.recordNumber).toBe(7);
+		expect(cc.record.timestamp).toBe(
 			new Date(1989, 12 - 1, 27, 10, 40, 30).toISOString(),
 		);
+		expect(cc.record.userId).toBe(1);
 	});
 
 	describe(`interview()`, () => {

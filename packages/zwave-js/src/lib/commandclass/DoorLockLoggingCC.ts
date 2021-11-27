@@ -1,10 +1,8 @@
 import {
 	CommandClasses,
-	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -12,6 +10,7 @@ import {
 import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -135,7 +134,7 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 
 const LATEST_RECORD_NUMBER_KEY = 0;
 
-export interface Record {
+export interface DoorLockLoggingRecord {
 	recordNumber: number;
 	timestamp: string | undefined;
 	eventType: EventType | undefined;
@@ -150,125 +149,23 @@ export enum RecordStatus {
 	HoldsLegalData = 0x01,
 }
 
-/** Returns the ValueID used to store how many Logging Records are supported */
-export function getDoorLockLoggingRecordsCountValueID(
-	endpoint: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordsCount",
-	};
+/**
+ * @publicAPI
+ * This is emitted when an record report is received
+ */
+export interface ZWaveNotificationCallbackArgs_DoorLockLoggingCC {
+	record: DoorLockLoggingRecord | undefined;
 }
 
-export function getDoorLockLoggingRecordEventTypeID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordEventType",
-	};
-}
-
-export function getDoorLockLoggingRecordNumberID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordNumber",
-	};
-}
-
-export function getDoorLockLoggingRecordTimestampID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordTimestamp",
-	};
-}
-
-export function getDoorLockLoggingRecordUserIDID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordUserID",
-	};
-}
-
-export function getDoorLockLoggingRecordUserCodeID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Door Lock Logging"],
-		endpoint,
-		property: "recordUserCode",
-	};
-}
-
-function setRecordMetadata(
-	this: DoorLockLoggingCC,
-	recordsCount: number | undefined,
-	userCode?: string | Buffer,
-) {
-	const valueDB = this.getValueDB();
-	const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
-		this.endpointIndex,
-	);
-	const recordNumberID = getDoorLockLoggingRecordNumberID(this.endpointIndex);
-	const recordTimestampID = getDoorLockLoggingRecordTimestampID(
-		this.endpointIndex,
-	);
-	const recordUserIDID = getDoorLockLoggingRecordUserIDID(this.endpointIndex);
-	const recordUserCodeID = getDoorLockLoggingRecordUserCodeID(
-		this.endpointIndex,
-	);
-
-	// Always create metadata if it does not exist
-	if (!valueDB.hasMetadata(recordTimestampID)) {
-		valueDB.setMetadata(recordTimestampID, {
-			...ValueMetadata.ReadOnlyString,
-			label: `record timestamp`,
-			description: "Timestamp for latest logging record",
-		});
-	}
-
-	if (!valueDB.hasMetadata(recordEventTypeID)) {
-		valueDB.setMetadata(recordEventTypeID, {
-			...ValueMetadata.ReadOnlyString,
-			label: `record event type`,
-			description: "Event Type for latest logging record",
-			states: enumValuesToMetadataStates(EventType),
-		});
-	}
-	if (
-		!valueDB.hasMetadata(recordNumberID) &&
-		typeof recordsCount != "undefined"
-	) {
-		valueDB.setMetadata(recordNumberID, {
-			...ValueMetadata.ReadOnlyNumber,
-			min: 1,
-			max: recordsCount,
-			label: `record number`,
-			description: "Record Number for latest logging record",
-		});
-	}
-	if (!valueDB.hasMetadata(recordUserIDID)) {
-		valueDB.setMetadata(recordUserIDID, {
-			...ValueMetadata.ReadOnlyNumber,
-			min: 0,
-			label: `record user id`,
-			description: "User ID for latest logging record",
-		});
-	}
-
-	const codeMetadata: ValueMetadata = {
-		...(Buffer.isBuffer(userCode)
-			? ValueMetadata.Buffer
-			: ValueMetadata.String),
-		minLength: 4,
-		maxLength: 10,
-		label: `record user code`,
-	};
-	if (valueDB.getMetadata(recordUserCodeID)?.type !== codeMetadata.type) {
-		valueDB.setMetadata(recordUserCodeID, codeMetadata);
-	}
-}
+/**
+ * @publicAPI
+ * Parameter types for the Door Lock Logging CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_DoorLockLoggingCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Door Lock Logging"],
+	args: ZWaveNotificationCallbackArgs_DoorLockLoggingCC,
+];
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
@@ -393,30 +290,6 @@ export class DoorLockLoggingCC extends CommandClass {
 			message: recordsCountLogMessage,
 			direction: "inbound",
 		});
-
-		setRecordMetadata.call(this, recordsCount);
-
-		// Just retrieve the lastest record
-		const record = await api.getRecord(LATEST_RECORD_NUMBER_KEY);
-
-		if (!record) {
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message:
-					"Door Lock Logging record query timed out, skipping interview...",
-				level: "warn",
-			});
-			return;
-		}
-
-		const recordLogMessage = `received response for latest record: ${JSON.stringify(
-			record,
-		)}`;
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: recordLogMessage,
-			direction: "inbound",
-		});
 	}
 }
 
@@ -467,14 +340,10 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 11);
 
-		this.recordNumber = this.payload[0];
-		this.recordStatus = this.payload[5] >>> 5;
-		if (this.recordStatus === RecordStatus.Empty) {
+		const recordNumber = this.payload[0];
+		const recordStatus = this.payload[5] >>> 5;
+		if (recordStatus === RecordStatus.Empty) {
 			this.record = undefined;
-			this.recordTimestamp = undefined;
-			this.recordEventType = undefined;
-			this.recordUserID = undefined;
-			this.recordUserCode = undefined;
 		} else {
 			const dateSegments = {
 				year: this.payload.readUInt16BE(1),
@@ -486,8 +355,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			};
 
 			const eventType = this.payload[8];
-			this.recordUserID = this.payload[9];
-
+			const recordUserID = this.payload[9];
 			// TODO: Parse User Code. The door lock I used does not provide
 			// 	     this data.
 			const userCode = undefined;
@@ -495,71 +363,20 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			this.record = {
 				eventType: eventType,
 				label: convertEventTypeToLabel(eventType),
-				recordNumber: this.recordNumber,
+				recordNumber,
 				timestamp: segmentsToDate(dateSegments).toISOString(),
-				userId: this.payload[9],
+				userId: recordUserID,
 				userCode,
 			};
-			this.recordTimestamp = segmentsToDate(dateSegments).toISOString();
-			this.recordEventType = eventType;
-			this.recordUserCode = undefined;
 		}
 
 		this.persistValues();
 	}
 
-	public readonly record: Record | undefined;
-	public readonly recordNumber: number;
-	public readonly recordStatus: RecordStatus;
-	public readonly recordTimestamp: string | undefined;
-	public readonly recordEventType: EventType | undefined;
-	public readonly recordUserID: number | undefined;
-	public readonly recordUserCode: string | Buffer | undefined;
-
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
-
-		const valueDB = this.getValueDB();
-		const recordEventTypeID = getDoorLockLoggingRecordEventTypeID(
-			this.endpointIndex,
-		);
-		const recordNumberID = getDoorLockLoggingRecordNumberID(
-			this.endpointIndex,
-		);
-		const recordTimestampID = getDoorLockLoggingRecordTimestampID(
-			this.endpointIndex,
-		);
-		const recordUserIDID = getDoorLockLoggingRecordUserIDID(
-			this.endpointIndex,
-		);
-		const recordUserCodeID = getDoorLockLoggingRecordUserCodeID(
-			this.endpointIndex,
-		);
-
-		// Check if Record is present
-		if (this.recordStatus == RecordStatus.Empty) {
-			// It is not, remove all values if any exist
-			valueDB.removeValue(recordEventTypeID);
-			valueDB.removeValue(recordNumberID);
-			valueDB.removeValue(recordTimestampID);
-			valueDB.removeValue(recordUserIDID);
-			valueDB.removeValue(recordUserCodeID);
-		} else {
-			// Always create metadata in case it does not exist
-			if (this.recordUserID && this.recordUserCode) {
-				setRecordMetadata.call(this, undefined, this.recordUserCode);
-			}
-			valueDB.setValue(recordEventTypeID, this.recordEventType);
-			valueDB.setValue(recordNumberID, this.recordNumber);
-			valueDB.setValue(recordTimestampID, this.recordTimestamp);
-			valueDB.setValue(recordUserIDID, this.recordUserID);
-			valueDB.setValue(recordUserCodeID, this.recordUserCode);
-		}
-		return true;
-	}
+	public readonly record: DoorLockLoggingRecord | undefined;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		if (this.recordStatus === RecordStatus.Empty) {
+		if (this.record == undefined) {
 			return {
 				...super.toLogEntry(),
 				message: {
