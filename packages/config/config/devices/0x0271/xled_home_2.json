@@ -147,86 +147,127 @@
 		},
 		{
 			"#": "10",
-			"label": "Basic CC Off Command: Turn Off Duration",
-			"description": "Light stays off until motion plus configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+			"label": "Z-Wave Off Command: Turn Off Duration",
+			"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Until motion, no timeout",
+					"label": "Turn off immediately, until motion detected",
 					"value": 0
 				},
 				{
-					"label": "Without waiting for motion, Duration of param 1 (Light Duration After Motion)",
+					"label": "Turn off immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Basic CC On Command: Turn On Duration",
-			"description": "Light stays on until motion plus configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+			"label": "Z-Wave On Command: Turn On Duration",
+			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"options": [
 				{
-					"label": "Until motion, no timeout",
+					"label": "Turn on, wait for motion immediately",
 					"value": 0
 				},
 				{
-					"label": "Without waiting for motion, Duration of param 1 (Light Duration After Motion)",
+					"label": "Turn on immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "Basic CC Off Command: Motion Wait Timeout",
-			"description": "On behaviour time over (timeout)",
+			"label": "Z-Wave On / Off-On: Motion Wait Time Limit",
+			"description": "How long to wait for motion after the configured duration before returning to normal operation to prevent staying on forever: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
+			"maxValue": 255,
+			"defaultValue": 204,
+			"options": [
+				{
+					"label": "Do not wait for motion",
+					"value": 0
+				},
+				{
+					"label": "Wait for motion indefinitely",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "13",
-			"label": "ON_OFF_ BEHAVIOUR",
-			"description": "Sequence On-Off behaviour (timeout)",
+			"label": "Z-Wave On-Off Sequence: Turn Off Duration",
+			"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
+			"maxValue": 255,
+			"defaultValue": 204,
+			"options": [
+				{
+					"label": "Immediately, until motion detected",
+					"value": 0
+				},
+				{
+					"label": "Ignore sequence, treat like off command",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "14",
-			"label": "OFF_ON_ BEHAVIOUR",
-			"description": "Sequence Off-On behaviour (timeout)",
+			"label": "Z-Wave Off-On Sequence: Turn On Duration",
+			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
+			"minValue": 2,
+			"maxValue": 255,
+			"defaultValue": 204,
+			"options": [
+				{
+					"label": "Turn on, wait for motion immediately",
+					"value": 0
+				},
+				{
+					"label": "Ignore sequence, treat like on command",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "15",
-			"label": "SEQUENCE_ TIME",
-			"description": "Sequence timing",
+			"label": "Sequence Timing",
+			"description": "Maximum delay between on-off or off-on commands to treat as a sequence",
 			"valueSize": 1,
+			"unit": "0.1 s",
 			"minValue": 10,
 			"maxValue": 50,
 			"defaultValue": 10
 		},
 		{
 			"#": "16",
-			"label": "MOTION_ DISABLE",
-			"description": "Motion Off behaviour (timeout)",
+			"label": "Motion Sensor Disable Timeout",
+			"description": "How long to disable internal motion sensor after Basic Set command to motion endpoint: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Ignore command, sensor permanently enabled",
+					"value": 0
+				},
+				{
+					"label": "Ignore command, sensor permanently disabled",
+					"value": 255
+				}
+			]
 		}
 	]
 }
