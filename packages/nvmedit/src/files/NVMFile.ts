@@ -3,8 +3,7 @@ import type { TypedClassDecorator } from "@zwave-js/shared";
 import { FragmentType, NVMObject, ObjectType } from "../object";
 
 export interface NVMFileBaseOptions {
-	fileId: number;
-	version: number;
+	fileId?: number;
 }
 export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
 	object: NVMObject;
@@ -25,13 +24,16 @@ export type NVMFileOptions =
 
 export class NVMFile {
 	public constructor(options: NVMFileOptions) {
-		this.fileId = options.fileId;
-		this.version = options.version;
 		if (gotDeserializationOptions(options)) {
+			this.fileId = options.object.key;
 			this.object = options.object;
 		} else {
+			const fileId = getNVMFileID(this);
+			if (typeof fileId === "number") {
+				this.fileId = fileId;
+			}
+
 			this.object = {
-				nvmVersion: options.version,
 				key: this.fileId,
 				fragmentType: FragmentType.None,
 				type: ObjectType.DataLarge,
@@ -41,10 +43,9 @@ export class NVMFile {
 		this.payload = this.object.data ?? Buffer.allocUnsafe(0);
 	}
 
-	public version: number;
 	protected object: NVMObject;
 	protected payload: Buffer;
-	public fileId: number;
+	public fileId: number = 0;
 
 	/**
 	 * Creates an instance of the CC that is serialized in the given buffer
@@ -54,7 +55,6 @@ export class NVMFile {
 		const Constructor = getNVMFileConstructor(object.key)!;
 		return new Constructor({
 			fileId: object.key,
-			version: object.nvmVersion,
 			object,
 		});
 	}
@@ -63,6 +63,10 @@ export class NVMFile {
 	 * Serializes this NVMFile into an NVM Object
 	 */
 	public serialize(): NVMObject {
+		if (!this.fileId) {
+			throw new Error("The NVM file ID must be set before serializing");
+		}
+		this.object.key = this.fileId;
 		this.object.data = this.payload;
 		return this.object;
 	}

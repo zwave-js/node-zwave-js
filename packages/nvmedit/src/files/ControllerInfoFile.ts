@@ -41,7 +41,7 @@ export class ControllerInfoFile extends NVMFile {
 		super(options);
 		if (gotDeserializationOptions(options)) {
 			this.homeId = this.payload.slice(0, 4);
-			if (options.version <= 1) {
+			if (this.payload.length === 13) {
 				this.nodeId = this.payload[4];
 				this.lastNodeId = this.payload[5];
 				this.staticControllerNodeId = this.payload[6];
@@ -51,7 +51,7 @@ export class ControllerInfoFile extends NVMFile {
 				this.maxNodeId = this.payload[10];
 				this.reservedId = this.payload[11];
 				this.systemState = this.payload[12];
-			} else if (options.version === 2) {
+			} else if (this.payload.length === 22) {
 				this.nodeId = this.payload.readUInt16LE(4);
 				this.staticControllerNodeId = this.payload.readUInt16LE(6);
 				this.lastNodeIdLR = this.payload.readUInt16LE(8);
@@ -66,7 +66,7 @@ export class ControllerInfoFile extends NVMFile {
 				this.primaryLongRangeChannelId = this.payload[20];
 				this.dcdcConfig = this.payload[21];
 			} else {
-				throw new Error(`Unsupported NVM version ${options.version}`);
+				throw new Error(`Unsupported payload length`);
 			}
 		} else {
 			this.homeId = options.homeId;
@@ -108,7 +108,39 @@ export class ControllerInfoFile extends NVMFile {
 	public dcdcConfig?: number;
 
 	public serialize(): NVMObject {
-		throw new Error("Not implemented");
+		if (this.lastNodeIdLR != undefined) {
+			this.payload = Buffer.allocUnsafe(22);
+			this.homeId.copy(this.payload, 0);
+			this.payload.writeUInt16LE(this.nodeId, 4);
+			this.payload.writeUInt16LE(this.staticControllerNodeId, 6);
+			this.payload.writeUInt16LE(this.lastNodeIdLR, 8);
+			this.payload[10] = this.lastNodeId;
+			this.payload[11] = this.sucLastIndex;
+			this.payload.writeUInt16LE(this.maxNodeIdLR!, 12);
+			this.payload[14] = this.maxNodeId;
+			this.payload[15] = this.controllerConfiguration;
+			this.payload.writeUInt16LE(this.reservedIdLR!, 16);
+			this.payload[18] = this.reservedId;
+			this.payload[19] = this.systemState;
+			this.payload[20] = this.primaryLongRangeChannelId!;
+			this.payload[21] = this.dcdcConfig!;
+		} else {
+			// V0
+			this.payload = Buffer.concat([
+				this.homeId,
+				Buffer.from([
+					this.nodeId,
+					this.lastNodeId,
+					this.staticControllerNodeId,
+					this.sucLastIndex,
+					this.controllerConfiguration,
+					this.sucAwarenessPushNeeded ?? 0,
+					this.maxNodeId,
+					this.reservedId,
+					this.systemState,
+				]),
+			]);
+		}
 		return super.serialize();
 	}
 

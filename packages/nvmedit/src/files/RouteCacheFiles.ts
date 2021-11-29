@@ -15,8 +15,10 @@ import {
 } from "./NVMFile";
 
 export const ROUTECACHES_PER_FILE_V1 = 8;
-
-const emptyRouteCache = Buffer.alloc(2 * (MAX_REPEATERS + 1), 0xff);
+const ROUTE_SIZE = MAX_REPEATERS + 1;
+const ROUTECACHE_SIZE = 2 * ROUTE_SIZE;
+const EMPTY_ROUTECACHE_FILL = 0xff;
+const emptyRouteCache = Buffer.alloc(ROUTECACHE_SIZE, EMPTY_ROUTECACHE_FILL);
 
 enum Beaming {
 	"1000ms" = 0x40,
@@ -46,6 +48,35 @@ function parseRoute(buffer: Buffer, offset: number): Route {
 	};
 	if (ret.repeaterNodeIDs![0] === 0xfe) delete ret.repeaterNodeIDs;
 	return ret;
+}
+
+function encodeRoute(route: Route): Buffer {
+	const ret = Buffer.alloc(ROUTE_SIZE, 0);
+	if (route.repeaterNodeIDs) {
+		for (
+			let i = 0;
+			i < MAX_REPEATERS && i < route.repeaterNodeIDs.length;
+			i++
+		) {
+			ret[i] = route.repeaterNodeIDs[i];
+		}
+	} else {
+		ret[0] = 0xfe;
+	}
+	let routeConf = 0;
+	if (route.beaming) routeConf |= Beaming[route.beaming] ?? 0;
+	routeConf |= route.protocolRate & protocolDataRateMask;
+	ret[ROUTE_SIZE - 1] = routeConf;
+
+	return ret;
+}
+
+export function getEmptyRoute(): Route {
+	return {
+		beaming: false,
+		protocolRate: RouteProtocolDataRate.ZWave_40k,
+		repeaterNodeIDs: undefined,
+	};
 }
 
 export interface RouteCacheFileV0Options extends NVMFileCreationOptions {
@@ -79,7 +110,11 @@ export class RouteCacheFileV0 extends NVMFile {
 	public routeCache: RouteCache;
 
 	public serialize(): NVMObject {
-		throw new Error("Not implemented");
+		this.fileId = nodeIdToRouteCacheFileIDV0(this.routeCache.nodeId);
+		this.payload = Buffer.concat([
+			encodeRoute(this.routeCache.lwr),
+			encodeRoute(this.routeCache.nlwr),
+		]);
 		return super.serialize();
 	}
 
@@ -145,7 +180,30 @@ export class RouteCacheFileV1 extends NVMFile {
 	public routeCaches: RouteCache[];
 
 	public serialize(): NVMObject {
-		throw new Error("Not implemented");
+		// The route infos must be sorted by node ID
+		this.routeCaches.sort((a, b) => a.nodeId - b.nodeId);
+		const minNodeId = this.routeCaches[0].nodeId;
+		this.fileId = nodeIdToRouteCacheFileIDV1(minNodeId);
+
+		this.payload = Buffer.alloc(
+			ROUTECACHES_PER_FILE_V1 * ROUTECACHE_SIZE,
+			EMPTY_ROUTECACHE_FILL,
+		);
+
+		const minFileNodeId =
+			Math.floor((minNodeId - 1) / ROUTECACHES_PER_FILE_V1) *
+				ROUTECACHES_PER_FILE_V1 +
+			1;
+
+		for (const routeCache of this.routeCaches) {
+			const offset =
+				(routeCache.nodeId - minFileNodeId) * ROUTECACHE_SIZE;
+			Buffer.concat([
+				encodeRoute(routeCache.lwr),
+				encodeRoute(routeCache.nlwr),
+			]).copy(this.payload, offset);
+		}
+
 		return super.serialize();
 	}
 

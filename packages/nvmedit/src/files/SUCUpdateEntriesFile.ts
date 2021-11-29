@@ -1,4 +1,4 @@
-import { CommandClasses, parseCCList } from "@zwave-js/core";
+import { CommandClasses, encodeCCList, parseCCList } from "@zwave-js/core";
 import type { NVMObject } from "../object";
 import {
 	getNVMFileIDStatic,
@@ -57,7 +57,7 @@ export class SUCUpdateEntriesFile extends NVMFile {
 		if (gotDeserializationOptions(options)) {
 			this.updateEntries = [];
 			for (let entry = 0; entry < SUC_MAX_UPDATES; entry++) {
-				const offset = entry * (SUC_UPDATE_NODEPARM_MAX + 2);
+				const offset = entry * SUC_UPDATE_ENTRY_SIZE;
 				const updateEntry = parseSUCUpdateEntry(this.payload, offset);
 				if (updateEntry) this.updateEntries.push(updateEntry);
 			}
@@ -69,7 +69,21 @@ export class SUCUpdateEntriesFile extends NVMFile {
 	public updateEntries: SUCUpdateEntry[];
 
 	public serialize(): NVMObject {
-		throw new Error("Not implemented");
+		this.payload = Buffer.alloc(SUC_MAX_UPDATES * SUC_UPDATE_ENTRY_SIZE, 0);
+		for (let i = 0; i < this.updateEntries.length; i++) {
+			const offset = i * SUC_UPDATE_ENTRY_SIZE;
+			const entry = this.updateEntries[i];
+			this.payload[offset] = entry.nodeId;
+			this.payload[offset + 1] = entry.changeType;
+			const ccList = encodeCCList(
+				entry.supportedCCs,
+				entry.controlledCCs,
+			);
+			if (ccList.length > SUC_UPDATE_NODEPARM_MAX) {
+				throw new Error("Cannot encode SUC update entry, too many CCs");
+			}
+			ccList.copy(this.payload, offset + 2);
+		}
 		return super.serialize();
 	}
 

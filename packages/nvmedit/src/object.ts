@@ -32,7 +32,6 @@ export enum FragmentType {
 }
 
 export interface NVMObject {
-	nvmVersion: number;
 	type: ObjectType;
 	fragmentType: FragmentType;
 	key: number;
@@ -100,7 +99,6 @@ export function readObject(
 	const bytesRead = headerSize + alignedLength;
 
 	const obj: NVMObject = {
-		nvmVersion,
 		type: objType,
 		fragmentType,
 		key,
@@ -177,7 +175,6 @@ export function compressObjects(objects: NVMObject[]) {
 		}
 		// Combine all fragments into a single readable object
 		ret.set(obj.key, {
-			nvmVersion: obj.nvmVersion,
 			key: obj.key,
 			fragmentType: FragmentType.None,
 			type: obj.type,
