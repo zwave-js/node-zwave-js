@@ -5,6 +5,8 @@ import {
 	stripUndefined,
 } from "@zwave-js/core";
 import { cloneDeep, pick } from "@zwave-js/shared";
+import semver from "semver";
+import type { PageWriteSize } from "./consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -52,16 +54,24 @@ import {
 	SUCUpdateEntriesFileID,
 	SUCUpdateEntry,
 } from "./files";
-import { parseNVM } from "./nvm";
+import { encodeNVM, NVMObjects, parseNVM } from "./nvm";
 import type { NVMObject } from "./object";
+import { getNVMMeta } from "./page";
 import { mapToObject } from "./utils";
 
 export interface NVMJSON {
 	format: number;
+	meta?: NVMMeta;
 	controller: NVMJSONController;
 	nodes: Record<number, NVMJSONNode>;
 }
 
+export interface NVMMeta {
+	pageSize: number;
+	deviceFamily: number;
+	writeSize: PageWriteSize;
+	memoryMapped: boolean;
+}
 export interface NVMJSONController {
 	protocolVersion: string;
 	applicationVersion: string;
@@ -409,12 +419,6 @@ export function nvmObjectsToJSON(
 	return ret;
 }
 
-/** Reads an NVM buffer and returns its JSON representation */
-export function nvmToJSON(buffer: Buffer, debugLogs: boolean = false): NVMJSON {
-	const nvm = parseNVM(buffer, debugLogs);
-	return nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
-}
-
 function nvmJSONNodeToNodeInfo(
 	nodeId: number,
 	node: NVMJSONNodeWithInfo,
@@ -475,15 +479,12 @@ function nvmJSONControllerToFileOptions(
 	return ret;
 }
 
-export function jsonToNVM_v3(
+export function jsonToNVMObjects_v3(
 	json: NVMJSON,
 	major: number,
 	minor: number,
 	patch: number,
-): {
-	applicationObjects: Map<number, NVMObject>;
-	protocolObjects: Map<number, NVMObject>;
-} {
+): NVMObjects {
 	const target = cloneDeep(json);
 	target.format = 3;
 
@@ -706,4 +707,65 @@ export function jsonToNVM_v3(
 		applicationObjects,
 		protocolObjects,
 	};
+}
+
+/** Reads an NVM buffer and returns its JSON representation */
+export function nvmToJSON(buffer: Buffer, debugLogs: boolean = false): NVMJSON {
+	const nvm = parseNVM(buffer, debugLogs);
+	const ret = nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
+	ret.meta = getNVMMeta(nvm.protocolPages[0]);
+	return ret;
+}
+
+/** Takes a JSON represented NVM and converts it to binary */
+export function jsonToNVM(
+	json: Required<NVMJSON>,
+	protocolVersion: string,
+): Buffer {
+	const parsedVersion = semver.parse(protocolVersion);
+	if (!parsedVersion) {
+		throw new Error(`Invalid protocol version: ${protocolVersion}`);
+	}
+
+	let objects: NVMObjects;
+	if (semver.gte(parsedVersion, "7.15.3")) {
+		objects = jsonToNVMObjects_v3(
+			json,
+			parsedVersion.major,
+			parsedVersion.minor,
+			parsedVersion.patch,
+		);
+	} else if (semver.gte(parsedVersion, "7.12.0")) {
+		throw new Error("not implemented");
+		// objects = jsonToNVMObjects_v2(
+		// 	json,
+		// 	parsedVersion.major,
+		// 	parsedVersion.minor,
+		// 	parsedVersion.patch,
+		// );
+	} else if (semver.gte(parsedVersion, "7.11.0")) {
+		throw new Error("not implemented");
+		// objects = jsonToNVMObjects_v1(
+		// 	json,
+		// 	parsedVersion.major,
+		// 	parsedVersion.minor,
+		// 	parsedVersion.patch,
+		// );
+	} else if (semver.gte(parsedVersion, "7.0.0")) {
+		throw new Error("not implemented");
+		// objects = jsonToNVMObjects_v0(
+		// 	json,
+		// 	parsedVersion.major,
+		// 	parsedVersion.minor,
+		// 	parsedVersion.patch,
+		// );
+	} else {
+		throw new Error("cannot convert to a pre-7.0 NVM version");
+	}
+
+	return encodeNVM(
+		objects.applicationObjects,
+		objects.protocolObjects,
+		json.meta,
+	);
 }

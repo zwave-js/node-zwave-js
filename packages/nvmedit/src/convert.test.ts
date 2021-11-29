@@ -1,6 +1,11 @@
 import fs from "fs-extra";
 import path from "path";
-import { jsonToNVM_v3, NVMJSON, nvmObjectsToJSON, nvmToJSON } from "./convert";
+import {
+	jsonToNVMObjects_v3,
+	NVMJSON,
+	nvmObjectsToJSON,
+	nvmToJSON,
+} from "./convert";
 import { encodeNVM } from "./nvm";
 
 describe("NVM conversion tests", () => {
@@ -37,7 +42,12 @@ describe("NVM conversion tests", () => {
 						jsonInput.controller.protocolVersion
 							.split(".")
 							.map((v) => parseInt(v));
-					const nvm = jsonToNVM_v3(jsonInput, major, minor, patch);
+					const nvm = jsonToNVMObjects_v3(
+						jsonInput,
+						major,
+						minor,
+						patch,
+					);
 					const jsonOutput = nvmObjectsToJSON(
 						nvm.applicationObjects,
 						nvm.protocolObjects,
@@ -67,7 +77,7 @@ describe("NVM conversion tests", () => {
 							.split(".")
 							.map((v) => parseInt(v));
 					// round 1
-					const objects = jsonToNVM_v3(
+					const objects = jsonToNVMObjects_v3(
 						jsonInput,
 						major,
 						minor,
@@ -102,10 +112,11 @@ describe("NVM conversion tests", () => {
 					.map((v) => parseInt(v));
 
 				const json = nvmToJSON(nvmIn);
-				const objects = jsonToNVM_v3(json, major, minor, patch);
+				const objects = jsonToNVMObjects_v3(json, major, minor, patch);
 				const nvmOut = encodeNVM(
 					objects.applicationObjects,
 					objects.protocolObjects,
+					json.meta,
 				);
 
 				expect(nvmOut).toEqual(nvmIn);

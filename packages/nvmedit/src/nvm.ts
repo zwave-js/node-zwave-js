@@ -10,6 +10,7 @@ import {
 	ZWAVE_APPLICATION_NVM_SIZE,
 	ZWAVE_PROTOCOL_NVM_SIZE,
 } from "./consts";
+import type { NVMMeta } from "./convert";
 import {
 	compressObjects,
 	fragmentLargeObject,
@@ -27,19 +28,24 @@ function comparePages(p1: NVMPage, p2: NVMPage) {
 	}
 }
 
-export function parseNVM(
-	buffer: Buffer,
-	verbose: boolean = false,
-): {
+export interface NVMPages {
 	/** All application pages in the NVM */
 	applicationPages: NVMPage[];
 	/** All application pages in the NVM */
 	protocolPages: NVMPage[];
+}
+
+export interface NVMObjects {
 	/** A compressed map of application-level NVM objects */
 	applicationObjects: Map<number, NVMObject>;
 	/** A compressed map of protocol-level NVM objects */
 	protocolObjects: Map<number, NVMObject>;
-} {
+}
+
+export function parseNVM(
+	buffer: Buffer,
+	verbose: boolean = false,
+): NVMPages & NVMObjects {
 	let offset = 0;
 	const pages: NVMPage[] = [];
 	while (offset < buffer.length) {
@@ -93,12 +99,7 @@ export function parseNVM(
 	};
 }
 
-export interface EncodeNVMOptions {
-	pageSize?: number;
-	deviceFamily?: number;
-	writeSize?: PageWriteSize;
-	memoryMapped?: boolean;
-}
+export type EncodeNVMOptions = Partial<NVMMeta>;
 
 export function encodeNVM(
 	/** A compressed map of application-level NVM objects */

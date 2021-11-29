@@ -1,3 +1,4 @@
+import { pick } from "@zwave-js/shared";
 import {
 	FLASH_MAX_PAGE_SIZE,
 	NVM3_MIN_PAGE_SIZE,
@@ -8,6 +9,7 @@ import {
 	PageStatus,
 	PageWriteSize,
 } from "./consts";
+import type { NVMMeta } from "./convert";
 import { NVMObject, readObjects } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
 
@@ -146,4 +148,13 @@ export function writePageHeader(header: Omit<PageHeader, "offset">): Buffer {
 	ret.writeUInt16LE(formatInfo, 18);
 
 	return ret;
+}
+
+export function getNVMMeta(page: NVMPage): NVMMeta {
+	return pick(page.header, [
+		"pageSize",
+		"writeSize",
+		"memoryMapped",
+		"deviceFamily",
+	]);
 }
