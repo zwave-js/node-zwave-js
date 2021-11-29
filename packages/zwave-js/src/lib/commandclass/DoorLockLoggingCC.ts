@@ -7,16 +7,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
-import {
-	PhysicalCCAPI,
-	PollValueImplementation,
-	POLL_VALUE,
-	throwUnsupportedProperty,
-} from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -180,23 +174,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-	}): Promise<unknown> => {
-		switch (property) {
-			case "recordsCount":
-				return (await this.getRecordsCount())?.[property];
-			case "record":
-				// Fetches latest record by default
-				return (await this.getRecord(LATEST_RECORD_NUMBER_KEY))?.[
-					property
-				];
-			default:
-				throwUnsupportedProperty(this.ccId, property);
-		}
-	};
-
-	public async getRecordsCount(): Promise<any> {
+	public async getRecordsCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordsCountGet,
@@ -211,14 +189,12 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 				cc,
 				this.commandOptions,
 			);
-		if (response) {
-			return pick(response, ["recordsCount"]);
-		}
+		return response?.recordsCount;
 	}
 
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
-	): Promise<any> {
+	): Promise<DoorLockLoggingRecord | undefined> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
 			DoorLockLoggingCommand.RecordGet,
@@ -234,9 +210,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 				cc,
 				this.commandOptions,
 			);
-		if (response) {
-			return pick(response, ["record"]);
-		}
+		return response?.record;
 	}
 }
 
