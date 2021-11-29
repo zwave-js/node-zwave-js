@@ -1,0 +1,793 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA024",
+	"description": "MultiSensor 7",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0018",
+			"zwaveAllianceId": 4061
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "OverHeat",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "UnderHeat",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "OverHumidity",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "UnderHumidity",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "OverLight",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "UnderLight",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "OverUV",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "UnderUV",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Temperature",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Beaming Enable/Disable",
+			"description": "Used to enable/disable beaming. if set to 1, flir commands will be supported. but the device must be re-included into the network to activate it. 0 - disable 1 - enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Power Status",
+			"description": "This value is readonly. used to report the power status (usb or battery powered) 0 - when battery powered, the device will act as rss. 1 - when usb cable insert, the device will act as lss. the device must be re-included in the network to change the role type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "When battery powered, the device will act as rss",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "101",
+			"label": "Automatic Report Checklist 1",
+			"description": "Checklist 1 for automatic timed report. when the corresponding item is selected, it will be checked when timeout setting by param111.  1 - battery 16 - uv 32 - temperature 64 - humidity 128 - lux",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 241,
+			"defaultValue": 241,
+			"unsigned": true
+		},
+		{
+			"#": "102",
+			"label": "Automatic Report Checklist 2",
+			"description": "Checklist 2 for automatic timed report. when the corresponding item is selected, it will be checked when timeout setting by param112. 1 - battery 16 -  32 - temperature 64 - humidity 128 - lux",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 241,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "103",
+			"label": "Automatic Report Checklist 3",
+			"description": "Battery. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 241,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Motion Group Control(group2)",
+			"description": "Set control of other devices on group2 based on motion trigger. 0 - send basic_set (0xff) when motion is triggered to associated device send basic_set (0x00) when motion is untriggered to associated device 1 - send basic_set (0x00) when motion is triggered send basic_set (0xff) when motion is untriggered 2 - send basic_set (0xff) when motion is triggered, nothing when motion untriggered. 3 - send basic_set (0x00) when motion is triggered, nothing when motion untriggered. 4 - send basic_set (0x00) when motion is untriggered, nothing when motion triggered. 5 - send basic_set (0xff) when motion is untriggered, nothing when motion triggered. 6 - send basic_set (value is configured by parameter 12) when motion is triggered to associated devices. send basic_set (value is configured by parameter 12) when motion is untriggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Send basic_set (0xff) when motion is triggered to associated device send basic_set (0x00) when motion is untriggered to associated device",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "111",
+			"label": "Automatic Checklist 1 Interval Time",
+			"description": "Interval time set in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "112",
+			"label": "Automatic Checklist 2 Interval Time",
+			"description": "Interval time set in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "113",
+			"label": "Automatic Checklist 3 Interval Time",
+			"description": "Interval time set in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Motion Group Value Setting",
+			"description": "Set Basic Set value for group2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 65280,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Motion Group Control Requirement",
+			"description": "Set threshold of light/lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 30000,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Over Humidity Group Threshold (group5)",
+			"description": "Set threshold of humidity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Under Humidity Group Threshold (group6)",
+			"description": "Set threshold of humidity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Over Heat Group Threshold (group3)",
+			"description": "Set threshold of temperature",
+			"valueSize": 2,
+			"minValue": -400,
+			"maxValue": 850,
+			"defaultValue": 239
+		},
+		{
+			"#": "17",
+			"label": "Under Heat Group Threshold (group4)",
+			"description": "Set threshold of temperature",
+			"valueSize": 2,
+			"minValue": -400,
+			"maxValue": 850,
+			"defaultValue": 155
+		},
+		{
+			"#": "18",
+			"label": "Over Light Group Threshold (group7)",
+			"description": "Set threshold of light/lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 2000,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Under Light Group Threshold (group8)",
+			"description": "Set threshold of light/lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Motion Retrigger Time",
+			"description": "Timeout set in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "20",
+			"label": "Over Uv Group Threshold (group9)",
+			"description": "Set threshold of uv",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		{
+			"#": "201",
+			"label": "Temperature Offset Value",
+			"description": "Temperature offset value",
+			"valueSize": 2,
+			"minValue": -200,
+			"maxValue": 200,
+			"defaultValue": 0
+		},
+		{
+			"#": "202",
+			"label": "Humidity Offset Value",
+			"description": "Humidity offset value",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "203",
+			"label": "Lux Offset Value",
+			"description": "Lux offset value",
+			"valueSize": 2,
+			"minValue": -10000,
+			"maxValue": 10000,
+			"defaultValue": 0
+		},
+		{
+			"#": "204",
+			"label": "Uv Offset Value",
+			"description": "Offset value range -10-10",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"label": "Under Uv Group Threshold (group10)",
+			"description": "Set threshold of uv\"",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Motion Untrigger Time",
+			"description": "Timeout set in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 240,
+			"unsigned": true
+		},
+		{
+			"#": "39",
+			"label": "Low Battery Threshold",
+			"description": "Configure low battery report threshold",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 90,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Motion Sensitivity",
+			"description": "Set the sensitivity of motion sensor. 0 - disable 1- minimum sensitivity 11 - maximum sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 11,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Threshold Check Enable/Disable",
+			"description": "Enable/disable threshold reporting, check time can be adjusted by param45. 0 - disable all threshold reports 1 - enable all threshold reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable all threshold reports",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Temperature Threshold",
+			"description": "Threshold = (value * 0.1) scale is determined by param64. 0 = disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "42",
+			"label": "Humidity Threshold",
+			"description": "Humidity range = 1% to 50%, 0 = disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "43",
+			"label": "Lux Threshold",
+			"description": "Lux threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 250,
+			"unsigned": true
+		},
+		{
+			"#": "44",
+			"label": "Uv Threshold",
+			"description": "Uv threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "45",
+			"label": "Threshold Check Time",
+			"description": "Set threshold check time in seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 240,
+			"unsigned": true
+		},
+		{
+			"#": "46",
+			"label": "Low Temperature Report",
+			"description": "Eable/disable alarm report for low temperature(",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "48",
+			"label": "Sensor Limit Control",
+			"description": "This value is bit mask. used to enable/disable measurement reports for various sensors that is more than the upper limit value or less than the lower limit value. 1 - temperature upper level 2 - humidity upper level 4 - lux upper level 8 - uv upper level 16 - temperature lower level 32 - humidity lower level 64 - lux lower level 128 - uv lower level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "49",
+			"label": "Temperature Upper Limit",
+			"description": "Set upper limit level for temperature",
+			"valueSize": 2,
+			"minValue": -400,
+			"maxValue": 1000,
+			"defaultValue": 280
+		},
+		{
+			"#": "5",
+			"label": "Motion Report Type",
+			"description": "Set which command class will be sent when motion sensor is triggered or detriggered. 0 - sends notification report 1 - sends sensor binary report 2 - sends notification and sensor binary report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Sends notification report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "50",
+			"label": "Temperature Lower Limit",
+			"description": "Set lower limit level for temperature",
+			"valueSize": 2,
+			"minValue": -400,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "51",
+			"label": "Temperature Recover Limit",
+			"description": "Temperature recover limit set in scale of 0.1",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "52",
+			"label": "Humidity Upper Limit",
+			"description": "Set humidity upper limit level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "53",
+			"label": "Humidity Lower Limit",
+			"description": "Set humidity lower limit level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "54",
+			"label": "Humidity Recover Limit",
+			"description": "Set humidity recover limit level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "55",
+			"label": "Lux Upper Limit",
+			"description": "Set lux upper limit level",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 1000,
+			"unsigned": true
+		},
+		{
+			"#": "56",
+			"label": "Lux Lower Limit",
+			"description": "Set lux lower limit level",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "58",
+			"label": "Uv Upper Limit",
+			"description": "Set uv upper limit level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		{
+			"#": "59",
+			"label": "Uv Lower Limit",
+			"description": "Set uv lower limit level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Vibration Sensor Enable/Disable",
+			"description": "Used to enable/disable vibration sensor. 0 - disable vibration 1~254 - timeout set in minutes to reset vibration status 255 - timeout set in minutes to reset vibration status",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable vibration",
+					"value": 0
+				},
+				{
+					"label": "Timeout set in minutes to reset vibration status",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "60",
+			"label": "Uv Recover Limit",
+			"description": "Set uv recover limit level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "61",
+			"label": "Out-of-limit State",
+			"description": "This is read only and bit mask. out of the limit state of sensors. bit mask: 0 - within limit 1 - out of limit value: 1 - temperature upper level 2 - humidity upper level 4 - lux upper level 8 - uv upper level 16 - temperature lower level 32 - humidity lower level 64 - lux lower level 128 - uv lower level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Within limit",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "64",
+			"label": "Temperature Scale",
+			"description": "Set the scale for temperature when reports. 0 - celsius 1 - fahrenheit",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "67",
+			"label": "Lux Recover Limit",
+			"description": "Set lux recover limit level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Vibration Intensity Reports",
+			"description": "Used to enable/disable vibration intensity reports. if set to 1, vibration intensity will be sent to gateway when triggered. if set to 0, do not report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "81",
+			"label": "Led Activity",
+			"description": "Allow user to enable/disable LED activity of specific reports sent by sensor. button press indicator is not affected by this. 0 - disable 1 - enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "82",
+			"label": "Motion Sensor Report Indicator",
+			"description": "If LED is enabled by param81, allow user to change the report color of motion sensor. 0 - disabled 1 - red 2 - blue 3 - green 4 - pink 5 - cyan 6 - purple 7 - orange 8 - yellow 9 - white",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 3,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "83",
+			"label": "Temperature Sensor Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "84",
+			"label": "Humidity Sensor Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "85",
+			"label": "Lux Sensor Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "86",
+			"label": "Uv Sensor Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "87",
+			"label": "Vibration Sensor Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 2,
+			"unsigned": true
+		},
+		{
+			"#": "88",
+			"label": "Battery Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "89",
+			"label": "Wakeup Report Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Wakeup Cc Timeout",
+			"description": "Timeout set in seconds",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "90",
+			"label": "Communication Indicator",
+			"description": "Disable. other value descriptions, please see above description box of this parameter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press once the Action Button on the product.",
+		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. Press once the Action Button on the product.",
+		"reset": "Press and hold the Action Button on product for 15-20s",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4061/MultiSensor%207%20User%20manual-1.pdf"
+	}
+}
