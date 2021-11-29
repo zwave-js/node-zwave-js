@@ -163,6 +163,12 @@ Object {
     "systemState": 0,
   },
   "format": 0,
+  "meta": Object {
+    "deviceFamily": 2047,
+    "memoryMapped": true,
+    "pageSize": 65536,
+    "writeSize": 1,
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,
@@ -728,6 +734,12 @@ Object {
     "systemState": 0,
   },
   "format": 1,
+  "meta": Object {
+    "deviceFamily": 46,
+    "memoryMapped": true,
+    "pageSize": 2048,
+    "writeSize": 1,
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,
@@ -1422,6 +1434,12 @@ Object {
     "systemState": 0,
   },
   "format": 2,
+  "meta": Object {
+    "deviceFamily": 46,
+    "memoryMapped": true,
+    "pageSize": 2048,
+    "writeSize": 1,
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,
@@ -2733,6 +2751,12 @@ Object {
     "systemState": 0,
   },
   "format": 3,
+  "meta": Object {
+    "deviceFamily": 46,
+    "memoryMapped": true,
+    "pageSize": 2048,
+    "writeSize": 1,
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,
@@ -4509,6 +4533,12 @@ Object {
     "systemState": 0,
   },
   "format": 3,
+  "meta": Object {
+    "deviceFamily": 42,
+    "memoryMapped": true,
+    "pageSize": 2048,
+    "writeSize": 1,
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,

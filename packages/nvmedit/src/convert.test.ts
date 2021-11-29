@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "path";
+import { jsonToNVM } from ".";
 import {
 	jsonToNVMObjects_v3,
 	NVMJSON,
@@ -38,6 +39,7 @@ describe("NVM conversion tests", () => {
 					const jsonInput: NVMJSON = await fs.readJson(
 						path.join(fixturesDir, file),
 					);
+					delete jsonInput.meta;
 					const [major, minor, patch] =
 						jsonInput.controller.protocolVersion
 							.split(".")
@@ -69,23 +71,12 @@ describe("NVM conversion tests", () => {
 		for (const file of files) {
 			if (file.includes("700_7.16")) {
 				it(file, async () => {
-					const jsonInput: NVMJSON = await fs.readJson(
+					const jsonInput: Required<NVMJSON> = await fs.readJson(
 						path.join(fixturesDir, file),
 					);
-					const [major, minor, patch] =
-						jsonInput.controller.protocolVersion
-							.split(".")
-							.map((v) => parseInt(v));
-					// round 1
-					const objects = jsonToNVMObjects_v3(
+					const nvm = jsonToNVM(
 						jsonInput,
-						major,
-						minor,
-						patch,
-					);
-					const nvm = encodeNVM(
-						objects.applicationObjects,
-						objects.protocolObjects,
+						jsonInput.controller.protocolVersion,
 					);
 					const jsonOutput = nvmToJSON(nvm);
 

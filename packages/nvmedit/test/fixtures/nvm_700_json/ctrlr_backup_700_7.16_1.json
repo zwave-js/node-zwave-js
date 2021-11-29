@@ -1,5 +1,11 @@
 {
 	"format": 3,
+	"meta": {
+		"deviceFamily": 1234,
+		"memoryMapped": true,
+		"pageSize": 1024,
+		"writeSize": 0
+	},
 	"controller": {
 		"protocolVersion": "7.16.2",
 		"applicationVersion": "7.16.2",
@@ -44,26 +50,8 @@
 				"nodeId": 2,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					152,
-					159,
-					108,
-					38,
-					112,
-					133,
-					89,
-					142,
-					134,
-					114,
-					90,
-					115,
-					117,
-					34,
-					122,
-					91,
-					135,
-					96
+					94, 85, 152, 159, 108, 38, 112, 133, 89, 142, 134, 114, 90,
+					115, 117, 34, 122, 91, 135, 96
 				],
 				"controlledCCs": []
 			},
@@ -77,26 +65,8 @@
 				"nodeId": 3,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					152,
-					159,
-					108,
-					38,
-					112,
-					133,
-					89,
-					142,
-					134,
-					114,
-					90,
-					115,
-					117,
-					34,
-					122,
-					91,
-					135,
-					96
+					94, 85, 152, 159, 108, 38, 112, 133, 89, 142, 134, 114, 90,
+					115, 117, 34, 122, 91, 135, 96
 				],
 				"controlledCCs": []
 			},
@@ -110,26 +80,8 @@
 				"nodeId": 4,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					152,
-					159,
-					108,
-					38,
-					112,
-					133,
-					89,
-					142,
-					134,
-					114,
-					90,
-					115,
-					117,
-					34,
-					122,
-					91,
-					135,
-					96
+					94, 85, 152, 159, 108, 38, 112, 133, 89, 142, 134, 114, 90,
+					115, 117, 34, 122, 91, 135, 96
 				],
 				"controlledCCs": []
 			},
@@ -137,24 +89,8 @@
 				"nodeId": 5,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -168,24 +104,8 @@
 				"nodeId": 6,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -199,24 +119,8 @@
 				"nodeId": 7,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -230,24 +134,8 @@
 				"nodeId": 8,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -261,24 +149,8 @@
 				"nodeId": 9,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -286,26 +158,8 @@
 				"nodeId": 10,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					152,
-					159,
-					108,
-					38,
-					112,
-					133,
-					89,
-					142,
-					134,
-					114,
-					90,
-					115,
-					117,
-					34,
-					122,
-					91,
-					135,
-					96
+					94, 85, 152, 159, 108, 38, 112, 133, 89, 142, 134, 114, 90,
+					115, 117, 34, 122, 91, 135, 96
 				],
 				"controlledCCs": []
 			},
@@ -313,26 +167,8 @@
 				"nodeId": 10,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					85,
-					152,
-					159,
-					108,
-					38,
-					112,
-					133,
-					89,
-					142,
-					134,
-					114,
-					90,
-					115,
-					117,
-					34,
-					122,
-					91,
-					135,
-					96
+					94, 85, 152, 159, 108, 38, 112, 133, 89, 142, 134, 114, 90,
+					115, 117, 34, 122, 91, 135, 96
 				],
 				"controlledCCs": []
 			},
@@ -340,24 +176,8 @@
 				"nodeId": 11,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -365,24 +185,8 @@
 				"nodeId": 11,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -396,24 +200,8 @@
 				"nodeId": 12,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -421,24 +209,8 @@
 				"nodeId": 12,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -446,24 +218,8 @@
 				"nodeId": 13,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -471,24 +227,8 @@
 				"nodeId": 13,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -514,24 +254,8 @@
 				"nodeId": 14,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -539,24 +263,8 @@
 				"nodeId": 14,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -564,24 +272,8 @@
 				"nodeId": 15,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -589,24 +281,8 @@
 				"nodeId": 15,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -614,24 +290,8 @@
 				"nodeId": 16,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -639,24 +299,8 @@
 				"nodeId": 16,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -664,24 +308,8 @@
 				"nodeId": 17,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -689,24 +317,8 @@
 				"nodeId": 17,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -714,24 +326,8 @@
 				"nodeId": 18,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -763,24 +359,8 @@
 				"nodeId": 19,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -788,24 +368,8 @@
 				"nodeId": 19,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -819,24 +383,8 @@
 				"nodeId": 20,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -844,24 +392,8 @@
 				"nodeId": 20,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -869,24 +401,8 @@
 				"nodeId": 21,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -894,24 +410,8 @@
 				"nodeId": 21,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -925,24 +425,8 @@
 				"nodeId": 22,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -950,34 +434,23 @@
 				"nodeId": 22,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					50,
-					91,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 50, 91, 152, 159,
+					37, 108, 117, 34, 122
 				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 23,
 				"changeType": 1,
+				"supportedCCs": [152, 114, 134],
+				"controlledCCs": []
+			},
+			{
+				"nodeId": 24,
+				"changeType": 1,
 				"supportedCCs": [
-					152,
-					114,
-					134
+					94, 133, 89, 128, 112, 90, 122, 135, 114, 142, 113, 115,
+					152, 159, 121, 108, 85, 134
 				],
 				"controlledCCs": []
 			},
@@ -985,49 +458,8 @@
 				"nodeId": 24,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					133,
-					89,
-					128,
-					112,
-					90,
-					122,
-					135,
-					114,
-					142,
-					113,
-					115,
-					152,
-					159,
-					121,
-					108,
-					85,
-					134
-				],
-				"controlledCCs": []
-			},
-			{
-				"nodeId": 24,
-				"changeType": 1,
-				"supportedCCs": [
-					94,
-					133,
-					89,
-					128,
-					112,
-					90,
-					122,
-					135,
-					114,
-					142,
-					113,
-					115,
-					152,
-					159,
-					121,
-					108,
-					85,
-					134
+					94, 133, 89, 128, 112, 90, 122, 135, 114, 142, 113, 115,
+					152, 159, 121, 108, 85, 134
 				],
 				"controlledCCs": []
 			},
@@ -1035,22 +467,8 @@
 				"nodeId": 25,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 152, 159, 37, 108,
+					117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -1058,22 +476,8 @@
 				"nodeId": 25,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					112,
-					133,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					152,
-					159,
-					37,
-					108,
-					117,
-					34,
-					122
+					94, 112, 133, 89, 85, 134, 114, 90, 115, 152, 159, 37, 108,
+					117, 34, 122
 				],
 				"controlledCCs": []
 			},
@@ -1081,20 +485,7 @@
 				"nodeId": 26,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					86,
-					134,
-					114,
-					90,
-					133,
-					89,
-					115,
-					37,
-					39,
-					112,
-					44,
-					43,
-					122
+					94, 86, 134, 114, 90, 133, 89, 115, 37, 39, 112, 44, 43, 122
 				],
 				"controlledCCs": []
 			},
@@ -1102,20 +493,7 @@
 				"nodeId": 26,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					86,
-					134,
-					114,
-					90,
-					133,
-					89,
-					115,
-					37,
-					39,
-					112,
-					44,
-					43,
-					122
+					94, 86, 134, 114, 90, 133, 89, 115, 37, 39, 112, 44, 43, 122
 				],
 				"controlledCCs": []
 			},
@@ -1123,23 +501,8 @@
 				"nodeId": 27,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					37,
-					133,
-					142,
-					89,
-					85,
-					134,
-					114,
-					90,
-					115,
-					112,
-					113,
-					50,
-					159,
-					96,
-					108,
-					122
+					94, 37, 133, 142, 89, 85, 134, 114, 90, 115, 112, 113, 50,
+					159, 96, 108, 122
 				],
 				"controlledCCs": []
 			},
@@ -1147,20 +510,7 @@
 				"nodeId": 28,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					86,
-					134,
-					114,
-					90,
-					133,
-					89,
-					115,
-					37,
-					39,
-					112,
-					44,
-					43,
-					122
+					94, 86, 134, 114, 90, 133, 89, 115, 37, 39, 112, 44, 43, 122
 				],
 				"controlledCCs": []
 			}
@@ -1174,10 +524,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -1185,17 +532,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				4,
-				14,
-				21,
-				22,
-				23,
-				24,
-				26,
-				27,
-				28
-			],
+			"neighbors": [4, 14, 21, 22, 23, 24, 26, 27, 28],
 			"sucUpdateIndex": 2,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1209,10 +546,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1220,17 +554,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 17,
 			"specificDeviceClass": 0,
-			"neighbors": [
-				1,
-				14,
-				21,
-				22,
-				23,
-				24,
-				26,
-				27,
-				28
-			],
+			"neighbors": [1, 14, 21, 22, 23, 24, 26, 27, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1250,10 +574,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1261,14 +582,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 17,
 			"specificDeviceClass": 0,
-			"neighbors": [
-				14,
-				22,
-				23,
-				24,
-				25,
-				28
-			],
+			"neighbors": [14, 22, 23, 24, 25, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1277,10 +591,7 @@
 			"lwr": {
 				"beaming": false,
 				"protocolRate": 2,
-				"repeaterNodeIDs": [
-					4,
-					24
-				]
+				"repeaterNodeIDs": [4, 24]
 			},
 			"nlwr": {
 				"beaming": false,
@@ -1292,10 +603,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1303,17 +611,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				10,
-				21,
-				23,
-				24,
-				25,
-				27,
-				28
-			],
+			"neighbors": [1, 4, 10, 21, 23, 24, 25, 27, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1334,10 +632,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1345,16 +640,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				14,
-				22,
-				23,
-				24,
-				26,
-				27
-			],
+			"neighbors": [1, 4, 14, 22, 23, 24, 26, 27],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1374,10 +660,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1385,16 +668,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				10,
-				21,
-				23,
-				24,
-				26,
-				27
-			],
+			"neighbors": [1, 4, 10, 21, 23, 24, 26, 27],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1403,9 +677,7 @@
 			"lwr": {
 				"beaming": false,
 				"protocolRate": 2,
-				"repeaterNodeIDs": [
-					28
-				]
+				"repeaterNodeIDs": [28]
 			},
 			"nlwr": {
 				"beaming": false,
@@ -1417,9 +689,7 @@
 			"isListening": false,
 			"isFrequentListening": "1000ms",
 			"isRouting": true,
-			"supportedDataRates": [
-				40000
-			],
+			"supportedDataRates": [40000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1427,17 +697,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 64,
 			"specificDeviceClass": 3,
-			"neighbors": [
-				1,
-				4,
-				10,
-				14,
-				21,
-				22,
-				24,
-				26,
-				27
-			],
+			"neighbors": [1, 4, 10, 14, 21, 22, 24, 26, 27],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1458,10 +718,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1469,17 +726,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 3,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				10,
-				14,
-				21,
-				22,
-				23,
-				26,
-				27
-			],
+			"neighbors": [1, 4, 10, 14, 21, 22, 23, 26, 27],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1500,10 +747,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1511,14 +755,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				10,
-				14,
-				22,
-				26,
-				28
-			],
+			"neighbors": [1, 10, 14, 22, 26, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1527,17 +764,12 @@
 			"lwr": {
 				"beaming": false,
 				"protocolRate": 3,
-				"repeaterNodeIDs": [
-					22,
-					10
-				]
+				"repeaterNodeIDs": [22, 10]
 			},
 			"nlwr": {
 				"beaming": false,
 				"protocolRate": 2,
-				"repeaterNodeIDs": [
-					14
-				]
+				"repeaterNodeIDs": [14]
 			}
 		},
 		"26": {
@@ -1545,10 +777,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1556,17 +785,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				21,
-				22,
-				23,
-				24,
-				25,
-				27,
-				28
-			],
+			"neighbors": [1, 4, 21, 22, 23, 24, 25, 27, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1575,9 +794,7 @@
 			"lwr": {
 				"beaming": false,
 				"protocolRate": 2,
-				"repeaterNodeIDs": [
-					10
-				]
+				"repeaterNodeIDs": [10]
 			},
 			"nlwr": {
 				"beaming": false,
@@ -1589,10 +806,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1600,17 +814,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 4,
-			"neighbors": [
-				1,
-				4,
-				14,
-				21,
-				22,
-				23,
-				24,
-				26,
-				28
-			],
+			"neighbors": [1, 4, 14, 21, 22, 23, 24, 26, 28],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -1623,9 +827,7 @@
 			"nlwr": {
 				"beaming": false,
 				"protocolRate": 3,
-				"repeaterNodeIDs": [
-					24
-				]
+				"repeaterNodeIDs": [24]
 			}
 		},
 		"28": {
@@ -1633,10 +835,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -1644,17 +843,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				4,
-				10,
-				14,
-				21,
-				22,
-				25,
-				26,
-				27
-			],
+			"neighbors": [1, 4, 10, 14, 21, 22, 25, 26, 27],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
