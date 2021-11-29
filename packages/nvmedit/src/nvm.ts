@@ -1,26 +1,23 @@
 import {
-	compressObjects,
-	fragmentLargeObject,
+	FLASH_MAX_PAGE_SIZE,
 	NVM3_OBJ_HEADER_SIZE_SMALL,
+	NVM3_PAGE_HEADER_SIZE,
 	NVM3_WORD_SIZE,
-	NVMObject,
 	NVM_COUNTER_SIZE,
 	ObjectType,
-	writeObject,
-} from "./object";
-import {
-	FLASH_MAX_PAGE_SIZE,
-	NVM3_PAGE_HEADER_SIZE,
-	NVMPage,
 	PageStatus,
 	PageWriteSize,
-	readPage,
-	writePageHeader,
-} from "./page";
+	ZWAVE_APPLICATION_NVM_SIZE,
+	ZWAVE_PROTOCOL_NVM_SIZE,
+} from "./consts";
+import {
+	compressObjects,
+	fragmentLargeObject,
+	NVMObject,
+	writeObject,
+} from "./object";
+import { NVMPage, readPage, writePageHeader } from "./page";
 import { dumpObject, dumpPage } from "./utils";
-
-const ZWAVE_APPLICATION_NVM_SIZE = 0x3000;
-const ZWAVE_PROTOCOL_NVM_SIZE = 0xc000 - ZWAVE_APPLICATION_NVM_SIZE;
 
 function comparePages(p1: NVMPage, p2: NVMPage) {
 	if (p1.header.eraseCount === p2.header.eraseCount) {

@@ -8,33 +8,26 @@ import { cloneDeep, pick } from "@zwave-js/shared";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
-} from "./files/ApplicationCCsFile";
-import {
 	ApplicationDataFile,
 	ApplicationDataFileID,
-} from "./files/ApplicationDataFile";
-import {
 	ApplicationRFConfigFile,
 	ApplicationRFConfigFileID,
-} from "./files/ApplicationRFConfigFile";
-import {
 	ApplicationTypeFile,
 	ApplicationTypeFileID,
-} from "./files/ApplicationTypeFile";
-import {
+	ApplicationVersionFile,
+	ApplicationVersionFileID,
 	ControllerInfoFile,
 	ControllerInfoFileID,
 	ControllerInfoFileOptions,
-} from "./files/ControllerInfoFile";
-import {
+	getEmptyRoute,
 	nodeIdToNodeInfoFileIDV0,
 	nodeIdToNodeInfoFileIDV1,
+	nodeIdToRouteCacheFileIDV0,
+	nodeIdToRouteCacheFileIDV1,
 	NodeInfo,
 	NodeInfoFileV0,
 	NodeInfoFileV1,
-} from "./files/NodeInfoFiles";
-import { NVMFile } from "./files/NVMFile";
-import {
+	NVMFile,
 	ProtocolAppRouteLockNodeMaskFile,
 	ProtocolAppRouteLockNodeMaskFileID,
 	ProtocolNodeListFile,
@@ -47,29 +40,18 @@ import {
 	ProtocolRouteSlaveSUCNodeMaskFileID,
 	ProtocolSUCPendingUpdateNodeMaskFile,
 	ProtocolSUCPendingUpdateNodeMaskFileID,
+	ProtocolVersionFile,
+	ProtocolVersionFileID,
 	ProtocolVirtualNodeMaskFile,
 	ProtocolVirtualNodeMaskFileID,
-} from "./files/ProtocolNodeMaskFiles";
-import {
-	getEmptyRoute,
-	nodeIdToRouteCacheFileIDV0,
-	nodeIdToRouteCacheFileIDV1,
 	Route,
 	RouteCache,
 	RouteCacheFileV0,
 	RouteCacheFileV1,
-} from "./files/RouteCacheFiles";
-import {
 	SUCUpdateEntriesFile,
 	SUCUpdateEntriesFileID,
 	SUCUpdateEntry,
-} from "./files/SUCUpdateEntriesFile";
-import {
-	ApplicationVersionFile,
-	ApplicationVersionFileID,
-	ProtocolVersionFile,
-	ProtocolVersionFileID,
-} from "./files/VersionFiles";
+} from "./files";
 import { parseNVM } from "./nvm";
 import type { NVMObject } from "./object";
 import { mapToObject } from "./utils";

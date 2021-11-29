@@ -1,45 +1,24 @@
 import {
+	FragmentType,
+	NVM3_CODE_LARGE_SHIFT,
+	NVM3_CODE_SMALL_SHIFT,
+	NVM3_OBJ_FRAGTYPE_MASK,
+	NVM3_OBJ_FRAGTYPE_SHIFT,
+	NVM3_OBJ_HEADER_SIZE_LARGE,
+	NVM3_OBJ_HEADER_SIZE_SMALL,
+	NVM3_OBJ_KEY_MASK,
+	NVM3_OBJ_KEY_SHIFT,
+	NVM3_OBJ_LARGE_LEN_MASK,
+	NVM3_OBJ_TYPE_MASK,
+	NVM3_WORD_SIZE,
+	NVM_COUNTER_SIZE,
+	ObjectType,
+} from "./consts";
+import {
 	computeBergerCode,
 	computeBergerCodeMulti,
 	validateBergerCodeMulti,
 } from "./utils";
-
-export const maxObjectSizeSmall = 120;
-export const maxObjectSizeLarge = 1900; // 204..4096, see nvm3.h in zw_nvm_converter
-
-const OBJ_KEY_SHIFT = 7;
-const OBJ_KEY_SIZE = 20;
-const OBJ_KEY_MASK = (1 << OBJ_KEY_SIZE) - 1;
-const OBJ_TYPE_MASK = 0b111_1111;
-const OBJ_LARGE_LEN_SIZE = 26;
-const OBJ_LARGE_LEN_MASK = (1 << OBJ_LARGE_LEN_SIZE) - 1;
-const FRAG_TYPE_SHIFT = 27;
-const FRAG_TYPE_MASK = 0b11;
-const CODE_SMALL_SHIFT = 27;
-const CODE_LARGE_SHIFT = 26;
-
-export const NVM3_OBJ_HEADER_SIZE_SMALL = 4;
-export const NVM3_OBJ_HEADER_SIZE_LARGE = 8;
-
-// objects must be word-aligned
-export const NVM3_WORD_SIZE = 4;
-
-export const NVM_COUNTER_SIZE = 204;
-
-export enum ObjectType {
-	DataLarge = 0,
-	CounterLarge = 1,
-	CounterSmall = 2,
-	Deleted = 3,
-	DataSmall = 7,
-}
-
-export enum FragmentType {
-	None = 0,
-	First = 1,
-	Next = 2,
-	Last = 3,
-}
 
 export interface NVMObject {
 	type: ObjectType;
@@ -63,8 +42,8 @@ export function readObject(
 	// Skip over blank page areas
 	if (hdr1 === 0xffffffff) return;
 
-	const key = (hdr1 >> OBJ_KEY_SHIFT) & OBJ_KEY_MASK;
-	let objType: ObjectType = hdr1 & OBJ_TYPE_MASK;
+	const key = (hdr1 >> NVM3_OBJ_KEY_SHIFT) & NVM3_OBJ_KEY_MASK;
+	let objType: ObjectType = hdr1 & NVM3_OBJ_TYPE_MASK;
 	let fragmentLength = 0;
 	let hdr2: number | undefined;
 	const isLarge =
@@ -72,7 +51,7 @@ export function readObject(
 	if (isLarge) {
 		hdr2 = buffer.readUInt32LE(offset + 4);
 		headerSize += 4;
-		fragmentLength = hdr2 & OBJ_LARGE_LEN_MASK;
+		fragmentLength = hdr2 & NVM3_OBJ_LARGE_LEN_MASK;
 	} else if (objType > ObjectType.DataSmall) {
 		// In small objects with data, the length and object type are stored in the same value
 		fragmentLength = objType - ObjectType.DataSmall;
@@ -82,13 +61,13 @@ export function readObject(
 	}
 
 	const fragmentType: FragmentType = isLarge
-		? (hdr1 >>> FRAG_TYPE_SHIFT) & FRAG_TYPE_MASK
+		? (hdr1 >>> NVM3_OBJ_FRAGTYPE_SHIFT) & NVM3_OBJ_FRAGTYPE_MASK
 		: FragmentType.None;
 
 	if (isLarge) {
-		validateBergerCodeMulti([hdr1, hdr2!], 32 + CODE_LARGE_SHIFT);
+		validateBergerCodeMulti([hdr1, hdr2!], 32 + NVM3_CODE_LARGE_SHIFT);
 	} else {
-		validateBergerCodeMulti([hdr1], CODE_SMALL_SHIFT);
+		validateBergerCodeMulti([hdr1], NVM3_CODE_SMALL_SHIFT);
 	}
 
 	if (buffer.length < offset + headerSize + fragmentLength) {
@@ -153,18 +132,19 @@ export function writeObject(obj: NVMObject): Buffer {
 
 	// Write header
 	if (isLarge) {
-		let hdr2 = dataLength & OBJ_LARGE_LEN_MASK;
+		let hdr2 = dataLength & NVM3_OBJ_LARGE_LEN_MASK;
 
 		const hdr1 =
-			(obj.type & OBJ_TYPE_MASK) |
-			((obj.key & OBJ_KEY_MASK) << OBJ_KEY_SHIFT) |
-			((obj.fragmentType & FRAG_TYPE_MASK) << FRAG_TYPE_SHIFT);
+			(obj.type & NVM3_OBJ_TYPE_MASK) |
+			((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT) |
+			((obj.fragmentType & NVM3_OBJ_FRAGTYPE_MASK) <<
+				NVM3_OBJ_FRAGTYPE_SHIFT);
 
 		const bergerCode = computeBergerCodeMulti(
 			[hdr1, hdr2],
-			32 + CODE_LARGE_SHIFT,
+			32 + NVM3_CODE_LARGE_SHIFT,
 		);
-		hdr2 |= bergerCode << CODE_LARGE_SHIFT;
+		hdr2 |= bergerCode << NVM3_CODE_LARGE_SHIFT;
 
 		ret.writeInt32LE(hdr1, 0);
 		ret.writeInt32LE(hdr2, 4);
@@ -174,10 +154,10 @@ export function writeObject(obj: NVMObject): Buffer {
 			typeAndLen += dataLength;
 		}
 		let hdr1 =
-			(typeAndLen & OBJ_TYPE_MASK) |
-			((obj.key & OBJ_KEY_MASK) << OBJ_KEY_SHIFT);
-		const bergerCode = computeBergerCode(hdr1, CODE_SMALL_SHIFT);
-		hdr1 |= bergerCode << CODE_SMALL_SHIFT;
+			(typeAndLen & NVM3_OBJ_TYPE_MASK) |
+			((obj.key & NVM3_OBJ_KEY_MASK) << NVM3_OBJ_KEY_SHIFT);
+		const bergerCode = computeBergerCode(hdr1, NVM3_CODE_SMALL_SHIFT);
+		hdr1 |= bergerCode << NVM3_CODE_SMALL_SHIFT;
 
 		ret.writeInt32LE(hdr1, 0);
 	}

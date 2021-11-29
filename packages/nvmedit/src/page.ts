@@ -1,18 +1,15 @@
+import {
+	FLASH_MAX_PAGE_SIZE,
+	NVM3_MIN_PAGE_SIZE,
+	NVM3_PAGE_COUNTER_MASK,
+	NVM3_PAGE_COUNTER_SIZE,
+	NVM3_PAGE_HEADER_SIZE,
+	NVM3_PAGE_MAGIC,
+	PageStatus,
+	PageWriteSize,
+} from "./consts";
 import { NVMObject, readObjects } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
-
-const NVM3_MIN_PAGE_SIZE = 512;
-export const FLASH_MAX_PAGE_SIZE = 2048;
-export const NVM3_PAGE_HEADER_SIZE = 20;
-const NVM3_PAGE_COUNTER_SIZE = 27;
-const NVM3_PAGE_COUNTER_MASK = (1 << NVM3_PAGE_COUNTER_SIZE) - 1;
-const NVM3_PAGE_MAGIC = 0xb29a;
-
-export enum NVMVersion {
-	"7.0+",
-	"7.11+",
-	"7.15.3+",
-}
 
 export interface PageHeader {
 	offset: number;
@@ -26,21 +23,9 @@ export interface PageHeader {
 	deviceFamily: number;
 }
 
-export enum PageStatus {
-	OK = 0xffffffff,
-	OK_ErasePending = 0xffffa5a5,
-	Bad = 0x0000ffff,
-	Bad_ErasePending = 0x0000a5a5,
-}
-
 export interface NVMPage {
 	header: PageHeader;
 	objects: NVMObject[];
-}
-
-export enum PageWriteSize {
-	WRITE_SIZE_32 = 0, // Only single writes are allowed
-	WRITE_SIZE_16 = 1, // Two writes are allowed
 }
 
 // The page size field has a value from 0 to 7 describing page sizes from 512 to 65536 bytes

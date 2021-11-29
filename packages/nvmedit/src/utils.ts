@@ -1,6 +1,7 @@
+import { FragmentType, ObjectType, PageStatus } from "./consts";
 import { NVMFile } from "./files/NVMFile";
-import { FragmentType, NVMObject, ObjectType } from "./object";
-import { NVMPage, PageStatus } from "./page";
+import type { NVMObject } from "./object";
+import type { NVMPage } from "./page";
 
 /** Counts the number of unset bits in the given word */
 export function computeBergerCode(word: number, numBits: number = 32): number {
