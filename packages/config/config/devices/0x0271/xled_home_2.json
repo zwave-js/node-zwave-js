@@ -55,7 +55,7 @@
 			"description": "Lamp switches off shortly and measures the ambient light.",
 			"valueSize": 1,
 			"unit": "minutes",
-			"minValue": 5,
+			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 0,
 			"options": [
@@ -169,7 +169,7 @@
 			"label": "Z-Wave On Command: Turn On Duration",
 			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
-			"minValue": 2,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"options": [
@@ -226,7 +226,7 @@
 			"label": "Z-Wave Off-On Sequence: Turn On Duration",
 			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
-			"minValue": 2,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 204,
 			"options": [
