@@ -579,7 +579,7 @@ function serializeCommonProtocolObjects(nvm: NVMJSON): NVMObject[] {
 		}).serialize(),
 	);
 
-	// TODO: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
+	// TODO: format >= 2: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
 
 	// TODO: { .key = FILE_ID_PREFERREDREPEATERS, .size = FILE_SIZE_PREFERREDREPEATERS, .name = "PREFERREDREPEATERS", .optional = true},
 
@@ -592,14 +592,127 @@ function serializeCommonProtocolObjects(nvm: NVMJSON): NVMObject[] {
 	return ret;
 }
 
-export function jsonToNVMObjects_v3(
+export function jsonToNVMObjects_v0(
 	json: NVMJSON,
 	major: number,
 	minor: number,
 	patch: number,
 ): NVMObjects {
 	const target = cloneDeep(json);
-	target.format = 3;
+	target.format = 0;
+
+	const applicationObjects = new Map<number, NVMObject>();
+	const protocolObjects = new Map<number, NVMObject>();
+
+	const addApplicationObjects = (...objects: NVMObject[]) => {
+		for (const o of objects) {
+			applicationObjects.set(o.key, o);
+		}
+	};
+	const addProtocolObjects = (...objects: NVMObject[]) => {
+		for (const o of objects) {
+			protocolObjects.set(o.key, o);
+		}
+	};
+
+	// Application files
+	const [applMajor, applMinor, applPatch] =
+		target.controller.applicationVersion.split(".").map((i) => parseInt(i));
+	const applVersionFile = new ApplicationVersionFile({
+		format: target.format,
+		major: applMajor,
+		minor: applMinor,
+		patch: applPatch,
+	});
+	addApplicationObjects(applVersionFile.serialize());
+
+	addApplicationObjects(...serializeCommonApplicationObjects(target));
+
+	// Protocol files
+
+	const protocolVersionFile = new ProtocolVersionFile({
+		format: target.format,
+		major,
+		minor,
+		patch,
+	});
+	addProtocolObjects(protocolVersionFile.serialize());
+
+	const nodeInfoFiles = new Map<number, NodeInfoFileV0>();
+	const routeCacheFiles = new Map<number, RouteCacheFileV0>();
+	const nodeInfoExists = new Set<number>();
+	const routeCacheExists = new Set<number>();
+
+	for (const [id, node] of Object.entries(target.nodes)) {
+		const nodeId = parseInt(id);
+		if (!nodeHasInfo(node)) continue;
+
+		nodeInfoExists.add(nodeId);
+
+		// Create/update node info file
+		const nodeInfoFileIndex = nodeIdToNodeInfoFileIDV0(nodeId);
+		nodeInfoFiles.set(
+			nodeInfoFileIndex,
+			new NodeInfoFileV0({
+				nodeInfo: nvmJSONNodeToNodeInfo(nodeId, node),
+			}),
+		);
+
+		// Create/update route cache file (if there is a route)
+		if (node.lwr || node.nlwr) {
+			routeCacheExists.add(nodeId);
+
+			const routeCacheFileIndex = nodeIdToRouteCacheFileIDV0(nodeId);
+			routeCacheFiles.set(
+				routeCacheFileIndex,
+				new RouteCacheFileV0({
+					routeCache: {
+						nodeId,
+						lwr: node.lwr ?? getEmptyRoute(),
+						nlwr: node.nlwr ?? getEmptyRoute(),
+					},
+				}),
+			);
+		}
+	}
+
+	addProtocolObjects(...serializeCommonProtocolObjects(target));
+
+	addProtocolObjects(
+		new ProtocolNodeListFile({ nodeIds: [...nodeInfoExists] }).serialize(),
+	);
+	addProtocolObjects(
+		new ProtocolRouteCacheExistsNodeMaskFile({
+			nodeIds: [...routeCacheExists],
+		}).serialize(),
+	);
+
+	if (nodeInfoFiles.size > 0) {
+		addProtocolObjects(
+			...[...nodeInfoFiles.values()].map((f) => f.serialize()),
+		);
+	}
+	if (routeCacheFiles.size > 0) {
+		addProtocolObjects(
+			...[...routeCacheFiles.values()].map((f) => f.serialize()),
+		);
+	}
+
+	return {
+		applicationObjects,
+		protocolObjects,
+	};
+}
+
+export function jsonToNVMObjects_v1_to_v3(
+	format: 1 | 2 | 3,
+	json: NVMJSON,
+	major: number,
+	minor: number,
+	patch: number,
+): NVMObjects {
+	const target = cloneDeep(json);
+	target.format = format;
 
 	const applicationObjects = new Map<number, NVMObject>();
 	const protocolObjects = new Map<number, NVMObject>();
@@ -713,11 +826,14 @@ export function jsonToNVMObjects_v3(
 }
 
 /** Reads an NVM buffer and returns its JSON representation */
-export function nvmToJSON(buffer: Buffer, debugLogs: boolean = false): NVMJSON {
+export function nvmToJSON(
+	buffer: Buffer,
+	debugLogs: boolean = false,
+): Required<NVMJSON> {
 	const nvm = parseNVM(buffer, debugLogs);
 	const ret = nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
 	ret.meta = getNVMMeta(nvm.protocolPages[0]);
-	return ret;
+	return ret as Required<NVMJSON>;
 }
 
 /** Takes a JSON represented NVM and converts it to binary */
@@ -732,36 +848,36 @@ export function jsonToNVM(
 
 	let objects: NVMObjects;
 	if (semver.gte(parsedVersion, "7.15.3")) {
-		objects = jsonToNVMObjects_v3(
+		objects = jsonToNVMObjects_v1_to_v3(
+			3,
 			json,
 			parsedVersion.major,
 			parsedVersion.minor,
 			parsedVersion.patch,
 		);
 	} else if (semver.gte(parsedVersion, "7.12.0")) {
-		throw new Error("not implemented");
-		// objects = jsonToNVMObjects_v2(
-		// 	json,
-		// 	parsedVersion.major,
-		// 	parsedVersion.minor,
-		// 	parsedVersion.patch,
-		// );
+		objects = jsonToNVMObjects_v1_to_v3(
+			2,
+			json,
+			parsedVersion.major,
+			parsedVersion.minor,
+			parsedVersion.patch,
+		);
 	} else if (semver.gte(parsedVersion, "7.11.0")) {
-		throw new Error("not implemented");
-		// objects = jsonToNVMObjects_v1(
-		// 	json,
-		// 	parsedVersion.major,
-		// 	parsedVersion.minor,
-		// 	parsedVersion.patch,
-		// );
+		objects = jsonToNVMObjects_v1_to_v3(
+			1,
+			json,
+			parsedVersion.major,
+			parsedVersion.minor,
+			parsedVersion.patch,
+		);
 	} else if (semver.gte(parsedVersion, "7.0.0")) {
-		throw new Error("not implemented");
-		// objects = jsonToNVMObjects_v0(
-		// 	json,
-		// 	parsedVersion.major,
-		// 	parsedVersion.minor,
-		// 	parsedVersion.patch,
-		// );
+		objects = jsonToNVMObjects_v0(
+			json,
+			parsedVersion.major,
+			parsedVersion.minor,
+			parsedVersion.patch,
+		);
 	} else {
 		throw new Error("cannot convert to a pre-7.0 NVM version");
 	}

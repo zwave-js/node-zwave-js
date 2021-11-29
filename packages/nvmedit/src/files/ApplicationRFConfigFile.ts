@@ -50,12 +50,15 @@ export class ApplicationRFConfigFile extends NVMFile {
 			this.rfRegion,
 			this.txPower * 10,
 			this.measured0dBm * 10,
-			this.enablePTI ?? 0,
-			0,
-			0,
 		]);
-		if (this.maxTXPower != undefined) {
-			this.payload.writeInt16LE(this.maxTXPower * 10, 4);
+		if (this.enablePTI != undefined || this.maxTXPower != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([this.enablePTI ?? 0, 0, 0]),
+			]);
+			if (this.maxTXPower != undefined) {
+				this.payload.writeInt16LE(this.maxTXPower * 10, 4);
+			}
 		}
 		return super.serialize();
 	}

@@ -1,8 +1,8 @@
 {
 	"format": 2,
 	"controller": {
-		"protocolVersion": "7.15.4",
-		"applicationVersion": "7.15.4",
+		"protocolVersion": "7.15.2",
+		"applicationVersion": "7.15.2",
 		"homeId": "0xd7db5d96",
 		"nodeId": 1,
 		"lastNodeId": 5,
@@ -23,22 +23,8 @@
 		"specificDeviceClass": 1,
 		"commandClasses": {
 			"includedInsecurely": [
-				94,
-				34,
-				133,
-				112,
-				86,
-				122,
-				114,
-				115,
-				152,
-				85,
-				134,
-				89,
-				90,
-				159,
-				108,
-				116
+				94, 34, 133, 112, 86, 122, 114, 115, 152, 85, 134, 89, 90, 159,
+				108, 116
 			],
 			"includedSecurelyInsecureCCs": [],
 			"includedSecurelySecureCCs": []
@@ -55,22 +41,8 @@
 				"nodeId": 1,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					34,
-					133,
-					112,
-					86,
-					122,
-					114,
-					115,
-					85,
-					134,
-					89,
-					90,
-					108,
-					116,
-					152,
-					159
+					94, 34, 133, 112, 86, 122, 114, 115, 85, 134, 89, 90, 108,
+					116, 152, 159
 				],
 				"controlledCCs": []
 			},
@@ -78,18 +50,7 @@
 				"nodeId": 2,
 				"changeType": 1,
 				"supportedCCs": [
-					37,
-					50,
-					114,
-					134,
-					32,
-					113,
-					112,
-					39,
-					133,
-					135,
-					117,
-					86
+					37, 50, 114, 134, 32, 113, 112, 39, 133, 135, 117, 86
 				],
 				"controlledCCs": []
 			},
@@ -97,21 +58,8 @@
 				"nodeId": 3,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					134,
-					114,
-					89,
-					133,
-					115,
-					113,
-					132,
-					128,
-					48,
-					49,
-					112,
-					152,
-					122,
-					90
+					94, 134, 114, 89, 133, 115, 113, 132, 128, 48, 49, 112, 152,
+					122, 90
 				],
 				"controlledCCs": []
 			},
@@ -119,25 +67,8 @@
 				"nodeId": 4,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					133,
-					142,
-					89,
-					85,
-					134,
-					114,
-					90,
-					135,
-					115,
-					128,
-					159,
-					48,
-					112,
-					113,
-					49,
-					132,
-					108,
-					122
+					94, 133, 142, 89, 85, 134, 114, 90, 135, 115, 128, 159, 48,
+					112, 113, 49, 132, 108, 122
 				],
 				"controlledCCs": []
 			},
@@ -145,25 +76,8 @@
 				"nodeId": 4,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					133,
-					142,
-					89,
-					85,
-					134,
-					114,
-					90,
-					135,
-					115,
-					128,
-					159,
-					48,
-					112,
-					113,
-					49,
-					132,
-					108,
-					122
+					94, 133, 142, 89, 85, 134, 114, 90, 135, 115, 128, 159, 48,
+					112, 113, 49, 132, 108, 122
 				],
 				"controlledCCs": []
 			},
@@ -177,19 +91,7 @@
 				"nodeId": 3,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					134,
-					114,
-					89,
-					133,
-					115,
-					113,
-					132,
-					128,
-					48,
-					49,
-					112,
-					122,
+					94, 134, 114, 89, 133, 115, 113, 132, 128, 48, 49, 112, 122,
 					90
 				],
 				"controlledCCs": []
@@ -215,23 +117,13 @@
 			{
 				"nodeId": 4,
 				"changeType": 1,
-				"supportedCCs": [
-					94,
-					85,
-					159,
-					108
-				],
+				"supportedCCs": [94, 85, 159, 108],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 4,
 				"changeType": 1,
-				"supportedCCs": [
-					94,
-					85,
-					159,
-					108
-				],
+				"supportedCCs": [94, 85, 159, 108],
 				"controlledCCs": []
 			},
 			{
@@ -244,22 +136,8 @@
 				"nodeId": 1,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					34,
-					133,
-					112,
-					86,
-					122,
-					114,
-					115,
-					152,
-					85,
-					134,
-					89,
-					90,
-					159,
-					108,
-					116
+					94, 34, 133, 112, 86, 122, 114, 115, 152, 85, 134, 89, 90,
+					159, 108, 116
 				],
 				"controlledCCs": []
 			},
@@ -267,22 +145,8 @@
 				"nodeId": 1,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					34,
-					133,
-					112,
-					86,
-					122,
-					114,
-					115,
-					152,
-					85,
-					134,
-					89,
-					90,
-					159,
-					108,
-					116
+					94, 34, 133, 112, 86, 122, 114, 115, 152, 85, 134, 89, 90,
+					159, 108, 116
 				],
 				"controlledCCs": []
 			},
@@ -290,25 +154,8 @@
 				"nodeId": 5,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					133,
-					142,
-					89,
-					85,
-					134,
-					114,
-					90,
-					135,
-					115,
-					128,
-					159,
-					48,
-					112,
-					113,
-					49,
-					132,
-					108,
-					122
+					94, 133, 142, 89, 85, 134, 114, 90, 135, 115, 128, 159, 48,
+					112, 113, 49, 132, 108, 122
 				],
 				"controlledCCs": []
 			},
@@ -322,21 +169,8 @@
 				"nodeId": 3,
 				"changeType": 1,
 				"supportedCCs": [
-					94,
-					134,
-					114,
-					89,
-					133,
-					115,
-					113,
-					132,
-					128,
-					48,
-					49,
-					112,
-					152,
-					122,
-					90
+					94, 134, 114, 89, 133, 115, 113, 132, 128, 48, 49, 112, 152,
+					122, 90
 				],
 				"controlledCCs": []
 			}
@@ -350,10 +184,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -361,10 +192,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				3,
-				5
-			],
+			"neighbors": [3, 5],
 			"sucUpdateIndex": 16,
 			"appRouteLock": false,
 			"routeSlaveSUC": true,
@@ -378,10 +206,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -389,10 +214,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				3,
-				5
-			],
+			"neighbors": [3, 5],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -401,9 +223,7 @@
 			"lwr": {
 				"beaming": false,
 				"protocolRate": 2,
-				"repeaterNodeIDs": [
-					3
-				]
+				"repeaterNodeIDs": [3]
 			},
 			"nlwr": {
 				"beaming": false,
@@ -415,10 +235,7 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -426,10 +243,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 33,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				2
-			],
+			"neighbors": [1, 2],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -450,10 +264,7 @@
 			"isListening": false,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [
-				40000,
-				100000
-			],
+			"supportedDataRates": [40000, 100000],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -461,10 +272,7 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 7,
 			"specificDeviceClass": 1,
-			"neighbors": [
-				1,
-				2
-			],
+			"neighbors": [1, 2],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
