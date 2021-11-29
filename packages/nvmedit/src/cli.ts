@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
-import { nvmToJSON } from "./convert";
+import { jsonToNVM, nvmToJSON } from "./convert";
 import "./index";
 
 void yargs
@@ -38,7 +38,7 @@ void yargs
 			const buffer = await fs.readFile(argv.in);
 			const json = nvmToJSON(buffer, argv.verbose);
 			await fs.writeJSON(argv.out, json, { spaces: "\t" });
-			console.error(`NVM written to ${argv.out}`);
+			console.error(`NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);
 		},
@@ -47,21 +47,36 @@ void yargs
 		"json2nvm",
 		"Convert an NVM backup to JSON",
 		(yargs) =>
-			yargs.usage("$0 json2nvm --in <input> --out <output>").options({
-				in: {
-					describe: "JSON input filename",
-					type: "string",
-					required: true,
-				},
-				out: {
-					describe: "NVM output filename",
-					type: "string",
-					required: true,
-				},
-			}),
-		(_argv) => {
-			console.error("not implemented yet!");
-			process.exit(1);
+			yargs
+				.usage(
+					"$0 json2nvm --in <input> --out <output> --version <version>",
+				)
+				.options({
+					in: {
+						describe: "JSON input filename",
+						type: "string",
+						required: true,
+					},
+					out: {
+						describe: "NVM output filename",
+						type: "string",
+						required: true,
+					},
+					protocolVersion: {
+						alias: "V",
+						describe:
+							"target protocol version, determines the NVM format",
+						type: "string",
+						required: true,
+					},
+				}),
+		async (argv) => {
+			const json = await fs.readJson(argv.in);
+			const nvm = jsonToNVM(json, argv.protocolVersion);
+			await fs.writeFile(argv.out, nvm);
+			console.error(`NVM (binary) written to ${argv.out}`);
+
+			process.exit(0);
 		},
 	)
 	.demandCommand(1, "Please specify a command")
