@@ -1,16 +1,17 @@
 import { NVMObject, readObjects } from "./object";
-import { validateBergerCode } from "./utils";
+import { computeBergerCode, validateBergerCode } from "./utils";
 
 const NVM3_MIN_PAGE_SIZE = 512;
-const FLASH_MAX_PAGE_SIZE = 2048;
+export const FLASH_MAX_PAGE_SIZE = 2048;
+export const NVM3_PAGE_HEADER_SIZE = 20;
 const NVM3_PAGE_COUNTER_SIZE = 27;
 const NVM3_PAGE_COUNTER_MASK = (1 << NVM3_PAGE_COUNTER_SIZE) - 1;
 const NVM3_PAGE_MAGIC = 0xb29a;
 
 export enum NVMVersion {
-	"6.61+",
+	"7.0+",
 	"7.11+",
-	"7.15+",
+	"7.15.3+",
 }
 
 export interface PageHeader {
@@ -59,6 +60,9 @@ export function readPage(
 	const magic = buffer.readUInt16LE(offset + 2);
 	if (magic !== NVM3_PAGE_MAGIC) {
 		throw new Error("Not a valid NVM3 page!");
+	}
+	if (version !== 0x01) {
+		throw new Error(`Unsupported NVM3 page version: ${version}`);
 	}
 
 	// The erase counter is saved twice, once normally, once inverted
@@ -114,10 +118,47 @@ export function readPage(
 	const bytesRead = actualPageSize;
 	const data = buffer.slice(offset + 20, offset + bytesRead);
 
-	const { objects } = readObjects(version, data);
+	const { objects } = readObjects(data);
 
 	return {
 		page: { header, objects },
 		bytesRead,
 	};
+}
+
+export function writePageHeader(header: Omit<PageHeader, "offset">): Buffer {
+	const ret = Buffer.alloc(NVM3_PAGE_HEADER_SIZE);
+
+	ret.writeUInt16LE(header.version, 0);
+	ret.writeUInt16LE(NVM3_PAGE_MAGIC, 2);
+
+	let eraseCount = header.eraseCount & NVM3_PAGE_COUNTER_MASK;
+	const eraseCountCode = computeBergerCode(
+		eraseCount,
+		NVM3_PAGE_COUNTER_SIZE,
+	);
+	eraseCount |= eraseCountCode << NVM3_PAGE_COUNTER_SIZE;
+	ret.writeInt32LE(eraseCount, 4);
+
+	let eraseCountInv = ~header.eraseCount & NVM3_PAGE_COUNTER_MASK;
+	const eraseCountInvCode = computeBergerCode(
+		eraseCountInv,
+		NVM3_PAGE_COUNTER_SIZE,
+	);
+	eraseCountInv |= eraseCountInvCode << NVM3_PAGE_COUNTER_SIZE;
+	ret.writeInt32LE(eraseCountInv, 8);
+
+	ret.writeUInt32LE(header.status, 12);
+
+	const devInfo =
+		(header.deviceFamily & 0x7ff) |
+		((header.writeSize & 0b1) << 11) |
+		((header.memoryMapped ? 1 : 0) << 12) |
+		(pageSizeToBits(header.pageSize) << 13);
+	ret.writeUInt16LE(devInfo, 16);
+
+	const formatInfo = header.encrypted ? 0xfffe : 0xffff;
+	ret.writeUInt16LE(formatInfo, 18);
+
+	return ret;
 }

@@ -29,6 +29,19 @@ export function validateBergerCode(
 	}
 }
 
+export function computeBergerCodeMulti(
+	words: number[],
+	numBits: number,
+): number {
+	let ret = 0;
+	for (const word of words) {
+		ret += computeBergerCode(word, Math.min(numBits, 32));
+		if (numBits < 32) break;
+		numBits -= 32;
+	}
+	return ret;
+}
+
 export function validateBergerCodeMulti(
 	words: number[],
 	numBits: number,

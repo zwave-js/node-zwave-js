@@ -1,4 +1,11 @@
-import { validateBergerCodeMulti } from "./utils";
+import {
+	computeBergerCode,
+	computeBergerCodeMulti,
+	validateBergerCodeMulti,
+} from "./utils";
+
+export const maxObjectSizeSmall = 120;
+export const maxObjectSizeLarge = 1900; // 204..4096, see nvm3.h in zw_nvm_converter
 
 const OBJ_KEY_SHIFT = 7;
 const OBJ_KEY_SIZE = 20;
@@ -11,10 +18,13 @@ const FRAG_TYPE_MASK = 0b11;
 const CODE_SMALL_SHIFT = 27;
 const CODE_LARGE_SHIFT = 26;
 
-// Everything is word-aligned
-const NVM3_WORD_SIZE = 4;
+export const NVM3_OBJ_HEADER_SIZE_SMALL = 4;
+export const NVM3_OBJ_HEADER_SIZE_LARGE = 8;
 
-const COUNTER_SIZE = 204;
+// objects must be word-aligned
+export const NVM3_WORD_SIZE = 4;
+
+export const NVM_COUNTER_SIZE = 204;
 
 export enum ObjectType {
 	DataLarge = 0,
@@ -39,7 +49,6 @@ export interface NVMObject {
 }
 
 export function readObject(
-	nvmVersion: number,
 	buffer: Buffer,
 	offset: number,
 ):
@@ -69,7 +78,7 @@ export function readObject(
 		fragmentLength = objType - ObjectType.DataSmall;
 		objType = ObjectType.DataSmall;
 	} else if (objType === ObjectType.CounterSmall) {
-		fragmentLength = COUNTER_SIZE;
+		fragmentLength = NVM_COUNTER_SIZE;
 	}
 
 	const fragmentType: FragmentType = isLarge
@@ -110,17 +119,14 @@ export function readObject(
 	};
 }
 
-export function readObjects(
-	nvmVersion: number,
-	buffer: Buffer,
-): {
+export function readObjects(buffer: Buffer): {
 	objects: NVMObject[];
 	bytesRead: number;
 } {
 	let offset = 0;
 	const objects: NVMObject[] = [];
 	while (offset < buffer.length) {
-		const result = readObject(nvmVersion, buffer, offset);
+		const result = readObject(buffer, offset);
 		if (!result) break;
 
 		const { object, bytesRead } = result;
@@ -133,6 +139,95 @@ export function readObjects(
 		objects,
 		bytesRead: offset,
 	};
+}
+
+export function writeObject(obj: NVMObject): Buffer {
+	const isLarge =
+		obj.type === ObjectType.DataLarge ||
+		obj.type === ObjectType.CounterLarge;
+	const headerSize = isLarge
+		? NVM3_OBJ_HEADER_SIZE_LARGE
+		: NVM3_OBJ_HEADER_SIZE_SMALL;
+	const dataLength = obj.data?.length ?? 0;
+	const ret = Buffer.allocUnsafe(dataLength + headerSize);
+
+	// Write header
+	if (isLarge) {
+		let hdr2 = dataLength & OBJ_LARGE_LEN_MASK;
+
+		const hdr1 =
+			(obj.type & OBJ_TYPE_MASK) |
+			((obj.key & OBJ_KEY_MASK) << OBJ_KEY_SHIFT) |
+			((obj.fragmentType & FRAG_TYPE_MASK) << FRAG_TYPE_SHIFT);
+
+		const bergerCode = computeBergerCodeMulti(
+			[hdr1, hdr2],
+			32 + CODE_LARGE_SHIFT,
+		);
+		hdr2 |= bergerCode << CODE_LARGE_SHIFT;
+
+		ret.writeInt32LE(hdr1, 0);
+		ret.writeInt32LE(hdr2, 4);
+	} else {
+		let typeAndLen = obj.type;
+		if (typeAndLen === ObjectType.DataSmall && dataLength > 0) {
+			typeAndLen += dataLength;
+		}
+		let hdr1 =
+			(typeAndLen & OBJ_TYPE_MASK) |
+			((obj.key & OBJ_KEY_MASK) << OBJ_KEY_SHIFT);
+		const bergerCode = computeBergerCode(hdr1, CODE_SMALL_SHIFT);
+		hdr1 |= bergerCode << CODE_SMALL_SHIFT;
+
+		ret.writeInt32LE(hdr1, 0);
+	}
+
+	// Write data
+	if (obj.data) {
+		obj.data.copy(ret, headerSize);
+	}
+	return ret;
+}
+
+export function fragmentLargeObject(
+	obj: NVMObject & { type: ObjectType.DataLarge | ObjectType.CounterLarge },
+	maxFirstFragmentSizeWithHeader: number,
+	maxFragmentSizeWithHeader: number,
+): NVMObject[] {
+	const ret: NVMObject[] = [];
+
+	if (
+		obj.data!.length + NVM3_OBJ_HEADER_SIZE_LARGE <=
+		maxFirstFragmentSizeWithHeader
+	) {
+		return [obj];
+	}
+
+	let offset = 0;
+	while (offset < obj.data!.length) {
+		const fragmentSize =
+			offset === 0
+				? maxFirstFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE
+				: maxFragmentSizeWithHeader - NVM3_OBJ_HEADER_SIZE_LARGE;
+		const data = obj.data!.slice(offset, offset + fragmentSize);
+
+		ret.push({
+			type: obj.type,
+			key: obj.key,
+			fragmentType:
+				offset === 0
+					? FragmentType.First
+					: data.length + NVM3_OBJ_HEADER_SIZE_LARGE <
+					  maxFragmentSizeWithHeader
+					? FragmentType.Last
+					: FragmentType.Next,
+			data,
+		});
+
+		offset += fragmentSize;
+	}
+
+	return ret;
 }
 
 /**

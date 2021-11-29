@@ -1,6 +1,11 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { TypedClassDecorator } from "@zwave-js/shared";
-import { FragmentType, NVMObject, ObjectType } from "../object";
+import {
+	FragmentType,
+	maxObjectSizeSmall,
+	NVMObject,
+	ObjectType,
+} from "../object";
 
 export interface NVMFileBaseOptions {
 	fileId?: number;
@@ -68,6 +73,15 @@ export class NVMFile {
 		}
 		this.object.key = this.fileId;
 		this.object.data = this.payload;
+		// We only support large and small data objects for now
+		if (this.payload.length <= maxObjectSizeSmall) {
+			this.object.type = ObjectType.DataSmall;
+		} else {
+			this.object.type = ObjectType.DataLarge;
+		}
+		// By default output unfragmented objects, they will be split later
+		this.object.fragmentType = FragmentType.None;
+
 		return this.object;
 	}
 
