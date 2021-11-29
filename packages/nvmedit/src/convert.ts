@@ -479,6 +479,119 @@ function nvmJSONControllerToFileOptions(
 	return ret;
 }
 
+function serializeCommonApplicationObjects(nvm: NVMJSON): NVMObject[] {
+	const ret: NVMObject[] = [];
+	const applTypeFile = new ApplicationTypeFile(
+		pick(nvm.controller, [
+			"listening",
+			"optionalFunctionality",
+			"genericDeviceClass",
+			"specificDeviceClass",
+		]),
+	);
+	ret.push(applTypeFile.serialize());
+
+	const applCCsFile = new ApplicationCCsFile(
+		pick(nvm.controller.commandClasses, [
+			"includedInsecurely",
+			"includedSecurelyInsecureCCs",
+			"includedSecurelySecureCCs",
+		]),
+	);
+	ret.push(applCCsFile.serialize());
+
+	if (nvm.controller.rfConfig) {
+		const applRFConfigFile = new ApplicationRFConfigFile({
+			...pick(nvm.controller.rfConfig, [
+				"rfRegion",
+				"txPower",
+				"measured0dBm",
+			]),
+			enablePTI: nvm.controller.rfConfig.enablePTI ?? undefined,
+			maxTXPower: nvm.controller.rfConfig.maxTXPower ?? undefined,
+		});
+		ret.push(applRFConfigFile.serialize());
+	}
+
+	if (nvm.controller.applicationData) {
+		// TODO: ensure this is 512 bytes long
+		const applDataFile = new ApplicationDataFile({
+			data: Buffer.from(nvm.controller.applicationData, "hex"),
+		});
+		ret.push(applDataFile.serialize());
+	}
+
+	return ret;
+}
+
+function serializeCommonProtocolObjects(nvm: NVMJSON): NVMObject[] {
+	const ret: NVMObject[] = [];
+
+	const appRouteLock = new Set<number>();
+	const routeSlaveSUC = new Set<number>();
+	const sucPendingUpdate = new Set<number>();
+	const isVirtual = new Set<number>();
+	const pendingDiscovery = new Set<number>();
+
+	for (const [id, node] of Object.entries(nvm.nodes)) {
+		const nodeId = parseInt(id);
+		if (!nodeHasInfo(node)) {
+			isVirtual.add(nodeId);
+			continue;
+		} else {
+			if (node.isVirtual) isVirtual.add(nodeId);
+			if (node.appRouteLock) appRouteLock.add(nodeId);
+			if (node.routeSlaveSUC) routeSlaveSUC.add(nodeId);
+			if (node.sucPendingUpdate) sucPendingUpdate.add(nodeId);
+			if (node.pendingDiscovery) pendingDiscovery.add(nodeId);
+		}
+	}
+
+	ret.push(
+		new ControllerInfoFile(
+			nvmJSONControllerToFileOptions(nvm.controller),
+		).serialize(),
+	);
+
+	ret.push(
+		new ProtocolAppRouteLockNodeMaskFile({
+			nodeIds: [...appRouteLock],
+		}).serialize(),
+	);
+	ret.push(
+		new ProtocolRouteSlaveSUCNodeMaskFile({
+			nodeIds: [...routeSlaveSUC],
+		}).serialize(),
+	);
+	ret.push(
+		new ProtocolSUCPendingUpdateNodeMaskFile({
+			nodeIds: [...sucPendingUpdate],
+		}).serialize(),
+	);
+	ret.push(
+		new ProtocolVirtualNodeMaskFile({
+			nodeIds: [...isVirtual],
+		}).serialize(),
+	);
+	ret.push(
+		new ProtocolPendingDiscoveryNodeMaskFile({
+			nodeIds: [...pendingDiscovery],
+		}).serialize(),
+	);
+
+	// TODO: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
+
+	// TODO: { .key = FILE_ID_PREFERREDREPEATERS, .size = FILE_SIZE_PREFERREDREPEATERS, .name = "PREFERREDREPEATERS", .optional = true},
+
+	ret.push(
+		new SUCUpdateEntriesFile({
+			updateEntries: nvm.controller.sucUpdateEntries,
+		}).serialize(),
+	);
+
+	return ret;
+}
+
 export function jsonToNVMObjects_v3(
 	json: NVMJSON,
 	major: number,
@@ -502,12 +615,7 @@ export function jsonToNVMObjects_v3(
 		}
 	};
 
-	// {.key = ZAF_FILE_ID_APP_VERSION, .size = ZAF_FILE_SIZE_APP_VERSION, .name = "APP_VERSION"},
-	// {.key = FILE_ID_APPLICATIONSETTINGS, .size = FILE_SIZE_APPLICATIONSETTINGS, .name = "APPLICATIONSETTINGS"},
-	// {.key = FILE_ID_APPLICATIONCMDINFO, .size = FILE_SIZE_APPLICATIONCMDINFO, .name = "APPLICATIONCMDINFO"},
-	// {.key = FILE_ID_APPLICATIONCONFIGURATION, .size = FILE_SIZE_APPLICATIONCONFIGURATION, .name = "APPLICATIONCONFIGURATION"},
-	// {.key = FILE_ID_APPLICATIONDATA, .size = FILE_SIZE_APPLICATIONDATA, .name = "APPLICATIONDATA"}
-
+	// Application files
 	const [applMajor, applMinor, applPatch] =
 		target.controller.applicationVersion.split(".").map((i) => parseInt(i));
 	const applVersionFile = new ApplicationVersionFile({
@@ -516,64 +624,11 @@ export function jsonToNVMObjects_v3(
 		minor: applMinor,
 		patch: applPatch,
 	});
-	addProtocolObjects(applVersionFile.serialize());
+	addApplicationObjects(applVersionFile.serialize());
 
-	const applTypeFile = new ApplicationTypeFile(
-		pick(target.controller, [
-			"listening",
-			"optionalFunctionality",
-			"genericDeviceClass",
-			"specificDeviceClass",
-		]),
-	);
-	addApplicationObjects(applTypeFile.serialize());
-
-	const applCCsFile = new ApplicationCCsFile(
-		pick(target.controller.commandClasses, [
-			"includedInsecurely",
-			"includedSecurelyInsecureCCs",
-			"includedSecurelySecureCCs",
-		]),
-	);
-	addApplicationObjects(applCCsFile.serialize());
-
-	if (target.controller.rfConfig) {
-		const applRFConfigFile = new ApplicationRFConfigFile({
-			...pick(target.controller.rfConfig, [
-				"rfRegion",
-				"txPower",
-				"measured0dBm",
-			]),
-			enablePTI: target.controller.rfConfig.enablePTI ?? undefined,
-			maxTXPower: target.controller.rfConfig.maxTXPower ?? undefined,
-		});
-		addApplicationObjects(applRFConfigFile.serialize());
-	}
-
-	if (target.controller.applicationData) {
-		// TODO: ensure this is 512 bytes long
-		const applDataFile = new ApplicationDataFile({
-			data: Buffer.from(target.controller.applicationData, "hex"),
-		});
-		addApplicationObjects(applDataFile.serialize());
-	}
+	addApplicationObjects(...serializeCommonApplicationObjects(target));
 
 	// Protocol files
-
-	// ✔ { .key = FILE_ID_ZW_VERSION, .size = FILE_SIZE_ZW_VERSION, .name = "ZW_VERSION"},
-	// ✔ { .key = FILE_ID_NODEINFO_V1, .size = FILE_SIZE_NODEINFO_V1, .name = "NODEINFO_V1", .optional = true, .num_keys = ZW_CLASSIC_MAX_NODES / NODEINFOS_PER_FILE},
-	// ✔ { .key = FILE_ID_NODEROUTECAHE_V1, .size = FILE_SIZE_NODEROUTECAHE_V1, .name = "NODEROUTECAHE_V1", .optional = true, .num_keys = ZW_CLASSIC_MAX_NODES / NODEROUTECACHES_PER_FILE},
-	// { .key = FILE_ID_PREFERREDREPEATERS, .size = FILE_SIZE_PREFERREDREPEATERS, .name = "PREFERREDREPEATERS", .optional = true},
-	// ✔ { .key = FILE_ID_SUCNODELIST, .size = FILE_SIZE_SUCNODELIST, .name = "SUCNODELIST"},
-	// ✔ { .key = FILE_ID_CONTROLLERINFO, .size = FILE_SIZE_CONTROLLERINFO_NVM715, .name = "CONTROLLERINFO"},
-	// ✔ { .key = FILE_ID_NODE_STORAGE_EXIST, .size = FILE_SIZE_NODE_STORAGE_EXIST, .name = "NODE_STORAGE_EXIST"},
-	// ✔ { .key = FILE_ID_NODE_ROUTECACHE_EXIST, .size = FILE_SIZE_NODE_ROUTECACHE_EXIST, .name = "NODE_ROUTECACHE_EXIST"},
-	// { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
-	// ✔ { .key = FILE_ID_APP_ROUTE_LOCK_FLAG, .size = FILE_SIZE_APP_ROUTE_LOCK_FLAG, .name = "APP_ROUTE_LOCK_FLAG"},
-	// ✔ { .key = FILE_ID_ROUTE_SLAVE_SUC_FLAG, .size = FILE_SIZE_ROUTE_SLAVE_SUC_FLAG, .name = "ROUTE_SLAVE_SUC_FLAG"},
-	// ✔ { .key = FILE_ID_SUC_PENDING_UPDATE_FLAG, .size = FILE_SIZE_SUC_PENDING_UPDATE_FLAG, .name = "SUC_PENDING_UPDATE_FLAG" },
-	// ✔ { .key = FILE_ID_BRIDGE_NODE_FLAG, .size = FILE_SIZE_BRIDGE_NODE_FLAG, .name = "BRIDGE_NODE_FLAG"},
-	// ✔ { .key = FILE_ID_PENDING_DISCOVERY_FLAG, .size = FILE_SIZE_PENDING_DISCOVERY_FLAG, .name = "PENDING_DISCOVERY_FLAG"},
 
 	const protocolVersionFile = new ProtocolVersionFile({
 		format: target.format,
@@ -586,26 +641,13 @@ export function jsonToNVMObjects_v3(
 	const nodeInfoFiles = new Map<number, NodeInfoFileV1>();
 	const routeCacheFiles = new Map<number, RouteCacheFileV1>();
 	const nodeInfoExists = new Set<number>();
-	const appRouteLock = new Set<number>();
-	const routeSlaveSUC = new Set<number>();
-	const sucPendingUpdate = new Set<number>();
-	const isVirtual = new Set<number>();
-	const pendingDiscovery = new Set<number>();
 	const routeCacheExists = new Set<number>();
 
 	for (const [id, node] of Object.entries(target.nodes)) {
 		const nodeId = parseInt(id);
-		if (!nodeHasInfo(node)) {
-			isVirtual.add(nodeId);
-			continue;
-		} else {
-			nodeInfoExists.add(nodeId);
-			if (node.isVirtual) isVirtual.add(nodeId);
-			if (node.appRouteLock) appRouteLock.add(nodeId);
-			if (node.routeSlaveSUC) routeSlaveSUC.add(nodeId);
-			if (node.sucPendingUpdate) sucPendingUpdate.add(nodeId);
-			if (node.pendingDiscovery) pendingDiscovery.add(nodeId);
-		}
+		if (!nodeHasInfo(node)) continue;
+
+		nodeInfoExists.add(nodeId);
 
 		// Create/update node info file
 		const nodeInfoFileIndex = nodeIdToNodeInfoFileIDV1(nodeId);
@@ -641,30 +683,8 @@ export function jsonToNVMObjects_v3(
 			});
 		}
 	}
-	if (nodeInfoFiles.size > 0) {
-		addProtocolObjects(
-			...[...nodeInfoFiles.values()].map((f) => f.serialize()),
-		);
-	}
-	if (routeCacheFiles.size > 0) {
-		addProtocolObjects(
-			...[...routeCacheFiles.values()].map((f) => f.serialize()),
-		);
-	}
 
-	// TODO: { .key = FILE_ID_PREFERREDREPEATERS, .size = FILE_SIZE_PREFERREDREPEATERS, .name = "PREFERREDREPEATERS", .optional = true},
-
-	addProtocolObjects(
-		new SUCUpdateEntriesFile({
-			updateEntries: target.controller.sucUpdateEntries,
-		}).serialize(),
-	);
-
-	addProtocolObjects(
-		new ControllerInfoFile(
-			nvmJSONControllerToFileOptions(target.controller),
-		).serialize(),
-	);
+	addProtocolObjects(...serializeCommonProtocolObjects(target));
 
 	addProtocolObjects(
 		new ProtocolNodeListFile({ nodeIds: [...nodeInfoExists] }).serialize(),
@@ -675,33 +695,16 @@ export function jsonToNVMObjects_v3(
 		}).serialize(),
 	);
 
-	// TODO: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
-
-	addProtocolObjects(
-		new ProtocolAppRouteLockNodeMaskFile({
-			nodeIds: [...appRouteLock],
-		}).serialize(),
-	);
-	addProtocolObjects(
-		new ProtocolRouteSlaveSUCNodeMaskFile({
-			nodeIds: [...routeSlaveSUC],
-		}).serialize(),
-	);
-	addProtocolObjects(
-		new ProtocolSUCPendingUpdateNodeMaskFile({
-			nodeIds: [...sucPendingUpdate],
-		}).serialize(),
-	);
-	addProtocolObjects(
-		new ProtocolVirtualNodeMaskFile({
-			nodeIds: [...isVirtual],
-		}).serialize(),
-	);
-	addProtocolObjects(
-		new ProtocolPendingDiscoveryNodeMaskFile({
-			nodeIds: [...pendingDiscovery],
-		}).serialize(),
-	);
+	if (nodeInfoFiles.size > 0) {
+		addProtocolObjects(
+			...[...nodeInfoFiles.values()].map((f) => f.serialize()),
+		);
+	}
+	if (routeCacheFiles.size > 0) {
+		addProtocolObjects(
+			...[...routeCacheFiles.values()].map((f) => f.serialize()),
+		);
+	}
 
 	return {
 		applicationObjects,

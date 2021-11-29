@@ -2,12 +2,6 @@
 export const ZWAVE_APPLICATION_NVM_SIZE = 0x3000;
 export const ZWAVE_PROTOCOL_NVM_SIZE = 0xc000 - ZWAVE_APPLICATION_NVM_SIZE;
 
-export enum NVMVersion {
-	"7.0+", // Format 0
-	"7.12+", // Format 1
-	"7.15.3+", // Format 2
-}
-
 // Everything must be word-aligned
 export const NVM3_WORD_SIZE = 4;
 
