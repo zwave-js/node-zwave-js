@@ -4280,8 +4280,8 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/semver": ^7.3.9
     "@types/yargs": ^17.0.5
-    "@zwave-js/core": 8.7.4
-    "@zwave-js/shared": 8.7.3
+    "@zwave-js/core": 8.8.1
+    "@zwave-js/shared": 8.8.0
     alcalzone-shared: ^4.0.1
     esbuild: "*"
     esbuild-register: ^3.1.2
