@@ -846,12 +846,6 @@ where
 
 The CCs that use this event bring specialized versions of the callback and arguments.
 
-```ts
-interface ZWaveNotificationCallbackArgs_DoorLockLoggingCC {
-	record: DoorLockLoggingRecord | undefined;
-}
-```
-
 #### `Entry Control CC`
 
 uses the following signature
