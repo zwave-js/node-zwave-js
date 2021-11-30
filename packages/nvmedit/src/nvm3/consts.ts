@@ -42,7 +42,7 @@ export const NVM3_OBJ_HEADER_SIZE_LARGE = 8;
 
 export const NVM3_MAX_OBJ_SIZE_SMALL = 120;
 export const NVM3_MAX_OBJ_SIZE_LARGE = 1900; // 204..4096, see nvm3.h in zw_nvm_converter
-export const NVM_COUNTER_SIZE = 204;
+export const NVM3_COUNTER_SIZE = 204;
 
 export enum ObjectType {
 	DataLarge = 0,

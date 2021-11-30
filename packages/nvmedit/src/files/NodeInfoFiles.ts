@@ -8,7 +8,7 @@ import {
 	parseNodeProtocolInfo,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	gotDeserializationOptions,
 	NVMFile,
@@ -116,7 +116,7 @@ export class NodeInfoFileV0 extends NVMFile {
 
 	public nodeInfo: NodeInfo;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.fileId = nodeIdToNodeInfoFileIDV0(this.nodeInfo.nodeId);
 		this.payload = encodeNodeInfo(this.nodeInfo);
 		return super.serialize();
@@ -174,7 +174,7 @@ export class NodeInfoFileV1 extends NVMFile {
 
 	public nodeInfos: NodeInfo[];
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		// The infos must be sorted by node ID
 		this.nodeInfos.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.nodeInfos[0].nodeId;

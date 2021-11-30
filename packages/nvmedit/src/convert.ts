@@ -6,7 +6,6 @@ import {
 } from "@zwave-js/core";
 import { cloneDeep, pick } from "@zwave-js/shared";
 import semver from "semver";
-import type { PageWriteSize } from "./consts";
 import {
 	ApplicationCCsFile,
 	ApplicationCCsFileID,
@@ -54,10 +53,15 @@ import {
 	SUCUpdateEntriesFileID,
 	SUCUpdateEntry,
 } from "./files";
-import { encodeNVM, NVMObjects, parseNVM } from "./nvm";
-import type { NVMObject } from "./object";
-import { getNVMMeta } from "./page";
-import { mapToObject } from "./utils";
+import {
+	encodeNVM,
+	getNVMMeta,
+	NVM3Objects,
+	NVMMeta,
+	parseNVM,
+} from "./nvm3/nvm";
+import type { NVM3Object } from "./nvm3/object";
+import { mapToObject } from "./nvm3/utils";
 
 export interface NVMJSON {
 	format: number;
@@ -66,12 +70,6 @@ export interface NVMJSON {
 	nodes: Record<number, NVMJSONNode>;
 }
 
-export interface NVMMeta {
-	pageSize: number;
-	deviceFamily: number;
-	writeSize: PageWriteSize;
-	memoryMapped: boolean;
-}
 export interface NVMJSONController {
 	protocolVersion: string;
 	applicationVersion: string;
@@ -171,8 +169,8 @@ function createEmptyPhysicalNode(): NVMJSONNodeWithInfo {
 
 /** Converts a compressed set of NVM objects to a JSON representation */
 export function nvmObjectsToJSON(
-	applicationObjects: ReadonlyMap<number, NVMObject>,
-	protocolObjects: ReadonlyMap<number, NVMObject>,
+	applicationObjects: ReadonlyMap<number, NVM3Object>,
+	protocolObjects: ReadonlyMap<number, NVM3Object>,
 ): NVMJSON {
 	const nodes = new Map<number, NVMJSONNode>();
 	const getNode = (id: number): NVMJSONNode => {
@@ -182,7 +180,7 @@ export function nvmObjectsToJSON(
 
 	const getObject = (
 		id: number | ((id: number) => boolean),
-	): NVMObject | undefined => {
+	): NVM3Object | undefined => {
 		if (typeof id === "number") {
 			return protocolObjects.get(id) ?? applicationObjects.get(id);
 		} else {
@@ -197,7 +195,7 @@ export function nvmObjectsToJSON(
 
 	const getObjectOrThrow = (
 		id: number | ((id: number) => boolean),
-	): NVMObject => {
+	): NVM3Object => {
 		const ret = getObject(id);
 		if (ret) return ret;
 		throw new Error(`Object not found`);
@@ -479,8 +477,8 @@ function nvmJSONControllerToFileOptions(
 	return ret;
 }
 
-function serializeCommonApplicationObjects(nvm: NVMJSON): NVMObject[] {
-	const ret: NVMObject[] = [];
+function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
+	const ret: NVM3Object[] = [];
 	const applTypeFile = new ApplicationTypeFile(
 		pick(nvm.controller, [
 			"listening",
@@ -524,8 +522,8 @@ function serializeCommonApplicationObjects(nvm: NVMJSON): NVMObject[] {
 	return ret;
 }
 
-function serializeCommonProtocolObjects(nvm: NVMJSON): NVMObject[] {
-	const ret: NVMObject[] = [];
+function serializeCommonProtocolObjects(nvm: NVMJSON): NVM3Object[] {
+	const ret: NVM3Object[] = [];
 
 	const appRouteLock = new Set<number>();
 	const routeSlaveSUC = new Set<number>();
@@ -597,19 +595,19 @@ export function jsonToNVMObjects_v0(
 	major: number,
 	minor: number,
 	patch: number,
-): NVMObjects {
+): NVM3Objects {
 	const target = cloneDeep(json);
 	target.format = 0;
 
-	const applicationObjects = new Map<number, NVMObject>();
-	const protocolObjects = new Map<number, NVMObject>();
+	const applicationObjects = new Map<number, NVM3Object>();
+	const protocolObjects = new Map<number, NVM3Object>();
 
-	const addApplicationObjects = (...objects: NVMObject[]) => {
+	const addApplicationObjects = (...objects: NVM3Object[]) => {
 		for (const o of objects) {
 			applicationObjects.set(o.key, o);
 		}
 	};
-	const addProtocolObjects = (...objects: NVMObject[]) => {
+	const addProtocolObjects = (...objects: NVM3Object[]) => {
 		for (const o of objects) {
 			protocolObjects.set(o.key, o);
 		}
@@ -710,19 +708,19 @@ export function jsonToNVMObjects_v1_to_v3(
 	major: number,
 	minor: number,
 	patch: number,
-): NVMObjects {
+): NVM3Objects {
 	const target = cloneDeep(json);
 	target.format = format;
 
-	const applicationObjects = new Map<number, NVMObject>();
-	const protocolObjects = new Map<number, NVMObject>();
+	const applicationObjects = new Map<number, NVM3Object>();
+	const protocolObjects = new Map<number, NVM3Object>();
 
-	const addApplicationObjects = (...objects: NVMObject[]) => {
+	const addApplicationObjects = (...objects: NVM3Object[]) => {
 		for (const o of objects) {
 			applicationObjects.set(o.key, o);
 		}
 	};
-	const addProtocolObjects = (...objects: NVMObject[]) => {
+	const addProtocolObjects = (...objects: NVM3Object[]) => {
 		for (const o of objects) {
 			protocolObjects.set(o.key, o);
 		}
@@ -846,7 +844,7 @@ export function jsonToNVM(
 		throw new Error(`Invalid protocol version: ${protocolVersion}`);
 	}
 
-	let objects: NVMObjects;
+	let objects: NVM3Objects;
 	if (semver.gte(parsedVersion, "7.15.3")) {
 		objects = jsonToNVMObjects_v1_to_v3(
 			3,

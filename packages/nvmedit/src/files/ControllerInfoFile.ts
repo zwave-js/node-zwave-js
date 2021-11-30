@@ -1,6 +1,6 @@
 import { stripUndefined } from "@zwave-js/core";
 import { buffer2hex } from "@zwave-js/shared";
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -107,7 +107,7 @@ export class ControllerInfoFile extends NVMFile {
 	public primaryLongRangeChannelId?: number;
 	public dcdcConfig?: number;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		if (this.lastNodeIdLR != undefined) {
 			this.payload = Buffer.allocUnsafe(22);
 			this.homeId.copy(this.payload, 0);

@@ -5,7 +5,7 @@ import {
 	protocolDataRateMask,
 	RouteProtocolDataRate,
 } from "@zwave-js/core";
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	gotDeserializationOptions,
 	NVMFile,
@@ -109,7 +109,7 @@ export class RouteCacheFileV0 extends NVMFile {
 
 	public routeCache: RouteCache;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.fileId = nodeIdToRouteCacheFileIDV0(this.routeCache.nodeId);
 		this.payload = Buffer.concat([
 			encodeRoute(this.routeCache.lwr),
@@ -179,7 +179,7 @@ export class RouteCacheFileV1 extends NVMFile {
 
 	public routeCaches: RouteCache[];
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		// The route infos must be sorted by node ID
 		this.routeCaches.sort((a, b) => a.nodeId - b.nodeId);
 		const minNodeId = this.routeCaches[0].nodeId;

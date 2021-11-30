@@ -1,4 +1,4 @@
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -39,7 +39,7 @@ export class ApplicationTypeFile extends NVMFile {
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.payload = Buffer.from([
 			(this.listening ? 0b1 : 0) |
 				(this.optionalFunctionality ? 0b10 : 0),

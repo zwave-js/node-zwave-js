@@ -2,6 +2,7 @@ import {
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,
 	NVM3_CODE_SMALL_SHIFT,
+	NVM3_COUNTER_SIZE,
 	NVM3_OBJ_FRAGTYPE_MASK,
 	NVM3_OBJ_FRAGTYPE_SHIFT,
 	NVM3_OBJ_HEADER_SIZE_LARGE,
@@ -11,7 +12,6 @@ import {
 	NVM3_OBJ_LARGE_LEN_MASK,
 	NVM3_OBJ_TYPE_MASK,
 	NVM3_WORD_SIZE,
-	NVM_COUNTER_SIZE,
 	ObjectType,
 } from "./consts";
 import {
@@ -20,7 +20,7 @@ import {
 	validateBergerCodeMulti,
 } from "./utils";
 
-export interface NVMObject {
+export interface NVM3Object {
 	type: ObjectType;
 	fragmentType: FragmentType;
 	key: number;
@@ -32,7 +32,7 @@ export function readObject(
 	offset: number,
 ):
 	| {
-			object: NVMObject;
+			object: NVM3Object;
 			bytesRead: number;
 	  }
 	| undefined {
@@ -57,7 +57,7 @@ export function readObject(
 		fragmentLength = objType - ObjectType.DataSmall;
 		objType = ObjectType.DataSmall;
 	} else if (objType === ObjectType.CounterSmall) {
-		fragmentLength = NVM_COUNTER_SIZE;
+		fragmentLength = NVM3_COUNTER_SIZE;
 	}
 
 	const fragmentType: FragmentType = isLarge
@@ -86,7 +86,7 @@ export function readObject(
 		(fragmentLength + NVM3_WORD_SIZE - 1) & ~(NVM3_WORD_SIZE - 1);
 	const bytesRead = headerSize + alignedLength;
 
-	const obj: NVMObject = {
+	const obj: NVM3Object = {
 		type: objType,
 		fragmentType,
 		key,
@@ -99,11 +99,11 @@ export function readObject(
 }
 
 export function readObjects(buffer: Buffer): {
-	objects: NVMObject[];
+	objects: NVM3Object[];
 	bytesRead: number;
 } {
 	let offset = 0;
-	const objects: NVMObject[] = [];
+	const objects: NVM3Object[] = [];
 	while (offset < buffer.length) {
 		const result = readObject(buffer, offset);
 		if (!result) break;
@@ -120,7 +120,7 @@ export function readObjects(buffer: Buffer): {
 	};
 }
 
-export function writeObject(obj: NVMObject): Buffer {
+export function writeObject(obj: NVM3Object): Buffer {
 	const isLarge =
 		obj.type === ObjectType.DataLarge ||
 		obj.type === ObjectType.CounterLarge;
@@ -170,11 +170,11 @@ export function writeObject(obj: NVMObject): Buffer {
 }
 
 export function fragmentLargeObject(
-	obj: NVMObject & { type: ObjectType.DataLarge | ObjectType.CounterLarge },
+	obj: NVM3Object & { type: ObjectType.DataLarge | ObjectType.CounterLarge },
 	maxFirstFragmentSizeWithHeader: number,
 	maxFragmentSizeWithHeader: number,
-): NVMObject[] {
-	const ret: NVMObject[] = [];
+): NVM3Object[] {
+	const ret: NVM3Object[] = [];
 
 	if (
 		obj.data!.length + NVM3_OBJ_HEADER_SIZE_LARGE <=
@@ -215,8 +215,8 @@ export function fragmentLargeObject(
  * them so that each object is only stored once.
  */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function compressObjects(objects: NVMObject[]) {
-	const ret = new Map<number, NVMObject>();
+export function compressObjects(objects: NVM3Object[]) {
+	const ret = new Map<number, NVM3Object>();
 	// Only insert valid objects. This means non-fragmented ones, non-deleted ones
 	// and fragmented ones in the correct and complete order
 	outer: for (let i = 0; i < objects.length; i++) {

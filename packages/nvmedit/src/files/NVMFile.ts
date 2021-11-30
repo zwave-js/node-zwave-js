@@ -1,13 +1,17 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { TypedClassDecorator } from "@zwave-js/shared";
-import { FragmentType, NVM3_MAX_OBJ_SIZE_SMALL, ObjectType } from "../consts";
-import type { NVMObject } from "../object";
+import {
+	FragmentType,
+	NVM3_MAX_OBJ_SIZE_SMALL,
+	ObjectType,
+} from "../nvm3/consts";
+import type { NVM3Object } from "../nvm3/object";
 
 export interface NVMFileBaseOptions {
 	fileId?: number;
 }
 export interface NVMFileDeserializationOptions extends NVMFileBaseOptions {
-	object: NVMObject;
+	object: NVM3Object;
 }
 
 export function gotDeserializationOptions(
@@ -44,14 +48,14 @@ export class NVMFile {
 		this.payload = this.object.data ?? Buffer.allocUnsafe(0);
 	}
 
-	protected object: NVMObject;
+	protected object: NVM3Object;
 	protected payload: Buffer;
 	public fileId: number = 0;
 
 	/**
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
-	public static from(object: NVMObject): NVMFile {
+	public static from(object: NVM3Object): NVMFile {
 		// Fall back to unspecified command class in case we receive one that is not implemented
 		const Constructor = getNVMFileConstructor(object.key)!;
 		return new Constructor({
@@ -63,7 +67,7 @@ export class NVMFile {
 	/**
 	 * Serializes this NVMFile into an NVM Object
 	 */
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		if (!this.fileId) {
 			throw new Error("The NVM file ID must be set before serializing");
 		}

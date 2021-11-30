@@ -1,4 +1,4 @@
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -38,7 +38,7 @@ export class VersionFile extends NVMFile {
 	public minor: number;
 	public patch: number;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.payload = Buffer.from([
 			this.patch,
 			this.minor,

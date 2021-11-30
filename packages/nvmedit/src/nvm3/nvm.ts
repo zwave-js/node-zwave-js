@@ -1,26 +1,26 @@
+import { pick } from "@zwave-js/shared";
 import {
 	FLASH_MAX_PAGE_SIZE,
+	NVM3_COUNTER_SIZE,
 	NVM3_OBJ_HEADER_SIZE_SMALL,
 	NVM3_PAGE_HEADER_SIZE,
 	NVM3_WORD_SIZE,
-	NVM_COUNTER_SIZE,
 	ObjectType,
 	PageStatus,
 	PageWriteSize,
 	ZWAVE_APPLICATION_NVM_SIZE,
 	ZWAVE_PROTOCOL_NVM_SIZE,
 } from "./consts";
-import type { NVMMeta } from "./convert";
 import {
 	compressObjects,
 	fragmentLargeObject,
-	NVMObject,
+	NVM3Object,
 	writeObject,
 } from "./object";
-import { NVMPage, readPage, writePageHeader } from "./page";
+import { NVM3Page, readPage, writePageHeader } from "./page";
 import { dumpObject, dumpPage } from "./utils";
 
-function comparePages(p1: NVMPage, p2: NVMPage) {
+function comparePages(p1: NVM3Page, p2: NVM3Page) {
 	if (p1.header.eraseCount === p2.header.eraseCount) {
 		return p1.header.offset - p2.header.offset;
 	} else {
@@ -28,26 +28,33 @@ function comparePages(p1: NVMPage, p2: NVMPage) {
 	}
 }
 
-export interface NVMPages {
-	/** All application pages in the NVM */
-	applicationPages: NVMPage[];
-	/** All application pages in the NVM */
-	protocolPages: NVMPage[];
+export interface NVMMeta {
+	pageSize: number;
+	deviceFamily: number;
+	writeSize: PageWriteSize;
+	memoryMapped: boolean;
 }
 
-export interface NVMObjects {
+export interface NVM3Pages {
+	/** All application pages in the NVM */
+	applicationPages: NVM3Page[];
+	/** All application pages in the NVM */
+	protocolPages: NVM3Page[];
+}
+
+export interface NVM3Objects {
 	/** A compressed map of application-level NVM objects */
-	applicationObjects: Map<number, NVMObject>;
+	applicationObjects: Map<number, NVM3Object>;
 	/** A compressed map of protocol-level NVM objects */
-	protocolObjects: Map<number, NVMObject>;
+	protocolObjects: Map<number, NVM3Object>;
 }
 
 export function parseNVM(
 	buffer: Buffer,
 	verbose: boolean = false,
-): NVMPages & NVMObjects {
+): NVM3Pages & NVM3Objects {
 	let offset = 0;
-	const pages: NVMPage[] = [];
+	const pages: NVM3Page[] = [];
 	while (offset < buffer.length) {
 		const { page, bytesRead } = readPage(buffer, offset);
 		if (verbose) dumpPage(page);
@@ -70,14 +77,14 @@ export function parseNVM(
 	const applicationObjects = compressObjects(
 		applicationPages.reduce(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVMObject[],
+			[] as NVM3Object[],
 		),
 	);
 
 	const protocolObjects = compressObjects(
 		protocolPages.reduce(
 			(acc, page) => acc.concat(page.objects),
-			[] as NVMObject[],
+			[] as NVM3Object[],
 		),
 	);
 
@@ -103,9 +110,9 @@ export type EncodeNVMOptions = Partial<NVMMeta>;
 
 export function encodeNVM(
 	/** A compressed map of application-level NVM objects */
-	applicationObjects: Map<number, NVMObject>,
+	applicationObjects: Map<number, NVM3Object>,
 	/** A compressed map of protocol-level NVM objects */
-	protocolObjects: Map<number, NVMObject>,
+	protocolObjects: Map<number, NVM3Object>,
 	options?: EncodeNVMOptions,
 ): Buffer {
 	const {
@@ -140,7 +147,10 @@ export function encodeNVM(
 		protocolPages.push(createEmptyPage());
 	}
 
-	const writeObjects = (pages: Buffer[], objects: Map<number, NVMObject>) => {
+	const writeObjects = (
+		pages: Buffer[],
+		objects: Map<number, NVM3Object>,
+	) => {
 		// Keep track where we are at with writing in the pages
 		let pageIndex = -1;
 		let offsetInPage = -1;
@@ -165,13 +175,13 @@ export function encodeNVM(
 
 		nextPage();
 		for (const obj of objects.values()) {
-			let fragments: NVMObject[] | undefined;
+			let fragments: NVM3Object[] | undefined;
 
 			if (obj.type === ObjectType.Deleted) continue;
 			if (
 				(obj.type === ObjectType.CounterSmall &&
 					remainingSpace <
-						NVM3_OBJ_HEADER_SIZE_SMALL + NVM_COUNTER_SIZE) ||
+						NVM3_OBJ_HEADER_SIZE_SMALL + NVM3_COUNTER_SIZE) ||
 				(obj.type === ObjectType.DataSmall &&
 					remainingSpace <
 						NVM3_OBJ_HEADER_SIZE_SMALL + (obj.data?.length ?? 0))
@@ -206,4 +216,13 @@ export function encodeNVM(
 	writeObjects(protocolPages, protocolObjects);
 
 	return Buffer.concat([...applicationPages, ...protocolPages]);
+}
+
+export function getNVMMeta(page: NVM3Page): NVMMeta {
+	return pick(page.header, [
+		"pageSize",
+		"writeSize",
+		"memoryMapped",
+		"deviceFamily",
+	]);
 }

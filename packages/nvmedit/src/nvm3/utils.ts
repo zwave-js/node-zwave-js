@@ -1,7 +1,7 @@
+import { NVMFile } from "../files/NVMFile";
 import { FragmentType, ObjectType, PageStatus } from "./consts";
-import { NVMFile } from "./files/NVMFile";
-import type { NVMObject } from "./object";
-import type { NVMPage } from "./page";
+import type { NVM3Object } from "./object";
+import type { NVM3Page } from "./page";
 
 /** Counts the number of unset bits in the given word */
 export function computeBergerCode(word: number, numBits: number = 32): number {
@@ -74,7 +74,7 @@ export function mapToObject<T, TMap extends Map<string | number, T>>(
 	return obj;
 }
 
-export function dumpPage(page: NVMPage, json: boolean = false): void {
+export function dumpPage(page: NVM3Page, json: boolean = false): void {
 	console.log(` `);
 	console.log(`read page (offset 0x${page.header.offset.toString(16)}):`);
 	console.log(`  version: ${page.header.version}`);
@@ -92,7 +92,7 @@ export function dumpPage(page: NVMPage, json: boolean = false): void {
 	}
 }
 
-export function dumpObject(obj: NVMObject, json: boolean = false): void {
+export function dumpObject(obj: NVM3Object, json: boolean = false): void {
 	try {
 		if (json) {
 			const file = NVMFile.from(obj);

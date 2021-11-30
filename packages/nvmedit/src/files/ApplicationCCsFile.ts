@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -52,7 +52,7 @@ export class ApplicationCCsFile extends NVMFile {
 	public includedSecurelyInsecureCCs: CommandClasses[];
 	public includedSecurelySecureCCs: CommandClasses[];
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.payload = Buffer.alloc((1 + MAX_CCs) * 3);
 		let offset = 0;
 		for (const array of [

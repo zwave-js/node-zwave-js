@@ -1,4 +1,4 @@
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -45,7 +45,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public enablePTI?: number;
 	public maxTXPower?: number;
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.payload = Buffer.from([
 			this.rfRegion,
 			this.txPower * 10,

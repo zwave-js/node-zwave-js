@@ -1,5 +1,5 @@
 import { CommandClasses, encodeCCList, parseCCList } from "@zwave-js/core";
-import type { NVMObject } from "../object";
+import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
 	gotDeserializationOptions,
@@ -68,7 +68,7 @@ export class SUCUpdateEntriesFile extends NVMFile {
 
 	public updateEntries: SUCUpdateEntry[];
 
-	public serialize(): NVMObject {
+	public serialize(): NVM3Object {
 		this.payload = Buffer.alloc(SUC_MAX_UPDATES * SUC_UPDATE_ENTRY_SIZE, 0);
 		for (let i = 0; i < this.updateEntries.length; i++) {
 			const offset = i * SUC_UPDATE_ENTRY_SIZE;

@@ -1,4 +1,3 @@
-import { pick } from "@zwave-js/shared";
 import {
 	FLASH_MAX_PAGE_SIZE,
 	NVM3_MIN_PAGE_SIZE,
@@ -9,11 +8,10 @@ import {
 	PageStatus,
 	PageWriteSize,
 } from "./consts";
-import type { NVMMeta } from "./convert";
-import { NVMObject, readObjects } from "./object";
+import { NVM3Object, readObjects } from "./object";
 import { computeBergerCode, validateBergerCode } from "./utils";
 
-export interface PageHeader {
+export interface NVM3PageHeader {
 	offset: number;
 	version: number;
 	eraseCount: number;
@@ -25,9 +23,9 @@ export interface PageHeader {
 	deviceFamily: number;
 }
 
-export interface NVMPage {
-	header: PageHeader;
-	objects: NVMObject[];
+export interface NVM3Page {
+	header: NVM3PageHeader;
+	objects: NVM3Object[];
 }
 
 // The page size field has a value from 0 to 7 describing page sizes from 512 to 65536 bytes
@@ -42,7 +40,7 @@ export function pageSizeFromBits(bits: number): number {
 export function readPage(
 	buffer: Buffer,
 	offset: number,
-): { page: NVMPage; bytesRead: number } {
+): { page: NVM3Page; bytesRead: number } {
 	const version = buffer.readUInt16LE(offset);
 	const magic = buffer.readUInt16LE(offset + 2);
 	if (magic !== NVM3_PAGE_MAGIC) {
@@ -91,7 +89,7 @@ export function readPage(
 
 	const encrypted = !(formatInfo & 0b1);
 
-	const header: PageHeader = {
+	const header: NVM3PageHeader = {
 		offset,
 		version,
 		eraseCount,
@@ -113,7 +111,9 @@ export function readPage(
 	};
 }
 
-export function writePageHeader(header: Omit<PageHeader, "offset">): Buffer {
+export function writePageHeader(
+	header: Omit<NVM3PageHeader, "offset">,
+): Buffer {
 	const ret = Buffer.alloc(NVM3_PAGE_HEADER_SIZE);
 
 	ret.writeUInt16LE(header.version, 0);
@@ -148,13 +148,4 @@ export function writePageHeader(header: Omit<PageHeader, "offset">): Buffer {
 	ret.writeUInt16LE(formatInfo, 18);
 
 	return ret;
-}
-
-export function getNVMMeta(page: NVMPage): NVMMeta {
-	return pick(page.header, [
-		"pageSize",
-		"writeSize",
-		"memoryMapped",
-		"deviceFamily",
-	]);
 }

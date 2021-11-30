@@ -1,6 +1,5 @@
 import "reflect-metadata";
 
-export { FragmentType, ObjectType, PageStatus, PageWriteSize } from "./consts";
 export {
 	jsonToNVM,
 	NVMJSON,
@@ -9,8 +8,14 @@ export {
 	NVMJSONNode,
 	NVMJSONNodeWithInfo,
 	NVMJSONVirtualNode,
-	NVMMeta,
 	nvmToJSON,
 } from "./convert";
-export { NVMObject } from "./object";
-export { NVMPage, PageHeader } from "./page";
+export {
+	FragmentType,
+	ObjectType,
+	PageStatus,
+	PageWriteSize,
+} from "./nvm3/consts";
+export { NVMMeta } from "./nvm3/nvm";
+export { NVM3Object as NVMObject } from "./nvm3/object";
+export { NVM3Page as NVMPage, NVM3PageHeader as PageHeader } from "./nvm3/page";
