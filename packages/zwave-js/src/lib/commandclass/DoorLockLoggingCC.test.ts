@@ -136,8 +136,6 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 			});
 		});
 
-		it.todo("should send a DoorLockLoggingCC.RecordGet");
-
 		it.todo("Test the behavior when the request failed");
 
 		it.todo("Test the behavior when the request succeeds");

@@ -7,7 +7,6 @@ import type {
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
-import type { ZWaveNotificationCallbackParams_DoorLockLoggingCC } from "../commandclass/DoorLockLoggingCC";
 import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
 import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
 import type { ZWaveNotificationCallbackParams_PowerlevelCC } from "../commandclass/PowerlevelCC";
@@ -81,7 +80,6 @@ export type ZWaveNodeStatusChangeCallback = (
 
 export type ZWaveNotificationCallback = (
 	...args:
-		| ZWaveNotificationCallbackParams_DoorLockLoggingCC
 		| ZWaveNotificationCallbackParams_NotificationCC
 		| ZWaveNotificationCallbackParams_EntryControlCC
 		| ZWaveNotificationCallbackParams_PowerlevelCC

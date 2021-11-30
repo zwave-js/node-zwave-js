@@ -82,7 +82,6 @@ import {
 	DoorLockMode,
 	getCurrentModeValueId as getCurrentLockModeValueId,
 } from "../commandclass/DoorLockCC";
-import { DoorLockLoggingCCRecordReport } from "../commandclass/DoorLockLoggingCC";
 import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
 	FirmwareUpdateCapabilities,
@@ -2191,8 +2190,6 @@ protocol version:      ${this._protocolVersion}`;
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
 			return this.handlePowerlevelTestNodeReport(command);
-		} else if (command instanceof DoorLockLoggingCCRecordReport) {
-			return this.handleDoorLockLoggingRecordReport(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -3502,18 +3499,6 @@ protocol version:      ${this._protocolVersion}`;
 			}
 			throw e;
 		}
-	}
-
-	private handleDoorLockLoggingRecordReport(
-		command: DoorLockLoggingCCRecordReport,
-	): void {
-		// Notify listeners
-		this.emit(
-			"notification",
-			this,
-			CommandClasses["Door Lock Logging"],
-			pick(command, ["record"]),
-		);
 	}
 
 	private recentEntryControlNotificationSequenceNumbers: number[] = [];

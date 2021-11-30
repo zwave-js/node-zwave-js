@@ -158,10 +158,6 @@ export {
 	EventType,
 	RecordStatus,
 } from "./DoorLockLoggingCC";
-export type {
-	ZWaveNotificationCallbackArgs_DoorLockLoggingCC,
-	ZWaveNotificationCallbackParams_DoorLockLoggingCC,
-} from "./DoorLockLoggingCC";
 export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,

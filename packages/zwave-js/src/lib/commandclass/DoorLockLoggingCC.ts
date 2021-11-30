@@ -9,7 +9,6 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -142,24 +141,6 @@ export enum RecordStatus {
 	Empty = 0x00,
 	HoldsLegalData = 0x01,
 }
-
-/**
- * @publicAPI
- * This is emitted when an record report is received
- */
-export interface ZWaveNotificationCallbackArgs_DoorLockLoggingCC {
-	record: DoorLockLoggingRecord | undefined;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Door Lock Logging CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_DoorLockLoggingCC = [
-	node: ZWaveNode,
-	ccId: typeof CommandClasses["Door Lock Logging"],
-	args: ZWaveNotificationCallbackArgs_DoorLockLoggingCC,
-];
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
