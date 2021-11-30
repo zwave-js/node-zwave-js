@@ -29,17 +29,6 @@
 			["Thermostat Setpoint", "get", 1]
 		]
 	},
-	"paramInformation": [
-		{
-			"#": "132",
-			"label": "Wake Up",
-			"description": "Wake Up Interval",
-			"valueSize": 60,
-			"minValue": 60,
-			"maxValue": 1800,
-			"defaultValue": 300
-		}
-	],
 	"metadata": {
 		"inclusion": "• Ensure smart radiator valve is factory reset. \n• Activate “Inclusion” on the Z-Wave controller. \n• Quickly press and release menu button (one with a dot) on smart radiator valve. \n• Observe both controller and smart radiator valve for status of the process.",
 		"exclusion": "• Activate “Exclusion” on the Z-Wave controller. \n• Quickly press and release menu button (one with a dot) on smart radiator valve. \n• Observe both controller and smart radiator valve for status of the process.",
