@@ -6,8 +6,11 @@
 	"devices": [
 		{
 			"productType": "0x4447",
-			"productId": "0x4036",
-			"zwaveAllianceId": 4176
+			"productId": "0x4037"
+		},
+		{
+			"productType": "0x4447",
+			"productId": "0x4036"
 		}
 	],
 	"firmwareVersion": {
