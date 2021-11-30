@@ -2,11 +2,12 @@ import {
 	CommandClasses,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	validatePayload,
-	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { buffer2hex, isPrintableASCII, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -15,7 +16,6 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -128,12 +128,11 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 const LATEST_RECORD_NUMBER_KEY = 0;
 
 export interface DoorLockLoggingRecord {
-	recordNumber: number;
-	timestamp: string | undefined;
-	eventType: EventType | undefined;
-	label: string | undefined;
-	userId?: number | undefined;
-	userCode?: string | Buffer | undefined;
+	timestamp: string;
+	eventType: EventType;
+	label: string;
+	userId?: number;
+	userCode?: string | Buffer;
 }
 
 // @publicAPI
@@ -173,6 +172,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 		return response?.recordsCount;
 	}
 
+	/** Retrieves the specified audit record. Defaults to the latest one. */
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 	): Promise<DoorLockLoggingRecord | undefined> {
@@ -264,10 +264,6 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	}
 
 	@ccValue({ internal: true })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Max logging records stored",
-	})
 	public readonly recordsCount: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -280,9 +276,12 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	}
 }
 
-const convertEventTypeToLabel = (eventType: EventType): string => {
-	return eventTypeLabel[EventType[eventType] as keyof typeof EventType];
-};
+function eventTypeToLabel(eventType: EventType): string {
+	return (
+		eventTypeLabel[EventType[eventType] as keyof typeof EventType] ??
+		`Unknown ${num2hex(eventType)}`
+	);
+}
 
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedGet)
 @expectedCCResponse(DoorLockLoggingCCRecordsSupportedReport)
@@ -297,10 +296,10 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 11);
 
-		const recordNumber = this.payload[0];
+		this.recordNumber = this.payload[0];
 		const recordStatus = this.payload[5] >>> 5;
 		if (recordStatus === RecordStatus.Empty) {
-			this.record = undefined;
+			return;
 		} else {
 			const dateSegments = {
 				year: this.payload.readUInt16BE(1),
@@ -313,39 +312,59 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 
 			const eventType = this.payload[8];
 			const recordUserID = this.payload[9];
-			// TODO: Parse User Code. The door lock I used does not provide
-			// 	     this data.
-			const userCode = undefined;
+			const userCodeLength = this.payload[10];
+			validatePayload(
+				userCodeLength <= 10,
+				this.payload.length >= 11 + userCodeLength,
+			);
+
+			const userCodeBuffer = this.payload.slice(11, 11 + userCodeLength);
+			// See User Code CC for a detailed description. We try to parse the code as ASCII if possible
+			// and fall back to a buffer otherwise.
+			const userCodeString = userCodeBuffer.toString("utf8");
+			const userCode = isPrintableASCII(userCodeString)
+				? userCodeString
+				: userCodeBuffer;
 
 			this.record = {
 				eventType: eventType,
-				label: convertEventTypeToLabel(eventType),
-				recordNumber,
+				label: eventTypeToLabel(eventType),
 				timestamp: segmentsToDate(dateSegments).toISOString(),
 				userId: recordUserID,
 				userCode,
 			};
 		}
-
-		this.persistValues();
 	}
 
-	public readonly record: DoorLockLoggingRecord | undefined;
+	public readonly recordNumber: number;
+	public readonly record?: DoorLockLoggingRecord;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		if (this.record == undefined) {
-			return {
-				...super.toLogEntry(),
-				message: {
-					record: undefined,
-				},
+		let message: MessageRecord;
+
+		if (!this.record) {
+			message = {
+				"record #": `${this.recordNumber} (empty)`,
 			};
+		} else {
+			message = {
+				"record #": `${this.recordNumber}`,
+				"event type": this.record.label,
+				timestamp: this.record.timestamp,
+			};
+			if (this.record.userId) {
+				message["user ID"] = this.record.userId;
+			}
+			if (this.record.userCode) {
+				message["user code"] =
+					typeof this.record.userCode === "string"
+						? this.record.userCode
+						: buffer2hex(this.record.userCode);
+			}
 		}
 		return {
 			...super.toLogEntry(),
-			message: {
-				record: JSON.stringify(this.record),
-			},
+			message,
 		};
 	}
 }
@@ -354,8 +373,21 @@ interface DoorLockLoggingCCRecordGetOptions extends CCCommandOptions {
 	recordNumber: number;
 }
 
+function testResponseForDoorLockLoggingRecordGet(
+	sent: DoorLockLoggingCCRecordGet,
+	received: DoorLockLoggingCCRecordReport,
+) {
+	return (
+		sent.recordNumber === LATEST_RECORD_NUMBER_KEY ||
+		sent.recordNumber === received.recordNumber
+	);
+}
+
 @CCCommand(DoorLockLoggingCommand.RecordGet)
-@expectedCCResponse(DoorLockLoggingCCRecordReport)
+@expectedCCResponse(
+	DoorLockLoggingCCRecordReport,
+	testResponseForDoorLockLoggingRecordGet,
+)
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
 		driver: Driver,
