@@ -17,3 +17,5 @@ async getRecord(
 	recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 ): Promise<DoorLockLoggingRecord | undefined>;
 ```
+
+Retrieves the specified audit record. Defaults to the latest one.

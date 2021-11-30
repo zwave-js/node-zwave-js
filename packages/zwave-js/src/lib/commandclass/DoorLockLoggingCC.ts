@@ -336,6 +336,8 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 		}
 	}
 
+	// @noCCValues This CC does not save any values
+
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
