@@ -46,8 +46,8 @@ function segmentsToDate(segments: DateSegments): Date {
 
 // All the supported commands
 export enum DoorLockLoggingCommand {
-	RecordsCountGet = 0x01,
-	RecordsCountReport = 0x02,
+	RecordsSupportedGet = 0x01,
+	RecordsSupportedReport = 0x02,
 	RecordGet = 0x03,
 	RecordReport = 0x04,
 }
@@ -146,8 +146,8 @@ export enum RecordStatus {
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
 		switch (cmd) {
-			case DoorLockLoggingCommand.RecordsCountGet:
-			case DoorLockLoggingCommand.RecordsCountReport:
+			case DoorLockLoggingCommand.RecordsSupportedGet:
+			case DoorLockLoggingCommand.RecordsSupportedReport:
 			case DoorLockLoggingCommand.RecordGet:
 			case DoorLockLoggingCommand.RecordReport:
 				return true;
@@ -158,15 +158,15 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	public async getRecordsCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			DoorLockLoggingCommand,
-			DoorLockLoggingCommand.RecordsCountGet,
+			DoorLockLoggingCommand.RecordsSupportedGet,
 		);
 
-		const cc = new DoorLockLoggingCCRecordsCountGet(this.driver, {
+		const cc = new DoorLockLoggingCCRecordsSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		const response =
-			await this.driver.sendCommand<DoorLockLoggingCCRecordsCountReport>(
+			await this.driver.sendCommand<DoorLockLoggingCCRecordsSupportedReport>(
 				cc,
 				this.commandOptions,
 			);
@@ -224,7 +224,7 @@ export class DoorLockLoggingCC extends CommandClass {
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: "querying records count...",
+			message: "querying supported number of records...",
 			direction: "outbound",
 		});
 		const recordsCount = await api.getRecordsCount();
@@ -239,7 +239,9 @@ export class DoorLockLoggingCC extends CommandClass {
 			return;
 		}
 
-		const recordsCountLogMessage = `received response for records count: ${recordsCount}`;
+		const recordsCountLogMessage = `supports ${recordsCount} record${
+			recordsCount === 1 ? "" : "s"
+		}`;
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: recordsCountLogMessage,
@@ -248,8 +250,8 @@ export class DoorLockLoggingCC extends CommandClass {
 	}
 }
 
-@CCCommand(DoorLockLoggingCommand.RecordsCountReport)
-export class DoorLockLoggingCCRecordsCountReport extends DoorLockLoggingCC {
+@CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
+export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -272,7 +274,7 @@ export class DoorLockLoggingCCRecordsCountReport extends DoorLockLoggingCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"records count": this.recordsCount,
+				"supported no. of records": this.recordsCount,
 			},
 		};
 	}
@@ -282,9 +284,9 @@ const convertEventTypeToLabel = (eventType: EventType): string => {
 	return eventTypeLabel[EventType[eventType] as keyof typeof EventType];
 };
 
-@CCCommand(DoorLockLoggingCommand.RecordsCountGet)
-@expectedCCResponse(DoorLockLoggingCCRecordsCountReport)
-export class DoorLockLoggingCCRecordsCountGet extends DoorLockLoggingCC {}
+@CCCommand(DoorLockLoggingCommand.RecordsSupportedGet)
+@expectedCCResponse(DoorLockLoggingCCRecordsSupportedReport)
+export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
