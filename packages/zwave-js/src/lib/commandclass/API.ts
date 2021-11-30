@@ -411,6 +411,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Configuration"
 	: [CC] extends [typeof CommandClasses["Door Lock"]]
 	? "Door Lock"
+	: [CC] extends [typeof CommandClasses["Door Lock Logging"]]
+	? "Door Lock Logging"
 	: [CC] extends [typeof CommandClasses["Entry Control"]]
 	? "Entry Control"
 	: [CC] extends [typeof CommandClasses["Firmware Update Meta Data"]]
@@ -542,6 +544,7 @@ export interface CCAPIs {
 	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("./DoorLockCC").DoorLockCCAPI;
+	"Door Lock Logging": import("./DoorLockLoggingCC").DoorLockLoggingCCAPI;
 	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;

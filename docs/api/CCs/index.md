@@ -25,6 +25,7 @@ The **Command Classes API** provides a high-to-mid level entrypoint which allows
 -   [Configuration CC](api/CCs/Configuration.md) · `0x70`
 -   [CRC-16 Encapsulation CC](api/CCs/CRC16.md) · `0x56`
 -   [Door Lock CC](api/CCs/DoorLock.md) · `0x62`
+-   [Door Lock Logging CC](api/CCs/DoorLockLogging.md) · `0x4c`
 -   [Entry Control CC](api/CCs/EntryControl.md) · `0x6f`
 -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md) · `0x7a`
 -   [Indicator CC](api/CCs/Indicator.md) · `0x87`
