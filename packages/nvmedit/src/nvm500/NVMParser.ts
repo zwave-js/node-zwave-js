@@ -107,7 +107,7 @@ export class NVMParser {
 		for (const entry of this.impl.layout) {
 			const size = entry.size ?? NVMEntrySizes[entry.type];
 
-			if (entry.type === NVMEntryType.NVM_MODULE_SIZE) {
+			if (entry.type === NVMEntryType.NVMModuleSize) {
 				if (moduleStart !== -1) {
 					// All following NVM modules must start at the last module's end
 					offset = moduleStart + moduleSize;
@@ -115,7 +115,7 @@ export class NVMParser {
 
 				moduleStart = offset;
 				moduleSize = nvm.readUInt16BE(offset);
-			} else if (entry.type === NVMEntryType.NVM_MODULE_DESCRIPTOR) {
+			} else if (entry.type === NVMEntryType.NVMModuleDescriptor) {
 				// The module descriptor is always at the end of the module
 				offset = moduleStart + moduleSize - size;
 			}
@@ -135,28 +135,28 @@ export class NVMParser {
 			}
 			const converted = data.map((buffer) => {
 				switch (entry.type) {
-					case NVMEntryType.BYTE:
+					case NVMEntryType.Byte:
 						return buffer.readUInt8(0);
-					case NVMEntryType.WORD:
-					case NVMEntryType.NVM_MODULE_SIZE:
+					case NVMEntryType.Word:
+					case NVMEntryType.NVMModuleSize:
 						return buffer.readUInt16BE(0);
-					case NVMEntryType.DWORD:
+					case NVMEntryType.DWord:
 						return buffer.readUInt32BE(0);
-					case NVMEntryType.EX_NVM_NODEINFO:
+					case NVMEntryType.NodeInfo:
 						if (buffer.every((byte) => byte === 0))
 							return undefined;
 						return parseNVM500NodeInfo(buffer, 0);
-					case NVMEntryType.NODE_MASK_TYPE:
+					case NVMEntryType.NodeMask:
 						return parseBitMask(buffer);
-					case NVMEntryType.SUC_UPDATE_ENTRY_STRUCT:
+					case NVMEntryType.SUCUpdateEntry:
 						if (buffer.every((byte) => byte === 0))
 							return undefined;
 						return parseSUCUpdateEntry(buffer, 0);
-					case NVMEntryType.ROUTECACHE_LINE:
+					case NVMEntryType.Route:
 						if (buffer.every((byte) => byte === 0))
 							return undefined;
 						return parseRoute(buffer, 0);
-					case NVMEntryType.NVM_MODULE_DESCRIPTOR: {
+					case NVMEntryType.NVMModuleDescriptor: {
 						const ret = parseNVMModuleDescriptor(buffer);
 						if (ret.size !== moduleSize) {
 							throw new Error(
@@ -165,7 +165,7 @@ export class NVMParser {
 						}
 						return ret;
 					}
-					case NVMEntryType.NVM_DESCRIPTOR:
+					case NVMEntryType.NVMDescriptor:
 						return parseNVMDescriptor(buffer);
 					default:
 						// This includes NVMEntryType.BUFFER

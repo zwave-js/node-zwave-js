@@ -8,19 +8,20 @@ import type {
 } from "./EntryParsers";
 
 export enum NVMEntryType {
-	NVM_MODULE_SIZE,
-	BYTE,
-	WORD,
-	DWORD,
-	BUFFER,
-	EX_NVM_NODEINFO,
-	NODE_MASK_TYPE,
-	SUC_UPDATE_ENTRY_STRUCT,
-	ROUTECACHE_LINE,
-	NVM_MODULE_DESCRIPTOR,
-	NVM_DESCRIPTOR,
+	NVMModuleSize,
+	Byte,
+	Word,
+	DWord,
+	Buffer,
+	NodeInfo,
+	NodeMask,
+	SUCUpdateEntry,
+	Route,
+	NVMModuleDescriptor,
+	NVMDescriptor,
 }
 
+// These names are pretty bad, but they're used in Silabs nvm_converter code, so we keep them for easier lookup
 export type NVMEntryName =
 	| "EEOFFSET_CMDCLASS_far"
 	| "EEOFFSET_CMDCLASS_LEN_far"
@@ -108,28 +109,28 @@ export interface ParsedNVMEntry extends NVMEntry {
 export type NVMLayout = NVMEntry[];
 
 export const NVMEntrySizes: Record<NVMEntryType, number> = {
-	[NVMEntryType.NVM_MODULE_SIZE]: 2, // Marks the start of an NVM module
-	[NVMEntryType.BYTE]: 1,
-	[NVMEntryType.WORD]: 2,
-	[NVMEntryType.DWORD]: 4,
-	[NVMEntryType.BUFFER]: 1, // The size must be specified
-	[NVMEntryType.EX_NVM_NODEINFO]: 5, // 3 bytes NodeProtocolInfo + generic + specific device class
-	[NVMEntryType.NODE_MASK_TYPE]: NUM_NODEMASK_BYTES, // Nodes bitmask
-	[NVMEntryType.SUC_UPDATE_ENTRY_STRUCT]: SUC_UPDATE_ENTRY_SIZE,
-	[NVMEntryType.ROUTECACHE_LINE]: 5, // a Route
-	[NVMEntryType.NVM_MODULE_DESCRIPTOR]: 5, // 2 bytes module size, 1 byte module type, 2 bytes module version
-	[NVMEntryType.NVM_DESCRIPTOR]: 12,
+	[NVMEntryType.NVMModuleSize]: 2, // Marks the start of an NVM module
+	[NVMEntryType.Byte]: 1,
+	[NVMEntryType.Word]: 2,
+	[NVMEntryType.DWord]: 4,
+	[NVMEntryType.Buffer]: 1, // The size must be specified
+	[NVMEntryType.NodeInfo]: 5, // 3 bytes NodeProtocolInfo + generic + specific device class
+	[NVMEntryType.NodeMask]: NUM_NODEMASK_BYTES, // Nodes bitmask
+	[NVMEntryType.SUCUpdateEntry]: SUC_UPDATE_ENTRY_SIZE,
+	[NVMEntryType.Route]: 5, // a Route
+	[NVMEntryType.NVMModuleDescriptor]: 5, // 2 bytes module size, 1 byte module type, 2 bytes module version
+	[NVMEntryType.NVMDescriptor]: 12,
 };
 
 export enum NVMModuleType {
-	NVM_MODULE_TYPE_UNDEFINED = 0x00,
-	NVM_MODULE_TYPE_ZW_PHY_LIBRARY = 0x01,
-	NVM_MODULE_TYPE_ZW_LIBRARY = 0x02,
-	NVM_MODULE_TYPE_ZW_FRAMEWORK = 0x03,
-	NVM_MODULE_TYPE_APPLICATION = 0x04,
-	NVM_MODULE_TYPE_HOST_APPLICATION = 0x05,
-	NVM_MODULE_TYPE_SECURITY_2 = 0x06,
-	NVM_MODULE_TYPE_NVM_DESCRIPTOR = 0xff,
+	UNDEFINED = 0x00,
+	ZW_PHY_LIBRARY = 0x01,
+	ZW_LIBRARY = 0x02,
+	ZW_FRAMEWORK = 0x03,
+	APPLICATION = 0x04,
+	HOST_APPLICATION = 0x05,
+	SECURITY_2 = 0x06,
+	NVM_DESCRIPTOR = 0xff,
 }
 
 export const SUC_CONTROLLER_LIST_SIZE = 232;
