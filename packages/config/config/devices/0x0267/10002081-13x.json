@@ -1,0 +1,259 @@
+{
+	"manufacturer": "SimonTech S.L.U",
+	"manufacturerId": "0x0267",
+	"label": "10002081-13x",
+	"description": "Simon IO: Master Roller Blind",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x01c3"
+		},
+		{
+			"productType": "0x0005",
+			"productId": "0x00f4"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Association LED",
+			"description": "Activates the Central LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turns the LED OFF (default)",
+					"value": 0
+				},
+				{
+					"label": "Turns the LED ON",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Behavior of LED in Repose",
+			"description": "Configuration of Up/Down LEDs as identification at 20%.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON at 20% of maximum level",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Lock Input",
+			"description": "Unlock/lock the direct control of load.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock the direct control of load.",
+					"value": 0
+				},
+				{
+					"label": "Lock the direct control of load.",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Reset Default",
+			"valueSize": 2,
+			"minValue": 17170,
+			"maxValue": 39015,
+			"defaultValue": 39015,
+			"writeOnly": true,
+			"options": [
+				{
+					"label": "Parameters, Groups, and Z-Wave status are restored to default.",
+					"value": 39015
+				},
+				{
+					"label": "Parameters, except Lock long press are restored to default.",
+					"value": 17170
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Press Action",
+			"description": "Unlock/lock the direct control of load.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Pressing t <2sec switches between the last power on and off (depending on the status of the associated control) by sending a Basic Set to 0x00 or 0xFF to the associated nodes.",
+					"value": 0
+				},
+				{
+					"label": "Pressing t <2sec always activates those associated with the last poweron by sending aBasic Set to 0xFF.",
+					"value": 1
+				},
+				{
+					"label": "Pressing t <2sec always deactivates associates by sending a Basic Set to0x00.",
+					"value": 2
+				},
+				{
+					"label": "Pressing t <2sec on the left side sends a Basic Set to 0x00 and the DOWN 5s LED lights up. By pressing t <2sec on the right side a Basic Set is sent to 0xFF and the UP 5s led is lit.",
+					"value": 3
+				},
+				{
+					"label": "Pressing 0sec <t <2sec always activates the associated nodes by sending a BasicSet to 0xFF. Pressing 2sec <t <10sec always turns off the associated nodes by sending a Basic Set to 0x00. * Does not send Node Info nor does the central LED flash.",
+					"value": 4
+				},
+				{
+					"label": "Pressing t <2sec on the left side sends a Basic Set with VALUE OFF or 0x00 (depending on whether an OFF VALUE has been set). * If VALUEOFF is set, the DOWN LED lights up for 5sec. Otherwise the UP and DOWN LEDs will be activated briefly. Pressing t <2sec on the right side sends a Basic Set to VALUE ON or 0x00 (depending on whether an ON VALUE has been set). * If VALUE ON is set, the UP LED is lit for 5 seconds. Otherwise the UP and DOWN LEDs will be activated briefly.",
+					"value": 6
+				},
+				{
+					"label": "The associated nodes are controlled as described in the USE table KEYBOARD AND ANSWERS.",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Identify",
+			"valueSize": 1,
+			"minValue": 255,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"writeOnly": true,
+			"options": [
+				{
+					"label": "The central LED blinks for 5 seconds in order to identify the device.",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Device State",
+			"valueSize": 2,
+			"minValue": 176,
+			"maxValue": 177,
+			"defaultValue": 176,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0x00 Load is OFF. 0x01 Load is ON.",
+					"value": 176
+				},
+				{
+					"label": "0x00 Load is OFF. 0x01 Load is ON.",
+					"value": 177
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "OFF VALUE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "26",
+			"label": "ON VALUE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "27",
+			"label": "Lock long press",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Long press works as described previously.",
+					"value": 0
+				},
+				{
+					"label": "Long press of 2s<t<10s don’t sends the Node Info Long press oft>30s Parameters, except Lock long press are restored to default and device sends a Node Info.",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "28",
+			"label": "Consult on Touch detecdetion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(if there is 1 Associated device) when Touch is detected, controlled device state will be consult.",
+					"value": 0
+				},
+				{
+					"label": "(if there is 1 Associated device) when Touch is detected, controlled device state is not consulted. When Assocaited devices number is changed and before or after association there is 1 Simon’s device, the key will perform an Association Set o Remove to be informed about controlled device state or reduce the traffic on Z-Wave network. When the param value is 0xFF and one device is associated: - If associated devices goes from 0 to 1 or from 2 to 1 and it is a Simon device, the Key will send an Association Set to the Device group 2. (If it is not a Simon’s device please associate them manually). - If associated devices goes from 1 to 0 or from 1 to 2 and the first device is a Simon device, The key Sends an Association Remove to group 2 of the first device. (If it is not a Simon’s device please disassociate them manually).",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "29",
+			"label": "Enable automatic reporting CENTRAL_SCENE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enables CC Central Scene Notification when there are no nodes associated with the control group and Inhibits error signaling by pressing t <2s if there are no associated nodes.",
+					"value": 0
+				},
+				{
+					"label": "Enables error signaling by pressing t<2s if there are no associated nodes.",
+					"value": 255
+				}
+			]
+		}
+	]
+}
