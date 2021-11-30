@@ -62,6 +62,10 @@ import {
 } from "./nvm3/nvm";
 import type { NVM3Object } from "./nvm3/object";
 import { mapToObject } from "./nvm3/utils";
+import {
+	createParser as createNVM500Parser,
+	NVM500JSON,
+} from "./nvm500/NVMParser";
 
 export interface NVMJSON {
 	format: number;
@@ -832,6 +836,13 @@ export function nvmToJSON(
 	const ret = nvmObjectsToJSON(nvm.applicationObjects, nvm.protocolObjects);
 	ret.meta = getNVMMeta(nvm.protocolPages[0]);
 	return ret as Required<NVMJSON>;
+}
+
+/** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
+export function nvm500ToJSON(buffer: Buffer): NVM500JSON {
+	const parser = createNVM500Parser(buffer);
+	if (!parser) throw new Error("Unsupported NVM format!");
+	return parser.toJSON();
 }
 
 /** Takes a JSON represented NVM and converts it to binary */

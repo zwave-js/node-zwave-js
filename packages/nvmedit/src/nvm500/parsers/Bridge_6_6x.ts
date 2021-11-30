@@ -1,27 +1,27 @@
-import { HOMEID_BYTES, MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
+import { MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import { SUC_MAX_UPDATES } from "../../consts";
+import type { NVMParserImplementation } from "../NVMParser";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
 	NVMLayout,
 	NVM_SERIALAPI_HOST_SIZE,
-	POWERLEVEL_CHANNELS,
 	RTC_TIMER_SIZE,
 	SUC_CONTROLLER_LIST_SIZE,
 	TOTAL_RTC_TIMER_MAX,
 } from "../shared";
 
-export const NVM_Layout_Static_6_8x: NVMLayout = [
+const NVM_Layout_Bridge_6_6x: NVMLayout = [
 	{ name: "nvmTotalEnd", type: NVMEntryType.WORD, count: 1 },
 	{ name: "nvmZWlibrarySize", type: NVMEntryType.NVM_MODULE_SIZE, count: 1 },
 	{ name: "NVM_INTERNAL_RESERVED_1_far", type: NVMEntryType.BYTE, count: 4 },
 	{
 		name: "EX_NVM_HOME_ID_far",
-		type: NVMEntryType.BYTE,
-		count: HOMEID_BYTES,
+		type: NVMEntryType.DWORD,
+		count: 1,
 	},
 	{ name: "NVM_INTERNAL_RESERVED_2_far", type: NVMEntryType.BYTE, count: 4 },
-	{ name: "NVM_HOMEID_far", type: NVMEntryType.BYTE, count: HOMEID_BYTES },
+	{ name: "NVM_HOMEID_far", type: NVMEntryType.DWORD, count: 1 },
 	{ name: "NVM_NODEID_far", type: NVMEntryType.BYTE, count: 1 },
 	{ name: "NVM_CONFIGURATION_VALID_far", type: NVMEntryType.BYTE, count: 1 },
 	{
@@ -32,13 +32,15 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 	{ name: "NVM_INTERNAL_RESERVED_3_far", type: NVMEntryType.BYTE, count: 1 },
 	{
 		name: "NVM_PREFERRED_REPEATERS_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES + 3,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		size: NUM_NODEMASK_BYTES + 3,
+		count: 1,
 	},
 	{
 		name: "NVM_PENDING_DISCOVERY_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES + 3,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		size: NUM_NODEMASK_BYTES + 3,
+		count: 1,
 	},
 	{
 		name: "NVM_RTC_TIMERS_far",
@@ -97,6 +99,11 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 		count: 1,
 	},
 	{
+		name: "EX_NVM_BRIDGE_NODEPOOL_START_far",
+		type: NVMEntryType.NODE_MASK_TYPE,
+		count: 1,
+	},
+	{
 		name: "EX_NVM_CONTROLLER_CONFIGURATION_far",
 		type: NVMEntryType.BYTE,
 		count: 1,
@@ -106,7 +113,6 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 	{
 		name: "EX_NVM_ROUTECACHE_START_far",
 		type: NVMEntryType.ROUTECACHE_LINE,
-		offset: 0x268e,
 		count: MAX_NODES,
 	},
 	{
@@ -117,11 +123,9 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 	{ name: "EX_NVM_ROUTECACHE_MAGIC_far", type: NVMEntryType.BYTE, count: 1 },
 	{
 		name: "EX_NVM_ROUTECACHE_APP_LOCK_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		count: 1,
 	},
-	{ name: "NVM_SECURITY0_KEY_far", type: NVMEntryType.BYTE, count: 16 },
-	{ name: "NVM_SYSTEM_STATE", type: NVMEntryType.BYTE, count: 1 },
 	{
 		name: "nvmZWlibraryDescriptor",
 		type: NVMEntryType.NVM_MODULE_DESCRIPTOR,
@@ -132,7 +136,7 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 		type: NVMEntryType.NVM_MODULE_SIZE,
 		// The Bridge API saves an additional node mask for the virtual nodes in the
 		// previous module, so we can use this offset to distinguish between the two.
-		offset: 0x2fd2,
+		offset: 0x2fde,
 		count: 1,
 	},
 	{ name: "EEOFFSET_MAGIC_far", type: NVMEntryType.BYTE, count: 1 },
@@ -148,31 +152,6 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 		count: 1,
 	},
 	{
-		name: "EEOFFSET_POWERLEVEL_NORMAL_far",
-		type: NVMEntryType.BYTE,
-		count: POWERLEVEL_CHANNELS,
-	},
-	{
-		name: "EEOFFSET_POWERLEVEL_LOW_far",
-		type: NVMEntryType.BYTE,
-		count: POWERLEVEL_CHANNELS,
-	},
-	{
-		name: "EEOFFSET_MODULE_POWER_MODE_EXTINT_ENABLE_far",
-		type: NVMEntryType.BYTE,
-		count: 1,
-	},
-	{
-		name: "EEOFFSET_MODULE_POWER_MODE_far",
-		type: NVMEntryType.BYTE,
-		count: 1,
-	},
-	{
-		name: "EEOFFSET_MODULE_POWER_MODE_WUT_TIMEOUT_far",
-		type: NVMEntryType.BYTE,
-		count: 4,
-	},
-	{
 		name: "nvmApplicationDescriptor",
 		type: NVMEntryType.NVM_MODULE_DESCRIPTOR,
 		count: 1,
@@ -184,8 +163,9 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 	},
 	{
 		name: "EEOFFSET_HOST_OFFSET_START_far",
-		type: NVMEntryType.BYTE,
-		count: NVM_SERIALAPI_HOST_SIZE,
+		type: NVMEntryType.BUFFER,
+		size: NVM_SERIALAPI_HOST_SIZE,
+		count: 1,
 	},
 	{
 		name: "nvmHostApplicationDescriptor",
@@ -201,3 +181,9 @@ export const NVM_Layout_Static_6_8x: NVMLayout = [
 	},
 	{ name: "nvmModuleSizeEndMarker", type: NVMEntryType.WORD, count: 1 },
 ];
+
+export const Bridge_6_6x: NVMParserImplementation = {
+	name: "Bridge 6.6x",
+	protocolVersions: ["4.33", "4.62"],
+	layout: NVM_Layout_Bridge_6_6x,
+};

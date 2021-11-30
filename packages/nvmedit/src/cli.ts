@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
-import { jsonToNVM, nvmToJSON } from "./convert";
+import { jsonToNVM, nvm500ToJSON, nvmToJSON } from "./convert";
 import "./index";
 
 void yargs
@@ -36,7 +36,17 @@ void yargs
 			}),
 		async (argv) => {
 			const buffer = await fs.readFile(argv.in);
-			const json = nvmToJSON(buffer, argv.verbose);
+			let json: any;
+			try {
+				json = nvmToJSON(buffer, argv.verbose);
+			} catch (e) {
+				try {
+					json = nvm500ToJSON(buffer);
+				} catch (ee) {
+					console.error(e);
+					process.exit(1);
+				}
+			}
 			await fs.writeJSON(argv.out, json, { spaces: "\t" });
 			console.error(`NVM (JSON) written to ${argv.out}`);
 

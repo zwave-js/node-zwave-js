@@ -1,5 +1,6 @@
-import { HOMEID_BYTES, MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
+import { MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import { SUC_MAX_UPDATES } from "../../consts";
+import type { NVMParserImplementation } from "../NVMParser";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
@@ -11,17 +12,17 @@ import {
 	TOTAL_RTC_TIMER_MAX,
 } from "../shared";
 
-export const NVM_Layout_Bridge_6_8x: NVMLayout = [
+const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	{ name: "nvmTotalEnd", type: NVMEntryType.WORD, count: 1 },
 	{ name: "nvmZWlibrarySize", type: NVMEntryType.NVM_MODULE_SIZE, count: 1 },
 	{ name: "NVM_INTERNAL_RESERVED_1_far", type: NVMEntryType.BYTE, count: 4 },
 	{
 		name: "EX_NVM_HOME_ID_far",
-		type: NVMEntryType.BYTE,
-		count: HOMEID_BYTES,
+		type: NVMEntryType.DWORD,
+		count: 1,
 	},
 	{ name: "NVM_INTERNAL_RESERVED_2_far", type: NVMEntryType.BYTE, count: 4 },
-	{ name: "NVM_HOMEID_far", type: NVMEntryType.BYTE, count: HOMEID_BYTES },
+	{ name: "NVM_HOMEID_far", type: NVMEntryType.DWORD, count: 1 },
 	{ name: "NVM_NODEID_far", type: NVMEntryType.BYTE, count: 1 },
 	{ name: "NVM_CONFIGURATION_VALID_far", type: NVMEntryType.BYTE, count: 1 },
 	{
@@ -32,13 +33,15 @@ export const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	{ name: "NVM_INTERNAL_RESERVED_3_far", type: NVMEntryType.BYTE, count: 1 },
 	{
 		name: "NVM_PREFERRED_REPEATERS_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES + 3,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		size: NUM_NODEMASK_BYTES + 3,
+		count: 1,
 	},
 	{
 		name: "NVM_PENDING_DISCOVERY_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES + 3,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		size: NUM_NODEMASK_BYTES + 3,
+		count: 1,
 	},
 	{
 		name: "NVM_RTC_TIMERS_far",
@@ -121,8 +124,8 @@ export const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	{ name: "EX_NVM_ROUTECACHE_MAGIC_far", type: NVMEntryType.BYTE, count: 1 },
 	{
 		name: "EX_NVM_ROUTECACHE_APP_LOCK_far",
-		type: NVMEntryType.BYTE,
-		count: NUM_NODEMASK_BYTES,
+		type: NVMEntryType.NODE_MASK_TYPE,
+		count: 1,
 	},
 	{ name: "NVM_SECURITY0_KEY_far", type: NVMEntryType.BYTE, count: 16 },
 	{ name: "NVM_SYSTEM_STATE", type: NVMEntryType.BYTE, count: 1 },
@@ -173,8 +176,8 @@ export const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	},
 	{
 		name: "EEOFFSET_MODULE_POWER_MODE_WUT_TIMEOUT_far",
-		type: NVMEntryType.BYTE,
-		count: 4,
+		type: NVMEntryType.DWORD,
+		count: 1,
 	},
 	{
 		name: "nvmApplicationDescriptor",
@@ -188,8 +191,9 @@ export const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	},
 	{
 		name: "EEOFFSET_HOST_OFFSET_START_far",
-		type: NVMEntryType.BYTE,
-		count: NVM_SERIALAPI_HOST_SIZE,
+		type: NVMEntryType.BUFFER,
+		size: NVM_SERIALAPI_HOST_SIZE,
+		count: 1,
 	},
 	{
 		name: "nvmHostApplicationDescriptor",
@@ -205,3 +209,20 @@ export const NVM_Layout_Bridge_6_8x: NVMLayout = [
 	},
 	{ name: "nvmModuleSizeEndMarker", type: NVMEntryType.WORD, count: 1 },
 ];
+
+export const Bridge_6_8x: NVMParserImplementation = {
+	name: "Bridge 6.8x",
+	protocolVersions: [
+		"6.01",
+		"6.02",
+		"6.03",
+		"6.04",
+		"6.05",
+		"6.06",
+		"6.07",
+		"6.08",
+		"6.09",
+		"6.10",
+	],
+	layout: NVM_Layout_Bridge_6_8x,
+};

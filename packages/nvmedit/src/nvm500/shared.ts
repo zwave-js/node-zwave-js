@@ -11,6 +11,8 @@ export enum NVMEntryType {
 	NVM_MODULE_SIZE,
 	BYTE,
 	WORD,
+	DWORD,
+	BUFFER,
 	EX_NVM_NODEINFO,
 	NODE_MASK_TYPE,
 	SUC_UPDATE_ENTRY_STRUCT,
@@ -80,6 +82,8 @@ export type NVMEntryName =
 export interface NVMEntry {
 	name: NVMEntryName;
 	type: NVMEntryType;
+	// Override the default size for this entry
+	size?: number;
 	/** The offset is only specified if it is needed for validation */
 	offset?: number;
 	// The actual size of this entry is size(type) * count
@@ -107,6 +111,8 @@ export const NVMEntrySizes: Record<NVMEntryType, number> = {
 	[NVMEntryType.NVM_MODULE_SIZE]: 2, // Marks the start of an NVM module
 	[NVMEntryType.BYTE]: 1,
 	[NVMEntryType.WORD]: 2,
+	[NVMEntryType.DWORD]: 4,
+	[NVMEntryType.BUFFER]: 1, // The size must be specified
 	[NVMEntryType.EX_NVM_NODEINFO]: 5, // 3 bytes NodeProtocolInfo + generic + specific device class
 	[NVMEntryType.NODE_MASK_TYPE]: NUM_NODEMASK_BYTES, // Nodes bitmask
 	[NVMEntryType.SUC_UPDATE_ENTRY_STRUCT]: SUC_UPDATE_ENTRY_SIZE,
