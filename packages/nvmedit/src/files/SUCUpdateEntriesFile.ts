@@ -1,4 +1,9 @@
 import { CommandClasses, encodeCCList, parseCCList } from "@zwave-js/core";
+import {
+	SUC_MAX_UPDATES,
+	SUC_UPDATE_ENTRY_SIZE,
+	SUC_UPDATE_NODEPARM_MAX,
+} from "../consts";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
@@ -8,10 +13,6 @@ import {
 	NVMFileDeserializationOptions,
 	nvmFileID,
 } from "./NVMFile";
-
-const SUC_UPDATE_NODEPARM_MAX = 20;
-const SUC_UPDATE_ENTRY_SIZE = 2 + SUC_UPDATE_NODEPARM_MAX;
-const SUC_MAX_UPDATES = 64;
 
 export interface SUCUpdateEntriesFileOptions extends NVMFileCreationOptions {
 	updateEntries: SUCUpdateEntry[];
@@ -24,7 +25,7 @@ export interface SUCUpdateEntry {
 	controlledCCs: CommandClasses[];
 }
 
-function parseSUCUpdateEntry(
+export function parseSUCUpdateEntry(
 	buffer: Buffer,
 	offset: number,
 ): SUCUpdateEntry | undefined {

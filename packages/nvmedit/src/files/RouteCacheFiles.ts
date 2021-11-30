@@ -37,7 +37,7 @@ export interface RouteCache {
 	nlwr: Route;
 }
 
-function parseRoute(buffer: Buffer, offset: number): Route {
+export function parseRoute(buffer: Buffer, offset: number): Route {
 	const routeConf = buffer[offset + MAX_REPEATERS];
 	const ret: Route = {
 		beaming: (Beaming[routeConf & 0x60] ?? false) as FLiRS,

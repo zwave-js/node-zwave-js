@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 export * from "./ApplicationCCsFile";
 export * from "./ApplicationDataFile";
 export * from "./ApplicationRFConfigFile";
