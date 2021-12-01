@@ -4024,12 +4024,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.5":
-  version: 17.0.5
-  resolution: "@types/yargs@npm:17.0.5"
+"@types/yargs@npm:^17.0.7":
+  version: 17.0.7
+  resolution: "@types/yargs@npm:17.0.7"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 2be02640c84471c66aec58cfd415432fab0973283909765aa3becbdb76b5874d4770fe7f376e77b98833d5cc9d9bc258a905adce68a0baec13d430c866fce3b5
+  checksum: 520e803720b2a626338c0e2b61825dd1b956910fec4d855018c17e62cf9fb41eb67bcf122ba5c6fb569b1bfac73520d5d73e8be502b87f9a551619df441b1875
   languageName: node
   linkType: hard
 
@@ -4166,7 +4166,7 @@ __metadata:
     "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.9
     "@types/xml2json": ^0.11.4
-    "@types/yargs": ^17.0.5
+    "@types/yargs": ^17.0.7
     "@zwave-js/core": 8.8.1
     "@zwave-js/maintenance": 8.8.1
     "@zwave-js/shared": 8.8.0
@@ -4187,7 +4187,7 @@ __metadata:
     typescript: 4.5.2
     winston: ^3.3.3
     xml2json: ^0.12.0
-    yargs: ^17.2.1
+    yargs: ^17.3.0
   languageName: unknown
   linkType: soft
 
@@ -4234,7 +4234,7 @@ __metadata:
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/prettier": ^2
-    "@types/yargs": ^17.0.5
+    "@types/yargs": ^17.0.7
     "@zwave-js/core": 8.8.1
     "@zwave-js/shared": 8.8.0
     ansi-colors: ^4.1.1
@@ -4248,7 +4248,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     ts-morph: ^13.0.2
     typescript: 4.5.2
-    yargs: ^17.2.1
+    yargs: ^17.3.0
   languageName: unknown
   linkType: soft
 
@@ -12914,6 +12914,17 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
+"string-width@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "string-width@npm:4.2.3"
+  dependencies:
+    emoji-regex: ^8.0.0
+    is-fullwidth-code-point: ^3.0.0
+    strip-ansi: ^6.0.1
+  checksum: e52c10dc3fbfcd6c3a15f159f54a90024241d0f149cf8aed2982a2d801d2e64df0bf1dc351cf8e95c3319323f9f220c16e740b06faecd53e2462df1d2b5443fb
+  languageName: node
+  linkType: hard
+
 "string.prototype.trimend@npm:^1.0.4":
   version: 1.0.4
   resolution: "string.prototype.trimend@npm:1.0.4"
@@ -14257,6 +14268,13 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
+"yargs-parser@npm:^21.0.0":
+  version: 21.0.0
+  resolution: "yargs-parser@npm:21.0.0"
+  checksum: 1e205fca1cb7a36a1585e2b94a64e641c12741b53627d338e12747f4dca3c3610cdd9bb235040621120548dd74c3ef03a8168d52a1eabfedccbe4a62462b6731
+  languageName: node
+  linkType: hard
+
 "yargs@npm:^15.4.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
@@ -14291,7 +14309,7 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"yargs@npm:^17.0.0, yargs@npm:^17.2.1":
+"yargs@npm:^17.0.0":
   version: 17.2.1
   resolution: "yargs@npm:17.2.1"
   dependencies:
@@ -14318,6 +14336,21 @@ typescript@^4.4.3:
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
   checksum: b05a9467937172e01a4af7a7ad4361a22ee510cd12d1d5a3ad3b4c2e57eb8c35ca94ee22e4bdfbb40fe693fbf8000771e41824f77f6b224f1496c57f20f192b6
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^17.3.0":
+  version: 17.3.0
+  resolution: "yargs@npm:17.3.0"
+  dependencies:
+    cliui: ^7.0.2
+    escalade: ^3.1.1
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.3
+    y18n: ^5.0.5
+    yargs-parser: ^21.0.0
+  checksum: 2b687338684bf9645e9389ffdbe813fc5a2ddfede299d46fbe5ac80eb9a391e558b97861ba44d2256936ebe9d7f8135f6a38af1c76a5685eac4061008b2df57a
   languageName: node
   linkType: hard
 
