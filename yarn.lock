@@ -3598,9 +3598,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/bindings@npm:9.2.5":
-  version: 9.2.5
-  resolution: "@serialport/bindings@npm:9.2.5"
+"@serialport/bindings@npm:9.2.8":
+  version: 9.2.8
+  resolution: "@serialport/bindings@npm:9.2.8"
   dependencies:
     "@serialport/binding-abstract": 9.2.3
     "@serialport/parser-readline": 9.2.4
@@ -3608,8 +3608,8 @@ __metadata:
     debug: ^4.3.2
     nan: ^2.15.0
     node-gyp: latest
-    prebuild-install: ^6.1.4
-  checksum: 05fe3f37c6c6890c8f53eb55131823f32d83c8b8acc4f0237633cb8b3fbbc0a1c54b17d3047e94f823221f8ebd7e609fd9b280eb4f01362b967cc1de666d8e13
+    prebuild-install: ^7.0.0
+  checksum: 7512c57f7e329809fe0b0f048a881c635584cfa4e8e851eb99c9b93fa0c371811f6017a10c587f0a321fdb83036129809cb034ccfe0dcfc1dfd3ba60367571f9
   languageName: node
   linkType: hard
 
@@ -4327,7 +4327,7 @@ __metadata:
     esbuild: "*"
     esbuild-register: ^3.1.2
     jest-extended: ^0.11.5
-    serialport: ^9.2.5
+    serialport: ^9.2.8
     typescript: 4.5.2
     winston: ^3.3.3
   languageName: unknown
@@ -6112,12 +6112,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"decompress-response@npm:^4.2.0":
-  version: 4.2.1
-  resolution: "decompress-response@npm:4.2.1"
+"decompress-response@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "decompress-response@npm:6.0.0"
   dependencies:
-    mimic-response: ^2.0.0
-  checksum: 4e783ca4dfe9417354d61349750fe05236f565a4415a6ca20983a311be2371debaedd9104c0b0e7b36e5f167aeaae04f84f1a0b3f8be4162f1d7d15598b8fdba
+    mimic-response: ^3.1.0
+  checksum: d377cf47e02d805e283866c3f50d3d21578b779731e8c5072d6ce8c13cc31493db1c2f6784da9d1d5250822120cefa44f1deab112d5981015f2e17444b763812
   languageName: node
   linkType: hard
 
@@ -10265,10 +10265,10 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"mimic-response@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "mimic-response@npm:2.1.0"
-  checksum: 014fad6ab936657e5f2f48bd87af62a8e928ebe84472aaf9e14fec4fcb31257a5edff77324d8ac13ddc6685ba5135cf16e381efac324e5f174fb4ddbf902bf07
+"mimic-response@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "mimic-response@npm:3.1.0"
+  checksum: 25739fee32c17f433626bf19f016df9036b75b3d84a3046c7d156e72ec963dd29d7fc8a302f55a3d6c5a4ff24259676b15d915aad6480815a969ff2ec0836867
   languageName: node
   linkType: hard
 
@@ -10605,12 +10605,12 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"node-abi@npm:^2.21.0":
-  version: 2.30.0
-  resolution: "node-abi@npm:2.30.0"
+"node-abi@npm:^3.3.0":
+  version: 3.5.0
+  resolution: "node-abi@npm:3.5.0"
   dependencies:
-    semver: ^5.4.1
-  checksum: 4394c12de62bd532b304adc087ad76f1b24d0633ff3edefc2b412426a714cb413e3ec75c8c48a9f802a537def6377387eb4213a979f0f2b1b341edc26d6d7938
+    semver: ^7.3.5
+  checksum: e7fa2363cea366e788e460ead39cf900cc3c49b5978fa56790fda87df54b6937424c72ea00cbfb72fe1513eedcbb48a0ac50a56e7961cc6bd425ef09efbe1916
   languageName: node
   linkType: hard
 
@@ -11574,9 +11574,9 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"prebuild-install@npm:^6.1.4":
-  version: 6.1.4
-  resolution: "prebuild-install@npm:6.1.4"
+"prebuild-install@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "prebuild-install@npm:7.0.0"
   dependencies:
     detect-libc: ^1.0.3
     expand-template: ^2.0.3
@@ -11584,16 +11584,16 @@ fsevents@^2.1.2:
     minimist: ^1.2.3
     mkdirp-classic: ^0.5.3
     napi-build-utils: ^1.0.1
-    node-abi: ^2.21.0
+    node-abi: ^3.3.0
     npmlog: ^4.0.1
     pump: ^3.0.0
     rc: ^1.2.7
-    simple-get: ^3.0.3
+    simple-get: ^4.0.0
     tar-fs: ^2.0.0
     tunnel-agent: ^0.6.0
   bin:
     prebuild-install: bin.js
-  checksum: de4313eda821305912af922700a2db04bb8e77fe8aa9c2788550f1000c026cbefc82da468ec0c0a37764c5417bd8169dbd540928535fb38d00bb9bbd673dd217
+  checksum: 413783f74677a9691c286f3302ef37a9d4d6121b85bb38064d286931dfc57961da6066bfe02e7c411ee828c2ee40b0ba467575e7197178582db8385dd8402d5f
   languageName: node
   linkType: hard
 
@@ -12375,7 +12375,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.4.1, semver@npm:^5.5.0, semver@npm:^5.6.0, semver@npm:^5.7.1":
+"semver@npm:2 || 3 || 4 || 5, semver@npm:^5.5.0, semver@npm:^5.6.0, semver@npm:^5.7.1":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
   bin:
@@ -12413,12 +12413,12 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"serialport@npm:^9.2.5":
-  version: 9.2.5
-  resolution: "serialport@npm:9.2.5"
+"serialport@npm:^9.2.8":
+  version: 9.2.8
+  resolution: "serialport@npm:9.2.8"
   dependencies:
     "@serialport/binding-mock": 9.2.4
-    "@serialport/bindings": 9.2.5
+    "@serialport/bindings": 9.2.8
     "@serialport/parser-byte-length": 9.2.4
     "@serialport/parser-cctalk": 9.2.4
     "@serialport/parser-delimiter": 9.2.4
@@ -12428,7 +12428,7 @@ fsevents@^2.1.2:
     "@serialport/parser-regex": 9.2.4
     "@serialport/stream": 9.2.4
     debug: ^4.3.2
-  checksum: a1b25d5671ca3640f676a8749cb9739989921a13f0242f65bfe9f274d1559d92e4d8d125b50957a5c88d9d6abdf5fe0e3a7dfa6b4285012b28b9aa1960e47d7c
+  checksum: 7b6decf07b74f64605e13b28cae9810ecce64f11d976194bfc3d47614a02a651a5c7cd9947545bf11e2ccba127d8834e118f4112d0f07e374bd81d6b5613349e
   languageName: node
   linkType: hard
 
@@ -12524,14 +12524,14 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"simple-get@npm:^3.0.3":
-  version: 3.1.0
-  resolution: "simple-get@npm:3.1.0"
+"simple-get@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "simple-get@npm:4.0.0"
   dependencies:
-    decompress-response: ^4.2.0
+    decompress-response: ^6.0.0
     once: ^1.3.1
     simple-concat: ^1.0.0
-  checksum: cca91a9ab2b532fa8d367757c196b54e2dfe3325aab0298d66a3e2a45a29a9d335d1a3fb41f036dad14000f78baddd4170fbf9621d72869791d2912baf9469aa
+  checksum: 8af4fb788be27af3586395857a1617be133391a7356b007a76379f5eb2ad1c19ea6a13ba9467b0fe790b9e468f9fb124639779b62eb21e6d3ab2cb9b2850cb8d
   languageName: node
   linkType: hard
 
@@ -14359,7 +14359,7 @@ typescript@^4.4.3:
     proper-lockfile: ^4.1.2
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    serialport: ^9.2.5
+    serialport: ^9.2.8
     source-map-support: ^0.5.20
     typescript: 4.5.2
     winston: ^3.3.3
