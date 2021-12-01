@@ -7,30 +7,15 @@ import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
-import {
-	MessageGenerator,
-	Transaction,
-	TransactionOptions,
-} from "./Transaction";
+import { Transaction } from "./Transaction";
 
-function createDummyMessageGenerator(msg: Message): MessageGenerator {
-	return {
-		start: async function* () {
-			this.current = msg;
-			yield msg;
-		},
-		self: undefined,
-		current: undefined,
-	};
-}
-
-function createDummyTransaction(
-	options: Partial<TransactionOptions>,
-): Transaction {
-	options.priority ??= MessagePriority.Normal;
-	options.message ??= {} as any;
-	options.parts = createDummyMessageGenerator(options.message!);
-	return new Transaction(undefined as any, options as TransactionOptions);
+function createTransactionWithPriority(priority: MessagePriority): Transaction {
+	return new Transaction(
+		undefined as any,
+		{} as any,
+		undefined as any,
+		priority,
+	);
 }
 
 interface MockNode {
@@ -46,31 +31,21 @@ describe("lib/driver/Transaction => ", () => {
 		// "winning" means the position of a transaction in the queue is lower
 
 		// t2 has a later timestamp by default
-		const t1 = createDummyTransaction({
-			priority: MessagePriority.Controller,
-		});
-		const t2 = createDummyTransaction({
-			priority: MessagePriority.Controller,
-		});
+		const t1 = createTransactionWithPriority(MessagePriority.Controller);
+		const t2 = createTransactionWithPriority(MessagePriority.Controller);
 		// equal priority, earlier timestamp wins
 		expect(t1.compareTo(t2)).toBe(-1);
 		expect(t2.compareTo(t1)).toBe(1);
 
-		const t3 = createDummyTransaction({ priority: MessagePriority.Poll });
-		const t4 = createDummyTransaction({
-			priority: MessagePriority.Controller,
-		});
+		const t3 = createTransactionWithPriority(MessagePriority.Poll);
+		const t4 = createTransactionWithPriority(MessagePriority.Controller);
 		// lower priority loses
 		expect(t3.compareTo(t4)).toBe(1);
 		expect(t4.compareTo(t3)).toBe(-1);
 
 		// this should not happen but we still need to test it
-		const t5 = createDummyTransaction({
-			priority: MessagePriority.Controller,
-		});
-		const t6 = createDummyTransaction({
-			priority: MessagePriority.Controller,
-		});
+		const t5 = createTransactionWithPriority(MessagePriority.Controller);
+		const t6 = createTransactionWithPriority(MessagePriority.Controller);
 		t6.creationTimestamp = t5.creationTimestamp;
 		expect(t5.compareTo(t6)).toBe(0);
 		expect(t6.compareTo(t5)).toBe(0);
@@ -143,15 +118,15 @@ describe("lib/driver/Transaction => ", () => {
 			const msg =
 				nodeId != undefined
 					? new SendDataRequest(driver, {
-							command: new NoOperationCC(driver, {
-								nodeId,
-							}),
+							command: new NoOperationCC(driver, { nodeId }),
 					  })
 					: new GetControllerVersionRequest(driver);
-			const ret = createDummyTransaction({
+			const ret = new Transaction(
+				driver,
+				msg,
+				undefined as any,
 				priority,
-				message: msg,
-			});
+			);
 			ret.creationTimestamp = 0;
 			return ret;
 		}
@@ -255,10 +230,12 @@ describe("lib/driver/Transaction => ", () => {
 			const msg = new SendDataRequest(driver, {
 				command: new NoOperationCC(driver, { nodeId }),
 			});
-			const ret = createDummyTransaction({
+			const ret = new Transaction(
+				driver,
+				msg,
+				undefined as any,
 				priority,
-				message: msg,
-			});
+			);
 			ret.creationTimestamp = 0;
 			return ret;
 		}
@@ -346,10 +323,13 @@ describe("lib/driver/Transaction => ", () => {
 			msg: Message,
 			priority: MessagePriority = getDefaultPriority(msg)!,
 		) {
-			const ret = createDummyTransaction({
+			const driver = driverMock;
+			const ret = new Transaction(
+				driver,
+				msg,
+				undefined as any,
 				priority,
-				message: msg,
-			});
+			);
 			ret.creationTimestamp = ++creationTimestamp;
 			return ret;
 		}
@@ -371,9 +351,12 @@ describe("lib/driver/Transaction => ", () => {
 	});
 
 	it("should capture a stack trace where it was created", () => {
-		const test = createDummyTransaction({
-			message: "FOOBAR" as any,
-		});
+		const test = new Transaction(
+			undefined as any,
+			"FOOBAR" as any,
+			undefined as any,
+			undefined as any,
+		);
 		expect(test.stack).toInclude("Transaction.test.ts");
 		expect(test.stack).not.toInclude("FOOBAR");
 	});

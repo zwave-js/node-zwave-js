@@ -41,7 +41,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	discreteBinarySearch,
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
@@ -148,7 +147,6 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import { RSSI, RssiError, TXReport } from "../controller/SendDataShared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
@@ -156,11 +154,6 @@ import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
-import {
-	formatLifelineHealthCheckSummary,
-	formatRouteHealthCheckSummary,
-	healthCheckTestFrameCount,
-} from "./HealthCheck";
 import {
 	createNodeReadyMachine,
 	NodeReadyInterpreter,
@@ -178,11 +171,7 @@ import {
 import type {
 	DataRate,
 	FLiRS,
-	LifelineHealthCheckResult,
-	LifelineHealthCheckSummary,
 	RefreshInfoOptions,
-	RouteHealthCheckResult,
-	RouteHealthCheckSummary,
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
@@ -2386,11 +2375,8 @@ protocol version:      ${this._protocolVersion}`;
 			secMan.storeRemoteEI(this.nodeId, command.receiverEI);
 		}
 
-		this.driver.controllerLog.logNode(this.id, {
-			message: `received S2 nonce, not sure what to do with it`,
-			level: "warn",
-			direction: "inbound",
-		});
+		// Tell the driver to re-send the current message if necessary
+		this.driver.resendS2EncapsulatedCommand();
 	}
 
 	private busyPollingAfterHail: boolean = false;
@@ -3960,7 +3946,7 @@ protocol version:      ${this._protocolVersion}`;
 	public async testPowerlevel(
 		testNodeId: number,
 		powerlevel: Powerlevel,
-		healthCheckTestFrameCount: number,
+		testFrameCount: number,
 		onProgress?: (acknowledged: number, total: number) => void,
 	): Promise<number> {
 		const api = this.commandClasses.Powerlevel;
@@ -3975,17 +3961,11 @@ protocol version:      ${this._protocolVersion}`;
 		};
 
 		// Start the process
-		await api.startNodeTest(
-			testNodeId,
-			powerlevel,
-			healthCheckTestFrameCount,
-		);
+		await api.startNodeTest(testNodeId, powerlevel, testFrameCount);
 
 		// Each frame will take a few ms to be sent, let's assume 5 per second
 		// to estimate how long the test will take
-		const expectedDurationMs = Math.round(
-			(healthCheckTestFrameCount / 5) * 1000,
-		);
+		const expectedDurationMs = Math.round((testFrameCount / 5) * 1000);
 
 		// Poll the status of the test regularly
 		const pollFrequencyMs =
@@ -4028,406 +4008,8 @@ protocol version:      ${this._protocolVersion}`;
 				return result(status.acknowledgedFrames);
 			} else if (onProgress) {
 				// Notify the caller of the test progress
-				onProgress(
-					status.acknowledgedFrames,
-					healthCheckTestFrameCount,
-				);
+				onProgress(status.acknowledgedFrames, testFrameCount);
 			}
 		}
-	}
-
-	/**
-	 * Checks the health of connection between the controller and this node and returns the results.
-	 */
-	public async checkLifelineHealth(
-		rounds: number = 5,
-		onProgress?: (
-			round: number,
-			totalRounds: number,
-			lastRating: number,
-		) => void,
-	): Promise<LifelineHealthCheckSummary> {
-		if (rounds > 10 || rounds < 1) {
-			throw new ZWaveError(
-				"The number of health check rounds must be between 1 and 10!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		// No. of pings per round
-		const start = Date.now();
-
-		/** Computes a health rating from a health check result */
-		const computeRating = (result: LifelineHealthCheckResult) => {
-			const failedPings = Math.max(
-				result.failedPingsController ?? 0,
-				result.failedPingsNode,
-			);
-			const numNeighbors = result.numNeighbors;
-			const minPowerlevel = result.minPowerlevel ?? Powerlevel["-6 dBm"];
-			const snrMargin = result.snrMargin ?? 17;
-			const latency = result.latency;
-
-			if (failedPings === 10) return 0;
-			if (failedPings > 2) return 1;
-			if (failedPings === 2 || latency > 1000) return 2;
-			if (failedPings === 1 || latency > 500) return 3;
-			if (latency > 250) return 4;
-			if (latency > 100) return 5;
-			if (minPowerlevel < Powerlevel["-6 dBm"] || snrMargin < 17) {
-				// Lower powerlevel reductions (= higher power) have lower numeric values
-				return numNeighbors > 2 ? 7 : 6;
-			}
-			if (numNeighbors <= 2) return 8;
-			if (latency > 50) return 9;
-			return 10;
-		};
-
-		this.driver.controllerLog.logNode(
-			this.id,
-			`Starting lifeline health check (${rounds} round${
-				rounds !== 1 ? "s" : ""
-			})...`,
-		);
-
-		const results: LifelineHealthCheckResult[] = [];
-		for (let round = 1; round <= rounds; round++) {
-			// Determine the number of repeating neighbors
-			const numNeighbors = (
-				await this.driver.controller.getNodeNeighbors(this.nodeId, true)
-			).length;
-
-			// Ping the node 10x, measuring the RSSI
-			let txReport: TXReport | undefined;
-			let routeChanges: number | undefined;
-			let rssi: RSSI | undefined;
-			let channel: number | undefined;
-			let snrMargin: number | undefined;
-			let failedPingsNode = 0;
-			let latency = 0;
-			const pingAPI = this.commandClasses["No Operation"].withOptions({
-				onTXReport: (report) => {
-					txReport = report;
-				},
-			});
-			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
-				const start = Date.now();
-				const pingResult = await pingAPI.send().then(
-					() => true,
-					() => false,
-				);
-				const rtt = Date.now() - start;
-				latency = Math.max(
-					latency,
-					txReport ? txReport.txTicks * 10 : rtt,
-				);
-				if (!pingResult) {
-					failedPingsNode++;
-				} else if (txReport) {
-					routeChanges ??= 0;
-					if (txReport.routingAttempts > 1) {
-						routeChanges++;
-					}
-					rssi = txReport.ackRSSI;
-					channel = txReport.ackChannelNo;
-				}
-			}
-
-			// If possible, compute the SNR margin from the test results
-			if (
-				rssi != undefined &&
-				rssi < RssiError.NoSignalDetected &&
-				channel != undefined
-			) {
-				const backgroundRSSI =
-					await this.driver.controller.getBackgroundRSSI();
-				if (`rssiChannel${channel}` in backgroundRSSI) {
-					snrMargin =
-						rssi - (backgroundRSSI as any)[`rssiChannel${channel}`];
-				}
-			}
-
-			const ret: LifelineHealthCheckResult = {
-				latency,
-				failedPingsNode,
-				numNeighbors,
-				routeChanges,
-				snrMargin,
-				rating: 0,
-			};
-
-			// Now instruct the node to ping the controller, figuring out the minimum powerlevel
-			if (this.supportsCC(CommandClasses.Powerlevel)) {
-				// Do a binary search and find the highest reduction in powerlevel for which there are no errors
-				let failedPingsController = 0;
-
-				const executor = async (powerlevel: Powerlevel) => {
-					this.driver.controllerLog.logNode(
-						this.id,
-						`Sending ${healthCheckTestFrameCount} pings to controller at ${getEnumMemberName(
-							Powerlevel,
-							powerlevel,
-						)}...`,
-					);
-					const result = await this.testPowerlevel(
-						this.driver.controller.ownNodeId!,
-						powerlevel,
-						healthCheckTestFrameCount,
-					);
-					failedPingsController = healthCheckTestFrameCount - result;
-					this.driver.controllerLog.logNode(
-						this.id,
-						`At ${getEnumMemberName(
-							Powerlevel,
-							powerlevel,
-						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged...`,
-					);
-					return failedPingsController === 0;
-				};
-				try {
-					const powerlevel = await discreteBinarySearch(
-						Powerlevel["Normal Power"], // minimum reduction
-						Powerlevel["-9 dBm"], // maximum reduction
-						executor,
-					);
-					if (powerlevel == undefined) {
-						// There were still failures at normal power, report it
-						ret.minPowerlevel = Powerlevel["Normal Power"];
-						ret.failedPingsController = failedPingsController;
-					} else {
-						ret.minPowerlevel = powerlevel;
-					}
-				} catch (e) {
-					if (
-						isZWaveError(e) &&
-						e.code === ZWaveErrorCodes.Controller_CallbackNOK
-					) {
-						// The node is dead, treat this as a failure
-						ret.minPowerlevel = Powerlevel["Normal Power"];
-						ret.failedPingsController = healthCheckTestFrameCount;
-					} else {
-						throw e;
-					}
-				}
-			}
-
-			ret.rating = computeRating(ret);
-			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
-		}
-
-		const duration = Date.now() - start;
-
-		const rating = Math.min(...results.map((r) => r.rating));
-		const summary = { results, rating };
-		this.driver.controllerLog.logNode(
-			this.id,
-			`Lifeline health check complete in ${duration} ms
-${formatLifelineHealthCheckSummary(summary)}`,
-		);
-
-		return summary;
-	}
-
-	/**
-	 * Checks the health of connection between this node and the target node and returns the results.
-	 */
-	public async checkRouteHealth(
-		targetNodeId: number,
-		rounds: number = 5,
-		onProgress?: (
-			round: number,
-			totalRounds: number,
-			lastRating: number,
-		) => void,
-	): Promise<RouteHealthCheckSummary> {
-		if (rounds > 10 || rounds < 1) {
-			throw new ZWaveError(
-				"The number of health check rounds must be between 1 and 10!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
-
-		const otherNode = this.driver.controller.nodes.getOrThrow(targetNodeId);
-		if (
-			!this.supportsCC(CommandClasses.Powerlevel) &&
-			!otherNode.supportsCC(CommandClasses.Powerlevel)
-		) {
-			throw new ZWaveError(
-				"For a route health check, at least one of the nodes must support Powerlevel CC!",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// No. of pings per round
-		const healthCheckTestFrameCount = 10;
-		const start = Date.now();
-
-		/** Computes a health rating from a health check result */
-		const computeRating = (result: RouteHealthCheckResult) => {
-			const failedPings = Math.max(
-				result.failedPingsToSource ?? 0,
-				result.failedPingsToTarget ?? 0,
-			);
-			const numNeighbors = result.numNeighbors;
-			const minPowerlevel = Math.max(
-				result.minPowerlevelSource ?? Powerlevel["-6 dBm"],
-				result.minPowerlevelTarget ?? Powerlevel["-6 dBm"],
-			);
-
-			if (failedPings === 10) return 0;
-			if (failedPings > 2) return 1;
-			if (failedPings === 2) return 2;
-			if (failedPings === 1) return 3;
-			if (minPowerlevel < Powerlevel["-6 dBm"]) {
-				// Lower powerlevel reductions (= higher power) have lower numeric values
-				return numNeighbors > 2 ? 7 : 6;
-			}
-			if (numNeighbors <= 2) return 8;
-			return 10;
-		};
-
-		this.driver.controllerLog.logNode(
-			this.id,
-			`Starting route health check to node ${targetNodeId} (${rounds} round${
-				rounds !== 1 ? "s" : ""
-			})...`,
-		);
-
-		const results: RouteHealthCheckResult[] = [];
-		for (let round = 1; round <= rounds; round++) {
-			// Determine the minimum number of repeating neighbors between the
-			// source and target node
-			const numNeighbors = Math.min(
-				(
-					await this.driver.controller.getNodeNeighbors(
-						this.nodeId,
-						true,
-					)
-				).length,
-				(
-					await this.driver.controller.getNodeNeighbors(
-						targetNodeId,
-						true,
-					)
-				).length,
-			);
-
-			let failedPings = 0;
-			let failedPingsToSource: number | undefined;
-			let minPowerlevelSource: Powerlevel | undefined;
-			let failedPingsToTarget: number | undefined;
-			let minPowerlevelTarget: Powerlevel | undefined;
-			const executor =
-				(node: ZWaveNode, otherNode: ZWaveNode) =>
-				async (powerlevel: Powerlevel) => {
-					this.driver.controllerLog.logNode(
-						node.id,
-						`Sending ${healthCheckTestFrameCount} pings to node ${
-							otherNode.id
-						} at ${getEnumMemberName(Powerlevel, powerlevel)}...`,
-					);
-					const result = await node.testPowerlevel(
-						otherNode.id,
-						powerlevel,
-						healthCheckTestFrameCount,
-					);
-					failedPings = healthCheckTestFrameCount - result;
-					this.driver.controllerLog.logNode(
-						node.id,
-						`At ${getEnumMemberName(
-							Powerlevel,
-							powerlevel,
-						)}, ${result}/${healthCheckTestFrameCount} pings were acknowledged by node ${
-							otherNode.id
-						}...`,
-					);
-					return failedPings === 0;
-				};
-
-			// Now instruct this node to ping the other one, figuring out the minimum powerlevel
-			if (this.supportsCC(CommandClasses.Powerlevel)) {
-				try {
-					const powerlevel = await discreteBinarySearch(
-						Powerlevel["Normal Power"], // minimum reduction
-						Powerlevel["-9 dBm"], // maximum reduction
-						executor(this, otherNode),
-					);
-					if (powerlevel == undefined) {
-						// There were still failures at normal power, report it
-						minPowerlevelSource = Powerlevel["Normal Power"];
-						failedPingsToTarget = failedPings;
-					} else {
-						minPowerlevelSource = powerlevel;
-					}
-				} catch (e) {
-					if (
-						isZWaveError(e) &&
-						e.code === ZWaveErrorCodes.Controller_CallbackNOK
-					) {
-						// The node is dead, treat this as a failure
-						minPowerlevelSource = Powerlevel["Normal Power"];
-						failedPingsToTarget = healthCheckTestFrameCount;
-					} else {
-						throw e;
-					}
-				}
-			}
-
-			// And do the same with the other node
-			if (otherNode.supportsCC(CommandClasses.Powerlevel)) {
-				try {
-					const powerlevel = await discreteBinarySearch(
-						Powerlevel["Normal Power"], // minimum reduction
-						Powerlevel["-9 dBm"], // maximum reduction
-						executor(otherNode, this),
-					);
-					if (powerlevel == undefined) {
-						// There were still failures at normal power, report it
-						minPowerlevelTarget = Powerlevel["Normal Power"];
-						failedPingsToSource = failedPings;
-					} else {
-						minPowerlevelTarget = powerlevel;
-					}
-				} catch (e) {
-					if (
-						isZWaveError(e) &&
-						e.code === ZWaveErrorCodes.Controller_CallbackNOK
-					) {
-						// The node is dead, treat this as a failure
-						minPowerlevelTarget = Powerlevel["Normal Power"];
-						failedPingsToSource = healthCheckTestFrameCount;
-					} else {
-						throw e;
-					}
-				}
-			}
-
-			const ret: RouteHealthCheckResult = {
-				numNeighbors,
-				failedPingsToSource,
-				failedPingsToTarget,
-				minPowerlevelSource,
-				minPowerlevelTarget,
-				rating: 0,
-			};
-			ret.rating = computeRating(ret);
-			results.push(ret);
-			onProgress?.(round, rounds, ret.rating);
-		}
-
-		const duration = Date.now() - start;
-
-		const rating = Math.min(...results.map((r) => r.rating));
-		const summary = { results, rating };
-		this.driver.controllerLog.logNode(
-			this.id,
-			`Route health check to node ${
-				otherNode.id
-			} complete in ${duration} ms
-${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
-		);
-
-		return summary;
 	}
 }

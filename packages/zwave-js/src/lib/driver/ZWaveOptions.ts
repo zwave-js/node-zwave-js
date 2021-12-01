@@ -57,6 +57,9 @@ export interface ZWaveOptions {
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
 
+		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
+		retryAfterTransmitReport: boolean; // default: false
+
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
