@@ -49,7 +49,7 @@
     "fs-extra": "^10.0.0",
     "jest-extended": "^0.11.5",
     "piscina": "^3.1.0",
-    "prettier": "^2.4.1",
+    "prettier": "^2.5.0",
     "reflect-metadata": "^0.1.13",
     "ts-morph": "^13.0.2",
     "typescript": "4.5.2",
