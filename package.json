@@ -62,7 +62,7 @@
     "cz-conventional-changelog": "^3.3.0",
     "esbuild": "^0.14.1",
     "esbuild-register": "^3.2.0",
-    "eslint": "^8.2.0",
+    "eslint": "^8.3.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fs-extra": "^10.0.0",
