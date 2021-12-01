@@ -4303,7 +4303,7 @@ __metadata:
     prettier-plugin-organize-imports: ^2.3.4
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    source-map-support: ^0.5.20
+    source-map-support: ^0.5.21
     ts-node: ^10.4.0
     typescript: 4.5.2
     zwave-js: "workspace:*"
@@ -12677,6 +12677,16 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
+"source-map-support@npm:^0.5.21":
+  version: 0.5.21
+  resolution: "source-map-support@npm:0.5.21"
+  dependencies:
+    buffer-from: ^1.0.0
+    source-map: ^0.6.0
+  checksum: 43e98d700d79af1d36f859bdb7318e601dfc918c7ba2e98456118ebc4c4872b327773e5a1df09b0524e9e5063bb18f0934538eace60cca2710d1fa687645d137
+  languageName: node
+  linkType: hard
+
 "source-map-support@npm:^0.5.6":
   version: 0.5.19
   resolution: "source-map-support@npm:0.5.19"
@@ -14360,7 +14370,7 @@ typescript@^4.4.3:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     serialport: ^9.2.8
-    source-map-support: ^0.5.20
+    source-map-support: ^0.5.21
     typescript: 4.5.2
     winston: ^3.3.3
     xstate: ^4.26.0
