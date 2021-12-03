@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.8.3 (2021-12-03)
 ### Bugfixes
 * Temporarily revert the changes to the outgoing message handling, which fails on some edge cases
 
