@@ -19,7 +19,14 @@ import {
 	priority,
 } from "../message/Message";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
-import { parseRSSI, RSSI, RssiError } from "./SendDataShared";
+
+export enum RSSIValue {
+	NotAvailable = 127,
+	ReceiverSaturated = 126,
+	NoSignalDetected = 125,
+}
+
+const RSSI_RESERVED_START = 11;
 
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
@@ -78,7 +85,14 @@ export class BridgeApplicationCommandRequest
 		}
 		offset += multicastNodesLength;
 
-		this.rssi = parseRSSI(this.payload, offset);
+		this.rssi = this.payload[offset];
+		// Filter out reserved values
+		if (
+			this.rssi >= RSSI_RESERVED_START &&
+			this.rssi < RSSIValue.NoSignalDetected
+		) {
+			this.rssi = RSSIValue.NotAvailable;
+		}
 	}
 
 	public readonly routedBusy: boolean;
@@ -87,7 +101,7 @@ export class BridgeApplicationCommandRequest
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
 	public readonly fromForeignHomeId: boolean;
-	public readonly rssi: RSSI;
+	public readonly rssi: number | RSSIValue;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC;
@@ -104,13 +118,12 @@ export class BridgeApplicationCommandRequest
 					: this.targetNodeId.join(", ");
 		}
 		switch (true) {
-			case this.rssi === RssiError.ReceiverSaturated:
-			case this.rssi === RssiError.NoSignalDetected:
-				message.RSSI = getEnumMemberName(RssiError, this.rssi);
+			case this.rssi === RSSIValue.ReceiverSaturated:
+			case this.rssi === RSSIValue.NoSignalDetected:
+				message.rssi = getEnumMemberName(RSSIValue, this.rssi);
 				break;
-			// case this.rssi < RSSI_RESERVED_START:
-			default:
-				message.RSSI = `${this.rssi} dBm`;
+			case this.rssi < RSSI_RESERVED_START:
+				message.rssi = `${this.rssi} dBms`;
 				break;
 		}
 		return {

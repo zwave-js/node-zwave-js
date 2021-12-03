@@ -92,10 +92,6 @@ import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
 import {
-	GetBackgroundRSSIRequest,
-	GetBackgroundRSSIResponse,
-} from "../serialapi/misc/GetBackgroundRSSIMessages";
-import {
 	NodeIDType,
 	RFRegion,
 	SerialAPISetupCommand,
@@ -240,7 +236,6 @@ import {
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "./RequestNodeNeighborUpdateMessages";
-import type { RSSI } from "./SendDataShared";
 import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
@@ -1595,7 +1590,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			await api.getSecurityScheme(); // ignore the result
 
 			// Request nonce separately, so we can impose a timeout
-			await api.getNonce();
+			await api.getNonce({
+				standalone: true,
+				storeAsFreeNonce: true,
+			});
 
 			// send the network key
 			await api.setNetworkKey(this.driver.securityManager.networkKey);
@@ -4156,10 +4154,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Returns the known list of neighbors for a node
 	 */
-	public async getNodeNeighbors(
-		nodeId: number,
-		onlyRepeaters: boolean = false,
-	): Promise<readonly number[]> {
+	public async getNodeNeighbors(nodeId: number): Promise<readonly number[]> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
@@ -4169,7 +4164,7 @@ ${associatedNodes.join(", ")}`,
 				new GetRoutingInfoRequest(this.driver, {
 					nodeId,
 					removeBadLinks: false,
-					removeNonRepeaters: onlyRepeaters,
+					removeNonRepeaters: false,
 				}),
 			);
 			this.driver.controllerLog.logNode(nodeId, {
@@ -4741,21 +4736,5 @@ ${associatedNodes.join(", ")}`,
 		}
 		// Close NVM
 		await this.externalNVMClose();
-	}
-
-	/**
-	 * Request the most recent background RSSI levels detected by the controller.
-	 *
-	 * **Note:** This only returns useful values if something was transmitted recently.
-	 */
-	public async getBackgroundRSSI(): Promise<{
-		rssiChannel0: RSSI;
-		rssiChannel1: RSSI;
-		rssiChannel2?: RSSI;
-	}> {
-		const ret = await this.driver.sendMessage<GetBackgroundRSSIResponse>(
-			new GetBackgroundRSSIRequest(this.driver),
-		);
-		return pick(ret, ["rssiChannel0", "rssiChannel1", "rssiChannel2"]);
 	}
 }

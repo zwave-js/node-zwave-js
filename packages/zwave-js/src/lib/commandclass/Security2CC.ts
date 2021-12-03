@@ -208,6 +208,37 @@ export class Security2CCAPI extends CCAPI {
 	}
 
 	/**
+	 * Requests a nonce from the target node
+	 */
+	public async requestNonce(): Promise<void> {
+		this.assertSupportsCommand(Security2Command, Security2Command.NonceGet);
+
+		this.assertPhysicalEndpoint(this.endpoint);
+
+		if (!this.driver.securityManager2) {
+			throw new ZWaveError(
+				`Nonces can only be sent if secure communication is set up!`,
+				ZWaveErrorCodes.Driver_NoSecurity,
+			);
+		}
+
+		const cc = new Security2CCNonceGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+
+		await this.driver.sendCommand(cc, {
+			...this.commandOptions,
+			priority: MessagePriority.PreTransmitHandshake,
+			// Only try getting a nonce once
+			maxSendAttempts: 1,
+			// We don't want failures causing us to treat the node as asleep or dead
+			// The "real" transaction will do that for us
+			changeNodeStatusOnMissingACK: false,
+		});
+	}
+
+	/**
 	 * Queries the securely supported commands for the current security class
 	 * @param securityClass Can be used to overwrite the security class to use. If this doesn't match the current one, new nonces will need to be exchanged.
 	 */
@@ -573,33 +604,18 @@ interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-// An S2 encapsulated command may result in a NonceReport to be sent by the node if it couldn't decrypt the message
 function getCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
 ) {
 	if (sent.encapsulated?.expectsCCResponse()) {
-		return [
-			Security2CCMessageEncapsulation as any,
-			Security2CCNonceReport as any,
-		];
-	}
-}
-
-function testCCResponseForMessageEncapsulation(
-	sent: Security2CCMessageEncapsulation,
-	received: Security2CCMessageEncapsulation | Security2CCNonceReport,
-) {
-	if (received instanceof Security2CCMessageEncapsulation) {
-		return "checkEncapsulated";
-	} else {
-		return received.SOS && !!received.receiverEI;
+		return Security2CCMessageEncapsulation;
 	}
 }
 
 @CCCommand(Security2Command.MessageEncapsulation)
 @expectedCCResponse(
 	getCCResponseForMessageEncapsulation,
-	testCCResponseForMessageEncapsulation,
+	() => "checkEncapsulated",
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
 	// Define the securityManager and controller.ownNodeId as existing
@@ -866,7 +882,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
 
-	public unsetSequenceNumber(): void {
+	private _wasRetriedAfterDecodeFailure: boolean = false;
+	/** Indicates whether sending this command was retried after the target node failed to decode it  */
+	public get wasRetriedAfterDecodeFailure(): boolean {
+		return this._wasRetriedAfterDecodeFailure;
+	}
+
+	public prepareRetryAfterDecodeFailure(): void {
+		if (this._wasRetriedAfterDecodeFailure) {
+			throw new ZWaveError(
+				`S2 encapsulated messages may only be retried once after the target failed to decode them!`,
+				ZWaveErrorCodes.Controller_MessageDropped,
+			);
+		}
+		this._wasRetriedAfterDecodeFailure = true;
 		this._sequenceNumber = undefined;
 	}
 
@@ -897,6 +926,23 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			(e): e is SPANExtension => e instanceof SPANExtension,
 		);
 		return spanExtension?.senderEI;
+	}
+
+	public requiresPreTransmitHandshake(): boolean {
+		// We need the receiver's EI to be able to send an encrypted command
+		const secMan = this.driver.securityManager2;
+		const peerNodeId = this.nodeId as number;
+		const spanState = secMan.getSPANState(peerNodeId);
+		return (
+			spanState.type === SPANState.None ||
+			spanState.type === SPANState.LocalEI
+		);
+	}
+
+	public async preTransmitHandshake(): Promise<void> {
+		// Request a nonce
+		return this.getNode()!.commandClasses["Security 2"].requestNonce();
+		// Yeah, that's it :)
 	}
 
 	public serialize(): Buffer {
