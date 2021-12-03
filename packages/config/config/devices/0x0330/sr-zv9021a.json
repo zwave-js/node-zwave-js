@@ -1,0 +1,241 @@
+{
+	"manufacturer": "ShenZhen Sunricher Technology, Ltd.",
+	"manufacturerId": "0x0330",
+	"label": "SR-ZV9021A",
+	"description": "Z-Wave Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd004",
+			"zwaveAllianceId": 4302
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "10",
+			"label": "Parameter 10",
+			"description": "Whether to enable over temperature protection. when temperature achieves the set value, the relay output will be forced to off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 36,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable over temperature protection",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Parameter 11",
+			"description": "Temperature change report threshold, report to gateway when change value is lower or higher than the threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0: disable report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Parameter 12",
+			"description": "Time interval for periodical temperature report, unit is s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0: disable report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Parameter 13",
+			"description": "Power change absolute threshold, unit is w, report when power change value lower or higher than the threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Parameter 14",
+			"description": "Voltage change absolute threshold, unit is v, report when voltage change value lower or higher than the threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Parameter 15",
+			"description": "Current change absolute threshold, unit is 0.1a, report when current change value lower or higher than the threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable to report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Parameter 17",
+			"description": "Unit is s",
+			"valueSize": 4,
+			"minValue": 60,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "18",
+			"label": "Parameter 18",
+			"description": "Device state after a power reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch mode: 00， turn off relay ；thermostat mode:00，hvac off mode",
+					"value": 0
+				},
+				{
+					"label": "Switch mode: 01， turn on relay ；thermostat mode:01，hvac heat mode",
+					"value": 1
+				},
+				{
+					"label": "Switch mode: 02，save relay state before power reset ；thermostat mode:02，save hvac state before power reset",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Parameter 19",
+			"description": "Enable/disable to send switch_binary_report to the lifeline when the plug (under switch mode) state changes, reset power of the plug and factory reset the the plug",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to report",
+					"value": 0
+				},
+				{
+					"label": "Enable to send",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Parameter 20",
+			"description": "Enable/disable current protection threshold function, for instance, set the value as 15, then the over current protection will be triggered at 15.2a",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 16,
+			"defaultValue": 16,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Parameter 7",
+			"description": "0 - switch mode; 1 - thermostat mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Parameter 8",
+			"description": "When configured as thermostat mode: if thermostat setpoint or mode changes, whether to report actively",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not report",
+					"value": 0
+				},
+				{
+					"label": "Report actively",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Parameter 9",
+			"description": "Set a threshold,unit is 0.1 celsius degree",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": -50,
+			"maxValue": 50,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "Triple press the action button on the smart plug, it will set the plug into inclusion mode.The LED indicator will flash a white LED fast then stay solid white for 3 seconds to indicate successful inclusion. If there is no Z-Wave network available, the LED indicator will flash white fast for 30 seconds and the plug will quit inclusion mode automatically",
+		"exclusion": "Triple press the action button, the smart plug will be set to exclusion mode, the LED indicator will flash a\nwhite LED fast and then flash white slowly for 3 times to indicate successful exclusion. If exclusion fails, the\nLED indicator will flash fast for 30 seconds and the plug will quit exclusion mode automatically",
+		"reset": "Press and hold down action button for over 10 seconds, LED indicator stays solid white for 3s to indicate\nsuccessful factory reset, release action button, the smart plug will restart automatically",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4302/SR-ZV9021A%20Instruction%20ForRelease.pdf"
+	}
+}
