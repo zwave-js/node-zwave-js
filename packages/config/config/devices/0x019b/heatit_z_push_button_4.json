@@ -6,6 +6,10 @@
 	"devices": [
 		{
 			"productType": "0x0300",
+			"productId": "0xa305"
+		},
+		{
+			"productType": "0x0300",
 			"productId": "0xa306"
 		}
 	],
