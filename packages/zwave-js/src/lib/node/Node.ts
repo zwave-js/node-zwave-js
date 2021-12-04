@@ -230,6 +230,9 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			this._valueDB.on(
 				event,
 				(args: ValueUpdatedArgs | ValueRemovedArgs) => {
+					// Value updates caused by the driver should never cancel a scheduled poll
+					if ("source" in args && args.source === "driver") return;
+
 					if (this.cancelScheduledPoll(args)) {
 						this.driver.controllerLog.logNode(
 							this.nodeId,
@@ -334,30 +337,37 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	): void {
 		// Try to retrieve the speaking CC name
 		const outArg = this.translateValueID(arg);
+		// @ts-expect-error This can happen for value updated events
+		if ("source" in outArg) delete outArg.source;
+
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			(outArg as unknown as MetadataUpdatedArgs).metadata =
 				this.getValueMetadata(arg);
 		}
-		// Log the value change
+
 		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
 		const isInternalValue =
 			ccInstance && ccInstance.isInternalValue(arg.property as any);
-		// I don't like the splitting and any but its the easiest solution here
-		const [changeTarget, changeType] = eventName.split(" ");
-		const logArgument = {
-			...outArg,
-			nodeId: this.nodeId,
-			internal: isInternalValue,
-		};
-		if (changeTarget === "value") {
-			this.driver.controllerLog.value(
-				changeType as any,
-				logArgument as any,
-			);
-		} else if (changeTarget === "metadata") {
-			this.driver.controllerLog.metadataUpdated(logArgument);
+		if ((arg as any as ValueUpdatedArgs).source !== "driver") {
+			// Log the value change, except for updates caused by the driver itself
+			// I don't like the splitting and any but its the easiest solution here
+			const [changeTarget, changeType] = eventName.split(" ");
+			const logArgument = {
+				...outArg,
+				nodeId: this.nodeId,
+				internal: isInternalValue,
+			};
+			if (changeTarget === "value") {
+				this.driver.controllerLog.value(
+					changeType as any,
+					logArgument as any,
+				);
+			} else if (changeTarget === "metadata") {
+				this.driver.controllerLog.metadataUpdated(logArgument);
+			}
 		}
+
 		//Don't expose value events for internal value IDs...
 		if (isInternalValue) return;
 		// ... and root values ID that mirrors endpoint functionality
@@ -850,7 +860,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 					valueId,
 					value,
 					!!this.driver.options.emitValueUpdateAfterSetValue
-						? undefined
+						? { source: "driver" }
 						: { noEvent: true },
 				);
 			}

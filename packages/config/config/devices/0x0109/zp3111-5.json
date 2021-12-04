@@ -46,7 +46,7 @@
 			"#": "3",
 			"label": "Humidity",
 			"description": "Configure Relative Humidity",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
@@ -55,7 +55,7 @@
 		{
 			"#": "4",
 			"label": "Light Sensor",
-			"unit": "percent",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
@@ -65,11 +65,11 @@
 			"#": "5",
 			"label": "Trigger Interval",
 			"description": "Set the trigger interval for motion sensor re-activation.",
-			"unit": "seconds",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 180,
+			"defaultValue": 3,
 			"unsigned": true
 		},
 		{
