@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Dime Rate Steps (Manual)",
+			"label": "Dim Rate Steps (Manual)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 1,
