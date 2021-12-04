@@ -34,7 +34,7 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1",
+			"#": "0",
 			"label": "Siren Strobe Mode",
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
@@ -59,7 +59,7 @@
 			]
 		},
 		{
-			"#": "2",
+			"#": "1",
 			"$if": "firmwareVersion >= 15.0",
 			"label": "Alarm auto stop",
 			"description": "Defines the auto time out of the alarm indication",

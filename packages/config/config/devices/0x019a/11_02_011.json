@@ -274,11 +274,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 1
 				}
 			]

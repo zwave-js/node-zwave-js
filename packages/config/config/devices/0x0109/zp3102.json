@@ -44,9 +44,10 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "On time in minutes",
+			"label": "On Time",
 			"description": "Delay before sending OFF",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,

@@ -55,8 +55,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Minimum brightness level",
-			"description": "Set automatically during the calibration process",
+			"label": "Minimum Brightness Level",
+			"description": "For manual override, this is set during auto-calibration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -65,8 +65,8 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 3.4",
-			"label": "Maximum brightness level",
-			"description": "Set automatically during the calibration process.",
+			"label": "Maximum Brightness Level",
+			"description": "For manual override, this is set during auto-calibration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -84,8 +84,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Incandescence level of dimmable fluorescent lamps",
-			"description": "Dimmer will set to this value after first switch on.",
+			"label": "Incandescence Level of Dimmable CFL",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -93,8 +93,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Incandescence time of dimmable fluorescent lamps",
-			"description": "Time for switching fluorescent lamps and certain light sources.",
+			"label": "Incandescence Time of Dimmable CFL",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -102,7 +101,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Dimming Step at Automatic Control",
+			"label": "Automatic Control: Dimming Step Size",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -110,7 +109,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Dimming Step Timing at Automatic Control",
+			"label": "Automatic Control: Dimming Step Timing",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -118,7 +117,8 @@
 		},
 		{
 			"#": "7",
-			"label": "Dimming Step at Manual Control",
+			"label": "Manual Control: Dimming Step Size",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Dimming Step Timing at Manual Control",
+			"label": "Manual Control: Dimming Step Timing",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -138,8 +138,8 @@
 		},
 		{
 			"#": "10",
-			"label": "Timer functionality (auto - off).",
-			"description": "Setting of the timer.",
+			"label": "Timer Functionality (Auto - Off)",
+			"description": "Will automatically turn off after the specified time from switching on",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -199,8 +199,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Auto-calibration status (read-only parameter)",
-			"description": "Mode of the Dimmer (auto/man settings).",
+			"label": "Auto-Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -219,30 +218,47 @@
 		},
 		{
 			"#": "15",
-			"label": "Burnt out bulb detection",
-			"description": "Percentage value of power variation",
+			"label": "Burnt Out Bulb Detection Power Variation",
+			"description": "Percentage value of standard power consumption as measured during calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "16",
-			"label": "Time delay of burnt out bulb/overload detection",
-			"description": "Delay for power variation detection",
+			"label": "Burnt Out Bulb Detection Time Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "19",
-			"label": "Forced switch on brightness level",
-			"description": "Switching on the Dimmer will always set this brightness level.",
+			"label": "Forced Switch On Brightness",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Previous level",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "20",
@@ -255,11 +271,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mono-stable input (momentary button)",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Bi-stable input (switch)",
+					"label": "Toggle",
 					"value": 1
 				},
 				{
@@ -290,7 +306,7 @@
 		},
 		{
 			"#": "22",
-			"label": "Change Bi-Stable Input Switch Behavior",
+			"label": "Change Toggle Switch Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -434,7 +450,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Load control mode recognized during auto-calibration",
+			"label": "Dimmer Mode Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -442,11 +458,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "leading edge control",
+					"label": "Leading edge",
 					"value": 0
 				},
 				{
-					"label": "trailing edge control",
+					"label": "Trailing edge",
 					"value": 1
 				}
 			]
@@ -454,7 +470,7 @@
 		{
 			"#": "32",
 			"label": "On/Off Mode",
-			"description": "Useful when connecting non-dimmable loads.",
+			"description": "Useful when connecting non-dimmable loads",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -478,7 +494,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Dimmability of the load (read only)",
+			"label": "Dimmability Recognized During Auto-Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -486,11 +502,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Load recognized as dimmable",
+					"label": "Dimming possible",
 					"value": 0
 				},
 				{
-					"label": "Load recognized as non-dimmable",
+					"label": "Dimming not possible",
 					"value": 1
 				}
 			]
@@ -498,7 +514,7 @@
 		{
 			"#": "34",
 			"label": "Soft-Start Functionality",
-			"description": "Time required to warm up the filament of halogen bulb.",
+			"description": "Time required to warm up the filament of halogen bulb",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -511,11 +527,11 @@
 					"value": 0
 				},
 				{
-					"label": "Short soft-start (0,1s)",
+					"label": "Short soft-start (0.1s)",
 					"value": 1
 				},
 				{
-					"label": "Long soft-start (0,5s)",
+					"label": "Long soft-start (0.5s)",
 					"value": 2
 				}
 			]
@@ -535,7 +551,7 @@
 					"value": 0
 				},
 				{
-					"label": "After first power On",
+					"label": "After first power on",
 					"value": 1
 				},
 				{
@@ -594,8 +610,8 @@
 		{
 			"#": "39",
 			"$if": "firmwareVersion <= 3.4",
-			"label": "Power limit - OVERLOAD",
-			"description": "Reaching the defined value will result in turning off the load",
+			"label": "Power Limit",
+			"description": "Defined value turns off load",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 250,
@@ -784,11 +800,15 @@
 		},
 		{
 			"#": "59",
-			"label": "Approximated power at the maximum brightness level",
+			"label": "Approximated Power at the Maximum Brightness Level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 0
 		}
-	]
+	],
+	"metadata": {
+		"$import": "templates/fibaro_template.json#default_metadata",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2836/FGD-212-EN-T-v1.3.pdf"
+	}
 }

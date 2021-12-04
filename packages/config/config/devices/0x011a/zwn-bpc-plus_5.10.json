@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
-	"label": "ZWN-BPC",
+	"label": "ZWN-BPC-PLUS",
 	"description": "PIR Sensor",
 	"devices": [
 		{
@@ -10,7 +10,7 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
+		"min": "5.10",
 		"max": "255.255"
 	},
 	"paramInformation": [

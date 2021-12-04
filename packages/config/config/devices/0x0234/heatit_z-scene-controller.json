@@ -74,7 +74,7 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion <= 2.1",
-			"label": "LED #1 mode.",
+			"label": "LED #1 mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

@@ -37,7 +37,7 @@ Each device in the Z-Wave standard is identified by its product type and product
 
 ## `firmwareVersion`
 
-While it is possible to specify the firmware version covered by a file, doing so is deprecated. To define parameters that have changed over time, use [conditional parameters](config-files/conditional-settings.md).
+While it is possible to specify the firmware version covered by a file, doing so is deprecated. To define parameters that have changed over time, use [conditional parameters](config-files/conditional-settings.md). Separate files split by firmware should only be used in exceptional cases where a firmware split identifies a different device or where the parameter changes from one version to another are so different as to be impractical to represent with conditional parameters.
 
 The default `min` version is `0.0` and the default `max` version is `255.255`. Splitting device files by firmware version will only be allowed in exceptional cases, and only with developer approval.
 

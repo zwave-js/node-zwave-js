@@ -214,6 +214,7 @@
 			"#": "8",
 			"label": "Auto Turn-Off Timer for Dimmer",
 			"valueSize": 4,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0
@@ -222,6 +223,7 @@
 			"#": "9",
 			"label": "Auto Turn-On Timer for Dimmer",
 			"valueSize": 4,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0
@@ -230,6 +232,7 @@
 			"#": "10",
 			"label": "Auto Turn-Off Timer for Relay",
 			"valueSize": 4,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0
@@ -238,6 +241,7 @@
 			"#": "11",
 			"label": "Auto Turn-On Timer for Relay",
 			"valueSize": 4,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0

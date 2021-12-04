@@ -18,6 +18,7 @@
 			"#": "1",
 			"label": "Dimming Speed",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 3
