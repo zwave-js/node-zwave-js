@@ -1,0 +1,23 @@
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZL7434-5",
+	"description": "In-wall Switch",
+	"devices": [
+		{
+			"productType": "0x200c",
+			"productId": "0x0c06",
+			"zwaveAllianceId": 1378
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZL 7434-5 to your controller. To get in the “inclusion” mode, the distance between module and controller is suggested to be in one meter. Press 3 times program switch within 2 seconds or turn on the wall switch 3 times within 2 seconds (or press toggle switch 3 times) to be included",
+		"exclusion": "Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZL 7434-5 from your controller. \nPress 3 times program switch within 2 seconds or turn on the wall switch 3 times within 2 seconds (or press toggle switch 3 times) to be excluded.",
+		"reset": "Power off first, press Program Switch and power on, ZL7434-5 will send the “Device Reset Locally Notification” command and reset to the factory default. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1378/Microsoft%20Word%20-%20ZL7434-5%20In-Wall%20Switch%20-%201%20Relay_20150520.pdf"
+	}
+}

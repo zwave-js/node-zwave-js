@@ -1,17 +1,430 @@
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "Universal Dimmer 500W",
-	"description": "FIBARO Universal Dimmer 500W",
+	"label": "FGD211",
+	"description": "Universal Dimmer 500W",
 	"devices": [
 		{
 			"productType": "0x0100",
 			"productId": "0x0100",
 			"zwaveAllianceId": 88
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0104"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0106"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0107"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0109"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x100a"
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x300a"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	}
+	},
+	"associations": {
+		"1": {
+			"label": "Switch 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Switch 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Enable/Disable ALL ON/OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON active / ALL OFF active",
+					"value": 255
+				},
+				{
+					"label": "ALL ON disabled / ALL OFF disabled",
+					"value": 0
+				},
+				{
+					"label": "ALL ON disabled / ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active / ALL OFF disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Send Commands to Association Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send On/Off commands",
+					"value": 0
+				},
+				{
+					"label": "Send off; Turn on at last brightness",
+					"value": 1
+				},
+				{
+					"label": "Send off; Turn on at 100%",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Control key #2 behaviour",
+			"description": "Key no. 2 is not represented by any physical device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device status is not checked",
+					"value": 0
+				},
+				{
+					"label": "Device status is checked",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Dimming step at automatic control",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1
+		},
+		{
+			"#": "9",
+			"label": "Transition Time Between Values",
+			"description": "Options for changing parameter 1-255 (10ms - 2,5s)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Time of AUTOMATIC moving between values",
+			"description": "Time of autom. moving the dimmer between min/max",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Dimming step at manual control",
+			"description": "Options for changing parameter 1-99",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion <= 2.0",
+			"label": "Maximum dimmer level control",
+			"description": "Options for changing parameter 2-99",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 2
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Maximum dimmer level control",
+			"description": "Options for changing parameter 2-99",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion <= 2.0",
+			"label": "Minimum dimmer level control",
+			"description": "Options for changing parameter 1-98",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Minimum dimmer level control",
+			"description": "Options for changing parameter 1-98",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 2
+		},
+		{
+			"#": "14",
+			"label": "Inputs Button/Switch configuration",
+			"description": "Binary inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mono-stable input (button)",
+					"value": 0
+				},
+				{
+					"label": "Bi-stable input (switch)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"$if": "firmwareVersion <= 2.0",
+			"label": "Parm 15",
+			"description": "Double-click set lighting at 100%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable double click",
+					"value": 0
+				},
+				{
+					"label": "Enable double click",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Parm 15",
+			"description": "Double-click set lighting at 100%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable double click",
+					"value": 0
+				},
+				{
+					"label": "Enable double click",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "17",
+			"label": "3-way switch",
+			"description": "Function of 3-way switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Synchronizing light level for associated devices",
+			"description": "The dimmer communicate the level to the associated devices. (default value 0)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Change [On-Off] bi-stable keys",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device changes status on key status change",
+					"value": 0
+				},
+				{
+					"label": "Device status depends on key status",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Control impulse length",
+			"valueSize": 1,
+			"minValue": 100,
+			"maxValue": 170,
+			"defaultValue": 110,
+			"unsigned": true
+		},
+		{
+			"#": "30",
+			"label": "Relay 1: Response to General Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DEACTIVATION - no response to alarm frames",
+					"value": 0
+				},
+				{
+					"label": "Alarm relay ON",
+					"value": 1
+				},
+				{
+					"label": "Alarm relay OFF",
+					"value": 2
+				},
+				{
+					"label": "ALARM FLASHING",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "39",
+			"label": "ALARM FLASHING alarm time",
+			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"$if": "firmwareVersion >= 1.9 && firmwareVersion <= 2.0",
+			"label": "Updating the dimming level without switch.",
+			"description": "Parameter’s value changes depending on the dimming level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Updating the dimming level without switch.",
+			"description": "Available settings: from 1 to 99.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "41",
+			"$if": "firmwareVersion >= 1.9",
+			"label": "Scene activation functionality",
+			"description": "Command class scene activation for group no. 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene functionality deactivated",
+					"value": 0
+				},
+				{
+					"label": "Scene functionality activated",
+					"value": 1
+				}
+			]
+		}
+	]
 }
