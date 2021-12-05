@@ -1,13 +1,18 @@
 {
-	"manufacturer": "Spectrum Brands",
+	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
-	"label": "892",
-	"description": "10 Button Z-Wave Plus v2 Deadbolt",
+	"label": "HC620",
+	"description": "Home Connect 620 Connected Smart Lock",
 	"devices": [
 		{
 			"productType": "0x0811",
 			"productId": "0x03a8",
-			"zwaveAllianceId": 4026
+			"zwaveAllianceId": [4026, 4288, 4279]
+		},
+		{
+			"productType": "0x0811",
+			"productId": "0x13a8",
+			"zwaveAllianceId": 4081
 		}
 	],
 	"firmwareVersion": {
@@ -162,9 +167,9 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "For classic inclusion, initiate the process to add the lock to your system at your smart home controller. When prompted by your smart home system to add the lock, press button 'A' on the lock interior one time. The red LED will illuminate when the lock enters inclusion mode. If successful, re-name the lock in your system. If unsuccessful, follow your system's instruction to remove the lock from the network, press button 'A' one time to remove, and then repeat the process",
-		"exclusion": "Follow your smart home system's instructions to remove the lock from the network. When prompted by the system, press button 'A' on the lock interior once",
-		"reset": "NOTICE: A factory reset will delete all user codes associated with the lock as well as removing it from your smart home system.\n1. Remove the battery pack\n2. Press and HOLD the program button while reinserting the battery pack.\n3. Continue to hold the button for 30 seconds until the lock beeps and the status LED flashes red.\n4. Press the program button once more. The LEDs will cycle flashing between red and green while the reset process is being performed. \n5. When complete, the lock will reset and initiate the door handing process",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4026/69369%20Rev%2002%20KS%20892_small1.pdf"
+		"inclusion": "Press button \"A\" on the lock interior one time",
+		"exclusion": "Press button \"A\" one time",
+		"reset": "1. Remove battery pack.\n2. Press and HOLD \"Program\" button while reinserting the battery pack. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4279/5069372%20Weiser%20GED1800ss.pdf"
 	}
 }

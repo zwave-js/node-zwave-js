@@ -8,11 +8,23 @@
 			"productType": "0x0001",
 			"productId": "0x0003",
 			"zwaveAllianceId": [3263, 3821]
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0004",
+			"zwaveAllianceId": 4185
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
 	},
 	"metadata": {
 		"inclusion": "Swipe down to access “Settings” < Touch “Advanced Settings” < Enter code < Touch “Installation” < Touch “Devices” < Touch “Z-Wave Devices” < Touch “Add Device” < Touch “Pair” < Press pair or learn button on device < Adjust device name as needed < Select “Automation” < Click “Add” to save",

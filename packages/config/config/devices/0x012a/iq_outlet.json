@@ -1,0 +1,76 @@
+{
+	"manufacturer": "Qolsys",
+	"manufacturerId": "0x012a",
+	"label": "IQ Outlet",
+	"description": "Smart Plug-in Switch",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3033",
+			"zwaveAllianceId": 4133
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when load is off",
+					"value": 0
+				},
+				{
+					"label": "On when load is on",
+					"value": 1
+				},
+				{
+					"label": "Always Off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Energy Monitoring Reporting Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Place your network controller into inclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the top of the IQ Outlet. The controller should indicate that the new device was added successfully.\n3. Once the IQ Outlet has been successfully added to your home network, you can move it to the preferred location in the home.",
+		"exclusion": "1. Place your network controller into exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the top of the IQ Outlet. The controller should indicate that the new device was added successfully.\n3. Once the IQ Outlet has been successfully added to your home network, you can move it to the preferred location in the home.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable. The manual reset method is as follows:\n1. Unplug the IQ Outlet from the AC outlet and also unplug the power plug of the appliance from the IQ Outlet (if plugged in).\n2. Press and hold the button on the IQ Outlet .\n3. Plug the IQ Outlet back into the AC outlet with the button pressed.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4133/IQ%20Outlet%20User%20Guide%20032421.pdf"
+	}
+}

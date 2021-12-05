@@ -1,13 +1,13 @@
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
-	"label": "4AK1SZ-0EN0",
-	"description": "Ring Keypad v2",
+	"label": "4AK1SZ",
+	"description": "Keypad v2",
 	"devices": [
 		{
 			"productType": "0x0101",
 			"productId": "0x0301",
-			"zwaveAllianceId": 3870
+			"zwaveAllianceId": 4150
 		},
 		{
 			"productType": "0x0101",
@@ -307,9 +307,9 @@
 		"disableStrictEntryControlDataValidation": true
 	},
 	"metadata": {
-		"inclusion": "After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
-		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",
-		"reset": "Factory Default Instructions \n1. To restore Ring Alarm Keypad to factory default settings, locate the pinhole reset button on the device. This is found on the back of the device after removing the back bracket. \n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds. \n3. The device’s Connection icon LED will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network. \n\nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3870/Z-WaveUserManual_Keypad_700.pdf"
+		"inclusion": "Classic Inclusion should be used if the controller does not support SmartStart.\n1. Initiate add flow for Security Devices in the Ring mobile application – Follow the guided add flow instructions provided in the Ring mobile application.\n2. Select add manually and enter the 5-digit DSK PIN found on the package of the Ring Alarm Keypad or the 5-digit DSK PIN found under the QR code on the device.\n3. After powering on the device, press and hold the #1 button for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green Connection LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
+		"exclusion": "1. Initiate remove “Ring Alarm Keypad” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode.\n2. Locate the pinhole reset button on the back of the device.\n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s Connection LED turns on solid red to indicate the device was removed from the network.",
+		"reset": "Factory Default Instructions\n1. To restore Ring Alarm Keypad to factory default settings, locate the pinhole reset button on the device. This is found on the back of the device after removing the back bracket.\n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds.\n3. The device’s Connection icon LED will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network.\nNote\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4150/Ring%20Alarm%20Keypad%20Zwave.pdf"
 	}
 }

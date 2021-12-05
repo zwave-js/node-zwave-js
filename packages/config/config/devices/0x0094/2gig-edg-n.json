@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "2GIG-EDG-N",
+	"description": "2GIG Edge",
+	"devices": [
+		{
+			"productType": "0x0015",
+			"productId": "0x0115",
+			"zwaveAllianceId": 4076
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Reset Controller\nAvailable only for Installers, the Reset Controller option\nis also found on the Z-Wave settings menu.\nReset the panel’s Z-Wave Controller back to default\nsettings.\n1. Tap Reset Controller",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4076/10029908%20Rev-X11b%20-%202GIG%20Edge%20User%20Guide_sm.pdf"
+	}
+}

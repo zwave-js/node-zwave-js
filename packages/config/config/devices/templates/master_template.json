@@ -515,6 +515,24 @@
 			}
 		]
 	},
+	"temperature_scale_celsius_fahrenheit": {
+		"label": "Temperature Scale",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 0
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 1
+			}
+		]
+	},
 	"clock_format": {
 		"label": "Clock Format",
 		"valueSize": 1,

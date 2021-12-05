@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0401",
-			"productId": "0x0301"
+			"productId": "0x0301",
+			"zwaveAllianceId": 4148
 		}
 	],
 	"firmwareVersion": {
@@ -80,6 +81,9 @@
 		}
 	],
 	"metadata": {
-		"manual": "https://support.ring.com/hc/en-us/article_attachments/360055786012/Ring_Alarm_Range_Extender_Zwave.pdf"
+		"inclusion": "After powering on the device, press and hold the button on the front of the device for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
+		"exclusion": "Exclusion Instructions:\n1. Initiate remove “Ring Alarm Range Extender” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose Remove Device to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode.\n2. Locate the pinhole reset button on the back of the device.\n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The\ndevice’s red LED turns on solid to indicate the device was removed from the network",
+		"reset": "Factory Default Instructions\n1. To restore Ring Alarm Range Extender to factory default settings, locate the pinhole reset button on the device. This is found on the back of the device after unplugging the device from the outlet.\n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds.\n3. The device will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops,\nrelease the button. The red LED will turn on solid to indicate the device was removed from the network.\nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4148/Ring%20Alarm%20Range%20Extender%20Zwave.pdf"
 	}
 }

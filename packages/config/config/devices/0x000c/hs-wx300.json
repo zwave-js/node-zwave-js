@@ -6,11 +6,12 @@
 	"devices": [
 		{
 			"productType": "0x4447",
-			"productId": "0x4037"
+			"productId": "0x4036",
+			"zwaveAllianceId": 4176
 		},
 		{
 			"productType": "0x4447",
-			"productId": "0x4036"
+			"productId": "0x4037"
 		}
 	],
 	"firmwareVersion": {
@@ -24,15 +25,15 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Companion Sync",
+			"label": "Group 2",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Bottom LED Operation",
-			"$import": "~/templates/master_template.json#led_indicator_two_options"
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"label": "Bottom LED Operation"
 		},
 		{
 			"#": "4",
@@ -41,11 +42,11 @@
 		{
 			"#": "5",
 			"label": "Dimming Threshold",
-			"description": "Sets the lowest dimming threshold",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 14,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "6",
@@ -54,6 +55,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -73,7 +75,8 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3
+			"defaultValue": 3,
+			"unsigned": true
 		},
 		{
 			"#": "12",
@@ -82,93 +85,94 @@
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 90,
-			"defaultValue": 3
+			"defaultValue": 3,
+			"unsigned": true
 		},
 		{
 			"#": "13",
-			"label": "Status Mode",
-			"$import": "templates/homeseer_template.json#status_mode"
+			"$import": "templates/homeseer_template.json#status_mode",
+			"label": "Status Mode"
 		},
 		{
 			"#": "14",
+			"$import": "templates/homeseer_template.json#led_colors",
 			"label": "Load Status LED Color",
-			"description": "Set the LED color when displaying load status",
-			"$import": "templates/homeseer_template.json#led_colors"
+			"description": "Set the LED color when displaying load status"
 		},
 		{
 			"#": "21",
-			"label": "Status LED 1 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 1 Color"
 		},
 		{
 			"#": "22",
-			"label": "Status LED 2 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 2 Color"
 		},
 		{
 			"#": "23",
-			"label": "Status LED 3 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 3 Color"
 		},
 		{
 			"#": "24",
-			"label": "Status LED 4 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 4 Color"
 		},
 		{
 			"#": "25",
-			"label": "Status LED 5 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 5 Color"
 		},
 		{
 			"#": "26",
-			"label": "Status LED 6 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 6 Color"
 		},
 		{
 			"#": "27",
-			"label": "Status LED 7 Color",
-			"$import": "templates/homeseer_template.json#status_mode_choices"
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 7 Color"
 		},
 		{
 			"#": "30",
-			"label": "Custom Status Blink Frequency",
-			"$import": "templates/homeseer_template.json#blink_frequency"
+			"$import": "templates/homeseer_template.json#blink_frequency",
+			"label": "Custom Status Blink Frequency"
 		},
 		{
 			"#": "31[0x01]",
-			"label": "LED 1 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 1 Blink Status"
 		},
 		{
 			"#": "31[0x02]",
-			"label": "LED 2 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 2 Blink Status"
 		},
 		{
 			"#": "31[0x04]",
-			"label": "LED 3 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 3 Blink Status"
 		},
 		{
 			"#": "31[0x08]",
-			"label": "LED 4 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 4 Blink Status"
 		},
 		{
 			"#": "31[0x10]",
-			"label": "LED 5 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 5 Blink Status"
 		},
 		{
 			"#": "31[0x20]",
-			"label": "LED 6 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 6 Blink Status"
 		},
 		{
 			"#": "31[0x40]",
-			"label": "LED 7 Blink Status",
-			"$import": "templates/homeseer_template.json#led_blink_status"
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 7 Blink Status"
 		},
 		{
 			"#": "32",
@@ -177,7 +181,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "3 wire mode (Neutral, Line & Load)",
@@ -193,7 +197,7 @@
 	"metadata": {
 		"inclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
 		"exclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
-		"reset": "In rapid succession, tap the top paddle 3 times, then tap the bottom paddle 3 times. If all LEDs flash white 5 times, factory reset was successful. If not, repeat this procedure. \nNote: As this must be done very quickly, we recommend using 2 fingers for this operation; one on each paddle! \nNote: The switch will default to 3-wire mode and dimmer mode after factory reset.",
+		"reset": "To be used only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. In rapid succession, tap the top paddle 3 times, then tap the bottom paddle 3 times. If all LEDs flash white 5 times, factory reset was successful. If not, repeat this procedure.\nNote: As this must be done very quickly, we recommend using 2 fingers for this operation; one on each paddle!\nNote: The switch will default to 3-wire mode and dimmer mode after factory reset",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4176/HSPRODKB-HS-WX300UserGuide-260421-1500-2688%20-%20Copy.pdf"
 	}
 }

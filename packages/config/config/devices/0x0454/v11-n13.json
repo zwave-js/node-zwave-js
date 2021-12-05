@@ -1,0 +1,30 @@
+{
+	"manufacturer": "Sengled",
+	"manufacturerId": "0x0454",
+	"label": "V11-N13",
+	"description": "Smart LED Classic A19 CRI90",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0007",
+			"zwaveAllianceId": 4212
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Power cycle Sengled Smart Z-Wave™ bulb once within 2 seconds and keep the bulb on, it can go to the Inclusion mode. Then enable the Inclusion command in app can add the bulb successfully. If you would like to stop the Inclusion mode, power off the bulb more than 8 seconds, then you power on it, it can go to SmartStart mode again",
+		"exclusion": "If you would like to remove the bulb from your app, keep your bulb online and light on, then click the Exclusion button on your app, and power cycle the desired bulb once and keep on, it will be deleted from app automatically. Note: the bulb that you want to delete should be within the required time. If you want to delete another device, you should try the same operation again",
+		"reset": "To reset your Smart Z-Wave™ bulb to factory mode, ensure that the bulb is on firstly, then quickly turn the bulb off and on at least 5 times (using a light switch or power bar works best). If the reset is successful, the bulb will flash 3 times, and the device in app will be removed automatically. If it does not flash 3 times, you will have to try again. Once successfully reset, please try to pair it again",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4212/Z-Wave%20Plus™%20Sengled Smart LED User Guide --210803.pdf"
+	}
+}

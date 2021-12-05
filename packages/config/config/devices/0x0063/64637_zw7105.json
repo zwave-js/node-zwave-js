@@ -1,0 +1,50 @@
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "64637/ZW7105",
+	"description": "LED Bulb",
+	"devices": [
+		{
+			"productType": "0x4c42",
+			"productId": "0x3036",
+			"zwaveAllianceId": 4255
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Default Dim Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Dimming Rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Adding your device to a Z-Wave network\n1. Follow the instructions for your Z-Wave certified controller to add the LED smart bulb to\nthe Z-Wave network.\n2. Once the controller is ready to add your LED smart bulb, turn on power to the socket. The\nLED smart bulb is automatically added into your network within 30 seconds, and the smart\nbulb flashes twice when added to the network.\n3. You have complete control to turn ON/OFF your lamp or set dim levels according to\ngroups, scenes, schedules and interactive automations programmed by your controller.\nIf your Z-Wave certified controller features remote access, you can control your lighting\nfrom your mobile devices",
+		"exclusion": "To remove and reset the device\n1. Start with the bulb powered off at the wall switch.\n2. Follow the instructions for your Z-Wave certified controller to remove the smart bulb from the\nZ-Wave network.\n3. Once the controller is ready to remove your smart bulb, turn ON the light switch. The smart bulb will\nflash twice when removed from the network",
+		"reset": "To return your smart bulb to factory defaults\nStarting with the bulb on, cycle the wall switch OFF/ON four times.\n1. Turn OFF the switch, pause one second and turn ON again.\n2. Repeat three times (four times total).\n3. The smart bulb flashes twice when reset.\nNOTE: This should only be used in the event your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4255/64637%20QSG.pdf"
+	}
+}

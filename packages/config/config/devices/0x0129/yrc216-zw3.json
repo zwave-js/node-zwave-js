@@ -1,0 +1,246 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRC216-ZW3",
+	"description": "Interconnected Z-Wave Enabled Keypad Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x46c1",
+			"zwaveAllianceId": 4097
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Volume",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Auto Relock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Relock Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Wrong Code Entry Limit",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Language",
+			"description": "Language",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "English",
+					"value": 0
+				},
+				{
+					"label": "Spanish",
+					"value": 1
+				},
+				{
+					"label": "French",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Wrong Code Limit Lockout Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Vacation",
+					"value": 1
+				},
+				{
+					"label": "Privacy",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "One Touch Locking",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Privacy Button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Vacation mode",
+					"value": 1
+				},
+				{
+					"label": "Privacy mode",
+					"value": 2
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Reset to Factory Resets",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Reset to factory defaults",
+					"value": 255
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Install Yale Smart Module into slot above battery compartment\nIMPORTANT: Batteries must be removed before inserting Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n2. Open Z-Wave system's smart home or alarm app on your smartphone or tablet\n3. If you have Smart Start* enabled with your Z-Wave System follow in-app prompts to add a new device\nIf you don't have smart start or are not sure, follow steps 4 - 6\n4. On your lock keypad, enter your master entry code followed by the gear icon\n5. Press the 7 key followed by the gear icon\n6. Press the 1 key followed by the gear icon",
+		"exclusion": "Open Z-Wave system's smart home or alarm app and follow instructions for removing a device\n2. On your lock keypad, enter your master entry code followed by the icon\n3. Press the 7 key followed by the gear icon\n4. Press the 3 key followed by the gear icon",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4097/YRC216%20Manual%20(1).pdf"
+	}
+}

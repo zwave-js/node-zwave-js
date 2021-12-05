@@ -1,12 +1,13 @@
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "46202",
+	"label": "46202 / ZW4009",
 	"description": "GE Enbrighten Z-Wave Plus Smart Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3137"
+			"productId": "0x3137",
+			"zwaveAllianceId": 4157
 		}
 	],
 	"firmwareVersion": {
@@ -76,9 +77,35 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "19",
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Press two times on button and two time off button, LED will flash 5 times if successful",
+					"value": 1
+				}
+			]
 		}
 	],
 	"compat": {
 		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately press the OFF (Bottom) button three times. The LED will flash ON/OFF five times when completed successfully. Note: This should only be used if your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4157/46202%20QSG%20v5.pdf"
 	}
 }

@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Clare Controls",
+	"manufacturerId": "0x0194",
+	"label": "CLR-C1-PNLX",
+	"description": "ClareOne Panel",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002",
+			"zwaveAllianceId": 4084
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Factory Reset Mode: This mode will reset the controller to factory settings. Use this mode with caution",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4084/Clare%20Controls%20Z-Wave%20Web%20Admin%20Guide%20(DOC%20ID%201322%20Rev%2004).pdf"
+	}
+}
