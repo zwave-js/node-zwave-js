@@ -77,6 +77,12 @@ function getAuthenticationData(
 	]);
 }
 
+function throwNoNonce(reason?: string): never {
+	let message = `Security CC requires a nonce to be sent!`;
+	if (reason) message += ` Reason: ${reason}`;
+	throw new ZWaveError(message, ZWaveErrorCodes.SecurityCC_NoNonce);
+}
+
 const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
@@ -562,7 +568,36 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 	private authKey: Buffer;
 	private encryptionKey: Buffer;
+
 	public nonceId: number | undefined;
+	private _receiverNonce: Buffer | undefined;
+
+	private get receiverNonce(): Buffer {
+		if (this.nonceId == undefined) throwNoNonce("nonceId not set");
+
+		// If the nonce is not yet set or was changed, determine the new one
+		if (
+			this._receiverNonce == undefined ||
+			this.nonceId !==
+				this.driver.securityManager.getNonceId(this._receiverNonce)
+		) {
+			this._receiverNonce = this.driver.securityManager.getNonce({
+				issuer: this.nodeId,
+				nonceId: this.nonceId,
+			});
+			// and mark it as used
+			this.driver.securityManager.deleteNonce({
+				issuer: this.nodeId,
+				nonceId: this.nonceId,
+			});
+		}
+
+		if (!this._receiverNonce) {
+			throwNoNonce(`nonce ${num2hex(this.nonceId)} not found`);
+		}
+
+		return this._receiverNonce;
+	}
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		if (this.sequenced) {
@@ -599,26 +634,6 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	}
 
 	public serialize(): Buffer {
-		function throwNoNonce(): never {
-			throw new ZWaveError(
-				`Security CC requires a nonce to be sent!`,
-				ZWaveErrorCodes.SecurityCC_NoNonce,
-			);
-		}
-
-		// Try to find an active nonce
-		if (this.nonceId == undefined) throwNoNonce();
-		const receiverNonce = this.driver.securityManager.getNonce({
-			issuer: this.nodeId,
-			nonceId: this.nonceId,
-		});
-		if (!receiverNonce) throwNoNonce();
-		// and mark it as used
-		this.driver.securityManager.deleteNonce({
-			issuer: this.nodeId,
-			nonceId: this.nonceId,
-		});
-
 		const serializedCC = this.encapsulated.serialize();
 		const plaintext = Buffer.concat([
 			Buffer.from([0]), // TODO: frame control
@@ -626,6 +641,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		]);
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
+		const receiverNonce = this.receiverNonce;
 		const iv = Buffer.concat([senderNonce, receiverNonce]);
 		const ciphertext = encryptAES128OFB(plaintext, this.encryptionKey, iv);
 		// And generate the auth code
@@ -642,7 +658,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.payload = Buffer.concat([
 			senderNonce,
 			ciphertext,
-			Buffer.from([this.nonceId]),
+			Buffer.from([this.nonceId!]),
 			authCode,
 		]);
 		return super.serialize();
