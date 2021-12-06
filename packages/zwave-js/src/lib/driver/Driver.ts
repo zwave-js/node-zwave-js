@@ -2637,7 +2637,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Handshake,
+							priority: MessagePriority.Nonce,
 						});
 					},
 					sendSegmentsComplete: async () => {
@@ -2652,7 +2652,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Handshake,
+							priority: MessagePriority.Nonce,
 						});
 					},
 				},
@@ -2701,7 +2701,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				});
 				await this.sendCommand(cc, {
 					maxSendAttempts: 1,
-					priority: MessagePriority.Handshake,
+					priority: MessagePriority.Nonce,
 				});
 			}
 		}
@@ -3239,7 +3239,7 @@ ${handlers.length} left`,
 		if (node && success) {
 			if (node.canSleep) {
 				// Do not update the node status when we just responded to a nonce request
-				if (options.priority !== MessagePriority.Handshake) {
+				if (options.priority !== MessagePriority.Nonce) {
 					// If the node is not meant to be kept awake, try to send it back to sleep
 					if (!node.keepAwake) {
 						setImmediate(() => this.debounceSendNodeToSleep(node));
@@ -3324,8 +3324,8 @@ ${handlers.length} left`,
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
-			// Handshake messages are meant to be sent immediately
-			options.priority !== MessagePriority.Handshake
+			// Nonces have to be sent immediately
+			options.priority !== MessagePriority.Nonce
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -3384,9 +3384,9 @@ ${handlers.length} left`,
 
 		try {
 			const result = (await resultPromise) as TResponse;
-			// If this was a successful non-handshake message to a sleeping node, make sure it goes to sleep again
+			// If this was a successful non-nonce message to a sleeping node, make sure it goes to sleep again
 			if (
-				options.priority !== MessagePriority.Handshake &&
+				options.priority !== MessagePriority.Nonce &&
 				result &&
 				(result.functionType ===
 					FunctionType.BridgeApplicationCommand ||
@@ -3698,10 +3698,9 @@ ${handlers.length} left`,
 	private mayMoveToWakeupQueue(transaction: Transaction): boolean {
 		const msg = transaction.message;
 		switch (true) {
-			// Pings and handshake responses will block the send queue until wakeup,
-			// so they must be dropped
+			// Pings and nonces will block the send queue until wakeup, so they must be dropped
 			case messageIsPing(msg):
-			case transaction.priority === MessagePriority.Handshake:
+			case transaction.priority === MessagePriority.Nonce:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:

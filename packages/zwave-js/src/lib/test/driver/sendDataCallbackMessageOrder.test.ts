@@ -66,7 +66,7 @@ describe("regression tests", () => {
 		jest.setTimeout(5000);
 		// Repro from #1144
 
-		// A send data request for an outgoing handshake response is received after the response we expected
+		// A send data request for an outgoing nonce response is received after the response we expected
 		// This causes it to get matched to the following message
 
 		const node15 = new ZWaveNode(15, driver);
