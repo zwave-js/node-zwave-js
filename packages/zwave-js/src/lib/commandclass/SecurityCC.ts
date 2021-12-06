@@ -136,7 +136,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			{
 				...this.commandOptions,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.Nonce,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 			},
@@ -200,7 +200,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			await this.driver.sendMessage(msg, {
 				...this.commandOptions,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.Nonce,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});

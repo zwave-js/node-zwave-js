@@ -108,8 +108,8 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		try {
 			await this.driver.sendCommand(cc, {
 				...this.commandOptions,
-				// Supervision Reports must be sent immediately
-				priority: MessagePriority.Handshake,
+				// Supervision Reports must be prioritized over normal messages
+				priority: MessagePriority.Supervision,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 				// Only try sending the report once. If it fails, the node will ask again
