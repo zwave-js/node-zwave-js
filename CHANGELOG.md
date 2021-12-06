@@ -4,6 +4,31 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add support for `Door Lock Logging CC`
+
+### Bugfixes
+* Make sure that `encodePartial` returns an unsigned int
+* Send nodes to sleep again after successful response
+* Reuse S0 nonce for the lifetime of a CC instance
+* Do not send `Supervision Reports` when another transaction is active
+* Use the last 10 sequence numbers to check for duplicate S2 messages
+
+### Config file changes
+* Added metadata for HS-WX300
+* Several units and re-trigger parameter 5 default on ZP3111-5
+* Additional Product ID for HS-WX300
+* Update Keemple Smart Radiator
+* Add metadata to POPP Smart Radiator
+* Add product ID `0x0164` to SimonTech Roller Blind
+* Deprecate firmware version file splits, prefer conditionals
+* Fix typo in param labels
+* Clean up configuration and correct param ranges for Steinel XLED Home 2
+
+### Changes under the hood
+* Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.
+
 ## 8.8.3 (2021-12-03)
 ### Bugfixes
 * Temporarily revert the changes to the outgoing message handling, which fails on some edge cases
