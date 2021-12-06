@@ -54,6 +54,9 @@ export type SPANTableEntry =
 			rng: CtrDRBG;
 	  };
 
+// How many sequence numbers are remembered for each node when checking for duplicates
+const SINGLECAST_MAX_SEQ_NUMS = 10;
+
 export class SecurityManager2 {
 	public constructor() {
 		this.rng = new CtrDRBG(
@@ -74,7 +77,7 @@ export class SecurityManager2 {
 	public readonly tempKeys = new Map<number, TempNetworkKeys>();
 	/** A map of sequence numbers that were last used in communication with a node */
 	private ownSequenceNumbers = new Map<number, number>();
-	private peerSequenceNumbers = new Map<number, number>();
+	private peerSequenceNumbers = new Map<number, number[]>();
 	/** A map of MPAN states for each multicast group */
 	private mpanStates = new Map<number, Buffer>();
 	/** A map of permanent network keys per security class */
@@ -273,14 +276,25 @@ export class SecurityManager2 {
 		peerNodeId: number,
 		sequenceNumber: number,
 	): boolean {
-		return this.peerSequenceNumbers.get(peerNodeId) === sequenceNumber;
+		return (
+			this.peerSequenceNumbers
+				.get(peerNodeId)
+				?.includes(sequenceNumber) ?? false
+		);
 	}
 
 	public storeSequenceNumber(
 		peerNodeId: number,
 		sequenceNumber: number,
 	): void {
-		this.peerSequenceNumbers.set(peerNodeId, sequenceNumber);
+		if (this.peerSequenceNumbers.has(peerNodeId)) {
+			// Store the last SINGLECAST_MAX_SEQ_NUMS sequence numbers
+			const arr = this.peerSequenceNumbers.get(peerNodeId)!;
+			arr.push(sequenceNumber);
+			if (arr.length > SINGLECAST_MAX_SEQ_NUMS) arr.shift();
+		} else {
+			this.peerSequenceNumbers.set(peerNodeId, [sequenceNumber]);
+		}
 	}
 
 	public storeRemoteEI(peerNodeId: number, remoteEI: Buffer): void {
