@@ -3242,7 +3242,7 @@ ${handlers.length} left`,
 				if (options.priority !== MessagePriority.Handshake) {
 					// If the node is not meant to be kept awake, try to send it back to sleep
 					if (!node.keepAwake) {
-						this.debounceSendNodeToSleep(node);
+						setImmediate(() => this.debounceSendNodeToSleep(node));
 					}
 					// The node must be awake because it answered
 					node.markAsAwake();
@@ -3383,7 +3383,20 @@ ${handlers.length} left`,
 		}
 
 		try {
-			return (await resultPromise) as TResponse;
+			const result = (await resultPromise) as TResponse;
+			// If this was a successful non-handshake message to a sleeping node, make sure it goes to sleep again
+			if (
+				options.priority !== MessagePriority.Handshake &&
+				result &&
+				(result.functionType ===
+					FunctionType.BridgeApplicationCommand ||
+					result.functionType === FunctionType.ApplicationCommand)
+			) {
+				if (node && node.canSleep && !node.keepAwake) {
+					setImmediate(() => this.debounceSendNodeToSleep(node!));
+				}
+			}
+			return result;
 		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
