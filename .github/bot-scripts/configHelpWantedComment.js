@@ -28,6 +28,12 @@ We may get around to doing it ourselves at some point, but community support wil
 Thanks!
 `.trim();
 
+	// Delete the comment triggering this script
+	await github.rest.issues.deleteComment({
+		...options,
+		comment_id: context.payload.comment.id,
+	});
+
 	await github.rest.issues.createComment({
 		...options,
 		issue_number: context.payload.issue.number,
