@@ -17,4 +17,6 @@ module.exports = {
 		require("./renameCommitFeedback")(...args),
 	importConfigCreatePR: (...args) =>
 		require("./importConfigCreatePR")(...args),
+	configHelpWantedComment: (...args) =>
+		require("./configHelpWantedComment")(...args),
 };
