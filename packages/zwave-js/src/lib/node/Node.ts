@@ -1431,29 +1431,31 @@ protocol version:      ${this._protocolVersion}`;
 		if (this.isControllerNode()) {
 			this.driver.controllerLog.logNode(
 				this.id,
-				"not pinging the controller",
+				"is the controller node, cannot ping",
+				"warn",
 			);
-		} else {
-			this.driver.controllerLog.logNode(this.id, {
-				message: "pinging the node...",
-				direction: "outbound",
-			});
-
-			try {
-				await this.commandClasses["No Operation"].send();
-				this.driver.controllerLog.logNode(this.id, {
-					message: "ping successful",
-					direction: "inbound",
-				});
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					this.id,
-					`ping failed: ${getErrorMessage(e)}`,
-				);
-				return false;
-			}
+			return true;
 		}
-		return true;
+
+		this.driver.controllerLog.logNode(this.id, {
+			message: "pinging the node...",
+			direction: "outbound",
+		});
+
+		try {
+			await this.commandClasses["No Operation"].send();
+			this.driver.controllerLog.logNode(this.id, {
+				message: "ping successful",
+				direction: "inbound",
+			});
+			return true;
+		} catch (e) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				`ping failed: ${getErrorMessage(e)}`,
+			);
+			return false;
+		}
 	}
 
 	/**
@@ -1461,6 +1463,15 @@ protocol version:      ${this._protocolVersion}`;
 	 * Request node info
 	 */
 	protected async queryNodeInfo(): Promise<void> {
+		if (this.isControllerNode()) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				"is the controller node, cannot query node info",
+				"warn",
+			);
+			return;
+		}
+
 		this.driver.controllerLog.logNode(this.id, {
 			message: "querying node info...",
 			direction: "outbound",
@@ -1550,6 +1561,15 @@ protocol version:      ${this._protocolVersion}`;
 
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<boolean> {
+		if (this.isControllerNode()) {
+			this.driver.controllerLog.logNode(
+				this.id,
+				"is the controller node, cannot interview CCs",
+				"warn",
+			);
+			return true;
+		}
+
 		const interviewEndpoint = async (
 			endpoint: Endpoint,
 			cc: CommandClasses,
