@@ -32,6 +32,7 @@
 	},
 	"paramInformation": [
 		{
+			"$if": "firmwareVersion >= 5.24",
 			"#": "3",
 			"label": "LED Light",
 			"description": "Sets when the LED on the switch is lit",
