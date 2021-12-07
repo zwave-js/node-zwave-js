@@ -1306,32 +1306,37 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			await this.queryProtocolInfo();
 		}
 
+		if (!this.isControllerNode()) {
+			if (
+				(this.isListening || this.isFrequentListening) &&
+				this.status !== NodeStatus.Alive
+			) {
+				// Ping non-sleeping nodes to determine their status
+				await this.ping();
+			}
+
+			if (this.interviewStage === InterviewStage.ProtocolInfo) {
+				if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
+					return false;
+				}
+			}
+
+			// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
+			// to get updated information about command classes
+			if (this.interviewStage === InterviewStage.NodeInfo) {
+				// Only advance the interview if it was completed, otherwise abort
+				if (await this.interviewCCs()) {
+					await this.setInterviewStage(InterviewStage.CommandClasses);
+				} else {
+					return false;
+				}
+			}
+		}
+
 		if (
-			(this.isListening || this.isFrequentListening) &&
-			this.status !== NodeStatus.Alive
+			this.isControllerNode() ||
+			this.interviewStage === InterviewStage.CommandClasses
 		) {
-			// Ping non-sleeping nodes to determine their status
-			await this.ping();
-		}
-
-		if (this.interviewStage === InterviewStage.ProtocolInfo) {
-			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
-				return false;
-			}
-		}
-
-		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
-		// to get updated information about command classes
-		if (this.interviewStage === InterviewStage.NodeInfo) {
-			// Only advance the interview if it was completed, otherwise abort
-			if (await this.interviewCCs()) {
-				await this.setInterviewStage(InterviewStage.CommandClasses);
-			} else {
-				return false;
-			}
-		}
-
-		if (this.interviewStage === InterviewStage.CommandClasses) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
@@ -1454,65 +1459,53 @@ protocol version:      ${this._protocolVersion}`;
 	 * Request node info
 	 */
 	protected async queryNodeInfo(): Promise<void> {
-		if (this.isControllerNode()) {
+		this.driver.controllerLog.logNode(this.id, {
+			message: "querying node info...",
+			direction: "outbound",
+		});
+		const resp = await this.driver.sendMessage<
+			RequestNodeInfoResponse | ApplicationUpdateRequest
+		>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
+		if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
+			// TODO: handle this in SendThreadMachine
 			this.driver.controllerLog.logNode(
 				this.id,
-				"not querying node info from the controller",
+				`Querying the node info failed`,
+				"error",
 			);
-		} else {
-			this.driver.controllerLog.logNode(this.id, {
-				message: "querying node info...",
-				direction: "outbound",
-			});
-			const resp = await this.driver.sendMessage<
-				RequestNodeInfoResponse | ApplicationUpdateRequest
-			>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
-			if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
-				// TODO: handle this in SendThreadMachine
-				this.driver.controllerLog.logNode(
-					this.id,
-					`Querying the node info failed`,
-					"error",
-				);
-				throw new ZWaveError(
-					`Querying the node info failed`,
-					ZWaveErrorCodes.Controller_ResponseNOK,
-				);
-			} else if (
-				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
-			) {
-				// TODO: handle this in SendThreadMachine
-				this.driver.controllerLog.logNode(
-					this.id,
-					`Querying the node info failed`,
-					"error",
-				);
-				throw new ZWaveError(
-					`Querying the node info failed`,
-					ZWaveErrorCodes.Controller_CallbackNOK,
-				);
-			} else if (
-				resp instanceof ApplicationUpdateRequestNodeInfoReceived
-			) {
-				const logLines: string[] = [
-					"node info received",
-					"supported CCs:",
-				];
-				for (const cc of resp.nodeInformation.supportedCCs) {
-					const ccName = CommandClasses[cc];
-					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
-				}
-				logLines.push("controlled CCs:");
-				for (const cc of resp.nodeInformation.controlledCCs) {
-					const ccName = CommandClasses[cc];
-					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
-				}
-				this.driver.controllerLog.logNode(this.id, {
-					message: logLines.join("\n"),
-					direction: "inbound",
-				});
-				this.updateNodeInfo(resp.nodeInformation);
+			throw new ZWaveError(
+				`Querying the node info failed`,
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		} else if (
+			resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+		) {
+			// TODO: handle this in SendThreadMachine
+			this.driver.controllerLog.logNode(
+				this.id,
+				`Querying the node info failed`,
+				"error",
+			);
+			throw new ZWaveError(
+				`Querying the node info failed`,
+				ZWaveErrorCodes.Controller_CallbackNOK,
+			);
+		} else if (resp instanceof ApplicationUpdateRequestNodeInfoReceived) {
+			const logLines: string[] = ["node info received", "supported CCs:"];
+			for (const cc of resp.nodeInformation.supportedCCs) {
+				const ccName = CommandClasses[cc];
+				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
 			}
+			logLines.push("controlled CCs:");
+			for (const cc of resp.nodeInformation.controlledCCs) {
+				const ccName = CommandClasses[cc];
+				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
+			}
+			this.driver.controllerLog.logNode(this.id, {
+				message: logLines.join("\n"),
+				direction: "inbound",
+			});
+			this.updateNodeInfo(resp.nodeInformation);
 		}
 		await this.setInterviewStage(InterviewStage.NodeInfo);
 	}
