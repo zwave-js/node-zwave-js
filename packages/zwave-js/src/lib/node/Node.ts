@@ -1334,8 +1334,10 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		}
 
 		if (
-			this.isControllerNode() ||
-			this.interviewStage === InterviewStage.CommandClasses
+			(this.isControllerNode() &&
+				this.interviewStage === InterviewStage.ProtocolInfo) ||
+			(!this.isControllerNode() &&
+				this.interviewStage === InterviewStage.CommandClasses)
 		) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
