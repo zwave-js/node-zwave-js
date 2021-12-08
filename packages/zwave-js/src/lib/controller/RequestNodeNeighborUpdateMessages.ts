@@ -21,6 +21,7 @@ import type {
 	SuccessIndicator,
 } from "../message/SuccessIndicator";
 import { NodeType } from "../node/Types";
+import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -65,19 +66,12 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	}
 
 	public getCallbackTimeout(): number | undefined {
-		const node = this.getNodeUnsafe();
-		const allNodes = [...this.driver.controller.nodes.values()];
-		const numListeningNodes = allNodes.filter((n) => n.isListening).length;
-		const numFlirsNodes = allNodes.filter(
-			(n) => n.isFrequentListening,
-		).length;
-		const numNodes = allNodes.length;
-
-		return (
-			7600 +
-			numListeningNodes * 217 +
-			numFlirsNodes * 3517 +
-			(node?.nodeType === NodeType.Controller ? numNodes * 732 : 0)
+		// During inclusion, the timeout is mainly required for the node to detect all neighbors
+		// We do the same here, so we just reuse the timeout
+		return computeNeighborDiscoveryTimeout(
+			this.driver,
+			// Controllers take longer, just assume the worst case here
+			NodeType.Controller,
 		);
 	}
 

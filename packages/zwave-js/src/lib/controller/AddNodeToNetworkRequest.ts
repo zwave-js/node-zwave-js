@@ -16,6 +16,7 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
+import { NodeType } from "../node/Types";
 
 export enum AddNodeType {
 	Any = 1,
@@ -55,6 +56,24 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 	authHomeId: Buffer;
 	highPower?: boolean;
 	networkWide?: boolean;
+}
+
+export function computeNeighborDiscoveryTimeout(
+	driver: Driver,
+	nodeType: NodeType,
+): number {
+	const allNodes = [...driver.controller.nodes.values()];
+	const numListeningNodes = allNodes.filter((n) => n.isListening).length;
+	const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening).length;
+	const numNodes = allNodes.length;
+
+	// According to the Appl-Programmers-Guide
+	return (
+		76000 +
+		numListeningNodes * 217 +
+		numFlirsNodes * 3517 +
+		(nodeType === NodeType.Controller ? numNodes * 732 : 0)
+	);
 }
 
 @messageTypes(MessageType.Request, FunctionType.AddNodeToNetwork)
