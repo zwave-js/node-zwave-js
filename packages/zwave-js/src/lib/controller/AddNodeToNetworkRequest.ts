@@ -1,4 +1,8 @@
-import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
+import {
+	CommandClasses,
+	NodeType,
+	parseNodeUpdatePayload,
+} from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
@@ -16,7 +20,6 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { NodeType } from "../node/Types";
 
 export enum AddNodeType {
 	Any = 1,
