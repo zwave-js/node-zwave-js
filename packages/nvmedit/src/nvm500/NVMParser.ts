@@ -268,7 +268,7 @@ export class NVMParser {
 				protocolVersion: nvmDescriptor.protocolVersion,
 				applicationVersion: nvmDescriptor.firmwareVersion,
 				ownHomeId: num2hex(ownHomeId),
-				learnedHomeId: num2hex(learnedHomeId),
+				learnedHomeId: learnedHomeId ? num2hex(learnedHomeId) : null,
 				nodeId: this.getOne<number>("NVM_NODEID_far"),
 				lastNodeId,
 				staticControllerNodeId: this.getOne<number>(
@@ -330,7 +330,7 @@ export interface NVM500JSONController {
 	protocolVersion: string;
 	applicationVersion: string;
 	ownHomeId: string;
-	learnedHomeId?: string;
+	learnedHomeId?: string | null;
 	nodeId: number;
 	lastNodeId: number;
 	staticControllerNodeId: number;

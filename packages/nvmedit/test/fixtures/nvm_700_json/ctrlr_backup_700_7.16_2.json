@@ -23,7 +23,7 @@
 		"reservedIdLR": 0,
 		"primaryLongRangeChannelId": 0,
 		"dcdcConfig": 255,
-		"listening": true,
+		"isListening": true,
 		"optionalFunctionality": true,
 		"genericDeviceClass": 2,
 		"specificDeviceClass": 1,

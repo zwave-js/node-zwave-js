@@ -28,4 +28,8 @@ Only firmware version `7.x` is supported. Converting a 500-series `.json` to a 7
 
 ## Convert 500-series JSON to 700-series JSON
 
-coming soon...
+```
+npx @zwave-js/nvmedit 500to700 --in /path/to/nvm500.json --out /path/to/nvm700.json [--truncate]
+```
+
+Some 500-series NVM backups contain more application data than the 700-series NVM has reserved for this field. The conversion routine will try to remove 0-bytes at the start and end, but if this is not enough, it will fail. Set the `--truncate` option to allow truncating potentially valid application data.

@@ -9,7 +9,7 @@ import {
 } from "./NVMFile";
 
 export interface ApplicationTypeFileOptions extends NVMFileCreationOptions {
-	listening: boolean;
+	isListening: boolean;
 	optionalFunctionality: boolean;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
@@ -22,26 +22,26 @@ export class ApplicationTypeFile extends NVMFile {
 	) {
 		super(options);
 		if (gotDeserializationOptions(options)) {
-			this.listening = !!(this.payload[0] & 0b1);
+			this.isListening = !!(this.payload[0] & 0b1);
 			this.optionalFunctionality = !!(this.payload[0] & 0b10);
 			this.genericDeviceClass = this.payload[1];
 			this.specificDeviceClass = this.payload[2];
 		} else {
-			this.listening = options.listening;
+			this.isListening = options.isListening;
 			this.optionalFunctionality = options.optionalFunctionality;
 			this.genericDeviceClass = options.genericDeviceClass;
 			this.specificDeviceClass = options.specificDeviceClass;
 		}
 	}
 
-	public listening: boolean;
+	public isListening: boolean;
 	public optionalFunctionality: boolean;
 	public genericDeviceClass: number;
 	public specificDeviceClass: number;
 
 	public serialize(): NVM3Object {
 		this.payload = Buffer.from([
-			(this.listening ? 0b1 : 0) |
+			(this.isListening ? 0b1 : 0) |
 				(this.optionalFunctionality ? 0b10 : 0),
 			this.genericDeviceClass,
 			this.specificDeviceClass,
@@ -53,7 +53,7 @@ export class ApplicationTypeFile extends NVMFile {
 	public toJSON() {
 		return {
 			...super.toJSON(),
-			listening: this.listening,
+			listening: this.isListening,
 			"opt. functionality": this.optionalFunctionality,
 			genericDeviceClass: this.genericDeviceClass,
 			specificDeviceClass: this.specificDeviceClass,

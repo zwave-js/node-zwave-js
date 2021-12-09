@@ -50,7 +50,7 @@ export function parseNVMModuleDescriptor(
 export interface NVM500NodeInfo
 	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
 	genericDeviceClass: number;
-	specificDeviceClass?: number | null;
+	specificDeviceClass: number | null;
 }
 
 export function parseNVM500NodeInfo(

@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	ControllerCapabilityFlags,
 	NodeProtocolInfo,
 	NodeType,
 	stripUndefined,
@@ -95,7 +96,7 @@ export interface NVMJSONController {
 	dcdcConfig?: number | null;
 	rfConfig?: NVMJSONControllerRFConfig | null;
 
-	listening: boolean;
+	isListening: boolean;
 	optionalFunctionality: boolean;
 	genericDeviceClass: number;
 	specificDeviceClass: number;
@@ -372,7 +373,7 @@ export function nvmObjectsToJSON(
 		homeId: `0x${controllerInfoFile.homeId.toString("hex")}`,
 		...pick(controllerInfoFile, controllerProps),
 		...pick(applicationTypeFile, [
-			"listening",
+			"isListening",
 			"optionalFunctionality",
 			"genericDeviceClass",
 			"specificDeviceClass",
@@ -485,7 +486,7 @@ function serializeCommonApplicationObjects(nvm: NVMJSON): NVM3Object[] {
 	const ret: NVM3Object[] = [];
 	const applTypeFile = new ApplicationTypeFile(
 		pick(nvm.controller, [
-			"listening",
+			"isListening",
 			"optionalFunctionality",
 			"genericDeviceClass",
 			"specificDeviceClass",
@@ -896,4 +897,114 @@ export function jsonToNVM(
 		objects.protocolObjects,
 		json.meta,
 	);
+}
+
+export function json500To700(
+	json: NVM500JSON,
+	truncateApplicationData?: boolean,
+): NVMJSON {
+	const source = cloneDeep(json);
+
+	// On the 500 series, some properties are only defined for the nodes, so we pull it off the
+	// controller's node entry
+	let controllerNode = source.nodes[
+		source.controller.nodeId || 1
+	] as NVMJSONNodeWithInfo; // Little hack because TS doesn't type check the union type properly
+	if (!nodeHasInfo(controllerNode)) {
+		// No information available, use sensible defaults
+		controllerNode = {
+			isListening: true,
+			optionalFunctionality: false,
+			// Static PC Controller
+			genericDeviceClass: 0x02,
+			specificDeviceClass: 0x01,
+		} as any;
+	}
+
+	let applicationData: string | null = null;
+	if (source.controller.applicationData) {
+		let raw = Buffer.from(source.controller.applicationData, "hex");
+		// Find actual start and end of application data, ignoring zeroes
+		let start = 0;
+		while (start < raw.length && raw[start] === 0) {
+			start++;
+		}
+		let end = raw.length - 1;
+		while (end > start && raw[end] === 0) {
+			end--;
+		}
+		raw = raw.slice(start, end + 1);
+		if (raw.length > 512) {
+			if (!truncateApplicationData) {
+				throw new Error(
+					"Invalid NVM JSON: Application data would be truncated! Set truncateApplicationData to true to allow this.",
+				);
+			}
+			raw = raw.slice(0, 512);
+		}
+		applicationData = raw.toString("hex");
+	}
+
+	let homeId: string;
+	if (
+		source.controller.controllerConfiguration &
+		ControllerCapabilityFlags.OnOtherNetwork
+	) {
+		// The controller did not start the network itself
+		if (!source.controller.learnedHomeId) {
+			throw new Error(
+				"Invalid NVM JSON: Controller is part of another network but has no learned Home ID!",
+			);
+		} else if (!source.controller.nodeId) {
+			throw new Error(
+				"Invalid NVM JSON: Controller is part of another network but node ID is zero!",
+			);
+		}
+		homeId = source.controller.learnedHomeId;
+	} else {
+		// The controller did start the network itself
+		homeId = source.controller.ownHomeId;
+		// it is safe to set the node ID to 1
+		source.controller.nodeId = 1;
+	}
+
+	const ret: NVMJSON = {
+		// Start out with format 0 / protocol version 7.0.0, the jsonToNVM routines will do further conversion
+		format: 0,
+		controller: {
+			protocolVersion: "7.0.0",
+			applicationVersion: source.controller.applicationVersion,
+			homeId,
+			nodeId: source.controller.nodeId,
+			lastNodeId: source.controller.lastNodeId,
+			staticControllerNodeId: source.controller.staticControllerNodeId,
+			sucLastIndex: source.controller.sucLastIndex,
+			controllerConfiguration: source.controller.controllerConfiguration,
+			sucUpdateEntries: source.controller.sucUpdateEntries,
+			maxNodeId: source.controller.maxNodeId,
+			reservedId: source.controller.reservedId,
+			systemState: source.controller.systemState,
+
+			// TODO: preserve preferred repeaters
+
+			// RF config exists on both series but isn't compatible
+
+			isListening: controllerNode.isListening,
+			optionalFunctionality: controllerNode.optionalFunctionality,
+			genericDeviceClass: controllerNode.genericDeviceClass,
+			specificDeviceClass: controllerNode.specificDeviceClass ?? 0,
+
+			commandClasses: {
+				includedInsecurely: source.controller.commandClasses,
+				includedSecurelyInsecureCCs: [],
+				includedSecurelySecureCCs: [],
+			},
+
+			applicationData,
+		},
+		// The node entries are actually compatible between the two JSON versions
+		// but the types are structured differently
+		nodes: source.nodes,
+	};
+	return ret;
 }

@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
-import { jsonToNVM, nvm500ToJSON, nvmToJSON } from "./convert";
+import { json500To700, jsonToNVM, nvm500ToJSON, nvmToJSON } from "./convert";
 import "./index";
 
 void yargs
@@ -85,6 +85,39 @@ void yargs
 			const nvm = jsonToNVM(json, argv.protocolVersion);
 			await fs.writeFile(argv.out, nvm);
 			console.error(`NVM (binary) written to ${argv.out}`);
+
+			process.exit(0);
+		},
+	)
+	.command(
+		"500to700",
+		"Convert a 500-series JSON file into a 700-series JSON file",
+		(yargs) =>
+			yargs.usage("$0 500to700 --in <input> --out <output>").options({
+				in: {
+					describe: "500 series JSON input filename",
+					type: "string",
+					required: true,
+				},
+				out: {
+					describe: "700 series output filename",
+					type: "string",
+					required: true,
+				},
+				truncate: {
+					alias: "t",
+					describe:
+						"Truncate application data if it is too large (> 512 bytes)",
+					type: "boolean",
+					required: false,
+					default: false,
+				},
+			}),
+		async (argv) => {
+			const json500 = await fs.readJson(argv.in);
+			const json700 = json500To700(json500, argv.truncate);
+			await fs.writeJSON(argv.out, json700, { spaces: "\t" });
+			console.error(`700-series NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);
 		},

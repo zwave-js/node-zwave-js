@@ -13,7 +13,7 @@
 		"maxNodeId": 12,
 		"reservedId": 0,
 		"systemState": 0,
-		"listening": true,
+		"isListening": true,
 		"optionalFunctionality": true,
 		"genericDeviceClass": 2,
 		"specificDeviceClass": 7,

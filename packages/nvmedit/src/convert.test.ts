@@ -1,7 +1,8 @@
 import fs from "fs-extra";
 import path from "path";
 import { jsonToNVM } from ".";
-import { nvm500ToJSON, NVMJSON, nvmToJSON } from "./convert";
+import { json500To700, nvm500ToJSON, NVMJSON, nvmToJSON } from "./convert";
+import type { NVM500JSON } from "./nvm500/NVMParser";
 
 describe("NVM conversion tests", () => {
 	describe("700-series, binary to JSON", () => {
@@ -77,6 +78,24 @@ describe("NVM conversion tests", () => {
 				const data = await fs.readFile(path.join(fixturesDir, file));
 				const json = nvm500ToJSON(data);
 				expect(json).toMatchSnapshot();
+			});
+		}
+	});
+
+	describe("500 to 700 series JSON conversion", () => {
+		const fixturesDir = path.join(
+			__dirname,
+			"../test/fixtures/nvm_500_json",
+		);
+		const files = fs.readdirSync(fixturesDir);
+
+		for (const file of files) {
+			it(file, async () => {
+				const json500: NVM500JSON = await fs.readJson(
+					path.join(fixturesDir, file),
+				);
+				const json700 = json500To700(json500, true);
+				expect(json700).toMatchSnapshot();
 			});
 		}
 	});
