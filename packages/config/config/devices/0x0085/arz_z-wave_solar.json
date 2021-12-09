@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
-	"label": "ARZ Solar",
+	"label": "ARZ Z-Wave Solar",
 	"description": "Roller Shutter",
 	"devices": [
 		{
