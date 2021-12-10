@@ -31,12 +31,50 @@
 	},
 	"paramInformation": [
 		{
-			"#": "12",
-			"$import": "arz_z-wave.json#paramInformation/12"
-		},
-		{
 			"#": "13",
 			"$import": "arz_z-wave.json#paramInformation/13"
+		},
+		{
+			"#": "99",
+			"label": "Reset to Factory Defaults",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to Factory Default",
+					"value": 1
+				},
+				{
+					"label": "Parameters are changed",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "100",
+			"label": "Autoexclude",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 1
+				},
+				{
+					"label": "Autoexclude",
+					"value": 2
+				}
+			]
 		}
 	]
 }
