@@ -1,39 +1,79 @@
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
-	"label": "ARZ Z-WAV",
-	"description": "ARZ Z-Wave",
+	"label": "ARZ Z-Wave",
+	"description": "Roller Shutter",
 	"devices": [
 		{
+			// This is the Z-Wave Plus variant
 			"productType": "0x0003",
 			"productId": "0x0011",
 			"zwaveAllianceId": [2571, 2888]
+		},
+		{
+			// ARZ 1.1 (?)
+			"productType": "0x0003",
+			"productId": "0x0111"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Repeat",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Multilevel Switch Repeat",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "12",
-			"label": "Calibrate",
-			"description": "Value 1 – calibrated, value 2 – discalibrated – to enter the calibration mode must first time discalibrate and then calibrate",
+			"label": "Calibration",
+			"description": "To calibrate, first select Discalibrated, then Calibrated",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibrated",
+					"value": 1
+				},
+				{
+					"label": "Discalibrated",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "13",
-			"label": "End Position",
-			"description": "1 – ff go to max, 2 – ff go to previous position",
+			"label": "Response to Basic Set (0xff)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fully open",
+					"value": 1
+				},
+				{
+					"label": "Previous position",
+					"value": 2
+				}
+			]
 		}
 	],
 	"metadata": {

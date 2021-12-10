@@ -5,6 +5,7 @@
 	"description": "Roller Shutter Module",
 	"devices": [
 		{
+			// Non Z-Wave+
 			"productType": "0x0002",
 			"productId": "0x0002",
 			"zwaveAllianceId": 677
