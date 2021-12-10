@@ -333,11 +333,11 @@
 				"value": 0
 			},
 			{
-				"label": "Always on",
+				"label": "Always off",
 				"value": 1
 			},
 			{
-				"label": "Always off",
+				"label": "Always on",
 				"value": 2
 			}
 		]
