@@ -321,7 +321,7 @@ export class NVMParser {
 }
 
 export interface NVM500JSON {
-	version: string;
+	version?: string;
 	controller: NVM500JSONController;
 	nodes: Record<number, NVM500JSONNode>;
 }

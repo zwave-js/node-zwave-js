@@ -1,7 +1,13 @@
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
-import { json500To700, jsonToNVM, nvm500ToJSON, nvmToJSON } from "./convert";
+import {
+	json500To700,
+	json700To500,
+	jsonToNVM,
+	nvm500ToJSON,
+	nvmToJSON,
+} from "./convert";
 import "./index";
 
 void yargs
@@ -93,31 +99,58 @@ void yargs
 		"500to700",
 		"Convert a 500-series JSON file into a 700-series JSON file",
 		(yargs) =>
-			yargs.usage("$0 500to700 --in <input> --out <output>").options({
-				in: {
-					describe: "500 series JSON input filename",
-					type: "string",
-					required: true,
-				},
-				out: {
-					describe: "700 series output filename",
-					type: "string",
-					required: true,
-				},
-				truncate: {
-					alias: "t",
-					describe:
-						"Truncate application data if it is too large (> 512 bytes)",
-					type: "boolean",
-					required: false,
-					default: false,
-				},
-			}),
+			yargs
+				.usage("$0 500to700 --in <input> --out <output> [--truncate]")
+				.options({
+					in: {
+						describe: "500 series JSON input filename",
+						type: "string",
+						required: true,
+					},
+					out: {
+						describe: "700 series output filename",
+						type: "string",
+						required: true,
+					},
+					truncate: {
+						alias: "t",
+						describe:
+							"Truncate application data if it is too large (> 512 bytes)",
+						type: "boolean",
+						required: false,
+						default: false,
+					},
+				}),
 		async (argv) => {
 			const json500 = await fs.readJson(argv.in);
 			const json700 = json500To700(json500, argv.truncate);
 			await fs.writeJSON(argv.out, json700, { spaces: "\t" });
 			console.error(`700-series NVM (JSON) written to ${argv.out}`);
+
+			process.exit(0);
+		},
+	)
+	.command(
+		"700to500",
+		"Convert a 700-series JSON file into a 500-series JSON file",
+		(yargs) =>
+			yargs.usage("$0 700to500 --in <input> --out <output>").options({
+				in: {
+					describe: "700 series JSON input filename",
+					type: "string",
+					required: true,
+				},
+				out: {
+					describe: "500 series output filename",
+					type: "string",
+					required: true,
+				},
+			}),
+		async (argv) => {
+			const json700 = await fs.readJson(argv.in);
+			const json500 = json700To500(json700);
+			await fs.writeJSON(argv.out, json500, { spaces: "\t" });
+			console.error(`500-series NVM (JSON) written to ${argv.out}`);
 
 			process.exit(0);
 		},

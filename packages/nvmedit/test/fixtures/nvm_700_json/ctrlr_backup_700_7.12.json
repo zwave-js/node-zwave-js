@@ -22,6 +22,7 @@
 			"includedSecurelyInsecureCCs": [],
 			"includedSecurelySecureCCs": []
 		},
+		"preferredRepeaters": null,
 		"rfConfig": {
 			"rfRegion": 33,
 			"txPower": 0,

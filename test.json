@@ -1,80 +1,105 @@
 {
-	"format": 1,
 	"controller": {
 		"protocolVersion": "7.11.0",
 		"applicationVersion": "7.0.0",
-		"homeId": "0xfbfedd24",
+		"ownHomeId": "0xfbfedd24",
+		"learnedHomeId": null,
 		"nodeId": 1,
 		"lastNodeId": 6,
 		"staticControllerNodeId": 1,
 		"sucLastIndex": 7,
 		"controllerConfiguration": 60,
-		"sucAwarenessPushNeeded": 0,
-		"maxNodeId": 6,
-		"reservedId": 0,
-		"systemState": 0,
-		"isListening": true,
-		"optionalFunctionality": true,
-		"genericDeviceClass": 2,
-		"specificDeviceClass": 7,
-		"commandClasses": {
-			"includedInsecurely": [94, 85, 86, 34, 159, 152, 116, 108, 138],
-			"includedSecurelyInsecureCCs": [],
-			"includedSecurelySecureCCs": []
-		},
-		"preferredRepeaters": null,
-		"rfConfig": {
-			"rfRegion": 5,
-			"txPower": 0,
-			"measured0dBm": 3.3,
-			"enablePTI": null,
-			"maxTXPower": null
-		},
 		"sucUpdateEntries": [
 			{
 				"nodeId": 1,
 				"changeType": 1,
 				"supportedCCs": [
-					94, 85, 86, 34, 159, 116, 115, 114, 134, 108, 135, 138
+					94,
+					85,
+					86,
+					34,
+					159,
+					116,
+					115,
+					114,
+					134,
+					108,
+					135,
+					138
 				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 1,
 				"changeType": 1,
-				"supportedCCs": [94, 85, 86, 34, 159, 152, 116, 108, 138],
+				"supportedCCs": [
+					94,
+					85,
+					86,
+					34,
+					159,
+					152,
+					116,
+					108,
+					138
+				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 2,
 				"changeType": 1,
-				"supportedCCs": [152, 159],
+				"supportedCCs": [
+					152,
+					159
+				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 3,
 				"changeType": 1,
-				"supportedCCs": [152, 159],
+				"supportedCCs": [
+					152,
+					159
+				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 4,
 				"changeType": 1,
-				"supportedCCs": [152, 159],
+				"supportedCCs": [
+					152,
+					159
+				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 5,
 				"changeType": 1,
-				"supportedCCs": [152, 159],
+				"supportedCCs": [
+					152,
+					159
+				],
 				"controlledCCs": []
 			},
 			{
 				"nodeId": 6,
 				"changeType": 1,
 				"supportedCCs": [
-					94, 37, 133, 142, 89, 85, 134, 114, 90, 135, 115, 152, 159,
-					108, 122
+					94,
+					37,
+					133,
+					142,
+					89,
+					85,
+					134,
+					114,
+					90,
+					135,
+					115,
+					152,
+					159,
+					108,
+					122
 				],
 				"controlledCCs": []
 			},
@@ -82,17 +107,54 @@
 				"nodeId": 1,
 				"changeType": 1,
 				"supportedCCs": [
-					94, 85, 86, 34, 159, 116, 115, 114, 134, 108, 135, 138
+					94,
+					85,
+					86,
+					34,
+					159,
+					116,
+					115,
+					114,
+					134,
+					108,
+					135,
+					138
 				],
 				"controlledCCs": []
 			}
 		],
-		"applicationData": "a11d19000200001e3212270efd213a04fa1d00020000000000000000fd39277c022e000100000000000000000199445b8fcb3e537977d642e808b6568700000000000000000000000000000000000000000000008756e008a3cc6f339248ef5d663f50e136e12e8fe7432265349446d6c5541bf3c500be6567027beeb0e7712b11e21ddf53d86f0b134c00a3bdcd24963a89ef0d753a35b3033f64d1b759077a24d59b45da0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-		"lastNodeIdLR": null,
-		"maxNodeIdLR": null,
-		"reservedIdLR": null,
-		"primaryLongRangeChannelId": null,
-		"dcdcConfig": null
+		"maxNodeId": 6,
+		"reservedId": 0,
+		"systemState": 0,
+		"watchdogStarted": 0,
+		"preferredRepeaters": [],
+		"rfConfig": {
+			"powerLevelNormal": [
+				255,
+				255,
+				255
+			],
+			"powerLevelLow": [
+				255,
+				255,
+				255
+			],
+			"powerMode": 255,
+			"powerModeExtintEnable": 255,
+			"powerModeWutTimeout": 4294967295
+		},
+		"commandClasses": [
+			94,
+			85,
+			86,
+			34,
+			159,
+			152,
+			116,
+			108,
+			138
+		],
+		"applicationData": "a11d19000200001e3212270efd213a04fa1d00020000000000000000fd39277c022e000100000000000000000199445b8fcb3e537977d642e808b6568700000000000000000000000000000000000000000000008756e008a3cc6f339248ef5d663f50e136e12e8fe7432265349446d6c5541bf3c500be6567027beeb0e7712b11e21ddf53d86f0b134c00a3bdcd24963a89ef0d753a35b3033f64d1b759077a24d59b45da0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 	},
 	"nodes": {
 		"1": {
@@ -100,7 +162,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -108,7 +173,9 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 2,
 			"specificDeviceClass": 7,
-			"neighbors": [6],
+			"neighbors": [
+				6
+			],
 			"sucUpdateIndex": 2,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -122,7 +189,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": false,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -130,7 +200,9 @@
 			"supportsBeaming": false,
 			"genericDeviceClass": 15,
 			"specificDeviceClass": 2,
-			"neighbors": [6],
+			"neighbors": [
+				6
+			],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": true,
@@ -144,7 +216,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": false,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -152,7 +227,9 @@
 			"supportsBeaming": false,
 			"genericDeviceClass": 15,
 			"specificDeviceClass": 2,
-			"neighbors": [6],
+			"neighbors": [
+				6
+			],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -166,7 +243,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": false,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -174,7 +254,9 @@
 			"supportsBeaming": false,
 			"genericDeviceClass": 15,
 			"specificDeviceClass": 2,
-			"neighbors": [6],
+			"neighbors": [
+				6
+			],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -188,7 +270,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": false,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 0,
@@ -196,7 +281,9 @@
 			"supportsBeaming": false,
 			"genericDeviceClass": 15,
 			"specificDeviceClass": 2,
-			"neighbors": [6],
+			"neighbors": [
+				6
+			],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,
@@ -210,7 +297,10 @@
 			"isListening": true,
 			"isFrequentListening": false,
 			"isRouting": true,
-			"supportedDataRates": [40000, 100000],
+			"supportedDataRates": [
+				40000,
+				100000
+			],
 			"protocolVersion": 3,
 			"optionalFunctionality": true,
 			"nodeType": 1,
@@ -218,7 +308,13 @@
 			"supportsBeaming": true,
 			"genericDeviceClass": 16,
 			"specificDeviceClass": 0,
-			"neighbors": [1, 2, 3, 4, 5],
+			"neighbors": [
+				1,
+				2,
+				3,
+				4,
+				5
+			],
 			"sucUpdateIndex": 254,
 			"appRouteLock": false,
 			"routeSlaveSUC": false,

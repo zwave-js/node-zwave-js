@@ -36,6 +36,8 @@ import {
 	ProtocolNodeListFileID,
 	ProtocolPendingDiscoveryNodeMaskFile,
 	ProtocolPendingDiscoveryNodeMaskFileID,
+	ProtocolPreferredRepeatersFile,
+	ProtocolPreferredRepeatersFileID,
 	ProtocolRouteCacheExistsNodeMaskFile,
 	ProtocolRouteCacheExistsNodeMaskFileID,
 	ProtocolRouteSlaveSUCNodeMaskFile,
@@ -95,6 +97,7 @@ export interface NVMJSONController {
 	primaryLongRangeChannelId?: number | null;
 	dcdcConfig?: number | null;
 	rfConfig?: NVMJSONControllerRFConfig | null;
+	preferredRepeaters?: number[] | null;
 
 	isListening: boolean;
 	optionalFunctionality: boolean;
@@ -350,6 +353,9 @@ export function nvmObjectsToJSON(
 	const applicationTypeFile = getFileOrThrow<ApplicationTypeFile>(
 		ApplicationTypeFileID,
 	);
+	const preferredRepeaters = getFile<ProtocolPreferredRepeatersFile>(
+		ProtocolPreferredRepeatersFileID,
+	)?.nodeIds;
 
 	const controllerProps = [
 		"nodeId",
@@ -383,6 +389,7 @@ export function nvmObjectsToJSON(
 			"includedSecurelyInsecureCCs",
 			"includedSecurelySecureCCs",
 		]),
+		preferredRepeaters,
 		...(rfConfigFile
 			? {
 					rfConfig: {
@@ -407,6 +414,7 @@ export function nvmObjectsToJSON(
 		"primaryLongRangeChannelId",
 		"dcdcConfig",
 		"rfConfig",
+		"preferredRepeaters",
 		"applicationData",
 	] as const;
 	for (const prop of optionalControllerProps) {
@@ -584,7 +592,13 @@ function serializeCommonProtocolObjects(nvm: NVMJSON): NVM3Object[] {
 
 	// TODO: format >= 2: { .key = FILE_ID_LRANGE_NODE_EXIST, .size = FILE_SIZE_LRANGE_NODE_EXIST, .name = "LRANGE_NODE_EXIST"},
 
-	// TODO: { .key = FILE_ID_PREFERREDREPEATERS, .size = FILE_SIZE_PREFERREDREPEATERS, .name = "PREFERREDREPEATERS", .optional = true},
+	if (nvm.controller.preferredRepeaters?.length) {
+		ret.push(
+			new ProtocolPreferredRepeatersFile({
+				nodeIds: nvm.controller.preferredRepeaters,
+			}).serialize(),
+		);
+	}
 
 	ret.push(
 		new SUCUpdateEntriesFile({
@@ -969,10 +983,11 @@ export function json500To700(
 	}
 
 	const ret: NVMJSON = {
-		// Start out with format 0 / protocol version 7.0.0, the jsonToNVM routines will do further conversion
+		// Start out with format 0 (= protocol version 7.0.0), the jsonToNVM routines will do further conversion
 		format: 0,
 		controller: {
-			protocolVersion: "7.0.0",
+			// This will contain the original 6.x protocol version, but the jsonToNVM routines will update it
+			protocolVersion: source.controller.protocolVersion,
 			applicationVersion: source.controller.applicationVersion,
 			homeId,
 			nodeId: source.controller.nodeId,
@@ -984,8 +999,7 @@ export function json500To700(
 			maxNodeId: source.controller.maxNodeId,
 			reservedId: source.controller.reservedId,
 			systemState: source.controller.systemState,
-
-			// TODO: preserve preferred repeaters
+			preferredRepeaters: source.controller.preferredRepeaters,
 
 			// RF config exists on both series but isn't compatible
 
@@ -1004,6 +1018,54 @@ export function json500To700(
 		},
 		// The node entries are actually compatible between the two JSON versions
 		// but the types are structured differently
+		nodes: source.nodes,
+	};
+	return ret;
+}
+
+export function json700To500(json: NVMJSON): NVM500JSON {
+	const source = cloneDeep(json);
+
+	const ret: NVM500JSON = {
+		controller: {
+			// This will contain the original 7.x protocol version, but the jsonToNVM routines will update it
+			protocolVersion: source.controller.protocolVersion,
+			applicationVersion: source.controller.applicationVersion,
+			// The 700 series does not distinguish between own and learned home ID in NVM
+			// We infer it from the controller configuration if we need it
+			ownHomeId: source.controller.homeId,
+			learnedHomeId:
+				source.controller.controllerConfiguration &
+				ControllerCapabilityFlags.OnOtherNetwork
+					? source.controller.homeId
+					: null,
+			nodeId: source.controller.nodeId,
+			lastNodeId: source.controller.lastNodeId,
+			staticControllerNodeId: source.controller.staticControllerNodeId,
+			sucLastIndex: source.controller.sucLastIndex,
+			controllerConfiguration: source.controller.controllerConfiguration,
+			sucUpdateEntries: source.controller.sucUpdateEntries,
+			maxNodeId: source.controller.maxNodeId,
+			reservedId: source.controller.reservedId,
+			systemState: source.controller.systemState,
+			watchdogStarted: 0,
+			preferredRepeaters: json.controller.preferredRepeaters ?? [],
+
+			// RF config exists on both series but isn't compatible. So set the default
+			rfConfig: {
+				powerLevelNormal: [255, 255, 255],
+				powerLevelLow: [255, 255, 255],
+				powerMode: 255,
+				powerModeExtintEnable: 255,
+				powerModeWutTimeout: 0xffffffff,
+			},
+
+			commandClasses: source.controller.commandClasses.includedInsecurely,
+
+			applicationData: source.controller.applicationData,
+		},
+		// The node entries are actually compatible between the two JSON versions
+		// just the types are structured differently
 		nodes: source.nodes,
 	};
 	return ret;

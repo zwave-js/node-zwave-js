@@ -1,7 +1,14 @@
+import { cloneDeep } from "@zwave-js/shared";
 import fs from "fs-extra";
 import path from "path";
 import { jsonToNVM } from ".";
-import { json500To700, nvm500ToJSON, NVMJSON, nvmToJSON } from "./convert";
+import {
+	json500To700,
+	json700To500,
+	nvm500ToJSON,
+	NVMJSON,
+	nvmToJSON,
+} from "./convert";
 import type { NVM500JSON } from "./nvm500/NVMParser";
 
 describe("NVM conversion tests", () => {
@@ -96,6 +103,45 @@ describe("NVM conversion tests", () => {
 				);
 				const json700 = json500To700(json500, true);
 				expect(json700).toMatchSnapshot();
+			});
+		}
+	});
+
+	describe("500 to 700 to 500 series JSON round-trip", () => {
+		const fixturesDir = path.join(
+			__dirname,
+			"../test/fixtures/nvm_500_json",
+		);
+		const files = fs.readdirSync(fixturesDir);
+
+		for (const file of files) {
+			it(file, async () => {
+				const json500: NVM500JSON = await fs.readJson(
+					path.join(fixturesDir, file),
+				);
+				const json700 = json500To700(json500, true);
+				const output = json700To500(json700);
+				const expected = cloneDeep(json500);
+				// There are some expected normalizations
+				expected.controller.nodeId = 1;
+				delete expected.version;
+				if (expected.controller.applicationData) {
+					while (
+						expected.controller.applicationData.startsWith("00")
+					) {
+						expected.controller.applicationData =
+							expected.controller.applicationData.slice(2);
+					}
+					while (expected.controller.applicationData.endsWith("00")) {
+						expected.controller.applicationData =
+							expected.controller.applicationData.slice(0, -2);
+					}
+					if (expected.controller.applicationData.length > 1024) {
+						expected.controller.applicationData =
+							expected.controller.applicationData.slice(0, 1024);
+					}
+				}
+				expect(output).toEqual(expected);
 			});
 		}
 	});
