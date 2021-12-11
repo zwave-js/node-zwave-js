@@ -179,6 +179,6 @@
 		"info": "Input voltage: 110-230V AC 50/60Hz \nMax current: 13A \nRated input current:\n   10A, 110-230V, 50/60Hz Continous load current\n   16A, 110-230V AC, 50-60Hz Instantaneous load current ",
 		"inclusion": "• Power up the device.\n• Set Z-Wave Controller into inclusion mode.\n• Press the button 3 times within 1,5s.",
 		"exclusion": "• Power up the device.\n• Set Z-Wave Controller into exnclusion mode.\n• Press the button 3 times within 1,5s.",
-		"reset":"• Power up the device.\n• Press and hold the button for 10s until led lights is on, then relese the button.\nReset successfully, led will blink 5 times."
+		"reset": "• Power up the device.\n• Press and hold the button for 10s until led lights is on, then relese the button.\nReset successfully, led will blink 5 times."
 	}
 }
