@@ -1,0 +1,184 @@
+{
+	"manufacturer": "keemple",
+	"manufacturerId": "0x041a",
+	"label": "KP-SO-02",
+	"description": "keemple Power Plug",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Relay On/Off state Saved Disable",
+			"description": "Set this configuration to '1', the device will save current relay state, and after the device is powered down and restarted, it will automaticlly recover to the relay state before power-down.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Restore previous state",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Button Switch Function Disable",
+			"description": "Setting this configuration as '0' will be disabling to turn on and off the relay by pressed button.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Button disabled",
+					"value": 0
+				},
+				{
+					"label": "Button active",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "LED indication Disable",
+			"description": "Setting this configuration as '0' will disable led light on when turn on the device. This setting is invalid during device power-up.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led Off",
+					"value": 0
+				},
+				{
+					"label": "Led On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Timer Enable",
+			"description": "Setting this configuration as '1' will start the timing function of the plug, and the lenght of time is determined by the setting of parametr number 5. This function can only provied the time to turn off device function when the device is on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tmier deactivated",
+					"value": 0
+				},
+				{
+					"label": "Timer activated",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Timing Lenght Setting",
+			"description": "This configuration sets the time lenght for turning off the device. This configuration is only valid when parametr number 4 is set to '1'.",
+			"unit": "minute",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120
+		},
+		{
+			"#": "6",
+			"label": "Meter reporting function Disable",
+			"description": "This configuration sets the meter report function enabled or disabled. When device is detected an OCP event or the relay turned on/off, device will still report all meter values once if this configuration sets to '0'.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable meter measuring and reporting functions whatever others configurations",
+					"value": 0
+				},
+				{
+					"label": "Enable meter measuring and reporting function",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Interval of meter reporting settings",
+			"description": "This configuration sets the interval of reporting electric quanity detection result. This parameter is only valid when parameter number 6 is set as '1'.",
+			"unit": "second",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 32767,
+			"defaultValue": 300
+		},
+		{
+			"#": "8",
+			"label": "Maximum output current setting",
+			"description": "This configuration sets the maximum output current that device can provide. When the current consumed by the load is greater then the setting value, the device will automaticlly cut off the power of the load and sent out alarm information. Value must be greater then the alarm value defined in parameter number 10.",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 16
+		},
+		{
+			"#": "9",
+			"label": "Current Differential Setting",
+			"description": "This configuration sets the changed value of the load current (volatility). When the defferential between two measurements of current consumed by the load exceedes the value set by this configuration, the device will report the last measured result automatically to the controller.",
+			"unit": "0.01 A",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1600,
+			"defaultValue": 50
+		},
+		{
+			"#": "10",
+			"label": "Current Alarm Value",
+			"description": "This configuration sets the alarm value of the load current (volatility). When the load current is larger than this value, the led will be indicated with yellow. This valu must be less then the max. output valu defined in parameter number 8.",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 13
+		}
+	],
+	"metadata": {
+		"info": "Input voltage: 110-230V AC 50/60Hz \nMax current: 13A \nRated input current:\n   10A, 110-230V, 50/60Hz Continous load current\n   16A, 110-230V AC, 50-60Hz Instantaneous load current ",
+		"inclusion": "• Power up the device.\n• Set Z-Wave Controller into inclusion mode.\n• Press the button 3 times within 1,5s.",
+		"exclusion": "• Power up the device.\n• Set Z-Wave Controller into exnclusion mode.\n• Press the button 3 times within 1,5s.",
+		"reset":"• Power up the device.\n• Press and hold the button for 10s until led lights is on, then relese the button.\nReset successfully, led will blink 5 times."
+	}
+}
