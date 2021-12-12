@@ -13,6 +13,54 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Over current detection max value, unit is A",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 16,
+			"defaultValue": 16,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable current detection",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Vibration level buzzer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		}
+	],
 	"metadata": {
 		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The connected light will stay solid on for 3 seconds to indicate successful incusion.",
 		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
