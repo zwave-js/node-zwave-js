@@ -16,9 +16,9 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Over current detection max value, unit is A",
+			"label": "Over current detection value, unit is A. Valid values: 0, 5-16",
 			"valueSize": 1,
-			"minValue": 5,
+			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 16,
 			"allowManualEntry": true,
@@ -28,12 +28,8 @@
 					"value": 0
 				},
 				{
-					"label": "Low",
-					"value": 1
-				},
-				{
-					"label": "High",
-					"value": 2
+					"label": "Default (16A)",
+					"value": 16
 				}
 			]
 		},
@@ -59,11 +55,94 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "10",
+			"label": "Temperature control reference",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Room sensor",
+					"value": 1
+				},
+				{
+					"label": "Floor sensor",
+					"value": 2
+				},
+				{
+					"label": "Room + Floor sensor",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Set how long drying mode last, unit is minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default",
+					"value": 30
+				},
+				{
+					"label": "10 Minutes",
+					"value": 10
+				},
+				{
+					"label": "1 Hour",
+					"value": 60
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Set OLED brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low",
+					"value": 0
+				},
+				{
+					"label": "Medium",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Which sensor value to display",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default (Air sensor)",
+					"value": 0
+				},
+				{
+					"label": "Floor sensor",
+					"value": 1
+				}
+			]
 		}
-	],
-	"metadata": {
-		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The connected light will stay solid on for 3 seconds to indicate successful incusion.",
-		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
-		"reset": "Press and hold down the reset button for over 10 seconds, the dimmer will be reset to factory defaults."
-	}
+	]
 }
