@@ -21,7 +21,6 @@
 			"minValue": 0,
 			"maxValue": 16,
 			"defaultValue": 16,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disable current detection",
@@ -86,7 +85,6 @@
 			"minValue": 5,
 			"maxValue": 100,
 			"defaultValue": 30,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Default",
