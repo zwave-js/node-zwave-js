@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.9.0-beta.1 (2021-12-14)
 ### Features
 * Add support for `Door Lock Logging CC`
 
