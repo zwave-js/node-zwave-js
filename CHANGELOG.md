@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.9.0-beta.0 (2021-12-06)
+## __WORK IN PROGRESS__
 ### Features
 * Add support for `Door Lock Logging CC`
 
@@ -14,6 +14,8 @@
 * Reuse S0 nonce for the lifetime of a CC instance
 * Do not send `Supervision Reports` when another transaction is active
 * Use the last 10 sequence numbers to check for duplicate S2 messages
+* Fix computation of neighbor discovery timeout
+* Skip CC interview step for the controller node
 
 ### Config file changes
 * Added metadata for HS-WX300
@@ -25,6 +27,7 @@
 * Deprecate firmware version file splits, prefer conditionals
 * Fix typo in param labels
 * Clean up configuration and correct param ranges for Steinel XLED Home 2
+* Clean up and consolidate ARZ Roller Shutters
 
 ### Changes under the hood
 * Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.
