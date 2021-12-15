@@ -485,7 +485,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private assertFeature(feature: ZWaveFeature): void {
 		if (!this.supportsFeature(feature)) {
 			throw new ZWaveError(
-				`The controller does not support the ${feature} feature`,
+				`The controller does not support the ${getEnumMemberName(
+					ZWaveFeature,
+					feature,
+				)} feature`,
 				ZWaveErrorCodes.Controller_NotSupported,
 			);
 		}
