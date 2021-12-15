@@ -148,6 +148,7 @@
 		},
 		{
 			"#": "16",
+			"$if": "firmwareVersion <= 3.1",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		{
@@ -303,6 +304,7 @@
 		},
 		{
 			"#": "34",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Reaction to alarms",
 			"description": "Alarms to which the Wall Plug will respond",
 			"valueSize": 1,
@@ -312,6 +314,7 @@
 		},
 		{
 			"#": "35",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Response to alarms",
 			"description": "Defines responds to alarms (device's status change).",
 			"valueSize": 1,
@@ -341,6 +344,7 @@
 		},
 		{
 			"#": "39",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Alarm duration",
 			"description": "Wall Plug's alarm mode duration.",
 			"valueSize": 2,
@@ -544,6 +548,7 @@
 		},
 		{
 			"#": "45",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Reporting Changes in energy consumed",
 			"description": "Required change in power to generate power report.",
 			"valueSize": 1,
@@ -554,6 +559,7 @@
 		},
 		{
 			"#": "47",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Maximum Time Period between reports",
 			"description": "Time between reports in power load not been recorded.",
 			"valueSize": 2,
@@ -564,6 +570,7 @@
 		},
 		{
 			"#": "49",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Metering energy consumed by the Wall Plug itself.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -624,6 +631,7 @@
 		},
 		{
 			"#": "51",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "UP value",
 			"description": "Upper power threshold, used in parameter 52.",
 			"valueSize": 2,
@@ -634,6 +642,7 @@
 		},
 		{
 			"#": "52",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Action in case defined power values exceeded",
 			"description": "Defines the way 2nd association group devices are controlled",
 			"valueSize": 1,
@@ -675,6 +684,7 @@
 		},
 		{
 			"#": "60",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Power load to make red ring flash violet",
 			"description": "Red ring flashes violet when parameter 61 is set to 0 or 1.",
 			"valueSize": 2,
@@ -685,6 +695,7 @@
 		},
 		{
 			"#": "61",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "LED color when device is on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -737,6 +748,7 @@
 		},
 		{
 			"#": "62",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "LED color when device is off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -785,6 +797,7 @@
 		},
 		{
 			"#": "63",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "LED color when Z Wave alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -837,6 +850,7 @@
 		},
 		{
 			"#": "70",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Overload safety switch",
 			"description": "Turns off controlled device in case of exceeding power.",
 			"valueSize": 2,
