@@ -2827,6 +2827,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Don't try to heal dead nodes
 		const node = this.nodes.getOrThrow(nodeId);
 
+		// And keep battery powered nodes awake during the process
+		const keepAwake = node.keepAwake;
+
 		// Don't start the process twice
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
@@ -2848,9 +2851,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		try {
 			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
+			node.keepAwake = true;
 			return await this.healNodeInternal(nodeId);
 		} finally {
 			this._healNetworkActive = false;
+			node.keepAwake = keepAwake;
 		}
 	}
 

@@ -137,6 +137,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
+import { isSuccessIndicator } from "../message/SuccessIndicator";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
@@ -3384,18 +3385,35 @@ ${handlers.length} left`,
 
 		try {
 			const result = (await resultPromise) as TResponse;
+
 			// If this was a successful non-nonce message to a sleeping node, make sure it goes to sleep again
-			if (
-				options.priority !== MessagePriority.Nonce &&
-				result &&
-				(result.functionType ===
-					FunctionType.BridgeApplicationCommand ||
-					result.functionType === FunctionType.ApplicationCommand)
-			) {
-				if (node && node.canSleep && !node.keepAwake) {
-					setImmediate(() => this.debounceSendNodeToSleep(node!));
-				}
+			let maybeSendToSleep: boolean;
+			if (isSendData(msg)) {
+				// For SendData messages, make sure the message is not a nonce
+				maybeSendToSleep =
+					options.priority !== MessagePriority.Nonce &&
+					// And that the result is either a response from the node
+					// or a transmit report indicating success
+					result &&
+					(result.functionType ===
+						FunctionType.BridgeApplicationCommand ||
+						result.functionType ===
+							FunctionType.ApplicationCommand ||
+						(isSendDataTransmitReport(result) && result.isOK()));
+			} else {
+				// For other messages to the node, just check for successful completion. If the callback is not OK,
+				// we might not be able to communicate with the node. Sending another message is not a good idea.
+				maybeSendToSleep =
+					isNodeQuery(msg) &&
+					result &&
+					isSuccessIndicator(result) &&
+					result.isOK();
 			}
+
+			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
+				setImmediate(() => this.debounceSendNodeToSleep(node!));
+			}
+
 			return result;
 		} catch (e) {
 			if (isZWaveError(e)) {
