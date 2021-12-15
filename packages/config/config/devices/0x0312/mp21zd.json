@@ -93,10 +93,16 @@
 			"label": "Dimmer Ramp Rate (On/Off)",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Instant On/Off",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "10",
