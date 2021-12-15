@@ -29,7 +29,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=12.22.2 <16.9.0 || >16.9.0"
+    "node": ">=12.22.2 <13 || >=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
