@@ -569,35 +569,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	private authKey: Buffer;
 	private encryptionKey: Buffer;
 
-	public nonceId: number | undefined;
-	private _receiverNonce: Buffer | undefined;
-
-	private get receiverNonce(): Buffer {
-		if (this.nonceId == undefined) throwNoNonce("nonceId not set");
-
-		// If the nonce is not yet set or was changed, determine the new one
-		if (
-			this._receiverNonce == undefined ||
-			this.nonceId !==
-				this.driver.securityManager.getNonceId(this._receiverNonce)
-		) {
-			this._receiverNonce = this.driver.securityManager.getNonce({
-				issuer: this.nodeId,
-				nonceId: this.nonceId,
-			});
-			// and mark it as used
-			this.driver.securityManager.deleteNonce({
-				issuer: this.nodeId,
-				nonceId: this.nonceId,
-			});
-		}
-
-		if (!this._receiverNonce) {
-			throwNoNonce(`nonce ${num2hex(this.nonceId)} not found`);
-		}
-
-		return this._receiverNonce;
+	public get nonceId(): number | undefined {
+		if (!this.nonce) return undefined;
+		return this.driver.securityManager.getNonceId(this.nonce);
 	}
+	public nonce: Buffer | undefined;
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		if (this.sequenced) {
@@ -634,6 +610,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	}
 
 	public serialize(): Buffer {
+		if (!this.nonce) throwNoNonce();
+		if (this.nonce.length !== HALF_NONCE_SIZE)
+			throwNoNonce("Invalid nonce size");
+
 		const serializedCC = this.encapsulated.serialize();
 		const plaintext = Buffer.concat([
 			Buffer.from([0]), // TODO: frame control
@@ -641,13 +621,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		]);
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
-		const receiverNonce = this.receiverNonce;
-		const iv = Buffer.concat([senderNonce, receiverNonce]);
+		const iv = Buffer.concat([senderNonce, this.nonce]);
 		const ciphertext = encryptAES128OFB(plaintext, this.encryptionKey, iv);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
-			receiverNonce,
+			this.nonce,
 			this.ccCommand,
 			this.driver.controller.ownNodeId,
 			this.nodeId,

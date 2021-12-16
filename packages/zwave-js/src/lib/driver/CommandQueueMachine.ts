@@ -134,13 +134,16 @@ const notifyResult = sendParent((ctx: CommandQueueContext, evt: any) => ({
 	},
 }));
 
-const notifyError = sendParent<CommandQueueContext, any, CommandQueueEvent>(
-	(ctx, evt) => ({
+const notifyError = sendParent((ctx: CommandQueueContext, evt: any) => ({
+	type: "forward",
+	from: "QUEUE",
+	to: ctx.callbackIDs.get(ctx.currentTransaction!),
+	payload: {
 		type: "command_error",
 		error: evt.data,
 		transaction: ctx.currentTransaction,
-	}),
-);
+	},
+}));
 
 export function createCommandQueueMachine(
 	implementations: ServiceImplementations,
