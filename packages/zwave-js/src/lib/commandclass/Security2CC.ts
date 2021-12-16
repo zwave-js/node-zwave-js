@@ -382,26 +382,29 @@ export class Security2CC extends CommandClass {
 		});
 
 		// Only on the highest security class the reponse includes the supported commands
+		const secClass = node.getHighestSecurityClass();
 		let hasReceivedSecureCommands = false;
 
 		let possibleSecurityClasses: S2SecurityClass[];
-		if (endpoint.index === 0) {
+		if (securityClassIsS2(secClass)) {
+			// The highest security class is known to be S2, only query that one
+			possibleSecurityClasses = [secClass];
+		} else if (endpoint.index === 0) {
+			// If the highest security class isn't known, query all possible security classes
+			// but only on the root device
 			possibleSecurityClasses = [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_AccessControl,
 			];
 		} else {
-			const secClass = node.getHighestSecurityClass();
-			if (!securityClassIsS2(secClass)) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: endpoint.index,
-					message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
-					level: "error",
-				});
-				return;
-			}
-			possibleSecurityClasses = [secClass];
+			// For endpoint interviews, the security class MUST be known
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
+				level: "error",
+			});
+			return;
 		}
 
 		for (const secClass of possibleSecurityClasses) {

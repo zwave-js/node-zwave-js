@@ -301,8 +301,12 @@ export function createTransactionMachine(
 						);
 						return Promise.resolve();
 					} else {
-						return ctx.transaction.parts.self!.next(
-							ctx.result as any,
+						// self can be undefined if the transaction was expired while in flight
+						// In that case, resolve to nothing immediately to end the Transaction machine
+						return (
+							ctx.transaction.parts.self?.next(
+								ctx.result as any,
+							) ?? Promise.resolve()
 						);
 					}
 				},

@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.9.0-beta.0 (2021-12-06)
+## 8.9.0-beta.2 (2021-12-15)
 ### Features
 * Add support for `Door Lock Logging CC`
 
@@ -14,6 +14,13 @@
 * Reuse S0 nonce for the lifetime of a CC instance
 * Do not send `Supervision Reports` when another transaction is active
 * Use the last 10 sequence numbers to check for duplicate S2 messages
+* Fix computation of neighbor discovery timeout
+* Skip CC interview step for the controller node
+* Correct error message when SmartStart isn't supported
+* Send battery nodes to sleep after all message types targeting them, not only `SendData` which expect a response
+* Disallow Node.js releases that are dev previews or don't support subpath export patterns
+* Fixed a crash that happened when an in-flight message expired
+* Don't query all security classes if the highest one is known, e.g. directly after the inclusion
 
 ### Config file changes
 * Added metadata for HS-WX300
@@ -25,6 +32,12 @@
 * Deprecate firmware version file splits, prefer conditionals
 * Fix typo in param labels
 * Clean up configuration and correct param ranges for Steinel XLED Home 2
+* Clean up and consolidate ARZ Roller Shutters
+* Add double tap support to GE/Jasco 45609
+* Fixed a typo in `master_template` and correct `MP21ZD` options
+* Correct params for Fibaro FGWP102 FW 3.2
+* Clarify dim level parameter label for GE/Jasco 26932 / 26933 / ZW3008
+* Add fingerprint for AU/NZ model of Aeotec ZW141
 
 ### Changes under the hood
 * Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.
