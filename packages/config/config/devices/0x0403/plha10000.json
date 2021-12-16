@@ -2,7 +2,7 @@
 	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
 	"manufacturerId": "0x0403",
 	"label": "PLHA10000",
-	"description": "Z-Wave 230V relay module",
+	"description": "Z-Wave 230V Relay Module",
 	"devices": [
 		{
 			"productType": "0x0003",
