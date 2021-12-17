@@ -21,33 +21,53 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Key 1",
+			"label": "Relay 1",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Key 2",
+			"label": "Relay 2",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Key 1",
-			"description": "0: momentary button, 1: switch (toggle)",
+			"label": "Relay 1 Behavior",
+			"description": "Setup Relay Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"options": [
+				{
+					"label": "momentary button",
+					"value": 0
+				},
+				{
+					"label": "switch (toggle)",
+					"value": 1
+				}
+			],
 			"unsigned": true
 		},
 		{
 			"#": "2",
-			"label": "Key 2",
-			"description": "0: momentary button, 1: switch (toggle)",
+			"label": "Relay 2 Behavior",
+			"description": "Setup Relay Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"options": [
+				{
+					"label": "momentary button",
+					"value": 0
+				},
+				{
+					"label": "switch (toggle)",
+					"value": 1
+				}
+			],
 			"unsigned": true
 		},
 		{
@@ -58,6 +78,12 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
+			"options": [
+				{
+					"label": "disable auto off",
+					"value": 0
+				}
+			],
 			"unsigned": true
 		},
 		{
@@ -68,6 +94,12 @@
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
+			"options": [
+				{
+					"label": "disable auto off",
+					"value": 0
+				}
+			],
 			"unsigned": true
 		},
 		{
@@ -78,6 +110,16 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"options": [
+				{
+					"label": "do not remember",
+					"value": 0
+				},
+				{
+					"label": "remember",
+					"value": 1
+				}
+			],
 			"unsigned": true
 		},
 		{
@@ -88,6 +130,16 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"options": [
+				{
+					"label": "do not remember",
+					"value": 0
+				},
+				{
+					"label": "remember",
+					"value": 1
+				}
+			],
 			"unsigned": true
 		}
 	],
