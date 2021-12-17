@@ -24,14 +24,6 @@
 			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
-			"#": "5",
-			"$import": "templates/homeseer_template.json#dimmer_threshold"
-		},
-		{
-			"#": "6",
-			"$import": "templates/homeseer_template.json#scene_control"
-		},
-		{
 			"#": "11",
 			"label": "Ramp Rate (Z-Wave)",
 			"$import": "templates/homeseer_template.json#ramp_rate"

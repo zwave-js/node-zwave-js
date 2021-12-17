@@ -40,7 +40,7 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/homeseer_template.json#dimmer_threshold"
+			"$import": "templates/homeseer_template.json#dimming_threshold"
 		},
 		{
 			"#": "6",
