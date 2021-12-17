@@ -5,6 +5,7 @@ import {
 	json500To700,
 	json700To500,
 	jsonToNVM,
+	jsonToNVM500,
 	nvm500ToJSON,
 	nvmToJSON,
 } from "./convert";
@@ -61,11 +62,11 @@ void yargs
 	)
 	.command(
 		"json2nvm",
-		"Convert an NVM backup to JSON",
+		"Convert the JSON representation of an NVM to binary",
 		(yargs) =>
 			yargs
 				.usage(
-					"$0 json2nvm --in <input> --out <output> --version <version>",
+					"$0 json2nvm --in <input> --out <output> --version <version> [--lib <zw500-ver>]",
 				)
 				.options({
 					in: {
@@ -85,10 +86,28 @@ void yargs
 						type: "string",
 						required: true,
 					},
+					lib: {
+						alias: "l",
+						describe:
+							"When targetting 500-series controllers, this determines the target library type",
+						choices: ["static", "bridge"],
+						required: false,
+					},
 				}),
 		async (argv) => {
+			const { lib, protocolVersion } = argv;
+			const is500 = /^\d\.\d+$/.test(protocolVersion);
+			if (is500 && !lib) {
+				console.error(
+					`Protocol version ${protocolVersion} looks like a 500-series version and requires specifying the target library type with --lib!`,
+				);
+				process.exit(1);
+			}
+
 			const json = await fs.readJson(argv.in);
-			const nvm = jsonToNVM(json, argv.protocolVersion);
+			const nvm = is500
+				? jsonToNVM500(json, protocolVersion, lib as any)
+				: jsonToNVM(json, protocolVersion);
 			await fs.writeFile(argv.out, nvm);
 			console.error(`NVM (binary) written to ${argv.out}`);
 

@@ -1,5 +1,12 @@
 {
-	"version": "Static 6.8x",
+	"format": 500,
+	"meta": {
+		"version": "Static 6.8x",
+		"manufacturerID": 134,
+		"firmwareID": 90,
+		"productType": 1,
+		"productID": 90
+	},
 	"controller": {
 		"protocolVersion": "6.07",
 		"applicationVersion": "1.2",

@@ -50,23 +50,25 @@ export function parseRoute(buffer: Buffer, offset: number): Route {
 	return ret;
 }
 
-function encodeRoute(route: Route): Buffer {
+export function encodeRoute(route: Route | undefined): Buffer {
 	const ret = Buffer.alloc(ROUTE_SIZE, 0);
-	if (route.repeaterNodeIDs) {
-		for (
-			let i = 0;
-			i < MAX_REPEATERS && i < route.repeaterNodeIDs.length;
-			i++
-		) {
-			ret[i] = route.repeaterNodeIDs[i];
+	if (route) {
+		if (route.repeaterNodeIDs) {
+			for (
+				let i = 0;
+				i < MAX_REPEATERS && i < route.repeaterNodeIDs.length;
+				i++
+			) {
+				ret[i] = route.repeaterNodeIDs[i];
+			}
+		} else {
+			ret[0] = 0xfe;
 		}
-	} else {
-		ret[0] = 0xfe;
+		let routeConf = 0;
+		if (route.beaming) routeConf |= Beaming[route.beaming] ?? 0;
+		routeConf |= route.protocolRate & protocolDataRateMask;
+		ret[ROUTE_SIZE - 1] = routeConf;
 	}
-	let routeConf = 0;
-	if (route.beaming) routeConf |= Beaming[route.beaming] ?? 0;
-	routeConf |= route.protocolRate & protocolDataRateMask;
-	ret[ROUTE_SIZE - 1] = routeConf;
 
 	return ret;
 }

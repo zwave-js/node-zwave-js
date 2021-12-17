@@ -323,6 +323,14 @@ Object {
     "systemState": 0,
     "watchdogStarted": 0,
   },
+  "format": 500,
+  "meta": Object {
+    "firmwareID": 90,
+    "manufacturerID": 134,
+    "productID": 90,
+    "productType": 1,
+    "version": "Static 6.8x",
+  },
   "nodes": Object {
     "1": Object {
       "appRouteLock": false,
@@ -415,7 +423,6 @@ Object {
       "supportsSecurity": false,
     },
   },
-  "version": "Static 6.8x",
 }
 `;
 

@@ -49,6 +49,22 @@ export function parseSUCUpdateEntry(
 	};
 }
 
+export function encodeSUCUpdateEntry(
+	entry: SUCUpdateEntry | undefined,
+): Buffer {
+	const ret = Buffer.alloc(SUC_UPDATE_ENTRY_SIZE, 0);
+	if (entry) {
+		ret[0] = entry.nodeId;
+		ret[1] = entry.changeType;
+		const ccList = encodeCCList(entry.supportedCCs, entry.controlledCCs);
+		if (ccList.length > SUC_UPDATE_NODEPARM_MAX) {
+			throw new Error("Cannot encode SUC update entry, too many CCs");
+		}
+		ccList.copy(ret, 2);
+	}
+	return ret;
+}
+
 @nvmFileID(0x50003)
 export class SUCUpdateEntriesFile extends NVMFile {
 	public constructor(
@@ -74,16 +90,7 @@ export class SUCUpdateEntriesFile extends NVMFile {
 		for (let i = 0; i < this.updateEntries.length; i++) {
 			const offset = i * SUC_UPDATE_ENTRY_SIZE;
 			const entry = this.updateEntries[i];
-			this.payload[offset] = entry.nodeId;
-			this.payload[offset + 1] = entry.changeType;
-			const ccList = encodeCCList(
-				entry.supportedCCs,
-				entry.controlledCCs,
-			);
-			if (ccList.length > SUC_UPDATE_NODEPARM_MAX) {
-				throw new Error("Cannot encode SUC update entry, too many CCs");
-			}
-			ccList.copy(this.payload, offset + 2);
+			encodeSUCUpdateEntry(entry).copy(this.payload, offset);
 		}
 		return super.serialize();
 	}

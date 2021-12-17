@@ -5,6 +5,7 @@ import { jsonToNVM } from ".";
 import {
 	json500To700,
 	json700To500,
+	jsonToNVM500,
 	nvm500ToJSON,
 	NVMJSON,
 	nvmToJSON,
@@ -89,6 +90,46 @@ describe("NVM conversion tests", () => {
 		}
 	});
 
+	describe("500 series, NVM to JSON to NVM invariants", () => {
+		const fixturesDir = path.join(
+			__dirname,
+			"../test/fixtures/nvm_500_invariants",
+		);
+		const files = fs.readdirSync(fixturesDir);
+
+		// For debugging purposes
+		// function toHex(buffer: Buffer): string {
+		// 	let ret: string =
+		// 		"      00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f";
+		// 	for (let i = 0; i < buffer.length; i++) {
+		// 		if (i % 16 === 0) {
+		// 			ret += "\n" + i.toString(16).padStart(4, "0") + ": ";
+		// 		}
+		// 		ret += buffer[i].toString(16).padStart(2, "0");
+		// 		if (i % 16 !== 15) {
+		// 			ret += " ";
+		// 		}
+		// 	}
+		// 	return ret;
+		// }
+
+		for (const file of files) {
+			it(file, async () => {
+				const nvmIn = await fs.readFile(path.join(fixturesDir, file));
+
+				const lib = /_(static|bridge)_/.exec(file)![1];
+				const json = nvm500ToJSON(nvmIn);
+				const nvmOut = jsonToNVM500(
+					json,
+					json.controller.protocolVersion,
+					lib as any,
+				);
+
+				expect(nvmOut).toEqual(nvmIn);
+			});
+		}
+	});
+
 	describe("500 to 700 series JSON conversion", () => {
 		const fixturesDir = path.join(
 			__dirname,
@@ -124,7 +165,7 @@ describe("NVM conversion tests", () => {
 				const expected = cloneDeep(json500);
 				// There are some expected normalizations
 				expected.controller.nodeId = 1;
-				delete expected.version;
+				delete expected.meta;
 				if (expected.controller.applicationData) {
 					while (
 						expected.controller.applicationData.startsWith("00")

@@ -1,6 +1,6 @@
 import { MAX_NODES, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import { SUC_MAX_UPDATES } from "../../consts";
-import type { NVMParserImplementation } from "../NVMParser";
+import type { NVM500Details } from "../NVMParser";
 import {
 	APPL_NODEPARM_MAX,
 	NVMEntryType,
@@ -182,7 +182,7 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 	{ name: "nvmModuleSizeEndMarker", type: NVMEntryType.Word, count: 1 },
 ];
 
-export const Bridge_6_6x: NVMParserImplementation = {
+export const Bridge_6_6x: NVM500Details = {
 	name: "Bridge 6.6x",
 	protocolVersions: ["4.33", "4.62"],
 	layout: NVM_Layout_Bridge_6_6x,

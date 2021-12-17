@@ -67,7 +67,9 @@ import type { NVM3Object } from "./nvm3/object";
 import { mapToObject } from "./nvm3/utils";
 import {
 	createParser as createNVM500Parser,
+	nmvDetails500,
 	NVM500JSON,
+	NVMSerializer,
 } from "./nvm500/NVMParser";
 
 export interface NVMJSON {
@@ -146,7 +148,7 @@ export interface NVMJSONVirtualNode {
 
 export type NVMJSONNode = NVMJSONNodeWithInfo | NVMJSONVirtualNode;
 
-function nodeHasInfo(node: NVMJSONNode): node is NVMJSONNodeWithInfo {
+export function nodeHasInfo(node: NVMJSONNode): node is NVMJSONNodeWithInfo {
 	return !node.isVirtual || Object.keys(node).length > 1;
 }
 
@@ -854,7 +856,7 @@ export function nvmToJSON(
 }
 
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
-export function nvm500ToJSON(buffer: Buffer): NVM500JSON {
+export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 	const parser = createNVM500Parser(buffer);
 	if (!parser) throw new Error("Unsupported NVM format!");
 	return parser.toJSON();
@@ -903,7 +905,7 @@ export function jsonToNVM(
 			parsedVersion.patch,
 		);
 	} else {
-		throw new Error("cannot convert to a pre-7.0 NVM version");
+		throw new Error("jsonToNVM cannot convert to a pre-7.0 NVM version");
 	}
 
 	return encodeNVM(
@@ -911,6 +913,30 @@ export function jsonToNVM(
 		objects.protocolObjects,
 		json.meta,
 	);
+}
+
+/** Takes a JSON represented 500 series NVM and converts it to binary */
+export function jsonToNVM500(
+	json: Required<NVM500JSON>,
+	protocolVersion: string,
+	lib: "static" | "bridge",
+): Buffer {
+	// Try to find a matching implementation
+	const impl = nmvDetails500.find(
+		(p) =>
+			p.protocolVersions.includes(protocolVersion) &&
+			p.name.toLowerCase().startsWith(lib),
+	);
+
+	if (!impl) {
+		throw new Error(
+			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${lib}.`,
+		);
+	}
+
+	const serializer = new NVMSerializer(impl);
+	serializer.parseJSON(json, protocolVersion);
+	return serializer.serialize();
 }
 
 export function json500To700(
@@ -1027,6 +1053,7 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 	const source = cloneDeep(json);
 
 	const ret: NVM500JSON = {
+		format: 500,
 		controller: {
 			// This will contain the original 7.x protocol version, but the jsonToNVM routines will update it
 			protocolVersion: source.controller.protocolVersion,
