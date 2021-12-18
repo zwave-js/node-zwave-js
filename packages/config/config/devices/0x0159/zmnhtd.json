@@ -91,7 +91,7 @@
 			"#": "40",
 			"label": "Power reporting (Watts) on power change",
 			"unit": "%",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
