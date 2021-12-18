@@ -1,3 +1,4 @@
+import { isObject } from "alcalzone-shared/typeguards";
 import fs from "fs-extra";
 import "reflect-metadata";
 import yargs from "yargs";
@@ -66,7 +67,7 @@ void yargs
 		(yargs) =>
 			yargs
 				.usage(
-					"$0 json2nvm --in <input> --out <output> --version <version> [--lib <zw500-ver>]",
+					"$0 json2nvm --in <input> --out <output> --protocolVersion <version>",
 				)
 				.options({
 					in: {
@@ -86,27 +87,37 @@ void yargs
 						type: "string",
 						required: true,
 					},
-					lib: {
-						alias: "l",
-						describe:
-							"When targetting 500-series controllers, this determines the target library type",
-						choices: ["static", "bridge"],
-						required: false,
-					},
 				}),
 		async (argv) => {
-			const { lib, protocolVersion } = argv;
-			const is500 = /^\d\.\d+$/.test(protocolVersion);
-			if (is500 && !lib) {
+			const { protocolVersion } = argv;
+			const versionIs500 = /^\d\.\d+$/.test(protocolVersion);
+
+			const json = await fs.readJson(argv.in);
+			const jsonIs500 = json.format === 500;
+			if (versionIs500 && !jsonIs500) {
 				console.error(
-					`Protocol version ${protocolVersion} looks like a 500-series version and requires specifying the target library type with --lib!`,
+					`ERROR: Protocol version ${protocolVersion} looks like a 500-series version, but the JSON file does not belong to a 500-series NVM!
+Convert it first using the 700to500 command.`,
+				);
+				process.exit(1);
+			} else if (jsonIs500 && !versionIs500) {
+				console.error(
+					`ERROR: Protocol version ${protocolVersion} looks like a 700-series version, but the JSON file belong to a 500-series NVM!
+Convert it first using the 500to700 command.`,
 				);
 				process.exit(1);
 			}
 
-			const json = await fs.readJson(argv.in);
-			const nvm = is500
-				? jsonToNVM500(json, protocolVersion, lib as any)
+			if (!isObject(json.meta)) {
+				console.error(
+					`ERROR: The JSON file does not contain the meta section, which is required for the conversion to a binary NVM!
+Create a backup of the target stick, use the nvm2json command to convert it to JSON and copy the meta section from there.`,
+				);
+				process.exit(1);
+			}
+
+			const nvm = versionIs500
+				? jsonToNVM500(json, protocolVersion)
 				: jsonToNVM(json, protocolVersion);
 			await fs.writeFile(argv.out, nvm);
 			console.error(`NVM (binary) written to ${argv.out}`);

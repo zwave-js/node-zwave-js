@@ -1,11 +1,11 @@
 {
 	"format": 500,
 	"meta": {
-		"version": "Static 6.8x",
 		"manufacturerID": 134,
 		"firmwareID": 90,
 		"productType": 1,
-		"productID": 90
+		"productID": 90,
+		"library": "static"
 	},
 	"controller": {
 		"protocolVersion": "6.07",

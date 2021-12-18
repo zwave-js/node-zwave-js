@@ -196,6 +196,7 @@ const NVM_Layout_Static_6_7x: NVMLayout = [
 
 export const Static_6_7x: NVM500Details = {
 	name: "Static 6.7x",
+	library: "static",
 	protocolVersions: ["4.60", "4.61", "5.02", "5.03"],
 	layout: NVM_Layout_Static_6_7x,
 };

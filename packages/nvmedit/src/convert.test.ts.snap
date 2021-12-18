@@ -326,10 +326,10 @@ Object {
   "format": 500,
   "meta": Object {
     "firmwareID": 90,
+    "library": "static",
     "manufacturerID": 134,
     "productID": 90,
     "productType": 1,
-    "version": "Static 6.8x",
   },
   "nodes": Object {
     "1": Object {

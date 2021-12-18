@@ -184,6 +184,7 @@ const NVM_Layout_Bridge_6_6x: NVMLayout = [
 
 export const Bridge_6_6x: NVM500Details = {
 	name: "Bridge 6.6x",
+	library: "bridge",
 	protocolVersions: ["4.33", "4.62"],
 	layout: NVM_Layout_Bridge_6_6x,
 };

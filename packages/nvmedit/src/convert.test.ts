@@ -117,12 +117,11 @@ describe("NVM conversion tests", () => {
 			it(file, async () => {
 				const nvmIn = await fs.readFile(path.join(fixturesDir, file));
 
-				const lib = /_(static|bridge)_/.exec(file)![1];
+				// const lib = /_(static|bridge)_/.exec(file)![1];
 				const json = nvm500ToJSON(nvmIn);
 				const nvmOut = jsonToNVM500(
 					json,
 					json.controller.protocolVersion,
-					lib as any,
 				);
 
 				expect(nvmOut).toEqual(nvmIn);

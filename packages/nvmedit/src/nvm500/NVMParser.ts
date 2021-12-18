@@ -50,6 +50,7 @@ import {
 
 export interface NVM500Details {
 	name: string;
+	library: "static" | "bridge";
 	protocolVersions: string[];
 	layout: NVMLayout;
 }
@@ -278,7 +279,7 @@ export class NVMParser {
 		return {
 			format: 500,
 			meta: {
-				version: this.impl.name,
+				library: this.impl.library,
 				...pick(nvmDescriptor, [
 					"manufacturerID",
 					"firmwareID",
@@ -722,7 +723,7 @@ export interface NVM500Meta {
 	firmwareID: number;
 	productType: number;
 	productID: number;
-	version: string;
+	library: NVM500Details["library"];
 }
 
 export interface NVM500JSONController {

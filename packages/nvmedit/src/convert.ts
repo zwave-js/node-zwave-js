@@ -919,18 +919,17 @@ export function jsonToNVM(
 export function jsonToNVM500(
 	json: Required<NVM500JSON>,
 	protocolVersion: string,
-	lib: "static" | "bridge",
 ): Buffer {
 	// Try to find a matching implementation
 	const impl = nmvDetails500.find(
 		(p) =>
 			p.protocolVersions.includes(protocolVersion) &&
-			p.name.toLowerCase().startsWith(lib),
+			p.name.toLowerCase().startsWith(json.meta.library),
 	);
 
 	if (!impl) {
 		throw new Error(
-			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${lib}.`,
+			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${json.meta.library}.`,
 		);
 	}
 
