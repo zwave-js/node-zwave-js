@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Current Threshold",
+			"label": "Over-Current Threshold",
 			"description": "When detected current is above threshold, relay turns off and sends notification. Allowable range: 0, 5-16",
 			"valueSize": 1,
 			"minValue": 0,
@@ -27,6 +27,7 @@
 		{
 			"#": "3",
 			"label": "Buzzer Vibration Level",
+			"description": "Set buzzer and vibration level.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -49,7 +50,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Recover Settings",
+			"label": "Powerloss Recover Settings",
 			"description": "Recover settings after power loss / power reset.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +121,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NTC/10K - Default",
+					"label": "NTC/10K",
 					"value": 1
 				},
 				{
@@ -293,6 +294,7 @@
 		{
 			"#": "22",
 			"label": "OLED Brightness",
+			"description": "Sets OLED brightness, only when active.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
