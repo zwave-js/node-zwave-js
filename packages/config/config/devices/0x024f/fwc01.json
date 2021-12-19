@@ -44,8 +44,7 @@
 		{
 			"#": "10",
 			"label": "Dimming speed",
-			"description": "Dimmer Speed in 1/100th of a Second",
-			"unit": "/100s",
+			"unit": "0.01s",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
@@ -54,11 +53,14 @@
 		{
 			"#": "11",
 			"label": "Dimmer mode",
-			"description": "Dimmer Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
+            "options": [
+                {"label": "Leading Edge", "value": 0},
+                {"label": "Tailing Edge", "value": 1}
+            ]
 		},
 		{
 			"#": "12",
@@ -77,21 +79,116 @@
 			"defaultValue": 15
 		},
 		{
-			"#": "14",
-			"label": "UI modes and Zones",
-			"description": "Enable UI Modes and Zones via Bits",
+			"#": "14[0x1]",
+			"label": "Thermostat Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 67,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Disabled / Auto", "value": 0 },
+                { "label": "Enabled", "value": 1 }
+            ]
 		},
 		{
-			"#": "15",
-			"label": "Light Zone Control Mode",
+			"#": "14[0x2]",
+			"label": "Light Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 30,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Disabled / Auto", "value": 0 },
+                { "label": "Enabled", "value": 1 }
+            ]
+		},
+		{
+			"#": "14[0x4]",
+			"label": "Central Scene Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Disabled / Auto", "value": 0 },
+                { "label": "Enabled", "value": 1 }
+            ]
+		},
+		{
+			"#": "14[0x30]",
+			"label": "Light Zones",
+            "description": "Select number of Light Zones controllable via the device UI",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+            "options": [
+                { "label": "1 Light Zone", "value": 0 },
+                { "label": "2 Light Zones", "value": 1 },
+                { "label": "3 Light Zones", "value": 2 },
+                { "label": "4 Light Zones", "value": 3 }
+            ]
+		},
+		{
+			"#": "15[0x1]",
+			"label": "Light Control Mode",
+            "description": "Enable Switch Mode for ALL zones at once!",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Dimmer Mode", "value": 0 },
+                { "label": "Switch Mode", "value": 1 }
+            ]
+		},
+		{
+			"#": "15[0x2]",
+			"label": "Zone 1 Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Dimmer Mode", "value": 0 },
+                { "label": "Switch Mode", "value": 1 }
+            ]
+		},
+		{
+			"#": "15[0x4]",
+			"label": "Zone 2 Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Dimmer Mode", "value": 0 },
+                { "label": "Switch Mode", "value": 1 }
+            ]
+		},
+		{
+			"#": "15[0x8]",
+			"label": "Zone 3 Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Dimmer Mode", "value": 0 },
+                { "label": "Switch Mode", "value": 1 }
+            ]
+		},
+		{
+			"#": "15[0x10]",
+			"label": "Zone 4 Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+            "options": [
+                { "label": "Dimmer Mode", "value": 0 },
+                { "label": "Switch Mode", "value": 1 }
+            ]
 		},
 		{
 			"#": "17",
@@ -99,7 +196,12 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1
+			"defaultValue": 1,
+            "options": [
+                { "label": "Thermostat Controlled", "value": 0 },
+                { "label": "Light Zone Controlled", "value": 1 },
+                { "label": "Remote Controlled", "value": 2 }
+            ]
 		},
 		{
 			"#": "18",
@@ -107,13 +209,18 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 1
+			"defaultValue": 1,
+            "options": [
+                { "label": "Light Zone 1", "value": 1 },
+                { "label": "Light Zone 2", "value": 2 },
+                { "label": "Light Zone 3", "value": 3 },
+                { "label": "Light Zone 4", "value": 4 }
+            ]
 		},
 		{
 			"#": "32",
 			"label": "Thermostat Set Point Max",
-			"description": "Set Point Max in 1/10th of a degree Celcius",
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -122,7 +229,7 @@
 		{
 			"#": "34",
 			"label": "Thermostat Set Point Min",
-			"description": "Set Point Min in 1/10th of a degree Celcius",
+            "unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -131,7 +238,6 @@
 		{
 			"#": "36",
 			"label": "Thermostat Control Resend Interval",
-			"description": "Resend Interval in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -141,7 +247,6 @@
 		{
 			"#": "37",
 			"label": "Thermostat Minimum On/Off Interval",
-			"description": "Minimum On/Off interval in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 60,
@@ -151,8 +256,7 @@
 		{
 			"#": "38",
 			"label": "Thermostat Floor Temp Max",
-			"description": "Floor Temp Max in 1/10th of a degree Celcius",
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -164,7 +268,12 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 3
+			"defaultValue": 3,
+            "options": [
+                { "label": "Local Room", "value": 1 },
+                { "label": "Local Floor", "value": 2 },
+                { "label": "Room and Floor", "value": 3 }
+            ]
 		},
 		{
 			"#": "44",
@@ -177,7 +286,6 @@
 		{
 			"#": "64",
 			"label": "Temperature Report Inteval",
-			"description": "Report Interval in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -187,8 +295,7 @@
 		{
 			"#": "66",
 			"label": "Temperature Report Threshold",
-			"description": "Report Threshold in 1/10th of a degree Celcius",
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -197,7 +304,6 @@
 		{
 			"#": "67",
 			"label": "Thermostat On∕Off Interval Override Threshold",
-			"description": "Temperature Threshold in 1/10th of a degree Celcius",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -206,8 +312,7 @@
 		{
 			"#": "240",
 			"label": "Floor Sensor Temperature Offset",
-			"description": "Temperature Offset in 1/10th of a degree Celcius",
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -216,8 +321,7 @@
 		{
 			"#": "241",
 			"label": "Room Sensor Temperature Offset",
-			"description": "Temperature Offset in 1/10th of a degree Celcius",
-			"unit": "1/10 degrees",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
