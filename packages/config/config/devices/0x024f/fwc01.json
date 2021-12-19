@@ -58,8 +58,14 @@
 			"maxValue": 1,
 			"defaultValue": 1,
 			"options": [
-				{ "label": "Leading Edge", "value": 0 },
-				{ "label": "Tailing Edge", "value": 1 }
+				{
+					"label": "Leading Edge",
+					"value": 0
+				},
+				{
+					"label": "Tailing Edge",
+					"value": 1
+				}
 			]
 		},
 		{
@@ -79,39 +85,57 @@
 			"defaultValue": 15
 		},
 		{
-			"#": "14[0x1]",
+			"#": "14[0x01]",
 			"label": "Thermostat Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Disabled / Auto", "value": 0 },
-				{ "label": "Enabled", "value": 1 }
+				{
+					"label": "Disable / Auto",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
 			]
 		},
 		{
-			"#": "14[0x2]",
+			"#": "14[0x02]",
 			"label": "Light Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Disabled / Auto", "value": 0 },
-				{ "label": "Enabled", "value": 1 }
+				{
+					"label": "Disable / Auto",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
 			]
 		},
 		{
-			"#": "14[0x4]",
+			"#": "14[0x04]",
 			"label": "Central Scene Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Disabled / Auto", "value": 0 },
-				{ "label": "Enabled", "value": 1 }
+				{
+					"label": "Disable / Auto",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
 			]
 		},
 		{
@@ -123,14 +147,26 @@
 			"maxValue": 3,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "1 Light Zone", "value": 0 },
-				{ "label": "2 Light Zones", "value": 1 },
-				{ "label": "3 Light Zones", "value": 2 },
-				{ "label": "4 Light Zones", "value": 3 }
+				{
+					"label": "1 Light Zone",
+					"value": 0
+				},
+				{
+					"label": "2 Light Zones",
+					"value": 1
+				},
+				{
+					"label": "3 Light Zones",
+					"value": 2
+				},
+				{
+					"label": "4 Light Zones",
+					"value": 3
+				}
 			]
 		},
 		{
-			"#": "15[0x1]",
+			"#": "15[0x01]",
 			"label": "Light Control Mode",
 			"description": "Enable Switch Mode for ALL zones at once!",
 			"valueSize": 1,
@@ -138,44 +174,68 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Dimmer Mode", "value": 0 },
-				{ "label": "Switch Mode", "value": 1 }
+				{
+					"label": "Dimmer Mode",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
 			]
 		},
 		{
-			"#": "15[0x2]",
+			"#": "15[0x02]",
 			"label": "Zone 1 Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Dimmer Mode", "value": 0 },
-				{ "label": "Switch Mode", "value": 1 }
+				{
+					"label": "Dimmer Mode",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
 			]
 		},
 		{
-			"#": "15[0x4]",
+			"#": "15[0x04]",
 			"label": "Zone 2 Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Dimmer Mode", "value": 0 },
-				{ "label": "Switch Mode", "value": 1 }
+				{
+					"label": "Dimmer Mode",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
 			]
 		},
 		{
-			"#": "15[0x8]",
+			"#": "15[0x08]",
 			"label": "Zone 3 Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Dimmer Mode", "value": 0 },
-				{ "label": "Switch Mode", "value": 1 }
+				{
+					"label": "Dimmer Mode",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
 			]
 		},
 		{
@@ -186,8 +246,14 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
-				{ "label": "Dimmer Mode", "value": 0 },
-				{ "label": "Switch Mode", "value": 1 }
+				{
+					"label": "Dimmer Mode",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
 			]
 		},
 		{
@@ -198,9 +264,18 @@
 			"maxValue": 2,
 			"defaultValue": 1,
 			"options": [
-				{ "label": "Thermostat Controlled", "value": 0 },
-				{ "label": "Light Zone Controlled", "value": 1 },
-				{ "label": "Remote Controlled", "value": 2 }
+				{
+					"label": "Thermostat Controlled",
+					"value": 0
+				},
+				{
+					"label": "Light Zone Controlled",
+					"value": 1
+				},
+				{
+					"label": "Remote Controlled",
+					"value": 2
+				}
 			]
 		},
 		{
@@ -211,10 +286,22 @@
 			"maxValue": 4,
 			"defaultValue": 1,
 			"options": [
-				{ "label": "Light Zone 1", "value": 1 },
-				{ "label": "Light Zone 2", "value": 2 },
-				{ "label": "Light Zone 3", "value": 3 },
-				{ "label": "Light Zone 4", "value": 4 }
+				{
+					"label": "Light Zone 1",
+					"value": 1
+				},
+				{
+					"label": "Light Zone 2",
+					"value": 2
+				},
+				{
+					"label": "Light Zone 3",
+					"value": 3
+				},
+				{
+					"label": "Light Zone 4",
+					"value": 4
+				}
 			]
 		},
 		{
@@ -270,9 +357,18 @@
 			"maxValue": 3,
 			"defaultValue": 3,
 			"options": [
-				{ "label": "Local Room", "value": 1 },
-				{ "label": "Local Floor", "value": 2 },
-				{ "label": "Room and Floor", "value": 3 }
+				{
+					"label": "Local Room",
+					"value": 1
+				},
+				{
+					"label": "Local Floor",
+					"value": 2
+				},
+				{
+					"label": "Room and Floor",
+					"value": 3
+				}
 			]
 		},
 		{
@@ -303,7 +399,7 @@
 		},
 		{
 			"#": "67",
-			"label": "Thermostat On∕Off Interval Override Threshold",
+			"label": "Thermostat On/Off Interval Override Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
