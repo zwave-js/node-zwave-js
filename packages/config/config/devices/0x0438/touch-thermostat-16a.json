@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Namron",
 	"manufacturerId": "0x0438",
-	"label": "Z-Wave Touch Thermostat 16A",
-	"description": "In-Wall Thermostat 16A Module",
+	"label": "4512745",
+	"description": "In-Wall Touch Thermostat 16A",
 	"devices": [
 		{
 			"productType": "0x0200",
@@ -16,25 +16,17 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Over current detection value, unit is A. Valid values: 0, 5-16",
+			"label": "Current Threshold",
+			"description": "When detected current is above threshold, relay turns off and sends notification. Allowable range: 0, 5-16",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 16,
-			"defaultValue": 16,
-			"options": [
-				{
-					"label": "Disable current detection",
-					"value": 0
-				},
-				{
-					"label": "Default (16A)",
-					"value": 16
-				}
-			]
+			"unit": "A",
+			"defaultValue": 16
 		},
 		{
 			"#": "3",
-			"label": "Vibration level buzzer",
+			"label": "Buzzer Vibration Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,8 +48,99 @@
 			]
 		},
 		{
+			"#": "4",
+			"label": "Recover Settings",
+			"description": "Recover settings after power loss / power reset.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "High Temperature Threshold",
+			"description": "Turns off relay and sends notification if temperature is above threshold. Allowable range: 0, 20-60",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"unit": "°C",
+			"defaultValue": 45
+		},
+
+		{
+			"#": "7",
+			"label": "Temperature Hysteresis",
+			"description": "Temperature control hysteresis. Allowable range: 5-20",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 20,
+			"unit": "0.1 °C",
+			"defaultValue": 5
+		},
+
+		{
+			"#": "8",
+			"label": "Energy Save Mode",
+			"description": "0 - Off, user schedule used. 1 - On, use Energy_Save_Heating temperature set by THERMOSTAT_SETPOINT_SET",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Energy save mode off",
+					"value": 0
+				},
+				{
+					"label": "Energy save mode on",
+					"value": 1
+				}
+			]
+		},
+
+		{
+			"#": "9",
+			"label": "Floor Sensor Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NTC/10K - Default",
+					"value": 1
+				},
+				{
+					"label": "NTC/15K",
+					"value": 2
+				},
+				{
+					"label": "NTC/50K",
+					"value": 3
+				},
+				{
+					"label": "NTC/100K",
+					"value": 4
+				}
+			]
+		},
+
+		{
 			"#": "10",
-			"label": "Temperature control reference",
+			"label": "Temperature Control Reference",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -78,31 +161,138 @@
 				}
 			]
 		},
+
+		{
+			"#": "11",
+			"label": "Room Temperature Correction",
+			"description": "Correct room temperature sensor. Allowable range: -10 - 10",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"unit": "0.5 °C",
+			"defaultValue": 0
+		},
+
+		{
+			"#": "12",
+			"label": "Floor Temperature Correction",
+			"description": "Correct floor temperature sensor. Allowable range: -10 - 10",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"unit": "0.5 °C",
+			"defaultValue": 0
+		},
+
 		{
 			"#": "13",
-			"label": "Set how long drying mode last, unit is minutes",
+			"label": "Drying Mode Duration",
+			"description": "Allowable range: 5-100",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 100,
-			"defaultValue": 30,
+			"unit": "minutes",
+			"defaultValue": 30
+		},
+
+		{
+			"#": "14",
+			"label": "Mode After Drying",
+			"description": "Set the mode after drying mode completes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default",
-					"value": 30
+					"label": "Off mode",
+					"value": 0
 				},
 				{
-					"label": "10 Minutes",
-					"value": 10
+					"label": "Manual mode",
+					"value": 1
 				},
 				{
-					"label": "1 Hour",
-					"value": 60
+					"label": "Energy save mode",
+					"value": 2
+				},
+				{
+					"label": "Away mode",
+					"value": 3
 				}
 			]
 		},
+
+		{
+			"#": "16",
+			"label": "Temperature Report on Value",
+			"description": "When to report temperature relative change actively. Allowable range: 0 (disable), 2-10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unit": "0.1 °C",
+			"defaultValue": 2
+		},
+
+		{
+			"#": "17",
+			"label": "Temperature Report on Interval",
+			"description": "Time interval to report temperature. Allowable range: 0 (disable), 30-28800",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 28800,
+			"unit": "seconds",
+			"defaultValue": 300
+		},
+
+		{
+			"#": "18",
+			"label": "Power Change Threshold",
+			"description": "Threshold when to report power change. Allowable range: 0 (disable), 1-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"unit": "W",
+			"defaultValue": 5
+		},
+
+		{
+			"#": "19",
+			"label": "Current Change Threshold",
+			"description": "Threshold when to report current change. Allowable range: 0 (disable), 1-10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unit": "0.1 A",
+			"defaultValue": 10
+		},
+
+		{
+			"#": "20",
+			"label": "Voltage Change Threshold",
+			"description": "Threshold when to report voltage change. Allowable range: 0 (disable), 1-10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"unit": "V",
+			"defaultValue": 2
+		},
+
+		{
+			"#": "21",
+			"label": "Meter Report Interval",
+			"description": "Time interval for active report of Meter. Allowable range: 60-2678400",
+			"valueSize": 4,
+			"minValue": 60,
+			"maxValue": 2678400,
+			"unit": "seconds",
+			"defaultValue": 600
+		},
+
 		{
 			"#": "22",
-			"label": "Set OLED brightness",
+			"label": "OLED Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -125,7 +315,7 @@
 		},
 		{
 			"#": "23",
-			"label": "Which sensor value to display",
+			"label": "Sensor to Display",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -133,14 +323,24 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default (Air sensor)",
+					"label": "Air",
 					"value": 0
 				},
 				{
-					"label": "Floor sensor",
+					"label": "Floor",
 					"value": 1
 				}
 			]
+		},
+
+		{
+			"#": "24",
+			"label": "Timezone",
+			"description": "The timezone that the parameters command adopts is UTC, the timezone need to be set. Allowable range: -12 - 12",
+			"valueSize": 1,
+			"minValue": -12,
+			"maxValue": 12,
+			"defaultValue": 0
 		}
 	]
 }
