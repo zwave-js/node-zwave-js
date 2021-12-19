@@ -239,7 +239,7 @@
 			"#": "17",
 			"label": "Temperature Report on Interval",
 			"description": "Time interval to report temperature. Allowable range: 0 (disable), 30-28800",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28800,
 			"unit": "seconds",
