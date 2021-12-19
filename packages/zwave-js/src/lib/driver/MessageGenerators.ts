@@ -125,13 +125,10 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 		// Step 1: Acquire a nonce
 		const secMan = driver.securityManager!;
 		const nodeId = msg.command.nodeId;
-		let nonceId: number;
 
 		// Try to get a free nonce before requesting a new one
-		const freeNonce = secMan.getFreeNonce(nodeId);
-		if (freeNonce) {
-			nonceId = secMan.getNonceId(freeNonce);
-		} else {
+		let nonce: Buffer | undefined = secMan.getFreeNonce(nodeId);
+		if (!nonce) {
 			// No free nonce, request a new one
 			const cc = new SecurityCCNonceGet(driver, {
 				nodeId: nodeId,
@@ -153,22 +150,11 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 					ZWaveErrorCodes.SecurityCC_NoNonce,
 				);
 			}
-			const nonce = nonceResp.nonce;
-			// and store it
-			nonceId = secMan.getNonceId(nonce);
-			secMan.setNonce(
-				{
-					issuer: nodeId,
-					nonceId: nonceId,
-				},
-				{ nonce, receiver: driver.controller.ownNodeId! },
-				// The nonce is reserved for this command
-				{ free: false },
-			);
+			nonce = nonceResp.nonce;
 		}
+		msg.command.nonce = nonce;
 
 		// Now send the actual secure command
-		msg.command.nonceId = nonceId;
 		return yield* simpleMessageGenerator(driver, msg, onMessageSent);
 	};
 

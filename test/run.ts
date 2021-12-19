@@ -2,7 +2,6 @@
 // import { Driver } from "../packages/zwave-js";
 
 // To test without Sentry reporting
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
@@ -37,15 +36,7 @@ const driver = new Driver("COM5", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		await wait(2500);
-		const health = await driver.controller.nodes
-			.getOrThrow(2)
-			.checkRouteHealth(3, 3, (n, t, r) => {
-				console.debug(`Health check round ${n}/${t}: rating = ${r}`);
-			});
-
-		await wait(100);
-		process.exit(0);
+		// Test code
 	});
 void driver.start();
 // driver.enableStatistics({

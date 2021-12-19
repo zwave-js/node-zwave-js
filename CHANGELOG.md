@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.9.0-beta.2 (2021-12-15)
+## 8.9.0-beta.3 (2021-12-16)
 ### Features
 * Add support for `Door Lock Logging CC`
 
@@ -21,6 +21,9 @@
 * Disallow Node.js releases that are dev previews or don't support subpath export patterns
 * Fixed a crash that happened when an in-flight message expired
 * Don't query all security classes if the highest one is known, e.g. directly after the inclusion
+* Errors during Serial API command execution are now properly forwarded and no longer stall the communication
+* Security S0 nonce handling was improved to avoid nonces timing out before first use
+* When waiting for a reply from a node, nonce requests from other nodes are queued instead of handled immediately. Especially with the current 700 series issues, this should avoid some iterruptions in the communication.
 
 ### Config file changes
 * Added metadata for HS-WX300
@@ -38,6 +41,7 @@
 * Correct params for Fibaro FGWP102 FW 3.2
 * Clarify dim level parameter label for GE/Jasco 26932 / 26933 / ZW3008
 * Add fingerprint for AU/NZ model of Aeotec ZW141
+* Add fingerprint `0x0100:0x400a` to Fibargroup FGD211
 
 ### Changes under the hood
 * Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.

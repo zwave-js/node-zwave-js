@@ -158,14 +158,6 @@ isControllerNode(): boolean
 
 This is a little utility function to check if this node is the controller.
 
-### `isAwake`
-
-```ts
-isAwake(): boolean
-```
-
-Returns whether the node is currently assumed awake.
-
 ### `hasSecurityClass`
 
 ```ts

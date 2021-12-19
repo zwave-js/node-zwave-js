@@ -86,7 +86,7 @@
 			"label": "Threshold Check Interval",
 			"unit": "minutes",
 			"unsigned": true,
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 15

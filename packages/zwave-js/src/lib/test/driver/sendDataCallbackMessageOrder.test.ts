@@ -233,7 +233,7 @@ describe("regression tests", () => {
 			{ nonce: sentNonce, receiver: 17 },
 		);
 		const encap = SecurityCC.encapsulate(driver17, configReport);
-		encap.nonceId = sentNonce[0];
+		encap.nonce = sentNonce;
 		const msg = new ApplicationCommandRequest(driver17, {
 			command: encap,
 		});
