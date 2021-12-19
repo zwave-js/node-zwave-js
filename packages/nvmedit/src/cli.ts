@@ -7,6 +7,7 @@ import {
 	json700To500,
 	jsonToNVM,
 	jsonToNVM500,
+	migrateNVM,
 	nvm500ToJSON,
 	nvmToJSON,
 } from "./convert";
@@ -181,6 +182,44 @@ Create a backup of the target stick, use the nvm2json command to convert it to J
 			const json500 = json700To500(json700);
 			await fs.writeJSON(argv.out, json500, { spaces: "\t" });
 			console.error(`500-series NVM (JSON) written to ${argv.out}`);
+
+			process.exit(0);
+		},
+	)
+	.command(
+		"convert",
+		"Convert the format of an NVM backup between different Z-Wave modules",
+		(yargs) =>
+			yargs
+				.usage(
+					"$0 convert --source <source> --target <target> --out <output>",
+				)
+				.options({
+					source: {
+						describe:
+							"The source NVM filename. This file will be converted to match the target NVM.",
+						type: "string",
+						required: true,
+					},
+					target: {
+						describe:
+							"The target NVM filename. This file will used to determine how to convert the source NVM.",
+						type: "string",
+						required: true,
+					},
+					out: {
+						describe:
+							"The output filename where the convert NVM will be written.",
+						type: "string",
+						required: true,
+					},
+				}),
+		async (argv) => {
+			const source = await fs.readFile(argv.source);
+			const target = await fs.readFile(argv.target);
+			const output = migrateNVM(source, target);
+			await fs.writeFile(argv.out, output);
+			console.error(`Converted NVM written to ${argv.out}`);
 
 			process.exit(0);
 		},

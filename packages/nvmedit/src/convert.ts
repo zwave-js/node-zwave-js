@@ -1096,3 +1096,64 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 	};
 	return ret;
 }
+
+/** Converts the given source NVM into a format that is compatible with the given target NVM */
+export function migrateNVM(source: Buffer, target: Buffer): Buffer {
+	let sourceJSON: Required<NVMJSON> | Required<NVM500JSON>;
+	let targetJSON: Required<NVMJSON> | Required<NVM500JSON>;
+	let sourceIs500: boolean;
+	let targetIs500: boolean;
+	try {
+		sourceJSON = nvmToJSON(source);
+		sourceIs500 = false;
+	} catch (e) {
+		try {
+			sourceJSON = nvm500ToJSON(source);
+			sourceIs500 = true;
+		} catch (ee) {
+			throw new Error("Could not parse source NVM - invalid format!");
+		}
+	}
+
+	try {
+		targetJSON = nvmToJSON(target);
+		targetIs500 = false;
+	} catch (e) {
+		try {
+			targetJSON = nvm500ToJSON(target);
+			targetIs500 = true;
+		} catch (ee) {
+			throw new Error("Could not parse target NVM - invalid format!");
+		}
+	}
+
+	if (sourceIs500 && targetIs500) {
+		// Both are 500, so we just need to update the metadata to match the target
+		const json: Required<NVM500JSON> = {
+			...(sourceJSON as Required<NVM500JSON>),
+			meta: (targetJSON as Required<NVM500JSON>).meta,
+		};
+		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
+	} else if (sourceIs500 && !targetIs500) {
+		// We need to upgrade the source to 700 series
+		const json: Required<NVMJSON> = {
+			...json500To700(sourceJSON as Required<NVM500JSON>, true),
+			meta: (targetJSON as Required<NVMJSON>).meta,
+		};
+		return jsonToNVM(json, targetJSON.controller.protocolVersion);
+	} else if (!sourceIs500 && targetIs500) {
+		// We need to downgrade the source to 500 series
+		const json: Required<NVM500JSON> = {
+			...json700To500(sourceJSON as Required<NVMJSON>),
+			meta: (targetJSON as Required<NVM500JSON>).meta,
+		};
+		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
+	} else {
+		// Both are 700, so we just need to update the metadata to match the target
+		const json: Required<NVMJSON> = {
+			...(sourceJSON as Required<NVMJSON>),
+			meta: (targetJSON as Required<NVMJSON>).meta,
+		};
+		return jsonToNVM(json, targetJSON.controller.protocolVersion);
+	}
+}
