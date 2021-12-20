@@ -32,39 +32,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Relay 1 Behavior",
-			"description": "Setup Relay Behavior",
+			"label": "Relay 1: Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "momentary button",
+					"label": "Momentary switch",
 					"value": 0
 				},
 				{
-					"label": "switch (toggle)",
-					"value": 1
-				}
-			],
-			"unsigned": true
-		},
-		{
-			"#": "2",
-			"label": "Relay 2 Behavior",
-			"description": "Setup Relay Behavior",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "momentary button",
-					"value": 0
-				},
-				{
-					"label": "switch (toggle)",
+					"label": "Toggle switch",
 					"value": 1
 				}
 			],
@@ -72,31 +51,14 @@
 		},
 		{
 			"#": "3",
-			"label": "Relay 1 Auto Off Time",
-			"description": "0: no auto off",
+			"label": "Relay 1: Auto Off Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "disable auto off",
-					"value": 0
-				}
-			],
-			"unsigned": true
-		},
-		{
-			"#": "4",
-			"label": "Relay 2 Auto Off Time",
-			"description": "0: no auto off",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 43200,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "disable auto off",
+					"label": "Disable",
 					"value": 0
 				}
 			],
@@ -104,43 +66,47 @@
 		},
 		{
 			"#": "5",
-			"label": "Remember Relay 1 Last State",
-			"description": "0: do not remember, 1: remember",
+			"$import": "~/master_template.json#state_after_power_failure_off_prev",
+			"label": "Relay 1: State After Power Failure"
+		},
+		{
+			"#": "2",
+			"label": "Relay 2: Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"options": [
 				{
-					"label": "do not remember",
+					"label": "Momentary switch",
 					"value": 0
 				},
 				{
-					"label": "remember",
+					"label": "Toggle switch",
 					"value": 1
 				}
 			],
 			"unsigned": true
 		},
 		{
-			"#": "6",
-			"label": "Remember Relay 2 Last State",
-			"description": "0: do not remember, 1: remember",
-			"valueSize": 1,
+			"#": "4",
+			"label": "Relay 2: Auto Off Time",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
+			"maxValue": 43200,
+			"defaultValue": 0,
 			"options": [
 				{
-					"label": "do not remember",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "remember",
-					"value": 1
 				}
 			],
 			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$import": "~/master_template.json#state_after_power_failure_off_prev",
+			"label": "Relay 2: State After Power Failure"
 		}
 	],
 	"metadata": {
