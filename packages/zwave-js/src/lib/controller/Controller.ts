@@ -4723,7 +4723,8 @@ ${associatedNodes.join(", ")}`,
 				nvmData.slice(offset, offset + chunkSize),
 			);
 			// Report progress for listeners
-			if (onProgress) setImmediate(() => onProgress(offset, size));
+			if (onProgress)
+				setImmediate(() => onProgress(offset, nvmData.length));
 		}
 	}
 
