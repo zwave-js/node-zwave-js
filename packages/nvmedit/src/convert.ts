@@ -1141,6 +1141,10 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 			...(sourceJSON as Required<NVM500JSON>),
 			meta: (targetJSON as Required<NVM500JSON>).meta,
 		};
+		// If the target is a 500 series stick, preserve the RF config
+		json.controller.rfConfig = (
+			targetJSON as Required<NVM500JSON>
+		).controller.rfConfig;
 		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
 	} else if (sourceIs500 && !targetIs500) {
 		// We need to upgrade the source to 700 series
@@ -1155,6 +1159,10 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 			...json700To500(sourceJSON as Required<NVMJSON>),
 			meta: (targetJSON as Required<NVM500JSON>).meta,
 		};
+		// If the target is a 500 series stick, preserve the RF config
+		json.controller.rfConfig = (
+			targetJSON as Required<NVM500JSON>
+		).controller.rfConfig;
 		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
 	} else {
 		// Both are 700, so we just need to update the metadata to match the target
