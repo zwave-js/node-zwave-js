@@ -286,7 +286,7 @@ export function nvmObjectsToJSON(
 				const fileId = nodeIdToNodeInfoFileIDV0(id);
 				const file = getFileOrThrow<NodeInfoFileV0>(fileId);
 				nodeInfo = file.nodeInfo;
-			} else if (protocolFileFormat <= 3) {
+			} else if (protocolFileFormat <= 4) {
 				const fileId = nodeIdToNodeInfoFileIDV1(id);
 				const file = getFileOrThrow<NodeInfoFileV1>(fileId);
 				nodeInfo = file.nodeInfos.find((i) => i.nodeId === id)!;
@@ -317,7 +317,7 @@ export function nvmObjectsToJSON(
 				const fileId = nodeIdToRouteCacheFileIDV0(id);
 				const file = getFileOrThrow<RouteCacheFileV0>(fileId);
 				routeCache = file.routeCache;
-			} else if (protocolFileFormat <= 3) {
+			} else if (protocolFileFormat <= 4) {
 				const fileId = nodeIdToRouteCacheFileIDV1(id);
 				const file = getFileOrThrow<RouteCacheFileV1>(fileId);
 				routeCache = file.routeCaches.find((i) => i.nodeId === id)!;
@@ -723,8 +723,8 @@ export function jsonToNVMObjects_v0(
 	};
 }
 
-export function jsonToNVMObjects_v1_to_v3(
-	format: 1 | 2 | 3,
+export function jsonToNVMObjects_v1_to_v4(
+	format: 1 | 2 | 3 | 4,
 	json: NVMJSON,
 	major: number,
 	minor: number,
@@ -873,8 +873,16 @@ export function jsonToNVM(
 	}
 
 	let objects: NVM3Objects;
-	if (semver.gte(parsedVersion, "7.15.3")) {
-		objects = jsonToNVMObjects_v1_to_v3(
+	if (semver.gte(parsedVersion, "7.17.0")) {
+		objects = jsonToNVMObjects_v1_to_v4(
+			4,
+			json,
+			parsedVersion.major,
+			parsedVersion.minor,
+			parsedVersion.patch,
+		);
+	} else if (semver.gte(parsedVersion, "7.15.3")) {
+		objects = jsonToNVMObjects_v1_to_v4(
 			3,
 			json,
 			parsedVersion.major,
@@ -882,7 +890,7 @@ export function jsonToNVM(
 			parsedVersion.patch,
 		);
 	} else if (semver.gte(parsedVersion, "7.12.0")) {
-		objects = jsonToNVMObjects_v1_to_v3(
+		objects = jsonToNVMObjects_v1_to_v4(
 			2,
 			json,
 			parsedVersion.major,
@@ -890,7 +898,7 @@ export function jsonToNVM(
 			parsedVersion.patch,
 		);
 	} else if (semver.gte(parsedVersion, "7.11.0")) {
-		objects = jsonToNVMObjects_v1_to_v3(
+		objects = jsonToNVMObjects_v1_to_v4(
 			1,
 			json,
 			parsedVersion.major,
