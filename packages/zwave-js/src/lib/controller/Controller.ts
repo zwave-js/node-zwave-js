@@ -4689,10 +4689,26 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Controller_NotSupported,
 			);
 		} else if (size !== nvmData.length) {
-			throw new ZWaveError(
-				"The given data does not match the NVM size - cannot restore!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			// This might be a converted NVM buffer which contains only the first relevant part.
+			// The first two bytes must point to the last byte in the buffer then
+			const actualSize = 1 + nvmData.readUInt16BE(0);
+			if (actualSize !== size) {
+				throw new ZWaveError(
+					"The given data does not match the NVM size - cannot restore!",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			// Now we only need to figure out which part of the NVM needs to be overwritten when restoring
+			const oldSize =
+				1 + (await this.externalNVMReadBuffer(0, 2)).readUInt16BE(0);
+			if (oldSize > actualSize) {
+				// Pad the rest with 0xff
+				nvmData = Buffer.concat([
+					nvmData,
+					Buffer.alloc(oldSize - actualSize, 0xff),
+				]);
+			}
 		}
 
 		// Figure out the maximum chunk size the Serial API supports
