@@ -4692,7 +4692,7 @@ ${associatedNodes.join(", ")}`,
 			// This might be a converted NVM buffer which contains only the first relevant part.
 			// The first two bytes must point to the last byte in the buffer then
 			const actualSize = 1 + nvmData.readUInt16BE(0);
-			if (actualSize !== size) {
+			if (actualSize !== nvmData.length) {
 				throw new ZWaveError(
 					"The given data does not match the NVM size - cannot restore!",
 					ZWaveErrorCodes.Argument_Invalid,
