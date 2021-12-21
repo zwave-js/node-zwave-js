@@ -163,7 +163,6 @@ describe("NVM conversion tests", () => {
 				const output = json700To500(json700);
 				const expected = cloneDeep(json500);
 				// There are some expected normalizations
-				expected.controller.nodeId = 1;
 				delete expected.meta;
 				if (expected.controller.applicationData) {
 					while (

@@ -1059,6 +1059,23 @@ export function json500To700(
 export function json700To500(json: NVMJSON): NVM500JSON {
 	const source = cloneDeep(json);
 
+	let ownHomeId: string;
+	let learnedHomeId: string | null = null;
+	let nodeId: number;
+	if (
+		source.controller.controllerConfiguration &
+		ControllerCapabilityFlags.OnOtherNetwork
+	) {
+		// The controller did not start the network itself
+		ownHomeId = learnedHomeId = source.controller.homeId;
+		nodeId = source.controller.nodeId;
+	} else {
+		// The controller did start the network itself
+		ownHomeId = source.controller.homeId;
+		// 500 series controllers expect the node ID to be 0 when they are the primary
+		nodeId = 0;
+	}
+
 	const ret: NVM500JSON = {
 		format: 500,
 		controller: {
@@ -1067,13 +1084,9 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 			applicationVersion: source.controller.applicationVersion,
 			// The 700 series does not distinguish between own and learned home ID in NVM
 			// We infer it from the controller configuration if we need it
-			ownHomeId: source.controller.homeId,
-			learnedHomeId:
-				source.controller.controllerConfiguration &
-				ControllerCapabilityFlags.OnOtherNetwork
-					? source.controller.homeId
-					: null,
-			nodeId: source.controller.nodeId,
+			ownHomeId,
+			learnedHomeId,
+			nodeId,
 			lastNodeId: source.controller.lastNodeId,
 			staticControllerNodeId: source.controller.staticControllerNodeId,
 			sucLastIndex: source.controller.sucLastIndex,
@@ -1085,7 +1098,8 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 			watchdogStarted: 0,
 			preferredRepeaters: json.controller.preferredRepeaters ?? [],
 
-			// RF config exists on both series but isn't compatible. So set the default
+			// RF config exists on both series but isn't compatible. So set the default,
+			// it will be taken from the target NVM on restore.
 			rfConfig: {
 				powerLevelNormal: [255, 255, 255],
 				powerLevelLow: [255, 255, 255],
@@ -1134,6 +1148,10 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 			throw new Error("Could not parse target NVM - invalid format!");
 		}
 	}
+
+	// In any case, preserve the application version of the target stick
+	sourceJSON.controller.applicationVersion =
+		targetJSON.controller.applicationVersion;
 
 	if (sourceIs500 && targetIs500) {
 		// Both are 500, so we just need to update the metadata to match the target
