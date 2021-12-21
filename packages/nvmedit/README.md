@@ -5,6 +5,22 @@ CLI utility to convert binary NVM backups from Z-Wave controllers into JSON and 
 
 (Probably) supports all NVM files in the NVM3 format, which is used starting with Z-Wave SDK 6.61+.
 
+## Usage
+
+You can either execute the current version directly from `npm` using
+
+```
+npx @zwave-js/nvmedit ...command...
+```
+
+or you can execute the version in the checked out repository by executing
+
+```
+yarn ts packages/nvmedit/src/cli.ts ...command...
+```
+
+The following documentation will use the first approach.
+
 ## Convert one NVM to be compatible with another one
 
 **This is probably the command you're looking for.** It converts the format of an NVM backup between different Z-Wave modules.
