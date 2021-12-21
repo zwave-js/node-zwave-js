@@ -1173,6 +1173,21 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 		}
 	}
 
+	// Short circuit if the source and target protocol versions are compatible
+	if (!sourceIs500 && !targetIs500) {
+		const sourceProtocolVersion = sourceJSON.controller.protocolVersion;
+		const targetProtocolVersion = targetJSON.controller.protocolVersion;
+
+		// The 700 series firmware can automatically upgrade backups from a previous protocol version
+		// Not sure when that ability was added, but let's assume 7.16 supports it to be on the safe side
+		if (
+			semver.gte(targetProtocolVersion, "7.16.0") &&
+			semver.gte(targetProtocolVersion, sourceProtocolVersion)
+		) {
+			return source;
+		}
+	}
+
 	// In any case, preserve the application version of the target stick
 	sourceJSON.controller.applicationVersion =
 		targetJSON.controller.applicationVersion;
