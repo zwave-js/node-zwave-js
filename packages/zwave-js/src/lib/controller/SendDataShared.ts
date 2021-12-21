@@ -1,4 +1,8 @@
-import { MessageRecord, stripUndefined } from "@zwave-js/core";
+import {
+	MessageRecord,
+	ProtocolDataRate,
+	stripUndefined,
+} from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import {
 	SendDataBridgeRequest,
@@ -44,13 +48,6 @@ export enum TransmitStatus {
 	Fail = 0x02, // Transmission failed
 	NotIdle = 0x03, // Transmission failed, network busy
 	NoRoute = 0x04, // Transmission complete, no return route
-}
-
-export enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
 }
 
 export function protocolDataRateToString(rate: ProtocolDataRate): string {

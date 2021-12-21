@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
@@ -20,7 +20,6 @@ import type {
 	MultiStageCallback,
 	SuccessIndicator,
 } from "../message/SuccessIndicator";
-import { NodeType } from "../node/Types";
 import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {

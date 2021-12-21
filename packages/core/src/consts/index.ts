@@ -12,3 +12,6 @@ export const NUM_NODEMASK_BYTES = MAX_NODES / 8;
 
 /** The size of a Home ID */
 export const HOMEID_BYTES = 4;
+
+/** How many repeaters can appear in a route */
+export const MAX_REPEATERS = 4;

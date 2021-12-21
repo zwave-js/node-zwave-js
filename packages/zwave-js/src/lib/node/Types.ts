@@ -151,22 +151,6 @@ export enum NodeStatus {
 	Alive,
 }
 
-export enum ProtocolVersion {
-	"unknown" = 0,
-	"2.0" = 1,
-	"4.2x / 5.0x" = 2,
-	"4.5x / 6.0x" = 3,
-}
-
-export type FLiRS = false | "250ms" | "1000ms";
-
-export type DataRate = 9600 | 40000 | 100000;
-
-export enum NodeType {
-	Controller,
-	"Routing End Node",
-}
-
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {
 	/**
