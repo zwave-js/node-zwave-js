@@ -1,9 +1,12 @@
 import {
 	CommandClasses,
 	ControllerCapabilityFlags,
+	isZWaveError,
 	NodeProtocolInfo,
 	NodeType,
 	stripUndefined,
+	ZWaveError,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { cloneDeep, pick } from "@zwave-js/shared";
 import semver from "semver";
@@ -208,7 +211,10 @@ export function nvmObjectsToJSON(
 	): NVM3Object => {
 		const ret = getObject(id);
 		if (ret) return ret;
-		throw new Error(`Object not found`);
+		throw new ZWaveError(
+			`Object${typeof id === "number" ? ` ${id}` : ""} not found!`,
+			ZWaveErrorCodes.NVM_ObjectNotFound,
+		);
 	};
 
 	const getFileOrThrow = <T extends NVMFile>(
@@ -291,8 +297,9 @@ export function nvmObjectsToJSON(
 				const file = getFileOrThrow<NodeInfoFileV1>(fileId);
 				nodeInfo = file.nodeInfos.find((i) => i.nodeId === id)!;
 			} else {
-				throw new Error(
+				throw new ZWaveError(
 					`Unsupported protocol file format: ${protocolFileFormat}`,
+					ZWaveErrorCodes.NVM_NotSupported,
 				);
 			}
 		} catch (e: any) {
@@ -322,8 +329,9 @@ export function nvmObjectsToJSON(
 				const file = getFileOrThrow<RouteCacheFileV1>(fileId);
 				routeCache = file.routeCaches.find((i) => i.nodeId === id)!;
 			} else {
-				throw new Error(
+				throw new ZWaveError(
 					`Unsupported protocol file format: ${protocolFileFormat}`,
+					ZWaveErrorCodes.NVM_NotSupported,
 				);
 			}
 			node.lwr = routeCache.lwr;
@@ -858,7 +866,11 @@ export function nvmToJSON(
 /** Reads an NVM buffer of a 500-series stick and returns its JSON representation */
 export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 	const parser = createNVM500Parser(buffer);
-	if (!parser) throw new Error("Unsupported NVM format!");
+	if (!parser)
+		throw new ZWaveError(
+			"Did not find a matching NVM 500 parser implementation!",
+			ZWaveErrorCodes.NVM_NotSupported,
+		);
 	return parser.toJSON();
 }
 
@@ -869,7 +881,10 @@ export function jsonToNVM(
 ): Buffer {
 	const parsedVersion = semver.parse(protocolVersion);
 	if (!parsedVersion) {
-		throw new Error(`Invalid protocol version: ${protocolVersion}`);
+		throw new ZWaveError(
+			`Invalid protocol version: ${protocolVersion}`,
+			ZWaveErrorCodes.Argument_Invalid,
+		);
 	}
 
 	let objects: NVM3Objects;
@@ -913,7 +928,10 @@ export function jsonToNVM(
 			parsedVersion.patch,
 		);
 	} else {
-		throw new Error("jsonToNVM cannot convert to a pre-7.0 NVM version");
+		throw new ZWaveError(
+			"jsonToNVM cannot convert to a pre-7.0 NVM version. Use jsonToNVM500 instead.",
+			ZWaveErrorCodes.Argument_Invalid,
+		);
 	}
 
 	return encodeNVM(
@@ -936,8 +954,9 @@ export function jsonToNVM500(
 	);
 
 	if (!impl) {
-		throw new Error(
+		throw new ZWaveError(
 			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${json.meta.library}.`,
+			ZWaveErrorCodes.NVM_NotSupported,
 		);
 	}
 
@@ -983,8 +1002,9 @@ export function json500To700(
 		raw = raw.slice(start, end + 1);
 		if (raw.length > 512) {
 			if (!truncateApplicationData) {
-				throw new Error(
+				throw new ZWaveError(
 					"Invalid NVM JSON: Application data would be truncated! Set truncateApplicationData to true to allow this.",
+					ZWaveErrorCodes.NVM_InvalidJSON,
 				);
 			}
 			raw = raw.slice(0, 512);
@@ -999,12 +1019,14 @@ export function json500To700(
 	) {
 		// The controller did not start the network itself
 		if (!source.controller.learnedHomeId) {
-			throw new Error(
+			throw new ZWaveError(
 				"Invalid NVM JSON: Controller is part of another network but has no learned Home ID!",
+				ZWaveErrorCodes.NVM_InvalidJSON,
 			);
 		} else if (!source.controller.nodeId) {
-			throw new Error(
+			throw new ZWaveError(
 				"Invalid NVM JSON: Controller is part of another network but node ID is zero!",
+				ZWaveErrorCodes.NVM_InvalidJSON,
 			);
 		}
 		homeId = source.controller.learnedHomeId;
@@ -1129,11 +1151,12 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 		sourceJSON = nvmToJSON(source);
 		sourceIs500 = false;
 	} catch (e) {
-		try {
+		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
+			// This is not a 700 series NVM, maybe it is a 500 series one?
 			sourceJSON = nvm500ToJSON(source);
 			sourceIs500 = true;
-		} catch (ee) {
-			throw new Error("Could not parse source NVM - invalid format!");
+		} else {
+			throw e;
 		}
 	}
 
@@ -1141,11 +1164,12 @@ export function migrateNVM(source: Buffer, target: Buffer): Buffer {
 		targetJSON = nvmToJSON(target);
 		targetIs500 = false;
 	} catch (e) {
-		try {
+		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
+			// This is not a 700 series NVM, maybe it is a 500 series one?
 			targetJSON = nvm500ToJSON(target);
 			targetIs500 = true;
-		} catch (ee) {
-			throw new Error("Could not parse target NVM - invalid format!");
+		} else {
+			throw e;
 		}
 	}
 

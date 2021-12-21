@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,
@@ -71,7 +72,10 @@ export function readObject(
 	}
 
 	if (buffer.length < offset + headerSize + fragmentLength) {
-		throw new Error("Incomplete object in buffer!");
+		throw new ZWaveError(
+			"Incomplete object in buffer!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 
 	let data: Buffer | undefined;

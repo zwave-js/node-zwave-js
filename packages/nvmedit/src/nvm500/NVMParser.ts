@@ -3,6 +3,8 @@ import {
 	encodeBitMask,
 	MAX_NODES,
 	parseBitMask,
+	ZWaveError,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex, pick, sum } from "@zwave-js/shared";
 import { SUC_MAX_UPDATES } from "../consts";
@@ -79,7 +81,11 @@ export function createParser(nvm: Buffer): NVMParser | undefined {
 export class NVMParser {
 	public constructor(private readonly impl: NVM500Details, nvm: Buffer) {
 		this.parse(nvm);
-		if (!this.isValid()) throw new Error("Invalid NVM!");
+		if (!this.isValid())
+			throw new ZWaveError(
+				"Invalid NVM!",
+				ZWaveErrorCodes.NVM_InvalidFormat,
+			);
 	}
 
 	/** Tests if the given NVM is a valid NVM for this parser version */
@@ -136,8 +142,9 @@ export class NVMParser {
 
 			if (entry.offset != undefined && entry.offset !== offset) {
 				// The entry has a defined offset but is at the wrong location
-				throw new Error(
+				throw new ZWaveError(
 					`${entry.name} is at wrong location in NVM buffer!`,
+					ZWaveErrorCodes.NVM_InvalidFormat,
 				);
 			}
 
@@ -173,8 +180,9 @@ export class NVMParser {
 					case NVMEntryType.NVMModuleDescriptor: {
 						const ret = parseNVMModuleDescriptor(buffer);
 						if (ret.size !== moduleSize) {
-							throw new Error(
+							throw new ZWaveError(
 								"NVM module descriptor size does not match module size!",
+								ZWaveErrorCodes.NVM_InvalidFormat,
 							);
 						}
 						return ret;

@@ -1,4 +1,4 @@
-import { stripUndefined } from "@zwave-js/core";
+import { stripUndefined, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { buffer2hex } from "@zwave-js/shared";
 import type { NVM3Object } from "../nvm3/object";
 import {
@@ -66,7 +66,10 @@ export class ControllerInfoFile extends NVMFile {
 				this.primaryLongRangeChannelId = this.payload[20];
 				this.dcdcConfig = this.payload[21];
 			} else {
-				throw new Error(`Unsupported payload length`);
+				throw new ZWaveError(
+					`Unsupported payload length`,
+					ZWaveErrorCodes.NVM_InvalidFormat,
+				);
 			}
 		} else {
 			this.homeId = options.homeId;

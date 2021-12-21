@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	FLASH_MAX_PAGE_SIZE,
 	NVM3_MIN_PAGE_SIZE,
@@ -44,10 +45,16 @@ export function readPage(
 	const version = buffer.readUInt16LE(offset);
 	const magic = buffer.readUInt16LE(offset + 2);
 	if (magic !== NVM3_PAGE_MAGIC) {
-		throw new Error("Not a valid NVM3 page!");
+		throw new ZWaveError(
+			"Not a valid NVM3 page!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 	if (version !== 0x01) {
-		throw new Error(`Unsupported NVM3 page version: ${version}`);
+		throw new ZWaveError(
+			`Unsupported NVM3 page version: ${version}`,
+			ZWaveErrorCodes.NVM_NotSupported,
+		);
 	}
 
 	// The erase counter is saved twice, once normally, once inverted
@@ -66,7 +73,10 @@ export function readPage(
 	);
 
 	if (eraseCount !== (~eraseCountInv & NVM3_PAGE_COUNTER_MASK)) {
-		throw new Error("Invalid erase count!");
+		throw new ZWaveError(
+			"Invalid erase count!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 
 	// Page status
@@ -82,7 +92,10 @@ export function readPage(
 	const actualPageSize = Math.min(pageSize, FLASH_MAX_PAGE_SIZE);
 
 	if (buffer.length < offset + actualPageSize) {
-		throw new Error("Incomplete page in buffer!");
+		throw new ZWaveError(
+			"Incomplete page in buffer!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 
 	const formatInfo = buffer.readUInt16LE(offset + 18);

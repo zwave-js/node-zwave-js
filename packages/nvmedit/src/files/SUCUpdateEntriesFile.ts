@@ -1,4 +1,10 @@
-import { CommandClasses, encodeCCList, parseCCList } from "@zwave-js/core";
+import {
+	CommandClasses,
+	encodeCCList,
+	parseCCList,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import {
 	SUC_MAX_UPDATES,
 	SUC_UPDATE_ENTRY_SIZE,
@@ -58,7 +64,10 @@ export function encodeSUCUpdateEntry(
 		ret[1] = entry.changeType;
 		const ccList = encodeCCList(entry.supportedCCs, entry.controlledCCs);
 		if (ccList.length > SUC_UPDATE_NODEPARM_MAX) {
-			throw new Error("Cannot encode SUC update entry, too many CCs");
+			throw new ZWaveError(
+				"Cannot encode SUC update entry, too many CCs",
+				ZWaveErrorCodes.Argument_Invalid,
+			);
 		}
 		ccList.copy(ret, 2);
 	}
