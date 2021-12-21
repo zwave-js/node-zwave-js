@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "5",
-			"$import": "~/master_template.json#state_after_power_failure_off_prev",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
 			"label": "Relay 1: State After Power Failure"
 		},
 		{
@@ -105,7 +105,7 @@
 		},
 		{
 			"#": "6",
-			"$import": "~/master_template.json#state_after_power_failure_off_prev",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
 			"label": "Relay 2: State After Power Failure"
 		}
 	],
