@@ -22,6 +22,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { migrateNVM } from "@zwave-js/nvmedit";
 import {
 	flatMap,
 	getEnumMemberName,
@@ -4633,6 +4634,93 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 * If the given buffer is in a different NVM format, it is converted automatically. If the conversion is not supported, the operation fails.
+	 *
+	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
+	 *
+	 * @param nvmData The NVM backup to be restored
+	 * @param convertProgress Can be used to monitor the progress of the NVM conversion, which may take several seconds up to a few minutes depending on the NVM size
+	 * @param restoreProgress Can be used to monitor the progress of the restore operation, which may take several seconds up to a few minutes depending on the NVM size
+	 */
+	public async restoreNVM(
+		nvmData: Buffer,
+		convertProgress?: (bytesRead: number, total: number) => void,
+		restoreProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before restoring NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
+
+		// Restoring a potentially incompatible NVM happens in three steps:
+		// 1. the current NVM is read
+		// 2. the given NVM data is converted to match the current format
+		// 3. the converted data is written to the NVM
+
+		try {
+			this.driver.controllerLog.print(
+				"Converting NVM to target format...",
+			);
+			let targetNVM: Buffer;
+			if (this.serialApiGte("7.0")) {
+				targetNVM = await this.backupNVMRaw700(convertProgress);
+			} else {
+				targetNVM = await this.backupNVMRaw500(convertProgress);
+			}
+			const convertedNVM = migrateNVM(nvmData, targetNVM);
+
+			this.driver.controllerLog.print("Restoring NVM backup...");
+			if (this.serialApiGte("7.0")) {
+				await this.restoreNVMRaw700(convertedNVM, restoreProgress);
+			} else {
+				await this.restoreNVMRaw500(convertedNVM, restoreProgress);
+			}
+			this.driver.controllerLog.print("NVM backup restored");
+		} finally {
+			// Whatever happens, turn Z-Wave radio back on
+			await this.toggleRF(true);
+		}
+
+		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
+		// about soft reset capability
+		this._supportsSoftReset = undefined;
+
+		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
+		// Just forcing a restart of the driver seems easier.
+
+		// if (this.driver.options.enableSoftReset) {
+		// 	this.driver.controllerLog.print(
+		// 		"Activating restored NVM backup...",
+		// 	);
+		// 	await this.driver.softReset();
+		// } else {
+		// 	this.driver.controllerLog.print(
+		// 		"Soft reset not enabled, cannot automatically activate restored NVM backup!",
+		// 		"warn",
+		// 	);
+		// }
+
+		this.driver.controllerLog.print(
+			"Restarting driver to activate restored NVM backup...",
+		);
+
+		this.driver.emit(
+			"error",
+			new ZWaveError(
+				"Applying the NVM backup requires a driver restart!",
+				ZWaveErrorCodes.Driver_Failed,
+			),
+		);
+		await this.driver.destroy();
+	}
+
+	/**
+	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 *
+	 * **WARNING:** The given buffer is NOT checked for compatibility with the current stick. To have Z-Wave JS do that, use the {@link restoreNVM} method instead.
 	 *
 	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
 	 * @param nvmData The raw NVM backup to be restored
@@ -4668,17 +4756,37 @@ ${associatedNodes.join(", ")}`,
 		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
 		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
-		if (this.driver.options.enableSoftReset) {
-			this.driver.controllerLog.print(
-				"Activating restored NVM backup...",
-			);
-			await this.driver.softReset();
-		} else {
-			this.driver.controllerLog.print(
-				"Soft reset not enabled, cannot automatically activate restored NVM backup!",
-				"warn",
-			);
-		}
+		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
+		// about soft reset capability
+		this._supportsSoftReset = undefined;
+
+		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
+		// Just forcing a restart of the driver seems easier.
+
+		// if (this.driver.options.enableSoftReset) {
+		// 	this.driver.controllerLog.print(
+		// 		"Activating restored NVM backup...",
+		// 	);
+		// 	await this.driver.softReset();
+		// } else {
+		// 	this.driver.controllerLog.print(
+		// 		"Soft reset not enabled, cannot automatically activate restored NVM backup!",
+		// 		"warn",
+		// 	);
+		// }
+
+		this.driver.controllerLog.print(
+			"Restarting driver to activate restored NVM backup...",
+		);
+
+		this.driver.emit(
+			"error",
+			new ZWaveError(
+				"Activating the NVM backup requires a driver restart!",
+				ZWaveErrorCodes.Driver_Failed,
+			),
+		);
+		await this.driver.destroy();
 	}
 
 	private async restoreNVMRaw500(

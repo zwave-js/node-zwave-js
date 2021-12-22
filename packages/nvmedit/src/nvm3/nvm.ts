@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
 import {
 	FLASH_MAX_PAGE_SIZE,
@@ -159,7 +160,10 @@ export function encodeNVM(
 		const nextPage = () => {
 			pageIndex++;
 			if (pageIndex >= pages.length) {
-				throw new Error("Not enough pages!");
+				throw new ZWaveError(
+					"Not enough pages!",
+					ZWaveErrorCodes.NVM_NoSpace,
+				);
 			}
 			currentPage = pages[pageIndex];
 			offsetInPage = NVM3_PAGE_HEADER_SIZE;

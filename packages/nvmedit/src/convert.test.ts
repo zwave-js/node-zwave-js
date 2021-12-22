@@ -1,7 +1,7 @@
 import { cloneDeep } from "@zwave-js/shared";
 import fs from "fs-extra";
 import path from "path";
-import { jsonToNVM } from ".";
+import { jsonToNVM, migrateNVM } from ".";
 import {
 	json500To700,
 	json700To500,
@@ -183,5 +183,22 @@ describe("NVM conversion tests", () => {
 				expect(output).toEqual(expected);
 			});
 		}
+	});
+
+	it("700 to 700 migration shortcut", async () => {
+		const fixturesDir = path.join(
+			__dirname,
+			"../test/fixtures/nvm_700_binary",
+		);
+
+		const nvmSource = await fs.readFile(
+			path.join(fixturesDir, "ctrlr_backup_700_7.11.bin"),
+		);
+		const nvmTarget = await fs.readFile(
+			path.join(fixturesDir, "ctrlr_backup_700_7.16_1.bin"),
+		);
+		const converted = migrateNVM(nvmSource, nvmTarget);
+
+		expect(converted).toEqual(nvmSource);
 	});
 });

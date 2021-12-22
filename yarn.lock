@@ -4252,7 +4252,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/nvmedit@workspace:*, @zwave-js/nvmedit@workspace:packages/nvmedit":
+"@zwave-js/nvmedit@8.9.0-beta.3, @zwave-js/nvmedit@workspace:*, @zwave-js/nvmedit@workspace:packages/nvmedit":
   version: 0.0.0-use.local
   resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
   dependencies:
@@ -14440,6 +14440,7 @@ typescript@^4.4.3:
     "@zwave-js/config": 8.9.0-beta.3
     "@zwave-js/core": 8.9.0-beta.3
     "@zwave-js/maintenance": 8.9.0-beta.3
+    "@zwave-js/nvmedit": 8.9.0-beta.3
     "@zwave-js/serial": 8.9.0-beta.3
     "@zwave-js/shared": 8.9.0-beta.3
     "@zwave-js/testing": 8.9.0-beta.3

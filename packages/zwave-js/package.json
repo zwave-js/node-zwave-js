@@ -59,6 +59,7 @@
     "@sentry/node": "^6.15.0",
     "@zwave-js/config": "8.9.0-beta.3",
     "@zwave-js/core": "8.9.0-beta.3",
+    "@zwave-js/nvmedit": "8.9.0-beta.3",
     "@zwave-js/serial": "8.9.0-beta.3",
     "@zwave-js/shared": "8.9.0-beta.3",
     "alcalzone-shared": "^4.0.1",

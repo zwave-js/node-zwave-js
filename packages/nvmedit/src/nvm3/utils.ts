@@ -1,3 +1,4 @@
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { NVMFile } from "../files/NVMFile";
 import { FragmentType, ObjectType, PageStatus } from "./consts";
 import type { NVM3Object } from "./object";
@@ -26,7 +27,10 @@ export function validateBergerCode(
 	numBits: number = 32,
 ): void {
 	if (computeBergerCode(word, numBits) !== code) {
-		throw new Error("Berger Code validation failed!");
+		throw new ZWaveError(
+			"Berger Code validation failed!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 }
 
@@ -60,7 +64,10 @@ export function validateBergerCodeMulti(
 		numBits -= 32;
 	}
 	if (actual !== expected!) {
-		throw new Error("Berger Code validation failed!");
+		throw new ZWaveError(
+			"Berger Code validation failed!",
+			ZWaveErrorCodes.NVM_InvalidFormat,
+		);
 	}
 }
 
