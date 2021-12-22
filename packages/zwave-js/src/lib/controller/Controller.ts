@@ -848,6 +848,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					true,
 					true,
 				);
+				if (result) {
+					this._sucNodeId = this._ownNodeId;
+				}
 				this.driver.controllerLog.print(
 					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
 					result ? undefined : "warn",
