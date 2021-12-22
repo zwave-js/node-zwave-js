@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.9.0 (2021-12-22)
 ### Features
 * Add support for `Door Lock Logging CC`
 * Added a CLI tool to edit the NVM of controllers with SDK 6.61 (500 series) through 7.17.0 (700 series)
