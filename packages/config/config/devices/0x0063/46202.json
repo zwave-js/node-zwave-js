@@ -80,5 +80,11 @@
 	],
 	"compat": {
 		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the toggle.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle.",
+		"reset": "Quickly press ON (up) button three times, then immediately press the OFF (down) button three times.",
+		"manual": "https://byjasco.com/media/manuals/46202-QSG-v1.pdf"
 	}
 }
