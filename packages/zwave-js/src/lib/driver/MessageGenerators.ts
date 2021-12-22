@@ -15,10 +15,7 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
-import {
-	isSendData,
-	isSendDataTransmitReport,
-} from "../controller/SendDataShared";
+import { isSendData, isTransmitReport } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { Driver, SendCommandOptions } from "./Driver";
 import { sendDataErrorToZWaveError } from "./StateMachineShared";
@@ -65,13 +62,12 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 			throw e;
 		}
 
-		// If the sent message was a SendData message that had a NOK callback,
-		// we now need to throw because the callback was passed through so we could inspect it.
-		if (
-			isSendData(msg) &&
-			isSendDataTransmitReport(result) &&
-			!result.isOK()
-		) {
+		// If the message was sent to a node and came back with a NOK callback,
+		// we want to inspect the callback, for example to look at TX statistics
+		// or update the node status.
+		//
+		// We now need to throw because the callback was passed through so we could inspect it.
+		if (isTransmitReport(result) && !result.isOK()) {
 			// Throw the message in order to short-circuit all possible generators
 			throw result;
 		}
@@ -321,7 +317,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 						if (e instanceof Error) {
 							// There was an actual error, reject the transaction
 							resultPromise.reject(e);
-						} else if (isSendDataTransmitReport(e) && !e.isOK()) {
+						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
 							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
 							// to treat this as an error

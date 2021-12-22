@@ -4,6 +4,10 @@ import {
 	stripUndefined,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { AssignReturnRouteRequestTransmitReport } from "./AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequestTransmitReport } from "./AssignSUCReturnRouteMessages";
+import { DeleteReturnRouteRequestTransmitReport } from "./DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequestTransmitReport } from "./DeleteSUCReturnRouteMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
@@ -28,6 +32,14 @@ export type SendDataTransmitReport =
 	| SendDataMulticastRequestTransmitReport
 	| SendDataBridgeRequestTransmitReport
 	| SendDataMulticastBridgeRequestTransmitReport;
+
+/** All message classes that are a callback with a transmit report */
+export type TransmitReport =
+	| SendDataTransmitReport
+	| AssignReturnRouteRequestTransmitReport
+	| AssignSUCReturnRouteRequestTransmitReport
+	| DeleteReturnRouteRequestTransmitReport
+	| DeleteSUCReturnRouteRequestTransmitReport;
 
 export enum TransmitOptions {
 	NotSet = 0,
@@ -327,6 +339,17 @@ export function isSendDataTransmitReport(
 		msg instanceof SendDataMulticastRequestTransmitReport ||
 		msg instanceof SendDataBridgeRequestTransmitReport ||
 		msg instanceof SendDataMulticastBridgeRequestTransmitReport
+	);
+}
+
+export function isTransmitReport(msg: unknown): msg is TransmitReport {
+	if (!msg) return false;
+	return (
+		isSendDataTransmitReport(msg) ||
+		msg instanceof AssignReturnRouteRequestTransmitReport ||
+		msg instanceof AssignSUCReturnRouteRequestTransmitReport ||
+		msg instanceof DeleteReturnRouteRequestTransmitReport ||
+		msg instanceof DeleteSUCReturnRouteRequestTransmitReport
 	);
 }
 
