@@ -197,7 +197,7 @@ export function createCommandQueueMachine(
 					// stop on its own
 					{
 						cond: "isCurrentTransactionAndSendData",
-						actions: [spawnAbortMachine, removeFromQueue],
+						actions: [spawnAbortMachine],
 					},
 					// If the transaction to remove is the current transaction, but not SendData
 					// we can't just end it because it would risk putting the driver and stick out of sync
