@@ -147,7 +147,8 @@
 		},
 		{
 			"#": "19",
-			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval",
+			"label": "Threshold Check Interval",
+			"description": "Defines the frequency at which the automatic reporting thresholds are evaluated",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
