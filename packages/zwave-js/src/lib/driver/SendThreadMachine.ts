@@ -251,16 +251,13 @@ export function createSendThreadMachine(
 					);
 					break;
 				case "requeue":
-					if (source === "active") {
-						// Ignore this. Re-queing an active transaction will mess up the send queue
-						break;
-					}
 					if (reducerResult.priority != undefined) {
 						transaction.priority = reducerResult.priority;
 					}
 					if (reducerResult.tag != undefined) {
 						transaction.tag = reducerResult.tag;
 					}
+					if (source === "active") stopActive.push(transaction);
 					requeue.push(transaction);
 					break;
 				case "resolve":
@@ -301,7 +298,7 @@ export function createSendThreadMachine(
 
 		// Now we know what to do with the transactions
 		queue.remove(...dropQueued, ...requeue);
-		queue.add(...requeue);
+		queue.add(...requeue.map((t) => t.clone()));
 
 		return [
 			assign((ctx: SendThreadContext) => ({
