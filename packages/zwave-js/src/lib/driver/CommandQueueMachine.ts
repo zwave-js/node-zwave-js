@@ -10,7 +10,7 @@ import {
 	spawn,
 	StateMachine,
 } from "xstate";
-import { pure, raise, sendParent, stop } from "xstate/lib/actions";
+import { forwardTo, pure, raise, sendParent, stop } from "xstate/lib/actions";
 import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import {
@@ -52,7 +52,12 @@ export interface CommandQueueContext {
 export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
 	| { type: "add"; transaction: Transaction; from: string } // Adds a transaction to the command queue
-	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
+	// These events are forwarded to the SerialAPICommand machine
+	| { type: "ACK" }
+	| { type: "CAN" }
+	| { type: "NAK" }
+	// Used for received messages. The message will be returned as unsolicited when it is not expected
+	| { type: "message"; message: Message }
 	| { type: "remove"; transaction: Transaction } // Used to abort the given transaction and remove it from the command queue
 	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
 	| ({ type: "command_success" } & Omit<
@@ -185,8 +190,6 @@ export function createCommandQueueMachine(
 						raise("trigger") as any,
 					],
 				},
-				// By default, return all messages as unsolicited. The only exception is an active serial API machine
-				message: { actions: respondUnsolicited },
 
 				// What to do when removing transactions depends on their state
 				remove: [
@@ -194,13 +197,66 @@ export function createCommandQueueMachine(
 					// stop on its own
 					{
 						cond: "isCurrentTransactionAndSendData",
-						actions: spawnAbortMachine,
+						actions: [spawnAbortMachine, removeFromQueue],
 					},
 					// If the transaction to remove is the current transaction, but not SendData
 					// we can't just end it because it would risk putting the driver and stick out of sync
 					{
 						cond: "isNotCurrentTransaction",
 						actions: [stopTransaction, removeFromQueue],
+					},
+				],
+
+				// Then a serial API machine is active, forward the message. Otherwise, return all messages as unsolicited.
+				message: [
+					{
+						cond: "isExecuting",
+						actions: forwardTo("execute"),
+					},
+					{ actions: respondUnsolicited },
+				],
+
+				// Forward low-level messages to the correct actor
+				ACK: [
+					{
+						cond: "isAbortingInFlight",
+						actions: forwardTo((ctx) => ctx.abortActor!),
+					},
+					{
+						cond: "isAbortingWithTimeout",
+						actions: forwardTo("executeSendDataAbort"),
+					},
+					{
+						cond: "isExecuting",
+						actions: forwardTo("execute"),
+					},
+				],
+				CAN: [
+					{
+						cond: "isAbortingInFlight",
+						actions: forwardTo((ctx) => ctx.abortActor!),
+					},
+					{
+						cond: "isAbortingWithTimeout",
+						actions: forwardTo("executeSendDataAbort"),
+					},
+					{
+						cond: "isExecuting",
+						actions: forwardTo("execute"),
+					},
+				],
+				NAK: [
+					{
+						cond: "isAbortingInFlight",
+						actions: forwardTo((ctx) => ctx.abortActor!),
+					},
+					{
+						cond: "isAbortingWithTimeout",
+						actions: forwardTo("executeSendDataAbort"),
+					},
+					{
+						cond: "isExecuting",
+						actions: forwardTo("execute"),
 					},
 				],
 			},
@@ -217,14 +273,9 @@ export function createCommandQueueMachine(
 					},
 				},
 				execute: {
-					on: {
-						// Now the message event gets auto-forwarded to the serial API machine
-						message: undefined,
-					},
 					invoke: {
 						id: "execute",
 						src: "executeSerialAPICommand",
-						autoForward: true,
 						onDone: [
 							// On success, forward the response to our parent machine
 							{
@@ -254,7 +305,6 @@ export function createCommandQueueMachine(
 					invoke: {
 						id: "executeSendDataAbort",
 						src: "executeSendDataAbort",
-						autoForward: true,
 						onDone: "executeDone",
 					},
 				},
@@ -317,6 +367,10 @@ export function createCommandQueueMachine(
 						evt.data?.reason === "callback timeout"
 					);
 				},
+				isExecuting: (ctx, evt, meta) => meta.state.matches("execute"),
+				isAbortingWithTimeout: (ctx, evt, meta) =>
+					meta.state.matches("abortSendData"),
+				isAbortingInFlight: (ctx) => ctx.abortActor != undefined,
 			},
 			delays: {},
 		},
