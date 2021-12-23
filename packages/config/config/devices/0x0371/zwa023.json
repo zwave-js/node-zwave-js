@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Power Report Threshhold (Scene)",
+			"label": "Power Report Threshold (Scene)",
 			"description": "Power consumption at which to send a scene activation set command",
 			"valueSize": 2,
 			"unit": "W",
