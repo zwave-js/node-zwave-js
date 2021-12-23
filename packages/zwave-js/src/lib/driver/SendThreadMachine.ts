@@ -298,7 +298,7 @@ export function createSendThreadMachine(
 
 		// Now we know what to do with the transactions
 		queue.remove(...dropQueued, ...requeue);
-		queue.add(...requeue);
+		queue.add(...requeue.map((t) => t.clone()));
 
 		return [
 			assign((ctx: SendThreadContext) => ({

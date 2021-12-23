@@ -195,11 +195,7 @@ export function getSerialAPICommandMachineConfig(
 							lastError: (_) => "NAK",
 						}),
 					},
-					ACK: [
-						{
-							target: "waitForResponse",
-						},
-					],
+					ACK: "waitForResponse",
 				},
 				after: {
 					ACK_TIMEOUT: {
