@@ -4,28 +4,19 @@ So called unsolicited updates (that weren't requested by `zwave-js`) are sent by
 
 This section is meant to help you figure out why and reduce debugging time for us when you report issues. Please follow this checklist and correct any findings before opening an issue.
 
-1. Check whether the device supports `Association CC`, `Multi Channel Association CC` and/or `Multi Channel CC` and note the CC versions.  
+1. Check whether the device supports `Association CC` or `Multi Channel Association CC`. If it doesn't it cannot send unsolicited updates and must be polled regularly.  
    _You should find this info in the cache file `<homeid>.json` or in node dumps from the applications._
 
 1. Check whether **any** Lifeline association is set up. For `Z-Wave Plus` devices, this is association group 1. For legacy devices, check the manual.  
-   If not, try re-interviewing the device. `zwave-js` will try to configure the correct associations automatically. If that fails, go to the next step.
+   If not, **try re-interviewing** the device. `zwave-js` will try to configure the correct associations automatically.  
+   The lifeline association should have the controller as the target node. The type of association and the target endpoint depends on many factors, which would be too much for this guide.
 
-1. Check whether the Lifeline association is set up correctly. _The following will assume that the controller is node 1._
+1. Check the logfile which reports the device sends.
 
-    a.) The device supports `Multi Channel CC`, the endpoints support `Association CC`: One association per endpoint, **target node `1`, no target endpoint**
+    a) **With source endpoint information**  
+    The source endpoint should correspond to the endpoint you're using to control the device. These reports can be attributed to the correct endpoint:
 
-    b.) The device supports `Multi Channel CC`, the endpoints support `Multi Channel Association CC` version 3 or higher: One association per endpoint, **target node `1`, target endpoint `0`**
-
-    c.) The device supports `Multi Channel CC` and `Multi Channel Association CC` version 3 or higher: One association on the root device (endpoint 0), **target node `1`, target endpoint `0`**
-
-    d.) The device **does not** `Multi Channel CC` **or** it supports `Multi Channel Association CC` version 1 or 2 **or** it supports `Association CC` only: One association on the root device (endpoint 0), **target node `1`, no target endpoint**
-
-1. Check the logfile which reports the device sends. This depends on how the association is set up.
-
-    a.) **Target endpoint 0:**  
-    The device **should** send encapsulated reports (with source endpoint information):
-
-    ```
+    ```log
     DRIVER « [Node 011] [REQ] [ApplicationCommand]
              └─[MultiChannelCCCommandEncapsulation]
                │ source:      2
@@ -35,12 +26,12 @@ This section is meant to help you figure out why and reduce debugging time for u
                    value:         71 °F
     ```
 
-    These can be attributed to the correct endpoint. If this is not the case, see b). Otherwise, this seems to be okay from the `node-zwave-js` point of view.
+    If this is not the case, see b). Otherwise, this seems to be okay from the `node-zwave-js` point of view.
 
-    b.) **No target endpoint:**  
-    The device likely sends un-encapsulated reports (no source endpoint information):
+    b) **No source endpoint:**  
+    The device sends un-encapsulated reports (no source endpoint information):
 
-    ```
+    ```log
     DRIVER « [Node 011] [REQ] [ApplicationCommand]
              └─[ThermostatSetpointCCReport]
                  setpoint type: Heating
@@ -48,6 +39,9 @@ This section is meant to help you figure out why and reduce debugging time for u
     ```
 
     This means that we don't know which endpoint this report is from. If it was meant to come from an endpoint, we might be able to work around the missing info - see 4.
+
+    c) **None:**  
+    Most likely the lifeline is not set up correctly. Some devices spread their reports across multiple association groups. Consult the manual to figure out which reports are sent in which group.
 
 1. Check if the Command Class included in the report is supported on more than one endpoint (excluding endpoint `0`).  
    _You should find this info in the cache file `<homeid>.json` or in node dumps from the applications, for example:_

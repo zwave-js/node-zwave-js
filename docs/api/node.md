@@ -805,7 +805,7 @@ The Z-Wave protocol version this node implements.
 <!-- #import ProtocolVersion from "zwave-js" -->
 
 ```ts
-enum ProtocolVersion {
+declare enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
 	"4.2x / 5.0x" = 2,

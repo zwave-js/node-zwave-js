@@ -12,7 +12,7 @@ Unless you are inquiring about a missing device configuration, you **should** ha
 
 Here's an example how this **DOES** look like (correct log, correct loglevel):
 
-```
+```log
 2021-10-15T16:16:56.984Z DRIVER   starting driver...
 2021-10-15T16:16:56.997Z DRIVER   opening serial port COM5
 2021-10-15T16:16:57.128Z DRIVER   serial port opened
@@ -29,7 +29,7 @@ Here's an example how this **DOES** look like (correct log, correct loglevel):
 
 Here's how it **DOES NOT** look like. This is an **application log** from `zwavejs2mqtt`:
 
-```
+```log
 2021-08-04 15:56:59.250 INFO MQTT: MQTT is disabled
 2021-08-04 15:56:59.503 INFO ZWAVE: Connecting to /dev/ttyACM0
 2021-08-04 15:57:09.381 INFO ZWAVE: Zwave driver is ready
@@ -43,11 +43,11 @@ Here's how it **DOES NOT** look like. This is an **application log** from `zwave
 There are multiple log levels, but **only** the "debug" level contains enough info for troubleshooting.
 
 <details>
-<summary>Click here another counter example</summary>
+<summary>Click here for another counter example</summary>
 
-This is a driver log, but on the wrong loglevel (`info`):
+This is a driver log, but on the **wrong loglevel** (`info`):
 
-```
+```log
 2021-10-15T17:25:06.701Z CNTRLR   [Node 001] The node is alive.
 2021-10-15T17:25:06.701Z CNTRLR   [Node 001] The node is ready to be used
 2021-10-15T17:25:06.702Z CNTRLR » [Node 012] pinging the node...
@@ -69,28 +69,26 @@ This is a driver log, but on the wrong loglevel (`info`):
 
 ## Rule #3: When in doubt, re-interview
 
-The **interview** is the process of the driver figuring out the capabilities of a device. It is possible that something went wrong the first time and the driver operates on incorrect information. To make the driver forget what it knows about a device and start over, you can re-interview it (`refreshInfo`).
+The **interview** is the process of the driver figuring out the capabilities of a device. It is possible that something went wrong the first time and the driver operates on incorrect information. To make the driver forget what it knows about a device and start over, you can re-interview it (`refreshInfo`). This **does not** mean excluding and including again!
 
 Sometimes this is also necessary to pick up changed device config files or repair incorrect associations.
 
 ---
 
-## Common issues
+## Common issues {docsify-ignore}
 
 Now that we got this out of the way, here's a collection of **common** issues and how to solve them.
+
+🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, no responses from devices, etc.)
+
+🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
+
+🐛 [Problems with 700 series sticks](troubleshooting/700-series-issues.md) (healing, delays, wrong neighbors, ...)
 
 🐛 [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
 
 🐛 [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
 
-🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, etc.)
-
-🐛 [Healing the network fails on Z-Wave 700 stick](troubleshooting/healing-fails.md)
-
 🐛 [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
 
 🐛 [Some values are missing](troubleshooting/missing-values.md)
-
-🐛 [A device does not respond](troubleshooting/no-device-response.md)
-
-🐛 [Missing updates from a device](troubleshooting/no-updates.md)

@@ -84,8 +84,13 @@
 -   Troubleshooting
 
     -   [Overview](troubleshooting/index.md)
-    -   [A device does not respond](troubleshooting/no-device-response.md)
+    -   [Connectivity issues](troubleshooting/connectivity-issues.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
+    -   [Problems with 700 series sticks](troubleshooting/700-series-issues.md)
+    -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
+    -   [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
+    -   [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
+    -   [Some values are missing](troubleshooting/missing-values.md)
 
 -   Device Configuration Files
 
