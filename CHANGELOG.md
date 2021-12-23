@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.9.1 (2021-12-23)
 ### Bugfixes
 * More messages to nodes are treated like `SendData` and repect/contribute the node status
 * When changing the type of a lifeline association, the removed association is now also deleted from cache
