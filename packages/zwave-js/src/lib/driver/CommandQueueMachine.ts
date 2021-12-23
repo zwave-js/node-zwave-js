@@ -197,7 +197,7 @@ export function createCommandQueueMachine(
 					// stop on its own
 					{
 						cond: "isCurrentTransactionAndSendData",
-						actions: [spawnAbortMachine],
+						actions: [spawnAbortMachine, stopTransaction],
 					},
 					// If the transaction to remove is the current transaction, but not SendData
 					// we can't just end it because it would risk putting the driver and stick out of sync
@@ -277,6 +277,13 @@ export function createCommandQueueMachine(
 						id: "execute",
 						src: "executeSerialAPICommand",
 						onDone: [
+							// If the transition was aborted in flight, just silently ignore
+							// the result. The transaction was meant to be dropped or will be
+							// rejected anyways.
+							{
+								cond: "isAbortingInFlight",
+								target: "executeDone",
+							},
 							// On success, forward the response to our parent machine
 							{
 								cond: "executeSuccessful",
