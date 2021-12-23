@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* More messages to nodes are treated like `SendData` and repect/contribute the node status
+* When changing the type of a lifeline association, the removed association is now also deleted from cache
+* Fixed an issue where the send queue would get stuck after aborting an ongoing transmission
+
+### Config file changes
+* Clarify parameter function for Aeotec Smart Switch 7
+* Add Parameter 17 to Zen71 Switch (firmware dependent)
+
+### Changes under the hood
+* Support adding comments to devices
+
 ## 8.9.0 (2021-12-22)
 ### Features
 * Add support for `Door Lock Logging CC`
