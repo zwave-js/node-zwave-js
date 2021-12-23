@@ -138,7 +138,7 @@ import {
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import { isSuccessIndicator } from "../message/SuccessIndicator";
-import { isNodeQuery } from "../node/INodeQuery";
+import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
@@ -532,7 +532,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				rejectTransaction: (transaction, error) => {
 					// If a node failed to respond in time, it might be sleeping
 					if (this.isMissingNodeACK(transaction, error)) {
-						if (this.handleMissingNodeACK(transaction)) return;
+						if (this.handleMissingNodeACK(transaction as any))
+							return;
 					}
 
 					// If the transaction was already started, we need to throw the error into the message generator
@@ -2451,11 +2452,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public handleMissingNodeACK(
 		transaction: Transaction & {
-			message: SendDataRequest | SendDataBridgeRequest;
+			message: INodeQuery;
 		},
 	): boolean {
 		const node = transaction.message.getNodeUnsafe();
 		if (!node) return false; // This should never happen, but whatever
+
+		const messagePart1 = isSendData(transaction.message)
+			? `The node did not respond after ${transaction.message.maxSendAttempts} attempts`
+			: `The node did not respond`;
 
 		if (!transaction.changeNodeStatusOnTimeout) {
 			// The sender of this transaction doesn't want it to change the status of the node
@@ -2463,8 +2468,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		} else if (node.canSleep) {
 			this.controllerLog.logNode(
 				node.id,
-				`The node did not respond after ${transaction.message.maxSendAttempts} attempts.
-It is probably asleep, moving its messages to the wakeup queue.`,
+				`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
 				"warn",
 			);
 			// Mark the node as asleep
@@ -2473,7 +2477,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			node.markAsAsleep();
 			return this.mayMoveToWakeupQueue(transaction);
 		} else {
-			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
+			const errorMsg = `${messagePart1}, it is presumed dead`;
 			this.controllerLog.logNode(node.id, errorMsg, "warn");
 
 			node.markAsDead();

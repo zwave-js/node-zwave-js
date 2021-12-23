@@ -11,7 +11,11 @@ import {
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { SendDataMulticastBridgeRequest } from "../controller/SendDataBridgeMessages";
 import { SendDataMulticastRequest } from "../controller/SendDataMessages";
-import { isSendData, SendDataMessage } from "../controller/SendDataShared";
+import {
+	isSendData,
+	isTransmitReport,
+	SendDataMessage,
+} from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { CommandQueueEvent } from "./CommandQueueMachine";
 import {
@@ -258,9 +262,10 @@ export function createTransactionMachine(
 					error: (_) => undefined,
 				}),
 				rememberCommandFailure: assign((ctx, evt: any) => {
-					// For SendData messages, a NOK callback still contains useful info we need to evaluate
+					// For messages that were sent to a node, a NOK callback still contains useful info we need to evaluate
 					if (
-						isSendData(ctx.transaction.parts.current) &&
+						(isSendData(ctx.transaction.parts.current) ||
+							isTransmitReport(evt.result)) &&
 						evt.reason === "callback NOK"
 					) {
 						return {
