@@ -3219,7 +3219,7 @@ ${handlers.length} left`,
 		// Update statistics
 		const node = msg.getNodeUnsafe();
 		let success = true;
-		if (isNodeQuery(msg)) {
+		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
 			if (!node) return;
 
