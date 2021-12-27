@@ -3204,36 +3204,43 @@ protocol version:      ${this._protocolVersion}`;
 		});
 		switch (status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_BatteryLow:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The battery level is too low!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A firmware upgrade is already in progress!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidManufacturerOrFirmwareID:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid manufacturer or firmware id!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidHardwareVersion:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid hardware version!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_NotUpgradable:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} is not upgradable!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
 				);
 			case FirmwareUpdateRequestStatus.Error_FragmentSizeTooLarge:
+				this._resetUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The chosen fragment size is too large!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
@@ -3290,8 +3297,7 @@ protocol version:      ${this._protocolVersion}`;
 			});
 
 			// Clean up
-			this._firmwareUpdateStatus = undefined;
-			this.keepAwake = false;
+			this._resetUpdateStatus();
 		} catch (e) {
 			if (
 				isZWaveError(e) &&
@@ -3473,8 +3479,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._firmwareUpdateStatus = undefined;
-		this.keepAwake = false;
+		this._resetUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3504,8 +3509,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._firmwareUpdateStatus = undefined;
-		this.keepAwake = false;
+		this._resetUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3540,8 +3544,7 @@ protocol version:      ${this._protocolVersion}`;
 					"warn",
 				);
 				// clean up
-				this._firmwareUpdateStatus = undefined;
-				this.keepAwake = false;
+				this._resetUpdateStatus();
 
 				// Notify listeners
 				this.emit(
@@ -3552,6 +3555,12 @@ protocol version:      ${this._protocolVersion}`;
 			}
 			throw e;
 		}
+	}
+
+	private _resetUpdateStatus(): void 
+	{
+		this._firmwareUpdateStatus = undefined;
+		this.keepAwake = false;
 	}
 
 	private recentEntryControlNotificationSequenceNumbers: number[] = [];
