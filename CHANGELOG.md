@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.9.2 (2021-12-27)
 ### Bugfixes
 * Correctly reset firmware update status on failed updates
 * Update the node status correctly for non-SendData commands that are targeted at nodes
