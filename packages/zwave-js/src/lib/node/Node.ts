@@ -3141,7 +3141,7 @@ protocol version:      ${this._protocolVersion}`;
 		// Check if this update is possible
 		const meta = await api.getMetaData();
 		if (!meta) {
-			this._resetFirmwareUpdateStatus();
+			this.resetFirmwareUpdateStatus();
 			throw new ZWaveError(
 				`Failed to start the update: The node did not respond in time!`,
 				ZWaveErrorCodes.Controller_NodeTimeout,
@@ -3150,7 +3150,7 @@ protocol version:      ${this._protocolVersion}`;
 
 		if (target === 0) {
 			if (!meta.firmwareUpgradable) {
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
@@ -3158,13 +3158,13 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		} else {
 			if (version < 3) {
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 				);
 			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} not found on this node!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
@@ -3208,43 +3208,43 @@ protocol version:      ${this._protocolVersion}`;
 		});
 		switch (status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_BatteryLow:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The battery level is too low!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A firmware upgrade is already in progress!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidManufacturerOrFirmwareID:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid manufacturer or firmware id!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidHardwareVersion:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid hardware version!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_NotUpgradable:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} is not upgradable!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
 				);
 			case FirmwareUpdateRequestStatus.Error_FragmentSizeTooLarge:
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The chosen fragment size is too large!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
@@ -3301,7 +3301,7 @@ protocol version:      ${this._protocolVersion}`;
 			});
 
 			// Clean up
-			this._resetFirmwareUpdateStatus();
+			this.resetFirmwareUpdateStatus();
 		} catch (e) {
 			if (
 				isZWaveError(e) &&
@@ -3483,7 +3483,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._resetFirmwareUpdateStatus();
+		this.resetFirmwareUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3513,7 +3513,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._resetFirmwareUpdateStatus();
+		this.resetFirmwareUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3548,7 +3548,7 @@ protocol version:      ${this._protocolVersion}`;
 					"warn",
 				);
 				// clean up
-				this._resetFirmwareUpdateStatus();
+				this.resetFirmwareUpdateStatus();
 
 				// Notify listeners
 				this.emit(
@@ -3561,7 +3561,7 @@ protocol version:      ${this._protocolVersion}`;
 		}
 	}
 
-	private _resetFirmwareUpdateStatus(): void {
+	private resetFirmwareUpdateStatus(): void {
 		this._firmwareUpdateStatus = undefined;
 		this.keepAwake = false;
 	}
