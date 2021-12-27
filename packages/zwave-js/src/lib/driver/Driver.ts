@@ -124,6 +124,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
+	isTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
 	TXReport,
@@ -3218,11 +3219,12 @@ ${handlers.length} left`,
 		// Update statistics
 		const node = msg.getNodeUnsafe();
 		let success = true;
-		if (isSendData(msg)) {
+		if (isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
 			if (!node) return;
 
-			if (isSendDataTransmitReport(result)) {
+			// If this is a transmit report, use it to update statistics
+			if (isTransmitReport(result)) {
 				if (!result.isOK()) {
 					success = false;
 					node.incrementStatistics("commandsDroppedTX");
@@ -3230,32 +3232,34 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsTX");
 				}
 
-				// Notify listeners about the status report
+				// Notify listeners about the status report if one was received
 				if (hasTXReport(result)) {
 					options.onTXReport?.(result.txReport);
 					// TODO: Update statistics based on the TX report
 				}
 			}
+
+			// Track and potentially update the status of the node when communication succeeds
+			if (success) {
+				if (node.canSleep) {
+					// Do not update the node status when we only responded to a nonce request
+					if (options.priority !== MessagePriority.Nonce) {
+						// If the node is not meant to be kept awake, try to send it back to sleep
+						if (!node.keepAwake) {
+							setImmediate(() =>
+								this.debounceSendNodeToSleep(node),
+							);
+						}
+						// The node must be awake because it answered
+						node.markAsAwake();
+					}
+				} else if (node.status !== NodeStatus.Alive) {
+					// The node status was unknown or dead - in either case it must be alive because it answered
+					node.markAsAlive();
+				}
+			}
 		} else {
 			this._controller?.incrementStatistics("messagesTX");
-		}
-
-		// Track and potentially update the status of the node when communication succeeds
-		if (node && success) {
-			if (node.canSleep) {
-				// Do not update the node status when we just responded to a nonce request
-				if (options.priority !== MessagePriority.Nonce) {
-					// If the node is not meant to be kept awake, try to send it back to sleep
-					if (!node.keepAwake) {
-						setImmediate(() => this.debounceSendNodeToSleep(node));
-					}
-					// The node must be awake because it answered
-					node.markAsAwake();
-				}
-			} else if (node.status !== NodeStatus.Alive) {
-				// The node status was unknown or dead - in either case it must be alive because it answered
-				node.markAsAlive();
-			}
 		}
 	}
 
