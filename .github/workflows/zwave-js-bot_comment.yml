@@ -716,33 +716,3 @@ jobs:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
           return bot.addFingerprintCreatePR({github, context});
-
-
-  # #########################################################################
-  # Explain what "help wanted" in a configuration issue means when an authorized person posts
-  # @zwave-js-bot config help wanted
-  config-help-wanted:
-    if: |
-      contains(github.event.issue.html_url, '/issues/') &&
-      contains(github.event.comment.body, '@zwave-js-bot config help wanted') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
-
-    runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [14.x] # This should be LTS
-
-    steps:
-    - name: Checkout master branch
-      uses: actions/checkout@v2
- 
-    - name: Check user's permissions to do this
-      id: check-permissions
-      uses: actions/github-script@v5
-      with:
-        github-token: ${{secrets.BOT_TOKEN}}
-        result-encoding: string
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          if (bot.checkAuthorized({github, context}))
-            return bot.configHelpWantedComment({github, context});
