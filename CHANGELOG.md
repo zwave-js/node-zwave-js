@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Correctly reset firmware update status on failed updates
+* Update the node status correctly for non-SendData commands that are targeted at nodes
+
+### Config file changes
+* Add fingerprint `0x0203:0x008d` to AEON Labs ZW141 Nano Shutter
+
+### Changes under the hood
+* Improved write performance of the value DB
+
 ## 8.9.1 (2021-12-23)
 ### Bugfixes
 * More messages to nodes are treated like `SendData` and repect/contribute the node status
