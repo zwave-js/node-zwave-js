@@ -3561,8 +3561,7 @@ protocol version:      ${this._protocolVersion}`;
 		}
 	}
 
-	private _resetFirmwareUpdateStatus(): void 
-	{
+	private _resetFirmwareUpdateStatus(): void {
 		this._firmwareUpdateStatus = undefined;
 		this.keepAwake = false;
 	}
