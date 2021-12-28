@@ -138,7 +138,7 @@ export class ZWaveLogContainer extends winston.Container {
 					path.dirname(require.main.filename),
 					`zwavejs_%DATE%.log`,
 			  )
-			: path.join(__dirname, "../../..", `zwave_%DATE%.log`),
+			: path.join(__dirname, "../../..", `zwavejs_%DATE%.log`),
 		forceConsole: false,
 	};
 
@@ -300,6 +300,8 @@ export class ZWaveLogContainer extends winston.Container {
 		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
 			datePattern: "YYYY-MM-DD",
+			createSymlink: true,
+			symlinkName: this.logConfig.filename.replace(`_%DATE%`, "_current"),
 			zippedArchive: true,
 			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
