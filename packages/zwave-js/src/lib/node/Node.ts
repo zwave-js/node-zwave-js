@@ -1224,7 +1224,16 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		// directly via the serial API
 		if (this.isControllerNode()) return;
 
-		const { resetSecurityClasses = false } = options;
+		const { resetSecurityClasses = false, waitForWakeup = true } = options;
+		// Unless desired, don't forget the information about sleeping nodes immediately, so they continue to function
+		if (
+			waitForWakeup &&
+			this.canSleep &&
+			this.supportsCC(CommandClasses["Wake Up"])
+		) {
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			await this.waitForWakeup().catch(() => {});
+		}
 
 		// preserve the node name and location, since they might not be stored on the node
 		const name = this.name;

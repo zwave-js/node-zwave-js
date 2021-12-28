@@ -287,4 +287,10 @@ export interface RefreshInfoOptions {
 	 * Default: false
 	 */
 	resetSecurityClasses?: boolean;
+
+	/**
+	 * Whether the information about sleeping nodes should only be reset when the node wakes up.
+	 * Default: true
+	 */
+	waitForWakeup?: boolean;
 }

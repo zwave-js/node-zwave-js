@@ -1597,7 +1597,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			node.id,
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo();
+				void node.refreshInfo({
+					// After a firmware update, we need to refresh the node info
+					waitForWakeup: false,
+				});
 			}, waitTime * 1000).unref(),
 		);
 	}
