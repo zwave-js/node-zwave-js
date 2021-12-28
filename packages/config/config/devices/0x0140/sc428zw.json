@@ -133,7 +133,7 @@
 			"label": "Power Threshold: Action",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 16,
+			"maxValue": 18,
 			"defaultValue": 12,
 			"unsigned": true,
 			"options": [
