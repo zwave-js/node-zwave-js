@@ -220,7 +220,7 @@ export class WakeUpCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
-		if (node.isControllerNode()) {
+		if (node.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
