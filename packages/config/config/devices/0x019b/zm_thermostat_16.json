@@ -1,0 +1,159 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "ZM THERMOSTAT 16A",
+	"description": "Floor Thermostat",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x3502",
+			"zwaveAllianceId": 4305
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "External control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off,",
+					"value": 0
+				},
+				{
+					"label": "Heat",
+					"value": 1
+				},
+				{
+					"label": "Cool",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature Control Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Minimum Setpoint Temperature",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Maximum Setpoint Temperature",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Current Setpoint",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Sensor Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": -60,
+			"maxValue": 60,
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"label": "Temperature Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 1020,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Temperature Report Hysteresis",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Meter Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 1020,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Inverted Output"
+		},
+		{
+			"#": "11",
+			"label": "Relay State Update Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 43200,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added to the network if the primary controller is in add mode.\n\nThere are two ways to add the device to a Z-Wave network.\nMethod 1: Standard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicated this for 90 seconds until a timeout occurs, or until the module has been added to the network. To start the configuration process, press the configuration button 3 times in rapid succession. The LED will light up green for 3 seconds if adding is successful.\nThe device is now ready for use with default settings.\n\nMethod 2: SmartStart (Automatic)\nSmartStart enabled products may be added to a Z-Wave network by scanning the Z-Wave QR-Code on the product if your primary controller supports SmartStart inclusion. No further action is required and the SmartStart product will be added automatically after being powered on within range of the primary controller.",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode.\n\nRemove mode is indicated on the device by a blinking green LED. It indicated this for 90 seconds until a timeout occurs, or until the module has been removed from the network. To start the configuration process, press the configuration button 3 times in rapid succession. The LED will light up green for 3 seconds if removing is successful",
+		"reset": "Press and hold the configuration button. After 3 seconds the LED will start to blink in green. After 20 seconds the LED will start to blink green rapidly for 5 seconds. You may now release the button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4305/Manual_Heatit_ZM_Thermostat%2016A.pdf"
+	}
+}

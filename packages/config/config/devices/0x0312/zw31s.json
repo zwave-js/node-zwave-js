@@ -1,23 +1,13 @@
 {
-	"manufacturer": "Minoston",
+	"manufacturer": "EvaLogik",
 	"manufacturerId": "0x0312",
-	"label": "MS13ZS",
-	"description": "Smart Dimmer Toggle Switch",
+	"label": "ZW31S",
+	"description": "S2 Smart Start Dimmer Switch",
 	"devices": [
 		{
-			"productType": "0xee00",
-			"productId": "0xee04",
-			"zwaveAllianceId": [4007, 4140]
-		},
-		{
-			"productType": "0xff00",
-			"productId": "0xff02",
-			"zwaveAllianceId": 3405
-		},
-		{
-			"productType": "0xff01",
-			"productId": "0xff02",
-			"zwaveAllianceId": 3629
+			"productType": "0xbb00",
+			"productId": "0xbb02",
+			"zwaveAllianceId": 4078
 		}
 	],
 	"firmwareVersion": {
@@ -42,28 +32,18 @@
 			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
 		},
 		{
-			"#": "7[0x01]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_local_control"
-		},
-		{
-			"#": "7[0x02]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_three_way"
-		},
-		{
-			"#": "7[0x04]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_zwave"
-		},
-		{
-			"#": "7[0x08]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_timer"
-		},
-		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "9",
-			"$import": "~/templates/master_template.json#dim_rate"
+			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds",
+			"label": "Dimming Speed (Local & Z-Wave)"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds",
+			"label": "Dimming Speed (Press & Hold)"
 		},
 		{
 			"#": "10",
@@ -81,27 +61,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Double Tap Function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Value set in parameter 18",
-					"value": 1
-				},
-				{
-					"label": "Maximum brightness set in parameter 11",
-					"value": 2
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
 		},
 		{
 			"#": "15",
@@ -110,10 +70,6 @@
 		{
 			"#": "21",
 			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
-		},
-		{
-			"#": "16",
-			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
 		},
 		{
 			"#": "18",
@@ -145,9 +101,9 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
-		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the Up or Down button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the Up or Down button three times in one second",
 		"reset": "Press and hold lower paddle for 10 seconds, then LED starts blinking, release paddle and within 2 seconds, click lower paddle 5 times\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4140/MS13ZS%20manual-20210303.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4078/ZW31Smanual-20210107-2.pdf"
 	}
 }

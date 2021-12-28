@@ -64,7 +64,6 @@
 		{
 			"#": "5",
 			"label": "Binary Sensor Report on Motion",
-			"description": "If enabled, a Binary Sensor report will be sent on Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

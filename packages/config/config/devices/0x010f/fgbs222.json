@@ -128,22 +128,22 @@
 		{
 			"#": "40[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 1: Send Scenes (Key 1x)"
+			"label": "Input 1: Send Scenes (Key Pressed 1x)"
 		},
 		{
 			"#": "40[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 1: Send Scenes (Key 2x)"
+			"label": "Input 1: Send Scenes (Key Pressed 2x)"
 		},
 		{
 			"#": "40[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 1: Send Scenes (Key 3x)"
+			"label": "Input 1: Send Scenes (Key Pressed 3x)"
 		},
 		{
 			"#": "40[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 1: Send Scenes (Key Held)"
+			"label": "Input 1: Send Scenes (Key Held Down & Released)"
 		},
 		{
 			"#": "21",
@@ -230,22 +230,22 @@
 		{
 			"#": "41[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 2: Send Scenes (Key 1x)"
+			"label": "Input 2: Send Scenes (Key Pressed 1x)"
 		},
 		{
 			"#": "41[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 2: Send Scenes (Key 2x)"
+			"label": "Input 2: Send Scenes (Key Pressed 2x)"
 		},
 		{
 			"#": "41[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 2: Send Scenes (Key 3x)"
+			"label": "Input 2: Send Scenes (Key Pressed 3x)"
 		},
 		{
 			"#": "41[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Input 2: Send Scenes (Key Held)"
+			"label": "Input 2: Send Scenes (Key Held Down & Released)"
 		},
 		{
 			"#": "24",

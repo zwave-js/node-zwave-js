@@ -1,0 +1,832 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA024",
+	"description": "MultiSensor 7",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0018",
+			"zwaveAllianceId": 4088
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Motion",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "High Temperature",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Low Temperature",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "High Humidity",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Low Humidity",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "High Luminance Level",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Low Luminance Level",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "High UV Level",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "Low UV Level",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "Air Temperature (Multilevel)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Motion Retrigger Timeout",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Motion Reset Timeout",
+			"description": "Specifies the interval after which the device will clear its status",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 3600,
+			"defaultValue": 240,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Motion Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 11,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Motion Report Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Sensor Binary Report",
+					"value": 1
+				},
+				{
+					"label": "Notification and Sensor Binary Report",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Vibration Sensor",
+			"description": "Enables vibration sensor and specifies the timeout after which the sensor will clear its status; Allowable range: 1-254 minutes",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Only send vibration triggered notifications",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Vibration Intensity Reports"
+		},
+		{
+			"#": "9",
+			"label": "Wakeup Duration",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Power Status",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Battery Powered",
+					"value": 0
+				},
+				{
+					"label": "USB Powered",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Direct Association (Motion): Basic Set Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set 0xff on triggered, 0x00 on cleared",
+					"value": 0
+				},
+				{
+					"label": "Set 0x00 on triggered, 0xff on cleared",
+					"value": 1
+				},
+				{
+					"label": "Set 0xff on motion triggered",
+					"value": 2
+				},
+				{
+					"label": "Set 0x00 on motion triggered",
+					"value": 3
+				},
+				{
+					"label": "Set 0x00 on motion cleared",
+					"value": 4
+				},
+				{
+					"label": "Set 0xff on motion cleared",
+					"value": 5
+				},
+				{
+					"label": "As configured in parameter 12",
+					"value": 6
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Direct Association (Motion): Basic Set Value (Custom)",
+			"description": "Define a custom value to be sent when motion is detected; parameter 11 must be set to follow parameter 12",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 65280,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Direct Association (Motion): Luminance Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 30000,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Direct Association (High Humidity): Basic Set Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "15",
+			"label": "Direct Association (Low Humidity): Basic Set Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "16",
+			"label": "Direct Association (High Temperature): Basic Set Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -400,
+			"maxValue": 1850,
+			"defaultValue": 750
+		},
+		{
+			"#": "17",
+			"label": "Direct Association (Low Temperature): Basic Set Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -400,
+			"maxValue": 1850,
+			"defaultValue": 600
+		},
+		{
+			"#": "18",
+			"label": "Direct Association (High Luminance): Basic Set Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 2000,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Direct Association (Low Luminance): Basic Set Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+
+		{
+			"#": "20",
+			"label": "Direct Association (High UV): Basic Set Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Direct Association (Low UV): Basic Set Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Change Threshold Reporting Reporting"
+		},
+		{
+			"#": "45",
+			"label": "Change Threshold Reporting: Check Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 240,
+			"unsigned": true
+		},
+		{
+			"#": "41",
+			"label": "Change Threshold Reporting: Temperature",
+			"description": "Defines the degree of change that will induce a report",
+			"valueSize": 1,
+			"unit": "0.1 °C/°F",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "Change Threshold Reporting: Humidity",
+			"description": "Defines the degree of change that will induce a report",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "43",
+			"label": "Change Threshold Reporting: Luminance",
+			"description": "Defines the degree of change that will induce a report",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 250,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "44",
+			"label": "Change Threshold Reporting: UV",
+			"description": "Defines the degree of change that will induce a report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "46",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Low Temperature Report",
+			"defaultValue": 1
+		},
+		{
+			"#": "48[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: High Temperature"
+		},
+		{
+			"#": "49",
+			"label": "Threshold Reporting: High Temperature Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -400,
+			"maxValue": 2120,
+			"defaultValue": 280
+		},
+		{
+			"#": "48[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: Low Temperature"
+		},
+		{
+			"#": "50",
+			"label": "Threshold Reporting: Low Temperature Limit",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -400,
+			"maxValue": 2120,
+			"defaultValue": 0
+		},
+		{
+			"#": "51",
+			"label": "Threshold Reporting: Temperature Recover Limit",
+			"valueSize": 1,
+			"unit": "0.1 °C/°F",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: High Humidity"
+		},
+		{
+			"#": "52",
+			"label": "Threshold Reporting: High Humidity Limit",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: Low Humidity"
+		},
+		{
+			"#": "53",
+			"label": "Threshold Reporting: Low Humidity Limit",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "54",
+			"label": "Threshold Reporting: Humidity Recover Limit",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: High Luminance"
+		},
+		{
+			"#": "55",
+			"label": "Threshold Reporting: High Luminance Limit",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 1000,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: Low Luminance"
+		},
+		{
+			"#": "56",
+			"label": "Threshold Reporting: Low Luminance Limit",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "57",
+			"label": "Threshold Reporting: Luminance Recover Limit",
+			"valueSize": 1,
+			"unit": "lux",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: High UV"
+		},
+		{
+			"#": "58",
+			"label": "Threshold Reporting: High UV Limit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 8,
+			"unsigned": true
+		},
+		{
+			"#": "48[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Threshold Reporting: Low UV"
+		},
+		{
+			"#": "59",
+			"label": "Threshold Reporting: Low UV Limit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+
+		{
+			"#": "60",
+			"label": "Threshold Reporting: UV Recover Limit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "111",
+			"label": "Timed Reporting Group 1: Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "101[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 1: Battery",
+			"defaultValue": 1
+		},
+		{
+			"#": "101[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 1: UV",
+			"defaultValue": 1
+		},
+		{
+			"#": "101[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 1: Temperature",
+			"defaultValue": 1
+		},
+		{
+			"#": "101[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 1: Humidity",
+			"defaultValue": 1
+		},
+		{
+			"#": "101[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 1: Luminance",
+			"defaultValue": 1
+		},
+		{
+			"#": "112",
+			"label": "Timed Reporting Group 2: Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "102[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 2: Battery"
+		},
+		{
+			"#": "102[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 2: UV"
+		},
+		{
+			"#": "102[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 2: Temperature"
+		},
+		{
+			"#": "102[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 2: Humidity"
+		},
+		{
+			"#": "102[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 2: Luminance"
+		},
+		{
+			"#": "113",
+			"label": "Timed Reporting Group 3: Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "103[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 3: Battery"
+		},
+		{
+			"#": "103[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 3: UV"
+		},
+		{
+			"#": "103[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 3: Temperature"
+		},
+		{
+			"#": "103[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 3: Humidity"
+		},
+		{
+			"#": "103[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed Reporting Group 3: Luminance"
+		},
+		{
+			"#": "39",
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"maxValue": 90,
+			"defaultValue": 50
+		},
+		{
+			"#": "64",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
+		},
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Beaming",
+			"description": "If enabled, FLiR commands will be supported after re-including the device",
+			"defaultValue": 1
+		},
+		{
+			"#": "81",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
+		},
+		{
+			"#": "82",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Motion)",
+			"defaultValue": 3
+		},
+		{
+			"#": "83",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Temperature)",
+			"defaultValue": 0
+		},
+		{
+			"#": "84",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Humidity)",
+			"defaultValue": 0
+		},
+		{
+			"#": "85",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Luminance)",
+			"defaultValue": 0
+		},
+		{
+			"#": "86",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (UV)",
+			"defaultValue": 0
+		},
+		{
+			"#": "87",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Vibration)",
+			"defaultValue": 2
+		},
+		{
+			"#": "88",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Battery)",
+			"defaultValue": 0
+		},
+		{
+			"#": "89",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Wakeup Report)",
+			"defaultValue": 8
+		},
+
+		{
+			"#": "90",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "LED Indicator Color (Communications)",
+			"defaultValue": 0
+		},
+		{
+			"#": "201",
+			"label": "Temperature Offset Value",
+			"valueSize": 2,
+			"unit": "0.1 °C/°F",
+			"minValue": -200,
+			"maxValue": 200,
+			"defaultValue": 0
+		},
+		{
+			"#": "202",
+			"label": "Humidity Offset Value",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "203",
+			"label": "Luminance Offset Value",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": -10000,
+			"maxValue": 10000,
+			"defaultValue": 0
+		},
+		{
+			"#": "204",
+			"label": "UV Offset Value",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "61[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: High Temperature"
+		},
+		{
+			"#": "61[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: High Humidity"
+		},
+		{
+			"#": "61[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: High Luminance"
+		},
+		{
+			"#": "61[0x08]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: High UV"
+		},
+		{
+			"#": "61[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: Low Temperature"
+		},
+		{
+			"#": "61[0x20]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: Low Humidity"
+		},
+		{
+			"#": "61[0x40]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: Low Luminance"
+		},
+		{
+			"#": "61[0x80]",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_out_of_limit",
+			"label": "Out-of-limit State: Low UV"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press the Action Button on the product.",
+		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. Press the Action Button on the product.",
+		"reset": "Press and hold the Action Button on product for 15-20 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4088/MultiSensor%207%20User%20manual-2.pdf"
+	}
+}

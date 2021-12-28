@@ -92,7 +92,6 @@
 		{
 			"#": "5",
 			"label": "Language",
-			"description": "Language",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

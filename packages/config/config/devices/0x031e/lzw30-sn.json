@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 4197
 		}
 	],
 	"firmwareVersion": {
@@ -493,5 +494,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "To include your on/off switch start the inclusion process on your HUB and tap the Configuration Button three (3) times.\n\nPlease Note: If this doesn't work, you can check to see if your switch is within Z-Wave Range by holding down the Configuration Button for 5-10 seconds (if it's not within range, the LED Bar will indicate Red and if it is within Range, the LED Bar will indicate Green). If your switch indicates Red, please move the switch closer to the HUB. If your switch indicates Green, please try running an Exclusion to reset your switch",
+		"exclusion": "To Exclude your switch, put your HUB in exclusion mode and press the Configuration Button three (3) times",
+		"reset": "You may factory reset the switch by holding down the Config Button for twenty (20) or more seconds. The LED Bar will turn Red and blink three (3) times to confirm. \n\nHowever, we recommend using a certified Z-Wave controller to remove the device from your network for factory resetting the switch. \n\nOnly use either of these procedures in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4197/LZW30-SN%20Manual%20-%20Inovelli%20On-Off%20Switch%20(Red%20Series)%20-%2006.28.21.pdf"
+	}
 }

@@ -1,18 +1,13 @@
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MP22Z",
-	"description": "Z-Wave Outdoor Smart Plug",
+	"label": "MS11ZS",
+	"description": "Smart Dimmer Switch",
 	"devices": [
 		{
-			"productType": "0xff00",
-			"productId": "0xff07",
-			"zwaveAllianceId": 3711
-		},
-		{
-			"productType": "0xff07",
-			"productId": "0xff03",
-			"zwaveAllianceId": 4254
+			"productType": "0x0004",
+			"productId": "0xee02",
+			"zwaveAllianceId": 4139
 		}
 	],
 	"firmwareVersion": {
@@ -20,6 +15,10 @@
 		"max": "255.255"
 	},
 	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#orientation_momentary"
+		},
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#led_indicator_four_options"
@@ -71,6 +70,14 @@
 			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
 		},
 		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#default_dim_level_0-99"
+		},
+		{
+			"#": "19",
+			"$import": "~/0x0312/templates/minoston_template.json#external_switch_type_four_options"
+		},
+		{
 			"#": "20",
 			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
 		},
@@ -83,14 +90,18 @@
 			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
 		},
 		{
-			"#": "26",
+			"#": "24",
 			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "25",
+			"$import": "~/0x0312/templates/minoston_template.json#single_tap_function"
 		}
 	],
 	"metadata": {
 		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
 		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
-		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4254/MP22ZD-manual-20210728.pdf"
+		"reset": "Press and hold lower paddle for 10 seconds, then LED starts blinking, release paddle and within 2 seconds, click lower paddle 5 times\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4139/MS11ZS%20manual-20210303.pdf"
 	}
 }

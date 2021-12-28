@@ -1,0 +1,70 @@
+{
+	"manufacturer": "EvaLogik",
+	"manufacturerId": "0x0312",
+	"label": "ZW922",
+	"description": "S2 Remote Control Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xf001",
+			"zwaveAllianceId": 4080
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Hold button",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "On at 100% brightness",
+					"value": 1
+				},
+				{
+					"label": "Always on - color per parameter 2",
+					"value": 2
+				},
+				{
+					"label": "Always on - color per parameter 3",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color_upper"
+		},
+		{
+			"#": "3",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color_lower"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the Up or Down button six times in one second.\nThe device is compatible with SmartStart\nSmartStart enabled products can be added into a Z-Wave™ network by scanning the Z-Wave™ QR Code found on the top of the outlet or the back of\nthe box with a controller providing SmartStart inclusion.No further action is required and the SmartStart product will be added automatically within\n10 minutes of being switched on and in the network vicinity",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the Up or Down button six times in one second.\nThe device is compatible with SmartStart\nSmartStart enabled products can be added into a Z-Wave™ network by scanning the Z-Wave™ QR Code found on the top of the outlet or the back of\nthe box with a controller providing SmartStart inclusion.No further action is required and the SmartStart product will be added automatically within\n10 minutes of being switched on and in the network vicinity",
+		"reset": "Tap-tap-tap’and’hold to reset, LED indicator will blink red 5 times to confirm successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4080/ZW922-manual-20210118.pdf"
+	}
+}

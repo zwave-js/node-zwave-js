@@ -1,0 +1,227 @@
+{
+	"manufacturer": "Ness Corporation Pty Ltd.",
+	"manufacturerId": "0x0189",
+	"label": "117001",
+	"description": "Z-Wave LUX PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0104",
+			"productId": "0x0301",
+			"zwaveAllianceId": 4249
+		},
+		{
+			"productType": "0x0204",
+			"productId": "0x0301",
+			"zwaveAllianceId": 4158
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Motion Retrigger Timeout",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 240,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Motion Retrigger Timeout Reset Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Restart timeout with each motion event",
+					"value": 0
+				},
+				{
+					"label": "Calculate timeout from initial motion event",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Motion Reset Timeout",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable motion clear report",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Low Battery Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"label": "Battery Reporting Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Luminance Change Threshold",
+			"valueSize": 1,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Temperature Change Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C/°F",
+			"minValue": 0,
+			"maxValue": 80,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Temperature Reporting Interval",
+			"valueSize": 1,
+			"unit": "30 minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
+		},
+		{
+			"#": "10",
+			"label": "Night Light Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10 seconds",
+					"value": 0
+				},
+				{
+					"label": "30 seconds",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Night Light with Low Ambient Light",
+			"description": "If enabled, the night light will function despite a low ambient light level"
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Tamper Alarm Reporting"
+		},
+		{
+			"#": "13",
+			"label": "Walk Test Mode Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "10 minutes",
+					"value": 1
+				},
+				{
+					"label": "30 minutes",
+					"value": 2
+				},
+				{
+					"label": "60 minutes",
+					"value": 3
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Power up the LUX Z-Wave sensor by inserting the batteries (or fit the batteries in the correct polarity).\nYou may need to refer to your Z-Wave controller’s instructions for adding devices.\n1. Put your primary Z-Wave gateway into inclusion mode, the gateway should confirm that it is waiting to add a new device,\n2. Press the Z-Wave Action button on your LUX Z-Wave sensor for 1 second.\n3. The LED on the LUX Z-Wave sensor will blink Red rapidly, followed by a solid Green LED for 1 second for successful inclusion, or a solid red LED for 1 second for a failed inclusion",
+		"exclusion": "1. Put your primary Z-Wave gateway into exclude mode, the gateway should confirm that it is waiting to remove a device,\n2. Press the Z-Wave Action button on your LUX Z-Wave sensor for 1 second.\n3. The LED on the LUX Z-Wave sensor will display a solid Green LED for 1 second after successful exclusion",
+		"reset": "To reset all LUX Z-Wave sensor settings to factory default, press and hold the Z-Wave Action button for 20 seconds and release. This will remove any previous Z- Wave network inclusion credentials and reset any user set parameters.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4158/890-493_LUX_ZWave_Manual_Rev1.0_Draft9.pdf"
+	}
+}

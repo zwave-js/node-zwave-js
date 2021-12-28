@@ -1,100 +1,72 @@
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11-04-022",
+	"label": "11 04 028",
 	"description": "Strips Drip 700",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x000b"
+			"productId": "0x000b",
+			"zwaveAllianceId": [4075, 4154, 4159, 4301, 4442, 4448]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "LED Alarm Event Reporting",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED Off",
-					"value": 0
-				},
-				{
-					"label": "LED On",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Temperature Reporting",
+			"label": "Temperature & Humidity Reporting",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Enable - change threshold reporting",
 					"value": 1
+				},
+				{
+					"label": "Enable - timed reporting of actual values",
+					"value": 2
+				},
+				{
+					"label": "Enable - timed reporting of average values",
+					"value": 3
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Temperature Reporting Unit",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
 		},
 		{
 			"#": "6",
-			"label": "Temperature Alarms",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Temperature Alarms"
 		},
 		{
 			"#": "7",
-			"label": "High Temperature Alarm Level",
-			"valueSize": 1,
+			"label": "High Temperature Threshold",
+			"valueSize": 2,
 			"unit": "°C",
 			"minValue": -20,
 			"maxValue": 80,
@@ -102,53 +74,73 @@
 		},
 		{
 			"#": "8",
-			"label": "Low Temperature Alarm Level",
-			"valueSize": 1,
+			"label": "Low Temperature Threshold",
+			"valueSize": 2,
 			"unit": "°C",
 			"minValue": -20,
-			"maxValue": 80,
+			"maxValue": 60,
 			"defaultValue": 5
 		},
 		{
-			"#": "12",
-			"label": "Leakage/Moisture Alarm",
+			"#": "26",
+			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"unit": "0.1 °C",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "27",
+			"label": "Temperature Recover Limit",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Moisture Alarm",
+			"defaultValue": 1
 		},
 		{
 			"#": "13",
-			"label": "Leakage/Moisture Alarm Level",
+			"label": "Moisture Alarm Threshold",
+			"description": "Higher value means greater amount of wetness detected",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unsigned": true
 		},
 		{
 			"#": "14",
-			"label": "Leakage/Moisture Reporting Period",
+			"label": "Moisture Alarm Reporting Interval",
 			"valueSize": 1,
 			"unit": "hours",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Moisture Reporting During Wakeups"
 		},
 		{
 			"#": "15",
-			"label": "Activate Supervision",
-			"description": "Request confirmation from the gateway that a command was received.",
+			"label": "Supervision Commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -161,70 +153,58 @@
 					"value": 0
 				},
 				{
-					"label": "Alarm Report",
+					"label": "Alarm reports only",
 					"value": 1
 				},
 				{
-					"label": "All Reports",
+					"label": "All reports",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "23",
-			"label": "Perform Leakage/Moisture Sensor Calibration",
+			"label": "Moisture Sensor Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Idle",
+					"label": "Normal operation",
 					"value": 0
 				},
 				{
-					"label": "Perform Calibration",
+					"label": "Begin calibration",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "24",
-			"label": "Temperature Offset",
+			"label": "Temperature Offset Value",
 			"valueSize": 1,
-			"unit": "°C",
+			"unit": "0.1 °C",
 			"minValue": -100,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
 		{
 			"#": "25",
-			"label": "Temperature Reporting Period",
+			"label": "Temperature Reporting Interval",
 			"valueSize": 2,
 			"unit": "minutes",
 			"minValue": 15,
 			"maxValue": 1440,
-			"defaultValue": 1440
-		},
-		{
-			"#": "26",
-			"label": "Temperature Reporting Threshold",
-			"valueSize": 1,
-			"unit": "0.1°C",
-			"minValue": 5,
-			"maxValue": 100,
-			"defaultValue": 20
-		},
-		{
-			"#": "27",
-			"label": "Temperature Hysteresis for Temperature Alarms",
-			"description": "Triggers alarm clear reports. (See parameters 7&8)",
-			"valueSize": 1,
-			"unit": "0.1°C",
-			"minValue": 5,
-			"maxValue": 100,
-			"defaultValue": 20
+			"defaultValue": 1440,
+			"unsigned": true
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Place the controller into pairing or exclude mode and perform the \"wake up\" pattern as described below.\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
+		"exclusion": "Place the controller into exclude mode and perform the \"wake up\" pattern as described below.\n1. Take the magnet and move it to the rounded edge and wait for the blink, then move the magnet away.\n2. Repeat this 3 times. A final short blink will confirm that the user-command was successful",
+		"reset": "Follow the instructions for Wake Up above, but on the 3rd repetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4301/Strips%20Drip%20700%20manual.pdf"
+	}
 }
