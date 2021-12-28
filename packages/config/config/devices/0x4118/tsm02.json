@@ -1,0 +1,122 @@
+// This is a copy of the variant with manufacturerId 0x0118
+// Apparently there is a typo in the firmware, so some devices identify as 0x4118.
+{
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x4118",
+	"label": "TSM02",
+	"description": "Slim Multi-Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002",
+			"zwaveAllianceId": [838, 839]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Light Control",
+			"maxNodes": 7
+		},
+		"2": {
+			"label": "Reports",
+			"maxNodes": 7,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Basic Set Level",
+			"description": "Allowable range: 0-99, 255",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "PIR Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 70
+		},
+		{
+			"#": "4",
+			"label": "Light Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "5",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Multi-Sensor Function Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4
+		},
+		{
+			"#": "8",
+			"label": "PIR Re-Detect Interval Time",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 127,
+			"defaultValue": 3
+		},
+		{
+			"#": "9",
+			"label": "Turn Off Light Time",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 127,
+			"defaultValue": 4
+		},
+		{
+			"#": "10",
+			"label": "Auto Report Battery Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12
+		},
+		{
+			"#": "11",
+			"label": "Auto Report Door/Window State Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12
+		},
+		{
+			"#": "12",
+			"label": "Auto Report Illumination Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12
+		},
+		{
+			"#": "13",
+			"label": "Auto Report Temperature Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12
+		}
+	]
+}

@@ -529,7 +529,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
           const body = context.payload.comment.body;
-          const match1 = /add compat flag to (?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)\s/.exec(body);
+          const match1 = /add compat flag to `?(?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)`?\s/.exec(body);
           const match2 = /```(?:jsonc?)?(?<flag>(?:.|\n|\r)*)```/.exec(body);
           if (!match1 || !match2) return {skip: true};
           return {
@@ -649,7 +649,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
           const body = context.payload.comment.body;
-          const match = /add fingerprint (?<fingerprint>0x[0-9a-f]{4}:0x[0-9a-f]{4}) to (?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)/.exec(body);
+          const match = /add fingerprint `?(?<fingerprint>0x[0-9a-f]{4}:0x[0-9a-f]{4})`? to `?(?<id>0x[0-9a-f]{4}:0x[0-9a-f]{4}:0x[0-9a-f]{4}(?::\d+\.\d+)?)`?/.exec(body);
           if (!match) return {skip: true};
           return {
             fingerprint: match.groups.fingerprint,
@@ -716,5 +716,3 @@ jobs:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
           return bot.addFingerprintCreatePR({github, context});
-
-

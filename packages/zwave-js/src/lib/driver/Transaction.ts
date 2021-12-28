@@ -48,7 +48,21 @@ export class Transaction implements Comparable<Transaction> {
 		// class will try to print the message
 		const tmp = { message: "" };
 		Error.captureStackTrace(tmp, Transaction);
-		this.stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
+		this._stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
+	}
+
+	public clone(): Transaction {
+		const ret = new Transaction(this.driver, this.options);
+		for (const prop of [
+			"_stack",
+			"creationTimestamp",
+			"changeNodeStatusOnTimeout",
+			"pauseSendThread",
+			"requestWakeUpOnDemand",
+		] as const) {
+			(ret as any)[prop] = this[prop];
+		}
+		return ret;
 	}
 
 	/** Will be resolved/rejected by the Send Thread Machine when the entire transaction is handled */
@@ -88,7 +102,10 @@ export class Transaction implements Comparable<Transaction> {
 	public tag?: any;
 
 	/** The stack trace where the transaction was created */
-	public readonly stack!: string;
+	private _stack: string;
+	public get stack(): string {
+		return this._stack;
+	}
 
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {

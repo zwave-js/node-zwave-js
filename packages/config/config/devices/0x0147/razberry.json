@@ -2,7 +2,7 @@
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
 	"label": "RaZberry",
-	"description": "Z-Wave daughtercard",
+	"description": "Z-Wave Daughtercard",
 	"devices": [
 		{
 			"productType": "0x0002",

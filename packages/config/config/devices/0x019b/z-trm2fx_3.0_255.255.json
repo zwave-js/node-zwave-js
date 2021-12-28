@@ -1,0 +1,287 @@
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "Z-TRM2fx",
+	"description": "Floor thermostat",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off. (default)",
+					"value": 0
+				},
+				{
+					"label": "Heating mode",
+					"value": 1
+				},
+				{
+					"label": "Cooling mode (not implemented)",
+					"value": 2
+				},
+				{
+					"label": "Energy saving heating mode",
+					"value": 11
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Sensor mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "F-mode, floor sensor mode",
+					"value": 0
+				},
+				{
+					"label": "A2-mode, external room sensor mode",
+					"value": 3
+				},
+				{
+					"label": "A2F-mode, external sensor with floor limitation",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Floor sensor type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10K-NTC (default)",
+					"value": 0
+				},
+				{
+					"label": "12K-NTC",
+					"value": 1
+				},
+				{
+					"label": "15K-NTC",
+					"value": 2
+				},
+				{
+					"label": "22K-NTC",
+					"value": 3
+				},
+				{
+					"label": "33K-NTC",
+					"value": 4
+				},
+				{
+					"label": "47K-NTC",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Temperature control hysteresis (DIFF I)",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5
+		},
+		{
+			"#": "5",
+			"label": "Floor minimum temperature limit (FLo)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "6",
+			"label": "Floor maximum temperature (FHi)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "7",
+			"label": "Air (A2) minimum temperature limit (ALo)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "8",
+			"label": "Air (A2) maximum temperature limit (AHi)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "9",
+			"label": "Heating mode setpoint (CO)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		},
+		{
+			"#": "10",
+			"label": "Energy saving mode setpoint (ECO)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 180
+		},
+		{
+			"#": "11",
+			"label": "Cooling setpoint (COOL)",
+			"valueSize": 2,
+			"unit": "oC",
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		},
+		{
+			"#": "12",
+			"label": "Floor sensor calibration",
+			"valueSize": 1,
+			"unit": "oC",
+			"minValue": -40,
+			"maxValue": 40,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "External sensor calibration",
+			"valueSize": 1,
+			"unit": "oC",
+			"minValue": -40,
+			"maxValue": 40,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "Temperature display",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Display setpoint temperature (default)",
+					"value": 0
+				},
+				{
+					"label": "Display measured temperature",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Button brightness - dimmed state",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50
+		},
+		{
+			"#": "16",
+			"label": "Button brightness - active state",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "17",
+			"label": "Display brightness - dimmed state",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50
+		},
+		{
+			"#": "18",
+			"label": "Display brightness - active state",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "19",
+			"label": "Temperature report interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60
+		},
+		{
+			"#": "20",
+			"label": "Temperature report hysteresis",
+			"valueSize": 1,
+			"unit": "oC",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10
+		},
+		{
+			"#": "21",
+			"label": "Meter report interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60
+		},
+		{
+			"#": "22",
+			"label": "Meter report delta value",
+			"valueSize": 1,
+			"unit": "kWh/10",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10
+		}
+	],
+	"compat": {
+		// Stop this device from flooding the network with hundreds of invalid reports
+		"skipConfigurationInfoQuery": true
+	}
+}

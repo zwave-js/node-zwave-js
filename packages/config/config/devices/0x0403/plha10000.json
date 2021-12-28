@@ -1,0 +1,118 @@
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "PLHA10000",
+	"description": "Z-Wave 230V Relay Module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3679
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Relay 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Relay 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Relay 1: Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				}
+			],
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Relay 1: Auto Off Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			],
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"label": "Relay 1: State After Power Failure"
+		},
+		{
+			"#": "2",
+			"label": "Relay 2: Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch",
+					"value": 1
+				}
+			],
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Relay 2: Auto Off Time",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			],
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"label": "Relay 2: State After Power Failure"
+		}
+	],
+	"metadata": {
+		"inclusion": "Activate the inclusion mode on the gateway. (for further details please refer to the gateways manual) \n\nPress the \"+\" key (Add / Inclusion) in your Z-Wave app and follow the instructions to set the gateway to Inclusion mode.\nThe unit supports SmartStart function, where inclusion is initiated automatically on power-on, and repeated at dynamic intervals for as long as the device is not included into a Z-Wave network. Z-Wave SmartStart is based on the embedded SDK 6.8x and requires related gateway software components. The LED starts flashing.\n\nAlternative Inclusion:\nIf the automatic inclusion did not work, instead press the Link button 3 times quickly (within 1.5 seconds) to start the inclusion on the device.",
+		"exclusion": "Activate the exclusion mode at the gateway. (for further details please refer to the gateways manual) \n\nPress the \"-\" key (Remove / Exclusion) in your Z-Wave app and follow the instructions to set the gateway to exclusion mode.\n\nPress the Link button 3 times quickly (within 1.5 seconds) to start the exclusion on the device",
+		"reset": "Press the Link button 3 times quickly (within 1.5 seconds).\nPress quickly (within 1 second)\na fourth time and press and hold the Link button for at least 5 seconds.\nThe button is now reset to factory settings.\n\nHint: \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable. \nIf the device is set to factory default, the status is set to \"not included\" and the association settings and possible configurations are reset to default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3679/ABUS_PLHA10000_BDA_EN_1.1.pdf"
+	}
+}

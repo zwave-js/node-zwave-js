@@ -15,10 +15,7 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
-import {
-	isSendData,
-	isSendDataTransmitReport,
-} from "../controller/SendDataShared";
+import { isSendData, isTransmitReport } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
 import type { Driver, SendCommandOptions } from "./Driver";
 import { sendDataErrorToZWaveError } from "./StateMachineShared";
@@ -65,13 +62,12 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 			throw e;
 		}
 
-		// If the sent message was a SendData message that had a NOK callback,
-		// we now need to throw because the callback was passed through so we could inspect it.
-		if (
-			isSendData(msg) &&
-			isSendDataTransmitReport(result) &&
-			!result.isOK()
-		) {
+		// If the message was sent to a node and came back with a NOK callback,
+		// we want to inspect the callback, for example to look at TX statistics
+		// or update the node status.
+		//
+		// We now need to throw because the callback was passed through so we could inspect it.
+		if (isTransmitReport(result) && !result.isOK()) {
 			// Throw the message in order to short-circuit all possible generators
 			throw result;
 		}
@@ -125,13 +121,10 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 		// Step 1: Acquire a nonce
 		const secMan = driver.securityManager!;
 		const nodeId = msg.command.nodeId;
-		let nonceId: number;
 
 		// Try to get a free nonce before requesting a new one
-		const freeNonce = secMan.getFreeNonce(nodeId);
-		if (freeNonce) {
-			nonceId = secMan.getNonceId(freeNonce);
-		} else {
+		let nonce: Buffer | undefined = secMan.getFreeNonce(nodeId);
+		if (!nonce) {
 			// No free nonce, request a new one
 			const cc = new SecurityCCNonceGet(driver, {
 				nodeId: nodeId,
@@ -153,22 +146,11 @@ export const secureMessageGeneratorS0: MessageGeneratorImplementation =
 					ZWaveErrorCodes.SecurityCC_NoNonce,
 				);
 			}
-			const nonce = nonceResp.nonce;
-			// and store it
-			nonceId = secMan.getNonceId(nonce);
-			secMan.setNonce(
-				{
-					issuer: nodeId,
-					nonceId: nonceId,
-				},
-				{ nonce, receiver: driver.controller.ownNodeId! },
-				// The nonce is reserved for this command
-				{ free: false },
-			);
+			nonce = nonceResp.nonce;
 		}
+		msg.command.nonce = nonce;
 
 		// Now send the actual secure command
-		msg.command.nonceId = nonceId;
 		return yield* simpleMessageGenerator(driver, msg, onMessageSent);
 	};
 
@@ -335,7 +317,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 						if (e instanceof Error) {
 							// There was an actual error, reject the transaction
 							resultPromise.reject(e);
-						} else if (isSendDataTransmitReport(e) && !e.isOK()) {
+						} else if (isTransmitReport(e) && !e.isOK()) {
 							// The generator was prematurely ended by throwing a NOK transmit report.
 							// If this cannot be handled (e.g. by moving the messages to the wakeup queue), we need
 							// to treat this as an error

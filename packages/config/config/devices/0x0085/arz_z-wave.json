@@ -1,0 +1,85 @@
+{
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ARZ Z-Wave",
+	"description": "Roller Shutter",
+	"devices": [
+		{
+			// This is the Z-Wave Plus variant
+			"productType": "0x0003",
+			"productId": "0x0011",
+			"zwaveAllianceId": [2571, 2888]
+		},
+		{
+			// ARZ 1.1 (?)
+			"productType": "0x0003",
+			"productId": "0x0111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Repeat",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Multilevel Switch Repeat",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "12",
+			"label": "Calibration",
+			"description": "To calibrate, first select Discalibrated, then Calibrated",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibrated",
+					"value": 1
+				},
+				{
+					"label": "Discalibrated",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Response to Basic Set (0xff)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fully open",
+					"value": 1
+				},
+				{
+					"label": "Previous position",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Autoinclusion - This feature allow you to add hard to reach devices to Z-Wave network. 3-times ON and OFF the power roller shutter (OFF-ON-OFF-ON-OFF-ON) causes the introduction of roller shutter to Autoinclusion mode. Please note that the procedure has been started the time between on and off can not exceed 20s. Autoinclusion mode is activated for a maximum of 10 minutes. During this time, we can add an awning to any Z-Wave controller running in the Include procedure.\n\nInclude - This function allow you to add roller shutter to the network Z-Wave. Follow the procedur adding device to the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the roller shutter for 1 second",
+		"exclusion": "Exclude - This function allow you to remove roller shutter from the network Z-Wave. Follow the procedur removing device from the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the roller shutter for 1 second. Function removes information only about newtork Z-Wave",
+		"reset": "Device Reset Locally – This function allows you to reset the Z-Wave network without the use of Z-Wave controller. Press 5 times the programming button P fast, the roller shutter was removed from the Z-Wave network, restore the default parameters, name and locations. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2571/170307%20ARZ%20Z-WAVE%20User%20Manual.pdf"
+	}
+}

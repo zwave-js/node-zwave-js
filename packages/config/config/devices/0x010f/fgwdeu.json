@@ -244,47 +244,36 @@
 			"defaultValue": 600
 		},
 		{
-			"#": "40",
-			"label": "First button – scenes sent",
-			"description": "determines which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no scenes",
-					"value": 0
-				},
-				{
-					"label": "Key pressed once",
-					"value": 1
-				},
-				{
-					"label": "Key pressed twice",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key held down and released",
-					"value": 8
-				}
-			]
+			"#": "40[0x01]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
 		},
 		{
-			"#": "41",
-			"label": "Second button – scenes sent",
-			"description": "determines which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": true
+			"#": "40[0x02]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+		},
+		{
+			"#": "40[0x04]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
 		},
 		{
 			"#": "60",

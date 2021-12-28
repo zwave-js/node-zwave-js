@@ -436,18 +436,20 @@ The message priority must one of the following enum values, which are sorted fro
 
 ```ts
 enum MessagePriority {
-	// Handshake messages have the highest priority because they are part of other transactions
-	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
-	//
+	// Outgoing nonces have the highest priority because they are part of other transactions
+	// which may already be in progress.
 	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
-	Handshake = 0,
+	Nonce = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
-	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
+	// Supervision responses must be prioritized over other messages because the nodes requesting them
+	// will get impatient otherwise.
+	Supervision,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
 	WakeUp,
@@ -534,11 +536,11 @@ enum RssiError {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
+declare enum ProtocolDataRate {
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
 }
 ```
 

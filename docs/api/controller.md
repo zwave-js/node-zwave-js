@@ -601,12 +601,32 @@ Creates a backup of the NVM and returns the raw data as a Buffer. The optional a
 > [!NOTE] `backupNVMRaw` automatically turns the Z-Wave radio on/off during the backup.
 
 ```ts
+restoreNVM(
+	nvmData: Buffer,
+	convertProgress?: (bytesRead: number, total: number) => void,
+	restoreProgress?: (bytesWritten: number, total: number) => void,
+): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`.
+
+?> If the given buffer is in a different NVM format, it is **converted automatically**. If the conversion is not supported, the operation fails.
+
+The optional `convertProgress` and `restoreProgress` callbacks can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVM` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
+
+```ts
 restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>
 ```
 
 Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
 
 > [!NOTE] `restoreNVMRaw` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] The given buffer is **NOT** checked for compatibility with the current stick. To have Z-Wave JS do that, use the `restoreNVM` method instead.
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 

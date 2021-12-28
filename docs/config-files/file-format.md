@@ -37,17 +37,20 @@ Each device in the Z-Wave standard is identified by its product type and product
 
 ## `firmwareVersion`
 
-Since different firmware versions of a device may have different config params, you must specify the firmware range for each config file. A config file that is valid from version `2.0` to `4.75` would have the following `firmwareVersion` entry:
+While it is possible to specify the firmware version covered by a file, doing so is deprecated. To define parameters that have changed over time, use [conditional parameters](config-files/conditional-settings.md). Separate files split by firmware should only be used in exceptional cases where a firmware split identifies a different device or where the parameter changes from one version to another are so different as to be impractical to represent with conditional parameters.
+
+The default `min` version is `0.0` and the default `max` version is `255.255`. Splitting device files by firmware version will only be allowed in exceptional cases, and only with developer approval.
+
+`firmwareVersion` entry:
 
 ```json
 "firmwareVersion": {
-	"min": "2.0",
-	"max": "4.75"
+	"min": "0.0",
+	"max": "255.255"
 }
 ```
 
-The default `min` version is `0.0` and the default `max` version is `255.255`.
-All other firmware ranges should be reflected in the filename. This also means that `0.0-` and `-255.255` should not be part of the filename, as they are implied.
+If a range other than 0.0-255.255 is used, the firmware ranges should be reflected in the filename. This also means that `0.0-` and `-255.255` should not be part of the filename, as they are implied.
 
 > [!NOTE]
 > Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.

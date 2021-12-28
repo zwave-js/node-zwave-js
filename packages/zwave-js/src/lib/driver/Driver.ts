@@ -124,6 +124,7 @@ import {
 	isSendData,
 	isSendDataSinglecast,
 	isSendDataTransmitReport,
+	isTransmitReport,
 	SendDataMessage,
 	TransmitOptions,
 	TXReport,
@@ -137,7 +138,8 @@ import {
 	MessageType,
 } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
-import { isNodeQuery } from "../node/INodeQuery";
+import { isSuccessIndicator } from "../message/SuccessIndicator";
+import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
@@ -531,7 +533,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				rejectTransaction: (transaction, error) => {
 					// If a node failed to respond in time, it might be sleeping
 					if (this.isMissingNodeACK(transaction, error)) {
-						if (this.handleMissingNodeACK(transaction)) return;
+						if (this.handleMissingNodeACK(transaction as any))
+							return;
 					}
 
 					// If the transaction was already started, we need to throw the error into the message generator
@@ -1594,7 +1597,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			node.id,
 			setTimeout(() => {
 				this.retryNodeInterviewTimeouts.delete(node.id);
-				void node.refreshInfo();
+				void node.refreshInfo({
+					// After a firmware update, we need to refresh the node info
+					waitForWakeup: false,
+				});
 			}, waitTime * 1000).unref(),
 		);
 	}
@@ -2450,11 +2456,15 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public handleMissingNodeACK(
 		transaction: Transaction & {
-			message: SendDataRequest | SendDataBridgeRequest;
+			message: INodeQuery;
 		},
 	): boolean {
 		const node = transaction.message.getNodeUnsafe();
 		if (!node) return false; // This should never happen, but whatever
+
+		const messagePart1 = isSendData(transaction.message)
+			? `The node did not respond after ${transaction.message.maxSendAttempts} attempts`
+			: `The node did not respond`;
 
 		if (!transaction.changeNodeStatusOnTimeout) {
 			// The sender of this transaction doesn't want it to change the status of the node
@@ -2462,8 +2472,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		} else if (node.canSleep) {
 			this.controllerLog.logNode(
 				node.id,
-				`The node did not respond after ${transaction.message.maxSendAttempts} attempts.
-It is probably asleep, moving its messages to the wakeup queue.`,
+				`${messagePart1}. It is probably asleep, moving its messages to the wakeup queue.`,
 				"warn",
 			);
 			// Mark the node as asleep
@@ -2472,7 +2481,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			node.markAsAsleep();
 			return this.mayMoveToWakeupQueue(transaction);
 		} else {
-			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
+			const errorMsg = `${messagePart1}, it is presumed dead`;
 			this.controllerLog.logNode(node.id, errorMsg, "warn");
 
 			node.markAsDead();
@@ -2637,7 +2646,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Handshake,
+							priority: MessagePriority.Nonce,
 						});
 					},
 					sendSegmentsComplete: async () => {
@@ -2652,7 +2661,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 						});
 						await this.sendCommand(cc, {
 							maxSendAttempts: 1,
-							priority: MessagePriority.Handshake,
+							priority: MessagePriority.Nonce,
 						});
 					},
 				},
@@ -2701,7 +2710,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				});
 				await this.sendCommand(cc, {
 					maxSendAttempts: 1,
-					priority: MessagePriority.Handshake,
+					priority: MessagePriority.Nonce,
 				});
 			}
 		}
@@ -3213,11 +3222,12 @@ ${handlers.length} left`,
 		// Update statistics
 		const node = msg.getNodeUnsafe();
 		let success = true;
-		if (isSendData(msg)) {
+		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
 			if (!node) return;
 
-			if (isSendDataTransmitReport(result)) {
+			// If this is a transmit report, use it to update statistics
+			if (isTransmitReport(result)) {
 				if (!result.isOK()) {
 					success = false;
 					node.incrementStatistics("commandsDroppedTX");
@@ -3225,32 +3235,34 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsTX");
 				}
 
-				// Notify listeners about the status report
+				// Notify listeners about the status report if one was received
 				if (hasTXReport(result)) {
 					options.onTXReport?.(result.txReport);
 					// TODO: Update statistics based on the TX report
 				}
 			}
+
+			// Track and potentially update the status of the node when communication succeeds
+			if (success) {
+				if (node.canSleep) {
+					// Do not update the node status when we only responded to a nonce request
+					if (options.priority !== MessagePriority.Nonce) {
+						// If the node is not meant to be kept awake, try to send it back to sleep
+						if (!node.keepAwake) {
+							setImmediate(() =>
+								this.debounceSendNodeToSleep(node),
+							);
+						}
+						// The node must be awake because it answered
+						node.markAsAwake();
+					}
+				} else if (node.status !== NodeStatus.Alive) {
+					// The node status was unknown or dead - in either case it must be alive because it answered
+					node.markAsAlive();
+				}
+			}
 		} else {
 			this._controller?.incrementStatistics("messagesTX");
-		}
-
-		// Track and potentially update the status of the node when communication succeeds
-		if (node && success) {
-			if (node.canSleep) {
-				// Do not update the node status when we just responded to a nonce request
-				if (options.priority !== MessagePriority.Handshake) {
-					// If the node is not meant to be kept awake, try to send it back to sleep
-					if (!node.keepAwake) {
-						this.debounceSendNodeToSleep(node);
-					}
-					// The node must be awake because it answered
-					node.markAsAwake();
-				}
-			} else if (node.status !== NodeStatus.Alive) {
-				// The node status was unknown or dead - in either case it must be alive because it answered
-				node.markAsAlive();
-			}
 		}
 	}
 
@@ -3324,8 +3336,8 @@ ${handlers.length} left`,
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
-			// Handshake messages are meant to be sent immediately
-			options.priority !== MessagePriority.Handshake
+			// Nonces have to be sent immediately
+			options.priority !== MessagePriority.Nonce
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -3383,7 +3395,37 @@ ${handlers.length} left`,
 		}
 
 		try {
-			return (await resultPromise) as TResponse;
+			const result = (await resultPromise) as TResponse;
+
+			// If this was a successful non-nonce message to a sleeping node, make sure it goes to sleep again
+			let maybeSendToSleep: boolean;
+			if (isSendData(msg)) {
+				// For SendData messages, make sure the message is not a nonce
+				maybeSendToSleep =
+					options.priority !== MessagePriority.Nonce &&
+					// And that the result is either a response from the node
+					// or a transmit report indicating success
+					result &&
+					(result.functionType ===
+						FunctionType.BridgeApplicationCommand ||
+						result.functionType ===
+							FunctionType.ApplicationCommand ||
+						(isSendDataTransmitReport(result) && result.isOK()));
+			} else {
+				// For other messages to the node, just check for successful completion. If the callback is not OK,
+				// we might not be able to communicate with the node. Sending another message is not a good idea.
+				maybeSendToSleep =
+					isNodeQuery(msg) &&
+					result &&
+					isSuccessIndicator(result) &&
+					result.isOK();
+			}
+
+			if (maybeSendToSleep && node && node.canSleep && !node.keepAwake) {
+				setImmediate(() => this.debounceSendNodeToSleep(node!));
+			}
+
+			return result;
 		} catch (e) {
 			if (isZWaveError(e)) {
 				if (
@@ -3685,10 +3727,9 @@ ${handlers.length} left`,
 	private mayMoveToWakeupQueue(transaction: Transaction): boolean {
 		const msg = transaction.message;
 		switch (true) {
-			// Pings and handshake responses will block the send queue until wakeup,
-			// so they must be dropped
+			// Pings and nonces will block the send queue until wakeup, so they must be dropped
 			case messageIsPing(msg):
-			case transaction.priority === MessagePriority.Handshake:
+			case transaction.priority === MessagePriority.Nonce:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:

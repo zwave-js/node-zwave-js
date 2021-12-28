@@ -70,7 +70,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Power Report Threshhold",
+			"label": "Power Report Threshold (Scene)",
 			"description": "Power consumption at which to send a scene activation set command",
 			"valueSize": 2,
 			"unit": "W",
@@ -147,12 +147,14 @@
 		},
 		{
 			"#": "19",
-			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval",
+			"label": "Threshold Check Interval",
+			"description": "Defines the frequency at which the automatic reporting thresholds are evaluated",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
