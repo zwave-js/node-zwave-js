@@ -184,24 +184,37 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
 		// There are a few exceptions:
 		// 1. Pings may be used to determine whether a node is really asleep.
-		// 2. Responses to handshake requests must always be sent, because some sleeping nodes may try to send us encrypted messages.
+		// 2. Responses to nonce requests must be sent independent of the node status, because some sleeping nodes may try to send us encrypted messages.
 		//    If we don't send them, they block the send queue
 		// 3. Nodes that can sleep but do not support wakeup: https://github.com/zwave-js/node-zwave-js/discussions/1537
 		//    We need to try and send messages to them even if they are asleep, because we might never hear from them
 
-		// 3.
-		if (nextTransaction.priority === MessagePriority.Handshake) return true;
+		// While the queue is busy, we may not start any transaction, except nonce responses to the node we're currently communicating with
+		if (meta.state.matches("busy")) {
+			if (nextTransaction.priority === MessagePriority.Nonce) {
+				for (const active of ctx.activeTransactions.values()) {
+					if (
+						active.transaction.message.getNodeId() ===
+						nextTransaction.message.getNodeId()
+					) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
 
-		// We may not start any non-handshake transaction while the queue is busy
-		if (meta.state.matches("busy")) return false;
+		// While not busy, always reply to nonce requests
+		if (nextTransaction.priority === MessagePriority.Nonce) return true;
+		// And send pings
+		if (messageIsPing(message)) return true;
+		// Or controller messages
+		if (!targetNode) return true;
 
-		// 1./2.
 		return (
-			!targetNode ||
 			targetNode.status !== NodeStatus.Asleep ||
 			(!targetNode.supportsCC(CommandClasses["Wake Up"]) &&
-				targetNode.interviewStage >= InterviewStage.NodeInfo) ||
-			messageIsPing(message)
+				targetNode.interviewStage >= InterviewStage.NodeInfo)
 		);
 	},
 	hasNoActiveTransactions: (ctx) => ctx.activeTransactions.size === 0,
@@ -285,7 +298,7 @@ export function createSendThreadMachine(
 
 		// Now we know what to do with the transactions
 		queue.remove(...dropQueued, ...requeue);
-		queue.add(...requeue);
+		queue.add(...requeue.map((t) => t.clone()));
 
 		return [
 			assign((ctx: SendThreadContext) => ({
@@ -449,7 +462,7 @@ export function createSendThreadMachine(
 						trigger: { target: "idle" },
 					},
 				},
-				// While busy, only handshake responses may be sent
+				// While busy, only nonces may be sent
 				busy: {
 					id: "busy",
 					always: [

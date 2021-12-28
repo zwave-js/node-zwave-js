@@ -719,6 +719,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 							groupId: group,
 							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 						});
+						// refresh the associations - don't trust that it worked
+						await mcAPI.getGroup(group);
 					}
 
 					await assocAPI.addNodeIds(group, ownNodeId);
@@ -818,6 +820,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 								groupId: group,
 								nodeIds: [ownNodeId],
 							});
+							// refresh the associations - don't trust that it worked
+							await assocAPI.getGroup(group);
 						}
 					}
 

@@ -310,6 +310,20 @@
 				"manual": {
 					"type": "string",
 					"description": "A link to the device manual"
+				},
+				"comments": {
+					"oneOf": [
+						{
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/comment"
+							},
+							"minItems": 1
+						},
+						{
+							"$ref": "#/definitions/comment"
+						}
+					]
 				}
 			},
 			"additionalProperties": false,
@@ -572,6 +586,21 @@
 					"required": ["#", "$import"]
 				}
 			]
+		},
+		"comment": {
+			"type": "object",
+			"properties": {
+				"level": {
+					"type": "string",
+					"enum": ["info", "warning", "error"]
+				},
+				"text": {
+					"type": "string",
+					"description": "The actual comment"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["level", "text"]
 		}
 	}
 }

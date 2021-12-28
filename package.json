@@ -30,8 +30,8 @@
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
-    "@alcalzone/jsonl-db": "^2.2.0",
-    "@alcalzone/release-script": "~3.4.1",
+    "@alcalzone/jsonl-db": "^2.4.0",
+    "@alcalzone/release-script": "~3.4.2",
     "@alcalzone/release-script-plugin-lerna": "~3.4.1",
     "@babel/core": "^7.16.0",
     "@babel/plugin-proposal-class-properties": "*",
@@ -53,6 +53,7 @@
     "@typescript-eslint/parser": "^5.5.0",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/nvmedit": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
     "ansi-colors": "^4.1.1",
@@ -112,7 +113,7 @@
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
     "ts": "node -r esbuild-register",
-    "update-sdk": "yarn dlx @yarnpkg/sdks vscode"
+    "nvmedit": "yarn ts packages/nvmedit/src/cli.ts"
   },
   "readme": "README.md",
   "config": {
@@ -120,5 +121,5 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "packageManager": "yarn@3.1.0"
+  "packageManager": "yarn@3.1.1"
 }

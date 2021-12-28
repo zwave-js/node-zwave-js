@@ -1,4 +1,5 @@
 export * from "./capabilities/CommandClasses";
+export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/NodeInfo";
 export * from "./capabilities/Protocols";
 export * from "./consts";

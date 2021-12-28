@@ -13,6 +13,9 @@
 			"path": "../maintenance/tsconfig.build.json"
 		},
 		{
+			"path": "../nvmedit/tsconfig.build.json"
+		},
+		{
 			"path": "../serial/tsconfig.build.json"
 		},
 		{

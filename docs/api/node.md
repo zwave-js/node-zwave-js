@@ -158,14 +158,6 @@ isControllerNode(): boolean
 
 This is a little utility function to check if this node is the controller.
 
-### `isAwake`
-
-```ts
-isAwake(): boolean
-```
-
-Returns whether the node is currently assumed awake.
-
 ### `hasSecurityClass`
 
 ```ts
@@ -181,6 +173,16 @@ getHighestSecurityClass(): SecurityClass | undefined
 ```
 
 Returns the highest security class this node was granted or `undefined` if that information isn't known yet. This can be used to distinguish whether a node is communicating with S2, S0 or insecure.
+
+### `waitForWakeup`
+
+```ts
+waitForWakeup(): Promise<void>
+```
+
+Returns a promise that resolves when the node wakes up the next time or immediately if the node is already awake.
+
+> [!WARNING] This will throw if the node does not support wakeup or is not a sleeping node.
 
 ### `refreshInfo`
 
@@ -199,6 +201,12 @@ interface RefreshInfoOptions {
 	 * Default: false
 	 */
 	resetSecurityClasses?: boolean;
+
+	/**
+	 * Whether the information about sleeping nodes should only be reset when the node wakes up.
+	 * Default: true
+	 */
+	waitForWakeup?: boolean;
 }
 ```
 
@@ -813,7 +821,7 @@ The Z-Wave protocol version this node implements.
 <!-- #import ProtocolVersion from "zwave-js" -->
 
 ```ts
-enum ProtocolVersion {
+declare enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
 	"4.2x / 5.0x" = 2,

@@ -1,3 +1,4 @@
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { num2hex } from "./strings";
 
 /** Object.keys, but with `(keyof T)[]` as the return type */
@@ -8,7 +9,7 @@ export function keysOf<T>(obj: T): (keyof T)[] {
 /** Returns a subset of `obj` that contains only the given keys */
 export function pick<T extends Record<any, any>, K extends keyof T>(
 	obj: T,
-	keys: K[],
+	keys: readonly K[],
 ): Pick<T, K> {
 	const ret = {} as Pick<T, K>;
 	for (const key of keys) {
@@ -87,6 +88,23 @@ export function mergeDeep(
 	return target;
 }
 
+/**
+ * Creates a deep copy of the given object
+ */
+export function cloneDeep<T>(source: T): T {
+	if (isArray(source)) {
+		return source.map((i) => cloneDeep(i)) as any;
+	} else if (isObject(source)) {
+		const target: any = {};
+		for (const [key, value] of Object.entries(source)) {
+			target[key] = cloneDeep(value);
+		}
+		return target;
+	} else {
+		return source;
+	}
+}
+
 /** Pads a firmware version string, so it can be compared with semver */
 export function padVersion(version: string): string {
 	if (version.split(".").length === 3) return version;
@@ -118,4 +136,8 @@ export async function discreteBinarySearch(
 		if (!result) return undefined;
 	}
 	return min;
+}
+
+export function sum(values: number[]): number {
+	return values.reduce((acc, cur) => acc + cur, 0);
 }

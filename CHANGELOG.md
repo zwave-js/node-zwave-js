@@ -4,6 +4,84 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 8.9.2 (2021-12-27)
+### Bugfixes
+* Correctly reset firmware update status on failed updates
+* Update the node status correctly for non-SendData commands that are targeted at nodes
+
+### Config file changes
+* Add fingerprint `0x0203:0x008d` to AEON Labs ZW141 Nano Shutter
+
+### Changes under the hood
+* Improved write performance of the value DB
+
+## 8.9.1 (2021-12-23)
+### Bugfixes
+* More messages to nodes are treated like `SendData` and repect/contribute the node status
+* When changing the type of a lifeline association, the removed association is now also deleted from cache
+* Fixed an issue where the send queue would get stuck after aborting an ongoing transmission
+
+### Config file changes
+* Clarify parameter function for Aeotec Smart Switch 7
+* Add Parameter 17 to Zen71 Switch (firmware dependent)
+
+### Changes under the hood
+* Support adding comments to devices
+
+## 8.9.0 (2021-12-22)
+### Features
+* Add support for `Door Lock Logging CC`
+* Added a CLI tool to edit the NVM of controllers with SDK 6.61 (500 series) through 7.17.0 (700 series)
+* Added the controller method `restoreNVM` which automatically converts an NVM backup to the target format before restoring it.
+
+### Bugfixes
+* Make sure that `encodePartial` returns an unsigned int
+* Send nodes to sleep again after successful response
+* Reuse S0 nonce for the lifetime of a CC instance
+* Do not send `Supervision Reports` when another transaction is active
+* Use the last 10 sequence numbers to check for duplicate S2 messages
+* Fix computation of neighbor discovery timeout
+* Skip CC interview step for the controller node
+* Correct error message when SmartStart isn't supported
+* Send battery nodes to sleep after all message types targeting them, not only `SendData` which expect a response
+* Disallow Node.js releases that are dev previews or don't support subpath export patterns
+* Fixed a crash that happened when an in-flight message expired
+* Don't query all security classes if the highest one is known, e.g. directly after the inclusion
+* Errors during Serial API command execution are now properly forwarded and no longer stall the communication
+* Security S0 nonce handling was improved to avoid nonces timing out before first use
+* When waiting for a reply from a node, nonce requests from other nodes are queued instead of handled immediately. Especially with the current 700 series issues, this should avoid some iterruptions in the communication.
+* Interpret the callback status for the `SetSUCNodeID` command correctly
+* Update the cached SUC node id after self-promotion
+
+### Config file changes
+* Added metadata for HS-WX300
+* Several units and re-trigger parameter 5 default on ZP3111-5
+* Additional Product ID for HS-WX300
+* Update Keemple Smart Radiator
+* Add metadata to POPP Smart Radiator
+* Add product ID `0x0164` to SimonTech Roller Blind
+* Deprecate firmware version file splits, prefer conditionals
+* Fix typo in param labels
+* Clean up configuration and correct param ranges for Steinel XLED Home 2
+* Clean up and consolidate ARZ Roller Shutters
+* Add double tap support to GE/Jasco 45609
+* Fixed a typo in `master_template` and correct `MP21ZD` options
+* Correct params for Fibaro FGWP102 FW 3.2
+* Clarify dim level parameter label for GE/Jasco 26932 / 26933 / ZW3008
+* Add fingerprint for AU/NZ model of Aeotec ZW141
+* Add fingerprint `0x0100:0x400a` to Fibargroup FGD211
+* Add metadata for GE/Jasco 46202
+* Add ABUS PLHA10000
+* Add fingerprint `0x0404:0x3000` to FIBARO FGS214
+* Add configuration for Smartly Wheel Controller
+* Update Z-Uno definition
+* Treat Basic Set as event for ZW15S
+* Correct parameters 40 & 42, Qubino ZMNHTD
+* Correct valueSize for parameter 3, Aeotec ZWA039
+
+### Changes under the hood
+* Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.
+
 ## 8.8.3 (2021-12-03)
 ### Bugfixes
 * Temporarily revert the changes to the outgoing message handling, which fails on some edge cases

@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Dim Level",
+			"label": "Associated Dim Level",
 			"description": "Brightness of associated light(s)",
 			"valueSize": 1,
 			"minValue": 0,

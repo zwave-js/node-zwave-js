@@ -1,3 +1,4 @@
+import { ControllerCapabilityFlags } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
@@ -12,14 +13,6 @@ import {
 	messageTypes,
 	priority,
 } from "../message/Message";
-
-enum ControllerCapabilityFlags {
-	Secondary = 1 << 0, // Controller is a secondary
-	OnOtherNetwork = 1 << 1, // Controller is using a home ID from another network
-	SISPresent = 1 << 2, // There's a SUC id server (SIS) on the network
-	WasRealPrimary = 1 << 3, // Before the SIS was added, the controller was the primary
-	SUC = 1 << 4, // Controller is a static update controller (SUC)
-}
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)

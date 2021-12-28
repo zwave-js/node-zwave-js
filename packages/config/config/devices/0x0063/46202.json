@@ -103,9 +103,9 @@
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker)",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker)",
-		"reset": "1. Quickly press ON (top) button three times then immediately press the OFF (Bottom) button three times. The LED will flash ON/OFF five times when completed successfully. Note: This should only be used if your network’s primary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4157/46202%20QSG%20v5.pdf"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the toggle.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle.",
+		"reset": "Quickly press ON (up) button three times, then immediately press the OFF (down) button three times.",
+		"manual": "https://byjasco.com/media/manuals/46202-QSG-v1.pdf"
 	}
 }

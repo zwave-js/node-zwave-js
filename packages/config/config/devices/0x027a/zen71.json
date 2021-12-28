@@ -88,6 +88,27 @@
 		{
 			"#": "16",
 			"$import": "templates/zooz_template.json#association_reports"
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion >= 10.0",
+			"label": "Local Inclusion/Exclusion/LED Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {

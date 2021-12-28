@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/maintenance",
-  "version": "8.8.1",
+  "version": "8.9.2",
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],
@@ -26,7 +26,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=12.22.2 <16.9.0 || >16.9.0"
+    "node": ">=12.22.2 <13 || >=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
@@ -40,8 +40,8 @@
     "@types/node": "^15.12.5",
     "@types/prettier": "^2",
     "@types/yargs": "^17.0.7",
-    "@zwave-js/core": "8.8.1",
-    "@zwave-js/shared": "8.8.0",
+    "@zwave-js/core": "8.9.2",
+    "@zwave-js/shared": "8.9.0",
     "ansi-colors": "^4.1.1",
     "clipboardy": "^2.3.0",
     "esbuild": "*",

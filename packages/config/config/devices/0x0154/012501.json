@@ -1,0 +1,44 @@
+{
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "012501",
+	"description": "Electric Strike Lock Control",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "0",
+			"label": "Auto-Close",
+			"description": "Automated Close after Opening",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3
+		},
+		{
+			"#": "1",
+			"label": "Value of Off-Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "Value of On-Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99
+		}
+	]
+}
