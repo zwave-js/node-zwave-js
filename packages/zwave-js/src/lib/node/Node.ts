@@ -466,6 +466,22 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		this.statusMachine.send("AWAKE");
 	}
 
+	/** Returns a promise that resolves when the node wakes up the next time or immediately if the node is already awake. */
+	public waitForWakeup(): Promise<void> {
+		if (!this.canSleep || !this.supportsCC(CommandClasses["Wake Up"])) {
+			throw new ZWaveError(
+				`Node ${this.id} does not support wakeup!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (this._status === NodeStatus.Awake) {
+			return Promise.resolve();
+		}
+
+		return new Promise((resolve) => {
+			this.once("wake up", () => resolve());
+		});
+	}
+
 	// The node is only ready when the interview has been completed
 	// to a certain degree
 

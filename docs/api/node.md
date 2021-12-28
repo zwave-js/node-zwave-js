@@ -174,6 +174,16 @@ getHighestSecurityClass(): SecurityClass | undefined
 
 Returns the highest security class this node was granted or `undefined` if that information isn't known yet. This can be used to distinguish whether a node is communicating with S2, S0 or insecure.
 
+### `waitForWakeup`
+
+```ts
+waitForWakeup(): Promise<void>
+```
+
+Returns a promise that resolves when the node wakes up the next time or immediately if the node is already awake.
+
+> [!WARNING] This will throw if the node does not support wakeup or is not a sleeping node.
+
 ### `refreshInfo`
 
 ```ts

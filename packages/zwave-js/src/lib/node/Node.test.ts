@@ -13,6 +13,7 @@ import {
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { wait } from "alcalzone-shared/async";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import {
 	BinarySwitchCCReport,
@@ -1699,6 +1700,50 @@ describe("lib/node/Node", () => {
 				dataType: EntryControlDataTypes.ASCII,
 				eventType: EntryControlEventTypes.DisarmAll,
 				eventData: "1234",
+			});
+
+			node.destroy();
+		});
+	});
+
+	describe("waitForWakeup()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		function makeNode(canSleep: boolean = false): ZWaveNode {
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+			node["_isListening"] = !canSleep;
+			node["_isFrequentListening"] = false;
+			if (canSleep)
+				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			fakeDriver.controller.nodes.set(node.id, node);
+			return node;
+		}
+
+		it("resolves when a sleeping node wakes up", async () => {
+			const node = makeNode(true);
+			node.markAsAsleep();
+
+			const promise = node.waitForWakeup();
+			await wait(1);
+			node.markAsAwake();
+			await expect(promise).toResolve();
+
+			node.destroy();
+		});
+
+		it("resolves immediately when called on an awake node", async () => {
+			const node = makeNode(true);
+			node.markAsAwake();
+
+			await expect(node.waitForWakeup()).toResolve();
+			node.destroy();
+		});
+
+		it("throws when called on a non-sleeping node", async () => {
+			const node = makeNode(false);
+
+			await assertZWaveError(() => node.waitForWakeup(), {
+				errorCode: ZWaveErrorCodes.CC_NotSupported,
 			});
 
 			node.destroy();
