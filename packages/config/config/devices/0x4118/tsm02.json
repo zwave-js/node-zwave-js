@@ -1,3 +1,5 @@
+// This is a copy of the variant with manufacturerId 0x0118
+// Apparently there is a typo in the firmware, so some devices identify as 0x4118.
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x4118",
