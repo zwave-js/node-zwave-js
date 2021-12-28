@@ -23,3 +23,7 @@ While working on the SmartStart feature it was noticed that some properties and 
 -   Renamed the `serialApiGt(e)` and `serialApiLt(e)` methods to `sdkVersionGt(e)` and `sdkVersionLt(e)` respectively. These methods were checking the Z-Wave SDK version and not the Serial API which is versioned differently. This affects the `Controller` class.
 -   Renamed the `SerialAPIVersion` type to `SDKVersion`.
 -   Renamed the `serialApiVersion` property to `firmwareVersion`, because it was referring to a Z-Wave Stick's firmware version and not the Serial API version. This affects the `Controller` and the `GetSerialApiCapabilitiesResponse` classes.
+
+## Converted the `isControllerNode` method on the `ZWaveNode` class to a readonly property
+
+While there is no hard style guide governing this, we tend to use readonly properties for static things like a node's IDs and methods for (potentially) dynamic things like endpoint counts. Since the controller node ID doesn't change during usage, this feels more "correct".
