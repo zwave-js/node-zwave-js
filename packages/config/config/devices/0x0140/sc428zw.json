@@ -160,6 +160,10 @@
 				{
 					"label": "Send on to group 4 and off to group 5",
 					"value": 12
+				},
+				{
+					"label": "Send off to group 4 and on to group 5",
+					"value": 18
 				}
 			]
 		}
