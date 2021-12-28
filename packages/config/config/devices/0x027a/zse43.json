@@ -6,7 +6,7 @@
 	"devices": [
 		{
 			"productType": "0x7000",
-			"productId": "0xe003",
+			"productId": "0xe003"
 		}
 	],
 	"firmwareVersion": {
@@ -137,7 +137,7 @@
 					"value": 2
 				}
 			]
-		},		
+		},
 		{
 			"#": "8",
 			"label": "Group 2: Tilt Sensor Basic Reports",
