@@ -315,7 +315,8 @@
 		},
 		{
 			"#": "14",
-			"label": "Temperature Offset - 0=-10, 100=0, 200=+10",
+			"label": "Temperature Offset",
+			"description": "0=-10, 100=0, 200=+10",
 			"valueSize": 1,
 			"unit": "0.1 Degrees",
 			"minValue": 0,
@@ -325,7 +326,8 @@
 		},
 		{
 			"#": "15",
-			"label": "Humidity Offset - 0=-10, 100=0, 200=+10",
+			"label": "Humidity Offset",
+			"description": "0=-10, 100=0, 200=+10",
 			"valueSize": 1,
 			"unit": "0.1 %",
 			"minValue": 0,
