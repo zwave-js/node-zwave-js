@@ -34,8 +34,8 @@
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
@@ -44,8 +44,16 @@
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "LED On Vibration Only",
 					"value": 1
+				},
+				{
+					"label": "LED On Tilt Only",
+					"value": 2
+				},
+				{
+					"label": "LED On Vibration and Tilt",
+					"value": 2
 				}
 			]
 		},
@@ -97,7 +105,7 @@
 		{
 			"#": "5",
 			"label": "Group 2: On Delay",
-			"valueSize": 2,
+			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 3600,
@@ -107,7 +115,7 @@
 		{
 			"#": "6",
 			"label": "Group 2: Off Delay",
-			"valueSize": 2,
+			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 3600,
