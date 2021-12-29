@@ -44,15 +44,15 @@
 					"value": 0
 				},
 				{
-					"label": "LED On Shock Only",
+					"label": "LED on shock only",
 					"value": 1
 				},
 				{
-					"label": "LED On Tilt Only",
+					"label": "LED on tilt only",
 					"value": 2
 				},
 				{
-					"label": "LED On Shock and Tilt",
+					"label": "LED on shock and tilt",
 					"value": 3
 				}
 			]
