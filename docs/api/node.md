@@ -150,8 +150,6 @@ getAllEndpoints(): Endpoint[]
 
 This method returns an array of all endpoints on this node. At each index `i` the returned array contains the endpoint instance that would be returned by `getEndpoint(i)`.
 
-This is a little utility function to check if this node is the controller.
-
 ### `hasSecurityClass`
 
 ```ts
