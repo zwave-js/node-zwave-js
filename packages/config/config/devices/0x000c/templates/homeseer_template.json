@@ -107,7 +107,6 @@
 	},
 	"dimming_threshold": {
 		"label": "Dimming Threshold",
-		"description": "Sets the lowest dimming threshold",
 		"valueSize": 1,
 		"minValue": 1,
 		"maxValue": 14,
@@ -121,7 +120,7 @@
 		"defaultValue": 3
 	},
 	"scene_control": {
-		"label": "Central Scene, Multi-Tap, Press and Hold",
+		"label": "Central Scene Commands",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
