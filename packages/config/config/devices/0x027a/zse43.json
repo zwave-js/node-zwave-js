@@ -44,7 +44,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED On Vibration Only",
+					"label": "LED On Shock Only",
 					"value": 1
 				},
 				{
@@ -52,7 +52,7 @@
 					"value": 2
 				},
 				{
-					"label": "LED On Vibration and Tilt",
+					"label": "LED On Shock and Tilt",
 					"value": 2
 				}
 			]
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Vibration Sensitivity",
+			"label": "Shock Sensitivity",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
