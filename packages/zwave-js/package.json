@@ -53,7 +53,7 @@
     "ts": "node -r esbuild-register"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.4.0",
+    "@alcalzone/jsonl-db": "^2.4.1",
     "@alcalzone/pak": "^0.7.0",
     "@sentry/integrations": "^6.15.0",
     "@sentry/node": "^6.15.0",
