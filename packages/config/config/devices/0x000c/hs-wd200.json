@@ -24,22 +24,24 @@
 			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
+			"#": "5",
+			"$if": "firmwareVersion >= 5.14",
+			"$import": "templates/homeseer_template.json#dimming_threshold"
+		},
+		{
+			"#": "6",
+			"$if": "firmwareVersion >= 5.12",
+			"$import": "templates/homeseer_template.json#scene_control"
+		},
+		{
 			"#": "11",
 			"label": "Ramp Rate (Z-Wave)",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 3
+			"$import": "templates/homeseer_template.json#ramp_rate"
 		},
 		{
 			"#": "12",
 			"label": "Ramp Rate (Manual)",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 3
+			"$import": "templates/homeseer_template.json#ramp_rate"
 		},
 		{
 			"#": "13",
@@ -53,37 +55,37 @@
 		{
 			"#": "21",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode LED 1 Color"
+			"label": "Status LED 1 Color"
 		},
 		{
 			"#": "22",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 2 Color"
+			"label": "Status LED 2 Color"
 		},
 		{
 			"#": "23",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 3 Color"
+			"label": "Status LED 3 Color"
 		},
 		{
 			"#": "24",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 4 Color"
+			"label": "Status LED 4 Color"
 		},
 		{
 			"#": "25",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 5 Color"
+			"label": "Status LED 5 Color"
 		},
 		{
 			"#": "26",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 6 Color"
+			"label": "Status LED 6 Color"
 		},
 		{
 			"#": "27",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
-			"label": "Status Mode 7 Color"
+			"label": "Status LED 7 Color"
 		},
 		{
 			"#": "30",

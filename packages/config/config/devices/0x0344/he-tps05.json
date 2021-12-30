@@ -219,9 +219,19 @@
 			]
 		},
 		{
+			"#": "31",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 1: Backlight Control Source"
+		},
+		{
 			"#": "41",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "Button 1: Hold Control Mode"
+		},
+		{
+			"#": "32",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 2: Backlight Control Source"
 		},
 		{
 			"#": "42",
@@ -229,9 +239,19 @@
 			"label": "Button 2: Hold Control Mode"
 		},
 		{
+			"#": "33",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 3: Backlight Control Source"
+		},
+		{
 			"#": "43",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "Button 3: Hold Control Mode"
+		},
+		{
+			"#": "34",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 4: Backlight Control Source"
 		},
 		{
 			"#": "44",
@@ -239,33 +259,38 @@
 			"label": "Button 4: Hold Control Mode"
 		},
 		{
+			"#": "35",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 5: Backlight Control Source"
+		},
+		{
 			"#": "45",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 5: Hold Control Mode"
 		},
 		{
 			"#": "51",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 1: Click Control Mode"
 		},
 		{
 			"#": "52",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 2: Click Control Mode"
 		},
 		{
 			"#": "53",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 3: Click Control Mode"
 		},
 		{
 			"#": "54",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 4: Click Control Mode"
 		},
 		{
 			"#": "55",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 5: Click Control Mode"
 		},
 		{

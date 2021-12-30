@@ -41,52 +41,21 @@
 		},
 		{
 			"#": "5",
-			"label": "Dimming Threshold",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 14,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/homeseer_template.json#dimming_threshold"
 		},
 		{
 			"#": "6",
-			"label": "Central Scene, Multi-Tap, Press and Hold",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable (control load with delay)",
-					"value": 0
-				},
-				{
-					"label": "Disable (control load instantly)",
-					"value": 1
-				}
-			]
+			"$import": "templates/homeseer_template.json#scene_control"
 		},
 		{
 			"#": "11",
 			"label": "Ramp Rate (Z-Wave)",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/homeseer_template.json#ramp_rate"
 		},
 		{
 			"#": "12",
 			"label": "Ramp Rate (Manual)",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 90,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/homeseer_template.json#ramp_rate"
 		},
 		{
 			"#": "13",

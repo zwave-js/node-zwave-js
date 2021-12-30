@@ -1,7 +1,7 @@
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "EVA Logik",
 	"manufacturerId": "0x0312",
-	"label": "NZW39",
+	"label": "ZW39",
 	"description": "Dimmable Smart Plug",
 	"devices": [
 		{
@@ -9,8 +9,13 @@
 			"productId": "0x2700"
 		},
 		{
+			"productType": "0xc000",
+			"productId": "0xc002"
+		},
+		{
 			"productType": "0xb212",
-			"productId": "0x271c"
+			"productId": "0x271c",
+			"zwaveAllianceId": 2358
 		}
 	],
 	"firmwareVersion": {
@@ -87,8 +92,8 @@
 		{
 			"#": "5",
 			"label": "Auto Off Timer",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
@@ -211,5 +216,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press up and release the toggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.\n4. The device is associated in the same group when it included in setting process. \nNow you can control your Z-Wave device according to groups, scenes, schedules and automation programmed.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press up and release the front button to exclude it from the network.",
+		"reset": "1. Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.\n2. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2358/ZW39manual170412.pdf"
+	}
 }

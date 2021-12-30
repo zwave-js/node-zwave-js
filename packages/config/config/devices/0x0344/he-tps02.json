@@ -204,9 +204,19 @@
 			]
 		},
 		{
+			"#": "31",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 1: Backlight Control Source"
+		},
+		{
 			"#": "41",
 			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
 			"label": "Button 1: Hold Control Mode"
+		},
+		{
+			"#": "32",
+			"$import": "templates/heltun_template.json#base_button_backlight_control_source",
+			"label": "Button 2: Backlight Control Source"
 		},
 		{
 			"#": "42",
@@ -215,12 +225,12 @@
 		},
 		{
 			"#": "51",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 1: Click Control Mode"
 		},
 		{
 			"#": "52",
-			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode_6",
 			"label": "Button 2: Click Control Mode"
 		},
 		{

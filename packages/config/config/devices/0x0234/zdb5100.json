@@ -711,5 +711,9 @@
 		"exclusion": "Remove white button cover and press on the center switch with a non-conductive object. The LEDs will now start blinking on button 1 (upper left button)",
 		"reset": "Remove white button cover and long-press the center switch for 10 seconds with a non-conductive object. Please use this procedure only when the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3399/MATRIX_ZDB5100_User_Manual_1_01-EN.pdf"
+	},
+	"compat": {
+		// Starting in Firmware 1.6, the device no longer uses Central Scene for Pressed / Released, only Basic CC
+		"disableBasicMapping": true
 	}
 }
