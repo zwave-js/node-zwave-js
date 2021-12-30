@@ -155,7 +155,7 @@
 		}
 	],
 	"metadata": {
-		"comments":{
+		"comments": {
 			"level": "warning",
 			"text": "This device is buggy and sends large negative Meter Reports from time to time. "
 		}
