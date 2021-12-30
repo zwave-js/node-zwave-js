@@ -16,16 +16,14 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline", 
-			"maxNodes": 1 
-			"isLifeline": true,
+			"maxNodes": 1,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Control",
-			"description": "Basic Set", 
-			"isLifeline": true, 
-		},
-
-	}
+			"description": "Basic Set"
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "1",
@@ -52,7 +50,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
