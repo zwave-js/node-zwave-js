@@ -1,0 +1,115 @@
+{
+	"manufacturer": "Inteset",
+	"manufacturerId": "0x039a",
+	"label": "Inteset Door/Window Sensor",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline", 
+			"maxNodes": 1 
+			"isLifeline": true,
+		},
+		"2": {
+			"label": "Control",
+			"description": "Basic Set", 
+			"isLifeline": true, 
+		},
+
+	}
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Basic Set off Delay Time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "2",
+			"label": "Basic Set Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100
+		},
+		{
+			"#": "3",
+			"label": "Led Indicator",
+			"description": "Indicator on open close event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": " Binary Sensor Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+
+		},
+		{
+			"#": "5",
+			"label": "Battery Report Interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1080,
+			"defaultValue": 480,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"wakeup": "Press the button briefly",
+		"inclusion": "Press the button 3 times within 1.5s to enter inclusion mode.",
+		"exclusion": "Press the button 3 times within 1.5s",
+		"reset": "Press and hold the button for 10s until LED light is on, then release the button.",
+		"manual": "http://downloads.inteset.com/DoorSensorManualS2.pdf"
+	}
+}
