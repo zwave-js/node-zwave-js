@@ -1207,8 +1207,8 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	private _hasEmittedNoS2NetworkKeyError: boolean = false;
 	private _hasEmittedNoS0NetworkKeyError: boolean = false;
 
-	/** Utility function to check if this node is the controller */
-	public isControllerNode(): boolean {
+	/** Returns whether this node is the controller */
+	public get isControllerNode(): boolean {
 		return this.id === this.driver.controller.ownNodeId;
 	}
 
@@ -1222,7 +1222,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	public async refreshInfo(options: RefreshInfoOptions = {}): Promise<void> {
 		// It does not make sense to re-interview the controller. All important information is queried
 		// directly via the serial API
-		if (this.isControllerNode()) return;
+		if (this.isControllerNode) return;
 
 		const { resetSecurityClasses = false, waitForWakeup = true } = options;
 		// Unless desired, don't forget the information about sleeping nodes immediately, so they continue to function
@@ -1333,7 +1333,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			await this.queryProtocolInfo();
 		}
 
-		if (!this.isControllerNode()) {
+		if (!this.isControllerNode) {
 			if (
 				(this.isListening || this.isFrequentListening) &&
 				this.status !== NodeStatus.Alive
@@ -1361,9 +1361,9 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		}
 
 		if (
-			(this.isControllerNode() &&
+			(this.isControllerNode &&
 				this.interviewStage === InterviewStage.ProtocolInfo) ||
-			(!this.isControllerNode() &&
+			(!this.isControllerNode &&
 				this.interviewStage === InterviewStage.CommandClasses)
 		) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
@@ -1455,7 +1455,7 @@ protocol version:      ${this._protocolVersion}`;
 
 	/** Node interview: pings the node to see if it responds */
 	public async ping(): Promise<boolean> {
-		if (this.isControllerNode()) {
+		if (this.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				this.id,
 				"is the controller node, cannot ping",
@@ -1490,7 +1490,7 @@ protocol version:      ${this._protocolVersion}`;
 	 * Request node info
 	 */
 	protected async queryNodeInfo(): Promise<void> {
-		if (this.isControllerNode()) {
+		if (this.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				this.id,
 				"is the controller node, cannot query node info",
@@ -1588,7 +1588,7 @@ protocol version:      ${this._protocolVersion}`;
 
 	/** Step #? of the node interview */
 	protected async interviewCCs(): Promise<boolean> {
-		if (this.isControllerNode()) {
+		if (this.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				this.id,
 				"is the controller node, cannot interview CCs",
@@ -2168,7 +2168,7 @@ protocol version:      ${this._protocolVersion}`;
 
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
-		if (this.isControllerNode()) {
+		if (this.isControllerNode) {
 			// The device config was not loaded prior to this step because the Version CC is not interviewed.
 			// Therefore do it here.
 			await this.loadDeviceConfig();
