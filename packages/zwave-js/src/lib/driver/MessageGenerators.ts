@@ -32,7 +32,7 @@ export type MessageGeneratorImplementation = (
 	 */
 	onMessageSent: (msg: Message, result: Message | undefined) => void,
 
-	/** Can be used to extend the timeout wa */
+	/** Can be used to extend the timeout waiting for a response from a node to the sent message */
 	additionalCommandTimeoutMs?: number,
 ) => AsyncGenerator<Message, Message, Message>;
 

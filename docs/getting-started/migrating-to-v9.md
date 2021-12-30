@@ -3,7 +3,7 @@
 The recent rewrite of the message queue made it much simpler to support use cases that go beyond executing a simple Serial API command.
 Examples are requesting Security S0 nonces (which was relatively convoluted before), handling other multi-step commands, as well as the ability to time individual commands.
 
-The latter allows us to be more spec-compliant in that we now time out much faster while waiting for a response to a GET request. Since this required a breaking chance, we use the opportunity to collect some more breaking changes in version 9.x.
+The latter allows us to be more spec-compliant in that we now time out much faster while waiting for a response to a GET request. Since this required a breaking change, we use the opportunity to collect some more breaking changes in version 9.x.
 
 ## Faster timeout while waiting for a response to a GET request
 
