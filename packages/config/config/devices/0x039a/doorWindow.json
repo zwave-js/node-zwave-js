@@ -80,16 +80,6 @@
 			"minValue": 1,
 			"maxValue": 1080,
 			"defaultValue": 480,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
 		}
 	],
 	"metadata": {
