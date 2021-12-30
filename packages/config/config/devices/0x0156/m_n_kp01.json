@@ -1,0 +1,108 @@
+{
+	"manufacturer": "Vivint",
+	"manufacturerId": "0x0156",
+	"label": "KP01",
+	"description": "Z-Wave Secondary Keypad",
+	"devices": [
+		{
+			"productType": "0x4b50",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4119
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Motion Detector",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable ",
+					"value": 0
+				},
+				{
+					"label": "Enable ",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Sound",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Downcast Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Transmission Retry Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Battery Check Interval",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 5,
+			"maxValue": 1440,
+			"defaultValue": 70,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Use this standard method for adding Z-Wave devices at the panel or hub. Use the \"PAIR/RESET\" button next to the battery tray. Follow the onscreen prompts to add the keypad.",
+		"exclusion": "Removing Keypad from System\nTo remove the device, place the panel Use this standard method for excluding Z-Wave devices at the panel or hub. Use the \"PAIR/RESET\" button next to the battery tray. Follow the onscreen prompts to add the keypad",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nTo restore the keypad to factory settings which removes it from any network as well: \n1. Locate the button labeled Pair/Reset underneath the back battery cover. \n2. Insert a paperclip into the hole until you feel the button depress. \n3. Hold the button down for ten seconds. The green downcast indicator will blink rapidly while the reset button is pressed and go out after ten seconds. \n4. The device’s downcast indicator will turn red when the reset operation is complete. The device is now ready to be added back to a Z-Wave network.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4119/Quick_Reference_Vivint_Keypad%20-%20DRAFT--%20for%20testing%20and%20review%20-%20working%20file%20Rev006.pdf"
+	}
+}

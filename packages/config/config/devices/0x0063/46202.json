@@ -1,12 +1,13 @@
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "46202",
+	"label": "46202 / ZW4009",
 	"description": "GE Enbrighten Z-Wave Plus Smart Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3137"
+			"productId": "0x3137",
+			"zwaveAllianceId": 4157
 		}
 	],
 	"firmwareVersion": {
@@ -73,6 +74,26 @@
 				},
 				{
 					"label": "Inverted Switch Install",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Press two times on button and two time off button, LED will flash 5 times if successful",
 					"value": 1
 				}
 			]

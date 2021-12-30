@@ -79,7 +79,6 @@
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Moderate Regulator Behaviour",
-			"description": "Set moderate regulator behaviour instead of rapid",
 			"valueSize": 4
 		},
 		{

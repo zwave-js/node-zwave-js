@@ -1,0 +1,61 @@
+{
+	"manufacturer": "BRK Brands, Inc.",
+	"manufacturerId": "0x0138",
+	"label": "SMCO400",
+	"description": "Smoke & Carbon Monoxide Alarm",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0058",
+			"zwaveAllianceId": 4087
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Supervision Report Timeout",
+			"valueSize": 2,
+			"unit": "milliseconds",
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Supervision Retry Count",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Supervision Wait Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "ADDING ALARM\n1. Slide battery door open.\n2. Insert batteries checking the correct orientation.\n3. Press and hold the test button with your finger or thumb. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
+		"exclusion": "REMOVING ALARM\n1. Slide battery door open.\n2. Remove and re-insert batteries checking the correct orientation.\n3. Press and hold the test button with your finger or thumb. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
+		"reset": "RESETTING ALARM\nIf the device is powered up with the test button held down for 10+ seconds, the device will reset all Z-Wave settings and leave the network.\nUpon completion of the Reset operation, the LED will glow and the horn will sound for ~1 second.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4087/User_Manual_M08-0456-170694.pdf"
+	}
+}

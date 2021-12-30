@@ -1,0 +1,124 @@
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAN34",
+	"description": "In Wall Roller shutter Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0080",
+			"zwaveAllianceId": [4250, 4267, 4269, 4270, 4274, 4275, 4283, 4284, 4290, 4291]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Power Reporting Interval",
+			"valueSize": 2,
+			"unit": "5 seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "External Switch Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "One button",
+					"value": 1
+				},
+				{
+					"label": "Two buttons",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Curtain Moving Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 6000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Per calibration",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Power Threshold for Motor Movement",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Send Meter Reports",
+			"description": "Triggered by a greater than 5% power variation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Timer Offset For Motor Start",
+			"valueSize": 2,
+			"unit": ".01 seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter inclusion mode",
+		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter exclusion mode. \n3. Node ID has been excluded",
+		"reset": "1. Pressing INCLUDE_BUTTON three times within 2 seconds will enter inclusion mode. \n2. Within 1 second, press On/Off button again for 5 seconds. \n3. IDs are excluded",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4250/PAN34%20manual-20210713.pdf"
+	}
+}

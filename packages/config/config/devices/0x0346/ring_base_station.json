@@ -1,13 +1,13 @@
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
-	"label": "RING BASE STATION",
-	"description": "Ring Alarm Base Station",
+	"label": "SVHSZWB1",
+	"description": "Base Station v2",
 	"devices": [
 		{
 			"productType": "0x0001",
 			"productId": "0x0101",
-			"zwaveAllianceId": 2657
+			"zwaveAllianceId": 4192
 		}
 	],
 	"firmwareVersion": {
@@ -17,7 +17,7 @@
 	"metadata": {
 		"inclusion": "Classic Inclusion Steps:\n1. Start inclusion mode on the primary controller \n2. From the application’s UI, navigate to controller’s device setting screen -> select Advance options -> Select Z-wave from “Protocol Adapters” and Select “Learn Mode” – DSK will be displayed (refer to the picture below)\n3. Select “Begin Learn Mode” in the UI\n4. When the inclusion process in complete, the LED on the base station will be solid blue\n\nNote: Joining another Z-Wave network via learn mode is available only when the base station is not already paired to any other devices",
 		"exclusion": "Exclusion Instructions:\n1. Start exclusion mode on the primary controller \n2. From the application’s UI, navigate to controller’s device setting screen -> select Advance options -> Select Z-wave from “Protocol Adapters” and Select “Learn Mode” – DSK will be displayed \n3. Select “Begin Learn Mode” in the UI\n4. When the exclusion process in complete, the LED on the base station will be solid blue",
-		"reset": "Factory Default Instructions\n1. Using a paper clip press and hold the reset button \n2. Wait for the network and power LEDs on the back to start to blink amber color \n3. Release the reset button \nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2657/Ring_Base_Station_-_Manual.pdf"
+		"reset": "1. Launch Ring app (iOS or Android) \n2. Navigate to Base Station Setting: Devices à Alarm Base Station à Tap on gear icon located on top right-hand corner \n3. Navigate to Advanced Options à Z-Wave\n4. Tap “Reset Z-Wave Network” and Select “Reset” \nWarning: This process is irreversible. All your Z-Wave devices will be removed from your Base Station. You will have to manually reset and re-add each device to rebuild your network. \nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4192/Base%20Station%20ZWave%20Technical%20Manual.pdf"
 	}
 }

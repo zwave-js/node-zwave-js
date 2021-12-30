@@ -1,0 +1,15 @@
+{
+	"delayed_off_time": {
+		"label": "Delayed Off Time",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 240,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"child_lock": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Child Lockout Enable"
+	}
+}

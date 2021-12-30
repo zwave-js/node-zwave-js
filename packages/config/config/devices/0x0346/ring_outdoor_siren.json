@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0701",
-			"productId": "0x0301"
+			"productId": "0x0301",
+			"zwaveAllianceId": [4118, 4129]
 		},
 		{
 			"productType": "0x0701",
@@ -111,6 +112,9 @@
 		}
 	],
 	"metadata": {
+		"inclusion": "Classic Inclusion Steps: \n1. Initiate add flow for Security Devices in the Ring mobile application – Follow the guided add flow instructions provided in the Ring mobile application.\n2. Select add manually and enter the 5-digit DSK pin found on the package of the Ring Alarm Outdoor Siren or the 5-digit DSK pin found under the QR code on the device. \n3. After powering on the device, press and hold the test under the battery cover ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
+		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Outdoor Siren” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the reset button on the back of the device under the battery compartment. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s red LED turns on solid to indicate the device was removed from the network.",
+		"reset": "Factory Default Instructions \n1. To restore Ring Alarm Outdoor Siren to factory default settings, locate the reset button underneath the battery cover. \n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds. \n3. The device will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network. \nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4118/Z-Wave%20User%20Manual_Outdoor_Siren.pdf"
 	}
 }

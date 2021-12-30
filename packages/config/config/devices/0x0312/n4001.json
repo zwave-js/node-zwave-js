@@ -1,0 +1,50 @@
+{
+	"manufacturer": "New One",
+	"manufacturerId": "0x0312",
+	"label": "N4001",
+	"description": "Mini Smart Plug",
+	"devices": [
+		{
+			"productType": "0xac01",
+			"productId": "0x4001",
+			"zwaveAllianceId": 4293
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "2",
+			"label": "Auto-Off Timer",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 36000,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"exclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button five times in one second",
+		"reset": "Power off N4001\n---keep holding the PROG button\n---Power on,Press and keep holding the PROG button for no less than 10 seconds.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4293/N4001%20manual-20210824.pdf"
+	}
+}

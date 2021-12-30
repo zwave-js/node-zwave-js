@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x7000",
-			"productId": "0xa001"
+			"productId": "0xa001",
+			"zwaveAllianceId": 4103
 		}
 	],
 	"firmwareVersion": {
@@ -109,5 +110,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. Finalize inclusion at the switch. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Tap the lower paddle on the switch 3 times quickly (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the switch, press and hold the lower paddle for 10 seconds until the LED indicator starts blinking. Release paddle, and immediately after, tap the lower paddle 5 times to complete the reset. The LED indicator will flash blue 3 times and turn red for 3 seconds to confirm successful reset.\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4103/zooz-700-series-switch-zen71-manual.pdf"
+	}
 }

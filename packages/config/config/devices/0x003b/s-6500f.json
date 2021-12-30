@@ -1,13 +1,13 @@
 {
-	"manufacturer": "Allegion",
+	"manufacturer": "Schlage",
 	"manufacturerId": "0x003b",
 	"label": "S-6500F",
-	"description": "Schlage Z-Wave Mortise Lock",
+	"description": "Z-Wave Mortise Lock",
 	"devices": [
 		{
 			"productType": "0x0003",
 			"productId": "0x6500",
-			"zwaveAllianceId": [3690, 3811, 3813]
+			"zwaveAllianceId": [3690, 3811, 3813, 4122, 4181, 4182]
 		}
 	],
 	"firmwareVersion": {
@@ -57,29 +57,29 @@
 		},
 		{
 			"#": "6",
-			"label": "User Slot Bit Field",
-			"description": "Each bit represent user slot",
+			"label": "User Slots",
+			"description": "This value represents a bitmask with 10 bits. Each bit represents a user slot. A value of 1 means that the slot is occupied.",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 1023,
 			"defaultValue": 3,
 			"unsigned": true
 		},
 		{
 			"#": "18",
-			"label": "Get Bootloader Version",
-			"description": "Version of the bootloader",
+			"label": "Bootloader Version",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 1,
+			"readOnly": true,
 			"unsigned": true
 		}
 	],
 	"metadata": {
-		"inclusion": "1. Place your Z-Wave Controller into the “Add” or Inclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “1” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, inclusion has completed successfully.\n9. If battery replace LED flickers(fail), try repeating steps 1-7",
-		"exclusion": "1. Place your Z-Wave Controller into the “Remove” or Exclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details). \n2. Slide the battery cover upward. \n3. Press the wireless button more than 3 seconds.\n4. Press “2” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, exclusion has completed successfully.\n9. If battery replace LED flickers, try repeating steps 1-7.",
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nWhen Master code was already registered \n1. Remove batteries (power off).\n2. Press “N” and “S” buttons at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code.\n6. Press “#” on the keypad.\n7. Press “8” on the keypad.\n\nWhen Master code was not registered yet\n1. Remove batteries (power off).\n2. Press “N” button and “S” button at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code to register.\n6. Press “#” on the keypad.\n7. Press previous 3-digit Master code.\n8. Press “#” on the keypad.",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3811/Manual%20for%20Schlage%20Z-Wave%20Mortise%20Lock%20v1_0.pdf"
+		"inclusion": "1. Place your Z-Wave Controller into the “Add” or Inclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details).\n2. Slide the battery cover upward.\n3. Press the wireless button more than 3 seconds.\n4. Press “1” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, inclusion has completed successfully.\n9. If battery replace LED flickers(fail), try repeating steps 1-7",
+		"exclusion": "1. Place your Z-Wave Controller into the “Remove” or Exclusion Mode (Refer the respective documentation for that specific home automation system or panel device for details).\n2. Slide the battery cover upward.\n3. Press the wireless button more than 3 seconds.\n4. Press “2” on the keypad.\n5. Press “6” on the keypad.\n6. Press User Code on the keypad.\n7. Press “#” on the keypad.\n8. If RF LED flickers, exclusion has completed successfully.\n9. If battery replace LED flickers, try repeating steps 1-7",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nWhen Master code was already registered\n1. Remove batteries (power off).\n2. Press “N” and “S” buttons at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code.\n6. Press “#” on the keypad.\n7. Press “8” on the keypad.\nWhen Master code was not registered yet\n1. Remove batteries (power off).\n2. Press “N” button and “S” button at the same time and hold.\n3. Insert batteries (power on).\n4. Release “N” and “S” buttons.\n5. Press 3-digit Master code to register.\n6. Press “#” on the keypad.\n7. Press previous 3-digit Master code.\n8. Press “#” on the keypad",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4122/Manual%20for%20Schlage%20Z-Wave%20Mortise%20Lock%20v1.1.pdf"
 	}
 }

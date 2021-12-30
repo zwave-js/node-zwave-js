@@ -1,0 +1,177 @@
+{
+	"manufacturer": "Salus",
+	"manufacturerId": "0x0140",
+	"label": "SC428ZW",
+	"description": "Z-Wave SmartPlug",
+	"devices": [
+		{
+			"productType": "0x0807",
+			"productId": "0x1007",
+			"zwaveAllianceId": 4098
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3[0x01]",
+			"label": "Group 2",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "3[0x02]",
+			"label": "Group 3",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "5",
+			"label": "Over Voltage Alarm Threshold",
+			"valueSize": 2,
+			"unit": "V",
+			"minValue": 1,
+			"maxValue": 200,
+			"defaultValue": 132,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Over Current Alarm Threshold",
+			"valueSize": 2,
+			"unit": "mA",
+			"minValue": 1,
+			"maxValue": 15000,
+			"defaultValue": 15000,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Power Change Reporting Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "22",
+			"label": "Overload Power Reporting Threshold",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 1,
+			"maxValue": 1980,
+			"defaultValue": 1980,
+			"unsigned": true
+		},
+		{
+			"#": "23",
+			"label": "Energy Reporting Threshold",
+			"valueSize": 2,
+			"unit": "kWh",
+			"minValue": 1,
+			"maxValue": 327,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "24",
+			"label": "Meter Reporting Threshold",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 30,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"unsigned": true
+		},
+		{
+			"#": "25",
+			"label": "Power Threshold: High",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1980,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "26",
+			"label": "Power Threshold: Low",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Power Threshold: Action",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 18,
+			"defaultValue": 12,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Send off to group 4",
+					"value": 2
+				},
+				{
+					"label": "Send on to group 4",
+					"value": 4
+				},
+				{
+					"label": "Send off to group 5",
+					"value": 8
+				},
+				{
+					"label": "Send on to group 5",
+					"value": 16
+				},
+				{
+					"label": "Send on to group 4 and off to group 5",
+					"value": 12
+				},
+				{
+					"label": "Send off to group 4 and on to group 5",
+					"value": 18
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Refer to the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n• Locate the Device Specific Key (DSK) label located on the back(plug side) of the SmartPlug, scan QR code to obtain DSK.\n• Plug the SmartPlug switch into an AC outlet at the desired location to account for any radio interference.\n• Press the Multi Button once to initiate adding the device to the network",
+		"exclusion": "Refer to the instructions for your Z-Wave certified controller to remove a device to the Z-Wave network.\n• Press the Multi Button once to remove the switch from the network",
+		"reset": "Press and hold the Multi Button for more than 10 seconds.\nThe amber LED will be illuminated for 2 seconds while it searches\nfor the network. Please use this procedure only when the network\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4098/SMC-QG-SC428ZW-20213v1_20210308.pdf"
+	}
+}

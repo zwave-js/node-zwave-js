@@ -1,0 +1,76 @@
+{
+	"manufacturer": "Yale",
+	"manufacturerId": "0x0129",
+	"label": "YRC256-ZW3",
+	"description": "Assure Interconnected Z-Wave Enabled SL Touch Screen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x8002",
+			"productId": "0x46c5",
+			"zwaveAllianceId": 4095
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/yale_template.json#volume"
+		},
+		{
+			"#": "2",
+			"$import": "templates/yale_template.json#auto_relock"
+		},
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#auto_relock_time_127"
+		},
+		{
+			"#": "4",
+			"$import": "templates/yale_template.json#wrong_code_limit_5"
+		},
+		{
+			"#": "5",
+			"$import": "templates/yale_template.json#language"
+		},
+		{
+			"#": "6",
+			"$import": "templates/yale_template.json#wrong_code_lockout_0_to_127"
+		},
+		{
+			"#": "7",
+			"$import": "templates/yale_template.json#operating_mode"
+		},
+		{
+			"#": "11",
+			"$import": "templates/yale_template.json#one_touch"
+		},
+		{
+			"#": "12",
+			"$import": "templates/yale_template.json#privacy_button"
+		},
+		{
+			"#": "13",
+			"$import": "templates/yale_template.json#lock_status_led"
+		},
+		{
+			"#": "8",
+			"$import": "templates/yale_template.json#reset_factory"
+		}
+	],
+	"metadata": {
+		"inclusion": "Install Yale Smart Module into slot above battery compartment\nIMPORTANT: Batteries must be removed before inserting Yale Smart Module:\n• Remove battery cover\n• Remove batteries\n• Insert Yale Smart Module\n• Reinstall batteries\n• Reinstall battery cover\n2. Open Z-Wave system's smart home or alarm app on your smartphone or tablet\n3. If you have Smart Start* enabled with your Z-Wave System follow in-app prompts to add a new device\nIf you don't have smart start or are not sure, follow steps 4 - 6\n4. On your lock keypad, enter your master entry code followed by the gear icon\n5. Press the 7 key followed by the gear icon\n6. Press the 1 key followed by the gear icon",
+		"exclusion": "Open Z-Wave system's smart home or alarm app and follow instructions for removing a device\n2. On your lock keypad, enter your master entry code followed by the icon\n3. Press the 7 key followed by the gear icon\n4. Press the 3 key followed by the gear icon",
+		"reset": "Remove the battery cover and batteries.\nRemove the interior escutcheon to access the reset button.\nThe reset button is located above the PCB cable connector.\nWhile pressing the reset button for a minimum of 3 seconds, reinstall batteries. Release reset button.\nReplace battery cover. \nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4095/YRC256%20Manual-compressed%20(1)-compressed.pdf"
+	}
+}

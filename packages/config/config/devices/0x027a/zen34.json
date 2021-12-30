@@ -5,12 +5,13 @@
 	"description": "Z-Wave Plus 700 Series Remote Switch",
 	"devices": [
 		{
-			"productType": "0x7000",
+			"productType": "0x0004",
 			"productId": "0xf001"
 		},
 		{
-			"productType": "0x0004",
-			"productId": "0xf001"
+			"productType": "0x7000",
+			"productId": "0xf001",
+			"zwaveAllianceId": 4114
 		}
 	],
 	"firmwareVersion": {
@@ -138,5 +139,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Put your Z-Wave hub into inclusion mode and click the upper paddle 6 times quickly. The LED indicator\nwill blink blue during the process and light up green once added successfully. It will light up red if failed",
+		"exclusion": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Click the lower paddle 6 times very quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device\nto factory settings manually. In order to complete the process, make sure the device is powered, then tap-tap-\ntap’and’hold the upper paddle. The LED indicator will blink red 5 times to indicate successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4114/zooz-700-series-remote-switch-zen34-manual-online.pdf"
+	}
 }

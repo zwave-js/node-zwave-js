@@ -1,0 +1,74 @@
+{
+	"manufacturer": "Schneider Electric",
+	"manufacturerId": "0x0447",
+	"label": "SQR22102",
+	"description": "Z-Wave Plus Dimmer",
+	"devices": [
+		{
+			"productType": "0x000e",
+			"productId": "0x1202",
+			"zwaveAllianceId": 4180
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Dimmer Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
+		},
+		{
+			"#": "2",
+			"$import": "~/0x0447/templates/schneider_template.json#delayed_off_time"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0447/templates/schneider_template.json#child_lock"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds",
+			"minValue": 0,
+			"maxValue": 180,
+			"defaultValue": 3
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Kickstart Mode",
+			"description": "Ensures lamp start-up even at low dim levels"
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
+			"maxValue": 45
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99",
+			"minValue": 55
+		}
+	],
+	"metadata": {
+		"inclusion": "Quick click x3, within 1.5s",
+		"exclusion": "Quick click x3, within 1.5s",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4180/GDE7797900_Z-Wave%20Plus%20dimmer%20user%20manual_English%20version_20210514.pdf"
+	}
+}
