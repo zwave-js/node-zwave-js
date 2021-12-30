@@ -85,27 +85,27 @@
 					"value": 0
 				},
 				{
-					"label": "Set 0xff on unlock, 0x00 on lock",
+					"label": "0xff on unlock, 0x00 on lock",
 					"value": 1
 				},
 				{
-					"label": "Set 0x00 on unlock, 0xff on lock",
+					"label": "0x00 on unlock, 0xff on lock",
 					"value": 2
 				},
 				{
-					"label": "Set 0xff on unlock",
+					"label": "0xff on unlock",
 					"value": 3
 				},
 				{
-					"label": "Set 0x00 on lock",
+					"label": "0x00 on lock",
 					"value": 4
 				},
 				{
-					"label": "Set 0x00 on unlock",
+					"label": "0x00 on unlock",
 					"value": 5
 				},
 				{
-					"label": "Set 0xff on lock",
+					"label": "ß0xff on lock",
 					"value": 6
 				}
 			]

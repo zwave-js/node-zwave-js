@@ -37,11 +37,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Parameter 2: 1-19200 ut; Parameter 3: 1-8960 ut",
+					"label": "Parameter 2: 1-19200 µT; Parameter 3: 1-8960 µT",
 					"value": 0
 				},
 				{
-					"label": "Parameter 2: 1-192000 ut; Parameter 3: 1-89600 ut",
+					"label": "Parameter 2: 1-192000 µT; Parameter 3: 1-89600 µT",
 					"value": 1
 				}
 			]
@@ -50,7 +50,7 @@
 			"#": "2",
 			"label": "Average Magnetic Field",
 			"valueSize": 4,
-			"unit": "ut",
+			"unit": "µT",
 			"minValue": 1,
 			"maxValue": 192000,
 			"defaultValue": 640,
@@ -60,6 +60,7 @@
 			"#": "3",
 			"label": "Magnetic Field Offset",
 			"valueSize": 4,
+			"unit": "µT",
 			"minValue": 1,
 			"maxValue": 89600,
 			"defaultValue": 200,

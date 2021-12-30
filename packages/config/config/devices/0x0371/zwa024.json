@@ -167,7 +167,6 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Battery Powered",
@@ -190,27 +189,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set 0xff on triggered, 0x00 on cleared",
+					"label": "0xff on triggered, 0x00 on cleared",
 					"value": 0
 				},
 				{
-					"label": "Set 0x00 on triggered, 0xff on cleared",
+					"label": "0x00 on triggered, 0xff on cleared",
 					"value": 1
 				},
 				{
-					"label": "Set 0xff on motion triggered",
+					"label": "0xff on motion triggered",
 					"value": 2
 				},
 				{
-					"label": "Set 0x00 on motion triggered",
+					"label": "0x00 on motion triggered",
 					"value": 3
 				},
 				{
-					"label": "Set 0x00 on motion cleared",
+					"label": "0x00 on motion cleared",
 					"value": 4
 				},
 				{
-					"label": "Set 0xff on motion cleared",
+					"label": "0xff on motion cleared",
 					"value": 5
 				},
 				{

@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MP21ZS",
+	"label": "MP21ZD",
 	"description": "Smart Plug Dimmer",
 	"devices": [
 		{

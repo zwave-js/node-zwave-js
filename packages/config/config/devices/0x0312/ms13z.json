@@ -81,27 +81,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Double Tap Function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Value set in parameter 18",
-					"value": 1
-				},
-				{
-					"label": "Maximum brightness set in parameter 11",
-					"value": 2
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
 		},
 		{
 			"#": "15",
