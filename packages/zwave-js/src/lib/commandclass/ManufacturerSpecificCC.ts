@@ -160,7 +160,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (!node.isControllerNode()) {
+		if (!node.isControllerNode) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,
