@@ -70,7 +70,6 @@
 					"value": 1
 				}
 			]
-
 		},
 		{
 			"#": "5",
@@ -79,7 +78,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1080,
-			"defaultValue": 480,
+			"defaultValue": 480
 		}
 	],
 	"metadata": {
