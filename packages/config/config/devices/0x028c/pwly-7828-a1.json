@@ -113,13 +113,11 @@
 		{
 			"#": "5",
 			"label": "Temperature Calibration",
-			"description": "0-5: 0 - 5°F, 251-255: -5 - -1°F",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -5,
+			"maxValue": 5,
 			"defaultValue": 0,
 			"unit": "°F",
-			"unsigned": true,
 			"options": [
 				{
 					"label": "No change",
