@@ -263,18 +263,18 @@
 		},
 		{
 			"#": "11",
-			"label": "Display always on",
+			"label": "Display On in C-Wire Powered Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Display off in C-Wire powered mode",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Display on in C-Wire powered mode",
+					"label": "Enable",
 					"value": 1
 				}
 			]
