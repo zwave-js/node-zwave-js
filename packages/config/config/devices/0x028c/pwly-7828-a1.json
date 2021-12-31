@@ -105,7 +105,7 @@
 					"value": 0
 				},
 				{
-					"label": "Restore Thermostat Factory Settings (excluding z-wave settings)",
+					"label": "Restore thermostat factory settings (excluding Z-Wave settings)",
 					"value": 1
 				}
 			]
