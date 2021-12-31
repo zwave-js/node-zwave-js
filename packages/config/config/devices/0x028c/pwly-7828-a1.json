@@ -119,6 +119,7 @@
 			"maxValue": 255,
 			"defaultValue": 0,
 			"unit": "°F",
+			"unsigned": true,
 			"options": [
 				{
 					"label": "No change",
