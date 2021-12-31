@@ -1,0 +1,286 @@
+{
+	"manufacturer": "Powerley",
+	"manufacturerId": "0x028c",
+	"label": "PWLY-7828-A1",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0xa55a",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2401
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Display Units",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "HVAC Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "1 Stage Conventional",
+					"value": 0
+				},
+				{
+					"label": "2 Stage Conventional",
+					"value": 1
+				},
+				{
+					"label": "Heat Pump with O-Wire",
+					"value": 2
+				},
+				{
+					"label": "Heat Pump with B-Wire",
+					"value": 3
+				},
+				{
+					"label": "Heat Pump with O-Wire and Aux Heating",
+					"value": 4
+				},
+				{
+					"label": "Heat Pump with B-Wire and Aux Heating",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "ECO Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Thermostat Default Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "No Change",
+					"value": 0
+				},
+				{
+					"label": "Restore Thermostat Factory Settings (excluding z-wave settings)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Temperature Calibration",
+			"description": "0-5: 0 - 5°F, 251-255: -5 - -1°F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unit": "°F",
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "LED Dimming",
+			"description": "When powered via C-Wire",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"options": [
+				{
+					"label": "Low",
+					"value": 0
+				},
+				{
+					"label": "Medium",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				},
+				{
+					"label": "Auto",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Demand Response Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Swing Setting",
+			"description": "Number of degrees from the set point at which the HVAC will turn on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 1,
+			"unit": "°F",
+			"options": [
+				{
+					"label": "No swing",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Differential Setting",
+			"description": "Number of degrees from the set point at which the 2nd stage will engage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unit": "°F",
+			"options": [
+				{
+					"label": "No differential",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "OTA (Over The Air) programming error code",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No error",
+					"value": 0
+				},
+				{
+					"label": "Battery low, reflashing not possible",
+					"value": 1
+				},
+				{
+					"label": "OTA Cancelled before completion",
+					"value": 2
+				},
+				{
+					"label": "Fragment CRC error",
+					"value": 3
+				},
+				{
+					"label": "Total image CRC error",
+					"value": 4
+				},
+				{
+					"label": "External flash error",
+					"value": 5
+				},
+				{
+					"label": "Fragment received out of order",
+					"value": 6
+				},
+				{
+					"label": "Invalid firmware or manufacture ID",
+					"value": 7
+				},
+				{
+					"label": "OTA session not properly initialized",
+					"value": 8
+				},
+				{
+					"label": "Same image currently running",
+					"value": 9
+				},
+				{
+					"label": "Time out during OTA download between fragments",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Display always on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Display off in C-Wire powered mode",
+					"value": 0
+				},
+				{
+					"label": "Display on in C-Wire powered mode",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Press and hold Mode (circle on front of thermostat) for 5 seconds. CONNECT will scroll across the thermostat display once in inclusion mode. SUCCESS will scroll across the thermostat display once included. FAIL will scroll across the thermostat display if inclusion is unsuccessful, or if process takes longer than 1 minute.",
+		"exclusion": "Press and hold Mode (circle on front of thermostat) for 5 seconds to initiate Z-Wave exclusion process. DELETE will scroll across the thermostat display once in exclusion mode. To cancel the exclusion process, press Mode (circle on front of thermostat). To complete exclusion press either of the up/down arrows. SUCCESS will scroll across the thermostat display once excluded. NOTE: Excluding the thermostat will restore it to the default state for Z-Wave and temperature set points.",
+		"reset": "Turn the thermostat off by pressing Mode (circle on front of thermostat) repeatedly until OFF scrolls across the display, then press and hold the down and up Setpoint arrows at the same time for 5 sec. If successful, RESET will scroll across the display and the device will be restored to its default settings. NOTE: If a reset to factory default settings is performed, all settings including Z-Wave configuration parameter values and temperature setpoints will return to default values.",
+		"manual": "https://manuals-backend.z-wave.info/make.php?lang=en&sku=PWLY-7828-A1&cert=ZC10-17065620"
+	}
+}
