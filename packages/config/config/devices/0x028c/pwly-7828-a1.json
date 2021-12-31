@@ -204,7 +204,7 @@
 		},
 		{
 			"#": "10",
-			"label": "OTA (Over The Air) programming error code",
+			"label": "OTA (Over The Air) Programming Error Code",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
