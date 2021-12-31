@@ -29,6 +29,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Celsius",
@@ -47,6 +48,7 @@
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "1 Stage Conventional",
@@ -81,13 +83,14 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -159,13 +162,14 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "On",
+					"label": "Enable",
 					"value": 1
 				}
 			]
