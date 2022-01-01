@@ -25,7 +25,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Basic Set Level",
+			"label": "Basic Set: Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
