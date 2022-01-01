@@ -1,0 +1,110 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NEO-DS07Z",
+	"description": "Door/Window Sensor Plus",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0702"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Led Indicated Disable", 
+			"description": "This configuration sets to ‘0’ will disable the Led indicating when device detects a door/window opened or closed event.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Binary Sensor Report Enable",
+			"description": "This configuration sets to ‘1’ will enable SENSOR_BINARY_REPORT when device detects a door/window opened or closed event.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Temperature Offset Value",
+			"description": "The current measuring temperature value can be add and minus a value by this setting. Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).",
+			"valueSize": 1,
+			"minValue": -120,
+			"maxValue": 121,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "4",
+			"label": "Humidity Offset Value",
+			"description": "The current measuring humidity value can be add and minus a value by this setting. Humidity Offset Value = [Value] × 0.1 RH%.",
+			"valueSize": 1,
+			"minValue": -120,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"unsigned": false
+		},
+		{
+			"#": "5",
+			"label": "Temperature D-Value Setting",
+			"description": "This configuration sets the changed value of the temperature. When the difference from the last report exceeds this setting value, the device will report current temperature value to Z-Wave Hubs. The D-Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Humidity D-Value Setting",
+			"description": "This configuration sets the changed value of the humidity. When the difference from the last report exceeds this setting value, the device will report current humidity value to Z-Wave Hubs. The D- Value = [Value] × 0.1 RH%.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Basic Set Value",
+			"description": "This configuration sets the level for device sending BASIC_SET to nodes that associated in group 2 when device detects a door/window opened event. [0] – Off, BASIC_SET = 0x00, all nodes associated in group 2 will be off. [1 … 99] – On. BASIC_SET = [Setting Value]. [100] – On, BASIC_SET = 0xFF.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Basic Set Off Delay Time",
+			"description": "This configuration sets the time delay for device sending BASIC_SET = 0x00 to nodes that associated in group 2 when device detects a door/window closed event. [0] – No time delay. [1 … 30000] – Time delay count.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Sensor Measuring Interval",
+			"description": "This parameter is configured the time interval for sensor measuring interval time. This value is larger, the sensor values updates slowly. ‘0’ – Sensor Measuring Disable.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30000,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	]	
+}
