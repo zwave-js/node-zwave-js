@@ -39,7 +39,7 @@
     "fs-extra": "^10.0.0",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.5",
-    "yargs": "^17.2.1"
+    "yargs": "^17.3.1"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
@@ -51,7 +51,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/semver": "^7.3.9",
-    "@types/yargs": "^17.0.5",
+    "@types/yargs": "^17.0.8",
     "esbuild": "*",
     "esbuild-register": "^3.1.2",
     "jest-extended": "^0.11.5",
