@@ -3922,10 +3922,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/js-levenshtein@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@types/js-levenshtein@npm:1.1.0"
-  checksum: 607aef621ca862726f03f64b50030933eabe0bd08977c81100946c7ff861278c966d03e9f625370d0333153120f9d86b80ec81bf9cdec03d561127ab26eb1a1e
+"@types/js-levenshtein@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@types/js-levenshtein@npm:1.1.1"
+  checksum: 1d1ff1ee2ad551909e47f3ce19fcf85b64dc5146d3b531c8d26fc775492d36e380b32cf5ef68ff301e812c3b00282f37aac579ebb44498b94baff0ace7509769
   languageName: node
   linkType: hard
 
@@ -4231,7 +4231,7 @@ __metadata:
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^26.0.24
-    "@types/js-levenshtein": ^1.1.0
+    "@types/js-levenshtein": ^1.1.1
     "@types/json-logic-js": ^1.2.1
     "@types/node": ^15.12.5
     "@types/pegjs": ^0.10.3
