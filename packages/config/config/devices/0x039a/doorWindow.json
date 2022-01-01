@@ -34,8 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Led Indicator",
-			"description": "Indicator on open close event",
+			"label": "LED Indicator: Open/Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
