@@ -26,11 +26,21 @@
 		{
 			"#": "2",
 			"label": "Basic Set: Level",
-			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 100
+				}
+			]
 		},
 		{
 			"#": "3",
@@ -73,7 +83,7 @@
 		{
 			"#": "5",
 			"label": "Battery Report Interval",
-			"unit": "seconds",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1080,
