@@ -4245,7 +4245,7 @@ __metadata:
     esbuild-register: ^3.3.1
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    piscina: ^3.1.0
+    piscina: ^3.2.0
     prettier: ^2.5.1
     reflect-metadata: ^0.1.13
     ts-morph: ^13.0.2
@@ -11579,9 +11579,9 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"piscina@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "piscina@npm:3.1.0"
+"piscina@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "piscina@npm:3.2.0"
   dependencies:
     eventemitter-asyncresource: ^1.0.0
     hdr-histogram-js: ^2.0.1
@@ -11590,7 +11590,7 @@ fsevents@^2.1.2:
   dependenciesMeta:
     nice-napi:
       optional: true
-  checksum: ae093257c3b4a54ead4687f1423716137c4e8e0012616bb3f93efd81ae1661aeb250c34a623b142c0d298541d0f8c96d09965024fc45cb7beb92109ea6f6c882
+  checksum: c1980c7d45d85f53265652dd2fc62a2b9e9d2321f5bbb9fc1796edb9c1324bb77c153e823a0d6454c3c35098820efedff584737cc282207480afe478a3b8a166
   languageName: node
   linkType: hard
 
