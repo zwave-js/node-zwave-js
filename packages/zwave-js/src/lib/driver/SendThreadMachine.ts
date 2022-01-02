@@ -204,8 +204,13 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 			return false;
 		}
 
-		// While not busy, always reply to nonce requests
-		if (nextTransaction.priority === MessagePriority.Nonce) return true;
+		// While not busy, always reply to nonce requests and Supervision Get requests
+		if (
+			nextTransaction.priority === MessagePriority.Nonce ||
+			nextTransaction.priority === MessagePriority.Supervision
+		) {
+			return true;
+		}
 		// And send pings
 		if (messageIsPing(message)) return true;
 		// Or controller messages
