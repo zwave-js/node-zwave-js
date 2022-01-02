@@ -89,8 +89,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			const ccBuffer = this.payload.slice(0, -2);
 
 			// Verify the CRC
-			let expectedCRC = CRC16_CCITT(this.headerBuffer);
-			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+			const expectedCRC = CRC16_CCITT(
+				Buffer.concat([this.headerBuffer, ccBuffer]),
+			);
 			const actualCRC = this.payload.readUInt16BE(
 				this.payload.length - 2,
 			);
@@ -117,8 +118,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
-		let crc = CRC16_CCITT(this.headerBuffer);
-		crc = CRC16_CCITT(commandBuffer, crc);
+		const crc = CRC16_CCITT(
+			Buffer.concat([this.headerBuffer, commandBuffer]),
+		);
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
 		return super.serialize();

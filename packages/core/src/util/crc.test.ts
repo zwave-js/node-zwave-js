@@ -18,14 +18,5 @@ describe("lib/util/crc", () => {
 		it("input: A x 256", () => {
 			expect(CRC16_CCITT(Buffer.alloc(256, "A", "ascii"))).toBe(0xe938);
 		});
-
-		it("chained with start values", () => {
-			const input = "123456789";
-			let crc: number | undefined;
-			for (let i = 0; i < input.length; i++) {
-				crc = CRC16_CCITT(Buffer.from(input[i], "ascii"), crc);
-			}
-			expect(crc).toBe(0xe5cc);
-		});
 	});
 });

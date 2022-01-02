@@ -549,8 +549,10 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		if (this.version >= 2) {
 			// Compute and save the CRC16 in the payload
 			// The CC header is included in the CRC computation
-			let crc = CRC16_CCITT(Buffer.from([this.ccId, this.ccCommand]));
-			crc = CRC16_CCITT(commandBuffer, crc);
+			const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
+			const crc = CRC16_CCITT(
+				Buffer.concat([headerBuffer, commandBuffer]),
+			);
 			this.payload = Buffer.concat([
 				commandBuffer,
 				Buffer.allocUnsafe(2),

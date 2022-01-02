@@ -121,8 +121,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 				this.ccCommand | this.payload[0],
 			]);
 			const ccBuffer = this.payload.slice(1, -2);
-			let expectedCRC = CRC16_CCITT(headerBuffer);
-			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+			const expectedCRC = CRC16_CCITT(
+				Buffer.concat([headerBuffer, ccBuffer]),
+			);
 			const actualCRC = this.payload.readUInt16BE(
 				this.payload.length - 2,
 			);
@@ -185,8 +186,8 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
-		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		const commandBuffer = this.payload.slice(0, -2);
+		const crc = CRC16_CCITT(Buffer.concat([headerBuffer, commandBuffer]));
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
@@ -251,8 +252,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 				this.ccCommand | this.payload[0],
 			]);
 			const ccBuffer = this.payload.slice(1, -2);
-			let expectedCRC = CRC16_CCITT(headerBuffer);
-			expectedCRC = CRC16_CCITT(ccBuffer, expectedCRC);
+			const expectedCRC = CRC16_CCITT(
+				Buffer.concat([headerBuffer, ccBuffer]),
+			);
 			const actualCRC = this.payload.readUInt16BE(
 				this.payload.length - 2,
 			);
@@ -389,8 +391,8 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		// Compute and save the CRC16 in the payload
 		// The CC header is included in the CRC computation
 		const headerBuffer = Buffer.from([this.ccId, this.ccCommand]);
-		let crc = CRC16_CCITT(headerBuffer);
-		crc = CRC16_CCITT(this.payload.slice(0, -2), crc);
+		const commandBuffer = this.payload.slice(0, -2);
+		const crc = CRC16_CCITT(Buffer.concat([headerBuffer, commandBuffer]));
 		// Write the checksum into the last two bytes of the payload
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
