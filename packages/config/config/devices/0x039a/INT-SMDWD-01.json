@@ -30,7 +30,6 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Off",
