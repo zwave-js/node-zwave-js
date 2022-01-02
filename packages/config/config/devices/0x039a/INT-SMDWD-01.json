@@ -2,7 +2,7 @@
 	"manufacturer": "Inteset",
 	"manufacturerId": "0x039a",
 	"label": "Inteset Door/Window Sensor",
-	"description": "Door/Window Sensor",
+	"description": "INT-SMDWD-01",
 	"devices": [
 		{
 			"productType": "0x0003",
