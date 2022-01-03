@@ -16,28 +16,49 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Led Indicated Disable", 
-			"description": "This configuration sets to ‘0’ will disable the Led indicating when device detects a door/window opened or closed event.",
+			"label": "Led Indicated",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "2",
-			"label": "Binary Sensor Report Enable",
-			"description": "This configuration sets to ‘1’ will enable SENSOR_BINARY_REPORT when device detects a door/window opened or closed event.",
+			"label": "Binary Sensor Report",
+			"description": "Enable Sensor_Binary_Report When Device Detects A Door/Window Opened Or Closed Event.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "3",
 			"label": "Temperature Offset Value",
-			"description": "The current measuring temperature value can be add and minus a value by this setting. Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).",
+			"description": "The Current Measuring Temperature Value Can Be Add And Minus A Value By This Setting. Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 121,
@@ -57,7 +78,7 @@
 		{
 			"#": "5",
 			"label": "Temperature D-Value Setting",
-			"description": "This configuration sets the changed value of the temperature. When the difference from the last report exceeds this setting value, the device will report current temperature value to Z-Wave Hubs. The D-Value = [Value] × 0.1 Degree Celsius / Fahrenheit (US).",
+			"description": "Sets The Changed Value Of The Temperature. When The Difference From The Last Report Exceeds This Setting Value, The Device Will Report Current Temperature Value To Z-Wave Hubs. The D-Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -67,7 +88,7 @@
 		{
 			"#": "6",
 			"label": "Humidity D-Value Setting",
-			"description": "This configuration sets the changed value of the humidity. When the difference from the last report exceeds this setting value, the device will report current humidity value to Z-Wave Hubs. The D- Value = [Value] × 0.1 RH%.",
+			"description": "Sets The Changed Value Of The Humidity. When The Difference From The Last Report Exceeds This Setting Value, The Device Will Report Current Humidity Value To Z-Wave Hubs. The D- Value = [Value] × 0.1 Rh%.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -77,34 +98,56 @@
 		{
 			"#": "7",
 			"label": "Basic Set Value",
-			"description": "This configuration sets the level for device sending BASIC_SET to nodes that associated in group 2 when device detects a door/window opened event. [0] – Off, BASIC_SET = 0x00, all nodes associated in group 2 will be off. [1 … 99] – On. BASIC_SET = [Setting Value]. [100] – On, BASIC_SET = 0xFF.",
+			"description": "Sets The Level For Device Sending BASIC_SET To Nodes That Associated In Group 2 When Device Detects A Door/Window Opened Event.  [1 … 99] – On. Basic_Set = [Setting Value].",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Off - BASIC_SET = 0x00 All Nodes Associated In Group 2 Will Be Off",
+					"value": 0
+				},
+				{
+					"label": "On - BASIC_SET = 0xFF",
+					"value": 100
+				}
+			]
 		},
 		{
 			"#": "8",
 			"label": "Basic Set Off Delay Time",
-			"description": "This configuration sets the time delay for device sending BASIC_SET = 0x00 to nodes that associated in group 2 when device detects a door/window closed event. [0] – No time delay. [1 … 30000] – Time delay count.",
+			"description": "Sets the Time Delay for Device sending BASIC_SET = 0x00 to Nodes that Associated in group 2 when Device detects a Door/Window closed event.  [1 … 30000] – Time delay count.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "No time delay",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "9",
 			"label": "Sensor Measuring Interval",
-			"description": "This parameter is configured the time interval for sensor measuring interval time. This value is larger, the sensor values updates slowly. ‘0’ – Sensor Measuring Disable.",
+			"description": "The Time Interval For Sensor Measuring Interval Time. This Value Is Larger, The Sensor Values Updates Slowly.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Sensor Measuring Disable",
+					"value": 0
+				}
+			]
 		}
-	]	
+	]
 }
