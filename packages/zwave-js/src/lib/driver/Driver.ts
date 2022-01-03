@@ -3246,7 +3246,10 @@ ${handlers.length} left`,
 			if (success) {
 				if (node.canSleep) {
 					// Do not update the node status when we only responded to a nonce request
-					if (options.priority !== MessagePriority.Nonce) {
+					if (
+						options.priority !== MessagePriority.Nonce &&
+						options.priority !== MessagePriority.Supervision
+					) {
 						// If the node is not meant to be kept awake, try to send it back to sleep
 						if (!node.keepAwake) {
 							setImmediate(() =>
@@ -3336,8 +3339,9 @@ ${handlers.length} left`,
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
 			!(msg instanceof SendDataMulticastBridgeRequest) &&
-			// Nonces have to be sent immediately
-			options.priority !== MessagePriority.Nonce
+			// Nonces and responses to Supervision Get have to be sent immediately
+			options.priority !== MessagePriority.Nonce &&
+			options.priority !== MessagePriority.Supervision
 		) {
 			if (options.priority === MessagePriority.NodeQuery) {
 				// Remember that this transaction was part of an interview
@@ -3403,6 +3407,7 @@ ${handlers.length} left`,
 				// For SendData messages, make sure the message is not a nonce
 				maybeSendToSleep =
 					options.priority !== MessagePriority.Nonce &&
+					options.priority !== MessagePriority.Supervision &&
 					// And that the result is either a response from the node
 					// or a transmit report indicating success
 					result &&
@@ -3727,9 +3732,10 @@ ${handlers.length} left`,
 	private mayMoveToWakeupQueue(transaction: Transaction): boolean {
 		const msg = transaction.message;
 		switch (true) {
-			// Pings and nonces will block the send queue until wakeup, so they must be dropped
+			// Pings, nonces and Supervision Reports will block the send queue until wakeup, so they must be dropped
 			case messageIsPing(msg):
 			case transaction.priority === MessagePriority.Nonce:
+			case transaction.priority === MessagePriority.Supervision:
 			// We also don't want to immediately send the node to sleep when it wakes up
 			case isCommandClassContainer(msg) &&
 				msg.command instanceof WakeUpCCNoMoreInformation:
