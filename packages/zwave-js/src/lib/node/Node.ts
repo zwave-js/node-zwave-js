@@ -4533,13 +4533,11 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			const newStats: RouteStatistics = {
 				protocolDataRate: txReport.routeSpeed,
 				repeaters: (txReport.repeaterNodeIds ?? []) as number[],
-				ackRSSI:
-					txReport.ackRSSI ??
-					ret.lwr?.ackRSSI ??
-					RssiError.NotAvailable,
+				rssi:
+					txReport.ackRSSI ?? ret.lwr?.rssi ?? RssiError.NotAvailable,
 			};
 			if (txReport.ackRepeaterRSSI != undefined) {
-				newStats.ackRepeaterRSSI = txReport.ackRepeaterRSSI as number[];
+				newStats.repeaterRSSI = txReport.ackRepeaterRSSI as number[];
 			}
 			if (
 				txReport.failedRouteLastFunctionalNodeId &&

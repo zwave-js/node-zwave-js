@@ -4,6 +4,7 @@ export {
 	NodeType,
 	NODE_ID_BROADCAST,
 	NODE_ID_MAX,
+	ProtocolDataRate,
 	ProtocolVersion,
 } from "@zwave-js/core";
 export { DeviceClass } from "./lib/node/DeviceClass";
@@ -17,6 +18,7 @@ export {
 	InterviewStage,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
+	LifelineRoutes,
 	NodeInterviewFailedEventArgs,
 	NodeStatus,
 	RefreshInfoOptions,

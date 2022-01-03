@@ -1175,15 +1175,16 @@ interface NodeStatistics {
 	 * Consecutive measurements are combined using an exponential moving average.
 	 */
 	rtt?: number;
+
 	/**
 	 * Average RSSI of frames received by this node in dBm.
 	 * Consecutive non-error measurements are combined using an exponential moving average.
 	 */
 	rssi?: RSSI;
 
-	/** The last working route between the controller and this node. */
+	/** The last working route from the controller to this node. */
 	lwr?: RouteStatistics;
-	/** The next to last working route between the controller and this node. */
+	/** The next to last working route from the controller to this node. */
 	nlwr?: RouteStatistics;
 }
 ```
@@ -1198,12 +1199,12 @@ interface RouteStatistics {
 	repeaters: number[];
 
 	/** The RSSI of the ACK frame received by the controller */
-	ackRSSI?: RSSI;
+	rssi?: RSSI;
 	/**
 	 * The RSSI of the ACK frame received by each repeater.
 	 * If this is set, it has the same length as the repeaters array.
 	 */
-	ackRepeaterRSSI?: RSSI[];
+	repeaterRSSI?: RSSI[];
 
 	/**
 	 * The node IDs of the nodes between which the transmission failed most recently.
