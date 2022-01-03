@@ -5,7 +5,7 @@
 	"description": "Door/Window Sensor Plus",
 	"devices": [
 		{
-			"productType": "0x0003",
+			"productType": "0x0010",
 			"productId": "0x0702"
 		}
 	],
