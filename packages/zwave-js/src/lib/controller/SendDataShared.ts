@@ -82,6 +82,10 @@ export enum RssiError {
 	NoSignalDetected = 125,
 }
 
+export function isRssiError(rssi: RSSI): rssi is RssiError {
+	return rssi >= RssiError.NoSignalDetected;
+}
+
 // const RSSI_RESERVED_START = 11;
 
 /** A number between -128 and +124 dBm or one of the special values in {@link RssiError} indicating an error */

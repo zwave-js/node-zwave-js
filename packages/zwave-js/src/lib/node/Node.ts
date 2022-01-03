@@ -57,10 +57,12 @@ import {
 	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
+import { roundTo } from "alcalzone-shared/math";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import type { Message } from "../..";
 import { PowerlevelCCTestNodeReport } from "../commandclass";
 import type {
 	CCAPI,
@@ -152,7 +154,12 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import { RSSI, RssiError, TXReport } from "../controller/SendDataShared";
+import {
+	isRssiError,
+	RSSI,
+	RssiError,
+	TXReport,
+} from "../controller/SendDataShared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
@@ -169,7 +176,12 @@ import {
 	createNodeReadyMachine,
 	NodeReadyInterpreter,
 } from "./NodeReadyMachine";
-import { NodeStatistics, NodeStatisticsHost } from "./NodeStatistics";
+import {
+	NodeStatistics,
+	NodeStatisticsHost,
+	RouteStatistics,
+	routeStatisticsEquals,
+} from "./NodeStatistics";
 import {
 	createNodeStatusMachine,
 	NodeStatusInterpreter,
@@ -4483,5 +4495,68 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 		);
 
 		return summary;
+	}
+
+	/**
+	 * Updates the average RTT of this node
+	 * @internal
+	 */
+	public updateRTT(sentMessage: Message): void {
+		if (sentMessage.rtt) {
+			const rttMs = sentMessage.rtt / 1e6;
+			this.updateStatistics((current) => ({
+				...current,
+				rtt:
+					current.rtt != undefined
+						? roundTo(current.rtt * 0.75 + rttMs * 0.25, 1)
+						: roundTo(rttMs, 1),
+			}));
+		}
+	}
+
+	/**
+	 * Updates route/transmission statistics for this node
+	 * @internal
+	 */
+	public updateRouteStatistics(txReport: TXReport): void {
+		this.updateStatistics((current) => {
+			const ret = { ...current };
+			// Update ACK RSSI
+			if (txReport.ackRSSI != undefined) {
+				ret.rssi =
+					ret.rssi == undefined || isRssiError(txReport.ackRSSI)
+						? txReport.ackRSSI
+						: Math.round(ret.rssi * 0.75 + txReport.ackRSSI * 0.25);
+			}
+
+			// Update the LWR's statistics
+			const newStats: RouteStatistics = {
+				protocolDataRate: txReport.routeSpeed,
+				repeaters: (txReport.repeaterNodeIds ?? []) as number[],
+				ackRSSI:
+					txReport.ackRSSI ??
+					ret.lwr?.ackRSSI ??
+					RssiError.NotAvailable,
+			};
+			if (txReport.ackRepeaterRSSI != undefined) {
+				newStats.ackRepeaterRSSI = txReport.ackRepeaterRSSI as number[];
+			}
+			if (
+				txReport.failedRouteLastFunctionalNodeId &&
+				txReport.failedRouteFirstNonFunctionalNodeId
+			) {
+				newStats.routeFailedBetween = [
+					txReport.failedRouteLastFunctionalNodeId,
+					txReport.failedRouteFirstNonFunctionalNodeId,
+				];
+			}
+
+			if (ret.lwr && !routeStatisticsEquals(ret.lwr, newStats)) {
+				// The old LWR becomes the NLWR
+				ret.nlwr = ret.lwr;
+			}
+			ret.lwr = newStats;
+			return ret;
+		});
 	}
 }

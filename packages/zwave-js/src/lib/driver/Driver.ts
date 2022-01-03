@@ -43,7 +43,6 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { roundTo } from "alcalzone-shared/math";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
@@ -3263,25 +3262,13 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsDroppedTX");
 				} else {
 					node.incrementStatistics("commandsTX");
-					if (msg.rtt) {
-						const rttMs = msg.rtt / 1e6;
-						node.updateStatistics((current) => ({
-							...current,
-							rtt:
-								current.rtt != undefined
-									? roundTo(
-											current.rtt * 0.9 + rttMs * 0.1,
-											1,
-									  )
-									: roundTo(rttMs, 1),
-						}));
-					}
+					node.updateRTT(msg);
 				}
 
 				// Notify listeners about the status report if one was received
 				if (hasTXReport(result)) {
 					options.onTXReport?.(result.txReport);
-					// TODO: Update statistics based on the TX report
+					node.updateRouteStatistics(result.txReport);
 				}
 			}
 
