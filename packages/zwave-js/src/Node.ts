@@ -9,7 +9,10 @@ export {
 export { DeviceClass } from "./lib/node/DeviceClass";
 export { Endpoint } from "./lib/node/Endpoint";
 export { ZWaveNode } from "./lib/node/Node";
-export type { NodeStatistics } from "./lib/node/NodeStatistics";
+export type {
+	NodeStatistics,
+	RouteStatistics,
+} from "./lib/node/NodeStatistics";
 export {
 	InterviewStage,
 	LifelineHealthCheckResult,

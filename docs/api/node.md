@@ -1175,5 +1175,40 @@ interface NodeStatistics {
 	 * Consecutive measurements are combined using an exponential moving average.
 	 */
 	rtt?: number;
+	/**
+	 * Average RSSI of frames received by this node in dBm.
+	 * Consecutive non-error measurements are combined using an exponential moving average.
+	 */
+	rssi?: RSSI;
+
+	/** The last working route between the controller and this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route between the controller and this node. */
+	nlwr?: RouteStatistics;
+}
+```
+
+<!-- #import RouteStatistics from "zwave-js" -->
+
+```ts
+interface RouteStatistics {
+	/** The protocol and used data rate for this route */
+	protocolDataRate: ProtocolDataRate;
+	/** Which nodes are repeaters for this route */
+	repeaters: number[];
+
+	/** The RSSI of the ACK frame received by the controller */
+	ackRSSI?: RSSI;
+	/**
+	 * The RSSI of the ACK frame received by each repeater.
+	 * If this is set, it has the same length as the repeaters array.
+	 */
+	ackRepeaterRSSI?: RSSI[];
+
+	/**
+	 * The node IDs of the nodes between which the transmission failed most recently.
+	 * Is only set if there recently was a transmission failure.
+	 */
+	routeFailedBetween?: [number, number];
 }
 ```
