@@ -1,35 +1,45 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_SO03",
+	"label": "HKZW-SO03",
 	"description": "Smart Plug",
 	"devices": [
 		{
 			"productType": "0x0101",
-			"productId": "0x000a"
+			"productId": "0x000a",
+			"zwaveAllianceId": 1854
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Overload Protection",
-			"unit": "decimal",
+			"label": "Overcurrent Protection",
+			"description": "Smart plug keep detecting the load power, once the ac current exceeds 16.5a for more than 5s, smart plug's relay will turn off",
 			"valueSize": 1,
+			"unit": "decimal",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "The function is disabled",
 					"value": 0
 				},
 				{
-					"label": "Enabled (default)",
+					"label": "The function is enabled",
 					"value": 1
 				}
 			]
@@ -40,47 +50,154 @@
 		},
 		{
 			"#": "24",
-			"label": "On/Off Status Change Notifications",
-			"unit": "decimal",
+			"label": "Notification When Load Status Change",
+			"description": "Smart plug can send notifications to association device (group lifeline) when state of smart plug’s load change",
 			"valueSize": 1,
+			"unit": "decimal",
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "The function is disabled",
 					"value": 0
 				},
 				{
-					"label": "Always Send (default)",
+					"label": "Send basic report",
 					"value": 1
 				},
 				{
-					"label": "Only Manual Changes",
+					"label": "Send basic report only when load condition is not changed by Z-Wave command",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "27",
-			"label": "Led Indicator Control",
-			"unit": "decimal",
+			"label": "Indicator Modes",
+			"description": "After smart plug being included into a Z-Wave network, the RGB LED indicator will indicator the situation of load",
 			"valueSize": 1,
+			"unit": "decimal",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Always On (default)",
+					"label": "The smart plug will work in power indication mode",
 					"value": 0
 				},
 				{
-					"label": "5 Seconds",
+					"label": "The smart plug will work in power indication mode for 5 seconds, when the state of smart plug’s load changed. RGB LED indicator will turn off if there is no more switch action in 5 seconds",
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "151",
+			"label": "Threshold of Change in Wattage",
+			"description": "Power threshold to be interpreted, when the change value of load power exceeds the setting threshold, the smart plug will send meter report to associated device (group lifeline)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "152",
+			"label": "Threshold of Change in Wattage Percentage",
+			"description": "Power percentage threshold to be interpreted, when change value of the load power exceeds the setting threshold, the smart plug will send meter report to associated device (group lifeline)",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "171",
+			"label": "Intervals of Sending Meter Report (for Wattage)",
+			"description": "The interval of sending meter report(in term of wattage) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "172",
+			"label": "Intervals of Sending Meter Report (for Kwh)",
+			"description": "The interval of sending meter report(in term of kwh) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "173",
+			"label": "Intervals of Sending Meter Report (for Voltage)",
+			"description": "The interval of sending meter report(in term of voltage) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "174",
+			"label": "Intervals of Sending Meter Report (for Current)",
+			"description": "The interval of sending meter report(in term of current) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1) Connect the power supply.\n2) Set the Z-Wave network main controller into inclusion mode (see Z-Wave network controller operating manual).\n3) Triple click the Z-button or power up the device , RGB LED indicator should blink fast in blue.\n4) Smart Plug should be recognized and included into the Z-Wave network.",
+		"exclusion": "1) Insert the Plug into a socket.\n2) Set the Z-Wave network controller into the exclusion mode (see Z-Wave controller operating manual).\n3) Triple click the Z button.\n4) RGB LED indicator will blink orange till the removing process is completed, than the indicator will keep orange for 3 seconds.",
+		"reset": "1) Insert the Plug into a socket,\n2) Press and hold the Z button for more than 20 seconds,\n3) If holding time more than 20seconds, the RGB LED indicator will keep yellow for 2 seconds, which means resetting is complete. \n Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1854/HKZW-SO03_manual.pdf"
+	}
 }
