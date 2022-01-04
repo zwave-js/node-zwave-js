@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.10.0 (2022-01-04)
 ### Features
 * Added the `waitForWakeup` message to the `ZWaveNode` class to wait until the node is awake
 * Delay resetting node info on re-interview for sleeping nodes until they wakeup
