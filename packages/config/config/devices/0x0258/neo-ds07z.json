@@ -88,7 +88,7 @@
 		{
 			"#": "6",
 			"label": "Humidity Change Report Threshold",
-			"unit": "0.1 (RH%).",
+			"unit": "0.1 %rH",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -98,7 +98,6 @@
 		{
 			"#": "7",
 			"label": "Association Group 2: Basic Set Value (Open)",
-			"description": "Sets The Level For Device Sending BASIC_SET To Nodes That Associated In Group 2 When Device Detects A Door/Window Opened Event.  [1 … 99] On. - Basic_Set = [Setting Value].",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
