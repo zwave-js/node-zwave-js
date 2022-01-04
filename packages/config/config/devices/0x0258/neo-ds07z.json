@@ -106,13 +106,13 @@
 			"unsigned": true,
 			"options": [
 				{
-                    "label": "Off (0x00)",
-                    "value": 0
-                },
-                {
-                    "label": "On (0xff)",
-                    "value": 100
-                }
+					"label": "Off (0x00)",
+					"value": 0
+				},
+				{
+					"label": "On (0xff)",
+					"value": 100
+				}
 			]
 		},
 		{
@@ -146,11 +146,12 @@
 					"value": 0
 				}
 			]
-		},
-		"metadata": {
-			"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
-			"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",
-			"reset": "1. Power Up The Device.\n2. Press And Hold The Button For 10s Until Pink Led Lights Is On, Then Release The Button Before Led Turn Off."
 		}
-	]
+	],
+
+	"metadata": {
+		"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
+		"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",
+		"reset": "1. Power Up The Device.\n2. Press And Hold The Button For 10s Until Pink Led Lights Is On, Then Release The Button Before Led Turn Off."
+	}
 }
