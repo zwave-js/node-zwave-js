@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-PH WALL CONTROLLER",
-	"description": "Heatit Z-Push Wall Controller",
+	"description": "Z-Push Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -21,60 +21,87 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Button group 2",
+			"label": "Double/Triple Rocker First Button",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Button group 3",
+			"label": "Single Rocker, Triple Rocker Middle Button",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Button group 4",
+			"label": "Double/Triple Rocker Last Button",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Select Button Reports",
-			"description": "Configure reports sent when pressing buttons: 0 - send central scene command only 1 - send group association command only 2 - send central scene and group association commands",
+			"label": "Button Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send central scene command only",
+					"label": "Central Scene",
 					"value": 0
+				},
+				{
+					"label": "Basic Set, Multilevel Switch",
+					"value": 1
+				},
+				{
+					"label": "All",
+					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Enable Led",
-			"description": "0 disable,1 enable",
+			"label": "LED Configuration",
+			"description": "Disabling this does not turn of factory reset/inclusion indication.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (does not turn off factory reset/learn mode blinking etc)",
+					"label": "Disable",
 					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Active Button Rockers",
-			"description": "If there is issue where, single button accidently presses other buttons, customer can turn of different button groups. not needed if plasic design already prevents this. 1 = buttongroup 3 is used (when sigle rocker is used) 2 = buttongroup 2 & 4 is used (when double rocker is used) 3 = buttongroup 2, 3 & 4 is used (when triple rocker is used)",
+			"label": "Installed Rocker",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"unsigned": true
+			"unsigned": true, 
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single Rocker",
+					"value": 1
+				},
+				{
+					"label": "Double Rocker",
+					"value": 2
+				},
+				{
+					"label": "Triple Rocker",
+					"value": 3
+				}
+			]
 		}
 	],
 	"metadata": {
