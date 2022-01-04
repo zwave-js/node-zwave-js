@@ -13,15 +13,11 @@
 		"min": "2.0",
 		"max": "255.255"
 	},
-	"metadata": {
-		"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
-		"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",
-		"reset": "1. Power Up The Device.\n2. Press And Hold The Button For 10s Until Pink Led Lights Is On, Then Release The Button Before Led Turn Off."
-	},
+
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Led Indicated",
+			"label": "LED Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -42,7 +38,6 @@
 		{
 			"#": "2",
 			"label": "Binary Sensor Report",
-			"description": "Enable SENSOR_BINARY_REPORT When Device Detects A Door/Window Opened Or Closed Event.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,8 +57,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Temperature Offset Value",
-			"description": "The Current Measuring Temperature Value Can Be Add And Minus A Value By This Setting. Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).Temperature Offset Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).",
+			"label": "Temperature Calibration",
+			"unit": "0.1 (°C/°F)",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 121,
@@ -73,7 +68,7 @@
 		{
 			"#": "4",
 			"label": "Humidity Offset Value",
-			"description": "The current measuring humidity value can be add and minus a value by this setting. Humidity Offset Value = [Value] × 0.1 RH%.",
+			"unit": "0.1 (RH%).",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 120,
@@ -82,8 +77,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Temperature D-Value Setting",
-			"description": "Sets The Changed Value Of The Temperature. When The Difference From The Last Report Exceeds This Setting Value, The Device Will Report Current Temperature Value To Z-Wave Hubs. The D-Value = [Value] × 0.1 Degree Celsius / Fahrenheit (Us).",
+			"label": "Temperature Temperature Change Report Threshold",
+			"unit": "0.1 (°C/°F)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -92,8 +87,8 @@
 		},
 		{
 			"#": "6",
-			"label": "Humidity D-Value Setting",
-			"description": "Sets The Changed Value Of The Humidity. When The Difference From The Last Report Exceeds This Setting Value, The Device Will Report Current Humidity Value To Z-Wave Hubs. The D- Value = [Value] × 0.1 Rh%.",
+			"label": "Humidity Temperature Change Report Threshold",
+			"unit": "0.1 (RH%).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -102,7 +97,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Basic Set Value",
+			"label": "Association Group 2: Basic Set Value (Open)",
 			"description": "Sets The Level For Device Sending BASIC_SET To Nodes That Associated In Group 2 When Device Detects A Door/Window Opened Event.  [1 … 99] On. - Basic_Set = [Setting Value].",
 			"valueSize": 1,
 			"minValue": 0,
@@ -111,19 +106,18 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Off - BASIC_SET = 0x00 All Nodes Associated In Group 2 Will Be Off",
-					"value": 0
-				},
-				{
-					"label": "On - BASIC_SET = 0xFF",
-					"value": 100
-				}
+                    "label": "Off (0x00)",
+                    "value": 0
+                },
+                {
+                    "label": "On (0xff)",
+                    "value": 100
+                }
 			]
 		},
 		{
 			"#": "8",
-			"label": "Basic Set Off Delay Time",
-			"description": "Sets the Time Delay for Device sending BASIC_SET = 0x00 to Nodes that Associated in group 2 when Device detects a Door/Window closed event.  [1 … 30000] – Time delay count.",
+			"label": "Association Group 2: Basic Set Off Delay (Close)",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -132,7 +126,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "No time delay",
+					"label": "No Delay",
 					"value": 0
 				}
 			]
@@ -140,7 +134,6 @@
 		{
 			"#": "9",
 			"label": "Sensor Measuring Interval",
-			"description": "The Time Interval For Sensor Measuring Interval Time. This Value Is Larger, The Sensor Values Updates Slowly.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -149,10 +142,15 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Sensor Measuring Disable",
+					"label": "Disable",
 					"value": 0
 				}
 			]
+		},
+		"metadata": {
+			"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
+			"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",
+			"reset": "1. Power Up The Device.\n2. Press And Hold The Button For 10s Until Pink Led Lights Is On, Then Release The Button Before Led Turn Off."
 		}
 	]
 }
