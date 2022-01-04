@@ -77,7 +77,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Temperature Temperature Change Report Threshold",
+			"label": "Temperature Change Report Threshold",
 			"unit": "0.1 (°C/°F)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Humidity Temperature Change Report Threshold",
+			"label": "Humidity Change Report Threshold",
 			"unit": "0.1 (RH%).",
 			"valueSize": 1,
 			"minValue": 0,
