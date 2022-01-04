@@ -4,6 +4,36 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added the `waitForWakeup` message to the `ZWaveNode` class to wait until the node is awake
+* Delay resetting node info on re-interview for sleeping nodes until they wakeup
+* Logging to file now creates a tailable symlink to the current logfile
+
+### Bugfixes
+* Supervision requests are answered again, even when the requesting node is asleep
+* Node responses claiming no support (version 0) for some critical CCs (`Version CC` and `Manufacturer Specific CC`) are now ignored
+
+### Config file changes
+* Add Shenzen Neo DS07Z door/window switch
+* Add Heatit Z-Push Wall Controller
+* Add undocumented parameter 61 to wiDom WDS2
+* Add Inteset Door/Window Sensor
+* Add Powerley PWLY-7828-A1 Thermostat
+* Add fingerprint 0x0300:0xa10b to Sunricher SR-ZV9001T4-DIM
+* Add many new devices from Z-Wave Alliance DB
+* Add warning to NAS-WR01ZE about huge negative values
+* Correct EVA LOGIK ZW39 device files
+* Update/consolidate HomeSeer parameters for WD200 and WX300
+* Add Zooz ZSE43 and ZSE44 device config files
+* Disable Basic CC mapping for Logic Group ZDB5100
+* Add variant of TKB Home TSM02 with manufacturerId 0x4118
+* Fix scene parameters for FGWDEU-111 (Fibaro Walli Dimmer)
+* Correct incorrect parameter values in various Heltun devices
+
+### Changes under the hood
+* Performance improvements for the Value DB
+
 ## 8.9.2 (2021-12-27)
 ### Bugfixes
 * Correctly reset firmware update status on failed updates
