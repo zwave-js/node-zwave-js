@@ -86,7 +86,7 @@
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
-			"unsigned": true, 
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
