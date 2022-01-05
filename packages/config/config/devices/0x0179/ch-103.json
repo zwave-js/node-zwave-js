@@ -68,7 +68,7 @@
 			"label": "Rotation Time",
      		"description": "Time of full rotation of lamellas or (180 °) in the blind mode",
      		"unit": "decisecond",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
@@ -77,7 +77,7 @@
 			"#": "4",
 			"label": "Open Operating Time",
       		"unit": "decisecond",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
@@ -86,7 +86,7 @@
 			"#": "5",
 			"label": "Close Operating Time",
 			"unit": "decisecond",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
@@ -95,7 +95,7 @@
 			"#": "6",
 			"label": "Open Delay",
 			"unit": "decisecond",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
@@ -104,19 +104,10 @@
 			"#": "7",
 			"label": "Close Delay",
 			"unit": "decisecond",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
-		},
-		{
-			"#": "15",
-			"label": "Time turbo mode",
-			"unit": "sec",
-			"valueSize": 2,
-			"minValue": 100,
-			"maxValue": 1200,
-			"defaultValue": 120
 		},
 		{
 			"#": "50",
