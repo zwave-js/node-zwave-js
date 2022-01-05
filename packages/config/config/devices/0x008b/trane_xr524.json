@@ -94,7 +94,7 @@
 				}
 			]
 		},
-			{
+		{
 			"#": "6",
 			"label": "Indoor Heat Stages",
 			"valueSize": 1,
@@ -271,7 +271,7 @@
 					"label": "9 Minutes",
 					"value": 9
 				}
-            ]
+			]
 		},
 		{
 			"#": "15",
@@ -291,7 +291,7 @@
 			"maxValue": 100,
 			"defaultValue": 65
 		},
-        {
+		{
 			"#": "30",
 			"label": "ESM Setpoint-Cooling",
 			"unit": "degrees",
