@@ -1,0 +1,182 @@
+{
+	"manufacturer": "ConnectHome",
+	"manufacturerId": "0x0179",
+	"label": "CH-103",
+	"description": "CH-103 Relay",
+	"devices": [
+		{
+			"productType": "0x0041",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for temperature and alarm reports",
+			"maxNodes": 10,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Automatic Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Calibration",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,     
+      "allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard",
+					"value": 0
+				},
+				{
+					"label": "Motor with limit switchs",
+					"value": 1
+				},
+        {
+					"label": "Blind Control",
+					"value": 2
+				}
+		},
+		{
+			"#": "3",
+			"label": "Rotation Time",
+      "description": "Time of full rotation of lamellas or (180 °) in the blind mode",
+      "unit": "decisecond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "4",
+			"label": "Open Operating Time",
+      "unit": "decisecond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		{
+			"#": "5",
+			"label": "Close Operating Time",
+			"unit": "decisecond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Open Delay",
+			"unit": "decisecond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"label": "Close Delay",
+			"unit": "decisecond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "15",
+			"label": "Time turbo mode",
+			"unit": "sec",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 1200,
+			"defaultValue": 120
+		},
+		{
+			"#": "50",
+			"label": "Response Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+      "allowManualEntry": false,
+			"options": [
+				{
+					"label": "Security and regular commands",
+					"value": 0
+				},
+				{
+					"label": "Security commands only",
+					"value": 1
+				}
+		},
+		{
+			"#": "51",
+			"label": "2nd Association Group",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click",
+					"value": 0
+				},
+				{
+					"label": "Press",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "52",
+			"label": "3rd Association Group",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Click",
+					"value": 0
+				},
+				{
+					"label": "Press",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Press the system button located on the top cover three times.",
+		"exclusion": "Press the system button located on the top cover three times.",
+		"reset": "Exclude causes factory reset.",
+		"manual": "https://connecthome.com.ua/product/ch103#anc_5"
+	}
+}
