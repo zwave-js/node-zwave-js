@@ -5,6 +5,8 @@
 → **Commands sometimes don't go through**  
 → **Nodes that go dead and come back alive**  
 → **Reports go missing**
+→ **Nodes that are close to the controller are missing from its neighbor list**
+→ **Nodes are vaninshing from the controller's neighbor list**
 
 Z-Wave sticks in particular are prone to interference by USB ports, especially by USB3 ports. We recommend putting the stick in a suitable location:
 
@@ -14,6 +16,8 @@ Z-Wave sticks in particular are prone to interference by USB ports, especially b
 -   and especially not in the back of a server rack
 
 ?> Seriously, try it! The success rate of this is surprisingly high.
+
+If that alone doesn't help, eliminate external sources of RF interference or move the controller away from them. For example, these can be electrical appliances like microwaves, other USB devices like external drives, active USB adapters, etc.
 
 If you've excluded all this, it's time to look at the mesh. Z-Wave JS doesn't have good tools to measure its quality yet, but often a **network heal** can fix bad routes. A heal may also be necessary after moving devices, especially the controller.
 
