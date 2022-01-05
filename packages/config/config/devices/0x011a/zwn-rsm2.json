@@ -18,19 +18,45 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
+	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 1,
+					"isLifeline": true
+				},
+				"2": {
+					"label": "Switch Binary Report EP1",
+					"maxNodes": 3
+				},
+				"3": {
+					"label": "Switch Binary Report EP2",
+					"maxNodes": 3
+				}
+			}
+		},
 		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
-			"isLifeline": true
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/2"
+				}
+			}
 		},
 		"2": {
-			"label": "Switch Binary Report EP1",
-			"maxNodes": 3
-		},
-		"3": {
-			"label": "Switch Binary Report EP2",
-			"maxNodes": 3
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/3"
+				}
+			}
 		}
 	},
 	"paramInformation": [
@@ -40,9 +66,20 @@
 			"description": "Send unsolicited status report to primary controller",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send Broadcast",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
