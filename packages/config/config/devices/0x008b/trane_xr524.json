@@ -208,11 +208,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -246,11 +246,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "Enable",
 					"value": 1
 				}
 			]
