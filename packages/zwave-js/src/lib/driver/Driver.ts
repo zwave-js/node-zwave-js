@@ -1872,6 +1872,35 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._controller?.setInclusionState(InclusionState.Idle);
 	}
 
+	/** @internal */
+	public async softResetAndRestart(
+		restartLogMessage: string,
+		restartReason: string,
+	): Promise<void> {
+		this.controllerLog.print("Performing soft reset...");
+
+		try {
+			this.isSoftResetting = true;
+			await this.sendMessage(new SoftResetRequest(this), {
+				supportCheck: false,
+				pauseSendThread: true,
+			});
+		} catch (e) {
+			this.controllerLog.print(
+				`Soft reset failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		this.isSoftResetting = false;
+
+		this.controllerLog.print(restartLogMessage);
+		this.emit(
+			"error",
+			new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
+		);
+		await this.destroy();
+	}
+
 	private async ensureSerialAPI(): Promise<boolean> {
 		// Wait 1.5 seconds after reset to ensure that the module is ready for communication again
 		// Z-Wave 700 sticks are relatively fast, so we also wait for the Serial API started command
