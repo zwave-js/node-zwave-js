@@ -47,7 +47,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,     
-      "allowManualEntry": false,
+     		"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Standard",
@@ -57,16 +57,17 @@
 					"label": "Motor with limit switchs",
 					"value": 1
 				},
-        {
+       			{
 					"label": "Blind Control",
 					"value": 2
 				}
+			]
 		},
 		{
 			"#": "3",
 			"label": "Rotation Time",
-      "description": "Time of full rotation of lamellas or (180 °) in the blind mode",
-      "unit": "decisecond",
+     		"description": "Time of full rotation of lamellas or (180 °) in the blind mode",
+     		"unit": "decisecond",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -75,11 +76,12 @@
 		{
 			"#": "4",
 			"label": "Open Operating Time",
-      "unit": "decisecond",
+      		"unit": "decisecond",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0
+		},
 		{
 			"#": "5",
 			"label": "Close Operating Time",
@@ -123,7 +125,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-      "allowManualEntry": false,
+      		"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Security and regular commands",
@@ -133,7 +135,8 @@
 					"label": "Security commands only",
 					"value": 1
 				}
-		},
+			]
+		},	
 		{
 			"#": "51",
 			"label": "2nd Association Group",
