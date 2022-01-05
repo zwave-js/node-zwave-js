@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "System Type",
+			"label": "Outdoor Unit Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -197,7 +197,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Compressor Stage 1 MRT",
+			"label": "Indoor Heat Stage 1 MRT",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 9,
@@ -238,118 +238,62 @@
 			"#": "13",
 			"label": "Heating Delta Stage 1 OFF",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
+			"minValue": 0,
+			"maxValue": 8,
 			"defaultValue": 0
 		},
 		{
 			"#": "14",
-			"label": "Heating Delta Stage 2 ON",
+			"label": "Indoor Heat MOT",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 2
-		},
-		{
-			"#": "15",
-			"label": "Heating Delta Stage 2 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "16",
-			"label": "Heating Delta Stage 3 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 3
-		},
-		{
-			"#": "17",
-			"label": "Heating Delta Stage 3 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "18",
-			"label": "Cooling Delta Stage 1 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 1
-		},
-		{
-			"#": "19",
-			"label": "Cooling Delta Stage 1 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "20",
-			"label": "Cooling Delta Stage 2 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 2
-		},
-		{
-			"#": "21",
-			"label": "Cooling Delta Stage 2 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "24",
-			"label": "H/C Delta",
-			"unit": "degrees",
-			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 15,
-			"defaultValue": 3
-		},
-		{
-			"#": "25",
-			"label": "SetBack Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Setback",
-					"value": 0
+					"label": "5 Minutes",
+					"value": 5
 				},
 				{
-					"label": "Setback",
-					"value": 1
+					"label": "6 Minutes",
+					"value": 6
 				},
 				{
-					"label": "ESM",
-					"value": 2
+					"label": "7 Minutes",
+					"value": 7
+				},
+				{
+					"label": "8 Minutes",
+					"value": 8
+				},
+				{
+					"label": "9 Minutes",
+					"value": 9
 				}
-			]
+            ]
+		},
+		{
+			"#": "15",
+			"label": "Sensor Calibration",
+			"unit": "degrees",
+			"valueSize": 1,
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0
 		},
 		{
 			"#": "29",
-			"label": "ESM Setpoint--Heating",
+			"label": "ESM Setpoint-Heating",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 65
 		},
-		{
+        {
 			"#": "30",
-			"label": "ESM Setpoint--Cooling",
+			"label": "ESM Setpoint-Cooling",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
@@ -358,35 +302,26 @@
 		},
 		{
 			"#": "75",
-			"label": "Manually Run Fan",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 0
-		},
-		{
-			"#": "76",
-			"label": "Run/Hold Schedule",
+			"label": "Recovery Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Hold",
+					"label": "OFF",
 					"value": 0
 				},
 				{
-					"label": "Run schedule",
+					"label": "ON",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "77",
-			"label": "2nd Stage Heat Enable",
+			"#": "76",
+			"label": "Schedule",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -394,11 +329,30 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no 2nd stage heat",
+					"label": "Hold",
 					"value": 0
 				},
 				{
-					"label": "2nd stage heat",
+					"label": "Run Schedule",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "77",
+			"label": "ESM",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
 					"value": 1
 				}
 			]
