@@ -120,45 +120,16 @@
 		{
 			"#": "9",
 			"label": "Compressor Stage 1 MRT",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 9,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "3 Minutes",
-					"value": 3
-				},
-				{
-					"label": "4 Minutes",
-					"value": 4
-				},
-				{
-					"label": "5 Minutes",
-					"value": 5
-				},
-				{
-					"label": "6 Minutes",
-					"value": 6
-				},
-				{
-					"label": "7 Minutes",
-					"value": 7
-				},
-				{
-					"label": "8 Minutes",
-					"value": 8
-				},
-				{
-					"label": "9 Minutes",
-					"value": 9
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "10",
 			"label": "Minimum Off Time",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,
@@ -167,76 +138,25 @@
 		{
 			"#": "11",
 			"label": "Compressor MOT",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,
-			"defaultValue": 5,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "5 Minutes",
-					"value": 5
-				},
-				{
-					"label": "6 Minutes",
-					"value": 6
-				},
-				{
-					"label": "7 Minutes",
-					"value": 7
-				},
-				{
-					"label": "8 Minutes",
-					"value": 8
-				},
-				{
-					"label": "9 Minutes",
-					"value": 9
-				}
-			]
+			"defaultValue": 5
 		},
 		{
 			"#": "12",
 			"label": "Indoor Heat Stage 1 MRT",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 9,
-			"defaultValue": 3,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "3 Minutes",
-					"value": 3
-				},
-				{
-					"label": "4 Minutes",
-					"value": 4
-				},
-				{
-					"label": "5 Minutes",
-					"value": 5
-				},
-				{
-					"label": "6 Minutes",
-					"value": 6
-				},
-				{
-					"label": "7 Minutes",
-					"value": 7
-				},
-				{
-					"label": "8 Minutes",
-					"value": 8
-				},
-				{
-					"label": "9 Minutes",
-					"value": 9
-				}
-			]
+			"defaultValue": 3
 		},
 		{
 			"#": "13",
 			"label": "Heating Delta Stage 1 OFF",
+			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -245,33 +165,11 @@
 		{
 			"#": "14",
 			"label": "Indoor Heat MOT",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,
-			"defaultValue": 5,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "5 Minutes",
-					"value": 5
-				},
-				{
-					"label": "6 Minutes",
-					"value": 6
-				},
-				{
-					"label": "7 Minutes",
-					"value": 7
-				},
-				{
-					"label": "8 Minutes",
-					"value": 8
-				},
-				{
-					"label": "9 Minutes",
-					"value": 9
-				}
-			]
+			"defaultValue": 5
 		},
 		{
 			"#": "15",
@@ -398,6 +296,7 @@
 		{
 			"#": "141",
 			"label": "Screen Timeout",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -406,6 +305,7 @@
 		{
 			"#": "143",
 			"label": "Sensor (Internal) Offset",
+			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
