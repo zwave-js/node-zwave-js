@@ -301,7 +301,9 @@ export class ZWaveLogContainer extends winston.Container {
 			filename: this.logConfig.filename,
 			datePattern: "YYYY-MM-DD",
 			createSymlink: true,
-			symlinkName: this.logConfig.filename.replace(`_%DATE%`, "_current"),
+			symlinkName: path
+				.basename(this.logConfig.filename)
+				.replace(`_%DATE%`, "_current"),
 			zippedArchive: true,
 			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
