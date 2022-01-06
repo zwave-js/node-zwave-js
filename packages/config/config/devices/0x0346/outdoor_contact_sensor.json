@@ -76,7 +76,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Force Wakeup After Delay",
+			"label": "One-Time Wakeup Delay",
 			"description": "Device will wakeup once after the configured delay",
 			"valueSize": 2,
 			"unit": "seconds",
