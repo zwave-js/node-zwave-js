@@ -16,20 +16,24 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "System Type",
+			"label": "Outdoor Unit Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Heat Pump",
+					"label": "NONE",
 					"value": 0
 				},
 				{
 					"label": "AC",
 					"value": 1
+				},
+				{
+					"label": "HP",
+					"value": 2
 				}
 			]
 		},
@@ -73,7 +77,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Units",
+			"label": "Indoor Unit Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -81,142 +85,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Celsius",
+					"label": "Gas/Oil",
 					"value": 0
 				},
 				{
-					"label": "Fahrenheit",
+					"label": "Electric",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "9",
-			"label": "Display Lock",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Unlocked",
-					"value": 0
-				},
-				{
-					"label": "Locked",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "10",
-			"label": "Minimum Off Time",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 9,
-			"defaultValue": 5
-		},
-		{
-			"#": "11",
-			"label": "Minimum Run Time",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 9,
-			"defaultValue": 6
-		},
-		{
-			"#": "12",
-			"label": "Heating Delta Stage 1 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 1
-		},
-		{
-			"#": "13",
-			"label": "Heating Delta Stage 1 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "14",
-			"label": "Heating Delta Stage 2 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 2
-		},
-		{
-			"#": "15",
-			"label": "Heating Delta Stage 2 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "16",
-			"label": "Heating Delta Stage 3 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 3
-		},
-		{
-			"#": "17",
-			"label": "Heating Delta Stage 3 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "18",
-			"label": "Cooling Delta Stage 1 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 1
-		},
-		{
-			"#": "19",
-			"label": "Cooling Delta Stage 1 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "20",
-			"label": "Cooling Delta Stage 2 ON",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 2
-		},
-		{
-			"#": "21",
-			"label": "Cooling Delta Stage 2 OFF",
-			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		{
-			"#": "24",
-			"label": "H/C Delta",
-			"unit": "degrees",
-			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 15,
-			"defaultValue": 3
-		},
-		{
-			"#": "25",
-			"label": "SetBack Mode",
+			"#": "6",
+			"label": "Indoor Heat Stages",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -224,22 +104,85 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No Setback",
+					"label": "None",
 					"value": 0
 				},
 				{
-					"label": "Setback",
+					"label": "1 Stage",
 					"value": 1
 				},
 				{
-					"label": "ESM",
+					"label": "2 Stage",
 					"value": 2
 				}
 			]
 		},
 		{
+			"#": "9",
+			"label": "Compressor Stage 1 MRT",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 9,
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"label": "Minimum Off Time",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5
+		},
+		{
+			"#": "11",
+			"label": "Compressor MOT",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5
+		},
+		{
+			"#": "12",
+			"label": "Indoor Heat Stage 1 MRT",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 9,
+			"defaultValue": 3
+		},
+		{
+			"#": "13",
+			"label": "Heating Delta Stage 1 OFF",
+			"unit": "degrees",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "Indoor Heat MOT",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5
+		},
+		{
+			"#": "15",
+			"label": "Sensor Calibration",
+			"unit": "degrees",
+			"valueSize": 1,
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0
+		},
+		{
 			"#": "29",
-			"label": "ESM Setpoint--Heating",
+			"label": "ESM Setpoint-Heating",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
@@ -248,7 +191,7 @@
 		},
 		{
 			"#": "30",
-			"label": "ESM Setpoint--Cooling",
+			"label": "ESM Setpoint-Cooling",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
@@ -257,35 +200,7 @@
 		},
 		{
 			"#": "75",
-			"label": "Manually Run Fan",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 0
-		},
-		{
-			"#": "76",
-			"label": "Run/Hold Schedule",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Hold",
-					"value": 0
-				},
-				{
-					"label": "Run schedule",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "77",
-			"label": "2nd Stage Heat Enable",
+			"label": "Recovery Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -293,11 +208,49 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no 2nd stage heat",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "2nd stage heat",
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "76",
+			"label": "Schedule",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold",
+					"value": 0
+				},
+				{
+					"label": "Run Schedule",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "77",
+			"label": "ESM",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -343,6 +296,7 @@
 		{
 			"#": "141",
 			"label": "Screen Timeout",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -351,6 +305,7 @@
 		{
 			"#": "143",
 			"label": "Sensor (Internal) Offset",
+			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
