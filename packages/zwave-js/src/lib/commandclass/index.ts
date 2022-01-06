@@ -194,6 +194,32 @@ export {
 export type { FirmwareUpdateCapabilities } from "./FirmwareUpdateMetaDataCC";
 export { HailCC } from "./HailCC";
 export {
+	HumidityControlModeCC,
+	HumidityControlModeCCGet,
+	HumidityControlModeCCReport,
+	HumidityControlModeCCSet,
+	HumidityControlModeCCSupportedGet,
+	HumidityControlModeCCSupportedReport,
+} from "./HumidityControlModeCC";
+export {
+	HumidityControlOperatingStateCC,
+	HumidityControlOperatingStateCCGet,
+	HumidityControlOperatingStateCCReport,
+} from "./HumidityControlOperatingStateCC";
+export {
+	HumidityControlSetpointCC,
+	HumidityControlSetpointCCCapabilitiesGet,
+	HumidityControlSetpointCCCapabilitiesReport,
+	HumidityControlSetpointCCGet,
+	HumidityControlSetpointCCReport,
+	HumidityControlSetpointCCScaleSupportedGet,
+	HumidityControlSetpointCCScaleSupportedReport,
+	HumidityControlSetpointCCSet,
+	HumidityControlSetpointCCSupportedGet,
+	HumidityControlSetpointCCSupportedReport,
+} from "./HumidityControlSetpointCC";
+export type { HumidityControlSetpointMetadata } from "./HumidityControlSetpointCC";
+export {
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,

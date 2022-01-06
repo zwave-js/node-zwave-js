@@ -1,0 +1,174 @@
+import {
+	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
+import {
+	API,
+	CCCommand,
+	CCCommandOptions,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+	CommandClassDeserializationOptions,
+	gotDeserializationOptions,
+	ccValue,
+	ccValueMetadata,
+} from "./CommandClass";
+import { 
+	CommandClasses,
+	enumValuesToMetadataStates,
+	validatePayload,
+	ValueMetadata,
+	MessageOrCCLogEntry,
+	MessageRecord,
+	Maybe,
+} from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
+import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
+
+// All the supported commands
+export enum HumidityControlOperatingStateCommand {
+	Get = 0x01,
+	Report = 0x02,
+}
+
+export enum HumidityControlOperatingState {
+	"Idle" = 0x00,
+	"Humidifying" = 0x01,
+	"De-humidifying" = 0x02,
+}
+
+@API(CommandClasses["Humidity Control Operating State"])
+export class HumidityControlOperatingStateCCAPI extends CCAPI {
+	public supportsCommand(cmd: HumidityControlOperatingStateCommand): Maybe<boolean> {
+		switch (cmd) {
+			case HumidityControlOperatingStateCommand.Get:
+				return this.isSinglecast();
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "state":
+				return this.get();
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get() {
+		this.assertSupportsCommand(
+			HumidityControlOperatingStateCommand,
+			HumidityControlOperatingStateCommand.Get,
+		);
+
+		const cc = new HumidityControlOperatingStateCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.driver.sendCommand<HumidityControlOperatingStateCCReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return response?.state;
+		}
+	}
+}
+
+@commandClass(CommandClasses["Humidity Control Operating State"])
+@implementedVersion(1)
+export class HumidityControlOperatingStateCC extends CommandClass {
+	declare ccCommand: HumidityControlOperatingStateCommand;
+
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Humidity Control Operating State"].withOptions(
+			{
+				priority: MessagePriority.NodeQuery,
+			},
+		);
+
+		// Query the current status
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying current humidity control operating state...",
+			direction: "outbound",
+		});
+		const currentStatus = await api.get();
+		if (currentStatus) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"received current humidity control operating state: " +
+					getEnumMemberName(HumidityControlOperatingState, currentStatus),
+				direction: "inbound",
+			});
+		}
+	}
+}
+
+@CCCommand(HumidityControlOperatingStateCommand.Report)
+export class HumidityControlOperatingStateCCReport extends HumidityControlOperatingStateCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		validatePayload(this.payload.length == 1);
+		this._state = this.payload[0] & 0b1111;
+
+		this.persistValues();
+	}
+
+	private _state: HumidityControlOperatingState;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		states: enumValuesToMetadataStates(HumidityControlOperatingState),
+		label: "Humidity control operating state",
+	})
+	public get state(): HumidityControlOperatingState {
+		return this._state;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { 
+				state: getEnumMemberName(HumidityControlOperatingState, this.state)
+			},
+		};
+	}
+}
+
+@CCCommand(HumidityControlOperatingStateCommand.Get)
+@expectedCCResponse(HumidityControlOperatingStateCCReport)
+export class HumidityControlOperatingStateCCGet extends HumidityControlOperatingStateCC {}
