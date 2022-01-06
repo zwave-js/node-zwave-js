@@ -4684,37 +4684,21 @@ ${associatedNodes.join(", ")}`,
 			await this.toggleRF(true);
 		}
 
-		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
-		// about soft reset capability
+		// After restoring an NVM backup, the controller's capabilities may have changed.
+		// At the very least reset the information about the soft reset capability.
 		this._supportsSoftReset = undefined;
+		// Also, we could be talking to different nodes than the cache file contains.
+		// Reset all info about all nodes, so they get re-interviewed.
+		this._nodes.clear();
+		await this.driver.saveNetworkToCache();
 
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.
 
-		// if (this.driver.options.enableSoftReset) {
-		// 	this.driver.controllerLog.print(
-		// 		"Activating restored NVM backup...",
-		// 	);
-		// 	await this.driver.softReset();
-		// } else {
-		// 	this.driver.controllerLog.print(
-		// 		"Soft reset not enabled, cannot automatically activate restored NVM backup!",
-		// 		"warn",
-		// 	);
-		// }
-
-		this.driver.controllerLog.print(
+		await this.driver.softResetAndRestart(
 			"Restarting driver to activate restored NVM backup...",
+			"Applying the NVM backup requires a driver restart!",
 		);
-
-		this.driver.emit(
-			"error",
-			new ZWaveError(
-				"Applying the NVM backup requires a driver restart!",
-				ZWaveErrorCodes.Driver_Failed,
-			),
-		);
-		await this.driver.destroy();
 	}
 
 	/**
