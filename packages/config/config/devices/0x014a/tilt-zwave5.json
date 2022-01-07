@@ -49,7 +49,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,  
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -58,7 +58,7 @@
 				},
 				{
 					"label": "30 Degrees",
-					"value": 1					
+					"value": 1
 				},
 				{
 					"label": "50 Degrees",
@@ -72,7 +72,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,  
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -81,7 +81,7 @@
 				},
 				{
 					"label": "50 Degrees",
-					"value": 1					
+					"value": 1
 				},
 				{
 					"label": "70 Degrees",
