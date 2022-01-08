@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Immediately soft reset after restoring an NVM backup, instead of after restarting
+* Use a relative path for the logfile symlink
+
+### Config file changes
+* Enable Basic Set mapping for Swiid SW-ZCS
+* Add Ring Outdoor Contact Sensor, correct Contact Sensor Gen2
+* Add Ecolink Tilt-zwave5
+
 ## 8.10.0 (2022-01-04)
 ### Features
 * Added the `waitForWakeup` message to the `ZWaveNode` class to wait until the node is awake
