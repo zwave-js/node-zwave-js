@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.10.1 (2022-01-08)
 ### Bugfixes
 * Immediately soft reset after restoring an NVM backup, instead of after restarting
 * Use a relative path for the logfile symlink
