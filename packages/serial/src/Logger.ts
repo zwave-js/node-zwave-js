@@ -53,6 +53,23 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 			this.logMessageHeader(direction, MessageHeaders.CAN);
 	}
 
+	/**
+	 * Logs receipt of an unexpected byte, instead of a ACK, NAK, CAN, or data frame
+	 */
+        public whut(direction: DataDirection, data: Buffer): void {
+		if (this.isVisible())
+			this.logger.log({
+				level: SERIAL_LOGLEVEL,
+				message: `garble. unexpected byte 0x${data[0].toString("hex")}`,
+				secondaryTags: `(${data.length} bytes)`,
+				direction: getDirectionPrefix(direction),
+				context: {
+					source: "serial",
+					direction,
+				},
+		});
+	}
+
 	private logMessageHeader(
 		direction: DataDirection,
 		header: MessageHeaders,

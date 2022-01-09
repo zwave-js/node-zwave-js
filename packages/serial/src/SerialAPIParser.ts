@@ -53,6 +53,10 @@ export class SerialAPIParser extends Transform {
 						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
 						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
 						// Just skip this byte
+
+						// we should log this
+						// because corrupted message, a firmware bug, or a logic problem
+						this.logger.whut("inbound", this.receiveBuffer);
 					}
 				}
 				// Continue with the next byte
