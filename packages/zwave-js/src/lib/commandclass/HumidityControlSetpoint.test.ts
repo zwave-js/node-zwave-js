@@ -247,7 +247,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 			},
 		);
 
-		expect(cc.scaleSupported).toEqual([
+		expect(cc.supportedScales).toEqual([
 			new Scale(0, {
 				label: "Percentage value",
 				unit: "%",
@@ -329,7 +329,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 
 	describe(`interview()`, () => {
 		beforeAll(async () => {
-			const scaleSupported = [
+			const supportedScales = [
 				new Scale(0, { label: "Percentage", unit: "%" }),
 				new Scale(1, { label: "Absolute", unit: "g/m³" }),
 			];
@@ -348,7 +348,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 				.mockImplementationOnce(() =>
 					// ScaleSupportedGet for Humidifier
 					Promise.resolve({
-						command: { scaleSupported: scaleSupported },
+						command: { supportedScales: supportedScales },
 					}),
 				)
 				.mockImplementationOnce(() =>
@@ -357,15 +357,15 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 						command: {
 							minValue: 1,
 							maxValue: 99,
-							minValueScale: scaleSupported[0].key,
-							maxValueScale: scaleSupported[0].key,
+							minValueScale: supportedScales[0].key,
+							maxValueScale: supportedScales[0].key,
 						},
 					}),
 				)
 				.mockImplementationOnce(() =>
 					// ScaleSupportedGet for Auto
 					Promise.resolve({
-						command: { scaleSupported: scaleSupported },
+						command: { supportedScales: supportedScales },
 					}),
 				)
 				.mockImplementationOnce(() =>
@@ -374,8 +374,8 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 						command: {
 							minValue: 54,
 							maxValue: 71,
-							minValueScale: scaleSupported[1].key,
-							maxValueScale: scaleSupported[1].key,
+							minValueScale: supportedScales[1].key,
+							maxValueScale: supportedScales[1].key,
 						},
 					}),
 				)
@@ -385,7 +385,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 						command: {
 							type: HumidityControlSetpointType.Humidifier,
 							value: 71,
-							scale: scaleSupported[0],
+							scale: supportedScales[0],
 						},
 					}),
 				)
@@ -395,7 +395,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 						command: {
 							type: HumidityControlSetpointType.Auto,
 							value: 32,
-							scale: scaleSupported[1],
+							scale: supportedScales[1],
 						},
 					}),
 				);

@@ -126,11 +126,10 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		switch (cmd) {
 			case HumidityControlSetpointCommand.Get:
 			case HumidityControlSetpointCommand.SupportedGet:
+			case HumidityControlSetpointCommand.CapabilitiesGet:
 				return this.isSinglecast();
 			case HumidityControlSetpointCommand.Set:
 				return true; // This is mandatory
-			case HumidityControlSetpointCommand.CapabilitiesGet:
-				return this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -188,8 +187,9 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(setpointType: HumidityControlSetpointType) {
+	public async get(
+		setpointType: HumidityControlSetpointType,
+	): Promise<HumidityControlSetpointValue | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.Get,
@@ -212,7 +212,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			: // supported
 			  {
 					value: response.value,
-					scale: response.scale,
+					scale: response.scale.key,
 			  };
 	}
 
@@ -236,8 +236,9 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getCapabilities(setpointType: HumidityControlSetpointType) {
+	public async getCapabilities(
+		setpointType: HumidityControlSetpointType,
+	): Promise<HumidityControlSetpointCapabilities | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.CapabilitiesGet,
@@ -283,7 +284,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		return response?.supportedSetpointTypes;
 	}
 
-	public async getScaleSupported(
+	public async getSupportedScales(
 		setpointType: HumidityControlSetpointType,
 	): Promise<readonly Scale[] | undefined> {
 		this.assertSupportsCommand(
@@ -302,7 +303,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 				this.commandOptions,
 			);
 
-		return response?.scaleSupported;
+		return response?.supportedScales;
 	}
 }
 
@@ -385,9 +386,9 @@ export class HumidityControlSetpointCC extends CommandClass {
 				message: `retrieving capabilities for setpoint ${setpointName}...`,
 				direction: "outbound",
 			});
-			const setpointScaleSupported = await api.getScaleSupported(type);
+			const setpointScaleSupported = await api.getSupportedScales(type);
 			if (setpointScaleSupported) {
-				const logMessage = `received scale supported for setpoint ${setpointName}: 
+				const logMessage = `received supported scales for setpoint ${setpointName}: 
 ${setpointScaleSupported
 	.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
 	.join("")}`;
@@ -467,7 +468,10 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 			if (setpoint) {
 				const logMessage = `received current value of setpoint ${setpointName}: ${
 					setpoint.value
-				} ${setpoint.scale.unit ?? ""}`;
+				} ${
+					getScale(this.driver.configManager, setpoint.scale).unit ??
+					""
+				}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
@@ -511,11 +515,9 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public scale: number;
 
 	public serialize(): Buffer {
-		const override =
-			this.getNodeUnsafe()?.deviceConfig?.compat?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
-			encodeFloatWithScale(this.value, this.scale, override),
+			encodeFloatWithScale(this.value, this.scale),
 		]);
 		return super.serialize();
 	}
@@ -626,7 +628,7 @@ function testResponseForHumidityControlSetpointGet(
 	sent: HumidityControlSetpointCCGet,
 	received: HumidityControlSetpointCCReport,
 ) {
-	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
+	// We expect a Humidity Control Setpoint Report that matches the requested setpoint type
 	return received.type === sent.setpointType;
 }
 
@@ -733,24 +735,27 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
 
 		validatePayload(this.payload.length >= 1);
 
-		const supportedScaleIndices = parseBitMask(this.payload, 0);
-		this._scaleSupported = supportedScaleIndices.map((scale) =>
+		const supportedScaleIndices = parseBitMask(
+			Buffer.from([this.payload[0] & 0b1111]),
+			0,
+		);
+		this._supportedScales = supportedScaleIndices.map((scale) =>
 			getScale(this.driver.configManager, scale),
 		);
 
 		this.persistValues();
 	}
 
-	private _scaleSupported: Scale[];
-	public get scaleSupported(): Scale[] {
-		return this._scaleSupported;
+	private _supportedScales: Scale[];
+	public get supportedScales(): Scale[] {
+		return this._supportedScales;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"scale supported": this.scaleSupported
+				"scale supported": this.supportedScales
 					.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
 					.join(""),
 			},
@@ -770,7 +775,7 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| HumidityControlSetpointCCGetOptions,
+			| HumidityControlSetpointCCScaleSupportedGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {

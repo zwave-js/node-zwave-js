@@ -1,4 +1,15 @@
 import {
+	CommandClasses,
+	enumValuesToMetadataStates,
+	Maybe,
+	MessageOrCCLogEntry,
+	validatePayload,
+	ValueMetadata,
+} from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
+import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
+import {
 	CCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -7,28 +18,14 @@ import {
 import {
 	API,
 	CCCommand,
-	CCCommandOptions,
-	CommandClass,
-	commandClass,
-	expectedCCResponse,
-	implementedVersion,
-	CommandClassDeserializationOptions,
-	gotDeserializationOptions,
 	ccValue,
 	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	CommandClassDeserializationOptions,
+	expectedCCResponse,
+	implementedVersion,
 } from "./CommandClass";
-import { 
-	CommandClasses,
-	enumValuesToMetadataStates,
-	validatePayload,
-	ValueMetadata,
-	MessageOrCCLogEntry,
-	MessageRecord,
-	Maybe,
-} from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 
 // All the supported commands
 export enum HumidityControlOperatingStateCommand {
@@ -44,7 +41,9 @@ export enum HumidityControlOperatingState {
 
 @API(CommandClasses["Humidity Control Operating State"])
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
-	public supportsCommand(cmd: HumidityControlOperatingStateCommand): Maybe<boolean> {
+	public supportsCommand(
+		cmd: HumidityControlOperatingStateCommand,
+	): Maybe<boolean> {
 		switch (cmd) {
 			case HumidityControlOperatingStateCommand.Get:
 				return this.isSinglecast();
@@ -64,8 +63,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get() {
+	public async get(): Promise<HumidityControlOperatingState | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlOperatingStateCommand,
 			HumidityControlOperatingStateCommand.Get,
@@ -109,11 +107,11 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	public async refreshValues(): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
-		const api = endpoint.commandClasses["Humidity Control Operating State"].withOptions(
-			{
-				priority: MessagePriority.NodeQuery,
-			},
-		);
+		const api = endpoint.commandClasses[
+			"Humidity Control Operating State"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		// Query the current status
 		this.driver.controllerLog.logNode(node.id, {
@@ -127,7 +125,10 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 				endpoint: this.endpointIndex,
 				message:
 					"received current humidity control operating state: " +
-					getEnumMemberName(HumidityControlOperatingState, currentStatus),
+					getEnumMemberName(
+						HumidityControlOperatingState,
+						currentStatus,
+					),
 				direction: "inbound",
 			});
 		}
@@ -142,7 +143,7 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length == 1);
+		validatePayload(this.payload.length >= 1);
 		this._state = this.payload[0] & 0b1111;
 
 		this.persistValues();
@@ -162,8 +163,11 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { 
-				state: getEnumMemberName(HumidityControlOperatingState, this.state)
+			message: {
+				state: getEnumMemberName(
+					HumidityControlOperatingState,
+					this.state,
+				),
 			},
 		};
 	}

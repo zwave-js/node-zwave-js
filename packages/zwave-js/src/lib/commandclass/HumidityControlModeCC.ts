@@ -4,14 +4,13 @@ import {
 	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
-	MessageRecord,
 	parseBitMask,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -70,7 +69,6 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
 		if (property === "mode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -83,6 +81,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+		await this.set(value);
 
 		if (this.isSinglecast()) {
 			this.schedulePoll({ property });
@@ -94,15 +93,14 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}): Promise<unknown> => {
 		switch (property) {
 			case "mode":
-				return (await this.get())?.[property];
+				return this.get();
 
 			default:
 				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get() {
+	public async get(): Promise<HumidityControlMode | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Get,
@@ -118,7 +116,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 				this.commandOptions,
 			);
 		if (response) {
-			return pick(response, ["mode"]);
+			return response?.mode;
 		}
 	}
 
@@ -228,13 +226,13 @@ export class HumidityControlModeCC extends CommandClass {
 			message: "querying current humidity control mode...",
 			direction: "outbound",
 		});
-		const currentStatus = await api.get();
-		if (currentStatus) {
+		const currentMode = await api.get();
+		if (currentMode) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current humidity control mode: " +
-					getEnumMemberName(HumidityControlMode, currentStatus.mode),
+					getEnumMemberName(HumidityControlMode, currentMode),
 				direction: "inbound",
 			});
 		}
@@ -273,12 +271,11 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message: MessageRecord = {
-			mode: getEnumMemberName(HumidityControlMode, this.mode),
-		};
 		return {
 			...super.toLogEntry(),
-			message,
+			message: {
+				mode: getEnumMemberName(HumidityControlMode, this.mode),
+			},
 		};
 	}
 }
@@ -291,7 +288,7 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length == 1);
+		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
 
 		this.persistValues();
@@ -309,12 +306,11 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message: MessageRecord = {
-			mode: getEnumMemberName(HumidityControlMode, this.mode),
-		};
 		return {
 			...super.toLogEntry(),
-			message,
+			message: {
+				mode: getEnumMemberName(HumidityControlMode, this.mode),
+			},
 		};
 	}
 }
@@ -331,10 +327,15 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 	) {
 		super(driver, options);
 
+		validatePayload(this.payload.length >= 1);
 		this._supportedModes = parseBitMask(
 			this.payload,
-			HumidityControlMode["Off"],
+			HumidityControlMode.Off,
 		);
+
+		if (!this._supportedModes.includes(HumidityControlMode.Off)) {
+			this._supportedModes.unshift(HumidityControlMode.Off);
+		}
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
