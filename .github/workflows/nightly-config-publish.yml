@@ -60,15 +60,15 @@ jobs:
         yarn install --immutable
 
         # ===============================
-        # Double-check changes with lerna
+        # Double-check changes with yarn
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        LERNA_CHANGED=$(lerna changed)
-        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
-          echo "❌ Lerna detected unexpected package changes, aborting..."
+        CHANGED_PACKAGES=$(SINCE=$LAST_TAG yarn lschanged)
+        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$CHANGED_PACKAGES" ]]; then
+          echo "❌ Yarn detected unexpected package changes, aborting..."
           echo "These packages are changed:"
-          echo "$LERNA_CHANGED"
+          echo "$CHANGED_PACKAGES"
           exit 0
         fi
 
@@ -77,7 +77,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        lerna run build
+        yarn build
 
         # Lint config files
         yarn run lint:config
