@@ -18,45 +18,20 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"endpoints": {
-		"0": {
-			"associations": {
-				"1": {
-					"label": "Lifeline",
-					"maxNodes": 1,
-					"isLifeline": true
-				},
-				"2": {
-					"label": "Switch Binary Report EP1",
-					"maxNodes": 3
-				},
-				"3": {
-					"label": "Switch Binary Report EP2",
-					"maxNodes": 3
-				}
-			}
-		},
+	"associations": {
 		"1": {
-			"associations": {
-				"1": {
-					"$import": "#endpoints/0/associations/1",
-					"isLifeline": false
-				},
-				"2": {
-					"$import": "#endpoints/0/associations/2"
-				}
-			}
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true,
+			"multiChannel": true
 		},
 		"2": {
-			"associations": {
-				"1": {
-					"$import": "#endpoints/0/associations/1",
-					"isLifeline": false
-				},
-				"2": {
-					"$import": "#endpoints/0/associations/3"
-				}
-			}
+			"label": "Switch Binary Report EP1",
+			"maxNodes": 3
+		},
+		"3": {
+			"label": "Switch Binary Report EP2",
+			"maxNodes": 3
 		}
 	},
 	"paramInformation": [
