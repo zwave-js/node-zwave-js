@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.10.2 (2022-01-10)
 ### Bugfixes
 The `colors` dependency was recently [corrupted on purpose](https://www.theverge.com/2022/1/9/22874949/developer-corrupts-open-source-libraries-projects-affected). This patch updates all dependencies that depended on an affected version, directly or indirectly.
 
