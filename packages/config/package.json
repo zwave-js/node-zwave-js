@@ -48,7 +48,7 @@
     "json-logic-js": "^2.0.1",
     "json5": "^2.2.0",
     "semver": "^7.3.5",
-    "winston": "^3.3.3"
+    "winston": "^3.3.4"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",

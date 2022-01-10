@@ -73,99 +73,99 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-core@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-core@npm:3.4.1"
+"@alcalzone/release-script-core@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-core@npm:3.4.3"
   dependencies:
     execa: ^5.1.1
-  checksum: 29194637095f5ca8108ea2e97398dc06296cf05d5f566403fb795849629c3de4cf808302b55c773985ecef8ad9b113e61cd7fe85ad033ad1204171da47a8281f
+  checksum: be9c7595141d7b83c63d9c208e0521a1796af25ef8bf8b05ffbb9bea0af301be103a55addaa50bcb4c450bf7ef08559facebebe539cb51f99d5040bad5759507
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-changelog@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.4.1"
+"@alcalzone/release-script-plugin-changelog@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
     alcalzone-shared: ^4.0.0
-  checksum: 14357d5fe60ac3fc5d515ad841eb2f540826919eca173851ccd6f805097bbe07e2c128d66834a786724f84ced9ed7d9bc5d921ff7a48e40773d964f6d2d83d4f
+  checksum: 946cf6896e5a9eac62dbc438a5d3f311f108fb52c5ca35a517ad7ebe6b854ef99b52cfa2126d2d3f01016c1a543dad4f5f22dc480bce4bdee7388b454a03319e
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-exec@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-plugin-exec@npm:3.4.1"
+"@alcalzone/release-script-plugin-exec@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-exec@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
     alcalzone-shared: ^4.0.0
-  checksum: 4977fb83aebb9910bf4c719e22e1c9893939a952de9a689b9203794cd1ca29b977b1d76a3b94499e0f8e3d9354c1b60ca5be5ca79c1dae983c44f1624a488923
+  checksum: b7da77ec0db901868d471f557eed38fe416996546f6fa18f34810301d564b07018ab46e5e2b27682f5a37c8a014f7619b19232ec8a43a347bada24c35601e0ad
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-git@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-plugin-git@npm:3.4.1"
+"@alcalzone/release-script-plugin-git@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-git@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
     fs-extra: ^10.0.0
-  checksum: f4bd488b5fd9353ed64f56a226abfe03d0822316507f2bfb61e51582ede179e09854af5c9ab8f5683b0b541676a90a379fdc96af7bb1578815d384048595386b
+  checksum: 82b364df8faa1d5efa7328dd264db885d1c9c3165c083c5f3217b15049f1cf4e50aa65992bd5b6b8040be5a8702290ee3305dcdf872370496a983f0f8ab1fbfa
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-lerna@npm:~3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.4.1"
+"@alcalzone/release-script-plugin-lerna@npm:~3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-lerna@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
-  checksum: 2f0d47c06db2ff3b48b81a6b7880cf7f7fc72390bcb9ed7c92d9c9247619aed9152735bdfb1627a749107f3931ebbacc199646f6b4a51a229015d387206f2c20
+    "@alcalzone/release-script-core": 3.4.3
+  checksum: 6fa2174f9a07531e326fe86d162b9bd3bfe8159492b934901a5cbcfffe64f3e68172a728df494e38a751000af2a121cd877b2d3aad0bd13539867faa67160a74
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-package@npm:3.4.2":
-  version: 3.4.2
-  resolution: "@alcalzone/release-script-plugin-package@npm:3.4.2"
+"@alcalzone/release-script-plugin-package@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-package@npm:3.4.3"
   dependencies:
     "@alcalzone/pak": ^0.7.0
-    "@alcalzone/release-script-core": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
     alcalzone-shared: ^4.0.0
     semver: ^7.3.5
-  checksum: 78df812feb627c78e21166b10fff1cee0bf770397484f1abc7b7dfa78aea6c2e4ed3467c29aeda0945649abbe0cb26c92ccc8e5f6b91551726c9f9caaeb9056a
+  checksum: 4ede9452172b4d4de3bf0ebefe9758a5c470d9f59ae9965f5addc21ee051b30315ef93f4c1a6005567dec8f88a7ef6d34781250738f4962613d8e72ad4331736
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-version@npm:3.4.1":
-  version: 3.4.1
-  resolution: "@alcalzone/release-script-plugin-version@npm:3.4.1"
+"@alcalzone/release-script-plugin-version@npm:3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script-plugin-version@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
     alcalzone-shared: ^4.0.0
     semver: ^7.3.5
     tiny-glob: ^0.2.9
-  checksum: 28c15eb7170bef4c9cbd1f65d1d0490840c3f4c3ae94a9fe666beeb99dd39efd16bc233f2db1b572d659d575a4e98f0e76f6b6072238cb368f355ba8580dd889
+  checksum: ac4478357d0062ce5fed45d89e0c77658a60a8e90e3f1bab52c8b89c8250a9b0a12d1096cdc9e3e46fe8e9daf3fee2de01b0d7ef5edf6cdb366e07c8f78e65ab
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:~3.4.2":
-  version: 3.4.2
-  resolution: "@alcalzone/release-script@npm:3.4.2"
+"@alcalzone/release-script@npm:~3.4.3":
+  version: 3.4.3
+  resolution: "@alcalzone/release-script@npm:3.4.3"
   dependencies:
-    "@alcalzone/release-script-core": 3.4.1
-    "@alcalzone/release-script-plugin-changelog": 3.4.1
-    "@alcalzone/release-script-plugin-exec": 3.4.1
-    "@alcalzone/release-script-plugin-git": 3.4.1
-    "@alcalzone/release-script-plugin-package": 3.4.2
-    "@alcalzone/release-script-plugin-version": 3.4.1
+    "@alcalzone/release-script-core": 3.4.3
+    "@alcalzone/release-script-plugin-changelog": 3.4.3
+    "@alcalzone/release-script-plugin-exec": 3.4.3
+    "@alcalzone/release-script-plugin-git": 3.4.3
+    "@alcalzone/release-script-plugin-package": 3.4.3
+    "@alcalzone/release-script-plugin-version": 3.4.3
     alcalzone-shared: ^4.0.0
     axios: ^0.21.4
-    colors: ^1.4.0
     enquirer: ^2.3.6
     fs-extra: ^10.0.0
+    picocolors: 1.0.0
     semver: ^7.3.5
     source-map-support: ^0.5.20
     yargs: ^17.1.1
   bin:
     release-script: bin/release.js
-  checksum: ef92acfc1d7548cdda17cea35c605f5f7dea6392bbe0559325aaecded2cf5f8d9c1eda74271ad5c9bdfde1864f18fefc1994fe40c4ad5fe763b1c44b3fc9bd15
+  checksum: c484cd1fd2ca8990ecaaea0275c45427b0a720890f1bac00744c68ebf2946528647bb57dca66f692ecbaf839a0764707ce42864f9fa02f68ba07a12f4731ada0
   languageName: node
   linkType: hard
 
@@ -4203,7 +4203,7 @@ __metadata:
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
     typescript: 4.5.4
-    winston: ^3.3.3
+    winston: ^3.3.4
     xml2json: ^0.12.0
     yargs: ^17.3.1
   languageName: unknown
@@ -4218,19 +4218,19 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": 8.10.0
-    "@zwave-js/winston-daily-rotate-file": ^4.5.6-0
+    "@zwave-js/winston-daily-rotate-file": ^4.5.6-1
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     dayjs: ^1.10.7
     esbuild: "*"
     esbuild-register: ^3.3.1
     jest-extended: ^0.11.5
-    logform: "*"
+    logform: ^2.3.2
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
     typescript: 4.5.4
-    winston: ^3.3.3
-    winston-transport: "*"
+    winston: ^3.3.4
+    winston-transport: ^4.4.2
   languageName: unknown
   linkType: soft
 
@@ -4303,8 +4303,8 @@ __metadata:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^2.4.1
-    "@alcalzone/release-script": ~3.4.2
-    "@alcalzone/release-script-plugin-lerna": ~3.4.1
+    "@alcalzone/release-script": ~3.4.3
+    "@alcalzone/release-script-plugin-lerna": ~3.4.3
     "@babel/core": ^7.16.7
     "@babel/plugin-proposal-class-properties": "*"
     "@babel/plugin-proposal-decorators": ^7.16.7
@@ -4373,7 +4373,7 @@ __metadata:
     jest-extended: ^0.11.5
     serialport: ^9.2.8
     typescript: 4.5.4
-    winston: ^3.3.3
+    winston: ^3.3.4
   languageName: unknown
   linkType: soft
 
@@ -4407,21 +4407,21 @@ __metadata:
     jest-extended: ^0.11.5
     triple-beam: "*"
     typescript: 4.5.4
-    winston-transport: "*"
+    winston-transport: ^4.4.2
   languageName: unknown
   linkType: soft
 
-"@zwave-js/winston-daily-rotate-file@npm:^4.5.6-0":
-  version: 4.5.6-0
-  resolution: "@zwave-js/winston-daily-rotate-file@npm:4.5.6-0"
+"@zwave-js/winston-daily-rotate-file@npm:^4.5.6-1":
+  version: 4.5.6-1
+  resolution: "@zwave-js/winston-daily-rotate-file@npm:4.5.6-1"
   dependencies:
     "@zwave-js/file-stream-rotator": ^0.5.8-0
     object-hash: ^2.0.1
     triple-beam: ^1.3.0
-    winston-transport: ^4.4.0
+    winston-transport: ^4.4.2
   peerDependencies:
-    winston: ^3
-  checksum: d4b2f8e1523ba98a73766c8f0d0990b587d1674bbc18d573812522555f8cb9c99256d389d6b406f65119b7f5c6e5c4d84d1d144e607bd36492124f1d29d9ee2f
+    winston: ^3.3.4
+  checksum: b39e8b71ec49f81256463ac6515359389909a8113f84e38cd5c7d75d03dea62c2d500d6e8603b0219463d81e67dd42163b20c6c09b642d748c32967e9f6bebab
   languageName: node
   linkType: hard
 
@@ -4828,10 +4828,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.1.0":
-  version: 3.2.0
-  resolution: "async@npm:3.2.0"
-  checksum: 6739fae769e6c9f76b272558f118ef041d45c979c573a8fe93f8cfbc32eb9c92da032e9effe6bbcc9b1131292cde6c4a9e61a442894aa06a262addd8dd3adda1
+"async@npm:^3.2.3":
+  version: 3.2.3
+  resolution: "async@npm:3.2.3"
+  checksum: c4bee57ab2249af3dc83ca3ef9acfa8e822c0d5e5aa41bae3eaf7f673648343cd64ecd7d26091ffd357f3f044428b17b5f00098494b6cf8b6b3e9681f0636ca1
   languageName: node
   linkType: hard
 
@@ -5623,7 +5623,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:^1.2.1, colors@npm:^1.4.0":
+"colors@npm:1.4.0":
   version: 1.4.0
   resolution: "colors@npm:1.4.0"
   checksum: 98aa2c2418ad87dedf25d781be69dc5fc5908e279d9d30c34d8b702e586a0474605b3a189511482b9d5ed0d20c867515d22749537f7bc546256c6014f3ebdcec
@@ -7415,13 +7415,6 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 92cfec0a8dfafd9c7a15fba8f2cc29cd0b62b85f056d99ce448bbcd9f708e18ab2764bda4dd5158364f4145a7c72788538994f0d1787b956ef0d1062b0f7c24c
-  languageName: node
-  linkType: hard
-
-"fast-safe-stringify@npm:^2.0.4":
-  version: 2.0.7
-  resolution: "fast-safe-stringify@npm:2.0.7"
-  checksum: e0055e231d1fe0f97863dcfb45f5f285d59e3d23210e1e8a31348829e4a584e04ffe49f5944a0ba2f21d753b67b0ecb6f0ffc49ecd8c7f6f531cbcd45a5f606b
   languageName: node
   linkType: hard
 
@@ -10059,16 +10052,16 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"logform@npm:*, logform@npm:^2.2.0":
-  version: 2.2.0
-  resolution: "logform@npm:2.2.0"
+"logform@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "logform@npm:2.3.2"
   dependencies:
-    colors: ^1.2.1
-    fast-safe-stringify: ^2.0.4
+    colors: 1.4.0
     fecha: ^4.2.0
     ms: ^2.1.1
+    safe-stable-stringify: ^1.1.0
     triple-beam: ^1.3.0
-  checksum: 07319bfd50dacf69a4a3bc81cd6f5fab2f52d247ba5d2d2df99141f6b62f787f7fbb0353046650da90329d4030f265632d5f995706612ed9cb2c70281866007e
+  checksum: e4ccf22a1355c6f03b635d6b7905d5ac2d75fca8e6d5bf33a801793c654764138d584fec03411b13bffecaafa0003a70e6cf4f2f0af62d0e324d62622921405a
   languageName: node
   linkType: hard
 
@@ -11554,7 +11547,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1.0.0":
+"picocolors@npm:1.0.0, picocolors@npm:^1.0.0":
   version: 1.0.0
   resolution: "picocolors@npm:1.0.0"
   checksum: a2e8092dd86c8396bdba9f2b5481032848525b3dc295ce9b57896f931e63fc16f79805144321f72976383fc249584672a75cc18d6777c6b757603f372f745981
@@ -12027,7 +12020,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"readable-stream@npm:^2.0.6, readable-stream@npm:^2.3.7, readable-stream@npm:~2.3.6":
+"readable-stream@npm:^2.0.6, readable-stream@npm:~2.3.6":
   version: 2.3.7
   resolution: "readable-stream@npm:2.3.7"
   dependencies:
@@ -12399,6 +12392,13 @@ fsevents@^2.1.2:
   dependencies:
     ret: ~0.1.10
   checksum: 9a8bba57c87a841f7997b3b951e8e403b1128c1a4fd1182f40cc1a20e2d490593d7c2a21030fadfea320c8e859219019e136f678c6689ed5960b391b822f01d5
+  languageName: node
+  linkType: hard
+
+"safe-stable-stringify@npm:^1.1.0":
+  version: 1.1.1
+  resolution: "safe-stable-stringify@npm:1.1.1"
+  checksum: e32a30720e8a2e3043b8b96733f015c1aa7a21a5a328074ce917b8afe4d26b4308c186c74fa92131e5f794b1efc63caa32defafceaa2981accaaedbc8b2c861c
   languageName: node
   linkType: hard
 
@@ -14062,30 +14062,31 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"winston-transport@npm:*, winston-transport@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "winston-transport@npm:4.4.0"
+"winston-transport@npm:^4.4.2":
+  version: 4.4.2
+  resolution: "winston-transport@npm:4.4.2"
   dependencies:
-    readable-stream: ^2.3.7
+    logform: ^2.3.2
+    readable-stream: ^3.4.0
     triple-beam: ^1.2.0
-  checksum: 953d78d152b355962d97697c3ccdc26fda6be017a0e1e555729e218d1269aa32a60e9ff16eb7a72c6403f733e88bab664b259feae3857667b54ff8e2f149fa52
+  checksum: 1f1732d12f4e28d7cd0be110482035b3a3647f8ed07d681e9b79b4b2e168aaa34d91a3bbe9c7374d8df2ef9d6fd38f4add70d66798930d4c7cebb555ff8496f9
   languageName: node
   linkType: hard
 
-"winston@npm:^3.3.3":
-  version: 3.3.3
-  resolution: "winston@npm:3.3.3"
+"winston@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "winston@npm:3.3.4"
   dependencies:
     "@dabh/diagnostics": ^2.0.2
-    async: ^3.1.0
+    async: ^3.2.3
     is-stream: ^2.0.0
-    logform: ^2.2.0
+    logform: ^2.3.2
     one-time: ^1.0.0
     readable-stream: ^3.4.0
     stack-trace: 0.0.x
     triple-beam: ^1.3.0
-    winston-transport: ^4.4.0
-  checksum: 89a0a8db4e577d0df2bee8af67a751663fb80aaa782750b5a0a151a6bf97074dd0eb7c81780e196197735b851c12ea9c176952128fc51fae07a8a5ddba82913a
+    winston-transport: ^4.4.2
+  checksum: 804ed2bc468df672ff3ed08a22f3f85ae44c25ff0882d0fd531a40890173524a579f633cde0627024636a1d1df4b0afbcf0eca89a86196dbd52bfbe942731e03
   languageName: node
   linkType: hard
 
@@ -14447,7 +14448,7 @@ typescript@^4.4.3:
     serialport: ^9.2.8
     source-map-support: ^0.5.21
     typescript: 4.5.4
-    winston: ^3.3.3
+    winston: ^3.3.4
     xstate: ^4.27.0
   languageName: unknown
   linkType: soft
