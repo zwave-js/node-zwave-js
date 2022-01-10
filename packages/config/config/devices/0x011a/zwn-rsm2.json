@@ -22,7 +22,8 @@
 		"1": {
 			"label": "Lifeline",
 			"maxNodes": 1,
-			"isLifeline": true
+			"isLifeline": true,
+			"multiChannel": true
 		},
 		"2": {
 			"label": "Switch Binary Report EP1",
@@ -40,9 +41,20 @@
 			"description": "Send unsolicited status report to primary controller",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send Broadcast",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
@@ -50,5 +62,16 @@
 		"exclusion": "When the controller is in remove mode, press and release the program button of ZWN-RSM2 module, or Flick 3 times of the connected switch with Aux1 line (or Aux2 line) in 1.5 second. Then the controller will remove the module from current Z-Wave network",
 		"reset": "Once program button is pressed and hold for 10 second, the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2242/ZWN-RSM2%202017-2-28.pdf"
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				// The device needs a multi channel lifeline association (target endpoint 0),
+				// but only reports support for V2, which doesn't allow this.
+				"0x8e": {
+					"version": 3
+				}
+			}
+		}
 	}
 }
