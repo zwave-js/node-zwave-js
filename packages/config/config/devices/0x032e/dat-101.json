@@ -1,0 +1,402 @@
+{
+	"manufacturer": "DEFARO",
+	"manufacturerId": "0x032e",
+	"label": "DAT-101",
+	"description": "Thermostat actuator DAT-101",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x0021"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "State changes",
+			"description": "State changes -- general",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "External temperature sensor",
+			"description": "A group of associations to connect external room temperature sensor",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Relay mode",
+			"description": "Selects NO/NC modes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal OPEN (default)",
+					"value": 0
+				},
+				{
+					"label": "Normal CLOSE",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "ΔT",
+			"description": "How much degrees should change the temperature to turn on / off the heating mode (hereinafter, ΔT), °С",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "ΔT calculating",
+			"description": "Method for calculating on / off heating mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turning on the heating mode at room temperature, turning off at room temperature + ΔT",
+					"value": 0
+				},
+				{
+					"label": "Turning on the heating mode at room temperature - ΔT, turning off at room temperature",
+					"value": 1
+				},
+				{
+					"label": "Turning on the heating mode at room temperature - ½ ΔT, turning off at room temperature + ½ ΔT (default)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Relay status before receiving data or in case of failure.",
+			"description": "No data from the standard temperature sensor for 30 seconds or external room temperature sensor for a specified time in parameter No.5.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Relay OFF (recommended for electric floor heating)",
+					"value": 0
+				},
+				{
+					"label": "Relay ON (default)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Maximum data waiting time for external room temperature sensor, sec.",
+			"description": "After the specified time, the lack of data from the room sensor will be considered a failure.",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 30000,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Minimal temperature, °С",
+			"description": "The user-set temperature cannot be lower than this value.",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Maximal temperature, °С",
+			"description": "The user-set temperature cannot be higher than this value.",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Time in Turbo mode, sec",
+			"description": "Turbo mode is used for drying floors after wet cleaning. Turbo mode will maintain the maximum temperature at a specified period of time, after that, the thermostat will switch to the user-installed operation mode.",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 1200,
+			"defaultValue": 120,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Consider thermostat mode when turning on the Turbo mode",
+			"description": "This parameter determines whether the turbo mode is turned on when the thermostat is turned off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consider (default)",
+					"value": 0
+				},
+				{
+					"label": "Do not consider",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Thermostat temperature sensor type",
+			"description": "The DAT-101 thermostat is equipped with a high-precision DSA-111 temperature sensor. If your Z-Wave network configuration is more convenient to use a remote z-wave temperature sensor - you need to change this parameter.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Stock temp sensor (default)",
+					"value": 0
+				},
+				{
+					"label": "Poll external room temperature sensor (External sensor has to be in 2nd association group)",
+					"value": 1
+				},
+				{
+					"label": "Waiting for data from room temperature sensor (DAT-101 has to be in corresponding assiciation group of external temp sensor)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "External temperature sensor poll period, sec",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 600,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "The temperature change to send values to the 1st group of associations, °С",
+			"description": "The thermostat can send data to the controller and / or other Z-Wave network devices when the temperature specified in this parameter is changed. Install this option based on your network configuration to avoid overloads.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Time interval to force data send, sec",
+			"description": "The thermostat can send data at certain intervals, for example, every 2 minutes. The value starts to be counted from the last successful data sending. ",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 600,
+			"defaultValue": 300
+		},
+		{
+			"#": "14",
+			"label": "Sending temperature to devices in the 1st group of associations after changing the relay state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send (default)",
+					"value": 0
+				},
+				{
+					"label": "Do not send",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Switching mode for Switch 1 (thermostat mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (default)",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (every push will switch relay)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Switching mode for Switch 2 (Turbo mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (default)",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (every push will switch relay)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Adjustment of the temperature sensor No.1",
+			"description": "The parameter works if sensor No.1 is a temperature sensor, in other cases the parameter is ignored.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 (default)",
+					"value": 0
+				},
+				{
+					"label": "t +1°С",
+					"value": 1
+				},
+				{
+					"label": "t +2°С",
+					"value": 2
+				},
+				{
+					"label": "t +3°С",
+					"value": 3
+				},
+				{
+					"label": "t +4°С",
+					"value": 4
+				},
+				{
+					"label": "t +5°С",
+					"value": 5
+				},
+				{
+					"label": "t -1°С",
+					"value": 6
+				},
+				{
+					"label": "t -2°С",
+					"value": 7
+				},
+				{
+					"label": "t -3°С",
+					"value": 8
+				},
+				{
+					"label": "t -4°С",
+					"value": 9
+				},
+				{
+					"label": "t -5°С",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Adjustment of the temperature sensor No.2",
+			"description": "The parameter works if sensor No.2 is a temperature sensor, in other cases the parameter is ignored.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0 (default)",
+					"value": 0
+				},
+				{
+					"label": "t +1°С",
+					"value": 1
+				},
+				{
+					"label": "t +2°С",
+					"value": 2
+				},
+				{
+					"label": "t +3°С",
+					"value": 3
+				},
+				{
+					"label": "t +4°С",
+					"value": 4
+				},
+				{
+					"label": "t +5°С",
+					"value": 5
+				},
+				{
+					"label": "t -1°С",
+					"value": 6
+				},
+				{
+					"label": "t -2°С",
+					"value": 7
+				},
+				{
+					"label": "t -3°С",
+					"value": 8
+				},
+				{
+					"label": "t -4°С",
+					"value": 9
+				},
+				{
+					"label": "t -5°С",
+					"value": 10
+				}
+			]
+		}
+	]
+}
