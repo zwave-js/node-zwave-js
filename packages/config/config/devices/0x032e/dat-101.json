@@ -16,13 +16,11 @@
 	"associations": {
 		"1": {
 			"label": "State changes",
-			"description": "State changes -- general",
 			"maxNodes": 10,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "External temperature sensor",
-			"description": "A group of associations to connect external room temperature sensor",
 			"maxNodes": 1
 		}
 	},
