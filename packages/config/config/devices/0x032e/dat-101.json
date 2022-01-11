@@ -2,7 +2,7 @@
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
 	"label": "DAT-101",
-	"description": "Thermostat actuator DAT-101",
+	"description": "Thermostat Actuator",
 	"devices": [
 		{
 			"productType": "0x0013",
