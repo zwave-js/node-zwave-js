@@ -64,7 +64,7 @@ jobs:
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        CHANGED_PACKAGES=$(SINCE=$LAST_TAG yarn lschanged)
+        CHANGED_PACKAGES=$(SINCE=$LAST_TAG yarn ls-changed)
         if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$CHANGED_PACKAGES" ]]; then
           echo "❌ Yarn detected unexpected package changes, aborting..."
           echo "These packages are changed:"
@@ -87,8 +87,6 @@ jobs:
         # ===============================
 
         cd packages/config
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
 
         # Figure out next version
         cat > ./script.js << 'EOF'
@@ -112,5 +110,10 @@ jobs:
 
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
-        npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish --tag nightly
+
+        cd ../..
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspace "@zwave-js/config" version "$VERSION" --deferred
+        yarn version apply --all
+        yarn workspace "@zwave-js/config" npm publish --tag nightly

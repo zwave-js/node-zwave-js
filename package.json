@@ -32,8 +32,7 @@
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
     "@alcalzone/jsonl-db": "^2.4.1",
-    "@alcalzone/release-script": "~3.4.2",
-    "@alcalzone/release-script-plugin-lerna": "~3.4.1",
+    "@alcalzone/release-script": "~3.5.0",
     "@babel/core": "^7.16.7",
     "@babel/plugin-proposal-class-properties": "*",
     "@babel/plugin-proposal-decorators": "^7.16.7",
@@ -112,8 +111,8 @@
     "test:firmware": "yarn ts test/firmware-extraction.ts",
     "ts": "node -r esbuild-register",
     "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
-    "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --json --git-range=$(git describe --abbrev=0) | cut -d'\"' -f4",
-    "for-changed": "yarn changed foreach --git-range=$(git describe --abbrev=0)"
+    "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
+    "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)"
   },
   "readme": "README.md",
   "config": {

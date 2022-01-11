@@ -14,7 +14,7 @@ indent_style = tab
 indent_size = 4
 
 # space indentation for some specific files
-[{package.json,lerna.json}]
+[package.json]
 indent_style = space
 indent_size = 2
 

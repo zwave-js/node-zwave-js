@@ -242,9 +242,9 @@ jobs:
       env:
         TAG: ${{ steps.extract_release.outputs.TAG }}
       run: |
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
-        lerna publish from-package --yes $TAG
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspaces foreach --topological --no-private npm publish --tolerate-republish $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1
