@@ -244,7 +244,7 @@ jobs:
       run: |
         yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
         yarn npm whoami
-        yarn workspaces foreach --topological --no-private npm publish --tolerate-republish $TAG
+        yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1

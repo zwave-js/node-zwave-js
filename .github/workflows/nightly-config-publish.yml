@@ -116,4 +116,4 @@ jobs:
         yarn npm whoami
         yarn workspace "@zwave-js/config" version "$VERSION" --deferred
         yarn version apply --all
-        yarn workspace "@zwave-js/config" npm publish --tag nightly
+        yarn workspace "@zwave-js/config" -vi npm publish --tag nightly

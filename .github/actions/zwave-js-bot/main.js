@@ -60,7 +60,7 @@ async function publishPr() {
 		// and release changed packages
 		await exec.exec(
 			"yarn",
-			`workspaces foreach --no-private npm publish --tolerate-republish --tag next`.split(
+			`workspaces foreach -vti --no-private npm publish --tolerate-republish --tag next`.split(
 				" ",
 			),
 		);
