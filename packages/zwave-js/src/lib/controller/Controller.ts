@@ -90,7 +90,7 @@ import type { Message } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
+import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
 import {
 	GetBackgroundRSSIRequest,
@@ -4209,6 +4209,26 @@ ${associatedNodes.join(", ")}`,
 			);
 			throw e;
 		}
+	}
+
+	/**
+	 * Returns the known routes the controller will use to communicate with the nodes.
+	 *
+	 * This information is dynamically built using TX status reports and may not be accurate at all times.
+	 * Also, it may not be available immediately after startup or at all if the controller doesn't support this feature.
+	 *
+	 * **Note:** To keep information returned by this method updated, use the information contained in each node's `"statistics"` event.
+	 */
+	public getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes> {
+		const ret = new Map<number, LifelineRoutes>();
+		for (const node of this.nodes.values()) {
+			if (node.isControllerNode) continue;
+			ret.set(node.id, {
+				lwr: node.statistics.lwr,
+				nlwr: node.statistics.nlwr,
+			});
+		}
+		return ret;
 	}
 
 	/**
