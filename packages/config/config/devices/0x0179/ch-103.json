@@ -66,7 +66,7 @@
 		{
 			"#": "3",
 			"label": "Rotation Time",
-			"description": "Time of full rotation of lamellas or (180 °) in the blind mode",
+			"description": "Time of full rotation of lamellas or 180° in the blind mode",
 			"unit": "decisecond",
 			"valueSize": 2,
 			"minValue": 0,
