@@ -547,6 +547,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
+		// Setpoint type 0 is not defined in the spec, prevent devices from using it.
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
