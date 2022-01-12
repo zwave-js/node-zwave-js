@@ -60,15 +60,15 @@ jobs:
         yarn install --immutable
 
         # ===============================
-        # Double-check changes with lerna
+        # Double-check changes with yarn
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        LERNA_CHANGED=$(lerna changed)
-        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
-          echo "❌ Lerna detected unexpected package changes, aborting..."
+        CHANGED_PACKAGES=$(SINCE=$LAST_TAG yarn ls-changed)
+        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$CHANGED_PACKAGES" ]]; then
+          echo "❌ Yarn detected unexpected package changes, aborting..."
           echo "These packages are changed:"
-          echo "$LERNA_CHANGED"
+          echo "$CHANGED_PACKAGES"
           exit 0
         fi
 
@@ -77,7 +77,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        lerna run build
+        yarn build
 
         # Lint config files
         yarn run lint:config
@@ -87,8 +87,6 @@ jobs:
         # ===============================
 
         cd packages/config
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
 
         # Figure out next version
         cat > ./script.js << 'EOF'
@@ -112,5 +110,10 @@ jobs:
 
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
-        npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish --tag nightly
+
+        cd ../..
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspace "@zwave-js/config" version "$VERSION" --deferred
+        yarn version apply --all
+        yarn workspace "@zwave-js/config" -vi npm publish --tag nightly
