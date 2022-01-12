@@ -18,6 +18,16 @@
 			"label": "Temperature and Alarm Reports",
 			"maxNodes": 10,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Commands for S1",
+			"maxNodes": 10,
+			"isLifeline": false
+		},
+		"3": {
+			"label": "Commands for S2",
+			"maxNodes": 10,
+			"isLifeline": false
 		}
 	},
 	"paramInformation": [
