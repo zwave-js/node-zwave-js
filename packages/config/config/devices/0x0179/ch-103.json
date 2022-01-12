@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Automatic Calibration",
+			"label": "Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
