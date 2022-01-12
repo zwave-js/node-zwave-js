@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.1",
-    "@zwave-js/shared": "8.11.3",
+    "@zwave-js/shared": "workspace:*",
     "@zwave-js/winston-daily-rotate-file": "^4.5.6-1",
     "alcalzone-shared": "^4.0.1",
     "ansi-colors": "^4.1.1",

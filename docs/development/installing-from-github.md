@@ -41,16 +41,6 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
         }
         ```
         And execute `yarn` in your repo to set up the links.
-    1. If your repo is using `npm` run this in the `node-zwave-js` repo:
-        ```bash
-        lerna exec -- npm link
-        ```
-        And this in your repo (for every package you use directly:)
-        ```bash
-        npm link zwave-js
-        npm link @zwave-js/config
-        # ... others
-        ```
 1. (Re)start your application
 1. If you're planning to work on `zwave-js`, run `yarn run watch` to continuously rebuild the changes
 1. Don't forget to remove the `"resolutions"` field and run `yarn` again when you're done testing.
