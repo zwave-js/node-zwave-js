@@ -76,7 +76,7 @@
 		{
 			"#": "4",
 			"label": "Open Operating Time",
-			"unit": "decisecond",
+			"unit": "0.1 s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -85,7 +85,7 @@
 		{
 			"#": "5",
 			"label": "Close Operating Time",
-			"unit": "decisecond",
+			"unit": "0.1 s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -94,7 +94,7 @@
 		{
 			"#": "6",
 			"label": "Open Delay",
-			"unit": "decisecond",
+			"unit": "0.1 s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -103,7 +103,7 @@
 		{
 			"#": "7",
 			"label": "Close Delay",
-			"unit": "decisecond",
+			"unit": "0.1 s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
