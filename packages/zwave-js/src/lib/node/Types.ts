@@ -14,6 +14,7 @@ import type {
 	ZWaveNotificationCallbackParams_PowerlevelCC,
 } from "../commandclass/PowerlevelCC";
 import type { ZWaveNode } from "./Node";
+import type { RouteStatistics } from "./NodeStatistics";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -293,4 +294,12 @@ export interface RefreshInfoOptions {
 	 * Default: true
 	 */
 	waitForWakeup?: boolean;
+}
+
+/** The last known routes between the controller and a node */
+export interface LifelineRoutes {
+	/** The last working route from the controller to this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route from the controller to this node. */
+	nlwr?: RouteStatistics;
 }
