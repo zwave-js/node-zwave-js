@@ -42,7 +42,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: lerna run build
+      run: yarn build
 
     - name: Run linters
       run: yarn run lint
@@ -101,7 +101,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: lerna run build
+      run: yarn build
 
     - name: Lint config files
       run: yarn run lint:config
@@ -242,9 +242,9 @@ jobs:
       env:
         TAG: ${{ steps.extract_release.outputs.TAG }}
       run: |
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
-        lerna publish from-package --yes $TAG
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1

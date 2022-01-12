@@ -1,5 +1,6 @@
 {
   "name": "@zwave-js/repo",
+  "version": "8.10.1",
   "private": true,
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
@@ -32,7 +33,6 @@
     "@actions/github": "^5.0.0",
     "@alcalzone/jsonl-db": "^2.5.1",
     "@alcalzone/release-script": "~3.5.2",
-    "@alcalzone/release-script-plugin-lerna": "~3.5.0",
     "@babel/core": "^7.17.5",
     "@babel/plugin-proposal-class-properties": "*",
     "@babel/plugin-proposal-decorators": "^7.17.2",
@@ -70,7 +70,6 @@
     "husky": "^7.0.4",
     "jest": "^26.6.3",
     "jest-extended": "^0.11.5",
-    "lerna": "^4.0.0",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-imports": "^2.3.4",
     "reflect-metadata": "^0.1.13",
@@ -80,11 +79,9 @@
     "zwave-js": "workspace:*"
   },
   "scripts": {
-    "prebuild": "yarn workspace zwave-js run b prebuild",
-    "build": "tsc -b packages/!(zwave-js)/tsconfig.build.json && yarn prebuild && tsc -b packages/zwave-js/tsconfig.build.json",
-    "watch": "yarn run build --watch",
-    "deprecated": "node -p '\\\"\\\\n \\\\n \\\\033[31;1;4mThe \\\\\"build:full\\\\\" script has been deprecated. Use \\\\\"build\\\\\" instead!\\\\033[0m\\\\n \\\\n\\\"'",
-    "build:full": "yarn run deprecated && yarn run build",
+    "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
+    "build": "yarn foreach -t run build",
+    "watch": "yarn foreach -t --exclude zwave-js run build && yarn workspace zwave-js run watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "yarn run test:ts --runInBand",
@@ -94,9 +91,9 @@
     "coverage:ci": "yarn run test:ci --collect-coverage",
     "show-coverage": "yarn run coverage && start ./coverage/index.html",
     "lint:ts": "eslint --ext .ts \"packages/*/src/**/*.ts\"",
-    "lint:config": "lerna run lint_config",
+    "lint:config": "yarn workspace @zwave-js/config run lint_config",
     "lint:configjson": "prettier -c \"packages/config/config/**/*.json\"",
-    "lint:zwave": "lerna run lint_zwave",
+    "lint:zwave": "yarn foreach run lint_zwave",
     "lint": "yarn run lint:ts && yarn run lint:configjson",
     "implemented_ccs": "yarn ts packages/maintenance/src/implementedCCs.ts",
     "gh-cc-table": "yarn run implemented_ccs --flavor=github --only-incomplete",
@@ -112,7 +109,9 @@
     "test:perf": "yarn ts test/valuedb-perf.ts",
     "test:firmware": "yarn ts test/firmware-extraction.ts",
     "ts": "node -r esbuild-register",
-    "nvmedit": "yarn ts packages/nvmedit/src/cli.ts"
+    "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
+    "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
+    "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)"
   },
   "readme": "README.md",
   "config": {
