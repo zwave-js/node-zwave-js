@@ -1,0 +1,33 @@
+{
+	"schedule_hour": {
+		"description": "24-hour format",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 23,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"schedule_minute": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 59,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"schedule_heat_setpoint": {
+		"valueSize": 4,
+		"unit": "°F",
+		"minValue": 55,
+		"maxValue": 90,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"schedule_cool_setpoint": {
+		"valueSize": 4,
+		"unit": "°F",
+		"minValue": 60,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true
+	}
+}
