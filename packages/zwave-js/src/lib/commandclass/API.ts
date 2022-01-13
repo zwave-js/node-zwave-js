@@ -417,6 +417,12 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Entry Control"
 	: [CC] extends [typeof CommandClasses["Firmware Update Meta Data"]]
 	? "Firmware Update Meta Data"
+	: [CC] extends [typeof CommandClasses["Humidity Control Mode"]]
+	? "Humidity Control Mode"
+	: [CC] extends [typeof CommandClasses["Humidity Control Operating State"]]
+	? "Humidity Control Operating State"
+	: [CC] extends [typeof CommandClasses["Humidity Control Setpoint"]]
+	? "Humidity Control Setpoint"
 	: [CC] extends [typeof CommandClasses["Indicator"]]
 	? "Indicator"
 	: [CC] extends [typeof CommandClasses["Language"]]
@@ -547,6 +553,9 @@ export interface CCAPIs {
 	"Door Lock Logging": import("./DoorLockLoggingCC").DoorLockLoggingCCAPI;
 	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
+	"Humidity Control Mode": import("./HumidityControlModeCC").HumidityControlModeCCAPI;
+	"Humidity Control Operating State": import("./HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
+	"Humidity Control Setpoint": import("./HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	Lock: import("./LockCC").LockCCAPI;

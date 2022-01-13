@@ -10,6 +10,16 @@
 			"unit": "°F"
 		}
 	},
+	"humidity": {
+		"0x00": {
+			"label": "Percentage value",
+			"unit": "%"
+		},
+		"0x01": {
+			"label": "Absolute humidity",
+			"unit": "g/m³"
+		}
+	},
 	"mass": {
 		"0x00": {
 			"label": "Kilogram",
