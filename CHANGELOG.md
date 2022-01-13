@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.0 (2022-01-13)
 ### Features
 * Add support for `Humidity Control Mode CC`
 * Add support for `Humidity Control Operating State CC`
