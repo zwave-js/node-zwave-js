@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add support for `Humidity Control Mode CC`
+* Add support for `Humidity Control Operating State CC`
+* Add support for `Humidity Control Setpoint CC`
+
+### Bugfixes
+* For associations that are not reported by a device, fall back to the maximum node count defined in config files instead of always `0`
+
+### Config file changes
+* Correct Trane XR524 parameters
+* Add fingerprint for Aeotec ZWA024-C (Multisensor 7 EU version)
+* Change default for Temperature Scale parameter of Zooz ZSE40
+
 ## 8.10.2 (2022-01-10)
 ### Bugfixes
 The `colors` dependency was recently [corrupted on purpose](https://www.theverge.com/2022/1/9/22874949/developer-corrupts-open-source-libraries-projects-affected). This patch updates all dependencies that depended on an affected version, directly or indirectly.
