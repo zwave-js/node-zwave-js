@@ -669,12 +669,15 @@
 		{
 			"#": "154",
 			"$if": "firmwareVersion >= 2.5",
+			"label": "Over-Current Notification",
+			"description": "The device will switch Off the load when the current reaches 16A.",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "159",
 			"$if": "firmwareVersion >= 2.5",
+			"label": "Load Error Notification",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
