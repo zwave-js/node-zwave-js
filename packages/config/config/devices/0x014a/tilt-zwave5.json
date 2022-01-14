@@ -1,0 +1,92 @@
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "TILT-ZWAVE5",
+	"description": "Garage Door Tilt Sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x04aa"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Message Retry Attempt Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3
+		},
+		{
+			"#": "2",
+			"label": "Delay Between Retry Attempts",
+			"unit": "ms",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 5000,
+			"defaultValue": 500
+		},
+		{
+			"#": "3",
+			"label": "Tilt Angle Closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10 Degrees",
+					"value": 0
+				},
+				{
+					"label": "30 Degrees",
+					"value": 1
+				},
+				{
+					"label": "50 Degrees",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Tilt Angle Open",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 Degrees",
+					"value": 0
+				},
+				{
+					"label": "50 Degrees",
+					"value": 1
+				},
+				{
+					"label": "70 Degrees",
+					"value": 2
+				}
+			]
+		}
+	]
+}

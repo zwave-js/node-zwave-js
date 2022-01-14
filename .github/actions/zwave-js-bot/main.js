@@ -1,9 +1,5 @@
 // @ts-check
 
-// Enable Yarn PnP
-// @ts-expect-error 🤷🏻‍♂️
-require("../../../.pnp.cjs").setup();
-
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
@@ -55,15 +51,14 @@ async function publishPr() {
 
 		// Bump versions
 		await exec.exec(
-			"yarn",
-			`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --no-push --yes`.split(
+			"lerna",
+			`version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --no-push --yes`.split(
 				" ",
 			),
 		);
 
 		// and release
-		await exec.exec("yarn", [
-			"lerna",
+		await exec.exec("lerna", [
 			"publish",
 			"from-package",
 			"--yes",

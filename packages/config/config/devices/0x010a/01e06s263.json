@@ -1,8 +1,8 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "01E06S263",
-	"description": "Vitrum VI EU on-off 6 triac 868.4MHz",
+	"description": "VI On-Off 6 Triac",
 	"devices": [
 		{
 			"productType": "0x8161",
@@ -17,281 +17,127 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Button N.1 Off Status Led",
-			"description": "Led is off: 0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_1_off_color"
 		},
 		{
 			"#": "8",
-			"label": "Button N.2 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_2_off_color"
 		},
 		{
 			"#": "9",
-			"label": "Button N.3 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_3_off_color"
 		},
 		{
 			"#": "10",
-			"label": "Button N.4 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_4_off_color"
 		},
 		{
 			"#": "11",
-			"label": "Button N.5 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_5_off_color"
 		},
 		{
 			"#": "12",
-			"label": "Button N.6 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_6_off_color"
 		},
 		{
 			"#": "13",
-			"label": "Button N.1 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_1_on_color"
 		},
 		{
 			"#": "14",
-			"label": "Button N.2 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_2_on_color"
 		},
 		{
 			"#": "15",
-			"label": "Button N.3 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_3_on_color"
 		},
 		{
 			"#": "16",
-			"label": "Button N.4 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_4_on_color"
 		},
 		{
 			"#": "17",
-			"label": "Button N.5 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_5_on_color"
 		},
 		{
 			"#": "18",
-			"label": "Button N.6 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_6_on_color"
 		},
 		{
 			"#": "25",
-			"label": "Output Port Connected to Button N.1",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_1_output_6ch"
 		},
 		{
 			"#": "26",
-			"label": "Output Port Connected to Button N.2",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 2,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_2_output_6ch"
 		},
 		{
 			"#": "27",
-			"label": "Output Port Connected to Button N.3",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_3_output_6ch"
 		},
 		{
 			"#": "28",
-			"label": "Output Port Connected to Button N.4",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 4,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_4_output_6ch"
 		},
 		{
 			"#": "29",
-			"label": "Output Port Connected to Button N.5",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 5,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_5_output_6ch"
 		},
 		{
 			"#": "30",
-			"label": "Output Port Connected to Button N.6",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 6,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#button_6_output_6ch"
 		},
 		{
 			"#": "31",
 			"label": "Basic Set On From Group 2",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "32",
 			"label": "Basic Set On From Group 3",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "33",
 			"label": "Basic Set On From Group 4",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "34",
 			"label": "Basic Set On From Group 5",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "35",
 			"label": "Basic Set On From Group 6",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "36",
 			"label": "Basic Set On From Group 7",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
 		{
 			"#": "206",
 			"label": "Buttons Maximum Brightness",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"defaultValue": 100
 		},
 		{
 			"#": "207",
 			"label": "Buttons Minimum Brightness",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"defaultValue": 5
 		},
 		{
 			"#": "209",
 			"label": "Buzzer",
-			"description": "0: disabled 1: enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "218",
 			"label": "Front-end Buttons Lock",
-			"description": "0: disabled; 1: enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		}
 	],
 	"metadata": {

@@ -1,0 +1,34 @@
+{
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "004407",
+	"description": "CO Detector",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Value of ON-Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "2",
+			"label": "Value of OFF-Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		}
+	]
+}

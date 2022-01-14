@@ -40,7 +40,7 @@
 		{
 			"#": "2",
 			"label": "LCD Timeout",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
@@ -92,8 +92,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Measured Temperature report",
-			"unit": "°C",
+			"label": "Temperature Report Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -138,7 +138,7 @@
 		{
 			"#": "8",
 			"label": "Temperature Offset",
-			"unit": "1/10 °C",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 50,

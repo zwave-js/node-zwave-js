@@ -1,16 +1,20 @@
 import {
 	actuatorCCs,
+	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
 	decodeX25519KeyDER,
 	deriveTempKeys,
+	dskFromString,
 	dskToString,
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
+	isValidDSK,
 	isZWaveError,
 	NODE_ID_BROADCAST,
+	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -18,6 +22,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { migrateNVM } from "@zwave-js/nvmedit";
 import {
 	flatMap,
 	getEnumMemberName,
@@ -38,7 +43,7 @@ import {
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
@@ -87,6 +92,10 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import {
+	GetBackgroundRSSIRequest,
+	GetBackgroundRSSIResponse,
+} from "../serialapi/misc/GetBackgroundRSSIMessages";
 import {
 	NodeIDType,
 	RFRegion,
@@ -146,9 +155,12 @@ import {
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
 import {
+	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
+	AddNodeToNetworkRequestStatusReport,
 	AddNodeType,
+	EnableSmartStartListenRequest,
 } from "./AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
@@ -158,6 +170,7 @@ import {
 } from "./ControllerStatistics";
 import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
+import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -188,10 +201,16 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
+	IncludedProvisioningEntry,
 	InclusionOptions,
+	InclusionOptionsInternal,
 	InclusionResult,
+	InclusionState,
 	InclusionStrategy,
+	InclusionUserCallbacks,
+	PlannedProvisioningEntry,
 	ReplaceNodeOptions,
+	SmartStartProvisioningEntry,
 } from "./Inclusion";
 import {
 	IsFailedNodeRequest,
@@ -206,6 +225,7 @@ import {
 } from "./RemoveFailedNodeMessages";
 import {
 	RemoveNodeFromNetworkRequest,
+	RemoveNodeFromNetworkRequestStatusReport,
 	RemoveNodeStatus,
 	RemoveNodeType,
 } from "./RemoveNodeFromNetworkRequest";
@@ -221,15 +241,19 @@ import {
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "./RequestNodeNeighborUpdateMessages";
+import type { RSSI } from "./SendDataShared";
 import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
 } from "./SetSerialApiTimeoutsMessages";
 import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-type SerialAPIVersion = `${number}.${number}`;
+export type SerialAPIVersion =
+	| `${number}.${number}`
+	| `${number}.${number}.${number}`;
 
 export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
@@ -285,15 +309,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// register message handlers
 		driver.registerRequestHandler(
 			FunctionType.AddNodeToNetwork,
-			this.handleAddNodeRequest.bind(this),
+			this.handleAddNodeStatusReport.bind(this),
 		);
 		driver.registerRequestHandler(
 			FunctionType.RemoveNodeFromNetwork,
-			this.handleRemoveNodeRequest.bind(this),
+			this.handleRemoveNodeStatusReport.bind(this),
 		);
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
-			this.handleReplaceNodeRequest.bind(this),
+			this.handleReplaceNodeStatusReport.bind(this),
 		);
 	}
 
@@ -356,46 +380,42 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Checks if the Serial API version is greater than the given one */
 	public serialApiGt(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.gt(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.gt(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is greater than or equal to the given one */
 	public serialApiGte(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.gte(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.gte(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is lower than the given one */
 	public serialApiLt(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.lt(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.lt(padVersion(sdkVersion), padVersion(version));
 	}
 
 	/** Checks if the Serial API version is lower than or equal to the given one */
 	public serialApiLte(version: SerialAPIVersion): boolean | undefined {
-		if (this._serialApiVersion === undefined) {
+		// TODO: Rename these to sdkVersionGt(e) etc...
+		if (this._libraryVersion === undefined) {
 			return undefined;
 		}
-		return semver.lte(
-			padVersion(this._serialApiVersion),
-			padVersion(version),
-		);
+		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		return semver.lte(padVersion(sdkVersion), padVersion(version));
 	}
 
 	private _manufacturerId: number | undefined;
@@ -451,6 +471,30 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportedSerialAPISetupCommands.indexOf(command) > -1;
 	}
 
+	/**
+	 * Tests if the controller supports a certain feature.
+	 * Returns `undefined` if this information isn't known yet.
+	 */
+	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
+		switch (feature) {
+			case ZWaveFeature.SmartStart:
+				return this.serialApiGte(minFeatureVersions[feature]);
+		}
+	}
+
+	/** Throws if the controller does not support a certain feature */
+	private assertFeature(feature: ZWaveFeature): void {
+		if (!this.supportsFeature(feature)) {
+			throw new ZWaveError(
+				`The controller does not support the ${getEnumMemberName(
+					ZWaveFeature,
+					feature,
+				)} feature`,
+				ZWaveErrorCodes.Controller_NotSupported,
+			);
+		}
+	}
+
 	private _sucNodeId: number | undefined;
 	public get sucNodeId(): number | undefined {
 		return this._sucNodeId;
@@ -461,10 +505,33 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportsTimers;
 	}
 
+	private _supportsSoftReset: boolean | undefined;
+	/** Whether the controller is known to support soft reset */
+	public get supportsSoftReset(): boolean | undefined {
+		return this._supportsSoftReset;
+	}
+	/** @internal */
+	public set supportsSoftReset(value: boolean | undefined) {
+		this._supportsSoftReset = value;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
 		return this._nodes;
+	}
+
+	/** Returns the node with the given DSK */
+	public getNodeByDSK(dsk: Buffer | string): ZWaveNode | undefined {
+		if (typeof dsk === "string") dsk = dskFromString(dsk);
+		for (const node of this._nodes.values()) {
+			if (node.dsk?.equals(dsk)) return node;
+		}
+	}
+
+	/** Returns the controller node's value DB */
+	public get valueDB(): ValueDB {
+		return this._nodes.get(this._ownNodeId!)!.valueDB;
 	}
 
 	private _healNetworkActive: boolean = false;
@@ -488,18 +555,171 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
+	private _provisioningList: SmartStartProvisioningEntry[] = [];
+	/** @internal */
+	public get provisioningList(): readonly SmartStartProvisioningEntry[] {
+		return this._provisioningList;
+	}
+
+	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
+	public provisionSmartStartNode(entry: PlannedProvisioningEntry): void {
+		// Make sure the controller supports SmartStart
+		this.assertFeature(ZWaveFeature.SmartStart);
+
+		const index = this._provisioningList.findIndex(
+			(e) => e.dsk === entry.dsk,
+		);
+		if (index === -1) {
+			this._provisioningList.push(entry);
+			// If this is an entry for an existing node, mark it as included
+			const node = this.getNodeByDSK(entry.dsk);
+			if (node) this.markNodeOnProvisioningList(node);
+		} else {
+			this._provisioningList[index] = entry;
+		}
+		this.autoProvisionSmartStart();
+		void this.driver.saveNetworkToCache();
+	}
+
+	/**
+	 * Removes the given DSK or node ID from the controller's SmartStart provisioning list.
+	 *
+	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
+	 */
+	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
+		const index = this._provisioningList.findIndex(
+			(e) =>
+				e.dsk === dskOrNodeId ||
+				(typeof dskOrNodeId === "number" &&
+					"nodeId" in e &&
+					e.nodeId === dskOrNodeId),
+		);
+		if (index >= 0) {
+			this._provisioningList.splice(index, 1);
+			this.autoProvisionSmartStart();
+			void this.driver.saveNetworkToCache();
+		}
+	}
+
+	/**
+	 * Returns the entry for the given DSK from the controller's SmartStart provisioning list.
+	 */
+	public getProvisioningEntry(
+		dsk: string,
+	): SmartStartProvisioningEntry | undefined {
+		return this._provisioningList.find((e) => e.dsk === dsk);
+	}
+
+	/**
+	 * Returns all entries from the controller's SmartStart provisioning list.
+	 */
+	public getProvisioningEntries(): SmartStartProvisioningEntry[] {
+		// Make copies so no one can modify the internal list (except for user info)
+		return this._provisioningList.map((e) => {
+			const { dsk, securityClasses, nodeId, ...rest } = e;
+			return {
+				dsk,
+				securityClasses: [...securityClasses],
+				...(nodeId != undefined ? { nodeId } : {}),
+				...rest,
+			};
+		});
+	}
+
+	/** Returns whether the SmartStart provisioning list contains entries that have not been included yet */
+	public hasPlannedProvisioningEntries(): boolean {
+		return this._provisioningList.some((e) => !("nodeId" in e));
+	}
+
+	/**
+	 * @internal
+	 * Automatically starts smart start inclusion if there are nodes pending inclusion.
+	 */
+	public autoProvisionSmartStart(): void {
+		// Make sure the controller supports SmartStart
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) return;
+
+		if (this.hasPlannedProvisioningEntries()) {
+			// SmartStart should be enabled
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			void this.enableSmartStart().catch(() => {});
+		} else {
+			// SmartStart should be disabled
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			void this.disableSmartStart().catch(() => {});
+		}
+	}
+
+	private markNodeOnProvisioningList(node: ZWaveNode): void {
+		// If this node's DSK is on the provisioning list, remember the node ID
+		if (node.dsk) {
+			const entry = this._provisioningList.find(
+				(e) => e.dsk === dskToString(node.dsk!),
+			);
+			if (entry) (entry as IncludedProvisioningEntry).nodeId = node.id;
+		}
+	}
+
+	private unmarkNodeOnProvisioningList(nodeId: number): void {
+		const entry = this._provisioningList.find(
+			(e) => "nodeId" in e && e.nodeId === nodeId,
+		);
+		if (entry) delete entry.nodeId;
+	}
+
+	/**
+	 * @internal
+	 * Queries the controller IDs and its Serial API capabilities
+	 */
+	public async identify(): Promise<void> {
+		// get the home and node id of the controller
+		this.driver.controllerLog.print(`querying controller IDs...`);
+		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
+			new GetControllerIdRequest(this.driver),
+			{ supportCheck: false },
+		);
+		this._homeId = ids.homeId;
+		this._ownNodeId = ids.ownNodeId;
+		this.driver.controllerLog.print(
+			`received controller IDs:
+  home ID:     ${num2hex(this._homeId)}
+  own node ID: ${this._ownNodeId}`,
+		);
+
+		// Figure out what the serial API can do
+		this.driver.controllerLog.print(`querying API capabilities...`);
+		const apiCaps =
+			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
+				new GetSerialApiCapabilitiesRequest(this.driver),
+				{
+					supportCheck: false,
+				},
+			);
+		this._serialApiVersion = apiCaps.serialApiVersion;
+		this._manufacturerId = apiCaps.manufacturerId;
+		this._productType = apiCaps.productType;
+		this._productId = apiCaps.productId;
+		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
+		this.driver.controllerLog.print(
+			`received API capabilities:
+  serial API version:  ${this._serialApiVersion}
+  manufacturer ID:     ${num2hex(this._manufacturerId)}
+  product type:        ${num2hex(this._productType)}
+  product ID:          ${num2hex(this._productId)}
+  supported functions: ${this._supportedFunctionTypes
+		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
+		.join("")}`,
+		);
+	}
+
 	/**
 	 * @internal
 	 * Interviews the controller for the necessary information.
-	 * @param initValueDBs Asynchronous callback for the driver to initialize the Value DBs before nodes are created
 	 * @param restoreFromCache Asynchronous callback for the driver to restore the network from cache after nodes are created
 	 */
 	public async interview(
-		initValueDBs: () => Promise<void>,
 		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
-		this.driver.controllerLog.print("beginning interview...");
-
 		// get basic controller version info
 		this.driver.controllerLog.print(`querying version info...`);
 		const version =
@@ -517,18 +737,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   library version: ${this._libraryVersion}`,
 		);
 
-		// get the home and node id of the controller
-		this.driver.controllerLog.print(`querying controller IDs...`);
-		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
-			new GetControllerIdRequest(this.driver),
-			{ supportCheck: false },
-		);
-		this._homeId = ids.homeId;
-		this._ownNodeId = ids.ownNodeId;
 		this.driver.controllerLog.print(
-			`received controller IDs:
-  home ID:     ${num2hex(this._homeId)}
-  own node ID: ${this._ownNodeId}`,
+			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
+				.filter((k) => /^\d+$/.test(k))
+				.map((k) => parseInt(k) as ZWaveFeature)
+				.filter((feat) => this.supportsFeature(feat))
+				.map((feat) => `\n  · ${getEnumMemberName(ZWaveFeature, feat)}`)
+				.join("")}`,
 		);
 
 		// find out what the controller can do
@@ -554,32 +769,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   was real primary:    ${this._wasRealPrimary}
   is a SUC:            ${this._isStaticUpdateController}`,
 		);
-
-		// find out which part of the API is supported
-		this.driver.controllerLog.print(`querying API capabilities...`);
-		const apiCaps =
-			await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
-				new GetSerialApiCapabilitiesRequest(this.driver),
-				{
-					supportCheck: false,
-				},
-			);
-		this._serialApiVersion = apiCaps.serialApiVersion;
-		this._manufacturerId = apiCaps.manufacturerId;
-		this._productType = apiCaps.productType;
-		this._productId = apiCaps.productId;
-		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
-		this.driver.controllerLog.print(
-			`received API capabilities:
-  serial API version:  ${this._serialApiVersion}
-  manufacturer ID:     ${num2hex(this._manufacturerId)}
-  product type:        ${num2hex(this._productType)}
-  product ID:          ${num2hex(this._productId)}
-  supported functions: ${this._supportedFunctionTypes
-		.map((fn) => `\n  · ${FunctionType[fn]} (${num2hex(fn)})`)
-		.join("")}`,
-		);
-		// now we can check if a function is supported
 
 		// Figure out which sub commands of SerialAPISetup are supported
 		if (this.isFunctionSupported(FunctionType.SerialAPISetup)) {
@@ -656,10 +845,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 			try {
 				const result = await this.configureSUC(
-					this._ownNodeId,
+					this._ownNodeId!,
 					true,
 					true,
 				);
+				if (result) {
+					this._sucNodeId = this._ownNodeId;
+				}
 				this.driver.controllerLog.print(
 					`Promotion to SUC/SIS ${result ? "succeeded" : "failed"}.`,
 					result ? undefined : "warn",
@@ -679,9 +871,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		) {
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
-
-		// Give the Driver time to set up the value DBs
-		await initValueDBs();
 
 		// Request information about all nodes with the GetInitData message
 		this.driver.controllerLog.print(`querying node information...`);
@@ -733,7 +922,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		await restoreFromCache();
 
 		// Set manufacturer information for the controller node
-		const controllerValueDB = this._nodes.get(this._ownNodeId)!.valueDB;
+		const controllerValueDB = this.valueDB;
 		controllerValueDB.setMetadata(
 			getManufacturerIdValueId(),
 			getManufacturerIdValueMetadata(),
@@ -889,16 +1078,37 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		});
 	}
 
-	private _exclusionActive: boolean = false;
-	private _inclusionActive: boolean = false;
+	private _inclusionState: InclusionState = InclusionState.Idle;
+	public get inclusionState(): InclusionState {
+		return this._inclusionState;
+	}
+
+	/** @internal */
+	public setInclusionState(state: InclusionState): void {
+		if (this._inclusionState === state) return;
+		this._inclusionState = state;
+		if (
+			state === InclusionState.Idle &&
+			this._smartStartEnabled &&
+			this.supportsFeature(ZWaveFeature.SmartStart)
+		) {
+			// If Smart Start was enabled before the inclusion/exclusion,
+			// enable it again and ignore errors
+
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			this.enableSmartStart().catch(() => {});
+		}
+	}
+
+	private _smartStartEnabled: boolean = false;
+
 	private _includeController: boolean = false;
-	private _inclusionOptions: InclusionOptions | undefined;
+	private _unprovisionRemovedNode: boolean = false;
+
+	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	private _nodePendingReplace: ZWaveNode | undefined;
-	// The following variables are to be used for inclusion AND exclusion
-	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
-	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _replaceFailedPromise: DeferredPromise<boolean> | undefined;
 
 	/**
@@ -921,8 +1131,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public async beginInclusion(
 		options?: InclusionOptions | boolean,
 	): Promise<boolean> {
-		// don't start it twice
-		if (this._inclusionActive || this._exclusionActive) {
+		if (
+			this._inclusionState === InclusionState.Including ||
+			this._inclusionState === InclusionState.Excluding ||
+			this._inclusionState === InclusionState.Busy
+		) {
 			return false;
 		}
 
@@ -939,72 +1152,169 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		// Protect against invalid inclusion options
-		if (!(options.strategy in InclusionStrategy)) {
+		if (
+			!(options.strategy in InclusionStrategy) ||
+			// @ts-expect-error We're checking for user errors
+			options.strategy === InclusionStrategy.SmartStart
+		) {
 			throw new ZWaveError(
 				`Invalid inclusion strategy: ${options.strategy}`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 
-		if (options.strategy === InclusionStrategy.SmartStart) {
-			throw new ZWaveError(
-				`SmartStart is not supported yet!`,
-				ZWaveErrorCodes.Driver_NotSupported,
-			);
+		if (this._inclusionState === InclusionState.SmartStart) {
+			// Disable listening mode so we can switch to inclusion mode
+			await this.stopInclusion();
 		}
 
-		this._inclusionActive = true;
+		this.setInclusionState(InclusionState.Including);
 		this._inclusionOptions = options;
 
-		this.driver.controllerLog.print(
-			`Starting inclusion process with strategy ${getEnumMemberName(
-				InclusionStrategy,
+		try {
+			this.driver.controllerLog.print(
+				`Starting inclusion process with strategy ${getEnumMemberName(
+					InclusionStrategy,
+					options.strategy,
+				)}...`,
+			);
+
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Any,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+
+			this.driver.controllerLog.print(
+				`The controller is now ready to add nodes`,
+			);
+
+			this.emit(
+				"inclusion started",
+				// TODO: Remove first parameter in next major version
+				options.strategy !== InclusionStrategy.Insecure,
 				options.strategy,
-			)}...`,
-		);
+			);
+		} catch (e) {
+			this.setInclusionState(InclusionState.Idle);
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Starting the inclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The inclusion could not be started.",
+					ZWaveErrorCodes.Controller_InclusionFailed,
+				);
+			}
+			throw e;
+		}
 
-		// create the promise we're going to return
-		this._beginInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
-		await this.driver.sendMessage(
-			new AddNodeToNetworkRequest(this.driver, {
-				addNodeType: AddNodeType.Any,
-				highPower: true,
-				networkWide: true,
-			}),
-		);
-
-		return this._beginInclusionPromise;
+		return true;
 	}
 
-	/** Is used internally to stop an active inclusion process without creating deadlocks */
-	private async stopInclusionInternal(): Promise<void> {
-		// don't stop it twice
-		if (!this._inclusionActive) return;
-		this._inclusionActive = false;
+	/** @internal */
+	public async beginInclusionSmartStart(
+		provisioningEntry: PlannedProvisioningEntry,
+	): Promise<boolean> {
+		if (
+			this._inclusionState === InclusionState.Including ||
+			this._inclusionState === InclusionState.Excluding ||
+			this._inclusionState === InclusionState.Busy
+		) {
+			return false;
+		}
 
-		this.driver.controllerLog.print(`stopping inclusion process...`);
+		// Disable listening mode so we can switch to inclusion mode
+		await this.stopInclusion();
 
-		// create the promise we're going to return
-		this._stopInclusionPromise = createDeferredPromise();
+		this.setInclusionState(InclusionState.Including);
+		this._inclusionOptions = {
+			strategy: InclusionStrategy.SmartStart,
+			provisioning: provisioningEntry,
+		};
 
-		// kick off the inclusion process
+		try {
+			this.driver.controllerLog.print(
+				`Including SmartStart node with DSK ${provisioningEntry.dsk}`,
+			);
+
+			// kick off the inclusion process
+			const dskBuffer = dskFromString(provisioningEntry.dsk);
+			await this.driver.sendMessage(
+				new AddNodeDSKToNetworkRequest(this.driver, {
+					nwiHomeId: nwiHomeIdFromDSK(dskBuffer),
+					authHomeId: authHomeIdFromDSK(dskBuffer),
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+
+			this.emit(
+				"inclusion started",
+				// TODO: Remove first parameter in next major version
+				true,
+				InclusionStrategy.SmartStart,
+			);
+		} catch (e) {
+			this.setInclusionState(InclusionState.Idle);
+			// Error handling for this happens at the call site
+			throw e;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Is used internally to stop an active inclusion process without waiting for a confirmation
+	 * @internal
+	 */
+	public async stopInclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
 			new AddNodeToNetworkRequest(this.driver, {
+				callbackId: 0, // disable callbacks
 				addNodeType: AddNodeType.Stop,
 				highPower: true,
 				networkWide: true,
 			}),
 		);
+		this.driver.controllerLog.print(`The inclusion process was stopped`);
+		this.emit("inclusion stopped");
+	}
 
-		// Don't await the promise or we create a deadlock
-		void this._stopInclusionPromise.then(() => {
-			this.driver.controllerLog.print(
-				`the inclusion process was stopped`,
+	/**
+	 * Finishes an inclusion process. This must only be called after the ProtocolDone status is received.
+	 * Returns the ID of the newly added node.
+	 */
+	private async finishInclusion(): Promise<number> {
+		this.driver.controllerLog.print(`finishing inclusion process...`);
+
+		const response =
+			await this.driver.sendMessage<AddNodeToNetworkRequestStatusReport>(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
 			);
-			this.emit("inclusion stopped");
-		});
+		if (response.status === AddNodeStatus.Done) {
+			return response.statusContext!.nodeId;
+		}
+
+		this.driver.controllerLog.print(
+			`Finishing the inclusion failed`,
+			"error",
+		);
+		throw new ZWaveError(
+			"Finishing the inclusion failed",
+			ZWaveErrorCodes.Controller_InclusionFailed,
+		);
 	}
 
 	/**
@@ -1012,67 +1322,253 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * and false if the inclusion was not active.
 	 */
 	public async stopInclusion(): Promise<boolean> {
-		// don't stop it twice
-		if (!this._inclusionActive) return false;
+		if (this._inclusionState !== InclusionState.Including) {
+			return false;
+		}
 
-		await this.stopInclusionInternal();
+		this.driver.controllerLog.print(`stopping inclusion process...`);
 
-		return this._stopInclusionPromise!;
+		try {
+			// stop the inclusion process
+			await this.driver.sendMessage(
+				new AddNodeToNetworkRequest(this.driver, {
+					addNodeType: AddNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`The inclusion process was stopped`,
+			);
+			this.emit("inclusion stopped");
+			this.setInclusionState(InclusionState.Idle);
+			return true;
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Stopping the inclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The inclusion could not be stopped.",
+					ZWaveErrorCodes.Controller_InclusionFailed,
+				);
+			}
+			throw e;
+		}
+	}
+
+	/**
+	 * Puts the controller into listening mode for Smart Start inclusion.
+	 * Whenever a node on the provisioning list announces itself, it will automatically be added.
+	 *
+	 * Resolves to `true` when the listening mode is started or was active, and `false` if it is scheduled for later activation.
+	 */
+	private async enableSmartStart(): Promise<boolean> {
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) {
+			this.driver.controllerLog.print(
+				`Smart Start is not supported by this controller, NOT enabling listening mode...`,
+				"warn",
+			);
+		}
+
+		this._smartStartEnabled = true;
+
+		if (this._inclusionState === InclusionState.Idle) {
+			this.setInclusionState(InclusionState.SmartStart);
+
+			this.driver.controllerLog.print(
+				`Enabling Smart Start listening mode...`,
+			);
+			try {
+				await this.driver.sendMessage(
+					new EnableSmartStartListenRequest(this.driver, {}),
+				);
+				this.driver.controllerLog.print(
+					`Smart Start listening mode enabled`,
+				);
+				return true;
+			} catch (e) {
+				this.setInclusionState(InclusionState.Idle);
+				this.driver.controllerLog.print(
+					`Smart Start listening mode could not be enabled: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+				throw e;
+			}
+		} else if (this._inclusionState === InclusionState.SmartStart) {
+			return true;
+		} else {
+			this.driver.controllerLog.print(
+				`Smart Start listening mode scheduled for later activation...`,
+			);
+			return false;
+		}
+	}
+
+	/**
+	 * Disables the listening mode for Smart Start inclusion.
+	 *
+	 * Resolves to `true` when the listening mode is stopped, and `false` if was not active.
+	 */
+	private async disableSmartStart(): Promise<boolean> {
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) return true;
+		this._smartStartEnabled = false;
+
+		if (this._inclusionState === InclusionState.SmartStart) {
+			this.setInclusionState(InclusionState.Idle);
+			this.driver.controllerLog.print(
+				`disabling Smart Start listening mode...`,
+			);
+			try {
+				await this.stopInclusion();
+				this.driver.controllerLog.print(
+					`Smart Start listening mode disabled`,
+				);
+				return true;
+			} catch (e) {
+				this.setInclusionState(InclusionState.SmartStart);
+				this.driver.controllerLog.print(
+					`Smart Start listening mode could not be disabled: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+				throw e;
+			}
+		} else if (this._inclusionState === InclusionState.Idle) {
+			return true;
+		} else {
+			this.driver.controllerLog.print(
+				`Smart Start listening mode disabled`,
+			);
+			return true;
+		}
 	}
 
 	/**
 	 * Starts the exclusion process of new nodes.
-	 * Resolves to true when the process was started,
-	 * and false if an inclusion or exclusion process was already active
+	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
+	 *
+	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
 	 */
-	public async beginExclusion(): Promise<boolean> {
-		// don't start it twice
-		if (this._inclusionActive || this._exclusionActive) return false;
-		this._exclusionActive = true;
+	public async beginExclusion(
+		unprovision: boolean = false,
+	): Promise<boolean> {
+		if (
+			this._inclusionState === InclusionState.Including ||
+			this._inclusionState === InclusionState.Excluding ||
+			this._inclusionState === InclusionState.Busy
+		) {
+			return false;
+		}
 
+		if (this._inclusionState === InclusionState.SmartStart) {
+			// Disable listening mode so we can switch to exclusion mode
+			await this.stopInclusion();
+		}
+
+		this.setInclusionState(InclusionState.Excluding);
 		this.driver.controllerLog.print(`starting exclusion process...`);
 
-		// create the promise we're going to return
-		this._beginInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
-		await this.driver.sendMessage(
-			new RemoveNodeFromNetworkRequest(this.driver, {
-				removeNodeType: RemoveNodeType.Any,
-				highPower: true,
-				networkWide: true,
-			}),
-		);
-
-		return this._beginInclusionPromise;
+		try {
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new RemoveNodeFromNetworkRequest(this.driver, {
+					removeNodeType: RemoveNodeType.Any,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
+			this.driver.controllerLog.print(
+				`The controller is now ready to remove nodes`,
+			);
+			this._unprovisionRemovedNode = unprovision;
+			this.emit("exclusion started");
+			return true;
+		} catch (e) {
+			this.setInclusionState(InclusionState.Idle);
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Starting the exclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The exclusion could not be started.",
+					ZWaveErrorCodes.Controller_ExclusionFailed,
+				);
+			}
+			throw e;
+		}
 	}
 
-	/** Is used internally to stop an active inclusion process without creating deadlocks */
-	private async stopExclusionInternal(): Promise<void> {
-		// don't stop it twice
-		if (!this._exclusionActive) return;
-		this._exclusionActive = false;
-
-		this.driver.controllerLog.print(`stopping exclusion process...`);
-
-		// create the promise we're going to return
-		this._stopInclusionPromise = createDeferredPromise();
-
-		// kick off the inclusion process
+	/**
+	 * Is used internally to stop an active exclusion process without waiting for confirmation
+	 * @internal
+	 */
+	public async stopExclusionNoCallback(): Promise<void> {
 		await this.driver.sendMessage(
 			new RemoveNodeFromNetworkRequest(this.driver, {
+				callbackId: 0, // disable callbacks
 				removeNodeType: RemoveNodeType.Stop,
 				highPower: true,
 				networkWide: true,
 			}),
 		);
+		this.driver.controllerLog.print(`the exclusion process was stopped`);
+		this.emit("exclusion stopped");
+	}
 
-		void this._stopInclusionPromise.then(() => {
+	/**
+	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
+	 * and false if the inclusion was not active.
+	 */
+	public async stopExclusion(): Promise<boolean> {
+		if (this._inclusionState !== InclusionState.Excluding) {
+			return false;
+		}
+
+		this.driver.controllerLog.print(`stopping exclusion process...`);
+
+		try {
+			// kick off the inclusion process
+			await this.driver.sendMessage(
+				new RemoveNodeFromNetworkRequest(this.driver, {
+					removeNodeType: RemoveNodeType.Stop,
+					highPower: true,
+					networkWide: true,
+				}),
+			);
 			this.driver.controllerLog.print(
 				`the exclusion process was stopped`,
 			);
 			this.emit("exclusion stopped");
-		});
+			this.setInclusionState(InclusionState.Idle);
+			return true;
+		} catch (e) {
+			if (
+				isZWaveError(e) &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK
+			) {
+				this.driver.controllerLog.print(
+					`Stopping the exclusion failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					"The exclusion could not be stopped.",
+					ZWaveErrorCodes.Controller_ExclusionFailed,
+				);
+			}
+			throw e;
+		}
 	}
 
 	private async secureBootstrapS0(
@@ -1106,10 +1602,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			await api.getSecurityScheme(); // ignore the result
 
 			// Request nonce separately, so we can impose a timeout
-			await api.getNonce({
-				standalone: true,
-				storeAsFreeNonce: true,
-			});
+			await api.getNonce();
 
 			// send the network key
 			await api.setNetworkKey(this.driver.securityManager.networkKey);
@@ -1184,9 +1677,40 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			});
 		}
 
-		const { userCallbacks } = this._inclusionOptions as InclusionOptions & {
-			strategy: InclusionStrategy.Security_S2;
+		let userCallbacks: InclusionUserCallbacks;
+		const inclusionOptions = this
+			._inclusionOptions as InclusionOptionsInternal & {
+			strategy:
+				| InclusionStrategy.Security_S2
+				| InclusionStrategy.SmartStart;
 		};
+		if ("provisioning" in inclusionOptions) {
+			// SmartStart and S2 with QR code are pre-provisioned, so we don't need to ask the user for anything
+			userCallbacks = {
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				abort() {},
+				grantSecurityClasses: (requested) => {
+					return Promise.resolve({
+						clientSideAuth: false,
+						securityClasses: requested.securityClasses.filter((r) =>
+							inclusionOptions.provisioning.securityClasses.includes(
+								r,
+							),
+						),
+					});
+				},
+				validateDSKAndEnterPIN: (dsk) => {
+					const fullDSK = inclusionOptions.provisioning.dsk;
+					const pin = fullDSK.slice(0, 5);
+					// Make sure the DSK matches
+					if (pin + dsk !== fullDSK) return Promise.resolve(false);
+					return Promise.resolve(pin);
+				},
+			};
+		} else {
+			// Use the provided callbacks
+			userCallbacks = inclusionOptions.userCallbacks;
+		}
 
 		const deleteTempKey = () => {
 			// Whatever happens, no further communication needs the temporary key
@@ -1330,11 +1854,26 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				});
 				return abort();
 			}
-
 			const nodePublicKey = pubKeyResponse.publicKey;
-			// This is the starting point of the timer TAI2. Depending on how long the user takes to confirm,
-			// the node has less time to send its KEXSet
+
+			// This is the starting point of the timer TAI2.
 			const timerStartTAI2 = Date.now();
+
+			// Generate ECDH key pair. We need to immediately send the other node our public key,
+			// so it won't abort bootstrapping
+			const keyPair = await util.promisify(crypto.generateKeyPair)(
+				"x25519",
+			);
+			const publicKey = decodeX25519KeyDER(
+				keyPair.publicKey.export({
+					type: "spki",
+					format: "der",
+				}),
+			);
+			await api.sendPublicKey(publicKey);
+			// After this, the node will start sending us a KEX SET every 10 seconds.
+			// We won't be able to decode it until the DSK was verified
+
 			if (
 				grantedKeys.includes(SecurityClass.S2_AccessControl) ||
 				grantedKeys.includes(SecurityClass.S2_Authenticated)
@@ -1343,10 +1882,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// Request the user to enter the missing part as a 5-digit PIN
 				const dsk = dskToString(nodePublicKey.slice(0, 16)).slice(5);
 
+				// The time the user has to enter the PIN is limited by the timeout TAI2
+				const tai2RemainingMs =
+					inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
+
 				const pinResult = await Promise.race([
-					wait(inclusionTimeouts.TAI2, true).then(
-						() => false as const,
-					),
+					wait(tai2RemainingMs, true).then(() => false as const),
 					userCallbacks
 						.validateDSKAndEnterPIN(dsk)
 						// ignore errors in application callbacks
@@ -1368,16 +1909,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				nodePublicKey.writeUInt16BE(parseInt(pinResult, 10), 0);
 			}
 
-			// Generate ECDH key pair. Z-Wave works with the "raw" keys, so this is a tad complicated
-			const keyPair = await util.promisify(crypto.generateKeyPair)(
-				"x25519",
-			);
-			const publicKey = decodeX25519KeyDER(
-				keyPair.publicKey.export({
-					type: "spki",
-					format: "der",
-				}),
-			);
+			// After the user has verified the DSK, we can derive the shared secret
+			// Z-Wave works with the "raw" keys, so this is a tad complicated
 			const sharedSecret = crypto.diffieHellman({
 				publicKey: crypto.createPublicKey({
 					key: encodeX25519KeyDERSPKI(nodePublicKey),
@@ -1387,19 +1920,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				privateKey: keyPair.privateKey,
 			});
 
-			// Derive temporary key from ECDH key pair
+			// Derive temporary key from ECDH key pair - this will allow us to receive the node's KEX SET commands
 			const tempKeys = deriveTempKeys(
 				computePRK(sharedSecret, publicKey, nodePublicKey),
 			);
+			this.driver.securityManager2.deleteNonce(node.id);
 			this.driver.securityManager2.tempKeys.set(node.id, {
 				keyCCM: tempKeys.tempKeyCCM,
 				personalizationString: tempKeys.tempPersonalizationString,
 			});
 
-			await api.sendPublicKey(publicKey);
-
-			// Wait until the encrypted KEXSet from the node was received
-			// (if there is even time left)
+			// Now wait for the next KEXSet from the node (if there is even time left)
 			const tai2RemainingMs =
 				inclusionTimeouts.TAI2 - (Date.now() - timerStartTAI2);
 			if (tai2RemainingMs < 1) {
@@ -1566,6 +2097,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					grantedKeys.includes(securityClass),
 				);
 			}
+			// Remember the DSK (first 16 bytes of the public key)
+			node.dsk = nodePublicKey.slice(0, 16);
+
 			this.driver.controllerLog.logNode(node.id, {
 				message: `Security S2 bootstrapping successful with these security classes:${[
 					...node.securityClasses.entries(),
@@ -1703,33 +2237,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
-	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
-	 * and false if the inclusion was not active.
-	 */
-	public async stopExclusion(): Promise<boolean> {
-		// don't stop it twice
-		if (!this._exclusionActive) return false;
-
-		await this.stopExclusionInternal();
-
-		return this._stopInclusionPromise!;
-	}
-
-	/**
 	 * Is called when an AddNode request is received from the controller.
 	 * Handles and controls the inclusion process.
 	 */
-	private async handleAddNodeRequest(
-		msg: AddNodeToNetworkRequest,
+	private async handleAddNodeStatusReport(
+		msg: AddNodeToNetworkRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
-			`handling add node request (status = ${
-				AddNodeStatus[msg.status!]
-			})`,
+			`handling add node request (status = ${AddNodeStatus[msg.status]})`,
 		);
 
 		if (
-			(!this._inclusionActive && msg.status !== AddNodeStatus.Done) ||
+			this._inclusionState !== InclusionState.Including ||
 			this._inclusionOptions == undefined
 		) {
 			this.driver.controllerLog.print(
@@ -1739,50 +2258,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		switch (msg.status) {
-			case AddNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				this.driver.controllerLog.print(
-					`  the controller is now ready to add nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit(
-						"inclusion started",
-						// TODO: Remove first parameter in next major version
-						this._inclusionOptions.strategy !==
-							InclusionStrategy.Insecure,
-						this._inclusionOptions.strategy,
-					);
-				}
-				break;
 			case AddNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					this.driver.controllerLog.print(
-						`  starting the inclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The inclusion could not be started.",
-							ZWaveErrorCodes.Controller_InclusionFailed,
-						),
-					);
-				} else {
-					// ...or adding a node failed
-					this.driver.controllerLog.print(
-						`  adding the node failed`,
-						"error",
-					);
-					this.emit("inclusion failed");
-				}
+				// This code is handled elsewhere for starting the inclusion, so this means
+				// that adding a node failed
+				this.driver.controllerLog.print(
+					`Adding the node failed`,
+					"error",
+				);
+				this.emit("inclusion failed");
+
 				// in any case, stop the inclusion process so we don't accidentally add another node
 				try {
-					await this.stopInclusionInternal();
+					await this.stopInclusion();
 				} catch {
 					/* ok */
 				}
-				break;
+				return true; // Don't invoke any more handlers
 			case AddNodeStatus.AddingController:
 				this._includeController = true;
 			// fall through!
@@ -1813,43 +2304,54 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			case AddNodeStatus.ProtocolDone: {
 				// this is called after a new node is added
 				// stop the inclusion process so we don't accidentally add another node
+				let nodeId: number | undefined;
 				try {
-					await this.stopInclusionInternal();
+					nodeId = await this.finishInclusion();
 				} catch {
-					/* ok */
+					// ignore the error
 				}
-				break;
-			}
-			case AddNodeStatus.Done: {
-				// this is called when the inclusion was completed
-				this.driver.controllerLog.print(
-					`done called for ${msg.statusContext!.nodeId}`,
-				);
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve(true);
 
-				if (msg.statusContext!.nodeId === NODE_ID_BROADCAST) {
+				// It is recommended to send another STOP command to the controller
+				try {
+					await this.stopInclusionNoCallback();
+				} catch {
+					// ignore the error
+				}
+
+				if (!nodeId || !this._nodePendingInclusion) {
+					// The inclusion did not succeed
+					this.setInclusionState(InclusionState.Idle);
+					this._nodePendingInclusion = undefined;
+					return true;
+				} else if (nodeId === NODE_ID_BROADCAST) {
 					// No idea how this can happen but it dit at least once
 					this.driver.controllerLog.print(
 						`Cannot add a node with the Node ID ${NODE_ID_BROADCAST}, aborting...`,
 						"warn",
 					);
+					this.setInclusionState(InclusionState.Idle);
 					this._nodePendingInclusion = undefined;
-				} else if (this._nodePendingInclusion != null) {
-					const newNode = this._nodePendingInclusion;
-					const supportedCommandClasses = [
-						...newNode.implementedCommandClasses.entries(),
-					]
-						.filter(([, info]) => info.isSupported)
-						.map(([cc]) => cc);
-					const controlledCommandClasses = [
-						...newNode.implementedCommandClasses.entries(),
-					]
-						.filter(([, info]) => info.isControlled)
-						.map(([cc]) => cc);
-					this.driver.controllerLog.print(
-						`finished adding node ${newNode.id}:
+					return true;
+				}
+
+				// We're technically done with the inclusion but should not include
+				// anything else until the node has been bootstrapped
+				this.setInclusionState(InclusionState.Busy);
+
+				// Inclusion is now completed, bootstrap the node
+				const newNode = this._nodePendingInclusion;
+				const supportedCommandClasses = [
+					...newNode.implementedCommandClasses.entries(),
+				]
+					.filter(([, info]) => info.isSupported)
+					.map(([cc]) => cc);
+				const controlledCommandClasses = [
+					...newNode.implementedCommandClasses.entries(),
+				]
+					.filter(([, info]) => info.isControlled)
+					.map(([cc]) => cc);
+				this.driver.controllerLog.print(
+					`finished adding node ${newNode.id}:
   basic device class:    ${newNode.deviceClass?.basic.label}
   generic device class:  ${newNode.deviceClass?.generic.label}
   specific device class: ${newNode.deviceClass?.specific.label}
@@ -1859,82 +2361,82 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   controlled CCs: ${controlledCommandClasses
 		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}`,
-					);
-					// remember the node
-					this._nodes.set(newNode.id, newNode);
-					this._nodePendingInclusion = undefined;
+				);
+				// remember the node
+				this._nodes.set(newNode.id, newNode);
+				this._nodePendingInclusion = undefined;
 
-					// We're communicating with the device, so assume it is alive
-					// If it is actually a sleeping device, it will be marked as such later
-					newNode.markAsAlive();
+				// We're communicating with the device, so assume it is alive
+				// If it is actually a sleeping device, it will be marked as such later
+				newNode.markAsAlive();
 
-					// Assign SUC return route to make sure the node knows where to get its routes from
-					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
-						newNode.id,
-					);
+				// Assign SUC return route to make sure the node knows where to get its routes from
+				newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+					newNode.id,
+				);
 
-					const opts = this._inclusionOptions;
-					// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
-					let lowSecurity = false;
+				const opts = this._inclusionOptions;
+				// The default inclusion strategy is: Use S2 if possible, only use S0 if necessary, use no encryption otherwise
+				let lowSecurity = false;
+				if (
+					newNode.supportsCC(CommandClasses["Security 2"]) &&
+					(opts.strategy === InclusionStrategy.Default ||
+						opts.strategy === InclusionStrategy.Security_S2 ||
+						opts.strategy === InclusionStrategy.SmartStart)
+				) {
+					await this.secureBootstrapS2(newNode);
+					const actualSecurityClass =
+						newNode.getHighestSecurityClass();
 					if (
-						newNode.supportsCC(CommandClasses["Security 2"]) &&
-						(opts.strategy === InclusionStrategy.Default ||
-							opts.strategy === InclusionStrategy.Security_S2)
+						actualSecurityClass == undefined ||
+						actualSecurityClass < SecurityClass.S2_Unauthenticated
 					) {
-						await this.secureBootstrapS2(newNode);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass <
-								SecurityClass.S2_Unauthenticated
-						) {
-							lowSecurity = true;
-						}
-					} else if (
-						newNode.supportsCC(CommandClasses.Security) &&
-						(opts.strategy === InclusionStrategy.Security_S0 ||
-							(opts.strategy === InclusionStrategy.Default &&
-								(opts.forceSecurity ||
-									(
-										newNode.deviceClass?.specific ??
-										newNode.deviceClass?.generic
-									)?.requiresSecurity)))
-					) {
-						await this.secureBootstrapS0(newNode);
-						const actualSecurityClass =
-							newNode.getHighestSecurityClass();
-						if (
-							actualSecurityClass == undefined ||
-							actualSecurityClass < SecurityClass.S0_Legacy
-						) {
-							lowSecurity = true;
-						}
+						lowSecurity = true;
 					}
-					this._includeController = false;
-
-					// Bootstrap the node's lifelines, so it knows where the controller is
-					await this.bootstrapLifelineAndWakeup(newNode);
-
-					// We're done adding this node, notify listeners
-					const result: InclusionResult = {};
-					if (lowSecurity) result.lowSecurity = true;
-					this.emit("node added", newNode, result);
+				} else if (
+					newNode.supportsCC(CommandClasses.Security) &&
+					(opts.strategy === InclusionStrategy.Security_S0 ||
+						(opts.strategy === InclusionStrategy.Default &&
+							(opts.forceSecurity ||
+								(
+									newNode.deviceClass?.specific ??
+									newNode.deviceClass?.generic
+								)?.requiresSecurity)))
+				) {
+					await this.secureBootstrapS0(newNode);
+					const actualSecurityClass =
+						newNode.getHighestSecurityClass();
+					if (
+						actualSecurityClass == undefined ||
+						actualSecurityClass < SecurityClass.S0_Legacy
+					) {
+						lowSecurity = true;
+					}
 				}
-				break;
+				this._includeController = false;
+
+				// Bootstrap the node's lifelines, so it knows where the controller is
+				await this.bootstrapLifelineAndWakeup(newNode);
+
+				// We're done adding this node, notify listeners
+				const result: InclusionResult = {};
+				if (lowSecurity) result.lowSecurity = true;
+				this.markNodeOnProvisioningList(newNode);
+				this.emit("node added", newNode, result);
+
+				this.setInclusionState(InclusionState.Idle);
+				return true; // Don't invoke any more handlers
 			}
-			default:
-				// not sure what to do with this message
-				return false;
 		}
-		return true; // Don't invoke any more handlers
+		// not sure what to do with this message
+		return false;
 	}
 
 	/**
 	 * Is called when an ReplaceFailed request is received from the controller.
 	 * Handles and controls the replace process.
 	 */
-	private async handleReplaceNodeRequest(
+	private async handleReplaceNodeStatusReport(
 		msg: ReplaceFailedNodeRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
@@ -1952,6 +2454,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		switch (msg.replaceStatus) {
 			case ReplaceFailedNodeStatus.NodeOK:
+				this.setInclusionState(InclusionState.Idle);
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
 						`The node could not be replaced because it has responded`,
@@ -1960,6 +2463,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
+				this.setInclusionState(InclusionState.Idle);
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
 						`The failed node has not been replaced`,
@@ -1980,7 +2484,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 						InclusionStrategy.Insecure,
 					this._inclusionOptions.strategy,
 				);
-				this._inclusionActive = true;
+				this.setInclusionState(InclusionState.Including);
 				this._replaceFailedPromise?.resolve(true);
 
 				// stop here, don't emit inclusion failed
@@ -1991,7 +2495,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 				if (this._nodePendingReplace) {
 					this.emit("node removed", this._nodePendingReplace, true);
+					this.unmarkNodeOnProvisioningList(
+						this._nodePendingReplace.id,
+					);
 					this._nodes.delete(this._nodePendingReplace.id);
+
+					// We're technically done with the replacing but should not include
+					// anything else until the node has been bootstrapped
+					this.setInclusionState(InclusionState.Busy);
 
 					// Create a fresh node instance and forget the old one
 					const newNode = new ZWaveNode(
@@ -2052,6 +2563,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					// We're done adding this node, notify listeners. This also kicks off the node interview
 					const result: InclusionResult = {};
 					if (lowSecurity) result.lowSecurity = true;
+
+					this.setInclusionState(InclusionState.Idle);
+					this.markNodeOnProvisioningList(newNode);
 					this.emit("node added", newNode, result);
 				}
 
@@ -2068,15 +2582,15 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Is called when a RemoveNode request is received from the controller.
 	 * Handles and controls the exclusion process.
 	 */
-	private async handleRemoveNodeRequest(
-		msg: RemoveNodeFromNetworkRequest,
+	private async handleRemoveNodeStatusReport(
+		msg: RemoveNodeFromNetworkRequestStatusReport,
 	): Promise<boolean> {
 		this.driver.controllerLog.print(
 			`handling remove node request (status = ${
-				RemoveNodeStatus[msg.status!]
+				RemoveNodeStatus[msg.status]
 			})`,
 		);
-		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
+		if (this._inclusionState !== InclusionState.Excluding) {
 			this.driver.controllerLog.print(
 				`  exclusion is NOT active, ignoring it...`,
 			);
@@ -2084,45 +2598,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 
 		switch (msg.status) {
-			case RemoveNodeStatus.Ready:
-				// this is called when inclusion was started successfully
-				this.driver.controllerLog.print(
-					`  the controller is now ready to remove nodes`,
-				);
-				if (this._beginInclusionPromise != null) {
-					this._beginInclusionPromise.resolve(true);
-					this.emit("exclusion started");
-				}
-				break;
-
 			case RemoveNodeStatus.Failed:
-				// this is called when inclusion could not be started...
-				if (this._beginInclusionPromise != null) {
-					this.driver.controllerLog.print(
-						`  starting the exclusion failed`,
-						"error",
-					);
-					this._beginInclusionPromise.reject(
-						new ZWaveError(
-							"The exclusion could not be started.",
-							ZWaveErrorCodes.Controller_ExclusionFailed,
-						),
-					);
-				} else {
-					// ...or removing a node failed
-					this.driver.controllerLog.print(
-						`  removing the node failed`,
-						"error",
-					);
-					this.emit("exclusion failed");
-				}
+				// This code is handled elsewhere for starting the exclusion, so this means
+				// that removing a node failed
+				this.driver.controllerLog.print(
+					`Removing the node failed`,
+					"error",
+				);
+				this.emit("exclusion failed");
+
 				// in any case, stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusionInternal();
+					await this.stopExclusion();
 				} catch {
 					/* ok */
 				}
-				break;
+				return true; // Don't invoke any more handlers
 
 			case RemoveNodeStatus.RemovingSlave:
 			case RemoveNodeStatus.RemovingController: {
@@ -2137,37 +2628,37 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// this is called when the exclusion was completed
 				// stop the exclusion process so we don't accidentally remove another node
 				try {
-					await this.stopExclusionInternal();
+					await this.stopExclusionNoCallback();
 				} catch {
 					/* ok */
 				}
 
-				// stopping the inclusion was acknowledged by the controller
-				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve(true);
-
-				if (this._nodePendingExclusion != null) {
-					this.driver.controllerLog.print(
-						`Node ${this._nodePendingExclusion.id} was removed`,
-					);
-
-					// notify listeners
-					this.emit(
-						"node removed",
-						this._nodePendingExclusion,
-						false,
-					);
-					// and forget the node
-					this._nodes.delete(this._nodePendingExclusion.id);
-					this._nodePendingExclusion = undefined;
+				if (!this._nodePendingExclusion) {
+					// The exclusion did not succeed
+					this.setInclusionState(InclusionState.Idle);
+					return true;
 				}
-				break;
+
+				const nodeId = this._nodePendingExclusion.id;
+				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
+
+				// Avoid automatic re-inclusion using SmartStart if desired
+				if (this._unprovisionRemovedNode)
+					this.unprovisionSmartStartNode(nodeId);
+
+				// notify listeners
+				this.emit("node removed", this._nodePendingExclusion, false);
+				// and forget the node
+				this.unmarkNodeOnProvisioningList(nodeId);
+				this._nodes.delete(nodeId);
+				this._nodePendingExclusion = undefined;
+
+				this.setInclusionState(InclusionState.Idle);
+				return true; // Don't invoke any more handlers
 			}
-			default:
-				// not sure what to do with this message
-				return false;
 		}
-		return true; // Don't invoke any more handlers
+		// not sure what to do with this message
+		return false;
 	}
 
 	private _healNetworkProgress = new Map<number, HealNodeStatus>();
@@ -2343,6 +2834,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Don't try to heal dead nodes
 		const node = this.nodes.getOrThrow(nodeId);
 
+		// And keep battery powered nodes awake during the process
+		const keepAwake = node.keepAwake;
+
 		// Don't start the process twice
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
@@ -2364,9 +2858,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		try {
 			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
+			node.keepAwake = true;
 			return await this.healNodeInternal(nodeId);
 		} finally {
 			this._healNetworkActive = false;
+			node.keepAwake = keepAwake;
 		}
 	}
 
@@ -3405,6 +3901,7 @@ ${associatedNodes.join(", ")}`,
 					// Emit the removed event so the driver and applications can react
 					this.emit("node removed", this.nodes.get(nodeId)!, false);
 					// and forget the node
+					this.unmarkNodeOnProvisioningList(nodeId);
 					this._nodes.delete(nodeId);
 
 					return;
@@ -3437,8 +3934,20 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		options?: ReplaceNodeOptions | boolean,
 	): Promise<boolean> {
-		// don't start it twice
-		if (this._inclusionActive || this._exclusionActive) return false;
+		if (
+			this._inclusionState === InclusionState.Including ||
+			this._inclusionState === InclusionState.Excluding ||
+			this._inclusionState === InclusionState.Busy
+		) {
+			return false;
+		}
+
+		if (this._inclusionState === InclusionState.SmartStart) {
+			// Disable listening mode so we can switch to exclusion mode
+			await this.stopInclusion();
+		}
+
+		this.setInclusionState(InclusionState.Busy);
 
 		if (options == undefined) {
 			options = {
@@ -3458,6 +3967,7 @@ ${associatedNodes.join(", ")}`,
 
 		const node = this.nodes.getOrThrow(nodeId);
 		if (await node.ping()) {
+			this.setInclusionState(InclusionState.Idle);
 			throw new ZWaveError(
 				`The node replace process could not be started because the node responded to a ping.`,
 				ZWaveErrorCodes.ReplaceFailedNode_Failed,
@@ -3507,6 +4017,7 @@ ${associatedNodes.join(", ")}`,
 			) {
 				message += `\n· The controller is busy or the node has responded`;
 			}
+			this.setInclusionState(InclusionState.Idle);
 			throw new ZWaveError(
 				message,
 				ZWaveErrorCodes.ReplaceFailedNode_Failed,
@@ -3657,7 +4168,10 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Returns the known list of neighbors for a node
 	 */
-	public async getNodeNeighbors(nodeId: number): Promise<readonly number[]> {
+	public async getNodeNeighbors(
+		nodeId: number,
+		onlyRepeaters: boolean = false,
+	): Promise<readonly number[]> {
 		this.driver.controllerLog.logNode(nodeId, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
@@ -3667,7 +4181,7 @@ ${associatedNodes.join(", ")}`,
 				new GetRoutingInfoRequest(this.driver, {
 					nodeId,
 					removeBadLinks: false,
-					removeNonRepeaters: false,
+					removeNonRepeaters: onlyRepeaters,
 				}),
 			);
 			this.driver.controllerLog.logNode(nodeId, {
@@ -3691,6 +4205,26 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public serialize(): JSONObject {
 		return {
+			controller: {
+				supportsSoftReset: this.supportsSoftReset,
+				provisioningList: this.provisioningList.map((e) => {
+					const {
+						dsk,
+						securityClasses,
+						// Node ID is not saved - we update it when deserializing nodes
+						nodeId,
+						...rest
+					} = e;
+					return {
+						dsk,
+						securityClasses: securityClasses.map(
+							(s) => SecurityClass[s],
+						),
+						// The user-defined properties are saved as-is
+						...rest,
+					};
+				}),
+			},
 			nodes: composeObject(
 				[...this.nodes.entries()].map(
 					([id, node]) =>
@@ -3705,6 +4239,46 @@ ${associatedNodes.join(", ")}`,
 	 * Deserializes the controller information and all nodes from the cache.
 	 */
 	public async deserialize(serialized: any): Promise<void> {
+		if (isObject(serialized.controller)) {
+			// Parse whether the controller supports soft reset
+			if (typeof serialized.controller.supportsSoftReset === "boolean") {
+				this.supportsSoftReset =
+					serialized.controller.supportsSoftReset;
+			}
+			// Parse the controller's Smart Start provisioning list
+			if (isArray(serialized.controller.provisioningList)) {
+				entries: for (const entry of serialized.controller
+					.provisioningList) {
+					if (!isObject(entry)) continue;
+					const {
+						dsk,
+						securityClasses: secClasses,
+						// Node ID is ignored - we update it when deserializing nodes
+						nodeId,
+						...rest
+					} = entry;
+					if (typeof entry.dsk !== "string") continue;
+					if (!isArray(entry.securityClasses)) continue;
+					if (!isValidDSK(entry.dsk)) continue;
+
+					const securityClasses: SecurityClass[] = [];
+					for (const s of secClasses) {
+						if (typeof s !== "string") continue entries;
+						const secClass = (SecurityClass as any)[s];
+						if (typeof secClass !== "number") continue entries;
+						securityClasses.push(secClass);
+					}
+
+					this._provisioningList.push({
+						dsk: entry.dsk,
+						securityClasses,
+						// The user-defined properties are not validated further
+						...rest,
+					});
+				}
+			}
+		}
+
 		if (isObject(serialized.nodes)) {
 			for (const nodeId of Object.keys(serialized.nodes)) {
 				const serializedNode = serialized.nodes[nodeId];
@@ -3720,9 +4294,9 @@ ${associatedNodes.join(", ")}`,
 				}
 
 				if (this.nodes.has(serializedNode.id)) {
-					await this.nodes
-						.get(serializedNode.id)!
-						.deserialize(serializedNode);
+					const node = this.nodes.getOrThrow(serializedNode.id);
+					await node.deserialize(serializedNode);
+					this.markNodeOnProvisioningList(node);
 				}
 			}
 		}
@@ -4060,6 +4634,77 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 * If the given buffer is in a different NVM format, it is converted automatically. If the conversion is not supported, the operation fails.
+	 *
+	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
+	 *
+	 * @param nvmData The NVM backup to be restored
+	 * @param convertProgress Can be used to monitor the progress of the NVM conversion, which may take several seconds up to a few minutes depending on the NVM size
+	 * @param restoreProgress Can be used to monitor the progress of the restore operation, which may take several seconds up to a few minutes depending on the NVM size
+	 */
+	public async restoreNVM(
+		nvmData: Buffer,
+		convertProgress?: (bytesRead: number, total: number) => void,
+		restoreProgress?: (bytesWritten: number, total: number) => void,
+	): Promise<void> {
+		// Turn Z-Wave radio off to avoid having the protocol write to the NVM while dumping it
+		if (!(await this.toggleRF(false))) {
+			throw new ZWaveError(
+				"Could not turn off the Z-Wave radio before restoring NVM backup!",
+				ZWaveErrorCodes.Controller_ResponseNOK,
+			);
+		}
+
+		// Restoring a potentially incompatible NVM happens in three steps:
+		// 1. the current NVM is read
+		// 2. the given NVM data is converted to match the current format
+		// 3. the converted data is written to the NVM
+
+		try {
+			this.driver.controllerLog.print(
+				"Converting NVM to target format...",
+			);
+			let targetNVM: Buffer;
+			if (this.serialApiGte("7.0")) {
+				targetNVM = await this.backupNVMRaw700(convertProgress);
+			} else {
+				targetNVM = await this.backupNVMRaw500(convertProgress);
+			}
+			const convertedNVM = migrateNVM(nvmData, targetNVM);
+
+			this.driver.controllerLog.print("Restoring NVM backup...");
+			if (this.serialApiGte("7.0")) {
+				await this.restoreNVMRaw700(convertedNVM, restoreProgress);
+			} else {
+				await this.restoreNVMRaw500(convertedNVM, restoreProgress);
+			}
+			this.driver.controllerLog.print("NVM backup restored");
+		} finally {
+			// Whatever happens, turn Z-Wave radio back on
+			await this.toggleRF(true);
+		}
+
+		// After restoring an NVM backup, the controller's capabilities may have changed.
+		// At the very least reset the information about the soft reset capability.
+		this._supportsSoftReset = undefined;
+		// Also, we could be talking to different nodes than the cache file contains.
+		// Reset all info about all nodes, so they get re-interviewed.
+		this._nodes.clear();
+		await this.driver.saveNetworkToCache();
+
+		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
+		// Just forcing a restart of the driver seems easier.
+
+		await this.driver.softResetAndRestart(
+			"Restarting driver to activate restored NVM backup...",
+			"Applying the NVM backup requires a driver restart!",
+		);
+	}
+
+	/**
+	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
+	 *
+	 * **WARNING:** The given buffer is NOT checked for compatibility with the current stick. To have Z-Wave JS do that, use the {@link restoreNVM} method instead.
 	 *
 	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
 	 * @param nvmData The raw NVM backup to be restored
@@ -4095,17 +4740,37 @@ ${associatedNodes.join(", ")}`,
 		// so you can figure out which pages you don't have to save or restore. If you do this, you need to make sure to issue a
 		// "factory reset" before restoring the NVM - that'll blank out the NVM to 0xffs before initializing it.
 
-		if (this.driver.options.enableSoftReset) {
-			this.driver.controllerLog.print(
-				"Activating restored NVM backup...",
-			);
-			await this.driver.softReset();
-		} else {
-			this.driver.controllerLog.print(
-				"Soft reset not enabled, cannot automatically activate restored NVM backup!",
-				"warn",
-			);
-		}
+		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
+		// about soft reset capability
+		this._supportsSoftReset = undefined;
+
+		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
+		// Just forcing a restart of the driver seems easier.
+
+		// if (this.driver.options.enableSoftReset) {
+		// 	this.driver.controllerLog.print(
+		// 		"Activating restored NVM backup...",
+		// 	);
+		// 	await this.driver.softReset();
+		// } else {
+		// 	this.driver.controllerLog.print(
+		// 		"Soft reset not enabled, cannot automatically activate restored NVM backup!",
+		// 		"warn",
+		// 	);
+		// }
+
+		this.driver.controllerLog.print(
+			"Restarting driver to activate restored NVM backup...",
+		);
+
+		this.driver.emit(
+			"error",
+			new ZWaveError(
+				"Activating the NVM backup requires a driver restart!",
+				ZWaveErrorCodes.Driver_Failed,
+			),
+		);
+		await this.driver.destroy();
 	}
 
 	private async restoreNVMRaw500(
@@ -4119,10 +4784,26 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.Controller_NotSupported,
 			);
 		} else if (size !== nvmData.length) {
-			throw new ZWaveError(
-				"The given data does not match the NVM size - cannot restore!",
-				ZWaveErrorCodes.Argument_Invalid,
-			);
+			// This might be a converted NVM buffer which contains only the first relevant part.
+			// The first two bytes must point to the last byte in the buffer then
+			const actualSize = 1 + nvmData.readUInt16BE(0);
+			if (actualSize !== nvmData.length) {
+				throw new ZWaveError(
+					"The given data does not match the NVM size - cannot restore!",
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			// Now we only need to figure out which part of the NVM needs to be overwritten when restoring
+			const oldSize =
+				1 + (await this.externalNVMReadBuffer(0, 2)).readUInt16BE(0);
+			if (oldSize > actualSize) {
+				// Pad the rest with 0xff
+				nvmData = Buffer.concat([
+					nvmData,
+					Buffer.alloc(oldSize - actualSize, 0xff),
+				]);
+			}
 		}
 
 		// Figure out the maximum chunk size the Serial API supports
@@ -4137,7 +4818,8 @@ ${associatedNodes.join(", ")}`,
 				nvmData.slice(offset, offset + chunkSize),
 			);
 			// Report progress for listeners
-			if (onProgress) setImmediate(() => onProgress(offset, size));
+			if (onProgress)
+				setImmediate(() => onProgress(offset, nvmData.length));
 		}
 	}
 
@@ -4179,5 +4861,21 @@ ${associatedNodes.join(", ")}`,
 		}
 		// Close NVM
 		await this.externalNVMClose();
+	}
+
+	/**
+	 * Request the most recent background RSSI levels detected by the controller.
+	 *
+	 * **Note:** This only returns useful values if something was transmitted recently.
+	 */
+	public async getBackgroundRSSI(): Promise<{
+		rssiChannel0: RSSI;
+		rssiChannel1: RSSI;
+		rssiChannel2?: RSSI;
+	}> {
+		const ret = await this.driver.sendMessage<GetBackgroundRSSIResponse>(
+			new GetBackgroundRSSIRequest(this.driver),
+		);
+		return pick(ret, ["rssiChannel0", "rssiChannel1", "rssiChannel2"]);
 	}
 }

@@ -79,7 +79,6 @@
 			"$if": "firmwareVersion >= 4.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Moderate Regulator Behaviour",
-			"description": "Set moderate regulator behaviour instead of rapid",
 			"valueSize": 4
 		},
 		{
@@ -138,6 +137,9 @@
 		}
 	],
 	"compat": {
-		"preserveEndpoints": [2]
+		// The device has two endpoints with different device classes, but both need to exist
+		"preserveEndpoints": [1, 2],
+		// Not sure if necessary, but this can prevent missing updates on endpoint 1
+		"mapRootReportsToEndpoint": 1
 	}
 }

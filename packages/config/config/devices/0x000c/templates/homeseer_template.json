@@ -105,6 +105,38 @@
 		"$import": "~/templates/master_template.json#dimming_timing",
 		"valueSize": 2
 	},
+	"dimming_threshold": {
+		"label": "Dimming Threshold",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 14,
+		"defaultValue": 1
+	},
+	"ramp_rate": {
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 90,
+		"defaultValue": 3
+	},
+	"scene_control": {
+		"label": "Central Scene Commands",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable (control load with delay)",
+				"value": 0
+			},
+			{
+				"label": "Disable (control load instantly)",
+				"value": 1
+			}
+		]
+	},
 	"basic_set_value": {
 		"label": "Basic Set Value on Send",
 		"valueSize": 1,
@@ -233,5 +265,23 @@
 		"label": "Temperature reportng interval when on line power",
 		"unit": "seconds",
 		"minValue": 30
+	},
+	"led_blink_status": {
+		"label": "LED Blink Status",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Solid",
+				"value": 0
+			},
+			{
+				"label": "Blink",
+				"value": 1
+			}
+		]
 	}
 }

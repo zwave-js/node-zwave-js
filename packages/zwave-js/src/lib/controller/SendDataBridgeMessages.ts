@@ -30,8 +30,16 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
-import { TransmitOptions, TransmitStatus } from "./SendDataShared";
+import {
+	parseTXReport,
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
@@ -163,6 +171,18 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
 		return 54;
 	}
+
+	public expectsNodeUpdate(): boolean {
+		return this.command.expectsCCResponse();
+	}
+
+	public isExpectedNodeUpdate(msg: Message): boolean {
+		return (
+			(msg instanceof ApplicationCommandRequest ||
+				msg instanceof BridgeApplicationCommandRequest) &&
+			this.command.isExpectedCCResponse(msg.command)
+		);
+	}
 }
 
 interface SendDataBridgeRequestTransmitReportOptions
@@ -185,21 +205,22 @@ export class SendDataBridgeRequestTransmitReport
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-			// TODO: Parse transmit report
+			this.transmitStatus = this.payload[1];
+			this.txReport = parseTXReport(
+				this.transmitStatus !== TransmitStatus.NoAck,
+				this.payload.slice(2),
+			);
 		} else {
 			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
+			this.transmitStatus = options.transmitStatus;
 		}
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
+	public readonly txReport: TXReport | undefined;
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -214,10 +235,14 @@ export class SendDataBridgeRequestTransmitReport
 			...super.toLogEntry(),
 			message: {
 				"callback id": this.callbackId,
-				"transmit status": getEnumMemberName(
-					TransmitStatus,
-					this.transmitStatus,
-				),
+				"transmit status":
+					getEnumMemberName(TransmitStatus, this.transmitStatus) +
+					(this.txReport
+						? `, took ${this.txReport.txTicks * 10} ms`
+						: ""),
+				...(this.txReport
+					? txReportToMessageRecord(this.txReport)
+					: {}),
 			},
 		};
 	}

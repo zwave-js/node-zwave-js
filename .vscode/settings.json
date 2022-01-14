@@ -1,5 +1,5 @@
 {
-	"typescript.tsdk": ".yarn/sdks/typescript/lib",
+	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": false,
 	"jest.enableCodeLens": true,
@@ -74,11 +74,8 @@
 	"debug.javascript.unmapMissingSources": true,
 	"jest.jestCommandLine": "yarn jest",
 	"search.exclude": {
-		"**/.yarn": true,
-		"**/.pnp.*": true
+		"**/.yarn": true
 	},
-	"eslint.nodePath": ".yarn/sdks",
-	"prettier.prettierPath": ".yarn/sdks/prettier/index.js",
 	"[typescript]": {
 		"editor.autoClosingBrackets": "languageDefined"
 	}

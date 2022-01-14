@@ -408,6 +408,7 @@ describe("lib/driver/Driver => ", () => {
 					has: () => true,
 					get: () => node2,
 					forEach: () => {},
+					values: () => [node2],
 				},
 				isFunctionSupported,
 				incrementStatistics: () => {},
@@ -483,6 +484,7 @@ describe("lib/driver/Driver => ", () => {
 					has: () => true,
 					get: () => node2,
 					forEach: () => {},
+					values: () => [node2],
 				},
 				isFunctionSupported,
 				incrementStatistics: () => {},
@@ -772,6 +774,7 @@ describe("lib/driver/Driver => ", () => {
 					has: () => true,
 					get: () => node2,
 					forEach: () => {},
+					values: () => [node2],
 				},
 				isFunctionSupported,
 			} as any;

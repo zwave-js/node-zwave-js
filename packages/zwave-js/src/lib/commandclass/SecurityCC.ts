@@ -77,6 +77,12 @@ function getAuthenticationData(
 	]);
 }
 
+function throwNoNonce(reason?: string): never {
+	let message = `Security CC requires a nonce to be sent!`;
+	if (reason) message += ` Reason: ${reason}`;
+	throw new ZWaveError(message, ZWaveErrorCodes.SecurityCC_NoNonce);
+}
+
 const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
@@ -116,19 +122,10 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 	}
 
 	/**
-	 * Requests a new nonce for Security CC encapsulation
+	 * Requests a new nonce for Security CC encapsulation which is not directly linked to a specific command.
 	 */
-	public async getNonce(
-		options: {
-			/** Whether the command should be sent as a standalone transaction. Default: false */
-			standalone?: boolean;
-			/** Whether the received nonce should be stored as "free". Default: false */
-			storeAsFreeNonce?: boolean;
-		} = {},
-	): Promise<Buffer | undefined> {
+	public async getNonce(): Promise<Buffer | undefined> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
-
-		const { standalone = false, storeAsFreeNonce = false } = options;
 
 		const cc = new SecurityCCNonceGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -138,32 +135,24 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			cc,
 			{
 				...this.commandOptions,
-				// Standalone nonce requests must be handled immediately
-				priority: standalone
-					? MessagePriority.Normal
-					: MessagePriority.PreTransmitHandshake,
+				// Nonce requests must be handled immediately
+				priority: MessagePriority.Nonce,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
-				// We don't want failures causing us to treat the node as asleep or dead
-				// The "real" transaction will do that for us
-				changeNodeStatusOnMissingACK: standalone,
 			},
 		);
-
 		if (!response) return;
 
 		const nonce = response.nonce;
-		if (storeAsFreeNonce) {
-			const secMan = this.driver.securityManager!;
-			secMan.setNonce(
-				{
-					issuer: this.endpoint.nodeId,
-					nonceId: secMan.getNonceId(nonce),
-				},
-				{ nonce, receiver: this.driver.controller.ownNodeId! },
-				{ free: true },
-			);
-		}
+		const secMan = this.driver.securityManager!;
+		secMan.setNonce(
+			{
+				issuer: this.endpoint.nodeId,
+				nonceId: secMan.getNonceId(nonce),
+			},
+			{ nonce, receiver: this.driver.controller.ownNodeId! },
+			{ free: true },
+		);
 		return nonce;
 	}
 
@@ -211,7 +200,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			await this.driver.sendMessage(msg, {
 				...this.commandOptions,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.Nonce,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});
@@ -579,7 +568,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 	private authKey: Buffer;
 	private encryptionKey: Buffer;
-	public nonceId: number | undefined;
+
+	public get nonceId(): number | undefined {
+		if (!this.nonce) return undefined;
+		return this.driver.securityManager.getNonceId(this.nonce);
+	}
+	public nonce: Buffer | undefined;
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		if (this.sequenced) {
@@ -615,72 +609,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		});
 	}
 
-	public requiresPreTransmitHandshake(): boolean {
-		// We require a new nonce if there is no free one,
-		// we don't have one yet or if the old one has expired
-		const secMan = this.driver.securityManager;
-
-		// If the nonce is already known we don't need a handshake
-		if (
-			this.nonceId != undefined &&
-			secMan.hasNonce({
-				issuer: this.nodeId,
-				nonceId: this.nonceId,
-			})
-		) {
-			return false;
-		}
-
-		// Try to get a free nonce before requesting a new one
-		const freeNonce = secMan.getFreeNonce(this.nodeId);
-		if (freeNonce) {
-			this.nonceId = secMan.getNonceId(freeNonce);
-			return false;
-		}
-
-		return true;
-	}
-
-	public async preTransmitHandshake(): Promise<void> {
-		// Request a nonce
-		const nonce = await this.getNode()!.commandClasses.Security.getNonce();
-		// TODO: Handle this more intelligent
-		if (nonce) {
-			// and store it
-			const secMan = this.driver.securityManager;
-			this.nonceId = secMan.getNonceId(nonce);
-			secMan.setNonce(
-				{
-					issuer: this.nodeId,
-					nonceId: this.nonceId,
-				},
-				{ nonce, receiver: this.driver.controller.ownNodeId },
-				// The nonce is reserved for this command
-				{ free: false },
-			);
-		}
-	}
-
 	public serialize(): Buffer {
-		function throwNoNonce(): never {
-			throw new ZWaveError(
-				`Security CC requires a nonce to be sent!`,
-				ZWaveErrorCodes.SecurityCC_NoNonce,
-			);
-		}
-
-		// Try to find an active nonce
-		if (this.nonceId == undefined) throwNoNonce();
-		const receiverNonce = this.driver.securityManager.getNonce({
-			issuer: this.nodeId,
-			nonceId: this.nonceId,
-		});
-		if (!receiverNonce) throwNoNonce();
-		// and mark it as used
-		this.driver.securityManager.deleteNonce({
-			issuer: this.nodeId,
-			nonceId: this.nonceId,
-		});
+		if (!this.nonce) throwNoNonce();
+		if (this.nonce.length !== HALF_NONCE_SIZE)
+			throwNoNonce("Invalid nonce size");
 
 		const serializedCC = this.encapsulated.serialize();
 		const plaintext = Buffer.concat([
@@ -689,12 +621,12 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		]);
 		// Encrypt the payload
 		const senderNonce = randomBytes(HALF_NONCE_SIZE);
-		const iv = Buffer.concat([senderNonce, receiverNonce]);
+		const iv = Buffer.concat([senderNonce, this.nonce]);
 		const ciphertext = encryptAES128OFB(plaintext, this.encryptionKey, iv);
 		// And generate the auth code
 		const authData = getAuthenticationData(
 			senderNonce,
-			receiverNonce,
+			this.nonce,
 			this.ccCommand,
 			this.driver.controller.ownNodeId,
 			this.nodeId,
@@ -705,7 +637,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.payload = Buffer.concat([
 			senderNonce,
 			ciphertext,
-			Buffer.from([this.nonceId]),
+			Buffer.from([this.nonceId!]),
 			authCode,
 		]);
 		return super.serialize();

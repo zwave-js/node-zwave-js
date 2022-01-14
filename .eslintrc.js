@@ -85,6 +85,7 @@ module.exports = {
 		],
 		// We can turn this on from time to time but in general these rules
 		// make our lives harder instead of easier
+		"@typescript-eslint/no-unsafe-argument": "off",
 		"@typescript-eslint/no-unsafe-assignment": "off",
 		"@typescript-eslint/no-unsafe-member-access": "off",
 		"@typescript-eslint/no-unsafe-return": "off",
@@ -117,6 +118,7 @@ module.exports = {
 				"@typescript-eslint/explicit-function-return-type": "off",
 				"@typescript-eslint/no-empty-function": "off",
 				"@typescript-eslint/ban-ts-comment": "off",
+				"@typescript-eslint/no-unsafe-argument": "off",
 				"@typescript-eslint/no-unsafe-assignment": "off",
 				"@typescript-eslint/no-unsafe-member-access": "off",
 				"@typescript-eslint/no-unsafe-member-return": "off",

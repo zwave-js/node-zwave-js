@@ -4,16 +4,290 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 8.5.1-beta.1 (2021-10-18)
+## 8.11.0 (2022-01-13)
+### Features
+* Add support for `Humidity Control Mode CC`
+* Add support for `Humidity Control Operating State CC`
+* Add support for `Humidity Control Setpoint CC`
+
+### Bugfixes
+* For associations that are not reported by a device, fall back to the maximum node count defined in config files instead of always `0`
+
+### Config file changes
+* Correct Trane XR524 parameters
+* Add fingerprint for Aeotec ZWA024-C (Multisensor 7 EU version)
+* Change default for Temperature Scale parameter of Zooz ZSE40
+
+## 8.10.2 (2022-01-10)
+### Bugfixes
+The `colors` dependency was recently [corrupted on purpose](https://www.theverge.com/2022/1/9/22874949/developer-corrupts-open-source-libraries-projects-affected). This patch updates all dependencies that depended on an affected version, directly or indirectly.
+
+### Config file changes
+* Correct lifeline association and param 3 for ZWN-RSM2-PLUS
+* Correct parameter 10 (LED blink on motion) for Shenzhen Neo NAS-PD01Z
+
+## 8.10.1 (2022-01-08)
+### Bugfixes
+* Immediately soft reset after restoring an NVM backup, instead of after restarting
+* Use a relative path for the logfile symlink
+
+### Config file changes
+* Enable Basic Set mapping for Swiid SW-ZCS
+* Add Ring Outdoor Contact Sensor, correct Contact Sensor Gen2
+* Add Ecolink Tilt-zwave5
+
+## 8.10.0 (2022-01-04)
+### Features
+* Added the `waitForWakeup` message to the `ZWaveNode` class to wait until the node is awake
+* Delay resetting node info on re-interview for sleeping nodes until they wakeup
+* Logging to file now creates a tailable symlink to the current logfile
+
+### Bugfixes
+* Supervision requests are answered again, even when the requesting node is asleep
+* Node responses claiming no support (version 0) for some critical CCs (`Version CC` and `Manufacturer Specific CC`) are now ignored
+
+### Config file changes
+* Add Shenzen Neo DS07Z door/window switch
+* Add Heatit Z-Push Wall Controller
+* Add undocumented parameter 61 to wiDom WDS2
+* Add Inteset Door/Window Sensor
+* Add Powerley PWLY-7828-A1 Thermostat
+* Add fingerprint 0x0300:0xa10b to Sunricher SR-ZV9001T4-DIM
+* Add many new devices from Z-Wave Alliance DB
+* Add warning to NAS-WR01ZE about huge negative values
+* Correct EVA LOGIK ZW39 device files
+* Update/consolidate HomeSeer parameters for WD200 and WX300
+* Add Zooz ZSE43 and ZSE44 device config files
+* Disable Basic CC mapping for Logic Group ZDB5100
+* Add variant of TKB Home TSM02 with manufacturerId 0x4118
+* Fix scene parameters for FGWDEU-111 (Fibaro Walli Dimmer)
+* Correct incorrect parameter values in various Heltun devices
+
+### Changes under the hood
+* Performance improvements for the Value DB
+
+## 8.9.2 (2021-12-27)
+### Bugfixes
+* Correctly reset firmware update status on failed updates
+* Update the node status correctly for non-SendData commands that are targeted at nodes
+
+### Config file changes
+* Add fingerprint `0x0203:0x008d` to AEON Labs ZW141 Nano Shutter
+
+### Changes under the hood
+* Improved write performance of the value DB
+
+## 8.9.1 (2021-12-23)
+### Bugfixes
+* More messages to nodes are treated like `SendData` and repect/contribute the node status
+* When changing the type of a lifeline association, the removed association is now also deleted from cache
+* Fixed an issue where the send queue would get stuck after aborting an ongoing transmission
+
+### Config file changes
+* Clarify parameter function for Aeotec Smart Switch 7
+* Add Parameter 17 to Zen71 Switch (firmware dependent)
+
+### Changes under the hood
+* Support adding comments to devices
+
+## 8.9.0 (2021-12-22)
+### Features
+* Add support for `Door Lock Logging CC`
+* Added a CLI tool to edit the NVM of controllers with SDK 6.61 (500 series) through 7.17.0 (700 series)
+* Added the controller method `restoreNVM` which automatically converts an NVM backup to the target format before restoring it.
+
+### Bugfixes
+* Make sure that `encodePartial` returns an unsigned int
+* Send nodes to sleep again after successful response
+* Reuse S0 nonce for the lifetime of a CC instance
+* Do not send `Supervision Reports` when another transaction is active
+* Use the last 10 sequence numbers to check for duplicate S2 messages
+* Fix computation of neighbor discovery timeout
+* Skip CC interview step for the controller node
+* Correct error message when SmartStart isn't supported
+* Send battery nodes to sleep after all message types targeting them, not only `SendData` which expect a response
+* Disallow Node.js releases that are dev previews or don't support subpath export patterns
+* Fixed a crash that happened when an in-flight message expired
+* Don't query all security classes if the highest one is known, e.g. directly after the inclusion
+* Errors during Serial API command execution are now properly forwarded and no longer stall the communication
+* Security S0 nonce handling was improved to avoid nonces timing out before first use
+* When waiting for a reply from a node, nonce requests from other nodes are queued instead of handled immediately. Especially with the current 700 series issues, this should avoid some iterruptions in the communication.
+* Interpret the callback status for the `SetSUCNodeID` command correctly
+* Update the cached SUC node id after self-promotion
+
+### Config file changes
+* Added metadata for HS-WX300
+* Several units and re-trigger parameter 5 default on ZP3111-5
+* Additional Product ID for HS-WX300
+* Update Keemple Smart Radiator
+* Add metadata to POPP Smart Radiator
+* Add product ID `0x0164` to SimonTech Roller Blind
+* Deprecate firmware version file splits, prefer conditionals
+* Fix typo in param labels
+* Clean up configuration and correct param ranges for Steinel XLED Home 2
+* Clean up and consolidate ARZ Roller Shutters
+* Add double tap support to GE/Jasco 45609
+* Fixed a typo in `master_template` and correct `MP21ZD` options
+* Correct params for Fibaro FGWP102 FW 3.2
+* Clarify dim level parameter label for GE/Jasco 26932 / 26933 / ZW3008
+* Add fingerprint for AU/NZ model of Aeotec ZW141
+* Add fingerprint `0x0100:0x400a` to Fibargroup FGD211
+* Add metadata for GE/Jasco 46202
+* Add ABUS PLHA10000
+* Add fingerprint `0x0404:0x3000` to FIBARO FGS214
+* Add configuration for Smartly Wheel Controller
+* Update Z-Uno definition
+* Treat Basic Set as event for ZW15S
+* Correct parameters 40 & 42, Qubino ZMNHTD
+* Correct valueSize for parameter 3, Aeotec ZWA039
+
+### Changes under the hood
+* Restored the changes to the outgoing message handling. Related bugfixes are mentioned above.
+
+## 8.8.3 (2021-12-03)
+### Bugfixes
+* Temporarily revert the changes to the outgoing message handling, which fails on some edge cases
+
+## 8.8.2 (2021-11-26)
+### Bugfixes
+* Fixed an issue where the driver could get stuck in a loop sending a node to sleep
+
+## 8.8.1 (2021-11-25)
+### Bugfixes
+* Don't cancel scheduled verification polls for `"value updated"` events caused by the `emitValueUpdateAfterSetValue` option
+
+## 8.8.0 (2021-11-25)
+### Features
+* The state machine handling outgoing messages has been rewritten from scratch, eliminating hard-coded message specific logic and adding the ability to handle sequenced messages. Things like requesting Security S0/S2 nonces and waiting for responses to GET requests now happens outside the state machine.
+* When a Z-Wave controller supports emitting transmit status reports for sent commands, these are now parsed, enabling further evaluation in future releases.
+* Implemented methods to check the health of routes between a node and the controller or other nodes.
+* Added an option to `refreshInfo` that allows resetting the cached info about granted security classes.
+* Added a driver option to emit `"value update"` events after `setValue`
+
+### Bugfixes
+* Before destroying the driver, remember that soft reset is not supported when a stick fails to re-connect
+* Don't handle SIGINT in the driver, let applications take care of it
+* Correctly reset inclusion state after soft reset
+* Assert that node exists before checking security class
+* Store `controllerNodeId` after configuring it during the interview
+* Add Vision Gen5 USB Stick to soft reset blacklist
+* Fixed the JSDoc comments for the `grantSecurityClasses` user callback
+* The `commandsDroppedTX` node statistics are now updated when an outgoing command could not be sent to a node
+
+### Config file changes
+* Disable Basic CC mapping for HeatIt TF016
+* Add REHAU AG RE.GUARD
+* Add device Inteset WR01Z
+* Update Zooz ZEN15 Config to FW 1.6+
+* Add manufacturer Inteset (0x039a)
+* Add fingerprint 0x0303:0x4000 for Fibaro FRG223
+* Add parameter 17 to Zooz ZEN73 (FW 10.0+)
+* Add Ecolink TBZ500 Z-Wave Smart Thermostat
+* Change some parameter units to seconds for Minoston MP20Z
+* Update Spectrum Brands 892 to match style guide / 893 file format
+* Add Spectrum Brands 893 deadbolt
+* Treat Basic Set as event for Merten single switch
+
+### Changes under the hood
+* Upgraded `yarn` to v3.1 and switched from PnP to the new `pnpm` linker
+* Migrate from project-snippets extension to VSCode-native snippets
+* Upgrade to TypeScript 4.5
+* Added documentation for serial-over-tcp connections
+
+## 8.7.7 (2021-11-18)
+### Bugfixes
+* Add driver `emitValueUpdateAfterSetValue` option to emit `"value updated"` events after `setValue`
+
+## 8.7.6 (2021-11-15)
+### Bugfixes
+* Update thermostat setpoint metadata when unit changes between reports
+* Avoid exiting the process while waiting for the Serial API to start up if the event loop is otherwise empty
+
+### Config file changes
+* Swap param 9 partials, add missing option for ZW100/FT100
+* Force-add missing CCs to ZMNHAA
+* Update ZEN23 config file with conditional parameters
+* Add missing units to Fibaro FGBS-222
+* Change firmware range for Aeotec a├½rQ v1
+* Add fingerprint `0x0300:0xa10d` to Sunricher SR-ZV9001T4-DIM
+* Correct LED Indicator Control parameter for ZEN27
+* Map reports from root to endpoint 1 on Fibaro Single Switches
+* Fix spelling in label for Honeywell 39349
+
+### Changes under the hood
+* Remove revision property from import script
+
+## 8.7.5 (2021-11-05)
+### Bugfixes
+* When a 500-series USB stick reconnects during startup, the process doesn't exit anymore if the event loop is otherwise empty
+* Increase delay before verifying thermostat values after set
+
+### Config file changes
+* Add Ring 4AR1SZ-0EN0 Alarm Extender Gen2
+
+## 8.7.4 (2021-11-03)
+### Bugfixes
+* Fixed a crash that happened when determining the SDK version for certain protocol versions
+
+## 8.7.3 (2021-11-03)
+### Bugfixes
+* The node ID of an existing node is no longer unnecessarily stored when serializing the provisioning list
+* Fixed assignment of lifeline associations that only support node associations, even though multi channel associations are supported by the node
+* The SmartStart feature is now limited to Z-Wave SDK 6.81+. Support needs to be tested before using the feature.
+
+### Config file changes
+* Add HomeSeer HS-WX300 Switch
+* Add missing parameters for Telldus TZWP-102
+* Add fingerprint to NAS-WR01ZE
+
+## 8.7.2 (2021-11-02)
+### Bugfixes
+* When provisioning an already-included node, the provisioning entry now gets assigned the node ID immediately
+
+## 8.7.1 (2021-11-02)
+### Bugfixes
+* Fix auto-enabling SmartStart listening mode after an inclusion or exclusion
+
+## 8.7.0 (2021-11-01)
+### Features
+* Add support for SmartStart and S2-only inclusion through pre-provisioned security information
+* Expose a helper function to parse QR code strings into provisioning information
+
+### Bugfixes
+* During S2 bootstrapping, send the controller's public key immediately to keep the included node from timing out
+* Allow removing associations with invalid node IDs
+* When the controller reports its own ID as 0 on startup, repeat the controller identification after soft-reset or restart
+* Fix polling of `Fibaro CC`
+
+### Config file changes
+* Add Aeotec aërQ Humidity Sensor v2
+* Add support for Heltun HE-FT01, small fixes for HE-HT01
+* Delay manual refresh for Leviton DZS15
+* Treat Basic Set as event for Merten FunkTaster CONNECT
+* Fix reporting for Fibaro FGT001
+* Fix reporting for Fibaro FGS-223
+
+## 8.6.1 (2021-10-26)
+### Bugfixes
+* Try to detect if a Z-Wave stick is incompatible with soft-reset and automatically disable the functionality
+
+## 8.6.0 (2021-10-25)
 ### Features
 * Implemented and use soft reset command. If this causes problems, you can opt-out.
 * Implemented 700-series variant of NVM backup/restore
 * Add driver option to change where lockfiles are created
+* Implement waitForMessage to await unsolicited Serial API messages
+* Add context object to log messages
 
 ### Bugfixes
+* Avoid force-adding Supervision support, remove encapsulation CCs from list of mandatory CCs
+* Check correct transaction for `pauseSendThread` flag
+* Remove listeners before closing serial port
 * Emit `Driver_Failed` error when serial port errors
 * Better error when creating a multicast group with missing nodes
 * Security S2 bootstrapping is now aborted when an incorrect PIN is entered
+* Avoid queuing duplicate firmware fragments
+* Add additional 1s delay before verifying a value that has been set through the `setValue` API with a transition duration
 
 ### Config file changes
 * Add support for Heltun panels
@@ -24,6 +298,15 @@
 * Add Heatit Z-Push Button 4
 * Update NAS-AB01Z to match manual
 * Clean up Zooz Zen 7x configs
+* Correct manufactuerID for Zooz ZAC36
+* Correct param 100 and preserve endpoints for ZMNHTD
+* Force notification idle reset for Vision Security ZP3103
+* Update lifeline config and parameters for Philio PAN06 v1
+* Add fingerprint `0x0200:0x1022` to Shenzhen Neo NAS-DS01Z
+* Add Fakro FVS Solar Powered Skylight
+* Tidy up Vitrum devices
+* Correct identification of Vision ZP3111-5
+* Remove endpoints from FGS-212
 
 ### Changes under the hood
 * `supportsZWavePlus` property was removed from config files and documentation

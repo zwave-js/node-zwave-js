@@ -1,0 +1,110 @@
+{
+	"manufacturer": "LEEDARSON LIGHTING CO., Ltd.",
+	"manufacturerId": "0x0300",
+	"label": "7CA-SS-VE-A0",
+	"description": "Z-WAVE 700 Motion Sensor Pet Immunity",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0042",
+			"zwaveAllianceId": 4297
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "10",
+			"label": "Low Battery Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "PIR Sensor",
+			"defaultValue": 1
+		},
+		{
+			"#": "13",
+			"label": "PIR Timeout",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 15300,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Basic Set Commands"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Invert Basic Set Commands"
+		},
+		{
+			"#": "16",
+			"label": "PIR Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Pet Immunity Mode"
+		},
+		{
+			"#": "18",
+			"label": "Reporting Value",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Lumens only",
+					"value": 1
+				},
+				{
+					"label": "Day/Night notification",
+					"value": 2
+				},
+				{
+					"label": "Lumens and Day/Night notification",
+					"value": 3
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Add the Motion Sensor into the Z-Wave network:\n5. Power on your Motion Sensor, and let your Z-Wave controller into add/inclusion mode.\n6. 3 consecutive clicks in 1.5 seconds, the Motion Sensor will send out a node info security CC in command class list (Security inclusion), the LED will be fast blink ,the timeout is 20-40 seconds;\n7. If the inclusion is successful, the LED will be turn on within 2 seconds. If failed, LED will be turn off forever, and please repeat the steps in above.",
+		"exclusion": "Remove Motion Sensor from a Z-Wave network:\n1. Power on your Motion Sensor, and let the Z-Wave primary controller into remove mode.\n2. 3 consecutive clicks in 1.5 second, the LED will be fast blink ,the timeout is 20-40 seconds;\n3. If Motion Sensor has been successfully removed from your Z-Wave\nnetwork, the LED will be turn on 2 seconds. If failed, LED will be turn off forever, and please repeat the steps in above.",
+		"reset": "Reset Motion Sensor to factory default.\n\n1. Triggering this action, in 5 seconds LED will be accelerate blink. After 5 seconds, the LED will remain on until the key is released. Motion Sensor will send “Device_Reset_Locally” to the main controller and exclude from the Z-Wave network when the button is released, this procedure will reset the sensor to factory default.\n2. Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n3. When not in the network, triggering this action, in 5 seconds LED will be accelerate blink red. After 5 seconds, the LED will remain on red until the key is released. this procedure will reset the sensor to factory default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4297/user%20manual%2003.13%207CA-SS-VE-A0-20210910.pdf"
+	}
+}

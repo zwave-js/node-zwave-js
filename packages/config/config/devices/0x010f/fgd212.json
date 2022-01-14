@@ -1,0 +1,814 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGD212",
+	"description": "Dimmer 2",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x4000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x6000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Send BASIC SET command class frame S1",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Sends MULTILEVEL SWITCH command class frame S1",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Sends BASIC SET command class S2",
+			"maxNodes": 10
+		},
+		"5": {
+			"label": "Sends MULTILEVEL SWITCH command class frame S2",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Minimum Brightness Level",
+			"description": "For manual override, this is set during auto-calibration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 1
+		},
+		{
+			"#": "2",
+			"$if": "firmwareVersion <= 3.4",
+			"label": "Maximum Brightness Level",
+			"description": "For manual override, this is set during auto-calibration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "2",
+			"$if": "firmwareVersion >= 3.5",
+			"label": "Maximum Brightness Level",
+			"description": "For manual override, this is set during auto-calibration",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 99
+		},
+		{
+			"#": "3",
+			"label": "Incandescence Level of Dimmable CFL",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"label": "Incandescence Time of Dimmable CFL",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0
+		},
+		{
+			"#": "5",
+			"label": "Automatic Control: Dimming Step Size",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"label": "Automatic Control: Dimming Step Timing",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1
+		},
+		{
+			"#": "7",
+			"label": "Manual Control: Dimming Step Size",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1
+		},
+		{
+			"#": "8",
+			"label": "Manual Control: Dimming Step Timing",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "10",
+			"label": "Timer Functionality (Auto - Off)",
+			"description": "Will automatically turn off after the specified time from switching on",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "11",
+			"label": "ALL ON/ALL OFF Function",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON not active, ALL OFF not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON not active, ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active, ALL OFF not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Force Auto-Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Readout",
+					"value": 0
+				},
+				{
+					"label": "Force auto-calibration without Fibaro Bypass",
+					"value": 1
+				},
+				{
+					"label": "Force auto-calibration with Fibaro Bypass",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Auto-Calibration Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No calibration on manual setting",
+					"value": 0
+				},
+				{
+					"label": "Dimmer operates on auto-calibration settings",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Burnt Out Bulb Detection Power Variation",
+			"description": "Percentage value of standard power consumption as measured during calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Burnt Out Bulb Detection Time Delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Forced Switch On Brightness",
+			"description": "Relative to the range defined by minimum and maximum brightness level configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Previous level",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Input Button/Switch Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				},
+				{
+					"label": "Roller blind switch (up / down)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Value Sent to Associated Devices on Single Click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set associated devices to last state",
+					"value": 0
+				},
+				{
+					"label": "This dimmer's current brightness",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Change Toggle Switch Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Output changes on input switch change",
+					"value": 0
+				},
+				{
+					"label": "Output syncs with input switch position",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Click Sets Brightness to 100%",
+			"defaultValue": 1
+		},
+		{
+			"#": "24[0x01]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s1_associations_on"
+		},
+		{
+			"#": "24[0x02]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s1_associations_off"
+		},
+		{
+			"#": "24[0x04]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s1_associations_hold_release"
+		},
+		{
+			"#": "24[0x08]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s1_associations_double_click"
+		},
+		{
+			"#": "24[0x10]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Command Frames in 2nd and 3rd Association Groups with 0xFF Value on Double Click"
+		},
+		{
+			"#": "25[0x01]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s2_associations_on"
+		},
+		{
+			"#": "25[0x02]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s2_associations_off"
+		},
+		{
+			"#": "25[0x04]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s2_associations_hold_release"
+		},
+		{
+			"#": "25[0x08]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_s2_associations_double_click"
+		},
+		{
+			"#": "25[0x10]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Command Frames in 4th and 5th Association Groups with 0xFF Value on Double Click"
+		},
+		{
+			"#": "26",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "3-way Switch Function",
+			"description": "Key S2 also controls the dimmer"
+		},
+		{
+			"#": "27[0x01]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
+			"defaultValue": 1
+		},
+		{
+			"#": "27[0x02]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
+			"defaultValue": 1
+		},
+		{
+			"#": "27[0x04]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
+			"defaultValue": 1
+		},
+		{
+			"#": "27[0x08]",
+			"$if": "firmwareVersion >= 3.5",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group5",
+			"defaultValue": 1
+		},
+		{
+			"#": "28",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene Activation Functionality",
+			"description": "See manual for SCENE ID specification details"
+		},
+		{
+			"#": "29",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Swap Functionality of Key S1 and Key S2",
+			"description": "Causes S1 to operate as S2 and S2 to operate as S1"
+		},
+		{
+			"#": "30",
+			"label": "Dimmer Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Force leading edge",
+					"value": 0
+				},
+				{
+					"label": "Force trailing edge",
+					"value": 1
+				},
+				{
+					"label": "As recognized during auto-calibration",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Dimmer Mode Recognized During Auto-Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Leading edge",
+					"value": 0
+				},
+				{
+					"label": "Trailing edge",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "On/Off Mode",
+			"description": "Useful when connecting non-dimmable loads",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable (dimming possible)",
+					"value": 0
+				},
+				{
+					"label": "Enable (dimming not possible)",
+					"value": 1
+				},
+				{
+					"label": "As recognized during auto-calibration",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "33",
+			"label": "Dimmability Recognized During Auto-Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Dimming possible",
+					"value": 0
+				},
+				{
+					"label": "Dimming not possible",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "34",
+			"label": "Soft-Start Functionality",
+			"description": "Time required to warm up the filament of halogen bulb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No soft-start",
+					"value": 0
+				},
+				{
+					"label": "Short soft-start (0.1s)",
+					"value": 1
+				},
+				{
+					"label": "Long soft-start (0.5s)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "35",
+			"label": "Perform Auto-Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Never",
+					"value": 0
+				},
+				{
+					"label": "After first power on",
+					"value": 1
+				},
+				{
+					"label": "After each power On",
+					"value": 2
+				},
+				{
+					"label": "After first power up or each load error, surge or overcurrent",
+					"value": 3
+				},
+				{
+					"label": "After each power up or each load error, surge or overcurrent",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "37",
+			"label": "Behavior After Overcurrent or Surge",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device permanently disabled",
+					"value": 0
+				},
+				{
+					"label": "Three attempts to turn on the load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "38",
+			"$if": "firmwareVersion >= 3.5",
+			"label": "Brightness Level Correction for Flickering Loads",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Always enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "39",
+			"$if": "firmwareVersion <= 3.4",
+			"label": "Power Limit",
+			"description": "Defined value turns off load",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 250
+		},
+		{
+			"#": "39",
+			"$if": "firmwareVersion >= 3.5",
+			"label": "Power Limit",
+			"description": "Defined value turns off load",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 350,
+			"defaultValue": 250
+		},
+		{
+			"#": "40",
+			"$import": "templates/fibaro_template.json#general_purpose_alarm_response"
+		},
+		{
+			"#": "41",
+			"$import": "templates/fibaro_template.json#water_flood_alarm_response"
+		},
+		{
+			"#": "42",
+			"$import": "templates/fibaro_template.json#smoke_alarm_response"
+		},
+		{
+			"#": "43",
+			"$import": "templates/fibaro_template.json#temperature_alarm_response"
+		},
+		{
+			"#": "44",
+			"$import": "templates/fibaro_template.json#alarm_state_time",
+			"maxValue": 32767
+		},
+		{
+			"#": "45",
+			"label": "Power Limit Alarm Report",
+			"description": "Load power consumption too high",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "46",
+			"label": "Load Error Alarm Report",
+			"description": "No load, load failure, burnt out bulb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "47",
+			"label": "Overcurrent Alarm Report",
+			"description": "Short circuit, burnt out bulb causing overcurrent",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "48",
+			"label": "Surge Alarm Report",
+			"description": "Dimmer output overvoltage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "49",
+			"label": "Overheat and Voltage Drop Alarm Report",
+			"description": "Critical temperature and low voltage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "50",
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative",
+			"defaultValue": 10
+		},
+		{
+			"#": "52",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Periodic Active Power and Energy Reports",
+			"maxValue": 32767
+		},
+		{
+			"#": "53",
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"maxValue": 255,
+			"defaultValue": 10
+		},
+		{
+			"#": "54",
+			"$import": "templates/fibaro_template.json#reports_include_self"
+		},
+		{
+			"#": "58",
+			"label": "Active Power Calculation Method",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Measurement based on the standard algorithm",
+					"value": 0
+				},
+				{
+					"label": "Approximation based on the calibration data",
+					"value": 1
+				},
+				{
+					"label": "Approximation based on the control angle",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "59",
+			"label": "Approximated Power at the Maximum Brightness Level",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"$import": "templates/fibaro_template.json#default_metadata",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2836/FGD-212-EN-T-v1.3.pdf"
+	}
+}

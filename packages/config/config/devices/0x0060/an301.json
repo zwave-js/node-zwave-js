@@ -1,0 +1,17 @@
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AN301",
+	"description": "274",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0004",
+			"zwaveAllianceId": 4317
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

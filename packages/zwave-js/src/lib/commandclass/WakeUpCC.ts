@@ -86,8 +86,8 @@ export class WakeUpCCAPI extends CCAPI {
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
 
 		if (this.isSinglecast()) {
-			// Verify the current value after a delay
-			this.schedulePoll({ property });
+			// Verify the current value after a (short) delay
+			this.schedulePoll({ property }, { transition: "fast" });
 		}
 	};
 
@@ -286,6 +286,10 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						direction: "outbound",
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
+					this.getValueDB().setValue(
+						getWakeUpIntervalValueId(),
+						ownNodeId,
+					);
 					this.driver.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",

@@ -4,6 +4,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { MockSerialPort } from "@zwave-js/serial";
+import { wait } from "alcalzone-shared/async";
 import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
 import { BinarySwitchCCAPI } from "../commandclass/BinarySwitchCC";
 import { ZWaveController } from "../controller/Controller";
@@ -191,11 +192,12 @@ describe("lib/node/VirtualEndpoint", () => {
 	});
 
 	describe("uses the correct commands behind the scenes", () => {
-		it("broadcast", () => {
+		it("broadcast", async () => {
 			makePhysicalNode(2);
 			makePhysicalNode(3);
 			const broadcast = driver.controller.getBroadcastNode();
 			broadcast.commandClasses.Basic.set(99);
+			await wait(1);
 			// » [Node 255] [REQ] [SendData]
 			//   │ transmit options: 0x25
 			//   │ callback id:        1
@@ -205,11 +207,12 @@ describe("lib/node/VirtualEndpoint", () => {
 			);
 		});
 
-		it("multicast", () => {
+		it("multicast", async () => {
 			makePhysicalNode(2);
 			makePhysicalNode(3);
 			const multicast = driver.controller.getMulticastGroup([2, 3]);
 			multicast.commandClasses.Basic.set(99);
+			await wait(1);
 			// » [Node 2, 3] [REQ] [SendData]
 			//   │ transmit options: 0x25
 			//   │ callback id:        1

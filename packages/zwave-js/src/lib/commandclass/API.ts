@@ -1,14 +1,18 @@
-import type { ValueChangeOptions, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
+	Duration,
 	Maybe,
 	NODE_ID_BROADCAST,
+	stripUndefined,
 	unknownBoolean,
+	ValueChangeOptions,
+	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
+import type { TXReport } from "../controller/SendDataShared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -33,7 +37,7 @@ export type SetValueAPIOptions = Partial<ValueChangeOptions>;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
-export type PollValueImplementation<T extends unknown = unknown> = (
+export type PollValueImplementation<T = unknown> = (
 	property: ValueIDProperties,
 ) => Promise<T | undefined>;
 
@@ -82,6 +86,11 @@ export function throwWrongValueType(
 	);
 }
 
+export interface SchedulePollOptions {
+	duration?: Duration;
+	transition?: "fast" | "slow";
+}
+
 /**
  * The base class for all CC APIs exposed via `Node.commandClasses.<CCName>`
  * @publicAPI
@@ -128,8 +137,17 @@ export class CCAPI {
 	 */
 	protected schedulePoll(
 		property: ValueIDProperties,
-		timeoutMs: number = this.driver.options.timeouts.refreshValue,
+		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
+		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
+		// use/add the short delay. Otherwise, default to the long delay.
+		const durationMs = duration?.toMilliseconds() ?? 0;
+		const additionalDelay =
+			!!durationMs || transition === "fast"
+				? this.driver.options.timeouts.refreshValueAfterTransition
+				: this.driver.options.timeouts.refreshValue;
+		const timeoutMs = durationMs + additionalDelay;
+
 		if (this.isSinglecast()) {
 			const node = this.endpoint.getNodeUnsafe();
 			if (!node) return false;
@@ -256,6 +274,69 @@ export class CCAPI {
 		});
 	}
 
+	/** Creates an instance of this API which (if supported) will return TX reports along with the result. */
+	public withTXReport<T extends this>(): WithTXReport<T> {
+		if (this.constructor === CCAPI) {
+			throw new ZWaveError(
+				"The withTXReport method may only be called on specific CC API implementations.",
+				ZWaveErrorCodes.Driver_NotSupported,
+			);
+		}
+
+		// Remember which properties need to be proxied
+		const ownProps = new Set(
+			Object.getOwnPropertyNames(this.constructor.prototype),
+		);
+		ownProps.delete("constructor");
+
+		function wrapResult<T>(result: T, txReport: TXReport): any {
+			// Both the result and the TX report may be undefined (no response, no support)
+			return stripUndefined({
+				result,
+				txReport,
+			});
+		}
+
+		return new Proxy(this, {
+			get: (target, prop) => {
+				if (prop === "withTXReport") return undefined;
+
+				let original = (target as any)[prop];
+				if (
+					ownProps.has(prop as string) &&
+					typeof original === "function"
+				) {
+					// This is a method that only exists in the specific implementation
+
+					// Wrap each call with its own API proxy, so we don't mix up TX reports
+					let txReport: TXReport;
+					const api = target.withOptions({
+						onTXReport: (report) => {
+							// Remember the last status report
+							txReport = report;
+						},
+					});
+					original = (api as any)[prop].bind(api);
+
+					// Return a wrapper function that will add the status report after the call is complete
+					return (...args: any) => {
+						let result = original(...args);
+						if (result instanceof Promise) {
+							result = result.then((res) =>
+								wrapResult(res, txReport),
+							);
+						} else {
+							result = wrapResult(result, txReport);
+						}
+						return result;
+					};
+				} else {
+					return original;
+				}
+			},
+		}) as any;
+	}
+
 	protected isSinglecast(): this is this & { endpoint: Endpoint } {
 		return (
 			typeof this.endpoint.nodeId === "number" &&
@@ -330,10 +411,18 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Configuration"
 	: [CC] extends [typeof CommandClasses["Door Lock"]]
 	? "Door Lock"
+	: [CC] extends [typeof CommandClasses["Door Lock Logging"]]
+	? "Door Lock Logging"
 	: [CC] extends [typeof CommandClasses["Entry Control"]]
 	? "Entry Control"
 	: [CC] extends [typeof CommandClasses["Firmware Update Meta Data"]]
 	? "Firmware Update Meta Data"
+	: [CC] extends [typeof CommandClasses["Humidity Control Mode"]]
+	? "Humidity Control Mode"
+	: [CC] extends [typeof CommandClasses["Humidity Control Operating State"]]
+	? "Humidity Control Operating State"
+	: [CC] extends [typeof CommandClasses["Humidity Control Setpoint"]]
+	? "Humidity Control Setpoint"
 	: [CC] extends [typeof CommandClasses["Indicator"]]
 	? "Indicator"
 	: [CC] extends [typeof CommandClasses["Language"]]
@@ -362,6 +451,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Node Naming and Location"
 	: [CC] extends [typeof CommandClasses["Notification"]]
 	? "Notification"
+	: [CC] extends [typeof CommandClasses["Powerlevel"]]
+	? "Powerlevel"
 	: [CC] extends [typeof CommandClasses["Protection"]]
 	? "Protection"
 	: [CC] extends [typeof CommandClasses["Scene Activation"]]
@@ -409,8 +500,34 @@ export type CCToAPI<CC extends CommandClasses> =
 
 export type APIMethodsOf<CC extends CommandClasses> = Omit<
 	OnlyMethods<CCToAPI<CC>>,
-	"isSetValueOptimistic" | "isSupported" | "supportsCommand" | "withOptions"
+	| "isSetValueOptimistic"
+	| "isSupported"
+	| "supportsCommand"
+	| "withOptions"
+	| "withTXReport"
 >;
+
+export type OwnMethodsOf<API extends CCAPI> = Omit<
+	OnlyMethods<API>,
+	keyof OnlyMethods<CCAPI>
+>;
+
+// Wraps the given type in an object that contains a TX report
+export type WrapWithTXReport<T> = [T] extends [Promise<infer U>]
+	? Promise<WrapWithTXReport<U>>
+	: [T] extends [void]
+	? { txReport: TXReport | undefined }
+	: { result: T; txReport: TXReport | undefined };
+
+// Converts the type of the given API implementation so the API methods return an object including the TX report
+export type WithTXReport<API extends CCAPI> = Omit<
+	API,
+	keyof OwnMethodsOf<API> | "withOptions" | "withTXReport"
+> & {
+	[K in keyof OwnMethodsOf<API>]: API[K] extends (...args: any[]) => any
+		? (...args: Parameters<API[K]>) => WrapWithTXReport<ReturnType<API[K]>>
+		: never;
+};
 
 // This interface is auto-generated by maintenance/generateCCAPIInterface.ts
 // Do not edit it by hand or your changes will be lost
@@ -433,8 +550,12 @@ export interface CCAPIs {
 	"Color Switch": import("./ColorSwitchCC").ColorSwitchCCAPI;
 	Configuration: import("./ConfigurationCC").ConfigurationCCAPI;
 	"Door Lock": import("./DoorLockCC").DoorLockCCAPI;
+	"Door Lock Logging": import("./DoorLockLoggingCC").DoorLockLoggingCCAPI;
 	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
+	"Humidity Control Mode": import("./HumidityControlModeCC").HumidityControlModeCCAPI;
+	"Humidity Control Operating State": import("./HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
+	"Humidity Control Setpoint": import("./HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	Lock: import("./LockCC").LockCCAPI;
@@ -449,6 +570,7 @@ export interface CCAPIs {
 	"No Operation": import("./NoOperationCC").NoOperationCCAPI;
 	"Node Naming and Location": import("./NodeNamingCC").NodeNamingAndLocationCCAPI;
 	Notification: import("./NotificationCC").NotificationCCAPI;
+	Powerlevel: import("./PowerlevelCC").PowerlevelCCAPI;
 	Protection: import("./ProtectionCC").ProtectionCCAPI;
 	"Scene Activation": import("./SceneActivationCC").SceneActivationCCAPI;
 	"Scene Actuator Configuration": import("./SceneActuatorConfigurationCC").SceneActuatorConfigurationCCAPI;

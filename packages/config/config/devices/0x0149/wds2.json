@@ -2,7 +2,7 @@
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "WDS2",
-	"description": "Widom Smart Double Switch",
+	"description": "Universal Double Switch",
 	"devices": [
 		{
 			"productType": "0x1214",
@@ -342,6 +342,39 @@
 				},
 				{
 					"label": "PREVIOUS STATUS - Status prior to restart",
+					"value": 4
+				}
+			]
+		},
+		{
+			// This parameter is undocumented (the same as for the WDS)
+			"#": "61",
+			"label": "Configuration reset",
+			"description": "Defines which parameters should be reset to default values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "FACTORY RESET",
+					"value": 0
+				},
+				{
+					"label": "ASSOCIATIONS RESET",
+					"value": 1
+				},
+				{
+					"label": "CONFIGURATIONS RESET",
+					"value": 2
+				},
+				{
+					"label": "RESTART DEVICE",
+					"value": 3
+				},
+				{
+					"label": "IGNORE",
 					"value": 4
 				}
 			]

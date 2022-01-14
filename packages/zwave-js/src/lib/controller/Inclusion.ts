@@ -15,11 +15,11 @@ export enum InclusionStrategy {
 	 * **This is the recommended** strategy and should be used unless there is a good reason not to.
 	 */
 	Default = 0,
+
 	/**
 	 * Include using SmartStart (requires Security S2).
-	 * Issues a warning if Security S2 is not supported, or the secure bootstrapping fails.
 	 *
-	 * **Should be preferred** over **Default** if supported.
+	 * **Note:** This will be used internally and cannot be used by applications
 	 */
 	SmartStart,
 
@@ -60,7 +60,7 @@ export interface InclusionUserCallbacks {
 	/**
 	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
 	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
-	 * If the user did not accept the requested security classes, the promise MUST resolve to `true`.
+	 * If the user did not accept the requested security classes, the promise MUST resolve to `false`.
 	 */
 	grantSecurityClasses(
 		requested: InclusionGrant,
@@ -95,13 +95,24 @@ export type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
-			strategy: InclusionStrategy.SmartStart;
-			provisioningList: unknown;
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
+	  };
+
+/**
+ * Options for inclusion of a new node, including SmartStart
+ * @internal
+ */
+export type InclusionOptionsInternal =
+	| InclusionOptions
+	| {
+			strategy: InclusionStrategy.SmartStart;
+			provisioning: PlannedProvisioningEntry;
 	  };
 
 /** Options for replacing a node */
@@ -113,7 +124,42 @@ export type ReplaceNodeOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
 			strategy:
 				| InclusionStrategy.Insecure
 				| InclusionStrategy.Security_S0;
 	  };
+
+export interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
+}
+
+export interface IncludedProvisioningEntry extends PlannedProvisioningEntry {
+	nodeId: number;
+}
+
+export type SmartStartProvisioningEntry =
+	| PlannedProvisioningEntry
+	| IncludedProvisioningEntry;
+
+export enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
+	Idle,
+	/** The controller is waiting for a node to be included. */
+	Including,
+	/** The controller is waiting for a node to be excluded. */
+	Excluding,
+	/** The controller is busy including or excluding a node. */
+	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
+	SmartStart,
+}

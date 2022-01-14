@@ -1,0 +1,16 @@
+{
+	"manufacturer": "EVA Logik",
+	"manufacturerId": "0x0312",
+	"label": "ZW681",
+	"description": "Smart Plug with Energy Meter",
+	"devices": [
+		{
+			"productType": "0xc001",
+			"productId": "0xc002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

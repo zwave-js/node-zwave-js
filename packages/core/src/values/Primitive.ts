@@ -262,8 +262,8 @@ export function encodePartial(
 	partialValue: number,
 	bitMask: number,
 ): number {
-	return (
+	const ret =
 		(fullValue & ~bitMask) |
-		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask)
-	);
+		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
+	return ret >>> 0; // convert to unsigned if necessary
 }

@@ -1284,10 +1284,26 @@ export class DeviceMetadata {
 			"exclusion",
 			"reset",
 			"manual",
+			"comments",
 		] as const) {
 			if (prop in definition) {
 				const value = definition[prop];
-				if (typeof value !== "string") {
+				if (prop === "comments") {
+					const isComment = (opt: unknown) =>
+						isObject(opt) &&
+						typeof opt.level === "string" &&
+						typeof opt.text === "string";
+
+					const isValid =
+						(isArray(value) && value.every(isComment)) ||
+						isComment(value);
+					if (!isValid)
+						throwInvalidConfig(
+							"devices",
+							`packages/config/config/devices/${filename}:
+The metadata entry comments is invalid!`,
+						);
+				} else if (typeof value !== "string") {
 					throwInvalidConfig(
 						"devices",
 						`packages/config/config/devices/${filename}:
@@ -1309,4 +1325,11 @@ The metadata entry ${prop} must be a string!`,
 	public readonly reset?: string;
 	/** A link to the device manual */
 	public readonly manual?: string;
+	/** Comments for this device */
+	public readonly comments?: DeviceComment | DeviceComment[];
+}
+
+export interface DeviceComment {
+	level: "info" | "warning" | "error";
+	text: string;
 }

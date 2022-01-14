@@ -2,7 +2,7 @@
 	"manufacturer": "HELTUN",
 	"manufacturerId": "0x0344",
 	"label": "HE-HT01",
-	"description": "Advanced Programmable Thermostat for Heating Systems",
+	"description": "Heating Thermostat",
 	"devices": [
 		{
 			"productType": "0x0004",

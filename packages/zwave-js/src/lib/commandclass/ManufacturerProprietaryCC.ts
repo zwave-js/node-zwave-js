@@ -14,7 +14,9 @@ import {
 	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
+	throwMissingPropertyKey,
 	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
 import {
@@ -120,18 +122,26 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 
 		// Verify the current value after a delay
-		this.schedulePoll({ property });
+		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
+		propertyKey,
 	}): Promise<unknown> => {
-		switch (property) {
-			case "position":
-			case "tilt":
-				return (await this.fibaroVenetianBlindsGet())?.[property];
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		} else if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		}
+
+		switch (propertyKey) {
+			case "venetianBlindsPosition":
+				return (await this.fibaroVenetianBlindsGet())?.position;
+			case "venetianBlindsTilt":
+				return (await this.fibaroVenetianBlindsGet())?.tilt;
 			default:
-				throwUnsupportedProperty(this.ccId, property);
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
 	};
 }

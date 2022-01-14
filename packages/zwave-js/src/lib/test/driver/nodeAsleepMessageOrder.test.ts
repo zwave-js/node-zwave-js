@@ -52,7 +52,11 @@ describe("regression tests", () => {
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const pingPromise10 = node10.ping();
+		await wait(1);
+		node10.commandClasses.Basic.set(60);
+		await wait(1);
 		const pingPromise17 = node17.ping();
+		await wait(1);
 		// » [Node 010] [REQ] [SendData]
 		//   │ transmit options: 0x25
 		//   │ callback id:      3
@@ -74,6 +78,7 @@ describe("regression tests", () => {
 		await wait(50);
 
 		node10.markAsAsleep();
+		await wait(1);
 		expect(node10.status).toBe(NodeStatus.Asleep);
 
 		// The command queue should now abort the ongoing transaction
@@ -81,6 +86,21 @@ describe("regression tests", () => {
 		expect(serialport.lastWrite).toEqual(Buffer.from("01030016ea", "hex"));
 		await wait(10);
 		serialport.receiveData(ACK);
+
+		await wait(50);
+
+		// Callback for previous message comes
+		// « [REQ] [SendData]
+		//     callback id:     3
+		//     transmit status: NoAck
+		serialport.receiveData(
+			Buffer.from(
+				"011800130301019b007f7f7f7f7f010107000000000204000012",
+				"hex",
+			),
+		);
+		// await wait(1);
+		expect(serialport.lastWrite).toEqual(ACK);
 
 		// Abort was acknowledged, Ping for 10 should be failed
 		await wait(50);
@@ -97,20 +117,6 @@ describe("regression tests", () => {
 		serialport.receiveData(ACK);
 
 		await wait(50);
-
-		// Callback for previous message comes and should be ignored
-		// « [REQ] [SendData]
-		//     callback id:     3
-		//     transmit status: NoAck
-		serialport.receiveData(
-			Buffer.from(
-				"011800130301019b007f7f7f7f7f010107000000000204000012",
-				"hex",
-			),
-		);
-		expect(serialport.lastWrite).toEqual(ACK);
-
-		await wait(10);
 
 		// Ping 17 does not get resolved by the other callback
 		await expect(Promise.race([pingPromise17, wait(50)])).resolves.toBe(
@@ -137,5 +143,7 @@ describe("regression tests", () => {
 		);
 		expect(serialport.lastWrite).toEqual(ACK);
 		await expect(pingPromise17).resolves.toBeFalse();
+
+		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
 	});
 });

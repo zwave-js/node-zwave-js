@@ -17,6 +17,22 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": [
 		{
 			"#": "3",
@@ -64,5 +80,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// Enable double-tap support
+		"treatBasicSetAsEvent": true
+	}
 }

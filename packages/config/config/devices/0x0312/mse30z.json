@@ -1,0 +1,216 @@
+{
+	"manufacturer": "Minoston",
+	"manufacturerId": "0x0312",
+	"label": "MSE30Z",
+	"description": "Door/Window Temperature & Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0713",
+			"productId": "0xd100",
+			"zwaveAllianceId": 4193
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Door State",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "High Temperature",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Low Temperature",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "High Humidity",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Low Humidity",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Battery Reporting Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Low Battery Alarm Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Invert Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Closed when magnet is near",
+					"value": 0
+				},
+				{
+					"label": "Opened when magnet is near",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Door Close Command Delay",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Door Open Command Delay",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Automatic Reporting: Temperature Change Threshold",
+			"valueSize": 1,
+			"unit": "0.5 °C",
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Automatic Reporting: Humidity Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Automatic Reporting: High Temperature Limit",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Automatic Reporting: Low Temperature Limit",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Automatic Reporting: High Humidity Limit",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Automatic Reporting: Low Humidity Limit",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
+		},
+		{
+			"#": "13",
+			"label": "Association Group 2 Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set 0xff when magnet is away; 0x00 when near",
+					"value": 1
+				},
+				{
+					"label": "Send Basic Set 0x00 when magnet is away; 0xff when near",
+					"value": 2
+				},
+				{
+					"label": "Only send Basic Set 0xff when magnet is away",
+					"value": 3
+				},
+				{
+					"label": "Only send Basic Set 0x00 when magnet is near",
+					"value": 4
+				},
+				{
+					"label": "Only send Basic Set 0x00 when magnet is away",
+					"value": 5
+				},
+				{
+					"label": "Only send Basic Set 0xff when magnet is near",
+					"value": 6
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Press Z-Wave button 3 times quickly, and hold the third time for at least 10 seconds.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4193/MSE30Z%20Manual-202106024.pdf"
+	}
+}

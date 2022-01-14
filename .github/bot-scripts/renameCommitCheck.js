@@ -1,5 +1,6 @@
-/// <reference path="types.d.ts" />
 // @ts-check
+
+/// <reference path="types.d.ts" />
 
 /**
  * @param {{github: Github, context: Context}} param
@@ -16,14 +17,14 @@ async function main(param) {
 		...options,
 		pull_number: context.issue.number,
 	};
-	const { data: commits } = await github.pulls.listCommits({
+	const { data: commits } = await github.rest.pulls.listCommits({
 		...options,
 		pull_number: context.issue.number,
 	});
 
 	if (commits.length > 1) {
 		// Not necessary to do this.
-		await github.issues.createComment({
+		await github.rest.issues.createComment({
 			...options,
 			issue_number: context.payload.issue.number,
 			body: `There is more than one commit - no need to rename it.`,

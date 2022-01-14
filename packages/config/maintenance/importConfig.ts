@@ -361,8 +361,13 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		"options",
 	];
 
-	// Potentially empty arrays to remove
-	const arraysToClean = ["associations", "compat", "metadata"];
+	// Potentially empty arrays and objects to remove
+	const disallowEmpty = [
+		"associations",
+		"paramInformation",
+		"compat",
+		"metadata",
+	];
 
 	/*******************
 	 * Standardize things
@@ -381,10 +386,20 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		config[l] = temp;
 	}
 
-	// Remove empty arrays
-	for (const array of Object.keys(arraysToClean)) {
-		if (!config[array] || config[array].length === 0) {
-			delete config[array];
+	// Remove empty arrays and objects
+	for (const prop of Object.keys(disallowEmpty)) {
+		if (prop in config) {
+			// Key exists
+			if (
+				isObject(config[prop]) &&
+				Object.keys(config[prop]).length === 0
+			) {
+				delete config[prop];
+			} else if (isArray(config[prop]) && config[prop].length === 0) {
+				delete config[prop];
+			} else if (!config[prop]) {
+				delete config[prop];
+			}
 		}
 	}
 
@@ -417,7 +432,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 						other["#"].startsWith(`${param["#"]}[`),
 					),
 			)
-			.map(([key]) => key);
+			.map((e) => e["#"]);
 
 		config.paramInformation = config.paramInformation.filter((param: any) =>
 			allowedKeys.includes(param["#"]),
@@ -775,10 +790,8 @@ async function parseOZWProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(
-		fileNameAbsolute,
-		stringify(normalizeConfig(newConfig), "\t"),
-	);
+	const output = stringify(normalizeConfig(newConfig), "\t") + "\n";
+	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
 /*********************************************************
@@ -827,8 +840,9 @@ async function parseZWAFiles(): Promise<void> {
 	for (const file of jsonData) {
 		// Lookup the manufacturer
 		const manufacturerId = parseInt(file.ManufacturerId, 16);
-		const manufacturerName =
-			configManager.lookupManufacturer(manufacturerId);
+		const manufacturerName = configManager.lookupManufacturer(
+			manufacturerId,
+		);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (Number.isNaN(manufacturerId)) {
@@ -1237,9 +1251,8 @@ async function parseZWAProduct(
 	const exclusion = product?.Texts?.find(
 		(document: any) => document.Type === 2,
 	)?.value;
-	const reset = product?.Texts?.find(
-		(document: any) => document.Type === 5,
-	)?.value;
+	const reset = product?.Texts?.find((document: any) => document.Type === 5)
+		?.value;
 	let manual = product?.Documents?.find(
 		(document: any) => document.Type === 1,
 	)?.value;
@@ -1498,7 +1511,8 @@ async function parseZWAProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// Write the file
-	const output = JSONC.stringify(normalizeConfig(newConfig), null, "\t");
+	const output =
+		JSONC.stringify(normalizeConfig(newConfig), null, "\t") + "\n";
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
@@ -1588,11 +1602,8 @@ async function maintenanceParse(): Promise<void> {
 			/*************************************
 			 *   Write the configuration file    *
 			 *************************************/
-			const output = JSONC.stringify(
-				normalizeConfig(jsonData),
-				null,
-				"\t",
-			);
+			const output =
+				JSONC.stringify(normalizeConfig(jsonData), null, "\t") + "\n";
 			await fs.writeFile(file, output, "utf8");
 		}
 	}
@@ -1797,7 +1808,6 @@ async function parseOHConfigFile(
 	assertValid(json);
 
 	const ret: Record<string, any> = {
-		revision: json.db_version,
 		manufacturer: json.manufacturer.label,
 		manufacturerId: formatId(json.manufacturer.reference),
 		label: sanitizeText(json.label),
@@ -1936,7 +1946,7 @@ async function importConfigFilesOH(): Promise<void> {
 		outFilename += ".json";
 		await fs.ensureDir(path.dirname(outFilename));
 
-		const output = stringify(parsed, "\t");
+		const output = stringify(parsed, "\t") + "\n";
 		await fs.writeFile(outFilename, output, "utf8");
 	}
 }

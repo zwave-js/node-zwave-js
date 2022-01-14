@@ -1,0 +1,713 @@
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "TBZ500",
+	"description": "Z-Wave Smart Thermostat",
+	"devices": [
+		{
+			"productType": "0x5442",
+			"productId": "0x5439",
+			"zwaveAllianceId": 4093
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "System Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard",
+					"value": 0
+				},
+				{
+					"label": "Heat Pump",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Fan Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas (No fan w/Heat)",
+					"value": 0
+				},
+				{
+					"label": "Electric (Fan w/Heat)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Changeover Type",
+			"description": "For Heat Pump HVAC systems only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Changeover with Cooling systems (Orange wire)",
+					"value": 0
+				},
+				{
+					"label": "Changeover with Heating systems (Brown wire)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Heat"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Aux Heat",
+			"defaultValue": 1
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "2nd Stage Cool"
+		},
+		{
+			"#": "7",
+			"label": "Temperature Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Minimum Off Time",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5
+		},
+		{
+			"#": "9",
+			"label": "Minimum Run Time",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 3,
+			"maxValue": 9,
+			"defaultValue": 3
+		},
+		{
+			"#": "10",
+			"label": "Setpoint Heat/Cool Delta",
+			"description": "Sets the minimum separation between heating and cooling setpoints.",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 3,
+			"maxValue": 15,
+			"defaultValue": 3
+		},
+		{
+			"#": "11",
+			"label": "Heating Stage 1: On Delta",
+			"description": "Stage 1 starts heating when current temperature is <Heating Stage 1: On Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1
+		},
+		{
+			"#": "12",
+			"label": "Heating Stage 1: Off Delta",
+			"description": "Stage 1 stops heating when current temperature is <Heating Stage 1: Off Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "Heating Stage 2: On Delta",
+			"description": "Stage 2 starts heating when current temperature is <Heating Stage 2: On Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 2,
+			"maxValue": 7,
+			"defaultValue": 2
+		},
+		{
+			"#": "14",
+			"label": "Heating Stage 2: Off Delta",
+			"description": "Stage 2 stops heating when current temperature is <Heating Stage 2: Off Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0
+		},
+		{
+			"#": "15",
+			"label": "Heating Stage 3: On Delta",
+			"description": "Stage 3 starts heating when current temperature is <Heating Stage 3: On Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 3,
+			"maxValue": 8,
+			"defaultValue": 3
+		},
+		{
+			"#": "16",
+			"label": "Heating Stage 3: Off Delta",
+			"description": "Stage 3 stops heating when current temperature is <Heating Stage 3: Off Delta> degrees below <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0
+		},
+		{
+			"#": "17",
+			"label": "Cooling Stage 1: On Delta",
+			"description": "Stage 1 starts cooling when current temperature is <Cooling Stage 1: On Delta> degrees above <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1
+		},
+		{
+			"#": "18",
+			"label": "Cooling Stage 1: Off Delta",
+			"description": "Stage 1 stops cooling when current temperature is <Cooling Stage 1: Off Delta> degrees above <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "Cooling Stage 2: On Delta",
+			"description": "Stage 2 starts cooling when current temperature is <Cooling Stage 2: On Delta> degrees above <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 2,
+			"maxValue": 8,
+			"defaultValue": 2
+		},
+		{
+			"#": "20",
+			"label": "Cooling Stage 2: Off Delta",
+			"description": "Stage 2 stops cooling when current temperature is <Cooling Stage 2: Off Delta> degrees above <Setpoint>",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"label": "Mechanical Status",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 256,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "MECH_H1",
+					"value": 1
+				},
+				{
+					"label": "MECH_H2",
+					"value": 2
+				},
+				{
+					"label": "MECH_H3",
+					"value": 4
+				},
+				{
+					"label": "MECH_C1",
+					"value": 8
+				},
+				{
+					"label": "MECH_C2",
+					"value": 16
+				},
+				{
+					"label": "PHANTOM_F",
+					"value": 32
+				},
+				{
+					"label": "MECH_F",
+					"value": 64
+				},
+				{
+					"label": "MANUAL_F",
+					"value": 128
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "SCP Status", // SCP is not defined in the manual. Perhaps State Condition Parameter.
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 128,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "STATE_HEAT",
+					"value": 1
+				},
+				{
+					"label": "STATE_COOL2",
+					"value": 2
+				},
+				{
+					"label": "STATE_2ND",
+					"value": 4
+				},
+				{
+					"label": "STATE_3RD",
+					"value": 8
+				},
+				{
+					"label": "STATE_FAN",
+					"value": 16
+				},
+				{
+					"label": "STATE_LAST",
+					"value": 32
+				},
+				{
+					"label": "STATE_MOT",
+					"value": 64
+				},
+				{
+					"label": "STATE_MRT",
+					"value": 128
+				}
+			]
+		},
+		{
+			"#": "23[0x0001]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Temperature",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0002]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Heat Setpoint",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0004]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Cool Setpoint",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0008]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Mode",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0010]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Fan Mode",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0020]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Fan State",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x0040]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Operating State",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x0080]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Schedule Enable",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x0100]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Setback",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x0200]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Run Hold",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x0400]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Display Lock",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x2000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Battery",
+			"valueSize": 2,
+			"defaultValue": 1
+		},
+		{
+			"#": "23[0x4000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: Mechanical Status",
+			"valueSize": 2
+		},
+		{
+			"#": "23[0x8000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Status Change Report: SCP Status",
+			"valueSize": 2
+		},
+		{
+			"#": "24",
+			"label": "Display Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlocked",
+					"value": 0
+				},
+				{
+					"label": "Locked",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "26",
+			"label": "Backlight Timer",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 30,
+			"defaultValue": 20
+		},
+		{
+			"#": "33",
+			"label": "Max Heat Setpoint",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 30,
+			"maxValue": 109,
+			"defaultValue": 90
+		},
+		{
+			"#": "34",
+			"label": "Min Cool Setpoint",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 33,
+			"maxValue": 112,
+			"defaultValue": 60
+		},
+		{
+			"#": "38",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Schedule"
+		},
+		{
+			"#": "40",
+			"label": "Setback Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Setback",
+					"value": 0
+				},
+				{
+					"label": "Unoccupied Mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Unoccupied Heat Setpoint",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 30,
+			"maxValue": 109,
+			"defaultValue": 62
+		},
+		{
+			"#": "42",
+			"label": "Unoccupied Cool Setpoint",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 33,
+			"maxValue": 112,
+			"defaultValue": 80
+		},
+		{
+			"#": "43",
+			"label": "Remote Sensor Node Number",
+			"description": "Node to use as alternative remote temperature sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 232,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "46",
+			"label": "Remote Sensor Temperature",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 0,
+			"maxValue": 112,
+			"defaultValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "48",
+			"label": "Internal Sensor Temp Offset",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0
+		},
+		{
+			"#": "49",
+			"label": "Remote Sensor Temperature Offset",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": -7,
+			"maxValue": 7,
+			"defaultValue": 0
+		},
+		{
+			"#": "52",
+			"label": "Filter Timer",
+			"valueSize": 2,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0
+		},
+		{
+			"#": "53",
+			"label": "Filter Timer Max",
+			"valueSize": 2,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 300
+		},
+		{
+			"#": "54",
+			"label": "Heat Timer",
+			"valueSize": 2,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0
+		},
+		{
+			"#": "55",
+			"label": "Cool Timer",
+			"valueSize": 2,
+			"unit": "hours",
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 0
+		},
+		{
+			"#": "61",
+			"label": "Fan Purge Heat",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0
+		},
+		{
+			"#": "62",
+			"label": "Fan Purge Cool",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 0
+		},
+		{
+			"#": "179",
+			"label": "Battery",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"readOnly": true
+		},
+		{
+			"#": "181",
+			"label": "Battery Stat Shutdown Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0
+		},
+		{
+			"#": "182",
+			"label": "Battery Radio Cutoff Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10
+		},
+		{
+			"#": "183",
+			"label": "Battery LOWBATT Indicator Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 20,
+			"maxValue": 75,
+			"defaultValue": 20
+		},
+		{
+			"#": "184",
+			"label": "Battery Value for Midlevel",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 50,
+			"maxValue": 80,
+			"defaultValue": 50
+		},
+		{
+			"#": "185",
+			"label": "Battery Report Timer",
+			"valueSize": 1,
+			"unit": "days",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "186",
+			"label": "Temperature Reporting Threshold",
+			"description": "Required change to trigger update",
+			"valueSize": 1,
+			"unit": "°F",
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 2
+		},
+		{
+			"#": "187",
+			"label": "Temperature Report Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "231",
+			"label": "Status Display",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relative Humidity",
+					"value": 0
+				},
+				{
+					"label": "Setpoint",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions provided with your system for enrolling the thermostat.\n2. Press and hold the FAN button on the Thermostat until the screen changes to the Menu screen.\n3. Press the UP button until ZWAVE is shown in the Status Display line then press Select.\n4. INSTALL should be shown on the status line.\n5. When instructed by your system installation to add the thermostat to the network press the “Select” button to install. Wait until SUCCESS or FAILED is shown on thestatus display.\n6. Press Done on the Thermostat to exit the ZWAVE screen.\n7. Press Done on the Thermostat again to exit the Menu screen.\n8. Once enrolled on your system’s network, continue to follow the instructions provided to complete the enrollment and naming of the thermostat.\n9. The indicator should be shown on the Thermostat Main screen indicating the thermostat has successfully been enrolled into the Z-Wave network.",
+		"exclusion": "It may be necessary to remove and/or reinstall the thermostat from a Z-Wave network if the thermostat has been previously installed on another network. Follow the instructions supplied with your Z-Wave system to remove/uninstall a Z-Wave device. When the system instructs you to press and release the Z-Wave button on the thermostat, follow these steps:\n\n1. Press and hold the FAN button for 3 seconds until the Menu screen is displayed.\n2. Press the UP arrow button to scroll to the “ZWAVE” menu.\n3. Press “Select” to select the ZWAVE screen.\n4. The display will show “REMOVE” in the text line.\n5. Press “Select” to perform the remove action.\n6. “WAIT” will be displayed in the text line. The remove operation is in process.\n7. “SUCCESS” will be display when the thermostat has been excluded from the network.\n8. Press “Done” to exit back to the thermostat screen.\n9. Thermostat is now ready to be added to any Z-Wave network.",
+		"reset": "Please use this procedure only when the Z-Wave Primary Controller is missing or otherwise inoperable. To reset the TBZ500’s Z-Wave parameters to Factory Settings (both Z-Wave and HVAC settings): 1. Remove power from the TBZ500. 2. Restore power to the TBZ500. 3. When “TBZ500” appears on the screen, hold down the MODE and FAN buttons at the same time. 4. Release the buttons when RESET appears on the Status Line. 5. Once the TBZ500 resets the Z-Wave and HVAC settings, a DONE confirmation message will appear on the screen before the thermostat self-reboots",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4093/TBZ500_manual_8_5x5_5_inch__SC_20210325.pdf"
+	}
+}

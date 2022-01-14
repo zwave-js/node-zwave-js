@@ -6,12 +6,24 @@
 	"devices": [
 		{
 			"productType": "0x2021",
-			"productId": "0x2101"
+			"productId": "0x2101",
+			"zwaveAllianceId": 4307
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
 	},
 	"paramInformation": [
 		{
@@ -20,7 +32,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -163,5 +175,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "Initiate inclusion (pairing) in the app (or web interface).\nClick the Z-Wave button with a paperclip twice. The LED indicator will start flashing",
+		"exclusion": "Initiate exclusion in the app (or web interface).\nClick the Z-Wave button with a paperclip twice. The LED indicator will start flashing",
+		"reset": "If your primary controller is missing or\ninoperable, you may need to reset the\ndevice to factory settings. To complete\nthe reset process manually, remove the\nback cover to trigger tamper switch.\nPress and release the Z-Wave button\nusing a paperclip 10 TIMES quickly\n(within 10 seconds)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4307/zooz-zse40-700-manual-online.pdf"
+	}
 }

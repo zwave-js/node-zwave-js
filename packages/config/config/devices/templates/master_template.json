@@ -126,6 +126,20 @@
 		"maxValue": 127,
 		"unsigned": true
 	},
+	"base_0-65535": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"base_1-65535": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
 	"base_true_false": {
 		"valueSize": 1,
 		"minValue": 0,
@@ -145,13 +159,15 @@
 		]
 	},
 	"dimming_timing_with_0": {
-		"description": "Set 0 to disable",
-		"valueSize": 1,
+		"$import": "#base_0-255_nounit",
 		"unit": "10ms",
-		"minValue": 0,
-		"maxValue": 255,
 		"defaultValue": 3,
-		"unsigned": true
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
 	"dimming_timing": {
 		"valueSize": 1,
@@ -160,6 +176,56 @@
 		"maxValue": 255,
 		"defaultValue": 3,
 		"unsigned": true
+	},
+	"dimming_speed_1-99_seconds": {
+		"$import": "#base_1-99_nounit",
+		"label": "Dimming Speed",
+		"unit": "seconds",
+		"defaultValue": 5
+	},
+	"dim_rate": {
+		"$import": "#base_1-99_nounit",
+		"label": "Dimming rate"
+	},
+	"minimum_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Minimum Dim Level",
+		"defaultValue": 1
+	},
+	"minimum_dim_level_1-99": {
+		"$import": "#base_1-99_nounit",
+		"label": "Minimum Dim Level",
+		"defaultValue": 1
+	},
+	"maximum_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 99
+	},
+	"maximum_dim_level_0-100": {
+		"$import": "#base_0-100_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 100
+	},
+	"maximum_dim_level_1-99": {
+		"$import": "#base_1-99_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 99
+	},
+	"maximum_dim_level_1-100": {
+		"$import": "#base_1-100_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 100
+	},
+	"default_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Default Dim Level",
+		"options": [
+			{
+				"label": "Last brightness level",
+				"value": 0
+			}
+		]
 	},
 	"orientation": {
 		"$import": "#base_enable_disable",
@@ -333,11 +399,11 @@
 				"value": 0
 			},
 			{
-				"label": "Always on",
+				"label": "Always off",
 				"value": 1
 			},
 			{
-				"label": "Always off",
+				"label": "Always on",
 				"value": 2
 			}
 		]
@@ -476,6 +542,10 @@
 			}
 		]
 	},
+	"enable_scene_control": {
+		"$import": "#base_enable_disable",
+		"label": "Scene Control"
+	},
 	"volume_three": {
 		"label": "Volume",
 		"valueSize": 1,
@@ -511,6 +581,24 @@
 			},
 			{
 				"label": "Celsius",
+				"value": 1
+			}
+		]
+	},
+	"temperature_scale_celsius_fahrenheit": {
+		"label": "Temperature Scale",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 0
+			},
+			{
+				"label": "Fahrenheit",
 				"value": 1
 			}
 		]

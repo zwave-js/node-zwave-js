@@ -27,8 +27,9 @@ export enum ZWaveErrorCodes {
 	Driver_NoErrorHandler,
 	Driver_FeatureDisabled,
 
-	/** The controller has timed out while waiting for a report from the node */
+	/** There was a timeout while waiting for a message from the controller */
 	Controller_Timeout = 200,
+	/** There was a timeout while waiting for a response from a node */
 	Controller_NodeTimeout,
 	Controller_MessageDropped,
 	Controller_ResponseNOK,
@@ -56,6 +57,17 @@ export enum ZWaveErrorCodes {
 
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
+
+	/** The given NVM version/format is unsupported */
+	NVM_NotSupported = 280,
+	/** Could not parse the JSON representation of an NVM due to invalid data */
+	NVM_InvalidJSON,
+	/** A required NVM3 object was not found while deserializing the NVM */
+	NVM_ObjectNotFound,
+	/** The parsed NVM or NVM content has an invalid format */
+	NVM_InvalidFormat,
+	/** Not enough space in the NVM */
+	NVM_NoSpace,
 
 	CC_Invalid = 300,
 	CC_NoNodeID,
@@ -136,6 +148,8 @@ export enum ZWaveErrorCodes {
 	Security2CC_MissingExtension,
 	/** Gets thrown when a Security S2 encapsulated command cannot be decoded by the target node */
 	Security2CC_CannotDecode,
+	/** Gets thrown when parsing an invalid QR code */
+	Security2CC_InvalidQRCode,
 
 	/** The firmware update process is already active */
 	FirmwareUpdateCC_Busy = 1500,
@@ -154,6 +168,9 @@ export enum ZWaveErrorCodes {
 	Invalid_Firmware_File,
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
+
+	/** Unsupported target node for a powerlevel test */
+	PowerlevelCC_UnsupportedTestNode = 1600,
 }
 
 export function getErrorSuffix(code: ZWaveErrorCodes): string {

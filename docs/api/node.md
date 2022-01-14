@@ -71,6 +71,10 @@ This method automatically figures out which commands to send to the node, so you
 -   The required Command Class is not implemented in this library yet
 -   The API for the required Command Class is not implemented in this library yet
 
+> [!ATTENTION] By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call is enough for the application to know that the value was changed and update its own cache or UI. Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+>
+> To get `"value updated"` events nonetheless, set the driver option `emitValueUpdateAfterSetValue` to `true`.
+
 The `options` bag contains options that influence the resulting commands, for example a transition duration. Each implementation will choose the options that are relevant for it, so you can use the same options everywhere.
 
 <!-- #import SetValueAPIOptions from "zwave-js" -->
@@ -154,14 +158,6 @@ isControllerNode(): boolean
 
 This is a little utility function to check if this node is the controller.
 
-### `isAwake`
-
-```ts
-isAwake(): boolean
-```
-
-Returns whether the node is currently assumed awake.
-
 ### `hasSecurityClass`
 
 ```ts
@@ -178,13 +174,41 @@ getHighestSecurityClass(): SecurityClass | undefined
 
 Returns the highest security class this node was granted or `undefined` if that information isn't known yet. This can be used to distinguish whether a node is communicating with S2, S0 or insecure.
 
+### `waitForWakeup`
+
+```ts
+waitForWakeup(): Promise<void>
+```
+
+Returns a promise that resolves when the node wakes up the next time or immediately if the node is already awake.
+
+> [!WARNING] This will throw if the node does not support wakeup or is not a sleeping node.
+
 ### `refreshInfo`
 
 ```ts
-refreshInfo(): Promise<void>
+refreshInfo(options?: RefreshInfoOptions): Promise<void>
 ```
 
-Resets all information about this node and forces a fresh interview.
+Resets (almost) all information about this node and forces a fresh interview. The information about granted security classes is not reset by default, but can be reset by setting the `resetSecurityClasses` option to `true`.
+
+<!-- #import RefreshInfoOptions from "zwave-js" -->
+
+```ts
+interface RefreshInfoOptions {
+	/**
+	 * Whether a re-interview should also reset the known security classes.
+	 * Default: false
+	 */
+	resetSecurityClasses?: boolean;
+
+	/**
+	 * Whether the information about sleeping nodes should only be reset when the node wakes up.
+	 * Default: true
+	 */
+	waitForWakeup?: boolean;
+}
+```
 
 > [!WARNING] After calling this method, the node will no longer be `ready`. Keep this in mind if you rely on the `ready` state in your application.
 
@@ -316,6 +340,200 @@ ping(): Promise<boolean>
 ```
 
 Pings the node and returns whether it responded or not.
+
+### `testPowerlevel`
+
+```ts
+testPowerlevel(
+	testNodeId: number,
+	powerlevel: Powerlevel,
+	testFrameCount: number,
+	onProgress?: (acknowledged: number, total: number) => void,
+): Promise<number>;
+```
+
+Instructs the node to send powerlevel test frames to the other node with ID `testNodeId` using the given powerlevel. Returns how many frames were acknowledged during the test.
+
+Depending on the number of test frames and involved hops, this may take a while. You can use the optional `onProgress` callback to get regular updates on the test progress.
+
+> [!ATTENTION] This will throw when the target node is a FLiRS node or a sleeping node that is not awake.
+
+### `checkLifelineHealth`
+
+```ts
+checkLifelineHealth(
+	rounds?: number,
+	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+): Promise<HealthCheckSummary>
+```
+
+Checks the health of the connection between the controller and this node and returns the results. The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+
+> [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
+
+```ts
+interface LifelineHealthCheckSummary {
+	/** The check results of each round */
+	results: LifelineHealthCheckResult[];
+	/** The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). */
+	rating: number;
+}
+```
+
+where each result looks as follows:
+
+<!-- #import LifelineHealthCheckResult from "zwave-js" -->
+
+```ts
+interface LifelineHealthCheckResult {
+	/**
+	 * How many times at least one new route was needed. Lower = better, ideally 0.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	routeChanges?: number;
+	/**
+	 * The maximum time it took to send a ping to the node. Lower = better, ideally 10 ms.
+	 *
+	 * Will use the time in TX reports if available, otherwise fall back to measuring the round trip time.
+	 */
+	latency: number;
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/** How many pings were not ACKed by the node. Lower = better, ideally 0. */
+	failedPingsNode: number;
+	/**
+	 * The minimum powerlevel where all pings from the node were ACKed by the controller. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	minPowerlevel?: Powerlevel;
+	/**
+	 * If no powerlevel was found where the controller ACKed all pings from the node, this contains the number of pings that weren't ACKed. Lower = better, ideally 0.
+	 *
+	 * Only available if the node supports Powerlevel CC
+	 */
+	failedPingsController?: number;
+	/**
+	 * An estimation of the Signal-to-Noise Ratio Margin in dBm.
+	 *
+	 * Only available if the controller supports TX reports.
+	 */
+	snrMargin?: number;
+
+	/** See {@link LifelineHealthCheckSummary.rating} */
+	rating: number;
+}
+```
+
+The health rating is computed similar to Silabs' PC Controller IMA tool where 10 means _perfect_ and 0 means _not working at all_. The following table shows which requirements must be fulfilled to achieve a given rating. If the min. powerlevel or SNR margin can not be measured, the condition is assumed to be fulfilled.
+
+| Rating | Failed pings |   Latency | No. of neighbors | min. powerlevel | SNR margin |
+| -----: | -----------: | --------: | ---------------: | --------------: | ---------: |
+|  ✅ 10 |            0 |   ≤ 50 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 9 |            0 |  ≤ 100 ms |              > 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 8 |            0 |  ≤ 100 ms |              ≤ 2 |        ≤ −6 dBm |   ≥ 17 dBm |
+|   🟢 7 |            0 |  ≤ 100 ms |              > 2 |               - |          - |
+|   🟢 6 |            0 |  ≤ 100 ms |              ≤ 2 |               - |          - |
+|        |              |           |                  |                 |            |
+|   🟡 5 |            0 |  ≤ 250 ms |                - |               - |          - |
+|   🟡 4 |            0 |  ≤ 500 ms |                - |               - |          - |
+|        |              |           |                  |                 |            |
+|   🔴 3 |            1 | ≤ 1000 ms |                - |               - |          - |
+|   🔴 2 |          ≤ 2 | > 1000 ms |                - |               - |          - |
+|   🔴 1 |          ≤ 9 |         - |                - |               - |          - |
+|        |              |           |                  |                 |            |
+|   ❌ 0 |           10 |         - |                - |               - |          - |
+
+> [!NOTE] This test builds on some functionality that is not available for all controller or nodes. If the node does not support `Powerlevel CC` or the controller does not support TX reports, this check will be less reliable.
+
+> [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatLifelineHealthCheckSummary` and/or `formatLifelineHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
+
+### `checkRouteHealth`
+
+```ts
+checkRouteHealth(
+	targetNodeId: number,
+	rounds?: number,
+	onProgress?: (round: number, totalRounds: number, lastRating: number) => void,
+): Promise<HealthCheckSummary>
+```
+
+Checks the health of connection between this node and the target node and returns the results. At least one of the nodes **must** support `Powerlevel CC`.
+
+The test is done in multiple rounds (1...10, default: 5), which can be configured using the first parameter. To monitor the progress, the optional `onProgress` callback can be used.
+
+> [!WARNING] This should **NOT** be done while there is a lot of traffic on the network because it will negatively impact the test results.
+
+The returned object contains the measurements of each round as well as a final rating (which is the worst of all round ratings):
+
+```ts
+interface RouteHealthCheckSummary {
+	/** The check results of each round */
+	results: RouteHealthCheckResult[];
+	/** The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). */
+	rating: number;
+}
+```
+
+where each result looks as follows:
+
+<!-- #import RouteHealthCheckResult from "zwave-js" -->
+
+```ts
+interface RouteHealthCheckResult {
+	/** How many routing neighbors this node has. Higher = better, ideally > 2. */
+	numNeighbors: number;
+	/**
+	 * How many pings were not ACKed by the target node. Lower = better, ideally 0.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	failedPingsToTarget?: number;
+	/**
+	 * How many pings were not ACKed by the source node. Lower = better, ideally 0.
+	 *
+	 * Only available if the target node supports Powerlevel CC
+	 */
+	failedPingsToSource?: number;
+	/**
+	 * The minimum powerlevel where all pings from the source node were ACKed by the target node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelSource?: Powerlevel;
+	/**
+	 * The minimum powerlevel where all pings from the target node were ACKed by the source node. Higher = better, ideally 6dBm or more.
+	 *
+	 * Only available if the source node supports Powerlevel CC
+	 */
+	minPowerlevelTarget?: Powerlevel;
+
+	/** See {@link RouteHealthCheckSummary.rating} */
+	rating: number;
+}
+```
+
+The health rating expressed as a number from 0 (not working at all) to 10 (perfect connectivity). The following table shows which requirements must be fulfilled to achieve a given rating. If the min. powerlevel of one node can not be measured, the condition is assumed to be fulfilled.
+
+| Rating | Failed pings | No. of neighbors | min. powerlevel |
+| -----: | -----------: | ---------------: | --------------: |
+|  ✅ 10 |            0 |              > 2 |        ≤ −6 dBm |
+|   🟢 8 |            0 |              ≤ 2 |        ≤ −6 dBm |
+|   🟢 7 |            0 |              > 2 |               - |
+|   🟢 6 |            0 |              ≤ 2 |               - |
+|        |              |                  |                 |
+|   🔴 3 |            1 |                - |               - |
+|   🔴 2 |            2 |                - |               - |
+|   🔴 1 |          ≤ 9 |                - |               - |
+|        |              |                  |                 |
+|   ❌ 0 |           10 |                - |               - |
+
+> [!NOTE] Due to missing insight into re-routing attempts between two nodes, some of the values for the lifeline health rating don't exist here. Furthermore, it is not guaranteed that a route between two nodes and lifeline with the same health rating have the same quality.
+
+> [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatRouteHealthCheckSummary` and/or `formatRouteHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
 
 ## ZWaveNode properties
 
@@ -603,7 +821,7 @@ The Z-Wave protocol version this node implements.
 <!-- #import ProtocolVersion from "zwave-js" -->
 
 ```ts
-enum ProtocolVersion {
+declare enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
 	"4.2x / 5.0x" = 2,
@@ -885,6 +1103,45 @@ interface ZWaveNotificationCallbackArgs_NotificationCC {
 	eventLabel: string;
 	/** Additional information related to the event */
 	parameters?: NotificationCCReport["eventParameters"];
+}
+```
+
+#### `Powerlevel CC`
+
+The event is emitted when a node finishes its powerlevel test of another node and sends the test result.
+It uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_PowerlevelCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Powerlevel,
+	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_PowerlevelCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_PowerlevelCC {
+	testNodeId: number;
+	status: PowerlevelTestStatus;
+	acknowledgedFrames: number;
+}
+```
+
+with
+
+<!-- #import PowerlevelTestStatus from "zwave-js" -->
+
+```ts
+enum PowerlevelTestStatus {
+	Failed = 0x00,
+	Success = 0x01,
+	"In Progress" = 0x02,
 }
 ```
 

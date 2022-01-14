@@ -1,0 +1,175 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA022",
+	"description": "illumino WallMote 7",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0016",
+			"zwaveAllianceId": 4253
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Top button Set On/Off",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Top Button Multilevel Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Buttom Button set On/Off",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Bottom Button Multilevel Set",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Top and Bottom Button Set On/Off",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Top/Bottom Button Multilevel Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Define Button Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Group association only",
+					"value": 0
+				},
+				{
+					"label": "Central scene only",
+					"value": 1
+				},
+				{
+					"label": "Group association and central scene",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Association Group 2/4/6 Report Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic Set",
+					"value": 0
+				},
+				{
+					"label": "Binary switch set",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Association Group 3/5/7: Double Tap Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Full on or full off",
+					"value": 1
+				},
+				{
+					"label": "Custom brightness level or full off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Custom Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "39",
+			"label": "Low Battery Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "81",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Status: Wakeup",
+			"defaultValue": 1
+		},
+		{
+			"#": "82",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Status: Communication Failure",
+			"defaultValue": 1
+		},
+		{
+			"#": "84",
+			"$import": "~/templates/master_template.json#enable_led_indicator"
+		},
+		{
+			"#": "85",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "Upper Indicator Color"
+		},
+		{
+			"#": "86",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",
+			"label": "Lower Indicator Color",
+			"defaultValue": 5
+		},
+		{
+			"#": "87",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Flirs"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your Z-Wave gateway/ controller into adding mode.\n2. Tap once the top/ bottom button, then the device will enter pairing mode",
+		"exclusion": "1. Turn your Z-Wave gateway/ controller into removing mode.\n2. Tap 6 times the top/ bottom button, then the device will enter exclusion mode",
+		"reset": "Press and hold the top/buttom button for 20s",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4253/Aeotec%20WallMote%207%20manual.pdf"
+	}
+}

@@ -150,6 +150,15 @@ export {
 } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
 export {
+	DoorLockLoggingCC,
+	DoorLockLoggingCCRecordGet,
+	DoorLockLoggingCCRecordReport,
+	DoorLockLoggingCCRecordsSupportedGet,
+	DoorLockLoggingCCRecordsSupportedReport,
+	EventType,
+	RecordStatus,
+} from "./DoorLockLoggingCC";
+export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
@@ -184,6 +193,32 @@ export {
 } from "./FirmwareUpdateMetaDataCC";
 export type { FirmwareUpdateCapabilities } from "./FirmwareUpdateMetaDataCC";
 export { HailCC } from "./HailCC";
+export {
+	HumidityControlModeCC,
+	HumidityControlModeCCGet,
+	HumidityControlModeCCReport,
+	HumidityControlModeCCSet,
+	HumidityControlModeCCSupportedGet,
+	HumidityControlModeCCSupportedReport,
+} from "./HumidityControlModeCC";
+export {
+	HumidityControlOperatingStateCC,
+	HumidityControlOperatingStateCCGet,
+	HumidityControlOperatingStateCCReport,
+} from "./HumidityControlOperatingStateCC";
+export {
+	HumidityControlSetpointCC,
+	HumidityControlSetpointCCCapabilitiesGet,
+	HumidityControlSetpointCCCapabilitiesReport,
+	HumidityControlSetpointCCGet,
+	HumidityControlSetpointCCReport,
+	HumidityControlSetpointCCScaleSupportedGet,
+	HumidityControlSetpointCCScaleSupportedReport,
+	HumidityControlSetpointCCSet,
+	HumidityControlSetpointCCSupportedGet,
+	HumidityControlSetpointCCSupportedReport,
+} from "./HumidityControlSetpointCC";
+export type { HumidityControlSetpointMetadata } from "./HumidityControlSetpointCC";
 export {
 	IndicatorCC,
 	IndicatorCCGet,
@@ -310,6 +345,21 @@ export type {
 	ZWaveNotificationCallbackArgs_NotificationCC,
 	ZWaveNotificationCallbackParams_NotificationCC,
 } from "./NotificationCC";
+export {
+	Powerlevel,
+	PowerlevelCC,
+	PowerlevelCCGet,
+	PowerlevelCCReport,
+	PowerlevelCCSet,
+	PowerlevelCCTestNodeGet,
+	PowerlevelCCTestNodeReport,
+	PowerlevelCCTestNodeSet,
+	PowerlevelTestStatus,
+} from "./PowerlevelCC";
+export type {
+	ZWaveNotificationCallbackArgs_PowerlevelCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "./PowerlevelCC";
 export {
 	LocalProtectionState,
 	ProtectionCC,

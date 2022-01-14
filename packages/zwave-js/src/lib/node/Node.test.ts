@@ -4,13 +4,16 @@ import {
 	CommandClasses,
 	CommandClassInfo,
 	getCCName,
+	NodeType,
 	nonApplicationCCs,
+	ProtocolVersion,
 	topologicalSort,
 	ValueDB,
 	ValueID,
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { wait } from "alcalzone-shared/async";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import {
 	BinarySwitchCCReport,
@@ -36,13 +39,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import {
-	InterviewStage,
-	NodeStatus,
-	NodeType,
-	ProtocolVersion,
-	ZWaveNodeEvents,
-} from "./Types";
+import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -1044,6 +1041,7 @@ describe("lib/node/Node", () => {
 				S2_Unauthenticated: true,
 				S0_Legacy: false,
 			},
+			dsk: "00000-00001-00002-00003-00004-00005-00006-00007",
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
@@ -1212,7 +1210,7 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("deserialize() should skip any primitive properties that have the wrong type", () => {
+		it("deserialize() should skip any primitive properties that have the wrong type or format", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			const wrongInputs: [string, any][] = [
 				["isListening", 1],
@@ -1222,6 +1220,7 @@ describe("lib/node/Node", () => {
 				["supportsSecurity", 3],
 				["supportsSecurity", "3"],
 				["protocolVersion", false],
+				["dsk", "foo"],
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {
@@ -1701,6 +1700,50 @@ describe("lib/node/Node", () => {
 				dataType: EntryControlDataTypes.ASCII,
 				eventType: EntryControlEventTypes.DisarmAll,
 				eventData: "1234",
+			});
+
+			node.destroy();
+		});
+	});
+
+	describe("waitForWakeup()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		function makeNode(canSleep: boolean = false): ZWaveNode {
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+			node["_isListening"] = !canSleep;
+			node["_isFrequentListening"] = false;
+			if (canSleep)
+				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			fakeDriver.controller.nodes.set(node.id, node);
+			return node;
+		}
+
+		it("resolves when a sleeping node wakes up", async () => {
+			const node = makeNode(true);
+			node.markAsAsleep();
+
+			const promise = node.waitForWakeup();
+			await wait(1);
+			node.markAsAwake();
+			await expect(promise).toResolve();
+
+			node.destroy();
+		});
+
+		it("resolves immediately when called on an awake node", async () => {
+			const node = makeNode(true);
+			node.markAsAwake();
+
+			await expect(node.waitForWakeup()).toResolve();
+			node.destroy();
+		});
+
+		it("throws when called on a non-sleeping node", async () => {
+			const node = makeNode(false);
+
+			await assertZWaveError(() => node.waitForWakeup(), {
+				errorCode: ZWaveErrorCodes.CC_NotSupported,
 			});
 
 			node.destroy();

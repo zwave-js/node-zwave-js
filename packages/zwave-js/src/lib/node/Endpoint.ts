@@ -8,7 +8,7 @@ import {
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { MultiChannelAssociationCC } from "../commandclass";
-import type { APIMethodsOf, CCAPI, CCAPIs } from "../commandclass/API";
+import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
 	AssociationCC,
 	getHasLifelineValueId,
@@ -320,8 +320,12 @@ export class Endpoint {
 	 * @internal
 	 * Creates an API instance for a given command class. Throws if no API is defined.
 	 * @param ccId The command class to create an API instance for
+	 * @param requireSupport Whether accessing the API should throw if it is not supported by the node.
 	 */
-	public createAPI(ccId: CommandClasses): CCAPI {
+	public createAPI<T extends CommandClasses>(
+		ccId: T,
+		requireSupport: boolean = true,
+	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		const APIConstructor = getAPI(ccId);
 		const ccName = CommandClasses[ccId];
 		if (APIConstructor == undefined) {
@@ -333,27 +337,35 @@ export class Endpoint {
 			);
 		}
 		const apiInstance = new APIConstructor(this.driver, this);
-		return new Proxy(apiInstance, {
-			get: (target, property) => {
-				// Forbid access to the API if it is not supported by the node
-				if (
-					property !== "ccId" &&
-					property !== "endpoint" &&
-					property !== "isSupported" &&
-					property !== "withOptions" &&
-					property !== "commandOptions" &&
-					!target.isSupported()
-				) {
-					throw new ZWaveError(
-						`Node ${this.nodeId}${
-							this.index === 0 ? "" : ` (endpoint ${this.index})`
-						} does not support the Command Class ${ccName}!`,
-						ZWaveErrorCodes.CC_NotSupported,
-					);
-				}
-				return target[property as keyof CCAPI];
-			},
-		});
+		if (requireSupport) {
+			// @ts-expect-error TS doesn't like assigning to conditional types
+			return new Proxy(apiInstance, {
+				get: (target, property) => {
+					// Forbid access to the API if it is not supported by the node
+					if (
+						property !== "ccId" &&
+						property !== "endpoint" &&
+						property !== "isSupported" &&
+						property !== "withOptions" &&
+						property !== "commandOptions" &&
+						!target.isSupported()
+					) {
+						throw new ZWaveError(
+							`Node ${this.nodeId}${
+								this.index === 0
+									? ""
+									: ` (endpoint ${this.index})`
+							} does not support the Command Class ${ccName}!`,
+							ZWaveErrorCodes.CC_NotSupported,
+						);
+					}
+					return target[property as keyof CCAPI];
+				},
+			});
+		} else {
+			// @ts-expect-error TS doesn't like assigning to conditional types
+			return apiInstance;
+		}
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -483,7 +495,7 @@ export class Endpoint {
 		const node = this.getNodeUnsafe()!;
 		const valueDB = node.valueDB;
 		// We check if a node supports Multi Channel CC before creating Multi Channel Lifeline Associations (#1109)
-		const supportsMultiChannel = node.supportsCC(
+		const nodeSupportsMultiChannel = node.supportsCC(
 			CommandClasses["Multi Channel"],
 		);
 
@@ -528,7 +540,7 @@ supports multi channel associations: ${!!mcInstance}`,
 		});
 
 		for (const group of lifelineGroups) {
-			const groupSupportsMultiChannel = group <= mcGroupCount;
+			const groupSupportsMultiChannelAssociation = group <= mcGroupCount;
 			const assocConfig =
 				node.deviceConfig?.getAssociationConfigForEndpoint(
 					this.index,
@@ -536,10 +548,15 @@ supports multi channel associations: ${!!mcInstance}`,
 				);
 
 			const mustUseNodeAssociation =
-				!supportsMultiChannel || assocConfig?.multiChannel === false;
+				!groupSupportsMultiChannelAssociation ||
+				!nodeSupportsMultiChannel ||
+				assocConfig?.multiChannel === false;
 			let mustUseMultiChannelAssociation = false;
 
-			if (supportsMultiChannel) {
+			if (
+				groupSupportsMultiChannelAssociation &&
+				nodeSupportsMultiChannel
+			) {
 				if (assocConfig?.multiChannel === true) {
 					mustUseMultiChannelAssociation = true;
 				} else if (this.index === 0) {
@@ -568,7 +585,7 @@ supports multi channel associations: ${!!mcInstance}`,
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.index,
 				message: `Configuring lifeline group #${group}:
-group supports multi channel:  ${groupSupportsMultiChannel}
+group supports multi channel:  ${groupSupportsMultiChannelAssociation}
 configured strategy:           ${assocConfig?.multiChannel ?? "auto"}
 must use node association:     ${mustUseNodeAssociation}
 must use endpoint association: ${mustUseMultiChannelAssociation}`,
@@ -576,7 +593,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 
 			// Figure out which associations exist and may need to be removed
 			const isAssignedAsNodeAssociation = (): boolean => {
-				if (groupSupportsMultiChannel && mcInstance) {
+				if (groupSupportsMultiChannelAssociation && mcInstance) {
 					if (
 						// Only consider a group if it doesn't share its associations with the root endpoint
 						mcInstance.getMaxNodesCached(group) > 0 &&
@@ -645,7 +662,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			if (
 				invalidEndpointAssociations.length > 0 &&
 				mcAPI.isSupported() &&
-				groupSupportsMultiChannel
+				groupSupportsMultiChannelAssociation
 			) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.index,
@@ -702,6 +719,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 							groupId: group,
 							endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 						});
+						// refresh the associations - don't trust that it worked
+						await mcAPI.getGroup(group);
 					}
 
 					await assocAPI.addNodeIds(group, ownNodeId);
@@ -801,6 +820,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 								groupId: group,
 								nodeIds: [ownNodeId],
 							});
+							// refresh the associations - don't trust that it worked
+							await assocAPI.getGroup(group);
 						}
 					}
 
@@ -830,8 +851,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				}
 			}
 
-			// Last attempt (actual Z-Wave+ Lifelines only): Try a multi channel association on the root
-			// Endpoint interview happen AFTER the root interview, so this enables us to overwrite what
+			// Last attempt (actual Z-Wave+ Lifelines only): Try a multi channel association on the root.
+			// Endpoint interviews happen AFTER the root interview, so this enables us to overwrite what
 			// we previously configured on the root.
 			if (
 				!hasLifeline &&
@@ -846,13 +867,13 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 						group,
 					);
 				const rootMustUseNodeAssociation =
-					!supportsMultiChannel ||
+					!nodeSupportsMultiChannel ||
 					rootAssocConfig?.multiChannel === false;
 
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.index,
 					message: `Checking root device for fallback assignment of lifeline group #${group}:
-root supports multi channel:  ${supportsMultiChannel}
+root supports multi channel:  ${nodeSupportsMultiChannel}
 configured strategy:           ${rootAssocConfig?.multiChannel ?? "auto"}
 must use node association:     ${rootMustUseNodeAssociation}`,
 				});

@@ -1,8 +1,8 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
-	"label": "Vitrum I EU Boiler",
-	"description": "Vitrum touch timer switch Dual Relay",
+	"label": "Boiler",
+	"description": "Touch Timer Switch Dual Relay",
 	"devices": [
 		{
 			"productType": "0x7032",

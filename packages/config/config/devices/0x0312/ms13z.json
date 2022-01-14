@@ -1,9 +1,14 @@
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MS13Z",
+	"label": "MS13ZS",
 	"description": "Smart Dimmer Toggle Switch",
 	"devices": [
+		{
+			"productType": "0xee00",
+			"productId": "0xee04",
+			"zwaveAllianceId": [4007, 4140]
+		},
 		{
 			"productType": "0xff00",
 			"productId": "0xff02",
@@ -13,11 +18,6 @@
 			"productType": "0xff01",
 			"productId": "0xff02",
 			"zwaveAllianceId": 3629
-		},
-		{
-			"productType": "0xee00",
-			"productId": "0xee04",
-			"zwaveAllianceId": 4007
 		}
 	],
 	"firmwareVersion": {
@@ -27,199 +27,35 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Button Orientation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Swap up/down buttons",
-					"value": 1
-				},
-				{
-					"label": "Both buttons toggle",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		{
 			"#": "2",
-			"label": "Status LED Configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when load off, LED off when load on",
-					"value": 0
-				},
-				{
-					"label": "LED on when load on, LED off when load off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				},
-				{
-					"label": "LED always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "3",
-			"label": "Enable/Disable Auto Turn-off Timer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "4",
-			"label": "Auto Turn-off Time",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60,
-			"unsigned": true
+			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "5",
-			"label": "Enable/Disable Auto Turn-on Timer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "6",
-			"label": "Auto Turn-on Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60,
-			"unsigned": true
+			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "7[0x01]",
-			"label": "Send Status Change Report: Local Control",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_local_control"
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Send Status Change Report: 3-Way",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_three_way"
 		},
 		{
 			"#": "7[0x04]",
-			"label": "Send Status Change Report: Z-Wave",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_zwave"
 		},
 		{
 			"#": "7[0x08]",
-			"label": "Send Status Change Report: Timer",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_timer"
 		},
 		{
 			"#": "8",
@@ -227,102 +63,71 @@
 		},
 		{
 			"#": "9",
-			"label": "Dimmer Speed (Manual)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#dim_rate"
 		},
 		{
 			"#": "10",
-			"label": "Minimum Dim Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
 		},
 		{
 			"#": "11",
-			"label": "Maximum Dim Level",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
-		},
-		{
-			"#": "12",
-			"label": "Dim Level on Double Tap",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Maximum dim level",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "14",
-			"label": "Double Tap Behavior",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Maximum dim level",
-					"value": 0
-				},
-				{
-					"label": "Disable double tap; single tap to last level",
-					"value": 1
-				},
-				{
-					"label": "Disable double tap, single tap to full brightness",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "15",
-			"label": "Enable/Disable Local Control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
 				}
 			]
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
+		},
+		{
+			"#": "21",
+			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#default_dim_level_0-99"
+		},
+		{
+			"#": "19",
+			"$import": "~/0x0312/templates/minoston_template.json#external_switch_type_four_options"
+		},
+		{
+			"#": "20",
+			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
+		},
+		{
+			"#": "22",
+			"$import": "~/0x0312/templates/minoston_template.json#night_mode_brightness"
+		},
+		{
+			"#": "23",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
+		},
+		{
+			"#": "24",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "25",
+			"$import": "~/0x0312/templates/minoston_template.json#single_tap_function"
 		}
 	],
 	"metadata": {
-		"inclusion": "ADD the MS13Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS13Z to/from a Z-Wave Gateway with supporting Security.The MS13Z can support the Primary Controller that implemented the security S2.",
-		"exclusion": "Remove the MS13Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS13Z to/from a Z-Wave Gateway with supporting Security.The MS13Z can support the Primary Controller that implemented the security S2.",
-		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n (Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3629/MS13Z-manual-190822.pdf"
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Press and hold lower paddle for 10 seconds, then LED starts blinking, release paddle and within 2 seconds, click lower paddle 5 times\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4140/MS13ZS%20manual-20210303.pdf"
 	}
 }

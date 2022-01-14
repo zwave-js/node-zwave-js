@@ -4,6 +4,24 @@ The controller instance contains information about the controller and a list of 
 
 ## Controller methods
 
+### `supportsFeature`
+
+```ts
+supportsFeature(feature: ZWaveFeature): boolean | undefined
+```
+
+Some Z-Wave features are not available on all controllers and can potentially create unwanted situations. The `supportsFeature` method must be used to check for support before using certain features. It returns a boolean indicating whether the feature is supported or `undefined` if this information isn't known yet.
+
+The available features to test for are:
+
+<!-- #import ZWaveFeature from "zwave-js" -->
+
+```ts
+enum ZWaveFeature {
+	SmartStart,
+}
+```
+
 ### `beginInclusion`
 
 ```ts
@@ -16,10 +34,6 @@ The options parameter is used to specify the inclusion strategy and provide call
 
 -   `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.  
     **This is the recommended** strategy and should be used unless there is a good reason not to.
-
--   `InclusionStrategy.SmartStart`: Include using SmartStart (requires Security S2). Can't include devices that do not support SmartStart.  
-    **Should be preferred** over `Default` if supported, because it is easier for the user.  
-    **WARNING:** This is not supported yet!
 
 -   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
     **Not recommended**, because S2 should be used where possible.
@@ -55,8 +69,8 @@ type InclusionOptions =
 			userCallbacks: InclusionUserCallbacks;
 	  }
 	| {
-			strategy: InclusionStrategy.SmartStart;
-			provisioningList: unknown;
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -74,7 +88,7 @@ interface InclusionUserCallbacks {
 	/**
 	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
 	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
-	 * If the user did not accept the requested security classes, the promise MUST resolve to `true`.
+	 * If the user did not accept the requested security classes, the promise MUST resolve to `false`.
 	 */
 	grantSecurityClasses(
 		requested: InclusionGrant,
@@ -130,6 +144,20 @@ enum SecurityClass {
 }
 ```
 
+Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
+
+```ts
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+}
+```
+
+> [!NOTE] The `provisioning` property accepts `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is an `S2` QR code by checking the `version` field.
+
+> [!ATTENTION] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
+
 ### `stopInclusion`
 
 ```ts
@@ -141,10 +169,12 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(): Promise<boolean>
+async beginExclusion(unprovision?: boolean): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
+
+The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well.
 
 ### `stopExclusion`
 
@@ -152,7 +182,76 @@ Starts the exclusion process to remove a node from the network. The returned pro
 async stopExclusion(): Promise<boolean>
 ```
 
-Stops the exclusion process to remove a node from the network.The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+Stops the exclusion process to remove a node from the network. The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+
+### `provisionSmartStartNode`
+
+```ts
+provisionSmartStartNode(entry: PlannedProvisioningEntry): void
+```
+
+Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+
+> [!ATTENTION] This method will throw when SmartStart is not supported by the controller!
+
+The parameter has the following shape:
+
+<!-- #import PlannedProvisioningEntry from "zwave-js" -->
+
+```ts
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
+}
+```
+
+> [!NOTE] This method accepts a `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is a `SmartStart` QR code by checking the `version` field.
+
+### `unprovisionSmartStartNode`
+
+```ts
+unprovisionSmartStartNode(dskOrNodeId: string | number): void
+```
+
+Removes the given DSK or node ID from the controller's SmartStart provisioning list.
+
+> [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
+
+### `getProvisioningEntry`
+
+```ts
+getProvisioningEntry(dsk: string): SmartStartProvisioningEntry | undefined
+```
+
+Returns the entry for the given DSK from the controller's SmartStart provisioning list. The returned entry (if found) has the following shape:
+
+```ts
+interface SmartStartProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+	nodeId?: number;
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
+}
+```
+
+The `nodeId` will be set when the entry corresponds to an included node.
+
+### `getProvisioningEntries`
+
+```ts
+getProvisioningEntries(): SmartStartProvisioningEntry[]
+```
+
+Returns all entries from the controller's SmartStart provisioning list.
 
 ### `getNodeNeighbors`
 
@@ -245,6 +344,10 @@ type ReplaceNodeOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -498,12 +601,32 @@ Creates a backup of the NVM and returns the raw data as a Buffer. The optional a
 > [!NOTE] `backupNVMRaw` automatically turns the Z-Wave radio on/off during the backup.
 
 ```ts
+restoreNVM(
+	nvmData: Buffer,
+	convertProgress?: (bytesRead: number, total: number) => void,
+	restoreProgress?: (bytesWritten: number, total: number) => void,
+): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`.
+
+?> If the given buffer is in a different NVM format, it is **converted automatically**. If the conversion is not supported, the operation fails.
+
+The optional `convertProgress` and `restoreProgress` callbacks can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVM` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
+
+```ts
 restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>
 ```
 
 Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
 
 > [!NOTE] `restoreNVMRaw` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] The given buffer is **NOT** checked for compatibility with the current stick. To have Z-Wave JS do that, use the `restoreNVM` method instead.
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
@@ -599,10 +722,35 @@ Returns the ID of the controller in the current network.
 ### `isHealNetworkActive`
 
 ```ts
-isHealNetworkActive: boolean;
+readonly isHealNetworkActive: boolean;
 ```
 
 Returns whether the network or a node is currently being healed.
+
+### `inclusionState`
+
+```ts
+readonly inclusionState: InclusionState
+```
+
+Returns the controller state regarding inclusion/exclusion.
+
+<!-- #import InclusionState from "zwave-js" -->
+
+```ts
+enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
+	Idle,
+	/** The controller is waiting for a node to be included. */
+	Including,
+	/** The controller is waiting for a node to be excluded. */
+	Excluding,
+	/** The controller is busy including or excluding a node. */
+	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
+	SmartStart,
+}
+```
 
 ## Controller events
 

@@ -302,7 +302,14 @@ export class AssociationCC extends CommandClass {
 		return (
 			this.getValueDB().getValue(
 				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ?? 0
+			) ??
+			// If the information is not available, fall back to the configuration file if possible
+			// This can happen on some legacy devices which have "hidden" association groups
+			this.getNodeUnsafe()?.deviceConfig?.getAssociationConfigForEndpoint(
+				this.endpointIndex,
+				groupId,
+			)?.maxNodes ??
+			0
 		);
 	}
 
@@ -525,12 +532,8 @@ export class AssociationCCRemove extends AssociationCC {
 				);
 			}
 
-			if (options.nodeIds?.some((n) => n < 1 || n > MAX_NODES)) {
-				throw new ZWaveError(
-					`All node IDs must be between 1 and ${MAX_NODES}!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
+			// When removing associations, we allow invalid node IDs.
+			// See GH#3606 - it is possible that those exist.
 			this.groupId = options.groupId;
 			this.nodeIds = options.nodeIds;
 		}

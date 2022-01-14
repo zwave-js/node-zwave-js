@@ -21,6 +21,8 @@ mockFs.restore = async (): Promise<void> => {
 };
 
 describe("readJsonWithTemplate", () => {
+	jest.setTimeout(20000);
+
 	beforeAll(() => mockFs.restore());
 	afterEach(() => mockFs.restore());
 

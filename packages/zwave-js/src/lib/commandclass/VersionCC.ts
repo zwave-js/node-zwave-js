@@ -259,10 +259,24 @@ export class VersionCC extends CommandClass {
 					} (${num2hex(cc)}) in version ${supportedVersion}`;
 				} else {
 					// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-					endpoint.removeCC(cc);
-					logMessage = `  does NOT support CC ${
-						CommandClasses[cc]
-					} (${num2hex(cc)})`;
+					// Make sure this is not a critical CC, which must be supported though
+					switch (cc) {
+						case CommandClasses.Version:
+						case CommandClasses["Manufacturer Specific"]:
+							logMessage = `  claims NOT to support CC ${
+								CommandClasses[cc]
+							} (${num2hex(
+								cc,
+							)}), but it must. Assuming the node supports version 1...`;
+							endpoint.addCC(cc, { version: 1 });
+							break;
+
+						default:
+							logMessage = `  does NOT support CC ${
+								CommandClasses[cc]
+							} (${num2hex(cc)})`;
+							endpoint.removeCC(cc);
+					}
 				}
 				this.driver.controllerLog.logNode(node.id, logMessage);
 			} else {

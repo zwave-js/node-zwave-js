@@ -415,7 +415,8 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			(this as ConfigurationCCAPI).schedulePoll(
 				{ property, propertyKey },
-				1000,
+				// Configuration changes are instant
+				{ transition: "fast" },
 			);
 		}
 	};

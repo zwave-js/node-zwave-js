@@ -1,5 +1,9 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	ValueID,
+	ValueMetadataNumeric,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -181,6 +185,8 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a delay
+			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+			// aren't able to handle the GET this quickly.
 			this.schedulePoll({ property, propertyKey });
 		}
 	};
@@ -673,12 +679,20 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 
 	public persistValues(): boolean {
+		const valueDB = this.getValueDB();
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
 			this._type,
 		);
-		if (!this.getValueDB().hasMetadata(setpointValueId)) {
-			this.getValueDB().setMetadata(setpointValueId, {
+		// Update the metadata when it is missing or the unit has changed
+		if (
+			(
+				valueDB.getMetadata(setpointValueId) as
+					| ValueMetadataNumeric
+					| undefined
+			)?.unit !== this._scale.unit
+		) {
+			valueDB.setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
 				unit: this._scale.unit,
 				ccSpecific: {
@@ -686,14 +700,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				},
 			});
 		}
-		this.getValueDB().setValue(setpointValueId, this._value);
+		valueDB.setValue(setpointValueId, this._value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
 		const scaleValueId = getSetpointScaleValueID(
 			this.endpointIndex,
 			this._type,
 		);
-		this.getValueDB().setValue(scaleValueId, this._scale.key);
+		valueDB.setValue(scaleValueId, this._scale.key);
 		return true;
 	}
 

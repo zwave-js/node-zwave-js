@@ -305,5 +305,9 @@
 			"defaultValue": 600,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		// The device sends reports for endpoint 1 un-encapsulated
+		"mapRootReportsToEndpoint": 1
+	}
 }

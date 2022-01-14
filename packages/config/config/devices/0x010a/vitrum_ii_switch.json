@@ -1,0 +1,37 @@
+{
+	"manufacturer": "Vitrum",
+	"manufacturerId": "0x010a",
+	"label": "01E020020 / 01B020020",
+	"description": "II On-Off Wireless",
+	"devices": [
+		{
+			"productType": "0x1200",
+			"productId": "0x5200",
+			"zwaveAllianceId": 87
+		},
+		{
+			"productType": "0x2200",
+			"productId": "0x9200"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Button 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Button 2",
+			"maxNodes": 5
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Check the device is not already included in a Z-Wave network by pressing any button on the front panel: the LED button should blink with red colour brielfy. Should the device be already included, follow the exclusion instructions to exclude it from the network\n2. Set the controller into “Inclusion Mode”. Refer to the controller documentation to set the controller into Inclusion mode\n3. Touch any of the keys on Vitrum to include the unit.\n4. If adding succeeds, Vitrum will flash the LEDs yellow three times, and switch on all outputs.",
+		"exclusion": "1. The device can be excluded from a network only if previously included. Check that by pressing a button on the front panel: the LED button should not blink with red colour brielfy.\n2. Set the controller into “Exclusion Mode”. Refer to the controller documentation to set the controller into Exclusion mode.\n 3. Press and hold the top left most button for at least 8 seconds.\n 4. LED will flash red three times and sound a tone to confirm successful exclusion.",
+		"reset": "WARNING: Please use this procedure only when the Z-Wave Primary Controller is missing or otherwise inoperable.\nTo reset the unit to Factory Settings:\n1. Remove the unit from the wall mounting box.\n2. Press and hold the hidden Factory Reset button for at least 3 seconds.\n3. LED will flash red three times and sound a tone to confirm successful factory reset.",
+		"manual": "https://www.manualslib.com/manual/1360869/Vitrum-On-Off-Wireless.html"
+	}
+}

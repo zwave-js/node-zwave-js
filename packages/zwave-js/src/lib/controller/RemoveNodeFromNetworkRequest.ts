@@ -6,13 +6,16 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessageOptions,
 	messageTypes,
 	priority,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 
 export enum RemoveNodeType {
 	Any = 1,
@@ -41,67 +44,68 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 	networkWide?: boolean;
 }
 
-// TODO: Can we differentiate between sent and received here?
-// payload length maybe?
-
 @messageTypes(MessageType.Request, FunctionType.RemoveNodeFromNetwork)
-// no expected response, the controller will respond with another RemoveNodeFromNetworkRequest
+// no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
-export class RemoveNodeFromNetworkRequest extends Message {
+export class RemoveNodeFromNetworkRequestBase extends Message {
+	public constructor(driver: Driver, options: MessageOptions) {
+		if (
+			gotDeserializationOptions(options) &&
+			(new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
+		) {
+			return new RemoveNodeFromNetworkRequestStatusReport(
+				driver,
+				options,
+			);
+		}
+		super(driver, options);
+	}
+}
+
+function testCallbackForRemoveNodeRequest(
+	sent: RemoveNodeFromNetworkRequest,
+	received: Message,
+) {
+	if (!(received instanceof RemoveNodeFromNetworkRequestStatusReport)) {
+		return false;
+	}
+	switch (sent.removeNodeType) {
+		case RemoveNodeType.Any:
+		case RemoveNodeType.Controller:
+		case RemoveNodeType.Slave:
+			return (
+				received.status === RemoveNodeStatus.Ready ||
+				received.status === RemoveNodeStatus.Failed
+			);
+		case RemoveNodeType.Stop:
+			return (
+				received.status === RemoveNodeStatus.Done ||
+				received.status === RemoveNodeStatus.Failed
+			);
+		default:
+			return false;
+	}
+}
+
+@expectedCallback(testCallbackForRemoveNodeRequest)
+export class RemoveNodeFromNetworkRequest extends RemoveNodeFromNetworkRequestBase {
 	public constructor(
 		driver: Driver,
-		options:
-			| MessageDeserializationOptions
-			| RemoveNodeFromNetworkRequestOptions = {},
+		options: RemoveNodeFromNetworkRequestOptions = {},
 	) {
 		super(driver, options);
-		if (gotDeserializationOptions(options)) {
-			// not sure what the value in payload[0] means
-			this._status = this.payload[1];
-			switch (this._status) {
-				case RemoveNodeStatus.Ready:
-				case RemoveNodeStatus.NodeFound:
-				case RemoveNodeStatus.Failed:
-				case RemoveNodeStatus.Done:
-					// no context for the status to parse
-					// TODO:
-					// An application MUST time out waiting for the REMOVE_NODE_STATUS_REMOVING_SLAVE status
-					// if it does not receive the indication within a 14 sec after receiving the
-					// REMOVE_NODE_STATUS_NODE_FOUND status.
-					break;
 
-				case RemoveNodeStatus.RemovingController:
-				case RemoveNodeStatus.RemovingSlave:
-					// the payload contains a node information frame
-					this._statusContext = parseNodeUpdatePayload(
-						this.payload.slice(2),
-					);
-					break;
-			}
-		} else {
-			this.removeNodeType = options.removeNodeType;
-			this.highPower = !!options.highPower;
-			this.networkWide = !!options.networkWide;
-		}
+		this.removeNodeType = options.removeNodeType;
+		this.highPower = !!options.highPower;
+		this.networkWide = !!options.networkWide;
 	}
 
-	/** The type of node to add */
+	/** The type of node to remove */
 	public removeNodeType: RemoveNodeType | undefined;
 	/** Whether to use high power */
 	public highPower: boolean = false;
-	/** Whether to include network wide */
+	/** Whether to exclude network wide */
 	public networkWide: boolean = false;
-
-	// These two properties are only set if we parse a response
-	private _status: RemoveNodeStatus | undefined;
-	public get status(): RemoveNodeStatus | undefined {
-		return this._status;
-	}
-
-	private _statusContext: RemoveNodeStatusContext | undefined;
-	public get statusContext(): RemoveNodeStatusContext | undefined {
-		return this._statusContext;
-	}
 
 	public serialize(): Buffer {
 		let data: number = this.removeNodeType || RemoveNodeType.Any;
@@ -112,14 +116,46 @@ export class RemoveNodeFromNetworkRequest extends Message {
 
 		return super.serialize();
 	}
+}
 
-	// public toJSON(): JSONObject {
-	// 	return super.toJSONInherited({
-	// 		status: RemoveNodeStatus[this.status],
-	// 		statusContext: this.statusContext,
-	// 		payload: this.statusContext != null ? undefined : this.payload,
-	// 	});
-	// }
+export class RemoveNodeFromNetworkRequestStatusReport
+	extends RemoveNodeFromNetworkRequestBase
+	implements SuccessIndicator
+{
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this.callbackId = this.payload[0];
+		this.status = this.payload[1];
+		switch (this.status) {
+			case RemoveNodeStatus.Ready:
+			case RemoveNodeStatus.NodeFound:
+			case RemoveNodeStatus.Failed:
+			case RemoveNodeStatus.Done:
+				// no context for the status to parse
+				// TODO:
+				// An application MUST time out waiting for the REMOVE_NODE_STATUS_REMOVING_SLAVE status
+				// if it does not receive the indication within a 14 sec after receiving the
+				// REMOVE_NODE_STATUS_NODE_FOUND status.
+				break;
+
+			case RemoveNodeStatus.RemovingController:
+			case RemoveNodeStatus.RemovingSlave:
+				// the payload contains a node information frame
+				this.statusContext = parseNodeUpdatePayload(
+					this.payload.slice(2),
+				);
+				break;
+		}
+	}
+
+	isOK(): boolean {
+		// Some of the status codes are for unsolicited callbacks, but
+		// Failed is the only NOK status.
+		return this.status !== RemoveNodeStatus.Failed;
+	}
+
+	public readonly status: RemoveNodeStatus;
+	public readonly statusContext: RemoveNodeStatusContext | undefined;
 }
 
 interface RemoveNodeStatusContext {

@@ -469,6 +469,13 @@ describe("lib/values/Primitive", () => {
 					bitMask: 0b00_11_0000,
 					expected: 0b11_10_1111,
 				},
+				// Bit shifting with 4-byte values can cause them to get interpreted as signed
+				{
+					fullValue: 0xffff0000,
+					partialValue: 0x0000aaaa,
+					bitMask: 0x0000ffff,
+					expected: 0xffffaaaa,
+				},
 			];
 			for (const {
 				fullValue,

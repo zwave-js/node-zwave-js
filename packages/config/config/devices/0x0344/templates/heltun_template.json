@@ -32,6 +32,43 @@
 			}
 		]
 	},
+	"external_input_click_control_mode_6": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Toggle switch (based on relay state)",
+				"value": 1
+			},
+			{
+				"label": "Toggle switch (based on button backlight state)",
+				"value": 2
+			},
+			{
+				"label": "Turn on",
+				"value": 3
+			},
+			{
+				"label": "Turn off",
+				"value": 4
+			},
+			{
+				"label": "Turn on, then off after timer",
+				"value": 5
+			},
+			{
+				"label": "Turn off, then on after timer",
+				"value": 6
+			}
+		]
+	},
 	"external_input_hold_control_mode": {
 		"valueSize": 1,
 		"minValue": 0,
@@ -354,6 +391,24 @@
 			{
 				"label": "Active state red / Inactive state blue",
 				"value": 1
+	},
+	"base_button_backlight_control_source": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Touch button",
+				"value": 1
+			},
+			{
+				"label": "Controller (ignore button)",
+				"value": 2
 			}
 		]
 	}

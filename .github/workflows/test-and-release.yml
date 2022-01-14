@@ -42,7 +42,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: yarn lerna run build
+      run: lerna run build
 
     - name: Run linters
       run: yarn run lint
@@ -101,7 +101,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: yarn lerna run build
+      run: lerna run build
 
     - name: Lint config files
       run: yarn run lint:config
@@ -139,7 +139,7 @@ jobs:
 
     # Test that the generated packages are ok
     - name: Import main entry point
-      run: yarn node -e 'require("zwave-js")'
+      run: node -e 'require("zwave-js")'
 
     - name: Run component tests
       run: yarn run test:ci
@@ -244,7 +244,7 @@ jobs:
       run: |
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
         npm whoami
-        yarn lerna publish from-package --yes $TAG
+        lerna publish from-package --yes $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1

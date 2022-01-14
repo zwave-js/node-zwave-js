@@ -34,13 +34,6 @@
 			}
 		]
 	},
-	"base_0-65535": {
-		"valueSize": 4,
-		"minValue": 0,
-		"maxValue": 65535,
-		"defaultValue": 0,
-		"unsigned": true
-	},
 	"base_interval": {
 		"valueSize": 4,
 		"unit": "seconds",
@@ -141,6 +134,22 @@
 			{
 				"label": "White",
 				"value": 9
+			}
+		]
+	},
+	"base_out_of_limit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"readOnly": true,
+		"options": [
+			{
+				"label": "Within limit",
+				"value": 0
+			},
+			{
+				"label": "Out of limit",
+				"value": 1
 			}
 		]
 	},
@@ -749,7 +758,7 @@
 		]
 	},
 	"auto_off_timer_65535": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Auto Off Timer",
 		"unit": "seconds",
 		"options": [
@@ -776,7 +785,7 @@
 		]
 	},
 	"auto_on_timer_65535": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Auto On Timer",
 		"unit": "seconds",
 		"options": [
@@ -858,7 +867,7 @@
 		"label": "Automatic Reporting Interval"
 	},
 	"auto_report_interval_watt": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Automatic Reporting Interval: Power Consumption",
 		"unit": "seconds",
 		"defaultValue": 600,
@@ -870,7 +879,7 @@
 		]
 	},
 	"auto_report_interval_kwh": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Automatic Reporting Interval: kWh",
 		"unit": "seconds",
 		"defaultValue": 600,
@@ -882,7 +891,7 @@
 		]
 	},
 	"auto_report_interval_v": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Automatic Reporting Interval: Voltage",
 		"unit": "seconds",
 		"defaultValue": 600,
@@ -894,7 +903,7 @@
 		]
 	},
 	"auto_report_interval_amp": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"label": "Automatic Reporting Interval: Current",
 		"unit": "seconds",
 		"defaultValue": 600,
@@ -1930,7 +1939,7 @@
 		"label": "Sleep State",
 		"valueSize": 2,
 		"minValue": 0,
-		"maxValue": 1,
+		"maxValue": 2,
 		"defaultValue": 0,
 		"readOnly": true,
 		"allowManualEntry": false,
@@ -1942,6 +1951,10 @@
 			{
 				"label": "Awake",
 				"value": 1
+			},
+			{
+				"label": "Always awake on USB power",
+				"value": 2
 			}
 		]
 	},
@@ -2789,7 +2802,7 @@
 		"label": "Button 3: Battery Voltage"
 	},
 	"base_button_version": {
-		"$import": "#base_0-65535",
+		"$import": "~/templates/master_template.json#base_0-65535",
 		"options": [
 			{
 				"label": "Not paired",

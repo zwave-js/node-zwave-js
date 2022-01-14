@@ -1,22 +1,19 @@
-// TODO: The "Handshake" priority should be called differently
-
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Handshake messages have the highest priority because they are part of other transactions
-	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
-	//
-	// We distinguish between responses to handshake requests from nodes that must be handled first.
-	// Some nodes don't respond to our requests if they are waiting for a nonce.
-	Handshake = 0,
-	// Our handshake requests must be prioritized over all other messages
-	PreTransmitHandshake = 1,
+	// Outgoing nonces have the highest priority because they are part of other transactions
+	// which may already be in progress.
+	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
+	Nonce = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
-	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
+	// Supervision responses must be prioritized over other messages because the nodes requesting them
+	// will get impatient otherwise.
+	Supervision,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
 	WakeUp,
@@ -60,7 +57,7 @@ export enum FunctionType {
 	SoftReset = 0x08,
 
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
+	SerialAPIStarted = 0x0a, // Sent by the controller after the serial API has been started (again)
 
 	SerialAPISetup = 0x0b, // Configure the Serial API
 
@@ -108,7 +105,7 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_ClearNetworkStats = 0x39,
 	UNKNOWN_FUNC_GetNetworkStats = 0x3a,
-	UNKNOWN_FUNC_GetBackgroundRSSI = 0x3b,
+	GetBackgroundRSSI = 0x3b, // request the most recent background RSSI levels detected
 	UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 0x3f,
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40, // Not implemented

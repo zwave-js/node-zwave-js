@@ -385,10 +385,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 				await this.set({ [propertyKey]: value, duration });
 
 				if (this.isSinglecast()) {
-					// Verify the current value after a delay
+					// Verify the current value after a (short) delay
 					this.schedulePoll(
 						{ property, propertyKey },
-						duration?.toMilliseconds(),
+						{ duration, transition: "fast" },
 					);
 				}
 			} else {

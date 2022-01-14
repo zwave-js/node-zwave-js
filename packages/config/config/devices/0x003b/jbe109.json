@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Allegion",
+	"manufacturer": "Schlage",
 	"manufacturerId": "0x003b",
 	"label": "JBE109",
 	"description": "J-Series by Schlage Z-Wave Keypad Deadbolt",
@@ -7,7 +7,7 @@
 		{
 			"productType": "0x0004",
 			"productId": "0x2109",
-			"zwaveAllianceId": 3925
+			"zwaveAllianceId": [3925, 4134]
 		}
 	],
 	"firmwareVersion": {
@@ -18,10 +18,9 @@
 		{
 			"#": "3",
 			"label": "Beeper",
-			"description": "Config enable snd ff else 00",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -32,17 +31,16 @@
 				},
 				{
 					"label": "Enable beeper",
-					"value": 1
+					"value": 255
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Vacation_mode",
-			"description": "Config enable snd ff else 00",
+			"label": "Vacation Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -53,18 +51,17 @@
 				},
 				{
 					"label": "Enable vacation mode",
-					"value": 1
+					"value": 255
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Lock_and_leave",
-			"description": "Config enable snd ff else 00",
+			"label": "Lock & Leave",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
@@ -74,47 +71,16 @@
 				},
 				{
 					"label": "Enable lock & leave",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "6",
-			"label": "User_slot_bit_field",
-			"description": "Get user slot occupied",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "User slots 8 – 1 (msb – lsb) 8,7,6,5,4,3,2,1",
-					"value": 1
-				},
-				{
-					"label": "User slots 16 – 9 (msb – lsb) 16,15,14,13,12,11,10,9",
-					"value": 2
-				},
-				{
-					"label": "User slots 24 – 17 (msb – lsb) 24,23,22,21,20,19,18,17",
-					"value": 3
-				},
-				{
-					"label": "User slots 30 – 25 (msb – lsb) x,x,30,29,28,27,26,25",
-					"value": 4
+					"value": 255
 				}
 			]
 		},
 		{
 			"#": "15",
-			"label": "Auto_lock",
-			"description": "Config enable snd ff else 00",
+			"label": "Auto Lock",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -125,7 +91,7 @@
 				},
 				{
 					"label": "Enable auto lock",
-					"value": 1
+					"value": 255
 				}
 			]
 		},
@@ -137,12 +103,23 @@
 			"maxValue": 8,
 			"defaultValue": 4,
 			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "User Slots",
+			"description": "This value represents a bitmask with 30 bits. Each bit represents a user slot. A value of 1 means that the slot is occupied.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1073741823,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
 		}
 	],
 	"metadata": {
-		"inclusion": "One-button Add lock to Z-Wave Network (Inclusion) \n\n1. Place your home automation system or panel into the “Add” or Inclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). \n2. Remove the battery cover of the deadbolt. \n3. Press then release the button on the PCB.\n4. An LED will flash amber indicating the “Add” or Inclusion process is in progress. \n• If the Security Scheme is Security 2 (S2), verify the DSK of the lock at the Z-Wave Controller. The PIN Code portion of the Z-Wave DSK will be needed.\n5. When a green LED turns ON, the “Add” or Inclusion has completed successfully. \n6. If a red LED turns ON, try repeating steps 1-3 \n \nInteractive Instruction for Add \nhttps://instructions.allegion.com/instr/86/2543",
-		"exclusion": "One-button Remove lock from Z-Wave Network (Exclusion) \n\n1. Place your home automation system or panel into the “Remove” or Exclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). \n2. Remove the battery cover of the deadbolt. \n3. Press then release the button on the PCB. \n4. An LED will flash amber indicating the “Remove” or Exclusion process is in progress. \n5. When a green LED flashes 3 times, the “Remove” or Exclusion process is completed successfully. \n6. If a red LED turns ON, try repeating steps 1-3 \n\nInteractive Instruction for Remove https://instructions.allegion.com/instr/86/2581",
-		"reset": "1. Press and hold the enrollment button.\nThe led will light solid amber.\n2. After about 8 seconds of holding the\nbutton, the amber light will turn off.\nRelease the button. Successful FDR is\nindicated by 3 long green blinks and 3\nlong beeps.\n3. You must enter a valid user code.\nLock will enter auto-handing routine,\nlocking and unlocking several times.\nAuto-handing is complete when lock\nmovement stops",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3925/J-Series%20UG-f1.pdf"
+		"inclusion": "One-button Add lock to Z-Wave Network (Inclusion) 1. Place your home automation system or panel into the “Add” or Inclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). 2. Remove the battery cover of the deadbolt. 3. Press then release the button on the PCB. 4. An LED will flash amber indicating the “Add” or Inclusion process is in progress. • If the Security Scheme is Security 2 (S2), verify the DSK of the lock at the Z-Wave Controller. The PIN Code portion of the Z-Wave DSK will be needed. 5. When a green LED turns ON, the “Add” or Inclusion has completed successfully. 6. If a red LED turns ON, try repeating steps 1-3 Interactive Instruction for Add https://instructions.allegion.com/instr/86/2543",
+		"exclusion": "One-button Remove lock from Z-Wave Network (Exclusion) 1. Place your home automation system or panel into the “Remove” or Exclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). 2. Remove the battery cover of the deadbolt. 3. Press then release the button on the PCB. 4. An LED will flash amber indicating the “Remove” or Exclusion process is in progress. 5. When a green LED flashes 3 times, the “Remove” or Exclusion process is completed successfully. 6. If a red LED turns ON, try repeating steps 1-3 Interactive Instruction for Remove https://instructions.allegion.com/instr/86/258",
+		"reset": "1. Press and hold the enrollment button. The led will light solid amber. 2. After about 8 seconds of holding the button, the amber light will turn off. Release the button. Successful FDR is indicated by 3 long green blinks and 3 long beeps. 3. You must enter a valid user code. Lock will enter auto-handing routine, locking and unlocking several times. Auto-handing is complete when lock movement stops",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4134/J-Series%20UG-f1.pdf"
 	}
 }

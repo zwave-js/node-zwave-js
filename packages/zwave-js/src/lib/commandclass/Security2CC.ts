@@ -190,7 +190,7 @@ export class Security2CCAPI extends CCAPI {
 			await this.driver.sendMessage(msg, {
 				...this.commandOptions,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.Nonce,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
 			});
@@ -205,37 +205,6 @@ export class Security2CCAPI extends CCAPI {
 			}
 		}
 		return true;
-	}
-
-	/**
-	 * Requests a nonce from the target node
-	 */
-	public async requestNonce(): Promise<void> {
-		this.assertSupportsCommand(Security2Command, Security2Command.NonceGet);
-
-		this.assertPhysicalEndpoint(this.endpoint);
-
-		if (!this.driver.securityManager2) {
-			throw new ZWaveError(
-				`Nonces can only be sent if secure communication is set up!`,
-				ZWaveErrorCodes.Driver_NoSecurity,
-			);
-		}
-
-		const cc = new Security2CCNonceGet(this.driver, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-		});
-
-		await this.driver.sendCommand(cc, {
-			...this.commandOptions,
-			priority: MessagePriority.PreTransmitHandshake,
-			// Only try getting a nonce once
-			maxSendAttempts: 1,
-			// We don't want failures causing us to treat the node as asleep or dead
-			// The "real" transaction will do that for us
-			changeNodeStatusOnMissingACK: false,
-		});
 	}
 
 	/**
@@ -413,26 +382,29 @@ export class Security2CC extends CommandClass {
 		});
 
 		// Only on the highest security class the reponse includes the supported commands
+		const secClass = node.getHighestSecurityClass();
 		let hasReceivedSecureCommands = false;
 
 		let possibleSecurityClasses: S2SecurityClass[];
-		if (endpoint.index === 0) {
+		if (securityClassIsS2(secClass)) {
+			// The highest security class is known to be S2, only query that one
+			possibleSecurityClasses = [secClass];
+		} else if (endpoint.index === 0) {
+			// If the highest security class isn't known, query all possible security classes
+			// but only on the root device
 			possibleSecurityClasses = [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_AccessControl,
 			];
 		} else {
-			const secClass = node.getHighestSecurityClass();
-			if (!securityClassIsS2(secClass)) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: endpoint.index,
-					message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
-					level: "error",
-				});
-				return;
-			}
-			possibleSecurityClasses = [secClass];
+			// For endpoint interviews, the security class MUST be known
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: endpoint.index,
+				message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
+				level: "error",
+			});
+			return;
 		}
 
 		for (const secClass of possibleSecurityClasses) {
@@ -604,18 +576,33 @@ interface Security2CCMessageEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
+// An S2 encapsulated command may result in a NonceReport to be sent by the node if it couldn't decrypt the message
 function getCCResponseForMessageEncapsulation(
 	sent: Security2CCMessageEncapsulation,
 ) {
 	if (sent.encapsulated?.expectsCCResponse()) {
-		return Security2CCMessageEncapsulation;
+		return [
+			Security2CCMessageEncapsulation as any,
+			Security2CCNonceReport as any,
+		];
+	}
+}
+
+function testCCResponseForMessageEncapsulation(
+	sent: Security2CCMessageEncapsulation,
+	received: Security2CCMessageEncapsulation | Security2CCNonceReport,
+) {
+	if (received instanceof Security2CCMessageEncapsulation) {
+		return "checkEncapsulated";
+	} else {
+		return received.SOS && !!received.receiverEI;
 	}
 }
 
 @CCCommand(Security2Command.MessageEncapsulation)
 @expectedCCResponse(
 	getCCResponseForMessageEncapsulation,
-	() => "checkEncapsulated",
+	testCCResponseForMessageEncapsulation,
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
 	// Define the securityManager and controller.ownNodeId as existing
@@ -649,6 +636,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// Ensure the node has a security class
 			const peerNodeID = this.nodeId as number;
 			const node = this.getNode()!;
+			validatePayload.withReason("The node is not included")(!!node);
 			const securityClass = node.getHighestSecurityClass();
 			validatePayload.withReason("No security class granted")(
 				securityClass !== SecurityClass.None,
@@ -881,20 +869,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public encapsulated?: CommandClass;
 	public extensions: Security2Extension[];
 
-	private _wasRetriedAfterDecodeFailure: boolean = false;
-	/** Indicates whether sending this command was retried after the target node failed to decode it  */
-	public get wasRetriedAfterDecodeFailure(): boolean {
-		return this._wasRetriedAfterDecodeFailure;
-	}
-
-	public prepareRetryAfterDecodeFailure(): void {
-		if (this._wasRetriedAfterDecodeFailure) {
-			throw new ZWaveError(
-				`S2 encapsulated messages may only be retried once after the target failed to decode them!`,
-				ZWaveErrorCodes.Controller_MessageDropped,
-			);
-		}
-		this._wasRetriedAfterDecodeFailure = true;
+	public unsetSequenceNumber(): void {
 		this._sequenceNumber = undefined;
 	}
 
@@ -925,23 +900,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			(e): e is SPANExtension => e instanceof SPANExtension,
 		);
 		return spanExtension?.senderEI;
-	}
-
-	public requiresPreTransmitHandshake(): boolean {
-		// We need the receiver's EI to be able to send an encrypted command
-		const secMan = this.driver.securityManager2;
-		const peerNodeId = this.nodeId as number;
-		const spanState = secMan.getSPANState(peerNodeId);
-		return (
-			spanState.type === SPANState.None ||
-			spanState.type === SPANState.LocalEI
-		);
-	}
-
-	public async preTransmitHandshake(): Promise<void> {
-		// Request a nonce
-		return this.getNode()!.commandClasses["Security 2"].requestNonce();
-		// Yeah, that's it :)
 	}
 
 	public serialize(): Buffer {

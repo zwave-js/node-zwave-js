@@ -1,0 +1,28 @@
+{
+	"manufacturer": "URC Automation",
+	"manufacturerId": "0x0445",
+	"label": "TRF-ZW10",
+	"description": "Z-Wave Gateway",
+	"devices": [
+		{
+			"productType": "0x0020",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4287
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Resets the memory of the TRF-ZW10 to factory settings. All existing programming is erased. The gateway requires a download from the URC software in order to be programmed again.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\n\nTo factory default the TRF-ZW10, turn the gateway over and locate the Reset button. Using a thin object, press and hold the button down for fifteen (15) seconds. \n\nWARNING! Only use this button when instructed by URC’s Technical Support team",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4287/URC_Total_Control_TRF-ZW10_OM_rev1.6_08132021.pdf"
+	}
+}

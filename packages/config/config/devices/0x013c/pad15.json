@@ -7,7 +7,7 @@
 		{
 			"productType": "0x0005",
 			"productId": "0x007e",
-			"zwaveAllianceId": 3923
+			"zwaveAllianceId": [4209, 4216, 4217, 4248, 4256, 4257, 4261, 4264, 4268]
 		}
 	],
 	"firmwareVersion": {
@@ -18,7 +18,6 @@
 		{
 			"#": "1",
 			"label": "Switch Set",
-			"description": "To select connected switch function.  setting value: 0: only s1 is effective 1: both s1 and s2 are effective. 2: s1 dimmer up  s2 dimmer down",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -27,48 +26,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0: only s1 is effective",
+					"label": "Enable S1",
 					"value": 0
 				},
 				{
-					"label": "1: both s1 and s2 are effective",
+					"label": "Enable S1 & S2",
 					"value": 1
 				},
 				{
-					"label": "2: s1 dimmer up s2 dimmer down",
+					"label": "Dimmer up/down",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Power-on Recovery Status Set",
-			"description": "To set dimmer level when ac power on.  setting value: 0: off-0% 1: on-last level 2: on-100%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "0: off-0%",
-					"value": 0
-				},
-				{
-					"label": "1: on-last level",
-					"value": 1
-				},
-				{
-					"label": "2: on-100%",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
 		{
 			"#": "3",
-			"label": "Rf Report Set",
-			"description": "To set if device send multilevel switch report to gateway when dimming finished.  setting value: 1: report on 0: report off",
+			"label": "Send Multilevel Switch Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -77,11 +54,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0: report off",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "1: report on",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -89,7 +66,6 @@
 		{
 			"#": "4",
 			"label": "Maximum Level",
-			"description": "1~99 : 1% ~ 99%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -99,7 +75,6 @@
 		{
 			"#": "5",
 			"label": "Minimum Level",
-			"description": "0~98 : 0% ~ 98%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -109,7 +84,6 @@
 		{
 			"#": "6",
 			"label": "Basic Duration Set",
-			"description": "Unit: second ,0 ~127second",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -119,9 +93,9 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "Add(Classic Inclusion) : \n1. Put your Z-Wave™ controller into inclusion mode by following the instructions provided by the controller\nmanufacturer.\n2. Press the include button three times within 3 seconds to enter inclusion mode",
-		"exclusion": "Remove (Exclusion)\n1. Put your Z-Wave™ controller into exclusion mode by following the instructions provided by the controller\nmanufacturer.\n2. Press the include button three times within 3 seconds to enter\nexclusion mode.\n3. Node ID will be excluded",
-		"reset": "Reset :\n1. Press the include button four times within 3 seconds and hold on the button press without releasing.\n2. Keep pressing the button for 3 seconds then LED will be off,release the button within 2 seconds.\n3. Device has been reset.\n\n※Function Reset : Please use this procedure only when the network\nprimary controller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3923/PAD15_UserManual_V3.pdf"
+		"inclusion": "Add(Classic Inclusion) : 1. Put your Z-Wave™ controller into inclusion mode by following the instructions\nprovided by the controller manufacturer. 2. Press the include button three times within 3 seconds to enter\ninclusion mode",
+		"exclusion": "Remove (Exclusion) 1. Put your Z-Wave™ controller into exclusion mode by following the instructions\nprovided by the controller manufacturer. 2. Press the include button three times within 3 seconds to enter\nexclusion mode. 3. Node ID will be excluded",
+		"reset": "Reset : 1. Press the include button four times within 3 seconds and hold on the button press without\nreleasing. 2. Keep pressing the button for 3 seconds then LED will be o ,release the button within 2 seconds.\n3. Device has been reset. ※Function Reset : Please use this procedure only when the network primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4209/PAD15_UserManual_V3.pdf"
 	}
 }
