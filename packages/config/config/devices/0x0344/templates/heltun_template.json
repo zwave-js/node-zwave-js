@@ -319,7 +319,7 @@
 	"hold_duration": {
 		"unit": "milliseconds",
 		"valueSize": 2,
-		"minValue":200,
+		"minValue": 200,
 		"maxValue": 5000,
 		"defaultValue": 500
 	},
