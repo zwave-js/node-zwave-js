@@ -16,212 +16,52 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Frequency Region",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "EU (868.4 MHz, 869.85 MHz)",
-					"value": 0
-				},
-				{
-					"label": "US (908.4 MHz, 916.0 MHz)",
-					"value": 1
-				},
-				{
-					"label": "AU (919.8 MHz, 921.4 MHz)",
-					"value": 2
-				},
-				{
-					"label": "HO (919.8 MHz)",
-					"value": 3
-				},
-				{
-					"label": "In (865.2 MHz)",
-					"value": 4
-				},
-				{
-					"label": "IL (916.0 MHz)",
-					"value": 5
-				},
-				{
-					"label": "RU (869.0 MHz)",
-					"value": 6
-				},
-				{
-					"label": "Cn (868.4 MHz)",
-					"value": 7
-				},
-				{
-					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
-					"value": 8
-				},
-				{
-					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
-					"value": 9
-				}
-			]
+			"$import": "templates/heltun_template.json#frequency_region"
 		},
 		{
 			"#": "3",
-			"label": "Hardware and Software Versions",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"readOnly": true
+			"$import": "templates/heltun_template.json#hw_sw_ver"
 		},
 		{
 			"#": "4",
-			"label": "Energy Consumption",
-			"unit": "kW",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"readOnly": true
+			"$import": "templates/heltun_template.json#energy_consumption"
 		},
 		{
 			"#": "7",
-			"label": "Relay Output Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally Open",
-					"value": 0
-				},
-				{
-					"label": "Normally Closed",
-					"value": 1
-				}
-			]
+			"$import": "templates/heltun_template.json#relay_output_mode",
+			"label": "Relay Output Mode"
 		},
 		{
 			"#": "10",
 			"label": "Floor Temperature Sensor Resistance",
 			"unit": "kΩ",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"defaultValue": 10
 		},
 		{
 			"#": "16",
-			"label": "Temperature Scale",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "templates/heltun_template.json#temperature_scale_f_c"
 		},
 		{
 			"#": "17",
-			"label": "Temperature Sensor Calibration",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": -100,
-			"maxValue": 100,
-			"defaultValue": 0
+			"$import": "templates/heltun_template.json#temp_sensor_cal"
 		},
 		{
 			"#": "19",
-			"label": "Time Correction by Controller",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/heltun_template.json#controller_time_correction"
 		},
 		{
 			"#": "21",
-			"label": "Week Day Override",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Monday",
-					"value": 1
-				},
-				{
-					"label": "Tuesday",
-					"value": 2
-				},
-				{
-					"label": "Wednesday",
-					"value": 3
-				},
-				{
-					"label": "Thursday",
-					"value": 4
-				},
-				{
-					"label": "Friday",
-					"value": 5
-				},
-				{
-					"label": "Saturday",
-					"value": 6
-				},
-				{
-					"label": "Sunday",
-					"value": 7
-				}
-			]
+			"$import": "templates/heltun_template.json#weekday_override"
 		},
 		{
 			"#": "22",
-			"label": "Time Override",
-			"unit": "HHMM",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2359,
-			"defaultValue": 0
+			"$import": "templates/heltun_template.json#time_override"
 		},
 		{
 			"#": "23",
 			"label": "Auto On/Off",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "24",
@@ -262,65 +102,25 @@
 		},
 		{
 			"#": "41",
-			"label": "External Input: Hold Control Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Operate like click (parameter 51)",
-					"value": 1
-				},
-				{
-					"label": "Momentary switch",
-					"value": 2
-				},
-				{
-					"label": "Reversed momentary switch",
-					"value": 3
-				}
-			]
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"label": "External Input: Hold Control Mode"
+		},
+		{
+			"#": "46",
+			"$if": "firmwareVersion >= 1.3",
+			"label": "External Input: Hold Mode Duration",
+			"$import": "templates/heltun_template.json#hold_duration"
 		},
 		{
 			"#": "51",
-			"label": "External Input: Click Control Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch",
-					"value": 1
-				},
-				{
-					"label": "Turn on",
-					"value": 2
-				},
-				{
-					"label": "Turn off",
-					"value": 3
-				},
-				{
-					"label": "Turn on, then off after timer",
-					"value": 4
-				},
-				{
-					"label": "Turn off, then on after timer",
-					"value": 5
-				}
-			]
+			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"label": "External Input: Click Control Mode"
+		},
+		{
+			"#": "66",
+			"$if": "firmwareVersion >= 1.5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"defaultValue": 0
 		},
 		{
 			"#": "71",
@@ -334,16 +134,12 @@
 		{
 			"#": "141",
 			"label": "Energy Consumption Report Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 120,
-			"defaultValue": 10
+			"$import": "templates/heltun_template.json#report_interval"
 		},
 		{
 			"#": "142",
 			"label": "Energy Consumption Report Threshold",
-			"unit": "W",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
@@ -352,39 +148,20 @@
 		{
 			"#": "143",
 			"label": "Temperature Report Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 120,
-			"defaultValue": 10
+			"$import": "templates/heltun_template.json#report_interval"
 		},
 		{
 			"#": "144",
 			"label": "Temperature Report Threshold",
 			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"defaultValue": 2
 		},
 		{
 			"#": "151",
 			"label": "Device Failure Notifications",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "152",
@@ -409,21 +186,8 @@
 			"#": "154",
 			"label": "Over-Current Notification",
 			"description": "The device will switch Off the load when the current reaches 16A.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "155",
@@ -436,6 +200,27 @@
 		},
 		{
 			"#": "156",
+			"$if": "firmwareVersion >= 1.5",
+			"label": "Over-Voltage Protection & Notification",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 280,
+			"defaultValue": 260
+		},
+		{
+			"#": "157",
+			"$if": "firmwareVersion >= 1.5",
+			"label": "Voltage Drop Protection & Notification",
+			"unit": "Volts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 90
+		},
+		{
+			"#": "156",
+			"$if": "firmwareVersion < 1.5",
 			"label": "Over-Voltage Protection & Notification",
 			"unit": "Volts",
 			"valueSize": 2,
@@ -445,6 +230,7 @@
 		},
 		{
 			"#": "157",
+			"$if": "firmwareVersion < 1.5",
 			"label": "Voltage Drop Protection & Notification",
 			"unit": "Volts",
 			"valueSize": 2,
@@ -455,21 +241,20 @@
 		{
 			"#": "158",
 			"label": "Sparks Protection & Notification",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "159",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Load On Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "160",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Load Off Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		}
 	]
 }
