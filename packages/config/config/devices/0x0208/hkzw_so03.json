@@ -24,25 +24,10 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Overcurrent Protection",
-			"description": "Smart plug keep detecting the load power, once the ac current exceeds 16.5a for more than 5s, smart plug's relay will turn off",
-			"valueSize": 1,
-			"unit": "decimal",
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "The function is disabled",
-					"value": 0
-				},
-				{
-					"label": "The function is enabled",
-					"value": 1
-				}
-			]
+			"label": "Overload Protection",
+			"description": "Triggered at greater than 16.5A for more than 5 seconds",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "21",
@@ -51,9 +36,7 @@
 		{
 			"#": "24",
 			"label": "Notification When Load Status Change",
-			"description": "Smart plug can send notifications to association device (group lifeline) when state of smart plug’s load change",
 			"valueSize": 1,
-			"unit": "decimal",
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 1,
@@ -61,25 +44,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Send basic report",
+					"label": "Enable",
 					"value": 1
 				},
 				{
-					"label": "Send basic report only when load condition is not changed by Z-Wave command",
+					"label": "Only for manual changes",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "27",
-			"label": "Indicator Modes",
-			"description": "After smart plug being included into a Z-Wave network, the RGB LED indicator will indicator the situation of load",
+			"label": "Indicator Mode",
 			"valueSize": 1,
-			"unit": "decimal",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
@@ -87,35 +68,34 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The smart plug will work in power indication mode",
+					"label": "Always On",
 					"value": 0
 				},
 				{
-					"label": "The smart plug will work in power indication mode for 5 seconds, when the state of smart plug’s load changed. RGB LED indicator will turn off if there is no more switch action in 5 seconds",
+					"label": "5 Seconds",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "151",
-			"label": "Threshold of Change in Wattage",
-			"description": "Power threshold to be interpreted, when the change value of load power exceeds the setting threshold, the smart plug will send meter report to associated device (group lifeline)",
+			"label": "Power Change Report Threshold",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 50,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "152",
-			"label": "Threshold of Change in Wattage Percentage",
-			"description": "Power percentage threshold to be interpreted, when change value of the load power exceeds the setting threshold, the smart plug will send meter report to associated device (group lifeline)",
+			"label": "Power Change Report Threshold Percentage",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -124,71 +104,71 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "171",
-			"label": "Intervals of Sending Meter Report (for Wattage)",
-			"description": "The interval of sending meter report(in term of wattage) to associated device (group lifeline)",
+			"label": "Power Report Interval",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 30,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "172",
-			"label": "Intervals of Sending Meter Report (for Kwh)",
-			"description": "The interval of sending meter report(in term of kwh) to associated device (group lifeline)",
+			"label": "Energy Report Interval",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 300,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "173",
-			"label": "Intervals of Sending Meter Report (for Voltage)",
-			"description": "The interval of sending meter report(in term of voltage) to associated device (group lifeline)",
+			"label": "Voltage Report Interval",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "174",
-			"label": "Intervals of Sending Meter Report (for Current)",
-			"description": "The interval of sending meter report(in term of current) to associated device (group lifeline)",
+			"label": "Current Report Interval",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
