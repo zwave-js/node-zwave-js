@@ -391,6 +391,8 @@
 			{
 				"label": "Active state red / Inactive state blue",
 				"value": 1
+			}
+		]
 	},
 	"base_button_backlight_control_source": {
 		"valueSize": 1,
