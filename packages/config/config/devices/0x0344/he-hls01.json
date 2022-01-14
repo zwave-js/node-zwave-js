@@ -126,7 +126,8 @@
 			"#": "71",
 			"label": "Relay Timer Mode Duration",
 			"unit": "seconds",
-			"valueSize": 3,
+			"unsigned": true,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 43200,
 			"defaultValue": 0

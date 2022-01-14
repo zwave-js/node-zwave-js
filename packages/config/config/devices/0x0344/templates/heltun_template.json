@@ -196,6 +196,7 @@
 		"minValue": 0,
 		"maxValue": 43200,
 		"defaultValue": 0,
+		"unsigned": true,
 		"options": [
 			{
 				"label": "0.5 seconds",
