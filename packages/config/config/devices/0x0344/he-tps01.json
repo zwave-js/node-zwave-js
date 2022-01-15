@@ -50,7 +50,7 @@
 		},
 		{
 			"#": "17",
-			"$import": "templates/heltun_template.json#temp_sensor_cal",
+			"$import": "templates/heltun_template.json#temp_sensor_calibration",
 			"label": "Air Temperature Calibration"
 		},
 		{

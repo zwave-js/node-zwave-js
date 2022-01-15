@@ -40,11 +40,11 @@
 		},
 		{
 			"#": "16",
-			"$import": "templates/heltun_template.json#temperature_scale_f_c"
+			"$import": "~/templates/master_template.json#temperature_scale"
 		},
 		{
 			"#": "17",
-			"$import": "templates/heltun_template.json#temp_sensor_cal"
+			"$import": "templates/heltun_template.json#temp_sensor_calibration"
 		},
 		{
 			"#": "19",
@@ -203,7 +203,7 @@
 			"#": "156",
 			"$if": "firmwareVersion >= 1.5",
 			"label": "Over-Voltage Protection & Notification",
-			"unit": "Volts",
+			"unit": "V",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 280,
@@ -213,7 +213,7 @@
 			"#": "157",
 			"$if": "firmwareVersion >= 1.5",
 			"label": "Voltage Drop Protection & Notification",
-			"unit": "Volts",
+			"unit": "V",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 240,
@@ -223,7 +223,7 @@
 			"#": "156",
 			"$if": "firmwareVersion < 1.5",
 			"label": "Over-Voltage Protection & Notification",
-			"unit": "Volts",
+			"unit": "V",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 280,
@@ -233,7 +233,7 @@
 			"#": "157",
 			"$if": "firmwareVersion < 1.5",
 			"label": "Voltage Drop Protection & Notification",
-			"unit": "Volts",
+			"unit": "V",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 240,

@@ -286,24 +286,6 @@
 		"maxValue": 0,
 		"readOnly": true
 	},
-	"temperature_scale_f_c": {
-		"label": "Temperature Scale",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Fahrenheit",
-				"value": 0
-			},
-			{
-				"label": "Celsius",
-				"value": 1
-			}
-		]
-	},
 	"controller_time_correction": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Time Correction by Controller",
@@ -323,7 +305,7 @@
 		"maxValue": 5000,
 		"defaultValue": 500
 	},
-	"temp_sensor_cal": {
+	"temp_sensor_calibration": {
 		"label": "Temperature Sensor Calibration",
 		"unit": "0.1 °C",
 		"valueSize": 1,

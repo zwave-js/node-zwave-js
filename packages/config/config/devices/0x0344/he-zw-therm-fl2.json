@@ -16,22 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Degree Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Centigrade",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
 		},
 		{
 			"#": "2",
