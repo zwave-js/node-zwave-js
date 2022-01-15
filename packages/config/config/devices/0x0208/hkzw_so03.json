@@ -25,7 +25,7 @@
 		{
 			"#": "20",
 			"label": "Overload Protection",
-			"description": "Triggered at greater than 16.5A for more than 5 seconds",
+			"description": "Triggered when the current exceeds 16.5A for more than 5 seconds",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
@@ -59,7 +59,7 @@
 		},
 		{
 			"#": "27",
-			"label": "Indicator Mode",
+			"label": "LED Power Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -72,7 +72,7 @@
 					"value": 0
 				},
 				{
-					"label": "5 Seconds",
+					"label": "5 seconds after switching",
 					"value": 1
 				}
 			]
