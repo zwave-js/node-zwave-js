@@ -43,18 +43,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Buttons",
+					"label": "Momentary buttons",
 					"value": 0
 				},
 				{
-					"label": "2-State Switches",
+					"label": "Toggle switches",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "2-State Switches",
+			"label": "Toggle Switch Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,18 +62,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Toggle Switch without specified on/off position",
+					"label": "Without specified on/off position",
 					"value": 0
 				},
 				{
-					"label": "Toggle Switch with specified on/off position",
+					"label": "With specified on/off position",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Switch 1 - Operation Report to Association Group 1",
+			"label": "Switch 1: Report to Association Group 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -96,13 +96,13 @@
 		},
 		{
 			"#": "5",
-			"label": "Switch 1 - Off Timer",
+			"label": "Switch 1: Off Timer",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Switch 1 - Off Timer Interval",
+			"label": "Switch 1: Off Timer Interval",
 			"unit": "100ms",
 			"valueSize": 2,
 			"minValue": 0,
@@ -112,7 +112,8 @@
 		},
 		{
 			"#": "7",
-			"label": "Switch 1 - Operation Mode",
+			"label": "Operation Mode",
+			"description": "Determines if relay switches when command is received, or when AC voltage next crosses 0V.  Zero crossing mode may reduce possibility of relay failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -120,18 +121,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch Immediately",
+					"label": "Switch immediately",
 					"value": 0
 				},
 				{
-					"label": "Zero Crossing Switch",
+					"label": "Zero crossing detection",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Switch 2 - Operation Report to Association Group 2",
+			"label": "Switch 2: Operation Report to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -164,7 +165,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Idle",
 					"value": 0
 				},
 				{
