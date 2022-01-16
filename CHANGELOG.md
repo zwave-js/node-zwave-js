@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Update Z-Uno definition for custom configuration parameters
+* Add new firmware features to Heltun devices
+* Add Momentary Toggle Switch to Hold Control Modes for Heltun HE-RS01
+* Add MCOHome MH-S220
+* Adjust acceleration unit string
+
 ## 8.11.0 (2022-01-13)
 ### Features
 * Add support for `Humidity Control Mode CC`
