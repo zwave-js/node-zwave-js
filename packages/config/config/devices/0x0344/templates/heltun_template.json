@@ -94,6 +94,35 @@
 			}
 		]
 	},
+	"external_input_hold_control_mode_4": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Operate like click (parameter 51)",
+				"value": 1
+			},
+			{
+				"label": "Momentary switch",
+				"value": 2
+			},
+			{
+				"label": "Reversed momentary switch",
+				"value": 3
+			},
+			{
+				"label": "Momentary Toggle Switch",
+				"value": 4
+			}
+		]
+	},
 	"relay_button_number_source": {
 		"valueSize": 1,
 		"minValue": 0,

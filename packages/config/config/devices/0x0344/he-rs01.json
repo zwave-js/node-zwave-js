@@ -65,27 +65,27 @@
 		},
 		{
 			"#": "41",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode_4",
 			"label": "External Input S1: Hold Control Mode"
 		},
 		{
 			"#": "42",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode_4",
 			"label": "External Input S2: Hold Control Mode"
 		},
 		{
 			"#": "43",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode_4",
 			"label": "External Input S3: Hold Control Mode"
 		},
 		{
 			"#": "44",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode_4",
 			"label": "External Input S4: Hold Control Mode"
 		},
 		{
 			"#": "45",
-			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode_4",
 			"label": "External Input S5: Hold Control Mode"
 		},
 		{
