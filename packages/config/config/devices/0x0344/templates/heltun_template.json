@@ -192,14 +192,188 @@
 	"relay_timer_mode_duration": {
 		"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 		"unit": "seconds",
-		"valueSize": 3,
+		"valueSize": 2,
 		"minValue": 0,
 		"maxValue": 43200,
 		"defaultValue": 0,
+		"unsigned": true,
 		"options": [
 			{
 				"label": "0.5 seconds",
 				"value": 0
+			}
+		]
+	},
+	"relay_timer_mode_duration_new": {
+		"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
+		"unit": "seconds",
+		"valueSize": 2,
+		"minValue": -1,
+		"maxValue": 32400,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "0.05 seconds",
+				"value": -1
+			},
+			{
+				"label": "0.5 seconds",
+				"value": 0
+			}
+		]
+	},
+	"frequency_region": {
+		"label": "Frequency Region",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 9,
+		"readOnly": true,
+		"options": [
+			{
+				"label": "EU (868.4 MHz, 869.85 MHz)",
+				"value": 0
+			},
+			{
+				"label": "US (908.4 MHz, 916.0 MHz)",
+				"value": 1
+			},
+			{
+				"label": "AU (919.8 MHz, 921.4 MHz)",
+				"value": 2
+			},
+			{
+				"label": "HO (919.8 MHz)",
+				"value": 3
+			},
+			{
+				"label": "In (865.2 MHz)",
+				"value": 4
+			},
+			{
+				"label": "IL (916.0 MHz)",
+				"value": 5
+			},
+			{
+				"label": "RU (869.0 MHz)",
+				"value": 6
+			},
+			{
+				"label": "Cn (868.4 MHz)",
+				"value": 7
+			},
+			{
+				"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+				"value": 8
+			},
+			{
+				"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+				"value": 9
+			}
+		]
+	},
+	"hw_sw_ver": {
+		"label": "Hardware and Software Versions",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 0,
+		"readOnly": true
+	},
+	"energy_consumption": {
+		"label": "Energy Consumption",
+		"unit": "kW",
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 0,
+		"readOnly": true
+	},
+	"controller_time_correction": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Time Correction by Controller",
+		"defaultValue": 1
+	},
+	"report_interval": {
+		"unit": "minutes",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 120,
+		"defaultValue": 10
+	},
+	"hold_duration": {
+		"unit": "milliseconds",
+		"valueSize": 2,
+		"minValue": 200,
+		"maxValue": 5000,
+		"defaultValue": 500
+	},
+	"temp_sensor_calibration": {
+		"label": "Temperature Sensor Calibration",
+		"unit": "0.1 °C",
+		"valueSize": 1,
+		"minValue": -100,
+		"maxValue": 100,
+		"defaultValue": 0
+	},
+	"weekday_override": {
+		"label": "Week Day Override",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 7,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Monday",
+				"value": 1
+			},
+			{
+				"label": "Tuesday",
+				"value": 2
+			},
+			{
+				"label": "Wednesday",
+				"value": 3
+			},
+			{
+				"label": "Thursday",
+				"value": 4
+			},
+			{
+				"label": "Friday",
+				"value": 5
+			},
+			{
+				"label": "Saturday",
+				"value": 6
+			},
+			{
+				"label": "Sunday",
+				"value": 7
+			}
+		]
+	},
+	"time_override": {
+		"label": "Time Override",
+		"unit": "HHMM",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 2359,
+		"defaultValue": 0
+	},
+	"button_backlight_color": {
+		"label": "Buttons: Backlight Color",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Active state blue / Inactive state red",
+				"value": 0
+			},
+			{
+				"label": "Active state red / Inactive state blue",
+				"value": 1
 			}
 		]
 	},
