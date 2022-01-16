@@ -211,11 +211,12 @@
 		},
 		{
 			"#": "14",
+			"$if": "firmwareVersion <= 2.1",
 			"label": "Inputs Button/Switch configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -227,6 +228,32 @@
 				{
 					"label": "Bi-stable input (switch)",
 					"value": 1
+				}
+			]
+		},
+		{
+			"#": "14",
+			"$if": "firmwareVersion >= 2.2",
+			"label": "Inputs Button/Switch configuration",
+			"description": "Binary inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mono-stable input (button)",
+					"value": 0
+				},
+				{
+					"label": "Bi-stable input (switch)",
+					"value": 1
+				},
+				{
+					"label": "Roller blind switch",
+					"value": 2
 				}
 			]
 		},
