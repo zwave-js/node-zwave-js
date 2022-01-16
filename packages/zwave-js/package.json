@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "8.11.0",
+  "version": "8.11.1",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "build/index.js",
@@ -57,7 +57,7 @@
     "@alcalzone/pak": "^0.7.0",
     "@sentry/integrations": "^6.16.1",
     "@sentry/node": "^6.16.1",
-    "@zwave-js/config": "8.11.0",
+    "@zwave-js/config": "8.11.1",
     "@zwave-js/core": "8.10.2",
     "@zwave-js/nvmedit": "8.10.2",
     "@zwave-js/serial": "8.10.2",

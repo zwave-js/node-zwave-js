@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.1 (2022-01-16)
 ### Config file changes
 * Update Z-Uno definition for custom configuration parameters
 * Add new firmware features to Heltun devices
