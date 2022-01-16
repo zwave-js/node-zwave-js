@@ -29,7 +29,7 @@
 	"acceleration": {
 		"0x00": {
 			"label": "Meter per square second",
-			"unit": "m/s2"
+			"unit": "m/s²"
 		}
 	},
 	"percentage": {
