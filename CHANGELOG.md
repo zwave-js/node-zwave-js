@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add Eurotronic Temperature & Humidity Sensor
+* Add Vesternet devices
+* Add missing option to Zooz Zen16
+* Add missing parameters for HANK Electronics HKZW-SO03
+* Correct lifeline for RF9540-N v1.2+ and map Basic Sets
+* Added roller blind switch type to Fibaro FGD211 FW2.2+
+
 ## 8.11.1 (2022-01-16)
 ### Config file changes
 * Update Z-Uno definition for custom configuration parameters
