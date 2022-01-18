@@ -159,7 +159,7 @@
 		]
 	},
 	"dimmer_type_trail_lead": {
-		"label": "Dimmer mode",
+		"label": "Dimmer Mode",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -178,7 +178,7 @@
 		]
 	},
 	"dimmer_type_lead_trail": {
-		"label": "Dimmer mode",
+		"label": "Dimmer Mode",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
