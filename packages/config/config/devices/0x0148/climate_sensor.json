@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Eurotronic",
 	"manufacturerId": "0x0148",
-	"label": "Climate_Sensor",
+	"label": "TFS 700087",
 	"description": "Temperature & Humidity Sensor",
 	"devices": [
 		{
@@ -125,5 +125,8 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"manual": "https://eurotronic.org/wp-content/uploads/2020/02/TFS-Z-Wave-Plus_BDA_web_EN.pdf"
+	}
 }
