@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.2 (2022-01-18)
 ### Config file changes
 * Add Eurotronic Temperature & Humidity Sensor
 * Add Vesternet devices
