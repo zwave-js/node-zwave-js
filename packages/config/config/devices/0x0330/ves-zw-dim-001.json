@@ -205,7 +205,7 @@
 			]
 		},
 		{
-			"#": "21",
+			"#": "24",
 			"label": "Current Report Interval",
 			"unit": "seconds",
 			"valueSize": 4,
