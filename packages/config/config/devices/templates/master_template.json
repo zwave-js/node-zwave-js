@@ -158,6 +158,44 @@
 			}
 		]
 	},
+	"dimmer_type_trail_lead": {
+		"label": "Dimmer mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Trailing edge",
+				"value": 0
+			},
+			{
+				"label": "Leading edge",
+				"value": 1
+			}
+		]
+	},
+	"dimmer_type_lead_trail": {
+		"label": "Dimmer mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Leading edge",
+				"value": 0
+			},
+			{
+				"label": "Trailing edge",
+				"value": 1
+			}
+		]
+	},
 	"dimming_timing_with_0": {
 		"$import": "#base_0-255_nounit",
 		"unit": "10ms",
