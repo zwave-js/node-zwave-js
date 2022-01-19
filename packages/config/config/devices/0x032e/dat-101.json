@@ -57,8 +57,7 @@
 		},
 		{
 			"#": "3",
-			"label": "ΔT calculating",
-			"description": "Method for calculating on / off heating mode",
+			"label": "Hysteresis Offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
