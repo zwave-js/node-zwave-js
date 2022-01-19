@@ -52,7 +52,6 @@
 			"minValue": 1,
 			"maxValue": 7,
 			"defaultValue": 1,
-			"unsigned": true
 		},
 		{
 			"#": "3",
@@ -84,7 +83,6 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Relay OFF (recommended for electric floor heating)",
@@ -104,7 +102,6 @@
 			"minValue": 100,
 			"maxValue": 30000,
 			"defaultValue": 30000,
-			"unsigned": true
 		},
 		{
 			"#": "6",
@@ -114,7 +111,6 @@
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 4,
-			"unsigned": true
 		},
 		{
 			"#": "7",
@@ -124,7 +120,6 @@
 			"minValue": -127,
 			"maxValue": 127,
 			"defaultValue": 30,
-			"unsigned": true
 		},
 		{
 			"#": "8",
@@ -134,7 +129,6 @@
 			"minValue": 100,
 			"maxValue": 1200,
 			"defaultValue": 120,
-			"unsigned": true
 		},
 		{
 			"#": "9",
@@ -162,7 +156,6 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"options": [
 				{
 					"label": "Stock temp sensor",
@@ -186,7 +179,6 @@
 			"minValue": 10,
 			"maxValue": 600,
 			"defaultValue": 300,
-			"unsigned": true
 		},
 		{
 			"#": "12",
@@ -196,7 +188,6 @@
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 1,
-			"unsigned": true
 		},
 		{
 			"#": "13",
