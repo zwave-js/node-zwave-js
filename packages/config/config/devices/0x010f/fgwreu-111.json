@@ -103,7 +103,7 @@
 			"#": "30[0x00ff0000]",
 			"label": "Alarm Configuration: 1st Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
-			"defaultValue": 0,
+			"defaultValue": 0
 		},
 		{
 			"#": "30[0x00000003]",
@@ -134,7 +134,7 @@
 			"label": "Alarm Configuration: 1st Slot: LED Indicator",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 15,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -179,14 +179,14 @@
 		},
 		{
 			"#": "31[0x00000003]",
-			"label": "Alarm Configuration: 2nd Slot: Blinds Action",
 			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 2nd Slot: Blinds Action",
 			"defaultValue": 0
 		},
 		{
 			"#": "31[0x000000f0]",
-			"label": "Alarm Configuration: 2nd Slot: LED Indicator",
 			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 2nd Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
@@ -203,14 +203,14 @@
 		},
 		{
 			"#": "32[0x00000003]",
-			"label": "Alarm Configuration: 3rd Slot: Blinds Action",
 			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 3rd Slot: Blinds Action",
 			"defaultValue": 0
 		},
 		{
 			"#": "32[0x000000f0]",
-			"label": "Alarm Configuration: 3rd Slot: LED Indicator",
 			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 3rd Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
@@ -227,14 +227,14 @@
 		},
 		{
 			"#": "33[0x00000003]",
-			"label": "Alarm Configuration: 4th Slot: Blinds Action",
 			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 4th Slot: Blinds Action",
 			"defaultValue": 0
 		},
 		{
 			"#": "33[0x000000f0]",
-			"label": "Alarm Configuration: 4th Slot: LED Indicator",
 			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 4th Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
@@ -251,14 +251,14 @@
 		},
 		{
 			"#": "34[0x00000003]",
-			"label": "Alarm Configuration: 5th Slot: Blinds Action",
 			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 5th Slot: Blinds Action",
 			"defaultValue": 0
 		},
 		{
 			"#": "34[0x000000f0]",
-			"label": "Alarm Configuration: 5th Slot: LED Indicator",
 			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 5th Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
