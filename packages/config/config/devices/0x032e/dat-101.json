@@ -65,7 +65,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Turning on the heating mode at room temperature, turning off at room temperature + ΔT",
+					"label": "Turn on at setpoint, turn off at setpoint + hysteresis",
 					"value": 0
 				},
 				{
