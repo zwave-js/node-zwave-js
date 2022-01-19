@@ -73,7 +73,7 @@
 					"value": 1
 				},
 				{
-					"label": "Turning on the heating mode at room temperature - ½ ΔT, turning off at room temperature + ½ ΔT (default)",
+					"label": "Turn on at setpoint - ½ hysteresis, turn off at setpoint + ½ hysteresis",
 					"value": 2
 				}
 			]
