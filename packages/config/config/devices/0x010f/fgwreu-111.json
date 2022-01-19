@@ -335,7 +335,8 @@
 		{
 			"#": "65",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
-			"maxValue": 32400
+			"maxValue": 32400,
+			"defaultValue": 10
 		},
 		{
 			"#": "66",
