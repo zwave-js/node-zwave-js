@@ -15,20 +15,19 @@
 	},
 	"associations": {
 		"1": {
-			"label": "State changes",
+			"label": "State Changes",
 			"maxNodes": 10,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "External temperature sensor",
+			"label": "External Temperature Sensor",
 			"maxNodes": 1
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Relay mode",
-			"description": "Selects NO/NC modes",
+			"label": "Relay NO/NC Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -36,7 +35,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal OPEN (default)",
+					"label": "Normal OPEN",
 					"value": 0
 				},
 				{
@@ -80,8 +79,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Relay status before receiving data or in case of failure.",
-			"description": "No data from the standard temperature sensor for 30 seconds or external room temperature sensor for a specified time in parameter No.5.",
+			"label": "Default Relay Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -93,15 +91,15 @@
 					"value": 0
 				},
 				{
-					"label": "Relay ON (default)",
+					"label": "Relay ON",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Maximum data waiting time for external room temperature sensor, sec.",
-			"description": "After the specified time, the lack of data from the room sensor will be considered a failure.",
+			"label": "Maximum Data Waiting Time For External Temperature Sensor",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 30000,
@@ -110,8 +108,8 @@
 		},
 		{
 			"#": "6",
-			"label": "Minimal temperature, °С",
-			"description": "The user-set temperature cannot be lower than this value.",
+			"label": "Minimal Temperature",
+			"unit": "°С",
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
@@ -120,8 +118,8 @@
 		},
 		{
 			"#": "7",
-			"label": "Maximal temperature, °С",
-			"description": "The user-set temperature cannot be higher than this value.",
+			"label": "Maximal Temperature,
+			"unit": "°С",
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
@@ -130,8 +128,8 @@
 		},
 		{
 			"#": "8",
-			"label": "Time in Turbo mode, sec",
-			"description": "Turbo mode is used for drying floors after wet cleaning. Turbo mode will maintain the maximum temperature at a specified period of time, after that, the thermostat will switch to the user-installed operation mode.",
+			"label": "Time In Turbo Mode",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 1200,
@@ -140,8 +138,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Consider thermostat mode when turning on the Turbo mode",
-			"description": "This parameter determines whether the turbo mode is turned on when the thermostat is turned off.",
+			"label": "Consider Thermostat Mode When Turning On Turbo Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -149,7 +146,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Consider (default)",
+					"label": "Consider",
 					"value": 0
 				},
 				{
@@ -160,8 +157,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Thermostat temperature sensor type",
-			"description": "The DAT-101 thermostat is equipped with a high-precision DSA-111 temperature sensor. If your Z-Wave network configuration is more convenient to use a remote z-wave temperature sensor - you need to change this parameter.",
+			"label": "Thermostat Temperature Sensor Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -169,7 +165,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Stock temp sensor (default)",
+					"label": "Stock temp sensor",
 					"value": 0
 				},
 				{
@@ -184,7 +180,8 @@
 		},
 		{
 			"#": "11",
-			"label": "External temperature sensor poll period, sec",
+			"label": "External Temperature Sensor Poll Period",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
@@ -193,8 +190,8 @@
 		},
 		{
 			"#": "12",
-			"label": "The temperature change to send values to the 1st group of associations, °С",
-			"description": "The thermostat can send data to the controller and / or other Z-Wave network devices when the temperature specified in this parameter is changed. Install this option based on your network configuration to avoid overloads.",
+			"label": "The Temperature Change To Send Values To The 1st Group Of Associations,
+			"unit": "°С",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 16,
@@ -203,8 +200,8 @@
 		},
 		{
 			"#": "13",
-			"label": "Time interval to force data send, sec",
-			"description": "The thermostat can send data at certain intervals, for example, every 2 minutes. The value starts to be counted from the last successful data sending. ",
+			"label": "Time Interval To Force Data Transmission",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
@@ -212,7 +209,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Sending temperature to devices in the 1st group of associations after changing the relay state.",
+			"label": "Send Temperature To The 1st Group of Associations After Changing Relay State.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -220,7 +217,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send (default)",
+					"label": "Send",
 					"value": 0
 				},
 				{
@@ -231,7 +228,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Switching mode for Switch 1 (thermostat mode)",
+			"label": "Switch 1 Mode (Thermostat Mode)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -239,7 +236,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Monostable (default)",
+					"label": "Monostable",
 					"value": 0
 				},
 				{
@@ -258,7 +255,7 @@
 		},
 		{
 			"#": "16",
-			"label": "Switching mode for Switch 2 (Turbo mode)",
+			"label": "Switch 2 Mode (Turbo mode)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -266,7 +263,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Monostable (default)",
+					"label": "Monostable",
 					"value": 0
 				},
 				{
@@ -285,8 +282,8 @@
 		},
 		{
 			"#": "40",
-			"label": "Adjustment of the temperature sensor No.1",
-			"description": "The parameter works if sensor No.1 is a temperature sensor, in other cases the parameter is ignored.",
+			"label": "Adjustment of the Temperature Sensor No.1",
+			"unit": "°С",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
@@ -294,7 +291,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 (default)",
+					"label": "0",
 					"value": 0
 				},
 				{
@@ -342,7 +339,7 @@
 		{
 			"#": "41",
 			"label": "Adjustment of the temperature sensor No.2",
-			"description": "The parameter works if sensor No.2 is a temperature sensor, in other cases the parameter is ignored.",
+			"unit": "°С",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
@@ -350,7 +347,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0 (default)",
+					"label": "0",
 					"value": 0
 				},
 				{
