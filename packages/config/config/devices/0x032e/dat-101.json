@@ -47,8 +47,8 @@
 		},
 		{
 			"#": "2",
-			"label": "ΔT",
-			"description": "How much degrees should change the temperature to turn on / off the heating mode (hereinafter, ΔT), °С",
+			"label": "Hysteresis",
+			"unit": "°С",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
