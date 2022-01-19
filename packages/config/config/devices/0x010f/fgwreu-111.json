@@ -323,57 +323,25 @@
 		},
 		{
 			"#": "61",
-			"label": "Power Report Threshold",
-			"unit": "%",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
 			"defaultValue": 15
 		},
 		{
 			"#": "62",
-			"label": "Power Report Interval",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"label": "Power Reports: Interval",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"maxValue": 32400
 		},
 		{
 			"#": "65",
-			"label": "Energy Report Threshold",
-			"unit": "0.01kWh",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
-			"defaultValue": 10,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"maxValue": 32400
 		},
 		{
 			"#": "66",
-			"label": "Energy Report Interval",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"label": "Energy Reports: Interval",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"maxValue": 32400
 		},
 		{
 			"#": "150[0x01]",
