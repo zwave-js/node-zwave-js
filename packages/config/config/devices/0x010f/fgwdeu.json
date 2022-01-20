@@ -17,57 +17,41 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"paramInformation": [
 		{
-			"#": "0",
-			"label": "ON/OFF mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
 		{
-			"#": "1",
-			"label": "Remember device state",
-			"description": "Determines how the device will react in the event of power supply failure",
-			"valueSize": 1,
+			"#": "2",
+			"label": "Overload Threshold",
+			"description": "Turn off the controlled device in case of exceeding threshold.",
+			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
+			"maxValue": 5000,
+			"defaultValue": 3500,
+			"unit": "0.1 W",
 			"options": [
 				{
-					"label": "remains switched off after restoring power",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "restores remembered state after restoring power",
-					"value": 1
 				}
 			]
 		},
 		{
-			"#": "2",
-			"label": "Overload safety switch",
-			"description": "Turn off the controlled device in case of exceeding the defined power",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 5000,
-			"defaultValue": 3500
-		},
-		{
 			"#": "10",
-			"label": "LED frame – power limit",
-			"description": "Determines maximum active power.",
+			"label": "LED Indicator: Overload Threshold",
+			"description": "Indicator flashes violet in case of exceeding threshold.",
 			"valueSize": 4,
 			"minValue": 100,
 			"maxValue": 5000,
-			"defaultValue": 3500
+			"defaultValue": 3500,
+			"unit": "0.1 W"
 		},
 		{
 			"#": "11",
-			"label": "LED frame – colour when ON",
-			"description": "This parameter defines the LED colour when the device is ON.",
+			"label": "LED Indicator: Load On Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -75,7 +59,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED diabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -107,19 +91,18 @@
 					"value": 7
 				},
 				{
-					"label": "changes smoothly",
+					"label": "Smooth gradient based on measured power",
 					"value": 8
 				},
 				{
-					"label": "changes in steps",
+					"label": "Stepped gradient based on measured power",
 					"value": 9
 				}
 			]
 		},
 		{
 			"#": "12",
-			"label": "LED frame – colour when OFF",
-			"description": "This parameter defines the LED colour when the device is OFF.",
+			"label": "LED Indicator: Load Off Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -127,7 +110,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -162,186 +145,300 @@
 		},
 		{
 			"#": "13",
-			"label": "LED frame – brightness",
-			"description": "This parameter allows to adjust the LED frame brightness.",
+			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 102,
-			"defaultValue": 100
-		},
-		{
-			"#": "24",
-			"label": "Buttons orientation",
-			"description": "This parameter allows reversing the operation of the buttons.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"defaultValue": 100,
 			"options": [
 				{
-					"label": "default (1st button brightens, 2nd button dims)",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "reversed (1st button dims, 2nd button brightens)",
-					"value": 1
+					"label": "Proportional to set level",
+					"value": 101
+				},
+				{
+					"label": "Inversely proportial to set level",
+					"value": 102
 				}
 			]
 		},
 		{
-			"#": "30",
-			"label": "Alarm configuration - 1st slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "24",
+			"label": "Switch Inverted Orientation",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "30[0xff000000]",
+			"label": "Alarm Configuration: 1st Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
 			"defaultValue": 0
 		},
 		{
-			"#": "31",
-			"label": "Alarm configuration - 2nd slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "30[0x00ff0000]",
+			"label": "Alarm Configuration: 1st Slot: Notification Event",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"defaultValue": 0
 		},
 		{
-			"#": "32",
-			"label": "Alarm configuration - 3rd slot",
-			"description": "determines to which alarm frames and how the device should react",
+			"#": "30[0x00000003]",
+			"label": "Alarm Configuration: 1st Slot: Load Action",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				},
+				{
+					"label": "Flash",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "30[0x000000f0]",
+			"label": "Alarm Configuration: 1st Slot: LED Indicator",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Blink red",
+					"value": 1
+				},
+				{
+					"label": "Blink green",
+					"value": 2
+				},
+				{
+					"label": "Blink blue",
+					"value": 4
+				},
+				{
+					"label": "Disable LED",
+					"value": 8
+				},
+				{
+					"label": "Blink red-white-blue",
+					"value": 15
+				}
+			]
+		},
+		{
+			"#": "31[0xff000000]",
+			"label": "Alarm Configuration: 2nd Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"defaultValue": 5
+		},
+		{
+			"#": "31[0x00ff0000]",
+			"label": "Alarm Configuration: 2nd Slot: Notification Event",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"defaultValue": 255
+		},
+		{
+			"#": "31[0x00000003]",
+			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 2nd Slot: Load Action",
 			"defaultValue": 0
 		},
 		{
-			"#": "33",
-			"label": "Alarm configuration - 4th slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "31[0x000000f0]",
+			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 2nd Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
-			"#": "34",
-			"label": "Alarm configuration - 5th slot",
-			"description": "determines to which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "32[0xff000000]",
+			"label": "Alarm Configuration: 3rd Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"defaultValue": 1
+		},
+		{
+			"#": "32[0x00ff0000]",
+			"label": "Alarm Configuration: 3rd Slot: Notification Event",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"defaultValue": 255
+		},
+		{
+			"#": "32[0x00000003]",
+			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 3rd Slot: Load Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0x000000f0]",
+			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 3rd Slot: LED Indicator",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xff000000]",
+			"label": "Alarm Configuration: 4th Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"defaultValue": 2
+		},
+		{
+			"#": "33[0x00ff0000]",
+			"label": "Alarm Configuration: 4th Slot: Notification Event",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"defaultValue": 255
+		},
+		{
+			"#": "33[0x00000003]",
+			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 4th Slot: Load Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0x000000f0]",
+			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 4th Slot: LED Indicator",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xff000000]",
+			"label": "Alarm Configuration: 5th Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"defaultValue": 4
+		},
+		{
+			"#": "34[0x00ff0000]",
+			"label": "Alarm Configuration: 5th Slot: Notification Event",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"defaultValue": 255
+		},
+		{
+			"#": "34[0x00000003]",
+			"$import": "#paramInformation/30[0x00000003]",
+			"label": "Alarm Configuration: 5th Slot: Load Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0x000000f0]",
+			"$import": "#paramInformation/30[0x000000f0]",
+			"label": "Alarm Configuration: 5th Slot: LED Indicator",
 			"defaultValue": 0
 		},
 		{
 			"#": "35",
-			"label": "Alarm configuration – duration",
-			"description": "defines duration of alarm sequence",
+			"label": "Alarm: Duration",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 600
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Infinite",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "40[0x01]",
-			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "First Button: Send Scene on Single Press"
 		},
 		{
 			"#": "40[0x02]",
-			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "First Button: Send Scene on Double Press"
 		},
 		{
 			"#": "40[0x04]",
-			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "First Button: Send Scene on Triple Press"
 		},
 		{
 			"#": "40[0x08]",
-			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "First Button: Send Scene on Press and Release"
 		},
 		{
 			"#": "41[0x01]",
-			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Second Button: Send Scene on Single Press"
 		},
 		{
 			"#": "41[0x02]",
-			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Second Button: Send Scene on Double Press"
 		},
 		{
 			"#": "41[0x04]",
-			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Second Button: Send Scene on Triple Press"
 		},
 		{
 			"#": "41[0x08]",
-			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Second Button: Send Scene on Press and Release"
 		},
 		{
 			"#": "60",
-			"label": "Power reports – include self-consumption",
-			"description": "determines whether the power measurements should include self-consumption",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"label": "Power Report: Include Self-consumption",
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "61",
-			"label": "Power reports – on change",
-			"description": "defines minimal change to be reported",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
 			"defaultValue": 15
 		},
 		{
 			"#": "62",
-			"label": "Power reports – periodic",
-			"description": "defines reporting interval for measured power",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600,
-			"writeOnly": true
+			"label": "Power Reports: Interval",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"maxValue": 32400
 		},
 		{
 			"#": "65",
-			"label": "Energy reports – on change",
-			"description": "defines minimal change to be reported",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"maxValue": 32400,
 			"defaultValue": 10
 		},
 		{
 			"#": "66",
-			"label": "Energy reports – periodic",
-			"description": "defines reporting interval for measured energy",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"label": "Energy Reports: Interval",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"maxValue": 32400
 		},
 		{
 			"#": "150",
-			"label": "Minimum brightness level",
-			"description": "Minimum brightness level - initialised at calibration",
-			"valueSize": 1,
-			"minValue": 1,
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
 			"maxValue": 98,
 			"defaultValue": 1
 		},
 		{
 			"#": "151",
-			"label": "Maximum brightness level",
-			"description": "Maximum brightness level - initalised at calibration",
-			"valueSize": 1,
-			"minValue": 2,
-			"maxValue": 99,
-			"defaultValue": 99
+			"$import": "~/templates/master_template.json#maximum_dim_level_1-99",
+			"minValue": 2
 		},
 		{
 			"#": "152",
-			"label": "Incandescence level of compact fluorescent lamps",
+			"label": "Fluorescent Lamp: Startup Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -349,113 +446,154 @@
 		},
 		{
 			"#": "153",
-			"label": "Incandescence time of compact fluorescent lamps",
+			"label": "Fluorescent Lamp: Startup Time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "0.1 seconds"
 		},
 		{
 			"#": "154",
-			"label": "Automatic control – dimming step size",
-			"description": "defines the percentage value of dimming step",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"label": "Automatic Control: Dimming Step Size",
+			"$import": "~/templates/master_template.json#base_1-99_nounit"
 		},
 		{
 			"#": "155",
-			"label": "Automatic control – time of dimming step",
+			"label": "Automatic Control: Dimming Step Duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unit": "0.01 seconds"
 		},
 		{
 			"#": "156",
-			"label": "Manual control – dimming step size",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"label": "Manual Control: Dimming Step Size",
+			"$import": "~/templates/master_template.json#base_1-99_nounit"
 		},
 		{
 			"#": "157",
-			"label": "Manual control – time of dimming step",
+			"label": "Manual Control: Dimming Step Duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5
+			"defaultValue": 1,
+			"unit": "0.01 seconds"
 		},
 		{
 			"#": "158",
-			"label": "Auto-off functionality",
+			"label": "Auto-off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "159",
-			"label": "Force auto-calibration",
+			"label": "Force Calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Without FIBARO Bypass 2",
+					"value": 1
+				},
+				{
+					"label": "With FIBARO Bypass 2",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "160",
-			"label": "Auto-calibration status",
+			"label": "Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": true
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Uncalibrated or overridden",
+					"value": 0
+				},
+				{
+					"label": "Calibrated",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "161",
-			"label": "Burnt out bulb detection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0
+			"label": "Burnt Out Bulb Detection: Power Variation",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "162",
-			"label": "Delay of a burnt out bulb and overload detection",
+			"label": "Time Delay: Burnt Out Bulb and Overload Detection",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5
+			"defaultValue": 5,
+			"unit": "seconds"
 		},
 		{
 			"#": "163",
-			"label": "1st button ON value sent to association groups",
+			"label": "First Button ON Value Sent to Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"options": [
+				{
+					"label": "Current level",
+					"value": 254
+				}
+			]
 		},
 		{
 			"#": "164",
-			"label": "2nd button OFF value sent to association groups",
+			"label": "Second Button OFF Value Sent to Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Current level",
+					"value": 254
+				}
+			]
 		},
 		{
 			"#": "165",
-			"label": "Double click – set level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
+			"label": "Double Click: Set Level",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"defaultValue": 99
 		},
 		{
 			"#": "170",
-			"label": "Load control mode",
+			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -463,40 +601,70 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forced leading edge",
+					"label": "Force leading edge",
 					"value": 0
 				},
 				{
-					"label": "forced trailing edge",
+					"label": "Force trailing edge",
 					"value": 1
 				},
 				{
-					"label": "control mode selected automatically",
+					"label": "Auto-detect",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "171",
-			"label": "Load control mode recognized",
+			"$import": "~/templates/master_template.json#dimmer_type_lead_trail",
+			"label": "Detected Dimmer Mode",
+			"readOnly": true
+		},
+		{
+			"#": "172",
+			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": true
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dimmable",
+					"value": 0
+				},
+				{
+					"label": "Non-dimmable (dimming is disabled)",
+					"value": 1
+				},
+				{
+					"label": "Auto-detect",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "173",
-			"label": "Dimmability of the load (read only)",
+			"label": "Detected Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"readOnly": true
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Dimmable",
+					"value": 0
+				},
+				{
+					"label": "Non-dimmable",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "174",
-			"label": "Soft-start functionality",
+			"label": "Soft-start Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -504,22 +672,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no soft-start",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "short soft-start (0.1s)",
+					"label": "0.1 seconds",
 					"value": 1
 				},
 				{
-					"label": "long soft-start (0.5s)",
+					"label": "0.5 seconds",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "175",
-			"label": "Auto-calibration after power on",
+			"label": "Auto-calibration Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -527,26 +695,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "no auto-calibration after power on",
+					"label": "None",
 					"value": 0
 				},
 				{
-					"label": "Auto-calibration after each power on",
-					"value": 1
-				},
-				{
-					"label": "Auto-calibration after each LOAD ERROR",
+					"label": "Power on",
 					"value": 2
 				},
 				{
-					"label": "Auto-calibratie after each power on or LOAD ERROR",
+					"label": "Load error",
+					"value": 3
+				},
+				{
+					"label": "Power on and load error",
 					"value": 4
 				}
 			]
 		},
 		{
 			"#": "176",
-			"label": "Behaviour after OVERCURRENT or SURGE",
+			"label": "Behaviour After Overcurrent or Surge",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -554,26 +722,37 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "permanently disabled",
+					"label": "Disable load",
 					"value": 0
 				},
 				{
-					"label": "three attempts to turn on the load",
+					"label": "Three attempts to turn on the load",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "177",
-			"label": "Brightness level correction flickering",
+			"label": "Brightness Level Correction Duration for Flickering Loads",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unit": "seconds",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Automatic Correction",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "178",
-			"label": "Method of calculating the active power",
+			"label": "Active Power Calculation Method",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -581,26 +760,27 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "standard algorithm",
+					"label": "Standard algorithm",
 					"value": 0
 				},
 				{
-					"label": "approximation / calibration data",
+					"label": "Calibration data approximation",
 					"value": 1
 				},
 				{
-					"label": "approximation / control angle",
+					"label": "Control angle approximation",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "179",
-			"label": "Approximated power at max brightness",
+			"label": "Approximated Power at Maximum Brightness",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "W"
 		}
 	]
 }
