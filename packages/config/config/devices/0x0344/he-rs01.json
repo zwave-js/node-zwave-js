@@ -54,27 +54,27 @@
 		{
 			"#": "12",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay 1: Relay 1 load Power"
+			"label": "Relay 1: Load Power"
 		},
 		{
 			"#": "13",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay 2: Relay 1 load Power"
+			"label": "Relay 2: Load Power"
 		},
 		{
 			"#": "14",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay 3: Relay 1 load Power"
+			"label": "Relay 3: Load Power"
 		},
 		{
 			"#": "15",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay 4: Relay 1 load Power"
+			"label": "Relay 4: Load Power"
 		},
 		{
 			"#": "16",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay 5: Relay 1 load Power"
+			"label": "Relay 5: Load Power"
 		},
 		{
 			"#": "19",
