@@ -91,19 +91,26 @@
 			"#": "40",
 			"label": "Power reporting (Watts) on power change",
 			"unit": "%",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
 		{
 			"#": "42",
-			"label": "Power reporting (Watts) by time interval",
+			"label": "Power (W) Reporting Interal",
+			"description": "Allowable range: 60-32535",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 600
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "45",
