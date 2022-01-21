@@ -102,6 +102,7 @@
 		},
 		"6":{
 			"label": "Movement Duration",
+			"description": "How fast iblinds will close in seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
