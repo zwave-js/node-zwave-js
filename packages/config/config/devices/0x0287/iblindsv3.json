@@ -31,7 +31,8 @@
 			"valueSize": 1,
 			"minValue": 16,
 			"maxValue": 32,
-			"defaultValue": 22
+			"defaultValue": 22,
+			"unsigned": true
 		},
 		"2":{
 			"label": "Reverse Direction",
@@ -39,6 +40,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -53,7 +55,7 @@
 		},
 		"3":{
 			"label": "Send Reports",
-			"description": "Disabling Z-Wave Reports is useful for systems that poll iblinds immediately after sending a position command. Disable this if an immediate report is causing iblinds motor to function improperly.",
+			"description": "Used to disable Z-Wave Reports. This is useful for systems that poll iblinds immediately after sending a position command. Disable this if an immediate report is causing iblinds motor to function improperly.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,11 +63,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "Enabled",
 					"value": 0
 				},
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 1
 				}
 			]
@@ -79,20 +81,21 @@
 			"defaultValue": 50
 		},
 		"5": {
-			"label": "Reset Button",
-			"description": "Disabling the reset button on the motor prevents it from accidentally being pressed",
+			"label": "Reset Button Disable",
+			"description": "Will disable the reset button on the motor, preventing it from accidentally being pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "No",
 					"value": 0
 				},
 				{
-					"label": "Disable",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -103,6 +106,7 @@
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
+			"unsigned": true,
 			"unit": "seconds"
 		},
 		"7":{
