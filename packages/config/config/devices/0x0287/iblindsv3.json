@@ -7,6 +7,10 @@
 		{
 			"productType": "0x0004",
 			"productId": "0x0071"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0072"
 		}
 	],
 	"firmwareVersion": {
@@ -21,22 +25,20 @@
 		}
 	},
 	"paramInformation": {
-		"1": {
+		"1":{
 			"label": "Close Interval",
-			"description": "Auto Calibration Tightness. Lower value = tighter, Higher value = looser (MUST BE RECALIBRATED). Range: 16-32",
+			"description": "Auto Calibration Tightness. Lower value = tighter, Higher value = looser (MUST BE RECALIBRATED).",
 			"valueSize": 1,
 			"minValue": 16,
 			"maxValue": 32,
-			"defaultValue": 22,
-			"unsigned": true
+			"defaultValue": 22
 		},
-		"2": {
+		"2":{
 			"label": "Reverse Direction",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -49,63 +51,123 @@
 				}
 			]
 		},
-		"3": {
+		"3":{
 			"label": "Send Reports",
-			"description": "Used to disable Z-Wave Report. This is useful for systems that poll iblinds immediately after sending a position command. Disable if this an immediate report is causing iblinds motor to function improperly.",
+			"description": "Disabling Z-Wave Reports is useful for systems that poll iblinds immediately after sending a position command. Disable this if an immediate report is causing iblinds motor to function improperly.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		},
-		"4": {
+		"4":{
 			"label": "Default ON Value",
 			"description": "Value that iblinds will open to by default",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"unsigned": true
+			"maxValue": 99,
+			"defaultValue": 50
 		},
-		"5": {
-			"label": "Reset Button Disable",
-			"description": "Will disable the reset button on the motor, preventing it from accidentally being pressed",
+		"5":{
+			"#": "5",
+			"label": "Reset Button",
+			"description": "Disabling the reset button on the motor prevents it from accidentally being pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		},
-		"6": {
-			"label": "Speed",
-			"description": "How fast iblinds will close in seconds",
+		"6":{
+			"label": "Movement Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
-			"unsigned": true
+			"unit": "seconds"
+		},
+		"7":{
+			"$if": "firmwareVersion >= 3.6",
+			"label": "Remote Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"writeOnly": true,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Start calibration",
+					"value": 1
+				}
+			]
+		},
+		"8":{
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Minimum Tilt Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 0,
+			"allowManualEntry": true,
+			"writeOnly": true,
+			"unit":"Tilt %"
+		},
+		"9":{
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Maximum Tilt Level",
+			"valueSize": 1,
+			"minValue": 75,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"allowManualEntry": true,
+			"writeOnly": true,
+			"unit":"Tilt %"
+		},
+		"10":{
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Remap 99",
+			"description":"Remap ON to 0x63 instead of 0xFF. Use if ON sends tilt all the way up instead of 50% or default ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"writeOnly": true,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Activate Remapping",
+					"value": 1
+				}
+			]
 		}
 	}
 }
