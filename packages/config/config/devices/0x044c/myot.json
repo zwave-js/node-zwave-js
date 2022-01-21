@@ -69,10 +69,8 @@
 
 	],
 	"metadata": {
-		"wakeup": "NA",
 		"inclusion": "By pressing the FUNCTIONS button for 8 seconds",
 		"exclusion": "By pressing the FUNCTIONS button for 8 seconds",
-		"reset": "NA",
 		"manual": "https://www.myvirtuosohome.com/en/downloads/send/4-manuals/209-z-wave-interface-actuator-manual-opentherm-boilers.html"
 	}
 }
