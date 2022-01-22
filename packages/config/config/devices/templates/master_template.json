@@ -57,7 +57,7 @@
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
-		"defaultValue": 0,
+		"defaultValue": 255,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
