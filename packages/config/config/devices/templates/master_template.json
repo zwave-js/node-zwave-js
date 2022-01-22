@@ -53,6 +53,24 @@
 			}
 		]
 	},
+	"base_enable_disable_255_inverted": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 255
+			}
+		]
+	},
 	"base_0-1_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
