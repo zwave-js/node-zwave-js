@@ -69,7 +69,7 @@
 				},
 				{
 					"label": "255 - ALL ON active, ALL OFF active",
-					"value": 2
+					"value": 255
 				}
 			]
 		},
