@@ -37,12 +37,7 @@ async function publishPr() {
 		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
 
 		// Configure npm login
-		await exec.exec("yarn", [
-			"config",
-			"set",
-			`npmRegistries["//registry.npmjs.org/"].npmAuthToken`,
-			npmToken,
-		]);
+		await exec.exec("yarn", ["config", "set", "npmAuthToken", npmToken]);
 
 		// Figure out the next version
 		newVersion = `${semver.inc(
@@ -53,7 +48,7 @@ async function publishPr() {
 		// Bump versions
 		await exec.exec(
 			"yarn",
-			`for-changed version ${newVersion} --deferred`.split(" "),
+			`workspaces foreach version ${newVersion} --deferred`.split(" "),
 		);
 		await exec.exec("yarn", ["version", "apply", "--all"]);
 
