@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Rent Café",
+	"manufacturerId": "0x0450",
+	"label": "H3PS-WC1",
+	"description": "HomeIQ Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4299
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Using the console application you can execute the “Network-Reset” command to factory reset the Z-Wave controller",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4299/Yardi_Hub_Manual_Console.pdf"
+	}
+}

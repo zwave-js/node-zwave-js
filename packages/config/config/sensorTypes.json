@@ -45,16 +45,7 @@
 	},
 	"0x05": {
 		"label": "Humidity",
-		"scales": {
-			"0x00": {
-				"label": "Percentage value",
-				"unit": "%"
-			},
-			"0x01": {
-				"label": "Absolute humidity",
-				"unit": "g/m³"
-			}
-		}
+		"scales": "$SCALES:humidity"
 	},
 	"0x06": {
 		"label": "Velocity",

@@ -79,6 +79,15 @@
 		"defaultValue": 5,
 		"unsigned": true
 	},
+	"wrong_code_limit_5": {
+		"label": "Wrong Code Limit",
+		"description": "Number of wrong attempts before the lockout a triggered",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 5,
+		"unsigned": true
+	},
 	"wrong_code_limit_7": {
 		"label": "Wrong Code Limit",
 		"description": "Number of wrong attempts before the lockout a triggered",
@@ -90,6 +99,12 @@
 	},
 	"wrong_code_lockout": {
 		"$import": "~/templates/master_template.json#base_0-180_nounit",
+		"label": "Wrong Code Lockout Time",
+		"unit": "seconds",
+		"defaultValue": 60
+	},
+	"wrong_code_lockout_0_to_127": {
+		"$import": "~/templates/master_template.json#base_0-127_nounit",
 		"label": "Wrong Code Lockout Time",
 		"unit": "seconds",
 		"defaultValue": 60

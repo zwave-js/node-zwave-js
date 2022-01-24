@@ -1,4 +1,4 @@
-import { discreteBinarySearch, throttle } from "./misc";
+import { cloneDeep, discreteBinarySearch, throttle } from "./misc";
 
 describe("throttle()", () => {
 	const originalDateNow = Date.now;
@@ -158,5 +158,62 @@ describe("discreteBinarySearch()", () => {
 				(i) => values[i] === 0,
 			),
 		).toBe(undefined);
+	});
+});
+
+describe("cloneDeep()", () => {
+	it("works with primitives", () => {
+		expect(cloneDeep(1)).toBe(1);
+		expect(cloneDeep("foo")).toBe("foo");
+		expect(cloneDeep(true)).toBe(true);
+	});
+
+	it("works with arrays", () => {
+		expect(cloneDeep([1, 2, 3])).toEqual([1, 2, 3]);
+		expect(cloneDeep([1, 2, 3])).not.toBe([1, 2, 3]);
+	});
+
+	it("works with objects", () => {
+		expect(cloneDeep({ a: 1, b: 2, c: 3 })).toEqual({ a: 1, b: 2, c: 3 });
+		expect(cloneDeep({ a: 1, b: 2, c: 3 })).not.toBe({ a: 1, b: 2, c: 3 });
+	});
+
+	it("works with nested objects", () => {
+		const source = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
+		const target = cloneDeep(source);
+
+		expect(target).toEqual(source);
+		expect(target).not.toBe(source);
+		expect(target.b).not.toBe(source.b);
+		expect(target.e).not.toBe(source.e);
+	});
+
+	it("works with nested arrays", () => {
+		const source = [1, [2, 3], 4];
+		const target = cloneDeep(source);
+
+		expect(target).toEqual(source);
+		expect(target).not.toBe(source);
+		expect(target[1]).not.toBe(source[1]);
+	});
+
+	it("works with objects nested in arrays", () => {
+		const source = [{ a: 1 }, { b: 2 }, { c: 3 }];
+		const target = cloneDeep(source);
+
+		expect(target).toEqual(source);
+		expect(target).not.toBe(source);
+		expect(target[0]).not.toBe(source[0]);
+		expect(target[1]).not.toBe(source[1]);
+		expect(target[2]).not.toBe(source[2]);
+	});
+
+	it("works with arrays nested in objects", () => {
+		const source = { a: [1, 2, 3] };
+		const target = cloneDeep(source);
+
+		expect(target).toEqual(source);
+		expect(target).not.toBe(source);
+		expect(target.a).not.toBe(source.a);
 	});
 });

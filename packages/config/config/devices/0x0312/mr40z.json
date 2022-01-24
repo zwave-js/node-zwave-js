@@ -1,0 +1,55 @@
+{
+	"manufacturer": "Minoston",
+	"manufacturerId": "0x0312",
+	"label": "MR40Z",
+	"description": "S2 Remote Control Switch",
+	"devices": [
+		{
+			"productType": "0x0924",
+			"productId": "0xd001",
+			"zwaveAllianceId": 4246
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "On at 100% brightness",
+					"value": 1
+				},
+				{
+					"label": "Always on - color per parameter 2",
+					"value": 2
+				},
+				{
+					"label": "Always on - color per parameter 3",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color_upper"
+		},
+		{
+			"#": "3",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color_lower"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Tap-tap-tap’and’hold to reset, LED indicator will blink red 5 times to confirm successful reset\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4246/MR40Z-manual-20210630.pdf"
+	}
+}

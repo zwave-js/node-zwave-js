@@ -302,7 +302,14 @@ export class AssociationCC extends CommandClass {
 		return (
 			this.getValueDB().getValue(
 				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ?? 0
+			) ??
+			// If the information is not available, fall back to the configuration file if possible
+			// This can happen on some legacy devices which have "hidden" association groups
+			this.getNodeUnsafe()?.deviceConfig?.getAssociationConfigForEndpoint(
+				this.endpointIndex,
+				groupId,
+			)?.maxNodes ??
+			0
 		);
 	}
 

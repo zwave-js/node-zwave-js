@@ -1,5 +1,13 @@
-import { MessageRecord, stripUndefined } from "@zwave-js/core";
+import {
+	MessageRecord,
+	ProtocolDataRate,
+	stripUndefined,
+} from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { AssignReturnRouteRequestTransmitReport } from "./AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequestTransmitReport } from "./AssignSUCReturnRouteMessages";
+import { DeleteReturnRouteRequestTransmitReport } from "./DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequestTransmitReport } from "./DeleteSUCReturnRouteMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
@@ -25,6 +33,14 @@ export type SendDataTransmitReport =
 	| SendDataBridgeRequestTransmitReport
 	| SendDataMulticastBridgeRequestTransmitReport;
 
+/** All message classes that are a callback with a transmit report */
+export type TransmitReport =
+	| SendDataTransmitReport
+	| AssignReturnRouteRequestTransmitReport
+	| AssignSUCReturnRouteRequestTransmitReport
+	| DeleteReturnRouteRequestTransmitReport
+	| DeleteSUCReturnRouteRequestTransmitReport;
+
 export enum TransmitOptions {
 	NotSet = 0,
 
@@ -44,13 +60,6 @@ export enum TransmitStatus {
 	Fail = 0x02, // Transmission failed
 	NotIdle = 0x03, // Transmission failed, network busy
 	NoRoute = 0x04, // Transmission complete, no return route
-}
-
-export enum ProtocolDataRate {
-	ZWave_9k6 = 0x01,
-	ZWave_40k = 0x02,
-	ZWave_100k = 0x03,
-	LongRange_100k = 0x04,
 }
 
 export function protocolDataRateToString(rate: ProtocolDataRate): string {
@@ -330,6 +339,17 @@ export function isSendDataTransmitReport(
 		msg instanceof SendDataMulticastRequestTransmitReport ||
 		msg instanceof SendDataBridgeRequestTransmitReport ||
 		msg instanceof SendDataMulticastBridgeRequestTransmitReport
+	);
+}
+
+export function isTransmitReport(msg: unknown): msg is TransmitReport {
+	if (!msg) return false;
+	return (
+		isSendDataTransmitReport(msg) ||
+		msg instanceof AssignReturnRouteRequestTransmitReport ||
+		msg instanceof AssignSUCReturnRouteRequestTransmitReport ||
+		msg instanceof DeleteReturnRouteRequestTransmitReport ||
+		msg instanceof DeleteSUCReturnRouteRequestTransmitReport
 	);
 }
 

@@ -58,6 +58,17 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
+	/** The given NVM version/format is unsupported */
+	NVM_NotSupported = 280,
+	/** Could not parse the JSON representation of an NVM due to invalid data */
+	NVM_InvalidJSON,
+	/** A required NVM3 object was not found while deserializing the NVM */
+	NVM_ObjectNotFound,
+	/** The parsed NVM or NVM content has an invalid format */
+	NVM_InvalidFormat,
+	/** Not enough space in the NVM */
+	NVM_NoSpace,
+
 	CC_Invalid = 300,
 	CC_NoNodeID,
 	CC_NotSupported,

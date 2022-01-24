@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Vesta",
+	"manufacturer": "Viewqwest Vesta",
 	"manufacturerId": "0x0367",
 	"label": "SVHSZWB1",
 	"description": "Vesta Shield",
@@ -7,17 +7,24 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": 4050
+			"zwaveAllianceId": 4312
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
 	"metadata": {
-		"inclusion": "Steps for Performing Classic device inclusion:\n\nStep 1: Have the device to be added ready and ensure it has been reset\n\nStep 2: Go to MENU --> DEVICE SETUP --> ADD DEVICE\n\nStep 3: Press the SCAN button\n\nStep 4: Press the ACTION button on the device to be added\n\nStep 5: Enter Partial DSK String if adding o S2 Secure mode and Submit\n\nStep 6: For S0 and Unsecure devices press the ACTION button and add without DSK\n\nStep 7: Choose the device from the list of Available Devices and Click ADD. The device is added and can be renamed",
-		"exclusion": "Step 1: Go to MENU --> DEVICE SETUP --> REMOVE DEVICE\nStep 2: Click CONFIRM on the pop-up message\nStep 3: Make sure you have the device with you and press the REMOVE button and then immediately press the action button on your device\nStep 4: The device will be removed from the z-wave network and from Vesta. This may take up to 60 seconds. Once the device is removed it will no longer be visible in the Device List",
-		"reset": "Factory Reset: \n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\n\nFactory reset can be performed in 2 ways:\n\n1] Hardware Factory Reset: To reset the hub back to its factory default state, press the reset button (next to the power cycle button) continuously for up to 5 seconds. You will hear a voice prompt to say the factory reset process has started. Then please allow up to 5 minutes for the whole reset process to complete. Once the hub has been reset, you will be notified by another voice prompt at the end to indicate that the reset process has been complete.\n\n2] Factory Reset through APP UI:\nStep 1: Go to MENU --> SETTINGS --> FACTORY RESET\nStep 2: Press PROCEED in the reset confirmation dialog box\nStep 3: Wait for 4 minutes for the reset process to be complete",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4050/VESTA_USER_GUIDE_v0.7.pdf"
+		"inclusion": "Steps for Performing Classic device inclusion:\n\nStep 1: Have the device to be added ready and ensure it has been reset\nStep 2: Go to MENU --> DEVICE SETUP --> ADD DEVICE\nStep 3: Press SCAN button\nStep 4: Press the Action button on the device to be added \nStep 5: Enter Partial DSK String if adding on S2 Secure mode and Submit\nStep 6: For S0 and Unsecure devices press the ACTION button and add without DSK \nStep 7: Choose the device from the list of Available Devices and Click ADD.\nThe device is added and can be renamed",
+		"exclusion": "Steps for performing Classic device exclusion:\n\nStep 1: Go to MENU --> DEVICE SETUP --> REMOVE DEVICE\nStep 2: Click CONFIRM on the pop up message \nStep 3: Make sure you have the device with you and press the REMOVE button and then immediately press the action button on your device\nStep 4: The device will be removed from the Z-Wave network and from Vesta. This may take up to 60 secs.\nOnce the device is removed it will no longer be visible in the device list",
+		"reset": "Factory Reset:\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\nFactory reset can be performed in 2 ways:\n1] Hardware Factory Reset: To reset the hub back to its factory default state, press the reset button (next to power cycle button) continuously for up to\n5 seconds. You will hear a voice prompt to say the factory reset process has started. Then please allow up to 5 minutes for the whole reset process to complete.\nOnce the hub has been reset, you will be notified by another voice prompt at the end to indicate that the reset process has been completed.\n2] Factory Reset through App: \nStep 1: Go to MENU --> SETTINGS --> FACTORY RESET\nStep 2: Press PROCEED in the reset confirmtion dialog box \nStep 3: Wait for 4 minutes for the reset process to be completed",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4312/VESTA_USER_GUIDE_v0.7.pdf"
 	}
 }

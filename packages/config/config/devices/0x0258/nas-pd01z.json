@@ -60,7 +60,7 @@
 		},
 		{
 			"#": "10",
-			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold"
+			"$import": "templates/shenzhen_neo_template.json#blink_on_motion"
 		},
 		{
 			"#": "99",

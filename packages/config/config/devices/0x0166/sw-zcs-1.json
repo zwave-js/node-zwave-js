@@ -54,5 +54,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// The device only sends Binary Switch Reports as broadcast (not routed) and Basic Sets
+		"enableBasicSetMapping": true
+	}
 }

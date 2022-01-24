@@ -1,0 +1,133 @@
+{
+	"manufacturer": "Schlage",
+	"manufacturerId": "0x003b",
+	"label": "JFE109",
+	"description": "Keypad Lever",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x6109",
+			"zwaveAllianceId": 4136
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "15",
+			"label": "Auto Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "User Code PIN Length",
+			"valueSize": 1,
+			"unit": "digits",
+			"minValue": 4,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Beeper",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Vacation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Lock & Leave",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "User Slot Status",
+			"description": "This value represents a bitmask with 30 bits. Each bit represents a user slot. A value of 1 means that the slot is occupied.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1073741823,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		}
+	],
+	"metadata": {
+		"inclusion": "One-button Add lock to Z-Wave Network (Inclusion) 1. Place your home automation system or panel into the “Add” or Inclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). 2. Remove the battery cover of the deadbolt. 3. Press then release the button on the PCB. 4. An LED will flash amber indicating the “Add” or Inclusion process is in progress. • If the Security Scheme is Security 2 (S2), verify the DSK of the lock at the Z-Wave Controller. The PIN Code portion of the Z-Wave DSK will be needed. 5. When a green LED turns ON, the “Add” or Inclusion has completed successfully. 6. If a red LED turns ON, try repeating steps 1-3 Interactive Instruction for Add https://instructions.allegion.com/instr/86/2543",
+		"exclusion": "One-button Remove lock from Z-Wave Network (Exclusion) 1. Place your home automation system or panel into the “Remove” or Exclusion Mode (Refer to the respective documentation for that specific home automation system or panel device for details). 2. Remove the battery cover of the deadbolt. 3. Press then release the button on the PCB. 4. An LED will flash amber indicating the “Remove” or Exclusion process is in progress. 5. When a green LED flashes 3 times, the “Remove” or Exclusion process is completed successfully. 6. If a red LED turns ON, try repeating steps 1-3 Interactive Instruction for Remove https://instructions.allegion.com/instr/86/2581",
+		"reset": "1. Press and hold the enrollment button. The led will light solid amber. 2. After about 8 seconds of holding the button, the amber light will turn off. Release the button. Successful FDR is indicated by 3 long green blinks and 3 long beeps. 3. You must enter a valid user code. Lock will enter auto-handing routine, locking and unlocking several times. Auto-handing is complete when lock movement stops",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4136/J-Series%20UG-e.pdf"
+	}
+}

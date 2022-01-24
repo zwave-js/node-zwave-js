@@ -11,17 +11,21 @@ import {
 	CommandClasses,
 	CommandClassInfo,
 	CRC16_CCITT,
+	DataRate,
 	dskFromString,
 	dskToString,
+	FLiRS,
 	getCCName,
 	getNodeMetaValueID,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
 	MetadataUpdatedArgs,
+	NodeType,
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
+	ProtocolVersion,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -176,8 +180,6 @@ import {
 	RequestNodeInfoResponse,
 } from "./RequestNodeInfoMessages";
 import type {
-	DataRate,
-	FLiRS,
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
 	RefreshInfoOptions,
@@ -187,7 +189,7 @@ import type {
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
 } from "./Types";
-import { InterviewStage, NodeStatus, NodeType, ProtocolVersion } from "./Types";
+import { InterviewStage, NodeStatus } from "./Types";
 
 export interface ZWaveNode
 	extends TypedEventEmitter<
@@ -462,6 +464,22 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 */
 	public markAsAwake(): void {
 		this.statusMachine.send("AWAKE");
+	}
+
+	/** Returns a promise that resolves when the node wakes up the next time or immediately if the node is already awake. */
+	public waitForWakeup(): Promise<void> {
+		if (!this.canSleep || !this.supportsCC(CommandClasses["Wake Up"])) {
+			throw new ZWaveError(
+				`Node ${this.id} does not support wakeup!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (this._status === NodeStatus.Awake) {
+			return Promise.resolve();
+		}
+
+		return new Promise((resolve) => {
+			this.once("wake up", () => resolve());
+		});
 	}
 
 	// The node is only ready when the interview has been completed
@@ -1206,7 +1224,16 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		// directly via the serial API
 		if (this.isControllerNode()) return;
 
-		const { resetSecurityClasses = false } = options;
+		const { resetSecurityClasses = false, waitForWakeup = true } = options;
+		// Unless desired, don't forget the information about sleeping nodes immediately, so they continue to function
+		if (
+			waitForWakeup &&
+			this.canSleep &&
+			this.supportsCC(CommandClasses["Wake Up"])
+		) {
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			await this.waitForWakeup().catch(() => {});
+		}
 
 		// preserve the node name and location, since they might not be stored on the node
 		const name = this.name;
@@ -3139,6 +3166,7 @@ protocol version:      ${this._protocolVersion}`;
 		// Check if this update is possible
 		const meta = await api.getMetaData();
 		if (!meta) {
+			this.resetFirmwareUpdateStatus();
 			throw new ZWaveError(
 				`Failed to start the update: The node did not respond in time!`,
 				ZWaveErrorCodes.Controller_NodeTimeout,
@@ -3147,6 +3175,7 @@ protocol version:      ${this._protocolVersion}`;
 
 		if (target === 0) {
 			if (!meta.firmwareUpgradable) {
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The Z-Wave chip firmware is not upgradable!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
@@ -3154,11 +3183,13 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		} else {
 			if (version < 3) {
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The node does not support upgrading a different firmware target than 0!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
 				);
 			} else if (meta.additionalFirmwareIDs[target - 1] == undefined) {
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} not found on this node!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_TargetNotFound,
@@ -3202,36 +3233,43 @@ protocol version:      ${this._protocolVersion}`;
 		});
 		switch (status) {
 			case FirmwareUpdateRequestStatus.Error_AuthenticationExpected:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A manual authentication event (e.g. button push) was expected!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_BatteryLow:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The battery level is too low!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_FirmwareUpgradeInProgress:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: A firmware upgrade is already in progress!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_Busy,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidManufacturerOrFirmwareID:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid manufacturer or firmware id!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_InvalidHardwareVersion:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Invalid hardware version!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
 				);
 			case FirmwareUpdateRequestStatus.Error_NotUpgradable:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: Firmware target #${target} is not upgradable!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_NotUpgradable,
 				);
 			case FirmwareUpdateRequestStatus.Error_FragmentSizeTooLarge:
+				this.resetFirmwareUpdateStatus();
 				throw new ZWaveError(
 					`Failed to start the update: The chosen fragment size is too large!`,
 					ZWaveErrorCodes.FirmwareUpdateCC_FailedToStart,
@@ -3288,8 +3326,7 @@ protocol version:      ${this._protocolVersion}`;
 			});
 
 			// Clean up
-			this._firmwareUpdateStatus = undefined;
-			this.keepAwake = false;
+			this.resetFirmwareUpdateStatus();
 		} catch (e) {
 			if (
 				isZWaveError(e) &&
@@ -3471,8 +3508,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._firmwareUpdateStatus = undefined;
-		this.keepAwake = false;
+		this.resetFirmwareUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3502,8 +3538,7 @@ protocol version:      ${this._protocolVersion}`;
 		});
 
 		// clean up
-		this._firmwareUpdateStatus = undefined;
-		this.keepAwake = false;
+		this.resetFirmwareUpdateStatus();
 
 		// Notify listeners
 		this.emit(
@@ -3538,8 +3573,7 @@ protocol version:      ${this._protocolVersion}`;
 					"warn",
 				);
 				// clean up
-				this._firmwareUpdateStatus = undefined;
-				this.keepAwake = false;
+				this.resetFirmwareUpdateStatus();
 
 				// Notify listeners
 				this.emit(
@@ -3550,6 +3584,11 @@ protocol version:      ${this._protocolVersion}`;
 			}
 			throw e;
 		}
+	}
+
+	private resetFirmwareUpdateStatus(): void {
+		this._firmwareUpdateStatus = undefined;
+		this.keepAwake = false;
 	}
 
 	private recentEntryControlNotificationSequenceNumbers: number[] = [];

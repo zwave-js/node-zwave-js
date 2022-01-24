@@ -1,0 +1,113 @@
+{
+	"manufacturer": "Heatit",
+	"manufacturerId": "0x019b",
+	"label": "Z-PH WALL CONTROLLER",
+	"description": "Z-Push Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x2403",
+			"zwaveAllianceId": 4028
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Double/Triple Rocker First Button",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Single Rocker, Triple Rocker Middle Button",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Double/Triple Rocker Last Button",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Button Reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Basic Set, Multilevel Switch",
+					"value": 1
+				},
+				{
+					"label": "All",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "LED Configuration",
+			"description": "Disabling this does not turn of factory reset/inclusion indication.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Installed Rocker",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single Rocker",
+					"value": 1
+				},
+				{
+					"label": "Double Rocker",
+					"value": 2
+				},
+				{
+					"label": "Triple Rocker",
+					"value": 3
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added to the network if the primary controller is in add mode. \n\nThere are two ways to add the device to a Z-Wave network.\n\nMethod 1: Standard (Manual)\nInitiate the learning mode in the controller.\nPress any UP button 6 times within 3 seconds. \n\nWhen the add mode has started, the LED corresponding to the button you pressed will blink green. The device will indicate ”Success” by emitting a green light for 3 seconds. \n\nMethod 2: SmartStart (Automatic)\nSmartStart-enabled products may be added to a Z-Wave network by scanning the Z-Wave QR-Code on the product if your primary controller supports SmartStart inclusion. No further action is required and the SmartStart product will be added automatically after being powered on within range of the primary controller.",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. \nWhen the device is removed from the network, it will NOT revert to factory settings.",
+		"reset": "To factory reset the device, remove the battery from the device. Press and hold any button on the device and repower the device. The LEDs will start blinking 3 times before lighting up in green. When the green LED is on, you can release the button. The device will issue a Device Reset Locally Notification Command to notify that the device will be reset to default. When preforming a factory reset the device will lose its Node ID from the gateway and reset its Home ID.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4028/Manual_Heatit%20Z-Push%20Wall%20Controller_ENG.pdf"
+	}
+}

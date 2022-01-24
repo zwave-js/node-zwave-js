@@ -1,0 +1,27 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "HC3L-001",
+	"description": "Home Center 3 Lite",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x1000",
+			"zwaveAllianceId": 4130
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4130/YH-HC3-HC3L-ZW-1.1.pdf"
+	}
+}

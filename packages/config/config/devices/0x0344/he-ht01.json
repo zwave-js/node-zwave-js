@@ -16,70 +16,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Frequency Region",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "EU (868.4 MHz, 869.85 MHz)",
-					"value": 0
-				},
-				{
-					"label": "US (908.4 MHz, 916.0 MHz)",
-					"value": 1
-				},
-				{
-					"label": "AU (919.8 MHz, 921.4 MHz)",
-					"value": 2
-				},
-				{
-					"label": "HO (919.8 MHz)",
-					"value": 3
-				},
-				{
-					"label": "In (865.2 MHz)",
-					"value": 4
-				},
-				{
-					"label": "IL (916.0 MHz)",
-					"value": 5
-				},
-				{
-					"label": "RU (869.0 MHz)",
-					"value": 6
-				},
-				{
-					"label": "Cn (868.4 MHz)",
-					"value": 7
-				},
-				{
-					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
-					"value": 8
-				},
-				{
-					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
-					"value": 9
-				}
-			]
+			"$import": "templates/heltun_template.json#frequency_region"
 		},
 		{
 			"#": "3",
-			"label": "Hardware and Software Versions",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"readOnly": true
+			"$import": "templates/heltun_template.json#hw_sw_ver"
 		},
 		{
 			"#": "4",
-			"label": "Energy Consumption",
-			"unit": "kW",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"readOnly": true
+			"$import": "templates/heltun_template.json#energy_consumption"
 		},
 		{
 			"#": "5",
@@ -100,22 +45,8 @@
 		},
 		{
 			"#": "7",
-			"label": "Relay Output Mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally Open",
-					"value": 0
-				},
-				{
-					"label": "Normally Closed",
-					"value": 1
-				}
-			]
+			"$import": "templates/heltun_template.json#relay_output_mode",
+			"label": "Relay Output Mode"
 		},
 		{
 			"#": "8",
@@ -183,9 +114,7 @@
 			"#": "10",
 			"label": "Floor Sensor Resistance",
 			"unit": "kΩ",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"defaultValue": 10
 		},
 		{
@@ -265,21 +194,13 @@
 		},
 		{
 			"#": "16",
-			"label": "Floor Temperature Calibration",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": -100,
-			"maxValue": 100,
-			"defaultValue": 0
+			"$import": "templates/heltun_template.json#temp_sensor_calibration",
+			"label": "Floor Temperature Calibration"
 		},
 		{
 			"#": "17",
-			"label": "Air Temperature Calibration",
-			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": -100,
-			"maxValue": 100,
-			"defaultValue": 0
+			"$import": "templates/heltun_template.json#temp_sensor_calibration",
+			"label": "Air Temperature Calibration"
 		},
 		{
 			"#": "18",
@@ -292,22 +213,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Time Correction by Controller",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/heltun_template.json#controller_time_correction"
 		},
 		{
 			"#": "20",
@@ -330,51 +236,11 @@
 		},
 		{
 			"#": "21",
-			"label": "Week Day Override",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Monday",
-					"value": 1
-				},
-				{
-					"label": "Tuesday",
-					"value": 2
-				},
-				{
-					"label": "Wednesday",
-					"value": 3
-				},
-				{
-					"label": "Thursday",
-					"value": 4
-				},
-				{
-					"label": "Friday",
-					"value": 5
-				},
-				{
-					"label": "Saturday",
-					"value": 6
-				},
-				{
-					"label": "Sunday",
-					"value": 7
-				}
-			]
+			"$import": "templates/heltun_template.json#weekday_override"
 		},
 		{
 			"#": "22",
-			"label": "Time Override",
-			"unit": "HHMM",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2359,
-			"defaultValue": 0
+			"$import": "templates/heltun_template.json#time_override"
 		},
 		{
 			"#": "23",
@@ -433,6 +299,30 @@
 				{
 					"label": "MAN",
 					"value": 6
+				}
+			]
+		},
+		{
+			"#": "40",
+			"$if": "firmwareVersion >= 2.4",
+			"label": "Child Lock Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All Locked",
+					"value": 1
+				},
+				{
+					"label": "Set Point Unlocked",
+					"value": 2
+				},
+				{
+					"label": "Set Point and Mode Unlocked",
+					"value": 3
 				}
 			]
 		},
@@ -727,11 +617,7 @@
 		{
 			"#": "141",
 			"label": "Energy Consumption Report Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 120,
-			"defaultValue": 10
+			"$import": "templates/heltun_template.json#report_interval"
 		},
 		{
 			"#": "142",
@@ -745,19 +631,13 @@
 		{
 			"#": "143",
 			"label": "Sensors Consecutive Reporting Interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 120,
-			"defaultValue": 10
+			"$import": "templates/heltun_template.json#report_interval"
 		},
 		{
 			"#": "144",
 			"label": "Air & Floor Temperature Sensors Report Threshold",
 			"unit": "0.1 °C",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"defaultValue": 2
 		},
 		{
@@ -773,10 +653,33 @@
 			"#": "146",
 			"label": "Light Sensor Report Threshold",
 			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"defaultValue": 50
+		},
+		{
+			"#": "152",
+			"$if": "firmwareVersion >= 2.5",
+			"label": "Temperature Rise Notification",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 40,
 			"maxValue": 99,
 			"defaultValue": 50
+		},
+		{
+			"#": "154",
+			"$if": "firmwareVersion >= 2.5",
+			"label": "Over-Current Notification",
+			"description": "The device will switch Off the load when the current reaches 16A.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "159",
+			"$if": "firmwareVersion >= 2.5",
+			"label": "Load Error Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "171",

@@ -1,0 +1,204 @@
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNKAD1",
+	"description": "Luxy Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0008",
+			"productId": "0x0052",
+			"zwaveAllianceId": 4079
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "LEDs On/Off",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Brightness Change",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Color Change",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Relay On/Off",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Relay Contact Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normally open) output type",
+					"value": 0
+				},
+				{
+					"label": "NC (normally closed) output type",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Device: Auto On Timer",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Device: Auto Off Timer",
+			"description": "Allowable range: 30–32535 seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Relay: Auto On Timer",
+			"description": "Allowable range: 30–32535 seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Relay: Auto Off Timer",
+			"description": "Allowable range: 30–32535 seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"label": "Device State After Power Failure"
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"label": "Relay State On Power Failure"
+		},
+		{
+			"#": "40",
+			"label": "Power Change Reporting Threshold",
+			"valueSize": 2,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "Power Reporting Interval",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "60",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Touch Functionality: Relay",
+			"defaultValue": 0
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Touch Functionality: Disable Alarm"
+		},
+		{
+			"#": "70",
+			"label": "Overload Limit",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 2300,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Enable add/remove mode on your Z-Wave gateway (hub).\n2. Connect the device to the power supply.\n3. Make sure the device is within direct range of your Z-Wave gateway (hub).\n4. Press once on button 3 – right. One press on button 4 – down for enabling full white. When full white is enabled, press, and hold button 3 – right, between 4 and 6 seconds. After 6 seconds, the device starts flashing green (1 second ON, 0.5 second OFF). Once the device receives node ID (after 10 seconds), it stops flashing and turns full green. The procedure is always available.\nNote: In case of S2 Security inclusion a dialog will appear prompting you to enter the corresponding PIN number (5 underlined digits) that are written on the module label and the label inserted in the packaging (check the example picture). IMPORTANT: The PIN code must not be lost.",
+		"exclusion": "1. Connect the device to the power supply.\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion.\n3. Enable exclusion mode on your Z-Wave gateway (hub).\n4. Press once on button 3 – right. One press on button 4 – down for enabling full white. When full white is enabled, press, and hold button 3 – right for 5 seconds. After 5 seconds, the device starts flashing red 1 second ON, 0.5 second OFF. \nOnce the device loses node ID (after 10 seconds), it stops flashing and turns full red. The procedure is always available. \nNOTE: LEARN MODE state allows the device to receive network information from the controller",
+		"reset": "1. Connect the device to the power supply\n2. Press once on button 3 – right. One press on button 4 – down for enabling full white. When full white is enabled, press and hold button 5 – left for 10 seconds. After 10 seconds, the device starts flashing blue 1 second on, 0.5 second off. \nAfter 10 seconds the device stops flashing and turns full blue. The procedure is available always. By resetting the device, all custom parameters previously set on the device will return to their default values, and a node ID will be deleted. Use this reset procedure only when the gateway (hub) is missing or otherwise inoperable.\nNOTE: See extended manual for custom settings and parameters available for this device.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4079/Qubino%20Luxy%20Smart%20Switch%20installation%20certification.pdf"
+	}
+}

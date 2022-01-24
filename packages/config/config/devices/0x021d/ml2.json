@@ -1,0 +1,120 @@
+{
+	"manufacturer": "Shenzhen Kaadas Intelligent Technology Co., Ltd.",
+	"manufacturerId": "0x021d",
+	"label": "ML2",
+	"description": "Digital Mortise Door Lock",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0003",
+			"zwaveAllianceId": 4120
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Configure Volume Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Silent",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#enable_led_indicator"
+		},
+		{
+			"#": "3",
+			"label": "Battery Reporting Interval",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 14400,
+			"defaultValue": 1440,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Basic Set Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "0xff on unlock, 0x00 on lock",
+					"value": 1
+				},
+				{
+					"label": "0x00 on unlock, 0xff on lock",
+					"value": 2
+				},
+				{
+					"label": "0xff on unlock",
+					"value": 3
+				},
+				{
+					"label": "0x00 on lock",
+					"value": 4
+				},
+				{
+					"label": "0x00 on unlock",
+					"value": 5
+				},
+				{
+					"label": "0xff on lock",
+					"value": 6
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the user guide of hub to enter inclusion mode.\n2. Operate on lock following guide below:\n 1) Enter master mode(** + Master PIN Code + √)\n 2) Input “8” to enter “function extension settings”\n 3) Input “1” to enter “Inclusion mode”",
+		"exclusion": "1. Follow the user guide of hub to enter exclusion mode.\n2. Operate on lock following guide below:\n 1) Enter master mode(** + Master PIN Code + √)\n 2) Input “8” to enter “function extension settings”\n 3) Input “2” to enter “Exclusion mode”",
+		"reset": "1) Open the door and keep the lock in \"unlock\" status\n 2) Open battery box and find the reset button. \n 3) Use a sharp thing to press and hold the reset button.\n 4) Keep holding the reset button and remove the battery from battery box then replace it.\n 5) Keep holding the reset button down until you hear the lock beep (Can take up to 10 seconds).\n2. Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4120/ML2%20-%20Product%20Manual_new.pdf"
+	}
+}

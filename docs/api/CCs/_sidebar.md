@@ -39,6 +39,9 @@
         -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md)
         -   [Entry Control CC](api/CCs/EntryControl.md)
         -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md)
+        -   [Humidity Control Mode CC](api/CCs/HumidityControlMode.md)
+        -   [Humidity Control Operating State CC](api/CCs/HumidityControlOperatingState.md)
+        -   [Humidity Control Setpoint CC](api/CCs/HumidityControlSetpoint.md)
         -   [Indicator CC](api/CCs/Indicator.md)
         -   [Language CC](api/CCs/Language.md)
         -   [Lock CC](api/CCs/Lock.md)
@@ -84,8 +87,13 @@
 -   Troubleshooting
 
     -   [Overview](troubleshooting/index.md)
-    -   [A device does not respond](troubleshooting/no-device-response.md)
+    -   [Connectivity issues](troubleshooting/connectivity-issues.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
+    -   [Problems with 700 series sticks](troubleshooting/700-series-issues.md)
+    -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
+    -   [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
+    -   [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
+    -   [Some values are missing](troubleshooting/missing-values.md)
 
 -   Device Configuration Files
 

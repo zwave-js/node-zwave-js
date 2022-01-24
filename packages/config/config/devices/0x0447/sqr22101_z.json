@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Schneider Electric",
 	"manufacturerId": "0x0447",
-	"label": "SQR22101**Z",
+	"label": "SQR22101",
 	"description": "Z-Wave Dimmer",
 	"devices": [
 		{
@@ -17,23 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Power on, LED off; power off, LED on",
-					"value": 0
-				},
-				{
-					"label": "Power on, LED on; power off, LED off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		}
 	],
 	"metadata": {

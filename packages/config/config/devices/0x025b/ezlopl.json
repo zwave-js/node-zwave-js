@@ -1,0 +1,28 @@
+{
+	"manufacturer": "AdTrustMedia LLC dba: eZLO",
+	"manufacturerId": "0x025b",
+	"label": "EZLOPL",
+	"description": "Ezlo Plus",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4308
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 232,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "Find the \"Reset\" button on the controller near the Ethernet cable connector. Push and hold the RESET button for at least 5 sec (on Ezlo Plus LED starts blinking RED), After that your Ezlo controller will be reset to factory defaults. Reset to Factory Settings remove all the information about added devices and reset Z-Wave chip (new Home ID, new S0/S2 keys, remove all Z-Wave nodes), scenes created, House modes settings, etc. The process is irreversible",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4308/Ezlo%20Plus%20User%20Manual.pdf"
+	}
+}

@@ -1,0 +1,117 @@
+{
+	"manufacturer": "LEEDARSON LIGHTING CO., Ltd.",
+	"manufacturerId": "0x0300",
+	"label": "7AA-SS-VE-A0",
+	"description": "Bypass Door Window Sensor Z-Wave 700",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0041",
+			"zwaveAllianceId": 4298
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Magnetic Field Range",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Parameter 2: 1-19200 µT; Parameter 3: 1-8960 µT",
+					"value": 0
+				},
+				{
+					"label": "Parameter 2: 1-192000 µT; Parameter 3: 1-89600 µT",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Average Magnetic Field",
+			"valueSize": 4,
+			"unit": "µT",
+			"minValue": 1,
+			"maxValue": 192000,
+			"defaultValue": 640,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Magnetic Field Offset",
+			"valueSize": 4,
+			"unit": "µT",
+			"minValue": 1,
+			"maxValue": 89600,
+			"defaultValue": 200,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Low Battery Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Basic Set Commands"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Invert Sensor State"
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Bypass Mode",
+			"defaultValue": 1
+		},
+		{
+			"#": "21",
+			"label": "Temperature Reporting Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 15,
+			"maxValue": 127,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "254",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Power on your Door Sensor, set your Z-Wave controller into add/inclusion mode.\n2. Trigger this action\n3. LED will flash green during the inclusion, and then solid green for 2 seconds to indicate the inclusion is successful, otherwise the LED will solid red for 2 seconds in which you need to repeat the process form step 2",
+		"exclusion": "1. Power on your Door Sensor, and let the Z-Wave primary controller into remove/exclusion mode.\n2. Trigger this action.\n3. LED will flash red during the exclusion, and then solid red for 2 seconds to indicate that the exclusion is successful, otherwise the LED will solid green for 2 seconds in which you need to repeat the process form step 2.",
+		"reset": "LED will blink red faster and faster within 5 seconds and then keep solid red until the button is released. Device will reset itself to factory default by sending a “Device Reset Locally Notification” to gateway when the button is released.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4298/zwave700%20DW%20sensor%207AA-SS-VE-A0%20user%20manual-20210910.pdf"
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Homee",
+	"manufacturerId": "0x0456",
+	"label": "HOMEE-005",
+	"description": "700 Series Cube",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x3800",
+			"zwaveAllianceId": 4271
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "If the Z Wave cube is reset to factory defaults, all connected Z Wave devices will be removed, and the cube gets a new Home ID. If homee is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessar y after the reset to remove and add all of the nodes in the network.\nIf this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4271/homee_zwave_pdf-komprimiert.pdf"
+	}
+}

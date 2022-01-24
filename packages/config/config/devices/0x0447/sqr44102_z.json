@@ -1,0 +1,52 @@
+{
+	"manufacturer": "Schneider Electric",
+	"manufacturerId": "0x0447",
+	"label": "SQR44102",
+	"description": "Z-Wave Plus Receptacle",
+	"devices": [
+		{
+			"productType": "0x000e",
+			"productId": "0x1107",
+			"zwaveAllianceId": 4121
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
+		},
+		{
+			"#": "2",
+			"$import": "~/0x0447/templates/schneider_template.json#delayed_off_time"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0447/templates/schneider_template.json#child_lock"
+		}
+	],
+	"metadata": {
+		"inclusion": "A. SmartStart inclusion: The feature assumes the gateway has implemented SmartStart. Users could use the APP of the gateway or the gateway camera to scan the QR code on device or on the enclosed label inside the package before powering on the device, and then when the device is powered on, it shall be automatically added to the gateway.\n\nB. Manual inclusion (Figure 5): When the gateway is in adding mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself), press the program button 3 times within 1.5s (the interval between each press is less than 0.5s)",
+		"exclusion": "Exclusion from a Z-Wave network: When the gateway is in removing mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself), press the program button 3 times within 1.5s (the interval between each press is less than 0.5s)",
+		"reset": "Long press the reset button for >20 seconds till the blue LED blink 5 times within one second",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4121/GDE7798100_Z-Wave%20Plus%20Receptacle%20user%20manual_English%20version.pdf"
+	}
+}

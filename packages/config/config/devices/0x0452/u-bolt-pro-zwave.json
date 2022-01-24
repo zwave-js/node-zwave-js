@@ -1,0 +1,30 @@
+{
+	"manufacturer": "Ultraloq",
+	"manufacturerId": "0x0452",
+	"label": "U-BOLT-PRO-ZWAVE",
+	"description": "U-Bolt Pro Z-Wave Smart Lock",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": [4115, 4179]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Step1\nSet the Z-Wave network main controller or hub into inclusion mode.\n\nStep2\nPress the button 5 on the lock keypad, until you hear beep sound and the indicator light flashes blue. \nIf your Z-Wave hub is Security 2 enabled and requires the Z-Wave QR code or pin code to add the lock automatically, please ﬁnd it on the back of the battery cover of your smart lock.\n\nStep3\nFollow the instructions of your Z-Wave hub to finish the inclusion process",
+		"exclusion": "Step1\nSet the Z-Wave network main controller or hub into exclusion mode.\n\nStep2\nPress the button 5 on the lock keypad, until you hear the beep sound and the indicator light flashes red. \n\nStep3\nFollow the instructions of your Z-Wave hub to finish the exclusion process",
+		"reset": "CAUTION: Resetting a Z-Wave device without notifying the hub may cause performance problems. Use this procedure only when the Z-Wave hub is missing or otherwise inoperable.\n\nIf you are using U-tec App as Owner, please click “Delete and Reset” to remove the lock from your U-tec Account, then use a Reset Needle to push the Reset Button (at the bottom of Interior Assembly) for around 3 seconds until you hear one long beep and two short beeps.\n\nIf U-Bolt Pro Z-Wave is working as Standalone Mode without the App, please use a Reset Needle to push the Reset Button (at the bottom of Interior Assembly) for around 3 seconds until you hear one long beep and two short beeps.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4115/U-Bolt%20Pro%20Z-Wave%20QuickGuide%20V1.4%20成品95x210cm(出血98mmx216mm)%2080g%20双胶纸%20共42P%20骑马钉装订.pdf"
+	}
+}
