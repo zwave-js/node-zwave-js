@@ -141,7 +141,6 @@
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 0,
-			"allowManualEntry": true,
 			"writeOnly": true
 		},
 		{
@@ -152,14 +151,13 @@
 			"minValue": 75,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"allowManualEntry": true,
 			"writeOnly": true
 		},
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.7",
-			"label": "Remap 99",
-			"description": "Remap ON to 0x63 instead of 0xFF. Use if ON sends tilt all the way up instead of 50% or default ON.",
+			"label": "Override Response to ON Command",
+			"description": "Overrides Set commands with a value of 99 to use the value defined in parameter 4 (Default ON Value) instead",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -168,11 +166,11 @@
 			"writeOnly": true,
 			"options": [
 				{
-					"label": "Idle",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Activate Remapping",
+					"label": "Enable",
 					"value": 1
 				}
 			]
