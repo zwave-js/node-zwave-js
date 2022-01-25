@@ -20,6 +20,7 @@ describe("compat flags", () => {
 			ownNodeId: 1,
 			isFunctionSupported: () => true,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 	});
 
@@ -32,7 +33,7 @@ describe("compat flags", () => {
 		jest.setTimeout(30000);
 
 		const node2 = new ZWaveNode(2, driver);
-		((driver.controller.nodes as any) as Map<number, ZWaveNode>).set(
+		(driver.controller.nodes as any as Map<number, ZWaveNode>).set(
 			2,
 			node2,
 		);

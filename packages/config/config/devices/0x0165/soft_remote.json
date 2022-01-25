@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Buttons 1 and 3 profile",
 			"description": "To set-up the profile of buttons 1 and 3",
 			"valueSize": 1,
@@ -39,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Buttons 2 and 4 profile",
 			"description": "To set-up the profile of buttons 2 and 4",
 			"valueSize": 1,
@@ -63,7 +64,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Scene Type",
 			"description": "To choose the way of sending Scene to the gateway",
 			"valueSize": 1,
@@ -83,7 +85,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Button 1 configuration",
 			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
 			"valueSize": 1,
@@ -107,7 +110,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button 2 configuration",
 			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
 			"valueSize": 1,
@@ -131,7 +135,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Button 3 configuration",
 			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
 			"valueSize": 1,
@@ -155,7 +160,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Button 4 configuration",
 			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
 			"valueSize": 1,
@@ -179,7 +185,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LED Management",
 			"description": "How to set up LED behaviour",
 			"valueSize": 1,
@@ -207,5 +214,5 @@
 				}
 			]
 		}
-	}
+	]
 }

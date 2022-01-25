@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Low Battery Alarm Level",
 			"unit": "percent",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "PIR sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -36,7 +37,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Waiting time between two PIR triggers",
 			"unit": "seconda",
 			"valueSize": 2,
@@ -44,7 +46,8 @@
 			"maxValue": 15300,
 			"defaultValue": 30
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "BASIC SET Command after PIR triggering",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +65,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Exchange of BASIC SET value and PIR status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +84,8 @@
 				}
 			]
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Reset parameters 101-104 to factory defaults",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +98,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Temperature report Time",
 			"valueSize": 4,
 			"minValue": 0,
@@ -106,7 +112,8 @@
 				}
 			]
 		},
-		"102": {
+		{
+			"#": "102",
 			"label": "Humidity report Time",
 			"valueSize": 4,
 			"minValue": 0,
@@ -119,14 +126,16 @@
 				}
 			]
 		},
-		"103": {
+		{
+			"#": "103",
 			"label": "Brightness report Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 7200
 		},
-		"104": {
+		{
+			"#": "104",
 			"label": "Battery report Time",
 			"valueSize": 4,
 			"minValue": 0,
@@ -139,7 +148,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Enable/Disable Report 111-114",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,14 +167,16 @@
 				}
 			]
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Temperature report Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Humidity report Threshold",
 			"unit": "percent",
 			"valueSize": 1,
@@ -172,7 +184,8 @@
 			"maxValue": 32,
 			"defaultValue": 5
 		},
-		"113": {
+		{
+			"#": "113",
 			"label": "Brightness report Threshold",
 			"unit": "Lux",
 			"valueSize": 2,
@@ -181,7 +194,8 @@
 			"defaultValue": 150,
 			"unsigned": true
 		},
-		"114": {
+		{
+			"#": "114",
 			"label": "Battery report Threshold",
 			"unit": "percent",
 			"valueSize": 1,
@@ -189,5 +203,5 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		}
-	}
+	]
 }

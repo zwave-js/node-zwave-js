@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Polling Interval",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -24,7 +25,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Blinking Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +53,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Using a paper clip or equivalent, push the button over 3 seconds.\n(Please note that this product is reset if switch is pushed over 10 seconds)\nStatus LED turns off after adding",
 		"exclusion": "Using a paper clip or equivalent, push the button over 3 seconds.\n(Please note that this product is reset if switch is pushed over 10 seconds)\nStatus LED starts flashing after removal is finished",

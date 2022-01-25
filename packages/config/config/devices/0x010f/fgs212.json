@@ -32,8 +32,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Override OFF-delay",
 			"description": "Forced auto off period",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Relay 1: OFF-delay time (100ms steps)",
 			"description": "Automatic turning off relay 1 after set time ...",
 			"valueSize": 2,
@@ -88,7 +91,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Separation of association sending (key 1)",
 			"description": "Sending commands to control devices assigned ...",
 			"valueSize": 1,
@@ -112,7 +116,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Inputs behaviour",
 			"description": "Assigns bistable key status to the device status.",
 			"valueSize": 1,
@@ -132,7 +137,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Inputs Button/Switch configuration",
 			"description": "Binary inputs type configuration",
 			"valueSize": 1,
@@ -152,7 +158,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Dimmer/Roller shutter control",
 			"description": "Enable/Disable operation of dimmer or roller shutter devices ...",
 			"valueSize": 1,
@@ -172,26 +179,12 @@
 				}
 			]
 		},
-		"16": {
-			"label": "Saving state before power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "State NOT saved at pwr failure, outputs set ...",
-					"value": 0
-				},
-				{
-					"label": "State saved at pwr failure, outputs are set to ...",
-					"value": 1
-				}
-			]
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Relay 1: Response to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -218,7 +211,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Relay 1: Response to Water Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -245,7 +239,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -272,7 +267,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Relay 1: Response to Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -299,7 +295,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "ALARM FLASHING alarm time",
 			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
 			"valueSize": 2,
@@ -308,5 +305,9 @@
 			"defaultValue": 600,
 			"unsigned": true
 		}
+	],
+	"compat": {
+		// The device sends reports for endpoint 1 un-encapsulated
+		"mapRootReportsToEndpoint": 1
 	}
 }

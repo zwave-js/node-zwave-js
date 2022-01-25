@@ -44,6 +44,9 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
 
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
@@ -67,6 +70,9 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
@@ -86,6 +92,9 @@ describe("lib/config/Notifications", () => {
 		beforeAll(async () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 
 			configManager = new ConfigManager();
 			await configManager.loadNotifications();
@@ -115,6 +124,9 @@ describe("lib/config/Notifications", () => {
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 
 			configManager = new ConfigManager();
 			await configManager.loadNotifications();

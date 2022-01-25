@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Change The State of Indicator Light",
 			"description": "0 means night light mode ,1 means night light off",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "0 means no memory function, 1 means memory function",
 			"valueSize": 1,
@@ -33,7 +35,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. have your Z-Wave controller enter into Inclusion mode\n2. press the dimmer socket button three times within 1.5 seconds",
 		"exclusion": "1. have your Z-Wave controller enter into Exclusion mode\n2. press the dimmer socket button three times within 1.5 seconds",

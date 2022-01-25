@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"6": {
+	"paramInformation": [
+		{
+			"#": "6",
 			"label": "Enable And Disable The PIR Sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -76,7 +79,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Motion Sensor Report Type",
 			"valueSize": 1,
 			"minValue": 1,
@@ -99,7 +103,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Temperature And Light Sensor Sensing Frequency",
 			"valueSize": 1,
 			"minValue": 5,
@@ -108,7 +113,8 @@
 			"unit": "minutes",
 			"unsigned": true
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Enable And Disable The LED Indication When PIR Triggered And After Timeout",
 			"valueSize": 1,
 			"minValue": 0,
@@ -127,7 +133,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add the device in the Z-Wave network.\n2. Once the controller is ready to add your\nmotion sensor, press and release the button\non the sensor to add it in the network.\n3. The blue LED will activate for 3 seconds to\nconfirm it has been included in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\nto remove the device from the Z-Wave network.\n2. Once the controller is ready to remove your\nmotion sensor, press and release the button on\nthe sensor to exclude it from the network.\n3. The LED will blink for 3 seconds at a time.\n\nNOTE: If the sensor’s power source is changed\nafter initial setup (ex: USB power instead of\nbattery power), the sensor must be excluded\nfrom the network and then re-included",

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Defines the behavior of the blue LED",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State",
 			"valueSize": 1,
@@ -44,5 +45,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -28,8 +28,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Reporting Threshold",
 			"description": "Reporting threshold for changes in the ambient temperature.",
 			"valueSize": 1,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "HVAC Settings",
 			"description": "Configured HVAC settings",
 			"valueSize": 4,
@@ -69,7 +71,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Utility Lock Enable/Disable",
 			"description": "Prevents setpoint changes at thermostat.",
 			"valueSize": 1,
@@ -89,7 +92,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Power Status",
 			"description": "C-Wire / Battery Status",
 			"valueSize": 1,
@@ -98,7 +102,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"description": "Reporting threshold for changes in the relative humidity.",
 			"valueSize": 1,
@@ -126,7 +131,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auxiliary/Emergency",
 			"description": "Enables or disables auxiliary / emergency heating",
 			"valueSize": 1,
@@ -146,7 +152,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Thermostat Swing Temperature",
 			"description": "Variance allowed from setpoint to engage HVAC",
 			"valueSize": 1,
@@ -189,7 +196,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Thermostat Diff Temperature",
 			"description": "Configures additional stages",
 			"valueSize": 1,
@@ -213,7 +221,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"description": "Fast or Economy recovery mode.",
 			"valueSize": 1,
@@ -221,7 +230,8 @@
 			"maxValue": 2,
 			"defaultValue": 2
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temp Reporting Filter",
 			"description": "Upper/Lower bounds for thermostat temperature reporting",
 			"valueSize": 2,
@@ -229,7 +239,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Simple UI Mode",
 			"description": "Simple Mode Enable/Disable",
 			"valueSize": 1,
@@ -237,7 +248,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Multicast",
 			"description": "Enable or disables Multicast",
 			"valueSize": 1,
@@ -245,5 +257,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

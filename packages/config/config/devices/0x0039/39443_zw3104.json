@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dim up/down rate",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dim Rate Steps (Z-Wave Command)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
@@ -84,7 +87,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dim Rate Timing (Z-Wave)",
 			"description": "Timing of steps or levels",
 			"valueSize": 2,
@@ -94,7 +98,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Rate Steps (Manual)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
@@ -103,7 +108,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim Rate Timing (Manual)",
 			"description": "Timing of steps",
 			"valueSize": 2,
@@ -113,7 +119,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dim Rate Steps (All-On/All-Off)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
@@ -123,7 +130,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Dim Rate Timing (All-On/All-Off)",
 			"description": "Timing of steps or levels",
 			"valueSize": 2,
@@ -133,7 +141,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Enable/disable switch mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -152,7 +161,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Minimum dim level",
 			"description": "Number of Steps",
 			"valueSize": 1,
@@ -161,7 +171,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

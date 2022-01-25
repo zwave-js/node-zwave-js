@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Activation of Central Scene",
 			"description": "Set top and bottom button scene numbers.",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Control Mode",
 			"description": "Control other devices or issue various scene activation...",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Invert top of switch ON/OFF buttons",
 			"valueSize": 1,
@@ -39,5 +41,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

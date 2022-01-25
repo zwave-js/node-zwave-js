@@ -30,8 +30,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "Value to be sent with a BASIC SET command",
 			"valueSize": 2,
@@ -39,7 +40,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Configuring the OFF Delay",
 			"description": "OFF Delay in seconds",
 			"valueSize": 1,
@@ -47,12 +49,13 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Staying Awake (for testing)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -8,6 +8,10 @@
 			"productType": "0x0006",
 			"productId": "0x0001",
 			"zwaveAllianceId": 2743
+		},
+		{
+			"productType": "0x0600",
+			"productId": "0x0000"
 		}
 	],
 	"firmwareVersion": {
@@ -21,18 +25,22 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume_inverted"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
-			"$import": "templates/yale_template.json#auto_relock_time_180"
+		{
+			"#": "3",
+			"$import": "templates/yale_template.json#manual_relock_time"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/yale_template.json#remote_relock_time"
 		}
-	}
+	]
 }

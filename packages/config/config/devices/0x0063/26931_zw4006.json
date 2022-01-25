@@ -29,8 +29,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Timeout Duration",
 			"description": "Amount of time the light stays on after motion stops",
 			"valueSize": 1,
@@ -66,7 +67,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dim level",
 			"description": "Change brightness of associated light bulb(s)",
 			"valueSize": 1,
@@ -81,7 +83,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Association Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -121,7 +125,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Invert Switch",
 			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
 			"valueSize": 1,
@@ -140,7 +145,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Motion Sensor",
 			"description": "Enable/Disable Motion Sensor",
 			"valueSize": 1,
@@ -159,7 +165,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Motion Sensor Sensitivity",
 			"description": "Amount of motion required to turn on the light",
 			"valueSize": 1,
@@ -182,7 +189,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Light Sensing",
 			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
 			"valueSize": 1,
@@ -201,7 +209,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset Cycle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -235,7 +244,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Exclusion Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -253,7 +263,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

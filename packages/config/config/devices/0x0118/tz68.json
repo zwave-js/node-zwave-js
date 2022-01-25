@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Behavior",
 			"description": "defines the behavior of the blue LED",
 			"valueSize": 1,
@@ -50,7 +51,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
@@ -69,7 +71,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1952/TZ68%20User%20Manual.pdf"
 	}

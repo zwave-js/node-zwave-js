@@ -26,6 +26,7 @@ import {
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum SerialAPISetupCommand {
+	Unsupported = 0x00,
 	GetSupportedCommands = 0x01,
 	SetTxStatusReport = 0x02,
 	SetPowerlevel = 0x04,
@@ -109,7 +110,8 @@ export class SerialAPISetupResponse extends Message {
 				CommandConstructor = SerialAPISetup_SetTXStatusReportResponse;
 				break;
 			case SerialAPISetupCommand.GetSupportedCommands:
-				CommandConstructor = SerialAPISetup_GetSupportedCommandsResponse;
+				CommandConstructor =
+					SerialAPISetup_GetSupportedCommandsResponse;
 				break;
 			case SerialAPISetupCommand.SetRFRegion:
 				CommandConstructor = SerialAPISetup_SetRFRegionResponse;
@@ -124,10 +126,12 @@ export class SerialAPISetupResponse extends Message {
 				CommandConstructor = SerialAPISetup_GetPowerlevelResponse;
 				break;
 			case SerialAPISetupCommand.GetMaximumPayloadSize:
-				CommandConstructor = SerialAPISetup_GetMaximumPayloadSizeResponse;
+				CommandConstructor =
+					SerialAPISetup_GetMaximumPayloadSizeResponse;
 				break;
 			case SerialAPISetupCommand.GetLRMaximumPayloadSize:
-				CommandConstructor = SerialAPISetup_GetLRMaximumPayloadSizeResponse;
+				CommandConstructor =
+					SerialAPISetup_GetLRMaximumPayloadSizeResponse;
 				break;
 			case SerialAPISetupCommand.SetNodeIDType:
 				CommandConstructor = SerialAPISetup_SetNodeIDTypeResponse;
@@ -139,7 +143,6 @@ export class SerialAPISetupResponse extends Message {
 				break;
 		}
 
-		// wotan-disable-next-line no-useless-predicate
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
 			return new CommandConstructor(driver, options);
 		}
@@ -194,7 +197,12 @@ export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupR
 			// Parse it as a bitmask
 			this.supportedCommands = parseBitMask(
 				this.payload.slice(1),
-				SerialAPISetupCommand.GetSupportedCommands,
+				// According to the Host API specification, the first bit (bit 0) should be GetSupportedCommands
+				// However, at least in Z-Wave SDK 7.15, the entire bitmask is shifted by 1 bit and
+				// GetSupportedCommands is encoded in the second bit (bit 1)
+
+				// TODO: When this is fixed, make the start value dependent on the SDK version
+				SerialAPISetupCommand.Unsupported,
 			);
 		} else {
 			// This module only uses the single byte power-of-2 bitmask. Decode it manually
@@ -274,7 +282,8 @@ export class SerialAPISetup_SetTXStatusReportRequest extends SerialAPISetupReque
 
 export class SerialAPISetup_SetTXStatusReportResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -342,7 +351,8 @@ export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetNodeIDTypeResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -432,7 +442,8 @@ export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetRFRegionResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;
@@ -557,7 +568,8 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 
 export class SerialAPISetup_SetPowerlevelResponse
 	extends SerialAPISetupResponse
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.success = this.payload[0] !== 0;

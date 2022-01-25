@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Reverse Open/Close Detection",
 			"description": "This parameter allows you to reverse the detection values of the device",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "This parameter allows you to enable the alternate exclusion method that is available for this device",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Inclusion Configuration",
 			"description": "This parameter allows you to change the inclusion configuration settings of this device",
 			"valueSize": 1,
@@ -75,7 +78,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Led Control (magnet Triggers Only)",
 			"description": "This parameter gives you the option to turn the LED off on magnetic triggers",
 			"valueSize": 1,
@@ -95,7 +99,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Battery Report Interval",
 			"description": "This parameter allows you to choose how often the battery level is reported",
 			"valueSize": 2,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Tamper LED Control",
 			"description": "This parameter allows you to choose how often the LED will flash once the device/battery cover is tampered with",
 			"valueSize": 1,
@@ -142,7 +148,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Automatic mode\n1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your sensor, slide the battery door down and remove (if not mounted to door or window).\n3. Remove the plastic battery tab. This activates the sensor and starts the auto-add process. The red LED will begin to flash\nquickly as it searches for a network. The sensor will attempt to search for a network for two minutes, after which, it will time out.\n4. The red LED will continue to flash quickly after it locates a network – the controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product. Enter the 5-digit code.\n5. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n\nManual mode\n1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has been removed.\n3. Press and release the programming button. This starts the manual add process. The red LED will begin to flash quickly as it begins the add process.\n4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product. Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button on the sensor 1 time to remove it from the network.\n3. The red LED will blink 5 times to indicate it has been removed",

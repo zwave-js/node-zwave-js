@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set OFF Level",
 			"description": "Setting the BASIC command value",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Basic Set ON Level",
 			"description": "Setting the BASIC command value",
 			"valueSize": 1,
@@ -33,7 +34,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "Operation mode. Using bit to control.",
 			"valueSize": 1,
@@ -52,7 +54,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Parameter to set the sensor functions",
 			"valueSize": 1,
@@ -61,7 +64,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto report the battery level.",
 			"valueSize": 1,
@@ -69,7 +73,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto Report Flood Time",
 			"description": "The interval time for auto report the flood state.",
 			"valueSize": 1,
@@ -77,7 +82,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto reporting each tick.",
 			"valueSize": 1,
@@ -86,5 +92,5 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	}
+	]
 }

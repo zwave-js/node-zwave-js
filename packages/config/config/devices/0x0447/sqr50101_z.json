@@ -1,0 +1,44 @@
+{
+	"manufacturer": "Schneider Electric",
+	"manufacturerId": "0x0447",
+	"label": "SQR50101",
+	"description": "Z-Wave Plus Auxiliary Switch",
+	"devices": [
+		{
+			"productType": "0x000e",
+			"productId": "0x1301",
+			"zwaveAllianceId": 4116
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Dimmer Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/0x0447/templates/schneider_template.json#child_lock"
+		}
+	],
+	"metadata": {
+		"inclusion": "A. SmartStart inclusion: The feature assumes the gateway has implemented SmartStart. Users could use the APP of the gateway or the gateway camera to scan the QR code on device or on the enclosed label inside the package before powering on the device, and then when the device is powered on, it shall be automatically added to the gateway.\nB. Manual inclusion (Figure 4): When the gateway is in adding mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself), quick click the upper paddle or lower paddle 3 times within 1.5 seconds",
+		"exclusion": "When the gateway is in removing mode (please refer to the instruction of the Z-Wave gateway for the operations on gateway itself), quick click the upper paddle or lower paddle 3 times within 1.5 seconds",
+		"reset": "Reset to factory defaults (Figure 10):\nLong press the reset button for >20 seconds till the blue LED blink 5 times within one second.\nNOTE:\n• Use this procedure only when the Z-Wave gateway is missing or otherwise inoperable.\n• Reset the device to factory default settings will set the device to not in Z-Wave network state, delete the association setting and restore the configuration setting to the default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4116/GDE77963_Z-Wave%20Plus%20Auxiliary%20Switch%20user%20manual_English%20version.pdf"
+	}
+}

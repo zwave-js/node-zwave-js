@@ -1,6 +1,3 @@
-// wotan-disable no-restricted-property-access
-// wotan-disable prefer-dot-notation
-
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";

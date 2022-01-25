@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Period",
 			"description": "The period is set in 15 minute increments (multiply the value by 15)",
 			"valueSize": 1,
@@ -25,7 +26,7 @@
 			"defaultValue": 24,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Press & hold inclusion/exclusion button for 5 seconds until LED turns on.\n2. Open sensor will try inclusion for 30 seconds when button is released.",
 		"exclusion": "1. Press & hold inclusion/exclusion button for 5 seconds until LED turns on.\n2. Open sensor will try exclusion when button is released.\n3. If exclusion is successful, LED will blink 3 times with 250ms interval.",

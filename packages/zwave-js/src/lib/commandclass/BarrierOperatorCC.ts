@@ -174,10 +174,11 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<BarrierOperatorCCSignalingCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<BarrierOperatorCCSignalingCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedSubsystemTypes;
 	}
 
@@ -194,10 +195,11 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			subsystemType,
 		});
-		const response = await this.driver.sendCommand<BarrierOperatorCCEventSignalingReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<BarrierOperatorCCEventSignalingReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.subsystemState;
 	}
 

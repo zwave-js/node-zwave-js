@@ -25,8 +25,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"99": {
+	"paramInformation": [
+		{
+			"#": "99",
 			"label": "Toggle sending clear message to group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,5 +45,5 @@
 				}
 			]
 		}
-	}
+	]
 }

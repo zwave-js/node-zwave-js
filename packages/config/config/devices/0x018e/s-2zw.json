@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Up Time Setting",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -24,7 +25,8 @@
 			"defaultValue": 240,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Close Time Setting",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -33,7 +35,8 @@
 			"defaultValue": 240,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Current Position",
 			"description": "The ranges from 0% to 99%",
 			"valueSize": 2,
@@ -42,7 +45,7 @@
 			"defaultValue": 99,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n1. Connect the power to Shutter Control (see manual’s Installation).\n2. Put the Z-Wave gateway or control panel into Inclusion mode (please refer to the Z-Wave gateway or control panel manual).\n3. Within 1.5 seconds, press the Function Button 3 times.\n4. Refer to the operation manual of the Z-Wave gateway or control panel to complete the adding process.\n5. If the device has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, try removing it first (see Removing Device).",
 		"exclusion": "The device must be removed from existing Z-Wave network before being added into another.\n1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).\n2. Within 1.5 seconds, press the Function Button 3 times and the device will be removed from the Z-Wave network.",

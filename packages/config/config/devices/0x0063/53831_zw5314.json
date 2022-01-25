@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Control Groups 2 & 3",
 			"description": "Determines whether Groups 2 & 3 are operational.",
 			"valueSize": 1,
@@ -51,7 +52,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},

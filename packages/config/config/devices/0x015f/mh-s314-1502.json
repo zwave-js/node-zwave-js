@@ -37,27 +37,13 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"2": {
-			"label": "Recover State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "All On/All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +70,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Backlight Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +79,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +119,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Relay On Duration",
 			"description": "0 for infinite",
 			"unit": "seconds",
@@ -141,7 +130,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Basic CC Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -168,7 +158,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Button 1 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -207,7 +198,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Button 2 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -246,7 +238,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Button 3 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -285,7 +278,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Button 4 Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -324,7 +318,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Local Relay Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -343,7 +338,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Z-Wave Relay Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -362,7 +358,8 @@
 				}
 			]
 		},
-		"16[0x01]": {
+		{
+			"#": "16[0x01]",
 			"label": "Button 1 Respond to Scenes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -381,7 +378,8 @@
 				}
 			]
 		},
-		"16[0x02]": {
+		{
+			"#": "16[0x02]",
 			"label": "Button 2 Respond to Scenes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -400,7 +398,8 @@
 				}
 			]
 		},
-		"16[0x04]": {
+		{
+			"#": "16[0x04]",
 			"label": "Button 3 Respond to Scenes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -419,7 +418,8 @@
 				}
 			]
 		},
-		"16[0x08]": {
+		{
+			"#": "16[0x08]",
 			"label": "Button 4 Respond to Scenes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -438,7 +438,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Button 1 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -465,7 +466,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Button 1 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 1,
@@ -473,7 +475,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Button 1 Activate Scene Dim Duration",
 			"description": "0-127 seconds, +128 for minutes",
 			"valueSize": 1,
@@ -482,7 +485,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Button 2 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -509,7 +513,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Button 2 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 1,
@@ -517,7 +522,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Button 2 Activate Scene Dim Duration",
 			"description": "0-127 seconds, +128 for minutes",
 			"valueSize": 1,
@@ -526,7 +532,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Button 3 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -553,7 +560,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Button 3 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 1,
@@ -561,7 +569,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Button 3 Activate Scene Dim Duration",
 			"description": "0-127 seconds, +128 for minutes",
 			"valueSize": 1,
@@ -570,7 +579,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Button 4 Scene Activate Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -597,7 +607,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Button 4 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 1,
@@ -605,7 +616,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Button 4 Activate Scene Dim Duration",
 			"description": "0-127 seconds, +128 for minutes",
 			"valueSize": 1,
@@ -614,7 +626,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -633,5 +646,5 @@
 				}
 			]
 		}
-	}
+	]
 }

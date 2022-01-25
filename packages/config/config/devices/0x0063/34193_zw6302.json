@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"13": {
+	"paramInformation": [
+		{
+			"#": "13",
 			"label": "PIR Sensitivity Setting",
 			"valueSize": 1,
 			"minValue": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Motion Sensor Report Type",
 			"valueSize": 1,
 			"minValue": 1,
@@ -79,7 +82,8 @@
 				}
 			]
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "LED Indication When PIR is Triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +102,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. \n2. Once the controller is ready to include your device, press and release the program button to include it in the network. \n3. The blue LED will activate for 3 seconds to confirm it has been included",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n 2. Once the controller is ready to exclude your device, press and release the program button to exclude it from the network.",

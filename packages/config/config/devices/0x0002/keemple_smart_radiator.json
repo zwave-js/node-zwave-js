@@ -5,6 +5,10 @@
 	"description": "Electronic radiator thermostat, intended for use with water based room radiators.",
 	"devices": [
 		{
+			"productType": "0x5fff",
+			"productId": "0xa010"
+		},
+		{
 			"productType": "0x6fff",
 			"productId": "0xa010"
 		}
@@ -12,5 +16,10 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "• Ensure smart radiator valve is factory reset. \n• Activate “Inclusion” on the Z-Wave controller. \n• Quickly press and release menu button (one with a dot) on smart radiator valve. \n• Observe both controller and smart radiator valve for status of the process.",
+		"exclusion": "• Activate “Exclusion” on the Z-Wave controller. \n• Quickly press and release menu button (one with a dot) on smart radiator valve. \n• Observe both controller and smart radiator valve for status of the process.",
+		"reset": "Remove the battery cover and take out one battery. \nPress and hold menu button (one with a dot) for approx. 5 seconds, while re-inserting the battery. \nSmart radiator valve is now factory reset and in mounting mode."
 	}
 }

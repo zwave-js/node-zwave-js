@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "Motion Sensor Sensitivity",
 			"description": "Higher values increase sensitivity",
 			"valueSize": 1,
@@ -24,16 +25,20 @@
 			"defaultValue": 8,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/homeseer_template.json#basic_set_value"
 		},
-		"17": {
+		{
+			"#": "17",
 			"$import": "templates/homeseer_template.json#enable_shock_alarm"
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Motion Detection Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -42,10 +47,11 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"$import": "templates/homeseer_template.json#low_battery_level"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1) Open the cover.\n2) Place the device within the direct range of your Z-Wave controller.\n3) Set the main controller in add mode (see the controller’s manual).\n4) Click the Z-button once or triple click the Z-button quickly, the LED indicator should blink fast. \n5) Wait for the adding process to end.\n6) Successful adding will be confirmed by the Z-Wave controller’s message.",
 		"exclusion": "1) Open the cover.\n2) Place the device within the direct range of your Z-Wave controller.\n3) Set the main controller remove mode (see the controller’s manual).\n4) Triple click the Z-button quickly, the LED indicator should blink fast.\n5) Wait for the removing process to end.\n6) Successful adding will be confirmed by the Z-Wave controller’s message.",

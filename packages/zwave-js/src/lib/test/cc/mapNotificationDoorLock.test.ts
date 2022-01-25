@@ -14,12 +14,16 @@ describe("map Notification CC to Door Lock CC", () => {
 	process.env.LOGLEVEL = "debug";
 
 	beforeEach(async () => {
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
+
 		({ driver } = await createAndStartDriver());
 
 		driver["_controller"] = {
 			ownNodeId: 1,
 			isFunctionSupported: () => true,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 		await driver.configManager.loadNotifications();
 	});

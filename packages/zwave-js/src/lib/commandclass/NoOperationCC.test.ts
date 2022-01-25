@@ -3,7 +3,7 @@ import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { NoOperationCC } from "./NoOperationCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

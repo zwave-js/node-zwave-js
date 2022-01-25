@@ -24,248 +24,328 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_browse"
+	"paramInformation": [
+		{
+			"#": "1[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_browse"
+		},
+		{
+			"#": "1[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_mode_browse"
+		},
+		{
+			"#": "2[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_tamper"
+		},
+		{
+			"#": "2[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_tamper"
+		},
+		{
+			"#": "2[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_tamper"
+		},
+		{
+			"#": "2[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_tamper"
+		},
+		{
+			"#": "3[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_1"
+		},
+		{
+			"#": "3[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_1"
+		},
+		{
+			"#": "3[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_1"
+		},
+		{
+			"#": "3[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_1"
+		},
+		{
+			"#": "4[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_2"
+		},
+		{
+			"#": "4[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_2"
+		},
+		{
+			"#": "4[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_2"
+		},
+		{
+			"#": "4[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_2"
+		},
+		{
+			"#": "5[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_doorbell_3"
+		},
+		{
+			"#": "5[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_doorbell_3"
+		},
+		{
+			"#": "5[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_doorbell_3"
+		},
+		{
+			"#": "5[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_doorbell_3"
+		},
+		{
+			"#": "6[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_environment"
+		},
+		{
+			"#": "6[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_environment"
+		},
+		{
+			"#": "6[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_environment"
+		},
+		{
+			"#": "6[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_environment"
+		},
+		{
+			"#": "7[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_security"
+		},
+		{
+			"#": "7[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_security"
+		},
+		{
+			"#": "7[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_security"
+		},
+		{
+			"#": "7[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_security"
 		},
-		"1[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_mode_browse"
+		{
+			"#": "8[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#light_index_emergency"
 		},
-		"2[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_tamper"
+		{
+			"#": "8[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_duration_emergency"
 		},
-		"2[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_tamper"
+		{
+			"#": "8[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_interval_emergency"
 		},
-		"2[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_tamper"
+		{
+			"#": "8[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#tone_play_count_emergency"
 		},
-		"2[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_tamper"
+		{
+			"#": "16[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_1"
 		},
-		"3[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_1"
+		{
+			"#": "16[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_1"
 		},
-		"3[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_1"
+		{
+			"#": "16[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_1"
 		},
-		"3[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_1"
+		{
+			"#": "16[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_1"
 		},
-		"3[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_1"
+		{
+			"#": "17[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_2"
 		},
-		"4[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_2"
+		{
+			"#": "17[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_2"
 		},
-		"4[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_2"
+		{
+			"#": "17[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_2"
 		},
-		"4[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_2"
+		{
+			"#": "17[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_2"
 		},
-		"4[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_2"
+		{
+			"#": "18[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_3"
 		},
-		"5[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_doorbell_3"
+		{
+			"#": "18[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_3"
 		},
-		"5[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_doorbell_3"
+		{
+			"#": "18[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_3"
 		},
-		"5[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_doorbell_3"
+		{
+			"#": "18[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_3"
 		},
-		"5[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_doorbell_3"
+		{
+			"#": "19[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_4"
 		},
-		"6[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_environment"
+		{
+			"#": "19[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_4"
 		},
-		"6[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_environment"
+		{
+			"#": "19[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_4"
 		},
-		"6[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_environment"
+		{
+			"#": "19[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_4"
 		},
-		"6[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_environment"
+		{
+			"#": "20[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_5"
 		},
-		"7[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_security"
+		{
+			"#": "20[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_5"
 		},
-		"7[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_security"
+		{
+			"#": "20[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_5"
 		},
-		"7[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_security"
+		{
+			"#": "20[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_5"
 		},
-		"7[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_security"
+		{
+			"#": "21[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_6"
 		},
-		"8[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#light_index_emergency"
+		{
+			"#": "21[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_6"
 		},
-		"8[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_duration_emergency"
+		{
+			"#": "21[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_6"
 		},
-		"8[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_interval_emergency"
+		{
+			"#": "21[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_6"
 		},
-		"8[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#tone_play_count_emergency"
+		{
+			"#": "22[0xff000000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_on_7"
 		},
-		"16[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_1"
+		{
+			"#": "22[0xff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#dim_duration_off_7"
 		},
-		"16[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_1"
+		{
+			"#": "22[0xff00]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_on_7"
 		},
-		"16[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_1"
+		{
+			"#": "22[0xff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_duration_off_7"
 		},
-		"16[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_1"
+		{
+			"#": "32",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_browse"
 		},
-		"17[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_2"
+		{
+			"#": "33",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_tamper"
 		},
-		"17[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_2"
+		{
+			"#": "34",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
 		},
-		"17[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_2"
+		{
+			"#": "35",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
 		},
-		"17[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_2"
+		{
+			"#": "36",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
 		},
-		"18[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_3"
+		{
+			"#": "37",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_environment"
 		},
-		"18[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_3"
+		{
+			"#": "38",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_security"
 		},
-		"18[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_3"
+		{
+			"#": "39",
+			"$import": "~/0x0086/templates/aeotec_template.json#basic_set_command_emergency"
 		},
-		"18[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_3"
+		{
+			"#": "48",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_unpair"
 		},
-		"19[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_4"
+		{
+			"#": "49",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_pair"
 		},
-		"19[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_4"
+		{
+			"#": "50",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_pairing_status"
 		},
-		"19[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_4"
+		{
+			"#": "51[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_1"
 		},
-		"19[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_4"
+		{
+			"#": "51[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_2"
 		},
-		"20[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_5"
+		{
+			"#": "51[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_status_3"
 		},
-		"20[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_5"
+		{
+			"#": "52[0xffff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_1"
 		},
-		"20[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_5"
+		{
+			"#": "52[0xffff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_1"
 		},
-		"20[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_5"
+		{
+			"#": "53[0xffff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_2"
 		},
-		"21[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_6"
+		{
+			"#": "53[0xffff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_2"
 		},
-		"21[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_6"
+		{
+			"#": "54[0xffff0000]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_battery_voltage_3"
 		},
-		"21[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_6"
+		{
+			"#": "54[0xffff]",
+			"$import": "~/0x0086/templates/aeotec_template.json#button_version_3"
 		},
-		"21[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_6"
+		{
+			"#": "96",
+			"$import": "~/0x0086/templates/aeotec_template.json#stop_action_button"
 		},
-		"22[0xff000000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_on_7"
-		},
-		"22[0xff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#dim_duration_off_7"
-		},
-		"22[0xff00]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_on_7"
-		},
-		"22[0xff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#led_duration_off_7"
-		},
-		"32": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_browse"
-		},
-		"33": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_tamper"
-		},
-		"34": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_1"
-		},
-		"35": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_2"
-		},
-		"36": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_doorbell_3"
-		},
-		"37": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_environment"
-		},
-		"38": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_security"
-		},
-		"39": {
-			"$import": "../0x0086/templates/aeotec_template.json#basic_set_command_emergency"
-		},
-		"48": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_unpair"
-		},
-		"49": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pair"
-		},
-		"50": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_pairing_status"
-		},
-		"51[0x01]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_1"
-		},
-		"51[0x02]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_2"
-		},
-		"51[0x04]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_status_3"
-		},
-		"52[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_1"
-		},
-		"52[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_1"
-		},
-		"53[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_2"
-		},
-		"53[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_2"
-		},
-		"54[0xffff0000]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_battery_voltage_3"
-		},
-		"54[0xffff]": {
-			"$import": "../0x0086/templates/aeotec_template.json#button_version_3"
-		},
-		"96": {
-			"$import": "../0x0086/templates/aeotec_template.json#stop_action_button"
-		},
-		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		{
+			"#": "255",
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "This product supports Security 2 Command Class. While a Security S2 enabled Controller is needed in order to fully use the security feature. This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufacturers and/or other applications. All non-battery operated nodes within the network will\nact as repeaters regardless of vendor to increase reliability of the network.\n\n1. Set your Z-Wave Controller into its 'Add Device' mode in order to add Chime into your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n\n2. Power on Chime via the provided power adapter; its LED will be breathing white light all the time.\n\n3. Click Chime Action Button once, it will quickly flash white light for 30 seconds until Chime is added into the network. It will become constantly bright white light after being assigned a NodeID.\n\n4. If your Z-Wave Controller supports S2 encryption, enter the first 5 digits of DSK into your Controller's interface if/when requested. The DSK is printed on Chime's housing.\n\n5. If Adding fails, it will slowly flash white light 3 times and then become breathing white light; repeat steps 1 to 4. Contact us for further support if needed.\n\n6. If Adding succeeds, it will quickly flash white light 3 times and then become off. Now, Chime is a part of your Z-Wave home control system. You can configure it and its automations via your Z-Wave system; please refer to your software's user guide for precise instructions.\n\nNote:\nIf Action Button is clicked again during the Learn Mode, the Learn Mode will exit. At the same time, Indicator Light will extinguish immediately, and then become breathing white light",
 		"exclusion": "1. Set your Z-Wave Controller into its ' Remove Device' mode in order to remove Chime from your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n\n2. Power on Chime via the provided power adapter; its LED will be off.\n\n3. Click Chime Action Button 6 times quickly; it will bright white light, up to 2s.\n\n4. If Removing fails, it will keep off; repeat steps 1 to 3. Contact us for further support if needed.\n\n5. If Removing succeeds, it will quickly flash white light 3 times and then become breathing white light. Now, Chime is removed from Z-Wave network successfully",

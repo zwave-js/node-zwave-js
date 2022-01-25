@@ -1,0 +1,202 @@
+name: Bug report
+description: Use this template if something is not working correctly or to report errors in existing device config files.
+#title: ""
+#labels: []
+#assignees:
+#  - AlCalzone
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Hi there!
+
+        We appreciate you taking your time and reporting an issue.
+
+        Z-Wave JS is used in multiple applications with a lot of moving parts, so your issue might actually be caused by something outside our control.
+        Let's find out if you're in the correct repository!
+
+  - type: dropdown
+    attributes:
+      label: Is your problem within Home Assistant (Core or Z-Wave JS Integration)?
+      description: If yes, please open your issue at https://github.com/home-assistant/core/issues
+      options:
+        - NO, my problem is NOT within Home Assistant or the ZWave JS integration
+        - YES, BUT a Home Assistant developer has told me to come here
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: Is your problem within ZWaveJS2MQTT?
+      description: If yes, please open your issue at https://github.com/zwave-js/zwavejs2mqtt/issues
+      options:
+        - NO, my problem is NOT within ZWaveJS2MQTT
+        - YES, BUT a ZWaveJS2MQTT developer has told me to come here
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: |
+            I have checked the [troubleshooting section](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index) and my problem is **not** described there.
+          required: true
+
+        - label: |
+            I have read the [changelog](https://github.com/zwave-js/node-zwave-js/blob/master/CHANGELOG.md) and my problem was **not** mentioned there.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## 🙏🏻🙏🏻🙏🏻 Thanks, now onto your issue 🙏🏻🙏🏻🙏🏻
+
+  - type: textarea
+    id: bug_description
+    attributes:
+      label: Describe the bug
+      description: 'A clear and concise description of what the bug is and how it can be reproduced.'
+      value: |
+        What causes the bug?
+
+        What do you observe?
+
+        What did you expect to happen?
+
+        Steps to reproduce the behavior:
+          1. Go to '...'
+          2. Click on '...'
+          3. Scroll down to '...'
+          4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: devices
+    attributes:
+      label: Device information
+      description: 'If this is an issue with a device, please specify which one(s). Repeat the pre-defined text if necessary.'
+      value: |
+        Manufacturer: 
+        Model name: 
+        Node ID in your network: <!-- 1...232 -->
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+  - type: checkboxes
+    id: software
+    attributes:
+      label: How are you using `node-zwave-js`?
+      options:
+        - label: '`zwavejs2mqtt` Docker image (latest)'
+        - label: '`zwavejs2mqtt` Docker image (dev)'
+        - label: '`zwavejs2mqtt` Docker manually built _(please specify branches)_'
+        - label: '`ioBroker.zwave2` adapter _(please specify version)_'
+        - label: '`HomeAssistant zwave_js` integration  _(please specify version)_'
+        - label: '`pkg`'
+        - label: '`node-red-contrib-zwave-js` _(please specify version, double click node to find out)_'
+        - label: 'Manually built from GitHub _(please specify branch)_'
+        - label: 'Other _(please describe)_'
+    validations:
+      required: true
+
+  - type: textarea
+    id: software_versions
+    attributes:
+      label: Which branches or versions?
+      description: Please fill out the (applicable) branches/versions requested in the previous dropdown, delete the rest
+      value: |
+        version:
+        `node-zwave-js` branch:
+        `zwavejs2mqtt` branch:
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+  - type: dropdown
+    id: changes
+    attributes:
+      label: Did you change anything?
+      options:
+        - 'yes (please describe)'
+        - 'no'
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes_description
+    attributes:
+      label: If yes, what did you change?
+
+  - type: dropdown
+    id: changes_worked_before
+    attributes:
+      label: Did this work before?
+      options:
+        - "Don't know, this is a new device"
+        - 'No, it never worked anywhere'
+        - 'Yes (please describe)'
+    validations:
+      required: true
+
+  - type: textarea
+    id: changes_worked_where
+    attributes:
+      label: If yes, where did it work?
+      description: Please specify which application (and which version)
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+
+  - type: textarea
+    id: logfile
+    validations:
+      required: true
+    attributes:
+      label: Attach Driver Logfile
+      description: |
+        Many issues simply cannot be investigated without the correct logfile. We **need** a **driver** logfile on loglevel **DEBUG**.
+        Please no links or gists or embedded logs.
+
+        Avoid copy-pasting as text because that messes up the formatting.
+        Avoid truncating the logs because you might be missing relevant info.
+
+        Please make sure to upload the correct log! If you're unsure, the correct one is called `zwave_<date>.log` and contains
+        ```
+        ███████╗ ██╗    ██╗  █████╗  ██╗   ██╗ ███████╗             ██╗ ███████╗
+        ╚══███╔╝ ██║    ██║ ██╔══██╗ ██║   ██║ ██╔════╝             ██║ ██╔════╝
+          ███╔╝  ██║ █╗ ██║ ███████║ ██║   ██║ █████╗   █████╗      ██║ ███████╗
+         ███╔╝   ██║███╗██║ ██╔══██║ ╚██╗ ██╔╝ ██╔══╝   ╚════╝ ██   ██║ ╚════██║
+        ███████╗ ╚███╔███╔╝ ██║  ██║  ╚████╔╝  ███████╗        ╚█████╔╝ ███████║
+        ╚══════╝  ╚══╝╚══╝  ╚═╝  ╚═╝   ╚═══╝   ╚══════╝         ╚════╝  ╚══════╝
+        ```
+
+        If you are using `zwavejs2mqtt`, this is how you create the logfiles:
+        * Go to Settings, Z-Wave section
+        * select log level DEBUG
+        * enable "log to file"
+
+        **Attention:**
+        For encrypted communication we need your network key to decode. You can send that via email to info@zwave-js.io
+        If your logfile contains user codes or a secure inclusion process, you should upload an encrypted archive (zip, rar, 7z, tgz, ...) and send us the password via email.
+
+      placeholder: |
+        Drag and drop logfile (`zwave_<date>.log`) file here.
+        Copying the contents is okay for short logs (< 20 lines), but please put them in code blocks:
+        ```
+        log here
+        ```
+
+  - type: markdown
+    attributes:
+      value: Thanks for your patience. Filling this out completely saves us a lot of time.

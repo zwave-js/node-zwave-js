@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -26,7 +27,8 @@
 			"maxValue": 4200,
 			"defaultValue": 4200
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dwell Time",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -34,7 +36,8 @@
 			"maxValue": 9,
 			"defaultValue": 3
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Pet Immunity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +59,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Walk Test",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +79,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://support.ring.com/hc/en-gb/article_attachments/360051977311/Ring_Motion_Detector_Zwave_UK.pdf"
 	}

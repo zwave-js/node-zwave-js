@@ -50,8 +50,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "ALL ON / ALL OFF function activation",
 			"description": "Activation/deactivation of ALL ON/ALL OFF functions.",
 			"valueSize": 1,
@@ -79,7 +80,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Associations command class choice",
 			"valueSize": 1,
 			"minValue": 0,
@@ -110,7 +112,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Outputs state change mode",
 			"description": "MODE1, Example: change saturation level from 0% to 99%",
 			"valueSize": 1,
@@ -130,7 +133,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Step value (for MODE1)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -138,7 +142,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Time between steps (relevant for MODE1)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -146,7 +151,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Time for changing from start to end value",
 			"description": "Step value (relevant for MODE1).",
 			"valueSize": 1,
@@ -155,7 +161,8 @@
 			"defaultValue": 67,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Brightening level",
 			"valueSize": 1,
 			"minValue": 3,
@@ -163,7 +170,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Minimum dim level",
 			"valueSize": 1,
 			"minValue": 2,
@@ -171,7 +179,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Inputs/Outputs configuration",
 			"description": "Relevant for main controllers other than Home Center 2 only",
 			"valueSize": 2,
@@ -180,26 +189,12 @@
 			"defaultValue": 4369,
 			"unsigned": true
 		},
-		"16": {
-			"label": "Remember device status after power failure",
-			"description": "Define how will the Plug react after the power supply is back on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not remember state",
-					"value": 0
-				},
-				{
-					"label": "Remember state before power failure",
-					"value": 1
-				}
-			]
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Alarm response",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,14 +220,16 @@
 				}
 			]
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Alarm sequence program",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Active PROGRAM alarm time",
 			"valueSize": 2,
 			"minValue": 1,
@@ -240,7 +237,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Command class reporting Outputs status change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -262,7 +260,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Reporting 0-10v analog inputs change threshold",
 			"description": "Defines which input voltage must change to be reported",
 			"valueSize": 1,
@@ -270,7 +269,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Power load reporting frequency",
 			"description": "Parameter defines Time between reports.",
 			"valueSize": 2,
@@ -279,7 +279,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Reporting energy consumption changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -287,7 +288,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Response to BRIGHTNESS set to 0%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -305,7 +307,8 @@
 				}
 			]
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Starting animation program",
 			"description": "Starting predefined program when device set to work in RGB/RGBW mode",
 			"valueSize": 1,
@@ -313,7 +316,8 @@
 			"maxValue": 10,
 			"defaultValue": 1
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Triple click action",
 			"description": "Triple click action, default setting: 0",
 			"valueSize": 1,
@@ -332,5 +336,9 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// This device exposes the RGBW control on the root endpoint
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

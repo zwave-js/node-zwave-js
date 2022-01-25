@@ -20,6 +20,7 @@ describe("regression tests", () => {
 		driver["_controller"] = {
 			ownNodeId: 1,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 	});
 
@@ -31,9 +32,8 @@ describe("regression tests", () => {
 	it("when a SendData request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
 		jest.setTimeout(5000);
 		// Use the normal SendData commands
-		driver[
-			"_controller"
-		]!.isFunctionSupported = isFunctionSupported_NoBridge;
+		driver["_controller"]!.isFunctionSupported =
+			isFunctionSupported_NoBridge;
 
 		const node2 = new ZWaveNode(2, driver);
 		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
@@ -55,6 +55,7 @@ describe("regression tests", () => {
 		const promise = driver.sendCommand(command, {
 			maxSendAttempts: 1,
 		});
+		await wait(1);
 
 		// » [Node 002] [REQ] [SendData]
 		//   │ transmit options: 0x25
@@ -111,6 +112,7 @@ describe("regression tests", () => {
 		const promise = driver.sendCommand(command, {
 			maxSendAttempts: 1,
 		});
+		await wait(1);
 
 		// » [Node 002] [REQ] [SendDataBridge]
 		//   │ source node id:   1

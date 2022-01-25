@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Period",
 			"valueSize": 1,
 			"unit": "30 minutes",
@@ -24,7 +25,7 @@
 			"defaultValue": 12,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "a. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is exclusion status.\nb. LED of Open sensor will be on 5 seconds later.\nc. Open sensor will try Inclusion for 30sec when button is released.\nd. LED will blink 3 times if Inclusion is successful.",
 		"exclusion": "a. Receiver will stay exclusion waiting mode.\nb. Press & hold Inclusion/Exclusion button for 5 seconds when Open Sensor is Inclusion status.\nc. LED of Open sensor will be on 5 seconds later.\nd. Open sensor will try Exclusion when button is released.\ne. LED will blink 3 times if Exclusion is successful.",

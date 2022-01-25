@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Send Basic Sets",
 			"description": "Send or do not send Basic Set commands to AG2",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Binary Reports",
 			"description": "Send Sensor Binary Reports for backward compatibility",
 			"valueSize": 1,
@@ -55,5 +56,5 @@
 				}
 			]
 		}
-	}
+	]
 }

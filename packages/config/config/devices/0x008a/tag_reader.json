@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set to Default",
 			"description": "Set all configuration values to default values (factory settings)",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Feedback time",
 			"description": "the time the beep goes to off",
 			"valueSize": 1,
@@ -40,7 +42,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Feedback time-out",
 			"description": "waiting for the wake-up-no-more command",
 			"valueSize": 1,
@@ -49,14 +52,16 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "feedback beeps per second",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 2
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Mode",
 			"description": "To configure mode",
 			"valueSize": 1,
@@ -65,7 +70,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "RFID circuit start-up time",
 			"description": "The time the RFID will be started after pressing \"home\" or \"away\"",
 			"valueSize": 1,
@@ -74,5 +80,5 @@
 			"defaultValue": 100,
 			"unsigned": true
 		}
-	}
+	]
 }

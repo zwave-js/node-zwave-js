@@ -4,7 +4,8 @@ import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 export type DurationUnit = "seconds" | "minutes" | "unknown" | "default";
 
-const durationStringRegex = /^(?:(?<hoursStr>\d+)h)?(?:(?<minutesStr>\d+)m)?(?:(?<secondsStr>\d+)s)?$/i;
+const durationStringRegex =
+	/^(?:(?<hoursStr>\d+)h)?(?:(?<minutesStr>\d+)m)?(?:(?<secondsStr>\d+)s)?$/i;
 
 /** Represents a duration that is used by some command classes */
 export class Duration {

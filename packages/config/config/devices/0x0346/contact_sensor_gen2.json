@@ -8,6 +8,11 @@
 			"productType": "0x0201",
 			"productId": "0x0301",
 			"zwaveAllianceId": 3862
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x0401",
+			"zwaveAllianceId": 4147
 		}
 	],
 	"firmwareVersion": {
@@ -21,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Heartbeat Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -31,7 +37,8 @@
 			"defaultValue": 70,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Message Retry Attempt Limit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +46,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delay Between Retry Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -48,7 +56,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -71,8 +80,9 @@
 				}
 			]
 		},
-		"5": {
-			"label": "Force Wakeup After Delay",
+		{
+			"#": "5",
+			"label": "One-Time Wakeup Delay",
 			"description": "Device will wakeup once after the configured delay",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -81,7 +91,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Supervision Report Timeout",
 			"description": "How long to wait for a Supervision Report response to a Supervision Get",
 			"valueSize": 2,
@@ -91,7 +102,7 @@
 			"defaultValue": 1500,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "After powering on the device, press and hold the button on the front of the device for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
 		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Contact Sensor” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s red LED turns on solid to indicate the device was removed from the network.",

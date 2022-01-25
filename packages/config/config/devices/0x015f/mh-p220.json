@@ -10,6 +10,11 @@
 		},
 		{
 			"productType": "0x220a",
+			"productId": "0x5101",
+			"zwaveAllianceId": 3011
+		},
+		{
+			"productType": "0x220a",
 			"productId": "0x5102"
 		},
 		{
@@ -21,26 +26,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
-			"label": "Restore State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch States",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +73,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "All On / All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -107,21 +101,24 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimming Step Time (Manual)",
 			"valueSize": 2,
 			"unit": "10ms",
@@ -129,14 +126,16 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dimming Step Size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimming Step Time (Auto)",
 			"valueSize": 2,
 			"unit": "10ms",
@@ -144,28 +143,32 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming Step Size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "One click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Double click of S1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -183,7 +186,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Operation Report Switch1 to Association Groups 2 & 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -191,7 +195,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Operation Report Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -209,7 +214,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Switch 2 Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -240,7 +246,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Association Group 4 Commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -267,7 +274,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Scene ID - One Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -275,7 +283,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Scene ID - Double Click of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -283,7 +292,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Scene ID - Hold of S2 (Association Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -291,7 +301,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,5 +322,11 @@
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "Add the device into Z-Wave network:\n1. Set controller into ADD mode. Follow the instructions provided by the controller/gateway manufacturer.\n2. Press the momentary button on the device 3 times, or the connected external button S1 3 times in quick succession. \nNote: If the ADD is successful, the INDICATION LED will blink 6 times. If not, INDICATION LED will be solid on or off depending on switch’s state.",
+		"exclusion": "Remove the device from Z-Wave network:\n1. Set controller into REMOVE mode. Follow the instructions provided by the controller/gateway manufacturer.\n2. Press the momentary button on the device 3 times, or the connected external button S1 3 times in quick succession. \nNote: If the REMOVE is successful, the INDICATION LED will blink 6 times. If not, INDICATION LED will be solid on or off depending on switch’s state.",
+		"reset": "Restoring Factory Settings:\nThe default configuration can be restored by:\n Sending commands through controller/gateway (the command classes which support this function is Configuration Command Class). The parameter are as follows:\n\nParameter Number 0xFF\nSize 1 BYTE\nDefault value N/A\nConfiguration value 0x55\nSet 0xFF as 0x55 will restore Factory Settings.\n\n Or press the inner button on the module 10 times in quick succession.Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3011/MH-P220UserManual.pdf"
 	}
 }

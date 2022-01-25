@@ -1,0 +1,180 @@
+{
+	"manufacturer": "Weiser",
+	"manufacturerId": "0x0090",
+	"label": "GED1455",
+	"description": "SmartCode 5 Touchpad Electronic Lever",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0339",
+			"zwaveAllianceId": 2378
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/kwikset_template.json#usercode_1"
+		},
+		{
+			"#": "2",
+			"$import": "templates/kwikset_template.json#usercode_2"
+		},
+		{
+			"#": "3",
+			"$import": "templates/kwikset_template.json#usercode_3"
+		},
+		{
+			"#": "4",
+			"$import": "templates/kwikset_template.json#usercode_4"
+		},
+		{
+			"#": "5",
+			"$import": "templates/kwikset_template.json#usercode_5"
+		},
+		{
+			"#": "6",
+			"$import": "templates/kwikset_template.json#usercode_6"
+		},
+		{
+			"#": "7",
+			"$import": "templates/kwikset_template.json#usercode_7"
+		},
+		{
+			"#": "8",
+			"$import": "templates/kwikset_template.json#usercode_8"
+		},
+		{
+			"#": "9",
+			"$import": "templates/kwikset_template.json#usercode_9"
+		},
+		{
+			"#": "10",
+			"$import": "templates/kwikset_template.json#usercode_10"
+		},
+		{
+			"#": "11",
+			"$import": "templates/kwikset_template.json#usercode_11"
+		},
+		{
+			"#": "12",
+			"$import": "templates/kwikset_template.json#usercode_12"
+		},
+		{
+			"#": "13",
+			"$import": "templates/kwikset_template.json#usercode_13"
+		},
+		{
+			"#": "14",
+			"$import": "templates/kwikset_template.json#usercode_14"
+		},
+		{
+			"#": "15",
+			"$import": "templates/kwikset_template.json#usercode_15"
+		},
+		{
+			"#": "16",
+			"$import": "templates/kwikset_template.json#usercode_16"
+		},
+		{
+			"#": "17",
+			"$import": "templates/kwikset_template.json#usercode_17"
+		},
+		{
+			"#": "18",
+			"$import": "templates/kwikset_template.json#usercode_18"
+		},
+		{
+			"#": "19",
+			"$import": "templates/kwikset_template.json#usercode_19"
+		},
+		{
+			"#": "20",
+			"$import": "templates/kwikset_template.json#usercode_20"
+		},
+		{
+			"#": "21",
+			"$import": "templates/kwikset_template.json#usercode_21"
+		},
+		{
+			"#": "22",
+			"$import": "templates/kwikset_template.json#usercode_22"
+		},
+		{
+			"#": "23",
+			"$import": "templates/kwikset_template.json#usercode_23"
+		},
+		{
+			"#": "24",
+			"$import": "templates/kwikset_template.json#usercode_24"
+		},
+		{
+			"#": "25",
+			"$import": "templates/kwikset_template.json#usercode_25"
+		},
+		{
+			"#": "26",
+			"$import": "templates/kwikset_template.json#usercode_26"
+		},
+		{
+			"#": "27",
+			"$import": "templates/kwikset_template.json#usercode_27"
+		},
+		{
+			"#": "28",
+			"$import": "templates/kwikset_template.json#usercode_28"
+		},
+		{
+			"#": "29",
+			"$import": "templates/kwikset_template.json#usercode_29"
+		},
+		{
+			"#": "30",
+			"$import": "templates/kwikset_template.json#usercode_30"
+		},
+		{
+			"#": "31[0x01]",
+			"$import": "templates/kwikset_template.json#dipswitch_led"
+		},
+		{
+			"#": "31[0x02]",
+			"$import": "templates/kwikset_template.json#dipswitch_autolock"
+		},
+		{
+			"#": "31[0x04]",
+			"$import": "templates/kwikset_template.json#dipswitch_buzzer"
+		},
+		{
+			"#": "31[0x08]",
+			"$import": "templates/kwikset_template.json#dipswitch_securescreen"
+		},
+		{
+			"#": "33",
+			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
+		},
+		{
+			"#": "34",
+			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
+		},
+		{
+			"#": "40",
+			"$import": "templates/kwikset_template.json#reset"
+		}
+	],
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system.\nPlease only perform a factory reset when the primary controller is missing or inoperable.\n\nTo perform a factory reset, please perform the following: \n1. Remove the battery pack\n2. Press and HOLD the Program button while reinserting the battery pack.\n3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red.\n4. Press the Program button once more. The status LED will flash green and red several times.\n5. After a few seconds, the lock will initiate the door handing process",
+		"manual": "http://www.weiserlock.com/PDFs/instructions/Electronics/SmartCode_5_Installation_and_User_Guide_English.pdf"
+	}
+}

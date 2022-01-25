@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"13": {
+	"paramInformation": [
+		{
+			"#": "13",
 			"label": "Motion Sensor",
 			"valueSize": 1,
 			"minValue": 1,
@@ -44,7 +45,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "PIR Timeout Duration",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Basic Set, Notification and Basic Report",
 			"valueSize": 1,
 			"minValue": 1,
@@ -82,7 +85,8 @@
 				}
 			]
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Enable & Disable the LED indication",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,5 +104,5 @@
 				}
 			]
 		}
-	}
+	]
 }

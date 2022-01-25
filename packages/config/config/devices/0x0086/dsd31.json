@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"37[0xff00]": {
+	"paramInformation": [
+		{
+			"#": "37[0xff00]",
 			"label": "Siren Sound",
 			"valueSize": 2,
 			"minValue": 1,
@@ -45,15 +45,18 @@
 				}
 			]
 		},
-		"37[0xff]": {
-			"$import": "../templates/master_template.json#volume_three",
+		{
+			"#": "37[0xff]",
+			"$import": "~/templates/master_template.json#volume_three",
 			"valueSize": 2
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		}
-	}
+	]
 }

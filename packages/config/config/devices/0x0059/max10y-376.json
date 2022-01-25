@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Enable/Disable Fail Safe Timer",
 			"description": "For any non zero value fail safe timer of 60 minutes starts after valid 'switch binary set' or 'Basic Set' command, timer is reloaded with 60 minutes on every successful communication with the controller. in case of communication failure with the controller for 60 minutes. fail safe timer will switch off the relay and communication failure indicated on rf led",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Scale",
 			"description": "Used to select temperature scale '°c' or '°f' for unsolicited multilevel sensor report. note: (1) on every scale change config parameter 3 to 5 will be set to their default values. (2) parameter 2 to 5 available only if temperature sensor is connected while inclusion process",
 			"valueSize": 2,
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Report Interval",
 			"description": "Configuration of time for time base temperature reporting. (range 31 second to 65534 second)",
 			"valueSize": 2,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Delta Configuration Temperature Report",
 			"description": "Configuration of delta temperature for delta temperature change based reporting. in case of °f scale: minimum value is 0 and maximum value is 500 (in 0.1 °f resolution)",
 			"valueSize": 2,
@@ -107,7 +111,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Cut Off Temperature",
 			"description": "When temperature reaches at cut off temperature point than relay will be switched off. in case of °f scale: minimum value is 320 and maximum value is 2120 (in 0.1 °f resolution)",
 			"valueSize": 2,
@@ -123,7 +128,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "STEP 1: Ensure the RF LED is flashing on the SIR 321, if not than follow ‘Exclusion’ steps first.\nSTEP 2: Put the third party controller into inclusion mode.\nSTEP 3: Press and hold the pairing button on the SIR 321 until the RF LED start flashing at a fast rate. Then release the button.\nThe SIR 321 has been added onto the network when the RF LED stop flashing",
 		"exclusion": "STEP 1: Put the third party controller into exclusion mode.\nSTEP 2: Press and hold the pairing button on the SIR 321 until the RF LED start flashing at a fast rate. Then release the button.\nThe SIR 321 has been removed from the network when the RF LED starts flashing",

@@ -25,8 +25,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Setting the BASIC command value to turn on the light.",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"description": "Set the sensitivity for the PIR (Passive Infrared Sensor).",
 			"valueSize": 1,
@@ -59,7 +61,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Set the illumination threshold to turn on the light.",
 			"valueSize": 1,
@@ -73,7 +76,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "Parameter to set the Operation Mode",
 			"valueSize": 1,
@@ -81,7 +85,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi-Sensor Function Switch",
 			"description": "Parameter to set the sensor functions.",
 			"valueSize": 1,
@@ -89,7 +94,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Parameter to set the Customer Function.",
 			"valueSize": 1,
@@ -97,7 +103,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"description": "Setting the re-detect time after motion detected",
 			"valueSize": 1,
@@ -105,7 +112,8 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"description": "Setting delay time to turn off the light when no motion",
 			"valueSize": 1,
@@ -113,7 +121,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto reporting the battery level.",
 			"valueSize": 1,
@@ -121,7 +130,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"description": "Interval time for auto reporting the door/window state.",
 			"valueSize": 1,
@@ -129,7 +139,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"description": "The Interval time for auto reporting the illumination state.",
 			"valueSize": 1,
@@ -137,7 +148,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto reporting the temperature state.",
 			"valueSize": 1,
@@ -145,7 +157,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for each auto report tick.",
 			"valueSize": 1,
@@ -154,21 +167,23 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network.\nTo add into a Z-Wave network: \n1. Have Z-Wave Controller entered inclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave Controller about 20 seconds",
 		"exclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network.\nTo remove the device from a Z-Wave network: \n1. Have Z-Wave Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been excluded",

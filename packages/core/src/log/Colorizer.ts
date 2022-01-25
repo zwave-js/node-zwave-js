@@ -29,7 +29,7 @@ function colorizeTextAndTags(
 	);
 }
 
-export const colorizer = format((((
+export const colorizer = format(((
 	info: ZWaveLogInfo,
 	_opts: ColorizerOptions,
 ) => {
@@ -63,4 +63,4 @@ export const colorizer = format((((
 		info.secondaryTags = colors.gray(info.secondaryTags);
 	}
 	return info;
-}) as unknown) as TransformFunction);
+}) as unknown as TransformFunction);

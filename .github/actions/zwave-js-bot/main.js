@@ -30,7 +30,7 @@ async function publishPr() {
 	let newVersion;
 	try {
 		// Build it
-		await exec.exec("yarn", ["run", "build:full"]);
+		await exec.exec("yarn", ["run", "build"]);
 
 		// Configure git
 		await exec.exec("git", ["config", "user.email", "bot@zwave-js.io"]);
@@ -51,15 +51,14 @@ async function publishPr() {
 
 		// Bump versions
 		await exec.exec(
-			"npx",
-			`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
+			"lerna",
+			`version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --no-push --yes`.split(
 				" ",
 			),
 		);
 
 		// and release
-		await exec.exec("npx", [
-			"lerna",
+		await exec.exec("lerna", [
 			"publish",
 			"from-package",
 			"--yes",

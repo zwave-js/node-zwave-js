@@ -24,8 +24,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Setting the BASIC command value to turn on the light",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Setting the illumination threshold to turn on the light",
 			"valueSize": 1,
@@ -42,7 +44,8 @@
 			"maxValue": 100,
 			"defaultValue": 99
 		},
-		"5[0x02]": {
+		{
+			"#": "5[0x02]",
 			"label": "Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +62,8 @@
 				}
 			]
 		},
-		"5[0x04]": {
+		{
+			"#": "5[0x04]",
 			"label": "Door Window Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +80,8 @@
 				}
 			]
 		},
-		"5[0x08]": {
+		{
+			"#": "5[0x08]",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +98,8 @@
 				}
 			]
 		},
-		"5[0x10]": {
+		{
+			"#": "5[0x10]",
 			"label": "Illumination Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -110,7 +116,8 @@
 				}
 			]
 		},
-		"5[0x20]": {
+		{
+			"#": "5[0x20]",
 			"label": "Temperature Report on Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -127,7 +134,8 @@
 				}
 			]
 		},
-		"5[0x80]": {
+		{
+			"#": "5[0x80]",
 			"label": "Back Key Release in Test Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +152,8 @@
 				}
 			]
 		},
-		"6[0x02]": {
+		{
+			"#": "6[0x02]",
 			"label": "Magnetic Illumination",
 			"valueSize": 1,
 			"minValue": 0,
@@ -161,7 +170,8 @@
 				}
 			]
 		},
-		"6[0x10]": {
+		{
+			"#": "6[0x10]",
 			"label": "5 Second Delay Light Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -178,7 +188,8 @@
 				}
 			]
 		},
-		"6[0x20]": {
+		{
+			"#": "6[0x20]",
 			"label": "Auto Turn Off Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -195,7 +206,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Basic CC Off After Door Close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -212,7 +224,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -229,7 +242,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Multi Command Encapsulated Auto Reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -246,7 +260,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Report Battery State When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -263,49 +278,56 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -313,19 +335,21 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1
 		}
-	}
+	]
 }

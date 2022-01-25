@@ -124,11 +124,10 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 		// When something is piped to us, pipe it to the serial port instead
 		// Also pass all written data to the serialport unchanged
-		// wotan-disable-next-line
 		this.on("pipe" as any, (source: Readable) => {
 			source.unpipe(this as any);
 			// Pass all written data to the serialport unchanged
-			source.pipe((this.serial as unknown) as Writable, { end: false });
+			source.pipe(this.serial as unknown as Writable, { end: false });
 		});
 
 		// Delegate iterating to the parser stream

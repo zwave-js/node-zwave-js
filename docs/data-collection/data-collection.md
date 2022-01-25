@@ -28,6 +28,7 @@ In order to gain insight into how `zwave-js` is used, which manufacturers and de
 -   A **hash** of your network's home ID salted with a 32 byte randomly generated number. This is used to distinguish the individual records to ensure that duplicate entries aren't made. The hash cannot be reversed to reconstruct the home ID without knowing the salt which is not collected.
 -   The application that uses `zwave-js` and its version.
 -   The version of `zwave-js`.
+-   The version of `Node.js` and your operating system **platform** and **architecture**.
 -   The **manufacturer ID**, **product type**, **product ID** and **firmware version** that are reported by each device - in other words which devices you have.
 
 > [!NOTE] We do not collect your IP address, nor is the IP address or any other identifying information stored and tied to a record.
@@ -40,6 +41,9 @@ Here's an example of the collected data along with an explanation:
 	"driverVersion": "7.1.0", // Which version of zwave-js you're running
 	"applicationName": "ioBroker.zwave2", // The application's name, provided by the application
 	"applicationVersion": "1.9.1", // The version of the application you're using
+	"nodeVersion": "16.3.0", // The version of Node.js which is executing the application
+	"os": "linux",
+	"arch": "x64",
 	"devices": [
 		{
 			// Aeotec MultiSensor 6 (ZW100):

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input IN1 configuration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +65,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input IN2 configuration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -115,7 +116,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input IN3 configuration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -165,7 +167,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input IN4 configuration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -215,7 +218,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto scene mode set",
 			"description": "Activation of the programmed scene changing color shades.",
 			"valueSize": 1,
@@ -250,7 +254,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Scene Mode",
 			"description": "Duration between Colour change",
 			"valueSize": 2,
@@ -258,7 +263,8 @@
 			"maxValue": 1127,
 			"defaultValue": 3
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Memorize device status at power cut",
 			"description": "Device will be set to status memorized before power cut.",
 			"valueSize": 1,
@@ -277,49 +283,56 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Automatic turning off output after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Automatic turning on output after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "MAX dimming value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "MIN dimming value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Dimming time (soft on/off)",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 25,
 			"defaultValue": 10
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "4 Dimmers mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -345,5 +358,5 @@
 				}
 			]
 		}
-	}
+	]
 }

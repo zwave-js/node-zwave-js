@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
@@ -65,11 +66,9 @@ export function getDimmingDurationValueID(
 	};
 }
 
-function persistSceneActuatorConfig(
+function setSceneActuatorConfigMetaData(
 	this: SceneActuatorConfigurationCC,
 	sceneId: number,
-	level: number,
-	dimmingDuration: Duration,
 ) {
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
@@ -82,6 +81,7 @@ function persistSceneActuatorConfig(
 		valueDB.setMetadata(levelValueId, {
 			...ValueMetadata.UInt8,
 			label: `Level (${sceneId})`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 	}
 	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
@@ -89,6 +89,27 @@ function persistSceneActuatorConfig(
 			...ValueMetadata.Duration,
 			label: `Dimming duration (${sceneId})`,
 		});
+	}
+}
+
+function persistSceneActuatorConfig(
+	this: SceneActuatorConfigurationCC,
+	sceneId: number,
+	level: number,
+	dimmingDuration: Duration,
+): boolean {
+	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
+	const dimmingDurationValueId = getDimmingDurationValueID(
+		this.endpointIndex,
+		sceneId,
+	);
+	const valueDB = this.getValueDB();
+
+	if (
+		!valueDB.hasMetadata(levelValueId) ||
+		!valueDB.hasMetadata(dimmingDurationValueId)
+	) {
+		setSceneActuatorConfigMetaData.call(this, sceneId);
 	}
 
 	valueDB.setValue(levelValueId, level);
@@ -114,6 +135,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	): Promise<void> => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -131,15 +153,53 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			}
 
 			// We need to set the dimming duration along with the level.
-			// If no duration is set, we default to 0 seconds
-			const node = this.endpoint.getNodeUnsafe()!;
+			// Dimming duration is chosen with the following precedence:
+			// 1. options.transitionDuration
+			// 2. current stored value
+			// 3. default
 			const dimmingDuration =
-				node.getValue<Duration>(
-					getDimmingDurationValueID(this.endpoint.index, propertyKey),
-				) ?? new Duration(0, "seconds");
+				Duration.from(options?.transitionDuration) ??
+				this.endpoint
+					.getNodeUnsafe()!
+					.getValue<Duration>(
+						getDimmingDurationValueID(
+							this.endpoint.index,
+							propertyKey,
+						),
+					);
 			await this.set(propertyKey, dimmingDuration, value);
+		} else if (property === "dimmingDuration") {
+			if (typeof value !== "string" && !(value instanceof Duration)) {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"duration",
+					typeof value,
+				);
+			}
+
+			const dimmingDuration = Duration.from(value);
+			if (dimmingDuration == undefined) {
+				throw new ZWaveError(
+					`${getCCName(
+						this.ccId,
+					)}: "${property}" could not be set. ${JSON.stringify(
+						value,
+					)} is not a valid duration.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+
+			// Must set the level along with the dimmingDuration,
+			// Use saved value, if it's defined. Otherwise the default
+			// will be used.
+			const node = this.endpoint.getNodeUnsafe()!;
+			const level = node.getValue<number>(
+				getLevelValueID(this.endpoint.index, propertyKey),
+			);
+
+			await this.set(propertyKey, dimmingDuration, level);
 		} else {
-			// setting dimmingDuration value alone not supported
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
@@ -169,7 +229,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 	public async set(
 		sceneId: number,
-		dimmingDuration: Duration,
+		dimmingDuration?: Duration,
 		level?: number,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -177,11 +237,14 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			SceneActuatorConfigurationCommand.Set,
 		);
 
+		// Undefined `dimmingDuration` defaults to 0 seconds to simplify the call
+		// for actuators that don't support non-instant `dimmingDuration`
+		// Undefined `level` uses the actuator's current value (override = 0).
 		const cc = new SceneActuatorConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration,
+			dimmingDuration: dimmingDuration ?? new Duration(0, "seconds"),
 			level,
 		});
 
@@ -205,10 +268,11 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: 0,
 		});
-		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		if (response) {
 			return pick(response, ["sceneId", "level", "dimmingDuration"]);
@@ -238,10 +302,11 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sceneId: sceneId,
 		});
-		const response = await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SceneActuatorConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			);
 
 		if (response) {
 			return pick(response, ["level", "dimmingDuration"]);
@@ -249,12 +314,46 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	}
 }
 
-// @noInterview - We don't want to query 255 scenes
-
 @commandClass(CommandClasses["Scene Actuator Configuration"])
 @implementedVersion(1)
 export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
+
+	// eslint-disable-next-line @typescript-eslint/require-await
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+
+		this.driver.controllerLog.logNode(node.id, {
+			message: `${this.constructor.name}: setting metadata`,
+			direction: "none",
+		});
+
+		for (let sceneId = 1; sceneId <= 255; sceneId++) {
+			setSceneActuatorConfigMetaData.call(this, sceneId);
+		}
+
+		this.interviewComplete = true;
+	}
+
+	// `refreshValues()` would create 255 `Get` commands to be issued to the node
+	// Therefore, I think we should not implement it. Here is how it would be implemented
+	//
+	// public async refreshValues(): Promise<void> {
+	// 	const node = this.getNode()!;
+	// 	const endpoint = this.getEndpoint()!;
+	// 	const api = endpoint.commandClasses[
+	// 		"Scene Actuator Configuration"
+	// 	].withOptions({
+	// 		priority: MessagePriority.NodeQuery,
+	// 	});
+	// 	this.driver.controllerLog.logNode(node.id, {
+	// 		message: "querying all scene actuator configs...",
+	// 		direction: "outbound",
+	// 	});
+	// 	for (let sceneId = 1; sceneId <= 255; sceneId++) {
+	// 		await api.get(sceneId);
+	// 	}
+	// }
 }
 
 interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {

@@ -8,11 +8,26 @@
 			"productType": "0x0003",
 			"productId": "0x3602",
 			"zwaveAllianceId": 4064
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0018"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Smoke Sensor (Basic Set)",
+			"maxNodes": 5
+		}
 	},
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).\n2. Within 1.5 seconds, press the Function button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will turn on for ~2 seconds. Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.",

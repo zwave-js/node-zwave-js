@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"29": {
+	"paramInformation": [
+		{
+			"#": "29",
 			"label": "Disable Alarm",
 			"unit": "disable_alarm",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm Duration",
 			"description": "Play alarm sound duration, 1 tick is 30 seconds. 0 means never auto stop.",
 			"valueSize": 1,
@@ -43,7 +44,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +63,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing tamper key three times within 1.5 seconds\nto enter the inclusion mode.\n3. After add successful, the LED will light ON 1 second",
 		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing tamper key three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been excluded",

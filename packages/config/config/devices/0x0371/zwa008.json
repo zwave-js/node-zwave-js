@@ -5,233 +5,122 @@
 	"description": "Door/Window Sensor 7",
 	"devices": [
 		{
+			"productType": "0x0000",
+			"productId": "0x0007",
+			"zwaveAllianceId": 3472
+		},
+		{
 			"productType": "0x0002",
 			"productId": "0x0007"
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0007"
+			"productId": "0x0007",
+			"zwaveAllianceId": 3574
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x0007"
+			"productId": "0x0007",
+			"zwaveAllianceId": 3573
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
-			"label": "Sensor Operation Mode",
-			"description": "Defines if internal magnet sensor or the external terminal input is detected",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Internal Magnet Sensor Used",
-					"value": 0
-				},
-				{
-					"label": "External Terminal Inputs Used",
-					"value": 1
-				}
-			]
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"2": {
-			"label": "Sensor State Polarity",
-			"description": "Defines the polarity of the magnet sensor",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Closed when Magnet in proximity",
-					"value": 0
-				},
-				{
-					"label": "Opened when Magnet in proximity",
-					"value": 1
-				}
-			]
+			"label": "Group 2",
+			"maxNodes": 5
 		},
 		"3": {
-			"label": "Visual LED Indications",
-			"description": "Defines when the red LED will indicate events.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 31,
-			"defaultValue": 7
+			"label": "Group 3",
+			"maxNodes": 5
 		},
 		"4": {
-			"label": "Range Test after double click",
-			"description": "Allows to enable the activation of a Z-Wave range.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"5": {
-			"label": "2nd Association Group Trigger",
-			"description": "Sending a BASIC command to all devices of Association Group 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch after ‘Open‘ and ‘Close‘",
-					"value": 0
-				},
-				{
-					"label": "Switch after ‘Open‘",
-					"value": 1
-				},
-				{
-					"label": "Switch after ‘Close‘",
-					"value": 2
-				}
-			]
-		},
-		"6": {
-			"label": "Command Sent to Devices of Association Group 2",
-			"description": "This parameter defines which commands is sent to 2nd Association Group",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On",
-					"value": 0
-				},
-				{
-					"label": "Off",
-					"value": 1
-				},
-				{
-					"label": "On and Off",
-					"value": 2
-				}
-			]
-		},
-		"7": {
-			"label": "BASIC command value sent to 2nd Assoc Group on On",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
-		},
-		"8": {
-			"label": "BASIC command value sent to 2nd Assoc Group on Off",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		"9": {
-			"label": "Time Delay of ‘On‘ command frame",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0
-		},
-		"10": {
-			"label": "Time Delay of ‘Off‘ command frame",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0
-		},
-		"11": {
-			"label": "Delay of Tamper Alarm Cancellation",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0
-		},
-		"12": {
-			"label": "Reporting Tamper Alarm Cancellation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not send Report",
-					"value": 0
-				},
-				{
-					"label": "Send Report",
-					"value": 1
-				}
-			]
-		},
-		"13": {
-			"label": "Central Scene Event Functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"14": {
-			"label": "Tilt Sensor Functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"15": {
-			"label": "Tilt Sensor Sensitivity",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50
+			"label": "Group 4",
+			"maxNodes": 5
 		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/0x0086/templates/aeotec_template.json#sensor_operation_mode"
+		},
+		{
+			"#": "2",
+			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
+		},
+		{
+			"#": "3[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_open"
+		},
+		{
+			"#": "3[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
+		},
+		{
+			"#": "3[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
+		},
+		{
+			"#": "5",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
+		},
+		{
+			"#": "6",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
+		},
+		{
+			"#": "7",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
+		},
+		{
+			"#": "8",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
+		},
+		{
+			"#": "9",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on"
+		},
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off"
+		},
+		{
+			"#": "11",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper"
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
+		},
+		{
+			"#": "13",
+			"$import": "~/0x0086/templates/aeotec_template.json#central_scene_functionality"
+		},
+		{
+			"#": "14",
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
+		},
+		{
+			"#": "15",
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+		}
+	],
+	"metadata": {
+		"inclusion": "Tripple clicking the tamper button includes (adds) the device",
+		"exclusion": "Tripple clicking the tamper button excludes (removes) the device",
+		"reset": "This device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\nOnce Cover is removed and tamper switch is tripped, push the tamper for 5 seconds until red LED blinks. Then release tamper and push it again for 5 seconds until LED blinks",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3472/User%20manual%20-%20Aeotec%20Door%20Window%20Sensor%207%20ZWA008.pdf"
 	}
 }

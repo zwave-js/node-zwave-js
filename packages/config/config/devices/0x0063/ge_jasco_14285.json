@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Product State after Power Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Energy Report Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,14 +64,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Energy Report Frequency",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
 			"defaultValue": 5
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,5 +91,5 @@
 				}
 			]
 		}
-	}
+	]
 }

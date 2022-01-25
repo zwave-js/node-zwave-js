@@ -1,0 +1,160 @@
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAN30",
+	"description": "In-Wall Dual Relay Switch Module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0077",
+			"zwaveAllianceId": [4188, 4194, 4207, 4210, 4213, 4214, 4215, 4251, 4252, 4259]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch EP 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch EP 2",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Meter EP 3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Meter EP 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Power Reporting Interval",
+			"valueSize": 2,
+			"unit": "5 seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "kWh Reporting Interval",
+			"valueSize": 2,
+			"unit": "10 minutes",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Power Reporting Threshold: Limit",
+			"valueSize": 2,
+			"unit": ".01 A",
+			"minValue": 10,
+			"maxValue": 750,
+			"defaultValue": 750,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Power Reporting Threshold: Change",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "5%",
+					"value": 1
+				},
+				{
+					"label": "10%",
+					"value": 2
+				},
+				{
+					"label": "15%",
+					"value": 3
+				},
+				{
+					"label": "20%",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "kWh Reporting Threshold: Limit",
+			"valueSize": 2,
+			"unit": "kWh",
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "External Switch Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-toggle mode",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer.\n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter inclusion mode",
+		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer.\n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter exclusion mode.\n3. Node ID has been excluded",
+		"reset": "1. Pressing INCLUDE_BUTTON three times within 2 seconds will enter inclusion mode.\n2. Within 1 second, press On/Off button again for 5 seconds.\n3. IDs are excluded",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4188/PAN30%20manual-20210602.pdf"
+	}
+}

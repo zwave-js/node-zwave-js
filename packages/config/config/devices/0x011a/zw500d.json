@@ -24,8 +24,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "configure LED light state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Reverse installed direction",
 			"description": "Control if switch up is on or off",
 			"valueSize": 1,
@@ -62,5 +64,5 @@
 				}
 			]
 		}
-	}
+	]
 }

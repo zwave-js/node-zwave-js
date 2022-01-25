@@ -1,0 +1,39 @@
+{
+	"manufacturer": "Enerwave / Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZWN-BPC",
+	"description": "PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0601",
+			"productId": "0x0901"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.9"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "0",
+			"label": "Motion timeout",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true
+		}
+	],
+	"compat": {
+		// This device uses Basic Set to report the motion sensor status
+		"enableBasicSetMapping": true
+	}
+}

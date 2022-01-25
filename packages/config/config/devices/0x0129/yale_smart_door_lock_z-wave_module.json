@@ -21,25 +21,29 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Alarm Reports",
+			"label": "Lifeline",
 			"maxNodes": 4,
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume_inverted"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/yale_template.json#manual_relock_time"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/yale_template.json#remote_relock_time"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Put the Z-Wave controller into add mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 1 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the add/inclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
 		"exclusion": "Put the Z-Wave controller into remove mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 3 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the remove/exclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",

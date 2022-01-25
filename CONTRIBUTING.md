@@ -6,7 +6,7 @@ We're happy that you're considering helping us out. Although the goal of this pr
 
 ## Do you have a problem? Something not working? Configuration missing?
 
-Please read the [troubleshooting](https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting) section of the documentation. Your problem might already be answered there.
+Please read the [troubleshooting](https://zwave-js.github.io/node-zwave-js/#/troubleshooting/index) section of the documentation. Your problem might already be answered there.
 If not, consider opening an issue. Please **use the issue templates** and fill them out as best as you can.
 
 ## Do you want to propose a new feature?
@@ -15,7 +15,10 @@ Open an issue with the **feature request template** and fill it out. For complic
 
 ## Do you want to contribute device configuration files?
 
-Thanks, just go ahead and open a PR! Please make sure to follow the [[Style guide](config-files/style-guide.md) and use the [available templates](config-files/using-templates.md), while following the other documentation on [conditional parameters and settings](config-files/conditional-settings.md) and [partial parameters](config-files/partial-parameters.md).
+Thanks, just go ahead and open a PR! Please make sure to follow our [standards and contribution guidelines for configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files).
+
+**Did you know?** 🥳  
+We now have preconfigured [online instances of VSCode](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js) that help you through the contributing process without having to download and install a bunch of stuff on your system. These have auto-formatting and let you run checks, so prefer using them over editing on Github.
 
 ## Do you want to help out with a PR?
 

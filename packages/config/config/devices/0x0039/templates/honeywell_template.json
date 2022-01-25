@@ -1,0 +1,679 @@
+{
+	"base_hvac_stages_2": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1
+	},
+	"base_hvac_cycle_rate_6": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 6,
+		"defaultValue": 3,
+		"unit": "Cycles per hour"
+	},
+	"base_hvac_cycle_rate_12": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 12,
+		"defaultValue": 3,
+		"unit": "Cycles per hour"
+	},
+	"base_hvac_cycle_rate_12_default_9": {
+		"$import": "#base_hvac_cycle_rate_12",
+		"defaultValue": 9
+	},
+	"base_aux_em_heat_type": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Electric",
+				"value": 0
+			},
+			{
+				"label": "Gas/Oil",
+				"value": 1
+			}
+		]
+	},
+	"base_lockout_temperature": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 65,
+		"defaultValue": 65,
+		"unit": "°F",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"base_air_filter_reminder": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 19,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "10 run time days",
+				"value": 1
+			},
+			{
+				"label": "20 run time days",
+				"value": 2
+			},
+			{
+				"label": "30 run time days",
+				"value": 3
+			},
+			{
+				"label": "45 run time days",
+				"value": 4
+			},
+			{
+				"label": "60 run time days",
+				"value": 5
+			},
+			{
+				"label": "90 run time days",
+				"value": 6
+			},
+			{
+				"label": "120 run time days",
+				"value": 7
+			},
+			{
+				"label": "150 run time days",
+				"value": 8
+			},
+			{
+				"label": "30 days",
+				"value": 9
+			},
+			{
+				"label": "45 days",
+				"value": 10
+			},
+			{
+				"label": "60 days",
+				"value": 11
+			},
+			{
+				"label": "75 days",
+				"value": 12
+			},
+			{
+				"label": "3 months",
+				"value": 13
+			},
+			{
+				"label": "4 months",
+				"value": 14
+			},
+			{
+				"label": "5 months",
+				"value": 15
+			},
+			{
+				"label": "6 months",
+				"value": 16
+			},
+			{
+				"label": "9 months",
+				"value": 17
+			},
+			{
+				"label": "12 months",
+				"value": 18
+			},
+			{
+				"label": "15 months",
+				"value": 19
+			}
+		]
+	},
+	"base_reminder_months": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 12,
+		"defaultValue": 0,
+		"unit": "months",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"base_reminder_months_by_3": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 12,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "3 months",
+				"value": 3
+			},
+			{
+				"label": "6 months",
+				"value": 6
+			},
+			{
+				"label": "9 months",
+				"value": 9
+			},
+			{
+				"label": "12 months",
+				"value": 12
+			}
+		]
+	},
+	"base_reminder_months_6_12_24": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 24,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "6 months",
+				"value": 6
+			},
+			{
+				"label": "12 months",
+				"value": 12
+			},
+			{
+				"label": "24 months",
+				"value": 24
+			}
+		]
+	},
+	"schedule_type": {
+		"label": "Schedule Type",
+		"description": "On-thermostat schedule type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "No schedule on thermostat",
+				"value": 0
+			},
+			{
+				"label": "Single schedule",
+				"value": 1
+			},
+			{
+				"label": "5-2 schedule",
+				"value": 2
+			},
+			{
+				"label": "5-1-1 schedule",
+				"value": 3
+			},
+			{
+				"label": "Every day unique schedule",
+				"value": 4
+			}
+		]
+	},
+	"outdoor_temperature_sensor": {
+		"label": "Outdoor Temperature Sensor",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"heating_equipment_type": {
+		"label": "Equipment Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 9,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "None",
+				"value": 0
+			},
+			{
+				"label": "Standard Gas",
+				"value": 1
+			},
+			{
+				"label": "High Efficiency Gas",
+				"value": 2
+			},
+			{
+				"label": "Oil",
+				"value": 3
+			},
+			{
+				"label": "Electric",
+				"value": 4
+			},
+			{
+				"label": "Fan Coil",
+				"value": 5
+			},
+			{
+				"label": "Air to Air Heat pump",
+				"value": 6
+			},
+			{
+				"label": "Geothermal Heat Pump",
+				"value": 7
+			},
+			{
+				"label": "Hot Water",
+				"value": 8
+			},
+			{
+				"label": "Steam",
+				"value": 9
+			}
+		]
+	},
+	"reversing_valve": {
+		"label": "Reversing Valve",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "O/B on Cool",
+				"value": 0
+			},
+			{
+				"label": "O/B on Heat",
+				"value": 1
+			}
+		]
+	},
+	"cool_stages": {
+		"label": "Cool Stages",
+		"$import": "#base_hvac_stages_2"
+	},
+	"heat_stages": {
+		"label": "Heat Stages",
+		"description": "Heat stages or auxiliary/emergency stages",
+		"$import": "#base_hvac_stages_2"
+	},
+	"auxiliary_emergency_control": {
+		"label": "Auxiliary/Emergency Control",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Both auxiliary and emergency",
+				"value": 0
+			},
+			{
+				"label": "Either auxiliary or emergency",
+				"value": 1
+			}
+		]
+	},
+	"auxiliary_heat_type": {
+		"label": "Auxiliary Heat Type",
+		"$import": "#base_aux_em_heat_type"
+	},
+	"emergency_heat_type": {
+		"label": "Emergency Heat Type",
+		"$import": "#base_aux_em_heat_type"
+	},
+	"fossil_kit_control": {
+		"label": "Fossil Kit Control",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Thermostat",
+				"value": 0
+			},
+			{
+				"label": "External",
+				"value": 1
+			}
+		]
+	},
+	"auto_changeover": {
+		"label": "Auto Changeover",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"auto_differential": {
+		"label": "Auto Differential",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 0,
+		"unit": "°F"
+	},
+	"high_cool_stage_finish": {
+		"label": "High Cool Stage Finish",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"high_heat_stage_finish": {
+		"label": "High Heat Stage Finish",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"auxiliary_heat_droop": {
+		"label": "Auxiliary Heat Droop",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 15,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Comfort",
+				"value": 0
+			},
+			{
+				"label": "2 °F",
+				"value": 2
+			},
+			{
+				"label": "3 °F",
+				"value": 3
+			},
+			{
+				"label": "4 °F",
+				"value": 4
+			},
+			{
+				"label": "5 °F",
+				"value": 5
+			},
+			{
+				"label": "6 °F",
+				"value": 6
+			},
+			{
+				"label": "7 °F",
+				"value": 7
+			},
+			{
+				"label": "8 °F",
+				"value": 8
+			},
+			{
+				"label": "9 °F",
+				"value": 9
+			},
+			{
+				"label": "10 °F",
+				"value": 10
+			},
+			{
+				"label": "11 °F",
+				"value": 11
+			},
+			{
+				"label": "12 °F",
+				"value": 12
+			},
+			{
+				"label": "13 °F",
+				"value": 13
+			},
+			{
+				"label": "14 °F",
+				"value": 14
+			},
+			{
+				"label": "15 °F",
+				"value": 15
+			}
+		]
+	},
+	"up_stage_timer_aux_heat": {
+		"label": "Up Stage Timer Aux Heat",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 15,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			},
+			{
+				"label": "30 minutes",
+				"value": 1
+			},
+			{
+				"label": "45 minutes",
+				"value": 2
+			},
+			{
+				"label": "60 minutes",
+				"value": 3
+			},
+			{
+				"label": "75 minutes",
+				"value": 4
+			},
+			{
+				"label": "90 minutes",
+				"value": 5
+			},
+			{
+				"label": "2 hours",
+				"value": 6
+			},
+			{
+				"label": "3 hours",
+				"value": 7
+			},
+			{
+				"label": "4 hours",
+				"value": 8
+			},
+			{
+				"label": "5 hours",
+				"value": 9
+			},
+			{
+				"label": "6 hours",
+				"value": 10
+			},
+			{
+				"label": "8 hours",
+				"value": 11
+			},
+			{
+				"label": "10 hours",
+				"value": 12
+			},
+			{
+				"label": "12 hours",
+				"value": 13
+			},
+			{
+				"label": "14 hours",
+				"value": 14
+			},
+			{
+				"label": "16 hours",
+				"value": 15
+			}
+		]
+	},
+	"balance_point": {
+		"label": "Balance Point",
+		"description": "Compressor Lockout allowable range: 5-65 in 5 degree increments",
+		"$import": "#base_lockout_temperature"
+	},
+	"aux_heat_outdoor_lockout": {
+		"label": "Aux Heat Outdoor Lockout",
+		"description": "Allowable range: 5-65 in 5 degree increments",
+		"$import": "#base_lockout_temperature"
+	},
+	"cool_stage_1_cycle_rate": {
+		"label": "Cool Stage 1 Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_6"
+	},
+	"cool_stage_2_cycle_rate": {
+		"label": "Cool Stage 2 Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_6"
+	},
+	"heat_stage_1_cycle_rate": {
+		"label": "Heat Stage 1 Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_12"
+	},
+	"heat_stage_2_cycle_rate": {
+		"label": "Heat Stage 2 Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_12"
+	},
+	"aux_heat_cycle_rate": {
+		"label": "Aux Heat Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_12_default_9"
+	},
+	"emergency_heat_cycle_rate": {
+		"label": "Emergency Heat Cycle Rate",
+		"$import": "#base_hvac_cycle_rate_12_default_9"
+	},
+	"compressor_protection": {
+		"label": "Compressor Protection",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 5,
+		"unit": "minutes",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"adaptive_intelligent_recovery": {
+		"label": "Adaptive Intelligent Recovery",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"minimum_cool_temperature": {
+		"label": "Minimum Cool Temperature",
+		"valueSize": 1,
+		"minValue": 50,
+		"maxValue": 99,
+		"defaultValue": 50,
+		"unit": "°F"
+	},
+	"maximum_heat_temperature": {
+		"label": "Maximum Heat Temperature",
+		"valueSize": 1,
+		"minValue": 40,
+		"maxValue": 90,
+		"defaultValue": 90,
+		"unit": "°F"
+	},
+	"air_filters": {
+		"label": "Air Filters",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0
+	},
+	"air_filter_1_reminder": {
+		"label": "Air Filter 1 Reminder",
+		"$import": "#base_air_filter_reminder"
+	},
+	"air_filter_2_reminder": {
+		"label": "Air Filter 2 Reminder",
+		"$import": "#base_air_filter_reminder"
+	},
+	"humidification_pad_reminder": {
+		"label": "Humidification Pad Reminder",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "6 months",
+				"value": 1
+			},
+			{
+				"label": "12 months",
+				"value": 2
+			}
+		]
+	},
+	"dehumidification_filter_reminder": {
+		"label": "Dehumidification Filter Reminder",
+		"$import": "#base_reminder_months"
+	},
+	"ventilation_filter_reminder": {
+		"label": "Ventilation Filter Reminder",
+		"$import": "#base_reminder_months_by_3"
+	},
+	"uv_devices": {
+		"label": "UV Devices",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0
+	},
+	"uv_bulb_1_reminder": {
+		"label": "UV Bulb 1 Reminder",
+		"$import": "#base_reminder_months_6_12_24"
+	},
+	"uv_bulb_2_reminder": {
+		"label": "UV Bulb 2 Reminder",
+		"$import": "#base_reminder_months_6_12_24"
+	},
+	"idle_brightness": {
+		"label": "Idle Brightness",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 5,
+		"defaultValue": 0
+	},
+	"daylight_saving": {
+		"label": "Daylight Saving",
+		"$import": "~/templates/master_template.json#base_enable_disable"
+	},
+	"temperature_offset": {
+		"label": "Temperature Offset",
+		"valueSize": 1,
+		"minValue": -3,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unit": "°F"
+	}
+}

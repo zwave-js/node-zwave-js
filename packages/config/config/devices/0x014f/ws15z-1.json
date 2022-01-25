@@ -2,7 +2,7 @@
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "WS15Z-1",
-	"description": "Wall Mounted Switch",
+	"description": "In-wall Switch",
 	"devices": [
 		{
 			"productType": "0x5257",
@@ -17,46 +17,63 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
-			"label": "Night Light",
-			"description": "By default, the LED will turn OFF when the lead attached is turned ON.",
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when load is on",
-					"value": 0
-				},
-				{
-					"label": "Off when load is on",
-					"value": 1
-				}
-			]
-		},
-		"4": {
-			"label": "Invert Switch",
-			"description": "To change the top of the switch to OFF and the bottom of the switch ON.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top-ON, Bottom-OFF",
+					"label": "Off when load is on",
 					"value": 0
 				},
 				{
-					"label": "Bottom-ON, Top-OFF",
+					"label": "On when load is on",
+					"value": 1
+				},
+				{
+					"label": "Always on",
+					"value": 2
+				},
+				{
+					"label": "Always off",
+					"value": 3
+				},
+				{
+					"label": "Blink during transmission",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Orientation",
+					"value": 0
+				},
+				{
+					"label": "Inverted Orientation",
 					"value": 1
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "With the controller in inclusion mode, press the top of the switch two times.",
+		"exclusion": "With the controller in exclusion mode, press the top of the switch two times.",
+		"manual": "https://www.nortekcontrol.com/wp-content/uploads/WS15Z1_manual.pdf"
 	}
 }

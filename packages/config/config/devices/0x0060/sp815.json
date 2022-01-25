@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature And Humidity Auto Report Period Setting",
 			"description": "Minutes",
 			"valueSize": 2,
@@ -25,7 +26,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Re-trigger Interval Setting (for PIR Sensor Only)",
 			"description": "Seconds",
 			"valueSize": 2,
@@ -35,7 +37,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Trigger Off Interval Setting",
 			"description": "Seconds",
 			"valueSize": 2,
@@ -45,7 +48,7 @@
 			"defaultValue": 15,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the learn key 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the learn key 3 times within 1.5 seconds to put the unit into exclusion mode.",

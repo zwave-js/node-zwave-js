@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Number of Pixels",
 			"description": "When individually addressable LEDs are used, this parameter tells the controller the number of pixels that are attached.  0: Automatic recognition of pixels.",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dimming Speed",
 			"description": "This changes the speed in which the light strip dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.",
 			"valueSize": 1,
@@ -51,7 +53,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Ramp Rate",
 			"description": "This changes the speed in which the light strip turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 2.",
 			"valueSize": 1,
@@ -60,7 +63,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Minimum Level",
 			"description": "The minimum level that the strip can be dimmed to. Useful when the user has an LED strip that does not turn on or flickers at a lower level.",
 			"valueSize": 1,
@@ -69,7 +73,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Maximum Level",
 			"description": "The maximum level that the strip can be dimmed to. Useful when the user has an LED strip that reaches its maximum level before the dimmer value of 99.",
 			"valueSize": 1,
@@ -78,7 +83,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Off Timer",
 			"description": "After the strip is turned on, turn it off automatically after this time.",
 			"valueSize": 2,
@@ -94,7 +100,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Default Level (Local)",
 			"description": "Default level for the strip when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.",
 			"valueSize": 1,
@@ -103,7 +110,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Default Level (Z-Wave)",
 			"description": "Default level for the dimmer when it is powered on from a Z-Wave command (i.e. BasicSet(0xFF)). A setting of 0 means that the switch will return to the level that it was on before it was turned off.",
 			"valueSize": 1,
@@ -112,7 +120,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9[0xffff]": {
+		{
+			"#": "9[0xffff]",
 			"label": "Default Color: Hue Color",
 			"description": "Set the default color to a Hue Color Wheel color. Allowable Range: 1 - 360.",
 			"valueSize": 4,
@@ -131,7 +140,8 @@
 				}
 			]
 		},
-		"9[0xffff0000]": {
+		{
+			"#": "9[0xffff0000]",
 			"label": "Default Color: Color Temperature",
 			"valueSize": 4,
 			"minValue": 2700,
@@ -139,15 +149,9 @@
 			"defaultValue": 6500,
 			"unsigned": true
 		},
-		"10": {
-			"label": "State after power Restored",
-			"description": "The state the switch should return to once power is restored after power failure.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
 			"options": [
 				{
 					"label": "Off",
@@ -158,12 +162,13 @@
 					"value": 1
 				},
 				{
-					"label": "Previous",
+					"label": "Previous state",
 					"value": 2
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Active Power Reports",
 			"description": "The power level change that will result in a new power report being sent. The value is relative to the previous report.",
 			"valueSize": 1,
@@ -179,7 +184,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent. The timer is reset after each report is sent.",
 			"valueSize": 2,
@@ -189,7 +195,8 @@
 			"unsigned": true,
 			"unit": "seconds"
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
 			"valueSize": 1,
@@ -199,7 +206,8 @@
 			"unsigned": true,
 			"unit": "0.01 kWh"
 		},
-		"21[0xff]": {
+		{
+			"#": "21[0xff]",
 			"label": "Quick Strip Effect: Hue Color Wheel / Color Temp",
 			"description": "If 'Quick Strip Effect: Color Type' is set to 'Hue Color Wheel', this is the hue color wheel value.  To calculate value, value = hue_color_wheel_value / 360 * 255.  If 'Quick Strip Effect: Color Type' is set to 'Color Temp', this is the color temp value.  To calculate value, value = (color_temp_value - 2700) / (6500 - 2700) * 255.",
 			"valueSize": 4,
@@ -208,7 +216,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21[0x7f00]": {
+		{
+			"#": "21[0x7f00]",
 			"label": "Quick Strip Effect Intensity",
 			"description": "Intensity of the LED strip. Coarse: 0 - 10, where 10 = 100%. Fine: 0-99, where 99 = 100%.",
 			"valueSize": 4,
@@ -217,7 +226,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21[0x8000]": {
+		{
+			"#": "21[0x8000]",
 			"label": "Quick Strip Effect Intensity Scale",
 			"description": "Changes the scale of the intensity. 0 = Coarse (10 x Intensity), 1 = Fine (1 x Intensity).",
 			"valueSize": 4,
@@ -236,7 +246,8 @@
 				}
 			]
 		},
-		"21[0xff0000]": {
+		{
+			"#": "21[0xff0000]",
 			"label": "Quick Strip Effect: Duration",
 			"description": "The light LED strip effect duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely.",
 			"valueSize": 4,
@@ -245,7 +256,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21[0x3f000000]": {
+		{
+			"#": "21[0x3f000000]",
 			"label": "Quick Strip Effect: Effect",
 			"description": "The light LED strip effect.",
 			"valueSize": 4,
@@ -285,7 +297,8 @@
 				}
 			]
 		},
-		"21[0x40000000]": {
+		{
+			"#": "21[0x40000000]",
 			"label": "Quick Strip Effect: Color Type",
 			"description": "Color type for the effect.",
 			"valueSize": 4,
@@ -305,7 +318,8 @@
 				}
 			]
 		},
-		"22[0x7]": {
+		{
+			"#": "22[0x7]",
 			"label": "Custom Strip Effect: Action 1 Effect",
 			"description": "This is the effect of Action 1.",
 			"valueSize": 4,
@@ -336,7 +350,8 @@
 				}
 			]
 		},
-		"22[0xf8]": {
+		{
+			"#": "22[0xf8]",
 			"label": "Custom Strip Effect: Action 1 Color",
 			"description": "This is the color of Action 1.",
 			"valueSize": 4,
@@ -411,7 +426,8 @@
 				}
 			]
 		},
-		"22[0x700]": {
+		{
+			"#": "22[0x700]",
 			"label": "Custom Strip Effect: Action 2 Effect",
 			"description": "This is the effect of Action 2.",
 			"valueSize": 4,
@@ -442,7 +458,8 @@
 				}
 			]
 		},
-		"22[0xf800]": {
+		{
+			"#": "22[0xf800]",
 			"label": "Custom Strip Effect: Action 2 Color",
 			"description": "This is the color of Action 2.",
 			"valueSize": 4,
@@ -517,7 +534,8 @@
 				}
 			]
 		},
-		"22[0x70000]": {
+		{
+			"#": "22[0x70000]",
 			"label": "Custom Strip Effect: Action 3 Effect",
 			"description": "This is the effect of Action 3.",
 			"valueSize": 4,
@@ -548,7 +566,8 @@
 				}
 			]
 		},
-		"22[0xf80000]": {
+		{
+			"#": "22[0xf80000]",
 			"label": "Custom Strip Effect: Action 3 Color",
 			"description": "This is the color of Action 3.",
 			"valueSize": 4,
@@ -623,7 +642,8 @@
 				}
 			]
 		},
-		"22[0x7000000]": {
+		{
+			"#": "22[0x7000000]",
 			"label": "Custom Strip Effect: Action 4 Effect",
 			"description": "This is the effect of Action 4.",
 			"valueSize": 4,
@@ -654,7 +674,8 @@
 				}
 			]
 		},
-		"22[0xf8000000]": {
+		{
+			"#": "22[0xf8000000]",
 			"label": "Custom Strip Effect: Action 4 Color",
 			"description": "This is the color of Action 4.",
 			"valueSize": 4,
@@ -729,7 +750,8 @@
 				}
 			]
 		},
-		"23[0x7f]": {
+		{
+			"#": "23[0x7f]",
 			"label": "Custom Strip Effect: Action 1 Intensity",
 			"description": "This is the intensity of Action 1.",
 			"valueSize": 4,
@@ -738,7 +760,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"23[0x7f00]": {
+		{
+			"#": "23[0x7f00]",
 			"label": "Custom Strip Effect: Action 2 Intensity",
 			"description": "This is the intensity of Action 2.",
 			"valueSize": 4,
@@ -747,7 +770,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"23[0x7f0000]": {
+		{
+			"#": "23[0x7f0000]",
 			"label": "Custom Strip Effect: Action 3 Intensity",
 			"description": "This is the intensity of Action 3.",
 			"valueSize": 4,
@@ -756,7 +780,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"23[0x7f000000]": {
+		{
+			"#": "23[0x7f000000]",
 			"label": "Custom Strip Effect: Action 4 Intensity",
 			"description": "This is the intensity of Action 4.",
 			"valueSize": 4,
@@ -765,7 +790,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"24[0x3f]": {
+		{
+			"#": "24[0x3f]",
 			"label": "Custom Strip Effect: Duration 1",
 			"description": "Duration of the Action 1 Effect.",
 			"valueSize": 4,
@@ -774,7 +800,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"24[0x3f00]": {
+		{
+			"#": "24[0x3f00]",
 			"label": "Custom Strip Effect: Duration 2",
 			"description": "Duration of the Action 2 Effect.",
 			"valueSize": 4,
@@ -783,7 +810,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"24[0x3f0000]": {
+		{
+			"#": "24[0x3f0000]",
 			"label": "Custom Strip Effect: Duration 3",
 			"description": "Duration of the Action 3 Effect.",
 			"valueSize": 4,
@@ -792,7 +820,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"24[0x3f000000]": {
+		{
+			"#": "24[0x3f000000]",
 			"label": "Custom Strip Effect: Duration 4",
 			"description": "Duration of the Action 4 Effect.",
 			"valueSize": 4,
@@ -801,7 +830,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0xff]": {
+		{
+			"#": "30[0xff]",
 			"label": "Custom Strip Effect: Iterations",
 			"description": "Number of times the custom effect will occur.  Iterations x (Action 1 -> Action 2 -> Action 3 -> Action 4).",
 			"valueSize": 4,
@@ -810,7 +840,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0xff00]": {
+		{
+			"#": "30[0xff00]",
 			"label": "Custom Strip Effect: Behavior",
 			"description": "What will occur after the Custom Effect is Finished.",
 			"valueSize": 4,
@@ -833,7 +864,8 @@
 				}
 			]
 		},
-		"30[0xff0000]": {
+		{
+			"#": "30[0xff0000]",
 			"label": "Custom Strip Effect: Duration Units",
 			"description": "Units of the Duration for Parameter 24.",
 			"valueSize": 4,
@@ -860,7 +892,8 @@
 				}
 			]
 		},
-		"31[0xff]": {
+		{
+			"#": "31[0xff]",
 			"label": "Pixel Effect",
 			"description": "Pixel Effect that utilizes the individually addressable LEDs.",
 			"valueSize": 2,
@@ -1051,7 +1084,8 @@
 				}
 			]
 		},
-		"31[0x7f00]": {
+		{
+			"#": "31[0x7f00]",
 			"label": "Pixel Effect Intensity",
 			"description": "This is the intensity of the Pixel Effect.",
 			"valueSize": 2,
@@ -1060,7 +1094,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Disable Physical On/Off Delay",
 			"description": "The 700ms delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. Still working are the 1x tap, held, released, and the level up/down scenes.",
 			"valueSize": 1,
@@ -1080,5 +1115,5 @@
 				}
 			]
 		}
-	}
+	]
 }

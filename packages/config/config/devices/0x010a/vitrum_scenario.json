@@ -1,8 +1,8 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
-	"label": "Vitrum Scenario",
-	"description": "Vitrum Scenario controller",
+	"label": "Scenario",
+	"description": "Scenario Controller",
 	"devices": [
 		{
 			"productType": "0x1500",

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto-Off Timer (Left Outlet)",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -47,7 +49,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto-Off Timer (Right Outlet)",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -56,7 +59,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second",
 		"exclusion": "-Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\nWhen prompted by your primary controller, click the PROG button five times in one second",

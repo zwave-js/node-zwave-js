@@ -36,27 +36,34 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/act_template.json#ignore_start_level_transmitting"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
-		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		},
-		"4": {
-			"$import": "../templates/master_template.json#orientation"
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/act_template.json#enable_shade_group_2"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/act_template.json#enable_shade_group_3"
 		},
-		"19": {
+		{
+			"#": "19",
 			"$import": "templates/act_template.json#led_indicator"
 		}
-	}
+	]
 }

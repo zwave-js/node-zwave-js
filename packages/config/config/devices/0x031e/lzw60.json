@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Low Battery Alert Level",
 			"description": "At what battery level should the sensor send a low battery alert",
 			"valueSize": 1,
@@ -25,7 +26,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +41,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "PIR Reset Time",
 			"description": "How long after motion stops should the sensor wait before sending a no-motion report",
 			"valueSize": 2,
@@ -49,7 +52,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Send Basic Set After PIR Trigger",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +72,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reverse Basic Set Behavior",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +92,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Temperature Reporting Interval",
 			"description": "Value will be rounded to the nearest minute",
 			"valueSize": 4,
@@ -103,7 +109,8 @@
 				}
 			]
 		},
-		"102": {
+		{
+			"#": "102",
 			"label": "Humidity Reporting Interval",
 			"description": "Value will be rounded to the nearest minute",
 			"valueSize": 4,
@@ -119,7 +126,8 @@
 				}
 			]
 		},
-		"103": {
+		{
+			"#": "103",
 			"label": "Luminance Reporting Interval",
 			"description": "Value will be rounded to nearest minute",
 			"valueSize": 4,
@@ -129,7 +137,8 @@
 			"defaultValue": 7200,
 			"unsigned": true
 		},
-		"104": {
+		{
+			"#": "104",
 			"label": "Battery Reporting Interval",
 			"description": "Value will be rounded to nearest minute",
 			"valueSize": 4,
@@ -139,7 +148,8 @@
 			"defaultValue": 7200,
 			"unsigned": true
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Report Only When Thresholds Are Met",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +167,8 @@
 				}
 			]
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Temperature Report Threshold",
 			"valueSize": 2,
 			"unit": "0.1°C",
@@ -166,7 +177,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Humidity Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -175,7 +187,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"113": {
+		{
+			"#": "113",
 			"label": "Luminance Report Threshold",
 			"valueSize": 2,
 			"unit": "lux",
@@ -184,7 +197,8 @@
 			"defaultValue": 150,
 			"unsigned": true
 		},
-		"114": {
+		{
+			"#": "114",
 			"label": "Battery Report Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -193,7 +207,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press the sensor button 1x and the sensor will flash red rapidly. If successful, the sensor will stop flashing and the red light will be solid for 1-2 seconds, followed by the red light turning off. If unsuccessful, the red light will continue to rapidly flash until it times out after 25 seconds",
 		"exclusion": "Put your HUB in Exclusion mode and press the sensor button 1x. Your sensor will rapidly blink, indicating it’s in exclusion mode. When exclusion is successful, the red light will stop blinking, turn solid red and then turn off",

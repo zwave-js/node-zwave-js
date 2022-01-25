@@ -8,15 +8,24 @@
 			"productType": "0x0003",
 			"productId": "0x008d",
 			"zwaveAllianceId": [3693, 3742]
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x008d"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x008d"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure",
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
 			"options": [
 				{
 					"label": "Current position",
@@ -32,7 +41,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Motor Run Direction",
 			"valueSize": 1,
 			"minValue": 0,
@@ -59,7 +69,8 @@
 				}
 			]
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Blade Turn Time",
 			"valueSize": 2,
 			"unit": "0.1 seconds",
@@ -68,7 +79,8 @@
 			"defaultValue": 150,
 			"unsigned": true
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Curtain Trip Time",
 			"valueSize": 2,
 			"unit": "0.1 seconds",
@@ -77,7 +89,8 @@
 			"defaultValue": 15000,
 			"unsigned": true
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Enter/Exit Calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +113,8 @@
 				}
 			]
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "User Confirmation For Calibration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -115,7 +129,8 @@
 				}
 			]
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +166,8 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Curtain Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -170,7 +186,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Inititiate Repositioning",
 			"valueSize": 1,
 			"minValue": 1,
@@ -186,7 +203,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Repositioning Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -206,7 +224,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Calibration Lock",
 			"valueSize": 1,
 			"minValue": 0,
@@ -229,8 +248,9 @@
 				}
 			]
 		},
-		"80": {
-			"$import": "../0x0086/templates/aeotec_template.json#notification_report_type",
+		{
+			"#": "80",
+			"$import": "~/0x0086/templates/aeotec_template.json#notification_report_type",
 			"label": "Command Report Type",
 			"options": [
 				{
@@ -247,7 +267,8 @@
 				}
 			]
 		},
-		"85": {
+		{
+			"#": "85",
 			"label": "External Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -270,7 +291,8 @@
 				}
 			]
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Switch S1 Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -301,7 +323,8 @@
 				}
 			]
 		},
-		"121": {
+		{
+			"#": "121",
 			"label": "Switch S2 Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -332,7 +355,8 @@
 				}
 			]
 		},
-		"243": {
+		{
+			"#": "243",
 			"label": "Device Specific Key",
 			"valueSize": 1,
 			"minValue": 0,
@@ -341,7 +365,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"248": {
+		{
+			"#": "248",
 			"label": "External Switch: Network/Reset Functions",
 			"valueSize": 1,
 			"minValue": 1,
@@ -364,10 +389,11 @@
 				}
 			]
 		},
-		"255": {
-			"$import": "../0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		{
+			"#": "255",
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "3.5.2 Classic inclusion Learn Mode\n1. Set your Z-Wave Controller into its 'Add Device' mode in order to add the product into your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n2. Make sure the product is powered. If not, plug it into a wall socket and power on; its LED will be breathing blue light all the time.\n3. Click Action Button once, it will quickly flash blue light for 30 seconds until it is added into the network. It will become constantly bright yellow light after being assigned a NodeID.\n4. If your Z-Wave Controller supports S2 encryption, enter the first 5 digits of DSK into your Controller's interface if/when requested. The DSK is printed on its housing.\n5. If Adding fails, it will bright red light for 2s and then become breathing blue light; repeat steps 1 to 4. Contact us for further support if needed.\n6. If Adding succeeds, it will bright blue light for 2s and then turn to Load Indicator Mode. Now, this product is a part of your Z-Wave home control system. You can configure it and its automations via your Z-Wave system; please refer to your software's user guide for precise instructions",
 		"exclusion": "3.6 How to Remove the device from Z-Wave network\n1. Set your Z-Wave Controller into its 'Remove Device' mode in order to remove the product from your Z-Wave system.Refer to the Controller's manual if you are unsure of how to perform this step.\n2. Click Action Button/S1/S2(external switch need to be identified first) 6 times will enter exclusion mode.\n3. If Removing fails, it will bright red light for 2s then turn back to Regular Light Mode, repeat steps 1-2. Contact us for further support if needed.\n4. If Removing succeeds, it will become breathing blue light. Now, it is removed from Z-Wave network successfully",

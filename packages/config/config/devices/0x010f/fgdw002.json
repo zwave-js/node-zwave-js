@@ -25,9 +25,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Door/window state",
 			"description": "What state is door/window when the magnet is close to the sensor",
 			"valueSize": 1,
@@ -46,7 +46,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Associations in Z-Wave network Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +73,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "2nd association group triggers",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,42 +96,48 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Value of ON command sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Value of OFF command sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Association for opening - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Association for closing - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Tamper - alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 5
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Tamper - reporting alarm cancellation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -147,35 +155,40 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Interval of temperature measurements",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 300
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Temperature reports threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
 			"defaultValue": 10
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Interval of temperature reports",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 0
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Temperature offset",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Temperature alarm reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,21 +214,24 @@
 				}
 			]
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "High temperature alarm threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 600,
 			"defaultValue": 350
 		},
-		"56": {
+		{
+			"#": "56",
 			"label": "Low temperature alarm threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 599,
 			"defaultValue": 100
 		},
-		"2[0x01]": {
+		{
+			"#": "2[0x01]",
 			"label": "Visual LED indications - Open/close",
 			"valueSize": 1,
 			"minValue": 0,
@@ -233,7 +249,8 @@
 				}
 			]
 		},
-		"2[0x02]": {
+		{
+			"#": "2[0x02]",
 			"label": "Visual LED indications - wake up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -251,7 +268,8 @@
 				}
 			]
 		},
-		"2[0x04]": {
+		{
+			"#": "2[0x04]",
 			"label": "Visual LED indications - tampering",
 			"valueSize": 1,
 			"minValue": 0,
@@ -269,5 +287,5 @@
 				}
 			]
 		}
-	}
+	]
 }

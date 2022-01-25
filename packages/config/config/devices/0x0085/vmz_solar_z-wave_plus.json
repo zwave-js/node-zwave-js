@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "operating mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Summer / Winter mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delay time",
 			"description": "delay to auto shade",
 			"unit": "min",
@@ -64,7 +66,8 @@
 			"maxValue": 30,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Level of sensitivity for day",
 			"description": "Level of insolation to open/close the shades",
 			"unit": "mA",
@@ -73,7 +76,8 @@
 			"maxValue": 100,
 			"defaultValue": 3
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature",
 			"unit": "C",
 			"valueSize": 1,
@@ -82,7 +86,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "STM active",
 			"description": "STM AutoShade active",
 			"valueSize": 1,
@@ -101,7 +106,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Restore last position",
 			"valueSize": 1,
 			"minValue": 1,
@@ -119,7 +125,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Insolation level",
 			"description": "Current on autoshade solar panel",
 			"unit": "mA",
@@ -130,7 +137,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Motor current",
 			"unit": "mA",
 			"valueSize": 1,
@@ -139,7 +147,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"77": {
+		{
+			"#": "77",
 			"label": "CLOSE current",
 			"unit": "mA",
 			"valueSize": 1,
@@ -148,7 +157,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"78": {
+		{
+			"#": "78",
 			"label": "OPEN current",
 			"unit": "mA",
 			"valueSize": 1,
@@ -157,21 +167,24 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"79": {
+		{
+			"#": "79",
 			"label": "CLOSE overload current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "OPEN overload current",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"99": {
+		{
+			"#": "99",
 			"label": "Restore default config values",
 			"valueSize": 1,
 			"minValue": 1,
@@ -189,7 +202,8 @@
 				}
 			]
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Autoexclude",
 			"valueSize": 1,
 			"minValue": 1,
@@ -207,5 +221,5 @@
 				}
 			]
 		}
-	}
+	]
 }

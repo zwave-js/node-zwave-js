@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Master Valve Delay",
 			"description": "Delay in seconds",
 			"unit": "Number",
@@ -24,7 +24,8 @@
 			"maxValue": 255,
 			"defaultValue": 1
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Flow Sensor K value",
 			"description": "Unique to flow sensor",
 			"unit": "Number",
@@ -33,7 +34,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Flow Sensor Offset value",
 			"description": "Unique to the flow sensor",
 			"unit": "Number",
@@ -42,5 +44,5 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		}
-	}
+	]
 }

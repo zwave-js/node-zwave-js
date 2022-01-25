@@ -28,7 +28,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	let node2: ZWaveNode;
 
 	beforeAll(() => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(2, node2);
@@ -83,6 +83,24 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 				3, // groupId
 				240, // sceneId
 				0x05, // dimming duration
+			]),
+		);
+		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the Set command should serialize correctly with undefined duration", () => {
+		const cc = new SceneControllerConfigurationCCSet(fakeDriver, {
+			nodeId: 2,
+			groupId: 3,
+			sceneId: 240,
+			dimmingDuration: undefined,
+		});
+		const expected = buildCCBuffer(
+			Buffer.from([
+				SceneControllerConfigurationCommand.Set, // CC Command
+				3, // groupId
+				240, // sceneId
+				0xff, // dimming duration
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);

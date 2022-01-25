@@ -6,7 +6,11 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x000D"
+			"productId": "0x000d"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0010"
 		}
 	],
 	"firmwareVersion": {
@@ -25,8 +29,9 @@
 			"description": "All devices in this group will receive a BASIC SET command on Smoke Alarms. Configuration parameter 3 and 4 will define the BASIC command sent."
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Value of On-Command",
 			"description": "This value is sent as BASIC Set to Association Group 2 when an Smoke Alarm occurs.",
 			"valueSize": 1,
@@ -34,7 +39,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value of Off-Command",
 			"description": "This value is sent as BASIC Set to Association Group 2 when an Smoke Alarm is cleared.",
 			"valueSize": 1,
@@ -42,7 +48,7 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"wakeup": " A double click on the Z-Wave button wakes up the device.",
 		"inclusion": "Secure Inclusion: Push the button for 3 seconds, Unsecure Inclusion: Push the button for 1 seconds",

@@ -6,13 +6,17 @@
 
 import * as fs from "fs-extra";
 import * as path from "path";
+import { formatWithPrettier } from "../../maintenance/src/prettier";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
 const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 const apiFile = path.join(ccDir, "API.ts");
-const startToken = "\t// AUTO GENERATION BELOW";
-const endToken = "}";
+const startTokenType = "export type CCToName<CC extends CommandClasses> =";
+const endTokenType = "never;";
+
+const startTokenInterface = "\t// AUTO GENERATION BELOW";
+const endTokenInterface = "}";
 
 process.on("unhandledRejection", (r) => {
 	throw r;
@@ -42,10 +46,17 @@ export async function generateCCAPIInterface(): Promise<void> {
 
 	console.log(`Found ${CCsWithAPI.length} API classes...`);
 
-	let apiFileContent = await fs.readFile(apiFile, "utf8");
-	const startTokenEnd =
-		apiFileContent.indexOf(startToken) + startToken.length;
-	const endTokenStart = apiFileContent.indexOf(endToken, startTokenEnd);
+	const originalApiFileContent = await fs.readFile(apiFile, "utf8");
+	let apiFileContent = originalApiFileContent;
+
+	// Generate interface
+	let startTokenEnd =
+		apiFileContent.indexOf(startTokenInterface) +
+		startTokenInterface.length;
+	let endTokenStart = apiFileContent.indexOf(
+		endTokenInterface,
+		startTokenEnd,
+	);
 	apiFileContent =
 		apiFileContent.substr(0, startTokenEnd) +
 		"\n" +
@@ -55,7 +66,27 @@ export async function generateCCAPIInterface(): Promise<void> {
 		).join("\n") +
 		"\n" +
 		apiFileContent.substr(endTokenStart);
-	await fs.writeFile(apiFile, apiFileContent, "utf8");
+
+	// Generate lookup type
+	startTokenEnd =
+		apiFileContent.indexOf(startTokenType) + startTokenType.length;
+	endTokenStart = apiFileContent.indexOf(endTokenType, startTokenEnd);
+	apiFileContent =
+		apiFileContent.substr(0, startTokenEnd) +
+		"\n" +
+		CCsWithAPI.map(({ name }) => {
+			if (!name.startsWith(`"`)) name = `"${name}"`;
+			return `\t[CC] extends [(typeof CommandClasses[${name}])] ? ${name} : `;
+		}).join("\n") +
+		"\n" +
+		apiFileContent.substr(endTokenStart);
+
+	apiFileContent = formatWithPrettier(apiFile, apiFileContent);
+	// Only update file if necessary - this reduces build time
+	if (apiFileContent !== originalApiFileContent) {
+		console.log("API interface changed");
+		await fs.writeFile(apiFile, apiFileContent, "utf8");
+	}
 }
 
 if (require.main === module) void generateCCAPIInterface();

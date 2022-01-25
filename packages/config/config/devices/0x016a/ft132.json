@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Current Overload Protection.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Configure the output status after re-power on it.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Group 1 notifications",
 			"description": "To set which notification would be sent to the associated devices (Group 1)",
 			"valueSize": 1,
@@ -104,7 +107,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Group 3 notifications",
 			"description": "To set which notification would be sent to association group 3",
 			"valueSize": 1,
@@ -123,7 +127,8 @@
 				}
 			]
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Group 4 notifications",
 			"description": "To set which notification would be sent to association group 4",
 			"valueSize": 1,
@@ -142,7 +147,8 @@
 				}
 			]
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
@@ -160,7 +166,8 @@
 				}
 			]
 		},
-		"91": {
+		{
+			"#": "91",
 			"label": "Set the threshold value of wattage.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -168,14 +175,16 @@
 			"defaultValue": 25,
 			"unsigned": true
 		},
-		"92": {
+		{
+			"#": "92",
 			"label": "Set the threshold value of percent power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Set parameter 101-103 to default value",
 			"description": "Reset the parameter 101-103",
 			"valueSize": 1,
@@ -184,7 +193,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Set group 1 reports",
 			"description": "To set which reports need to be sent in Report group 1",
 			"valueSize": 4,
@@ -243,7 +253,8 @@
 				}
 			]
 		},
-		"102": {
+		{
+			"#": "102",
 			"label": "Reports sent to Report group 2.",
 			"valueSize": 4,
 			"minValue": 0,
@@ -301,7 +312,8 @@
 				}
 			]
 		},
-		"103": {
+		{
+			"#": "103",
 			"label": "Reports sent to Report group 3",
 			"valueSize": 4,
 			"minValue": 0,
@@ -359,7 +371,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Set parameter 111-113 to default value.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -367,28 +380,32 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Automatic report interval for Report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
 			"defaultValue": 10
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Automatic report interval for Report group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"113": {
+		{
+			"#": "113",
 			"label": "Automatic report interval for Report group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -414,7 +431,8 @@
 				}
 			]
 		},
-		"121": {
+		{
+			"#": "121",
 			"label": "Configure the external switch mode for S2.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -440,7 +458,8 @@
 				}
 			]
 		},
-		"122": {
+		{
+			"#": "122",
 			"label": "Set the control destination for external switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -462,7 +481,8 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
@@ -480,7 +500,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset the Dual Nano Switch",
 			"valueSize": 4,
 			"minValue": 0,
@@ -498,5 +519,5 @@
 				}
 			]
 		}
-	}
+	]
 }

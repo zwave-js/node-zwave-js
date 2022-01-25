@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "PIR sensor sensitivity",
 			"description": "1 = low sensitivity and 8 = high sensitivity.",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 8,
 			"defaultValue": 4
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "BASIC SET reports",
 			"description": "0 - disabled, 1 - enabled",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "reverse BASIC SET",
 			"description": "0: 255 motion, 0 timeout. 1: 0 motion, 255 timeout",
 			"valueSize": 1,
@@ -39,7 +41,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "vibration sensor",
 			"description": "0=disabled, 1=enabled",
 			"valueSize": 1,
@@ -47,7 +50,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "trigger interval",
 			"description": "3=6 seconds, 65535=65538 seconds (add 3 seconds to value set)",
 			"unit": "seconds",
@@ -57,7 +61,8 @@
 			"defaultValue": 27,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "LED Indicator",
 			"description": "0=disabled, 1=enabled (default)",
 			"valueSize": 1,
@@ -65,7 +70,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Low Battery Alert",
 			"description": "percent battery left",
 			"valueSize": 1,
@@ -73,5 +79,5 @@
 			"maxValue": 50,
 			"defaultValue": 10
 		}
-	}
+	]
 }

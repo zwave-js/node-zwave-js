@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "(I1) Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "(I2) Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +53,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "(I3) Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +72,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "ALL ON/ALL OFF",
 			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off",
 			"description": "Automatic turning off output after set time",
 			"valueSize": 2,
@@ -112,7 +116,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Automatic turning on",
 			"description": "Automatic turning on output after set time",
 			"valueSize": 2,
@@ -126,7 +131,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto off / on, s or ms selection",
 			"description": "Automatic turning off / on seconds or milliseconds selection",
 			"valueSize": 1,
@@ -145,26 +151,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Saving the state",
-			"description": "Saving the state of the relay after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "HC Switch relay module saves its state",
-					"value": 0
-				},
-				{
-					"label": "HC Switch relay module returns to \"off\" position",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting (W) on power change",
 			"valueSize": 1,
 			"unit": "%",
@@ -178,7 +170,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting (W) by time interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -191,7 +184,8 @@
 				}
 			]
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Output Switch selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -209,7 +203,8 @@
 				}
 			]
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Enable / Disable Endpoint I2",
 			"description": "Enable / Disable Endpoint I2 or select Notification Type and Event",
 			"valueSize": 1,
@@ -248,7 +243,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Enable / Disable Endpoint I3",
 			"description": "Enable / Disable Endpoint I3 or select Notification Type and Event",
 			"valueSize": 1,
@@ -287,21 +283,23 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
 			"defaultValue": 32536
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "AUTOMATICALLY ADDING THE DEVICE TO A Z-WAVE NETWORK\n\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected – sold separately*).\n3. Auto-inclusion will be initiated within 5 seconds of connection to the power supply and the device will automatically enroll in your network\n\nMANUALLY ADDING THE DEVICE TO A Z-WAVE NETWORK\n\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected*)\n3. Toggle the switch connected to the I1 terminal 3 times within 3 seconds\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button for at least 2 seconds\n4. A new multi-channel device will appear on your dashboard\n\n*If connecting the temperature sensor, switch off the power supply and make sure the device is excluded from your network BEFORE connecting the sensor.\n\nMake sure the device is excluded from your network before connecting the temperature sensor. Switch off the power supply, connect the temperature sensor, and re-include the device to your network",
 		"exclusion": "REMOVAL FROM A Z-WAVE NETWORK\n\n• Connect module to power supply\n• bring module within maximum 1 meter (3 feet) of the main controller,\n• enable add/remove mode on main controller\n\nIf push button I1 is pressed three times within 5s (or service button S is pressed more than 2 and less than 6 seconds) module is excluded, but configuration parameters are not set to default values",

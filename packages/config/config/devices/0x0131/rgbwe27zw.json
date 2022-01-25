@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Color temperature",
 			"description": "Values range from 0 to 100 where 0 is cold white and 100 is warm white.",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Shock sensor sensitivity",
 			"description": "Range from 0 to 31 where 0 is minimum sensitivity and 31 is maximum sensitivity.",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 31,
 			"defaultValue": 16
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Strobe Light Interval",
 			"description": "Values range from 0 to 25 in intervals of 100 milliseconds.",
 			"valueSize": 1,
@@ -39,7 +41,8 @@
 			"maxValue": 25,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Strobe Light Pulse Count",
 			"description": "Values range from 0 to 250 and a special value 255 which sets infinite flashing.",
 			"valueSize": 1,
@@ -48,7 +51,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable or Disable Random Strobe Pulse Colors",
 			"description": "Values range are 0 (turn on) or 1 (turn off).",
 			"valueSize": 1,
@@ -67,5 +71,5 @@
 				}
 			]
 		}
-	}
+	]
 }

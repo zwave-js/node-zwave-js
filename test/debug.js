@@ -21,7 +21,10 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadIndicators();
 
 	// The data to decode
-	const data = Buffer.from("010b0004001e05700d002000b6", "hex");
+	const data = Buffer.from(
+		"011b00a800011f129f03a70015820de70626870e785dafb9090300d543",
+		"hex",
+	);
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it
@@ -65,4 +68,4 @@ const { ConfigManager } = require("@zwave-js/config");
 	}
 	msg;
 	debugger;
-})();
+})().catch(console.error);

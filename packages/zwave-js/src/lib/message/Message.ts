@@ -157,7 +157,7 @@ export class Message {
 		}
 		return this._callbackId;
 	}
-	public set callbackId(v: number) {
+	public set callbackId(v: number | undefined) {
 		this._callbackId = v;
 	}
 
@@ -316,6 +316,12 @@ export class Message {
 		);
 	}
 
+	/** Tests whether this message expects an update from the target node to finalize the transaction */
+	public expectsNodeUpdate(): boolean {
+		// Most messages don't expect an update by default
+		return false;
+	}
+
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {
 		return (
@@ -336,6 +342,13 @@ export class Message {
 		}
 
 		return this.testMessage(msg, this.expectedCallback);
+	}
+
+	/** Checks if a message is an expected node update for this message */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	public isExpectedNodeUpdate(msg: Message): boolean {
+		// Most messages don't expect an update by default
+		return false;
 	}
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
@@ -423,7 +436,7 @@ export function messageTypes(
 		) || new Map()) as MessageTypeMap;
 		map.set(
 			getMessageTypeMapKey(messageType, functionType),
-			(messageClass as any) as Constructable<Message>,
+			messageClass as any as Constructable<Message>,
 		);
 		Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
 	};

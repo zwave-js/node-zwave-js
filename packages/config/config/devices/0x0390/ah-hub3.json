@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Alloy",
+	"manufacturerId": "0x0390",
+	"label": "AH-HUB3",
+	"description": "SmartHome Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 4077
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "To reset the Alloy SmartHome Hub to its factory settings, you will first need to remove all\ndevices. A ​ Factory reset​ button will then become visible. Pressing the ​ Factory reset​ button will immediately reset the Hub. The Hub will reboot.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in\nyour network being orphaned and it will be necessary after the reset to exclude and re-include\nall of the nodes in the network. If this controller is being used as a secondary controller in the\nnetwork, use this procedure to reset this controller only in the event that the network primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4077/Alloy%20SmartHome%20Hub%20User%20Guide.pdf"
+	}
+}

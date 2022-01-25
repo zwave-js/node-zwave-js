@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button 1 and 3 pair mode",
 			"description": "In separate mode button 1 works with Group A, button 3 with Group C.",
 			"valueSize": 1,
@@ -39,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button 2 and 4 pair mode",
 			"description": "In separate mode button 2 works with group B, button 4 with group D.",
 			"valueSize": 1,
@@ -63,7 +64,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Command to control Group A",
 			"description": "This parameter defines the command to be sent to devices of control group A",
 			"valueSize": 1,
@@ -111,7 +113,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Command to control Group B",
 			"description": "This parameter defines the command to be sent to devices of control group B",
 			"valueSize": 1,
@@ -159,7 +162,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Command to control Group C",
 			"description": "This parameter defines the command to be sent to devices of control group C",
 			"valueSize": 1,
@@ -207,7 +211,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Command to control Group D",
 			"description": "This parameter defines the command to be sent to devices of control group D",
 			"valueSize": 1,
@@ -255,7 +260,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -278,7 +284,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -297,7 +304,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Blocks wake up even when Wake Up Interval is set",
 			"valueSize": 1,
 			"minValue": 0,
@@ -315,7 +323,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -338,5 +347,5 @@
 				}
 			]
 		}
-	}
+	]
 }

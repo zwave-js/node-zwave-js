@@ -1,158 +1,181 @@
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
-	"label": "Radiator Thermostat",
-	"description": "Thermostat - HVAC",
+	"label": "ZWA021",
+	"description": "Radiator Thermostat",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0015"
+			"productId": "0x0015",
+			"zwaveAllianceId": 3627
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0016",
+			"zwaveAllianceId": 3790
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert LCD orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal orientation",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "LCD content inverted",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LCD Timeout",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "LCD always on",
+					"label": "Always on",
 					"value": 0
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Backlight",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Backlight disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Backlight enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"4": {
-			"label": "Battery report",
+		{
+			"#": "4",
+			"label": "Battery Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Battery reporting disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Battery reporting enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"5": {
-			"label": "Measured Temperature",
-			"description": "Measured Temperature report. Reporting Delta in 1/10 Celsius. '0' to disable reporting.",
-			"unit": "1/10 °C",
+		{
+			"#": "5",
+			"label": "Measured Temperature Report",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Temperature reporting disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
-		"6": {
-			"label": "Valve position",
-			"description": "Valve position report. Reporting delta in percent. '0' to disable reporting.",
-			"unit": "%",
+		{
+			"#": "6",
+			"label": "Valve Position Report",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Valve position reporting disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
-		"7": {
-			"label": "Window open detection",
-			"description": "Control 'Window open detection' sensitivity",
+		{
+			"#": "7",
+			"label": "Open Window Detection Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Detection Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Sensitivity low",
+					"label": "Low",
 					"value": 1
 				},
 				{
-					"label": "Sensitivity medium",
+					"label": "Medium",
 					"value": 2
 				},
 				{
-					"label": "Sensitivity high",
+					"label": "High",
 					"value": 3
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Temperature Offset",
-			"unit": ".1°C",
+			"description": "Allowable range: -50 to 50 (-5 °C to +5 °C)",
 			"valueSize": 1,
+			"unit": "0.1 °C",
 			"minValue": -128,
 			"maxValue": 50,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Ext temp sensor is used for regulation",
+					"label": "Use External Temperature Sensor",
 					"value": -128
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "Start the Inclusion mode of your primary Z-Wave Controller. Press the Boost-Button of the Thermoast. The Radiator thermostat will show the assigned NodeID",
+		"exclusion": "Set your Z-Wave primary Controller into exclusion mode. Press and hold the Boost button for 5 seconds. The LCD screen of the sensor will show \"LEA\". Leave the Radiator thermostat as it is until the multicolor LED will light up green and the LCD screen will show \"0\". If the exclusion failed, the screen will show the failed code \"18\"",
+		"reset": "Remove batteries.\nPress and hold boost button.\nWhile still holding boost button insert batteries.\nThe LCD shows RES. Release boost button.\nTo perform the factory reset press boost button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3627/RadiatorThermostat_Mainmanual.pdf"
 	}
 }

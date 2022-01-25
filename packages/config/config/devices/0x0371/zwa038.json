@@ -1,0 +1,104 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA038",
+	"description": "illumino Wall Switch",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0026",
+			"zwaveAllianceId": 4273
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Top Button - Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Buttom Button - Basic Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "External Switch - Basic Set",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Top and Bottom Button - Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "40",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer_65535"
+		},
+		{
+			"#": "41",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_on_timer_65535"
+		},
+		{
+			"#": "80",
+			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
+		},
+		{
+			"#": "82",
+			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
+		},
+		{
+			"#": "83",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_function"
+		},
+		{
+			"#": "84",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_output"
+		},
+		{
+			"#": "85",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_scene"
+		},
+		{
+			"#": "86",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "119",
+			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_scene_function"
+		},
+		{
+			"#": "120",
+			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_toggle_no_nc"
+		},
+		{
+			"#": "121",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-3"
+		},
+		{
+			"#": "123",
+			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode_reporting"
+		},
+		{
+			"#": "122",
+			"$import": "~/templates/master_template.json#orientation_momentary"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press the Top/Buttom button once on product",
+		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. 3*tap the Top/Buttom button on product",
+		"reset": "Press and hold the Top/ Bottom button for 20s",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4273/Aeotec%20Wall%20Switch%20manual.pdf"
+	}
+}

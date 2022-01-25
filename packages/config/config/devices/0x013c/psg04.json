@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Auto Report Battery Time",
 			"description": "Units of 30 minute",
 			"valueSize": 1,
@@ -25,7 +26,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Have Z-WaveTM Controller entered inclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-WaveTM Controller about 20 seconds",
 		"exclusion": "1. Have Z-WaveTM Controller entered exclusion mode.\n2. Pressing button three times within 1.5 seconds to enter the exclusion mode.\nNode ID has been removed.",

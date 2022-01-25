@@ -1,0 +1,165 @@
+{
+	"manufacturer": "Sensative AB",
+	"manufacturerId": "0x019a",
+	"label": "11-01-022",
+	"description": "Strips Guard 700",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0004",
+			"zwaveAllianceId": [4155, 4160, 4300, 4441, 4447]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Notification type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary sensor report & Notification report (Access Control)",
+					"value": 0
+				},
+				{
+					"label": "Notification report (Access Control)",
+					"value": 1
+				},
+				{
+					"label": "Notification report (Home Security)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Led Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Send Supervision Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Events with S2 Encapsulation only",
+					"value": 0
+				},
+				{
+					"label": "Only door open alarm reports",
+					"value": 1
+				},
+				{
+					"label": "Unsolicited reports",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Supervision Report Wait Time",
+			"valueSize": 2,
+			"unit": "ms",
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000,
+			"unsigned": true
+		},
+		{
+			"#": "17",
+			"label": "Number of Failed Event Retries",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "No retries",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Failed Event Retry Interval",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"unsigned": true
+		},
+		{
+			"#": "19",
+			"label": "Heartbeat Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 5,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true
+		},
+		{
+			"#": "22",
+			"label": "Security Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard Security",
+					"value": 0
+				},
+				{
+					"label": "High Security",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful.\n\nTo wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
+		"exclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful.\n\nTo wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
+		"reset": "You may need to reset Strips if your Z-Wave controller is missing or not responding.\n\nFollow the instructions for “Wake up” above, but on the 3rd repetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4300/Strips%20Drip%20700%20manual.pdf"
+	}
+}

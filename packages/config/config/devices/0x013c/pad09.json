@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dimmer Level Report Mode",
 			"description": "0 : disable 1 : enable",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Led Indication Mode",
 			"description": "1: show dimmer state 2 : show night mode 3: one flash mode",
 			"valueSize": 1,
@@ -33,7 +35,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Restore Dimmer State",
 			"description": "0 : dimmer off 1 : last dimmer state 2 : dimmer on",
 			"valueSize": 1,
@@ -42,7 +45,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1.check Z-WaveTM Controller entered inclusion mode.\n2.Pressing Include button of PAD09 three times within 2 seconds will \nenter inclusion mode.",
 		"exclusion": "1.check Z-WaveTM Controller entered exclusion mode.\n2.Pressing Include button of PAD09 three times within 2 seconds will \nenter exclusion mode",

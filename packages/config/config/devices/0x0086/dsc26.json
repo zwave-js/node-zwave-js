@@ -25,30 +25,38 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"2[0xff]": {
+	"paramInformation": [
+		{
+			"#": "2[0xff]",
 			"$import": "templates/aeotec_template.json#blink_duration"
 		},
-		"2[0xff00]": {
+		{
+			"#": "2[0xff00]",
 			"$import": "templates/aeotec_template.json#blink_length"
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"120": {
+		{
+			"#": "120",
 			"$import": "templates/aeotec_template.json#external_switch_3way"
 		},
-		"200": {
+		{
+			"#": "200",
 			"$import": "templates/aeotec_template.json#partner_id_att"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	}
+	]
 }

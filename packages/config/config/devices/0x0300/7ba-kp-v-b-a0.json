@@ -1,0 +1,105 @@
+{
+	"manufacturer": "LEEDARSON LIGHTING CO., Ltd.",
+	"manufacturerId": "0x0300",
+	"label": "7BA-KP-V-B-A0",
+	"description": "Z-WAVE 700 Keypad",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0044",
+			"zwaveAllianceId": 4277
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Entry & Exit Delay",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Low Battery Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Proximity Sensor",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"label": "Proximity Sensor: Timeout",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 2,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Proximity Sensor: Sensitivity",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 31,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Light Sensor",
+			"defaultValue": 1
+		},
+		{
+			"#": "7",
+			"label": "Day/Night Threshold",
+			"valueSize": 1,
+			"unit": "lux",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Key Tones",
+			"defaultValue": 1
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Indicate Arm Status After Wakeup",
+			"defaultValue": 1
+		}
+	],
+	"metadata": {
+		"inclusion": "Add the Keypad into the Z-Wave network via SmartStart:\n1. Add Keypad DSK into the primary controller SmartStart Provisioning List (If you don’t know how to do this, refer to its manual).\n2. Power on the Keypad again.\n3. The Keypad will send “Z-Wave protocol Command Class” frame to start SmartStart Inclusion.\n4. Network green LED will flashing at every 1 second to indicate that the inclusion is working, and solid green LED 3 seconds for indicate the inclusion is successful, otherwise the LED will be soild yellow in which you need to repeat the process from step 2\nNote: Keypad will reset itself to factory default by sending “Device Reset Locally CC” when it is included into a non-security Z-wave network.\nDSK QR code is on the left side of the product with laser printing.\nUser should follow the procedure in the section below if the controller does not support SmartStart inclusion.\n\nAdd the Keypad into the Z-Wave network:\n1. Set the Z-Wave network main controller into learning mode (see Z-Wave network controller operating manual).\n2. Trigger this action.\n3. Network green LED will flashing at every 1 second to indicate that the inclusion is working, and solid green LED 3 seconds for indicate the inclusion is successful, otherwise the LED will be soild yellow in which you need to repeat the process from step 2.",
+		"exclusion": "Remove the Keypad from a Z-Wave network:\n1. Set the Z-Wave network main controller into removing mode (see Z-Wave controller operating manual).\n2. Trigger this button action. the Network LED will flashing at every 1 second.\n3. If the removing is successful, the LED will solid green for 3 seconds. If the removing is failed then LED display yellow for 3 seconds, otherwise you need to repeat the process from step 2.\nNote: Keypad will start SmartStart Inclusion when it is removed from a Z-wave network.",
+		"reset": "Reset the Keypad to factory default.\n1. Device will reset itself to factory default by sending a “Device Reset Locally Notification” to gateway.\n2. If triggered the factory reset, the network connection led will solid green while factory reset is completed.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4277/keypad%20quick%20guide%207BA-KP-V-B-A0%2020210811(updated).pdf"
+	}
+}

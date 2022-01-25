@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Buttons mode",
 			"description": "Set number and type of directly connected buttons",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatically close after",
 			"description": "If not zero, automatically close blind after a user defined time",
 			"unit": "seconds",
@@ -62,7 +64,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "What to do on RF close command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +91,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Typical click timeout",
 			"description": "Typical time used to differentiate click, hold, double and triple clicks",
 			"unit": "ms",
@@ -97,7 +101,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +120,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Action on button press or hold",
 			"description": "Which command sent to Association group on button press or hold.",
 			"valueSize": 1,
@@ -134,7 +140,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -164,7 +171,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Full close time",
 			"description": "Time to go from opened to closed state",
 			"unit": "seconds",
@@ -174,7 +182,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Full open time",
 			"description": "Time to go from closed to open state",
 			"unit": "seconds",
@@ -184,14 +193,16 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Node Id of the blocking device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 24,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Blocking mode command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -209,7 +220,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Invert open and close relays",
 			"valueSize": 1,
 			"minValue": 0,
@@ -227,5 +239,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -25,8 +25,9 @@
 			"maxNodes": 3
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dim Level Sent via Basic Set",
 			"description": "The dim level sent to a lamp module upon activation: (0) Off; (1)-(99) Dim Level",
 			"valueSize": 1,
@@ -40,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Trigger ON value",
 			"description": "Temperature level when a ON command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
@@ -54,7 +56,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Trigger OFF value",
 			"description": "Temperature level when a OFF command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
@@ -68,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Humidity Trigger ON value",
 			"description": "Humidity level when a ON command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
@@ -82,7 +86,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Trigger OFF value",
 			"description": "Humidity level when a OFF command is sent out. Set to 99 to disable.",
 			"valueSize": 1,
@@ -96,7 +101,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto report time",
 			"description": "Sets the time interval when a sensor report is sent",
 			"valueSize": 2,
@@ -110,7 +116,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Auto report temperature",
 			"description": "Sets the temperature change causing a sensor report.",
 			"valueSize": 1,
@@ -124,7 +131,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto report humidity",
 			"description": "Sets the humidity change causing a sensor report.",
 			"valueSize": 1,
@@ -138,5 +146,11 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// The device shouldn't have any endpoints
+		"preserveRootApplicationCCValueIDs": true
+		// TODO: Remove endpoints when compat flag is implemented
+		// https://github.com/zwave-js/node-zwave-js/issues/3335
 	}
 }

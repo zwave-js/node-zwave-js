@@ -35,69 +35,88 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/act_template.json#ignore_start_level_transmitting"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/act_template.json#suspend_group_4"
 		},
-		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options_inverted"
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		},
-		"4": {
-			"$import": "../templates/master_template.json#orientation"
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/act_template.json#ignore_start_level_receiving"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/act_template.json#dim_step_zwave"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/act_template.json#dim_rate_zwave"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/act_template.json#dim_step_manual"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/act_template.json#dim_rate_manual"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/act_template.json#dim_step_all"
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "templates/act_template.json#dim_rate_all"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/act_template.json#disable_group_4"
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/act_template.json#enable_shade_group_2"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/act_template.json#enable_shade_group_3"
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "templates/act_template.json#enable_shade_group_1"
 		},
-		"19": {
+		{
+			"#": "19",
 			"$import": "templates/act_template.json#led_indicator"
 		},
-		"20": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Poll Group Interval",
 			"unit": "minutes",
 			"defaultValue": 2
 		},
-		"21": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 1"
 		},
-		"22": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Poll Group 2",
 			"defaultValue": 1
 		}
-	}
+	]
 }

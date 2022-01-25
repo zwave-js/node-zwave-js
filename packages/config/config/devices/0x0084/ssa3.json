@@ -7,14 +7,19 @@
 		{
 			"productType": "0x0341",
 			"productId": "0x0205"
+		},
+		{
+			"productType": "0x0331",
+			"productId": "0x010b"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delay before accept of Basic Set Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -22,5 +27,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

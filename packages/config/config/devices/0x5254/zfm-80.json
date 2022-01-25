@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "ExternalSwitchType",
 			"description": "Set External switch type Definitions",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Timeout",
 			"description": "Set timeout period",
 			"valueSize": 1,
@@ -63,7 +65,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "NodeIdNumber",
 			"description": "Configure Node ID number for Z-Wave command source",
 			"valueSize": 1,
@@ -72,7 +75,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "OutputStatus",
 			"description": "Set relay output status if timeout period has been reached",
 			"valueSize": 1,
@@ -80,5 +84,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

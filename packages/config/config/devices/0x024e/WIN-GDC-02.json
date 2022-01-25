@@ -1,0 +1,333 @@
+{
+	"manufacturer": "zConnect",
+	"manufacturerId": "0x024e",
+	"label": "DHS-WIN-GDC-02",
+	"description": "Garage Door Opener",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"endpoints": {
+		"0": {
+			"associations": {
+				"1": {
+					"label": "Lifeline",
+					"maxNodes": 3,
+					"isLifeline": true
+				},
+				"2": {
+					"label": "Sensor 1",
+					"maxNodes": 10
+				},
+				"3": {
+					"label": "Sensor 2",
+					"maxNodes": 10
+				},
+				"4": {
+					"label": "Sensor 3",
+					"maxNodes": 10
+				},
+				"5": {
+					"label": "Sensor 4 (optional temp sensor)",
+					"maxNodes": 10
+				}
+			}
+		},
+		"1": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/2"
+				}
+			}
+		},
+		"2": {
+			"associations": {
+				"1": {
+					"$import": "#endpoints/0/associations/1",
+					"isLifeline": false
+				},
+				"2": {
+					"$import": "#endpoints/0/associations/3"
+				}
+			}
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/zconnect_template.json#relay_mode_selection",
+			"label": "Relay 1 Mode"
+		},
+		{
+			"#": "2",
+			"$import": "templates/zconnect_template.json#interval_1-65000",
+			"label": "Strobe Closed Interval",
+			"description": "Relay 1 and 2 closed contacts time interval in strobe mode.",
+			"defaultValue": 10
+		},
+		{
+			"#": "3",
+			"$import": "templates/zconnect_template.json#interval_1-65000",
+			"label": "Strobe Open Interval",
+			"description": "Relay 1 and 2 open contacts time interval in strobe mode.",
+			"defaultValue": 10
+		},
+		{
+			"#": "4",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 1 Auto Off Delay",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command On Relay 1 will be switched Off automatically with predefined delay."
+		},
+		{
+			"#": "5",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 1 On Delay",
+			"description": "Relay 1 will be switched On with predefined delay."
+		},
+		{
+			"#": "6",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 1 Off Delay",
+			"description": "Relay 1 will be switched Off with predefined delay."
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "Relay 1 Restore After Power Loss",
+			"description": "Restore to the last known state for relay 1 after power was interrupted."
+		},
+		{
+			"#": "8",
+			"label": "Reaction To Broadcast Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Accept broadcast On and Off",
+					"value": 0
+				},
+				{
+					"label": "Ignore broadcast On and Off",
+					"value": 1
+				},
+				{
+					"label": "Ignore broadcast On, accept Off",
+					"value": 2
+				},
+				{
+					"label": "Accept broadcast On, ignore Off",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Hide Relay",
+			"description": "Hide relay 2 in controller interface"
+		},
+		{
+			"#": "10",
+			"$import": "templates/zconnect_template.json#relay_mode_selection",
+			"label": "Relay 2 Mode"
+		},
+		{
+			"#": "11",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 2 Auto Off Delay",
+			"description": "Relay will turn off automatically after time specified in this parameter. After receiving command On Relay 2 will be switched Off automatically with predefined delay."
+		},
+		{
+			"#": "12",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 2 On Delay",
+			"description": "Relay 2 will be switched On with predefined delay."
+		},
+		{
+			"#": "13",
+			"$import": "templates/zconnect_template.json#interval_1-65000_disable",
+			"label": "Relay 2 Off Delay",
+			"description": "Relay 2 will be switched Off with predefined delay."
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off",
+			"label": "Relay 2 Restore After Power Loss",
+			"description": "Restore to the last known state for relay 2 after power was interrupted."
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Control Relay 1 & 2 together",
+			"description": "When enabled, Relay 2 will be switched On when Relay 1 is switched."
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Control Relay 1 with S1"
+		},
+		{
+			"#": "20",
+			"$import": "templates/zconnect_template.json#sensor_relay_control",
+			"label": "Relay 1 And Connected Sensor Integration"
+		},
+		{
+			"#": "21",
+			"$import": "templates/zconnect_template.json#sensor_relay_control",
+			"label": "Relay 2 And Connected Sensor Integration"
+		},
+		{
+			"#": "24",
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 1 Processing Options",
+			"description": "Values of sensor 1 options for processing. Devices included in association group 2 will be using this parameter for controlling sensor 1."
+		},
+		{
+			"#": "26",
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 1 Send Interval",
+			"description": "Time interval to submit Sensor 1 readings to controller.",
+			"defaultValue": 300
+		},
+		{
+			"#": "29",
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 2 Processing Options",
+			"description": "Values of sensor 2 options for processing. Devices included in association group 3 will be using this parameter for controlling sensor 2."
+		},
+		{
+			"#": "31",
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 2 Send Interval",
+			"description": "Time interval to submit Sensor 2 readings to controller.",
+			"defaultValue": 300
+		},
+		{
+			"#": "32",
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 3 On Level",
+			"description": "Multilevel sensor 3 values for turning devices On in association group 4 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		{
+			"#": "33",
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 3 Off Level",
+			"description": "Multilevel sensor 3 values for turning devices Off in association group 4 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		{
+			"#": "34",
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 3 Processing Options",
+			"description": "Values of sensor 3 options for processing. Devices included in association group 4 will be using this parameter for controlling sensor 3."
+		},
+		{
+			"#": "35",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
+			// I suspect the documentation is incorrect regarding this parameter
+			// as it doesn't make sense as documented. (same as 36).
+			// I think this is about sensor value change.
+			"label": "Sensor 3 Level Change",
+			"description": "Level change to trigger sending sensor change to controller. Default values depends on connected sensor type: temperature =1; humidity=5; luminosity=100 lux; power=50 Watt.",
+			"defaultValue": 1
+		},
+		{
+			"#": "36",
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 3 Send Interval",
+			"description": "Time interval to submit Sensor 3 readings to association group 1.",
+			"defaultValue": 300
+		},
+		{
+			"#": "37",
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 4 On Value",
+			"description": "Multilevel sensor 4 values for turning devices On in association group 5 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		{
+			"#": "38",
+			"$import": "templates/zconnect_template.json#base_-60-1000",
+			"label": "Sensor 4 Off Value",
+			"description": "Multilevel sensor 4 values for turning devices Off in association group 5 or device itself. Note: Value selection depends on sensor type and its readings.",
+			"defaultValue": 0
+		},
+		{
+			"#": "39",
+			"$import": "templates/zconnect_template.json#sensor_processing_options",
+			"label": "Sensor 4 Processing Options",
+			"description": "Values of sensor 4 options for processing. Devices included in association group 5 will be using this parameter for controlling sensor 4."
+		},
+		{
+			"#": "40",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
+			// I suspect the documentation is incorrect regarding this parameter
+			// as it doesn't make sense as documented. (same as 41).
+			// I think this is about sensor value change.
+			"label": "Sensor 4 Value Change",
+			"description": "Value change interval to trigger sensor change to controller. Default values depends on connected sensor type: temperature =1; humidity=5; luminosity=100 lux; power=50 Watt.",
+			"defaultValue": 1
+		},
+		{
+			"#": "41",
+			"$import": "templates/zconnect_template.json#interval_1-600_disable",
+			"label": "Sensor 4 Send Interval",
+			"description": "Time interval to submit Sensor 4 readings to association group 1.",
+			"defaultValue": 300
+		},
+		{
+			"#": "50",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Require Secure Commands",
+			"description": "React only to secure commands when device is in secure mode.",
+			"defaultValue": 0
+		},
+		{
+			"#": "51",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 2",
+			"description": "Send secure command signals for association group 2.",
+			"defaultValue": 0
+		},
+		{
+			"#": "52",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 3",
+			"description": "Send secure command signals for association group 3.",
+			"defaultValue": 0
+		},
+		{
+			"#": "53",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 4",
+			"description": "Send secure command signals for association group 4.",
+			"defaultValue": 0
+		},
+		{
+			"#": "54",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Secure Send Group 5",
+			"description": "Send secure command signals for association group 5.",
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "Put the controller into inclusion mode, with security if supported. Connect power to the Z-Wave garage door controller. If already powered click inclusion/exclusion button on garage door controller three times.",
+		"exclusion": "Put the controller into exclusion mode, Click the inclusion/exclusion button three times.",
+		"reset": "The device is factory reset on exclusion from the network.",
+		"manual": "https://www.digitalhomesystems.com.au/documentation/ZWaveGarageDoorControllerManual.pdf"
+	}
+}

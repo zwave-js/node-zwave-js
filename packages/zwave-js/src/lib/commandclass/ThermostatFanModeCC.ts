@@ -139,6 +139,8 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a delay
+			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+			// aren't able to handle the GET this quickly.
 			this.schedulePoll({ property });
 		}
 	};
@@ -167,10 +169,11 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatFanModeCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatFanModeCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["mode", "off"]);
 		}
@@ -203,10 +206,11 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatFanModeCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatFanModeCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedModes;
 	}
 }

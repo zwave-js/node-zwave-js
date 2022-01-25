@@ -32,6 +32,12 @@ describe("lib/config/Devices", () => {
 			);
 			expect(config).not.toBeUndefined();
 			expect(
+				config?.endpoints?.get(0)?.associations?.get(2),
+			).toMatchObject({
+				label: "Button 1 (Basic Report)",
+				maxNodes: 5,
+			});
+			expect(
 				config?.endpoints?.get(1)?.associations?.get(1),
 			).toMatchObject({
 				label: "Lifeline",

@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Change the state of indicator light",
 			"description": "Default status of socket LED is on as indicator when the load is off",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "Default with memory: the socket status is same as before when power on",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch Mode",
 			"description": "Edge or Pulse mode or EdgeToggle mode",
 			"valueSize": 1,
@@ -80,5 +82,5 @@
 				}
 			]
 		}
-	}
+	]
 }

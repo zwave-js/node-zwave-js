@@ -17,17 +17,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
-			"label": "Switch state saved or not when power failure",
-			"description": "0=Saved 1=not saved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "ALL ON/ALL OFF",
 			"description": "0,1,2,255",
 			"valueSize": 1,
@@ -36,7 +32,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Backlit brightness level",
 			"description": "0x00 LED disabled 0x01~0x0A Min level-Max level >0x0A same level as 0x0A",
 			"valueSize": 1,
@@ -44,7 +41,8 @@
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Key Mode",
 			"description": "0-4",
 			"valueSize": 1,
@@ -52,7 +50,8 @@
 			"maxValue": 4,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Key On duration",
 			"description": "0=infinite 1~65535=unit \"sec\"",
 			"unit": "2",
@@ -62,5 +61,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

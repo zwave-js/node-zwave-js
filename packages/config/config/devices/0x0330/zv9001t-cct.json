@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9001T-CCT",
+	"description": "CCT Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0xa104"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "templates/sunricher_template.json#scene_command_type"
+		}
+	],
+	"metadata": {
+		"inclusion": "Short press the “inclusion/exclusion” button, or press and hold down “ALL ON/OFF” button for over 3 seconds, the wall controller will be set to inclusion mode, and waiting to be included, then LED indicator turns on and blinks 6 times quickly to indicate successful inclusion.",
+		"exclusion": "Short press the “inclusion/exclusion” button, or press and hold down “ALL ON/OFF” button for over 3 seconds, the wall controller will be set to exclusion mode, and waiting to be excluded, then LED indicator turns on and shows 3 short blinks and 1 long blink to indicate successful exclusion.",
+		"reset": "Press and hold down “inclusion/exclusion” button for over 8 seconds, LED indicator blinks slowly to indicate successful factory reset, release “inclusion/exclusion” button, the wall controller will restart automatically.",
+		"manual": "https://www.sunricher.com/media/resources/manual/SR-ZV9001T-CCT-EU%20Instruction.pdf"
+	}
+}

@@ -39,7 +39,7 @@ export async function loadNotificationsInternal(
 	externalConfig?: boolean,
 ): Promise<NotificationMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"notifications.json",
 	);
 
@@ -65,7 +65,7 @@ export async function loadNotificationsInternal(
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"notifications",
-					`found non-hex key "${id}" at the root`,
+					`found invalid key "${id}" at the root. Notifications must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
@@ -75,7 +75,7 @@ export async function loadNotificationsInternal(
 			);
 		}
 		return notifications;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {
@@ -99,9 +99,9 @@ export class Notification {
 				if (!hexKeyRegexNDigits.test(eventId)) {
 					throwInvalidConfig(
 						"notifications",
-						`found non-hex key "${eventId}" in notification ${num2hex(
+						`found invalid key "${eventId}" in notification ${num2hex(
 							id,
-						)}`,
+						)}. Notification events must have lowercase hexadecimal IDs.`,
 					);
 				}
 				const eventIdNum = parseInt(eventId.slice(2), 16);
@@ -163,7 +163,7 @@ export class NotificationVariable {
 			if (!hexKeyRegexNDigits.test(stateId)) {
 				throwInvalidConfig(
 					"notifications",
-					`found non-hex key "${stateId}" in notification variable ${this.name}`,
+					`found invalid key "${stateId}" in notification variable ${this.name}. Notification states must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const stateIdNum = parseInt(stateId.slice(2), 16);

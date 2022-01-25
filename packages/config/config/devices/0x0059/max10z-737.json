@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Setpoint Upper Limit (endpoint 1)",
 			"description": "In degree centigrade",
 			"valueSize": 1,
@@ -25,7 +26,8 @@
 			"defaultValue": 35,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Setpoint Lower Limit (endpoint 1)",
 			"description": "In degree centigrade",
 			"valueSize": 1,
@@ -35,7 +37,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Button Override Duration",
 			"description": "In minutes",
 			"valueSize": 1,
@@ -45,7 +48,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Relay State On Power (switch Endpoint Only)",
 			"description": "Boolean",
 			"valueSize": 1,
@@ -54,7 +58,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Dynamic Endpoint 2 Device Type",
 			"description": "Value 0 = thermostat, 1 = binary switch",
 			"valueSize": 1,
@@ -63,7 +68,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Time Sync",
 			"description": "In 2 minutes steps",
 			"valueSize": 1,
@@ -73,7 +79,8 @@
 			"defaultValue": 65,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Heating Tpi Cycle",
 			"description": "Value 1 = 3 cycles per hour, 2 = 6 cycles per hour, 3 = 9 cycles per hour and 4 = 12 cycles per hour",
 			"valueSize": 1,
@@ -82,7 +89,7 @@
 			"defaultValue": 2,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put network controller in Inclusion mode.\n2. Hold the button on the top of the Beanbag Receiver for more than 2 seconds until the Network Indicator LED turns red then release the button to put the Beanbag Receiver into Learn Mode. \n3. Beanbag Receiver will indicate success with sold white Network LED",
 		"exclusion": "1. Put network controller in Exclusion mode.\n2. Hold the button on the top of the Beanbag Receiver for more than 2 seconds until the Network Indicator LED turns red then release the button to put the Beanbag Receiver into Learn Mode. \n3. Beanbag Receiver will indicate success with flashing white Network LED (3Sec ON and 30Sec OFF)",

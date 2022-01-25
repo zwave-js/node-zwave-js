@@ -4,7 +4,7 @@
 	],
 	"useWorkspaces": true,
 	"npmClient": "yarn",
-	"version": "7.5.0",
+	"version": "8.11.2",
 	"command": {
 		"run": {
 			"stream": true
@@ -12,14 +12,13 @@
 		"version": {
 			"allowBranch": [
 				"master",
-				"release-*"
+				"release-*",
+				"next"
 			],
 			"ignoreChanges": [
 				"*.md"
 			],
-			"exact": true,
-			"amend": true,
-			"push": false
+			"exact": true
 		}
 	}
 }

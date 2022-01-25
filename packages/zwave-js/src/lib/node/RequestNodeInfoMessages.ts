@@ -39,7 +39,8 @@ interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
 export class RequestNodeInfoResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;

@@ -13,9 +13,24 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Primary Notification Volume",
 			"valueSize": 1,
 			"minValue": 1,
@@ -37,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Primary Notification Length",
 			"valueSize": 1,
 			"minValue": 1,
@@ -64,7 +80,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Secondary Notification Length",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -83,7 +100,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Secondary Notification Volume",
 			"valueSize": 1,
 			"minValue": 1,
@@ -105,7 +123,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Primary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
@@ -155,7 +174,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Secondary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
@@ -205,7 +225,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Toggle notification sound",
 			"valueSize": 1,
 			"minValue": 1,
@@ -223,7 +244,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "When prompted by the controller:\n1. The Siren should be within 10’ of your Z-Wave controller for the inclusion process. After successful pairing, the device can be brought to the desired lo-cation.\n2. Remove the BACK COVER by twisting it CLOCKWISE.\n3. Remove the BATTERY TABS.\n4. Press the CONNECT BUTTON quickly 3 times in a row.\n\nThe LED RING will flash five times indicating exclusion/disconnection.",
 		"exclusion": "When prompted by the controller:\n1. Remove the BACK COVER from the MAIN BODY.\n2. Press the CONNECT BUTTON quickly 3 times in a row.\n\nThe LED RING will flash five times indicating exclusion/disconnection.",

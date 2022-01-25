@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"80": {
+	"paramInformation": [
+		{
+			"#": "80",
 			"label": "Command Type When Triggered",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset the Device",
 			"valueSize": 4,
 			"minValue": 0,
@@ -53,7 +55,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Let your primary Controller/gateway into Inclusion mode, then press once the \"Learn\" Button in the app of Touch.",
 		"exclusion": "Let your primary Controller/gateway into Exclusion mode, then press once the \"Learn\" Button in the app of Touch.",

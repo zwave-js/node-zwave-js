@@ -21,22 +21,25 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Switching single-surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Doorbell function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "LOWER shutter as long as button is pressed",
 			"description": "Direction of movement changes after each switching process",
 			"valueSize": 1,
@@ -44,19 +47,21 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Move shutter single-surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "RAISE shutter as long as button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		}
-	}
+	]
 }

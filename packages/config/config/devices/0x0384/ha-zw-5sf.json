@@ -1,0 +1,94 @@
+{
+	"manufacturer": "AiBase Smart Technology",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5SF",
+	"description": "Water Leak Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x000a",
+			"zwaveAllianceId": 2906
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water - Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "10",
+			"label": "Low Battery Report Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Beeping Rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On 1s, off 1s",
+					"value": 0
+				},
+				{
+					"label": "On 0.5s, off 0.5s",
+					"value": 1
+				},
+				{
+					"label": "Continual beeping",
+					"value": 2
+				},
+				{
+					"label": "Disable",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "254",
+			"label": "Lock Configuration Parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Insert the battery.\n2. Set the Z-Wave network main controller into Inclusion mode.\n3. Triggering this button action.\n4. If the add for inclusion is successful, the LED will blink fast and then keep on 3 seconds. Otherwise, the LED will blink 25 seconds and then turn off, in which case you need to repeat the process from step 2.",
+		"exclusion": "1. Insert the battery.\n2. Set the Z-Wave network main controller into exclusion mode.\n3. Triggering this button action.\nIf the remove for exclusion is successful, the LED will blink fast and turn off. Otherwise, the LED will keep solid for 25 seconds and then turn off, in which case you need to repeat the process from step 2.",
+		"reset": "Pressing and holding the z-button for 5 seconds, LED will blink for 5 seconds and then keep solid for 3 seconds, after that Water Leak Sensor will send “Device_Reset_Locally” to the main controller and exclude from the Z-Wave network.\n\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2906/LEEDARSON%20Z-Wave%20Water%20Leak%20Sensor%20-%20User%20Guide_20180516.pdf"
+	}
+}

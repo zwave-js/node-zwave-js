@@ -25,83 +25,96 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 70
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi-Sensor Function Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		}
-	}
+	]
 }

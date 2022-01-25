@@ -64,6 +64,7 @@ export class SceneActivationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property !== "sceneId") {
 			throwUnsupportedProperty(this.ccId, property);
@@ -71,7 +72,8 @@ export class SceneActivationCCAPI extends CCAPI {
 		if (typeof value !== "number") {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
-		await this.set(value);
+		const duration = Duration.from(options?.transitionDuration);
+		await this.set(value, duration);
 	};
 
 	/**
@@ -135,6 +137,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		...ValueMetadata.UInt8,
 		min: 1,
 		label: "Scene ID",
+		valueChangeOptions: ["transitionDuration"],
 	})
 	public sceneId: number;
 

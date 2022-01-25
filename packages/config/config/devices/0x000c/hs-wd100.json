@@ -18,27 +18,32 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"4": {
-			"$import": "../templates/master_template.json#orientation"
+	"paramInformation": [
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
 		},
-		"7": {
-			"$import": "../templates/master_template.json#base_1-99_nounit",
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
 			"label": "Remote Dimming Level Increment"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/homeseer_template.json#dimming_step",
 			"label": "Remote Dimming Step Duration"
 		},
-		"9": {
-			"$import": "../templates/master_template.json#base_1-99_nounit",
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_1-99_nounit",
 			"label": "Local Dimming Level Increment"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/homeseer_template.json#dimming_step",
 			"label": "Local Dimming Step Duration"
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"remove": {

@@ -25,8 +25,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "True Period",
 			"description": "Time of switching status to send status message",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Out Basic Command",
 			"description": "Enable or Disable the status message function",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Meter Report Period",
 			"description": "Autoreporting meter value interval",
 			"valueSize": 2,
@@ -63,5 +66,5 @@
 			"maxValue": 3240,
 			"defaultValue": 3
 		}
-	}
+	]
 }

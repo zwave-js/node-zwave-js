@@ -1,5 +1,6 @@
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
 import { MockSerialPort } from "@zwave-js/serial";
+import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -25,6 +26,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 	});
 
@@ -67,6 +69,7 @@ describe("regression tests", () => {
 			direction: "up",
 			ignoreStartLevel: true,
 		});
+		await wait(1);
 
 		// The driver should send a secure command
 		expect(serialport.lastWrite?.[6]).toBe(0x98);

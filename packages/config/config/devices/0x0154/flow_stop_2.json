@@ -13,12 +13,14 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"$import": "templates/popp_template.json#led_status"
 		},
-		"1": {
+		{
+			"#": "1",
 			"$import": "templates/popp_template.json#shut_off_controller_behavior"
 		}
-	}
+	]
 }

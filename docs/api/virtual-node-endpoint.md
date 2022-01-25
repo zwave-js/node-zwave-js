@@ -10,6 +10,40 @@ Like in physical nodes, the endpoint 0 of a virtual node represents its root end
 
 See [`ZWaveNode.setValue`](api/node.md#setValue) for a description. Behind the scenes, multicast and broadcast commands are used automatically when necessary.
 
+### `getDefinedValueIDs`
+
+```ts
+getDefinedValueIDs(): VirtualValueID[]
+```
+
+Similar to [`ZWaveNode.getDefinedValueIDs`](api/node.md#getDefinedValueIDs), this returns an array of all possible value IDs that can be used to control the physical node(s) this virtual node represents using [`setValue`](#setValue). Because these value IDs are only virtual and can change over time, they are not stored in the database and this method returns the corresponding metadata and CC version along with the value ID itself:
+
+```ts
+interface VirtualValueID extends TranslatedValueID {
+	/** The metadata that belongs to this virtual value ID */
+	metadata: ValueMetadata;
+	/** The maximum supported CC version among all nodes targeted by this virtual value ID */
+	ccVersion: number;
+}
+```
+
+> [!NOTE] The returned array will include values for the `Basic CC`, which is the preferred way to control different heterogeneous devices like Binary Switches and Multilevel Switches together.
+
+This method and its return values need to be re-evaluated whenever the underlying physical nodes change. This is the case when:
+
+-   **Broadcast node**:
+    -   All nodes are ready for the first time
+    -   A new node is added to the network and becomes ready
+    -   An existing node is re-interviewed and becomes ready again
+    -   A node is removed from the network
+-   **Multicast groups**:
+    -   All members of the multicast group are ready for the first time
+    -   A (ready) node is added to a multicast group
+    -   A member of a multicast group is re-interviewed and becomes ready again
+    -   A node is removed from a multicast group
+
+> [!NOTE] Values of virtual nodes/endpoints are only writable. They don't store a value in the value DB and their value is never updated.
+
 ### `getEndpoint`
 
 ```ts
@@ -67,6 +101,30 @@ getCCVersion(cc: CommandClasses): number
 ```
 
 Retrieves the minimum version of the given CommandClass the underlying physical endpoints implement. If none of the endpoints support this CC, `0` is returned.
+
+### `invokeCCAPI`
+
+```ts
+invokeCCAPI(
+	cc: CommandClasses,
+	method: string, // any of the CC's methods
+	...args: unknown[], // that method's arguments
+): Promise<unknown> // that method's return type
+```
+
+Allows dynamically calling any CC API method on this virtual endpoint by CC ID and method name. When the CC and/or method name is known this uses a bunch of type magic to show you the the correct arguments depending on the CC and method name you entered.
+
+> [!NOTE] When dealing with statically known CCs, using the [`commandClasses` API](#commandClasses) is recommended instead.
+
+### `supportsCCAPI`
+
+```ts
+supportsCCAPI(cc: CommandClasses): boolean
+```
+
+Allows checking whether a CC API is supported before calling it with [`invokeCCAPI`](#invokeCCAPI)
+
+> [!WARNING] Get-type commands are not supported by virtual nodes/endpoints and will cause an error.
 
 ## VirtualEndpoint properties
 

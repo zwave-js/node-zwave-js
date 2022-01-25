@@ -35,9 +35,10 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"32": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+	"paramInformation": [
+		{
+			"#": "32",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Default Startup Sound",
 			"options": [
 				{
@@ -46,8 +47,9 @@
 				}
 			]
 		},
-		"34": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "34",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Sensor Calibration",
 			"description": "To calibrate, close door fully. Initiate calibration. Open door fully, then close door fully.",
 			"options": [
@@ -61,117 +63,136 @@
 				}
 			]
 		},
-		"35": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "35",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Sensor Calibration Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
 			"defaultValue": 60
 		},
-		"36": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+		{
+			"#": "36",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Get Current Alarm Music Number",
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"37[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "37[0xff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Opening Alarm",
 			"valueSize": 4
 		},
-		"37[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "37[0xff00]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Opening Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
 		},
-		"37[0xff0000]": {
+		{
+			"#": "37[0xff0000]",
 			"label": "Opening Alarm: Sound Selection",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 1
 		},
-		"37[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "37[0xff000000]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Opening Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 10
 		},
-		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "38[0xff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Closing Alarm",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
-		"38[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "38[0xff00]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closing Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
 		},
-		"38[0xff0000]": {
+		{
+			"#": "38[0xff0000]",
 			"label": "Closing Alarm: Sound Selection",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"38[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "38[0xff000000]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closing Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 6
 		},
-		"39[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "39[0xff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Unknown State Alarm",
 			"valueSize": 4
 		},
-		"39[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "39[0xff00]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Unknown State Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
 		},
-		"39[0xff0000]": {
+		{
+			"#": "39[0xff0000]",
 			"label": "Unknown State Alarm: Sound Selection",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3
 		},
-		"39[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "39[0xff000000]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Unknown State Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 4
 		},
-		"40[0xff]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "40[0xff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Closed Position Alarm",
 			"valueSize": 4
 		},
-		"40[0xff00]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "40[0xff00]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closed Position Alarm: Volume",
 			"valueSize": 4,
 			"defaultValue": 8
 		},
-		"40[0xff0000]": {
+		{
+			"#": "40[0xff0000]",
 			"label": "Closed Position Alarm: Sound Selection",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 3
 		},
-		"40[0xff000000]": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "40[0xff000000]",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Closed Position Alarm: LED Blinking Frequency",
 			"valueSize": 4,
 			"defaultValue": 4
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Tamper Sensor Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -190,7 +211,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Battery Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -209,8 +231,9 @@
 				}
 			]
 		},
-		"43": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "43",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Demo Sound Selection",
 			"description": "Allowable range: 0-100",
 			"options": [
@@ -220,11 +243,13 @@
 				}
 			]
 		},
-		"44": {
-			"$import": "../templates/master_template.json#base_1-10_nounit",
+		{
+			"#": "44",
+			"$import": "~/templates/master_template.json#base_1-10_nounit",
 			"label": "Test Volume Level"
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Environmental Temperature",
 			"valueSize": 2,
 			"unit": "0.1 °C",
@@ -234,8 +259,9 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"47": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "47",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
@@ -248,7 +274,8 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications",
 			"options": [
 				{
@@ -261,7 +288,8 @@
 				}
 			]
 		},
-		"241": {
+		{
+			"#": "241",
 			"label": "Pair Safety Sensor",
 			"description": "Start the sensor pairing mode",
 			"valueSize": 4,
@@ -280,13 +308,15 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find on the product's housing",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Z-Wave button that you can find on the product's housing",

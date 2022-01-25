@@ -24,6 +24,10 @@ describe("lib/config/Meters", () => {
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			configManager = new ConfigManager();
 			await configManager.loadMeters();
 		});
@@ -47,6 +51,9 @@ describe("lib/config/Meters", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			configManager = new ConfigManager();
 			await configManager.loadMeters();
 		});
@@ -66,6 +73,9 @@ describe("lib/config/Meters", () => {
 		beforeAll(async () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyMeters));
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 
 			configManager = new ConfigManager();
 			await configManager.loadMeters();

@@ -16,6 +16,7 @@ import {
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -102,6 +103,29 @@ export function getAggregatedCountValueId(): ValueID {
 	};
 }
 
+/**
+ * Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device.
+ * This function gives an estimate if this is the case (i.e. all endpoints have a different device class)
+ */
+function areAllEndpointsDifferent(
+	node: ZWaveNode,
+	endpointIndizes: number[],
+): boolean {
+	// Endpoints are useless if all of them have different device classes
+	const deviceClasses = new Set<number>();
+	for (const endpoint of endpointIndizes) {
+		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
+		const deviceClass =
+			node.getValue<{ generic: number; specific: number }>(
+				devClassValueId,
+			);
+		if (deviceClass) {
+			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
+		}
+	}
+	return deviceClasses.size === endpointIndizes.length;
+}
+
 @API(CommandClasses["Multi Channel"])
 export class MultiChannelCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultiChannelCommand): Maybe<boolean> {
@@ -138,10 +162,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCEndPointReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCEndPointReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return {
 				isDynamicEndpointCount: response.countIsDynamic,
@@ -165,10 +190,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.capability;
 	}
 
@@ -187,10 +213,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			genericClass,
 			specificClass,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.foundEndpoints;
 	}
 
@@ -207,10 +234,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.members;
 	}
 
@@ -280,6 +308,7 @@ export class MultiChannelCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
+		this.registerValue(getEndpointIndizesValueId().property, true);
 		this.registerValue(getEndpointCCsValueId(0).property, true);
 		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
 	}
@@ -355,7 +384,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			direction: "inbound",
 		});
 
-		const allEndpoints: number[] = [];
+		let allEndpoints: number[] = [];
 		const addSequentialEndpoints = (): void => {
 			for (
 				let i = 1;
@@ -439,6 +468,13 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 
 				// copy the capabilities from the first endpoint
+				const devClass = this.getValueDB().getValue(
+					getEndpointDeviceClassValueId(allEndpoints[0]),
+				);
+				this.getValueDB().setValue(
+					getEndpointDeviceClassValueId(endpoint),
+					devClass,
+				);
 				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
 					getEndpointCCsValueId(allEndpoints[0]),
 				)!;
@@ -482,6 +518,33 @@ supported CCs:`;
 		}
 
 		// Now that all endpoints have been interviewed, remember which ones are there
+		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
+		if (
+			!multiResponse.identicalCapabilities &&
+			areAllEndpointsDifferent(node, allEndpoints)
+		) {
+			const preserve = node.deviceConfig?.compat?.preserveEndpoints;
+			if (!preserve) {
+				allEndpoints = [];
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
+				});
+			} else if (preserve === "*") {
+				// preserve all endpoints, do nothing
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary, but are configured to be preserved.`,
+				});
+			} else {
+				allEndpoints = allEndpoints.filter((ep) =>
+					preserve.includes(ep),
+				);
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Endpoints seem unnecessary, but endpoints ${allEndpoints.join(
+						", ",
+					)} are configured to be preserved.`,
+				});
+			}
+		}
 		this.getValueDB().setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete
@@ -537,7 +600,7 @@ supported CCs:`;
 		for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
 			// Check which CCs exist on this endpoint
 			const endpointCCs = [...endpointCounts.entries()]
-				.filter(([, ccEndpoints]) => ccEndpoints <= endpoint)
+				.filter(([, ccEndpoints]) => ccEndpoints >= endpoint)
 				.map(([ccId]) => ccId);
 			// And store it per endpoint
 			node.valueDB.setValue(getEndpointCCsValueId(endpoint), endpointCCs);
@@ -790,13 +853,15 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
-					this.genericClass,
-				).label,
-				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
-					this.genericClass,
-					this.specificClass,
-				).label,
+				"generic device class":
+					this.driver.configManager.lookupGenericDeviceClass(
+						this.genericClass,
+					).label,
+				"specific device class":
+					this.driver.configManager.lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label,
 				"found endpoints": this._foundEndpoints.join(", "),
 				"# of reports to follow": this._reportsToFollow,
 			},
@@ -843,13 +908,15 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
-					this.genericClass,
-				).label,
-				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
-					this.genericClass,
-					this.specificClass,
-				).label,
+				"generic device class":
+					this.driver.configManager.lookupGenericDeviceClass(
+						this.genericClass,
+					).label,
+				"specific device class":
+					this.driver.configManager.lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label,
 			},
 		};
 	}
@@ -957,10 +1024,10 @@ function getCCResponseForCommandEncapsulation(
 	) {
 		// Allow both versions of the encapsulation command
 		// Our implementation check is a bit too strict, so change the return type
-		return ([
+		return [
 			MultiChannelCCCommandEncapsulation,
 			MultiChannelCCV1CommandEncapsulation,
-		] as any) as typeof MultiChannelCCCommandEncapsulation[];
+		] as any as typeof MultiChannelCCCommandEncapsulation[];
 	}
 }
 
@@ -994,15 +1061,25 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
-			this.endpointIndex = this.payload[0] & 0b0111_1111;
-			const isBitMask = !!(this.payload[1] & 0b1000_0000);
-			const destination = this.payload[1] & 0b0111_1111;
-			if (isBitMask) {
-				this.destination = parseBitMask(
-					Buffer.from([destination]),
-				) as any;
+			if (
+				this.getNodeUnsafe()?.deviceConfig?.compat
+					?.treatDestinationEndpointAsSource
+			) {
+				// This device incorrectly uses the destination field to indicate the source endpoint
+				this.endpointIndex = this.payload[1] & 0b0111_1111;
+				this.destination = 0;
 			} else {
-				this.destination = destination;
+				// Parse normally
+				this.endpointIndex = this.payload[0] & 0b0111_1111;
+				const isBitMask = !!(this.payload[1] & 0b1000_0000);
+				const destination = this.payload[1] & 0b0111_1111;
+				if (isBitMask) {
+					this.destination = parseBitMask(
+						Buffer.from([destination]),
+					) as any;
+				} else {
+					this.destination = destination;
+				}
 			}
 			// No need to validate further, each CC does it for itself
 			this.encapsulated = CommandClass.from(this.driver, {
@@ -1016,6 +1093,14 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.destination = options.destination;
 			// If the encapsulated command requires security, so does this one
 			if (this.encapsulated.secure) this.secure = true;
+			if (
+				this.getNodeUnsafe()?.deviceConfig?.compat
+					?.treatDestinationEndpointAsSource
+			) {
+				// This device incorrectly responds from the endpoint we've passed as our source endpoint
+				if (typeof this.destination === "number")
+					this.endpointIndex = this.destination;
+			}
 		}
 	}
 

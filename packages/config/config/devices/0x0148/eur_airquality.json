@@ -24,8 +24,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Humidity Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +77,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Temperature Resolution",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,7 +101,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Resolution",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +125,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "VOC Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -135,7 +141,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "CO2eq Change Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,7 +157,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Air Quality Indication via LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,5 +177,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Auto Report State Time",
 			"description": "0 means turn off auto report state. units of 30 minutes",
 			"valueSize": 1,
@@ -25,7 +26,7 @@
 			"defaultValue": 12,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Check Z-WaveTM Controller enter inclusion mode. Pressing tamper key three times within 3 seconds to enter the inclusion mode. If the addition is successful, the LED will flash slowly.",
 		"exclusion": "Check Z-WaveTM Controller enter exclusion mode. Pressing tamper key three times within 3 seconds to enter the exclusion mode. If the removal is successful, the code light will flash for 30 seconds.",

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator",
 			"description": "Change the behavior of the LED Indicator",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Countdown",
 			"description": "Plug Auto Shutoff",
 			"unit": "Seconds",
@@ -48,5 +49,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

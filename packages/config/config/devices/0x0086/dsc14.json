@@ -21,24 +21,28 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"$import": "templates/aeotec_template.json#enable_notifications",
 			"label": "Motor start delay time",
 			"unit": "ms"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/aeotec_template.json#enable_notifications",
 			"label": "Opening Time",
 			"unit": "ms"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/aeotec_template.json#enable_notifications",
 			"label": "Closing Time",
 			"unit": "ms"
 		},
-		"7": {
-			"$import": "../templates/master_template.json#state_after_power_failure",
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
 			"options": [
 				{
 					"label": "Stop",
@@ -54,8 +58,9 @@
 				}
 			]
 		},
-		"8": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Count of External Buttons/Switches",
 			"options": [
 				{
@@ -68,17 +73,21 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"120": {
+		{
+			"#": "120",
 			"$import": "templates/aeotec_template.json#external_switch_two"
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	}
+	]
 }

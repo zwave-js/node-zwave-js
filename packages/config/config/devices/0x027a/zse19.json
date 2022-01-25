@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren Alarm Duration",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -23,7 +23,8 @@
 			"maxValue": 600,
 			"defaultValue": 180
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature & Humidity reporting interval",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -31,12 +32,13 @@
 			"maxValue": 1440,
 			"defaultValue": 30
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Custom Sound Selection for Audio Speaker",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -16,17 +16,10 @@ async sendEncapsulated(
 ### `getNonce`
 
 ```ts
-async getNonce(
-	options: {
-		/** Whether the command should be sent as a standalone transaction. Default: false */
-		standalone?: boolean;
-		/** Whether the received nonce should be stored as "free". Default: false */
-		storeAsFreeNonce?: boolean;
-	} = {},
-): Promise<Buffer | undefined>;
+async getNonce(): Promise<Buffer | undefined>;
 ```
 
-Requests a new nonce for Security CC encapsulation.
+Requests a new nonce for Security CC encapsulation which is not directly linked to a specific command.
 
 ### `sendNonce`
 

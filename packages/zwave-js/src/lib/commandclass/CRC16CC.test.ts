@@ -1,12 +1,11 @@
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
-import { CommandClass } from "./CommandClass";
+import { CommandClass, InvalidCC } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/CRC16 => ", () => {
 	describe("CommandEncapsulation (V1)", () => {
@@ -43,8 +42,9 @@ describe("lib/commandclass/CRC16 => ", () => {
 				data: serialized,
 			});
 			expect(deserialized.nodeId).toBe(basicCCSet.nodeId);
-			const deserializedPayload = (deserialized as CRC16CCCommandEncapsulation)
-				.encapsulated as BasicCCSet;
+			const deserializedPayload = (
+				deserialized as CRC16CCCommandEncapsulation
+			).encapsulated as BasicCCSet;
 			expect(deserializedPayload).toBeInstanceOf(BasicCCSet);
 			expect(deserializedPayload.nodeId).toBe(basicCCSet.nodeId);
 			expect(deserializedPayload.targetValue).toBe(
@@ -52,7 +52,7 @@ describe("lib/commandclass/CRC16 => ", () => {
 			);
 		});
 
-		it("deserializing a CC with a wrong checksum should throw", () => {
+		it("deserializing a CC with a wrong checksum should result in an invalid CC", () => {
 			const basicCCSet = new BasicCCSet(fakeDriver, {
 				nodeId: 3,
 				targetValue: 89,
@@ -63,16 +63,11 @@ describe("lib/commandclass/CRC16 => ", () => {
 			const serialized = crc16.serialize();
 			serialized[serialized.length - 1] ^= 0xff;
 
-			assertZWaveError(
-				() =>
-					CommandClass.from(fakeDriver, {
-						nodeId: basicCCSet.nodeId as number,
-						data: serialized,
-					}),
-				{
-					errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-				},
-			);
+			const decoded = CommandClass.from(fakeDriver, {
+				nodeId: basicCCSet.nodeId as number,
+				data: serialized,
+			});
+			expect(decoded).toBeInstanceOf(InvalidCC);
 		});
 	});
 });

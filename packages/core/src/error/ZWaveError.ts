@@ -1,5 +1,7 @@
+import { padStart } from "alcalzone-shared/strings";
+
 /**
- * Used to identify errors from this library without relying on the error message
+ * Used to identify errors from this library without relying on the specific wording of the error message
  */
 export enum ZWaveErrorCodes {
 	PacketFormat_Truncated,
@@ -11,7 +13,7 @@ export enum ZWaveErrorCodes {
 	PacketFormat_DecryptionFailed,
 
 	/** The driver failed to start */
-	Driver_Failed,
+	Driver_Failed = 100,
 	Driver_Reset,
 	Driver_Destroyed,
 	Driver_NotReady,
@@ -23,15 +25,20 @@ export enum ZWaveErrorCodes {
 	/** The driver tried to do something that requires security */
 	Driver_NoSecurity,
 	Driver_NoErrorHandler,
+	Driver_FeatureDisabled,
 
-	/** The controller has timed out while waiting for a report from the node */
-	Controller_Timeout,
+	/** There was a timeout while waiting for a message from the controller */
+	Controller_Timeout = 200,
+	/** There was a timeout while waiting for a response from a node */
 	Controller_NodeTimeout,
 	Controller_MessageDropped,
 	Controller_ResponseNOK,
 	Controller_CallbackNOK,
 	Controller_InclusionFailed,
 	Controller_ExclusionFailed,
+
+	/** Tried to do something the controller does not support */
+	Controller_NotSupported,
 
 	/** The interview for this node was restarted by the user */
 	Controller_InterviewRestarted,
@@ -48,17 +55,31 @@ export enum ZWaveErrorCodes {
 	/** The message has expired (the given timeout has elapsed) */
 	Controller_MessageExpired,
 
-	CC_Invalid,
+	/** A Serial API command resulted in an error response */
+	Controller_CommandError,
+
+	/** The given NVM version/format is unsupported */
+	NVM_NotSupported = 280,
+	/** Could not parse the JSON representation of an NVM due to invalid data */
+	NVM_InvalidJSON,
+	/** A required NVM3 object was not found while deserializing the NVM */
+	NVM_ObjectNotFound,
+	/** The parsed NVM or NVM content has an invalid format */
+	NVM_InvalidFormat,
+	/** Not enough space in the NVM */
+	NVM_NoSpace,
+
+	CC_Invalid = 300,
 	CC_NoNodeID,
 	CC_NotSupported,
 	CC_NotImplemented,
 	CC_NoAPI,
 
-	Deserialization_NotImplemented,
+	Deserialization_NotImplemented = 320,
 	Arithmetic,
 	Argument_Invalid,
 
-	Config_Invalid,
+	Config_Invalid = 340,
 	Config_NotFound,
 	/** A compound config file has circular imports */
 	Config_CircularImport,
@@ -73,7 +94,7 @@ export enum ZWaveErrorCodes {
 	// Here follow message specific errors
 
 	/** The removal process could not be started or completed due to one or several reasons */
-	RemoveFailedNode_Failed,
+	RemoveFailedNode_Failed = 360,
 	/** The removal process was aborted because the node has responded */
 	RemoveFailedNode_NodeOK,
 	/** The replace process could not be started or completed due to one or several reasons */
@@ -117,6 +138,18 @@ export enum ZWaveErrorCodes {
 
 	/** Used to report that no nonce exists */
 	SecurityCC_NoNonce = 1400,
+	/** Used to report that no SPAN is established between the nodes yet. The context should be an object that contains the peer node ID */
+	Security2CC_NoSPAN,
+	/** Used to report that the inner state required for this action was not initialized */
+	Security2CC_NotInitialized,
+	/** Used to report that secure communication with a node is not possible because the node is not secure */
+	Security2CC_NotSecure,
+	/** Gets thrown when a Security S2 command is missing a required extension */
+	Security2CC_MissingExtension,
+	/** Gets thrown when a Security S2 encapsulated command cannot be decoded by the target node */
+	Security2CC_CannotDecode,
+	/** Gets thrown when parsing an invalid QR code */
+	Security2CC_InvalidQRCode,
 
 	/** The firmware update process is already active */
 	FirmwareUpdateCC_Busy = 1500,
@@ -135,6 +168,19 @@ export enum ZWaveErrorCodes {
 	Invalid_Firmware_File,
 	/** An firmware file with an unsupported format was provided */
 	Unsupported_Firmware_Format,
+
+	/** Unsupported target node for a powerlevel test */
+	PowerlevelCC_UnsupportedTestNode = 1600,
+}
+
+export function getErrorSuffix(code: ZWaveErrorCodes): string {
+	return `ZW${padStart(code.toString(), 4, "0")}`;
+}
+
+function appendErrorSuffix(message: string, code: ZWaveErrorCodes): string {
+	const suffix = ` (${getErrorSuffix(code)})`;
+	if (!message.endsWith(suffix)) message += suffix;
+	return message;
 }
 
 /**
@@ -149,7 +195,10 @@ export class ZWaveError extends Error {
 		/** If this error corresponds to a failed transaction, this contains the stack where it was created */
 		public readonly transactionSource?: string,
 	) {
-		super(message);
+		super();
+
+		// Add the error code to the message to be able to identify it even when the stack trace is garbled somehow
+		this.message = appendErrorSuffix(message, code);
 
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
@@ -166,15 +215,14 @@ export function isZWaveError(e: unknown): e is ZWaveError {
 	return e instanceof Error && Object.getPrototypeOf(e).name === "ZWaveError";
 }
 
-export function isTransmissionError(
-	e: unknown,
-): e is ZWaveError & {
+export function isTransmissionError(e: unknown): e is ZWaveError & {
 	code:
 		| ZWaveErrorCodes.Controller_Timeout
 		| ZWaveErrorCodes.Controller_MessageDropped
 		| ZWaveErrorCodes.Controller_CallbackNOK
 		| ZWaveErrorCodes.Controller_ResponseNOK
-		| ZWaveErrorCodes.Controller_NodeTimeout;
+		| ZWaveErrorCodes.Controller_NodeTimeout
+		| ZWaveErrorCodes.Security2CC_CannotDecode;
 } {
 	return (
 		isZWaveError(e) &&
@@ -182,7 +230,8 @@ export function isTransmissionError(
 			e.code === ZWaveErrorCodes.Controller_MessageDropped ||
 			e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 			e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
-			e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+			e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+			e.code === ZWaveErrorCodes.Security2CC_CannotDecode)
 	);
 }
 

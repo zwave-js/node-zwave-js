@@ -19,7 +19,8 @@ const noInterviewRegex = /^\/\/ @noInterview/m; // This comment marks a CC that 
 const pollValueApiRegex = /^\tprotected \[POLL_VALUE\]/m;
 const noPollValueApiRegex = /^\/\/ @noPollValueAPI/m; // This comment marks a CC that needs no pollValue API
 
-const onlyIncomplete = !!yargs.argv.onlyIncomplete;
+const argv = yargs.parseSync();
+const onlyIncomplete = !!argv.onlyIncomplete;
 
 function getSafeLength(str: string): number {
 	return c.stripColor(str).length;
@@ -107,9 +108,11 @@ interface CCInfo {
 		name,
 		{ version, interview, API, setValue, pollValue },
 	] of allCCs.entries()) {
-		const { version: latest, deprecated, obsolete } = getLatestVersion(
-			name,
-		);
+		const {
+			version: latest,
+			deprecated,
+			obsolete,
+		} = getLatestVersion(name);
 		if (obsolete) continue;
 		const implementationStatus =
 			version === latest && interview && API && setValue
@@ -161,7 +164,7 @@ interface CCInfo {
 	}
 	writeTable(
 		[headers, ...rows],
-		yargs.argv.flavor === "github" ? "github" : "console",
+		argv.flavor === "github" ? "github" : "console",
 	);
 })();
 
@@ -328,7 +331,7 @@ const ccVersions: Record<
 };
 
 function getLatestVersion(ccName: string) {
-	const cc = (CommandClasses[ccName as any] as any) as number;
+	const cc = CommandClasses[ccName as any] as any as number;
 	const version = ccVersions[num2hex(cc, true)];
 	if (version == undefined) {
 		return { version: 0, obsolete: true };

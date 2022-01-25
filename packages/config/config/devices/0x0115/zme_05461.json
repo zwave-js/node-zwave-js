@@ -28,8 +28,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,7 +53,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatically switch off first channel after",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
@@ -61,7 +63,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Function of RF off command on first channel",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +91,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch on/off by holding buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +119,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -142,7 +147,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"description": "Allows for exchanging ON and OFF.",
 			"valueSize": 1,
@@ -162,7 +168,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Switch by buttons (first channel)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -185,7 +192,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -212,7 +220,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -239,7 +248,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "What to do on button Down press (both)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -262,7 +272,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Energy consumption for first channel",
 			"valueSize": 2,
 			"minValue": 0,
@@ -275,7 +286,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Automatically switch off second channel after",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
@@ -284,7 +296,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Function of RF off command on second channel",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +324,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Switch by buttons (second channel)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -334,7 +348,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Energy consumption for second channel",
 			"valueSize": 2,
 			"minValue": 0,
@@ -347,5 +362,5 @@
 				}
 			]
 		}
-	}
+	]
 }

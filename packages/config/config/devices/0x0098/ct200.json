@@ -18,9 +18,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Reporting Threshold (8-bit)",
 			"description": "This value determines the reporting threshold",
 			"valueSize": 1,
@@ -48,7 +48,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "HVAC Settings",
 			"description": "Retrieves the HVAC Settings",
 			"valueSize": 4,
@@ -57,7 +58,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Utility Lock",
 			"description": "Enable or Disable the Utility Lock",
 			"valueSize": 1,
@@ -67,7 +69,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "C-Wire/Battery Status",
 			"description": "Query power which source is in use",
 			"valueSize": 1,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"description": "This value determines the reporting threshold",
 			"valueSize": 1,
@@ -95,14 +99,16 @@
 			"maxValue": 3,
 			"defaultValue": 2
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auxiliary/Emergency Heat Pump Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Thermostat Swing Temp",
 			"description": "Temperature spread between the on and off temperatures",
 			"unit": "degrees Fahrenheit",
@@ -146,7 +152,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Thermostat Diff Temp",
 			"description": "How far off from target temp before turning on unit",
 			"valueSize": 1,
@@ -177,7 +184,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"description": "Bring a space back to a normal occupied temp",
 			"valueSize": 1,
@@ -196,7 +204,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Simple UI Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -214,7 +223,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Multicast",
 			"description": "Toggle Multicast Mode",
 			"valueSize": 1,
@@ -233,7 +243,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Main Display Selection",
 			"description": "Control which info is displayed in the main display area",
 			"valueSize": 1,
@@ -252,7 +263,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Save Energy Mode Type",
 			"valueSize": 1,
 			"minValue": 1,
@@ -260,7 +272,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Fan Timer",
 			"description": "Activate Fan w/ auto shutoff timer",
 			"valueSize": 1,
@@ -268,14 +281,16 @@
 			"maxValue": 60,
 			"defaultValue": 0
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"minValue": -6,
 			"maxValue": 6,
 			"defaultValue": 0
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Display Units",
 			"description": "Celsius or Fahrenheit",
 			"valueSize": 1,
@@ -294,5 +309,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -26,8 +26,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "Value to be sent with a BASIC SET command",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Configuring the OFF Delay",
 			"description": "OFF Delay in seconds",
 			"valueSize": 1,
@@ -43,7 +45,7 @@
 			"maxValue": 127,
 			"defaultValue": 1
 		}
-	},
+	],
 	"compat": {
 		// The device is a Binary Sensor, but uses Basic Sets to report its status
 		"enableBasicSetMapping": true

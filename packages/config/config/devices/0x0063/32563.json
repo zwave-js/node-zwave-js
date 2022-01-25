@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Report Method",
 			"description": "Change Open/Close Report Method",
 			"valueSize": 1,
@@ -23,5 +23,5 @@
 			"maxValue": 3,
 			"defaultValue": 1
 		}
-	}
+	]
 }

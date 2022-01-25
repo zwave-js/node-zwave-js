@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_FLD01",
-	"description": "Flood Sensor FLD01",
+	"label": "HKZW-FLD01",
+	"description": "Flood Sensor",
 	"devices": [
 		{
 			"productType": "0x0200",
@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"14": {
+	"paramInformation": [
+		{
+			"#": "14",
 			"label": "Enable/Disable Basic Set Command",
 			"description": "The flood sensor can send BASIC SET command to nodes associated",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "value of the Basic Set",
 			"description": "The flood sensor can send BASIC SET command to nodes associated",
 			"valueSize": 1,
@@ -57,7 +58,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Flooding Alarm",
 			"description": "Enable/Disable flooding alarm",
 			"valueSize": 1,
@@ -76,7 +78,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Shock Alarm",
 			"description": "Enable/Disable shock alarm",
 			"valueSize": 1,
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "High Temperature Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +117,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Set the high temperature alarm trigger value",
 			"description": "Available setting(US):-67°c to -257°c",
 			"valueSize": 2,
@@ -121,7 +126,8 @@
 			"maxValue": 2570,
 			"defaultValue": 1040
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Low Temperature Alarm",
 			"description": "Enable/Disable low temperature alarm",
 			"valueSize": 1,
@@ -140,7 +146,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Set the low temperature alarm trigger value",
 			"description": "Available setting(US):-67°c to -257°c",
 			"valueSize": 2,
@@ -148,9 +155,10 @@
 			"maxValue": 2570,
 			"defaultValue": 0
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Blinking LED",
-			"description": "Enable/Disable blinking LED when alarm being triggerd",
+			"description": "Enable/Disable blinking LED when alarm being triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -167,7 +175,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Level of low battery",
 			"description": "This parameter defines a battery level as the \"low bettery\"",
 			"valueSize": 1,
@@ -175,5 +184,5 @@
 			"maxValue": 50,
 			"defaultValue": 20
 		}
-	}
+	]
 }

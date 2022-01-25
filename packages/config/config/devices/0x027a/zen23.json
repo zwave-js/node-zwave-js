@@ -1,0 +1,233 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN23",
+	"description": "Z-Wave Plus On/Off Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x1111",
+			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xb111",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "BASIC Command Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 || firmwareVersion === 20.15",
+			"label": "Switch behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "UP=On, DOWN=Off",
+					"value": 0
+				},
+				{
+					"label": "UP=Off, DOWN=On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "1",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Switch behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "UP=On, DOWN=Off",
+					"value": 0
+				},
+				{
+					"label": "UP=Off, DOWN=On",
+					"value": 1
+				},
+				{
+					"label": "Toggle",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Auto Turn-Off Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Auto Turn-Off Timer Time",
+			"description": "Time after which the switch automatically turns off",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Auto Turn-On Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Auto Turn-On Timer Time",
+			"description": "Set the time after which the switch automatically turns on",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion >= 3.1 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Enable/Disable Scene Control",
+			"description": "Enable or disable scene control functionality for quick 2-tap.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$if": "firmwareVersion >= 3.1 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Smart Bulb Mode (Disable Physical Switch)",
+			"description": "Enable/Disable Toggle / Z-Wave Control. NOTE: tap the upper paddle 10 times quickly to change this mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Physical switch disabled",
+					"value": 0
+				},
+				{
+					"label": "Physical switch enabled",
+					"value": 1
+				},
+				{
+					"label": "Physical switch and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion >= 3.4 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "3-Way Switch Type",
+			"description": "Choose the type of 3-way switch you want to use with this dimmer in a 3-way set-up.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3-way on/off switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary switch",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 3.5 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
+			"label": "Report status when toggle is disabled",
+			"description": "Report light status when both physical and Z-Wave control are disabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Yes",
+					"value": 0
+				},
+				{
+					"label": "No",
+					"value": 1
+				}
+			]
+		}
+	]
+}

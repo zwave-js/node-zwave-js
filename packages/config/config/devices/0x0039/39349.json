@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Led Light",
 			"description": "Invert LED light",
 			"valueSize": 1,
@@ -30,7 +31,7 @@
 					"value": 0
 				},
 				{
-					"label": "Led on when load is on, LED off when laod is off (default)",
+					"label": "Led on when load is on, LED off when load is off (default)",
 					"value": 1
 				},
 				{
@@ -39,7 +40,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the Program Button to add it in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button to remove it from the\nnetwork",

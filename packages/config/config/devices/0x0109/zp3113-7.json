@@ -1,0 +1,135 @@
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZP3113-7",
+	"description": "4 in 1 PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x2021",
+			"productId": "0x2112",
+			"zwaveAllianceId": [4099, 4314, 4315]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
+		},
+		{
+			"#": "2",
+			"label": "Temperature Reporting Threshold",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Humidity Reporting Threshold",
+			"description": "Allowable range: 5%-50%",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Light Reporting Threshold",
+			"description": "Allowable range: 5%-50%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 25,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Motion Trigger Interval",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Motion Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Led Indicator",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always off",
+					"value": 1
+				},
+				{
+					"label": "Flash - PIR/temperature",
+					"value": 2
+				},
+				{
+					"label": "PIR only",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Message Failure Retry Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: To add the ZP3113 to your Z-Wave network (inclusion), place your Z-Wave primary controller into inclusion mode. Press the Program Switch of ZP3113 once for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion, otherwise, ZP3113 will go to sleep after 30 seconds. The LED indicator will be flashing while the inclusion is continued",
+		"exclusion": "For “Exclusion” from (removing from) a network: To remove the ZP3113 from your Z-Wave network (exclusion), place your Z-Wave primary controller into “exclusion” mode, and following its instruction to delete the ZP3113 to your controller. Press the Program Switch of ZP3113 once to be excluded.",
+		"reset": "Factory Default Reset: \nRemove cover to triggered tamper switch, LED flash once & send out Alarm Report. Press Program Switch 10 times within 10 seconds, ZP3113 will send the “Device Reset Locally Notification” command and reset to the factory default. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4314/ZP3113-7%204%20in%201%20PIR%20(Z-Wave%20certified)%20-%2020211004.pdf"
+	}
+}

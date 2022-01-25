@@ -13,17 +13,19 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
-			"description": "Setting the BASIC command value to turn on the light.",
+			"description": "Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": -1
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,7 +46,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Setting the illumination threshold to turn on the light",
 			"valueSize": 1,
@@ -63,7 +66,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "Parameter to set the Operation Mode",
 			"valueSize": 1,
@@ -81,7 +85,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi-Sensor Function Switch",
 			"description": "Parameter to set the sensor functions",
 			"valueSize": 1,
@@ -89,7 +94,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Parameter to set the Customer Function",
 			"valueSize": 1,
@@ -103,14 +109,16 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"description": "Parameter to set the Turn Off Light Time",
 			"valueSize": 1,
@@ -118,14 +126,16 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"description": "The interval time for auto reporting the door/window state",
 			"valueSize": 1,
@@ -133,7 +143,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"description": "The Interval time for auto reporting the illumination state",
 			"valueSize": 1,
@@ -141,7 +152,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto reporting the temperature state",
 			"valueSize": 1,
@@ -149,7 +161,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for each auto report tick",
 			"valueSize": 1,
@@ -158,19 +171,21 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1
 		}
-	}
+	]
 }

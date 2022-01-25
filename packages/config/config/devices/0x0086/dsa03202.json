@@ -36,44 +36,53 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"241": {
+	"paramInformation": [
+		{
+			"#": "241",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 1 (Upper Left) Mode"
 		},
-		"242": {
+		{
+			"#": "242",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 2 (Upper Right) Mode"
 		},
-		"243": {
+		{
+			"#": "243",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 3 (Lower Left) Mode"
 		},
-		"244": {
+		{
+			"#": "244",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 4 (Lower Right) Mode"
 		},
-		"245": {
+		{
+			"#": "245",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 5 (Include) Mode"
 		},
-		"246": {
+		{
+			"#": "246",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 6 (Exclude) Mode"
 		},
-		"247": {
+		{
+			"#": "247",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 7 (Association) Mode"
 		},
-		"248": {
+		{
+			"#": "248",
 			"$import": "templates/aeotec_template.json#base_remote_mode_5",
 			"label": "Button 8 (Learn) Mode"
 		},
-		"250": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "250",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene Mode (Secondary Controller)"
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

@@ -30,26 +30,31 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"81": {
-			"$import": "../templates/master_template.json#enable_led_indicator"
+	"paramInformation": [
+		{
+			"#": "81",
+			"$import": "~/templates/master_template.json#enable_led_indicator"
 		},
-		"220": {
-			"$import": "../templates/master_template.json#base_0-10_nounit",
+		{
+			"#": "220",
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "Rf Power Level",
 			"defaultValue": 10
 		},
-		"242": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "242",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Security Network"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	},
+	],
 	"metadata": {
 		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1345/Z%20Stick%20Gen5%20manual%201.pdf"

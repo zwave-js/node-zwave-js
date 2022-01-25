@@ -1,20 +1,19 @@
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
-	// Handshake messages have the highest priority because they are part of other transactions
-	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
-	//
-	// We distinguish between responses to handshake requests from nodes that must be handled first.
-	// Some nodes don't respond to our requests if they are waiting for a nonce.
-	Handshake = 0,
-	// Our handshake requests must be prioritized over all other messages
-	PreTransmitHandshake = 1,
+	// Outgoing nonces have the highest priority because they are part of other transactions
+	// which may already be in progress.
+	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
+	Nonce = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
-	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
+	// Supervision responses must be prioritized over other messages because the nodes requesting them
+	// will get impatient otherwise.
+	Supervision,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
 	WakeUp,
@@ -55,14 +54,14 @@ export enum FunctionType {
 	SetSerialApiTimeouts = 0x06,
 	GetSerialApiCapabilities = 0x07,
 
-	FUNC_ID_SERIAL_API_SOFT_RESET = 0x08,
+	SoftReset = 0x08,
 
 	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
-	UNKNOWN_FUNC_UNKNOWN_0x0a = 0x0a, // ??
+	SerialAPIStarted = 0x0a, // Sent by the controller after the serial API has been started (again)
 
 	SerialAPISetup = 0x0b, // Configure the Serial API
 
-	UNKNOWN_FUNC_RF_RECEIVE_MODE = 0x10, // Power down the RF section of the stick
+	SetRFReceiveMode = 0x10, // Power the RF section of the stick down/up
 	UNKNOWN_FUNC_SET_SLEEP_MODE = 0x11, // Set the CPU into sleep mode
 
 	FUNC_ID_ZW_SEND_NODE_INFORMATION = 0x12, // Send Node Information Frame of the stick
@@ -88,11 +87,13 @@ export enum FunctionType {
 	UNKNOWN_FUNC_FlashAutoProgSet = 0x27, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x28 = 0x28, // ??
 
-	UNKNOWN_FUNC_NVMGetId = 0x29,
-	UNKNOWN_FUNC_NVMExtReadLongBuffer = 0x2a,
-	UNKNOWN_FUNC_NVMExtWriteLongBuffer = 0x2b,
-	UNKNOWN_FUNC_NVMExtReadLongByte = 0x2c,
-	UNKNOWN_FUNC_NVMExtWriteLongByte = 0x2d,
+	GetNVMId = 0x29, // Returns information about the external NVM
+	ExtNVMReadLongBuffer = 0x2a, // Reads a buffer from the external NVM
+	ExtNVMWriteLongBuffer = 0x2b, // Writes a buffer to the external NVM
+	ExtNVMReadLongByte = 0x2c, // Reads a byte from the external NVM
+	ExtExtWriteLongByte = 0x2d, // Writes a byte to the external NVM
+
+	NVMOperations = 0x2e, // 700-series command to read and write from/to the external NVM
 
 	UNKNOWN_FUNC_CLOCK_SET = 0x30, // ??
 	UNKNOWN_FUNC_CLOCK_GET = 0x31, // ??
@@ -104,7 +105,7 @@ export enum FunctionType {
 
 	UNKNOWN_FUNC_ClearNetworkStats = 0x39,
 	UNKNOWN_FUNC_GetNetworkStats = 0x3a,
-	UNKNOWN_FUNC_GetBackgroundRSSI = 0x3b,
+	GetBackgroundRSSI = 0x3b, // request the most recent background RSSI levels detected
 	UNKNOWN_FUNC_RemoveNodeIdFromNetwork = 0x3f,
 
 	FUNC_ID_ZW_SET_LEARN_NODE_STATE = 0x40, // Not implemented

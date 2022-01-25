@@ -5,7 +5,7 @@ import type { CommandClass } from "./CommandClass";
 import { isMultiEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import { MultiCommandCC } from "./MultiCommandCC";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 describe("lib/commandclass/MultiCommandCC", () => {
 	describe("MultiCommandCC()", () => {

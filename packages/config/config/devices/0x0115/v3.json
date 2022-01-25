@@ -14,9 +14,11 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
-			"label": "Blink With Service LED During Operation",
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Debug Mode",
+			"description": "Debug mode to apply channels, associations and power mode changes on the fly without exclusion-inclusion sequence. Use for debugging only!",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -25,20 +27,446 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dont blink",
+					"label": "Normal mode",
 					"value": 0
 				},
 				{
-					"label": "Blink",
+					"label": "Debug mode",
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "2",
+			"label": "Service LED Blinking",
+			"description": "Blink with service LED during operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Security S0",
+			"description": "Enable or disable Security S0 during inclusion (requires re-inclusion). Same as changing Tools → Security in the Arduino IDE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Z-Wave Logging",
+			"description": "Enable or disable logging via Z-Wave. Same as changing Tools → Logging in the Arduino IDE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Z-Wave Frequency",
+			"description": "Set Z-Wave frequency and reboot. Same as changing Tools → Frequency in the Arduino IDE. Note that after issuing this command the device will stop change frequency and your controller will loose communications with it!",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2550,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don't change, just reboot",
+					"value": 0
+				},
+				{
+					"label": "EU",
+					"value": 255
+				},
+				{
+					"label": "RU",
+					"value": 510
+				},
+				{
+					"label": "IN",
+					"value": 765
+				},
+				{
+					"label": "US",
+					"value": 1020
+				},
+				{
+					"label": "ANZ",
+					"value": 1275
+				},
+				{
+					"label": "HK",
+					"value": 1530
+				},
+				{
+					"label": "CN",
+					"value": 1785
+				},
+				{
+					"label": "JP",
+					"value": 2040
+				},
+				{
+					"label": "KR",
+					"value": 2295
+				},
+				{
+					"label": "IL",
+					"value": 2550
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Multilevel Report Interval",
+			"description": "Minimal time (in seconds) between Sensor Multilevel reports. See zunoSendReport(). Values less than 30 should not be used to conform to Z-Wave Plus, use them for debug only!",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"unit": "seconds"
+		},
+		{
+			"#": "12",
+			"label": "Legacy Notification Channel Type",
+			"description": "Change channel type from Notification to legacy Sensor Binary to help Fibaro Home Center, Vera and some other controllers having problems with the latest Z-Wave Plus to understand the channel type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification channel type",
+					"value": 0
+				},
+				{
+					"label": "Switch Binary channel type",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "OTA Confirmation",
+			"description": "Confirmation of OTA operations (for bootloader and sketch upgrades). Do it right before or right after initiating the firmware upgrade process",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Comfirm OTA",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "64",
+			"label": "Custom parameter 64",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "65",
+			"label": "Custom parameter 65",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "66",
+			"label": "Custom parameter 66",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "67",
+			"label": "Custom parameter 67",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "68",
+			"label": "Custom parameter 68",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "69",
+			"label": "Custom parameter 69",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "70",
+			"label": "Custom parameter 70",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "71",
+			"label": "Custom parameter 71",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "72",
+			"label": "Custom parameter 72",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "73",
+			"label": "Custom parameter 73",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "74",
+			"label": "Custom parameter 74",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "75",
+			"label": "Custom parameter 75",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "76",
+			"label": "Custom parameter 76",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "77",
+			"label": "Custom parameter 77",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "78",
+			"label": "Custom parameter 78",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "79",
+			"label": "Custom parameter 79",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "80",
+			"label": "Custom parameter 80",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "81",
+			"label": "Custom parameter 81",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "82",
+			"label": "Custom parameter 82",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "83",
+			"label": "Custom parameter 83",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "84",
+			"label": "Custom parameter 84",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "85",
+			"label": "Custom parameter 85",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "86",
+			"label": "Custom parameter 86",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "87",
+			"label": "Custom parameter 87",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "88",
+			"label": "Custom parameter 88",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "89",
+			"label": "Custom parameter 89",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "90",
+			"label": "Custom parameter 90",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "91",
+			"label": "Custom parameter 91",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "92",
+			"label": "Custom parameter 92",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "93",
+			"label": "Custom parameter 93",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "94",
+			"label": "Custom parameter 94",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "95",
+			"label": "Custom parameter 95",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press Service button three times",
 		"exclusion": "Press Service button three times",
 		"reset": "Hold Service button for five seconds, then press Service button three times.\n\nUse this procedure only if your controller is missing or inoperable.\n\nNote that the user sketch is not erased during exclusion or reset process",
+		"wakeup": "Press Service button three times while sleeping",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1825/Z-Uno%20V3%20Manual.pdf"
 	}
 }

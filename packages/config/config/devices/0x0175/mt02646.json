@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"description": "multiples of 5s",
 			"unit": "seconds",
@@ -31,7 +31,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWH Meter Report Period",
 			"description": "number of 10 minute intervals",
 			"unit": "10m",
@@ -46,7 +47,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold of current for Load Caution",
 			"description": "1300*0.01A = 13A",
 			"valueSize": 2,
@@ -54,7 +56,8 @@
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of KWh for Load Caution",
 			"description": "load caution threshold",
 			"valueSize": 2,
@@ -62,7 +65,8 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -85,7 +89,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Mode of switch off function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,7 +109,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED indication mode",
 			"description": "Restore switch state mode.",
 			"valueSize": 1,
@@ -128,7 +134,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto off timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
 			"valueSize": 2,
@@ -142,7 +149,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +177,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing On/Off button three times within 2 seconds will enter inclusion \n mode on the switch.",
 		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer. \n2. Pressing On/Off button three times within 2 seconds will enter exclusion \n mode on the switch.",

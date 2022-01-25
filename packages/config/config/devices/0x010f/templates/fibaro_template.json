@@ -1,0 +1,413 @@
+{
+	"default_metadata": {
+		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, quickly press key S1 or B-button on product's housing three times",
+		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, quickly press key S1 or B-button on product's housing three times",
+		"reset": "1. Power-cycle the device\n2. Press and hold the B-button to enter the menu\n3. Wait for the LED to turn yellow\n4. Quickly release and click B-button again\n5. Device will restart and LED will turn red"
+	},
+	"send_secure_commands_group2": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Commands to 2nd Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group3": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Commands to 3rd Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group4": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Commands to 4th Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_secure_commands_group5": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Secure Commands to 5th Association Group",
+		"description": "Only active when the node is included securely"
+	},
+	"send_s1_associations_on": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send ON With Single Click",
+		"defaultValue": 0
+	},
+	"send_s1_associations_off": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send OFF With Single Click",
+		"defaultValue": 0
+	},
+	"send_s1_associations_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send When Holding and Releasing",
+		"defaultValue": 0
+	},
+	"send_s1_associations_double_click": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S1 Associations: Send When Double Clicking",
+		"defaultValue": 0
+	},
+	"send_s2_associations_on": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send ON With Single Click",
+		"defaultValue": 0
+	},
+	"send_s2_associations_off": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send OFF With Single Click",
+		"defaultValue": 0
+	},
+	"send_s2_associations_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send When Holding and Releasing",
+		"defaultValue": 0
+	},
+	"send_s2_associations_double_click": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Key S2 Associations: Send When Double Clicking",
+		"defaultValue": 0
+	},
+	"send_s1_central_scene_pressed_1x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S1 Central Scene: Pressed 1x",
+		"defaultValue": 0
+	},
+	"send_s1_central_scene_pressed_2x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S1 Central Scene: Pressed 2x",
+		"defaultValue": 0
+	},
+	"send_s1_central_scene_pressed_3x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S1 Central Scene: Pressed 3x",
+		"defaultValue": 0
+	},
+	"send_s1_central_scene_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S1 Central Scene: Hold and Released",
+		"defaultValue": 0
+	},
+	"send_s2_central_scene_pressed_1x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S2 Central Scene: Pressed 1x",
+		"defaultValue": 0
+	},
+	"send_s2_central_scene_pressed_2x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S2 Central Scene: Pressed 2x",
+		"defaultValue": 0
+	},
+	"send_s2_central_scene_pressed_3x": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S2 Central Scene: Pressed 3x",
+		"defaultValue": 0
+	},
+	"send_s2_central_scene_hold_release": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Key S2 Central Scene: Hold and Released",
+		"defaultValue": 0
+	},
+	"general_purpose_alarm_response": {
+		"label": "General Purpose Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"water_flood_alarm_response": {
+		"label": "Water Flood Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"smoke_alarm_response": {
+		"label": "Smoke, CO or CO2 Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"temperature_alarm_response": {
+		"label": "Temperature Alarm Response",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Ignore",
+				"value": 0
+			},
+			{
+				"label": "Turn on load",
+				"value": 1
+			},
+			{
+				"label": "Turn off load",
+				"value": 2
+			},
+			{
+				"label": "Blink load",
+				"value": 3
+			}
+		]
+	},
+	"alarm_state_time": {
+		"label": "Time of Alarm State",
+		"valueSize": 2,
+		"unit:": "seconds",
+		"minValue": 1,
+		"defaultValue": 600
+	},
+	"power_report_threshold_relative": {
+		"label": "Power Reports: Relative Change Threshold",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 0,
+		"maxValue": 100,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"power_report_threshold_relative_0-500": {
+		"$import": "#power_report_threshold_relative",
+		"valueSize": 2,
+		"maxValue": 500
+	},
+	"energy_report_threshold": {
+		"label": "Energy Reports: Threshold",
+		"valueSize": 2,
+		"unit": "0.01 kWh",
+		"minValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"reports_periodic": {
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"defaultValue": 3600,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"reports_include_self": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Include Consumption By Device Itself in Reports"
+	},
+	"alarm_configuration_notification_type": {
+		// This generally uses a bitmask of 0xff000000
+		// The label depends on the slot this is for, should be something like
+		// Alarm Configuration - 1st Slot Notification Type
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 22,
+		// Default value needs to be specified on use
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Smoke Alarm",
+				"value": 1
+			},
+			{
+				"label": "CO Alarm",
+				"value": 2
+			},
+			{
+				"label": "CO2 Alarm",
+				"value": 3
+			},
+			{
+				"label": "Heat Alarm",
+				"value": 4
+			},
+			{
+				"label": "Water Alarm",
+				"value": 5
+			},
+			{
+				"label": "Access Control",
+				"value": 6
+			},
+			{
+				"label": "Home Security",
+				"value": 7
+			},
+			{
+				"label": "Power Management",
+				"value": 8
+			},
+			{
+				"label": "System",
+				"value": 9
+			},
+			{
+				"label": "Emergency Alarm",
+				"value": 10
+			},
+			{
+				"label": "Clock",
+				"value": 11
+			},
+			{
+				"label": "Appliance",
+				"value": 12
+			},
+			{
+				"label": "Home Health",
+				"value": 13
+			},
+			{
+				"label": "Siren",
+				"value": 14
+			},
+			{
+				"label": "Water Valve",
+				"value": 15
+			},
+			{
+				"label": "Weather Alarm",
+				"value": 16
+			},
+			{
+				"label": "Irrigation",
+				"value": 17
+			},
+			{
+				"label": "Gas Alarm",
+				"value": 18
+			},
+			{
+				"label": "Pest Control",
+				"value": 19
+			},
+			{
+				"label": "Light Sensor",
+				"value": 20
+			},
+			{
+				"label": "Water Quality Monitoring",
+				"value": 21
+			},
+			{
+				"label": "Home Monitoring",
+				"value": 22
+			}
+		]
+	},
+	"alarm_configuration_notification_event": {
+		// This generally uses a bitmask of 0xff0000
+		// The label depends on the slot this is for, should be something like
+		// Alarm Configuration - 1st Slot Notification Event
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		// Default value needs to be specified on use
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Any Notification",
+				"value": 255
+			},
+			{
+				"label": "Disabled",
+				"value": 0
+			}
+		]
+	},
+	"alarm_configuration_notification_event_parameter": {
+		// This generally uses a bitmask of 0xff00
+		// The label depends on the slot this is for, should be something like
+		// Alarm Configuration - 1st Slot Notification Event Parameter
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"alarm_configuration_action": {
+		// This generally uses a bitmask of 0xff
+		// The label depends on the slot this is for, should be something like
+		// Alarm Configuration - 1st Slot Action
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true
+		// The options are device specific
+	}
+}

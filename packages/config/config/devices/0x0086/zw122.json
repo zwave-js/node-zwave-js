@@ -43,17 +43,21 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"$import": "templates/aeotec_template.json#wake_up_10_minutes"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/aeotec_template.json#wake_up_timeout"
 		},
-		"9[0xff00]": {
+		{
+			"#": "9[0xff00]",
 			"$import": "templates/aeotec_template.json#current_power_mode"
 		},
-		"9[0xff]": {
+		{
+			"#": "9[0xff]",
 			"label": "Current Power State",
 			"valueSize": 2,
 			"minValue": 0,
@@ -77,64 +81,76 @@
 				}
 			]
 		},
-		"10[0xff]": {
+		{
+			"#": "10[0xff]",
 			"label": "Buzzer Repeat Cycles",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"10[0xff00]": {
+		{
+			"#": "10[0xff00]",
 			"label": "Buzzer On Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 20
 		},
-		"10[0xffff0000]": {
+		{
+			"#": "10[0xffff0000]",
 			"label": "Buzzer Off Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 120
 		},
-		"39": {
+		{
+			"#": "39",
 			"$import": "templates/aeotec_template.json#low_battery_threshold",
 			"defaultValue": 20
 		},
-		"48": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "48",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Sensor Reports"
 		},
-		"49[0xffff0000]": {
+		{
+			"#": "49[0xffff0000]",
 			"label": "Overheat Temperature Threshold",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 4
 		},
-		"49[0xff00]": {
+		{
+			"#": "49[0xff00]",
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Overheat Threshold Temperature Unit"
 		},
-		"50[0xffff0000]": {
+		{
+			"#": "50[0xffff0000]",
 			"label": "Underheat Temperature Threshold",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 1
 		},
-		"50[0xff00]": {
+		{
+			"#": "50[0xff00]",
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Underheat Threshold Temperature Unit"
 		},
-		"57[0xff00]": {
+		{
+			"#": "57[0xff00]",
 			"$import": "templates/aeotec_template.json#recover_limit_temp"
 		},
-		"57[0x0f]": {
+		{
+			"#": "57[0x0f]",
 			"$import": "templates/aeotec_template.json#recover_limit_temp_unit"
 		},
-		"84": {
+		{
+			"#": "84",
 			"label": "Tilt Sensor State",
 			"valueSize": 1,
 			"minValue": 0,
@@ -154,37 +170,44 @@
 				}
 			]
 		},
-		"86": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "86",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer",
 			"defaultValue": 1
 		},
-		"87[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "87[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Water Leak",
 			"valueSize": 4
 		},
-		"87[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "87[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Vibration",
 			"valueSize": 4
 		},
-		"87[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "87[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Tilt Sensor",
 			"valueSize": 4
 		},
-		"87[0x10]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "87[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Underheat",
 			"valueSize": 4
 		},
-		"87[0x20]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "87[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Buzzer: Overheat",
 			"valueSize": 4
 		},
-		"88": {
+		{
+			"#": "88",
 			"label": "Basic Set on Water Leak (Probe 1)",
 			"description": "Report is sent to Association Group 3",
 			"valueSize": 1,
@@ -208,7 +231,8 @@
 				}
 			]
 		},
-		"89": {
+		{
+			"#": "89",
 			"label": "Basic Set on Water Leak (Probe 2)",
 			"description": "Report is sent to Association Group 4",
 			"valueSize": 1,
@@ -232,8 +256,9 @@
 				}
 			]
 		},
-		"94": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "94",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Battery Source to Report",
 			"options": [
 				{
@@ -246,12 +271,14 @@
 				}
 			]
 		},
-		"64": {
+		{
+			"#": "64",
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Temperature Unit for Reporting",
 			"valueSize": 1
 		},
-		"135": {
+		{
+			"#": "135",
 			"label": "Automatic Report Type",
 			"description": "For non-multichannel devices - Configuration CC will report to the Water Leak Status parameters",
 			"valueSize": 1,
@@ -279,7 +306,8 @@
 				}
 			]
 		},
-		"136[0x01]": {
+		{
+			"#": "136[0x01]",
 			"label": "Water Leak Status: Probe 1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -299,7 +327,8 @@
 				}
 			]
 		},
-		"136[0x02]": {
+		{
+			"#": "136[0x02]",
 			"label": "Water Leak Status: Probe 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -319,7 +348,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Automatic Secondary Report Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -346,30 +376,35 @@
 				}
 			]
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#auto_report_interval",
 			"label": "Audtomatic Secondary Report Interval",
 			"maxValue": 2678400
 		},
-		"201[0xff00]": {
+		{
+			"#": "201[0xff00]",
 			"label": "Temperature Calibration",
 			"valueSize": 2,
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"201[0x0f]": {
+		{
+			"#": "201[0x0f]",
 			"$import": "templates/aeotec_template.json#celsius_fahrenheit_0",
 			"label": "Temperature Calibration Unit",
 			"valueSize": 2
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action Button that you can find on the product",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action Button that you can find on the product",

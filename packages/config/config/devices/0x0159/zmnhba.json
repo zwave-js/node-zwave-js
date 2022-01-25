@@ -28,8 +28,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +69,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,7 +97,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off relay Q1 after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -102,7 +106,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Automatic turning off relay Q2 after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -110,26 +115,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30": {
-			"label": "Saving Q1 and Q2 after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Saves state before power failure",
-					"value": 0
-				},
-				{
-					"label": "Do not save state after a power failure",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on power change for Q1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -137,7 +128,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Power reporting in Watts on power change for Q2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -145,7 +137,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -153,7 +146,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Power reporting in Watts by time interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -161,5 +155,5 @@
 			"defaultValue": 300,
 			"unsigned": true
 		}
-	}
+	]
 }

@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Switch All",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,5 +54,9 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// The device only sends Binary Switch Reports as broadcast (not routed) and Basic Sets
+		"enableBasicSetMapping": true
 	}
 }

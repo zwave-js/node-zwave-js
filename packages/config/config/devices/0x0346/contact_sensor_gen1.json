@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -26,7 +27,7 @@
 			"maxValue": 4200,
 			"defaultValue": 4200
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://support.ring.com/hc/en-gb/article_attachments/360051851552/Ring_Contact_Sensor_Zwave_UK.pdf"
 	}

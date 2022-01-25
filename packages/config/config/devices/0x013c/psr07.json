@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Off Level",
 			"description": "Basic Set value of off from 0~99",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Basic Set On Level",
 			"description": "Basic Set value of on from 0~99",
 			"valueSize": 1,
@@ -33,7 +35,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "Interval time for auto re-porting battery level",
 			"valueSize": 1,
@@ -42,7 +45,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Percentage Set Method",
 			"description": "Dimmer setting method. 0 : auto send command Basic Set after rotating. 1 : send command Basic Set by touching key after rotating",
 			"valueSize": 1,
@@ -62,7 +66,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Have Z-Wave™ Controller entered inclusion mode.\n2. Rotate to area A and then press button three times within 1.5 seconds to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave™ Controller about 20 seconds",
 		"exclusion": "1. Have Z-Wave™ Controller entered exclusion mode.\n2. Rotate to area A and then press button three times within 1.5 seconds to enter the exclusion mode. Node ID has been removed",

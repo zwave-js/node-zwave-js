@@ -2,7 +2,7 @@
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
 	"label": "LFM-20",
-	"description": "",
+	"description": "20A Relay Fixture Module",
 	"devices": [
 		{
 			"productType": "0x5246",
@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,5 +34,12 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Put your controller in INCLUDE mode, and double tap the button on the face of the device.",
+		"exclusion": "Put your controller in EXCLUDE mode, and double tap the button on the face of the device."
 	}
 }

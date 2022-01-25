@@ -7,6 +7,11 @@
 		{
 			"productType": "0x7000",
 			"productId": "0xa008"
+		},
+		{
+			"productType": "0xbb00",
+			"productId": "0xbb08",
+			"zwaveAllianceId": 4131
 		}
 	],
 	"firmwareVersion": {
@@ -60,8 +65,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator (Relay)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,7 +94,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Indicator (Button 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +122,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED Indicator (Button 2)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -142,7 +150,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Indicator (Button 3)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +178,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator (Button 4)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -196,7 +206,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Indicator Color (Relay)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -223,7 +234,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED Indicator Color (Button 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -250,7 +262,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LED Indicator Color (Button 2)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -277,7 +290,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "LED Indicator Color (Button 3)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -304,7 +318,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED Indicator Color (Button 4)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -331,7 +346,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED Indicator Brightness (Relay)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -354,7 +370,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED Indicator Brightness (Button 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -377,7 +394,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "LED Indicator Brightness (Button 2)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -400,7 +418,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "LED Indicator Brightness (Button 3)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -423,7 +442,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "LED Indicator Brightness (Button 4)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -446,7 +466,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Auto-Off Timer (Relay)",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -455,7 +476,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Auto-On Timer (Relay)",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -464,30 +486,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"18": {
-			"label": "Status After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Relay and buttons - Prior state",
-					"value": 0
-				},
-				{
-					"label": "All off",
-					"value": 1
-				},
-				{
-					"label": "All on",
-					"value": 2
-				}
-			]
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Relay Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -510,7 +514,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Send Report when Relay Disabled",
 			"description": "Determines whether an on/off report is sent and LED changes on button press, when the relay is disabled",
 			"valueSize": 1,
@@ -530,7 +535,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"$if": "firmwareVersion >= 1.2",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
@@ -550,5 +556,11 @@
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "INCLUSION\n1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP THE SWITCH BUTTON 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink blue to signal communication and turn green for 3 seconds if inclusion is successful or turn red for 3 seconds if the pairing attempt fails.",
+		"exclusion": "EXCLUSION\n1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. TAP THE SWITCH BUTTON 3 TIMES QUICKLY (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list\nreset",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the switch, press and hold the switch button for 20 seconds until the LED indicator starts flashing red. Release the button, and immediately a􀆞er, tap remote button 1 once to complete the reset. The LED indicators on all buttons will flash red to confirm a successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4131/zooz-z-wave-plus-scene-control-switch-zen32-online-manual.pdf"
 	}
 }

@@ -1,0 +1,780 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-FT01",
+	"description": "Fan Coil Thermostat",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Frequency Region",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "EU (868.4 MHz, 869.85 MHz)",
+					"value": 0
+				},
+				{
+					"label": "US (908.4 MHz, 916.0 MHz)",
+					"value": 1
+				},
+				{
+					"label": "AU (919.8 MHz, 921.4 MHz)",
+					"value": 2
+				},
+				{
+					"label": "HO (919.8 MHz)",
+					"value": 3
+				},
+				{
+					"label": "In (865.2 MHz)",
+					"value": 4
+				},
+				{
+					"label": "IL (916.0 MHz)",
+					"value": 5
+				},
+				{
+					"label": "RU (869.0 MHz)",
+					"value": 6
+				},
+				{
+					"label": "Cn (868.4 MHz)",
+					"value": 7
+				},
+				{
+					"label": "JP (922.5 MHz, 923.9 MHz, 926.3 MHz)",
+					"value": 8
+				},
+				{
+					"label": "Or (920.9 MHz, 921.7 MHz, 923.1 MHz)",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Hardware and Software Versions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"label": "Energy Consumption",
+			"unit": "kW",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"label": "Backlight Brightness Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Touch Buttons Sensitivity",
+			"description": "1 = low sensitivity; 10 = high sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 6
+		},
+		{
+			"#": "7",
+			"label": "Fan Relay Output Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Heater Relay Output Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Cooler Relay Output Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Heating State Fan Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Cooling State Fan Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Fan Low Speed Relay: Load Power",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "Fan Medium Speed Relay: Load Power",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		{
+			"#": "14",
+			"label": "Fan High Speed Relay: Load Power",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		{
+			"#": "15",
+			"label": "Heating Valve Relay: Load Power",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		{
+			"#": "16",
+			"label": "Cooling Valve Relay: Load Power",
+			"description": "The power of the connected device, which is used to determine energy consumption.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1100,
+			"defaultValue": 0
+		},
+		{
+			"#": "17",
+			"label": "Air Temperature Calibration",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0
+		},
+		{
+			"#": "18",
+			"label": "Temperature Hysteresis",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "19",
+			"label": "Time Correction by Controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Time Format",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "24 hour",
+					"value": 0
+				},
+				{
+					"label": "12 hour (AM / PM)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Week Day Override",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monday",
+					"value": 1
+				},
+				{
+					"label": "Tuesday",
+					"value": 2
+				},
+				{
+					"label": "Wednesday",
+					"value": 3
+				},
+				{
+					"label": "Thursday",
+					"value": 4
+				},
+				{
+					"label": "Friday",
+					"value": 5
+				},
+				{
+					"label": "Saturday",
+					"value": 6
+				},
+				{
+					"label": "Sunday",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Time Override",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 0
+		},
+		{
+			"#": "23",
+			"label": "Time Mode Operation",
+			"description": "This Parameter determines the Climate Mode (Heating or Cooling)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Heating and Cooling Mode",
+					"value": 1
+				},
+				{
+					"label": "Heating Mode",
+					"value": 2
+				},
+				{
+					"label": "Cooling Mode",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Morning Start Time",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 600
+		},
+		{
+			"#": "42",
+			"label": "Day Start Time",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 900
+		},
+		{
+			"#": "43",
+			"label": "Evening Start Time",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 1800
+		},
+		{
+			"#": "44",
+			"label": "Night Start Time",
+			"unit": "HHMM",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2359,
+			"defaultValue": 2300
+		},
+		{
+			"#": "45",
+			"label": "Monday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "46",
+			"label": "Monday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "47",
+			"label": "Monday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "48",
+			"label": "Monday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "49",
+			"label": "Tuesday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "50",
+			"label": "Tuesday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "51",
+			"label": "Tuesday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "52",
+			"label": "Tuesday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "53",
+			"label": "Wednesday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "54",
+			"label": "Wednesday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "55",
+			"label": "Wednesday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "56",
+			"label": "Wednesday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "57",
+			"label": "Thursday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "58",
+			"label": "Thursday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "59",
+			"label": "Thursday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "60",
+			"label": "Thursday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "61",
+			"label": "Friday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "62",
+			"label": "Friday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "63",
+			"label": "Friday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "64",
+			"label": "Friday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "65",
+			"label": "Saturday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "66",
+			"label": "Saturday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "67",
+			"label": "Saturday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "68",
+			"label": "Saturday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "69",
+			"label": "Sunday Morning Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 240
+		},
+		{
+			"#": "70",
+			"label": "Sunday Day Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 200
+		},
+		{
+			"#": "71",
+			"label": "Sunday Evening Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 230
+		},
+		{
+			"#": "72",
+			"label": "Sunday Night Temperature",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 370,
+			"defaultValue": 180
+		},
+		{
+			"#": "141",
+			"label": "Energy Consumption Report Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "142",
+			"label": "Control Energy Consumption Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "143",
+			"label": "Sensors Consecutive Reporting Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 10
+		},
+		{
+			"#": "144",
+			"label": "Air Temperature Sensors Report Threshold",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 2
+		},
+		{
+			"#": "145",
+			"label": "Humidity Sensor Report Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 2
+		},
+		{
+			"#": "146",
+			"label": "Light Sensor Report Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 50
+		},
+		{
+			"#": "171",
+			"label": "Basic Set Action",
+			"description": "Activate this mode when a Basic Set is received",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "COM with Heating & Cooling Climate Mode",
+					"value": 1
+				},
+				{
+					"label": "COM with Heating Climate Mode",
+					"value": 2
+				},
+				{
+					"label": "COM with Cooling Climate Mode",
+					"value": 3
+				},
+				{
+					"label": "TIME with Heating & Cooling Climate Mode",
+					"value": 4
+				},
+				{
+					"label": "TIME with Heating Climate Mode",
+					"value": 5
+				},
+				{
+					"label": "TIME with Cooling Climate Mode",
+					"value": 6
+				},
+				{
+					"label": "ECO with Heating Climate Mode",
+					"value": 7
+				},
+				{
+					"label": "ECO with Cooling Climate Mode",
+					"value": 8
+				},
+				{
+					"label": "Ventilation Climate Mode",
+					"value": 9
+				}
+			]
+		}
+	]
+}

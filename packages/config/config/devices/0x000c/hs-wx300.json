@@ -1,0 +1,172 @@
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-WX300",
+	"description": "Wall Dimmer & Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x4036",
+			"zwaveAllianceId": 4176
+		},
+		{
+			"productType": "0x4447",
+			"productId": "0x4037"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"label": "Bottom LED Operation"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "5",
+			"$import": "templates/homeseer_template.json#dimming_threshold"
+		},
+		{
+			"#": "6",
+			"$import": "templates/homeseer_template.json#scene_control"
+		},
+		{
+			"#": "11",
+			"label": "Ramp Rate (Z-Wave)",
+			"$import": "templates/homeseer_template.json#ramp_rate"
+		},
+		{
+			"#": "12",
+			"label": "Ramp Rate (Manual)",
+			"$import": "templates/homeseer_template.json#ramp_rate"
+		},
+		{
+			"#": "13",
+			"$import": "templates/homeseer_template.json#status_mode",
+			"label": "Status Mode"
+		},
+		{
+			"#": "14",
+			"$import": "templates/homeseer_template.json#led_colors",
+			"label": "Load Status LED Color",
+			"description": "Set the LED color when displaying load status"
+		},
+		{
+			"#": "21",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 1 Color"
+		},
+		{
+			"#": "22",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 2 Color"
+		},
+		{
+			"#": "23",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 3 Color"
+		},
+		{
+			"#": "24",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 4 Color"
+		},
+		{
+			"#": "25",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 5 Color"
+		},
+		{
+			"#": "26",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 6 Color"
+		},
+		{
+			"#": "27",
+			"$import": "templates/homeseer_template.json#status_mode_choices",
+			"label": "Status LED 7 Color"
+		},
+		{
+			"#": "30",
+			"$import": "templates/homeseer_template.json#blink_frequency",
+			"label": "Custom Status Blink Frequency"
+		},
+		{
+			"#": "31[0x01]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 1 Blink Status"
+		},
+		{
+			"#": "31[0x02]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 2 Blink Status"
+		},
+		{
+			"#": "31[0x04]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 3 Blink Status"
+		},
+		{
+			"#": "31[0x08]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 4 Blink Status"
+		},
+		{
+			"#": "31[0x10]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 5 Blink Status"
+		},
+		{
+			"#": "31[0x20]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 6 Blink Status"
+		},
+		{
+			"#": "31[0x40]",
+			"$import": "templates/homeseer_template.json#led_blink_status",
+			"label": "LED 7 Blink Status"
+		},
+		{
+			"#": "32",
+			"label": "Wire Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "3 wire mode (Neutral, Line & Load)",
+					"value": 0
+				},
+				{
+					"label": "2 wire mode (Line & Load)",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
+		"exclusion": "1. Put your Z-Wave controller into inclusion (or exclusion) mode. Consult your controller’s manual if you’re unsure how to do this. \n2. In rapid succession, tap the bottom paddle 2 times, then press & hold the bottom paddle for 3 seconds (tap-tap-press & hold). This will initiate the inclusion (or exclusion) process. \nNote: The switch will default to dimmer mode after Z-Wave exclusion.",
+		"reset": "To be used only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. In rapid succession, tap the top paddle 3 times, then tap the bottom paddle 3 times. If all LEDs flash white 5 times, factory reset was successful. If not, repeat this procedure.\nNote: As this must be done very quickly, we recommend using 2 fingers for this operation; one on each paddle!\nNote: The switch will default to 3-wire mode and dimmer mode after factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4176/HSPRODKB-HS-WX300UserGuide-260421-1500-2688%20-%20Copy.pdf"
+	}
+}

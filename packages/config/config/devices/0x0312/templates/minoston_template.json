@@ -1,0 +1,276 @@
+{
+	"base_led_color": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 6,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "White",
+				"value": 0
+			},
+			{
+				"label": "Blue",
+				"value": 1
+			},
+			{
+				"label": "Green",
+				"value": 2
+			},
+			{
+				"label": "Red",
+				"value": 3
+			},
+			{
+				"label": "Magenta",
+				"value": 4
+			},
+			{
+				"label": "Yellow",
+				"value": 5
+			},
+			{
+				"label": "Cyan",
+				"value": 6
+			}
+		]
+	},
+	"auto_off_timer": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Auto-Off Timer",
+		"unit": "minutes",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"auto_on_timer": {
+		"$import": "~/templates/master_template.json#base_0-65535",
+		"label": "Auto-On Timer",
+		"unit": "minutes",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"single_tap_function": {
+		"label": "Single Tap Function",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Last brightness level",
+				"value": 0
+			},
+			{
+				"label": "Value set in parameter 18",
+				"value": 1
+			},
+			{
+				"label": "Maximum brightness set in parameter 11",
+				"value": 2
+			},
+			{
+				"label": "Full brightness",
+				"value": 3
+			}
+		]
+	},
+	"double_tap_function": {
+		"label": "Double Tap Function",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Full brightness",
+				"value": 0
+			},
+			{
+				"label": "Value set in parameter 18",
+				"value": 1
+			},
+			{
+				"label": "Maximum brightness set in parameter 11",
+				"value": 2
+			},
+			{
+				"label": "Disable",
+				"value": 3
+			}
+		]
+	},
+	"association_reports": {
+		"label": "Association Reports",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Basic report (short/long press, with relay enabled); MultiLevel (Z-Wave); Multilevel, each level (long press with relay disabled)",
+				"value": 0
+			},
+			{
+				"label": "Basic report (local control); MultiLevel (Z-Wave)",
+				"value": 1
+			},
+			{
+				"label": "MultiLevel reports (all); Each level (long press, with relay disabled)",
+				"value": 2
+			}
+		]
+	},
+	"report_state_when_local_control_disabled": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Suppress State Reporting When Local Control is Disabled"
+	},
+	"led_indicator_color": {
+		"label": "Led Indicator: Color",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "White",
+				"value": 0
+			},
+			{
+				"label": "Blue",
+				"value": 1
+			},
+			{
+				"label": "Green",
+				"value": 2
+			},
+			{
+				"label": "Red",
+				"value": 3
+			}
+		]
+	},
+	"led_indicator_color_upper": {
+		"$import": "#base_led_color",
+		"label": "Led Indicator: Upper Paddle Color"
+	},
+	"led_indicator_color_lower": {
+		"$import": "#base_led_color",
+		"label": "Led Indicator: Lower Paddle Color"
+	},
+	"led_indicator_brightness": {
+		"label": "Led Indicator: Brightness",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "High",
+				"value": 0
+			},
+			{
+				"label": "Medium",
+				"value": 1
+			},
+			{
+				"label": "Low",
+				"value": 2
+			}
+		]
+	},
+	"night_mode_brightness": {
+		"label": "Night Mode Brightness Level",
+		"description": "Sets the dim level the device will turn on to when the button is held for two seconds",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 20,
+		"unsigned": true
+	},
+	"external_switch_type_two_options": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle switch",
+				"value": 0
+			},
+			{
+				"label": "Momentary switch",
+				"value": 1
+			}
+		]
+	},
+	"external_switch_type_four_options": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle switch",
+				"value": 0
+			},
+			{
+				"label": "Toggle switch - 2x (as set in parameter 12); 3x (dim in loop)",
+				"value": 1
+			},
+			{
+				"label": "Momentary switch - 2x (as set in parameter 12); Hold (dim in loop)",
+				"value": 2
+			},
+			{
+				"label": "Momentary switch - 2x (as set in parameter 12); Hold (dim in loop, but dim down only after double tap to full brightness)",
+				"value": 3
+			}
+		]
+	},
+	"status_change_report_local_control": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Status Change Report: Local Control",
+		"defaultValue": 1
+	},
+	"status_change_report_three_way": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Status Change Report: 3-Way",
+		"defaultValue": 1
+	},
+	"status_change_report_zwave": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Status Change Report: Z-Wave",
+		"defaultValue": 1
+	},
+	"status_change_report_timer": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Send Status Change Report: Timer",
+		"defaultValue": 1
+	}
+}

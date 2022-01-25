@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Automatic Secure Timeout",
 			"description": "After this time a CLOSE is sent to the door lock.",
 			"unit": "seconds",
@@ -24,7 +24,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Ring Button OFF Timeout",
 			"description": "After this time the Door Bell will receive an OFF.",
 			"unit": "seconds",
@@ -33,7 +34,8 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Ring Button ON Command",
 			"description": "Value to send on ring button press.",
 			"valueSize": 1,
@@ -42,7 +44,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Ring Button OFF Command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +53,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Central Scene ID",
 			"description": "Defines if different user codes shall cause individual or similar scene ID.",
 			"valueSize": 1,
@@ -69,7 +73,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Buzzer Confirmation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,5 +92,5 @@
 				}
 			]
 		}
-	}
+	]
 }

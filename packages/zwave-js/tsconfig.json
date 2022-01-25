@@ -13,6 +13,9 @@
 			"path": "../maintenance/tsconfig.build.json"
 		},
 		{
+			"path": "../nvmedit/tsconfig.build.json"
+		},
+		{
 			"path": "../serial/tsconfig.build.json"
 		},
 		{
@@ -22,6 +25,6 @@
 			"path": "../testing/tsconfig.build.json"
 		}
 	],
-	"include": ["gulpfile.ts", "maintenance/**/*.ts", "src/**/*.ts"],
+	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }

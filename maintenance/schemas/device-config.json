@@ -77,24 +77,11 @@
 		"endpoints": { "$ref": "#/definitions/endpoints" },
 		"associations": { "$ref": "#/definitions/associations" },
 		"paramInformation": {
-			"type": "object",
+			"type": "array",
 			"description": "Defines all the existing configuration parameters",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" }
-			},
-			"patternProperties": {
-				"^\\d+(\\[0x[0-9a-f]{1,8}\\])?$": {
-					"oneOf": [
-						{ "$ref": "#/definitions/param" },
-						{
-							"type": "array",
-							"items": { "$ref": "#/definitions/param" },
-							"minItems": 2
-						}
-					]
-				}
-			},
-			"additionalProperties": false
+			"items": { "$ref": "#/definitions/param" },
+			"minItems": 1,
+			"additionalItems": false
 		},
 		"proprietary": {
 			"type": "object",
@@ -227,9 +214,18 @@
 				"forceNotificationIdleReset": {
 					"const": true
 				},
+				"forceSceneControllerGroupCount": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 255
+				},
 				"manualValueRefreshDelayMs": {
 					"type": "number",
 					"minimum": 0
+				},
+				"mapRootReportsToEndpoint": {
+					"type": "number",
+					"minimum": 1
 				},
 				"overrideFloatEncoding": {
 					"type": "object",
@@ -246,6 +242,21 @@
 					},
 					"minProperties": 1,
 					"additionalProperties": false
+				},
+				"preserveEndpoints": {
+					"oneOf": [
+						{
+							"const": "*"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "integer",
+								"minimum": 1
+							}
+						}
+					]
 				},
 				"preserveRootApplicationCCValueIDs": {
 					"const": true
@@ -269,6 +280,9 @@
 					"const": true
 				},
 				"treatBasicSetAsEvent": {
+					"const": true
+				},
+				"treatDestinationEndpointAsSource": {
 					"const": true
 				}
 			},
@@ -296,6 +310,20 @@
 				"manual": {
 					"type": "string",
 					"description": "A link to the device manual"
+				},
+				"comments": {
+					"oneOf": [
+						{
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/comment"
+							},
+							"minItems": 1
+						},
+						{
+							"$ref": "#/definitions/comment"
+						}
+					]
 				}
 			},
 			"additionalProperties": false,
@@ -322,7 +350,7 @@
 		"import": {
 			"type": "string",
 			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>([\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d_-]+/)*[\\w\\d_-]+)?$"
+			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d\\[\\]_-]+/)*[\\w\\d\\[\\]_-]+)?$"
 		},
 		"condition": {
 			"type": "string",
@@ -374,8 +402,8 @@
 							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
 						},
 						"multiChannel": {
-							"const": false,
-							"description": "Set this to `false` to force node id associations for this group, even if endpoint associations are supported."
+							"type": "boolean",
+							"description": "`true`: Force a multi channel association (if possible); `false`: Force a node association (if possible)"
 						}
 					},
 					"anyOf": [
@@ -439,6 +467,10 @@
 		"param": {
 			"type": "object",
 			"properties": {
+				"#": {
+					"type": "string",
+					"pattern": "^\\d+(\\[0x[0-9a-f]{1,8}\\])?$"
+				},
 				"$import": { "$ref": "#/definitions/import" },
 				"$if": { "$ref": "#/definitions/condition" },
 				"label": {
@@ -520,6 +552,7 @@
 					}
 				}
 			},
+			"additionalProperties": false,
 			"anyOf": [
 				{
 					"if": {
@@ -531,6 +564,7 @@
 					},
 					"then": {
 						"required": [
+							"#",
 							"label",
 							"valueSize",
 							"minValue",
@@ -539,6 +573,7 @@
 					},
 					"else": {
 						"required": [
+							"#",
 							"label",
 							"valueSize",
 							"minValue",
@@ -548,9 +583,24 @@
 					}
 				},
 				{
-					"required": ["$import"]
+					"required": ["#", "$import"]
 				}
 			]
+		},
+		"comment": {
+			"type": "object",
+			"properties": {
+				"level": {
+					"type": "string",
+					"enum": ["info", "warning", "error"]
+				},
+				"text": {
+					"type": "string",
+					"description": "The actual comment"
+				}
+			},
+			"additionalProperties": false,
+			"required": ["level", "text"]
 		}
 	}
 }

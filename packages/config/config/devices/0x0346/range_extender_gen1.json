@@ -11,14 +11,19 @@
 		{
 			"productType": "0x0401",
 			"productId": "0x0102"
+		},
+		{
+			"productType": "0x0401",
+			"productId": "0x0202"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -26,7 +31,8 @@
 			"maxValue": 70,
 			"defaultValue": 70
 		},
-		"2": {
+		{
+			"#": "2",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Timeout",
 			"description": "How long to wait for a supervision report in response to a supervision get from the sensor",
@@ -36,7 +42,8 @@
 			"maxValue": 50,
 			"defaultValue": 15
 		},
-		"3": {
+		{
+			"#": "3",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Retries",
 			"description": "Number of application level retries attempted for messages either not ACKed or Supervision encapsulated messages that did not receive a report",
@@ -45,7 +52,8 @@
 			"maxValue": 5,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Back Off",
 			"description": "Used to calculate the delay between retried messages",
@@ -55,7 +63,8 @@
 			"maxValue": 60,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Supervision Battery Report Frequency",
 			"description": "The number of battery report messages sent before being encapsulated in supervision",
@@ -64,7 +73,8 @@
 			"maxValue": 31,
 			"defaultValue": 5
 		},
-		"6": {
+		{
+			"#": "6",
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Build Number",
 			"description": "The Jenkins build number for this firmware",
@@ -75,7 +85,7 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		}
-	},
+	],
 	"metadata": {
 		"manual": "https://support.ring.com/hc/en-us/article_attachments/360051851812/Range_Extender_Zwave_UK.pdf"
 	}

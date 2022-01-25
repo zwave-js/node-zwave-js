@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Unit Selection",
 			"description": "Choose °C or °F",
 			"valueSize": 1,
@@ -42,7 +43,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Temperature Report Interval",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -51,7 +53,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Humidity Report Interval",
 			"valueSize": 1,
 			"unit": "%",
@@ -60,7 +63,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Light Report Interval",
 			"valueSize": 1,
 			"unit": "%",
@@ -69,7 +73,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZD2301 to your controller, to get in the “inclusion” mode. Press the program switch of ZD2301 for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion; otherwise, ZD2301 will go to sleep after 20 seconds",
 		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZD2301 from your controller. Press the program switch of ZD2301 for 1 second at least to be excluded",

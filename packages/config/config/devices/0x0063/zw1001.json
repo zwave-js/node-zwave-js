@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED light",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
@@ -38,5 +39,5 @@
 				}
 			]
 		}
-	}
+	]
 }

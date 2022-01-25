@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Time Between Battery Reports",
 			"valueSize": 1,
 			"unit": "hours",
@@ -30,7 +31,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Basic Set ON - Above Temperature",
 			"valueSize": 1,
 			"minValue": 15,
@@ -44,7 +46,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Send Basic Set ON - Below Temperature",
 			"valueSize": 1,
 			"minValue": 15,
@@ -58,7 +61,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Send Basic Set OFF - Above Temperature",
 			"valueSize": 1,
 			"minValue": 15,
@@ -72,7 +76,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Send Basic Set OFF - Below Temperature",
 			"valueSize": 1,
 			"minValue": 15,
@@ -86,7 +91,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Extra Basic Set Attempts",
 			"description": "Make multiple attempts for all Basic Set Commands. Number of extra attempts sent every minute after first send",
 			"valueSize": 1,
@@ -101,7 +107,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Units",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +127,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Temperature Delta Report Threshold (Group 1)",
 			"unit": "0.1°",
 			"valueSize": 1,
@@ -129,7 +137,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Periodic Temperature Report Interval (Group 1)",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -144,7 +153,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Temperature Delta Report Threshold (Group 2)",
 			"valueSize": 1,
 			"unit": "0.1°",
@@ -153,7 +163,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Periodic Temperature Report Interval (Group 2)",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -168,7 +179,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Send Basic Set ON - Above Humidity Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -183,7 +195,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Send Basic Set ON - Below Humidity Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -198,7 +211,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Send Basic Set OFF - Above Humidity Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -213,7 +227,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Send Basic Set OFF - Below Humidity Level",
 			"valueSize": 1,
 			"unit": "%",
@@ -228,7 +243,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Group 1 Humidity Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -237,7 +253,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Group 1 Humidity Report Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -252,7 +269,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Group 3 Humidity Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -261,7 +279,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Group 3 Humidity Report Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -276,7 +295,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Enable/Disable Basic Set Commands",
 			"description": "Determines which combination of Basic Set commands will be sent",
 			"valueSize": 1,
@@ -304,7 +324,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Offset Correction",
 			"description": "Correct deviations in the device's temperature reading.",
 			"valueSize": 1,
@@ -314,7 +335,8 @@
 			"defaultValue": 0,
 			"unsigned": false
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Humidity Offset Correction",
 			"description": "Correct deviations in the device's humidity reading.",
 			"valueSize": 1,
@@ -324,7 +346,8 @@
 			"defaultValue": 0,
 			"unsigned": false
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Humidity Filter Time Constant",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -333,7 +356,7 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
 		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",

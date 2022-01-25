@@ -24,8 +24,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "PeriodOfReport",
 			"description": "Time period of Multi Level Sensor Report.",
 			"valueSize": 2,
@@ -35,7 +36,8 @@
 			"defaultValue": 600,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "TempSensor",
 			"description": "During the cycle, if the temperature change is greater than the set value, a report of the current temperature value will be immediately issued.",
 			"valueSize": 1,
@@ -45,7 +47,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "HumSensor",
 			"description": "During the cycle, if the humidity change is greater than the set value, a report of the current humidity value will be immediately issued.",
 			"valueSize": 1,
@@ -55,7 +58,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Press the 3rd button for above 5 seconds. Then, red color LED blinks every 0.5 second 6 times. At this time released the button during the red color LED blinking. Then, ZWAVE Add / Remove operation is started",
 		"exclusion": "Press the 3rd button for above 5 seconds. Then, red color LED blinks every 0.5 second 6 times. At this time released the button during the red color LED blinking. Then, ZWAVE Add / Remove operation is started",

@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Countdown timer",
 			"description": "Automatic turning off in minutes, 0 to disable",
 			"valueSize": 1,
@@ -28,30 +28,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
-			"label": "Device status after power failure",
-			"description": "Define how the plug will react after the power supply is back on",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Always off",
-					"value": 0
-				},
-				{
-					"label": "Remember status",
-					"value": 1
-				},
-				{
-					"label": "Always on",
-					"value": 2
-				}
-			]
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev_on"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED indicator",
 			"description": "Set the intensity of the LED indicator",
 			"valueSize": 1,
@@ -59,5 +41,5 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		}
-	}
+	]
 }

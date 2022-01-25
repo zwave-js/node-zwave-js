@@ -6,96 +6,69 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x00bb"
+			"productId": "0x00bb",
+			"zwaveAllianceId": [3620, 3694, 3736]
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x00bb"
+			"productId": "0x00bb",
+			"zwaveAllianceId": 3785
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x00bb",
+			"zwaveAllianceId": 3786
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Lifeline group. (1) Device Reset Locally Notification: Issued when Factory Reset is performed. (2) Battery Report: lssued periodically to report the current battery level; lssued when battery becomes low. (3) Sensor Binary Report: Issued when Magnet is away or near. (4) Notification Report (Type=0x06; Event=0x16): Issued when sensor state is changed to be Open Status. (5) Notification Report (Type=0x06; Event=0x17): Issued when sensor state is changed to be Close Status. (6) Notification Report (Type=0x08; Event-0x01): Issued when battery voltage change exceeds 20%. (7) Notification Report (Type-0x09; Event=0x04; Param=0x55): Issued when reset due to Watch-Dog Timeout.",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "On/Off control (Access)",
-			"description": "Issue Basic Set when magnet is away or near. (The Basic Set Value is determined by Confiquration Parameter 3)",
+			"label": "Group 2",
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
-			"label": "Binary Sensor Report",
-			"description": "Enable/Disable Binary Sensor Report. Allow for backward compatibility to report Binary if Notification Report cannot be used for status changes. When enabled the Sensor Binary Report will NOT be issued via Lifeline when the magnet is away or near. When disabled the Sensor Binary Report will be issued via Lifeline when the magnet is away or near.",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report"
 		},
-		"2": {
-			"label": "Reverse Sensor Reports",
-			"description": "Reverse both Sensor Binary Report and Notification Report.",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Open when magnet is away, close when magnet is near.",
-					"value": 0
-				},
-				{
-					"label": "Closed when magnet is away, open when magnet is near.",
-					"value": 1
-				}
-			]
+		{
+			"#": "2",
+			"$import": "~/0x0086/templates/aeotec_template.json#invert_state_report"
 		},
-		"3": {
-			"label": "Association Group 2 Settings",
-			"description": "Configure the Basic Set value. Determine the Basic Set value to control other Z-Wave devices directly when magnet is away or near.",
-			"unsigned": true,
+		{
+			"#": "3",
+			"label": "Association Group 2: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable completely.",
+					"label": "Disable completely",
 					"value": 0
 				},
 				{
-					"label": "Send Basic Set 0xFF when magnet is away and 0x00 when magnet is near",
+					"label": "Send Basic Set 0xff when magnet is away; Basic Set 0x00 when near",
 					"value": 1
 				},
 				{
-					"label": "Send Basic Set 0x00 when magnet is away and 0xFF when magnet is near",
+					"label": "Send Basic Set 0x00 when magnet is away; Basic Set 0xff when near",
 					"value": 2
 				},
 				{
-					"label": "Only send Basic Set 0xFF when magnet is away",
+					"label": "Only send Basic Set 0xff when magnet is away",
 					"value": 3
 				},
 				{
@@ -107,84 +80,83 @@
 					"value": 5
 				},
 				{
-					"label": "Only send Basic Set 0xFF when magnet is near",
+					"label": "Only send Basic Set 0xff when magnet is near",
 					"value": 6
 				}
 			]
 		},
-		"4[0xff00]": {
-			"label": "Application Layer Retry Max Retries",
-			"description": "Configure max number of retries from 0-5. 0 means disabled. The device supports an application level retry mechanism when the application of the device has detected a transmission error when Basic Set, Sensor Binary Report or Notification Report (Access Control) message is sent but fails to result in an ACK or Supervision Report.",
-			"unsigned": true,
+		{
+			"#": "4[0xff00]",
+			"label": "Max Number of Transmission Retries",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"4[0x00ff]": {
-			"label": "Application Layer Retry Wait Time",
-			"description": "Valid value 0-255. Unit is 100ms",
-			"unsigned": true,
+		{
+			"#": "4[0x00ff]",
+			"label": "Transmission Retry Wait Time",
 			"valueSize": 2,
+			"unit": "100 ms",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Supervision Report Wait Time",
-			"description": "Unit is 100ms. Note: Issuing Basic Set, Sensor Binary Report or Notification Report (Access Control) via associatioon groups uses Supervision encapsulation only if sending commands with S2 (or higher security) encapsulation In other words, this parameter can be configured in any network, but works only in S2 (or higher security) network.",
-			"unsigned": true,
 			"valueSize": 1,
-			"minValue": 0,
+			"unit": "100 ms",
+			"minValue": 1,
 			"maxValue": 50,
-			"defaultValue": 15
+			"defaultValue": 15,
+			"unsigned": true
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "LED Indicator",
 			"description": "Configure whether the LED will flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
-			"unsigned": true,
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Completely disable LED.",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "LED quickly flashes only when sending the Basic Set, Sensor Binary Report or Notification Report (Access Control).",
+					"label": "Flash when transmitting (except Wake Up notifications)",
 					"value": 1
 				},
 				{
-					"label": "LED activates only when sending Wake Up Notification.",
+					"label": "On when sending Wake Up notification",
 					"value": 2
 				},
 				{
-					"label": "LED quickly flashes when sending Basic Set, Sensor Binary Report or Notification Report (Access Control), and activates when sending Wake Up Notification.",
+					"label": "Flash when transmitting (including Wake Up notifications)",
 					"value": 3
 				}
 			]
 		},
-		"90": {
-			"label": "Low Battery Threshold",
-			"description": "Send a Battery Report when the battery level is less than or equal to threshold.",
-			"unsigned": true,
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 30,
-			"unit": "%"
+		{
+			"#": "90",
+			"$import": "~/0x0086/templates/aeotec_template.json#low_battery_threshold",
+			"defaultValue": 30
 		},
-		"101": {
-			"label": "Battery Report Interval",
-			"unsigned": true,
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 14400,
-			"defaultValue": 70,
-			"unit": "minutes"
+		{
+			"#": "101",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_battery"
 		}
+	],
+	"metadata": {
+		"inclusion": "1. Press the sensor latch with a slotting screwdriver to remove the lid of the sensor.\n2. Squeeze the sides of the sensor casing to alleviate pressure on the chipboard; slide the chipboard out.\n3. Remove the Pull Tab to engage the pre-installed battery. The sensor’s LED will fade the color red in and out for a few seconds to indicate that it’s powered on.\n4. Set your gateway into its 'add device' mode. Refer to its manual if you are unsure of how to perform this step. Then press Recessed Door Sensor 7's Action Button once; its LED will blink.\nIf your gateway supports S2 security, and you want your device to use this higher level of security, please enter the first 5 digits of the DSK into the gateway's interface when prompted. Refer to the gateway's manual if you are unsure how to perform this step. Do not lose the DSK or remove it from the product or package.\n5. When Recessed Door Sensor 7 successfully joins your Z-Wave network its LED will turn solid red for 10 minutes and then off. If fails, its LED turns slow fade-in fade-out red color. Repeat the above steps and please contact us for further support if needed.\n6. Squeeze the sides of the sensor casing lightly again and re-insert the chipboard as it was. Re-attach the lid",
+		"exclusion": "1. Set your Z-Wave Controller into its 'Remove Device' mode in order to remove the product from your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.\n2. Make sure the product is powered. \n3. Single-click Action Button; LED will become flash red color for 5 seconds, which indicates entering exclusion mode. \n4. If the exclusion is successful, LED will change to the default unpaired state which is slow fade-in fade-out red color. \n5. Should its LED extinguish without slow fade-in fade-out red color, it indicates the exclusion is unsuccessful. Contact us for further support if needed",
+		"reset": "If the primary controller is missing or inoperable, you may need to reset the device to factory settings.\nMake sure the product is powered. To complete the reset process manually, press and hold the Action Button for at least 20s, and Factory Reset is performed when released. The LED will become slow fade-in fade-out red color, which indicates the reset operation is successful. Contact us for further support if needed. \nNote: \n1. This procedure should only be used when the primary controller is missing or inoperable.\n2. Factory Reset will:\n(a) Remove the product from Z-Wave network;\n(b) Delete the Association setting;\n(c) Restore the configuration settings to the default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3620/Recessed%20Door%20Sensor%207%20-%20Product%20Manual.pdf"
 	}
 }

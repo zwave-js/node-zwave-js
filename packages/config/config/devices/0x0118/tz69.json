@@ -28,8 +28,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator Mode",
 			"description": "Sets whether LED should indicate device is on (1) or off (0)",
 			"valueSize": 1,
@@ -48,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "determines if current state is memorized on power failure",
 			"valueSize": 1,
@@ -67,7 +69,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Watt Meter Report Period",
 			"description": "5s x 720 (default) = 3600s = 1 hour",
 			"unit": "5 seconds",
@@ -76,7 +79,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "kWH Meter Report Period",
 			"description": "10m * 6 (default) = 60m = 1 hour",
 			"unit": "10 minutes",
@@ -85,7 +89,8 @@
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Threshold of Watt for Load Caution",
 			"description": "Above this level, switch enters overload mode",
 			"unit": "W",
@@ -94,7 +99,8 @@
 			"maxValue": 3000,
 			"defaultValue": 3000
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Threshold of kWH for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
 			"unit": "kWH",
@@ -103,7 +109,7 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

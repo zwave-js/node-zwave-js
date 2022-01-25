@@ -30,5 +30,9 @@
 			"label": "Group 4",
 			"maxNodes": 232
 		}
+	},
+	"compat": {
+		// This device has 4 association groups, but 8 scenes
+		"forceSceneControllerGroupCount": 8
 	}
 }

@@ -1,0 +1,32 @@
+name: 'Z-Wave Bot: Auto-Approve Renovate-Bot PRs'
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  # #########################################################################
+  # Auto-Approves Renovate-Bot PRs, because it won't auto-merge otherwise
+  auto-approve-renovate:
+    if: github.event.sender.login == 'renovate[bot]'
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x] # This should be LTS
+
+    steps:
+    - uses: actions/github-script@v5
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const options = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          };
+
+          await github.rest.pulls.createReview({
+            ...options,
+            pull_number: context.payload.pull_request.number,
+            event: "APPROVE"
+          });

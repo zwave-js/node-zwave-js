@@ -13,9 +13,9 @@
 		"min": "5.10",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Motion timeout",
 			"description": "Multiplier to wakeup timer interval",
 			"valueSize": 1,
@@ -23,5 +23,5 @@
 			"maxValue": 7,
 			"defaultValue": 1
 		}
-	}
+	]
 }

@@ -36,6 +36,7 @@
 		<script src="//unpkg.com/prismjs/components/prism-typescript.min.js"></script>
 		<script src="//unpkg.com/prismjs/components/prism-json.min.js"></script>
 		<script src="//unpkg.com/prismjs/components/prism-diff.min.js"></script>
+		<script src="//unpkg.com/prismjs/components/prism-log.min.js"></script>
 
 		<script>
 			window.$docsify = {
@@ -48,7 +49,9 @@
 				// onlyCover: true,
 
 				// Avoid collisions with other docs on the same domain
-				namespace: "node-zwave-js",
+				search: {
+					namespace: "node-zwave-js",
+				},
 
 				plugins: [
 					EditOnGithubPlugin.create(

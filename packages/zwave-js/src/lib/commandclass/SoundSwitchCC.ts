@@ -99,10 +99,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.toneCount;
 	}
 
@@ -118,10 +119,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
@@ -154,10 +156,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["defaultToneId", "defaultVolume"]);
 		}
@@ -211,10 +214,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["toneId", "volume"]);
 		}
@@ -223,6 +227,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property === "defaultToneId") {
 			if (typeof value !== "number") {
@@ -254,17 +259,22 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			if (value > 0) {
-				// Try to use the current volume if it exists
-				const volume = this.endpoint
-					.getNodeUnsafe()
-					?.getValue<number>(getVolumeValueId(this.endpoint.index));
+				// Use provided volume or try to use the current volume if it exists
+				const volume =
+					options?.volume !== undefined
+						? options.volume
+						: this.endpoint
+								.getNodeUnsafe()
+								?.getValue<number>(
+									getVolumeValueId(this.endpoint.index),
+								);
 				await this.play(value, volume);
 			} else {
 				await this.stopPlaying();
 			}
 			if (this.isSinglecast()) {
-				// Verify the current value after a delay
-				this.schedulePoll({ property });
+				// Verify the current value after a (short) delay
+				this.schedulePoll({ property }, { transition: "fast" });
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
@@ -655,6 +665,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		label: "Tone ID",
+		valueChangeOptions: ["volume"],
 	})
 	public readonly toneId: ToneId | number;
 

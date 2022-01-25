@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -49,7 +50,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Thermistor Type Input 1",
 			"description": "This parameter decides which kind of thermistor that is connected to the input..",
 			"valueSize": 1,
@@ -68,7 +70,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Thermistor Type Input 2",
 			"description": "This parameter decides which kind of thermistor that is connected to the input.",
 			"valueSize": 1,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Thermistor Type Input 3",
 			"description": "This parameter decides which kind of thermistor that is connected to the input.",
 			"valueSize": 1,
@@ -106,7 +110,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Thermistor Type Input 4",
 			"description": "This parameter decides which kind of thermistor that is connected to the input.",
 			"valueSize": 1,
@@ -125,7 +130,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Input 1 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -133,7 +139,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Input 2 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -141,7 +148,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Input 3 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -149,7 +157,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Input 4 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -157,7 +166,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Input 1 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
@@ -166,7 +176,8 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Input 2 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
@@ -175,7 +186,8 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Input 3 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
@@ -184,7 +196,8 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Input 4 Report Interval",
 			"description": "Time interval between consecutive temperature reports.",
 			"valueSize": 2,
@@ -193,5 +206,5 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		}
-	}
+	]
 }

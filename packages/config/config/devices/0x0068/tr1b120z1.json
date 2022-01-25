@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Led Light Up Time",
 			"description": "1~100:led light up 1 ~ 100 seconds. 127:always on",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Buzzer Beep Times",
 			"description": "0 : disable  1~100: sound 1~100 beeps (0.5s on, 0.5s off) 127: continue beep till cancel trigger",
 			"valueSize": 1,
@@ -54,7 +56,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Push the button three times in 1.5 seconds.\nWhen inclusion successful, the LED will be RED blink three times.",
 		"exclusion": "Push the button three times in 1.5 seconds.\nWhen exclusion successful, the LED will be RED blink three times. And the LED will be red blinking for 30 seconds at one blink per two seconds. The device is now waiting to inclusion.",

@@ -15,7 +15,7 @@ import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
-import { readJsonWithTemplate } from "./JsonTemplate";
+import { clearTemplateCache, readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
 import {
@@ -42,6 +42,7 @@ export interface DeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 
@@ -53,6 +54,7 @@ export interface FulltextDeviceConfigIndexEntry {
 	productType: string;
 	productId: string;
 	firmwareVersion: FirmwareVersionRange;
+	rootDir?: string;
 	filename: string;
 }
 
@@ -66,12 +68,13 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-const embeddedDevicesDir = path.join(configDir, "devices");
+export const embeddedDevicesDir = path.join(configDir, "devices");
 const fulltextIndexPath = path.join(embeddedDevicesDir, "fulltext_index.json");
 
-function getDevicesPaths(
-	configDir: string,
-): { devicesDir: string; indexPath: string } {
+export function getDevicesPaths(configDir: string): {
+	devicesDir: string;
+	indexPath: string;
+} {
 	const devicesDir = path.join(configDir, "devices");
 	const indexPath = path.join(devicesDir, "index.json");
 	return { devicesDir, indexPath };
@@ -113,11 +116,13 @@ async function hasChangedDeviceFiles(
  */
 async function generateIndex<T extends Record<string, unknown>>(
 	devicesDir: string,
+	isEmbedded: boolean,
 	extractIndexEntries: (config: DeviceConfig) => T[],
 	logger?: ConfigLogger,
-): Promise<(T & { filename: string })[]> {
-	const index: (T & { filename: string })[] = [];
+): Promise<(T & { filename: string; rootDir?: string })[]> {
+	const index: (T & { filename: string; rootDir?: string })[] = [];
 
+	clearTemplateCache();
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) =>
@@ -133,17 +138,25 @@ async function generateIndex<T extends Record<string, unknown>>(
 			.replace(/\\/g, "/");
 		// Try parsing the file
 		try {
-			const config = await DeviceConfig.from(file, {
-				relativeTo: devicesDir,
+			const config = await DeviceConfig.from(file, isEmbedded, {
+				rootDir: devicesDir,
+				relative: true,
 			});
 			// Add the file to the index
 			index.push(
-				...extractIndexEntries(config).map((entry) => ({
-					...entry,
-					filename: relativePath,
-				})),
+				...extractIndexEntries(config).map((entry) => {
+					const ret: T & { filename: string; rootDir?: string } = {
+						...entry,
+						filename: relativePath,
+					};
+					// Only add the root dir to the index if necessary
+					if (devicesDir !== embeddedDevicesDir) {
+						ret.rootDir = devicesDir;
+					}
+					return ret;
+				}),
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			const message = `Error parsing config file ${relativePath}: ${
 				(e as Error).message
 			}`;
@@ -210,7 +223,12 @@ async function loadDeviceIndexShared<T extends Record<string, unknown>>(
 
 	if (needsUpdate) {
 		// Read all files from disk and generate an index
-		index = await generateIndex(devicesDir, extractIndexEntries, logger);
+		index = await generateIndex(
+			devicesDir,
+			true,
+			extractIndexEntries,
+			logger,
+		);
 		// Save the index to disk
 		try {
 			await writeFile(
@@ -221,7 +239,7 @@ ${stringify(index, "\t")}
 				"utf8",
 			);
 			logger?.print("Device index regenerated", "verbose");
-		} catch (e: unknown) {
+		} catch (e) {
 			logger?.print(
 				`Writing the device index to disk failed: ${
 					(e as Error).message
@@ -246,6 +264,7 @@ export async function generatePriorityDeviceIndex(
 	return (
 		await generateIndex(
 			deviceConfigPriorityDir,
+			false,
 			(config) =>
 				config.devices.map((dev) => ({
 					manufacturerId: formatId(
@@ -256,6 +275,7 @@ export async function generatePriorityDeviceIndex(
 					productType: formatId(dev.productType),
 					productId: formatId(dev.productId),
 					firmwareVersion: config.firmwareVersion,
+					rootDir: deviceConfigPriorityDir,
 				})),
 			logger,
 		)
@@ -277,7 +297,7 @@ export async function loadDeviceIndexInternal(
 	externalConfig?: boolean,
 ): Promise<DeviceConfigIndex> {
 	const { devicesDir, indexPath } = getDevicesPaths(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 	);
 
 	return loadDeviceIndexShared(
@@ -317,6 +337,7 @@ export async function loadFulltextDeviceIndexInternal(
 				productType: formatId(dev.productType),
 				productId: formatId(dev.productId),
 				firmwareVersion: config.firmwareVersion,
+				rootDir: embeddedDevicesDir,
 			})),
 		logger,
 	);
@@ -343,7 +364,7 @@ function conditionApplies(condition: string, context: unknown): boolean {
 		return !!evaluate(condition, context);
 	} catch (e) {
 		throw new ZWaveError(
-			`Invalid condition "condition"!`,
+			`Invalid condition "${condition}"!`,
 			ZWaveErrorCodes.Config_Invalid,
 		);
 	}
@@ -353,27 +374,30 @@ function conditionApplies(condition: string, context: unknown): boolean {
 export class ConditionalDeviceConfig {
 	public static async from(
 		filename: string,
+		isEmbedded: boolean,
 		options: {
-			relativeTo?: string;
-		} = {},
+			rootDir: string;
+			relative?: boolean;
+		},
 	): Promise<ConditionalDeviceConfig> {
-		const { relativeTo } = options;
+		const { relative, rootDir } = options;
 
-		const relativePath = relativeTo
-			? path.relative(relativeTo, filename).replace(/\\/g, "/")
+		const relativePath = relative
+			? path.relative(rootDir, filename).replace(/\\/g, "/")
 			: filename;
-		const json = await readJsonWithTemplate(filename);
-		return new ConditionalDeviceConfig(relativePath, json);
+		const json = await readJsonWithTemplate(filename, options.rootDir);
+		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
-	public constructor(filename: string, definition: any) {
+	public constructor(filename: string, isEmbedded: boolean, definition: any) {
 		this.filename = filename;
+		this.isEmbedded = isEmbedded;
 
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-manufacturer id must be a hexadecimal number with 4 digits`,
+manufacturer id must be a lowercase hexadecimal number with 4 digits`,
 			);
 		}
 		this.manufacturerId = parseInt(definition.manufacturerId, 16);
@@ -401,7 +425,7 @@ ${prop} is not a string`,
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
+devices is malformed (not an object or type/id that is not a lowercase 4-digit hex key)`,
 			);
 		}
 		this.devices = (definition.devices as any[]).map(
@@ -494,71 +518,121 @@ found non-numeric group id "${key}" in associations`,
 				{ parameter: number; valueBitMask?: number },
 				ConditionalParamInformation[]
 			>();
-			if (!isObject(definition.paramInformation)) {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-paramInformation is not an object`,
-				);
-			}
-			for (const [key, paramDefinition] of entries(
-				definition.paramInformation,
-			)) {
-				const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
-				if (!match) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-found invalid param number "${key}" in paramInformation`,
-					);
-				}
 
+			if (isArray(definition.paramInformation)) {
+				// Defining paramInformation as an array is the preferred variant now.
+
+				// Check that every param has a param number
 				if (
-					!isObject(paramDefinition) &&
-					!(
-						isArray(paramDefinition) &&
-						(paramDefinition as any[]).every((p) => isObject(p))
+					!definition.paramInformation.every(
+						(entry: any) => "#" in entry,
 					)
 				) {
 					throwInvalidConfig(
 						`device`,
 						`packages/config/config/devices/${filename}: 
-paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
+required property "#" missing in at least one entry of paramInformation`,
 					);
 				}
 
-				// Normalize to an array
-				const defns: any[] = isArray(paramDefinition)
-					? paramDefinition
-					: [paramDefinition];
-				if (
-					!defns.every(
-						(d, index) => index === defns.length - 1 || "$if" in d,
-					)
-				) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}: 
-paramInformation "${key}" is invalid: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+				for (const paramDefinition of definition.paramInformation) {
+					const { ["#"]: paramNo, ...defn } = paramDefinition;
+					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(
+						paramNo,
 					);
-				}
+					if (!match) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}: 
+found invalid param number "${paramNo}" in paramInformation`,
+						);
+					}
 
-				const keyNum = parseInt(match[1], 10);
-				const bitMask =
-					match[2] != undefined ? parseInt(match[2], 16) : undefined;
-				paramInformation.set(
-					{ parameter: keyNum, valueBitMask: bitMask },
-					defns.map(
-						(def) =>
+					const keyNum = parseInt(match[1], 10);
+					const bitMask =
+						match[2] != undefined
+							? parseInt(match[2], 16)
+							: undefined;
+					const key = { parameter: keyNum, valueBitMask: bitMask };
+
+					if (!paramInformation.has(key))
+						paramInformation.set(key, []);
+					paramInformation
+						.get(key)!
+						.push(
 							new ConditionalParamInformation(
 								this,
 								keyNum,
 								bitMask,
-								def,
+								defn,
 							),
-					),
+						);
+				}
+			} else if (
+				(process.env.NODE_ENV !== "test" || !!process.env.CI) &&
+				isObject(definition.paramInformation)
+			) {
+				// Prior to v8.1.0, paramDefinition was an object
+				// We need to support parsing legacy files because users might have custom configs
+				// However, we don't allow this on CI or during tests/lint
+
+				for (const [key, paramDefinition] of entries(
+					definition.paramInformation,
+				)) {
+					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);
+					if (!match) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}:
+found invalid param number "${key}" in paramInformation`,
+						);
+					}
+
+					if (
+						!isObject(paramDefinition) &&
+						!(
+							isArray(paramDefinition) &&
+							(paramDefinition as any[]).every((p) => isObject(p))
+						)
+					) {
+						throwInvalidConfig(
+							`device`,
+							`packages/config/config/devices/${filename}:
+paramInformation "${key}" is invalid: Every entry must either be an object or an array of objects!`,
+						);
+					}
+
+					// Normalize to an array
+					const defns: any[] = isArray(paramDefinition)
+						? paramDefinition
+						: [paramDefinition];
+
+					const keyNum = parseInt(match[1], 10);
+					const bitMask =
+						match[2] != undefined
+							? parseInt(match[2], 16)
+							: undefined;
+					paramInformation.set(
+						{ parameter: keyNum, valueBitMask: bitMask },
+						defns.map(
+							(def) =>
+								new ConditionalParamInformation(
+									this,
+									keyNum,
+									bitMask,
+									def,
+								),
+						),
+					);
+				}
+			} else {
+				throwInvalidConfig(
+					`device`,
+					`packages/config/config/devices/${filename}:
+paramInformation must be an array!`,
 				);
 			}
+
 			this.paramInformation = paramInformation;
 		}
 
@@ -623,6 +697,9 @@ metadata is not an object`,
 	/** Contains instructions and other metadata for the device */
 	public readonly metadata?: DeviceMetadata;
 
+	/** Whether this is an embedded configuration or not */
+	public readonly isEmbedded: boolean;
+
 	public evaluate(deviceId?: DeviceID): DeviceConfig {
 		let associations: Map<number, AssociationConfig> | undefined;
 		if (this.associations) {
@@ -661,6 +738,7 @@ metadata is not an object`,
 
 		return new DeviceConfig(
 			this.filename,
+			this.isEmbedded,
 			this.manufacturer,
 			this.manufacturerId,
 			this.label,
@@ -680,17 +758,26 @@ metadata is not an object`,
 export class DeviceConfig {
 	public static async from(
 		filename: string,
+		isEmbedded: boolean,
 		options: {
-			relativeTo?: string;
+			rootDir: string;
+			relative?: boolean;
 			deviceId?: DeviceID;
-		} = {},
+		},
 	): Promise<DeviceConfig> {
-		const ret = await ConditionalDeviceConfig.from(filename, options);
+		const ret = await ConditionalDeviceConfig.from(
+			filename,
+			isEmbedded,
+			options,
+		);
 		return ret.evaluate(options.deviceId);
 	}
 
 	public constructor(
 		public readonly filename: string,
+		/** Whether this is an embedded configuration or not */
+		public readonly isEmbedded: boolean,
+
 		public readonly manufacturer: string,
 		public readonly manufacturerId: number,
 		public readonly label: string,
@@ -712,15 +799,24 @@ export class DeviceConfig {
 		public readonly compat?: CompatConfig,
 		/** Contains instructions and other metadata for the device */
 		public readonly metadata?: DeviceMetadata,
-	) {
-		// A config file is treated as am embedded one when it is located under the devices root dir
-		this.isEmbedded = !path
-			.relative(embeddedDevicesDir, this.filename)
-			.startsWith("..");
-	}
+	) {}
 
-	/** Whether this is an embedded configuration or not */
-	public readonly isEmbedded: boolean;
+	/** Returns the association config for a given endpoint */
+	public getAssociationConfigForEndpoint(
+		endpointIndex: number,
+		group: number,
+	): AssociationConfig | undefined {
+		if (endpointIndex === 0) {
+			// The root endpoint's associations may be configured separately or as part of "endpoints"
+			return (
+				this.associations?.get(group) ??
+				this.endpoints?.get(0)?.associations?.get(group)
+			);
+		} else {
+			// The other endpoints can only have a configuration as part of "endpoints"
+			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
+		}
+	}
 }
 
 export class ConditionalEndpointConfig {
@@ -878,16 +974,16 @@ isLifeline in association ${groupId} must be a boolean`,
 
 		if (
 			definition.multiChannel != undefined &&
-			definition.multiChannel !== false
+			typeof definition.multiChannel !== "boolean"
 		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${filename}:
-multiChannel in association ${groupId} must be either false or left out`,
+multiChannel in association ${groupId} must be a boolean`,
 			);
 		}
-		// Default to multi channel associations
-		this.multiChannel = definition.multiChannel ?? true;
+		// Default to the "auto" strategy
+		this.multiChannel = definition.multiChannel ?? "auto";
 	}
 
 	public readonly condition?: string;
@@ -901,8 +997,14 @@ multiChannel in association ${groupId} must be either false or left out`,
 	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
 	 */
 	public readonly isLifeline: boolean;
-	/** Some devices support multi channel associations but require some of its groups to use node id associations */
-	public readonly multiChannel: boolean;
+	/**
+	 * Controls the strategy of setting up lifeline associations:
+	 *
+	 * * `true` - Use a multi channel association (if possible)
+	 * * `false` - Use a node association (if possible)
+	 * * `"auto"` - Prefer node associations, fall back to multi channel associations
+	 */
+	public readonly multiChannel: boolean | "auto";
 
 	public evaluateCondition(
 		deviceId?: DeviceID,
@@ -1182,10 +1284,26 @@ export class DeviceMetadata {
 			"exclusion",
 			"reset",
 			"manual",
+			"comments",
 		] as const) {
 			if (prop in definition) {
 				const value = definition[prop];
-				if (typeof value !== "string") {
+				if (prop === "comments") {
+					const isComment = (opt: unknown) =>
+						isObject(opt) &&
+						typeof opt.level === "string" &&
+						typeof opt.text === "string";
+
+					const isValid =
+						(isArray(value) && value.every(isComment)) ||
+						isComment(value);
+					if (!isValid)
+						throwInvalidConfig(
+							"devices",
+							`packages/config/config/devices/${filename}:
+The metadata entry comments is invalid!`,
+						);
+				} else if (typeof value !== "string") {
 					throwInvalidConfig(
 						"devices",
 						`packages/config/config/devices/${filename}:
@@ -1207,4 +1325,11 @@ The metadata entry ${prop} must be a string!`,
 	public readonly reset?: string;
 	/** A link to the device manual */
 	public readonly manual?: string;
+	/** Comments for this device */
+	public readonly comments?: DeviceComment | DeviceComment[];
+}
+
+export interface DeviceComment {
+	level: "info" | "warning" | "error";
+	text: string;
 }

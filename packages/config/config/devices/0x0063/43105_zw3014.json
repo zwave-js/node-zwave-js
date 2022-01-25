@@ -7,7 +7,7 @@
 		{
 			"productType": "0x4944",
 			"productId": "0x3330",
-			"zwaveAllianceId": 4002
+			"zwaveAllianceId": [4002, 4162]
 		}
 	],
 	"firmwareVersion": {
@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Indication",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dim Up/Down Rate",
 			"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Switch Mode",
 			"description": "Turn your dimmer into an On/Off Switch",
 			"valueSize": 1,
@@ -99,7 +102,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Enables alternate exclusion method to avoid accidental exclusion of device",
 			"valueSize": 1,
@@ -119,7 +123,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Minimum Dim Threshold",
 			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
 			"valueSize": 1,
@@ -128,7 +133,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Default Brightness Level",
 			"description": "Set the default brightness level that the dimmer will turn on when being controlled manually",
 			"valueSize": 1,
@@ -137,7 +143,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},
@@ -145,6 +151,6 @@
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the top or bottom of the rocker.\n3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
 		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4002/43105%20QSG%20v1.pdf"
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4162/43105%20QSG%20v1.pdf"
 	}
 }

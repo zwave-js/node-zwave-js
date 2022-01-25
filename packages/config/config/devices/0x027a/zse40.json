@@ -6,16 +6,28 @@
 	"devices": [
 		{
 			"productType": "0x2021",
-			"productId": "0x2101"
+			"productId": "0x2101",
+			"zwaveAllianceId": 4307
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 3,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,73 +45,77 @@
 				}
 			]
 		},
-		"2": {
-			"label": "Temperature offset",
-			"description": "temperature change to be reported",
+		{
+			"#": "2",
+			"label": "Temperature Reporting Threshold",
+			"unit": "0.1 °",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 1
+			"defaultValue": 10
 		},
-		"3": {
-			"label": "Humidity",
-			"description": "Configure Relative Humidity",
-			"unit": "percent",
+		{
+			"#": "3",
+			"label": "Humidity Reporting Threshold",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"4": {
-			"label": "Light Sensor",
-			"unit": "percent",
+		{
+			"#": "4",
+			"label": "Brightness Reporting Threshold",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
 			"defaultValue": 10
 		},
-		"5": [
-			{
-				"$if": "firmwareVersion < 17.9",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "minutes",
-				"valueSize": 1,
-				"minValue": 1,
-				"maxValue": 255,
-				"defaultValue": 3,
-				"unsigned": true
-			},
-			{
-				"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "seconds",
-				"valueSize": 1,
-				"minValue": 15,
-				"maxValue": 60,
-				"defaultValue": 15,
-				"unsigned": true
-			},
-			{
-				"$if": "firmwareVersion >= 24.2",
-				"label": "Trigger Interval",
-				"description": "Set the trigger interval for motion sensor re-activation.",
-				"unit": "seconds",
-				"valueSize": 1,
-				"minValue": 15,
-				"maxValue": 255,
-				"defaultValue": 15,
-				"unsigned": true
-			}
-		],
-		"6": {
+		{
+			"#": "5",
+			"$if": "firmwareVersion < 17.9",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 60,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 24.2",
+			"label": "Trigger Interval",
+			"description": "Set the trigger interval for motion sensor re-activation.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "6",
 			"label": "Motion Sensor Sensitivity",
 			"description": "Adjust sensitivity of the motion sensor.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 4,
+			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -132,12 +148,13 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED indicator mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
-			"defaultValue": 3,
+			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -158,5 +175,11 @@
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "Initiate inclusion (pairing) in the app (or web interface).\nClick the Z-Wave button with a paperclip twice. The LED indicator will start flashing",
+		"exclusion": "Initiate exclusion in the app (or web interface).\nClick the Z-Wave button with a paperclip twice. The LED indicator will start flashing",
+		"reset": "If your primary controller is missing or\ninoperable, you may need to reset the\ndevice to factory settings. To complete\nthe reset process manually, remove the\nback cover to trigger tamper switch.\nPress and release the Z-Wave button\nusing a paperclip 10 TIMES quickly\n(within 10 seconds)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4307/zooz-zse40-700-manual-online.pdf"
 	}
 }

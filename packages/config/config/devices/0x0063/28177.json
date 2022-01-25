@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
@@ -35,5 +35,5 @@
 				}
 			]
 		}
-	}
+	]
 }

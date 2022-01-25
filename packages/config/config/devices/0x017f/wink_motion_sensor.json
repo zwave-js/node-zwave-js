@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sensitivity Level",
 			"valueSize": 1,
 			"minValue": 8,
@@ -23,7 +24,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Motion Cleared Time Delay",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -32,7 +34,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,7 +57,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Enable/Disable Motion Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +77,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Group 2 Ambient Light Threshold",
 			"valueSize": 2,
 			"unit": "Lux",
@@ -82,7 +87,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Retrigger Interval",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -91,7 +97,8 @@
 			"defaultValue": 8,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Light Sensing Interval",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -100,7 +107,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Enable/Disable Group 2 Ambient Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -119,7 +127,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ambient Light Sensitivity Level",
 			"valueSize": 1,
 			"unit": "Lux",
@@ -128,7 +137,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -147,7 +157,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Follow the instructions for your Z-Wave certified Controller to enter inclusion mode.\nWhen prompted by the Controller:\n1. For proper inclusion, bring the Motion Detector within range of your Controller.\n2. Pull the tab on the side of the sensor to power on, or remove then re-install the batteries.\nThe LED indicator will flash five times indicating inclusion",
 		"exclusion": "Follow the instructions for your Z-Wave certified Controller to enter exclusion mode. When prompted by the Controller:\n1. Remove the cover of the Motion Detector and be sure it is powered on.\n2. Press the Connect Button on the bottom of the device quickly 3 times in a row.\nThe LED Indicator will flash five times indicating exclusion/disconnection.",

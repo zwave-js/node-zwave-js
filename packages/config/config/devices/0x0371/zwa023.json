@@ -1,0 +1,310 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA023",
+	"description": "Smart Switch 7",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0017",
+			"zwaveAllianceId": 3844
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Retransmit",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Alert",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_three_options_alt"
+		},
+		{
+			"#": "2",
+			"label": "Night Light: On Time",
+			"description": "Set in hex format: 0xHHMMSS",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2316633,
+			"defaultValue": 1572864,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Night Light: Off Time",
+			"description": "Set in hex format: 0xHHMMSS",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2316633,
+			"defaultValue": 393216,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#blink_duration"
+		},
+		{
+			"#": "5",
+			"label": "LED Blink Speed",
+			"description": "Number of blinks per second",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 24,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Power Report Threshold (Scene)",
+			"description": "Power consumption at which to send a scene activation set command",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 3000,
+			"defaultValue": 100,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Local Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Z-Wave control only",
+					"value": 1
+				},
+				{
+					"label": "Always on",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "9",
+			"label": "Scene Id (Group 3)",
+			"description": "Set the scene id when scene activation set command is sent",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#current_overload_threshold",
+			"maxValue": 1800,
+			"defaultValue": 1800
+		},
+		{
+			"#": "11",
+			"label": "Voltage Overload Protection",
+			"description": "Allowable range: 95-255",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 135,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Threshold Check Interval",
+			"description": "Defines the frequency at which the automatic reporting thresholds are evaluated",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/0x0086/templates/aeotec_template.json#kwh_threshold"
+		},
+		{
+			"#": "21",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold",
+			"maxValue": 2500,
+			"defaultValue": 0
+		},
+		{
+			"#": "22",
+			"$import": "~/0x0086/templates/aeotec_template.json#current_threshold"
+		},
+		{
+			"#": "23",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_watt",
+			"valueSize": 2
+		},
+		{
+			"#": "24",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_kwh",
+			"valueSize": 2
+		},
+		{
+			"#": "25",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_v",
+			"valueSize": 2
+		},
+		{
+			"#": "26",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_amp",
+			"valueSize": 2
+		},
+		{
+			"#": "30[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Smoke"
+		},
+		{
+			"#": "30[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: CO"
+		},
+		{
+			"#": "30[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: CO2"
+		},
+		{
+			"#": "30[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Heat"
+		},
+		{
+			"#": "30[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Water"
+		},
+		{
+			"#": "30[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Access Control"
+		},
+		{
+			"#": "30[0x40]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Home Security (Intrusion)"
+		},
+		{
+			"#": "30[0x80]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "React to Alarm Type: Home Security (Motion)"
+		},
+		{
+			"#": "31",
+			"label": "Alarm Response",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Alarm Disable Setting",
+			"description": "Allowable range: 5-255",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Tap action button once",
+					"value": 0
+				},
+				{
+					"label": "Tap action button twice",
+					"value": 1
+				},
+				{
+					"label": "Tap action button four times",
+					"value": 2
+				},
+				{
+					"label": "Press and hold action button for four seconds",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "40",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer"
+		},
+		{
+			"#": "41",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_on_timer"
+		},
+		{
+			"#": "42",
+			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
+		}
+	],
+	"metadata": {
+		"inclusion": "Turn the gateway/ primary controller into inclusion mode, then short press the Action Button on the product one time.",
+		"exclusion": "Turn the gateway/ primary controller into exclusion mode, then short press the Action Button on the product 2 times.",
+		"reset": "Press and hold the Action Button for 15-20s.\n\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3844/User%20manual%20-%20Smart%20Switch%207%20_US-2.pdf"
+	}
+}

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Night Light Off Threshold",
 			"description": "Sets the brightness at which night light is turned off.  The higher the value,the brighter the ambient light must be to turn off the night light.",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Night Light On Threshold",
 			"description": "Sets the brightness at which night light is turned on.  The lower the value, the dimmer the ambient light must be to turn on the night light.",
 			"valueSize": 1,
@@ -33,7 +35,7 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the Z-Wave Button on Range Extender 3 times",
 		"exclusion": "Turn the primary controller of the Z-Wave network into exclusion mode, press the Z-Wave Button on Range Extender 3 times",

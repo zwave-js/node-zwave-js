@@ -22,9 +22,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Reporting Threshold",
 			"description": "Sets the reporting threshold for changes in ambient temperature.",
 			"valueSize": 1,
@@ -55,7 +55,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Utility Lock Enable/Disable",
 			"description": "Enables or Disables the Utility Lock.",
 			"valueSize": 1,
@@ -76,7 +77,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"description": "Sets the reporting threshold for changes in humidity.",
 			"valueSize": 1,
@@ -103,7 +105,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auxiliary/Emergency",
 			"description": "Enables or Disables the Aux / Emergency Heat.",
 			"valueSize": 1,
@@ -122,7 +125,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Swing Temperature",
 			"description": "Sets the swing threshold before turning on / off HVAC.",
 			"valueSize": 1,
@@ -165,7 +169,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Thermostat Diff Temperature",
 			"description": "Set's the differential temperature for multi-stage HVAC systems.",
 			"valueSize": 2,
@@ -173,7 +178,8 @@
 			"maxValue": 3084,
 			"defaultValue": 4
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"description": "This parameter defines the thermostat recovery mode.",
 			"valueSize": 1,
@@ -192,7 +198,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Simple UI Mode Enable/Disable",
 			"description": "Enables or Disables Simple UI Mode",
 			"valueSize": 1,
@@ -211,7 +218,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Multicast Enable/Disable",
 			"description": "If set to 0, multicast is disabled, if set to 1, will enable the multicast.",
 			"valueSize": 1,
@@ -231,5 +239,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -8,7 +8,7 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility). In this case, use `tcp://<hostname>:<portnumber>` as the connection string. If you're using `ser2net`, use these settings to host the port: `<portnumber>:raw:0:<path-to-serial>:115200 8DATABITS NONE 1STOPBIT`.
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
 
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desription.
 
@@ -98,6 +98,21 @@ Since it might be necessary to control a node **before** its supported CC versio
 -   **throws (!)** if the requested CC is not implemented in this library
 -   returns the version the node claims to support otherwise
 
+### `softReset`
+
+```ts
+async softReset(): Promise<void>
+async trySoftReset(): Promise<void>
+```
+
+Instruct the controller to soft-reset (restart). The returned Promise will resolve after the controller has restarted and can be used again.
+
+> [!NOTE] Soft-reset may cause problems in Docker containers with certain Z-Wave sticks if they disconnect and reconnect too quickly so that the stick's address changes. Therefore, soft-reset may be disabled by setting the ZWAVEJS_DISABLE_SOFT_RESET environment variable. It is also possible to workaround this issue with more advanced udev configurations.
+
+`softReset` will throw when called while soft-reset is not enabled. Consider using `trySoftReset` instead, which only performs a soft-reset when enabled.
+
+> [!WARNING] USB modules will reconnect, meaning that they might get a new address. Make sure to configure your device address in a way that prevents it from changing, e.g. by using `/dev/serial/by-id/...` on Linux.
+
 ### `hardReset`
 
 ```ts
@@ -171,6 +186,19 @@ trySendCommandSupervised(command: CommandClass, options?: SendSupervisedCommandO
 
 If `Supervision CC` is not supported, the returned promise resolves to `undefined`.
 
+### `waitForMessage`
+
+```ts
+waitForMessage<T extends Message>(predicate: (msg: Message) => boolean, timeout: number): Promise<T>
+```
+
+Waits until an unsolicited serial message is received which matches the given predicate or a timeout has elapsed. Resolves the received message. This method takes two arguments:
+
+-   `predicate` - A predicate function that will be called for every received unsolicited message. If the function returns `true`, the returned promise will be resolved with the message.
+-   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching message has been received.
+
+> [!NOTE] This does not trigger for (Bridge)ApplicationCommandRequests, which are handled differently. To wait for a certain CommandClass, use [`waitForCommand`](#waitForCommand).
+
 ### `waitForCommand`
 
 ```ts
@@ -179,7 +207,7 @@ waitForCommand<T extends CommandClass>(predicate: (cc: CommandClass) => boolean,
 
 Waits until an unsolicited command is received which matches the given predicate or a timeout has elapsed. Resolves the received command. This method takes two arguments:
 
--   `predicate` - A predicate function that will be called for every received command. If the function returns true, the returned promise will be resolved with the command.
+-   `predicate` - A predicate function that will be called for every received command. If the function returns `true`, the returned promise will be resolved with the command.
 -   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching command has been received.
 
 ### `saveNetworkToCache`
@@ -235,6 +263,14 @@ getLogConfig(): LogConfig
 ```
 
 Returns the current logging configuration.
+
+### `setPreferredScales`
+
+```ts
+setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void
+```
+
+Configures a new set of preferred sensor scales without having to restart the driver. The `scales` argument has the same type as `preferences.scales` in [`ZWaveOptions`](#ZWaveOptions).
 
 ### `checkForConfigUpdates`
 
@@ -358,7 +394,7 @@ interface LogConfig {
 -   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
 -   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `nodeFilter`: If set, only messages regarding the given node IDs are logged
--   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave-${process.pid}.log` and located in the same directory as the main executable.
+-   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave_%DATE%.log` (where `%DATE%` is replaced with the current date) and located in the same directory as the main executable.
 -   `forceConsole`: By default, `zwave-js` does not log to the console if it is not a TTY in order to reduce the CPU load. By setting this option to `true`, the TTY check will be skipped and all logs will be printed to the console, **except if `logToFile` is `true`**. Default: `false`.
 
 > [!NOTE]
@@ -384,6 +420,13 @@ interface SendMessageOptions {
 	changeNodeStatusOnMissingACK?: boolean;
 	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
+	/** If a Wake Up On Demand should be requested for the target node. */
+	requestWakeUpOnDemand?: boolean;
+	/**
+	 * When a message sent to a node results in a TX report to be received, this callback will be called.
+	 * For multi-stage messages, the callback may be called multiple times.
+	 */
+	onTXReport?: (report: TXReport) => void;
 }
 ```
 
@@ -393,21 +436,20 @@ The message priority must one of the following enum values, which are sorted fro
 
 ```ts
 enum MessagePriority {
-	// Handshake messages have the highest priority because they are part of other transactions
-	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
-	//
-	// We distinguish between responses to handshake requests from nodes that must be handled first.
-	// Some nodes don't respond to our requests if they are waiting for a nonce.
-	Handshake = 0,
-	// Our handshake requests must be prioritized over all other messages
-	PreTransmitHandshake = 1,
+	// Outgoing nonces have the highest priority because they are part of other transactions
+	// which may already be in progress.
+	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
+	Nonce = 0,
 	// Controller commands usually finish quickly and should be preferred over node queries
 	Controller,
-	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
 	MultistepController,
+	// Supervision responses must be prioritized over other messages because the nodes requesting them
+	// will get impatient otherwise.
+	Supervision,
+	// Pings (NoOP) are used for device probing at startup and for network diagnostics
+	Ping,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
 	WakeUp,
@@ -426,11 +468,89 @@ enum MessagePriority {
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
+TX status reports are supported by the more modern controllers and contain details about the message transmission to other nodes, e.g. routing attempts, RSSI, speed, etc.:
+
+<!-- #import TXReport from "zwave-js" -->
+
+```ts
+interface TXReport {
+	/** Transmission time in ticks (multiples of 10ms) */
+	txTicks: number;
+	/** Number of repeaters used in the route to the destination, 0 for direct range */
+	numRepeaters: number;
+	/** RSSI value of the acknowledgement frame */
+	ackRSSI?: RSSI;
+	/** RSSI values of the incoming acknowledgement frame, measured by repeater 0...3 */
+	ackRepeaterRSSI?: [RSSI?, RSSI?, RSSI?, RSSI?];
+	/** Channel number the acknowledgement frame is received on */
+	ackChannelNo?: number;
+	/** Channel number used to transmit the data */
+	txChannelNo: number;
+	/** State of the route resolution for the transmission attempt. Encoding is manufacturer specific. */
+	routeSchemeState: number;
+	/** Node IDs of the repeater 0..3 used in the route. */
+	repeaterNodeIds: [number?, number?, number?, number?];
+	/** Whether the destination requires a 1000ms beam to be reached */
+	beam1000ms: boolean;
+	/** Whether the destination requires a 250ms beam to be reached */
+	beam250ms: boolean;
+	/** Transmission speed used in the route */
+	routeSpeed: ProtocolDataRate;
+	/** How many routing attempts have been made to transmit the payload */
+	routingAttempts: number;
+	/** When a route failed, this indicates the last functional Node ID in the last used route */
+	failedRouteLastFunctionalNodeId?: number;
+	/** When a route failed, this indicates the first non-functional Node ID in the last used route */
+	failedRouteFirstNonFunctionalNodeId?: number;
+	/** Transmit power used for the transmission in dBm */
+	txPower?: number;
+	/** Measured noise floor during the outgoing transmission */
+	measuredNoiseFloor?: RSSI;
+	/** TX power in dBm used by the destination to transmit the ACK */
+	destinationAckTxPower?: number;
+	/** Measured RSSI of the acknowledgement frame received from the destination */
+	destinationAckMeasuredRSSI?: RSSI;
+	/** Noise floor measured by the destination during the ACK transmission */
+	destinationAckMeasuredNoiseFloor?: RSSI;
+}
+```
+
+The RSSI is either a number indicating the value in dBm or one of the special values defined in `RssiError`.
+
+<!-- #import RSSI from "zwave-js" -->
+
+```ts
+type RSSI = number | RssiError;
+```
+
+<!-- #import RssiError from "zwave-js" -->
+
+```ts
+enum RssiError {
+	NotAvailable = 127,
+	ReceiverSaturated = 126,
+	NoSignalDetected = 125,
+}
+```
+
+<!-- #import ProtocolDataRate from "zwave-js" -->
+
+```ts
+declare enum ProtocolDataRate {
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
+}
+```
+
 ### `SendCommandOptions`
 
 Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
 
 -   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
+-   `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
+-   `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
 
 ### `SendSupervisedCommandOptions`
 
@@ -471,7 +591,7 @@ This interface specifies the optional options object that is passed to the `Driv
 
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
-```ts
+````ts
 interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
@@ -495,6 +615,11 @@ interface ZWaveOptions {
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
+		/**
+		 * How long to wait for the Serial API Started command after a soft-reset before resorting
+		 * to polling the API for the responsiveness check.
+		 */
+		serialAPIStarted: number; // [1000...30000], default: 5000 ms
 	};
 
 	attempts: {
@@ -503,9 +628,6 @@ interface ZWaveOptions {
 
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
-
-		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
-		retryAfterTransmitReport: boolean; // default: false
 
 		/**
 		 * How many attempts should be made for each node interview before giving up
@@ -517,11 +639,25 @@ interface ZWaveOptions {
 	 * Optional log configuration
 	 */
 	logConfig?: LogConfig;
+
+	interview: {
+		/**
+		 * Whether all user code should be queried during the interview of the UserCode CC.
+		 * Note that enabling this can cause a lot of traffic during the interview.
+		 */
+		queryAllUserCodes?: boolean;
+	};
+
 	storage: {
 		/** Allows you to replace the default file system driver used to store and read the cache */
 		driver: FileSystem;
 		/** Allows you to specify a different cache directory */
 		cacheDir: string;
+		/**
+		 * Allows you to specify a different directory for the lockfiles than cacheDir.
+		 * Can also be set with the ZWAVEJS_LOCK_DIRECTORY env variable.
+		 */
+		lockDir?: string;
 		/**
 		 * Allows you to specify a directory where device configuration files can be loaded from with higher priority than the included ones.
 		 * This directory does not get indexed and should be used sparingly, e.g. for testing.
@@ -538,15 +674,22 @@ interface ZWaveOptions {
 		 */
 		throttle: "fast" | "normal" | "slow";
 	};
-
-	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
-	networkKey?: Buffer;
+	/**
+	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
+	 */
+	securityKeys?: {
+		S2_Unauthenticated?: Buffer;
+		S2_Authenticated?: Buffer;
+		S2_AccessControl?: Buffer;
+		S0_Legacy?: Buffer;
+	};
 
 	/**
 	 * Some Command Classes support reporting that a value is unknown.
 	 * When this flag is `false`, unknown values are exposed as `undefined`.
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false` */
+	 * Default: `false`
+	 */
 	preserveUnknownValues?: boolean;
 
 	/**
@@ -560,15 +703,64 @@ interface ZWaveOptions {
 	 * Default: `false`
 	 */
 	disableOptimisticValueUpdate?: boolean;
+
+	/**
+	 * By default, the driver assumes to be talking to a single application. In this scenario a successful `setValue` call
+	 * is enough for the application to know that the value was changed and update its own cache or UI.
+	 *
+	 * Therefore, the `"value updated"` event is not emitted after `setValue` unless the change was verified by the device.
+	 * To get `"value updated"` events nonetheless, set this option to `true`.
+	 *
+	 * Default: `false`
+	 */
+	emitValueUpdateAfterSetValue?: boolean;
+
+	/**
+	 * Soft Reset is required after some commands like changing the RF region or restoring an NVM backup.
+	 * Because it may be problematic in certain environments, we provide the user with an option to opt out.
+	 * Default: `true,` except when ZWAVEJS_DISABLE_SOFT_RESET env variable is set.
+	 */
+	enableSoftReset?: boolean;
+
+	preferences: {
+		/**
+		 * The preferred scales to use when querying sensors. The key is either:
+		 * - the name of a named scale group, e.g. "temperature", which applies to every sensor type that uses this scale group.
+		 * - or the numeric sensor type to specify the scale for a single sensor type
+		 *
+		 * Single-type preferences have a higher priority than named ones. For example, the following preference
+		 * ```js
+		 * {
+		 *     temperature: "°F",
+		 *     0x01: "°C",
+		 * }
+		 * ```
+		 * will result in using the Fahrenheit scale for all temperature sensors, except the air temperature (0x01).
+		 *
+		 * The value must match what is defined in the sensor type config file and contain either:
+		 * - the label (e.g. "Celsius", "Fahrenheit")
+		 * - the unit (e.g. "°C", "°F")
+		 * - or the numeric key of the scale (e.g. 0 or 1).
+		 *
+		 * Default:
+		 * ```js
+		 * {
+		 *     temperature: "Celsius"
+		 * }
+		 * ```
+		 */
+		scales: Partial<Record<string | number, string | number>>;
+	};
 }
-```
+````
 
 The timeout values `ack` and `byte` are sent to the Z-Wave stick using the `SetSerialApiTimeouts` command. Change them only if you know what you're doing.
 The `report` timeout is used by this library to determine how long to wait for a node's response.
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is `5`.
 
 For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
-The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
+The `throttle` option allows you to fine-tune the filesystem. The default value is `"normal"`.
+Note that the lockfiles to avoid concurrent cache accesses are updated every couple of seconds. If you have concerns regarding SD card wear, you can change the `lockDir` option to point a directory that resides in a RAM filesystem.
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.

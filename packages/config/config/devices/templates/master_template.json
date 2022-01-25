@@ -126,6 +126,20 @@
 		"maxValue": 127,
 		"unsigned": true
 	},
+	"base_0-65535": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
+	"base_1-65535": {
+		"valueSize": 4,
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 0,
+		"unsigned": true
+	},
 	"base_true_false": {
 		"valueSize": 1,
 		"minValue": 0,
@@ -144,14 +158,54 @@
 			}
 		]
 	},
-	"dimming_timing_with_0": {
-		"description": "Set 0 to disable",
+	"dimmer_type_trail_lead": {
+		"label": "Dimmer Mode",
 		"valueSize": 1,
-		"unit": "10ms",
 		"minValue": 0,
-		"maxValue": 255,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Trailing edge",
+				"value": 0
+			},
+			{
+				"label": "Leading edge",
+				"value": 1
+			}
+		]
+	},
+	"dimmer_type_lead_trail": {
+		"label": "Dimmer Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Leading edge",
+				"value": 0
+			},
+			{
+				"label": "Trailing edge",
+				"value": 1
+			}
+		]
+	},
+	"dimming_timing_with_0": {
+		"$import": "#base_0-255_nounit",
+		"unit": "10ms",
 		"defaultValue": 3,
-		"unsigned": true
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
 	},
 	"dimming_timing": {
 		"valueSize": 1,
@@ -161,9 +215,82 @@
 		"defaultValue": 3,
 		"unsigned": true
 	},
+	"dimming_speed_1-99_seconds": {
+		"$import": "#base_1-99_nounit",
+		"label": "Dimming Speed",
+		"unit": "seconds",
+		"defaultValue": 5
+	},
+	"dim_rate": {
+		"$import": "#base_1-99_nounit",
+		"label": "Dimming rate"
+	},
+	"minimum_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Minimum Dim Level",
+		"defaultValue": 1
+	},
+	"minimum_dim_level_1-99": {
+		"$import": "#base_1-99_nounit",
+		"label": "Minimum Dim Level",
+		"defaultValue": 1
+	},
+	"maximum_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 99
+	},
+	"maximum_dim_level_0-100": {
+		"$import": "#base_0-100_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 100
+	},
+	"maximum_dim_level_1-99": {
+		"$import": "#base_1-99_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 99
+	},
+	"maximum_dim_level_1-100": {
+		"$import": "#base_1-100_nounit",
+		"label": "Maximum Dim Level",
+		"defaultValue": 100
+	},
+	"default_dim_level_0-99": {
+		"$import": "#base_0-99_nounit",
+		"label": "Default Dim Level",
+		"options": [
+			{
+				"label": "Last brightness level",
+				"value": 0
+			}
+		]
+	},
 	"orientation": {
 		"$import": "#base_enable_disable",
 		"label": "Inverted Orientation"
+	},
+	"orientation_momentary": {
+		"label": "Inverted Orientation",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			},
+			{
+				"label": "Momentary mode",
+				"value": 2
+			}
+		]
 	},
 	"enable_led_indicator": {
 		"$import": "#base_enable_disable",
@@ -253,7 +380,73 @@
 			}
 		]
 	},
-	"state_after_power_failure": {
+	"state_after_power_failure_off_on_prev": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Previous state",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_off_prev_on": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Previous state",
+				"value": 1
+			},
+			{
+				"label": "Always on",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_prev_off_on": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always off",
+				"value": 1
+			},
+			{
+				"label": "Always on",
+				"value": 2
+			}
+		]
+	},
+	"state_after_power_failure_prev_on_off": {
 		"label": "State After Power Failure",
 		"valueSize": 1,
 		"minValue": 0,
@@ -275,6 +468,122 @@
 			}
 		]
 	},
+	"state_after_power_failure_off_prev": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Always off",
+				"value": 0
+			},
+			{
+				"label": "Previous state",
+				"value": 1
+			}
+		]
+	},
+	"state_after_power_failure_prev_off": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always off",
+				"value": 1
+			}
+		]
+	},
+	"state_after_power_failure_prev_on_off_schedule": {
+		"label": "State After Power Failure",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Previous state",
+				"value": 0
+			},
+			{
+				"label": "Always on",
+				"value": 1
+			},
+			{
+				"label": "Always off",
+				"value": 2
+			},
+			{
+				"label": "Return to schedule (Schedule CC)",
+				"value": 3
+			}
+		]
+	},
+	"smart_switch_mode_0-2": {
+		"label": "Smart Switch Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Local control disabled",
+				"value": 0
+			},
+			{
+				"label": "Local and Z-Wave control enabled",
+				"value": 1
+			},
+			{
+				"label": "Local and Z-Wave control disabled",
+				"value": 2
+			}
+		]
+	},
+	"smart_switch_mode_0-3": {
+		"label": "Smart Switch Mode",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 3,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Local control only",
+				"value": 1
+			},
+			{
+				"label": "Central Scene only",
+				"value": 2
+			},
+			{
+				"label": "Local and Central Scene",
+				"value": 3
+			}
+		]
+	},
+	"enable_scene_control": {
+		"$import": "#base_enable_disable",
+		"label": "Scene Control"
+	},
 	"volume_three": {
 		"label": "Volume",
 		"valueSize": 1,
@@ -293,6 +602,60 @@
 			{
 				"label": "High",
 				"value": 3
+			}
+		]
+	},
+	"temperature_scale": {
+		"label": "Temperature Scale",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Fahrenheit",
+				"value": 0
+			},
+			{
+				"label": "Celsius",
+				"value": 1
+			}
+		]
+	},
+	"temperature_scale_celsius_fahrenheit": {
+		"label": "Temperature Scale",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Celsius",
+				"value": 0
+			},
+			{
+				"label": "Fahrenheit",
+				"value": 1
+			}
+		]
+	},
+	"clock_format": {
+		"label": "Clock Format",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "12 hour",
+				"value": 0
+			},
+			{
+				"label": "24 hour",
+				"value": 1
 			}
 		]
 	}

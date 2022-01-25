@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LED Brightness",
 			"valueSize": 1,
 			"unit": "%",
@@ -49,7 +50,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Thermistor Type Input 1",
 			"description": "This parameter decides which kind of thermistor is connected to input 1.",
 			"valueSize": 1,
@@ -68,7 +70,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Thermistor Type Input 2",
 			"description": "This parameter decides which kind of thermistor is connected to input 2.",
 			"valueSize": 1,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Input 1 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -95,7 +99,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Input 2 Calibration",
 			"valueSize": 1,
 			"unit": "0.1 °C",
@@ -103,7 +108,8 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Input 1 Report Interval",
 			"unit": "10 seconds",
 			"valueSize": 2,
@@ -111,7 +117,8 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Input 2 Report Interval",
 			"unit": "10 seconds",
 			"valueSize": 2,
@@ -119,7 +126,8 @@
 			"maxValue": 8640,
 			"defaultValue": 6
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Flood Sensor Report Interval",
 			"valueSize": 2,
 			"unit": "10 seconds",
@@ -127,7 +135,8 @@
 			"maxValue": 8640,
 			"defaultValue": 2
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Meter Reports Interval",
 			"valueSize": 2,
 			"unit": "10 seconds",
@@ -135,7 +144,8 @@
 			"maxValue": 8640,
 			"defaultValue": 90
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Input 3 Flood Steady Timer",
 			"description": "Defines the time after which the flood sensor state will be considered valid",
 			"valueSize": 1,
@@ -144,7 +154,8 @@
 			"maxValue": 60,
 			"defaultValue": 6
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Relay On",
 			"description": "Configures which events will cause the relay to be turned on",
 			"valueSize": 1,
@@ -167,7 +178,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Relay Off",
 			"description": "Configures which events will cause the relay to be turned off",
 			"valueSize": 1,
@@ -190,7 +202,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Flood Detection Threshold",
 			"description": "Configures the threshold for input 3 that will cause a flood to be detected.",
 			"valueSize": 2,
@@ -198,7 +211,8 @@
 			"maxValue": 4095,
 			"defaultValue": 2048
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Voltage",
 			"description": "Voltage value used for power calculation.",
 			"unit": "V",
@@ -208,7 +222,8 @@
 			"defaultValue": 220,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Digital Value Per Ampere",
 			"description": "Note: Heatit recommends not changing this value unless instructed to do so",
 			"valueSize": 1,
@@ -217,7 +232,8 @@
 			"defaultValue": 81,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Load Size Connect to Relay Output",
 			"description": "Actual load in Watt.",
 			"unit": "W",
@@ -226,5 +242,5 @@
 			"maxValue": 6000,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Flood Alarm Basic On Value",
 			"description": "Flood detected",
 			"valueSize": 1,
@@ -25,7 +25,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Flood Alarm Basic Off Value",
 			"description": "No Flood detected",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable Buzzer Sound on Alarm",
 			"description": "Buzzer enabled during flood detection",
 			"valueSize": 1,
@@ -43,5 +45,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

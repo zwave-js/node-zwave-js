@@ -24,23 +24,31 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/logic_group_template.json#dimming_duration"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/logic_group_template.json#dimmer_mode"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/logic_group_template.json#dimmer_min"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/logic_group_template.json#dimmer_max"
 		},
-		"5": {
-			"$import": "templates/logic_group_template.json#dimmer_max"
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Meter Report Time",
+			"description": "Values 1-127 = seconds; 128-255 = minutes (minus 127)",
+			"defaultValue": 60
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Push the ON logo 3 times and the LED will start to blink",
 		"exclusion": "Push the ON logo 3 times and the LED will start to blink",

@@ -2,8 +2,10 @@
 
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
+    -   [Security S2](getting-started/security-s2.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
+    -   [Migrating to v8](getting-started/migrating-to-v8.md)
     -   [Sponsoring the development](getting-started/sponsoring.md)
 
 -   API
@@ -13,8 +15,10 @@
     -   [Controller](api/controller.md)
     -   [ZWaveNode](api/node.md)
     -   [Endpoint](api/endpoint.md)
+    -   [Virtual nodes and endpoints](api/virtual-node-endpoint.md)
     -   [Values and Metadata](api/valueid.md)
     -   [ConfigManager](api/config-manager.md)
+    -   [Utilities](api/utils.md)
     -   [Command Classes](api/CCs/index.md)
         <!-- AUTO-GENERATE: CC Links -->
 
@@ -22,12 +26,18 @@
 
     -   [Send custom messages](usage/custom.md)
     -   [External config DB location](usage/external-config.md)
+    -   [Connect to a hosted serial port over TCP](usage/tcp-connection.md)
 
 -   Troubleshooting
 
     -   [Overview](troubleshooting/index.md)
-    -   [A device does not respond](troubleshooting/no-device-response.md)
+    -   [Connectivity issues](troubleshooting/connectivity-issues.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
+    -   [Problems with 700 series sticks](troubleshooting/700-series-issues.md)
+    -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
+    -   [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
+    -   [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
+    -   [Some values are missing](troubleshooting/missing-values.md)
 
 -   Device Configuration Files
 
@@ -35,6 +45,7 @@
     -   [File format](config-files/file-format.md)
     -   [Contributing device files](config-files/contributing-files.md)
     -   [Importing files from other sources](config-files/importing-from-others.md)
+    -   [Using telemetry data](config-files/using-telemetry-data.md)
     -   [Style guide](config-files/style-guide.md)
     -   [Conditional parameters and settings](config-files/conditional-settings.md)
     -   [Using templates](config-files/using-templates.md)

@@ -13,3 +13,11 @@ async sendEncapsulated(
 	requestStatusUpdates: boolean = true,
 ): Promise<void>;
 ```
+
+### `sendReport`
+
+```ts
+async sendReport(
+	options: SupervisionCCReportOptions & { secure?: boolean },
+): Promise<void>;
+```

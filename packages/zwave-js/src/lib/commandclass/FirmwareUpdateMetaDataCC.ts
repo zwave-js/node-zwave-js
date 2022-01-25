@@ -94,6 +94,23 @@ export enum FirmwareDownloadStatus {
 	OK = 0xff,
 }
 
+// @publicAPI
+export type FirmwareUpdateCapabilities =
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: false;
+	  }
+	| {
+			/** Indicates whether the node's firmware can be upgraded */
+			readonly firmwareUpgradable: true;
+			/** An array of firmware targets that can be upgraded */
+			readonly firmwareTargets: readonly number[];
+			/** Indicates whether the node continues to function normally during an upgrade */
+			readonly continuesToFunction: Maybe<boolean>;
+			/** Indicates whether the node supports delayed activation of the new firmware */
+			readonly supportsActivation: Maybe<boolean>;
+	  };
+
 function getSupportsActivationValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Firmware Update Meta Data"],
@@ -140,10 +157,11 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<FirmwareUpdateMetaDataCCMetaDataReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<FirmwareUpdateMetaDataCCMetaDataReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"manufacturerId",
@@ -180,14 +198,13 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 		// we do not use the built-in waiting functionality, which would block
 		// all other communication
 		await this.driver.sendCommand(cc, this.commandOptions);
-		const {
-			status,
-		} = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
-			(cc) =>
-				cc instanceof FirmwareUpdateMetaDataCCRequestReport &&
-				cc.nodeId === this.endpoint.nodeId,
-			60000,
-		);
+		const { status } =
+			await this.driver.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
+				(cc) =>
+					cc instanceof FirmwareUpdateMetaDataCCRequestReport &&
+					cc.nodeId === this.endpoint.nodeId,
+				60000,
+			);
 		return status;
 	}
 
@@ -228,10 +245,11 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = await this.driver.sendCommand<FirmwareUpdateMetaDataCCActivationReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<FirmwareUpdateMetaDataCCActivationReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.activationStatus;
 	}
 }

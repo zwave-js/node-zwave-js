@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Overload Protection",
 			"description": "turns relay off once voltage exceeds 16.5A for over 5 secs if enabled",
 			"valueSize": 1,
@@ -40,30 +41,12 @@
 				}
 			]
 		},
-		"21": {
-			"label": "On/Off Status Recovery After Power Failure",
-			"description": "Recovery state for power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous setting",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "OFF",
-					"value": 2
-				}
-			]
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "On/Off Status Change Notifications",
 			"description": "Send notifications to associated devices",
 			"valueSize": 1,
@@ -86,7 +69,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,7 +88,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Power Report Value Threshold",
 			"description": "Minimum change in watts to report",
 			"valueSize": 2,
@@ -113,7 +98,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Power Report Percentage Threshold",
 			"description": "Minimum percentage change to report",
 			"valueSize": 1,
@@ -122,7 +108,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Power Report Frequency",
 			"description": "How often to report power consumption (W) in secs",
 			"valueSize": 4,
@@ -130,7 +117,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 30
 		},
-		"172": {
+		{
+			"#": "172",
 			"label": "Energy Report Frequency",
 			"description": "How often to report energy usage (KWH) in secs",
 			"valueSize": 4,
@@ -138,7 +126,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"173": {
+		{
+			"#": "173",
 			"label": "Voltage Report Frequency",
 			"description": "How often to report voltage (V) in secs",
 			"valueSize": 4,
@@ -146,7 +135,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		},
-		"174": {
+		{
+			"#": "174",
 			"label": "Electricity Report Frequency",
 			"description": "How often to report electrical current (A) in secs",
 			"valueSize": 4,
@@ -154,5 +144,11 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		}
+	],
+	"metadata": {
+		"inclusion": "There are three types of inclusion for this device: 1) Auto Z-Wave Inclusion 2) Manual Z-Wave Inclusion 3) Secure Z-Wave Inclusion.\n\n1) Auto Z-Wave Inclusion\n1. Put your Z-Wave controller in inclusion mode\n2. Plug the smart plug into a grounded receptacle located within 3 feet from your Z-Wave gateway controller\n3. LED indicator will flash blue4. A new on / off device should be recognized by your Z-Wave controller\n\n2)Manual Z-Wave Inclusion\n1. Plug the smart plug into a grounded receptacle located within 3 feet from your Z-Wave gateway controller\n2. Put your Z-Wave controller in inclusion mode\n3. Press and release the Z-Wave button 3 TIMES QUICKLY\n4. LED indicator will flash blue\n5. A new on / off device should be recognized by your Z-Wave controller\n\n3)Secure Z-Wave Inclusion\n1. Plug the smart plug into a grounded receptacle located within 3 feet from your Z-Wave gateway controller\n2. Put your Z-Wave controller in secure inclusion mode\n3. Press and HOLD the Z-Wave button for at least 3 seconds\n4. LED indicator will flash green\n5. LED indicator will turn solid green once the inclusion is completed. Please allow 5 minutes for configuration. DO NOT press any buttons or move the device during that time\n6. A new secure on / off device should be recognized by your Z-Wave controller.",
+		"exclusion": "1. Plug the smart plug into a grounded receptacle located within 3 feet from your Z-Wave gateway controller\n2. Put your Z-Wave controller in exclusion mode\n3. Press and release the Z-Wave button 3 TIMES QUICKLY\n4. LED indicator will flash orange\n5. The smart plug should disappear from your controller's device list and LED indicator will remain solid orange for a few seconds to indicate exclusion.",
+		"reset": "Plug the smart plug into a grounded receptacle, then PRESS AND HOLD the Z-Wave button for AT LEAST 20 SECONDS. The LED indicator will stay solid yellow for 2 seconds to indicate successful reset. The plug will then automatically turn off. NOTE: All previously recorded activity and custom settings will be erased from the devices memory. You may only reset your smart plug once it has been included to a Z-Wave network.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=Manuals/1901/Zooz-Z-Wave-Smart-Plug-ZEN06%20Manual.pdf"
 	}
 }

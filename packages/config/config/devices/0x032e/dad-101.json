@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Load type",
 			"description": "Dimmer load type",
 			"valueSize": 1,
@@ -46,21 +46,24 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Min dimming level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 94,
 			"defaultValue": 1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Max dimming level",
 			"valueSize": 1,
 			"minValue": 6,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Dimming speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +80,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto Off delay",
 			"description": "Delay to turn device OFF after ON command received",
 			"valueSize": 2,
@@ -91,14 +95,16 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "All ON/OFF behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Powerfail recovery mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +122,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Lighting autolevel",
 			"description": "Autolevel behavior",
 			"valueSize": 1,
@@ -139,7 +146,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Light level",
 			"description": "Light level to maintain",
 			"valueSize": 2,
@@ -153,7 +161,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Lighting change trigger threshold",
 			"valueSize": 2,
 			"minValue": 1,
@@ -174,7 +183,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Turn on delay",
 			"valueSize": 2,
 			"minValue": 0,
@@ -187,7 +197,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Smart delay for dimmer",
 			"valueSize": 2,
 			"minValue": 0,
@@ -200,14 +211,16 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Smart delay mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Load in Watts",
 			"valueSize": 2,
 			"minValue": 0,
@@ -220,7 +233,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "S1 button mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -250,7 +264,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "S2 button mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,7 +291,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Double click to max",
 			"description": "Level up to max on double click",
 			"valueSize": 1,
@@ -295,7 +311,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Sensor driven dimmer",
 			"description": "Sets sensor for dimmer control",
 			"valueSize": 1,
@@ -318,7 +335,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Sensor 1 ON command value",
 			"valueSize": 2,
 			"minValue": -60,
@@ -335,7 +353,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Sensor 1 command OFF value",
 			"description": "Value to activate OFF command for Sensor 1",
 			"valueSize": 2,
@@ -343,7 +362,8 @@
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Sensor 1 ON/OFF command behavior",
 			"description": "Behavior for ON/OFF command",
 			"valueSize": 1,
@@ -351,5 +371,5 @@
 			"maxValue": 6,
 			"defaultValue": 0
 		}
-	}
+	]
 }

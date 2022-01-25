@@ -23,8 +23,9 @@
 			"maxNodes": 10
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Operating Mode",
 			"description": "Selecting the operating mode",
 			"valueSize": 1,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Disabling With Delay",
 			"description": "After opening, the tap will automatically close after a certain time.",
 			"valueSize": 2,
@@ -52,5 +54,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

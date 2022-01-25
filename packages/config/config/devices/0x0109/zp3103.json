@@ -19,5 +19,8 @@
 			"maxNodes": 5,
 			"isLifeline": true
 		}
+	},
+	"compat": {
+		"forceNotificationIdleReset": true
 	}
 }

@@ -13,27 +13,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"9": {
-			"label": "Restore state after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "off after power loss",
-					"value": 0
-				},
-				{
-					"label": "restore last state",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "First channel operating mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +53,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "1st ch. reaction to switch",
 			"description": "First channel - reaction to switch for delay/auto ON/OFF modes",
 			"valueSize": 1,
@@ -90,21 +77,24 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "time parameter for delay/auto ON/OFF modes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "1st ch. pulse time for flashing mode",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 5
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +116,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Flashing mode - reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +135,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Associations in Z-Wave network security mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -178,7 +170,8 @@
 				}
 			]
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "S1 switch - scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -207,7 +200,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "S2 switch - scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -236,7 +230,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "S1 assocs. sent to 2nd and 3rd group",
 			"valueSize": 1,
 			"minValue": 0,
@@ -265,28 +260,32 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "S1 ON val sent to 2nd and 3rd groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "S1 OFF val sent to 2nd and 3rd groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "S1 DblClick val sent to 2nd and 3rd groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "S2 assocs. sent to 4th and 5th group",
 			"valueSize": 1,
 			"minValue": 0,
@@ -315,7 +314,8 @@
 				}
 			]
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "S2 switch ON value sent to 4th and 5th ass. groups",
 			"valueSize": 1,
 			"minValue": 0,
@@ -323,21 +323,24 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "S2 switch OFF sent to 4th and 5th groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "S2 double click sent to 4th and 5th ass. grps.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 99
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Reaction to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -363,7 +366,8 @@
 				}
 			]
 		},
-		"41": {
+		{
+			"#": "41",
 			"label": "Reaction to Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -389,7 +393,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Reaction to CO/CO2/Smoke Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -415,7 +420,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Reaction to Heat Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -441,14 +447,16 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Flashing alarm duration",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 600
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Active power reports",
 			"description": "Power level reporting threshold.",
 			"valueSize": 1,
@@ -456,14 +464,16 @@
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Minimal time between power report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 10
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Energy reports",
 			"description": "Energy level change resulting in sending a new energy report.",
 			"valueSize": 2,
@@ -471,7 +481,8 @@
 			"maxValue": 32000,
 			"defaultValue": 100
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "Periodic power reports",
 			"description": "Determines time interval for periodic power reports",
 			"valueSize": 2,
@@ -479,7 +490,8 @@
 			"maxValue": 32000,
 			"defaultValue": 3600
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Periodic energy reports",
 			"description": "Determines time interval for periodic energy reports",
 			"valueSize": 2,
@@ -487,7 +499,8 @@
 			"maxValue": 32000,
 			"defaultValue": 3600
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Measuring energy consumed by the device itself",
 			"description": "Determines if energy consumed by device should be included",
 			"valueSize": 1,
@@ -506,5 +519,5 @@
 				}
 			]
 		}
-	}
+	]
 }

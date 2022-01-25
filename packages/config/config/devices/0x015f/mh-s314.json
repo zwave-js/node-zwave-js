@@ -40,27 +40,13 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"2": {
-			"label": "Recover State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "All On/All Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +73,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Backlight Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,7 +82,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,7 +114,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Relay On Duration",
 			"description": "0 for infinite",
 			"unit": "seconds",
@@ -136,7 +125,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,5 +145,5 @@
 				}
 			]
 		}
-	}
+	]
 }

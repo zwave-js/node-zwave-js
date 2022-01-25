@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Relay On/Off Status Saved Enable",
 			"description": "Restore switch status on power restore.",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Backlight Enable",
 			"description": "Enable back light when Light Switch is powered on.",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relay On/Off Indicate",
 			"description": "Switch on LED indicator.",
 			"valueSize": 1,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Root Device Mapped Setting",
 			"description": "Endpoint device mapping setting for associated devices.",
 			"valueSize": 1,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button Switch Function Disable",
 			"description": "Enables/disables button",
 			"valueSize": 1,
@@ -122,7 +126,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Timer enable",
 			"description": "Timer to turn off the relay automatically",
 			"valueSize": 1,
@@ -141,7 +146,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Channel 1 Off Time Settings",
 			"description": "Delay timer to turn off the channel",
 			"unit": "Minute",
@@ -150,7 +156,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Channel 2 Off Time Settings",
 			"description": "Delay timer to turn off the channel",
 			"unit": "minute",
@@ -159,7 +166,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Channel 3 Off Time Settings",
 			"description": "Delay timer to turn off the channel",
 			"unit": "minute",
@@ -168,5 +176,5 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		}
-	}
+	]
 }

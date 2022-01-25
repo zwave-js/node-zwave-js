@@ -93,7 +93,8 @@ export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 
 export class RemoveFailedNodeRequestStatusReport
 	extends RemoveFailedNodeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
@@ -114,7 +115,8 @@ export class RemoveFailedNodeRequestStatusReport
 @messageTypes(MessageType.Response, FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._removeStatus = this.payload[0];

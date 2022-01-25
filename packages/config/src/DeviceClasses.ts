@@ -29,7 +29,7 @@ export async function loadDeviceClassesInternal(
 	genericDeviceClasses: GenericDeviceClassMap;
 }> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"deviceClasses.json",
 	);
 
@@ -68,7 +68,7 @@ export async function loadDeviceClassesInternal(
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
-					`found non-hex key "${key}" in the basic device class definition`,
+					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -80,7 +80,7 @@ export async function loadDeviceClassesInternal(
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
 					"device classes",
-					`found non-hex key "${key}" in the generic device class definition`,
+					`found invalid key "${key}" in the generic device class definition. Device classes must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
@@ -91,7 +91,7 @@ export async function loadDeviceClassesInternal(
 		}
 
 		return { basicDeviceClasses, genericDeviceClasses };
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {
@@ -156,6 +156,19 @@ export class GenericDeviceClass {
 				);
 			} else {
 				this.zwavePlusDeviceType = definition.zwavePlusDeviceType;
+			}
+		}
+
+		if (definition.requiresSecurity != undefined) {
+			if (typeof definition.requiresSecurity !== "boolean") {
+				throwInvalidConfig(
+					"device classes",
+					`The requiresSecurity property for generic device class ${num2hex(
+						key,
+					)} is not a boolean!`,
+				);
+			} else {
+				this.requiresSecurity = definition.requiresSecurity;
 			}
 		}
 
@@ -229,9 +242,11 @@ export class GenericDeviceClass {
 				if (!hexKeyRegexNDigits.test(specificKey))
 					throwInvalidConfig(
 						"device classes",
-						`found non-hex key "${specificKey}" in device class ${
+						`found invalid key "${specificKey}" in device class ${
 							this.label
-						} (${num2hex(this.key)})`,
+						} (${num2hex(
+							this.key,
+						)}). Device classes must have lowercase hexadecimal IDs.`,
 					);
 				const specificKeyNum = parseInt(specificKey.slice(2), 16);
 				specific.set(
@@ -251,6 +266,7 @@ export class GenericDeviceClass {
 	public readonly label: string;
 	/** @internal */
 	public readonly zwavePlusDeviceType?: string;
+	public readonly requiresSecurity?: boolean;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
 	public readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
@@ -287,6 +303,21 @@ export class SpecificDeviceClass {
 			}
 		} else if (generic.zwavePlusDeviceType != undefined) {
 			this.zwavePlusDeviceType = generic.zwavePlusDeviceType;
+		}
+
+		if (definition.requiresSecurity != undefined) {
+			if (typeof definition.requiresSecurity !== "boolean") {
+				throwInvalidConfig(
+					"device classes",
+					`The requiresSecurity property for device class ${
+						generic.label
+					} -> ${num2hex(key)} is not a string!`,
+				);
+			} else {
+				this.requiresSecurity = definition.requiresSecurity;
+			}
+		} else if (generic.requiresSecurity != undefined) {
+			this.requiresSecurity = generic.requiresSecurity;
 		}
 
 		if (definition.supportedCCs != undefined) {
@@ -363,6 +394,7 @@ export class SpecificDeviceClass {
 	public readonly key: number;
 	public readonly label: string;
 	public readonly zwavePlusDeviceType?: string;
+	public readonly requiresSecurity?: boolean;
 	public readonly supportedCCs: readonly CommandClasses[];
 	public readonly controlledCCs: readonly CommandClasses[];
 }

@@ -7,15 +7,23 @@
 		{
 			"productType": "0x4c42",
 			"productId": "0x3035",
-			"zwaveAllianceId": 3924
+			"zwaveAllianceId": [3924, 4105, 4145]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "State With Manual Switch or Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +46,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Rate Steps",
 			"valueSize": 1,
 			"minValue": 1,
@@ -46,7 +55,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim Rate Timing",
 			"valueSize": 1,
 			"unit": "10ms",
@@ -55,11 +65,11 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
-		"inclusion": "1. When initially powered, the bulb is in SmartStart inclusion mode. If your hub supports SmartStart, scan the QR code.\n2. To change to classic inclusion mode, turn bulb OFF, then ON three times. The bulb rapidly flashes four times to indicate classic mode.\n3. To change back to SmartStart inclusion mode, turn the bulb OFF, then ON three times. The bulb rapidly flashes six times to indicate SmartStart mode.",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, turn ON the light switch. The smart bulb flashes twice when\nremoved from the network",
-		"reset": "Starting with the bulb on, cycle the wall switch OFF/ON four times.\n1. Turn the switch off, pause one second, then turn back ON.\n2. Repeat three times (four times total).\n3. The smart bulb flashes twice when reset",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3924/52190%20QSG%20v2.pdf"
+		"inclusion": "Adding your device to a Z-Wave network\n1. When initially powered, the bulb is in SmartStart inclusion mode. If your hub supports SmartStart, scan the\nQR code.\n2. To change to classic inclusion mode, turn bulb OFF, then ON three times. The bulb rapidly flashes four\ntimes to indicate classic mode.\n3. To change back to SmartStart inclusion mode, turn the bulb OFF, then ON three times. The bulb rapidly\nflashes six times to indicate SmartStart mode.\nNOTE: The bulb attempts to connect in either inclusion mode for 10 seconds. If not found after 10 seconds,\ncycle the bulb OFF/ON to restart the inclusion mode.\n4. In either method, the bulb flashes twice to indicate it was added to the network.\nNOTE: The bulb remains in the last known inclusion mode when cycled OFF/ON once.\nYou have complete control to turn your light ON/OFF or set dim levels according to groups, scenes, schedules\nand interactive automations programmed by your controller.\nIf your Z-Wave certified controller features remote access, you can control your lighting from your mobile\ndevices.\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side\nof the box or the QR code label on the product (see Figure 1). Enter the 5-digit pin code.\nFigure 1.\nNOTE: SmartStart enabled products can be added into a Z-Wave network by scanning the QR code on the\nproduct with a controller providing SmartStart inclusion. No further action is required and the SmartStart\nproduct will be added automatically within 10 minutes of being switched on in the network vicinity",
+		"exclusion": "To remove and reset the device\n1. Follow the instructions for your Z-Wave certified controller\nto remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, turn\nbulb OFF, then ON three times. The smart bulb flashes\ntwice when removed from the network",
+		"reset": "To return your smart bulb to factory defaults\nStarting with the bulb on, cycle the wall switch OFF/ON\nfour times.\n1. Turn the switch off, pause one second, then turn back ON.\n2. Repeat three times (four times total).\n3. The smart bulb flashes twice when reset.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4145/52190-2.pdf"
 	}
 }

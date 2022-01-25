@@ -14,23 +14,29 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/homeseer_template.json#pir_trigger_off"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/homeseer_template.json#lux_trigger_threshold"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/homeseer_template.json#multilevel_sensor_interval"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/homeseer_template.json#enable_pir_trigger_alerts"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/homeseer_template.json#enable_pir_triggers"
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Floodlight Triggers",
 			"valueSize": 1,
 			"minValue": 0,
@@ -49,7 +55,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Calibration",
 			"valueSize": 1,
 			"unit": "0.1°C",
@@ -57,7 +64,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +88,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave controller into inclusion mode.\n2. Press the Link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. \n2. Press the Link button 3 times within 1.5 seconds to put the unit into exclusion mode",

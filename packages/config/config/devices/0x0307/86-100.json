@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Led Indicator",
 			"description": "The LED indicator will be on whenever the connected appliance is off, and turns off when the connected device is on",
 			"valueSize": 1,
@@ -39,7 +40,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put your network controller into inclusion mode following the instructions from your controller manufacturer\n2. When the controller is ready, single click the button on the front of 86-100 \n3. The controller should indicate that the new device was added successfully",
 		"exclusion": "1. Put your network controller into exclusion mode following the instructions from your controller manufacturer\n2. When the controller is ready, single click the button on the front of 86-100 \n3. The controller should indicate that the device was excluded successfully",

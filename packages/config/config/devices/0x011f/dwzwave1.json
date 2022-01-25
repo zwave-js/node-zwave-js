@@ -25,8 +25,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"99": {
+	"paramInformation": [
+		{
+			"#": "99",
 			"label": "Fault Restore Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -45,5 +46,5 @@
 				}
 			]
 		}
-	}
+	]
 }

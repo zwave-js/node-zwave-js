@@ -1,0 +1,152 @@
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14296 / ZW3011",
+	"description": "In-Wall Smart Toggle Dimmer",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3132"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load is off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light is on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Dim Speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim quickly",
+					"value": 0
+				},
+				{
+					"label": "Dim slowly",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Switch Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two times OFF button",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Minimum Dim Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "31",
+			"label": "Maximum Brightness Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
+			"#": "32",
+			"label": "Default Brightness Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	}
+}

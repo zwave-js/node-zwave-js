@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Indicator",
 			"description": "LED Indicator ON/OFF/Disabled",
 			"valueSize": 1,
@@ -24,5 +24,5 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		}
-	}
+	]
 }

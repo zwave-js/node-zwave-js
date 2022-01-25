@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "Motor state mode",
 			"description": "Allows to change motor state (normal/calibration/discalibration mode)",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "BASIC SET Respone",
 			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
 			"valueSize": 1,
@@ -61,5 +62,5 @@
 				}
 			]
 		}
-	}
+	]
 }

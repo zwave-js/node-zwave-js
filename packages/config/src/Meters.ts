@@ -19,7 +19,7 @@ export async function loadMetersInternal(
 	externalConfig?: boolean,
 ): Promise<MeterMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"meters.json",
 	);
 
@@ -42,14 +42,14 @@ export async function loadMetersInternal(
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"meters",
-					`found non-hex key "${id}" at the root`,
+					`found invalid key "${id}" at the root. Meters must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
 			meters.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
 		}
 		return meters;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {
@@ -71,9 +71,9 @@ export class Meter {
 				if (!hexKeyRegexNDigits.test(scaleId)) {
 					throwInvalidConfig(
 						"meters",
-						`found non-hex key "${scaleId}" in meter ${num2hex(
+						`found invalid key "${scaleId}" in meter ${num2hex(
 							id,
-						)}`,
+						)}. Meter scales must have lowercase hexadecimal IDs.`,
 					);
 				}
 				if (typeof scaleDefinition !== "string") {

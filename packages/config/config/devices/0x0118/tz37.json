@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Night light",
 			"description": "Configure LED to reflect load's status",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "Toggles the Switch's memory function",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Invert switch",
 			"description": "Inverts switch's top/bottom",
 			"valueSize": 1,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED transmission indication",
 			"description": "LED flickers when transmitting data to any group",
 			"valueSize": 1,
@@ -95,7 +98,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Don't transmit to Group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,5 +117,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -1,0 +1,80 @@
+{
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "WO15EMZ5",
+	"description": "In-Wall Single Outlet",
+	"devices": [
+		{
+			"productType": "0x574f",
+			"productId": "0x3535",
+			"zwaveAllianceId": 2527
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off when load is on",
+					"value": 0
+				},
+				{
+					"label": "On when load is on",
+					"value": 1
+				},
+				{
+					"label": "Always on",
+					"value": 2
+				},
+				{
+					"label": "Always off",
+					"value": 3
+				},
+				{
+					"label": "Blink during RF transmissions",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Automatic Reporting Interval",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"unit": "minutes",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Put the controller in to INCLUDE mode. Press the button on the unit once.",
+		"exclusion": "Put the controller in to EXCLUDE mode. Press the button on the unit twice.",
+		"reset": "Press the button on the unit five times then press and hold the button for 15 seconds.",
+		"manual": "https://www.gocontrol.com/manuals/10010070ax2_wo15emz5-1_instructions.pdf"
+	}
+}

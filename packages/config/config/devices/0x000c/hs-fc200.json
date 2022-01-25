@@ -14,59 +14,73 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
-			"$import": "../templates/master_template.json#led_indicator_two_options"
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		},
-		"4": {
-			"$import": "../templates/master_template.json#orientation"
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/homeseer_template.json#fan_type"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/homeseer_template.json#status_mode"
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/homeseer_template.json#led_colors",
 			"label": "Default LED Color"
 		},
-		"21": {
+		{
+			"#": "21",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
 			"label": "Status Mode LED 1 Color"
 		},
-		"22": {
+		{
+			"#": "22",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
 			"label": "Status Mode LED 2 Color"
 		},
-		"23": {
+		{
+			"#": "23",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
 			"label": "Status Mode LED 3 Color"
 		},
-		"24": {
+		{
+			"#": "24",
 			"$import": "templates/homeseer_template.json#status_mode_choices",
 			"label": "Status Mode LED 4 Color"
 		},
-		"30": {
+		{
+			"#": "30",
 			"$import": "templates/homeseer_template.json#blink_frequency"
 		},
-		"31[0x01]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "31[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 1"
 		},
-		"31[0x02]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "31[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 2"
 		},
-		"31[0x04]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "31[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 3"
 		},
-		"31[0x08]": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "31[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking - LED 4"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Inclusion: Add the device into your network by a Z-Wave certified controller. HS-FC200+ supports the latest S2 security offered by Z-Wave certified controllers. If your controller supports S2, please refer to the user guide of the controller for detailed instructions on adding devices to the network. You should be able to add HS-FC200+ into your network using the unique QR code or the DSK 5 digit pin located on the product or packaging. In addition, the device can be added or removed using the following 2-step procedure:\n\n1. Put your Z-Wave controller into Inclusion mode. Consult your controller manual if you're unsure how to do this.\n2. Tap the paddle of your new HomeSeer switch to begin the inclusion process. This will take a few moments to complete",
 		"exclusion": "Exclusion: Remove the device from your network by a Z-Wave certified controller. HS-FC200+ supports the latest S2 security offered by Z-Wave certified controllers. If your controller supports S2, please refer to the user guide of the controller for detailed instructions on removing devices from the network. You should be able to remove HS-FC200+ into your network using the unique QR code or the DSK 5 digit pin located on the product or packaging. In addition, the device can be added or removed using the following 2-step procedure:\n\n1. Put your Z-Wave controller into Exclusion mode. Consult your controller manual if you're unsure how to do this.\n2. Tap the paddle of your new HomeSeer switch to begin the Exclusion process. This will take a few moments to complete",

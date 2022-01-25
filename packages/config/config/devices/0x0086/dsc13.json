@@ -28,63 +28,82 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/aeotec_template.json#report_power_voltage"
 		},
-		"2[0xff]": {
+		{
+			"#": "2[0xff]",
 			"$import": "templates/aeotec_template.json#blink_duration"
 		},
-		"2[0xff00]": {
+		{
+			"#": "2[0xff00]",
 			"$import": "templates/aeotec_template.json#blink_length"
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"90": {
+		{
+			"#": "90",
 			"$import": "templates/aeotec_template.json#send_automatic_reports"
 		},
-		"91": {
+		{
+			"#": "91",
 			"$import": "templates/aeotec_template.json#wattage_trigger"
 		},
-		"92": {
+		{
+			"#": "92",
 			"$import": "templates/aeotec_template.json#wattage_percent_trigger"
 		},
-		"101[0x02]": {
+		{
+			"#": "101[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_msrc"
 		},
-		"101[0x04]": {
+		{
+			"#": "101[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt"
 		},
-		"101[0x08]": {
+		{
+			"#": "101[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh"
 		},
-		"102[0x02]": {
+		{
+			"#": "102[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_msrc"
 		},
-		"102[0x04]": {
+		{
+			"#": "102[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt"
 		},
-		"102[0x08]": {
+		{
+			"#": "102[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh"
 		},
-		"103[0x02]": {
+		{
+			"#": "103[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_msrc"
 		},
-		"103[0x04]": {
+		{
+			"#": "103[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt"
 		},
-		"103[0x08]": {
+		{
+			"#": "103[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
 		},
-		"112": {
+		{
+			"#": "112",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
 		},
-		"113": {
+		{
+			"#": "113",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
 		}
-	}
+	]
 }

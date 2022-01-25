@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delta Percentage",
 			"description": "2 % - 56 % -> Delta",
 			"valueSize": 1,
@@ -30,7 +31,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Celsius/Fahrenheit",
 			"description": "0 - 64 -> Celsius : 64 - 127 -> Fahrenheit",
 			"valueSize": 1,
@@ -39,7 +41,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Send Setpoint when WakeUp",
 			"description": "0 - 64 -> SEND : 64 - 127 -> DO NOT SEND",
 			"valueSize": 1,
@@ -48,5 +51,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

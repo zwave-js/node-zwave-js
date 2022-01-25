@@ -1,0 +1,86 @@
+name: Request missing device configuration
+description: Choose this if you want to request a MISSING configuration file for a device. DO NOT use this template to report a problem with an existing one!
+title: 'Missing device configuration: <enter manufacturer and device name>'
+labels: ['config ⚙']
+#assignees:
+#  - AlCalzone
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We appreciate you taking your time and reporting an issue.
+        Please note that this template is **NOT** for bug reports! To report a problem with an existing config file or if a device is not working correctly, please use the **bug report** template.
+
+        To speed things up, consider [contributing](https://zwave-js.github.io/node-zwave-js/#/config-files/contributing-files) a config file yourself.
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: "Please check that we really don't have a config file for your device."
+      options:
+        - label: |
+            It is not in the [configuration DB](https://devices.zwave-js.io/?search=3)
+          required: true
+        - label: |
+            It was not [merged recently](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Apr+is%3Aclosed) or has a [pending PR](https://github.com/zwave-js/node-zwave-js/pulls?q=is%3Aopen+is%3Apr)
+          required: true
+
+  - type: input
+    id: device
+    attributes:
+      label: Which device is missing?
+      placeholder: Enter manufacturer and device name here
+    validations:
+      required: true
+
+  - type: input
+    id: manufacturerId
+    attributes:
+      label: Manufacturer ID
+      description: As a hexadecimal number, can be found in logs or your application
+      placeholder: '0x1234'
+    validations:
+      required: true
+
+  - type: input
+    id: productType
+    attributes:
+      label: Product Type
+      description: As a hexadecimal number, can be found in logs or your application
+      placeholder: '0x4321'
+    validations:
+      required: true
+
+  - type: input
+    id: productId
+    attributes:
+      label: Product ID
+      description: As a hexadecimal number, can be found in logs or your application
+      placeholder: '0x1001'
+    validations:
+      required: true
+
+  - type: input
+    id: firmwareVersion
+    attributes:
+      label: Firmware Version
+      placeholder: '1.23'
+
+  - type: input
+    id: zwaLink
+    attributes:
+      label: 'Is the device listed on the Z-Wave Alliance website?'
+      description: |
+        Please search [here](https://products.z-wavealliance.org/products/) and enter the link below.
+        We can automatically create a rough configuration file template from that information, greatly speeding up the process.
+      placeholder: 'https://products.z-wavealliance.org/products/1234'
+
+  - type: textarea
+    id: manual
+    attributes:
+      label: Do you have a manual?
+      description: 'If so, it helps in creating the config file'
+      placeholder: |
+        Drag and drop PDF here or post a link

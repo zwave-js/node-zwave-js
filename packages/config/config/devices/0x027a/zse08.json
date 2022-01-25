@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Close Delay",
 			"description": "Delay (in seconds) before close signal will be sent",
 			"valueSize": 2,
@@ -24,7 +24,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Trigger Value",
 			"description": "The value that will be set when the sensor is triggered",
 			"valueSize": 1,
@@ -33,5 +34,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

@@ -27,8 +27,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "True Period",
 			"description": "Timeout before unit transmits ON/OFF state after manual button press",
 			"valueSize": 1,
@@ -37,7 +38,8 @@
 			"maxValue": 120,
 			"defaultValue": 10
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Basic Command to Group 2",
 			"description": "Configure the unit to send command to other devices in Grouping 2",
 			"valueSize": 1,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Meter Report Period (W)",
 			"description": "How often the meter should report load (W).",
 			"valueSize": 2,
@@ -65,7 +68,8 @@
 			"maxValue": 3240,
 			"defaultValue": 3
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Meter Report Period (kWh)",
 			"description": "How often the meter should report load (kWh).",
 			"valueSize": 2,
@@ -74,5 +78,5 @@
 			"maxValue": 10080,
 			"defaultValue": 1440
 		}
-	}
+	]
 }

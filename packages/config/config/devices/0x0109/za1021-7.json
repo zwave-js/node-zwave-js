@@ -1,0 +1,27 @@
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZA1021-7",
+	"description": "Mini Gateway",
+	"devices": [
+		{
+			"productType": "0x1006",
+			"productId": "0x0601",
+			"zwaveAllianceId": 4281
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4281/SNP-C19033_Mini_Gateway_UserManual_v6.pdf"
+	}
+}

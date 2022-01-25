@@ -17,23 +17,25 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Motor speed I",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "1 Motor speed II (rain sensor)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
 			"defaultValue": 2
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Callibrate",
 			"description": "This parameter on/off callibration function",
 			"valueSize": 1,
@@ -41,7 +43,8 @@
 			"maxValue": 2,
 			"defaultValue": 1
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Last saved position",
 			"description": "Set servomotor in previous position",
 			"valueSize": 1,
@@ -49,7 +52,8 @@
 			"maxValue": 2,
 			"defaultValue": 1
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Close after time",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -57,5 +61,5 @@
 			"maxValue": 120,
 			"defaultValue": 120
 		}
-	}
+	]
 }

@@ -28,8 +28,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatic switch off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
@@ -64,7 +66,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Function of RF off command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -90,7 +93,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch on dimming by buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -108,7 +112,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,14 +131,16 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Typical click timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +158,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Switch by buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -173,7 +181,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -207,7 +216,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -241,7 +251,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Send the following switch all commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -264,7 +275,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "What to do on button Down press",
 			"valueSize": 1,
 			"minValue": 0,
@@ -286,5 +298,5 @@
 				}
 			]
 		}
-	}
+	]
 }

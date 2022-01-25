@@ -22,8 +22,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "The Basic Set Command is sent with this value.",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Amount Of Delay",
 			"description": "Amount Of Delay (seconds) to send the Basic Set Off command.",
 			"valueSize": 1,
@@ -39,6 +41,18 @@
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
+		}
+	],
+	"compat": {
+		"enableBasicSetMapping": true,
+		// The device supports Binary Switch CC, despite the Version query telling otherwise
+		"commandClasses": {
+			"add": {
+				"0x25": {
+					"isSupported": true,
+					"version": 1
+				}
+			}
 		}
 	}
 }

@@ -21,7 +21,12 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { TransmitOptions, TransmitStatus } from "./SendDataShared";
+import { TransmitOptions } from "./SendDataShared";
+
+export enum SetSUCNodeIdStatus {
+	Succeeded = 0x05,
+	Failed = 0x06,
+}
 
 export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 	sucNodeId?: number;
@@ -115,7 +120,8 @@ export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 
 export class SetSUCNodeIdRequestStatusReport
 	extends SetSUCNodeIdRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
@@ -123,12 +129,12 @@ export class SetSUCNodeIdRequestStatusReport
 		this._status = this.payload[1];
 	}
 
-	private _status: TransmitStatus;
-	public get status(): TransmitStatus {
+	private _status: SetSUCNodeIdStatus;
+	public get status(): SetSUCNodeIdStatus {
 		return this._status;
 	}
 
 	public isOK(): boolean {
-		return this._status === TransmitStatus.OK;
+		return this._status === SetSUCNodeIdStatus.Succeeded;
 	}
 }

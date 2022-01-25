@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Period",
 			"unit": "15 minutes",
 			"valueSize": 1,
@@ -24,7 +25,7 @@
 			"defaultValue": 24,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "a. Press & hold Inclusion/Exclusion button for 5 seconds when Door Sensor is exclusion status.\nb. LED of Door sensor will be on 5 seconds later.\nc. Door sensor will try Inclusion for 30sec when button is released.\nd. LED will blink 3 times with 250ms interval if Inclusion is successful",
 		"exclusion": "a. Receiver will stay exclusion waiting mode.\nb. Press & hold Inclusion/Exclusion button for 5 seconds when Door Sensor is Inclusion status.\nc. LED of Door sensor will be on 5 seconds later.\nd. Door sensor will try Exclusion when button is released.\ne. LED will blink 3 times with 250ms interval if Exclusion is successful",

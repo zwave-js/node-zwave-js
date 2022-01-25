@@ -76,7 +76,9 @@ function findExports() {
 				ts.isEnumDeclaration(node) ||
 				ts.isTypeAliasDeclaration(node) ||
 				ts.isInterfaceDeclaration(node) ||
-				ts.isClassDeclaration(node)
+				ts.isClassDeclaration(node) ||
+				ts.isFunctionDeclaration(node) ||
+				ts.isArrowFunction(node)
 			) {
 				if (!node.name) return;
 
@@ -139,9 +141,9 @@ export async function generateCCExports(): Promise<void> {
 `;
 
 	// Generate type and value exports for all found symbols
-	for (const [filename, fileExports] of [
-		...findExports().entries(),
-	].sort(([fileA], [fileB]) => compareStrings(fileA, fileB))) {
+	for (const [filename, fileExports] of [...findExports().entries()].sort(
+		([fileA], [fileB]) => compareStrings(fileA, fileB),
+	)) {
 		const relativePath = path
 			.relative(ccIndexFile, filename)
 			// normalize to slashes
@@ -164,12 +166,13 @@ export async function generateCCExports(): Promise<void> {
 		}
 	}
 
-	// And write the file
-	await fs.writeFile(
-		ccIndexFile,
-		formatWithPrettier(ccIndexFile, fileContent),
-		"utf8",
-	);
+	// And write the file if it changed
+	const originalFileContent = await fs.readFile(ccIndexFile, "utf8");
+	fileContent = formatWithPrettier(ccIndexFile, fileContent);
+	if (fileContent !== originalFileContent) {
+		console.log("CC index file changed");
+		await fs.writeFile(ccIndexFile, fileContent, "utf8");
+	}
 }
 
 if (require.main === module) void generateCCExports();

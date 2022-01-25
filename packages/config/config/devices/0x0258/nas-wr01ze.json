@@ -11,33 +11,23 @@
 		{
 			"productType": "0x0200",
 			"productId": "0x1027"
+		},
+		{
+			"productType": "0x0300",
+			"productId": "0x1027"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
-			"label": "Remember relay ON/OFF status after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Do not remember",
-					"value": 0
-				},
-				{
-					"label": "Remember",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Top button function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +45,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "LED indication",
 			"valueSize": 1,
 			"minValue": 0,
@@ -73,7 +64,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Timed auto-off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +83,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Timed auto-off period",
 			"description": "Delay time after the plug is switched off",
 			"unit": "minutes",
@@ -101,7 +94,8 @@
 			"defaultValue": 120,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Send meter reports",
 			"valueSize": 1,
 			"minValue": 0,
@@ -119,7 +113,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Meter report interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -128,7 +123,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Maximum current",
 			"description": "Maximum current the plug can provide to load",
 			"unit": "A",
@@ -137,7 +133,8 @@
 			"maxValue": 16,
 			"defaultValue": 16
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Power report threshold",
 			"description": "Change in power consumption that triggers a report",
 			"unit": "0.01 A",
@@ -146,7 +143,8 @@
 			"maxValue": 1600,
 			"defaultValue": 50
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Alarm current thershold",
 			"description": "An over-current notification is sent when the current is higher than this value",
 			"unit": "A",
@@ -154,6 +152,12 @@
 			"minValue": 1,
 			"maxValue": 16,
 			"defaultValue": 13
+		}
+	],
+	"metadata": {
+		"comments": {
+			"level": "warning",
+			"text": "This device is buggy and sends large negative Meter Reports from time to time. "
 		}
 	}
 }

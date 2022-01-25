@@ -13,9 +13,28 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Binary Sensor Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Total Alarm Duration",
 			"description": "Total time the Leak Sensor will beep and light its LED in the event of a leak",
 			"unit": "Minutes",
@@ -25,7 +44,8 @@
 			"defaultValue": 120,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Mute Time",
 			"description": "Quiet time between each Reminder Alarm",
 			"unit": "Minutes",
@@ -35,7 +55,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Initial Alarm",
 			"description": "Time the Leak Sensor beeps before it is muted",
 			"unit": "Seconds",
@@ -45,7 +66,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Reminder Alarm",
 			"description": "Length of each beep after the Initial Alarm",
 			"unit": "Seconds",
@@ -55,7 +77,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Audible Alarm",
 			"description": "Enables or disables the audible alarm (“beeping”)",
 			"valueSize": 1,
@@ -74,7 +97,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Enable/Disable Water Detection",
 			"description": "If disabled, the device will not respond in any way to detected leaks.",
 			"valueSize": 1,
@@ -93,7 +117,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Basic Set Level",
 			"description": "The value sent by the BASIC_SET command to Association Group 2",
 			"valueSize": 1,
@@ -102,5 +127,5 @@
 			"defaultValue": 255,
 			"unsigned": true
 		}
-	}
+	]
 }

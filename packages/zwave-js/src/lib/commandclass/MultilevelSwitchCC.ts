@@ -14,6 +14,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -135,16 +136,15 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<MultilevelSwitchCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultilevelSwitchCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["currentValue", "targetValue", "duration"]);
 		}
 	}
-
-	private refreshTimeout: NodeJS.Timeout | undefined;
 
 	/**
 	 * Sets the switch to a new value
@@ -207,31 +207,35 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		const node = this.endpoint.getNodeUnsafe()!;
-		// Assume supervision is supported until we know it is not
-		let mayUseSupervision = node.getValue(superviseValueId) !== false;
+		let mayUseSupervision: boolean;
+		if (this.endpoint instanceof VirtualEndpoint) {
+			// We cannot use supervision when communicating with multiple nodes
+			mayUseSupervision = false;
+		} else {
+			// For singlecast, try to use supervision unless we know it is not supported
+			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+			const node = this.endpoint.getNodeUnsafe()!;
+			mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (mayUseSupervision) {
-			// Try to supervise the command execution
-			const supervisionResult = await this.driver.trySendCommandSupervised(
-				cc,
-			);
+			if (mayUseSupervision) {
+				// Try to supervise the command execution
+				const supervisionResult =
+					await this.driver.trySendCommandSupervised(cc);
 
-			if (supervisionResult?.status === SupervisionStatus.Fail) {
-				throw new ZWaveError(
-					"startLevelChange failed",
-					ZWaveErrorCodes.SupervisionCC_CommandFailed,
-				);
-			} else if (
-				supervisionResult?.status === SupervisionStatus.NoSupport
-			) {
-				// Remember that we shouldn't use supervision for that
-				node.valueDB.setValue(superviseValueId, false);
-				mayUseSupervision = false;
+				if (supervisionResult?.status === SupervisionStatus.Fail) {
+					throw new ZWaveError(
+						"startLevelChange failed",
+						ZWaveErrorCodes.SupervisionCC_CommandFailed,
+					);
+				} else if (
+					supervisionResult?.status === SupervisionStatus.NoSupport
+				) {
+					// Remember that we shouldn't use supervision for that
+					node.valueDB.setValue(superviseValueId, false);
+					mayUseSupervision = false;
+				}
 			}
 		}
-		// In order to support a fallback to no supervision, we must not use else-if here
 		if (!mayUseSupervision) {
 			await this.driver.sendCommand(cc);
 		}
@@ -248,31 +252,36 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		const node = this.endpoint.getNodeUnsafe()!;
-		// Assume supervision is supported until we know it is not
-		let mayUseSupervision = node.getValue(superviseValueId) !== false;
+		let mayUseSupervision: boolean;
+		if (this.endpoint instanceof VirtualEndpoint) {
+			// We cannot use supervision when communicating with multiple nodes
+			mayUseSupervision = false;
+		} else {
+			// For singlecast, try to use supervision unless we know it is not supported
+			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+			const node = this.endpoint.getNodeUnsafe()!;
+			mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (mayUseSupervision) {
-			// Try to supervise the command execution
-			const supervisionResult = await this.driver.trySendCommandSupervised(
-				cc,
-			);
+			if (mayUseSupervision) {
+				// Try to supervise the command execution
+				const supervisionResult =
+					await this.driver.trySendCommandSupervised(cc);
 
-			if (supervisionResult?.status === SupervisionStatus.Fail) {
-				throw new ZWaveError(
-					"stopLevelChange failed",
-					ZWaveErrorCodes.SupervisionCC_CommandFailed,
-				);
-			} else if (
-				supervisionResult?.status === SupervisionStatus.NoSupport
-			) {
-				// Remember that we shouldn't use supervision for that
-				node.valueDB.setValue(superviseValueId, false);
-				mayUseSupervision = false;
+				if (supervisionResult?.status === SupervisionStatus.Fail) {
+					throw new ZWaveError(
+						"stopLevelChange failed",
+						ZWaveErrorCodes.SupervisionCC_CommandFailed,
+					);
+				} else if (
+					supervisionResult?.status === SupervisionStatus.NoSupport
+				) {
+					// Remember that we shouldn't use supervision for that
+					node.valueDB.setValue(superviseValueId, false);
+					mayUseSupervision = false;
+				}
 			}
 		}
-		// In order to support a fallback to no supervision, we must not use else-if here
+
 		if (!mayUseSupervision) {
 			await this.driver.sendCommand(cc);
 		}
@@ -288,16 +297,18 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.switchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
+		options,
 	): Promise<void> => {
 		if (property === "targetValue") {
 			if (typeof value !== "number") {
@@ -308,7 +319,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			const completed = await this.set(value);
+			const duration = Duration.from(options?.transitionDuration);
+			const completed = await this.set(value, duration);
 
 			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 			// so UIs have immediate feedback
@@ -327,22 +339,18 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						);
 					}
 
-					// Verify the current value after a delay if the node does not support Supervision
+					// Verify the current value after a delay, unless the device supports Supervision and we know the actual value
 					if (
+						value === 255 ||
 						!this.endpoint
 							.getNodeUnsafe()
 							?.supportsCC(CommandClasses.Supervision)
 					) {
-						// TODO: #1321
-						const duration = undefined as Duration | undefined;
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						// wotan-disable-next-line no-useless-predicate
 						if (property === "targetValue")
 							property = "currentValue";
-						this.schedulePoll(
-							{ property },
-							duration?.toMilliseconds(),
-						);
+
+						this.schedulePoll({ property }, { duration });
 					}
 				} else if (this.isMulticast()) {
 					// Only update currentValue for valid target values
@@ -352,12 +360,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						value <= 99
 					) {
 						// Figure out which nodes were affected by this command
-						const affectedNodes = this.endpoint.node.physicalNodes.filter(
-							(node) =>
+						const affectedNodes =
+							this.endpoint.node.physicalNodes.filter((node) =>
 								node
 									.getEndpoint(this.endpoint.index)
 									?.supportsCC(this.ccId),
-						);
+							);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
 							node.valueDB?.setValue(
@@ -370,15 +378,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						// However, when setting the value 255 (ON), we don't know the actual state
 
 						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						// wotan-disable-next-line no-useless-predicate
 						if (property === "targetValue")
 							property = "currentValue";
-						// TODO: #1321
-						const duration = undefined as Duration | undefined;
-						this.schedulePoll(
-							{ property },
-							duration?.toMilliseconds(),
-						);
+						this.schedulePoll({ property }, { duration });
 					}
 				}
 			}
@@ -404,16 +406,22 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				// Try to retrieve the current value to use as the start level,
 				// even if the target node is going to ignore it. There might
 				// be some bugged devices that ignore the ignore start level flag.
-				const startLevel = this.endpoint
-					.getNodeUnsafe()
-					?.getValue<number>(
-						getCurrentValueValueId(this.endpoint.index),
-					);
+				const startLevel =
+					// except for multicast, where we can't access the current value
+					this.endpoint instanceof VirtualEndpoint
+						? undefined
+						: this.endpoint
+								.getNodeUnsafe()
+								?.getValue<number>(
+									getCurrentValueValueId(this.endpoint.index),
+								);
 				// And perform the level change
+				const duration = Duration.from(options?.transitionDuration);
 				await this.startLevelChange({
 					direction,
 					ignoreStartLevel: true,
 					startLevel,
+					duration,
 				});
 			} else {
 				await this.stopLevelChange();
@@ -634,6 +642,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
+		valueChangeOptions: ["transitionDuration"],
 	})
 	public readonly targetValue: number | undefined;
 

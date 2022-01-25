@@ -35,32 +35,40 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/aeotec_template.json#invert_state_report"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/aeotec_template.json#invert_basic_set"
 		},
-		"101": {
+		{
+			"#": "101",
 			"$import": "templates/aeotec_template.json#low_battery_check"
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#low_battery_interval"
 		},
-		"121": {
+		{
+			"#": "121",
 			"$import": "templates/aeotec_template.json#sensor_report_type"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Z-Wave button that you can find in the back of the product",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Z-Wave button that you can find in back of the product",

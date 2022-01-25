@@ -67,17 +67,16 @@ describe("lib/security/Manager", () => {
 
 				jest.mock("crypto");
 				const crypto: typeof import("crypto") = require("crypto");
-				const original: typeof import("crypto") = jest.requireActual(
-					"crypto",
-				);
+				const original: typeof import("crypto") =
+					jest.requireActual("crypto");
 				(crypto.randomBytes as jest.Mock)
 					.mockReturnValueOnce(buf1a)
 					.mockReturnValueOnce(buf1b)
 					.mockReturnValueOnce(buf2);
 				crypto.createCipheriv = original.createCipheriv;
 				crypto.createDecipheriv = original.createDecipheriv;
-				const SM: typeof SecurityManager = require("./Manager")
-					.SecurityManager;
+				const SM: typeof SecurityManager =
+					require("./Manager").SecurityManager;
 
 				const man = new SM(options);
 				const nonce1 = man.generateNonce(2, 8);

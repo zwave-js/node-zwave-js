@@ -15,6 +15,9 @@ describe("lib/config/Manufacturers", () => {
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
 
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
+
 			configManager = new ConfigManager();
 			await configManager.loadManufacturers();
 		});
@@ -37,6 +40,9 @@ describe("lib/config/Manufacturers", () => {
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x000e": `);
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 
 			configManager = new ConfigManager();
 			await configManager.loadManufacturers();
@@ -61,6 +67,9 @@ describe("lib/config/Manufacturers", () => {
 					"0x000e": "Test",
 				}),
 			);
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 
 			configManager = new ConfigManager();
 			await configManager.loadManufacturers();

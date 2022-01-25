@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED is on when load is on",
 			"description": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Instant Energy Autosend Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +63,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Instant Power Autosend Interval",
 			"description": "Instant Power Autosend interval (send SENSOR_MULTILEVEL_REPORT)",
 			"valueSize": 1,
@@ -70,7 +73,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Accumulated Energy Autosend Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +82,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Enable automatic notifications",
 			"valueSize": 1,
 			"minValue": 0,
@@ -104,7 +109,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Minimum change in wattage triggering report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +118,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "When the primary controller is in the adding mode, flicks the paddle 3 times in the\n1.5 second. The primary controller will verify the adding, assign a node ID number\nfor the module",
 		"exclusion": "When the primary controller is in the removing mode, flicks the paddle 3 times in\nthe 1.5 second. The primary controller will verify the removing, remove the module\nfrom the current Z-Wave network, and the LED will blink when the module is on\npower",

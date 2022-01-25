@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Siren Volume",
 			"description": "3 volume levels for the alarm siren sound.",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 3,
 			"defaultValue": 3
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Siren Alarm Duration",
 			"description": "5 modes to set the duration for siren alarm",
 			"valueSize": 1,
@@ -32,7 +33,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Chime Sound Duration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,7 +42,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Chime Volume",
 			"description": "3 volume levels for the doorbell sound. Set volume to low, medium, or high.",
 			"valueSize": 1,
@@ -48,7 +51,8 @@
 			"maxValue": 3,
 			"defaultValue": 3
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Siren Alarm Tone",
 			"description": "10 different tones for alarm siren",
 			"valueSize": 1,
@@ -56,7 +60,8 @@
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Chime Tone",
 			"description": "10 different tones for doorbell",
 			"valueSize": 1,
@@ -64,26 +69,29 @@
 			"maxValue": 10,
 			"defaultValue": 4
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Siren Alarm or Chime Mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "LED Notifications for Siren Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "LED Notifications for Chime",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

@@ -1,5 +1,6 @@
 import * as fs from "fs-extra";
 import path from "path";
+import { getErrorMessage } from ".";
 
 export async function enumFilesRecursive(
 	rootDir: string,
@@ -17,8 +18,10 @@ export async function enumFilesRecursive(
 				ret.push(fullPath);
 			}
 		}
-	} catch (err) {
-		console.error(`Cannot read directory: "${rootDir}": ${err}`);
+	} catch (e) {
+		console.error(
+			`Cannot read directory: "${rootDir}": ${getErrorMessage(e, true)}`,
+		);
 	}
 
 	return ret;

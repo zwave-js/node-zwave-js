@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "State after Power Loss",
 			"description": "This state will be chosen when the power is restored",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Color Adjustment (Warm White)",
 			"description": "Changes the color temperature for warm white",
 			"valueSize": 2,
@@ -55,7 +57,8 @@
 			"unit": "K",
 			"unsigned": true
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Color Adjustment (Cold White)",
 			"description": "Changes the color temperature for cold white",
 			"valueSize": 2,
@@ -65,5 +68,5 @@
 			"unit": "K",
 			"unsigned": true
 		}
-	}
+	]
 }

@@ -28,7 +28,7 @@ export async function loadIndicatorsInternal(
 	properties: IndicatorPropertiesMap;
 }> {
 	const indicatorsConfigPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"indicators.json",
 	);
 
@@ -63,7 +63,7 @@ export async function loadIndicatorsInternal(
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",
-					`found non-hex key "${id}" in "indicators"`,
+					`found invalid key "${id}" in "indicators". Indicators must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
@@ -75,7 +75,7 @@ export async function loadIndicatorsInternal(
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
 					"indicators",
-					`found non-hex key "${id}" in "properties"`,
+					`found invalid key "${id}" in "properties". Indicator properties must have lowercase hexadecimal IDs.`,
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
@@ -83,7 +83,7 @@ export async function loadIndicatorsInternal(
 		}
 
 		return { indicators, properties };
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

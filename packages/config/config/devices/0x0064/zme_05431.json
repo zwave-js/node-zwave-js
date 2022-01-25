@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Automatic switch off",
 			"description": "If not zero, automatically switch off after a user defined time",
 			"valueSize": 2,
@@ -46,7 +47,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Function of RF off command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
@@ -73,7 +75,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch on/off by holding buttons",
 			"description": "Defines if the switch should change its state to on/off if being hold",
 			"valueSize": 1,
@@ -92,7 +95,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state after power cycle",
 			"description": "Defines if the switch should restore state to the last state",
 			"valueSize": 1,
@@ -111,7 +115,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +134,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Switch by buttons",
 			"description": "If disabled, the local operations by buttons will not switch the load",
 			"valueSize": 1,
@@ -152,7 +158,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -198,7 +205,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold",
 			"valueSize": 1,
@@ -245,7 +253,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Send the following switch all commands",
 			"valueSize": 1,
 			"minValue": 1,
@@ -268,7 +277,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "What to do on button Down press",
 			"valueSize": 1,
 			"minValue": 0,
@@ -290,7 +300,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Energy consumption",
 			"description": "Specify the consumption of the loads in watts (0=disabled)",
 			"valueSize": 2,
@@ -305,5 +316,5 @@
 				}
 			]
 		}
-	}
+	]
 }

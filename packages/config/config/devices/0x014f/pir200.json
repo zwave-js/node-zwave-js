@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"5": {
+	"paramInformation": [
+		{
+			"#": "5",
 			"label": "Trigger Re-Activation Delay",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -23,7 +24,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
@@ -61,5 +63,5 @@
 				}
 			]
 		}
-	}
+	]
 }

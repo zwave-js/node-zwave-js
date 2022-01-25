@@ -1,5 +1,5 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
-import { EventEmitter } from "events";
+import { TypedEventEmitter } from "@zwave-js/shared";
 import { CommandClasses } from "../capabilities/CommandClasses";
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
@@ -21,6 +21,11 @@ export interface TranslatedValueID extends ValueID {
 export interface ValueUpdatedArgs extends ValueID {
 	prevValue: unknown;
 	newValue: unknown;
+	/**
+	 * Whether this value update was caused by the driver itself or the node.
+	 * If not set, it is assumed that the value update was caused by the node.
+	 */
+	source?: "driver" | "node";
 }
 
 export interface ValueAddedArgs extends ValueID {
@@ -91,27 +96,6 @@ export function assertValueID(
 	}
 }
 
-export interface ValueDB {
-	on<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	once<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	removeListener<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		callback: ValueDBEventCallbacks[TEvent],
-	): this;
-	removeAllListeners(event?: ValueDBEvents): this;
-
-	emit<TEvent extends ValueDBEvents>(
-		event: TEvent,
-		...args: Parameters<ValueDBEventCallbacks[TEvent]>
-	): boolean;
-}
-
 /**
  * Ensures all Value ID properties are in the same order and there are no extraneous properties.
  * A normalized value ID can be used as a database key */
@@ -135,6 +119,14 @@ export function valueIdToString(valueID: ValueID): string {
 	return JSON.stringify(normalizeValueID(valueID));
 }
 
+/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
+export function getNodeMetaValueID(property: string): ValueID {
+	return {
+		commandClass: CommandClasses._NONE,
+		property,
+	};
+}
+
 export interface SetValueOptions {
 	/** When this is true, no event will be emitted for the value change */
 	noEvent?: boolean;
@@ -144,12 +136,14 @@ export interface SetValueOptions {
 	 * When this is `false`, the value will not be stored and a `value notification` event will be emitted instead (implies `noEvent: false`).
 	 */
 	stateful?: boolean;
+	/** Allows defining the source of a value update */
+	source?: ValueUpdatedArgs["source"];
 }
 
 /**
  * The value store for a single node
  */
-export class ValueDB extends EventEmitter {
+export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 	// This is a wrapper around the driver's on-disk value and metadata key value stores
 
 	/**
@@ -238,6 +232,8 @@ export class ValueDB extends EventEmitter {
 			if (this._db.has(dbKey)) {
 				event = "value updated";
 				(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
+				if (options.source)
+					(cbArg as ValueUpdatedArgs).source = options.source;
 			} else {
 				event = "value added";
 			}
@@ -292,7 +288,6 @@ export class ValueDB extends EventEmitter {
 	/**
 	 * Retrieves a value for a given value id
 	 */
-	/* wotan-disable-next-line no-misused-generics */
 	public getValue<T = unknown>(valueId: ValueID): T | undefined {
 		const key = this.valueIdToDBKey(valueId);
 		return this._db.get(key) as T | undefined;
@@ -437,9 +432,7 @@ export class ValueDB extends EventEmitter {
 	}
 
 	/** Returns all metadata that is stored for a given CC */
-	public getAllMetadata(
-		forCC: CommandClasses,
-	): (ValueID & {
+	public getAllMetadata(forCC: CommandClasses): (ValueID & {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
@@ -457,9 +450,7 @@ export class ValueDB extends EventEmitter {
 	}
 
 	/** Returns all values whose id matches the given predicate */
-	public findMetadata(
-		predicate: (id: ValueID) => boolean,
-	): (ValueID & {
+	public findMetadata(predicate: (id: ValueID) => boolean): (ValueID & {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];

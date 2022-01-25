@@ -1,0 +1,261 @@
+{
+	"manufacturer": "HELTUN",
+	"manufacturerId": "0x0344",
+	"label": "HE-HLS01",
+	"description": "High Load Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/heltun_template.json#frequency_region"
+		},
+		{
+			"#": "3",
+			"$import": "templates/heltun_template.json#hw_sw_ver"
+		},
+		{
+			"#": "4",
+			"$import": "templates/heltun_template.json#energy_consumption"
+		},
+		{
+			"#": "7",
+			"$import": "templates/heltun_template.json#relay_output_mode",
+			"label": "Relay Output Mode"
+		},
+		{
+			"#": "10",
+			"label": "Floor Temperature Sensor Resistance",
+			"unit": "kΩ",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
+			"defaultValue": 10
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#temperature_scale"
+		},
+		{
+			"#": "17",
+			"$import": "templates/heltun_template.json#temp_sensor_calibration"
+		},
+		{
+			"#": "19",
+			"$import": "templates/heltun_template.json#controller_time_correction"
+		},
+		{
+			"#": "21",
+			"$import": "templates/heltun_template.json#weekday_override"
+		},
+		{
+			"#": "22",
+			"$import": "templates/heltun_template.json#time_override"
+		},
+		{
+			"#": "23",
+			"label": "Auto On/Off",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "24",
+			"label": "Auto Off Timeout",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 5
+		},
+		{
+			"#": "25",
+			"label": "Auto On Reconnect Timeout",
+			"description": "When the load is reconnected the relay output will be switched on after this time.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"label": "High Load Timeout Protection: Power Threshold",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 3500,
+			"defaultValue": 0
+		},
+		{
+			"#": "27",
+			"label": "High Load Timeout Protection: Time Threshold",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 0
+		},
+		{
+			"#": "41",
+			"$import": "templates/heltun_template.json#external_input_hold_control_mode",
+			"label": "External Input: Hold Control Mode"
+		},
+		{
+			"#": "46",
+			"$if": "firmwareVersion >= 1.3",
+			"label": "External Input: Hold Mode Duration",
+			"$import": "templates/heltun_template.json#hold_duration"
+		},
+		{
+			"#": "51",
+			"$import": "templates/heltun_template.json#external_input_click_control_mode",
+			"label": "External Input: Click Control Mode"
+		},
+		{
+			"#": "66",
+			"$if": "firmwareVersion >= 1.5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev",
+			"defaultValue": 0
+		},
+		{
+			"#": "71",
+			"label": "Relay Timer Mode Duration",
+			"unit": "seconds",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 43200,
+			"defaultValue": 0
+		},
+		{
+			"#": "141",
+			"label": "Energy Consumption Report Interval",
+			"$import": "templates/heltun_template.json#report_interval"
+		},
+		{
+			"#": "142",
+			"label": "Energy Consumption Report Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 25
+		},
+		{
+			"#": "143",
+			"label": "Temperature Report Interval",
+			"$import": "templates/heltun_template.json#report_interval"
+		},
+		{
+			"#": "144",
+			"label": "Temperature Report Threshold",
+			"unit": "0.1 °C",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"defaultValue": 2
+		},
+		{
+			"#": "151",
+			"label": "Device Failure Notifications",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "152",
+			"label": "Temperature Rise Notification",
+			"description": "The value should be lower than the value of parameter 153 (Overheat Protection & Notification).",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 1
+		},
+		{
+			"#": "153",
+			"label": "Overheat Protection & Notification",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0
+		},
+		{
+			"#": "154",
+			"label": "Over-Current Notification",
+			"description": "The device will switch Off the load when the current reaches 16A.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "155",
+			"label": "Over-Load Protection & Notification",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 3500
+		},
+		{
+			"#": "156",
+			"$if": "firmwareVersion >= 1.5",
+			"label": "Over-Voltage Protection & Notification",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 280,
+			"defaultValue": 260
+		},
+		{
+			"#": "157",
+			"$if": "firmwareVersion >= 1.5",
+			"label": "Voltage Drop Protection & Notification",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 90
+		},
+		{
+			"#": "156",
+			"$if": "firmwareVersion < 1.5",
+			"label": "Over-Voltage Protection & Notification",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 280,
+			"defaultValue": 240
+		},
+		{
+			"#": "157",
+			"$if": "firmwareVersion < 1.5",
+			"label": "Voltage Drop Protection & Notification",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 200
+		},
+		{
+			"#": "158",
+			"label": "Sparks Protection & Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "159",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Load On Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		},
+		{
+			"#": "160",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Load Off Notification",
+			"$import": "~/templates/master_template.json#base_enable_disable"
+		}
+	]
+}

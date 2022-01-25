@@ -25,8 +25,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Scale",
 			"description": "Controls the temperature sensor scale",
 			"valueSize": 1,
@@ -46,7 +47,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Lower temperature limit",
 			"description": "Defines the minimum temperature. Steps are 1C",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Upper temperature limit",
 			"description": "Defines the maximum temperature. Steps are 1C",
 			"valueSize": 1,
@@ -64,7 +67,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Delta T",
 			"description": "Defines the temperature steps of the heating control",
 			"valueSize": 1,
@@ -73,5 +77,5 @@
 			"defaultValue": 5,
 			"unsigned": true
 		}
-	}
+	]
 }

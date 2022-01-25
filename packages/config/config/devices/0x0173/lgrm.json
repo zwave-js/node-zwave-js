@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Debounce",
 			"description": "If meter pulses are more than 100/second, lower debounce. If incrementing by more than 1 with each pulse, debounce should be increased",
 			"valueSize": 1,
@@ -24,7 +25,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Report Rate Interval (Controller)",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -39,7 +41,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Report Rate Interval (Association Group 1)",
 			"valueSize": 1,
 			"unit": "x 6 minutes",
@@ -54,7 +57,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "How to Add the Leak Gopher Meter Reader to your Z-Wave Controller \n- Plug the wall cube power adapter (included) into the receptacle on the bottom of the Leak Gopher marked “12 VDC”. Plug the wall cube into a 110 VAC outlet. \nThis provides power to the Leak Gopher. \n- Configure the Z-Wave Controller to Include/Add a device. \n- When the Z-Wave Controller is ready to include/add a device, it will display a message like “waiting to add device”. Press Include/Add button on the front of the device. \n- The Include/Exclude button is the Z-Wave logo located on the front of the Leak Gopher Meter Reader.\n- Press the Include/Remove button. Depending on your controller you may have to press the button 3 times. \n- The Z-Wave Controller will acknowledge that the Leak Gopher Meter Reader has been added to the Z-Wave network. \n- Your Leak Gopher Meter Reader is ready to use.",
 		"exclusion": "How to Remove the Leak Gopher Meter Reader from your Z-Wave Controller \n- Plug the wall cube power adapter (included) into the receptacle on the bottom of the Leak Gopher Meter Reader marked “12 VDC”. Plug the wall cube into a 110 VAC outlet. \nThis provides power to the Leak Gopher Meter Reader. \n- Configure the Z-Wave Controller to Exclude a device. \n- When the Z-Wave Controller is ready to exclude a device, it will display a message like \n“waiting to exclude device. Press exclude button on the device” \n- The Include/Exclude button is the Z-Wave logo located on the front of the Leak Gopher Meter Reader.\n- Press the Include/Remove button. Depending on your controller you may have to press the button 3 times. \n- The Z-Wave Controller will acknowledge that the Leak Gopher Meter Reader has been excluded from the Z-Wave network. \n- Your Leak Gopher Meter Reader is excluded from this controller.",

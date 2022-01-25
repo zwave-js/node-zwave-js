@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import {
 	CommandClasses,
 	validatePayload,
@@ -13,7 +14,9 @@ import {
 	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
+	throwMissingPropertyKey,
 	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
 import {
@@ -47,28 +50,25 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async fibaroVenetianBlindsGet() {
-		const {
-			FibaroVenetianBlindCCGet,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-		} = require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
+		const { FibaroVenetianBlindCCGet } =
+			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, ["position", "tilt"]);
 		}
 	}
 
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
-		const {
-			FibaroVenetianBlindCCSet,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-		} = require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
+		const { FibaroVenetianBlindCCSet } =
+			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -78,10 +78,8 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
-		const {
-			FibaroVenetianBlindCCSet,
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-		} = require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
+		const { FibaroVenetianBlindCCSet } =
+			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
 		const cc = new FibaroVenetianBlindCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -124,18 +122,26 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 
 		// Verify the current value after a delay
-		this.schedulePoll({ property });
+		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
+		propertyKey,
 	}): Promise<unknown> => {
-		switch (property) {
-			case "position":
-			case "tilt":
-				return (await this.fibaroVenetianBlindsGet())?.[property];
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		} else if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		}
+
+		switch (propertyKey) {
+			case "venetianBlindsPosition":
+				return (await this.fibaroVenetianBlindsGet())?.position;
+			case "venetianBlindsTilt":
+				return (await this.fibaroVenetianBlindsGet())?.tilt;
 			default:
-				throwUnsupportedProperty(this.ccId, property);
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
 	};
 }
@@ -157,8 +163,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			validatePayload(this.payload.length >= 1);
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
 			this.manufacturerId =
-				(((this.ccCommand as unknown) as number) << 8) +
-				this.payload[0];
+				((this.ccCommand as unknown as number) << 8) + this.payload[0];
 			this.payload = this.payload.slice(1);
 
 			// Try to parse the proprietary command
@@ -185,7 +190,6 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	public manufacturerId!: number;
 
 	private assertManufacturerIdIsSet(): void {
-		// wotan-disable-next-line
 		if (this.manufacturerId == undefined) {
 			throw new ZWaveError(
 				`To use an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
@@ -222,9 +226,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			isArray(proprietaryConfig.fibaroCCs) &&
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const FibaroVenetianBlindCC = (require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro"))
-				.FibaroVenetianBlindCC;
+			const FibaroVenetianBlindCC = (
+				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro")
+			).FibaroVenetianBlindCC;
 			await new FibaroVenetianBlindCC(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
@@ -252,9 +256,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			isArray(proprietaryConfig.fibaroCCs) &&
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const FibaroVenetianBlindCC = (require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro"))
-				.FibaroVenetianBlindCC;
+			const FibaroVenetianBlindCC = (
+				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro")
+			).FibaroVenetianBlindCC;
 			await new FibaroVenetianBlindCC(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
@@ -273,7 +277,6 @@ function getProprietaryCCConstructor(
 ): typeof ManufacturerProprietaryCC | undefined {
 	switch (manufacturerId) {
 		case MANUFACTURERID_FIBARO:
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			return require("./manufacturerProprietary/Fibaro").FibaroCC;
 	}
 }

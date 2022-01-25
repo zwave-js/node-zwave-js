@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Relay 1 Pulse length (ms)",
 			"description": "Time the relay is on in milliseconds.",
 			"valueSize": 4,
@@ -23,7 +23,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 5000
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Relay 1 Delay length (ms)",
 			"description": "Time before the relay is activated.",
 			"valueSize": 4,
@@ -31,7 +32,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relay 2 Pulse length (ms)",
 			"description": "Time the relay is on in milliseconds.",
 			"valueSize": 4,
@@ -39,7 +41,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 5000
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Relay 2 Delay length (ms)",
 			"description": "Time before the relay is activated.",
 			"valueSize": 4,
@@ -47,7 +50,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Relay 3 Pulse length (ms)",
 			"description": "Time the relay is on in milliseconds.",
 			"valueSize": 4,
@@ -55,7 +59,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 5000
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Relay 3 Delay length (ms)",
 			"description": "Time before the relay is activated.",
 			"valueSize": 4,
@@ -63,7 +68,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Disable battery alarm",
 			"description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
 			"valueSize": 1,
@@ -82,14 +88,16 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Battery Sample Interval Seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 3600
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Battery Milli Volt Level Threshold Maximum",
 			"description": "Maximum battery alarm level in mV.",
 			"valueSize": 4,
@@ -97,7 +105,8 @@
 			"maxValue": 12100,
 			"defaultValue": 12100
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Battery Milli Volt Level Threshold Minimum",
 			"description": "Minimum battery alarm level in mV.",
 			"valueSize": 4,
@@ -105,7 +114,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 11600
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Ble temporary allow – timer - seconds",
 			"description": "Allow Bluetooth to be on for a time in seconds",
 			"valueSize": 4,
@@ -113,7 +123,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "BLE Always allowed",
 			"description": "0 = Not always allowed. 1= Always allowed.",
 			"valueSize": 1,
@@ -132,5 +143,5 @@
 				}
 			]
 		}
-	}
+	]
 }

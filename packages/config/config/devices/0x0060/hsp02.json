@@ -35,8 +35,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "Value to be sent with a BASIC SET command",
 			"valueSize": 1,
@@ -44,7 +45,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Sensor Detecting Function",
 			"valueSize": 1,
 			"minValue": 1,
@@ -67,14 +69,16 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Sensitivity Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 6
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Re-trigger Interval Setting",
 			"valueSize": 1,
 			"minValue": 5,
@@ -82,7 +86,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LUX Level",
 			"description": "Value for what LUX level will arm the detection sensor",
 			"valueSize": 1,
@@ -90,7 +95,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "On-Off Duration",
 			"valueSize": 1,
 			"minValue": 5,
@@ -98,7 +104,7 @@
 			"defaultValue": 15,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		// The device is a Binary Sensor, but uses Basic Sets to report its status
 		"enableBasicSetMapping": true

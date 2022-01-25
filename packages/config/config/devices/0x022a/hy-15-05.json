@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Valve Default Timeout",
 			"description": "",
 			"valueSize": 4,
@@ -25,7 +26,8 @@
 			"defaultValue": 2400,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Remaining Time to Close",
 			"description": "",
 			"valueSize": 4,
@@ -35,7 +37,8 @@
 			"defaultValue": 2400,
 			"unsigned": true
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Valve Report Interval",
 			"description": "",
 			"valueSize": 4,
@@ -45,7 +48,7 @@
 			"defaultValue": 86400,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To enter learn mode(inclusion), press UP arrow for 5 seconds while the valve is open",
 		"exclusion": "To enter learn mode(exclusion), press UP arrow for 5 seconds while the valve is open",

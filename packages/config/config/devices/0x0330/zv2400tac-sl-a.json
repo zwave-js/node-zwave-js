@@ -13,31 +13,13 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
-			"label": "State before power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "shutoff load",
-					"value": 0
-				},
-				{
-					"label": "turn on load",
-					"value": 1
-				},
-				{
-					"label": "save load state before power failure",
-					"value": 2
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Send Basic report",
 			"description": "send the basic report to the Lifeline when the load state changed",
 			"valueSize": 1,
@@ -56,7 +38,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Default fade time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,21 +66,24 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum brightness value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "MOSFET driving type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +101,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Added to and removed from a network",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +120,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Detect load",
 			"description": "Enable/disable to detect load",
 			"valueSize": 1,
@@ -156,7 +144,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Wiring type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -164,7 +153,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Load type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -172,7 +162,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Over current protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -190,47 +181,53 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Threshold, unit is W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Threshold, unit is %",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Power metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Energy metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 1800
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Voltage metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Current metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		}
-	}
+	]
 }

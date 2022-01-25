@@ -2,58 +2,75 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA005",
-	"description": "Motion, light, and temperature sensor",
+	"description": "TriSensor",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 2898
 		},
 		{
 			"productType": "0x0102",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 2919
+		},
+		{
+			"productType": "0x1c02",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3216
 		},
 		{
 			"productType": "0x0202",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 2920
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
-			"label": "Motion Retrigger Time",
-			"description": "Delay before the motion event can be re-triggered",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 30,
-			"options": [
-				{
-					"label": "Disable re-triggering until motion timeout",
-					"value": 0
-				}
-			]
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
 		},
 		"2": {
-			"label": "Motion Clear Time",
-			"description": "Time until the motion event is cleared",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 240
+			"label": "Home Security",
+			"maxNodes": 5
 		},
 		"3": {
+			"label": "Temperature",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/0x0086/templates/aeotec_template.json#motion_timeout",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 30
+		},
+		{
+			"#": "2",
+			"label": "Motion Clear Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 240,
+			"unsigned": true
+		},
+		{
+			"#": "3",
 			"label": "Motion Sensitivity",
-			"description": "Motion sensor sensitivity on a scale from 1-11",
+			"description": "Allowable range: 1-11",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
 			"defaultValue": 11,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Motion sensor disabled",
@@ -61,32 +78,18 @@
 				}
 			]
 		},
-		"4": {
-			"label": "Motion Sensor Report Mode",
-			"description": "Sets the report to send when motion is detected",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Notification Reports",
-					"value": 0
-				},
-				{
-					"label": "Binary Sensor",
-					"value": 1
-				}
-			]
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_binary_report"
 		},
-		"5": {
-			"label": "Send BASIC_SET to Associated nodes",
-			"description": "Send BASIC_SET when events are triggered",
+		{
+			"#": "5",
+			"label": "Send Basic Set to Associated Nodes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -107,25 +110,26 @@
 				}
 			]
 		},
-		"6": {
-			"label": "Basic Set Value Settings for Group 2",
-			"description": "Values to send to Group 2",
+		{
+			"#": "6",
+			"label": "Basic Set Value For Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Set 0xFF on triggered, 0x00 on cleared",
+					"label": "Set 0xff on triggered, 0x00 on cleared",
 					"value": 0
 				},
 				{
-					"label": "Set 0x00 on triggered, 0xFF on cleared",
+					"label": "Set 0x00 on triggered, 0xff on cleared",
 					"value": 1
 				},
 				{
-					"label": "Set 0xFF on motion triggered",
+					"label": "Set 0xff on motion triggered",
 					"value": 2
 				},
 				{
@@ -137,304 +141,125 @@
 					"value": 4
 				},
 				{
-					"label": "Set 0xFF on motion cleared",
+					"label": "Set 0xff on motion cleared",
 					"value": 5
 				}
 			]
 		},
-		"7": {
-			"label": "Temperature Alarm Value",
-			"description": "Alert nodes when temperature is above this value",
-			"unit": "0.1 degrees (C/F)",
+		{
+			"#": "7",
+			"label": "Temperature Alarm Threshold (High)",
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": -400,
 			"maxValue": 1185,
 			"defaultValue": 239
 		},
-		"10": {
-			"label": "LED Indicate Disable",
-			"description": "Whether to blink the LED when motion is detected",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Led Blink",
-					"value": 0
-				},
-				{
-					"label": "Enable Led Blink",
-					"value": 1
-				}
-			]
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_led_indicator"
 		},
-		"11": {
-			"label": "LED Color For Motion Event Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Yellow",
-					"value": 4
-				},
-				{
-					"label": "Pink",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "Purple",
-					"value": 7
-				},
-				{
-					"label": "Orange",
-					"value": 8
-				}
-			]
+		{
+			"#": "11",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Motion Event Report",
+			"defaultValue": 2
 		},
-		"12": {
-			"label": "Led Color For Temperature Sensor Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Yellow",
-					"value": 4
-				},
-				{
-					"label": "Pink",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "Purple",
-					"value": 7
-				},
-				{
-					"label": "Orange",
-					"value": 8
-				}
-			]
+		{
+			"#": "12",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Temperature Sensor Report",
+			"defaultValue": 0
 		},
-		"13": {
-			"label": "Led Color For Light Sensor Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Yellow",
-					"value": 4
-				},
-				{
-					"label": "Pink",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "Purple",
-					"value": 7
-				},
-				{
-					"label": "Orange",
-					"value": 8
-				}
-			]
+		{
+			"#": "13",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Light Sensor Report",
+			"defaultValue": 0
 		},
-		"15": {
-			"label": "Led Color For Wakeup Notification Report",
-			"description": "LED color when sending a wakeup report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Red",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Blue",
-					"value": 3
-				},
-				{
-					"label": "Yellow",
-					"value": 4
-				},
-				{
-					"label": "Pink",
-					"value": 5
-				},
-				{
-					"label": "Cyan",
-					"value": 6
-				},
-				{
-					"label": "Purple",
-					"value": 7
-				},
-				{
-					"label": "Orange",
-					"value": 8
-				}
-			]
+		{
+			"#": "14",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Battery Report",
+			"defaultValue": 0
 		},
-		"20": {
-			"label": "Temperature Scale",
-			"description": "Report temperature in Celsius or Fahrenheit",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+		{
+			"#": "15",
+			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options",
+			"label": "LED Color: Wakeup Notification Report",
+			"defaultValue": 0
 		},
-		"21": {
-			"label": "Temperature Threshold Value to Report",
-			"description": "Minimum temperature change to report",
-			"unit": "0.1 degrees (C/F)",
+		{
+			"#": "20",
+			"$import": "~/0x0086/templates/aeotec_template.json#celsius_fahrenheit_0",
+			"valueSize": 1
+		},
+		{
+			"#": "21",
+			"label": "Temperature Change Threshold",
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": 0,
 			"maxValue": 250,
-			"defaultValue": 25
+			"defaultValue": 20,
+			"unsigned": true
 		},
-		"22": {
-			"label": "Light intensity Threshold Value to Report",
-			"description": "Minimum light intensity change to report",
-			"unit": "Lux",
+		{
+			"#": "22",
+			"label": "Light Intensity Change Threshold",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": 0,
 			"maxValue": 10000,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"unsigned": true
 		},
-		"23": {
-			"label": "Temperature Sensor Report Interval",
-			"description": "Interval for timed temperature reports",
-			"unit": "Seconds",
+		{
+			"#": "23",
+			"label": "Timed Temperature Report Interval",
 			"valueSize": 2,
-			"minValue": 0,
+			"unit": "seconds",
+			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 3600
+			"defaultValue": 3600,
+			"unsigned": true
 		},
-		"24": {
-			"label": "Light Sensor Report Interval",
-			"description": "Interval for timed light level reports",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 3600
+		{
+			"#": "24",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_light"
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Temperature Offset Value",
-			"description": "Adjustment for temperature measurements",
-			"unit": "0.1 degrees (C/F)",
 			"valueSize": 2,
+			"unit": "0.1 °(C/F)",
 			"minValue": -200,
 			"maxValue": 200,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Light Intensity Offset Value",
-			"description": "Adjustment for light intensity measurements",
-			"unit": "Lux",
 			"valueSize": 2,
+			"unit": "lux",
 			"minValue": -1000,
 			"maxValue": 1000,
 			"defaultValue": 0
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Light Sensor Calibrated Coefficient",
-			"description": "Calibration coefficient for light measurements",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 1024
+			"defaultValue": 1024,
+			"unsigned": true
 		}
+	],
+	"metadata": {
+		"inclusion": "Press once TriSensor’s Action Button. If it is the first installation, the yellow LED will keep solid until whole network processing is complete. If successful, the LED will flash white -> green -> white -> green, after 2 seconds finished. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once.\nIf it is the S2 encryption network, please enter the first 5 digits of DSK.",
+		"exclusion": "Press once TriSensor’s Action Button, the Purple LED will keep solid until whole network processing is complete. If the exclusion is successful, the LED will flash white -> green ->white -> green and then LED will pulse a blue. If failed, the yellow LED lasts for 30 seconds, then the green LED flashes once",
+		"reset": "1. Power up the device. \n2. Press and hold the button for 15s until Red LED is blinking,then release the button\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2898/TriSensor%20user%20manual%2020180416.pdf"
 	}
 }

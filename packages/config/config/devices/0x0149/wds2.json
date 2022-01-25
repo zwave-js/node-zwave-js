@@ -2,7 +2,7 @@
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "WDS2",
-	"description": "Widom Smart Double Switch",
+	"description": "Universal Double Switch",
 	"devices": [
 		{
 			"productType": "0x1214",
@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Numbers of clicks to control Channel 1",
 			"description": "Define which sequences of clicks control the load connected to Channel 1/2.",
 			"valueSize": 1,
@@ -62,7 +62,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Numbers of clicks to control Channel 2",
 			"description": "Define which sequences of click control the load connected to Channel 2",
 			"valueSize": 1,
@@ -109,7 +110,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value used for devices belonging to Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -132,7 +134,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Value used for devices belonging to Group 5",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,7 +158,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Value used for devices belonging to Group 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -178,7 +182,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Value used for devices belonging to Group 6",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,7 +206,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Value used for devices belonging to Group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -224,7 +230,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Value used for devices belonging to Group 7",
 			"valueSize": 1,
 			"minValue": 0,
@@ -247,7 +254,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timer to switch OFF the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched OFF",
 			"valueSize": 2,
@@ -255,7 +263,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Timer to switch OFF the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched OFF",
 			"valueSize": 2,
@@ -263,7 +272,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Timer to switch ON the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched ON",
 			"valueSize": 2,
@@ -271,7 +281,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Timer to switch ON the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched ON",
 			"valueSize": 2,
@@ -279,7 +290,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Local Scenario",
 			"description": "Defines the behavior of the device Channels",
 			"valueSize": 1,
@@ -302,7 +314,8 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Start-up status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
@@ -333,7 +346,41 @@
 				}
 			]
 		},
-		"62": {
+		{
+			// This parameter is undocumented (the same as for the WDS)
+			"#": "61",
+			"label": "Configuration reset",
+			"description": "Defines which parameters should be reset to default values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "FACTORY RESET",
+					"value": 0
+				},
+				{
+					"label": "ASSOCIATIONS RESET",
+					"value": 1
+				},
+				{
+					"label": "CONFIGURATIONS RESET",
+					"value": 2
+				},
+				{
+					"label": "RESTART DEVICE",
+					"value": 3
+				},
+				{
+					"label": "IGNORE",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "62",
 			"label": "Type of external switch both inputs",
 			"description": "Defines the type of external switch connected both to input 1 and input 2.",
 			"valueSize": 1,
@@ -356,7 +403,8 @@
 				}
 			]
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Type of external switch input 2",
 			"description": "Define the switch type connected to the input 2",
 			"valueSize": 1,
@@ -383,5 +431,5 @@
 				}
 			]
 		}
-	}
+	]
 }

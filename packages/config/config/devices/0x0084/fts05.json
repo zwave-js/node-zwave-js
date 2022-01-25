@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Low Threshold",
 			"description": "-10 deg to 69 deg c",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"maxValue": 69,
 			"defaultValue": 4
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature High Threshold",
 			"description": "-9 deg to 70 deg c",
 			"valueSize": 1,
@@ -31,7 +33,8 @@
 			"maxValue": 70,
 			"defaultValue": 70
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Water Alarm Association Mode",
 			"description": "240 or 0",
 			"valueSize": 1,
@@ -40,7 +43,7 @@
 			"defaultValue": 240,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1) Set up the Add/Inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been added into the network. Also, the LED will blink 2 quick blinks when complete.",
 		"exclusion": "1) Set up the Remove/Exclusion mode at the controller; 2) Press and hold the switch for approx. 2 seconds and then release. The controller will indicates the unit has been removed from the network. The LED will blink 4 quick blinks when complete",

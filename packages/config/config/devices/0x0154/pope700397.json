@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED Operation Mode",
 			"description": "Defines when the LED shall shine and how",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Off",
 			"description": "Defines if and after which time the device shall turn off",
 			"valueSize": 2,
@@ -43,7 +44,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switching behavior",
 			"description": "Switching behavior when receiving wireless OFF",
 			"valueSize": 1,
@@ -70,7 +72,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Button Mode",
 			"description": "This parameter defines if the local button ...",
 			"valueSize": 1,
@@ -89,25 +92,12 @@
 				}
 			]
 		},
-		"5": {
-			"label": "Status after Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Always off",
-					"value": 0
-				},
-				{
-					"label": "Return to last switching state",
-					"value": 1
-				}
-			]
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "LED Color on OFF state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,7 +119,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "LED Color on ON state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -151,7 +142,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Voltage Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -159,7 +151,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Current Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -167,7 +160,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Power Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -175,14 +169,16 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Soft Circuit Breaker Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
 			"defaultValue": 3600
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Soft Circuit Breaker Recovery Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -190,7 +186,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Soft Circuit Breaker Delay Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -198,5 +195,5 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	}
+	]
 }

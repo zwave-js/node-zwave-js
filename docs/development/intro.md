@@ -13,11 +13,19 @@ _Alright, here's a short introduction if you're new to this stuff. If you know t
 `yarn` can also run package scripts for you, which we use extensively, e.g. `yarn run build` to compile TypeScript into JavaScript. You'll find most of the scripts in `package.json` under `"scripts"`.
 
 [`lerna`](https://github.com/lerna/lerna) is a tool to manage monorepos (multiple dependent packages in a single repo) that works hand in hand with `yarn`. Since it allows running package scripts of sub-packages, we use it for some of our workflows.  
-To use `lerna`, you need to install it globally with `npm i -g lerna`. If you prefer not to, you can alternatively just prefix the commands with `npx`, e.g. `npx lerna run <scriptname>`.
+To use `lerna`, you need to install it globally with `npm i -g lerna`. If you prefer not to, you can alternatively just prefix the commands with `yarn`, e.g. `yarn lerna run <scriptname>`.
+
+## Online editor
+
+It is now possible to develop on Gitpod, directly in your browser and skip the lengthy setup process.
+
+Click [here](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js) to start with a preconfigured workspace that contains VSCode and all dependencies, so you can focus on coding.
+
+> [!NOTE] We only have a limited amount of hours and parallel workspaces available. Please use them responsibly.
 
 ## Prerequisites
 
-For the best possible development experience, you should use [VSCode](https://code.visualstudio.com/).
+For the best possible offline development experience, you should use [VSCode](https://code.visualstudio.com/).
 The repository comes with settings and recommended extensions to make your life easier when working on `node-zwave-js`. The snippets alone will save you a ton of typing.  
 It is **strongly recommended** to install the recommended extensions when VSCode asks you.
 

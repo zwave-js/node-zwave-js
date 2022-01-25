@@ -32,8 +32,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dim Start Level",
 			"description": "Set Ignore Start Level Bit When Transmitting Dim Commands",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Suspend Group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Relationship between LED and status of devices in Group 1",
 			"valueSize": 1,
@@ -92,7 +95,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Setting the relationship between the top of the transmitter to ON or OFF",
 			"valueSize": 1,
@@ -112,7 +116,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ignore start level when recieving dim commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +136,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "dim step parameter",
 			"description": "dim step parameter valid values: 1-99",
 			"valueSize": 1,
@@ -139,7 +145,8 @@
 			"maxValue": 99,
 			"defaultValue": 3
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "dim timer parameter",
 			"description": "dim timer parameter valid values: 1-255",
 			"valueSize": 1,
@@ -148,7 +155,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Local control dim step",
 			"description": "dim step parameter valid values: 1-99",
 			"valueSize": 1,
@@ -156,7 +164,8 @@
 			"maxValue": 99,
 			"defaultValue": 3
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Local control dim timer",
 			"description": "dim timer parameter valid values: 1-255",
 			"valueSize": 1,
@@ -165,7 +174,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "ALL ON/ ALL OFF dim step",
 			"description": "dim step parameter valid values: 1-99",
 			"valueSize": 1,
@@ -173,7 +183,8 @@
 			"maxValue": 99,
 			"defaultValue": 3
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "ALL ON/ ALL OFF dim timer",
 			"description": "dim timer parameter valid values: 1-255",
 			"valueSize": 1,
@@ -182,7 +193,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Disable group 4 during a dim command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,7 +213,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable Shade Control Group 2",
 			"description": "The switch can control shade control devices if this parameter is set to 1.",
 			"valueSize": 1,
@@ -221,7 +234,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Enable Shade Control Group 3",
 			"description": "The switch can control shade control devices if this parameter is set to 1.",
 			"valueSize": 1,
@@ -241,7 +255,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Enable Shade Control Group 1",
 			"description": "The switch can control shade control devices if this parameter is set to 1.",
 			"valueSize": 1,
@@ -261,7 +276,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "LED Transmission Indication",
 			"valueSize": 1,
 			"minValue": 0,
@@ -284,7 +300,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Poll: minutes",
 			"description": "Frequency that WT00Z-1 will poll first node in Group 1",
 			"valueSize": 1,
@@ -293,7 +310,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Poll first node in group 1",
 			"description": "Activate/Deactivate polling of first node in Group 1",
 			"valueSize": 1,
@@ -313,7 +331,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

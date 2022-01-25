@@ -29,8 +29,9 @@
 			"maxNodes": 1
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Reset to factory settings",
 			"description": "Set all configuration values to default values (factory settings).",
 			"valueSize": 1,
@@ -39,7 +40,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "The way how the button reacts when press/released",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +64,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Control Type",
 			"description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
 			"valueSize": 1,
@@ -82,7 +85,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Enable dimming",
 			"valueSize": 1,
 			"minValue": 0,
@@ -101,7 +105,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum load",
 			"valueSize": 2,
 			"minValue": 0,
@@ -109,7 +114,8 @@
 			"defaultValue": 200,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimming speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +123,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Fading up speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -125,7 +132,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Toggle time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,7 +141,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto meter report: percentage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -141,7 +150,8 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto meter report: watt",
 			"valueSize": 1,
 			"minValue": 0,
@@ -149,7 +159,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto meter report: time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -157,7 +168,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Last known status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -165,7 +177,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Fading down speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -173,5 +186,5 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	}
+	]
 }

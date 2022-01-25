@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Dimmer steps",
 			"description": "number of steps or levels",
 			"valueSize": 1,
@@ -23,7 +24,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Time between dimmer steps",
 			"description": "Timing of the steps",
 			"valueSize": 1,
@@ -33,7 +35,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Load sensing",
 			"description": "Turn load sensing on or off",
 			"valueSize": 1,
@@ -52,5 +55,5 @@
 				}
 			]
 		}
-	}
+	]
 }

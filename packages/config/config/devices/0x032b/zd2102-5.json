@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Configuration - External Switch",
 			"description": "",
 			"valueSize": 1,
@@ -35,7 +36,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "For “Inclusion” (adding to) a network: Put the Z-Wave™ network controller into “inclusion” mode following its instructions. To add the ZD2102-5 to your controller press the program switch of ZD2102-5 to send the Node Information Frame (NIF). After sending NIF, the network controller will send the auto inclusion request; otherwise, ZD2102-5 will go to sleep after 15 seconds",
 		"exclusion": "For “Exclusion” (removing from) a network: Put the Z-Wave™ network controller into “exclusion” mode, following its instructions. To delete the ZD2102-5 from your controller press the program switch of ZD2102-5 for at least 1 second to be excluded. Note: All user and network settings will be cleared and the device reset to factory setting defaults when the device is excluded",

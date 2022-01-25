@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Water Detection Beep Frequency",
 			"description": "Once water is detected, frequency of beep and notification",
 			"valueSize": 1,
@@ -40,7 +41,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Reporting Interval On Line Power",
 			"description": "",
 			"valueSize": 1,
@@ -50,7 +52,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Notification Buzzer",
 			"description": "",
 			"valueSize": 1,
@@ -70,7 +73,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Inclusion: Add the device into your network by a Z-Wave certiﬁed controller. If the controller is SmartStart compatible, refer to the controller manufacturer app that allows the DSK code to be scanned, and scan the DSK code on the inside of the battery door or on the box. If your controller is not S2/ SmartStart compatible, the device can be added using the traditional method for Z-Wave as follows:\n1. Place your controller into Inclusion (Add) mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button of LD-100. The controller should indicate that the new device was added successfully. If the controller shows it failed, repeat the procedure",
 		"exclusion": "Exclusion: Remove the device from your network by a Z-Wave certiﬁed controller. The device can be removed using the traditional method for Z-Wave as follows:\n\n1. Place your controller into Exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button of LD-100. The controller should indicate that the new device was removed successfully. If the controller shows it failed, repeat the procedure",

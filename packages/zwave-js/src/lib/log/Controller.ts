@@ -3,9 +3,12 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
+	LogContext,
+	NodeLogContext,
 	tagify,
 	ValueAddedArgs,
 	ValueID,
+	ValueLogContext,
 	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
@@ -22,14 +25,26 @@ const VALUE_LOGLEVEL = "debug";
 
 interface LogNodeOptions {
 	message: string;
-	level?: "verbose" | "warn" | "error";
+	level?: "debug" | "verbose" | "warn" | "error";
 	direction?: DataDirection;
 	endpoint?: number;
 }
 
+export type ControllerLogContext = LogContext<"controller">;
+
+export type ControllerNodeLogContext = ControllerLogContext &
+	NodeLogContext & { endpoint?: number; direction: string };
+
+export type ControllerValueLogContext = ControllerLogContext &
+	ValueLogContext & {
+		direction?: string;
+		change?: "added" | "updated" | "removed" | "notification";
+		internal?: boolean;
+	};
+
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
-export class ControllerLogger extends ZWaveLoggerBase {
+export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
@@ -54,6 +69,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			level: actualLevel,
 			message,
 			direction: getDirectionPrefix("none"),
+			context: { source: "controller", type: "controller" },
 		});
 	}
 
@@ -65,7 +81,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public logNode(
 		nodeId: number,
 		message: string,
-		level?: "verbose" | "warn" | "error",
+		level?: "debug" | "verbose" | "warn" | "error",
 	): void;
 
 	/**
@@ -77,7 +93,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public logNode(
 		nodeId: number,
 		messageOrOptions: string | LogNodeOptions,
-		logLevel?: "verbose" | "warn" | "error",
+		logLevel?: "debug" | "verbose" | "warn" | "error",
 	): void {
 		if (typeof messageOrOptions === "string") {
 			return this.logNode(nodeId, {
@@ -91,6 +107,14 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		if (!this.container.isLoglevelVisible(actualLevel)) return;
 		if (!this.container.shouldLogNode(nodeId)) return;
 
+		const context: ControllerNodeLogContext = {
+			nodeId,
+			source: "controller",
+			type: "node",
+			direction: direction || "none",
+		};
+		if (endpoint) context.endpoint = endpoint;
+
 		this.logger.log({
 			level: actualLevel,
 			primaryTags: tagify([getNodeTag(nodeId)]),
@@ -99,6 +123,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 				? tagify([`Endpoint ${endpoint}`])
 				: undefined,
 			direction: getDirectionPrefix(direction || "none"),
+			context,
 		});
 	}
 
@@ -129,7 +154,15 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	): void {
 		if (!this.isValueLogVisible()) return;
 		if (!this.container.shouldLogNode(args.nodeId)) return;
-
+		const context: ControllerValueLogContext = {
+			nodeId: args.nodeId,
+			change,
+			commandClass: args.commandClass,
+			internal: args.internal,
+			property: args.property,
+			source: "controller",
+			type: "value",
+		};
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
 			this.valueEventPrefixes[change],
@@ -137,6 +170,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		];
 		const secondaryTags: string[] = [];
 		if (args.endpoint != undefined) {
+			context.endpoint = args.endpoint;
 			secondaryTags.push(`Endpoint ${args.endpoint}`);
 		}
 		if (args.internal === true) {
@@ -144,16 +178,17 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		}
 		let message = args.property.toString();
 		if (args.propertyKey != undefined) {
+			context.propertyKey = args.propertyKey;
 			message += `[${args.propertyKey}]`;
 		}
 		switch (change) {
 			case "added":
 				message += `: ${this.formatValue(
-					((args as unknown) as ValueAddedArgs).newValue,
+					(args as unknown as ValueAddedArgs).newValue,
 				)}`;
 				break;
 			case "updated": {
-				const _args = (args as unknown) as ValueUpdatedArgs;
+				const _args = args as unknown as ValueUpdatedArgs;
 				message += `: ${this.formatValue(
 					_args.prevValue,
 				)} => ${this.formatValue(_args.newValue)}`;
@@ -161,12 +196,12 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			}
 			case "removed":
 				message += ` (was ${this.formatValue(
-					((args as unknown) as ValueRemovedArgs).prevValue,
+					(args as unknown as ValueRemovedArgs).prevValue,
 				)})`;
 				break;
 			case "notification":
 				message += `: ${this.formatValue(
-					((args as unknown) as ValueNotificationArgs).value,
+					(args as unknown as ValueNotificationArgs).value,
 				)}`;
 				break;
 		}
@@ -176,6 +211,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			secondaryTags: tagify(secondaryTags),
 			message,
 			direction: getDirectionPrefix("none"),
+			context,
 		});
 	}
 
@@ -183,13 +219,21 @@ export class ControllerLogger extends ZWaveLoggerBase {
 	public metadataUpdated(args: LogValueArgs<ValueID>): void {
 		if (!this.isValueLogVisible()) return;
 		if (!this.container.shouldLogNode(args.nodeId)) return;
-
+		const context: ControllerValueLogContext = {
+			nodeId: args.nodeId,
+			commandClass: args.commandClass,
+			internal: args.internal,
+			property: args.property,
+			source: "controller",
+			type: "value",
+		};
 		const primaryTags: string[] = [
 			getNodeTag(args.nodeId),
 			CommandClasses[args.commandClass],
 		];
 		const secondaryTags: string[] = [];
 		if (args.endpoint != undefined) {
+			context.endpoint = args.endpoint;
 			secondaryTags.push(`Endpoint ${args.endpoint}`);
 		}
 		if (args.internal === true) {
@@ -197,6 +241,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		}
 		let message = args.property.toString();
 		if (args.propertyKey != undefined) {
+			context.propertyKey = args.propertyKey;
 			message += `[${args.propertyKey}]`;
 		}
 		message += ": metadata updated";
@@ -206,6 +251,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 			secondaryTags: tagify(secondaryTags),
 			message,
 			direction: getDirectionPrefix("none"),
+			context,
 		});
 	}
 
@@ -214,7 +260,7 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		if (!this.isControllerLogVisible()) return;
 		if (!this.container.shouldLogNode(node.id)) return;
 
-		this.logger.log({
+		this.logger.log<ControllerNodeLogContext>({
 			level: CONTROLLER_LOGLEVEL,
 			primaryTags: tagify([getNodeTag(node.id)]),
 			message:
@@ -224,6 +270,12 @@ export class ControllerLogger extends ZWaveLoggerBase {
 							InterviewStage[node.interviewStage]
 					  }`,
 			direction: getDirectionPrefix("none"),
+			context: {
+				nodeId: node.id,
+				source: "controller",
+				type: "node",
+				direction: "none",
+			},
 		});
 	}
 
@@ -235,11 +287,17 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		const message = `Beginning interview - last completed stage: ${
 			InterviewStage[node.interviewStage]
 		}`;
-		this.logger.log({
+		this.logger.log<ControllerNodeLogContext>({
 			level: CONTROLLER_LOGLEVEL,
 			primaryTags: tagify([getNodeTag(node.id)]),
 			message,
 			direction: getDirectionPrefix("none"),
+			context: {
+				nodeId: node.id,
+				source: "controller",
+				type: "node",
+				direction: "none",
+			},
 		});
 	}
 }

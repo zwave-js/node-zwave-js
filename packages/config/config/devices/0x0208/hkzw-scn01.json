@@ -1,0 +1,76 @@
+{
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-SCN01",
+	"description": "One-key Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0009"
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "42",
+			"label": "Duration",
+			"description": "Set the duration value of the sent commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "254",
+			"label": "Configuration Lock",
+			"description": "Lock/unlock all configuration parameters.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "255",
+			"label": "Reset/Remove",
+			"description": "Reset the sensor or remove from the Z-Wave network",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 1
+				},
+				{
+					"label": "Reset configuration",
+					"value": 85
+				},
+				{
+					"label": "Reset configuration and remove",
+					"value": 1431655765
+				}
+			]
+		}
+	]
+}

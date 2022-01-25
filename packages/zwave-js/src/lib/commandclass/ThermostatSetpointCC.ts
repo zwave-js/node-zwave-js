@@ -1,5 +1,9 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	ValueID,
+	ValueMetadataNumeric,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -181,6 +185,8 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a delay
+			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
+			// aren't able to handle the GET this quickly.
 			this.schedulePoll({ property, propertyKey });
 		}
 	};
@@ -218,10 +224,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (!response) return;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
@@ -265,10 +272,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"minValue",
@@ -296,10 +304,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedSetpointTypes;
 	}
 }
@@ -352,9 +361,8 @@ export class ThermostatSetpointCC extends CommandClass {
 			// Whether our tests changed the assumed bitmask interpretation
 			let interpretationChanged = false;
 
-			const supportedSetpointTypesValueId = getSupportedSetpointTypesValueID(
-				this.endpointIndex,
-			);
+			const supportedSetpointTypesValueId =
+				getSupportedSetpointTypesValueID(this.endpointIndex);
 
 			// Query the supported setpoint types
 			this.driver.controllerLog.logNode(node.id, {
@@ -428,7 +436,6 @@ export class ThermostatSetpointCC extends CommandClass {
 					logMessage = `received current value of setpoint ${setpointName}: ${
 						setpoint.value
 					} ${setpoint.scale.unit ?? ""}`;
-					// wotan-disable-next-line
 				} else if (!interpretation) {
 					// The setpoint type is not supported, switch to interpretation A
 					this.driver.controllerLog.logNode(node.id, {
@@ -453,7 +460,6 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// If we made an assumption and did not switch to interpretation A,
 			// the device adheres to interpretation B
-			// wotan-disable-next-line no-useless-predicate
 			if (!interpretation && !interpretationChanged) {
 				// our assumption about interpretation B was correct
 				interpretation = "B";
@@ -623,8 +629,8 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public serialize(): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
-		const override = this.getNodeUnsafe()?.deviceConfig?.compat
-			?.overrideFloatEncoding;
+		const override =
+			this.getNodeUnsafe()?.deviceConfig?.compat?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
@@ -673,12 +679,20 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 
 	public persistValues(): boolean {
+		const valueDB = this.getValueDB();
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
 			this._type,
 		);
-		if (!this.getValueDB().hasMetadata(setpointValueId)) {
-			this.getValueDB().setMetadata(setpointValueId, {
+		// Update the metadata when it is missing or the unit has changed
+		if (
+			(
+				valueDB.getMetadata(setpointValueId) as
+					| ValueMetadataNumeric
+					| undefined
+			)?.unit !== this._scale.unit
+		) {
+			valueDB.setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
 				unit: this._scale.unit,
 				ccSpecific: {
@@ -686,14 +700,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				},
 			});
 		}
-		this.getValueDB().setValue(setpointValueId, this._value);
+		valueDB.setValue(setpointValueId, this._value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
 		const scaleValueId = getSetpointScaleValueID(
 			this.endpointIndex,
 			this._type,
 		);
-		this.getValueDB().setValue(scaleValueId, this._scale.key);
+		valueDB.setValue(scaleValueId, this._scale.key);
 		return true;
 	}
 
@@ -799,10 +813,8 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			scale: this._minValueScale,
 			bytesRead,
 		} = parseFloatWithScale(this.payload.slice(1)));
-		({
-			value: this._maxValue,
-			scale: this._maxValueScale,
-		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+		({ value: this._maxValue, scale: this._maxValueScale } =
+			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this._type);

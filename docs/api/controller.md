@@ -4,18 +4,159 @@ The controller instance contains information about the controller and a list of 
 
 ## Controller methods
 
+### `supportsFeature`
+
+```ts
+supportsFeature(feature: ZWaveFeature): boolean | undefined
+```
+
+Some Z-Wave features are not available on all controllers and can potentially create unwanted situations. The `supportsFeature` method must be used to check for support before using certain features. It returns a boolean indicating whether the feature is supported or `undefined` if this information isn't known yet.
+
+The available features to test for are:
+
+<!-- #import ZWaveFeature from "zwave-js" -->
+
+```ts
+enum ZWaveFeature {
+	SmartStart,
+}
+```
+
 ### `beginInclusion`
 
 ```ts
-async beginInclusion(includeNonSecure?: boolean): Promise<boolean>
+async beginInclusion(options: InclusionOptions): Promise<boolean>
 ```
 
 Starts the inclusion process for a new node. The returned promise resolves to `true` if starting the inclusion was successful, `false` if it failed or if it was already active.
 
-By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+The options parameter is used to specify the inclusion strategy and provide callbacks to the application which are necessary to support inclusion with Security S2. The following inclusion strategies are defined:
+
+-   `InclusionStrategy.Default`: Prefer _Security S2_ if supported, use _Security S0_ if absolutely necessary (e.g. for legacy locks) or if opted in with the `forceSecurity` flag, don't use encryption otherwise.  
+    **This is the recommended** strategy and should be used unless there is a good reason not to.
+
+-   `InclusionStrategy.Insecure`: Don't use encryption, even if supported.  
+    **Not recommended**, because S2 should be used where possible.
+
+-   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
+    **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+
+-   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
+    **Not recommended** because `Default` is more versatile and less complicated for the user.
 
 > [!NOTE]
 > For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
+
+> [!NOTE] We've compiled some [guidelines](usage/s2-inclusion.md) how to tackle inclusion from the UI side, especially for Security S2.
+
+Depending on the chosen inclusion strategy, the options object requires additional properties:
+
+<!-- #import InclusionOptions from "zwave-js" -->
+
+```ts
+type InclusionOptions =
+	| {
+			strategy: InclusionStrategy.Default;
+			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
+			 * This is not recommended due to the overhead caused by S0.
+			 */
+			forceSecurity?: boolean;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
+			strategy:
+				| InclusionStrategy.Insecure
+				| InclusionStrategy.Security_S0;
+	  };
+```
+
+For inclusion with _Security S2_, this includes callbacks into the application which are defined as follows:
+
+<!-- #import InclusionUserCallbacks from "zwave-js" -->
+
+```ts
+interface InclusionUserCallbacks {
+	/**
+	 * Instruct the application to display the user which security classes the device has requested and whether client-side authentication (CSA) is desired.
+	 * The returned promise MUST resolve to the user selection - which of the requested security classes have been granted and whether CSA was allowed.
+	 * If the user did not accept the requested security classes, the promise MUST resolve to `false`.
+	 */
+	grantSecurityClasses(
+		requested: InclusionGrant,
+	): Promise<InclusionGrant | false>;
+
+	/**
+	 * Instruct the application to display the received DSK for the user to verify if it matches the one belonging to the device and
+	 * additionally enter the PIN that's found on the device.
+	 * The returned promise MUST resolve to the 5-digit PIN (as a string) when the user has confirmed the DSK and entered the PIN and `false` otherwise.
+	 *
+	 * @param dsk The partial DSK in the form `-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222`. The first 5 characters are left out because they are the unknown PIN.
+	 */
+	validateDSKAndEnterPIN(dsk: string): Promise<string | false>;
+
+	/** Called by the driver when the user validation has timed out and needs to be aborted */
+	abort(): void;
+}
+```
+
+This includes choosing the security classes to grant to the node and whether client side authentication should allowed.
+
+<!-- #import InclusionGrant from "zwave-js" -->
+
+```ts
+interface InclusionGrant {
+	/**
+	 * An array of security classes that are requested or to be granted.
+	 * The granted security classes MUST be a subset of the requested ones.
+	 */
+	securityClasses: SecurityClass[];
+	/** Whether client side authentication is requested or to be granted */
+	clientSideAuth: boolean;
+}
+```
+
+<!-- #import SecurityClass from "@zwave-js/core" -->
+
+```ts
+enum SecurityClass {
+	/**
+	 * Used internally during inclusion of a node. Don't use this!
+	 */
+	Temporary = -2,
+	/**
+	 * `None` is used to indicate that a node is included without security.
+	 * It is not meant as input to methods that accept a security class.
+	 */
+	None = -1,
+	S2_Unauthenticated = 0,
+	S2_Authenticated = 1,
+	S2_AccessControl = 2,
+	S0_Legacy = 7,
+}
+```
+
+Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
+
+```ts
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+}
+```
+
+> [!NOTE] The `provisioning` property accepts `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is an `S2` QR code by checking the `version` field.
+
+> [!ATTENTION] The intended use case for this is inclusion after scanning a S2 QR code. Otherwise, care must be taken to give correct information. If the included node has a different DSK than the provided one, the secure inclusion will fail. Furthermore, the node will be granted only those security classes that are requested and the provided list. If there is no overlap, the secure inclusion will fail.
 
 ### `stopInclusion`
 
@@ -28,10 +169,12 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(): Promise<boolean>
+async beginExclusion(unprovision?: boolean): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
+
+The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well.
 
 ### `stopExclusion`
 
@@ -39,7 +182,76 @@ Starts the exclusion process to remove a node from the network. The returned pro
 async stopExclusion(): Promise<boolean>
 ```
 
-Stops the exclusion process to remove a node from the network.The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+Stops the exclusion process to remove a node from the network. The returned promise resolves to `true` if stopping the exclusion was successful, `false` if it failed or if it was not active.
+
+### `provisionSmartStartNode`
+
+```ts
+provisionSmartStartNode(entry: PlannedProvisioningEntry): void
+```
+
+Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry. The node will be included out of band when it powers up.
+
+> [!ATTENTION] This method will throw when SmartStart is not supported by the controller!
+
+The parameter has the following shape:
+
+<!-- #import PlannedProvisioningEntry from "zwave-js" -->
+
+```ts
+interface PlannedProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
+}
+```
+
+> [!NOTE] This method accepts a `QRProvisioningInformation` which is returned by [`parseQRCodeString`](api/utils.md#parse-s2-or-smartstart-qr-code-strings). You just need to make sure that the QR code is a `SmartStart` QR code by checking the `version` field.
+
+### `unprovisionSmartStartNode`
+
+```ts
+unprovisionSmartStartNode(dskOrNodeId: string | number): void
+```
+
+Removes the given DSK or node ID from the controller's SmartStart provisioning list.
+
+> [!NOTE] If this entry corresponds to an already-included node, it will **NOT** be excluded.
+
+### `getProvisioningEntry`
+
+```ts
+getProvisioningEntry(dsk: string): SmartStartProvisioningEntry | undefined
+```
+
+Returns the entry for the given DSK from the controller's SmartStart provisioning list. The returned entry (if found) has the following shape:
+
+```ts
+interface SmartStartProvisioningEntry {
+	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
+	dsk: string;
+	securityClasses: SecurityClass[];
+	nodeId?: number;
+	/**
+	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
+	 */
+	[prop: string]: any;
+}
+```
+
+The `nodeId` will be set when the entry corresponds to an included node.
+
+### `getProvisioningEntries`
+
+```ts
+getProvisioningEntries(): SmartStartProvisioningEntry[]
+```
+
+Returns all entries from the controller's SmartStart provisioning list.
 
 ### `getNodeNeighbors`
 
@@ -48,6 +260,14 @@ async getNodeNeighbors(nodeId: number): Promise<readonly number[]>
 ```
 
 Returns the known list of neighbors for a node.
+
+> [!ATTENTION] Especially older Z-Wave sticks can get stuck if you call this too often while the Z-Wave radio is still on.
+
+To get around this:
+
+1. Turn the radio off with `controller.toggleRF(false)`
+2. Batch all `getNodeNeighbors` requests together
+3. Turn the radio back on with `controller.toggleRF(true`)
 
 ### `healNode`
 
@@ -106,14 +326,35 @@ Removes a failed node from the controller's memory. If the process fails, this w
 ### `replaceFailedNode`
 
 ```ts
-replaceFailedNode(nodeId: number, includeNonSecure?: boolean): Promise<boolean>
+replaceFailedNode(nodeId: number, options: ReplaceNodeOptions): Promise<boolean>
 ```
 
 Removes a failed node from the controller's memory and starts an inclusion process to include a replacement node which will re-use the same node ID.
 
 This method returns `true` when the inclusion process is started, `false` if another inclusion or exclusion process is already running. If the process fails, this will throw an exception with the details why.
 
-By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+Like [`beginInclusion`](#beginInclusion), this method supports different inclusion strategies for the new node. However, the user or application must decide beforehand which security CC should be used to include the new node, since it is not possible to detect automatically. For that reason, only the inclusion strategies `Security_S2`, `Security_S0` and `Insecure` are supported:
+
+<!-- #import ReplaceNodeOptions from "zwave-js" without comments -->
+
+```ts
+type ReplaceNodeOptions =
+	// We don't know which security CCs a node supports when it is a replacement
+	// we we need the user to specify how the node should be included
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			userCallbacks: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			provisioning: PlannedProvisioningEntry;
+	  }
+	| {
+			strategy:
+				| InclusionStrategy.Insecure
+				| InclusionStrategy.Security_S0;
+	  };
+```
 
 ### Managing associations
 
@@ -210,7 +451,9 @@ Creates a virtual node that can be used to send commands to multiple supporting 
 > -   Broadcasting or multicasting commands is not possible using `Security S0`.
 > -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
-### Configure RF region
+### Configuring the Z-Wave radio
+
+#### Configure RF region
 
 ```ts
 setRFRegion(region: RFRegion): Promise<boolean>
@@ -239,7 +482,7 @@ export enum RFRegion {
 
 > [!ATTENTION] Not all controllers support configuring the RF region. These methods will throw if they are not supported
 
-### Configure TX powerlevel
+#### Configure TX powerlevel
 
 ```ts
 setPowerlevel(powerlevel: number, measured0dBm: number): Promise<boolean>;
@@ -251,6 +494,141 @@ Configure or read the TX powerlevel setting of the Z-Wave API. `powerlevel` is t
 > [!ATTENTION] Not all controllers support configuring the TX powerlevel. These methods will throw if they are not supported.
 
 > [!WARNING] Increasing the powerlevel (i.e. "shouting louder") does not improve reception of the controller and may even be **against the law**. Use at your own risk!
+
+#### Turn Z-Wave Radio on/off
+
+```ts
+toggleRF(enabled: boolean): Promise<boolean>
+```
+
+When accessing the controller memory, the Z-Wave radio **must** be turned off with `toggleRF(false)` to avoid resource conflicts and inconsistent data. Afterwards the radio can be turned back on with `toggleRF(true)`.
+
+This method returns `true` when turning the radio on or off succeeded, `false` otherwise.
+
+### Reading from and writing to the controller memory (external NVM)
+
+> [!WARNING] The Z-Wave radio **must** be turned off when accessing the NVM.
+
+#### Retrieving information about the NVM (500 series only)
+
+```ts
+getNVMId(): Promise<NVMId>
+```
+
+Returns information of the controller's external NVM. The return value has the following shape:
+
+```ts
+interface NVMId {
+	readonly nvmManufacturerId: number;
+	readonly memoryType: NVMType;
+	readonly memorySize: NVMSize;
+}
+```
+
+#### Opening the NVM and retrieving the size (700 series only)
+
+```ts
+externalNVMOpen(): Promise<number>
+```
+
+Before reading or writing to a 700 series NVM, it must be opened using this method, which also returns the accessible NVM size in bytes.
+
+> [!NOTE] The first access determines whether the NVM can be written to or read from. To change the access method, close and re-open the NVM.
+
+#### Closing the NVM (700 series only)
+
+```ts
+externalNVMClose(): Promise<void>
+```
+
+#### Reading from the NVM (500 series only)
+
+```ts
+externalNVMReadByte(offset: number): Promise<number>
+```
+
+Reads a byte from the external NVM at the given offset.
+
+```ts
+externalNVMReadBuffer(offset: number, length: number): Promise<Buffer>
+```
+
+Reads a buffer from the external NVM at the given offset. The returned buffer length is limited by the Serial API capabilities and not guaranteed to equal `length`.
+
+#### Reading from the NVM (700 series only)
+
+```ts
+externalNVMReadBuffer700(offset: number, length: number): Promise<{ buffer: Buffer; endOfFile: boolean }>
+```
+
+Reads a buffer from the external NVM at the given offset. The returned `buffer` length is limited by the Serial API capabilities and not guaranteed to equal `length`.
+If `endOfFile` is `true`, the end of the NVM has been reached and the NVM should be closed with a call to [`externalNVMClose`](#externalNVMClose).
+
+#### Writing to the NVM (500 series only)
+
+```ts
+externalNVMWriteByte(offset: number, data: number): Promise<boolean>
+```
+
+Writes a byte to the external NVM at the given offset
+
+```ts
+externalNVMWriteBuffer(offset: number, buffer: Buffer): Promise<boolean>
+```
+
+Writes a buffer to the external NVM at the given offset.
+
+> [!WARNING] These methods can write in the full NVM address space and are not offset to start at the application area. Take care not to accidentally overwrite the protocol NVM area!
+
+#### Writing to the NVM (700 series only)
+
+```ts
+externalNVMWriteBuffer700(offset: number, buffer: Buffer): Promise<boolean>
+```
+
+Writes a buffer to the external NVM at the given offset. If `endOfFile` is `true`, the end of the NVM has been reached and the NVM should be closed with a call to [`externalNVMClose`](#externalNVMClose).
+
+> [!WARNING] This method can write in the full NVM address space and are not offset to start at the application area. Take care not to accidentally overwrite the protocol NVM area!
+
+#### NVM backup and restore
+
+```ts
+backupNVMRaw(onProgress?: (bytesRead: number, total: number) => void): Promise<Buffer>
+```
+
+Creates a backup of the NVM and returns the raw data as a Buffer. The optional argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `backupNVMRaw` automatically turns the Z-Wave radio on/off during the backup.
+
+```ts
+restoreNVM(
+	nvmData: Buffer,
+	convertProgress?: (bytesRead: number, total: number) => void,
+	restoreProgress?: (bytesWritten: number, total: number) => void,
+): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`.
+
+?> If the given buffer is in a different NVM format, it is **converted automatically**. If the conversion is not supported, the operation fails.
+
+The optional `convertProgress` and `restoreProgress` callbacks can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVM` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
+
+```ts
+restoreNVMRaw(nvmData: Buffer, onProgress?: (bytesWritten: number, total: number) => void): Promise<void>
+```
+
+Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd argument can be used to monitor the progress of the operation, which may take several seconds up to a few minutes depending on the NVM size.
+
+> [!NOTE] `restoreNVMRaw` automatically turns the Z-Wave radio on/off during the restore.
+
+> [!WARNING] The given buffer is **NOT** checked for compatibility with the current stick. To have Z-Wave JS do that, use the `restoreNVM` method instead.
+
+> [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
 ## Controller properties
 
@@ -341,6 +719,39 @@ Returns the ID of the controller in the current network.
 * readonly supportsTimers: boolean
 -->
 
+### `isHealNetworkActive`
+
+```ts
+readonly isHealNetworkActive: boolean;
+```
+
+Returns whether the network or a node is currently being healed.
+
+### `inclusionState`
+
+```ts
+readonly inclusionState: InclusionState
+```
+
+Returns the controller state regarding inclusion/exclusion.
+
+<!-- #import InclusionState from "zwave-js" -->
+
+```ts
+enum InclusionState {
+	/** The controller isn't doing anything regarding inclusion. */
+	Idle,
+	/** The controller is waiting for a node to be included. */
+	Including,
+	/** The controller is waiting for a node to be excluded. */
+	Excluding,
+	/** The controller is busy including or excluding a node. */
+	Busy,
+	/** The controller listening for SmartStart nodes to announce themselves. */
+	SmartStart,
+}
+```
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
@@ -370,15 +781,26 @@ The process to include or exclude a node was stopped successfully. Note that the
 
 ### `"node added"`
 
-A node has successfully been added to the network. The added node is passed to the event handler as the only argument:
+A node has successfully been added to the network
 
 ```ts
-(node: ZWaveNode) => void
+(node: ZWaveNode, result: InclusionResult) => void
+```
+
+The second argument gives additional info about the inclusion result.
+
+<!-- #import InclusionResult from "zwave-js" -->
+
+```ts
+interface InclusionResult {
+	/** This flag warns that a node was included with a lower than intended security, meaning unencrypted when it should have been included with Security S0/S2 */
+	lowSecurity?: boolean;
+}
 ```
 
 ### `"node removed"`
 
-A node has successfully been replaced or removed from the network. The `replace` parameter indicates whether the node was replaced with another node.
+A node has successfully been replaced or removed from the network. The `replaced` parameter indicates whether the node was replaced with another node.
 
 ```ts
 (node: ZWaveNode, replaced: boolean) => void
@@ -402,3 +824,38 @@ The healing status is one of the following values:
 ### `"heal network done"`
 
 The healing process for the network was completed. The event handler is called with the final healing status, see the [`"heal network progress"` event](#quotheal-network-progressquot) for details
+
+### `"statistics updated"`
+
+This event is emitted regularly during and after communication with the controller and gives some insight that would otherwise only be visible by looking at logs. The callback has the signature
+
+```ts
+(statistics: ControllerStatistics) => void
+```
+
+where the statistics have the following shape:
+
+<!-- #import ControllerStatistics from "zwave-js" -->
+
+```ts
+interface ControllerStatistics {
+	/** No. of messages successfully sent to the controller */
+	messagesTX: number;
+	/** No. of messages received by the controller */
+	messagesRX: number;
+	/** No. of messages from the controller that were dropped by the host */
+	messagesDroppedRX: number;
+	/** No. of messages that the controller did not accept */
+	NAK: number;
+	/** No. of collisions while sending a message to the controller */
+	CAN: number;
+	/** No. of transmission attempts where an ACK was missing from the controller */
+	timeoutACK: number;
+	/** No. of transmission attempts where the controller response did not come in time */
+	timeoutResponse: number;
+	/** No. of transmission attempts where the controller callback did not come in time */
+	timeoutCallback: number;
+	/** No. of outgoing messages that were dropped because they could not be sent */
+	messagesDroppedTX: number;
+}
+```

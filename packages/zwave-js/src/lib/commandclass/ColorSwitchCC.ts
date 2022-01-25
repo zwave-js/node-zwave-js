@@ -84,7 +84,8 @@ const ColorComponentMap = {
 };
 type ColorKey = keyof typeof ColorComponentMap;
 
-const hexColorRegex = /^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
+const hexColorRegex =
+	/^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
 
 // Accept both the kebabCase names and numeric components as table keys
 /**
@@ -196,10 +197,11 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedColorComponents;
 	}
 
@@ -360,8 +362,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
+		options,
 	) => {
 		if (property === "targetColor") {
+			const duration = Duration.from(options?.transitionDuration);
 			if (propertyKey != undefined) {
 				// Single color component, only accepts numbers
 				if (typeof propertyKey !== "number") {
@@ -378,16 +382,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 						typeof value,
 					);
 				}
-
-				await this.set({ [propertyKey]: value });
+				await this.set({ [propertyKey]: value, duration });
 
 				if (this.isSinglecast()) {
-					// Verify the current value after a delay
-					// TODO: #1321
-					const duration = undefined as Duration | undefined;
+					// Verify the current value after a (short) delay
 					this.schedulePoll(
 						{ property, propertyKey },
-						duration?.toMilliseconds(),
+						{ duration, transition: "fast" },
 					);
 				}
 			} else {
@@ -423,7 +424,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				// Avoid sending empty commands
 				if (Object.keys(value as any).length === 0) return;
 
-				await this.set(value as ColorTable);
+				await this.set({ ...(value as ColorTable), duration });
 
 				// We're not going to poll each color component separately
 			}
@@ -438,7 +439,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 				);
 			}
 
-			await this.set({ hexColor: value });
+			const duration = Duration.from(options?.transitionDuration);
+			await this.set({ hexColor: value, duration });
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -547,6 +549,7 @@ export class ColorSwitchCC extends CommandClass {
 		valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
 			...ValueMetadata.Any,
 			label: `Target Color`,
+			valueChangeOptions: ["transitionDuration"],
 		});
 
 		// Create the collective HEX color values
@@ -888,7 +891,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		for (const [key, value] of entries(this.colorTable)) {
 			const component = colorTableKeyToComponent(key);
 			this.payload[i] = component;
-			this.payload[i + 1] = clamp(value!, 0, 0xff);
+			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
 		if (this.version >= 2 && this.duration) {
@@ -900,7 +903,6 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
-			if (value == undefined) continue;
 			const realKey: string =
 				key in ColorComponentMap
 					? (ColorComponent as any)[(ColorComponentMap as any)[key]]

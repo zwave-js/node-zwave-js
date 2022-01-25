@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Association LED",
 			"description": "Turns ON/OFF the Association LED",
 			"unit": "HEXADECIMAL",
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Custom consumption limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -45,7 +46,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Beacon LEDs",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +60,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Delay ON",
 			"valueSize": 1,
 			"minValue": 0,
@@ -66,7 +69,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Activation TIME",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +78,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED in Repose",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +98,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Lock Input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +118,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Reset",
 			"description": "Reset default",
 			"valueSize": 2,
@@ -133,7 +140,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Delay OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -141,5 +149,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

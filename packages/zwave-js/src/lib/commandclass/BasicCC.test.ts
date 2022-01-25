@@ -11,7 +11,7 @@ import {
 } from "./BasicCC";
 import { getCCValueMetadata } from "./CommandClass";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -124,7 +124,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	describe("getDefinedValueIDs()", () => {
 		it("should include the target value for all endpoints except the node itself", () => {
 			// Repro for GH#377
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			(fakeDriver as any).controller.nodes.set(node.id, node);
 			// interviewComplete needs to be true for getEndpoint to work
 			node.valueDB.setValue(

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Up/Down Button Swap Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Motor Rotation Direction Swap Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Backlight Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Curtain Moving Indicate Enable",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,7 +90,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -105,5 +109,5 @@
 				}
 			]
 		}
-	}
+	]
 }

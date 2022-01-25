@@ -138,6 +138,16 @@ export function getCCName(cc: number): string {
 }
 
 /**
+ * An array of all defined CCs
+ */
+export const allCCs: readonly CommandClasses[] = Object.freeze(
+	Object.keys(CommandClasses)
+		.filter((key) => /^\d+$/.test(key))
+		.map((key) => parseInt(key))
+		.filter((key) => key >= 0),
+);
+
+/**
  * Defines which CCs are considered Actuator CCs
  */
 // Is defined in SDS13781
@@ -245,6 +255,13 @@ export const applicationCCs: readonly CommandClasses[] = [
 	CommandClasses["User Code"],
 	CommandClasses["Window Covering"],
 ];
+
+/**
+ * An array of all defined CCs that are not application CCs
+ */
+export const nonApplicationCCs: readonly CommandClasses[] = Object.freeze(
+	allCCs.filter((cc) => !applicationCCs.includes(cc)),
+);
 
 export interface CommandClassInfo {
 	/** Whether the endpoint or node can react to this CC */

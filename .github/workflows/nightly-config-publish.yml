@@ -3,6 +3,7 @@ name: Publish nightly configuration updates
 on:
   schedule:
     - cron: 0 2 * * * # Every day at 02:00
+  workflow_dispatch: # Manually on demand
 
 jobs:
   publish-config:
@@ -10,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [14.x] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -19,9 +20,10 @@ jobs:
         fetch-depth: 0 # Fetch the history, or this action won't work
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
 
     - name: Detect changes (git)
       run: |
@@ -32,16 +34,19 @@ jobs:
         LAST_TAG=$(git describe --abbrev=0)
         echo "Checking for changes since last tag $LAST_TAG"
 
+        # Figure out what changed in the package directories
+        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E "^packages\/" || true)
+
         # Check if there were any config file changes
-        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E "packages\/config\/config\/(.*\/)?.+\.json" || true)
-        if [ -z "$CHANGES" ] ; then
+        CONFIG_CHANGES=$(echo "$CHANGES" | grep -E "^packages\/config\/config\/(.*\/)?.+\.json" || true)
+        if [ -z "$CONFIG_CHANGES" ] ; then
           echo "🔸 No config file changes since latest version, aborting..."
           exit 0
         fi
 
         # Check if there were changes except config files and .gitignore
-        CHANGES=$(git diff "$LAST_TAG" --name-only | grep -E -v "packages\/config\/config\/(.*\/)?.+\.json" | grep -v ".gitignore" || true)
-        if [ -n "$CHANGES" ] ; then
+        NON_CONFIG_CHANGES=$(echo "$CHANGES" | grep -E -v "^packages\/config\/config\/(.*\/)?.+\.json" | grep -v ".gitignore" || true)
+        if [ -n "$NON_CONFIG_CHANGES" ] ; then
           echo "❌ Found non-config changes, aborting..."
           exit 0
         else
@@ -52,15 +57,14 @@ jobs:
         # Install dependencies
         # ===============================
 
-        npm i -g yarn
-        yarn install --frozen-lockfile
+        yarn install --immutable
 
         # ===============================
         # Double-check changes with lerna
         # ===============================
 
         # Verify that only @zwave-js/config and zwave-js are changed
-        LERNA_CHANGED=$(npx lerna changed)
+        LERNA_CHANGED=$(lerna changed)
         if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
           echo "❌ Lerna detected unexpected package changes, aborting..."
           echo "These packages are changed:"
@@ -73,7 +77,7 @@ jobs:
         # ===============================
 
         # Create a clean build
-        npx lerna run build
+        lerna run build
 
         # Lint config files
         yarn run lint:config
@@ -89,7 +93,7 @@ jobs:
         # Figure out next version
         cat > ./script.js << 'EOF'
         const semver = require("semver");
-        let v = require("../config/package.json").version;
+        let v = require("@zwave-js/config/package.json").version;
         const now = new Date();
         const today = new Date(now.getTime() - now.getTimezoneOffset()*60000);
         const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
@@ -109,4 +113,4 @@ jobs:
         VERSION=$(node script.js)
         echo "Next version is $VERSION"
         npm version "$VERSION" --ignore-scripts --no-git-tag-version
-        npm publish
+        npm publish --tag nightly

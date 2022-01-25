@@ -36,8 +36,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Minimum brightness level",
 			"description": "Set the desired value from 1 to 98% for the minimum dim level that the dimmer is restricted to, the dimmer will not go lower than the value set here.",
 			"valueSize": 1,
@@ -47,7 +48,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Maximum brightness level",
 			"description": "Set the desired value from 2 to 99% for the maximum dim level that the dimmer is restricted to, the dimmer will not go higher than the value set here.",
 			"valueSize": 1,
@@ -57,7 +59,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Automatic control - dimming step size",
 			"description": "This parameter defines the percentage value of dimming step during the automatic control.",
 			"valueSize": 1,
@@ -67,7 +70,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Automatic control - time of a dimming step",
 			"description": "This parameter defines the time of single dimming step set in parameter 3 during the automatic control.",
 			"valueSize": 1,
@@ -76,7 +80,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Manual control - dimming step size",
 			"description": "This parameter defines the percentage value of dimming step during the manual control.",
 			"valueSize": 1,
@@ -86,7 +91,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Manual control - time of a dimming step",
 			"description": "This parameter defines the time of single dimming step setin parameter 5 during the manual control.",
 			"valueSize": 1,
@@ -95,27 +101,12 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"7": {
-			"label": "Memory function after power failure",
-			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Device does not save the state before a power failure, it returns to off position",
-					"value": 0
-				},
-				{
-					"label": "Device restores it's state before power failure",
-					"value": 1
-				}
-			]
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Switch type",
 			"description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim",
 			"valueSize": 1,
@@ -139,7 +130,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Switch functionality of S1 and S2",
 			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
 			"valueSize": 1,
@@ -159,7 +151,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "S1 Scene ID set",
 			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 3 . S1 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
@@ -168,7 +161,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "S2 Scene ID set",
 			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 5. S2 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
@@ -177,7 +171,8 @@
 			"defaultValue": 2,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto-Off Timer",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -192,5 +187,5 @@
 				}
 			]
 		}
-	}
+	]
 }

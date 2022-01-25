@@ -40,8 +40,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +141,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"description": "Module responds to commands ALL ON / ALL OFF",
 			"valueSize": 1,
@@ -164,7 +170,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Set point set by I2",
 			"valueSize": 2,
 			"minValue": 0,
@@ -172,7 +179,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Set point set by I3",
 			"valueSize": 2,
 			"minValue": 0,
@@ -180,26 +188,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30": {
-			"label": "Saving the state after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Module saves its state",
-					"value": 0
-				},
-				{
-					"label": "Module does not save state",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on power change for Q1",
 			"valueSize": 1,
 			"unit": "%",
@@ -208,7 +202,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -216,7 +211,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Hysteresis On",
 			"valueSize": 1,
 			"minValue": 0,
@@ -224,7 +220,8 @@
 			"defaultValue": 132,
 			"unsigned": true
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Hysteresis Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -232,7 +229,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Antifreeze",
 			"description": "Antifreeze function Temperature",
 			"valueSize": 1,
@@ -241,7 +239,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -249,7 +248,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -257,7 +257,8 @@
 			"defaultValue": 700,
 			"unsigned": true
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Switch selection",
 			"description": "Connected device type can be (NO) or (NC)",
 			"valueSize": 2,
@@ -266,5 +267,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

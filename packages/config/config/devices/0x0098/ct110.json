@@ -29,15 +29,17 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 4
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Utility Lock",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +58,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "C-Wire/Battery",
 			"valueSize": 1,
 			"minValue": 1,
@@ -74,7 +77,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +104,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auxiliary/Emergency Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -118,7 +123,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Thermostat Swing Temperature",
 			"valueSize": 1,
 			"minValue": 1,
@@ -160,7 +166,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -178,7 +185,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Simple UI Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -196,7 +204,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Multicast",
 			"valueSize": 1,
 			"minValue": 0,
@@ -214,7 +223,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Main Display Settings",
 			"valueSize": 1,
 			"minValue": 1,
@@ -232,7 +242,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Save Energy Mode Type",
 			"valueSize": 1,
 			"minValue": 1,
@@ -241,7 +252,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"2[0xff]": {
+		{
+			"#": "2[0xff]",
 			"label": "HVAC Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -259,14 +271,16 @@
 				}
 			]
 		},
-		"2[0x0f00]": {
+		{
+			"#": "2[0x0f00]",
 			"label": "# of Auxiliary Stages",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0
 		},
-		"2[0xf000]": {
+		{
+			"#": "2[0xf000]",
 			"label": "Fuel Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -284,33 +298,37 @@
 				}
 			]
 		},
-		"2[0xff0000]": {
+		{
+			"#": "2[0xff0000]",
 			"label": "# of Heat Pump Stages.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 128,
 			"defaultValue": 0
 		},
-		"2[0x0f000000]": {
+		{
+			"#": "2[0x0f000000]",
 			"label": "# of Cool Stages.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 0
 		},
-		"10[0xffff]": {
+		{
+			"#": "10[0xffff]",
 			"label": "Temperature Reporting Filter (lower bound)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
 			"defaultValue": 124
 		},
-		"10[0x0fff0000]": {
+		{
+			"#": "10[0x0fff0000]",
 			"label": "Temperature Reporting Filter (upper bound)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
 			"defaultValue": 124
 		}
-	}
+	]
 }

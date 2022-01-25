@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "W meter report period",
 			"description": "Period for reporting W meter",
 			"valueSize": 2,
@@ -40,7 +41,8 @@
 			"defaultValue": 720,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "kWh meter report period",
 			"description": "Period for reporting kWh meter",
 			"valueSize": 2,
@@ -49,7 +51,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Selected endpoint",
 			"description": "Which endpoint is addressed by the BASIC command class",
 			"valueSize": 1,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
@@ -95,7 +99,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Threshold of Watt for Load Caution",
 			"description": "If threshold of wattage is reached, a meter report will be generated",
 			"valueSize": 2,
@@ -103,7 +108,8 @@
 			"maxValue": 1500,
 			"defaultValue": 1500
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Threshold of kWh for Load Caution",
 			"description": "If threshold of kWh is reached, a Meter Report will be generated",
 			"valueSize": 2,
@@ -111,7 +117,8 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -134,7 +141,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
@@ -142,7 +150,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +178,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,
@@ -188,5 +198,5 @@
 				}
 			]
 		}
-	}
+	]
 }

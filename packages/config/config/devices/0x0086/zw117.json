@@ -41,9 +41,10 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"82": {
-			"$import": "../templates/master_template.json#led_indicator_two_options",
+	"paramInformation": [
+		{
+			"#": "82",
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
 			"options": [
 				{
 					"label": "On for 2 seconds",
@@ -55,19 +56,23 @@
 				}
 			]
 		},
-		"200": {
+		{
+			"#": "200",
 			"$import": "templates/aeotec_template.json#partner_id_other"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the Z-Wave Button on Range Extender 6",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the Z-Wave Button on Range Extender 6",

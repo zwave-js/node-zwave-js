@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Meter Report Interval",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -24,7 +25,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Night Light Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -32,7 +34,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Night Light Color Value",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,7 +43,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "If you want to manually include the device, press the button for 3 times to include the device.\nLED Status: Blue LED Solid light",
 		"exclusion": "If you want to manually exclude the device, press the button for 3 times to exclude the device.\nLED Status: Green LED 1 sec. flashes 1 times",

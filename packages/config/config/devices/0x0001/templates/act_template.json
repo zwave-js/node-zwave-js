@@ -1,38 +1,38 @@
 // ACT/HomePro Templates
 {
 	"ignore_start_level_receiving": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Ignore Start Level (Receiving)",
 		"description": "When enabled, the switch will start dimming from the current level"
 	},
 	"ignore_start_level_transmitting": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Ignore Start Level (Transmitting)",
 		"description": "When enabled, dim commands will ignore the start level",
 		"defaultValue": 1
 	},
 	"suspend_group_4": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Group 4",
 		"description": "Controls whether commands will be transmitted to Group 4"
 	},
 	"disable_send_level": {
-		"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 		"label": "Enable / Disable Send Levels After Dim",
 		"description": "Controls whether devices are set to the same level as the ZDW103 after dimming"
 	},
 	"enable_shade_group_1": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Shade Group 1",
 		"description": "Define whether the device can control shade control devices via Group 1"
 	},
 	"enable_shade_group_2": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Shade Group 2",
 		"description": "Define whether the device can control shade control devices via Group 2"
 	},
 	"enable_shade_group_3": {
-		"$import": "../../templates/master_template.json#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable / Disable Shade Group 3",
 		"description": "Define whether the device can control shade control devices via Group 3"
 	},
@@ -59,31 +59,31 @@
 		]
 	},
 	"dim_step_zwave": {
-		"$import": "../../templates/master_template.json#base_1-99_nounit",
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
 		"label": "Dimming Steps (Z-Wave)"
 	},
 	"dim_rate_zwave": {
-		"$import": "../../templates/master_template.json#dimming_timing",
+		"$import": "~/templates/master_template.json#dimming_timing",
 		"label": "Dimming Rate (Z-Wave)"
 	},
 	"dim_step_manual": {
-		"$import": "../../templates/master_template.json#base_1-99_nounit",
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
 		"label": "Dimming Steps (Manual)"
 	},
 	"dim_rate_manual": {
-		"$import": "../../templates/master_template.json#dimming_timing",
+		"$import": "~/templates/master_template.json#dimming_timing",
 		"label": "Dimming Rate (Manual)"
 	},
 	"dim_step_all": {
-		"$import": "../../templates/master_template.json#base_1-99_nounit",
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
 		"label": "Dimming Steps (All-On/All-Off)"
 	},
 	"dim_rate_all": {
-		"$import": "../../templates/master_template.json#dimming_timing",
+		"$import": "~/templates/master_template.json#dimming_timing",
 		"label": "Dimming Rate (All-On/All-Off)"
 	},
 	"disable_group_4": {
-		"$import": "../../templates/master_template.json#base_enable_disable_inverted",
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 		"label": "Enable / Disable Group 4 Dimming",
 		"description": "Controls whether dimming commands are transmitted to Group 4"
 	}

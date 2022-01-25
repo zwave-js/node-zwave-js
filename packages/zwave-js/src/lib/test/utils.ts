@@ -1,4 +1,4 @@
-/* wotan-disable no-restricted-property-access */
+/* eslint-disable @typescript-eslint/no-empty-function */
 
 import { MockSerialPort } from "@zwave-js/serial";
 import type { DeepPartial } from "@zwave-js/shared";
@@ -7,9 +7,8 @@ import type { ZWaveOptions } from "../driver/ZWaveOptions";
 
 // load the driver with stubbed out Serialport
 jest.mock("@zwave-js/serial", () => {
-	const mdl: typeof import("@zwave-js/serial") = jest.requireActual(
-		"@zwave-js/serial",
-	);
+	const mdl: typeof import("@zwave-js/serial") =
+		jest.requireActual("@zwave-js/serial");
 	return {
 		...mdl,
 		ZWaveSerialPort: mdl.MockSerialPort,
@@ -32,11 +31,14 @@ export async function createAndStartDriver(
 
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
-		skipInterview: true,
+		interview: { skipInterview: true },
 	});
 	driver.on("error", () => {
 		/* swallow error events during testing */
 	});
+	// We don't need to test the soft reset logic in CI
+	// Return a promise that never resolves, so we don't accidentally stumble into interview code
+	driver.softReset = () => new Promise(() => {});
 	await driver.start();
 	const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 
@@ -57,6 +59,7 @@ export async function createAndStartDriver(
 		ownNodeId: 1,
 		isFunctionSupported: () => true,
 		nodes: new Map(),
+		incrementStatistics: () => {},
 	} as any;
 
 	return {

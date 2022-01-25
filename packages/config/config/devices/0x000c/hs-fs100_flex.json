@@ -1,0 +1,52 @@
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-FS100+",
+	"description": "Flex Sensor",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3050
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.18",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/homeseer_template.json#light_sensitivity"
+		},
+		{
+			"#": "2",
+			"$import": "templates/homeseer_template.json#water_beep_frequency"
+		},
+		{
+			"#": "3",
+			"$import": "templates/homeseer_template.json#temp_reporting_interval"
+		},
+		{
+			"#": "4",
+			"$import": "templates/homeseer_template.json#enable_notification_buzzer"
+		},
+		{
+			"#": "5",
+			"label": "Flashing LED Detection Delay",
+			"description": "Set delay to avoid continuous notifications when detecting flashing LEDs; 0 to disable",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "Inclusion: Add the device into your network by a Z-Wave certified controller. HS-FS100+ supports the latest S2 security offered by Z-Wave certified controllers. If your controller supports S2, please refer to the user guide of the controller for detailed instructions on adding devices to the network. The device can be added using the traditional method for Z-Wave as follows:\n1. Place your controller into Inclusion (Add) mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button of HS-FS100+. The controller should indicate that the new device was added successfully. If the controller shows it failed, repeat the procedure",
+		"exclusion": "Exclusion: Remove the device from your network by a Z-Wave certified controller. HS-FS100+ supports the latest S2 security offered by Z-Wave certified controllers. If your controller supports S2, please refer to the user guide of the controller for detailed instructions on removing devices from the network. The device can be removed using the traditional method for Z-Wave as follows:\n1. Place your controller into Exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button of HS-FS100+. The controller should indicate that the device was removed successfully. If the controller shows it failed, repeat the procedure",
+		"reset": "Use this procedure to reset Flex Sensor to factory settings when the Z-Wave controller is missing or otherwise inoperable.\n\nPress and hold the Z-Wave button on the sensor body for 10 seconds. If successful, the LED will flash 5 times",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3050/HS-FS100-Manual%20081418.pdf"
+	}
+}

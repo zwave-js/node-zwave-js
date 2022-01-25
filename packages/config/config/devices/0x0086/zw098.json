@@ -40,8 +40,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"14": {
+	"paramInformation": [
+		{
+			"#": "14",
 			"$if": "firmwareVersion <= 1.5",
 			"label": "Sunrise Transition Time",
 			"valueSize": 2,
@@ -51,7 +52,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"$if": "firmwareVersion <= 1.5",
 			"label": "Sunset Transition Time",
 			"valueSize": 2,
@@ -61,10 +63,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
-			"$import": "../templates/master_template.json#state_after_power_failure"
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Color Change Report Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,36 +91,42 @@
 				}
 			]
 		},
-		"33[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "33[0xff]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Blue Color Value",
 			"valueSize": 4,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"33[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "33[0xff00]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Green Color Value",
 			"valueSize": 4,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"33[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "33[0xff0000]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Red Color Value",
 			"valueSize": 4,
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"34": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "34",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "External Switch (On/Off)"
 		},
-		"35": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "35",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "External Switch (Color)"
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Reboot/Save/Exit Colorful Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +154,8 @@
 				}
 			]
 		},
-		"37[0xe0]": {
+		{
+			"#": "37[0xe0]",
 			"label": "Time Base of Color Change Speed",
 			"valueSize": 4,
 			"minValue": 0,
@@ -166,7 +177,8 @@
 				}
 			]
 		},
-		"37[0x1f]": {
+		{
+			"#": "37[0x1f]",
 			"label": "Color Change Speed Level",
 			"description": "Allowable range: 1-30",
 			"valueSize": 4,
@@ -184,8 +196,9 @@
 				}
 			]
 		},
-		"37[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "37[0xff00]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Cycle Count",
 			"description": "Allowable range: 1-254",
 			"valueSize": 4,
@@ -201,8 +214,9 @@
 				}
 			]
 		},
-		"37[0xff0000]": {
-			"$import": "../templates/master_template.json#base_1-255_nounit",
+		{
+			"#": "37[0xff0000]",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Brightness",
 			"description": "Allowable range: 1-99",
 			"valueSize": 4,
@@ -213,7 +227,8 @@
 				}
 			]
 		},
-		"37[0x07000000]": {
+		{
+			"#": "37[0x07000000]",
 			"label": "Color Display Cycle",
 			"valueSize": 4,
 			"minValue": 0,
@@ -243,7 +258,8 @@
 				}
 			]
 		},
-		"37[0x38000000]": {
+		{
+			"#": "37[0x38000000]",
 			"label": "Color Change Speed Option",
 			"valueSize": 4,
 			"minValue": 0,
@@ -257,7 +273,8 @@
 				}
 			]
 		},
-		"37[0xc0000000]": {
+		{
+			"#": "37[0xc0000000]",
 			"label": "Color Transition Style",
 			"valueSize": 4,
 			"minValue": 0,
@@ -275,53 +292,62 @@
 				}
 			]
 		},
-		"38[0xff]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "38[0xff]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Pause Time of Off",
 			"description": "Active only in Fade Out/Fade In Transition Style",
 			"valueSize": 4,
 			"defaultValue": 0
 		},
-		"38[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "38[0xff00]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Pause Time of On",
 			"valueSize": 4,
 			"defaultValue": 6
 		},
-		"38[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "38[0xff0000]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Transition Speed (On to Off)",
 			"description": "Active only in Fade Out/Fade In Transition Style",
 			"valueSize": 4,
 			"maxValue": 125,
 			"defaultValue": 0
 		},
-		"38[0xff000000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "38[0xff000000]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Transition Speed (Off to On)",
 			"valueSize": 4,
 			"maxValue": 125,
 			"defaultValue": 24
 		},
-		"39[0xff00]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "39[0xff00]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Blue Value",
 			"valueSize": 4
 		},
-		"39[0xff0000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "39[0xff0000]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Green Value",
 			"valueSize": 4
 		},
-		"39[0xff000000]": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "39[0xff000000]",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Single Color/Fade Out: Red Value",
 			"valueSize": 4
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -348,13 +374,15 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, press the external switch of LED Bulb to turn it off and then press the external switch again to turn it on",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, press the external switch of LED Bulb to turn off and then press the external switch again to turn on it, repeat the operation 3 times",

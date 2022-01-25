@@ -1,0 +1,91 @@
+{
+	"manufacturer": "Minoston",
+	"manufacturerId": "0x0312",
+	"label": "MP21ZD",
+	"description": "Smart Plug Dimmer",
+	"devices": [
+		{
+			"productType": "0xff00",
+			"productId": "0xff0d",
+			"zwaveAllianceId": 4137
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "3",
+			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+		},
+		{
+			"#": "5",
+			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#dim_rate"
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
+		},
+		{
+			"#": "21",
+			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
+		},
+		{
+			"#": "20",
+			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
+		},
+		{
+			"#": "22",
+			"$import": "~/0x0312/templates/minoston_template.json#night_mode_brightness"
+		},
+		{
+			"#": "23",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
+		},
+		{
+			"#": "26",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4137/MP21ZD%20Manual-20210322.pdf"
+	}
+}

@@ -48,7 +48,8 @@ export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.AssignReturnRoute)
 export class AssignReturnRouteRequest
 	extends AssignReturnRouteRequestBase
-	implements INodeQuery {
+	implements INodeQuery
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -90,7 +91,8 @@ export class AssignReturnRouteRequest
 @messageTypes(MessageType.Response, FunctionType.AssignReturnRoute)
 export class AssignReturnRouteResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.hasStarted = this.payload[0] !== 0;
@@ -118,7 +120,8 @@ export class AssignReturnRouteResponse
 
 export class AssignReturnRouteRequestTransmitReport
 	extends AssignReturnRouteRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

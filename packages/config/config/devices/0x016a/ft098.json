@@ -26,8 +26,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Power-on state",
 			"description": "The bulb's state after power is applied",
 			"valueSize": 1,
@@ -50,7 +51,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Send report when color is changed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +70,8 @@
 				}
 			]
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Get the bulb's color value",
 			"description": "Byte 1: reserved, Bytes 2, 3, 4: Red, Green, Blue",
 			"valueSize": 4,
@@ -76,7 +79,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Allow external switch to turn the bulb on/off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -94,7 +98,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Allow external switch to change the color",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +117,8 @@
 				}
 			]
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Reboot / Save / Exit colorful mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -138,7 +144,8 @@
 				}
 			]
 		},
-		"37": {
+		{
+			"#": "37",
 			"label": "Colorful mode configuration",
 			"description": "Configure the colour cycling modes. See overview for details.",
 			"valueSize": 4,
@@ -146,7 +153,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"38": {
+		{
+			"#": "38",
 			"label": "Change speed",
 			"description": "Change the speed when going from OFF to ON, ON to OFF. See overview for details.",
 			"valueSize": 4,
@@ -154,7 +162,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Multi-colour configuration",
 			"description": "Set up to 8 colours to cycle between when the LED is in Multi Colour Mode",
 			"valueSize": 4,
@@ -162,7 +171,8 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Send notifications to associated devices (Group 1)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -184,7 +194,8 @@
 				}
 			]
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Dimer mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -210,7 +221,8 @@
 				}
 			]
 		},
-		"200": {
+		{
+			"#": "200",
 			"label": "Partner ID",
 			"valueSize": 1,
 			"minValue": 0,
@@ -223,7 +235,8 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Enable/disable Lock Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -241,7 +254,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset to factory defaults",
 			"description": "Reset the bulb, optionally also removing it from the z-wave network",
 			"valueSize": 4,
@@ -249,5 +263,5 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		}
-	}
+	]
 }

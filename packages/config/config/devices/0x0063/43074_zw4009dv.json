@@ -7,7 +7,7 @@
 		{
 			"productType": "0x4952",
 			"productId": "0x3231",
-			"zwaveAllianceId": 3351
+			"zwaveAllianceId": [3351, 4167]
 		}
 	],
 	"firmwareVersion": {
@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Indication Configuration",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
@@ -59,7 +60,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Enables alternate method for excluding the device to prevent accidental removal",
 			"valueSize": 1,
@@ -79,14 +81,14 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the top or bottom of the wireless smart switch (rocker)",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\nto remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the top or bottom of the wireless smart switch (rocker)",
-		"reset": "1. Quickly press ON (top) button three times then immediately\npress the OFF (Bottom) button three times. The LED will\nflash ON/OFF five times when completed successfully.\nNote: This should only be used if your network’s primary\ncontroller is missing or otherwise inoperable",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3351/46202.43074%20Binder.pdf"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately press the OFF (Bottom) button three times. The LED will flash ON/OFF five times when completed successfully. Note: This should only be used if your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4167/43074%20QSG%20v1.pdf"
 	}
 }

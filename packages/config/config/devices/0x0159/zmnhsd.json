@@ -37,8 +37,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -56,7 +57,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Working mode",
 			"description": "Module presentation on the user interface.",
 			"valueSize": 1,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON / ALL OFF",
 			"description": "DIN dimmer module responds to commands ALL ON / ALL OFF",
 			"valueSize": 2,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off output after set time",
 			"unit": "s",
 			"valueSize": 2,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Automatic turning on output after set time",
 			"unit": "s",
 			"valueSize": 2,
@@ -131,7 +136,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Enable / Disable Double click function",
 			"description": "If Double click function is enabled, double click to maximum dimming power",
 			"valueSize": 1,
@@ -151,26 +157,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Save state of after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Save state enabled",
-					"value": 0
-				},
-				{
-					"label": "Save state disabled",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in watts on power change",
 			"description": "Reporting the power in Watts on power change larger then the setpoint",
 			"unit": "%",
@@ -179,7 +171,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval",
 			"unit": "s",
 			"valueSize": 2,
@@ -187,7 +180,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Minimum dimming value",
 			"unit": "%",
 			"valueSize": 1,
@@ -195,7 +189,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Maximum dimming value",
 			"unit": "%",
 			"valueSize": 1,
@@ -203,7 +198,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Dimming time (soft on/off)",
 			"description": "Set value means time of moving the Dimmer between min. and max. dimming",
 			"valueSize": 2,
@@ -211,7 +207,8 @@
 			"maxValue": 255,
 			"defaultValue": 100
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Dimming time when key pressed",
 			"description": "Time to moving the Dimmer between min. and max values (in seconds).",
 			"valueSize": 2,
@@ -219,7 +216,8 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Ignore start level",
 			"description": "Ignore or respect start level when used together with association group 3",
 			"valueSize": 1,
@@ -239,7 +237,8 @@
 				}
 			]
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Dimming duration",
 			"description": "This parameter is used with association group 3.",
 			"valueSize": 1,
@@ -247,7 +246,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature sensor offset settings",
 			"description": "32536 = no offset; 1-100 = 0.1°C added; 1001-1100 = 0.1°C subtracted",
 			"unit": "°C",
@@ -256,7 +256,8 @@
 			"maxValue": 32536,
 			"defaultValue": 32536
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Digital temperature sensor reporting",
 			"description": "Reporting temperature when change is larger than defined by this parameter",
 			"unit": "°C",
@@ -265,5 +266,5 @@
 			"maxValue": 127,
 			"defaultValue": 5
 		}
-	}
+	]
 }

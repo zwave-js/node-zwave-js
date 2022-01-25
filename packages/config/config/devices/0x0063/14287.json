@@ -16,12 +16,12 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Basic Set",
 			"maxNodes": 5
 		},
 		"3": {
@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State",
 			"valueSize": 1,
@@ -51,7 +52,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true,
 		"commandClasses": {

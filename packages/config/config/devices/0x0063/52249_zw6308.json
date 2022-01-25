@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Invert Door Status",
 			"description": "Invert open close door",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "Alternate exclusion mode press button one time or three time",
 			"valueSize": 1,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Change Cmd Send",
 			"description": "Change cmd send of open/close door/window",
 			"valueSize": 1,
@@ -75,7 +78,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Enable LED Blink",
 			"description": "Enable LED blink open or close door or window",
 			"valueSize": 1,
@@ -95,7 +99,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Battery Rpt Interval",
 			"description": "Set the interval timer of battery report",
 			"valueSize": 2,
@@ -122,7 +127,8 @@
 				}
 			]
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Tamper Home Security",
 			"description": "Tamper remove LED continuous blink you can set",
 			"valueSize": 1,
@@ -142,7 +148,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has been removed.\n3. Press and release the programming button (see Figure 2). This starts the manual add process. The red LED (see Figure 2) will begin to flash quickly as it begins the add process.\n4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product (see Figure 3). Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button on the sensor\n1 time to remove it from the network (see Figure 4).\n3. The red LED will blink 5 times to indicate it has been removed",

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Input switch (i1) function selection",
 			"description": "Available configuration parameters for input switch I1",
 			"valueSize": 1,
@@ -45,7 +45,8 @@
 				}
 			]
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Reporting on power change",
 			"description": "This parameter is valid for Active Powers Total, Phase1, Phase2 and Phase3.",
 			"unit": "%",
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Reporting on time interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -75,7 +77,8 @@
 				}
 			]
 		},
-		"43": {
+		{
+			"#": "43",
 			"label": "Other Values - Reporting on time interval",
 			"description": "Energy reports for Voltage, Current, Total Power Factor, Total Reactive Power",
 			"unit": "seconds",
@@ -91,7 +94,8 @@
 				}
 			]
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Enable / Disable External IR relay (BICOM)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -113,7 +117,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Enable / Disable External relay (IKA)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -131,7 +136,8 @@
 				}
 			]
 		},
-		"106": {
+		{
+			"#": "106",
 			"label": "maximum power threshold of all phases together",
 			"unit": "W",
 			"valueSize": 2,
@@ -140,7 +146,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Power threshold – Delay before power on",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -154,5 +161,5 @@
 				}
 			]
 		}
-	}
+	]
 }

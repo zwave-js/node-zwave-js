@@ -72,8 +72,9 @@
 			"maxNodes": 16
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +93,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -111,7 +113,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -130,7 +133,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -149,7 +153,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON / ALL OFF",
 			"description": "Dimmer module responds to commands ALL ON / ALL OFF",
 			"valueSize": 2,
@@ -177,7 +182,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off output after set time",
 			"description": "Auto OFF enabled with defined time, step is 1 second.",
 			"valueSize": 2,
@@ -185,7 +191,8 @@
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Automatic turning on output after set time",
 			"description": "Auto ON enabled with defined time, step is 1 second.",
 			"valueSize": 2,
@@ -193,7 +200,8 @@
 			"maxValue": 32536,
 			"defaultValue": 0
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Enable / Disable 3-way switch",
 			"description": "Dimming is done by push button or switch connected to I1.",
 			"valueSize": 1,
@@ -217,7 +225,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Enable / Disable Double click function",
 			"description": "A fast double click on the push button will set dimming power at maximum.",
 			"valueSize": 1,
@@ -237,26 +246,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Saving the state after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Save state enabled",
-					"value": 0
-				},
-				{
-					"label": "Save state disabled",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in watts on power change",
 			"description": "Set value is percentage, set value from 0 - 100 = 0% - 100%.",
 			"valueSize": 1,
@@ -264,7 +259,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval",
 			"description": "Set value means time interval (0 – 32767) in seconds.",
 			"valueSize": 2,
@@ -272,7 +268,8 @@
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Minimum dimming value",
 			"description": "Minimum dimming value is set by entered value.",
 			"valueSize": 1,
@@ -280,7 +277,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Maximum dimming value",
 			"description": "Maximum dimming value is set by entered value.",
 			"valueSize": 1,
@@ -288,7 +286,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Dimming time (soft on/off)",
 			"description": "Set value means time of moving the Dimmer between min. and max. dimming values",
 			"valueSize": 2,
@@ -296,7 +295,8 @@
 			"maxValue": 255,
 			"defaultValue": 100
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Dimming time when key pressed",
 			"description": "Time of moving the Dimmer between min. and max dimming values",
 			"valueSize": 2,
@@ -304,7 +304,8 @@
 			"maxValue": 255,
 			"defaultValue": 3
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Ignore start level",
 			"description": "This parameter is used with association group 3",
 			"valueSize": 1,
@@ -324,7 +325,8 @@
 				}
 			]
 		},
-		"68": {
+		{
+			"#": "68",
 			"label": "Dimming duration",
 			"description": "This parameter is used with association group 3",
 			"valueSize": 1,
@@ -332,7 +334,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Enable / Disable Endpoints I2",
 			"description": "Enabling I2 means that Endpoint (I2) will be present on UI.",
 			"valueSize": 1,
@@ -376,7 +379,8 @@
 				}
 			]
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Enable / Disable Endpoints I3",
 			"description": "Enabling I3 means that Endpoint (I3) will be present on UI.",
 			"valueSize": 1,
@@ -420,7 +424,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Temperature sensor offset settings",
 			"description": "Offset to actual measured value",
 			"valueSize": 2,
@@ -428,7 +433,8 @@
 			"maxValue": 32536,
 			"defaultValue": 32536
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "Digital temperature sensor reporting",
 			"description": "Module reports measured temperature on defined temperature change",
 			"valueSize": 1,
@@ -436,7 +442,8 @@
 			"maxValue": 127,
 			"defaultValue": 5
 		},
-		"250": {
+		{
+			"#": "250",
 			"label": "Unsecure / Secure Inclusion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -454,7 +461,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "AUTOMATICALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (AUTO INCLUSION)\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected – sold separately*).\n3. Auto-inclusion will be initiated within 5 seconds of connection to the power supply and the device will automatically enrol in your network\nMANUALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (MANUAL INCLUSION)\n1. Enable add/remove mode on your Z-Wave gateway (hub)\n2. Connect the device to the power supply (with the temperature sensor already connected)\n3. Toggle the switch connected to the I1 terminal 3 times within 3 seconds\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button between 2 and 6 seconds\n4. A new multi-channel device will appear on your dashboard\n\nMake sure the device is excluded from your network before connecting the temperature sensor. Switch off the power supply, connect the temperature sensor, and re-include the device to your network.\nNOTE2: When connecting temperature sensor to module that has already been included, you have to exclude module first. Switch off power supply, connect the sensor and re-include the module.",
 		"exclusion": "REMOVAL FROM A ZWAVE NETWORK (Z-WAVE EXCLUSION)\n1. Connect the device to the power supply\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion\n3. Enable add/remove mode on your Z-Wave gateway (hub)\n4. Toggle the switch connected to the I1 terminal 3 times within 3 seconds\nOR\nIf the device is powered by 24 V SELV supply, press and hold the S (Service) button between 2 and 6 seconds\n5. The device will be removed from your network but any custom configuration parameters will not be erased",

@@ -32,39 +32,47 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Numbers of clicks to control the load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 7
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Value used for devices belonging to Group 2",
-			"description": "Value sent when the external switch receives 1 Click",
+			"description": "Value sent when the external switch receives 1 click. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Value used for devices belonging to Group 3",
-			"description": "Value sent wen the external switch receives 2 Clicks",
+			"description": "Value sent when the external switch receives 2 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Value used for devices belonging to Group 4",
-			"description": "Value sent when external switch receives 3 Clicks",
+			"description": "Value sent when external switch receives 3 clicks. Allowable range: 0-99, 255",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 100,
-			"defaultValue": 100
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timer to switch OFF the Relay",
 			"description": "Defines the time after which the relay is switched OFF",
 			"valueSize": 2,
@@ -72,7 +80,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Timer to switch ON the Relay",
 			"description": "Defines the time after which the relay is switched ON",
 			"valueSize": 2,
@@ -80,7 +89,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Timer scale",
 			"description": "Defines the time unit used for parameters No.10 and No.11.",
 			"valueSize": 2,
@@ -89,7 +99,8 @@
 			"defaultValue": 1,
 			"writeOnly": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "One Click Scene Activation Set",
 			"description": "Defines the Scene Activation Set value sent to the Lifeline group with 1 Click",
 			"valueSize": 2,
@@ -97,7 +108,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Two Clicks Scene Activation Set",
 			"description": "Defines the Scene Activation Set value sent to the Lifeline group with 2 Clicks",
 			"valueSize": 2,
@@ -105,7 +117,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Three Clicks Scene Activation Set",
 			"description": "Defines the Scene Activation Set value sent to the Lifeline group with 3 Clicks",
 			"valueSize": 2,
@@ -113,7 +126,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Start-up Status",
 			"description": "Defines the status of the device following a restart",
 			"valueSize": 1,
@@ -136,7 +150,8 @@
 				}
 			]
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
@@ -159,5 +174,5 @@
 				}
 			]
 		}
-	}
+	]
 }

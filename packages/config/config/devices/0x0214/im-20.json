@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Level",
 			"description": "Basic Set Command will be sent when the door/window is opened or closed",
 			"valueSize": 1,
@@ -28,14 +28,16 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Turn Off Light Time Configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
 			"defaultValue": 20
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Door Sensor Status Report",
 			"description": "Auto report Door/Window status time",
 			"unit": "hours",
@@ -44,5 +46,5 @@
 			"maxValue": 24,
 			"defaultValue": 12
 		}
-	}
+	]
 }

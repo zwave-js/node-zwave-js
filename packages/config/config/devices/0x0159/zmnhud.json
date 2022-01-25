@@ -41,8 +41,9 @@
 			"maxNodes": 99
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +80,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -96,7 +99,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input 1 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -114,7 +118,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -132,7 +137,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -150,7 +156,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Input 1 operation mode selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -188,7 +195,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Input 2 operation mode selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -226,7 +234,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Input 3 operation mode selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -264,23 +273,9 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Device state after pwr failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "The module saves its state before power failure",
-					"value": 0
-				},
-				{
-					"label": "The module does not save the state",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		}
-	}
+	]
 }

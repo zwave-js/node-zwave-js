@@ -1,6 +1,6 @@
 import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
 import { reportProblem } from "@zwave-js/maintenance";
-import { formatId, num2hex } from "@zwave-js/shared";
+import { formatId, getErrorMessage, num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -17,9 +17,6 @@ import {
 import { parseLogic } from "../src/Logic";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
-/* wotan-disable no-useless-predicate */
-/* wotan-disable no-restricted-property-access */
-
 const configManager = new ConfigManager();
 
 async function lintNotifications(): Promise<void> {
@@ -34,7 +31,7 @@ async function lintManufacturers(): Promise<void> {
 
 async function lintIndicators(): Promise<void> {
 	await configManager.loadIndicators();
-	const properties = configManager["indicatorProperties"]!;
+	const properties = configManager.indicatorProperties;
 
 	if (!(properties.get(1)?.label === "Multilevel")) {
 		throw new Error(
@@ -177,14 +174,21 @@ async function lintDevices(): Promise<void> {
 	}
 
 	for (const file of uniqueFiles) {
-		const filePath = path.join(configDir, "devices", file);
+		const rootDir = path.join(configDir, "devices");
+		const filePath = path.join(rootDir, file);
 
 		// Try parsing the file
 		let conditionalConfig: ConditionalDeviceConfig;
 		try {
-			conditionalConfig = await ConditionalDeviceConfig.from(filePath);
+			conditionalConfig = await ConditionalDeviceConfig.from(
+				filePath,
+				true,
+				{
+					rootDir,
+				},
+			);
 		} catch (e) {
-			addError(file, e.message);
+			addError(file, getErrorMessage(e));
 			continue;
 		}
 
@@ -223,7 +227,7 @@ async function lintDevices(): Promise<void> {
 			try {
 				config = conditionalConfig.evaluate(variant);
 			} catch (e) {
-				addError(file, e.message, variant);
+				addError(file, getErrorMessage(e), variant);
 				continue;
 			}
 
@@ -826,6 +830,30 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 			}
 		}
 
+		// Ensure that for a given param, the one without a condition comes last
+		if (conditionalConfig.paramInformation) {
+			for (const [
+				key,
+				definitions,
+			] of conditionalConfig.paramInformation) {
+				if (
+					!definitions.every(
+						(d, index) =>
+							d.condition !== undefined ||
+							index === definitions.length - 1,
+					)
+				) {
+					addError(
+						file,
+						`${paramNoToString(
+							key.parameter,
+							key.valueBitMask,
+						)} is either invalid or duplicated: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+					);
+				}
+			}
+		}
+
 		// Check only the conditional configs for single bit masks, because they might be added for
 		// separate variants
 		if (conditionalConfig.paramInformation) {
@@ -945,7 +973,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 
 async function lintNamedScales(): Promise<void> {
 	await configManager.loadNamedScales();
-	const definitions = configManager["namedScales"]!;
+	const definitions = configManager.namedScales;
 
 	if (!definitions.has("temperature")) {
 		throw new Error(`Named scale "temperature" is missing!`);
@@ -961,6 +989,8 @@ async function lintSensorTypes(): Promise<void> {
 }
 
 export async function lintConfigFiles(): Promise<void> {
+	// Set NODE_ENV to test in order to trigger stricter checks
+	process.env.NODE_ENV = "test";
 	try {
 		await lintManufacturers();
 		await lintDevices();
@@ -973,7 +1003,7 @@ export async function lintConfigFiles(): Promise<void> {
 		console.log(green("The config files are valid!"));
 		console.log();
 		console.log(" ");
-	} catch (e) {
+	} catch (e: any) {
 		if (typeof e.stack === "string") {
 			const lines = (e.stack as string).split("\n");
 			if (lines[0].trim().toLowerCase() === "error:") {

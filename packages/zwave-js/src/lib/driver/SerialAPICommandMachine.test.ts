@@ -308,7 +308,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 		},
 		SEND_SUCCESS: {
 			exec: ({ sendDataPromise }) => {
-				sendDataPromise?.resolve();
+				sendDataPromise?.resolve(undefined as any);
 			},
 		},
 		SEND_FAILURE: {
@@ -426,8 +426,8 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 
 					if (plan.state.value === "failure") {
 						// parse expected failure reason from plan
-						const failureEvent = path.segments.slice(-1)?.[0]?.event
-							.type;
+						const failureEvent =
+							path.segments.slice(-1)?.[0]?.event.type;
 						context.expectedFailureReason = (() => {
 							switch (failureEvent) {
 								case "SEND_FAILURE":
@@ -449,8 +449,8 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 						})();
 					} else if (plan.state.value === "success") {
 						// parse expected success event from plan
-						const successEvent = path.segments.slice(-1)?.[0]?.event
-							.type;
+						const successEvent =
+							path.segments.slice(-1)?.[0]?.event.type;
 						context.expectedResult = (() => {
 							switch (successEvent) {
 								case "ACK":

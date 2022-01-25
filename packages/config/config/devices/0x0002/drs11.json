@@ -1,0 +1,22 @@
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "DRS11",
+	"description": "Room Thermostat",
+	"devices": [
+		{
+			"productType": "0x8003",
+			"productId": "0x8001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"comments": {
+			"level": "error",
+			"text": "This device only supports proprietary commands and is not usable in Z-Wave JS."
+		}
+	}
+}

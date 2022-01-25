@@ -2,7 +2,6 @@ import {
 	CommandClasses,
 	DSTInfo,
 	formatDate,
-	getDefaultDSTInfo,
 	getDSTInfo,
 	Maybe,
 	MessageOrCCLogEntry,
@@ -152,7 +151,7 @@ export class TimeCC extends CommandClass {
 				direction: "outbound",
 			});
 			// Set the correct timezone on this node
-			const timezone = getDSTInfo() || getDefaultDSTInfo();
+			const timezone = getDSTInfo();
 			await api.setTimezone(timezone);
 		}
 

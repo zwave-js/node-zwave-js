@@ -7,15 +7,19 @@
 		{
 			"productType": "0x0a01",
 			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0a02",
+			"productId": "0x5102"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "PM2.5 report interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
 			"unit": "0.1μg/m³",
@@ -35,7 +39,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Temperature Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
 			"unit": "0.5°C",
@@ -55,7 +60,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Humidity Report Interval",
 			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
 			"unit": "2%",
@@ -65,7 +71,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Setting",
 			"description": "85 (0x55) to restore factory setting",
 			"valueSize": 1,
@@ -86,5 +93,5 @@
 				}
 			]
 		}
-	}
+	]
 }

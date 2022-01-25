@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
+	"paramInformation": [
+		{
+			"#": "7",
 			"label": "Input 1 switch function selection",
 			"description": "IR external relay or External Relay control mode",
 			"valueSize": 1,
@@ -46,7 +46,35 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "10",
+			"label": "All On / All Off Function",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable both",
+					"value": 0
+				},
+				{
+					"label": "Disable All On, Enable All Off",
+					"value": 1
+				},
+				{
+					"label": "Enable All On, Disable All Off",
+					"value": 2
+				},
+				{
+					"label": "Enable both",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "11",
 			"label": "Timer turning off IR external relay",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -60,7 +88,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Timer turning on IR external relay output",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -68,7 +97,8 @@
 			"maxValue": 32535,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Timer turning off External relay output",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -76,30 +106,34 @@
 			"maxValue": 32535,
 			"defaultValue": 0
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Timer turning on External relay after output",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
 			"defaultValue": 0
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting (Watts) on power change",
 			"unit": "%",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting (Watts) by time interval",
-			"unit": "%",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32535,
-			"defaultValue": 0
+			"defaultValue": 600
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Reset Power counters",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,8 +163,9 @@
 				}
 			]
 		},
-		"100": {
-			"label": "Enable / Disable endpoints relays",
+		{
+			"#": "100",
+			"label": "Configure External Relay Endpoints",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -138,24 +173,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "EP IR external relay and External relay disabled",
+					"label": "IR (BICOM) and TRIAC (IKA) disabled",
 					"value": 0
 				},
 				{
-					"label": "EP IR external relay dsbld, External relay enbld",
+					"label": "IR (BICOM) enabled, TRIAC (IKA) disabled",
 					"value": 1
 				},
 				{
-					"label": "EP IR external relay enbld, External relay dsbld",
+					"label": "IR (BICOM) disabled, TRIAC (IKA) enabled",
 					"value": 2
 				},
 				{
-					"label": "EP IR external relay and External relay enabled",
+					"label": "IR (BICOM) and TRIAC (IKA) enabled",
 					"value": 3
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Maximum Power auto off",
 			"valueSize": 2,
 			"minValue": 0,
@@ -172,7 +208,8 @@
 				}
 			]
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Delay overpower off",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -180,7 +217,8 @@
 			"maxValue": 32525,
 			"defaultValue": 30
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Relay to power off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -206,5 +244,9 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// This device has additional external relays, which the driver thinks are unnecessary
+		"preserveEndpoints": "*"
 	}
 }

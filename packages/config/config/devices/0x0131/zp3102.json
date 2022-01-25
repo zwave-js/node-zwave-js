@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "On time in minutes",
 			"description": "Delay before sending OFF",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,7 +43,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Infrared sensor sensitivity adjustment",
 			"description": "1 is most sensitive, 7 is least",
 			"valueSize": 1,
@@ -50,7 +52,7 @@
 			"maxValue": 7,
 			"defaultValue": 4
 		}
-	},
+	],
 	"compat": {
 		"enableBasicSetMapping": true
 	}

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delta Based Switch Status Reporting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,7 +24,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Time Interval Based Switch Status Reporting",
 			"valueSize": 2,
 			"minValue": 0,
@@ -31,7 +33,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relay And LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +42,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To include the SSP 301 onto a network, put the controller into inclusion mode. Now press and hold the button on SSP 301 for 4 to 7 seconds then\nrelease. The network status LED will start flashing (twice per second) on successful start of inclusion process. On successful inclusion the LED will turn off.",
 		"exclusion": "To exclude the SSP 301 from a network, put the controller into exclusion mode. Now press and hold the button on SSP 301 for 4 to 7 seconds then\nrelease. After successful exclusion the network status LED will start flashing once per second, and the device will reset to factory default.",

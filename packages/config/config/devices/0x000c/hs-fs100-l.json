@@ -1,0 +1,34 @@
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-FS100-L",
+	"description": "Z-Wave Indicator Light Sensor",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.17"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/homeseer_template.json#light_sensitivity"
+		},
+		{
+			"#": "2",
+			"$import": "templates/homeseer_template.json#water_beep_frequency"
+		},
+		{
+			"#": "3",
+			"$import": "templates/homeseer_template.json#temp_reporting_interval"
+		},
+		{
+			"#": "4",
+			"$import": "templates/homeseer_template.json#enable_notification_buzzer"
+		}
+	]
+}

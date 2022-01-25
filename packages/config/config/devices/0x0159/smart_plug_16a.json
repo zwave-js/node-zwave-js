@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"10": {
+	"paramInformation": [
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON / ALL OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -41,7 +41,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto-Off Timer",
 			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
 			"valueSize": 2,
@@ -56,7 +57,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto-On Timer",
 			"valueSize": 2,
 			"minValue": 0,
@@ -70,7 +72,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Timer Settings Unit",
 			"description": "Set Timer Units to Seconds or Milliseconds",
 			"valueSize": 1,
@@ -89,25 +92,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "Restore state ofter power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Restore state after power failure",
-					"value": 0
-				},
-				{
-					"label": "Do not restore state after power failure",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power Consumption (Watt) Reporting Threshold",
 			"unit": "%",
 			"valueSize": 1,
@@ -115,7 +105,8 @@
 			"maxValue": 100,
 			"defaultValue": 20
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power Consumption (Watt) Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -123,5 +114,5 @@
 			"maxValue": 32535,
 			"defaultValue": 0
 		}
-	}
+	]
 }

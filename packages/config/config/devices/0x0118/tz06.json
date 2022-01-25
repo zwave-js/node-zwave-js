@@ -31,8 +31,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Selected Relay",
 			"valueSize": 1,
 			"minValue": 1,
@@ -54,7 +55,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External Switch Mode",
 			"description": "Change the External Switch (S1 & S2) Mode",
 			"valueSize": 1,
@@ -77,7 +79,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Restore Switch State",
 			"description": "Restore Switch State after AC power loss",
 			"valueSize": 1,
@@ -100,7 +103,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto OFF Timer",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -108,7 +112,8 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "RF Command Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -134,7 +139,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Existence of Endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,
@@ -152,5 +158,11 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// The device has multiple endpoints, but doesn't seem to use multi channel encapsulation
+		// for unsolicited reports. By preserving the root endpoint values, users can use polling
+		// to update the endpoint values.
+		"preserveRootApplicationCCValueIDs": true
 	}
 }

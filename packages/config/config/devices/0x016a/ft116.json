@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Current Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Instant Energy Autosend Interval",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -60,7 +62,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Output status after re-power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,7 +85,8 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"label": "Group 1 notifications",
 			"description": "Group 1 notifications when the state of Nano Switch's load is changed",
 			"valueSize": 1,
@@ -109,7 +113,8 @@
 				}
 			]
 		},
-		"81": {
+		{
+			"#": "81",
 			"label": "Group 3 notifications",
 			"description": "Notification to sent for Group 3 when using the external switch 1",
 			"valueSize": 1,
@@ -128,7 +133,8 @@
 				}
 			]
 		},
-		"82": {
+		{
+			"#": "82",
 			"label": "Group 4 notifications",
 			"description": "Notification to sent for Group 4 when using the external switch 2",
 			"valueSize": 1,
@@ -147,7 +153,8 @@
 				}
 			]
 		},
-		"83": {
+		{
+			"#": "83",
 			"label": "Configure the state of LED",
 			"valueSize": 1,
 			"minValue": 0,
@@ -169,7 +176,8 @@
 				}
 			]
 		},
-		"84": {
+		{
+			"#": "84",
 			"label": "Night light mode LED state",
 			"description": "Set the ON/OFF time of the LED when it is in Night light mode",
 			"valueSize": 4,
@@ -177,7 +185,8 @@
 			"maxValue": 0,
 			"defaultValue": 301991936
 		},
-		"86": {
+		{
+			"#": "86",
 			"label": "Set appointment 1",
 			"description": "Set the ON time of output load.",
 			"valueSize": 4,
@@ -185,7 +194,8 @@
 			"maxValue": 0,
 			"defaultValue": 8327680
 		},
-		"87": {
+		{
+			"#": "87",
 			"label": "Set appointment 2",
 			"description": "Set the OFF time of output load",
 			"valueSize": 4,
@@ -193,7 +203,8 @@
 			"maxValue": 8327680,
 			"defaultValue": 8327680
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Enables/disables parameter 91 and 92",
 			"valueSize": 1,
 			"minValue": 0,
@@ -211,7 +222,8 @@
 				}
 			]
 		},
-		"91": {
+		{
+			"#": "91",
 			"label": "Set the threshold value of wattage",
 			"description": "Threshold change in wattage (in terms of wattage) to induce an automatic report",
 			"valueSize": 2,
@@ -220,7 +232,8 @@
 			"defaultValue": 25,
 			"unsigned": true
 		},
-		"92": {
+		{
+			"#": "92",
 			"label": "Set the threshold value of percent power",
 			"description": "Threshold percentage change in wattage for an automatic report",
 			"valueSize": 1,
@@ -228,7 +241,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"100": {
+		{
+			"#": "100",
 			"label": "Set parameter 101-103 to default value",
 			"description": "Reset the parameter 101-103",
 			"valueSize": 1,
@@ -237,7 +251,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"101": {
+		{
+			"#": "101",
 			"label": "Set group 1 reports",
 			"description": "To set which reports need to be sent in Report group 1.",
 			"valueSize": 4,
@@ -264,7 +279,8 @@
 				}
 			]
 		},
-		"102": {
+		{
+			"#": "102",
 			"label": "Set group 2 reports",
 			"description": "To set which reports need to be sent in Report group 2.",
 			"valueSize": 4,
@@ -291,7 +307,8 @@
 				}
 			]
 		},
-		"103": {
+		{
+			"#": "103",
 			"label": "Set group 3 reports",
 			"description": "To set which reports need to be sent in Report group 3.",
 			"valueSize": 4,
@@ -318,7 +335,8 @@
 				}
 			]
 		},
-		"110": {
+		{
+			"#": "110",
 			"label": "Reset the parameter 111-113",
 			"description": "Set parameter 111-113 to default value.",
 			"valueSize": 1,
@@ -326,21 +344,24 @@
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"111": {
+		{
+			"#": "111",
 			"label": "Interval for automatic report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"112": {
+		{
+			"#": "112",
 			"label": "Interval for automatic report group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"113": {
+		{
+			"#": "113",
 			"label": "Interval for automatic group 3 report",
 			"description": "Set the interval of automatic report for Report group 3",
 			"valueSize": 4,
@@ -348,7 +369,8 @@
 			"maxValue": 2147483647,
 			"defaultValue": 600
 		},
-		"120": {
+		{
+			"#": "120",
 			"label": "External switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
@@ -374,7 +396,8 @@
 				}
 			]
 		},
-		"121": {
+		{
+			"#": "121",
 			"label": "External switch mode for S2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -400,7 +423,8 @@
 				}
 			]
 		},
-		"122": {
+		{
+			"#": "122",
 			"label": "Control destination of external switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -422,7 +446,8 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
@@ -440,7 +465,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset the Nano Switch",
 			"valueSize": 4,
 			"minValue": 0,
@@ -458,5 +484,5 @@
 				}
 			]
 		}
-	}
+	]
 }

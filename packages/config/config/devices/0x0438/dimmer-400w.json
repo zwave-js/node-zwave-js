@@ -1,0 +1,130 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "Z-Wave Dimmer 400W",
+	"description": "In-Wall Dimmer Module",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"label": "Send Basic Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Default Fade Time",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Minimum Brightness Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 15
+		},
+		{
+			"#": "6",
+			"label": "MOSFET Driving Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trailing edge",
+					"value": 0
+				},
+				{
+					"label": "Leading edge",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Add / Remove From A Network Through External Switch",
+			"description": "When enabling this, triple press the external switch within 1.5 seconds to be added to or removed from a network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Dimming Curve",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Startup Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Set primary controller/gateway into inclusion mode (Please refer top your primary controllers manual on how to set your controller into inclusion). 2. Power on the in-wall dimmer. 3.Tripple Press the reset button on the dimmer, it will set the dimmer into inclusion mode. The connected light will stay solid on for 3 seconds to indicate successful incusion.",
+		"exclusion": "1. Set the primary controller/gateway int exclusion mode (Please refer top your primary controllers manual on how to set your controller into exclusion). 2.Triple press the reset button, the dimmer will be set to exclusion mode, and wait to be excluded, then the dimmer will be excluded form the network.",
+		"reset": "Press and hold down the reset button for over 10 seconds, the dimmer will be reset to factory defaults."
+	}
+}

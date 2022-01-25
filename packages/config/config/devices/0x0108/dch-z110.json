@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Setting the BASIC command value to turn on the light.",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"description": "Set the sensitivity for the PIR (Passive Infrared Sensor).",
 			"valueSize": 1,
@@ -49,7 +50,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Threshold",
 			"description": "Set the illumination threshold to turn on the light.",
 			"valueSize": 1,
@@ -63,7 +65,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,56 +79,64 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi-Sensor Function Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"valueSize": 1,
 			"minValue": 0,
@@ -133,21 +144,24 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Disable send of BASIC OFF after door closed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -165,7 +179,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -183,7 +198,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Disable Multi CC in auto report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -201,7 +217,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Disable to report battery state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -219,5 +236,5 @@
 				}
 			]
 		}
-	}
+	]
 }

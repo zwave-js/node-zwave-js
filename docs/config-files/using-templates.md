@@ -19,6 +19,17 @@ where
 
 Both parts are optional, so you can import entire files and you can also build self-referencing templates if you leave out the filesystem path.
 
+Whenever possible, you should prefer using `~/` to navigate to the **config root directory** instead of using varying levels of `../`. This avoids broken references when files are moved around:
+
+```json
+{
+	// Prefer this:
+	"$import": "~/templates/master_template.json#selector",
+	// Over this:
+	"$import": "../../../templates/master_template.json#selector"
+}
+```
+
 Properties listed before the `$import` statement may get overwritten by the imports. Properties listed after it will overwrite the imported properties. You can use this to do device-specific additions without having to change the template as a whole.
 
 > [!ATTENTION]
@@ -30,12 +41,13 @@ Properties listed before the `$import` statement may get overwritten by the impo
 // config.json (on disk)
 {
 	// ... all the rest
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/params.json#light_config",
-			"valueSize": "2" // this device has a different value size than the others
+			"valueSize": 2 // this device has a different value size than the others
 		}
-	}
+	]
 }
 
 // templates/params.json (on disk)
@@ -55,14 +67,15 @@ Properties listed before the `$import` statement may get overwritten by the impo
 // config.json (parsed)
 {
 	// ... all the rest
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Light configuration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2,
 		}
-	}
+	]
 }
 ```
 
@@ -100,6 +113,55 @@ Properties listed before the `$import` statement may get overwritten by the impo
 // file1.json (parsed)
 {
     "template": true
+}
+```
+
+### Example 3
+
+> [!ATTENTION] There is one exception to this rule. The property `#` will not be included because it can be used as a selector target to reference parameters in the same config file.
+
+```json
+// config.json (on disk)
+{
+	// ... all the rest
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Light configuration TOP",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			// ...
+		},
+		{
+			"#": "2",
+			"$import": "#paramInformation/1", // This includes parameter #1 without copying `#`
+			"label": "Light configuration BOTTOM",
+		}
+	]
+}
+
+// config.json (parsed)
+{
+	// ... all the rest
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Light configuration TOP",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			// ...
+		},
+		{
+			"#": "2",
+			"label": "Light configuration BOTTOM",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			// ...
+		}
+	]
 }
 ```
 
@@ -323,16 +385,20 @@ While you can override a label for an imported template in a device file, we pre
 Which then becomes in the device file:
 
 ```json
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/kwikset_template.json#usercode_1"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/kwikset_template.json#usercode_2"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/kwikset_template.json#usercode_3"
 		}
+	]
 ```
 
 ## Ultimate Goal
@@ -366,25 +432,31 @@ Ultimately, most device files should end up looking like:
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume_inverted"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/yale_template.json#auto_relock_time_180"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/yale_template.json#wrong_code_lockout_10_to_127"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/yale_template.json#operating_mode"
 		}
-	}
+	]
 }
 ```

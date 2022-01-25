@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Central Scene: Multiple Button Presses",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Report interval",
 			"valueSize": 2,
 			"unit": "10s",
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Energy meter report interval",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -61,7 +63,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Forced Roller Shutter calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,5 +82,5 @@
 				}
 			]
 		}
-	}
+	]
 }

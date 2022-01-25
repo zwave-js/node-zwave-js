@@ -44,8 +44,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Light Dimming Speed (Z-Wave)",
 			"units": "seconds",
 			"valueSize": 1,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Light Dimming Speed",
 			"units": "seconds",
 			"valueSize": 1,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Light Ramp Rate (Z-Wave)",
 			"units": "seconds",
 			"valueSize": 1,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Light Ramp Rate",
 			"units": "seconds",
 			"valueSize": 1,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Light Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -125,7 +130,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum Light Level",
 			"valueSize": 1,
 			"minValue": 55,
@@ -133,7 +139,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Minimum Fan Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -141,7 +148,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Maximum Fan Level",
 			"valueSize": 1,
 			"minValue": 55,
@@ -149,7 +157,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Off Light Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -158,7 +167,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto Off Fan Timer",
 			"units": "seconds",
 			"valueSize": 2,
@@ -167,7 +177,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Default Light Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -181,7 +192,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Default Light Level (Z-Wave)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -195,7 +207,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Default Fan Speed",
 			"valueSize": 1,
 			"minValue": 0,
@@ -222,7 +235,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Default Fan Speed (Z-Wave)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -249,7 +263,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Light Brightness After Power Restored",
 			"valueSize": 1,
 			"minValue": 0,
@@ -267,7 +282,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Fan Speed After Power Restored",
 			"valueSize": 1,
 			"minValue": 0,
@@ -297,7 +313,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Light LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
@@ -340,7 +357,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Light LED Strip Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -395,7 +413,8 @@
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Fan LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
@@ -438,7 +457,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Fan LED Strip Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -493,7 +513,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Light LED Strip Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -547,7 +568,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Fan LED Strip Brightness When Off",
 			"description": "This is useful for users to see the light switch location when the lights are off.",
 			"valueSize": 1,
@@ -602,7 +624,8 @@
 				}
 			]
 		},
-		"24[0x7f000000]": {
+		{
+			"#": "24[0x7f000000]",
 			"label": "Light LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
@@ -637,16 +660,18 @@
 				}
 			]
 		},
-		"24[0xff0000]": {
+		{
+			"#": "24[0xff0000]",
 			"label": "Light LED Effect Duration",
-			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"24[0xff00]": {
+		{
+			"#": "24[0xff00]",
 			"label": "Light LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
@@ -701,7 +726,8 @@
 				}
 			]
 		},
-		"24[0xff]": {
+		{
+			"#": "24[0xff]",
 			"label": "Light LED Effect Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
@@ -744,7 +770,8 @@
 				}
 			]
 		},
-		"25[0x7f000000]": {
+		{
+			"#": "25[0x7f000000]",
 			"label": "Fan LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
@@ -779,16 +806,18 @@
 				}
 			]
 		},
-		"25[0xff0000]": {
+		{
+			"#": "25[0xff0000]",
 			"label": "Fan LED Effect Duration",
-			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"25[0xff00]": {
+		{
+			"#": "25[0xff00]",
 			"label": "Fan LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
@@ -843,7 +872,8 @@
 				}
 			]
 		},
-		"25[0xff]": {
+		{
+			"#": "25[0xff]",
 			"label": "Fan LED Effect Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
@@ -886,7 +916,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Light LED Strip Timeout",
 			"description": "When light LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted",
 			"unit": "seconds",
@@ -902,7 +933,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Fan LED Strip Timeout",
 			"description": "When the fan LED strip intensity is set to 0, this setting allows the LED strip to turn on temporarily while being adjusted.",
 			"unit": "seconds",
@@ -918,7 +950,8 @@
 				}
 			]
 		},
-		"28": {
+		{
+			"#": "28",
 			"label": "Active Power Reports",
 			"description": "The power level change that will result in a new power report being sent.",
 			"unit": "%",
@@ -934,7 +967,8 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Periodic Power & Energy Reports",
 			"description": "Time period between consecutive power & energy reports being sent.",
 			"units": "seconds",
@@ -944,7 +978,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Energy Reports",
 			"description": "The energy level change that will result in a new energy report being sent.",
 			"units": "%",
@@ -954,7 +989,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Local Protection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -981,7 +1017,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Instant On",
 			"$if": "firmwareVersion >= 1.36",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
@@ -1002,7 +1039,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"remove": {

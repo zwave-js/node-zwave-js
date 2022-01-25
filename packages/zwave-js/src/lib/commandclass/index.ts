@@ -11,6 +11,7 @@ export {
 } from "./AlarmSensorCC";
 export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export { CCAPI } from "./API";
+export type { SetValueAPIOptions } from "./API";
 export {
 	AssociationCC,
 	AssociationCCGet,
@@ -111,7 +112,7 @@ export {
 	ColorSwitchCCSupportedReport,
 } from "./ColorSwitchCC";
 export type { ColorTable } from "./ColorSwitchCC";
-export { CommandClass } from "./CommandClass";
+export { CommandClass, getAPI, InvalidCC } from "./CommandClass";
 export {
 	ConfigurationCC,
 	ConfigurationCCBulkGet,
@@ -149,6 +150,15 @@ export {
 } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
 export {
+	DoorLockLoggingCC,
+	DoorLockLoggingCCRecordGet,
+	DoorLockLoggingCCRecordReport,
+	DoorLockLoggingCCRecordsSupportedGet,
+	DoorLockLoggingCCRecordsSupportedReport,
+	EventType,
+	RecordStatus,
+} from "./DoorLockLoggingCC";
+export {
 	EntryControlCC,
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
@@ -181,7 +191,34 @@ export {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "./FirmwareUpdateMetaDataCC";
+export type { FirmwareUpdateCapabilities } from "./FirmwareUpdateMetaDataCC";
 export { HailCC } from "./HailCC";
+export {
+	HumidityControlModeCC,
+	HumidityControlModeCCGet,
+	HumidityControlModeCCReport,
+	HumidityControlModeCCSet,
+	HumidityControlModeCCSupportedGet,
+	HumidityControlModeCCSupportedReport,
+} from "./HumidityControlModeCC";
+export {
+	HumidityControlOperatingStateCC,
+	HumidityControlOperatingStateCCGet,
+	HumidityControlOperatingStateCCReport,
+} from "./HumidityControlOperatingStateCC";
+export {
+	HumidityControlSetpointCC,
+	HumidityControlSetpointCCCapabilitiesGet,
+	HumidityControlSetpointCCCapabilitiesReport,
+	HumidityControlSetpointCCGet,
+	HumidityControlSetpointCCReport,
+	HumidityControlSetpointCCScaleSupportedGet,
+	HumidityControlSetpointCCScaleSupportedReport,
+	HumidityControlSetpointCCSet,
+	HumidityControlSetpointCCSupportedGet,
+	HumidityControlSetpointCCSupportedReport,
+} from "./HumidityControlSetpointCC";
+export type { HumidityControlSetpointMetadata } from "./HumidityControlSetpointCC";
 export {
 	IndicatorCC,
 	IndicatorCCGet,
@@ -309,6 +346,21 @@ export type {
 	ZWaveNotificationCallbackParams_NotificationCC,
 } from "./NotificationCC";
 export {
+	Powerlevel,
+	PowerlevelCC,
+	PowerlevelCCGet,
+	PowerlevelCCReport,
+	PowerlevelCCSet,
+	PowerlevelCCTestNodeGet,
+	PowerlevelCCTestNodeReport,
+	PowerlevelCCTestNodeSet,
+	PowerlevelTestStatus,
+} from "./PowerlevelCC";
+export type {
+	ZWaveNotificationCallbackArgs_PowerlevelCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "./PowerlevelCC";
+export {
 	LocalProtectionState,
 	ProtectionCC,
 	ProtectionCCExclusiveControlGet,
@@ -337,6 +389,23 @@ export {
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
 } from "./SceneControllerConfigurationCC";
+export {
+	Security2CC,
+	Security2CCCommandsSupportedGet,
+	Security2CCCommandsSupportedReport,
+	Security2CCKEXFail,
+	Security2CCKEXGet,
+	Security2CCKEXReport,
+	Security2CCKEXSet,
+	Security2CCMessageEncapsulation,
+	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyReport,
+	Security2CCNetworkKeyVerify,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+	Security2CCPublicKeyReport,
+	Security2CCTransferEnd,
+} from "./Security2CC";
 export {
 	SecurityCC,
 	SecurityCCCommandEncapsulation,
@@ -436,6 +505,14 @@ export {
 	TimeParametersCCReport,
 	TimeParametersCCSet,
 } from "./TimeParametersCC";
+export {
+	TransportServiceCC,
+	TransportServiceCCFirstSegment,
+	TransportServiceCCSegmentComplete,
+	TransportServiceCCSegmentRequest,
+	TransportServiceCCSegmentWait,
+	TransportServiceCCSubsequentSegment,
+} from "./TransportServiceCC";
 export {
 	KeypadMode,
 	UserCodeCC,

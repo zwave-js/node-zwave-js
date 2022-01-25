@@ -6,16 +6,17 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 4197
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -63,14 +66,16 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
@@ -117,7 +122,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Indicator Brightness",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +177,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +232,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "LED Strip Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
@@ -280,7 +288,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Active Power Reports",
 			"unit": "%",
 			"valueSize": 1,
@@ -288,7 +297,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Periodic Power & Energy Reports",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -296,7 +306,8 @@
 			"maxValue": 32767,
 			"defaultValue": 3600
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Energy Reports",
 			"unit": "%",
 			"valueSize": 1,
@@ -304,7 +315,8 @@
 			"maxValue": 100,
 			"defaultValue": 10
 		},
-		"13": {
+		{
+			"#": "13",
 			"$if": "firmwareVersion >= 1.17",
 			"label": "Load Type",
 			"valueSize": 1,
@@ -323,7 +335,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
@@ -343,7 +356,8 @@
 				}
 			]
 		},
-		"8[0xff]": {
+		{
+			"#": "8[0xff]",
 			"label": "LED Effect Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 4,
@@ -385,7 +399,8 @@
 				}
 			]
 		},
-		"8[0xff00]": {
+		{
+			"#": "8[0xff00]",
 			"label": "LED Effect Brightness",
 			"valueSize": 4,
 			"minValue": 0,
@@ -439,15 +454,17 @@
 				}
 			]
 		},
-		"8[0xff0000]": {
+		{
+			"#": "8[0xff0000]",
 			"label": "LED Effect Duration",
-			"description": "1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"8[0x7f000000]": {
+		{
+			"#": "8[0x7f000000]",
 			"label": "LED Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
@@ -477,5 +494,11 @@
 				}
 			]
 		}
+	],
+	"metadata": {
+		"inclusion": "To include your on/off switch start the inclusion process on your HUB and tap the Configuration Button three (3) times.\n\nPlease Note: If this doesn't work, you can check to see if your switch is within Z-Wave Range by holding down the Configuration Button for 5-10 seconds (if it's not within range, the LED Bar will indicate Red and if it is within Range, the LED Bar will indicate Green). If your switch indicates Red, please move the switch closer to the HUB. If your switch indicates Green, please try running an Exclusion to reset your switch",
+		"exclusion": "To Exclude your switch, put your HUB in exclusion mode and press the Configuration Button three (3) times",
+		"reset": "You may factory reset the switch by holding down the Config Button for twenty (20) or more seconds. The LED Bar will turn Red and blink three (3) times to confirm. \n\nHowever, we recommend using a certified Z-Wave controller to remove the device from your network for factory resetting the switch. \n\nOnly use either of these procedures in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4197/LZW30-SN%20Manual%20-%20Inovelli%20On-Off%20Switch%20(Red%20Series)%20-%2006.28.21.pdf"
 	}
 }

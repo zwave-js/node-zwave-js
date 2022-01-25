@@ -19,8 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button Orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,7 +72,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/Disable Auto Turn-off Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +92,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Auto Turn-off Time",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -98,7 +102,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Auto Turn-on Timer",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +122,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auto Turn-on Timer",
 			"valueSize": 4,
 			"unit": "minutes",
@@ -126,7 +132,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"7[0x01]": {
+		{
+			"#": "7[0x01]",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -146,7 +153,8 @@
 				}
 			]
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -166,7 +174,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -186,7 +195,8 @@
 				}
 			]
 		},
-		"7[0x08]": {
+		{
+			"#": "7[0x08]",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
@@ -206,30 +216,12 @@
 				}
 			]
 		},
-		"8": {
-			"label": "State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/Disable Local Control",
 			"valueSize": 1,
 			"minValue": 0,
@@ -248,7 +240,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include\n a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press up and \n Release for threes times the toggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the \n Z-Wave network to optimize performance.\n4. The device is associated in the same group when it included in setting process. \n Now you can control your Z-Wave device according to groups, scenes, schedules \n and automation programmed.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude \n a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press up and \n release for threes times the front button to exclude it from the network.",

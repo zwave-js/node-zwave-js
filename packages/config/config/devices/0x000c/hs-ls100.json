@@ -14,28 +14,34 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"14": {
+	"paramInformation": [
+		{
+			"#": "14",
 			"$import": "templates/homeseer_template.json#enable_basic_set_command"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/homeseer_template.json#basic_set_value"
 		},
-		"17": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Flood Alarm Interval",
 			"unit": "minutes",
 			"defaultValue": 5
 		},
-		"18": {
+		{
+			"#": "18",
 			"$import": "templates/homeseer_template.json#enable_shock_alarm"
 		},
-		"19": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "19",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Temperature Report Interval",
 			"unit": "minutes"
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Temperature (High) Alarm Trigger Threshold",
 			"valueSize": 2,
 			"unit": "0.1°F",
@@ -43,7 +49,8 @@
 			"maxValue": 2570,
 			"defaultValue": 1040
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Temperature (Low) Trigger Threshold",
 			"valueSize": 2,
 			"unit": "0.1°F",
@@ -51,15 +58,17 @@
 			"maxValue": 2570,
 			"defaultValue": 320
 		},
-		"24": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "24",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Blinking LED",
 			"defaultValue": 1
 		},
-		"32": {
+		{
+			"#": "32",
 			"$import": "templates/homeseer_template.json#low_battery_level"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1) Open the cover.\n2) Place the device within the direct range of your Z-Wave controller.\n3) Set the main controller in add mode (see the controller’s manual).\n4) Click the Z-button once or triple click the Z-button quickly, the LED indicator should blink fast. \n5) Wait for the adding process to end.\n6) Successful adding will be confirmed by the Z-Wave controller’s message.",
 		"exclusion": "1) Open the cover.\n2) Place the device within the direct range of your Z-Wave controller.\n3) Set the main controller remove mode (see the controller’s manual).\n4) Triple click the Z-button quickly, the LED indicator should blink fast.\n5) Wait for the removing process to end.\n6) Successful adding will be confirmed by the Z-Wave controller’s message.",

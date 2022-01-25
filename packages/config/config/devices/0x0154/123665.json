@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Watt Meter Report Period",
 			"description": "Time frame for reporting instant power consumption",
 			"valueSize": 2,
@@ -30,7 +31,8 @@
 			"defaultValue": 720,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "KWH Meter Report Period",
 			"description": "Time frame for reporting Accumulated Power Consumption",
 			"valueSize": 2,
@@ -39,7 +41,8 @@
 			"defaultValue": 6,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold of Watt for Load caution",
 			"description": "Warn when wattage of load over the preset threshold value",
 			"valueSize": 2,
@@ -48,7 +51,8 @@
 			"defaultValue": 3000,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of KWh for Load caution",
 			"description": "Warn if Acc. Power Consumption exceeds the set value",
 			"valueSize": 2,
@@ -57,7 +61,8 @@
 			"defaultValue": 10000,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ignore start level after pwr outage",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +84,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Disable Switching Funktion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -97,5 +103,5 @@
 				}
 			]
 		}
-	}
+	]
 }

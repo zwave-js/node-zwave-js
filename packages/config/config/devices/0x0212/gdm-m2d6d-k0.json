@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Silent Mode On/Off",
 			"valueSize": 1,
 			"minValue": 1,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Auto Relock On/Off",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +59,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relock Time",
 			"description": "Time lock stays unlocked before automatically re-locking",
 			"valueSize": 1,
@@ -66,7 +69,7 @@
 			"defaultValue": 30,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To include:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,1,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",
 		"exclusion": "To exclude:\n1. Touch keypad with palm\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\n3. Press 'R' button [Registration] from the inside of battery cover.\n4. Press 9,#,3,# on the keypad (by sequence)\n5. Wait until 'Ding dong dang' melody play than press 'R' button [Registration]",

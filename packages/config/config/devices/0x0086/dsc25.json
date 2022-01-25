@@ -26,12 +26,14 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2[0xff]": {
+	"paramInformation": [
+		{
+			"#": "2[0xff]",
 			"$import": "templates/aeotec_template.json#blink_duration"
 		},
-		"2[0xff00]": {
+		{
+			"#": "2[0xff00]",
 			"$import": "templates/aeotec_template.json#blink_length"
 		}
-	}
+	]
 }

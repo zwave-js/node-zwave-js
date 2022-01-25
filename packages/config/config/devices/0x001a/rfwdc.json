@@ -1,0 +1,90 @@
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RFWDC",
+	"description": "5-Scene Keypad",
+	"devices": [
+		{
+			"productType": "0x574d",
+			"productId": "0xcc09"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 232
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 232
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 232
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 232
+		},
+		"5": {
+			"label": "Group 5",
+			"maxNodes": 232
+		},
+		"255": {
+			"label": "Group 255",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Group 1 Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Group 2 Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Group 3 Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Group 4 Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 40,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Group 5 Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true
+		}
+	]
+}

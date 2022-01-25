@@ -28,8 +28,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Dim level when the bulb is turned on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimming / brightening step level",
 			"description": "Controls the speed of dimming / brightening",
 			"valueSize": 1,
@@ -55,12 +57,13 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming / brightening step timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 3
 		}
-	}
+	]
 }

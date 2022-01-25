@@ -38,6 +38,17 @@ export type ValueType =
 	| "buffer"
 	| "any";
 
+/**
+ * Defines options that can be provided when changing a value on a device via its value ID.
+ * Each implementation will choose the options that are relevant for it, so the same options can be used everywhere.
+ */
+export interface ValueChangeOptions {
+	/** A duration to be used for transitions like dimming lights or activating scenes. */
+	transitionDuration: Duration | string;
+	/** A volume level to be used for activating a Sound Switch CC. */
+	volume: number;
+}
+
 export interface ValueMetadataAny {
 	/** The type of the value */
 	type: ValueType;
@@ -53,6 +64,8 @@ export interface ValueMetadataAny {
 	label?: string;
 	/** CC-specific information to help identify this value */
 	ccSpecific?: Record<string, any>;
+	/** Options that can be provided when changing this value on a device via its value ID. */
+	valueChangeOptions?: (keyof ValueChangeOptions)[];
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataAny {
@@ -100,6 +113,9 @@ export interface ValueMetadataDuration extends ValueMetadataAny {
 	default?: Duration;
 }
 
+/**
+ * Defines how a configuration value is encoded
+ */
 export enum ConfigValueFormat {
 	SignedInteger = 0x00,
 	UnsignedInteger = 0x01,

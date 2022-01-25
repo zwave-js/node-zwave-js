@@ -21,8 +21,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Beeper",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +42,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Vacation Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +62,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Lock & Leave",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +82,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "User Slot Status",
 			"valueSize": 4,
 			"minValue": 0,
@@ -87,7 +91,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Lock Specific Alarm Mode",
 			"description": "BE469 Only",
 			"valueSize": 1,
@@ -114,7 +119,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Lock Specific Alarm Alert Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +154,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Lock Specific Alarm Tamper Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -182,7 +189,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Lock Specific Alarm Kick Sensitivity",
 			"description": "BE469 Only",
 			"valueSize": 1,
@@ -217,7 +225,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Lock Specific Alarm Disable—Local Controls",
 			"valueSize": 1,
 			"minValue": 0,
@@ -236,7 +245,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Electronic Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -244,7 +254,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Mechanical Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -252,7 +263,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Electronic Failed Count",
 			"valueSize": 4,
 			"minValue": 0,
@@ -260,7 +272,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Auto Lock",
 			"valueSize": 1,
 			"minValue": 0,
@@ -279,7 +292,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "User Code PIN Length",
 			"valueSize": 1,
 			"minValue": 4,
@@ -287,7 +301,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Get Bootloader Version",
 			"valueSize": 1,
 			"minValue": 0,
@@ -296,5 +311,5 @@
 			"unsigned": true,
 			"readOnly": true
 		}
-	}
+	]
 }

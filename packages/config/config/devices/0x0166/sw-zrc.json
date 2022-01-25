@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Source Node Priority Association Group",
 			"description": "Set priority Association Group number for an Association Source Node",
 			"valueSize": 1,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Function Device Key A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +64,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Function Device Key B",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +92,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Function Device Key C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +120,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Function Device Key D",
 			"valueSize": 1,
 			"minValue": 0,
@@ -143,7 +148,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Function Device Key E",
 			"valueSize": 1,
 			"minValue": 0,
@@ -170,7 +176,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Function Device Key F",
 			"valueSize": 1,
 			"minValue": 0,
@@ -197,7 +204,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Function Device Key G",
 			"valueSize": 1,
 			"minValue": 0,
@@ -224,7 +232,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Function Device Key H",
 			"valueSize": 1,
 			"minValue": 0,
@@ -251,7 +260,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Send Unsolicited Battery Report On Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -270,7 +280,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimming Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -289,7 +300,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"reset": "1. Press and hold both the “Stop” and “All” keys until the red and green LEDs both start blinking at the same time (after about 3 seconds)\n2. Press three times (3x) on the “Up” command key of the RemSwiid™ remote and the blue Z-Wave LED will also light up. After about 2-3 seconds, the blue and red LEDs will turn off and the green LED will remain lit for 1-2 seconds indicating that the reset has been completed.\nResetting the RemSwiid™ remote will result in its taking on a new randomly generated Home ID. Obviously, if the RemSwiid™ remote is the primary controller in the Z-Wave network, resetting it will result in the nodes in the network being orphaned and it will be necessary after the reset to exclude and re-include all the nodes in a network with a new Home ID. If the RemSwiid™ is being used as a secondary controller in the network, the reset procedure should only be used once it has been excluded from the network, except of course if such exclusion is not feasible (e.g. if the network’s primary controller is missing or otherwise inoperable)",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2360/ZRC1%20Users%20manual%20v1.09%20CERTIFIED.pdf"

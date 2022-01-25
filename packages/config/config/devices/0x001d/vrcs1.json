@@ -5,6 +5,10 @@
 	"description": "1-Scene Controller",
 	"devices": [
 		{
+			"productType": "0x0901",
+			"productId": "0x0215"
+		},
+		{
 			"productType": "0x0902",
 			"productId": "0x0215"
 		}

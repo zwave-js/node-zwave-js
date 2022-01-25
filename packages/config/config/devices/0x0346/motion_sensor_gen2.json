@@ -1,12 +1,13 @@
 {
 	"manufacturer": "Ring",
 	"manufacturerId": "0x0346",
-	"label": "- / 4SP1SZ-0EU0",
+	"label": "4SP1SZ",
 	"description": "Motion Sensor Gen2",
 	"devices": [
 		{
 			"productType": "0x0301",
-			"productId": "0x0301"
+			"productId": "0x0301",
+			"zwaveAllianceId": 4149
 		},
 		{
 			"productType": "0x0301",
@@ -17,8 +18,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Heartbeat Interval",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -26,14 +28,16 @@
 			"maxValue": 70,
 			"defaultValue": 70
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Application Retries",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 5
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Application Level Retry Base Wait Time Period",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -41,7 +45,8 @@
 			"maxValue": 96,
 			"defaultValue": 5
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,7 +68,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Occupancy Clear Delay",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -72,7 +78,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Instrusion Clear Delay",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -81,7 +88,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Standard Clear Delay",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -90,7 +98,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Motion Detection Sensitivity",
 			"description": "0 = lowest, 4 = highest",
 			"valueSize": 1,
@@ -98,7 +107,8 @@
 			"maxValue": 4,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Lighting Sensor",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +126,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Lighting Delay",
 			"description": "Used to turn off lights when motion is no longer detected",
 			"valueSize": 1,
@@ -125,7 +136,8 @@
 			"maxValue": 60,
 			"defaultValue": 2
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Supervision Report Timeout",
 			"valueSize": 2,
 			"unit": "ms",
@@ -133,8 +145,11 @@
 			"maxValue": 30000,
 			"defaultValue": 10000
 		}
-	},
+	],
 	"metadata": {
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3869/Z-WaveUserManual_Motion_Detector_700.pdf"
+		"inclusion": "After powering on the device, press and hold the button on the front of the device for ~3 seconds. Release the button and the device will enter Classic inclusion mode which implements both classic inclusion with a Node Information Frame, and Network Wide Inclusion. During Classic Inclusion mode, the green LED will blink three times followed by a brief pause, repeatedly. When Classic inclusion times-out, the device will blink alternating red and green a few times",
+		"exclusion": "Exclusion Instructions: \n1. Initiate remove “Ring Alarm Motion Detector” flow in the Ring Alarm mobile application – Select the settings icon from device details page and choose “Remove Device” to remove the device. This will place the controller into Remove or “Z-Wave Exclusion” mode. \n2. Locate the pinhole reset button on the back of the device in the battery compartment. \n3. With the controller in Remove (Z-Wave Exclusion) mode, use a paper clip or similar object and tap the pinhole button. The device’s red LED turns on solid to indicate the device was removed from the network.",
+		"reset": "Factory Default Instructions \n1. To restore Ring Alarm Motion Detector to factory default settings, locate the pinhole reset button on the device. This is found inside the battery compartment on the back of the device after removing the back bracket. \n2. Using a paperclip or similar object, insert it into the pinhole, press and hold the button down for 10 seconds. \n3. The device will rapidly blink green continuously for 10 seconds. After about 10 seconds, when the green blinking stops, release the button. The red LED will turn on solid to indicate the device was removed from the network. \n\nNote: Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4149/Ring%20Alarm%20Motion%20Detector%20Zwave.pdf"
 	}
 }

@@ -25,16 +25,17 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Lock Mode - unlocking sequence",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Lock Mode - time to lock and locking button",
 			"description": "0 - Lock Mode disabled, 5-1791 - calculated value",
 			"unit": "s",
@@ -43,7 +44,8 @@
 			"maxValue": 1791,
 			"defaultValue": 60
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "First scene sequence",
 			"description": "0 - 1st sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -51,7 +53,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Second scene sequence",
 			"description": "0 - 2nd sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -59,7 +62,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Third scene sequence",
 			"description": "0 - 3rd sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -67,7 +71,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Fourth scene sequence",
 			"description": "0 - 4th sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -75,7 +80,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Fifth scene sequence",
 			"description": "0 - 5th sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -83,7 +89,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Sixth scene sequence",
 			"description": "0 - 6th sequence disabled, 9-28086 - value of sequence",
 			"valueSize": 2,
@@ -91,7 +98,8 @@
 			"maxValue": 28086,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Sequences - timeout",
 			"description": "5-30 (0.5-3s, 0.1s step) - time to lock",
 			"unit": "s",
@@ -100,7 +108,8 @@
 			"maxValue": 30,
 			"defaultValue": 10
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Single button associations - operating mode",
 			"description": "This parameter allows to choose operating mode for single button associations.",
 			"valueSize": 1,
@@ -123,7 +132,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Value sent to Square association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -131,7 +141,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Value sent to Circle association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -139,7 +150,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Value sent to Crossx association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -147,7 +159,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Value sent to Triangle association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -155,7 +168,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Value sent to Minus association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -163,7 +177,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Value sent to Plus association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
@@ -171,7 +186,8 @@
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Paired buttons association for Square and Circle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -189,7 +205,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Paired buttons association for Cross and Triangle",
 			"valueSize": 1,
 			"minValue": 0,
@@ -207,7 +224,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Paired buttons association for Minus and Plus",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +243,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Scene activation for Square button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -233,7 +252,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Scene activation for Circle button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -241,7 +261,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Scene activation for Cross button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -249,7 +270,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Scene activation for Triangle button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -257,7 +279,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Scene activation for Minus button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -265,7 +288,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Scene activation for Plus button",
 			"description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
 			"valueSize": 1,
@@ -273,7 +297,8 @@
 			"maxValue": 15,
 			"defaultValue": 9
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Associations in Z-Wave network security mode",
 			"description": "defines how commands are sent in specified association groups",
 			"valueSize": 2,
@@ -281,5 +306,5 @@
 			"maxValue": 4095,
 			"defaultValue": 4095
 		}
-	}
+	]
 }

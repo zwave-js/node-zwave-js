@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Length",
 			"description": "1 minute to 10 minutes",
 			"valueSize": 1,
@@ -25,7 +26,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm LED Flash",
 			"description": "0:disable, 1: enable",
 			"valueSize": 1,
@@ -34,7 +36,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Comfort Led",
 			"valueSize": 1,
 			"unit": "10 seconds",
@@ -43,7 +46,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Tamper",
 			"description": "0:disable, 1: enable",
 			"valueSize": 1,
@@ -52,7 +56,7 @@
 			"defaultValue": 1,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\n -Insert the two 1.5V D-Cell alkaline batteries into the battery \n compartment connecting the correct polarity as shown on the \n battery compartment lid.The Bellbox will emit a 2-tone beep.\n -Put the Z-Wave gateway or control panel into Inclusion mode (please \n refer to the Z-Wave gateway or control panel manual).\n -Within 1.5 seconds, press the Function Button 3 times.\n -Refer to the operation manual of the Z-Wave Gateway or Control \n Panel to complete the adding process.\n -If the sensor has already been added (included) into another Z-Wave \n Gateway/Control Panel, or if the sensor is unable to be added into the \n current Z-Wave Gateway/Control Panel, please exclude it first (see \n Removing Device) before attempting to include it into the current Z-\n Wave Gateway/Control Panel.",
 		"exclusion": "The Bellbox must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.\n -Put the Z-Wave gateway or control panel into Exclusion mode (please \n refer to the Z-Wave gateway or control panel manual).\n -Within 1.5 seconds, press the Function Button 3 times and the Bellbox \n will be removed from the Z-Wave network.",

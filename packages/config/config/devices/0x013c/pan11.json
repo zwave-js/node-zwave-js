@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "W meter report period",
 			"description": "Set automatic W meter reporting interval",
 			"valueSize": 2,
@@ -31,7 +31,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "kWh meter report period",
 			"description": "Set automatic kWh meter reporting interval.",
 			"valueSize": 2,
@@ -39,14 +40,16 @@
 			"maxValue": 32767,
 			"defaultValue": 6
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Threshold of Watt for load caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
 			"defaultValue": 1300
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Threshold of kWh for Load Caution",
 			"description": "If threshold of kWh is reached, a Meter Report will be generated",
 			"valueSize": 2,
@@ -54,7 +57,8 @@
 			"maxValue": 10000,
 			"defaultValue": 10000
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +81,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Mode of switch Off function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -96,7 +101,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -119,7 +125,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto Off Timer",
 			"description": "Auto off timer. 0 will disable the auto off function.",
 			"valueSize": 2,
@@ -127,7 +134,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "RF Off command mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -154,5 +162,5 @@
 				}
 			]
 		}
-	}
+	]
 }

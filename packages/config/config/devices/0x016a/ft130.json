@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Touch sound",
 			"description": "Enable/disable the touch sound.",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Touch vibration",
 			"description": "Enable/disable the touch vibration.",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Button slide",
 			"description": "Enable/disable the function of button slide.",
 			"valueSize": 1,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Notification report",
 			"description": "Which notification to be sent to the associated devices.",
 			"valueSize": 1,
@@ -91,14 +94,16 @@
 				}
 			]
 		},
-		"39": {
+		{
+			"#": "39",
 			"label": "Low battery value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset the WallMote Quad",
 			"valueSize": 4,
 			"minValue": 0,
@@ -116,5 +121,5 @@
 				}
 			]
 		}
-	}
+	]
 }

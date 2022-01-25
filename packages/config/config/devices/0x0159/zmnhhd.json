@@ -6,35 +6,56 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0055"
+			"productId": "0x0055",
+			"zwaveAllianceId": 4211
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
-			"label": "In-wall Switch Type for Load to control I1",
-			"unit": "/",
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic On/Off",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Start/Stop Level Change",
+			"maxNodes": 16
+		},
+		"4": {
+			"label": "Multilevel Switch Set",
+			"maxNodes": 16
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "In-wall Switch Type for Load to Control I1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "push-button (momentary)",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "on/off toggle switch",
+					"label": "Toggle",
 					"value": 1
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Working mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -52,184 +73,259 @@
 				}
 			]
 		},
-		"11": {
-			"label": "Turn Load 1 Off Automatically with Timer",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32536,
-			"defaultValue": 0
-		},
-		"12": {
-			"label": "Turn Load 1 On Automatically with Timer",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32536,
-			"defaultValue": 0
-		},
-		"21": {
-			"label": "Enable/Disable the Double click function",
+		{
+			"#": "6",
+			"label": "Load Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Double click disabled",
+					"label": "Dimmable load",
 					"value": 0
 				},
 				{
-					"label": "Double click enabled",
+					"label": "Non-dimmable load",
 					"value": 1
 				}
 			]
 		},
-		"30": {
-			"label": "Restore on/off status for load after power failure",
-			"valueSize": 1,
+		{
+			"#": "11",
+			"label": "Turn Load 1 Off Automatically With Timer",
+			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 32536,
 			"defaultValue": 0,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Save last on/off status",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Don't save last on/off status",
-					"value": 1
 				}
 			]
 		},
-		"40": {
-			"label": "Power Consumption Threshold",
+		{
+			"#": "12",
+			"label": "Turn Load 1 On Automatically With Timer",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32536,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Double Click Function"
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
+		},
+		{
+			"#": "40",
+			"label": "Power Change Reporting Threshold For Load",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
-		"42": {
-			"label": "Power Consumption Threshold (time)",
+		{
+			"#": "42",
+			"label": "Power Reporting Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
-		"60": {
-			"label": "Minimum dimming value",
+		{
+			"#": "60",
+			"label": "Minimum Dimming Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"61": {
-			"label": "Maximum dimming value",
+		{
+			"#": "61",
+			"label": "Maximum Dimming Level",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 2,
 			"maxValue": 99,
-			"defaultValue": 1
+			"defaultValue": 99,
+			"unsigned": true
 		},
-		"65": {
-			"label": "Dimming time when key pressed",
+		{
+			"#": "65",
+			"label": "Dimming Duration (Key Pressed)",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 127,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
-		"66": {
-			"label": "Dimming time when key hold",
+		{
+			"#": "66",
+			"label": "Dimming Duration (Key Held)",
+			"description": "1-127 seconds; 128-253 minutes (minus 127)",
 			"valueSize": 2,
 			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 3
+			"maxValue": 253,
+			"defaultValue": 3,
+			"unsigned": true
 		},
-		"67": {
-			"label": "Ignore start level",
+		{
+			"#": "67",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Ignore Pre-Set Dimming Start Level",
+			"defaultValue": 0
+		},
+		{
+			"#": "68",
+			"label": "Dimming Duration",
+			"description": "In switch mode the parameter has no effect",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 127,
 			"defaultValue": 0,
-			"allowManualEntry": false,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "use the start level value",
+					"label": "Dimming duration according to Dimming Duration (Key Held)",
 					"value": 0
-				},
-				{
-					"label": "ignore the start level value",
-					"value": 1
 				}
 			]
 		},
-		"68": {
-			"label": "Dimming duration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0
-		},
-		"70": {
-			"label": "Overload safety switch",
+		{
+			"#": "70",
+			"label": "Overload Protection",
 			"valueSize": 2,
-			"minValue": 1,
+			"unit": "W",
+			"minValue": 0,
 			"maxValue": 200,
-			"defaultValue": 200
+			"defaultValue": 200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
-		"71": {
-			"label": "Calibration trigger",
+		{
+			"#": "71",
+			"label": "Calibration Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "calibration after exclusion",
+					"label": "After exclusion",
 					"value": 0
 				},
 				{
-					"label": "calibration after power cycle",
+					"label": "After power cycle",
 					"value": 1
 				},
 				{
-					"label": "force calibration",
+					"label": "Force calibration",
 					"value": 2
 				}
 			]
 		},
-		"72": {
-			"label": "Calibration status (read only)",
+		{
+			"#": "72",
+			"label": "Calibration Status",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 2,
+			"unsigned": true,
 			"readOnly": true,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "calibration was successful",
+					"label": "Successful",
 					"value": 1
 				},
 				{
-					"label": "calibration failed",
+					"label": "Failed",
 					"value": 2
 				}
 			]
 		},
-		"73": {
-			"label": "Alarm/Notification events",
+		{
+			"#": "73",
+			"label": "Action on Alarm/Notification Events",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off",
+					"value": 1
+				},
+				{
+					"label": "Turn on",
+					"value": 2
+				},
+				{
+					"label": "Blink load",
+					"value": 3
+				}
+			]
 		},
-		"74": {
-			"label": "Alarm/Notification time interval",
+		{
+			"#": "74",
+			"label": "Alarm/Notification Action Duration",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 125,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unsigned": true
 		}
+	],
+	"metadata": {
+		"inclusion": "AUTOMATICALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (SMARTSTART INCLUSION)\n1. Scan QR code on device label and add S2 DSK to Provisioning List in gateway (hub) \n2. Connect the device to the power supply \n3. Inclusion will be initiated automatically within few seconds of connection to the power supply and the device will automatically enrol in your network (when the device is excluded and connected to the power supply it automatically enters the LEARN MODE state). \nNOTE: LEARN MODE state allows the device to receive network information from the controller. \nⓘ SmartStart inclusion is a part of S2 security level, so if you want to use SmartStart, you need to include it as S2 Authenticated.",
+		"exclusion": "REMOVAL FROM A ZWAVE NETWORK (Z-WAVE EXCLUSION)\n1. Connect the device to the power supply.\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion.\n3. Enable add/remove mode on your Z-Wave gateway (hub).\n4. Toggle the switch connected to the terminal I 3 times within 3 seconds (this procedure put the device in LEARN MODE). The device has to get On/Off signal 3 times, meaning 3 times push of the momentary switch or with toggle switch 3 times On and 3 times Off. \nOR\nPress and hold the S (Service) button between 2 and 6 seconds if connected power supply. For your safety use only 24-30 Vdc power supply when accessing to S (Service) button. This procedure put the device in LEARN MODE.\n5. Exclusion with the switch connected to terminal I is not limited by time. \n6. The device will be removed from your network, but any custom configuration parameters will not be erased.\nⓘ NOTE: LEARN MODE state allows the device to receive network information from the controller.",
+		"reset": "12.5. Device factory reset\n1. Connect the device to the power supply.\n2. Within the first minute (60 seconds) the device is connected to the power supply, toggle the switch connected to the terminal I 5 times within 3 seconds. The device has to get On/Off signal 5 times, meaning 5 times push of the momentary switch or with toggle switch 5 times On and 5 times Off.\nOR\nPress and hold the S (Service) button for at least 6 seconds if connected to power supply. For your safety use only 24-30 Vdc power supply when accessing to S (Service) button. This procedure put the device in LEARN MODE.\nⓘ NOTE: By resetting the device, all custom parameters previously set on the device will return to their default values, and the node ID will be deleted. Use this reset procedure only when the main gateway (hub) is missing or otherwise inoperable. If an end device is factory reset, it is reverted to the Z-Wave SmartStart inclusion state.\nⓘ NOTE: the reset with switch connected to terminal I is possible only in the first minute after the device is connected to the power.\nⓘ NOTE: after the reset is successfully done the autocalibration will trigger and the green LED will start blinking.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4211/Qubino_Mini%20Dimmer%20PLUS%20extended%20manual_eng_30.10.1.pdf"
 	}
 }

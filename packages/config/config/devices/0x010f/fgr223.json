@@ -11,18 +11,22 @@
 		{
 			"productType": "0x0303",
 			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0303",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"proprietary": {
 		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
 	},
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -44,7 +48,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Inputs orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +67,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Outputs orientation",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +86,8 @@
 				}
 			]
 		},
-		"40[0x01]": {
+		{
+			"#": "40[0x01]",
 			"label": "S1 scenes: Pressed 1 time",
 			"description": "Send a Central Scene notification when S1 is pressed 1 time",
 			"valueSize": 1,
@@ -88,7 +95,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"40[0x02]": {
+		{
+			"#": "40[0x02]",
 			"label": "S1 scenes: Pressed 2 times",
 			"description": "Send a Central Scene notification when S1 is pressed 2 times",
 			"valueSize": 1,
@@ -96,7 +104,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"40[0x04]": {
+		{
+			"#": "40[0x04]",
 			"label": "S1 scenes: Pressed 3 time",
 			"description": "Send a Central Scene notification when S1 is pressed 3 times",
 			"valueSize": 1,
@@ -104,7 +113,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"40[0x08]": {
+		{
+			"#": "40[0x08]",
 			"label": "S1 scenes: Hold down / Release",
 			"description": "Send a Central Scene notification when S1 is held down or released",
 			"valueSize": 1,
@@ -112,7 +122,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"41[0x01]": {
+		{
+			"#": "41[0x01]",
 			"label": "S2 scenes: Pressed 1 time",
 			"description": "Send a Central Scene notification when S2 is pressed 1 time",
 			"valueSize": 1,
@@ -120,7 +131,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"41[0x02]": {
+		{
+			"#": "41[0x02]",
 			"label": "S2 scenes: Pressed 2 times",
 			"description": "Send a Central Scene notification when S2 is pressed 2 times",
 			"valueSize": 1,
@@ -128,7 +140,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"41[0x04]": {
+		{
+			"#": "41[0x04]",
 			"label": "S2 scenes: Pressed 3 time",
 			"description": "Send a Central Scene notification when S2 is pressed 3 times",
 			"valueSize": 1,
@@ -136,7 +149,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"41[0x08]": {
+		{
+			"#": "41[0x08]",
 			"label": "S2 scenes: Hold down / Release",
 			"description": "Send a Central Scene notification when S2 is held down or released",
 			"valueSize": 1,
@@ -144,7 +158,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Measuring power consumed by the device itself",
 			"valueSize": 1,
 			"minValue": 0,
@@ -162,35 +177,40 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Power reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 15
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power reports - periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy reports - periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "Force calibration",
 			"valueSize": 1,
 			"minValue": 0,
@@ -212,7 +232,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Operating mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -246,7 +267,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Venetian blind - time of full turn of the slats",
 			"unit": "1/100 sec",
 			"valueSize": 4,
@@ -254,7 +276,8 @@
 			"maxValue": 65535,
 			"defaultValue": 150
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "Set slats back to previous position",
 			"valueSize": 1,
 			"minValue": 0,
@@ -276,7 +299,8 @@
 				}
 			]
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "Delay motor stop",
 			"description": "Delay motor stop after reaching end switch",
 			"unit": "1/10 sec",
@@ -285,7 +309,8 @@
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
 			"unit": "1/10 sec",
@@ -294,7 +319,8 @@
 			"maxValue": 255,
 			"defaultValue": 10
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "Time of up movement",
 			"unit": "1/100 sec",
 			"valueSize": 4,
@@ -302,7 +328,8 @@
 			"maxValue": 65535,
 			"defaultValue": 6000
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "Time of down movement",
 			"unit": "1/100 sec",
 			"valueSize": 4,
@@ -310,7 +337,8 @@
 			"maxValue": 65535,
 			"defaultValue": 6000
 		},
-		"30[0xff]": {
+		{
+			"#": "30[0xff]",
 			"label": "Alarm #1: Action",
 			"description": "Which action to perform when Alarm #1 is triggered",
 			"valueSize": 4,
@@ -333,7 +361,8 @@
 				}
 			]
 		},
-		"30[0xff00]": {
+		{
+			"#": "30[0xff00]",
 			"label": "Alarm #1: Event/State Parameters",
 			"description": "Which event parameters Alarm #1 should be limited to",
 			"valueSize": 4,
@@ -341,7 +370,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"30[0xff0000]": {
+		{
+			"#": "30[0xff0000]",
 			"label": "Alarm #1: Notification Status",
 			"description": "Which notification status Alarm #1 should be limited to",
 			"valueSize": 4,
@@ -355,7 +385,8 @@
 				}
 			]
 		},
-		"30[0xff000000]": {
+		{
+			"#": "30[0xff000000]",
 			"label": "Alarm #1: Notification Type",
 			"description": "Which notification type should raise Alarm #1",
 			"valueSize": 4,
@@ -363,7 +394,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"31[0xff]": {
+		{
+			"#": "31[0xff]",
 			"label": "Alarm #2: Action",
 			"description": "Which action to perform when Alarm #2 is triggered",
 			"valueSize": 4,
@@ -386,7 +418,8 @@
 				}
 			]
 		},
-		"31[0xff00]": {
+		{
+			"#": "31[0xff00]",
 			"label": "Alarm #2: Event/State Parameters",
 			"description": "Which event parameters Alarm #2 should be limited to",
 			"valueSize": 4,
@@ -394,7 +427,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"31[0xff0000]": {
+		{
+			"#": "31[0xff0000]",
 			"label": "Alarm #2: Notification Status",
 			"description": "Which notification status Alarm #2 should be limited to",
 			"valueSize": 4,
@@ -408,7 +442,8 @@
 				}
 			]
 		},
-		"31[0xff000000]": {
+		{
+			"#": "31[0xff000000]",
 			"label": "Alarm #2: Notification Type",
 			"description": "Which notification type should raise Alarm #2",
 			"valueSize": 4,
@@ -416,7 +451,8 @@
 			"maxValue": 255,
 			"defaultValue": 5 // Water
 		},
-		"32[0xff]": {
+		{
+			"#": "32[0xff]",
 			"label": "Alarm #3: Action",
 			"description": "Which action to perform when Alarm #3 is triggered",
 			"valueSize": 4,
@@ -439,7 +475,8 @@
 				}
 			]
 		},
-		"32[0xff00]": {
+		{
+			"#": "32[0xff00]",
 			"label": "Alarm #3: Event/State Parameters",
 			"description": "Which event parameters Alarm #3 should be limited to",
 			"valueSize": 4,
@@ -447,7 +484,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"32[0xff0000]": {
+		{
+			"#": "32[0xff0000]",
 			"label": "Alarm #3: Notification Status",
 			"description": "Which notification status Alarm #3 should be limited to",
 			"valueSize": 4,
@@ -461,7 +499,8 @@
 				}
 			]
 		},
-		"32[0xff000000]": {
+		{
+			"#": "32[0xff000000]",
 			"label": "Alarm #3: Notification Type",
 			"description": "Which notification type should raise Alarm #3",
 			"valueSize": 4,
@@ -469,7 +508,8 @@
 			"maxValue": 255,
 			"defaultValue": 1 // Smoke
 		},
-		"33[0xff]": {
+		{
+			"#": "33[0xff]",
 			"label": "Alarm #4: Action",
 			"description": "Which action to perform when Alarm #4 is triggered",
 			"valueSize": 4,
@@ -492,7 +532,8 @@
 				}
 			]
 		},
-		"33[0xff00]": {
+		{
+			"#": "33[0xff00]",
 			"label": "Alarm #4: Event/State Parameters",
 			"description": "Which event parameters Alarm #4 should be limited to",
 			"valueSize": 4,
@@ -500,7 +541,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"33[0xff0000]": {
+		{
+			"#": "33[0xff0000]",
 			"label": "Alarm #4: Notification Status",
 			"description": "Which notification status Alarm #4 should be limited to",
 			"valueSize": 4,
@@ -514,7 +556,8 @@
 				}
 			]
 		},
-		"33[0xff000000]": {
+		{
+			"#": "33[0xff000000]",
 			"label": "Alarm #4: Notification Type",
 			"description": "Which notification type should raise Alarm #4",
 			"valueSize": 4,
@@ -522,7 +565,8 @@
 			"maxValue": 255,
 			"defaultValue": 2 // CO
 		},
-		"34[0xff]": {
+		{
+			"#": "34[0xff]",
 			"label": "Alarm #5: Action",
 			"description": "Which action to perform when Alarm #5 is triggered",
 			"valueSize": 4,
@@ -545,7 +589,8 @@
 				}
 			]
 		},
-		"34[0xff00]": {
+		{
+			"#": "34[0xff00]",
 			"label": "Alarm #5: Event/State Parameters",
 			"description": "Which event parameters Alarm #5 should be limited to",
 			"valueSize": 4,
@@ -553,7 +598,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"34[0xff0000]": {
+		{
+			"#": "34[0xff0000]",
 			"label": "Alarm #5: Notification Status",
 			"description": "Which notification status Alarm #5 should be limited to",
 			"valueSize": 4,
@@ -567,7 +613,8 @@
 				}
 			]
 		},
-		"34[0xff000000]": {
+		{
+			"#": "34[0xff000000]",
 			"label": "Alarm #5: Notification Type",
 			"description": "Which notification type should raise Alarm #5",
 			"valueSize": 4,
@@ -575,5 +622,5 @@
 			"maxValue": 255,
 			"defaultValue": 4 // Heat
 		}
-	}
+	]
 }

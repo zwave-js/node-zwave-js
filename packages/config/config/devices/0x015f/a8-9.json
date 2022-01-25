@@ -1,0 +1,462 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "A8-9",
+	"description": "9 in 1 MULTI-SENSOR",
+	"devices": [
+		{
+			"productType": "0xa803",
+			"productId": "0x135a",
+			"zwaveAllianceId": [3456, 3995]
+		},
+		{
+			"productType": "0xa803",
+			"productId": "0x1352"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "PM2.5 Sensor: Change Report Threshold",
+			"unit": "µg/m³",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "CO2 Sensor: Change Report Threshold",
+			"unit": "5 ppm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Temperature Sensor: Change Report Threshold",
+			"unit": "0.5 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Humidity Sensor: Change Report Threshold",
+			"unit": "%rF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "VOC Sensor: Change Report Threshold",
+			"unit": "5 ppb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Brightness Sensor: Change Report Threshold",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "dB Sensor: Change Report Threshold",
+			"unit": "dB",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "PIR Sensor: Report Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Smoke Sensor: Report Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Smoke Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "PIR Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "PM2.5 Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "CO2 Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Temperature Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 180,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Humidity Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 180,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "VOC Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 180,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Brightness Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "dB Sensor: Auto-Report Timer",
+			"description": "Allowable Range: 35-32767 s",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "47",
+			"label": "Temperature Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "50",
+			"label": "Temperature Offset",
+			"description": "Offset = value minus 100. Example: 91 => -0.9 °",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "51",
+			"label": "Humidity Offset",
+			"description": "Offset = value minus 20. Example: 33 => +13 %",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 40,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "52",
+			"label": "CO2 Offset",
+			"description": "Offset = value minus 500. Example: 999 => +499 ppm",
+			"unit": "ppm",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 500,
+			"unsigned": true
+		},
+		{
+			"#": "53",
+			"label": "PM2.5 Offset",
+			"description": "Offset = value minus 100. Example: 101 => +1 µg/m³",
+			"unit": "µg/m³",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "54",
+			"label": "Brightness Offset",
+			"description": "Offset = value minus 5000. Example: 49 => -4951 lux",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 5000,
+			"unsigned": true
+		},
+		{
+			"#": "55",
+			"label": "VOC Offset",
+			"description": "Offset = value minus 100. Example: 101 => +1 ppb",
+			"unit": "ppb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "56",
+			"label": "dB Offset",
+			"description": "Offset = value minus 50. Example: 98 => +48 dB",
+			"unit": "dB",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "255",
+			"label": "Reset to Factory Default Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 170,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Completely factory reset sensor",
+					"value": 85
+				},
+				{
+					"label": "Reset all configuration parameters to default settings",
+					"value": 170
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Activate Add mode in the gateway. When device is powered on, hold F1 to choose interface for Add into Z-Wave network. Click F2 five times until \"cycle icon\" turns blue. Hold F2 and the device enters into learning mode, then \"wifi icon\" turns blue and the device is added into Z-Wave network",
+		"exclusion": "Activate Remove mode in the gateway. When device is powered on, hold F1 to choose interface for Remove into Z-Wave network. Click F2 five times until \"cycle icon\" turns blue. Hold F2 and the device enters into learning mode, then \"wifi icon\" turns blue and the device is added into Z-Wave network",
+		"reset": "1. Remove the device from network.\n2. By manual: 1, Press & hold F1 to enter Z-Wave setting interface, then press & hold F1 again to enter parameters setting interface;\n2, Press & hold F2 to enter setting interface and select “default”;\n3, Click F2 3 times and displays “OFF”-->“ON”-->“OK”-->“OFF”, factory setting is restored.\n3. Input 0xFF to ==0x55 Restore factory setting\n ==0xAA Restore default para.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3456/A8-9.pdf"
+	}
+}

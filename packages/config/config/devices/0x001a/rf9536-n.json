@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed OFF time",
 			"description": "time in seconds to delay OFF",
 			"valueSize": 1,
@@ -36,7 +37,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic ON time",
 			"description": "Time in seconds for panic mode ON",
 			"valueSize": 1,
@@ -46,7 +48,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic OFF time",
 			"description": "time in seconds for OFF in panic mode",
 			"valueSize": 1,
@@ -56,7 +59,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Basic Set Value",
 			"description": "Send value to association group on trigger",
 			"valueSize": 1,
@@ -65,7 +69,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
@@ -89,7 +94,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
@@ -109,7 +115,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimmer Ramp Time",
 			"description": "Time in seconds to reach desired level",
 			"valueSize": 1,
@@ -119,7 +126,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Kickstart / Rapid Start",
 			"description": "Turn on or off rapid start feature",
 			"valueSize": 1,
@@ -139,7 +147,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Minimum Dimmer Level",
 			"description": "The minimum dim level the switch will allow",
 			"valueSize": 1,
@@ -147,7 +156,8 @@
 			"maxValue": 99,
 			"defaultValue": 4
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Dimmer Level",
 			"description": "The maximum dim level the switch will allow",
 			"valueSize": 1,
@@ -155,5 +165,5 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		}
-	}
+	]
 }

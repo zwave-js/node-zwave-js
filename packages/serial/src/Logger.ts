@@ -2,16 +2,22 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
+	LogContext,
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
-import { buffer2hex, num2hex } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { MessageHeaders } from "./MessageHeaders";
 
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
-export class SerialLogger extends ZWaveLoggerBase {
+export interface SerialLogContext extends LogContext<"serial"> {
+	direction: DataDirection;
+	header?: string;
+}
+
+export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, SERIAL_LABEL);
 	}
@@ -57,6 +63,11 @@ export class SerialLogger extends ZWaveLoggerBase {
 			message: "",
 			secondaryTags: `(${num2hex(header)})`,
 			direction: getDirectionPrefix(direction),
+			context: {
+				source: "serial",
+				header: getEnumMemberName(MessageHeaders, header),
+				direction,
+			},
 		});
 	}
 
@@ -72,6 +83,10 @@ export class SerialLogger extends ZWaveLoggerBase {
 				message: `0x${data.toString("hex")}`,
 				secondaryTags: `(${data.length} bytes)`,
 				direction: getDirectionPrefix(direction),
+				context: {
+					source: "serial",
+					direction,
+				},
 			});
 		}
 		if (process.env.NODE_ENV !== "test") {
@@ -111,6 +126,10 @@ export class SerialLogger extends ZWaveLoggerBase {
 				level: SERIAL_LOGLEVEL,
 				message,
 				direction: getDirectionPrefix("none"),
+				context: {
+					source: "serial",
+					direction: "none",
+				},
 			});
 		}
 	}

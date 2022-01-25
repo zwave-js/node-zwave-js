@@ -1,0 +1,640 @@
+{
+	"manufacturer": "Custos",
+	"manufacturerId": "0x0270",
+	"label": "BVS-ZWU",
+	"description": "Water Ball Valve Servo",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x000a",
+			"zwaveAllianceId": [3885, 3916]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water Valve",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Leak Sensor",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Overheat Alarm",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Freeze Alarm",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "17",
+			"label": "Invert Water Valve Report",
+			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; ",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Association Group 2: Basic Set Value (On)",
+			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Association Group 2: Basic Set Value (Off)",
+			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "49",
+			"label": "Association Group 3: Water Leak Basic Set Value (Trigger)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "50",
+			"label": "Association Group 3: Water Leak Basic Set Value (Cancel)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "33",
+			"label": "Temperature Report Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable reports",
+					"value": 0
+				},
+				{
+					"label": "Celsius",
+					"value": 1
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "35[0xff]",
+			"label": "Temperature Report Offset",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "35[0xff00]",
+			"label": "Temperature Report Offset: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 17,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius (Negative)",
+					"value": 16
+				},
+				{
+					"label": "Celsius (Positive)",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit (Negative)",
+					"value": 1
+				},
+				{
+					"label": "Fahrenheit (Positive)",
+					"value": 17
+				}
+			]
+		},
+		{
+			"#": "34[0xff]",
+			"label": "Temperature Change Reporting: Threshold",
+			"valueSize": 2,
+			"unit": "°F/C",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "34[0xff00]",
+			"label": "Temperature Change Reporting: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "36[0xff]",
+			"label": "Overheat Trigger: Temperature",
+			"valueSize": 2,
+			"unit": "°F/C",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 104,
+			"unsigned": true
+		},
+		{
+			"#": "36[0xff00]",
+			"label": "Overheat Trigger: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "37[0xff]",
+			"label": "Overheat Recover: Temperature",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 86,
+			"unsigned": true
+		},
+		{
+			"#": "37[0xff00]",
+			"label": "Overheat Recover: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "38",
+			"label": "Association Group 4: Overheat Basic Set Value (Trigger)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "39",
+			"label": "Association Group 4: Overheat Basic Set Value (Cancel)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "40[0xff]",
+			"label": "Freeze Threshold: Temperature",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 32,
+			"unsigned": true
+		},
+		{
+			"#": "40[0xff00]",
+			"label": "Freeze Threshold: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "41[0xff]",
+			"label": "Freeze Recover: Temperature",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 36,
+			"unsigned": true
+		},
+		{
+			"#": "41[0xff00]",
+			"label": "Freeze Recover: Unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "43",
+			"label": "Association Group 5: Freeze Basic Set Value (Trigger)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "44",
+			"label": "Association Group 5: Freeze Basic Set Value (Cancel)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Set on (0xff)",
+					"value": 1
+				},
+				{
+					"label": "Basic Set off (0x00)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "51",
+			"label": "Allow Valve Control - Water Leak Detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "42",
+			"label": "Allow Valve Control - Water Leak Detected During Freeze Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "65",
+			"label": "Buzzer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "66",
+			"label": "LED Brightness Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 80,
+			"unsigned": true
+		},
+		{
+			"#": "67",
+			"label": "Touch Keylock Protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "81[0x01]",
+			"label": "Notification Report: Water Valve Open",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "81[0x02]",
+			"label": "Notification Report: Overheat Detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "81[0x04]",
+			"label": "Notification Report: Freeze Detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "81[0x08]",
+			"label": "Notification Report: Local Water Leak Sensor Probe Detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Set your Z-Wave Gateway into Inclusion mode / Add device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue. For security inclusion support, you may need to entering first 5 digit\nthat show on QR Code label, please refer to the instructions of central controller.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication changes to Green LED slow blinking from Yellow LED blinking.",
+		"exclusion": "Set your Z-Wave Gateway into Exclusion mode / Remove device.\ni. Start: Short press Touch Sense Button 3 times.\nii. Processing: Yellow LED and short beep sound keeping continue.\niii. Success: Green LED on 1 second with 2 short beep sounds.\niv. The LED indication Changes to Yellow LED blinking",
+		"reset": "Start: Long hold Touch Sense Button for 10 seconds then short click 5 times.\nii. Processing: Yellow LED ON 1 second then wait 2-5 seconds.\niii. Success: Green LED on 2 second with long beep sounds for 2 seconds.\n*Factory Default Reset will:\na. Remote the BVS from Z-Wave Network;\nb. Delete the association setting;\nc. Restore the configuration settings to the default",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3885/BVS_ZWU_v1.0.9.pdf"
+	}
+}

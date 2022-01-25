@@ -1,9 +1,14 @@
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MS12Z",
+	"label": "MS12ZS",
 	"description": "Smart On/Off Toggle Switch",
 	"devices": [
+		{
+			"productType": "0xee00",
+			"productId": "0xee03",
+			"zwaveAllianceId": [3996, 4138]
+		},
 		{
 			"productType": "0xff00",
 			"productId": "0xff01",
@@ -13,127 +18,76 @@
 			"productType": "0xff01",
 			"productId": "0xff01",
 			"zwaveAllianceId": 3628
-		},
-		{
-			"productType": "0xee00",
-			"productId": "0xee03",
-			"zwaveAllianceId": 3996
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
-			"label": "Button Orientation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Swap up/down buttons",
-					"value": 1
-				},
-				{
-					"label": "Both buttons toggle",
-					"value": 2
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
-		"2": {
-			"label": "Status LED Configuration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when load off, LED off when load on",
-					"value": 0
-				},
-				{
-					"label": "LED on when load on, LED off when load off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				},
-				{
-					"label": "LED always on",
-					"value": 3
-				}
-			]
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
-		"3": {
-			"label": "Enable/Disable Auto-Off Timer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+		{
+			"#": "3",
+			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
 		},
-		"4": {
-			"label": "Auto-Off Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60,
-			"unsigned": true
+		{
+			"#": "5",
+			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
 		},
-		"5": {
-			"label": "Enable/Disable Auto-On Timer",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+		{
+			"#": "7[0x01]",
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_local_control"
 		},
-		"6": {
-			"label": "Auto-On Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60,
-			"unsigned": true
+		{
+			"#": "7[0x02]",
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_three_way"
 		},
-		"7[0x01]": {
-			"label": "Send Status Change Report: Local Control",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
+		{
+			"#": "7[0x04]",
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_zwave"
+		},
+		{
+			"#": "7[0x08]",
+			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_timer"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#enable_scene_control"
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
+		},
+		{
+			"#": "13",
+			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0312/templates/minoston_template.json#external_switch_type_two_options"
+		},
+		{
+			"#": "14",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
+		},
+		{
+			"#": "15",
+			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "16",
+			"label": "Association Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -142,122 +96,20 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Binary Switch report (Z-Wave); Basic Set report (local control)",
 					"value": 0
 				},
 				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"7[0x02]": {
-			"label": "Send Status Change Report: 3-Way",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"7[0x04]": {
-			"label": "Send Status Change Report: Z-Wave",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"7[0x08]": {
-			"label": "Send Status Change Report: Timer",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"8": {
-			"label": "State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
-		},
-		"9": {
-			"label": "Enable/Disable Local Control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
+					"label": "Binary Switch report (all)",
 					"value": 1
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
-		"inclusion": "ADD or Remove the MS12Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS12Z to/from a Z-Wave Gateway with supporting Security.The MS12Z can support the Primary Controller that implemented the security S2.",
-		"exclusion": "ADD or Remove the MS12Z from the existing Z-Wave home control network with your primary controller.\n ---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n ---When prompted by your primary controller, click the Up or Down button three times in one second. \nInclude MS12Z to/from a Z-Wave Gateway with supporting Security.The MS12Z can support the Primary Controller that implemented the security S2.",
-		"reset": "Press click Z-Wave button 3 times quickly,and hold the third time for at least 10 seconds. to restore the device to the factory.Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3628/MS12Z-manual-190822..pdf"
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Press and hold lower paddle for 10 seconds,then LED starts blinking, release paddle and within 2 seconds,click lower paddle 5 times\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4138/MS12ZS%20manual-20210303.pdf"
 	}
 }

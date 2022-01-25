@@ -1,0 +1,150 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA037",
+	"description": "illumino Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0025",
+			"zwaveAllianceId": 4262
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Top Button - Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Top Button - Multilevel Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Buttom Button - Basic Set",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Bottom Button - Multilevel Set",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "External Switch - Basic Set",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "External Switch - Multilevel Set",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "Top and Bottom Button - Basic Set",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "Top and Bottom Button - Multilevel Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "40",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer_65535"
+		},
+		{
+			"#": "41",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_on_timer_65535"
+		},
+		{
+			"#": "80",
+			"$import": "~/0x0086/templates/aeotec_template.json#binary_report_type"
+		},
+		{
+			"#": "82",
+			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
+		},
+		{
+			"#": "83",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_function"
+		},
+		{
+			"#": "84",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_output"
+		},
+		{
+			"#": "85",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_color_scene"
+		},
+		{
+			"#": "86",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "110",
+			"$import": "~/0x0086/templates/aeotec_template.json#brightness_single_tap"
+		},
+		{
+			"#": "111",
+			"$import": "~/0x0086/templates/aeotec_template.json#brightness_double_tap"
+		},
+		{
+			"#": "119",
+			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_scene_function"
+		},
+		{
+			"#": "120",
+			"$import": "~/0x0086/templates/aeotec_template.json#external_switch_dimmers"
+		},
+		{
+			"#": "121",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-3"
+		},
+		{
+			"#": "123",
+			"$import": "~/0x0086/templates/aeotec_template.json#smart_switch_mode_reporting"
+		},
+		{
+			"#": "122",
+			"$import": "~/templates/master_template.json#orientation_momentary"
+		},
+		{
+			"#": "125",
+			"$import": "~/0x0086/templates/aeotec_template.json#dimming_rate_99",
+			"label": "Dimming Rate (Z-Wave & Tap)"
+		},
+		{
+			"#": "126",
+			"$import": "~/0x0086/templates/aeotec_template.json#dimming_rate_99",
+			"label": "Dimming Rate (Hold)"
+		},
+		{
+			"#": "131",
+			"$import": "~/0x0086/templates/aeotec_template.json#min_brightness"
+		},
+		{
+			"#": "132",
+			"$import": "~/0x0086/templates/aeotec_template.json#max_brightness_100"
+		},
+		{
+			"#": "133",
+			"$import": "~/0x0086/templates/aeotec_template.json#custom_brightness_99"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Turn the primary controller/ gateway into adding mode.\n2. 1x tap the Top/ Bottom button of Dimmer Switch",
+		"exclusion": "1. Turn the primary controller/ gateway into removing mode.\n2. 3x tap the Top/ Bottom button of Dimmer Switch",
+		"reset": "Press and hold the Top/ Bottom button for 20 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4262/Aeotec%20Dimmer%20Switch%20Manual.pdf"
+	}
+}

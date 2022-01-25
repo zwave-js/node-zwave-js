@@ -1,7 +1,7 @@
 {
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
-	"label": "HKZW_MS02",
+	"label": "HKZW-MS02",
 	"description": "Motion Sensor",
 	"devices": [
 		{
@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "Motion Sensor`s Sensitivity",
 			"description": "The higher the value,the more sensitive the PIR sensor",
 			"valueSize": 1,
@@ -65,7 +65,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Enable/Disable Basic Set Command",
 			"description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
 			"valueSize": 1,
@@ -84,7 +85,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "value of basic set command",
 			"valueSize": 1,
 			"minValue": 0,
@@ -102,7 +104,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "enable/disable shock alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +123,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Motion Alarm Cancellation Delay",
 			"description": "Period of time after which Motion alarm will be cancelled.",
 			"unit": "seconds",
@@ -130,7 +134,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Level of low battery",
 			"description": "Define a battery level ad the \"low battery\"",
 			"valueSize": 1,
@@ -138,5 +143,5 @@
 			"maxValue": 50,
 			"defaultValue": 20
 		}
-	}
+	]
 }

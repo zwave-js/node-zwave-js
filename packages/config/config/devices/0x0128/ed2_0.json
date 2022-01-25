@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Analog gas/heat port mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -42,14 +43,16 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Analog gas/heat port resolution",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 400
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Analog electricity port mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -70,14 +73,16 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Analog electricity port resolution",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 400
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Restart device",
 			"description": "Restart device or metering chip",
 			"valueSize": 1,
@@ -96,5 +101,5 @@
 				}
 			]
 		}
-	}
+	]
 }

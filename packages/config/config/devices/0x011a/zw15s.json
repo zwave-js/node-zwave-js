@@ -28,8 +28,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LED State",
 			"valueSize": 1,
 			"minValue": 0,
@@ -47,5 +48,9 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// Enable double-tap support
+		"treatBasicSetAsEvent": true
 	}
 }

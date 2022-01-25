@@ -20,6 +20,10 @@
 		{
 			"productType": "0x6501",
 			"productId": "0x000d"
+		},
+		{
+			"productType": "0x6501",
+			"productId": "0x00fd"
 		}
 	],
 	"firmwareVersion": {
@@ -33,8 +37,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -64,7 +69,8 @@
 				}
 			]
 		},
-		"2[0xff000000]": {
+		{
+			"#": "2[0xff000000]",
 			"label": "HVAC Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -82,7 +88,8 @@
 				}
 			]
 		},
-		"2[0x0f0000]": {
+		{
+			"#": "2[0x0f0000]",
 			"label": "Number of Auxiliary or Heat Stages",
 			"valueSize": 4,
 			"minValue": 0,
@@ -90,7 +97,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"2[0xf00000]": {
+		{
+			"#": "2[0xf00000]",
 			"label": "Auxiliary Heat Type",
 			"valueSize": 4,
 			"minValue": 1,
@@ -108,7 +116,8 @@
 				}
 			]
 		},
-		"2[0xff00]": {
+		{
+			"#": "2[0xff00]",
 			"label": "Number of Heat Pump Stages",
 			"valueSize": 4,
 			"minValue": 0,
@@ -116,7 +125,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"2[0xff]": {
+		{
+			"#": "2[0xff]",
 			"label": "Number of Cool Stages",
 			"valueSize": 4,
 			"minValue": 0,
@@ -124,7 +134,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Lock Setpoint Changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -144,7 +155,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Thermostat Power Type",
 			"valueSize": 1,
 			"minValue": 1,
@@ -162,7 +174,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
@@ -189,7 +202,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Auxiliary/Emergency Heating",
 			"valueSize": 1,
 			"minValue": 0,
@@ -208,7 +222,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Thermostat Hysteresis",
 			"description": "Variance allowed from setpoint to engage HVAC",
 			"valueSize": 1,
@@ -251,7 +266,8 @@
 				}
 			]
 		},
-		"8[0xff00]": {
+		{
+			"#": "8[0xff00]",
 			"label": "Heating Differential Temperature",
 			"valueSize": 2,
 			"minValue": 4,
@@ -281,7 +297,8 @@
 				}
 			]
 		},
-		"8[0xff]": {
+		{
+			"#": "8[0xff]",
 			"label": "Cooling Differential Temperature",
 			"valueSize": 2,
 			"minValue": 4,
@@ -311,7 +328,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"valueSize": 1,
 			"minValue": 1,
@@ -329,5 +347,9 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		// The device has two endpoints. The temperature gets reported via the root, humidity is on endpoint 2.
+		"mapRootReportsToEndpoint": 1
 	}
 }

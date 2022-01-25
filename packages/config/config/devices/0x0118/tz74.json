@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Change the state of indicator light",
 			"description": "Default status of socket LED is on as indicator when the load is off",
 			"valueSize": 1,
@@ -34,7 +34,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"description": "Default with memory: the socket staus is same as before when power is on",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Invert switch",
 			"description": "In the edge mode invert switch - no effect if Pulse or Edge-toggle modes",
 			"valueSize": 1,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Edge, Pulse, or Edge Toggle Mode",
 			"description": "Set how the switch controls the module",
 			"valueSize": 1,
@@ -95,5 +98,5 @@
 				}
 			]
 		}
-	}
+	]
 }

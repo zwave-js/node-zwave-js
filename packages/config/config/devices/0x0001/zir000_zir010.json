@@ -40,8 +40,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"17": {
+	"paramInformation": [
+		{
+			"#": "17",
 			"label": "Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -63,18 +64,21 @@
 				}
 			]
 		},
-		"18": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Delay After Trigger",
 			"description": "Defines the time after motion before the device sets off/idle",
 			"unit": "minutes"
 		},
-		"19": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "19",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Sending Commands",
 			"description": "Allows temporarily disabling sending commands without removing direct associations"
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Awake Time",
 			"description": "Defines the time the device will remain awake",
 			"valueSize": 1,
@@ -83,5 +87,5 @@
 			"maxValue": 45,
 			"defaultValue": 30
 		}
-	}
+	]
 }

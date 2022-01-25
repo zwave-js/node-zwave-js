@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "configure LED light state",
 			"valueSize": 1,
 			"minValue": 0,
@@ -32,5 +33,5 @@
 				}
 			]
 		}
-	}
+	]
 }

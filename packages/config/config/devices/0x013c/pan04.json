@@ -25,9 +25,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Meter Report Period (W)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -36,7 +36,8 @@
 			"unit": "5 seconds",
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "kWh Meter Report Period (kWh)",
 			"valueSize": 2,
 			"minValue": 0,
@@ -45,7 +46,8 @@
 			"unit": "10 minutes",
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Selected Relay",
 			"description": "Which relay is addressed by the BASIC command class",
 			"valueSize": 1,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "External Switch Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +95,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Threshold for Load Caution (A)",
 			"description": "When this threshold is surpassed, a Meter Report will be sent.",
 			"valueSize": 2,
@@ -102,7 +106,8 @@
 			"unit": "0.01 A",
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Threshold for Load Caution (kWh)",
 			"description": "When this threshold is surpassed, a Meter Report will be sent.",
 			"valueSize": 2,
@@ -112,7 +117,8 @@
 			"unit": "kWh",
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "State after Power Loss",
 			"valueSize": 1,
 			"minValue": 0,
@@ -135,7 +141,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Auto Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
@@ -150,7 +157,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "RF Off Command Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -177,7 +185,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Endpoint 3",
 			"valueSize": 1,
 			"minValue": 0,
@@ -196,8 +205,8 @@
 				}
 			]
 		},
-		// It seems that parameters 14 and 31 were added in a later firmware version, but there's no way to find out which one
-		"14": {
+		{
+			"#": "14",
 			"label": "Differential Report Threshold (W)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -227,7 +236,8 @@
 				}
 			]
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Send Reports From Endpoints",
 			"description": "Enable this to distinguish between the relays.",
 			"valueSize": 1,
@@ -247,7 +257,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by the controller manufacturer.\n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter inclusion mode",
 		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by the controller manufacturer.\n2. Pressing INCLUDE_BUTTON three times within 2 seconds will enter exclusion mode.",

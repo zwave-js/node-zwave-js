@@ -30,8 +30,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,12 +51,13 @@
 				}
 			]
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "WaterLevel Timeout",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 60
 		}
-	}
+	]
 }

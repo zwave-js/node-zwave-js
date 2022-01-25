@@ -34,6 +34,10 @@
 		},
 		{
 			"productType": "0x0004",
+			"productId": "0x0164"
+		},
+		{
+			"productType": "0x0004",
 			"productId": "0x0177"
 		}
 	],
@@ -41,9 +45,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Association LED",
 			"description": "Activates the Central LED.",
 			"valueSize": 1,
@@ -63,7 +67,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Up Time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -82,7 +87,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Down Time",
 			"valueSize": 1,
 			"minValue": 1,
@@ -100,7 +106,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Calibration",
 			"valueSize": 1,
 			"minValue": 255,
@@ -109,7 +116,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Behavior of LED in Repose",
 			"description": "Configuration of Main LED as identification at 20%.",
 			"valueSize": 1,
@@ -129,7 +137,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Lock Input",
 			"description": "Unlock/lock the direct control of load.",
 			"valueSize": 1,
@@ -149,7 +158,8 @@
 				}
 			]
 		},
-		"21[0xff00]": {
+		{
+			"#": "21[0xff00]",
 			"label": "Blind State: Direction",
 			"valueSize": 2,
 			"minValue": 0,
@@ -172,7 +182,8 @@
 				}
 			]
 		},
-		"21[0xff]": {
+		{
+			"#": "21[0xff]",
 			"label": "Blind State: Position",
 			"valueSize": 2,
 			"minValue": 0,
@@ -180,7 +191,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Calibration Required",
 			"valueSize": 1,
 			"minValue": 0,
@@ -200,7 +212,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Lock long press",
 			"valueSize": 1,
 			"minValue": 0,
@@ -219,5 +232,5 @@
 				}
 			]
 		}
-	}
+	]
 }

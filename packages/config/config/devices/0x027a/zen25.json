@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "On/Off After Power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,10 +37,10 @@
 				}
 			]
 		},
-		"2": {
-			"label": "Wattage Threshold",
-			"description": "Power Wattage Report Value Threshold",
-			"unit": "Watta",
+		{
+			"#": "2",
+			"label": "Power (W) Report Threshold",
+			"unit": "W",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -52,50 +52,54 @@
 				}
 			]
 		},
-		"3": {
-			"label": "Wattage Frequency",
-			"unit": "Seconds",
+		{
+			"#": "3",
+			"label": "Power (W) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 30,
 			"maxValue": 2678400,
 			"defaultValue": 30
 		},
-		"4": {
-			"label": "Energy Frequency",
-			"unit": "Seconds",
+		{
+			"#": "4",
+			"label": "Energy (kWh) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
-			"minValue": 30,
+			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"5": {
-			"label": "Voltage Frequency",
-			"unit": "Seconds",
+		{
+			"#": "5",
+			"label": "Voltage (V) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
-			"minValue": 30,
+			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"6": {
-			"label": "Current Frequency",
-			"description": "Electrical Current (A) Report Frequency",
-			"unit": "Seconds",
+		{
+			"#": "6",
+			"label": "Current (A) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
-			"minValue": 30,
+			"minValue": 5,
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Overload Protection",
-			"unit": "Amps",
+			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10
 		},
-		"8": {
-			"label": "Enable Auto-Off (Left)",
-			"description": "Enable Auto Turn-Off Timer for Left Outlet",
+		{
+			"#": "8",
+			"label": "Auto-Off (Left Outlet)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -112,17 +116,18 @@
 				}
 			]
 		},
-		"9": {
-			"label": "Turn-Off Time (Left)",
-			"unit": "Minutes",
+		{
+			"#": "9",
+			"label": "Auto-Off Delay (Left Outlet)",
+			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"10": {
-			"label": "Enable Auto-On (Left)",
-			"description": "Enable Auto Turn-On Timer for Left Outlet",
+		{
+			"#": "10",
+			"label": "Auto-On (Left Outlet)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -139,17 +144,18 @@
 				}
 			]
 		},
-		"11": {
-			"label": "Turn-On Time (Left)",
-			"unit": "Minutes",
+		{
+			"#": "11",
+			"label": "Auto-On Delay (Left Outlet)",
+			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"12": {
-			"label": "Enable Auto-Off (Right)",
-			"description": "Enable Auto Turn-Off Timer for Right Outlet",
+		{
+			"#": "12",
+			"label": "Auto-Off (Right Outlet)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -166,16 +172,18 @@
 				}
 			]
 		},
-		"13": {
-			"label": "Turn-Off Time (Right)",
+		{
+			"#": "13",
+			"label": "Auto-Off Delay (Right Outlet)",
+			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"14": {
-			"label": "Enable Auto-On (Right)",
-			"description": "Enable Auto Turn-On Timer for Right Outlet",
+		{
+			"#": "14",
+			"label": "Auto-On (Right Outlet)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -192,16 +200,19 @@
 				}
 			]
 		},
-		"15": {
-			"label": "Turn-On Time (Right)",
+		{
+			"#": "15",
+			"label": "Auto-On Delay (Right Outlet)",
+			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 60
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Manual Control",
-			"description": "Enable/Disable Manual Control",
+			"description": "Enable/Disable manual control of both outlets",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -218,9 +229,9 @@
 				}
 			]
 		},
-		"17": {
-			"label": "LED Mode",
-			"description": "LED Indicator Mode",
+		{
+			"#": "17",
+			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -245,7 +256,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Enable/Disable Power Reports",
 			"valueSize": 1,
@@ -276,7 +288,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"preserveRootApplicationCCValueIDs": true
 	}

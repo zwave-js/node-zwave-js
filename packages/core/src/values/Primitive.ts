@@ -1,5 +1,9 @@
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
-import { validatePayload } from "../util/misc";
+import {
+	getBitMaskWidth,
+	getMinimumShiftForBitMask,
+	validatePayload,
+} from "../util/misc";
 
 type Brand<K, T> = K & { __brand: T };
 
@@ -43,17 +47,55 @@ export function parseNumber(val: number): number | undefined {
 	return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }
 
-/** Parses a floating point value with a scale from a buffer */
+/**
+ * Parses a floating point value with a scale from a buffer.
+ */
 export function parseFloatWithScale(
 	payload: Buffer,
-): { value: number; scale: number; bytesRead: number } {
+	allowEmpty?: false,
+): {
+	value: number;
+	scale: number;
+	bytesRead: number;
+};
+
+/**
+ * Parses a floating point value with a scale from a buffer.
+ * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
+ */
+export function parseFloatWithScale(
+	payload: Buffer,
+	allowEmpty: true,
+): {
+	value?: number;
+	scale?: number;
+	bytesRead: number;
+};
+
+/**
+ * Parses a floating point value with a scale from a buffer.
+ * @param allowEmpty Whether empty floats (precision = scale = size = 0 no value) are accepted
+ */
+export function parseFloatWithScale(
+	payload: Buffer,
+	allowEmpty: boolean = false,
+): {
+	value?: number;
+	scale?: number;
+	bytesRead: number;
+} {
 	validatePayload(payload.length >= 1);
 	const precision = (payload[0] & 0b111_00_000) >>> 5;
 	const scale = (payload[0] & 0b000_11_000) >>> 3;
 	const size = payload[0] & 0b111;
-	validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
-	const value = payload.readIntBE(1, size) / Math.pow(10, precision);
-	return { value, scale, bytesRead: 1 + size };
+	if (allowEmpty && size === 0) {
+		validatePayload(precision === 0, scale === 0);
+		return { bytesRead: 1 };
+	} else {
+		validatePayload(size >= 1, size <= 4, payload.length >= 1 + size);
+		const value = payload.readIntBE(1, size) / Math.pow(10, precision);
+		return { value, scale, bytesRead: 1 + size };
+	}
 }
 
 function getPrecision(num: number): number {
@@ -156,14 +198,72 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 }
 
 /** Serializes a numeric array with a given maximum into a bit mask */
-export function encodeBitMask(values: number[], maxValue: number): Buffer {
-	const numBytes = Math.ceil(maxValue / 8);
+export function encodeBitMask(
+	values: readonly number[],
+	maxValue: number,
+	startValue: number = 1,
+): Buffer {
+	const numBytes = Math.ceil((maxValue - startValue + 1) / 8);
 	const ret = Buffer.alloc(numBytes, 0);
-	for (let val = 1; val <= maxValue; val++) {
+	for (let val = startValue; val <= maxValue; val++) {
 		if (values.indexOf(val) === -1) continue;
-		const byteNum = (val - 1) >>> 3; // id / 8
-		const bitNum = (val - 1) % 8;
+		const byteNum = (val - startValue) >>> 3; // id / 8
+		const bitNum = (val - startValue) % 8;
 		ret[byteNum] |= 2 ** bitNum;
 	}
 	return ret;
+}
+
+/**
+ * Parses a partial value from a "full" value. Example:
+ * ```txt
+ *   Value = 01110000
+ *   Mask  = 00110000
+ *   ----------------
+ *             11     => 3 (unsigned) or -1 (signed)
+ * ```
+ *
+ * @param value The full value the partial should be extracted from
+ * @param bitMask The bit mask selecting the partial value
+ * @param signed Whether the partial value should be interpreted as signed
+ */
+export function parsePartial(
+	value: number,
+	bitMask: number,
+	signed: boolean,
+): number {
+	const shift = getMinimumShiftForBitMask(bitMask);
+	const width = getBitMaskWidth(bitMask);
+	let ret = (value & bitMask) >>> shift;
+	// If the high bit is set and this value should be signed, we need to convert it
+	if (signed && !!(ret & (2 ** (width - 1)))) {
+		// To represent a negative partial as signed, the high bits must be set to 1
+		ret = ~(~ret & (bitMask >>> shift));
+	}
+	return ret;
+}
+
+/**
+ * Encodes a partial value into a "full" value. Example:
+ * ```txt
+ *   Value   = 01··0000
+ * + Partial =   10     (2 or -2 depending on signed interpretation)
+ *   Mask    = 00110000
+ *   ------------------
+ *             01100000
+ * ```
+ *
+ * @param fullValue The full value the partial should be merged into
+ * @param partialValue The partial to be merged
+ * @param bitMask The bit mask selecting the partial value
+ */
+export function encodePartial(
+	fullValue: number,
+	partialValue: number,
+	bitMask: number,
+): number {
+	const ret =
+		(fullValue & ~bitMask) |
+		((partialValue << getMinimumShiftForBitMask(bitMask)) & bitMask);
+	return ret >>> 0; // convert to unsigned if necessary
 }

@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Night Light",
 			"description": "LED Mode",
 			"valueSize": 1,
@@ -27,14 +27,16 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Memory Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Invert Switch",
 			"description": "Reverse switch direction",
 			"valueSize": 1,
@@ -42,7 +44,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Transmission Indication",
 			"description": "Set LED flickering mode",
 			"valueSize": 1,
@@ -50,7 +53,8 @@
 			"maxValue": 2,
 			"defaultValue": 1
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Suspend Group 4",
 			"description": "Disable transmitting commands to devices that are in Group 4",
 			"valueSize": 1,
@@ -58,5 +62,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -21,9 +21,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Back light Enable",
 			"description": "Enable back light when Light Switch is powered on.",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Relay On/Off Indicate",
 			"description": "Switch on LED indicator.",
 			"valueSize": 1,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Relay On/Off Status Saved Enable",
 			"description": "Restore switch status on power restore.",
 			"valueSize": 1,
@@ -80,7 +82,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Root Device Mapped Setting",
 			"description": "Endpoint device mapping setting for associated devices.",
 			"valueSize": 1,
@@ -107,5 +110,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -19,8 +19,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Volume",
 			"valueSize": 1,
 			"minValue": 1,
@@ -43,7 +44,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Door Lock Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +64,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Re Lock Time",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -71,7 +74,7 @@
 			"defaultValue": 7,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Please proceed with the door lock open.\n1. Set the controller in inclusion mode.\n2. Open the battery cover of the indoor body and press the [REG] button.\n3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n4. Press the [8][8] button after pressing the [*] button.",
 		"exclusion": "Please proceed with the door lock open.\n1. Set the controller in exclusion mode.\n2. Open the battery cover of the indoor body and press the [REG] button.\n3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.\n4. Press the [9][9] button after pressing the [*] button",

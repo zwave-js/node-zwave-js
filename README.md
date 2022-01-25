@@ -1,6 +1,6 @@
 ![node-zwave-js](docs/_images/logo.svg)
 
-<h2 align="center">Z-Wave driver written entirely in JavaScript/TypeScript</h2>
+<h2 align="center">Z-Wave device driver written entirely in JavaScript/TypeScript</h2>
 
 ![Test and Release](https://github.com/AlCalzone/node-zwave-js/workflows/Test%20and%20Release/badge.svg)
 [![Coverage Status](https://img.shields.io/coveralls/github/AlCalzone/node-zwave-js.svg)](https://coveralls.io/github/AlCalzone/node-zwave-js)
@@ -20,11 +20,25 @@
 Z-Wave is an amazing piece of technology, but it is difficult to get started with and develop for.  
 **It shouldn't be!** We've got you covered.
 
-Built on Node.js, **Z-Wave JS** runs on almost anything with a little bit of computing power and a serial port. Check out the [documentation](https://zwave-js.github.io/node-zwave-js) to get started!
+Built on Node.js and compatible with all known 500 and 700 series Z-Wave controller hardware adapters, **Z-Wave JS** runs on almost anything with a little bit of computing power and a serial port. Check out the [documentation](https://zwave-js.github.io/node-zwave-js) to get started!
+
+## Quick Links
+
+<p align="center">
+  <a href="LICENSE">License</a> &middot;
+  <a href="CHANGELOG.md">Changelog</a> &middot;
+  <a href="https://zwave-js.github.io/node-zwave-js/">Documentation</a> &middot;
+  <a href="https://devices.zwave-js.io">Device configuration DB</a>
+</p>
+<p align="center">
+  <a href="https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js">
+    <img src="https://gitpod.io/button/open-in-gitpod.svg" alt="Open in Gitpod" />
+  </a>
+</p>
 
 ## Supporting Z-Wave JS
 
-Started in 2018, **Z-Wave JS** has breathed new life into the Z-Wave ecosystem and is now powering thousands of smart homes all over the world. We strive to build the best open source Z-Wave driver out there and hold ourselves to the highest standards. This requires a lot of effort and is done entirely in our free time. We'd love to spend more time on **Z-Wave JS**, but need your support to do so.
+Started in 2018, **Z-Wave JS** has breathed new life into the Z-Wave ecosystem and is now powering thousands of smart homes all over the world. We strive to build the best open source Z-Wave device driver out there and hold ourselves to the highest standards. This requires a lot of effort and is done entirely in our free time. We'd love to spend more time on **Z-Wave JS**, but need your support to do so.
 
 If you'd like to help support the future of the project and make the Z-Wave world a better place, please consider:
 
@@ -33,9 +47,8 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 -   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps.
 -   Providing a part-time salary for @AlCalzone by becoming a [sponsor](https://github.com/sponsors/AlCalzone) - [read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring).
 
-## Quick Links
+**Top Sponsors:**
 
--   [License](LICENSE)
--   [Changelog](CHANGELOG.md)
--   [Documentation](https://zwave-js.github.io/node-zwave-js/)
--   [Device configuration DB](https://devices.zwave-js.io)
+<p>
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
+</p>

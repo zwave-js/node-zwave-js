@@ -149,10 +149,11 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<BinarySensorCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<BinarySensorCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		// We don't want to repeat the sensor type
 		return response?.supportedSensorTypes;
 	}

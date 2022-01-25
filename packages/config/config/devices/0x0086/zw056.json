@@ -55,18 +55,21 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"2": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Set The Repetitions For Playing Doorbell Ringtone",
 			"defaultValue": 2
 		},
-		"5": {
-			"$import": "../templates/master_template.json#base_1-100_nounit",
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Default Doorbell Ringtone"
 		},
-		"6": {
-			"$import": "../templates/master_template.json#base_0-100_nounit",
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Play Ringtone",
 			"options": [
 				{
@@ -75,7 +78,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Control Items",
 			"description": "This parameter is used to implement the control items",
 			"valueSize": 1,
@@ -107,13 +111,15 @@
 				}
 			]
 		},
-		"8": {
-			"$import": "../templates/master_template.json#base_0-10_nounit",
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_0-10_nounit",
 			"label": "Volume",
 			"defaultValue": 10
 		},
-		"10": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Define The Function of Button- and Button+",
 			"options": [
 				{
@@ -126,8 +132,9 @@
 				}
 			]
 		},
-		"11": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
@@ -140,8 +147,9 @@
 				}
 			]
 		},
-		"42": {
-			"$import": "../templates/master_template.json#base_0-255_nounit",
+		{
+			"#": "42",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Wireless Button Battery Status",
 			"description": "Set Normal Battery Level to reset low battery alarm",
 			"defaultValue": 0,
@@ -156,13 +164,16 @@
 				}
 			]
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"81": {
+		{
+			"#": "81",
 			"$import": "templates/aeotec_template.json#low_battery_button"
 		},
-		"241": {
+		{
+			"#": "241",
 			"label": "Pair Wireless Button With Doorbell",
 			"description": "Start the wireless button pairing mode",
 			"valueSize": 4,
@@ -186,13 +197,15 @@
 				}
 			]
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset_exclude"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",
 		"exclusion": "Turn the primary controller of Z-Wave network into exclusion mode, short press the product’s Action button that you can find on the product's housing",

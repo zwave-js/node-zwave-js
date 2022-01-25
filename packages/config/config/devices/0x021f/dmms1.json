@@ -13,9 +13,28 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Binary Sensor Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Motion Sensitivity",
 			"description": "8 = high; 255 = low",
 			"valueSize": 1,
@@ -24,7 +43,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Trigger ON Duration",
 			"description": "delay after motion before turning OFF",
 			"unit": "integer",
@@ -33,7 +53,8 @@
 			"maxValue": 600,
 			"defaultValue": 30
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Trigger Action",
 			"description": "Brightness to turn on the associated device 1-99, 255=ON",
 			"valueSize": 1,
@@ -42,7 +63,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Motion Detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +72,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Light Trigger Level",
 			"description": "Max Light level which enables motion trigger",
 			"valueSize": 2,
@@ -58,7 +81,8 @@
 			"maxValue": 1000,
 			"defaultValue": 100
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Motion Trigger Interval",
 			"description": "Minimum time between motion triggers.",
 			"valueSize": 1,
@@ -66,7 +90,8 @@
 			"maxValue": 8,
 			"defaultValue": 8
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Light Polling Interval",
 			"description": "Interval between light level reporting",
 			"valueSize": 2,
@@ -75,7 +100,8 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Light Trigger",
 			"description": "255=enable Light sensor",
 			"valueSize": 1,
@@ -84,7 +110,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Light Report",
 			"description": "Light level change to be reported.",
 			"valueSize": 1,
@@ -93,7 +120,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED Notifications",
 			"description": "0=disable, 1=enable",
 			"valueSize": 1,
@@ -101,5 +129,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

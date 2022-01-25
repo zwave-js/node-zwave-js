@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"29": {
+	"paramInformation": [
+		{
+			"#": "29",
 			"label": "Load Sense",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,5 +34,5 @@
 				}
 			]
 		}
-	}
+	]
 }

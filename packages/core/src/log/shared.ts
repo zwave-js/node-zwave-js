@@ -1,12 +1,13 @@
 import { DeepPartial, flatMap } from "@zwave-js/shared";
+import DailyRotateFile from "@zwave-js/winston-daily-rotate-file";
 import { padStart } from "alcalzone-shared/strings";
 import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
 import { configs, MESSAGE } from "triple-beam";
 import winston, { Logger } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
 import type Transport from "winston-transport";
 import type { ConsoleTransportInstance } from "winston/lib/winston/transports";
+import type { ValueID } from "../values/ValueDB";
 import { colorizer } from "./Colorizer";
 
 const { combine, timestamp, label } = winston.format;
@@ -44,7 +45,8 @@ export const LOG_WIDTH = 80;
 /** The width of the columns containing the timestamp and channel */
 export const LOG_PREFIX_WIDTH = 20;
 
-export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
+export interface ZWaveLogInfo<TContext extends LogContext = LogContext>
+	extends Omit<TransformableInfo, "message"> {
 	direction: string;
 	/** Primary tags are printed before the message and must fit into the first line.
 	 * They don't have to be enclosed in square brackets */
@@ -56,7 +58,19 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	timestamp?: string;
 	label?: string;
 	message: string | string[];
+	context: TContext;
 }
+
+export interface LogContext<T extends string = string> {
+	/** Which logger this log came from */
+	source: T;
+	/** An optional identifier to distinguish different log types from the same logger */
+	type?: string;
+}
+
+export type NodeLogContext = LogContext & { nodeId: number; type: "node" };
+export type ValueLogContext = LogContext &
+	ValueID & { nodeId: number; type: "value" };
 
 export type MessageRecord = Record<
 	string,
@@ -73,17 +87,20 @@ export function getNodeTag(nodeId: number): string {
 	return "Node " + padStart(nodeId.toString(), 3, "0");
 }
 
-export type ZWaveLogger = Omit<Logger, "log"> & {
-	log: (info: ZWaveLogInfo) => void;
+export type ZWaveLogger<TContext extends LogContext = LogContext> = Omit<
+	Logger,
+	"log"
+> & {
+	log: <T extends TContext>(info: ZWaveLogInfo<T>) => void;
 };
 
-export class ZWaveLoggerBase {
+export class ZWaveLoggerBase<TContext extends LogContext = LogContext> {
 	constructor(loggers: ZWaveLogContainer, logLabel: string) {
 		this.container = loggers;
 		this.logger = this.container.getLogger(logLabel);
 	}
 
-	public logger: ZWaveLogger;
+	public logger: ZWaveLogger<TContext>;
 	public container: ZWaveLogContainer;
 }
 
@@ -121,7 +138,7 @@ export class ZWaveLogContainer extends winston.Container {
 					path.dirname(require.main.filename),
 					`zwavejs_%DATE%.log`,
 			  )
-			: path.join(__dirname, "../../..", `zwave_%DATE%.log`),
+			: path.join(__dirname, "../../..", `zwavejs_%DATE%.log`),
 		forceConsole: false,
 	};
 
@@ -141,7 +158,7 @@ export class ZWaveLogContainer extends winston.Container {
 			});
 		}
 
-		return (this.get(label) as unknown) as ZWaveLogger;
+		return this.get(label) as unknown as ZWaveLogger;
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
@@ -208,7 +225,6 @@ export class ZWaveLogContainer extends winston.Container {
 		if (
 			!this.fileTransport &&
 			!this.consoleTransport &&
-			// wotan-disable-next-line no-useless-predicate
 			(!this.logConfig.transports ||
 				this.logConfig.transports.length === 0)
 		) {
@@ -284,6 +300,10 @@ export class ZWaveLogContainer extends winston.Container {
 		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
 			datePattern: "YYYY-MM-DD",
+			createSymlink: true,
+			symlinkName: path
+				.basename(this.logConfig.filename)
+				.replace(`_%DATE%`, "_current"),
 			zippedArchive: true,
 			maxFiles: "7d",
 			format: createDefaultTransportFormat(false, false),
@@ -331,7 +351,7 @@ export function createLoggerFormat(channel: string): Format {
 /** Prints a formatted and colorized log message */
 export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 	return {
-		transform: (((info: ZWaveLogInfo) => {
+		transform: ((info: ZWaveLogInfo) => {
 			// The formatter has already split the message into multiple lines
 			const messageLines = messageToLines(info.message);
 			// Also this can only happen if the user forgot to call the formatter first
@@ -374,13 +394,13 @@ export function createLogMessagePrinter(shortTimestamps: boolean): Format {
 			}
 			info[MESSAGE as any] = lines.join("\n");
 			return info;
-		}) as unknown) as TransformFunction,
+		}) as unknown as TransformFunction,
 	};
 }
 
 /** Formats the log message and calculates the necessary paddings */
 export const logMessageFormatter: Format = {
-	transform: (((info: ZWaveLogInfo) => {
+	transform: ((info: ZWaveLogInfo) => {
 		const messageLines = messageToLines(info.message);
 		const firstMessageLineLength = messageLines[0].length;
 		info.multiline =
@@ -420,7 +440,7 @@ export const logMessageFormatter: Format = {
 			info.message = lines.join("\n");
 		}
 		return info;
-	}) as unknown) as TransformFunction,
+	}) as unknown as TransformFunction,
 };
 
 /** The common logger format for built-in transports */

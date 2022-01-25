@@ -277,9 +277,7 @@ export class IndicatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getSupported(
-		indicatorId: number,
-	): Promise<
+	public async getSupported(indicatorId: number): Promise<
 		| {
 				indicatorId?: number;
 				supportedProperties: readonly number[];
@@ -297,10 +295,11 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = await this.driver.sendCommand<IndicatorCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<IndicatorCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return {
 				// Include the actual indicator ID if 0x00 was requested

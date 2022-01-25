@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "D1 Automatically Turn Off",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -30,7 +31,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "D2 Automatically Turn Off",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -45,7 +47,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -53,7 +56,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Reload Power Status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +65,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Reporting On Power Change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -76,7 +81,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Watts Auto-report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
@@ -92,7 +98,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Kwh Auto-report Period",
 			"description": "Allowable range: 60-32767",
 			"valueSize": 2,
@@ -108,7 +115,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "D1 Automatically Turn On",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -123,7 +131,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "D2 Automatically Turn On",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -138,7 +147,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Include/Exclude Button - Inclusion/exclusion, press 3 times in 2 seconds",
 		"exclusion": "Include/Exclude Button - Inclusion/exclusion, press 3 times in 2 seconds",

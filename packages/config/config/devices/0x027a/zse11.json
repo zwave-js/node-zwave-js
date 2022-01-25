@@ -14,15 +14,15 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"12": {
+	"paramInformation": [
+		{
+			"#": "12",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
 			"defaultValue": 6,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -30,7 +30,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Motion Detection: Timeout",
 			"valueSize": 2,
 			"unit": "seconds",
@@ -39,7 +40,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Motion Detection: Send Basic Set",
 			"valueSize": 1,
 			"minValue": 0,
@@ -58,7 +60,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Motion Detection: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
@@ -77,7 +80,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Motion Detection: Send Binary Sensor Reports",
 			"description": "If disabled, notification reports will be sent instead",
 			"valueSize": 1,
@@ -97,7 +101,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 1,
@@ -116,7 +121,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Flash LED on Motion",
 			"valueSize": 1,
 			"minValue": 0,
@@ -135,7 +141,8 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Low Battery Alert",
 			"valueSize": 1,
 			"unit": "%",
@@ -144,7 +151,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"172": {
+		{
+			"#": "172",
 			"label": "Minimum Reporting Frequency",
 			"valueSize": 2,
 			"unit": "hours",
@@ -153,7 +161,8 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-		"182": {
+		{
+			"#": "182",
 			"label": "Battery Reporting Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -168,7 +177,8 @@
 				}
 			]
 		},
-		"183": {
+		{
+			"#": "183",
 			"label": "Temperature Reporting Change Threshold",
 			"valueSize": 2,
 			"unit": "°F",
@@ -177,7 +187,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"184": {
+		{
+			"#": "184",
 			"label": "Humidity Reporting Change Threshold",
 			"valueSize": 1,
 			"unit": "%",
@@ -192,7 +203,8 @@
 				}
 			]
 		},
-		"185": {
+		{
+			"#": "185",
 			"label": "Brightness Reporting Change Threshold",
 			"valueSize": 2,
 			"unit": "lux",
@@ -207,7 +219,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Put your Z-Wave hub into inclusion mode and click the Z-Wave button 3 times as quickly as possible. The LED indicator will start blinking to confirm inclusion mode and turn off once inclusion is completed. The sensor will automatically pair as a repeater if connected to USB power, no special button sequence required",
 		"exclusion": "1. Bring the sensor within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Press and release the Z-Wave button 3 times quickly.\n4. Your hub will confirm exclusion and the sensor will disappear from your controller's device list",

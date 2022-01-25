@@ -13,26 +13,53 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
-		// One entry for each association group
 		"1": {
 			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Basic Set",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when light off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +77,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true
 	}

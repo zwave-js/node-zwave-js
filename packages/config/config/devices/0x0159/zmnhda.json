@@ -32,8 +32,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"description": "Switch type (input I1)",
 			"valueSize": 1,
@@ -53,7 +54,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +74,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -91,7 +94,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -118,26 +122,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "State of the device after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Saves its state before power failure",
-					"value": 0
-				},
-				{
-					"label": "OFF",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on power change",
 			"description": "Set value means percentage",
 			"valueSize": 1,
@@ -145,7 +135,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by time interval",
 			"valueSize": 2,
 			"minValue": 0,
@@ -153,21 +144,24 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Minimum dimming value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Maximum dimming value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Dimming time (soft on/off)",
 			"valueSize": 1,
 			"minValue": 1,
@@ -175,7 +169,8 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
@@ -183,7 +178,7 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	},
+	],
 	"compat": {
 		"commandClasses": {
 			"add": {

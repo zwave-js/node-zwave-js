@@ -100,10 +100,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			weekday,
 		});
-		const response = await this.driver.sendCommand<ClimateControlScheduleCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ClimateControlScheduleCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.switchPoints;
 	}
 
@@ -117,10 +118,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ClimateControlScheduleCCChangedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ClimateControlScheduleCCChangedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.changeCounter;
 	}
 
@@ -135,10 +137,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ClimateControlScheduleCCOverrideReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ClimateControlScheduleCCOverrideReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return {
 				type: response.overrideType,

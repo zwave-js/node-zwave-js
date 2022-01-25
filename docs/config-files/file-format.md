@@ -2,21 +2,20 @@
 
 The following properties are defined and should always be present in the same order for consistency among the config files:
 
-| Property            | Description                                                                                                                                                                                                |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `manufacturer`      | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                     |
-| `manufacturerId`    | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
-| `label`             | A short label for the device                                                                                                                                                                               |
-| `description`       | A longer description of the device, usually the full name                                                                                                                                                  |
-| `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
-| `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
-| `supportsZWavePlus` | (deprecated)                                                                                                                                                                                               |
-| `endpoints`         | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
-| `associations`      | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
-| `paramInformation`  | A dictionary of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                              |
-| `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
-| `compat`            | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
-| `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
+| Property           | Description                                                                                                                                                                                                |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `manufacturer`     | The name of the manufacturer (or brand under which the device is sold)                                                                                                                                     |
+| `manufacturerId`   | The ID of the manufacturer (as defined in the Z-Wave specs) as a 4-digit hexadecimal string.                                                                                                               |
+| `label`            | A short label for the device                                                                                                                                                                               |
+| `description`      | A longer description of the device, usually the full name                                                                                                                                                  |
+| `devices`          | An array of product type and product ID combinations, [see below](#devices) for details.                                                                                                                   |
+| `firmwareVersion`  | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                                                                                                       |
+| `endpoints`        | Endpoint-specific configuration, [see below](#endpoints) for details. If this is present, `associations` must be specified on endpoint `"0"` instead of on the root level.                                 |
+| `associations`     | The association groups the device supports, [see below](#associations) for details. Only needs to be present if the device does not support Z-Wave+ or requires changes to the default association config. |
+| `paramInformation` | An array of the configuration parameters the device supports. [See below](#paramInformation) for details.                                                                                                  |
+| `proprietary`      | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.                                                                                                |
+| `compat`           | Compatibility flags used to influence the communication with non-complient devices. [See below](#compat) for details.                                                                                      |
+| `metadata`         | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.                                                                                           |
 
 ## `devices`
 
@@ -38,17 +37,20 @@ Each device in the Z-Wave standard is identified by its product type and product
 
 ## `firmwareVersion`
 
-Since different firmware versions of a device may have different config params, you must specify the firmware range for each config file. A config file that is valid from version `2.0` to `4.75` would have the following `firmwareVersion` entry:
+While it is possible to specify the firmware version covered by a file, doing so is deprecated. To define parameters that have changed over time, use [conditional parameters](config-files/conditional-settings.md). Separate files split by firmware should only be used in exceptional cases where a firmware split identifies a different device or where the parameter changes from one version to another are so different as to be impractical to represent with conditional parameters.
+
+The default `min` version is `0.0` and the default `max` version is `255.255`. Splitting device files by firmware version will only be allowed in exceptional cases, and only with developer approval.
+
+`firmwareVersion` entry:
 
 ```json
 "firmwareVersion": {
-	"min": "2.0",
-	"max": "4.75"
+	"min": "0.0",
+	"max": "255.255"
 }
 ```
 
-The default `min` version is `0.0` and the default `max` version is `255.255`.
-All other firmware ranges should be reflected in the filename. This also means that `0.0-` and `-255.255` should not be part of the filename, as they are implied.
+If a range other than 0.0-255.255 is used, the firmware ranges should be reflected in the filename. This also means that `0.0-` and `-255.255` should not be part of the filename, as they are implied.
 
 > [!NOTE]
 > Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.
@@ -185,17 +187,24 @@ Example:
 This property defines all the existing configuration parameters. It looks like this
 
 ```json
-"paramInformation": {
-	"1": { /* parameter #1 definition */},
-	"2": { /* parameter #2 definition */},
+"paramInformation": [
+	{
+		"#": "1",
+		// parameter #1 definition
+	},
+	{
+		"#": "2",
+		// parameter #2 definition
+	}
 	// ... more parameters ...
-}
+]
 ```
 
 where each parameter definition has the following properties:
 
 | Parameter property | Type    | Required? | Description                                                                                                                                                                                                                                                                                  |
 | ------------------ | ------- | :-------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `#`                | string  |    yes    | The parameter number (e.g. `"1"`, `"2"`, ...). <br />For partial parameters, this includes the bitmask (e.g. `"5[0xff00]"`)                                                                                                                                                                  |
 | `label`            | string  |    yes    | A short name for the parameter. <br />This **must not** include unnecessary white-space, such as newlines or tabs.                                                                                                                                                                           |
 | `description`      | string  |    no     | An **optional** longer description of what the parameter does.<br />If a description does not add **significant** value (for example if it just repeats the allowed values), it should be removed instead.<br />This **must not** include unnecessary white-space, such as newlines or tabs. |
 | `valueSize`        | number  |    yes    | How many bytes the device uses for this value                                                                                                                                                                                                                                                |
@@ -216,19 +225,23 @@ Some devices use a single parameter number to configure several, sometimes unrel
 For example,
 
 ```json
-"40[0x01]": {
+{
+	"#": "40[0x01]",
 	"label": "Button 1: behavior",
 	/* parameter definition */
 },
-"40[0x02]": {
+{
+	"#": "40[0x02]",
 	"label": "Button 1: notifications",
 	/* parameter definition */
 },
-"40[0x04]": {
+{
+	"#": "40[0x04]",
 	"label": "Button 2: behavior",
 	/* parameter definition */
 },
-"40[0x08]": {
+{
+	"#": "40[0x08]",
 	"label": "Button 2: notifications",
 	/* parameter definition */
 },
@@ -341,7 +354,7 @@ By default, received `Basic CC::Report` commands are mapped to a more appropriat
 
 ### `disableStrictEntryControlDataValidation`
 
-The specifications mandate strict rules for the data in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
+The specifications mandate strict rules for the data and sequence numbers in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
 ### `enableBasicSetMapping`
 
@@ -353,9 +366,26 @@ The specifications mandate strict rules for the data in `Entry Control CC Notifi
 
 Version 8 of the `Notification CC` added the requirement that devices must issue an idle notification after a notification variable is no longer active. Several legacy devices and some misbehaving V8 devices do not return their variables to idle automatically. By setting `forceNotificationIdleReset` to `true`, `zwave-js` auto-idles supporting notification variables after 5 minutes.
 
+### `forceSceneControllerGroupCount`
+
+The specifications mandate that each `Scene Controller Configuration CC` Group ID corresponds to exactly one association group. Some devices ignore this rule, and as a result not all scenes can be configured. Using the `forceSceneControllerGroupCount` flag, the actual number of scenes of these devices can be configured.
+
 ### `manualValueRefreshDelayMs`
 
 Some legacy devices emit an NIF when a local event occurs (e.g. a button press) to signal that the controller should request a status update. However, some of these devices require a delay before they are ready to respond to this request. `manualValueRefreshDelayMs` specifies that delay, expressed in milliseconds. If unset, there will be no delay.
+
+### `mapRootReportsToEndpoint`
+
+Some multi-channel devices incorrectly report state changes for one of their endpoints via the root device, however there is no way to automatically detect for which endpoint these reports are meant. The flag `mapRootReportsToEndpoint` can be used to specify which endpoint these reports are mapped to. Without this flag, reports to the root device are silently ignored, unless `preserveRootApplicationCCValueIDs` is `true`.
+
+### `preserveEndpoints`
+
+Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device. `zwave-js` tries to detect these cases and ignore all endpoints. To opt out of this behavior or to preserve single endpoints, `preserveEndpoints` can be used. Example:
+
+```js
+"preserveEndpoints": "*",    // to preserve all endpoints
+"preserveEndpoints": [2, 3], // to preserve endpoints 2 and 3, but ignore endpoint 1
+```
 
 ### `preserveRootApplicationCCValueIDs`
 
@@ -371,3 +401,7 @@ By default, `Basic CC::Set` commands are interpreted as status updates. This fla
 
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
+
+### `treatDestinationEndpointAsSource`
+
+Some devices incorrectly use the multi channel **destination** endpoint in reports to indicate the **source** endpoint the report originated from. When this flag is `true`, the destination endpoint is instead interpreted to be the source and the original source endpoint gets ignored.

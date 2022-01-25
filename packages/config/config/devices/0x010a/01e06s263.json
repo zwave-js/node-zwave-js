@@ -1,8 +1,8 @@
 {
-	"manufacturer": "VDA",
+	"manufacturer": "Vitrum",
 	"manufacturerId": "0x010a",
 	"label": "01E06S263",
-	"description": "Vitrum VI EU on-off 6 triac 868.4MHz",
+	"description": "VI On-Off 6 Triac",
 	"devices": [
 		{
 			"productType": "0x8161",
@@ -14,258 +14,132 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"7": {
-			"label": "Button N.1 Off Status Led",
-			"description": "Led is off: 0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+	"paramInformation": [
+		{
+			"#": "7",
+			"$import": "templates/vitrum_template.json#button_1_off_color"
 		},
-		"8": {
-			"label": "Button N.2 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "8",
+			"$import": "templates/vitrum_template.json#button_2_off_color"
 		},
-		"9": {
-			"label": "Button N.3 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "9",
+			"$import": "templates/vitrum_template.json#button_3_off_color"
 		},
-		"10": {
-			"label": "Button N.4 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "10",
+			"$import": "templates/vitrum_template.json#button_4_off_color"
 		},
-		"11": {
-			"label": "Button N.5 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "11",
+			"$import": "templates/vitrum_template.json#button_5_off_color"
 		},
-		"12": {
-			"label": "Button N.6 Off Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "12",
+			"$import": "templates/vitrum_template.json#button_6_off_color"
 		},
-		"13": {
-			"label": "Button N.1 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "13",
+			"$import": "templates/vitrum_template.json#button_1_on_color"
 		},
-		"14": {
-			"label": "Button N.2 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "14",
+			"$import": "templates/vitrum_template.json#button_2_on_color"
 		},
-		"15": {
-			"label": "Button N.3 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "15",
+			"$import": "templates/vitrum_template.json#button_3_on_color"
 		},
-		"16": {
-			"label": "Button N.4 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "16",
+			"$import": "templates/vitrum_template.json#button_4_on_color"
 		},
-		"17": {
-			"label": "Button N.5 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "17",
+			"$import": "templates/vitrum_template.json#button_5_on_color"
 		},
-		"18": {
-			"label": "Button N.6 On Status Led",
-			"description": "0: LED is off; 1: red; 2: green; 3: blue; 4: yellow; 5: magenta; 6: cyan; 7; white",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "18",
+			"$import": "templates/vitrum_template.json#button_6_on_color"
 		},
-		"25": {
-			"label": "Output Port Connected to Button N.1",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 1,
-			"unsigned": true
+		{
+			"#": "25",
+			"$import": "templates/vitrum_template.json#button_1_output_6ch"
 		},
-		"26": {
-			"label": "Output Port Connected to Button N.2",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 2,
-			"unsigned": true
+		{
+			"#": "26",
+			"$import": "templates/vitrum_template.json#button_2_output_6ch"
 		},
-		"27": {
-			"label": "Output Port Connected to Button N.3",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 3,
-			"unsigned": true
+		{
+			"#": "27",
+			"$import": "templates/vitrum_template.json#button_3_output_6ch"
 		},
-		"28": {
-			"label": "Output Port Connected to Button N.4",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 4,
-			"unsigned": true
+		{
+			"#": "28",
+			"$import": "templates/vitrum_template.json#button_4_output_6ch"
 		},
-		"29": {
-			"label": "Output Port Connected to Button N.5",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 5,
-			"unsigned": true
+		{
+			"#": "29",
+			"$import": "templates/vitrum_template.json#button_5_output_6ch"
 		},
-		"30": {
-			"label": "Output Port Connected to Button N.6",
-			"description": "0: disconnected; 1: button connected to output port 1; 2: button connected to output port 2; 3: button connected to output port 3; 4: button connected to output port 4; 5: button connected to output port 5; 6: button connected to output port 6",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 6,
-			"unsigned": true
+		{
+			"#": "30",
+			"$import": "templates/vitrum_template.json#button_6_output_6ch"
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Basic Set On From Group 2",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Basic Set On From Group 3",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Basic Set On From Group 4",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Basic Set On From Group 5",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Basic Set On From Group 6",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Basic Set On From Group 7",
-			"description": "0: 99 (0x63) 1: 255 (0xff)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/vitrum_template.json#basic_set_type"
 		},
-		"206": {
+		{
+			"#": "206",
 			"label": "Buttons Maximum Brightness",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 100,
-			"defaultValue": 100,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"defaultValue": 100
 		},
-		"207": {
+		{
+			"#": "207",
 			"label": "Buttons Minimum Brightness",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"defaultValue": 5
 		},
-		"209": {
+		{
+			"#": "209",
 			"label": "Buzzer",
-			"description": "0: disabled 1: enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
-		"218": {
+		{
+			"#": "218",
 			"label": "Front-end Buttons Lock",
-			"description": "0: disabled; 1: enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Add the device to a certified Z-Wave network\nThe device supports both Classic Add (Classic Inclusion) and Network Wide Add (Network Wide Inclusion).\nThe device supports encryption S2 Unauthenticated.\nFollow the steps below to add the device to the network.\n1. Set primary controller into Add mode (please see controller instruction manual) and operate on it either to enable S2 Unauthenticated encryption or to disable encryption\n2. Check the device is not already added to the network (please refer to the manual section “How to check the device is added to the network”)\n3. Press and hold button N.1 located on top-left front-end device more then 4 seconds till button LED blinks shortly magenta or press shortly the Physical button located on the front-end top-back device (see section “Physical Button Operating” to locate Physical Button).\n4. Every device LED button blinks green shortly 3 times upon the device added successfully\n\nShould the device fail the Classic Add (Classic Inclusion) the device enters into Network Wide Add (Network Wide Inclusion) mode up to 4 times. Any time the device enters into Wide Add Mode, LED Button N.1 blinks Magenta and keeps on to emit a short beep.\n\nHow to check the device is added to the network\nPress button N.1 shortly. The LED button blinks red shortly whether the device is not added to the network",
 		"exclusion": "Remove the device from a certified Z-Wave network\n1. Set primary controller into Remove mode (please see controller instruction manual)\n2. Check the device is not already removed from the network (please refer to the manual section “How to check the device is added to the network”)\n3. Press and hold button N.1 located on top-left front-end device more then 6 seconds till the device emits a long beep. Release the button and press it shortly 3 times again or press shortly the Physical button located on the front end top-back device\n4. Button LED blinks red shortly upon the device removed successfully.\n5. Check the device is removed from the network (please refer to the manual section “How to check the device is added to the network”)\n\nHow to check the device is added to the network\nPress button N.1 shortly. The LED button blinks red shortly whether the device is not added to the network",

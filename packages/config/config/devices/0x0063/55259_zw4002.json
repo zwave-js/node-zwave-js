@@ -30,8 +30,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
@@ -51,7 +52,7 @@
 				}
 			]
 		}
-	},
+	],
 	"compat": {
 		"treatBasicSetAsEvent": true,
 		"commandClasses": {

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Current Motor Position",
 			"valueSize": 1,
 			"minValue": -127,
@@ -23,7 +23,8 @@
 			"defaultValue": -127,
 			"readOnly": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Set motor direction",
 			"description": "Toggle motor direction between reverse and default",
 			"valueSize": 1,
@@ -32,7 +33,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Clear motor lead tail endpoint setting",
 			"valueSize": 1,
 			"minValue": -128,
@@ -40,7 +42,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Enable manual pull function",
 			"valueSize": 1,
 			"minValue": -128,
@@ -48,7 +51,8 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Disable manual pull function",
 			"valueSize": 1,
 			"minValue": -128,
@@ -56,5 +60,5 @@
 			"defaultValue": 0,
 			"writeOnly": true
 		}
-	}
+	]
 }

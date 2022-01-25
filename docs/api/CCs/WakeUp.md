@@ -13,7 +13,7 @@ async getInterval(): Promise<Pick<WakeUpCCIntervalReport, "wakeUpInterval" | "co
 ### `getIntervalCapabilities`
 
 ```ts
-async getIntervalCapabilities(): Promise<Pick<WakeUpCCIntervalCapabilitiesReport, "defaultWakeUpInterval" | "minWakeUpInterval" | "maxWakeUpInterval" | "wakeUpIntervalSteps"> | undefined>;
+async getIntervalCapabilities(): Promise<Pick<WakeUpCCIntervalCapabilitiesReport, "defaultWakeUpInterval" | "minWakeUpInterval" | "maxWakeUpInterval" | "wakeUpIntervalSteps" | "wakeUpOnDemandSupported"> | undefined>;
 ```
 
 ### `setInterval`

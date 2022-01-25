@@ -50,7 +50,8 @@ export interface DeleteSUCReturnRouteRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.DeleteSUCReturnRoute)
 export class DeleteSUCReturnRouteRequest
 	extends DeleteSUCReturnRouteRequestBase
-	implements INodeQuery {
+	implements INodeQuery
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -80,7 +81,8 @@ export class DeleteSUCReturnRouteRequest
 @messageTypes(MessageType.Response, FunctionType.DeleteSUCReturnRoute)
 export class DeleteSUCReturnRouteResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.wasExecuted = this.payload[0] !== 0;
@@ -108,7 +110,8 @@ export class DeleteSUCReturnRouteResponse
 
 export class DeleteSUCReturnRouteRequestTransmitReport
 	extends DeleteSUCReturnRouteRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

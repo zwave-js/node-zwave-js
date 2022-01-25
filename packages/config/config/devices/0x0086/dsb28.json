@@ -31,9 +31,10 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"2": {
-			"$import": "../templates/master_template.json#base_0-1_nounit",
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
 			"label": "Energy Detection Mode",
 			"options": [
 				{
@@ -46,206 +47,270 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/aeotec_template.json#power_threshold_wholehem"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/aeotec_template.json#power_threshold_clamp1"
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/aeotec_template.json#power_threshold_clamp2"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/aeotec_template.json#power_threshold_clamp3"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/aeotec_template.json#percent_threshold_wholehem"
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/aeotec_template.json#percent_threshold_clamp1"
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/aeotec_template.json#percent_threshold_clamp2"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/aeotec_template.json#percent_threshold_clamp3"
 		},
-		"100": {
+		{
+			"#": "100",
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 101-103 to Default Values",
 			"valueSize": 4
 		},
-		"101[0x01]": {
+		{
+			"#": "101[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_wholehem"
 		},
-		"101[0x02]": {
+		{
+			"#": "101[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt_wholehem"
 		},
-		"101[0x04]": {
+		{
+			"#": "101[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_wholehem"
 		},
-		"101[0x08]": {
+		{
+			"#": "101[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_wholehem"
 		},
-		"101[0x0100]": {
+		{
+			"#": "101[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp1"
 		},
-		"101[0x0200]": {
+		{
+			"#": "101[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp2"
 		},
-		"101[0x0400]": {
+		{
+			"#": "101[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt_clamp3"
 		},
-		"101[0x0800]": {
+		{
+			"#": "101[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp1"
 		},
-		"101[0x1000]": {
+		{
+			"#": "101[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp2"
 		},
-		"101[0x2000]": {
+		{
+			"#": "101[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_clamp3"
 		},
-		"101[0x010000]": {
+		{
+			"#": "101[0x010000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp1"
 		},
-		"101[0x020000]": {
+		{
+			"#": "101[0x020000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp2"
 		},
-		"101[0x040000]": {
+		{
+			"#": "101[0x040000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_v_clamp3"
 		},
-		"101[0x080000]": {
+		{
+			"#": "101[0x080000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp1"
 		},
-		"101[0x100000]": {
+		{
+			"#": "101[0x100000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp2"
 		},
-		"101[0x200000]": {
+		{
+			"#": "101[0x200000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp_clamp3"
 		},
-		"102[0x01]": {
+		{
+			"#": "102[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_wholehem"
 		},
-		"102[0x02]": {
+		{
+			"#": "102[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt_wholehem"
 		},
-		"102[0x04]": {
+		{
+			"#": "102[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_wholehem"
 		},
-		"102[0x08]": {
+		{
+			"#": "102[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_wholehem"
 		},
-		"102[0x0100]": {
+		{
+			"#": "102[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp1"
 		},
-		"102[0x0200]": {
+		{
+			"#": "102[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp2"
 		},
-		"102[0x0400]": {
+		{
+			"#": "102[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt_clamp3"
 		},
-		"102[0x0800]": {
+		{
+			"#": "102[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp1"
 		},
-		"102[0x1000]": {
+		{
+			"#": "102[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp2"
 		},
-		"102[0x2000]": {
+		{
+			"#": "102[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_clamp3"
 		},
-		"102[0x010000]": {
+		{
+			"#": "102[0x010000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp1"
 		},
-		"102[0x020000]": {
+		{
+			"#": "102[0x020000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp2"
 		},
-		"102[0x040000]": {
+		{
+			"#": "102[0x040000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_v_clamp3"
 		},
-		"102[0x080000]": {
+		{
+			"#": "102[0x080000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp1"
 		},
-		"102[0x100000]": {
+		{
+			"#": "102[0x100000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp2"
 		},
-		"102[0x200000]": {
+		{
+			"#": "102[0x200000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp_clamp3"
 		},
-		"103[0x01]": {
+		{
+			"#": "103[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_wholehem"
 		},
-		"103[0x02]": {
+		{
+			"#": "103[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt_wholehem"
 		},
-		"103[0x04]": {
+		{
+			"#": "103[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_wholehem"
 		},
-		"103[0x08]": {
+		{
+			"#": "103[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_wholehem"
 		},
-		"103[0x0100]": {
+		{
+			"#": "103[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp1"
 		},
-		"103[0x0200]": {
+		{
+			"#": "103[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp2"
 		},
-		"103[0x0400]": {
+		{
+			"#": "103[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt_clamp3"
 		},
-		"103[0x0800]": {
+		{
+			"#": "103[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp1"
 		},
-		"103[0x1000]": {
+		{
+			"#": "103[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp2"
 		},
-		"103[0x2000]": {
+		{
+			"#": "103[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_clamp3"
 		},
-		"103[0x010000]": {
+		{
+			"#": "103[0x010000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp1"
 		},
-		"103[0x020000]": {
+		{
+			"#": "103[0x020000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp2"
 		},
-		"103[0x040000]": {
+		{
+			"#": "103[0x040000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_v_clamp3"
 		},
-		"103[0x080000]": {
+		{
+			"#": "103[0x080000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp1"
 		},
-		"103[0x100000]": {
+		{
+			"#": "103[0x100000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp2"
 		},
-		"103[0x200000]": {
+		{
+			"#": "103[0x200000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp_clamp3"
 		},
-		"110": {
+		{
+			"#": "110",
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 111-113 to Default Values",
 			"valueSize": 4
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group1",
 			"maxValue": 167400
 		},
-		"112": {
+		{
+			"#": "112",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group2",
 			"maxValue": 167400
 		},
-		"113": {
+		{
+			"#": "113",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group3",
 			"maxValue": 167400
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	},
+	],
 	"compat": {
 		// This device reports cumulative values to the root endpoint
 		"preserveRootApplicationCCValueIDs": true

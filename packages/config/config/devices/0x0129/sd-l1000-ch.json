@@ -18,24 +18,29 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume_inverted"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/yale_template.json#auto_relock_time_180",
 			"maxValue": 60
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/yale_template.json#wrong_tag_limit"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/yale_template.json#wrong_tag_lockout"
 		}
-	},
+	],
 	"compat": {
 		"alarmMapping": [
 			{

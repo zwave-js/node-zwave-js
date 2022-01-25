@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"30[0xff000000]": {
+	"paramInformation": [
+		{
+			"#": "30[0xff000000]",
 			"label": "Alarm Configuration - 1st Slot Notification Type",
 			"valueSize": 4,
 			"minValue": 0,
@@ -117,7 +118,8 @@
 				}
 			]
 		},
-		"30[0xff0000]": {
+		{
+			"#": "30[0xff0000]",
 			"label": "Alarm Configuration - 1st Slot Notification Event",
 			"valueSize": 4,
 			"minValue": 0,
@@ -135,7 +137,8 @@
 				}
 			]
 		},
-		"30[0xff00]": {
+		{
+			"#": "30[0xff00]",
 			"label": "Alarm Configuration - 1st Slot Notification Event Parameter",
 			"valueSize": 4,
 			"minValue": 0,
@@ -143,7 +146,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30[0xff]": {
+		{
+			"#": "30[0xff]",
 			"label": "Alarm Configuration - 1st Slot Action",
 			"valueSize": 4,
 			"minValue": 0,
@@ -165,87 +169,103 @@
 				}
 			]
 		},
-		"31[0xff000000]": {
+		{
+			"#": "31[0xff000000]",
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Type",
 			"defaultValue": 5
 		},
-		"31[0xff0000]": {
+		{
+			"#": "31[0xff0000]",
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 2nd Slot Notification Event",
 			"defaultValue": 255
 		},
-		"31[0xff00]": {
+		{
+			"#": "31[0xff00]",
 			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
-		"31[0xff]": {
+		{
+			"#": "31[0xff]",
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 2nd Slot Action",
 			"defaultValue": 0
 		},
-		"32[0xff000000]": {
+		{
+			"#": "32[0xff000000]",
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Type",
 			"defaultValue": 1
 		},
-		"32[0xff0000]": {
+		{
+			"#": "32[0xff0000]",
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 3rd Slot Notification Event",
 			"defaultValue": 255
 		},
-		"32[0xff00]": {
+		{
+			"#": "32[0xff00]",
 			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
-		"32[0xff]": {
+		{
+			"#": "32[0xff]",
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 3rd Slot Action",
 			"defaultValue": 0
 		},
-		"33[0xff000000]": {
+		{
+			"#": "33[0xff000000]",
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 4th Slot Notification Type",
 			"defaultValue": 2
 		},
-		"33[0xff0000]": {
+		{
+			"#": "33[0xff0000]",
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 4th Slot Notification Event",
 			"defaultValue": 255
 		},
-		"33[0xff00]": {
+		{
+			"#": "33[0xff00]",
 			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
-		"33[0xff]": {
+		{
+			"#": "33[0xff]",
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 4th Slot Action",
 			"defaultValue": 0
 		},
-		"34[0xff000000]": {
+		{
+			"#": "34[0xff000000]",
 			"$import": "#paramInformation/30[0xff000000]",
 			"label": "Alarm Configuration - 5th Slot Notification Type",
 			"defaultValue": 4
 		},
-		"34[0xff0000]": {
+		{
+			"#": "34[0xff0000]",
 			"$import": "#paramInformation/30[0xff0000]",
 			"label": "Alarm Configuration - 5th Slot Notification Event",
 			"defaultValue": 255
 		},
-		"34[0xff00]": {
+		{
+			"#": "34[0xff00]",
 			"$import": "#paramInformation/30[0xff00]",
 			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
 			"defaultValue": 0
 		},
-		"34[0xff]": {
+		{
+			"#": "34[0xff]",
 			"$import": "#paramInformation/30[0xff]",
 			"label": "Alarm Configuration - 5th Slot Action",
 			"defaultValue": 0
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Install the external antenna before powering the device and adding to the Z-Wave network for the device to automatically detect and enable it (use only antennas and cables compliant with technical specification).\n\n01. Set the Z-Wave gateway into adding mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alter nately\n04. If you are adding in Security S2 Authenticated, input the underlined part\nof the DSK (label on the box) DSK: XXXXX-XXXXX-XXXXX-XXXXX XXXXX-XXXXX-XXXXX-XXXXX\n05. When the adding process ends, the LEDs on the IBT4ZWAVE will show adding and antenna status (Table 1 in manual)",
 		"exclusion": "01. Set the Z-Wave gateway into remove mode (see the Z-Wave gateway’s manual)\n02. On the IBT4ZWAVE press and release the S1 button 3 times x3 S1\n03. LEDs on the IBT4ZW AVE will start slow flashing alternately\n04. Wait for the removing process to end",

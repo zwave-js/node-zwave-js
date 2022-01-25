@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"19": {
+	"paramInformation": [
+		{
+			"#": "19",
 			"label": "Alternate Exclusion",
 			"description": "When enabled, press the button three times quickly when prompted to remove device",
 			"valueSize": 2,
@@ -35,7 +36,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Reverse Detection of Wet/Dry",
 			"valueSize": 2,
 			"minValue": 1,
@@ -54,7 +56,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Temperature Report Interval (when Battery Operated)",
 			"valueSize": 2,
 			"minValue": 5,
@@ -80,7 +83,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Battery Report Interval",
 			"valueSize": 2,
 			"minValue": 5,
@@ -106,7 +110,8 @@
 				}
 			]
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Low Temp Alarm",
 			"description": "Notification type: heat = 04 under limit event = 06 under limit non-event = 00",
 			"valueSize": 2,
@@ -114,7 +119,8 @@
 			"maxValue": 122,
 			"defaultValue": 33
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "High Temp Alarm",
 			"description": "Notification type: heat = 04 over limit event = 02 over limit non-event = 00",
 			"valueSize": 2,
@@ -122,7 +128,8 @@
 			"maxValue": 122,
 			"defaultValue": 104
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Temperature Report Interval (when Usb Operated)",
 			"valueSize": 2,
 			"minValue": 5,
@@ -130,7 +137,8 @@
 			"defaultValue": 60,
 			"unsigned": true
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Tamper Alert Configuration",
 			"valueSize": 2,
 			"minValue": 1,
@@ -161,7 +169,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n2. Once the controller is ready to add your device, remove the top cover of the sensor. Ensure battery is installed with the correct polarity and the battery tab has been removed, or ensure micro USB is plugged into USB port.\n3. Press and release the programming button (see figure 10). This starts the manual add process. The red LED flashes quickly as it searches for a network. After 25 seconds, the LED will stop flashing. Press the programming button to manually start the add process. If it times out, the LED will stop flashing. Press and release the programming button again.\n4. The controller’s app will indicate if it discovers the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box or the QR code label on the product (see above). Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n2. Once the controller is ready to remove your sensor, press and release the programming button one time on the sensor (see figure 10).\n3. The red LED will blink five times to indicate it has been removed. Secure the top cover",

@@ -14,9 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +39,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +63,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Command to control Group A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -109,7 +111,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Command to control Group B",
 			"valueSize": 1,
 			"minValue": 0,
@@ -156,7 +159,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Command to control Group C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -203,7 +207,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Command to control Group D",
 			"valueSize": 1,
 			"minValue": 0,
@@ -250,7 +255,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
@@ -273,7 +279,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -292,7 +299,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Block wake up even when Wake Up Interval is set",
 			"valueSize": 1,
 			"minValue": 0,
@@ -311,7 +319,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -334,7 +343,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Place your primary controller in inclusion mode by following the manufacturer's instructions, then activate inclusion on the wall controller by pressing any one of the four buttons for one second. Inclusion mode is indicated by the red/green blinking of the LEDs until the timeout occurs after 10 seconds",
 		"exclusion": "Re-Inclusion and Exclusion are performed by pushing button 1 in management mode. Pushing all four buttons for 5 sec. turns the device into management mode (indicated by blinking green LED)",

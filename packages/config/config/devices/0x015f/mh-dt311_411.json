@@ -40,27 +40,13 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
-			"label": "Recover State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Dimming Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -83,7 +69,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Detection of Load Type When Powered On",
 			"valueSize": 1,
 			"minValue": 0,
@@ -106,7 +93,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "LED Backlight Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
@@ -114,7 +102,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 1,
@@ -122,7 +111,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum Brightness",
 			"valueSize": 1,
 			"minValue": 2,
@@ -130,7 +120,8 @@
 			"defaultValue": 99,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimming Step Time (Manual)",
 			"valueSize": 2,
 			"unit": "10 ms",
@@ -139,18 +130,18 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Dimming Step Size (Manual)",
-
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dimming Step Time (Auto)",
-
 			"valueSize": 2,
 			"unit": "10 ms",
 			"minValue": 0,
@@ -158,16 +149,17 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming Step Size (Auto)",
-
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimming Amount Per Tap",
 			"unit": "%",
 			"valueSize": 1,
@@ -182,7 +174,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Dimming Level Reporting Interval",
 			"valueSize": 1,
 			"unit": "10 ms",
@@ -197,7 +190,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "External Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -216,7 +210,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "External Switch Input",
 			"valueSize": 1,
 			"minValue": 0,
@@ -247,7 +242,8 @@
 				}
 			]
 		},
-		"15[0x01]": {
+		{
+			"#": "15[0x01]",
 			"label": "Energy Meter Report (Watts)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -266,7 +262,8 @@
 				}
 			]
 		},
-		"15[0x02]": {
+		{
+			"#": "15[0x02]",
 			"label": "Energy Meter Report (kWh)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -285,7 +282,8 @@
 				}
 			]
 		},
-		"15[0x04]": {
+		{
+			"#": "15[0x04]",
 			"label": "Energy Meter Report (Amps)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -304,7 +302,8 @@
 				}
 			]
 		},
-		"15[0x08]": {
+		{
+			"#": "15[0x08]",
 			"label": "Energy Meter Report (Voltage)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -323,9 +322,9 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Energy Meter Report Interval",
-
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -333,7 +332,8 @@
 			"defaultValue": 16,
 			"unsigned": true
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Beep",
 			"valueSize": 1,
 			"minValue": 0,
@@ -352,9 +352,9 @@
 				}
 			]
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm Threshold: Current",
-
 			"valueSize": 2,
 			"unit": "0.01 A",
 			"minValue": 1,
@@ -362,9 +362,9 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Alarm Threshold: Voltage",
-
 			"valueSize": 2,
 			"unit": "0.1 V",
 			"minValue": 1,
@@ -372,9 +372,9 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Alarm Threshold: Wattage",
-
 			"valueSize": 2,
 			"unit": "0.1 W",
 			"minValue": 1,
@@ -382,7 +382,8 @@
 			"defaultValue": 2000,
 			"unsigned": true
 		},
-		"36": {
+		{
+			"#": "36",
 			"label": "Overload Shutoff",
 			"valueSize": 1,
 			"minValue": 0,
@@ -401,7 +402,8 @@
 				}
 			]
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Overload Shutoff Delay",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -410,9 +412,9 @@
 			"defaultValue": 20,
 			"unsigned": true
 		},
-		"64": {
+		{
+			"#": "64",
 			"label": "Overload Detected: Amps",
-
 			"valueSize": 2,
 			"unit": "0.01 A",
 			"minValue": 0,
@@ -422,9 +424,9 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Overload Detected: Volts",
-
 			"valueSize": 2,
 			"unit": "0.1 V",
 			"minValue": 0,
@@ -434,9 +436,9 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Overload Detected: Watts",
-
 			"valueSize": 2,
 			"unit": "0.1 W",
 			"minValue": 0,
@@ -446,9 +448,9 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"67": {
+		{
+			"#": "67",
 			"label": "Overload Detected: Duration",
-
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -458,7 +460,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
@@ -477,5 +480,5 @@
 				}
 			]
 		}
-	}
+	]
 }

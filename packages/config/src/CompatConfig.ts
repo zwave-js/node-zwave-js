@@ -104,6 +104,30 @@ error in compat option forceNotificationIdleReset`,
 				definition.forceNotificationIdleReset;
 		}
 
+		if (definition.forceSceneControllerGroupCount != undefined) {
+			if (typeof definition.forceSceneControllerGroupCount !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option forceSceneControllerGroupCount must be a number!`,
+				);
+			}
+
+			if (
+				definition.forceSceneControllerGroupCount < 0 ||
+				definition.forceSceneControllerGroupCount > 255
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option forceSceneControllerGroupCount must be between 0 and 255!`,
+				);
+			}
+
+			this.forceSceneControllerGroupCount =
+				definition.forceSceneControllerGroupCount;
+		}
+
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -115,6 +139,27 @@ error in compat option preserveRootApplicationCCValueIDs`,
 
 			this.preserveRootApplicationCCValueIDs =
 				definition.preserveRootApplicationCCValueIDs;
+		}
+
+		if (definition.preserveEndpoints != undefined) {
+			if (
+				definition.preserveEndpoints !== "*" &&
+				!(
+					isArray(definition.preserveEndpoints) &&
+					definition.preserveEndpoints.every(
+						(d: any) =>
+							typeof d === "number" && d % 1 === 0 && d > 0,
+					)
+				)
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option preserveEndpoints must be "*" or an array of positive integers`,
+				);
+			}
+
+			this.preserveEndpoints = definition.preserveEndpoints;
 		}
 
 		if (definition.skipConfigurationInfoQuery != undefined) {
@@ -142,6 +187,19 @@ error in compat option treatBasicSetAsEvent`,
 			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
 		}
 
+		if (definition.treatDestinationEndpointAsSource != undefined) {
+			if (definition.treatDestinationEndpointAsSource !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option treatDestinationEndpointAsSource`,
+				);
+			}
+
+			this.treatDestinationEndpointAsSource =
+				definition.treatDestinationEndpointAsSource;
+		}
+
 		if (definition.manualValueRefreshDelayMs != undefined) {
 			if (typeof definition.manualValueRefreshDelayMs !== "number") {
 				throwInvalidConfig(
@@ -164,6 +222,29 @@ compat option manualValueRefreshDelayMs must be a non-negative integer!`,
 
 			this.manualValueRefreshDelayMs =
 				definition.manualValueRefreshDelayMs;
+		}
+
+		if (definition.mapRootReportsToEndpoint != undefined) {
+			if (typeof definition.mapRootReportsToEndpoint !== "number") {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a number!`,
+				);
+			}
+
+			if (
+				definition.mapRootReportsToEndpoint % 1 !== 0 ||
+				definition.mapRootReportsToEndpoint < 1
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+compat option mapRootReportsToEndpoint must be a positive integer!`,
+				);
+			}
+
+			this.mapRootReportsToEndpoint = definition.mapRootReportsToEndpoint;
 		}
 
 		if (definition.overrideFloatEncoding != undefined) {
@@ -260,7 +341,7 @@ error in compat option commandClasses.add`,
 					throwInvalidConfig(
 						"devices",
 						`config/devices/${filename}:
-All keys in compat option commandClasses.add must be 2-digit hex numbers!`,
+All keys in compat option commandClasses.add must be 2-digit lowercase hex numbers!`,
 					);
 				} else if (
 					!Object.values(definition.commandClasses.add).every((v) =>
@@ -301,7 +382,7 @@ error in compat option commandClasses.remove`,
 					throwInvalidConfig(
 						"devices",
 						`config/devices/${filename}:
-All keys in compat option commandClasses.remove must be 2-digit hex numbers!`,
+All keys in compat option commandClasses.remove must be 2-digit lowercase hex numbers!`,
 					);
 				}
 
@@ -367,14 +448,18 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly disableStrictEntryControlDataValidation?: boolean;
 	public readonly enableBasicSetMapping?: boolean;
 	public readonly forceNotificationIdleReset?: boolean;
+	public readonly forceSceneControllerGroupCount?: number;
 	public readonly manualValueRefreshDelayMs?: number;
+	public readonly mapRootReportsToEndpoint?: number;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
+	public readonly preserveEndpoints?: "*" | readonly number[];
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
+	public readonly treatDestinationEndpointAsSource?: boolean;
 	public readonly queryOnWakeup?: readonly [
 		string,
 		string,

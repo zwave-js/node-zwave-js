@@ -22,11 +22,11 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/BinarySensorCC => ", () => {
-	const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 	let node1: ZWaveNode;
 
 	beforeAll(() => {
-		node1 = new ZWaveNode(1, (fakeDriver as any) as Driver);
+		node1 = new ZWaveNode(1, fakeDriver as any as Driver);
 		(fakeDriver.controller.nodes as Map<any, any>).set(node1.id, node1);
 	});
 

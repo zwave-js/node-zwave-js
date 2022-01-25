@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Indicator",
 			"description": "Set the LED light behavior",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Switch Orientation",
 			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Auto-Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
@@ -69,5 +71,5 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		}
-	}
+	]
 }

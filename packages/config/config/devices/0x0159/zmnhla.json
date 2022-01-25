@@ -27,7 +27,7 @@
 			"maxNodes": 16
 		},
 		"4": {
-			"label": "On/Off Triggerd by High Temp",
+			"label": "On/Off Triggered by High Temp",
 			"maxNodes": 16
 		},
 		"5": {
@@ -40,8 +40,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +81,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -98,7 +101,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Input 1 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +141,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,7 +161,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"description": "Respond to ALL ON/ALL OFF",
 			"valueSize": 1,
@@ -183,7 +190,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "I1 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
@@ -191,7 +199,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "I2 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
@@ -199,7 +208,8 @@
 			"defaultValue": 65535,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "I3 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
@@ -207,21 +217,24 @@
 			"defaultValue": 65535,
 			"unsigned": true
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on power change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts by timer interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 300
 		},
-		"45": {
+		{
+			"#": "45",
 			"label": "Antifreeze",
 			"valueSize": 1,
 			"minValue": 0,
@@ -229,28 +242,32 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "PWM Maximum Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "PWM Minimum Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "PWM Cycle Duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 10
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "PID Value Inside Deadband",
 			"valueSize": 1,
 			"minValue": 0,
@@ -269,21 +286,24 @@
 				}
 			]
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "PID Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Integral Sampling Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 5
 		},
-		"56": {
+		{
+			"#": "56",
 			"label": "P Parameter",
 			"description": "0 - 1000 P value step is 1. Default = 100",
 			"valueSize": 2,
@@ -291,7 +311,8 @@
 			"maxValue": 1000,
 			"defaultValue": 100
 		},
-		"57": {
+		{
+			"#": "57",
 			"label": "I Parameter",
 			"description": "0 - 1000 - 0s I value step is 1. Default = 1",
 			"valueSize": 2,
@@ -299,7 +320,8 @@
 			"maxValue": 1000,
 			"defaultValue": 1
 		},
-		"58": {
+		{
+			"#": "58",
 			"label": "D Parameter",
 			"description": "0 - 1000 - 0s D value step is 1. Default = 1",
 			"valueSize": 2,
@@ -307,7 +329,8 @@
 			"maxValue": 1000,
 			"defaultValue": 1
 		},
-		"59": {
+		{
+			"#": "59",
 			"label": "Thermostat Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -326,21 +349,24 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 50
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 700
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Output Switch Selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -359,47 +385,53 @@
 				}
 			]
 		},
-		"70": {
+		{
+			"#": "70",
 			"label": "Input 1 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"71": {
+		{
+			"#": "71",
 			"label": "Input 1 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"72": {
+		{
+			"#": "72",
 			"label": "Input 2 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"73": {
+		{
+			"#": "73",
 			"label": "Input 2 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"74": {
+		{
+			"#": "74",
 			"label": "Input 3 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"75": {
+		{
+			"#": "75",
 			"label": "Input 3 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 0
 		}
-	}
+	]
 }

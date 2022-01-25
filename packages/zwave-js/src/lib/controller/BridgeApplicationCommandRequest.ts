@@ -19,21 +19,15 @@ import {
 	priority,
 } from "../message/Message";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
-
-export enum RSSIValue {
-	NotAvailable = 127,
-	ReceiverSaturated = 126,
-	NoSignalDetected = 125,
-}
-
-const RSSI_RESERVED_START = 11;
+import { parseRSSI, RSSI, RssiError } from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command
 @priority(MessagePriority.Normal)
 export class BridgeApplicationCommandRequest
 	extends Message
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		// if (gotDeserializationOptions(options)) {
@@ -84,14 +78,7 @@ export class BridgeApplicationCommandRequest
 		}
 		offset += multicastNodesLength;
 
-		this.rssi = this.payload[offset];
-		// Filter out reserved values
-		if (
-			this.rssi >= RSSI_RESERVED_START &&
-			this.rssi < RSSIValue.NoSignalDetected
-		) {
-			this.rssi = RSSIValue.NotAvailable;
-		}
+		this.rssi = parseRSSI(this.payload, offset);
 	}
 
 	public readonly routedBusy: boolean;
@@ -100,7 +87,7 @@ export class BridgeApplicationCommandRequest
 	public readonly isExploreFrame: boolean;
 	public readonly isForeignFrame: boolean;
 	public readonly fromForeignHomeId: boolean;
-	public readonly rssi: number | RSSIValue;
+	public readonly rssi: RSSI;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC;
@@ -117,12 +104,13 @@ export class BridgeApplicationCommandRequest
 					: this.targetNodeId.join(", ");
 		}
 		switch (true) {
-			case this.rssi === RSSIValue.ReceiverSaturated:
-			case this.rssi === RSSIValue.NoSignalDetected:
-				message.rssi = getEnumMemberName(RSSIValue, this.rssi);
+			case this.rssi === RssiError.ReceiverSaturated:
+			case this.rssi === RssiError.NoSignalDetected:
+				message.RSSI = getEnumMemberName(RssiError, this.rssi);
 				break;
-			case this.rssi < RSSI_RESERVED_START:
-				message.rssi = `${this.rssi} dBms`;
+			// case this.rssi < RSSI_RESERVED_START:
+			default:
+				message.RSSI = `${this.rssi} dBm`;
 				break;
 		}
 		return {

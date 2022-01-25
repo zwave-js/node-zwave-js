@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Hardware Combination Identifier",
 			"description": "",
 			"valueSize": 1,
@@ -44,7 +45,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dimming Speed",
 			"valueSize": 2,
 			"unit": "0.01 seconds",
@@ -53,7 +55,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -72,7 +75,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Maximum Dimmer Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -80,7 +84,8 @@
 			"defaultValue": 90,
 			"unsigned": true
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Minimum Dimmer Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -88,7 +93,8 @@
 			"defaultValue": 15,
 			"unsigned": true
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Back Unit Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +122,8 @@
 				}
 			]
 		},
-		"44": {
+		{
+			"#": "44",
 			"label": "Cold Start Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -124,7 +131,7 @@
 			"defaultValue": 20,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "To add the device to a Z-Wave network, the Z-Wave Controller must first be set into Add (Learn) mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",
 		"exclusion": "To remove the device from a Z-Wave network, the Z-Wave Controller must first be set into Remove mode. Then use a paperclip or a small pointy tool to push and hold the button in the button hole for approximately a second. The device LED will blink twice to indicate that it sends information to the Controller",

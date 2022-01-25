@@ -37,7 +37,6 @@ In short, I will save you time and headaches and save you from having to go thro
 
 There is still some way to go, but the plan is for **Z-Wave JS** to be the first **certified** open source Z-Wave driver. Meaning you can use it and expect it to **just work** with other certified devices. Some of the next steps on that way are:
 
--   Security S2
 -   StartSmart
 -   Z-Wave Long Range
 

@@ -2,6 +2,9 @@ module.exports = {
 	addCompatFlag: (...args) => require("./addCompatFlag")(...args),
 	addCompatFlagCreatePR: (...args) =>
 		require("./addCompatFlagCreatePR")(...args),
+	addFingerprint: (...args) => require("./addFingerprint")(...args),
+	addFingerprintCreatePR: (...args) =>
+		require("./addFingerprintCreatePR")(...args),
 	approveWorkflows: (...args) => require("./approveWorkflows")(...args),
 	checkAuthorized: (...args) => require("./checkAuthorized")(...args),
 	fixLintFeedback: (...args) => require("./fixLintFeedback")(...args),

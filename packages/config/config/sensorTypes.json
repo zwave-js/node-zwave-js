@@ -45,16 +45,7 @@
 	},
 	"0x05": {
 		"label": "Humidity",
-		"scales": {
-			"0x00": {
-				"label": "Percentage value",
-				"unit": "%"
-			},
-			"0x01": {
-				"label": "Absolute humidity",
-				"unit": "g/m³"
-			}
-		}
+		"scales": "$SCALES:humidity"
 	},
 	"0x06": {
 		"label": "Velocity",
@@ -71,39 +62,15 @@
 	},
 	"0x07": {
 		"label": "Direction",
-		"scales": {
-			"0x00": {
-				"label": "Degrees",
-				"unit": "°",
-				"description": "0° = no wind, 90° = east, 180° = south, 270° = west, 360° = north"
-			}
-		}
+		"scales": "$SCALES:direction"
 	},
 	"0x08": {
 		"label": "Atmospheric pressure",
-		"scales": {
-			"0x00": {
-				"label": "Kilopascal",
-				"unit": "kPa"
-			},
-			"0x01": {
-				"label": "Inches of Mercury",
-				"unit": "inHg"
-			}
-		}
+		"scales": "$SCALES:air_pressure"
 	},
 	"0x09": {
 		"label": "Barometric pressure",
-		"scales": {
-			"0x00": {
-				"label": "Kilopascal",
-				"unit": "kPa"
-			},
-			"0x01": {
-				"label": "Inches of Mercury",
-				"unit": "inHg"
-			}
-		}
+		"scales": "$SCALES:air_pressure"
 	},
 	"0x0a": {
 		"label": "Solar radiation",
@@ -471,21 +438,11 @@
 	},
 	"0x29": {
 		"label": "Soil humidity",
-		"scales": {
-			"0x00": {
-				"label": "Percentage value",
-				"unit": "%"
-			}
-		}
+		"scales": "$SCALES:percentage"
 	},
 	"0x2a": {
 		"label": "Soil reactivity",
-		"scales": {
-			"0x00": {
-				"label": "Acidity",
-				"unit": "pH"
-			}
-		}
+		"scales": "$SCALES:acidity"
 	},
 	"0x2b": {
 		"label": "Soil salinity",
@@ -520,39 +477,19 @@
 	},
 	"0x2e": {
 		"label": "Muscle mass",
-		"scales": {
-			"0x00": {
-				"label": "Kilogram",
-				"unit": "kg"
-			}
-		}
+		"scales": "$SCALES:mass"
 	},
 	"0x2f": {
 		"label": "Fat mass",
-		"scales": {
-			"0x00": {
-				"label": "Kilogram",
-				"unit": "kg"
-			}
-		}
+		"scales": "$SCALES:mass"
 	},
 	"0x30": {
 		"label": "Bone mass",
-		"scales": {
-			"0x00": {
-				"label": "Kilogram",
-				"unit": "kg"
-			}
-		}
+		"scales": "$SCALES:mass"
 	},
 	"0x31": {
 		"label": "Total body water (TBW)",
-		"scales": {
-			"0x00": {
-				"label": "Kilogram",
-				"unit": "kg"
-			}
-		}
+		"scales": "$SCALES:mass"
 	},
 	"0x32": {
 		"label": "Basis metabolic rate (BMR)",
@@ -573,39 +510,19 @@
 	},
 	"0x34": {
 		"label": "Acceleration X-axis",
-		"scales": {
-			"0x00": {
-				"label": "Meter per square second",
-				"unit": "m/s2"
-			}
-		}
+		"scales": "$SCALES:acceleration"
 	},
 	"0x35": {
 		"label": "Acceleration Y-axis",
-		"scales": {
-			"0x00": {
-				"label": "Meter per square second",
-				"unit": "m/s2"
-			}
-		}
+		"scales": "$SCALES:acceleration"
 	},
 	"0x36": {
 		"label": "Acceleration Z-axis",
-		"scales": {
-			"0x00": {
-				"label": "Meter per square second",
-				"unit": "m/s2"
-			}
-		}
+		"scales": "$SCALES:acceleration"
 	},
 	"0x37": {
 		"label": "Smoke density",
-		"scales": {
-			"0x00": {
-				"label": "Percentage value",
-				"unit": "%"
-			}
-		}
+		"scales": "$SCALES:percentage"
 	},
 	"0x38": {
 		"label": "Water flow",
@@ -662,12 +579,7 @@
 	},
 	"0x3d": {
 		"label": "Relative Modulation level",
-		"scales": {
-			"0x00": {
-				"label": "Percentage value",
-				"unit": "%"
-			}
-		}
+		"scales": "$SCALES:percentage"
 	},
 	"0x3e": {
 		"label": "Boiler water temperature",
@@ -696,12 +608,7 @@
 	},
 	"0x43": {
 		"label": "Water acidity",
-		"scales": {
-			"0x00": {
-				"label": "Acidity",
-				"unit": "pH"
-			}
-		}
+		"scales": "$SCALES:acidity"
 	},
 	"0x44": {
 		"label": "Water Oxidation reduction potential",
@@ -714,21 +621,11 @@
 	},
 	"0x45": {
 		"label": "Heart Rate LF/HF ratio",
-		"scales": {
-			"0x00": {
-				"label": "Unitless"
-			}
-		}
+		"scales": "$SCALES:unitless"
 	},
 	"0x46": {
 		"label": "Motion Direction",
-		"scales": {
-			"0x00": {
-				"label": "Degrees",
-				"unit": "°",
-				"description": "0° = no motion detected, 90° = east, 180° = south, 270° = west, 360° = north"
-			}
-		}
+		"scales": "$SCALES:direction"
 	},
 	"0x47": {
 		"label": "Applied force on the sensor",
@@ -765,29 +662,11 @@
 	},
 	"0x4e": {
 		"label": "Suction Pressure",
-		"scales": {
-			"0x00": {
-				"label": "Kilopascal",
-				"unit": "kPa"
-			},
-			"0x01": {
-				"label": "Pound per square inch",
-				"unit": "psi"
-			}
-		}
+		"scales": "$SCALES:pressure"
 	},
 	"0x4f": {
 		"label": "Discharge Pressure",
-		"scales": {
-			"0x00": {
-				"label": "Kilopascal",
-				"unit": "kPa"
-			},
-			"0x01": {
-				"label": "Pound per square inch",
-				"unit": "psi"
-			}
-		}
+		"scales": "$SCALES:pressure"
 	},
 	"0x50": {
 		"label": "Defrost temperature",
@@ -795,56 +674,34 @@
 	},
 	"0x51": {
 		"label": "Ozone",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
 	},
 	"0x52": {
 		"label": "Sulfur dioxide",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
 	},
 	"0x53": {
 		"label": "Nitrogen dioxide",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
 	},
 	"0x54": {
 		"label": "Ammonia",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
 	},
 	"0x55": {
 		"label": "Lead",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
 	},
 	"0x56": {
 		"label": "Particulate Matter 1",
-		"scales": {
-			"0x00": {
-				"label": "Density",
-				"unit": "µg/m³"
-			}
-		}
+		"scales": "$SCALES:density"
+	},
+	"0x57": {
+		"label": "Person counter (entering)",
+		"scales": "$SCALES:unitless"
+	},
+	"0x58": {
+		"label": "Person counter (exiting)",
+		"scales": "$SCALES:unitless"
 	}
 }

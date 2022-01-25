@@ -1,0 +1,173 @@
+{
+	"manufacturer": "Weiser",
+	"manufacturerId": "0x0090",
+	"label": "GED2150",
+	"description": "SmartCode 10 Touchscreen Electronic Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0642"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/kwikset_template.json#usercode_1"
+		},
+		{
+			"#": "2",
+			"$import": "templates/kwikset_template.json#usercode_2"
+		},
+		{
+			"#": "3",
+			"$import": "templates/kwikset_template.json#usercode_3"
+		},
+		{
+			"#": "4",
+			"$import": "templates/kwikset_template.json#usercode_4"
+		},
+		{
+			"#": "5",
+			"$import": "templates/kwikset_template.json#usercode_5"
+		},
+		{
+			"#": "6",
+			"$import": "templates/kwikset_template.json#usercode_6"
+		},
+		{
+			"#": "7",
+			"$import": "templates/kwikset_template.json#usercode_7"
+		},
+		{
+			"#": "8",
+			"$import": "templates/kwikset_template.json#usercode_8"
+		},
+		{
+			"#": "9",
+			"$import": "templates/kwikset_template.json#usercode_9"
+		},
+		{
+			"#": "10",
+			"$import": "templates/kwikset_template.json#usercode_10"
+		},
+		{
+			"#": "11",
+			"$import": "templates/kwikset_template.json#usercode_11"
+		},
+		{
+			"#": "12",
+			"$import": "templates/kwikset_template.json#usercode_12"
+		},
+		{
+			"#": "13",
+			"$import": "templates/kwikset_template.json#usercode_13"
+		},
+		{
+			"#": "14",
+			"$import": "templates/kwikset_template.json#usercode_14"
+		},
+		{
+			"#": "15",
+			"$import": "templates/kwikset_template.json#usercode_15"
+		},
+		{
+			"#": "16",
+			"$import": "templates/kwikset_template.json#usercode_16"
+		},
+		{
+			"#": "17",
+			"$import": "templates/kwikset_template.json#usercode_17"
+		},
+		{
+			"#": "18",
+			"$import": "templates/kwikset_template.json#usercode_18"
+		},
+		{
+			"#": "19",
+			"$import": "templates/kwikset_template.json#usercode_19"
+		},
+		{
+			"#": "20",
+			"$import": "templates/kwikset_template.json#usercode_20"
+		},
+		{
+			"#": "21",
+			"$import": "templates/kwikset_template.json#usercode_21"
+		},
+		{
+			"#": "22",
+			"$import": "templates/kwikset_template.json#usercode_22"
+		},
+		{
+			"#": "23",
+			"$import": "templates/kwikset_template.json#usercode_23"
+		},
+		{
+			"#": "24",
+			"$import": "templates/kwikset_template.json#usercode_24"
+		},
+		{
+			"#": "25",
+			"$import": "templates/kwikset_template.json#usercode_25"
+		},
+		{
+			"#": "26",
+			"$import": "templates/kwikset_template.json#usercode_26"
+		},
+		{
+			"#": "27",
+			"$import": "templates/kwikset_template.json#usercode_27"
+		},
+		{
+			"#": "28",
+			"$import": "templates/kwikset_template.json#usercode_28"
+		},
+		{
+			"#": "29",
+			"$import": "templates/kwikset_template.json#usercode_29"
+		},
+		{
+			"#": "30",
+			"$import": "templates/kwikset_template.json#usercode_30"
+		},
+		{
+			"#": "31[0x01]",
+			"$import": "templates/kwikset_template.json#dipswitch_led"
+		},
+		{
+			"#": "31[0x02]",
+			"$import": "templates/kwikset_template.json#dipswitch_autolock"
+		},
+		{
+			"#": "31[0x04]",
+			"$import": "templates/kwikset_template.json#dipswitch_buzzer"
+		},
+		{
+			"#": "31[0x08]",
+			"$import": "templates/kwikset_template.json#dipswitch_securescreen"
+		},
+		{
+			"#": "33",
+			"$import": "templates/kwikset_template.json#dipswitch_sku_firstfour"
+		},
+		{
+			"#": "34",
+			"$import": "templates/kwikset_template.json#dipswitch_sku_lastfour"
+		},
+		{
+			"#": "40",
+			"$import": "templates/kwikset_template.json#reset"
+		}
+	]
+}

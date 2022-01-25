@@ -4,7 +4,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getErrorMessage, num2hex } from "@zwave-js/shared";
 import { pathExists } from "fs-extra";
 import path from "path";
 import {
@@ -23,6 +23,7 @@ import {
 	DeviceConfigIndex,
 	FulltextDeviceConfigIndex,
 	generatePriorityDeviceIndex,
+	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
 } from "./Devices";
@@ -66,6 +67,7 @@ import {
 	configDir,
 	externalConfigDir,
 	getDeviceEntryPredicate,
+	getEmbeddedConfigVersion,
 	syncExternalConfigDir,
 } from "./utils";
 
@@ -80,35 +82,141 @@ export class ConfigManager {
 			options.logContainer ?? new ZWaveLogContainer({ enabled: false }),
 		);
 		this.deviceConfigPriorityDir = options.deviceConfigPriorityDir;
+		this._configVersion =
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			require("@zwave-js/config/package.json").version;
+	}
+
+	private _configVersion: string;
+	public get configVersion(): string {
+		return this._configVersion;
 	}
 
 	private logger: ConfigLogger;
 
-	private indicators: IndicatorMap | undefined;
-	private indicatorProperties: IndicatorPropertiesMap | undefined;
-	private manufacturers: ManufacturersMap | undefined;
-	private namedScales: NamedScalesGroupMap | undefined;
-	private sensorTypes: SensorTypeMap | undefined;
-	private meters: MeterMap | undefined;
-	private basicDeviceClasses: BasicDeviceClassMap | undefined;
-	private genericDeviceClasses: GenericDeviceClassMap | undefined;
+	private _indicators: IndicatorMap | undefined;
+	public get indicators(): IndicatorMap {
+		if (!this._indicators) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._indicators;
+	}
+
+	private _indicatorProperties: IndicatorPropertiesMap | undefined;
+	public get indicatorProperties(): IndicatorPropertiesMap {
+		if (!this._indicatorProperties) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._indicatorProperties;
+	}
+
+	private _manufacturers: ManufacturersMap | undefined;
+	public get manufacturers(): ManufacturersMap {
+		if (!this._manufacturers) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._manufacturers;
+	}
+
+	private _namedScales: NamedScalesGroupMap | undefined;
+	public get namedScales(): NamedScalesGroupMap {
+		if (!this._namedScales) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._namedScales;
+	}
+
+	private _sensorTypes: SensorTypeMap | undefined;
+	public get sensorTypes(): SensorTypeMap {
+		if (!this._sensorTypes) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._sensorTypes;
+	}
+
+	private _meters: MeterMap | undefined;
+	public get meters(): MeterMap {
+		if (!this._meters) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._meters;
+	}
+
+	private _basicDeviceClasses: BasicDeviceClassMap | undefined;
+	public get basicDeviceClasses(): BasicDeviceClassMap {
+		if (!this._basicDeviceClasses) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._basicDeviceClasses;
+	}
+
+	private _genericDeviceClasses: GenericDeviceClassMap | undefined;
+	public get genericDeviceClasses(): GenericDeviceClassMap {
+		if (!this._genericDeviceClasses) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._genericDeviceClasses;
+	}
 
 	private deviceConfigPriorityDir: string | undefined;
 	private index: DeviceConfigIndex | undefined;
 	private fulltextIndex: FulltextDeviceConfigIndex | undefined;
-	private notifications: NotificationMap | undefined;
 
-	private useExternalConfig: boolean = false;
+	private _notifications: NotificationMap | undefined;
+	public get notifications(): NotificationMap {
+		if (!this._notifications) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._notifications;
+	}
+
+	private _useExternalConfig: boolean = false;
+	public get useExternalConfig(): boolean {
+		return this._useExternalConfig;
+	}
 
 	public async loadAll(): Promise<void> {
 		// If the environment option for an external config dir is set
 		// try to sync it and then use it
-		this.useExternalConfig = await syncExternalConfigDir(this.logger);
-		if (this.useExternalConfig) {
+		const syncResult = await syncExternalConfigDir(this.logger);
+		if (syncResult.success) {
+			this._useExternalConfig = true;
 			this.logger.print(
-				`Using external configuration dir ${externalConfigDir}`,
+				`Using external configuration dir ${externalConfigDir()}`,
 			);
+			this._configVersion = syncResult.version;
+		} else {
+			this._useExternalConfig = false;
+			this._configVersion = await getEmbeddedConfigVersion();
 		}
+		this.logger.print(`version ${this._configVersion}`, "info");
 
 		await this.loadDeviceClasses();
 		await this.loadManufacturers();
@@ -122,10 +230,10 @@ export class ConfigManager {
 
 	public async loadManufacturers(): Promise<void> {
 		try {
-			this.manufacturers = await loadManufacturersInternal(
-				this.useExternalConfig,
+			this._manufacturers = await loadManufacturersInternal(
+				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -134,7 +242,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.manufacturers) this.manufacturers = new Map();
+				if (!this._manufacturers) this._manufacturers = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -143,14 +251,14 @@ export class ConfigManager {
 	}
 
 	public async saveManufacturers(): Promise<void> {
-		if (!this.manufacturers) {
+		if (!this._manufacturers) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		await saveManufacturersInternal(this.manufacturers);
+		await saveManufacturersInternal(this._manufacturers);
 	}
 
 	/**
@@ -158,14 +266,14 @@ export class ConfigManager {
 	 * @param manufacturerId The manufacturer id to look up
 	 */
 	public lookupManufacturer(manufacturerId: number): string | undefined {
-		if (!this.manufacturers) {
+		if (!this._manufacturers) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.manufacturers.get(manufacturerId);
+		return this._manufacturers.get(manufacturerId);
 	}
 
 	/**
@@ -177,22 +285,24 @@ export class ConfigManager {
 		manufacturerId: number,
 		manufacturerName: string,
 	): void {
-		if (!this.manufacturers) {
+		if (!this._manufacturers) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		this.manufacturers.set(manufacturerId, manufacturerName);
+		this._manufacturers.set(manufacturerId, manufacturerName);
 	}
 
 	public async loadIndicators(): Promise<void> {
 		try {
-			const config = await loadIndicatorsInternal(this.useExternalConfig);
-			this.indicators = config.indicators;
-			this.indicatorProperties = config.properties;
-		} catch (e: unknown) {
+			const config = await loadIndicatorsInternal(
+				this._useExternalConfig,
+			);
+			this._indicators = config.indicators;
+			this._indicatorProperties = config.properties;
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -201,9 +311,9 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.indicators) this.indicators = new Map();
-				if (!this.indicatorProperties)
-					this.indicatorProperties = new Map();
+				if (!this._indicators) this._indicators = new Map();
+				if (!this._indicatorProperties)
+					this._indicatorProperties = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -215,36 +325,36 @@ export class ConfigManager {
 	 * Looks up the label for a given indicator id
 	 */
 	public lookupIndicator(indicatorId: number): string | undefined {
-		if (!this.indicators) {
+		if (!this._indicators) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.indicators.get(indicatorId);
+		return this._indicators.get(indicatorId);
 	}
 
 	/**
 	 * Looks up the property definition for a given indicator property id
 	 */
 	public lookupProperty(propertyId: number): IndicatorProperty | undefined {
-		if (!this.indicatorProperties) {
+		if (!this._indicatorProperties) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.indicatorProperties.get(propertyId);
+		return this._indicatorProperties.get(propertyId);
 	}
 
 	public async loadNamedScales(): Promise<void> {
 		try {
-			this.namedScales = await loadNamedScalesInternal(
-				this.useExternalConfig,
+			this._namedScales = await loadNamedScalesInternal(
+				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -253,7 +363,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.namedScales) this.namedScales = new Map();
+				if (!this._namedScales) this._namedScales = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -265,17 +375,17 @@ export class ConfigManager {
 	 * Looks up all scales defined under a given name
 	 */
 	public lookupNamedScaleGroup(name: string): ScaleGroup | undefined {
-		if (!this.namedScales) {
+		if (!this._namedScales) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.namedScales.get(name);
+		return this._namedScales.get(name);
 	}
 
-	/** Looks up a scale definition for a given sensor type */
+	/** Looks up a scale definition for a given scale type */
 	public lookupNamedScale(name: string, scale: number): Scale {
 		const group = this.lookupNamedScaleGroup(name);
 		return group?.get(scale) ?? getDefaultScale(scale);
@@ -283,11 +393,11 @@ export class ConfigManager {
 
 	public async loadSensorTypes(): Promise<void> {
 		try {
-			this.sensorTypes = await loadSensorTypesInternal(
+			this._sensorTypes = await loadSensorTypesInternal(
 				this,
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -296,7 +406,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.sensorTypes) this.sensorTypes = new Map();
+				if (!this._sensorTypes) this._sensorTypes = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -308,14 +418,14 @@ export class ConfigManager {
 	 * Looks up the configuration for a given sensor type
 	 */
 	public lookupSensorType(sensorType: number): SensorType | undefined {
-		if (!this.sensorTypes) {
+		if (!this._sensorTypes) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.sensorTypes.get(sensorType);
+		return this._sensorTypes.get(sensorType);
 	}
 
 	/** Looks up a scale definition for a given sensor type */
@@ -332,8 +442,8 @@ export class ConfigManager {
 
 	public async loadMeters(): Promise<void> {
 		try {
-			this.meters = await loadMetersInternal(this.useExternalConfig);
-		} catch (e: unknown) {
+			this._meters = await loadMetersInternal(this._useExternalConfig);
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -342,7 +452,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.meters) this.meters = new Map();
+				if (!this._meters) this._meters = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -354,14 +464,14 @@ export class ConfigManager {
 	 * Looks up the notification configuration for a given notification type
 	 */
 	public lookupMeter(meterType: number): Meter | undefined {
-		if (!this.meters) {
+		if (!this._meters) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.meters.get(meterType);
+		return this._meters.get(meterType);
 	}
 
 	public getMeterName(meterType: number): string {
@@ -378,11 +488,11 @@ export class ConfigManager {
 	public async loadDeviceClasses(): Promise<void> {
 		try {
 			const config = await loadDeviceClassesInternal(
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
-			this.basicDeviceClasses = config.basicDeviceClasses;
-			this.genericDeviceClasses = config.genericDeviceClasses;
-		} catch (e: unknown) {
+			this._basicDeviceClasses = config.basicDeviceClasses;
+			this._genericDeviceClasses = config.genericDeviceClasses;
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -391,10 +501,10 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				if (!this.basicDeviceClasses)
-					this.basicDeviceClasses = new Map();
-				if (!this.genericDeviceClasses)
-					this.genericDeviceClasses = new Map();
+				if (!this._basicDeviceClasses)
+					this._basicDeviceClasses = new Map();
+				if (!this._genericDeviceClasses)
+					this._genericDeviceClasses = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -403,7 +513,7 @@ export class ConfigManager {
 	}
 
 	public lookupBasicDeviceClass(basic: number): BasicDeviceClass {
-		if (!this.basicDeviceClasses) {
+		if (!this._basicDeviceClasses) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
@@ -413,13 +523,13 @@ export class ConfigManager {
 		return {
 			key: basic,
 			label:
-				this.basicDeviceClasses.get(basic) ??
+				this._basicDeviceClasses.get(basic) ??
 				`UNKNOWN (${num2hex(basic)})`,
 		};
 	}
 
 	public lookupGenericDeviceClass(generic: number): GenericDeviceClass {
-		if (!this.genericDeviceClasses) {
+		if (!this._genericDeviceClasses) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
@@ -427,7 +537,7 @@ export class ConfigManager {
 		}
 
 		return (
-			this.genericDeviceClasses.get(generic) ??
+			this._genericDeviceClasses.get(generic) ??
 			getDefaultGenericDeviceClass(generic)
 		);
 	}
@@ -448,7 +558,7 @@ export class ConfigManager {
 			// The index of config files included in this package
 			const embeddedIndex = await loadDeviceIndexInternal(
 				this.logger,
-				this.useExternalConfig,
+				this._useExternalConfig,
 			);
 			// A dynamic index of the user-defined priority device config files
 			const priorityIndex: DeviceConfigIndex = [];
@@ -469,7 +579,7 @@ export class ConfigManager {
 			}
 			// Put the priority index in front, so the files get resolved first
 			this.index = [...priorityIndex, ...embeddedIndex];
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
 				(!isZWaveError(e) && e instanceof Error) ||
@@ -531,17 +641,36 @@ export class ConfigManager {
 		);
 
 		if (indexEntry) {
+			const devicesDir = getDevicesPaths(
+				this._useExternalConfig ? externalConfigDir()! : configDir,
+			).devicesDir;
 			const filePath = path.isAbsolute(indexEntry.filename)
 				? indexEntry.filename
-				: path.join(configDir, "devices", indexEntry.filename);
+				: path.join(devicesDir, indexEntry.filename);
 			if (!(await pathExists(filePath))) return;
 
+			// A config file is treated as am embedded one when it is located under the devices root dir
+			// or the external config dir
+			const isEmbedded = !path
+				.relative(devicesDir, filePath)
+				.startsWith("..");
+
 			try {
-				return await ConditionalDeviceConfig.from(filePath);
+				return await ConditionalDeviceConfig.from(
+					filePath,
+					isEmbedded,
+					{
+						// When looking for device files, fall back to the embedded config dir
+						rootDir: indexEntry.rootDir ?? devicesDir,
+					},
+				);
 			} catch (e) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
-						`Error loading device config ${filePath}`,
+						`Error loading device config ${filePath}: ${getErrorMessage(
+							e,
+							true,
+						)}`,
 						"error",
 					);
 				}
@@ -579,10 +708,10 @@ export class ConfigManager {
 
 	public async loadNotifications(): Promise<void> {
 		try {
-			this.notifications = await loadNotificationsInternal(
-				this.useExternalConfig,
+			this._notifications = await loadNotificationsInternal(
+				this._useExternalConfig,
 			);
-		} catch (e: unknown) {
+		} catch (e) {
 			// If the config file is missing or invalid, don't try to find it again
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Config_Invalid) {
 				if (process.env.NODE_ENV !== "test") {
@@ -591,7 +720,7 @@ export class ConfigManager {
 						"error",
 					);
 				}
-				this.notifications = new Map();
+				this._notifications = new Map();
 			} else {
 				// This is an unexpected error
 				throw e;
@@ -605,14 +734,14 @@ export class ConfigManager {
 	public lookupNotification(
 		notificationType: number,
 	): Notification | undefined {
-		if (!this.notifications) {
+		if (!this._notifications) {
 			throw new ZWaveError(
 				"The config has not been loaded yet!",
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
 
-		return this.notifications.get(notificationType);
+		return this._notifications.get(notificationType);
 	}
 
 	/**
@@ -622,7 +751,7 @@ export class ConfigManager {
 	private lookupNotificationUnsafe(
 		notificationType: number,
 	): Notification | undefined {
-		return this.notifications?.get(notificationType);
+		return this._notifications?.get(notificationType);
 	}
 
 	public getNotificationName(notificationType: number): string {

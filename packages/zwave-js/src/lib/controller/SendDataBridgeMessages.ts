@@ -30,8 +30,16 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
+import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
+import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
-import { TransmitOptions, TransmitStatus } from "./SendDataShared";
+import {
+	parseTXReport,
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
+	txReportToMessageRecord,
+} from "./SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
@@ -48,7 +56,7 @@ export class SendDataBridgeRequestBase extends Message {
 }
 
 interface SendDataBridgeRequestOptions<
-	CCType extends CommandClass = CommandClass
+	CCType extends CommandClass = CommandClass,
 > extends MessageBaseOptions {
 	command: CCType;
 	sourceNodeId?: number;
@@ -61,7 +69,8 @@ interface SendDataBridgeRequestOptions<
 @expectedCallback(FunctionType.SendDataBridge)
 export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	extends SendDataBridgeRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataBridgeRequestOptions<CCType>,
@@ -75,7 +84,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			);
 		}
 
-		// wotan-disable-next-line no-useless-predicate
 		if (options.route && options.route.length !== 4) {
 			throw new ZWaveError(
 				`The route must consist of exactly 4 entries!`,
@@ -163,6 +171,18 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		if (this.transmitOptions & TransmitOptions.AutoRoute) return 48;
 		return 54;
 	}
+
+	public expectsNodeUpdate(): boolean {
+		return this.command.expectsCCResponse();
+	}
+
+	public isExpectedNodeUpdate(msg: Message): boolean {
+		return (
+			(msg instanceof ApplicationCommandRequest ||
+				msg instanceof BridgeApplicationCommandRequest) &&
+			this.command.isExpectedCCResponse(msg.command)
+		);
+	}
 }
 
 interface SendDataBridgeRequestTransmitReportOptions
@@ -173,7 +193,8 @@ interface SendDataBridgeRequestTransmitReportOptions
 
 export class SendDataBridgeRequestTransmitReport
 	extends SendDataBridgeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -184,21 +205,22 @@ export class SendDataBridgeRequestTransmitReport
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
-			this._transmitStatus = this.payload[1];
-			// TODO: Parse transmit report
+			this.transmitStatus = this.payload[1];
+			this.txReport = parseTXReport(
+				this.transmitStatus !== TransmitStatus.NoAck,
+				this.payload.slice(2),
+			);
 		} else {
 			this.callbackId = options.callbackId;
-			this._transmitStatus = options.transmitStatus;
+			this.transmitStatus = options.transmitStatus;
 		}
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public readonly transmitStatus: TransmitStatus;
+	public readonly txReport: TXReport | undefined;
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {
@@ -213,10 +235,14 @@ export class SendDataBridgeRequestTransmitReport
 			...super.toLogEntry(),
 			message: {
 				"callback id": this.callbackId,
-				"transmit status": getEnumMemberName(
-					TransmitStatus,
-					this.transmitStatus,
-				),
+				"transmit status":
+					getEnumMemberName(TransmitStatus, this.transmitStatus) +
+					(this.txReport
+						? `, took ${this.txReport.txTicks * 10} ms`
+						: ""),
+				...(this.txReport
+					? txReportToMessageRecord(this.txReport)
+					: {}),
 			},
 		};
 	}
@@ -225,7 +251,8 @@ export class SendDataBridgeRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendDataBridge)
 export class SendDataBridgeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
@@ -282,10 +309,11 @@ interface SendDataMulticastBridgeRequestOptions<CCType extends CommandClass>
 @expectedResponse(FunctionType.SendDataMulticastBridge)
 @expectedCallback(FunctionType.SendDataMulticastBridge)
 export class SendDataMulticastBridgeRequest<
-		CCType extends CommandClass = CommandClass
+		CCType extends CommandClass = CommandClass,
 	>
 	extends SendDataMulticastBridgeRequestBase
-	implements ICommandClassContainer {
+	implements ICommandClassContainer
+{
 	public constructor(
 		driver: Driver,
 		options: SendDataMulticastBridgeRequestOptions<CCType>,
@@ -384,7 +412,8 @@ interface SendDataMulticastBridgeRequestTransmitReportOptions
 
 export class SendDataMulticastBridgeRequestTransmitReport
 	extends SendDataMulticastBridgeRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -435,7 +464,8 @@ export class SendDataMulticastBridgeRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendDataMulticastBridge)
 export class SendDataMulticastBridgeResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;

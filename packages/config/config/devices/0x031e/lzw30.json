@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,7 +37,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +56,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Auto Off Timer",
 			"unit": "Seconds",
 			"valueSize": 2,
@@ -63,14 +65,16 @@
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
 			"defaultValue": 15
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "LED Indicator Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
 			"valueSize": 2,
@@ -117,7 +121,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "LED Indicator Intensity (when on)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -171,7 +176,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "LED Indicator Intensity (when Off)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -225,7 +231,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"$if": "firmwareVersion >= 1.17",
 			"label": "Special Load Type",
 			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in.",
@@ -245,7 +252,8 @@
 				}
 			]
 		},
-		"51": {
+		{
+			"#": "51",
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
 			"valueSize": 1,
@@ -265,5 +273,5 @@
 				}
 			]
 		}
-	}
+	]
 }

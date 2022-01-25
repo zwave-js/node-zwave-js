@@ -33,8 +33,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Meter register offset",
 			"description": "current meter reading",
 			"unit": "Litre",
@@ -43,7 +44,8 @@
 			"maxValue": 99999999,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Meter reading reporting intervals",
 			"description": "how often meter reading is sent",
 			"unit": "minute",
@@ -52,7 +54,8 @@
 			"maxValue": 10000,
 			"defaultValue": 1440
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Delta config for meter reading",
 			"description": "min. delta for automatic report",
 			"unit": "Litre",
@@ -61,14 +64,16 @@
 			"maxValue": 10000,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Mechanical meter serial number",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature monitor on / off",
 			"description": "enable temperature monitor",
 			"unit": "Boolean",
@@ -77,7 +82,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Temperature delta",
 			"description": "change in temperature for report",
 			"unit": "deg. Celsius",
@@ -86,7 +92,8 @@
 			"maxValue": 30,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Temperature Alarm Threshold",
 			"description": "temperature triggering alarm",
 			"unit": "deg. Celsius",
@@ -95,5 +102,5 @@
 			"maxValue": 40,
 			"defaultValue": 0
 		}
-	}
+	]
 }

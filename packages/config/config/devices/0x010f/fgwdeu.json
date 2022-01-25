@@ -17,16 +17,17 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "ON/OFF mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 2
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Remember device state",
 			"description": "Determines how the device will react in the event of power supply failure",
 			"valueSize": 1,
@@ -45,7 +46,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Overload safety switch",
 			"description": "Turn off the controlled device in case of exceeding the defined power",
 			"valueSize": 4,
@@ -53,7 +55,8 @@
 			"maxValue": 5000,
 			"defaultValue": 3500
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "LED frame – power limit",
 			"description": "Determines maximum active power.",
 			"valueSize": 4,
@@ -61,7 +64,8 @@
 			"maxValue": 5000,
 			"defaultValue": 3500
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "LED frame – colour when ON",
 			"description": "This parameter defines the LED colour when the device is ON.",
 			"valueSize": 1,
@@ -112,7 +116,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "LED frame – colour when OFF",
 			"description": "This parameter defines the LED colour when the device is OFF.",
 			"valueSize": 1,
@@ -155,7 +160,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "LED frame – brightness",
 			"description": "This parameter allows to adjust the LED frame brightness.",
 			"valueSize": 1,
@@ -163,7 +169,8 @@
 			"maxValue": 102,
 			"defaultValue": 100
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Buttons orientation",
 			"description": "This parameter allows reversing the operation of the buttons.",
 			"valueSize": 1,
@@ -182,7 +189,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Alarm configuration - 1st slot",
 			"description": "determines to which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -190,7 +198,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"31": {
+		{
+			"#": "31",
 			"label": "Alarm configuration - 2nd slot",
 			"description": "determines to which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -198,7 +207,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Alarm configuration - 3rd slot",
 			"description": "determines to which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -206,7 +216,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Alarm configuration - 4th slot",
 			"description": "determines to which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -214,7 +225,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Alarm configuration - 5th slot",
 			"description": "determines to which alarm frames and how the device should react",
 			"valueSize": 4,
@@ -222,7 +234,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"35": {
+		{
+			"#": "35",
 			"label": "Alarm configuration – duration",
 			"description": "defines duration of alarm sequence",
 			"valueSize": 2,
@@ -230,48 +243,40 @@
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
-		"40": {
-			"label": "First button – scenes sent",
-			"description": "determines which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "no scenes",
-					"value": 0
-				},
-				{
-					"label": "Key pressed once",
-					"value": 1
-				},
-				{
-					"label": "Key pressed twice",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key held down and released",
-					"value": 8
-				}
-			]
+		{
+			"#": "40[0x01]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
 		},
-		"41": {
-			"label": "Second button – scenes sent",
-			"description": "determines which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": true
+		{
+			"#": "40[0x02]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
 		},
-		"60": {
+		{
+			"#": "40[0x04]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
+		},
+		{
+			"#": "60",
 			"label": "Power reports – include self-consumption",
 			"description": "determines whether the power measurements should include self-consumption",
 			"valueSize": 1,
@@ -279,7 +284,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Power reports – on change",
 			"description": "defines minimal change to be reported",
 			"valueSize": 2,
@@ -287,7 +293,8 @@
 			"maxValue": 500,
 			"defaultValue": 15
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power reports – periodic",
 			"description": "defines reporting interval for measured power",
 			"valueSize": 2,
@@ -296,7 +303,8 @@
 			"defaultValue": 3600,
 			"writeOnly": true
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy reports – on change",
 			"description": "defines minimal change to be reported",
 			"valueSize": 2,
@@ -304,7 +312,8 @@
 			"maxValue": 500,
 			"defaultValue": 10
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy reports – periodic",
 			"description": "defines reporting interval for measured energy",
 			"valueSize": 2,
@@ -312,7 +321,8 @@
 			"maxValue": 32400,
 			"defaultValue": 3600
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "Minimum brightness level",
 			"description": "Minimum brightness level - initialised at calibration",
 			"valueSize": 1,
@@ -320,7 +330,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Maximum brightness level",
 			"description": "Maximum brightness level - initalised at calibration",
 			"valueSize": 1,
@@ -328,21 +339,24 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Incandescence level of compact fluorescent lamps",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"153": {
+		{
+			"#": "153",
 			"label": "Incandescence time of compact fluorescent lamps",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"154": {
+		{
+			"#": "154",
 			"label": "Automatic control – dimming step size",
 			"description": "defines the percentage value of dimming step",
 			"valueSize": 1,
@@ -350,42 +364,48 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"155": {
+		{
+			"#": "155",
 			"label": "Automatic control – time of dimming step",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1
 		},
-		"156": {
+		{
+			"#": "156",
 			"label": "Manual control – dimming step size",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "Manual control – time of dimming step",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"158": {
+		{
+			"#": "158",
 			"label": "Auto-off functionality",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0
 		},
-		"159": {
+		{
+			"#": "159",
 			"label": "Force auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"160": {
+		{
+			"#": "160",
 			"label": "Auto-calibration status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -393,42 +413,48 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"161": {
+		{
+			"#": "161",
 			"label": "Burnt out bulb detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0
 		},
-		"162": {
+		{
+			"#": "162",
 			"label": "Delay of a burnt out bulb and overload detection",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 5
 		},
-		"163": {
+		{
+			"#": "163",
 			"label": "1st button ON value sent to association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"164": {
+		{
+			"#": "164",
 			"label": "2nd button OFF value sent to association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"165": {
+		{
+			"#": "165",
 			"label": "Double click – set level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"170": {
+		{
+			"#": "170",
 			"label": "Load control mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -450,7 +476,8 @@
 				}
 			]
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Load control mode recognized",
 			"valueSize": 1,
 			"minValue": 0,
@@ -458,7 +485,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"173": {
+		{
+			"#": "173",
 			"label": "Dimmability of the load (read only)",
 			"valueSize": 1,
 			"minValue": 0,
@@ -466,7 +494,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"174": {
+		{
+			"#": "174",
 			"label": "Soft-start functionality",
 			"valueSize": 1,
 			"minValue": 0,
@@ -488,7 +517,8 @@
 				}
 			]
 		},
-		"175": {
+		{
+			"#": "175",
 			"label": "Auto-calibration after power on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -514,7 +544,8 @@
 				}
 			]
 		},
-		"176": {
+		{
+			"#": "176",
 			"label": "Behaviour after OVERCURRENT or SURGE",
 			"valueSize": 1,
 			"minValue": 0,
@@ -532,14 +563,16 @@
 				}
 			]
 		},
-		"177": {
+		{
+			"#": "177",
 			"label": "Brightness level correction flickering",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255
 		},
-		"178": {
+		{
+			"#": "178",
 			"label": "Method of calculating the active power",
 			"valueSize": 1,
 			"minValue": 0,
@@ -561,12 +594,13 @@
 				}
 			]
 		},
-		"179": {
+		{
+			"#": "179",
 			"label": "Approximated power at max brightness",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 0
 		}
-	}
+	]
 }

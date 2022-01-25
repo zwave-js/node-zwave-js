@@ -1,0 +1,220 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA012",
+	"description": "Door / Window Sensor 7 Pro",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x000c",
+			"zwaveAllianceId": 3866
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x000c",
+			"zwaveAllianceId": 3950
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x000c"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x002a"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x002a"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x002a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Alarm sensor",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Tamper",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Tilt",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/0x0086/templates/aeotec_template.json#sensor_operation_mode"
+		},
+		{
+			"#": "2",
+			"label": "Dry Contact Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Switch mode",
+					"value": 0
+				},
+				{
+					"label": "Switch mode inverted",
+					"value": 1
+				},
+				{
+					"label": "Momentary mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary mode inverted",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"label": "State when magnet is close to sensor",
+			"options": [
+				{
+					"label": "Closed",
+					"value": 0
+				},
+				{
+					"label": "Opened",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4[0x01]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_open"
+		},
+		{
+			"#": "4[0x02]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
+		},
+		{
+			"#": "4[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
+		},
+		{
+			"#": "6",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
+		},
+		{
+			"#": "7",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
+		},
+		{
+			"#": "8",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
+		},
+		{
+			"#": "9",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on",
+			"defaultValue": 0
+		},
+		{
+			"#": "11",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off",
+			"defaultValue": 0
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper",
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
+		},
+		{
+			"#": "14",
+			"$import": "~/0x0086/templates/aeotec_template.json#central_scene_functionality"
+		},
+		{
+			"#": "15",
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor"
+		},
+		{
+			"#": "16",
+			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"label": "Tilt sensor polarity when sensor is vertical",
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "17",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger",
+			"label": "Association Group 5: Trigger"
+		},
+		{
+			"#": "18",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type",
+			"label": "Association Group 5: Command Type"
+		},
+		{
+			"#": "19",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on",
+			"label": "Association Group 5: Basic Set Value (On)"
+		},
+		{
+			"#": "20",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off",
+			"label": "Association Group 5: Basic Set Value (Off)",
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"$import": "~/0x0086/templates/aeotec_template.json#tilt_sensor_sensitivity"
+		},
+		{
+			"#": "255",
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		}
+	],
+	"metadata": {
+		"inclusion": "Inclusion\n1. Open the housing.\n2. Remove the battery protection.\n3. Press the tamper on the side of the appliance three times quickly",
+		"exclusion": "Exclusion\n1. Open the housing.\n2. Press the tamper on the side of the appliance three times quickly",
+		"reset": "Reset to factory default\nThis device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\n Once Cover is removed and the tamper switch is tripped, push the tamper for 5 seconds until the RED LED\n blinks once. Then release tamper and push it again for 5 seconds while the RED LED is blinking until the\n GREEN LED blinks once",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3866/DWS7Pro_Manual_Extended-2-8.pdf"
+	}
+}

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Duration",
 			"valueSize": 1,
 			"unit": "minutes",
@@ -24,11 +25,13 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"2": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Alarm LED Flash"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Flashing LED Interval",
 			"description": "Control's the siren's LED flash during non-alarm mode. Note: Setting this parameter will significantly reduce the battery life of your siren.",
 			"valueSize": 1,
@@ -44,11 +47,12 @@
 				}
 			]
 		},
-		"4": {
-			"$import": "../templates/master_template.json#base_enable_disable",
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Tamper Alarm"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "ADDING THE SIREN\nThis product can be added and operate in any compatible Z-Wave network. All non-battery operated nodes within the network will act as repeaters, regardless of vendor, to increase reliability of the network.\nAdding steps:\n• Turn on the battery power switch to activate\nthe pre-inserted batteries.\n• The Siren will emit a 2-tone beep.\n• Put the Z-Wave controller into adding or\nLearning mode (please refer to the Z-Wave\ncontroller manual).\n• Within 1.5 seconds, press the Siren learn button\n3 times.\n• Refer to the operation manual of the Z-Wave\ncontroller to complete the learn-in process.\n• If the Siren has already been added (learnt) into\nanother Z-Wave controller, or if the Siren is unable\nto be learnt into the current Z-Wave controller,\nplease remove it first (see Removing the siren below)\nbefore attempting to add it into the current\nZ-Wave controller",
 		"exclusion": "REMOVING THE SIREN\nThe Siren must be removed from any existing Z-Wave network before being added into a new Z-Wave network. There are two methods available to remove a device.\nRemoving Mode\n• Put the existing Z-Wave controller into Removing Mode (please refer to the Z-Wave controller manual).\n• Within 1.5 seconds, press the learn button 3 times and the Siren will be removed from the existing Z-Wave network.\n• The Siren is now ready to be added to a new Z-Wave controller",

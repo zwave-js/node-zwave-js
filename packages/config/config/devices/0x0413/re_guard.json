@@ -1,0 +1,645 @@
+{
+	"manufacturer": "REHAU AG + Co",
+	"manufacturerId": "0x0413",
+	"label": "RE.GUARD",
+	"description": "Water Leakage Detector and Meter",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Connection to Gateway",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Valve Status",
+			"description": "Sends Status of Valve",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Leakage Alarm",
+			"description": "Sends notification in Case of Leakage",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Valve Always Off",
+					"value": 0
+				},
+				{
+					"label": "User Absent/Holiday",
+					"value": 1
+				},
+				{
+					"label": "User Present",
+					"value": 2
+				},
+				{
+					"label": "Valve Always On",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Microleakage Test (Hour)",
+			"unit": "h",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 23,
+			"defaultValue": 3
+		},
+		{
+			"#": "5",
+			"label": "Microleakage Test (Minute)",
+			"unit": "min",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 59,
+			"defaultValue": 0
+		},
+		{
+			"#": "6[0x01]",
+			"label": "Microleakage Test Schedule: Sunday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x02]",
+			"label": "Microleakage Test Schedule: Saturday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x04]",
+			"label": "Microleakage Test Schedule: Friday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x08]",
+			"label": "Microleakage Test Schedule: Thursday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x10]",
+			"label": "Microleakage Test Schedule: Wednesday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x20]",
+			"label": "Microleakage Test Schedule: Tuesday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6[0x40]",
+			"label": "Microleakage Test Schedule: Monday",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Automatic Schedule Time Interval",
+			"description": "Interval between microleakage tests, if not fixed.",
+			"unit": "h",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 168,
+			"defaultValue": 24
+		},
+		{
+			"#": "8",
+			"label": "Micro Leakage Measuring Time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 100
+		},
+		{
+			"#": "9",
+			"label": "Micro Leakage Pressure Drop",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 5
+		},
+		{
+			"#": "10",
+			"label": "Micro Leakage Pressure Drop Abort",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 100
+		},
+		{
+			"#": "11",
+			"label": "Measurements per Time Period",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3
+		},
+		{
+			"#": "12",
+			"label": "Measurement Waiting Time",
+			"unit": "min",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 10
+		},
+		{
+			"#": "13",
+			"label": "Reaction to Micro Leakage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Detection",
+					"value": 0
+				},
+				{
+					"label": "Blink LED",
+					"value": 1
+				},
+				{
+					"label": "Blink LED and Shut Off Valve",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Macro Leakage Detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Leakage",
+					"value": 0
+				},
+				{
+					"label": "Leakage Detected",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Max Flow Rate (Present Mode)",
+			"unit": "l/h",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 3600
+		},
+		{
+			"#": "16",
+			"label": "Max Pressure Drop (Present Mode)",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 1000
+		},
+		{
+			"#": "17",
+			"label": "Max Single Water Withdrawal (Present Mode)",
+			"unit": "l",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 400
+		},
+		{
+			"#": "18",
+			"label": "Max Continuous Water Withdrawal (Present Mode)",
+			"unit": "l",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 400
+		},
+		{
+			"#": "19",
+			"label": "Max Single Water Withdrawal Duration (Present Mode)",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 30
+		},
+		{
+			"#": "20",
+			"label": "Max Continuous Water Withdrawal Duration (Present Mode)",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 60
+		},
+		{
+			"#": "21",
+			"label": "Max Flow Rate (Absent Mode)",
+			"unit": "l/h",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 3680
+		},
+		{
+			"#": "22",
+			"label": "Max Pressure Drop (Absent Mode)",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 1000
+		},
+		{
+			"#": "23",
+			"label": "Max Single Water Withdrawal (Absent Mode)",
+			"unit": "l",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 20
+		},
+		{
+			"#": "24",
+			"label": "Max Continuous Water Withdrawal (Absent Mode)",
+			"unit": "l",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 20
+		},
+		{
+			"#": "25",
+			"label": "Max Single Water Withdrawal Duration (Absent Mode)",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 30
+		},
+		{
+			"#": "26",
+			"label": "Max Continuous Water Withdrawal Duration (Absent Mode)",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 30
+		},
+		{
+			"#": "27",
+			"label": "Temporary Macro Leakage Deactivation Time",
+			"description": "For example for filling a pool",
+			"unit": "h",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 168,
+			"defaultValue": 2
+		},
+		{
+			"#": "28",
+			"label": "Reaction to Macro Leakage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Detection",
+					"value": 0
+				},
+				{
+					"label": "Blink LED",
+					"value": 1
+				},
+				{
+					"label": "Blink LED and Shut Off Valve",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "29",
+			"label": "Flooding Sensor Leak Detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Leakage",
+					"value": 0
+				},
+				{
+					"label": "Leakage Detected",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Reaction to Flooding Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Detection",
+					"value": 0
+				},
+				{
+					"label": "Blink LED",
+					"value": 1
+				},
+				{
+					"label": "Blink LED and Shut Off Valve",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Backup Battery Nominal Voltage",
+			"unit": "mV",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 6000
+		},
+		{
+			"#": "32",
+			"label": "Backup Battery Nominal Capacity",
+			"unit": "mAh",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 3000
+		},
+		{
+			"#": "37",
+			"label": "Time Set Correctly",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Time is set",
+					"value": 0
+				},
+				{
+					"label": "Time is not set",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "38",
+			"label": "Total Operating Time",
+			"description": "Counting total operation time internally",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "39",
+			"label": "Operating Time Since Last Power On",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": true
+		},
+		{
+			"#": "49",
+			"label": "Auto Absent Timer",
+			"description": "After no usage for this long, the operation mode is changed to 1 (absent)",
+			"unit": "h",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 168,
+			"defaultValue": 0
+		},
+		{
+			"#": "50",
+			"label": "Water Temperature High Threshold",
+			"description": "for warning of sanitary problems",
+			"unit": "1/10 °C",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 250
+		},
+		{
+			"#": "51",
+			"label": "Water Temperature Low Threshold",
+			"description": "warning of risk of frost",
+			"unit": "1/10 °C",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 20
+		},
+		{
+			"#": "52",
+			"label": "Water Pressure High Threshold",
+			"description": "warning of values above valid operating cond.",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 1000
+		},
+		{
+			"#": "53",
+			"label": "Water Pressure Low Threshold",
+			"description": "water pressure low threshold for warning of values below valid operating cond.",
+			"unit": "kPa",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 100
+		},
+		{
+			"#": "54",
+			"label": "Error Code",
+			"description": "error code to identify the reason of a warning or fault",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "56",
+			"label": "Autolearning",
+			"description": "Automatic adaption of limits, changes parameters 15-26 to learned values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "a) Set the Z-Wave network main controller into adding mode.\nb) Press and hold the 3th button (marked as Zwave/Wifi) on the main unit for 3 seconds. If Secure inclusion is required insert the passcode at the controller (found at the side of the main unit). The button will turn white on successful inclusion.",
+		"exclusion": "a) Set the Z-Wave network main controller into removing mode.\nb) Press the 3th button (marked as Zwave/Wifi) on the main unit 3 times within 3 seconds. THe button will flash yellow for 30 seconds. When exclusion is completed the button will go off.",
+		"reset": "Press first and last button on main unit for 20 seconds. The 3th button (marked as Zwave/Wifi) will flash red. Pless the 3th button within 6 seconds to factory reset the main unit.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3557/multi%20language%20small.pdf"
+	}
+}

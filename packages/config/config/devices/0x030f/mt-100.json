@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Sensitivity Level Setting",
 			"description": "This parameter defines the sensitivity of PIR detector",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 12,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "On/Off Duration",
 			"description": "how long the associated devices should stay ON status",
 			"unit": "Second",
@@ -33,7 +34,8 @@
 			"maxValue": 600,
 			"defaultValue": 30
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Basic Set Level",
 			"description": "value when PIR detector is triggered and Basic Set command sent",
 			"unit": "Percent",
@@ -49,7 +51,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "PIR Detecting Function Enabled/Disabled",
 			"description": "enabled or disabled the PIR",
 			"valueSize": 1,
@@ -69,7 +72,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Ambient illumination Lux Level",
 			"description": "Set a lux level value which determines when the light sensor is activated",
 			"unit": "Lux",
@@ -78,7 +82,8 @@
 			"maxValue": 1000,
 			"defaultValue": 100
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Retrigger Interval Setting",
 			"description": "Interval of being re-triggered after the PIR detector has been triggered.",
 			"unit": "Second",
@@ -87,7 +92,8 @@
 			"maxValue": 8,
 			"defaultValue": 8
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Light Sensor Polling Interva Time",
 			"description": "Set the light sensor measure ambient illumination level interval time",
 			"unit": "Second",
@@ -97,14 +103,16 @@
 			"defaultValue": 180,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Lux Level Function Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Ambient illumination Lux Level Report",
 			"unit": "Lux",
 			"valueSize": 2,
@@ -112,7 +120,8 @@
 			"maxValue": 255,
 			"defaultValue": 100
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Led Flash Enable",
 			"description": "This parameter defines the Led on/off enable",
 			"valueSize": 1,
@@ -120,5 +129,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Central Scene: Multiple Button Presses",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,7 +33,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Report interval",
 			"description": "Interval of unsolicited meter reports in 10s increments; 0 to disable.",
 			"valueSize": 2,
@@ -42,7 +43,8 @@
 			"maxValue": 8640,
 			"defaultValue": 3
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Energy meter report interval",
 			"description": "Interval of active energy meter reports in minutes; 0 to disable.",
 			"valueSize": 2,
@@ -51,7 +53,8 @@
 			"maxValue": 30240,
 			"defaultValue": 60
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Button mode",
 			"description": "Switching mode of the push buttons",
 			"valueSize": 1,
@@ -70,7 +73,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Input S: Button Mode",
 			"description": "Switching mode of the push buttons",
 			"valueSize": 1,
@@ -89,7 +93,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Input S: Central Scene Events for multiple button presses",
 			"description": "Which Central Scene to trigger on multiple button presses (2x-5x) of extension input S",
 			"valueSize": 1,
@@ -112,5 +117,5 @@
 				}
 			]
 		}
-	}
+	]
 }

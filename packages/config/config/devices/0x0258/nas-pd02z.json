@@ -1,0 +1,66 @@
+{
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NAS-PD02Z",
+	"description": "PIR Motion Sensor 2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/shenzhen_neo_template.json#motion_sensitivity"
+		},
+		{
+			"#": "2",
+			"$import": "templates/shenzhen_neo_template.json#motion_on_off_duration"
+		},
+		{
+			"#": "3",
+			"$import": "templates/shenzhen_neo_template.json#motion_basic_set_level"
+		},
+		{
+			"#": "4",
+			"$import": "templates/shenzhen_neo_template.json#motion_sensor"
+		},
+		{
+			"#": "5",
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_threshold"
+		},
+		{
+			"#": "6",
+			"$import": "templates/shenzhen_neo_template.json#motion_retrigger_interval"
+		},
+		{
+			"#": "7",
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_update_interval"
+		},
+		{
+			"#": "8",
+			"$import": "templates/shenzhen_neo_template.json#low_brightness_sensor"
+		},
+		{
+			"#": "9",
+			"$import": "templates/shenzhen_neo_template.json#light_sensor_report_threshold"
+		},
+		{
+			"#": "10",
+			"$import": "templates/shenzhen_neo_template.json#temperature_report_threshold"
+		},
+		{
+			"#": "11",
+			"$import": "templates/shenzhen_neo_template.json#blink_on_motion"
+		},
+		{
+			"#": "99",
+			"$import": "templates/shenzhen_neo_template.json#light_calibration"
+		}
+	]
+}

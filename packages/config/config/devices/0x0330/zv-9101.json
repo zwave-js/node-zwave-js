@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Saving load state",
 			"description": "Saving load state before power failure",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/disable to send report",
 			"description": "basic report to the Lifeline when the load state changed",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Default fade time",
 			"valueSize": 1,
 			"minValue": 0,
@@ -40,14 +42,16 @@
 			"unsigned": true,
 			"unit": "seconds"
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum Brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "MOSFET",
 			"description": "Choose MOSFET",
 			"valueSize": 1,
@@ -55,7 +59,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "removal from network",
 			"description": "Enable/disable external switch to be added to and removed from a network",
 			"valueSize": 1,
@@ -63,5 +68,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

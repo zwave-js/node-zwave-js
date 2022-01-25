@@ -14,6 +14,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			isFunctionSupported: () => true,
 			nodes: new Map(),
+			incrementStatistics: () => {},
 		} as any;
 	});
 

@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Meter Report duration",
 			"unit": "Minutes",
 			"valueSize": 2,
@@ -22,5 +23,5 @@
 			"maxValue": 1092,
 			"defaultValue": 30
 		}
-	}
+	]
 }

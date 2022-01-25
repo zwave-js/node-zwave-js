@@ -6,11 +6,26 @@ Don't take this the wrong way, but we have standards. We are unwilling to merge 
 
 While our standards are more exacting that other Z-Wave driver projects, we're here to help. To that end, we provide the following resources to help you:
 
+## Editor setup
+
+While it is possible to edit config files directly on GitHub, we recommend using a proper IDE to edit the files. For the best possible experience, we recommend using VS Code. The repository comes with settings like auto-formatting, code completion and recommended extensions to make your life easier and help you solve common issues. You can either:
+
+-   Open VSCode in a fully [preconfigured environment in your browser](https://gitpod.io/#/https://github.com/zwave-js/node-zwave-js)
+-   Or use VSCode offline, see [prerequisites](development/intro.md#prerequisites)
+
 ## Importing Device Files from Other Projects
 
 We provide scripts to allow you to import a pre-existing device file from the OpenZWave or OpenHAB projects. Please note that such files are only a starting point. Files for those projects frequently contain errors that must be corrected. Additionally, as explained in our [Style Guide](config-files/style-guide.md), our standards for labels and descriptions are much more exacting. Other things like templating, partial parameters, and conditional parameters work differently and will need to be corrected.
 
 Additional information is available at: [Importing files from other sources](config-files/importing-from-others.md)
+
+## Style Guide
+
+As mentioned, we have standards and specific expectations for how things will be described and options presented. Labels and descriptions from other projects will likely need to be amended. Descriptions provided in manufacturer documentation will also likely need to be shortened and simplified. To aid you, we have created a Style Guide. Converting existing files is a work-in-progress, so please do not be offended if you are asked to fix something despite having seen it used elsewhere.
+
+> [!NOTE] The style guide is mandatory. Configuration files that don't follow it will not be accepted.
+
+Additional information is available at: [Style guide](config-files/style-guide.md)
 
 ## Partial Parameters
 
@@ -31,14 +46,6 @@ In order to ensure consistency among devices and to ease future improvements, we
 > [!NOTE] You **must** use available templates when adding new devices. If a template does not yet exist for the applicable manufacturer, you will be expected to add, at minimum, the necessary templates to add the device you wish to add.
 
 Additional information is available at: [Using templates](config-files/using-templates.md)
-
-## Style Guide
-
-As mentioned, we have standards and specific expectations for how things will be described and options presented. Labels and descriptions from other projects will likely need to be amended. Descriptions provided in manufacturer documentation will also likely need to be shortened and simplified. To aid you, we have created a Style Guide. Converting existing files is a work-in-progress, so please do not be offended if you are asked to fix something despite having seen it used elsewhere.
-
-> [!NOTE] The style guide is mandatory. Configuration files that don't follow it will not be accepted.
-
-Additional information is available at: [Style guide](config-files/style-guide.md)
 
 ## Process to Submit Device Files
 

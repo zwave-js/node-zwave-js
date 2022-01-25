@@ -1,0 +1,52 @@
+{
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "FVS",
+	"description": "Solar Powered Skylight",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Repeat",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Rain",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "75",
+			"label": "Chain Outreach Length",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "17 cm",
+					"value": 1
+				},
+				{
+					"label": "27 cm",
+					"value": 2
+				}
+			]
+		}
+	]
+}

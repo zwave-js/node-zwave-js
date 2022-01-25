@@ -17,8 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Battery Report Interval",
 			"description": "Default heartbeat check in time",
 			"valueSize": 2,
@@ -27,7 +28,8 @@
 			"maxValue": 1440,
 			"defaultValue": 70
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Awake Timeout",
 			"description": "How long the device waits for a command before going back to sleep",
 			"valueSize": 1,
@@ -36,7 +38,8 @@
 			"maxValue": 5,
 			"defaultValue": 1
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Co-Proc Status",
 			"description": "Check to see if the co-proc is operational",
 			"valueSize": 1,
@@ -56,7 +59,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Proximity Timeout",
 			"description": "Timeout when proximity is detected and no input is received",
 			"valueSize": 1,
@@ -65,7 +69,8 @@
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Button Press Timeout",
 			"description": ": Timeout when a button is pressed, but a sequence is not completed and buttons are no longer being pressed",
 			"valueSize": 1,
@@ -74,7 +79,8 @@
 			"maxValue": 30,
 			"defaultValue": 5
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Status Change Timeout",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -82,7 +88,8 @@
 			"maxValue": 60,
 			"defaultValue": 15
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Enable / Disable Extended Battery Life Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -100,7 +107,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Key Backlight Timeout",
 			"description": "Timeout for keypad LED backlight to stay on between key presses",
 			"valueSize": 1,
@@ -109,7 +117,8 @@
 			"maxValue": 15,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Key Backlight Brightness",
 			"description": "Adjusts the brightness of the keypad backlight",
 			"valueSize": 1,
@@ -118,14 +127,16 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Key Tone Volume",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 8
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Ambient Light Sensor Level",
 			"description": "Light threshold where keypad will stop backlighting if higher than choosen value",
 			"valueSize": 1,
@@ -133,14 +144,16 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Siren Volume",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 6
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Enable / Disable Proximity mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -158,7 +171,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Proximity Distance",
 			"valueSize": 1,
 			"unit": "centimeters",
@@ -166,7 +180,8 @@
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Extended Battery Life LED Brightness Adjustment",
 			"valueSize": 1,
 			"unit": "%",
@@ -174,7 +189,8 @@
 			"maxValue": 100,
 			"defaultValue": 50
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Reduced Battery Life LED Brightness Adjustment",
 			"valueSize": 1,
 			"unit": "%",
@@ -182,7 +198,8 @@
 			"maxValue": 100,
 			"defaultValue": 65
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Fast Blink Rate",
 			"valueSize": 1,
 			"unit": "0.1 seconds",
@@ -190,7 +207,8 @@
 			"maxValue": 100,
 			"defaultValue": 5
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Slow Blink Rate",
 			"valueSize": 1,
 			"unit": "0.5 seconds",
@@ -198,7 +216,8 @@
 			"maxValue": 100,
 			"defaultValue": 2
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Supervision Report Timeout",
 			"valueSize": 2,
 			"unit": "milliseconds",
@@ -206,14 +225,16 @@
 			"maxValue": 5000,
 			"defaultValue": 1500
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Number of Re-transmissions Attempts",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 1
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Wait Period Between Re-transmissions Attempts",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -221,7 +242,8 @@
 			"maxValue": 60,
 			"defaultValue": 5
 		},
-		"22": {
+		{
+			"#": "22",
 			"$if": "productId === 0x0202",
 			"label": "Language",
 			"valueSize": 1,
@@ -280,55 +302,68 @@
 				}
 			]
 		},
-		"23[0x01000000]": {
+		{
+			"#": "23[0x01000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "US English"
 		},
-		"23[0x02000000]": {
+		{
+			"#": "23[0x02000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "UK English"
 		},
-		"23[0x04000000]": {
+		{
+			"#": "23[0x04000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "French"
 		},
-		"23[0x08000000]": {
+		{
+			"#": "23[0x08000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "German"
 		},
-		"23[0x10000000]": {
+		{
+			"#": "23[0x10000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Italian"
 		},
-		"23[0x20000000]": {
+		{
+			"#": "23[0x20000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Spanish"
 		},
-		"23[0x40000000]": {
+		{
+			"#": "23[0x40000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Dutch"
 		},
-		"23[0x80000000]": {
+		{
+			"#": "23[0x80000000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Danish"
 		},
-		"23[0x010000]": {
+		{
+			"#": "23[0x010000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Norwegian"
 		},
-		"23[0x020000]": {
+		{
+			"#": "23[0x020000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Swedish"
 		},
-		"23[0x040000]": {
+		{
+			"#": "23[0x040000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Finnish"
 		},
-		"23[0x080000]": {
+		{
+			"#": "23[0x080000]",
 			"$import": "templates/ring_template.json#supported_language",
 			"label": "Arabic"
 		},
-		"24[0xff0000]": {
+		{
+			"#": "24[0xff0000]",
 			"$if": "productId === 0x0202",
 			"label": "Quantity of audio files",
 			"valueSize": 3,
@@ -338,7 +373,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"24[0xff00]": {
+		{
+			"#": "24[0xff00]",
 			"$if": "productId === 0x0202",
 			"label": "Audio file version",
 			"valueSize": 3,
@@ -348,7 +384,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"24[0xff]": {
+		{
+			"#": "24[0xff]",
 			"$if": "productId === 0x0202",
 			"label": "Audio file sub version",
 			"valueSize": 3,
@@ -358,7 +395,7 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		}
-	},
+	],
 	"compat": {
 		"disableStrictEntryControlDataValidation": true
 	},

@@ -6,100 +6,121 @@
 	"devices": [
 		{
 			"productType": "0x0009",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [4295, 4430, 4431, 4432]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Twin Assist",
-			"description": "Helps you to lock and unlock your door lock.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"2": {
-			"label": "Hold and Release",
-			"description": "After a unlock operation the lock holds the lock, so the door can be opened",
+		{
+			"#": "2",
+			"label": "Hold & Release",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
-		"3": {
-			"label": "Block to block",
-			"description": "The lock will run the motor until it hits resistance.",
+		{
+			"#": "3",
+			"label": "Block to Block",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"4": {
-			"label": "BLE Temporary Allowed",
-			"description": "The BLE is enabled for a number of seconds.",
+		{
+			"#": "4",
+			"label": "BLE: Enable Temporary Time",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
-		"5": {
-			"label": "BLE Always Allowed",
+		{
+			"#": "5",
+			"label": "BLE: Always",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "BLE Always disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "BLE Always enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
-		"6": {
-			"label": "Autolock",
-			"description": "Lock after an unlock.Value is delay in sec before lock is locked again.",
+		{
+			"#": "6",
+			"label": "Auto Lock",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2147483647,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
+	],
+	"metadata": {
+		"inclusion": "1. Set the controller in inclusion mode\n2. Push the switch once.\n3. Wait 5 seconds",
+		"exclusion": "1. Set the controller in exclusion mode\n2. Push the switch once.\n3. Wait 5 seconds",
+		"reset": "The Danalock can be set to factory settings by pushing the switch ten times. Please use this procedure only when the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4295/Danalock_V3_Product_manual_Z_Wave_V_0.9.5.pdf"
 	}
 }

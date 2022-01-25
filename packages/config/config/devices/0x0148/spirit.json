@@ -17,9 +17,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "LCD Invert",
 			"valueSize": 1,
 			"minValue": 0,
@@ -37,9 +37,10 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "LCD Timeout",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Backlight",
 			"valueSize": 1,
 			"minValue": 0,
@@ -69,7 +71,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Battery report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -87,15 +90,17 @@
 				}
 			]
 		},
-		"5": {
-			"label": "Measured Temperature report",
-			"unit": "°C",
+		{
+			"#": "5",
+			"label": "Temperature Report Threshold",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 5
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Valve opening percentage report",
 			"unit": "%",
 			"valueSize": 1,
@@ -103,7 +108,8 @@
 			"maxValue": 100,
 			"defaultValue": 0
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Window open detection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -129,9 +135,10 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Temperature Offset",
-			"unit": "1/10 °C",
+			"unit": "0.1 °C",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 50,
@@ -143,5 +150,5 @@
 				}
 			]
 		}
-	}
+	]
 }

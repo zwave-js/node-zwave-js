@@ -56,8 +56,9 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "On Off Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,20 +68,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forced to OFF",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "restore to previous state",
+					"label": "Previous state",
 					"value": 1
 				},
 				{
-					"label": "forced to on",
+					"label": "Always on",
 					"value": 2
 				}
 			]
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Switch / Input Type for IN1",
 			"description": "Switch / Input Type for IN1. Choose the input/switch type you want to connect to the IN1 terminal. Default: momentary switch",
 			"valueSize": 1,
@@ -112,7 +114,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Switch / Input Type for IN2",
 			"description": "Switch / Input Type for IN2. Choose the input/switch type you want to connect to the IN2 terminal. Default: momentary switch",
 			"valueSize": 1,
@@ -144,7 +147,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Switch / Input Type for IN3",
 			"description": "Switch / Input Type for IN3. Choose the input/switch type you want to connect to the IN3 terminal. Default: momentary switch",
 			"valueSize": 1,
@@ -176,7 +180,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Switch / Input Type for IN4",
 			"description": "Switch / Input Type for IN4. Choose the input/switch type you want to connect to the IN4 terminal. Default: momentary switch",
 			"valueSize": 1,
@@ -208,7 +213,8 @@
 				}
 			]
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Power Report Frequency",
 			"description": "Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30.",
 			"valueSize": 2,
@@ -218,7 +224,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"65": {
+		{
+			"#": "65",
 			"label": "Energy Report Threshold",
 			"description": "Choose how you want your RGBW Dimmer to report energy use (kWh) to your hub. The number entered as value corresponds to decimal values in energy useage change. So if 10 is entered by default, the RGBW Dimmer will report any change in energy use over 0.1 kWh. Energy reports are sent in t least 30-second intervals.",
 			"valueSize": 2,
@@ -227,7 +234,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"66": {
+		{
+			"#": "66",
 			"label": "Energy Report Frequency",
 			"description": "Choose how often you want your RGBW Dimmer to report energy (kWh) to your controller. NOTE: must be 0, or an increment of 30",
 			"valueSize": 2,
@@ -237,7 +245,8 @@
 			"defaultValue": 3600,
 			"unsigned": true
 		},
-		"150": {
+		{
+			"#": "150",
 			"label": "RGBW/HSB Wall Switch Mode",
 			"description": "Choose how switches connected to the input terminals control your LED strip. In the default RGBW mode, each switch connected to each input terminal controls the RGBW chnnels separately (so IN1 for red, IN2 for green, etc.) with a single click for ON/OFF, double click to full brightness, and press-and-hold to dim (momentary switches only). In the HSB, IN1 controls hue, IN2 - saturation, IN3 - brightness, IN4 - white with single click for last set value or value 0, double click to max value, and press-and-hold to set custom value. Default: RGBW mode",
 			"valueSize": 1,
@@ -257,7 +266,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Ramp Rate (switch)",
 			"description": "How long it takes for the dimmer to reach full brightness or turn off when operated from the connected wall switch.",
 			"valueSize": 2,
@@ -273,7 +283,8 @@
 				}
 			]
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Ramp Rate (Z-Wave)",
 			"description": "How long it takes for the dimmer to reach full brightness or turn off when operated remotely from the Z-Wave hub.",
 			"valueSize": 2,
@@ -289,7 +300,8 @@
 				}
 			]
 		},
-		"157": {
+		{
+			"#": "157",
 			"label": "Preset Programs",
 			"description": "Enable one of the preset animated color programs to set the mood with a click.",
 			"valueSize": 1,
@@ -325,7 +337,8 @@
 				}
 			]
 		},
-		"40[0x01]": {
+		{
+			"#": "40[0x01]",
 			"label": "Scene Control for IN1. click/toggle 1 time to trigger",
 			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
 			"valueSize": 1,
@@ -333,7 +346,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"40[0x02]": {
+		{
+			"#": "40[0x02]",
 			"label": "Scene Control for IN1. click/toggle 2 times to trigger",
 			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
 			"valueSize": 1,
@@ -341,7 +355,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"40[0x04]": {
+		{
+			"#": "40[0x04]",
 			"label": "Scene Control for IN1. click/toggle 3 times to trigger",
 			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
 			"valueSize": 1,
@@ -349,7 +364,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"40[0x08]": {
+		{
+			"#": "40[0x08]",
 			"label": "Scene Control for IN1. click/toggle 4 times to trigger",
 			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
 			"valueSize": 1,
@@ -357,7 +373,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"41[0x01]": {
+		{
+			"#": "41[0x01]",
 			"label": "Scene Control for IN2. click/toggle 1 time to trigger",
 			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
 			"valueSize": 1,
@@ -365,7 +382,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"41[0x02]": {
+		{
+			"#": "41[0x02]",
 			"label": "Scene Control for IN2. click/toggle 2 times to trigger",
 			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
 			"valueSize": 1,
@@ -373,7 +391,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"41[0x04]": {
+		{
+			"#": "41[0x04]",
 			"label": "Scene Control for IN2. click/toggle 3 times to trigger",
 			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
 			"valueSize": 1,
@@ -381,7 +400,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"41[0x08]": {
+		{
+			"#": "41[0x08]",
 			"label": "Scene Control for IN2. click/toggle 4 times to trigger",
 			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
 			"valueSize": 1,
@@ -389,7 +409,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"42[0x01]": {
+		{
+			"#": "42[0x01]",
 			"label": "Scene Control for IN3. click/toggle 1 time to trigger",
 			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
 			"valueSize": 1,
@@ -397,7 +418,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"42[0x02]": {
+		{
+			"#": "42[0x02]",
 			"label": "Scene Control for IN3. click/toggle 2 times to trigger",
 			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
 			"valueSize": 1,
@@ -405,7 +427,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"42[0x04]": {
+		{
+			"#": "42[0x04]",
 			"label": "Scene Control for IN3. click/toggle 3 times to trigger",
 			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
 			"valueSize": 1,
@@ -413,7 +436,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"42[0x08]": {
+		{
+			"#": "42[0x08]",
 			"label": "Scene Control for IN3. click/toggle 4 times to trigger",
 			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
 			"valueSize": 1,
@@ -421,7 +445,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"43[0x01]": {
+		{
+			"#": "43[0x01]",
 			"label": "Scene Control for IN4. click/toggle 1 time to trigger",
 			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
 			"valueSize": 1,
@@ -429,7 +454,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"43[0x02]": {
+		{
+			"#": "43[0x02]",
 			"label": "Scene Control for IN4. click/toggle 2 times to trigger",
 			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
 			"valueSize": 1,
@@ -437,7 +463,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"43[0x04]": {
+		{
+			"#": "43[0x04]",
 			"label": "Scene Control for IN4. click/toggle 3 times to trigger",
 			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
 			"valueSize": 1,
@@ -445,7 +472,8 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"43[0x08]": {
+		{
+			"#": "43[0x08]",
 			"label": "Scene Control for IN4. click/toggle 4 times to trigger",
 			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
 			"valueSize": 1,
@@ -453,5 +481,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

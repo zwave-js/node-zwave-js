@@ -36,8 +36,9 @@
 			"maxNodes": 8
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Status upon receipt of 1 click",
 			"description": "Defines the status of the output O1/O2 after 1 Click",
 			"valueSize": 1,
@@ -68,7 +69,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Status upon receipt of 2 clicks",
 			"description": "Defines the status of the output O1/O2 after 2 Clicks",
 			"valueSize": 1,
@@ -95,7 +97,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Type of outputs",
 			"description": "Defines how the outputs are controlled",
 			"valueSize": 1,
@@ -103,7 +106,8 @@
 			"maxValue": 39,
 			"defaultValue": 0
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Number of clicks that control the device",
 			"description": "Defines the Clicks on the Switches that control associated devices",
 			"valueSize": 1,
@@ -122,21 +126,24 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Level used to control association group 2 and 3",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
 			"defaultValue": 100
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Level used to control association group 4 and 5.",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
 			"defaultValue": 100
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Timer to switch OFF the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched OFF",
 			"unit": "seconds",
@@ -145,7 +152,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Timer to switch OFF the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched OFF",
 			"unit": "seconds",
@@ -154,7 +162,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Timer to switch ON the Channel 1",
 			"description": "Defines the time after which the Channel 1 is switched ON",
 			"unit": "seconds",
@@ -163,7 +172,8 @@
 			"maxValue": 32000,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Timer to switch ON the Channel 2",
 			"description": "Defines the time after which the Channel 2 is switched ON",
 			"unit": "seconds",
@@ -173,7 +183,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Status after Multi-Channel Basic Set command",
 			"description": "Defines how Basic Set commands controlling outputs",
 			"valueSize": 1,
@@ -200,7 +211,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Outputs status upon receipt of a Basic Set command",
 			"description": "Define which channels are controlled by Basic Set command",
 			"valueSize": 2,
@@ -219,7 +231,8 @@
 				}
 			]
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Start-up status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
@@ -250,7 +263,8 @@
 				}
 			]
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Configuration reset",
 			"description": "Defines which parameters should be reset to default values",
 			"valueSize": 1,
@@ -281,7 +295,8 @@
 				}
 			]
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
@@ -304,5 +319,5 @@
 				}
 			]
 		}
-	}
+	]
 }

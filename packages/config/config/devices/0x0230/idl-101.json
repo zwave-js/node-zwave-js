@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Door Lock Mode",
 			"description": "Sets the door lock mode",
 			"valueSize": 1,
@@ -42,5 +42,5 @@
 				}
 			]
 		}
-	}
+	]
 }

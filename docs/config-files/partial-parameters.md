@@ -5,19 +5,23 @@ Some devices use a single parameter number to configure several, sometimes unrel
 For example,
 
 ```json
-"40[0x01]": {
+{
+	"#": "40[0x01]",
 	"label": "Button 1: behavior",
 	/* parameter definition */
 },
-"40[0x02]": {
+{
+	"#": "40[0x02]",
 	"label": "Button 1: notifications",
 	/* parameter definition */
 },
-"40[0x04]": {
+{
+	"#": "40[0x04]",
 	"label": "Button 2: behavior",
 	/* parameter definition */
 },
-"40[0x08]": {
+{
+	"#": "40[0x08]",
 	"label": "Button 2: notifications",
 	/* parameter definition */
 },

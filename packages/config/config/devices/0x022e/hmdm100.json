@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Security Function",
 			"description": "0=Disable 1=Enable 2=SystemDisable 3=SystemEnable 4=RequestForEnable 5=Fail",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 5,
 			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Privacy Mode",
 			"description": "0=Disable 1=Enable",
 			"valueSize": 1,
@@ -31,7 +32,8 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Registered User ID",
 			"description": "The number of registered user codes.2",
 			"valueSize": 1,
@@ -41,7 +43,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Platform",
 			"description": "0=Common 1=Samsung SDS",
 			"valueSize": 1,
@@ -49,5 +52,5 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		}
-	}
+	]
 }

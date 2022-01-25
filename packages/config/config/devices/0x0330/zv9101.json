@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Saving load state",
 			"description": "Saving load state before power failure",
 			"valueSize": 1,
@@ -23,7 +23,8 @@
 			"maxValue": 2,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Enable/disable basic report",
 			"description": "Enables/disables to send Basic report to the Lifeline when load state changed",
 			"valueSize": 1,
@@ -31,14 +32,16 @@
 			"maxValue": 1,
 			"defaultValue": 1
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Cool light stage mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
 			"defaultValue": 0
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Stage mode speed",
 			"description": "Speed of stage mode",
 			"valueSize": 1,
@@ -47,7 +50,8 @@
 			"defaultValue": 243,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Stage Mode Execution",
 			"description": "Execution times of stage mode",
 			"valueSize": 1,
@@ -56,7 +60,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Stage Mode Hue",
 			"description": "The hue of stage mode",
 			"valueSize": 1,
@@ -65,7 +70,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Enable/disable external switch",
 			"description": "Enable/disable external switch to be added to and removed from a network",
 			"valueSize": 1,
@@ -73,5 +79,5 @@
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

@@ -1,0 +1,80 @@
+{
+	"manufacturer": "Qolsys",
+	"manufacturerId": "0x012a",
+	"label": "IQ Dimmer",
+	"description": "Smart Plug In Dimmer",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3034",
+			"zwaveAllianceId": 4089
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "11",
+			"label": "Dimmer Ramp Rate (Z-Wave)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Dimmer Ramp Rate (Local)",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when load is off",
+					"value": 0
+				},
+				{
+					"label": "Off when load is on",
+					"value": 1
+				},
+				{
+					"label": "Always Off",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Place your network controller into inclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the top of the IQ Dimmer. The controller should indicate that the new device was added successfully.\n3. Once the IQ Dimmer has been successfully added to your home network, you can move it to the preferred location in the home.",
+		"exclusion": "1. Place your network controller into exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the top of the IQ Dimmer. The controller should indicate that the new device was added successfully.\n3. Once the IQ Dimmer has been successfully added to your home network, you can move it to the preferred location in the home.",
+		"reset": "If Inclusion still fails after the 2nd attempt, you need to first reset the IQ Dimmer before repeating the above step. The manual reset method is as follows:\n1. Unplug the IQ Dimmer from the AC outlet and also unplug the power plug of the appliance from the IQ Dimmer (if plugged in).\n2. Press and hold the button on the IQ Dimmer.\n3. Plug the IQ Dimmer back into the AC outlet with the button pressed.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4089/IQ%20Dimmer%20User%20Guide%20031921.pdf"
+	}
+}

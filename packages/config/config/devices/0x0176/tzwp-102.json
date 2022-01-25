@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Overcurrent protection",
 			"description": "If current exceeds 16A load will be switched off",
 			"valueSize": 1,
@@ -34,29 +34,12 @@
 				}
 			]
 		},
-		"2": {
-			"label": "device status after power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Remember Status",
-					"value": 0
-				},
-				{
-					"label": "Always ON",
-					"value": 1
-				},
-				{
-					"label": "Always OFF",
-					"value": 2
-				}
-			]
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Send Status When Load Changes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -78,7 +61,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Configure LED mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -96,9 +80,11 @@
 				}
 			]
 		},
-		"16": {
-			"label": "Report on change of power consumption",
+		{
+			"#": "16",
+			"label": "Power Consumption Reports: Change Threshold",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 2500,
 			"defaultValue": 50,
@@ -108,6 +94,85 @@
 					"value": 0
 				}
 			]
+		},
+		{
+			"#": "17",
+			"label": "Power Consumption Reports: Relative Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "101",
+			"label": "Power (W) report interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "Energy (kWh) report interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "103",
+			"label": "Voltage (V) report interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "104",
+			"label": "Current (A) report interval",
+			"description": "Allowable range: 5-2678400",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		}
-	}
+	]
 }

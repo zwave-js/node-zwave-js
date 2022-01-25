@@ -27,8 +27,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Alarm Volume",
 			"valueSize": 1,
 			"minValue": 1,
@@ -51,7 +52,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Alarm Duration",
 			"valueSize": 1,
 			"minValue": 1,
@@ -74,7 +76,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Configuring doorbell music duration time",
 			"description": "Duration",
 			"unit": "seconds",
@@ -90,7 +93,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Configure doorbell music volume",
 			"description": "Low, Medium, High",
 			"valueSize": 1,
@@ -114,7 +118,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Configure alarm sound index",
 			"description": "Sound types",
 			"valueSize": 1,
@@ -123,7 +128,8 @@
 			"defaultValue": 9,
 			"unsigned": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Configure doorbell music index",
 			"description": "Sound types",
 			"valueSize": 1,
@@ -132,7 +138,7 @@
 			"defaultValue": 10,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "The indoor siren can be included to the Z-Wave network by pressing the code button.\n1) Disassemble the siren and insert the battery into\nthe siren. Make sure the device is located within\nthe direct range of the controller.\n2) Set the controller into the inclusion mode (see\nmain controller’s operating manual).\n3) Quickly triple click the code button, LED light will\nflash red for 5 times.\n4) The Indoor siren will be detected and included\nin the Z-Wave network.\n5) Wait for the main controller to configure the siren.\n\nSMART START. This product also supports Z-Wave Smart Start option which enables easier inclusion. QR code for SmartStart inclusion is printed on the battery cover. SmartStart option is only possible when network controller is also supporting SmartStart",
 		"exclusion": "1) Make sure the siren is connected to power source. 2) Set the main controller into the exclusion mode\n(see main controller’s operating manual).\n3) Quickly triple click the code button, LED light\nwill flash red for 5 times\n4) Wait for the main controller to remove the sensor",

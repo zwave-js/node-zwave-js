@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Internal bulb temperature",
 			"valueSize": 1,
 			"minValue": 0,
@@ -23,14 +23,16 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Strobe light interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 25,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Strobe light pulse count",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +45,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Random strobe pulse colors",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +64,8 @@
 				}
 			]
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Reset bulb to factory settings",
 			"valueSize": 4,
 			"minValue": 1,
@@ -75,5 +79,5 @@
 				}
 			]
 		}
-	}
+	]
 }

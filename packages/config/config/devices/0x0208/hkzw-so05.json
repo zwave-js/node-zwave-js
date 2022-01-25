@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
+	"paramInformation": [
+		{
+			"#": "20",
 			"label": "Overload Protection",
 			"description": "Turn off if the load power exceeds 0.5A for more than 5s.",
 			"valueSize": 1,
@@ -35,30 +35,12 @@
 				}
 			]
 		},
-		"21": {
-			"label": "Device Status After Power Failure.",
-			"description": "Define how the Plug reacts after the power supply is back on.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Memorizes its state after a power failure",
-					"value": 0
-				},
-				{
-					"label": "Always on after power failure.",
-					"value": 1
-				},
-				{
-					"label": "Always off after power failure.",
-					"value": 2
-				}
-			]
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Load Status Change Notification",
 			"description": "Send notification to associated devices when load is changed.",
 			"valueSize": 1,
@@ -81,7 +63,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Indicator Modes",
 			"description": "The RGB LED indicator will indicate the load.",
 			"valueSize": 1,
@@ -100,7 +83,8 @@
 				}
 			]
 		},
-		"151": {
+		{
+			"#": "151",
 			"label": "Power Report Threshold",
 			"description": "Power threashold for when to send reports to associated devices",
 			"unit": "W",
@@ -110,7 +94,8 @@
 			"defaultValue": 50,
 			"unsigned": true
 		},
-		"152": {
+		{
+			"#": "152",
 			"label": "Power Report Percentage Threshold",
 			"description": "Percentage threshold for when to send report to associated devices",
 			"unit": "%",
@@ -120,7 +105,8 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-		"171": {
+		{
+			"#": "171",
 			"label": "Power Report Frequence",
 			"description": "The interval of sending power report to association device.",
 			"unit": "Seconds",
@@ -129,7 +115,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 30
 		},
-		"172": {
+		{
+			"#": "172",
 			"label": "Energy Report Frequence",
 			"description": "The interval of sending energy report to association device.",
 			"unit": "Seconds",
@@ -138,7 +125,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 300
 		},
-		"173": {
+		{
+			"#": "173",
 			"label": "Voltage Report Frequency",
 			"description": "The interval of sending voltage report to association device.",
 			"unit": "Seconds",
@@ -147,7 +135,8 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		},
-		"174": {
+		{
+			"#": "174",
 			"label": "Electricity Report Frequency",
 			"description": "The interval of sending electricity report to association device.",
 			"unit": "Seconds",
@@ -156,5 +145,5 @@
 			"maxValue": 2678400,
 			"defaultValue": 0
 		}
-	}
+	]
 }

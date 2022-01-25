@@ -1,0 +1,49 @@
+{
+	"manufacturer": "Kaipule Technology Co., Ltd.",
+	"manufacturerId": "0x0214",
+	"label": "ES-61",
+	"description": "Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Basic Set",
+			"description": "send BASIC Set = Value command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 255
+		},
+		{
+			"#": "2",
+			"label": "Turn Off Light Time Configuration",
+			"description": "send BASIC Set = Value command & send Basic Set = 0x00 to turn of light",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 20
+		},
+		{
+			"#": "3",
+			"label": "PIR Sensor Alarm Elemination Time Configuration",
+			"description": "Value * 5s",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 20
+		}
+	]
+}

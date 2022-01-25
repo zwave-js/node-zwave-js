@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "When value =0 the LED indicator will be off when the the connected light is on, and the LED will be on when the connected light is off. if value =1 the LED indicator will be on when the connected light is on, and the LED indicator will be off when the connected light is off. if value =2 the LED indicator will always be off regardless of the load status",
 			"valueSize": 1,
@@ -24,7 +25,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "Inclusion: Add the device into your network by a Z-Wave certified controller. The IQ Outlet supports the latest S2 security and SmartStart offered by Z-Wave certified controllers. If your controller supports S2 or SmartStart, please refer to the user guide of the controller for detailed instructions on adding devices to the network. You should be able to add the IQ Outlet into your network using the unique QR code or the DSK 5 digit pin located on the product or packaging. In addition, the device can be added using the traditional method for Z-Wave as follows:\n\n1. Place your network controller into inclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Outlet. The controller should indicate that the new device was added successfully.\n3. Once the IQ Outlet has been successfully added to your home network, you can move it to the preferred location in the home.\n\nIf the controller shows it failed, repeat the procedure.",
 		"exclusion": "Exclusion: Remove the device into your network by a Z-Wave certified controller. The IQ Outlet supports the latest S2 security and SmartStart offered by Z-Wave certified controllers. If your controller supports S2 or SmartStart, please refer to the user guide of the controller for detailed instructions on removing devices to the network. In addition, the device can be removed using the traditional method for Z-Wave as follows:\n\n1. Place your network controller into Exclusion mode by following the controller manufacturer's instructions.\n2. When the controller is ready, single click the button on the front of the IQ Outlet. The controller should indicate that the new device was removed successfully.\n\nIf the controller shows it failed, repeat the procedure.",

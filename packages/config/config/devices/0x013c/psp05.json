@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
+	"paramInformation": [
+		{
+			"#": "2",
 			"label": "Basic Set Level",
 			"description": "Setting the BASIC command value to turn on the light.",
 			"valueSize": 1,
@@ -24,14 +24,16 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 80
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Multi-Sensor Function Switch",
 			"description": "Parameter to set the sensor functions.",
 			"valueSize": 1,
@@ -40,7 +42,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Re-detection interval",
 			"description": "Multiples of 8 seconds to wait before re-detection",
 			"valueSize": 1,
@@ -48,7 +51,8 @@
 			"maxValue": 127,
 			"defaultValue": 3
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Turn off light time",
 			"description": "Time to wait after lighting has been turned on before turning off again",
 			"valueSize": 1,
@@ -56,7 +60,8 @@
 			"maxValue": 127,
 			"defaultValue": 4
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Batery level reporting interval",
 			"description": "How frequently battery status should be reported",
 			"valueSize": 1,
@@ -64,7 +69,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Tick Interval",
 			"description": "Interval time for sending reports",
 			"valueSize": 1,
@@ -73,7 +79,8 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"7[0x02]": {
+		{
+			"#": "7[0x02]",
 			"label": "Bit 1: Motion OFF Reporting",
 			"description": "Sends notification when motion has completed.",
 			"valueSize": 1,
@@ -92,7 +99,8 @@
 				}
 			]
 		},
-		"7[0x04]": {
+		{
+			"#": "7[0x04]",
 			"label": "Bit 2: Enable PIR super sensitivity mode.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -110,7 +118,8 @@
 				}
 			]
 		},
-		"7[0x10]": {
+		{
+			"#": "7[0x10]",
 			"label": "Bit 4: Notification Type",
 			"description": "Method used to send notifications on motion",
 			"valueSize": 1,
@@ -129,7 +138,8 @@
 				}
 			]
 		},
-		"7[0x20]": {
+		{
+			"#": "7[0x20]",
 			"label": "Bit 5: Send Multi CC in auto report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -147,7 +157,8 @@
 				}
 			]
 		},
-		"7[0x40]": {
+		{
+			"#": "7[0x40]",
 			"label": "Bit 6: Send Battery Report when Triggered",
 			"description": "Whether or not a battery status report should be sent when triggered",
 			"valueSize": 1,
@@ -166,5 +177,5 @@
 				}
 			]
 		}
-	}
+	]
 }

@@ -17,7 +17,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "LifeLine",
@@ -37,32 +36,14 @@
 			"maxNodes": 5
 		}
 	},
-	"paramInformation": {
-		"1": {
-			"label": "State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Returns to level before Power Outage",
-					"value": 2
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 0
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Notification when Load status change",
 			"description": "The Dimmer will send notification to associated device (Group Lifeline) when the status of Dimmer load is changed.",
 			"valueSize": 1,
@@ -86,7 +67,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Default dimming speed",
 			"description": "Configure the default dimming speed: 0 = Instantly, 1 = Fast, 100 = Slow",
 			"valueSize": 1,
@@ -96,7 +78,8 @@
 			"defaultValue": 5,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable or Disable external switch to pair network",
 			"valueSize": 1,
 			"minValue": 0,
@@ -115,7 +98,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Dimming algorithm",
 			"description": "Setting dimming way.",
 			"valueSize": 1,
@@ -135,7 +119,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Default brightness",
 			"description": "Setting default brightness when turn on the dimmer from off status. 0 means that the dimmer will use parameter 1.",
 			"valueSize": 1,
@@ -144,7 +129,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Turn off delay",
 			"description": "Setting delay time when turn off",
 			"valueSize": 1,
@@ -154,5 +140,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

@@ -50,7 +50,8 @@ export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.AssignSUCReturnRoute)
 export class AssignSUCReturnRouteRequest
 	extends AssignSUCReturnRouteRequestBase
-	implements INodeQuery {
+	implements INodeQuery
+{
 	public constructor(
 		driver: Driver,
 		options:
@@ -80,7 +81,8 @@ export class AssignSUCReturnRouteRequest
 @messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
 export class AssignSUCReturnRouteResponse
 	extends Message
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.wasExecuted = this.payload[0] !== 0;
@@ -108,7 +110,8 @@ export class AssignSUCReturnRouteResponse
 
 export class AssignSUCReturnRouteRequestTransmitReport
 	extends AssignSUCReturnRouteRequestBase
-	implements SuccessIndicator {
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 

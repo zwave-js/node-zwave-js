@@ -19,7 +19,7 @@ export async function loadManufacturersInternal(
 	externalConfig?: boolean,
 ): Promise<ManufacturersMap> {
 	const configPath = path.join(
-		(externalConfig && externalConfigDir) || configDir,
+		(externalConfig && externalConfigDir()) || configDir,
 		"manufacturers.json",
 	);
 
@@ -44,7 +44,7 @@ export async function loadManufacturersInternal(
 			if (!hexKeyRegex4Digits.test(id)) {
 				throwInvalidConfig(
 					"manufacturers",
-					`found non-hex key ${id} at the root level`,
+					`found invalid key ${id} at the root level. Manufacturer IDs must be hexadecimal lowercase.`,
 				);
 			}
 			if (typeof name !== "string") {
@@ -58,7 +58,7 @@ export async function loadManufacturersInternal(
 		}
 
 		return manufacturers;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (isZWaveError(e)) {
 			throw e;
 		} else {

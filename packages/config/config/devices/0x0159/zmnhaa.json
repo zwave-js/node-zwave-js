@@ -15,28 +15,26 @@
 	},
 	"associations": {
 		"1": {
-			"label": "basic on/off",
-			"description": "triggered at change of the output Q state and reflecting its state",
+			"label": "Basic on/off - output Q",
 			"maxNodes": 16
 		},
 		"2": {
-			"label": "basic on/off - input I2",
-			"description": "(triggered at change of the input I2 state and reflecting its state)",
+			"label": "Basic on/off - input I2",
 			"maxNodes": 16
 		},
 		"3": {
-			"label": "basic on/off - input I3",
-			"description": "ttriggered at change of the input I3 state and reflecting its state)",
+			"label": "Basic on/off - input I3",
 			"maxNodes": 16
 		},
 		"4": {
-			"label": "Controller Updates",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +53,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +73,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -93,7 +93,8 @@
 				}
 			]
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
@@ -120,7 +121,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Automatic turning off relay after set time",
 			"valueSize": 2,
 			"minValue": 0,
@@ -128,26 +130,12 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"30": {
-			"label": "Relay state after a power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last saved state",
-					"value": 0
-				},
-				{
-					"label": "Power OFF",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"40": {
+		{
+			"#": "40",
 			"label": "Power reporting in Watts on percentage change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -155,13 +143,30 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"42": {
+		{
+			"#": "42",
 			"label": "Power reporting in Watts on power change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 300,
 			"unsigned": true
+		}
+	],
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x72": {
+					// Manufacturer Specific CC is supported, but comes back as version 0
+					"version": 1,
+					"isSupported": true
+				},
+				"0x85": {
+					// Association CC is supported, but comes back as version 0
+					"version": 1,
+					"isSupported": true
+				}
+			}
 		}
 	}
 }

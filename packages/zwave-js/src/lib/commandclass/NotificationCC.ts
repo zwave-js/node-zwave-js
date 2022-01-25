@@ -1,5 +1,6 @@
 import {
 	ConfigManager,
+	Notification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
@@ -38,6 +39,7 @@ import {
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
+	InvalidCC,
 } from "./CommandClass";
 import { UserCodeCommand } from "./UserCodeCC";
 
@@ -86,6 +88,14 @@ export type ZWaveNotificationCallbackParams_NotificationCC = [
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
+
+/** Returns the ValueID used to store whether a node supports V1 Alarms */
+export function getSupportsV1AlarmValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		property: "supportsV1Alarm",
+	};
+}
 
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {
@@ -228,10 +238,11 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<NotificationCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<NotificationCCSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		if (response) {
 			return pick(response, [
 				"supportsV1Alarm",
@@ -253,12 +264,51 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = await this.driver.sendCommand<NotificationCCEventSupportedReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<NotificationCCEventSupportedReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.supportedEvents;
 	}
+}
+
+/** Returns the metadata to use for a notification value with an unknown notification type */
+export function getNotificationValueMetadataUnknownType(
+	type: number,
+): ValueMetadataNumeric {
+	return {
+		...ValueMetadata.ReadOnlyUInt8,
+		label: `Unknown notification (${num2hex(type)})`,
+		ccSpecific: {
+			notificationType: type,
+		},
+	};
+}
+
+/**
+ * Returns the metadata to use for a known notification value.
+ * Can be used to extend a previously defined metadata,
+ * e.g. for V2 notifications that don't allow discovering supported events.
+ */
+export function getNotificationValueMetadata(
+	previous: ValueMetadataNumeric | undefined,
+	notificationConfig: Notification,
+	valueConfig: NotificationValueDefinition & { type: "state" },
+): ValueMetadataNumeric {
+	const metadata: ValueMetadataNumeric = previous ?? {
+		...ValueMetadata.ReadOnlyUInt8,
+		label: valueConfig.variableName,
+		states: {},
+		ccSpecific: {
+			notificationType: notificationConfig.id,
+		},
+	};
+	if (valueConfig.idle) {
+		metadata.states![0] = "idle";
+	}
+	metadata.states![valueConfig.value] = valueConfig.label;
+	return metadata;
 }
 
 function defineMetadataForNotificationEvents(
@@ -277,13 +327,10 @@ function defineMetadataForNotificationEvents(
 			endpoint,
 			property,
 		};
-		ret.set(JSON.stringify(valueId), {
-			...ValueMetadata.ReadOnlyUInt8,
-			label: `Unknown notification (${num2hex(type)})`,
-			ccSpecific: {
-				notificationType: type,
-			},
-		});
+		ret.set(
+			JSON.stringify(valueId),
+			getNotificationValueMetadataUnknownType(type),
+		);
 		return ret;
 	}
 
@@ -300,18 +347,11 @@ function defineMetadataForNotificationEvents(
 			};
 
 			const dictKey = JSON.stringify(valueId);
-			const metadata: ValueMetadataNumeric = ret.get(dictKey) || {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: valueConfig.variableName,
-				states: {},
-				ccSpecific: {
-					notificationType: type,
-				},
-			};
-			if (valueConfig.idle) {
-				metadata.states![0] = "idle";
-			}
-			metadata.states![value] = valueConfig.label;
+			const metadata = getNotificationValueMetadata(
+				ret.get(dictKey),
+				notificationConfig,
+				valueConfig,
+			);
 			ret.set(dictKey, metadata);
 		}
 	}
@@ -524,9 +564,8 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig = this.driver.configManager.lookupNotification(
-						type,
-					);
+					const notificationConfig =
+						this.driver.configManager.lookupNotification(type);
 
 					// Enable reports for each notification type
 					this.driver.controllerLog.logNode(node.id, {
@@ -675,9 +714,10 @@ export class NotificationCCSet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 				status: this.notificationStatus,
 			},
 		};
@@ -721,12 +761,20 @@ export class NotificationCCReport extends NotificationCC {
 			// Don't use the version to decide because we might discard notifications
 			// before the interview is complete
 			if (this.payload.length >= 7) {
-				// Ignore the legacy alarm bytes
-				this.alarmType = undefined;
-				this.alarmLevel = undefined;
 				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
+
+				// Ignore the legacy alarm bytes unless we're dealing with an unknown notification
+				// and the alarmType has a valid value. This allows us to handle "unknown" notifications
+				// which incorrectly convey their info via alarm values.
+				const needsV1Values =
+					this.notificationEvent === 0xfe && this.alarmType !== 0;
+				if (!needsV1Values) {
+					this.alarmType = undefined;
+					this.alarmLevel = undefined;
+				}
+
 				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
 				const numEventParams = this.payload[6] & 0b11111;
 				if (numEventParams > 0) {
@@ -782,8 +830,9 @@ export class NotificationCCReport extends NotificationCC {
 					}
 				} else {
 					// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-					const mapping = this.getNodeUnsafe()?.deviceConfig?.compat
-						?.alarmMapping;
+					const mapping =
+						this.getNodeUnsafe()?.deviceConfig?.compat
+							?.alarmMapping;
 					const match = mapping?.find(
 						(m) =>
 							m.from.alarmType === this.alarmType &&
@@ -804,17 +853,19 @@ export class NotificationCCReport extends NotificationCC {
 							)) {
 								if (typeof val === "number") {
 									this.eventParameters[key] = val;
-									// wotan-disable-next-line no-useless-predicate
 								} else if (val === "alarmLevel") {
 									this.eventParameters[key] = this.alarmLevel;
 								}
 							}
 						}
-						this.alarmType = undefined;
-						this.alarmLevel = undefined;
+						// After mapping we do not set the legacy V1 values to undefined
+						// Otherwise, adding a new mapping will be a breaking change
 					}
 				}
 			}
+
+			// Store the V1 alarm values if they exist
+			this.persistValues();
 		} else {
 			// Create a notification to send
 			if ("alarmType" in options) {
@@ -832,29 +883,33 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	// @noCCValues - Persisting this CC is handled by ZWaveNode
-
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
 
 		const valueDB = this.getValueDB();
 		if (this.alarmType != undefined) {
-			valueDB.setValue(
-				getAlarmTypeValueId(this.endpointIndex),
-				this.alarmType,
-			);
+			const valueId = getAlarmTypeValueId(this.endpointIndex);
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Alarm Type",
+				});
+			}
+			valueDB.setValue(valueId, this.alarmType);
 		}
 		if (this.alarmLevel != undefined) {
-			valueDB.setValue(
-				getAlarmLevelValueId(this.endpointIndex),
-				this.alarmLevel,
-			);
+			const valueId = getAlarmLevelValueId(this.endpointIndex);
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Alarm Level",
+				});
+			}
+			valueDB.setValue(valueId, this.alarmLevel);
 		}
 
 		return true;
 	}
-
-	// Disable the lint error temporarily
 
 	public alarmType: number | undefined;
 	public alarmLevel: number | undefined;
@@ -890,9 +945,10 @@ export class NotificationCCReport extends NotificationCC {
 			}
 			if (valueConfig) {
 				message = {
-					"notification type": this.driver.configManager.getNotificationName(
-						this.notificationType!,
-					),
+					"notification type":
+						this.driver.configManager.getNotificationName(
+							this.notificationType!,
+						),
 					"notification status": this.notificationStatus,
 					[`notification ${valueConfig.type}`]:
 						valueConfig.label ??
@@ -1006,6 +1062,8 @@ export class NotificationCCReport extends NotificationCC {
 						fromEncapsulation: true,
 						encapCC: this,
 					});
+					validatePayload(!(cc instanceof InvalidCC));
+
 					let json = cc.toJSON();
 					// If a CC has no good toJSON() representation, we're only interested in the payload
 					if (
@@ -1016,7 +1074,7 @@ export class NotificationCCReport extends NotificationCC {
 						json = pick(json, ["payload"]);
 					}
 					this.eventParameters = json;
-				} catch (e: unknown) {
+				} catch (e) {
 					if (
 						isZWaveError(e) &&
 						e.code ===
@@ -1057,11 +1115,11 @@ export class NotificationCCReport extends NotificationCC {
 		) {
 			// The parameters contain a named value
 			this.eventParameters = {
-				[valueConfig.parameter
-					.propertyName]: this.eventParameters.readUIntBE(
-					0,
-					this.eventParameters.length,
-				),
+				[valueConfig.parameter.propertyName]:
+					this.eventParameters.readUIntBE(
+						0,
+						this.eventParameters.length,
+					),
 			};
 		}
 	}
@@ -1184,11 +1242,10 @@ export class NotificationCCGet extends NotificationCC {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message[
-				"notification type"
-			] = this.driver.configManager.getNotificationName(
-				this.notificationType,
-			);
+			message["notification type"] =
+				this.driver.configManager.getNotificationName(
+					this.notificationType,
+				);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
 					this.driver.configManager
@@ -1229,7 +1286,8 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	}
 
 	private _supportsV1Alarm: boolean;
-	@ccValue({ internal: true }) public get supportsV1Alarm(): boolean {
+	@ccValue({ internal: true })
+	public get supportsV1Alarm(): boolean {
 		return this._supportsV1Alarm;
 	}
 
@@ -1330,9 +1388,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
@@ -1383,9 +1442,10 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": this.driver.configManager.getNotificationName(
-					this.notificationType,
-				),
+				"notification type":
+					this.driver.configManager.getNotificationName(
+						this.notificationType,
+					),
 			},
 		};
 	}

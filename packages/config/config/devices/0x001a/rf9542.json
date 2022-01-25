@@ -25,8 +25,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Delayed OFF time",
 			"description": "Delay time in seconds",
 			"valueSize": 1,
@@ -36,7 +37,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Panic ON time",
 			"description": "Time in seconds for panic mode",
 			"valueSize": 1,
@@ -46,7 +48,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Panic OFF time",
 			"description": "Off time in seconds for panic mode",
 			"valueSize": 1,
@@ -56,7 +59,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Basic Set Value",
 			"description": "Send this value to associated devices",
 			"valueSize": 1,
@@ -65,7 +69,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
@@ -89,7 +94,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
@@ -109,7 +115,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Dimmer Ramp Time",
 			"description": "Time in seconds to ramp to desired level",
 			"valueSize": 1,
@@ -119,5 +126,5 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	}
+	]
 }

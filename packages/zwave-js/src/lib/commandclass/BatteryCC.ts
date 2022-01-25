@@ -422,9 +422,14 @@ export class BatteryCCHealthReport extends BatteryCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
+
+		// Parse maximum capacity. 0xff means unknown
 		this._maximumCapacity = this.payload[0];
+		if (this._maximumCapacity === 0xff) this._maximumCapacity = undefined;
+
 		const { value: temperature, scale } = parseFloatWithScale(
 			this.payload.slice(1),
+			true, // The temperature field may be omitted
 		);
 		this._temperature = temperature;
 
@@ -442,7 +447,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.persistValues();
 	}
 
-	private _maximumCapacity: number;
+	private _maximumCapacity: number | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
@@ -450,17 +455,17 @@ export class BatteryCCHealthReport extends BatteryCC {
 		unit: "%",
 		label: "Maximum capacity",
 	})
-	public get maximumCapacity(): number {
+	public get maximumCapacity(): number | undefined {
 		return this._maximumCapacity;
 	}
 
-	private _temperature: number;
+	private _temperature: number | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Temperature",
 	})
-	public get temperature(): number {
+	public get temperature(): number | undefined {
 		return this._temperature;
 	}
 
@@ -468,8 +473,14 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				temperature: this.temperature,
-				"max capacity": `${this.maximumCapacity} %`,
+				temperature:
+					this.temperature != undefined
+						? this.temperature
+						: "unknown",
+				"max capacity":
+					this.maximumCapacity != undefined
+						? `${this.maximumCapacity} %`
+						: "unknown",
 			},
 		};
 	}

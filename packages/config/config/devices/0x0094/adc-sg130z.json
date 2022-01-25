@@ -1,0 +1,28 @@
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADC-SG130Z",
+	"description": "Smart Gateway",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0111",
+			"zwaveAllianceId": [4151, 4304, 4309, 4310]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 56,
+			"isLifeline": true
+		}
+	},
+	"metadata": {
+		"reset": "This process will clear all nodes from the Alarm.com Z-Wave device’s network, change the Alarm.com ZWave device’s home ID, and reset all Z-Wave settings to their default values. To perform a Z-Wave reset, follow these steps:\n\n1. Log into the Partner Portal at https://alarmadmin.alarm.com/default.aspx and select a customer.\n2. Navigate to the “Equipment” page.\n3. Click the “Z-Wave Devices” tab.\n4. Under the “Advanced Z-Wave Commands” header, click “Remove All Z-Wave Devices.”\n5. Allow 3 minutes for the associated commands to go through and for the Alarm.com Z-Wave\ndevice to act on them.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only if the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4151/Alarm.com-SupplementalZ-WaveDocumentationv6_9_2.pdf"
+	}
+}

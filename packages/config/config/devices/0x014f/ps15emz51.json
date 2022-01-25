@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
-	"label": "PS15EMZ51",
-	"description": "Appliance Module",
+	"label": "PS15EMZ5-1",
+	"description": "Plug-in Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5053",
@@ -13,47 +13,97 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"2": {
-			"label": "LED Intensity",
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "LED Indicator: Brightness",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100
 		},
-		"3": {
-			"label": "Night Light",
+		{
+			"#": "3",
+			"label": "LED Indicator: Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 3,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when the load is ON",
+					"label": "On when the load is on",
 					"value": 0
 				},
 				{
-					"label": "LED OFF when the load is on",
+					"label": "On when the load is off",
 					"value": 1
 				},
 				{
-					"label": "LED is always ON",
+					"label": "Always On",
 					"value": 2
 				},
 				{
-					"label": "LED is always off",
+					"label": "Always off",
 					"value": 3
 				}
 			]
 		},
-		"13": {
-			"label": "Energy Monitoring",
+		{
+			"#": "11",
+			"label": "LED Indicator: Power Monitoring Display",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "LED Indicator: Power Monitoring Display Duration",
+			"description": "Sets the length of time for which the LED will reflect the current power usage",
 			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 60,
+			"options": [
+				{
+					"label": "Continuous",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Energy Usage Reporting Interval",
+			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 6
+			"defaultValue": 6,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		}
+	],
+	"metadata": {
+		"inclusion": "With the controller in inclusion mode, tap the button on the face of the outlet. The LED will blink slowly when adding.",
+		"exclusion": "Remove the switch by tapping the button on the face of the outlet 2 times. The LED will begin blinking slowly for 10 seconds indicating that it has been removed.",
+		"manual": "https://www.gocontrol.com/manuals/ps15emz5-1_installation_guide_10008371c.pdf"
 	}
 }

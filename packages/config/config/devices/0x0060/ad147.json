@@ -27,8 +27,9 @@
 			"maxNodes": 4
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Basic Set Command Value",
 			"valueSize": 2,
 			"unit": "%",
@@ -37,7 +38,8 @@
 			"defaultValue": 255,
 			"unsigned": true
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "The Delaying Time to Report to Group 1",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -46,7 +48,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Remember The Last Status",
 			"valueSize": 1,
 			"unit": "binary",
@@ -55,7 +58,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Output Mode Setting: Dimming, On/Off",
 			"description": "0 (dimmable) or 1 (on/off)",
 			"valueSize": 1,
@@ -65,7 +69,7 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode. (Please refer to the documentation for the location of the link key.)",
 		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. (Please refer to the documentation for the location of the link key.)",

@@ -19,7 +19,7 @@ import { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import { DriverLogger } from "./Driver";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -44,12 +44,12 @@ function createTransaction(
 	options: Partial<CreateTransactionOptions>,
 ): Transaction {
 	const message = createMessage(fakeDriver, options);
-	const trns = new Transaction(
-		fakeDriver,
+	const trns = new Transaction(fakeDriver, {
 		message,
-		createDeferredPromise(),
-		options.priority || MessagePriority.Controller,
-	);
+		parts: {} as any,
+		promise: createDeferredPromise(),
+		priority: options.priority || MessagePriority.Controller,
+	});
 	return trns;
 }
 

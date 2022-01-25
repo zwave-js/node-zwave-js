@@ -13,9 +13,24 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
+	"associations": {
 		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Notification Report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Disable Meter Functionality",
 			"description": "Enable/Disable the meter report.",
 			"valueSize": 1,
@@ -34,7 +49,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "METER_REPORT",
 			"description": "The time between meter reports.",
 			"unit": "seconds",
@@ -44,7 +60,8 @@
 			"defaultValue": 300,
 			"unsigned": true
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Set \"Overload\" Current level",
 			"description": "Maximum current the plug will pass",
 			"unit": "amps",
@@ -53,7 +70,8 @@
 			"maxValue": 16,
 			"defaultValue": 13
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Set \"Alert\" Current Level",
 			"description": "Current level warning threshold",
 			"unit": "amps",
@@ -62,7 +80,8 @@
 			"maxValue": 16,
 			"defaultValue": 12
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Enable/Disable Indicator LED",
 			"description": "This parameter enables or disables the indicator LED.",
 			"valueSize": 1,
@@ -81,7 +100,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Current change METER_REPORT level",
 			"description": "Report of relative change in current flow",
 			"unit": "%",
@@ -90,7 +110,8 @@
 			"maxValue": 64,
 			"defaultValue": 5
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Remember On/Off status",
 			"description": "Remember status from last plug in.",
 			"valueSize": 1,
@@ -109,7 +130,8 @@
 				}
 			]
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Enable/Disable Timer Function",
 			"description": "Timer once plugged in before it turn off the device.",
 			"valueSize": 1,
@@ -128,7 +150,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Set Timer Time Interval",
 			"description": "Time before auto shut off if on.",
 			"unit": "minute(s)",
@@ -137,7 +160,8 @@
 			"maxValue": 65535,
 			"defaultValue": 96
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Enable/Disable BUTTON",
 			"description": "Turn off the button",
 			"valueSize": 1,
@@ -156,5 +180,5 @@
 				}
 			]
 		}
-	}
+	]
 }

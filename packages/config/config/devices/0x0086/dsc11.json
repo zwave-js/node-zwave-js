@@ -21,77 +21,94 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"$import": "templates/aeotec_template.json#selective_reporting"
 		},
-		"5": {
+		{
+			"#": "5",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Whole Strip)",
 			"defaultValue": 25
 		},
-		"6": {
+		{
+			"#": "6",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 1)",
 			"defaultValue": 25
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 2)",
 			"defaultValue": 25
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 3)",
 			"defaultValue": 25
 		},
-		"9": {
+		{
+			"#": "9",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 4)",
 			"defaultValue": 25
 		},
-		"10": {
+		{
+			"#": "10",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 5)",
 			"defaultValue": 25
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/aeotec_template.json#power_threshold",
 			"label": "Power Change Threshold (Socket 6)",
 			"defaultValue": 25
 		},
-		"12": {
+		{
+			"#": "12",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Whole Strip)"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 1)"
 		},
-		"14": {
+		{
+			"#": "14",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 2)"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 3)"
 		},
-		"16": {
+		{
+			"#": "16",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 4)"
 		},
-		"17": {
+		{
+			"#": "17",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 5)"
 		},
-		"18": {
+		{
+			"#": "18",
 			"$import": "templates/aeotec_template.json#percent_threshold",
 			"label": "Power Percentage Change Threshold (Socket 6)"
 		},
-		"80": {
+		{
+			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
-		"90": {
+		{
+			"#": "90",
 			"label": "Operating Temperature of Smart Strip",
 			"valueSize": 2,
 			"minValue": 0,
@@ -100,195 +117,244 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"101[0x01]": {
+		{
+			"#": "101[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Whole Strip)"
 		},
-		"101[0x02]": {
+		{
+			"#": "101[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 1)"
 		},
-		"101[0x04]": {
+		{
+			"#": "101[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 2)"
 		},
-		"101[0x08]": {
+		{
+			"#": "101[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 3)"
 		},
-		"101[0x10]": {
+		{
+			"#": "101[0x10]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 4)"
 		},
-		"101[0x20]": {
+		{
+			"#": "101[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 5)"
 		},
-		"101[0x40]": {
+		{
+			"#": "101[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_watt",
 			"label": "Automatic Report: Group 1 - Power (Socket 6)"
 		},
-		"101[0x0100]": {
+		{
+			"#": "101[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Whole Strip)"
 		},
-		"101[0x0200]": {
+		{
+			"#": "101[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 1)"
 		},
-		"101[0x0400]": {
+		{
+			"#": "101[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 2)"
 		},
-		"101[0x0800]": {
+		{
+			"#": "101[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 3)"
 		},
-		"101[0x1000]": {
+		{
+			"#": "101[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 4)"
 		},
-		"101[0x2000]": {
+		{
+			"#": "101[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 5)"
 		},
-		"101[0x4000]": {
+		{
+			"#": "101[0x4000]",
 			"$import": "templates/aeotec_template.json#auto_report_group1_kwh",
 			"label": "Automatic Report: Group 1 - kWh (Socket 6)"
 		},
-		"102[0x01]": {
+		{
+			"#": "102[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Whole Strip)"
 		},
-		"102[0x02]": {
+		{
+			"#": "102[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 1)"
 		},
-		"102[0x04]": {
+		{
+			"#": "102[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 2)"
 		},
-		"102[0x08]": {
+		{
+			"#": "102[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 3)"
 		},
-		"102[0x10]": {
+		{
+			"#": "102[0x10]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 4)"
 		},
-		"102[0x20]": {
+		{
+			"#": "102[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 5)"
 		},
-		"102[0x40]": {
+		{
+			"#": "102[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_watt",
 			"label": "Automatic Report: Group 2 - Power (Socket 6)"
 		},
-		"102[0x0100]": {
+		{
+			"#": "102[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Whole Strip)"
 		},
-		"102[0x0200]": {
+		{
+			"#": "102[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 1)"
 		},
-		"102[0x0400]": {
+		{
+			"#": "102[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 2)"
 		},
-		"102[0x0800]": {
+		{
+			"#": "102[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 3)"
 		},
-		"102[0x1000]": {
+		{
+			"#": "102[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 4)"
 		},
-		"102[0x2000]": {
+		{
+			"#": "102[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 5)"
 		},
-		"102[0x4000]": {
+		{
+			"#": "102[0x4000]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh",
 			"label": "Automatic Report: Group 2 - kWh (Socket 6)"
 		},
-		"103[0x01]": {
+		{
+			"#": "103[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
-			"label": "Automatic Report: Group 3 - kWh (Whole Strip)"
+			"label": "Automatic Report: Group 3 - Power (Whole Strip)"
 		},
-		"103[0x02]": {
+		{
+			"#": "103[0x02]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 1)"
 		},
-		"103[0x04]": {
+		{
+			"#": "103[0x04]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 2)"
 		},
-		"103[0x08]": {
+		{
+			"#": "103[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 3)"
 		},
-		"103[0x10]": {
+		{
+			"#": "103[0x10]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 4)"
 		},
-		"103[0x20]": {
+		{
+			"#": "103[0x20]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 5)"
 		},
-		"103[0x40]": {
+		{
+			"#": "103[0x40]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_watt",
 			"label": "Automatic Report: Group 3 - Power (Socket 6)"
 		},
-		"103[0x0100]": {
+		{
+			"#": "103[0x0100]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Whole Strip)"
 		},
-		"103[0x0200]": {
+		{
+			"#": "103[0x0200]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 1)"
 		},
-		"103[0x0400]": {
+		{
+			"#": "103[0x0400]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 2)"
 		},
-		"103[0x0800]": {
+		{
+			"#": "103[0x0800]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 3)"
 		},
-		"103[0x1000]": {
+		{
+			"#": "103[0x1000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 4)"
 		},
-		"103[0x2000]": {
+		{
+			"#": "103[0x2000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 5)"
 		},
-		"103[0x4000]": {
+		{
+			"#": "103[0x4000]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh",
 			"label": "Automatic Report: Group 3 - kWh (Socket 6)"
 		},
-		"100": {
+		{
+			"#": "100",
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 101-103 to Default Values"
 		},
-		"111": {
+		{
+			"#": "111",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group1"
 		},
-		"112": {
+		{
+			"#": "112",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group2"
 		},
-		"113": {
+		{
+			"#": "113",
 			"$import": "templates/aeotec_template.json#auto_report_interval_group3"
 		},
-		"110": {
+		{
+			"#": "110",
 			"$import": "templates/aeotec_template.json#reset_parameters",
 			"label": "Reset Parameters 111-113 to Default Values"
 		},
-		"252": {
+		{
+			"#": "252",
 			"$import": "templates/aeotec_template.json#lock_configuration"
 		},
-		"253": {
+		{
+			"#": "253",
 			"label": "Meter Calibration Mode",
 			"valueSize": 4,
 			"minValue": 0,
@@ -308,11 +374,13 @@
 				}
 			]
 		},
-		"254": {
+		{
+			"#": "254",
 			"$import": "templates/aeotec_template.json#device_tag"
 		},
-		"255": {
+		{
+			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	}
+	]
 }

@@ -1,0 +1,90 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA018",
+	"description": "Water Sensor 7 Basic",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0012"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water Leakage (Control)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Water Leakage (Alarm)",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Tamper (Alarm)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3[0x04]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_wake"
+		},
+		{
+			"#": "3[0x10]",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_indicator_tamper"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#range_test_double_click"
+		},
+		{
+			"#": "5",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_trigger"
+		},
+		{
+			"#": "6",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_command_type"
+		},
+		{
+			"#": "7",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_on"
+		},
+		{
+			"#": "8",
+			"$import": "~/0x0086/templates/aeotec_template.json#association_group_2_basic_set_off"
+		},
+		{
+			"#": "9",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_on"
+		},
+		{
+			"#": "10",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_off"
+		},
+		{
+			"#": "11",
+			"$import": "~/0x0086/templates/aeotec_template.json#time_delay_tamper"
+		},
+		{
+			"#": "12",
+			"$import": "~/0x0086/templates/aeotec_template.json#report_on_tamper_cancel"
+		},
+		{
+			"#": "255",
+			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_exclude"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Open the housing.\n2. Remove the battery protection.\n3. Press the tamper on the side of the appliance three times quickly",
+		"exclusion": "1. Open the housing.\n2. Press the tamper on the side of the appliance three times quickly",
+		"reset": "This device also allows to be reset without any involvement of a Z-Wave controller. This procedure should only be used when the primary controller is inoperable.\nOnce Cover is removed and the tamper switch is tripped, push the tamper for 5 seconds until the RED LED blinks once. Then release tamper and push it again for 5 seconds while the RED LED is blinking until the GREEN LED blinks once"
+	}
+}

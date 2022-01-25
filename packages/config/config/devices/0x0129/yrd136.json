@@ -14,35 +14,44 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"$import": "templates/yale_template.json#volume"
 		},
-		"2": {
+		{
+			"#": "2",
 			"$import": "templates/yale_template.json#auto_relock"
 		},
-		"3": {
+		{
+			"#": "3",
 			"$import": "templates/yale_template.json#auto_relock_time_127"
 		},
-		"4": {
+		{
+			"#": "4",
 			"$import": "templates/yale_template.json#wrong_code_limit_3_to_10"
 		},
-		"7": {
+		{
+			"#": "7",
 			"$import": "templates/yale_template.json#wrong_code_lockout"
 		},
-		"8": {
+		{
+			"#": "8",
 			"$import": "templates/yale_template.json#operating_mode"
 		},
-		"11": {
+		{
+			"#": "11",
 			"$import": "templates/yale_template.json#one_touch"
 		},
-		"13": {
+		{
+			"#": "13",
 			"$import": "templates/yale_template.json#lock_status_led"
 		},
-		"15": {
+		{
+			"#": "15",
 			"$import": "templates/yale_template.json#reset_factory"
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 1 key followed by the gear key",
 		"exclusion": "1. Enter the 4-8 digit master PIN code followed by the gear key.\n2. Press the 7 key followed by the gear key.\n3. Press the 3 key followed by the gear key",

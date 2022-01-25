@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Default State",
 			"description": "Status after a power outage or after being plugged",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Follow State",
 			"description": "Allows to enable or disable Group 2 & Group 3",
 			"valueSize": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Always On",
 			"description": "Forces the Micro Smart Plug status to be ON",
 			"valueSize": 1,
@@ -84,7 +86,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Power Auto-Sending Report",
 			"description": "Power report for changes of x % W",
 			"unit": "%",
@@ -139,7 +142,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Overload Report",
 			"description": "Switch off Micro Smart Plug in case the power is above x W",
 			"unit": "W",
@@ -190,7 +194,8 @@
 				}
 			]
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Energy Auto-Sending Report",
 			"description": "Auto energy report if value changes of x Wh",
 			"unit": "Wh",
@@ -254,7 +259,8 @@
 				}
 			]
 		},
-		"24": {
+		{
+			"#": "24",
 			"label": "Metering Heartbeat",
 			"description": "Reporting intervall for power and energy to lifeline.",
 			"unit": "s",
@@ -282,7 +288,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Power High Threshold",
 			"description": "Defines the High Threshold value in W.",
 			"unit": "W",
@@ -350,7 +357,8 @@
 				}
 			]
 		},
-		"26": {
+		{
+			"#": "26",
 			"label": "Power Low Threshold",
 			"description": "Defines the Low Threshold value in W.",
 			"unit": "W",
@@ -422,7 +430,8 @@
 				}
 			]
 		},
-		"27": {
+		{
+			"#": "27",
 			"label": "Power Threshold Action",
 			"description": "Defines actions if the power Low/High Threshold are reached.",
 			"valueSize": 1,
@@ -469,5 +478,5 @@
 				}
 			]
 		}
-	}
+	]
 }

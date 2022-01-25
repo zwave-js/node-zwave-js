@@ -11,7 +11,7 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "5.5"
+		"max": "255.255"
 	},
 	"associations": {
 		"1": {
@@ -24,25 +24,10 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
-			"label": "Recover State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		}
-	}
+	]
 }

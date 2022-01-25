@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "mode",
 			"description": "operating mode",
 			"valueSize": 1,
@@ -37,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Summer/Winter mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +57,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Measurement frequency",
 			"unit": "min",
 			"valueSize": 1,
@@ -63,7 +66,8 @@
 			"maxValue": 30,
 			"defaultValue": 3
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Level of sensitivity for day",
 			"unit": "%",
 			"valueSize": 1,
@@ -71,7 +75,8 @@
 			"maxValue": 99,
 			"defaultValue": 60
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Temperature",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +84,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Level of sensitivity for night",
 			"unit": "%",
 			"valueSize": 1,
@@ -87,5 +93,5 @@
 			"maxValue": 9,
 			"defaultValue": 3
 		}
-	}
+	]
 }

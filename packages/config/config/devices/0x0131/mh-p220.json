@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"0": {
+	"paramInformation": [
+		{
+			"#": "0",
 			"label": "Switch All Mode",
 			"description": "Set the mode for the switch when receiving SWITCH ALL commands.",
 			"valueSize": 1,
@@ -43,7 +43,8 @@
 				}
 			]
 		},
-		"1": {
+		{
+			"#": "1",
 			"label": "Dimmer state after power down",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "External type switch",
 			"description": "Momentary buttons/2-state Switches/S1 dim up, S2 dim down",
 			"valueSize": 1,
@@ -84,7 +86,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "2-state switches",
 			"description": "toggle Dimmer without or with specified on/off position",
 			"valueSize": 1,
@@ -103,7 +106,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "ALL ON / ALL OFF",
 			"description": "forbid/allow ALL ON/ALL OFF",
 			"valueSize": 1,
@@ -131,7 +135,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Minimum brightness level",
 			"valueSize": 1,
 			"unit": "%",
@@ -139,7 +144,8 @@
 			"maxValue": 98,
 			"defaultValue": 1
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Maximum brightness level",
 			"valueSize": 1,
 			"unit": "%",
@@ -147,7 +153,8 @@
 			"maxValue": 99,
 			"defaultValue": 63
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Single dimming step time(Manual)",
 			"description": "Max 2.55s, in 10ms steps",
 			"valueSize": 2,
@@ -155,7 +162,8 @@
 			"maxValue": 26,
 			"defaultValue": 3
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Single dimming step size (Manual)",
 			"description": "1~99 percentage value (modification isn’t recommended)",
 			"valueSize": 1,
@@ -163,7 +171,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Single dimming step time (Auto)",
 			"description": "Max 2.55s, in 10ms steps",
 			"valueSize": 2,
@@ -171,7 +180,8 @@
 			"maxValue": 26,
 			"defaultValue": 3
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Single dimming step size (Auto)",
 			"description": "1~99 percentage value (modification isn’t recommended)",
 			"valueSize": 1,
@@ -179,7 +189,8 @@
 			"maxValue": 99,
 			"defaultValue": 1
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Timer function (Auto-off)",
 			"description": "0x00 function disabled 0x0001~0x00FF 1s~255s",
 			"valueSize": 2,
@@ -187,7 +198,8 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "One click of S1",
 			"description": "1~99 percentage value switch",
 			"valueSize": 1,
@@ -195,7 +207,8 @@
 			"maxValue": 99,
 			"defaultValue": 99
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Double click of S1",
 			"description": "max brightness level",
 			"valueSize": 1,
@@ -214,7 +227,8 @@
 				}
 			]
 		},
-		"15": {
+		{
+			"#": "15",
 			"label": "Operation report Switch1 to Assoc Group 2 & 3",
 			"description": "Dimming level report only valid when holding external button",
 			"valueSize": 1,
@@ -237,7 +251,8 @@
 				}
 			]
 		},
-		"16": {
+		{
+			"#": "16",
 			"label": "Operation report Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
@@ -255,7 +270,8 @@
 				}
 			]
 		},
-		"17": {
+		{
+			"#": "17",
 			"label": "Switch 2 function",
 			"description": "Enable S2 switch, enable Scene Activation and send Basic Set",
 			"valueSize": 1,
@@ -287,7 +303,8 @@
 				}
 			]
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Operation report Switch2 to Association Group 4",
 			"valueSize": 1,
 			"minValue": 0,
@@ -314,7 +331,8 @@
 				}
 			]
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Scene ID sent to AG1 when one click of S2",
 			"description": "0 Scene Activation disabled 1~255 send Activation CC to AG1",
 			"valueSize": 1,
@@ -323,7 +341,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Scene ID sent to AG1 when double click of S2",
 			"description": "0 Scene Activation disabled 1~255 send Activation CC",
 			"valueSize": 1,
@@ -332,7 +351,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Scene ID sent to AG1 when hold S2",
 			"description": "0 Scene Activation disabled 1~255 send Activation CC",
 			"valueSize": 1,
@@ -341,7 +361,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"255": {
+		{
+			"#": "255",
 			"label": "Factory setting",
 			"description": "0x55 restore factory setting",
 			"valueSize": 1,
@@ -361,5 +382,5 @@
 				}
 			]
 		}
-	}
+	]
 }

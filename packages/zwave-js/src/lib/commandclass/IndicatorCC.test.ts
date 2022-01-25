@@ -26,13 +26,16 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 	let node1: ZWaveNode;
 
 	beforeAll(async () => {
-		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
 		node1 = new ZWaveNode(1, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(1, node1);
 		node1.addCC(CommandClasses.Indicator, {
 			isSupported: true,
 			version: 3,
 		});
+
+		// Loading configuration may take a while on CI
+		if (process.env.CI) jest.setTimeout(30000);
 		await fakeDriver.configManager.loadIndicators();
 	});
 

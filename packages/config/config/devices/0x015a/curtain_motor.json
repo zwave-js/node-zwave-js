@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"17": {
+	"paramInformation": [
+		{
+			"#": "17",
 			"label": "Motor Open, Go to Direction B",
 			"valueSize": 4,
 			"minValue": 0,
@@ -30,7 +31,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"18": {
+		{
+			"#": "18",
 			"label": "Motor Stop",
 			"valueSize": 4,
 			"minValue": 0,
@@ -39,7 +41,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"19": {
+		{
+			"#": "19",
 			"label": "Motor Close, Go to Direction A",
 			"valueSize": 4,
 			"minValue": 0,
@@ -48,7 +51,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Motor Position",
 			"description": "Return motor current position",
 			"valueSize": 2,
@@ -57,7 +61,8 @@
 			"defaultValue": 0,
 			"readOnly": true
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Motor revert direction",
 			"valueSize": 4,
 			"minValue": 0,
@@ -66,7 +71,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Clear motor lead tail endpoint setting",
 			"valueSize": 1,
 			"minValue": 0,
@@ -75,7 +81,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"32": {
+		{
+			"#": "32",
 			"label": "Return motor status flag",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +91,8 @@
 			"unsigned": true,
 			"readOnly": true
 		},
-		"33": {
+		{
+			"#": "33",
 			"label": "Enable manual pulling function",
 			"valueSize": 4,
 			"minValue": 0,
@@ -93,7 +101,8 @@
 			"unsigned": true,
 			"writeOnly": true
 		},
-		"34": {
+		{
+			"#": "34",
 			"label": "Disable manual pulling function",
 			"valueSize": 4,
 			"minValue": 0,
@@ -102,5 +111,5 @@
 			"unsigned": true,
 			"writeOnly": true
 		}
-	}
+	]
 }

@@ -1,0 +1,391 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH5-2A",
+	"description": "Fan Coil Thermostat",
+	"devices": [
+		{
+			"productType": "0xf501",
+			"productId": "0x7102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature Unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature Reporting Threshold",
+			"description": "Valid range: 3-255; Variation in temperature to induce automatic report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"unit": "0.1 °F/C",
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Humidity Reporting Threshold",
+			"description": "Variation in humidity to induce automatic report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 1
+		},
+		{
+			"#": "13",
+			"label": "Display Brightness",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "Medium",
+					"value": 3
+				},
+				{
+					"label": "High",
+					"value": 4
+				},
+				{
+					"label": "Always on",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Beep Volume",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "Medium",
+					"value": 3
+				},
+				{
+					"label": "High",
+					"value": 4
+				},
+				{
+					"label": "Standard",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Set Temperature: Upper Limit",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 98,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Default (Celsius)",
+					"value": 37
+				},
+				{
+					"label": "Default (Fahrenheit)",
+					"value": 98
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Set Temperature: Lower Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Default (Celsius)",
+					"value": 5
+				},
+				{
+					"label": "Default (Fahrenheit)",
+					"value": 41
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Indoor Temperature Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °F/C",
+			"minValue": -99,
+			"maxValue": 99,
+			"defaultValue": 0
+		},
+		{
+			"#": "19",
+			"label": "Indoor Humidity Calibration",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": -20,
+			"maxValue": 20,
+			"defaultValue": 0
+		},
+		{
+			"#": "20",
+			"label": "Outdoor Temperature Calibration",
+			"valueSize": 1,
+			"unit": "0.1 °F/C",
+			"minValue": -99,
+			"maxValue": 99,
+			"defaultValue": 0
+		},
+		{
+			"#": "21",
+			"label": "Outdoor Temperature Sensor Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Protection sensor",
+					"value": 0
+				},
+				{
+					"label": "Controlled sensor",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Antifreeze Protection",
+			"description": "Automatic heating at 41°F/5°C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Fan Mode Above Set Temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Always off",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Fan Working Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cool and heat modes",
+					"value": 0
+				},
+				{
+					"label": "Cool mode only",
+					"value": 1
+				},
+				{
+					"label": "Heat mode only",
+					"value": 2
+				},
+				{
+					"label": "Disable",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Key Lock Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Ventilation Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "28",
+			"label": "Ventilation Duration",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "29",
+			"label": "Temperature Deadband",
+			"valueSize": 1,
+			"unit": "0.1 °F/C",
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 30,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Default (Celsius)",
+					"value": 15
+				},
+				{
+					"label": "Default (Fahrenheit)",
+					"value": 30
+				}
+			]
+		},
+		{
+			"#": "255",
+			"label": "Factory Reset",
+			"valueSize": 1,
+			"minValue": 53,
+			"maxValue": 55,
+			"defaultValue": 53,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 53
+				},
+				{
+					"label": "Reset to factory defaults",
+					"value": 55
+				}
+			]
+		}
+	]
+}

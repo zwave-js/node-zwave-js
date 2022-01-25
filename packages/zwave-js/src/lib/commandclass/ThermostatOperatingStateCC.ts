@@ -90,10 +90,11 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = await this.driver.sendCommand<ThermostatOperatingStateCCReport>(
-			cc,
-			this.commandOptions,
-		);
+		const response =
+			await this.driver.sendCommand<ThermostatOperatingStateCCReport>(
+				cc,
+				this.commandOptions,
+			);
 		return response?.state;
 	}
 }

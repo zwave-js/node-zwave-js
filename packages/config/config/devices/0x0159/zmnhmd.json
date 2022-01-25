@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Output 1 Valve Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -32,7 +33,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Input 2 Contact Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -50,7 +52,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Input 3 Contact Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,25 +71,12 @@
 				}
 			]
 		},
-		"30": {
-			"label": "State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Restore previous state",
-					"value": 0
-				},
-				{
-					"label": "Remain off",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off"
 		},
-		"48": {
+		{
+			"#": "48",
 			"label": "Total Water Consumption",
 			"valueSize": 4,
 			"minValue": -2147483648,
@@ -94,14 +84,16 @@
 			"defaultValue": 0,
 			"unit": "l"
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Number of Liters per Pulse",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
 			"defaultValue": 10
 		},
-		"51": {
+		{
+			"#": "51",
 			"label": "Slow Leak: Threshold",
 			"description": "How much water must be consumed in the timespan defined by parameter 52 to trigger slow leak alarm",
 			"valueSize": 2,
@@ -110,7 +102,8 @@
 			"defaultValue": 1,
 			"unit": "l"
 		},
-		"52": {
+		{
+			"#": "52",
 			"label": "Slow Leak: Time Interval",
 			"valueSize": 1,
 			"minValue": 1,
@@ -118,7 +111,8 @@
 			"defaultValue": 24,
 			"unit": "hours"
 		},
-		"60": {
+		{
+			"#": "60",
 			"label": "Slow Leak: Close Valve on Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +130,8 @@
 				}
 			]
 		},
-		"53": {
+		{
+			"#": "53",
 			"label": "Medium Leak: Threshold",
 			"description": "How much water must be consumed in the timespan defined by parameter 54 to trigger medium leak alarm",
 			"valueSize": 2,
@@ -144,7 +139,8 @@
 			"maxValue": 1000,
 			"defaultValue": 150
 		},
-		"54": {
+		{
+			"#": "54",
 			"label": "Medium Leak: Time Interval",
 			"valueSize": 1,
 			"minValue": 1,
@@ -152,7 +148,8 @@
 			"defaultValue": 6,
 			"unit": "hours"
 		},
-		"61": {
+		{
+			"#": "61",
 			"label": "Medium Leak: Close Valve on Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -170,7 +167,8 @@
 				}
 			]
 		},
-		"55": {
+		{
+			"#": "55",
 			"label": "Fast Leak: Threshold",
 			"description": "How much water must be consumed in the timespan defined by parameter 56 to trigger fast leak alarm",
 			"valueSize": 2,
@@ -178,7 +176,8 @@
 			"maxValue": 1000,
 			"defaultValue": 300
 		},
-		"56": {
+		{
+			"#": "56",
 			"label": "Fast Leak: Time Interval",
 			"valueSize": 1,
 			"minValue": 1,
@@ -186,7 +185,8 @@
 			"defaultValue": 3,
 			"unit": "hours"
 		},
-		"62": {
+		{
+			"#": "62",
 			"label": "Fast Leak: Close Valve on Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -204,7 +204,8 @@
 				}
 			]
 		},
-		"63": {
+		{
+			"#": "63",
 			"label": "Hardware Leak: Close Valve on Alarm",
 			"valueSize": 1,
 			"minValue": 0,
@@ -222,5 +223,5 @@
 				}
 			]
 		}
-	}
+	]
 }

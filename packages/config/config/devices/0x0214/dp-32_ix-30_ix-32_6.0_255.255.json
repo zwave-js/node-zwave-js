@@ -1,0 +1,46 @@
+{
+	"manufacturer": "Kaipule Technology Co., Ltd.",
+	"manufacturerId": "0x0214",
+	"label": "DP-32 / IX-30 / IX-32",
+	"description": "PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "6.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Basic Set",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 255
+		},
+		{
+			"#": "2",
+			"label": "Turn Off Light Time Configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 20
+		},
+		{
+			"#": "3",
+			"label": "PIR Sensor Alarm Elimination Time Configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 20
+		}
+	]
+}

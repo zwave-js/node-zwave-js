@@ -20,8 +20,9 @@
 			"isLifeline": true
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Temperature Auto Report period setting",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -29,7 +30,8 @@
 			"maxValue": 255,
 			"defaultValue": 120
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Temperature offset for internal sensor",
 			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
 			"valueSize": 1,
@@ -38,7 +40,8 @@
 			"maxValue": 80,
 			"defaultValue": 0
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Maximum Set point value",
 			"valueSize": 1,
 			"unit": "°C",
@@ -46,7 +49,8 @@
 			"maxValue": 35,
 			"defaultValue": 35
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Minimum Set point value",
 			"valueSize": 1,
 			"unit": "°C",
@@ -54,7 +58,8 @@
 			"maxValue": 35,
 			"defaultValue": 5
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Frost protection temperature",
 			"valueSize": 1,
 			"unit": "°C",
@@ -62,7 +67,8 @@
 			"maxValue": 15,
 			"defaultValue": 5
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Open window detect function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -80,7 +86,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Open window detect time period",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -88,7 +95,8 @@
 			"maxValue": 30,
 			"defaultValue": 15
 		},
-		"8": {
+		{
+			"#": "8",
 			"label": "Open window detect temperature drop setting",
 			"valueSize": 1,
 			"minValue": 4,
@@ -118,7 +126,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Open window detect delay time select",
 			"unit": "minutes",
 			"valueSize": 1,
@@ -126,7 +135,7 @@
 			"maxValue": 60,
 			"defaultValue": 30
 		}
-	},
+	],
 	"compat": {
 		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
 		"overrideFloatEncoding": {

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Power meter report period",
 			"description": "Power meter report period, in 5 seconds unit. 720 -> 1 hour",
 			"unit": "5sec",
@@ -24,7 +24,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Energy meter report period",
 			"description": "The accumulated power consumption report period",
 			"unit": "5sec",
@@ -33,7 +34,8 @@
 			"maxValue": 32767,
 			"defaultValue": 720
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Selected default endpoint",
 			"description": "1 => CT1 and CT2, 2 => CT1, 3 => CT2",
 			"valueSize": 1,
@@ -41,5 +43,5 @@
 			"maxValue": 3,
 			"defaultValue": 1
 		}
-	}
+	]
 }

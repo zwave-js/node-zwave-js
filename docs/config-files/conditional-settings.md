@@ -27,24 +27,24 @@ It is also possible to select one of multiple variants of a config parameter by 
 ```json
 {
 	// ... all the rest
-	"paramInformation": {
-		"1": [
-			{
-				// This variant is active for firmware version 1.0
-				"$if": "firmwareVersion === 1.0",
-				"label": "Light configuration",
-				"valueSize": 2,
-				"minValue": 0,
-				"maxValue": 2
-			},
-			{
-				// This one for all others
-				"label": "Sound configuration",
-				"valueSize": 1,
-				"minValue": 0,
-				"maxValue": 1
-			}
-		]
-	}
+	"paramInformation": [
+		{
+			"#": "1",
+			// This variant is active for firmware version 1.0
+			"$if": "firmwareVersion === 1.0",
+			"label": "Light configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2
+		},
+		{
+			"#": "1",
+			// This one for all others
+			"label": "Sound configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1
+		}
+	]
 }
 ```

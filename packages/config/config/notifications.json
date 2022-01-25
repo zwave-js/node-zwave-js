@@ -235,7 +235,7 @@
 			{
 				"name": "Periodic inspection status",
 				"states": {
-					"0x0B": {
+					"0x0b": {
 						"label": "Maintenance required, planned periodic inspection",
 						"description": "This event may be issued by an alarm device to advertise that the device has reached the end of a designed maintenance interval. The device is should be serviced in order to stay reliable."
 					}
@@ -244,7 +244,7 @@
 			{
 				"name": "Dust in device status",
 				"states": {
-					"0x0A": {
+					"0x0a": {
 						"label": "Maintenance required, dust in device",
 						"description": "This event may be issued by an alarm device to advertise that the device has detected dust in its sensor. The device is not reliable until it has been serviced."
 					}
@@ -259,11 +259,11 @@
 			"0x04": {
 				"label": "Rapid temperature rise"
 			},
-			"0x0C": {
+			"0x0c": {
 				"label": "Rapid temperature fall (location provided)",
 				"description": "The event parameters contain a location report"
 			},
-			"0x0D": {
+			"0x0d": {
 				"label": "Rapid temperature fall"
 			}
 		}
@@ -568,19 +568,19 @@
 			"0x09": {
 				"label": "Auto lock locked operation"
 			},
-			"0x0A": {
+			"0x0a": {
 				"label": "Auto lock not fully locked operation"
 			},
-			"0x0C": {
+			"0x0c": {
 				"label": "All user codes deleted"
 			},
-			"0x0D": {
+			"0x0d": {
 				"label": "Single user code deleted"
 			},
-			"0x0E": {
+			"0x0e": {
 				"label": "New user code added"
 			},
-			"0x0F": {
+			"0x0f": {
 				"label": "New user code not added due to duplicate code"
 			},
 			"0x12": {
@@ -597,6 +597,22 @@
 			},
 			"0x20": {
 				"label": "Messaging User Code entered via keypad",
+				// Param contains UserCodeCC User Identifier (2 bytes)
+				"params": {
+					"type": "value",
+					"name": "user ID"
+				}
+			},
+			"0x21": {
+				"label": "Lock operation with User Code",
+				// Param contains UserCodeCC User Identifier (2 bytes)
+				"params": {
+					"type": "value",
+					"name": "user ID"
+				}
+			},
+			"0x22": {
+				"label": "Unlock operation with User Code",
 				// Param contains UserCodeCC User Identifier (2 bytes)
 				"params": {
 					"type": "value",
@@ -683,11 +699,11 @@
 			"0x09": {
 				"label": "Tampering, product moved"
 			},
-			"0x0A": {
+			"0x0a": {
 				"label": "Impact detected",
 				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself."
 			},
-			"0x0C": {
+			"0x0c": {
 				"label": "RF Jamming detected",
 				"description": "This event can be issued if the node has detected a raise in the background RSSI level.",
 				// 1-byte value representing the measured RSSI over a period of time spanning between 10s and 60s.
@@ -757,10 +773,10 @@
 			{
 				"name": "Battery maintenance status",
 				"states": {
-					"0x0A": {
+					"0x0a": {
 						"label": "Replace battery soon"
 					},
-					"0x0B": {
+					"0x0b": {
 						"label": "Replace battery now"
 					},
 					"0x11": {
@@ -779,13 +795,13 @@
 			{
 				"name": "Battery level status",
 				"states": {
-					"0x0D": {
+					"0x0d": {
 						"label": "Battery is fully charged"
 					},
-					"0x0E": {
+					"0x0e": {
 						"label": "Charge battery soon"
 					},
-					"0x0F": {
+					"0x0f": {
 						"label": "Charge battery now"
 					}
 				}
@@ -862,7 +878,7 @@
 			}
 		}
 	},
-	"0x0A": {
+	"0x0a": {
 		"name": "System",
 		"events": {
 			"0x01": {
@@ -876,7 +892,7 @@
 			}
 		}
 	},
-	"0x0B": {
+	"0x0b": {
 		"name": "Clock",
 		"events": {
 			"0x01": {
@@ -894,7 +910,7 @@
 			}
 		}
 	},
-	"0x0C": {
+	"0x0c": {
 		"name": "Appliance",
 		"variables": [
 			{
@@ -928,13 +944,13 @@
 					"0x08": {
 						"label": "Boiling"
 					},
-					"0x0A": {
+					"0x0a": {
 						"label": "Washing"
 					},
-					"0x0C": {
+					"0x0c": {
 						"label": "Rinsing"
 					},
-					"0x0E": {
+					"0x0e": {
 						"label": "Draining"
 					},
 					"0x10": {
@@ -972,7 +988,7 @@
 			{
 				"name": "Washing failure status",
 				"states": {
-					"0x0B": {
+					"0x0b": {
 						"label": "Washing failure"
 					}
 				}
@@ -980,7 +996,7 @@
 			{
 				"name": "Rinsing failure status",
 				"states": {
-					"0x0D": {
+					"0x0d": {
 						"label": "Rinsing failure"
 					}
 				}
@@ -988,7 +1004,7 @@
 			{
 				"name": "Draining failure status",
 				"states": {
-					"0x0F": {
+					"0x0f": {
 						"label": "Draining failure"
 					}
 				}
@@ -1027,7 +1043,7 @@
 			}
 		]
 	},
-	"0x0D": {
+	"0x0d": {
 		"name": "Home Health",
 		"variables": [
 			{
@@ -1091,10 +1107,10 @@
 					"0x09": {
 						"label": "Sleep stage 1 detected (Light sleep, non-REM 1)"
 					},
-					"0x0A": {
+					"0x0a": {
 						"label": "Sleep stage 2 detected (Medium sleep, non-REM 2)"
 					},
-					"0x0B": {
+					"0x0b": {
 						"label": "Sleep stage 3 detected (Deep sleep, non-REM 3)"
 					}
 				}
@@ -1104,13 +1120,13 @@
 			"0x04": {
 				"label": "Posture changed"
 			},
-			"0x0C": {
+			"0x0c": {
 				"label": "Fall detected",
 				"description": "This event is used to indicate that a person fall has been detected and medical help may be needed."
 			}
 		}
 	},
-	"0x0E": {
+	"0x0e": {
 		"name": "Siren",
 		"variables": [
 			{
@@ -1123,7 +1139,7 @@
 			}
 		]
 	},
-	"0x0F": {
+	"0x0f": {
 		"name": "Water Valve",
 		"variables": [
 			{
@@ -1513,7 +1529,7 @@
 			{
 				"name": "Heating status",
 				"states": {
-					"0x0A": {
+					"0x0a": {
 						"label": "Heating operation ongoing"
 					}
 				}
@@ -1521,7 +1537,7 @@
 			{
 				"name": "Filter pump status",
 				"states": {
-					"0x0B": {
+					"0x0b": {
 						"label": "Filter pump operation ongoing"
 					}
 				}
@@ -1529,7 +1545,7 @@
 			{
 				"name": "Freshwater flow status",
 				"states": {
-					"0x0C": {
+					"0x0c": {
 						"label": "Freshwater operation ongoing"
 					}
 				}
@@ -1537,7 +1553,7 @@
 			{
 				"name": "Dry protection status",
 				"states": {
-					"0x0D": {
+					"0x0d": {
 						"label": "Dry protection operation active"
 					}
 				}
@@ -1547,10 +1563,10 @@
 				"name": "Water tank status",
 				"idle": false,
 				"states": {
-					"0x0E": {
+					"0x0e": {
 						"label": "Water tank is empty"
 					},
-					"0x0F": {
+					"0x0f": {
 						"label": "Water tank level is unknown"
 					},
 					"0x10": {

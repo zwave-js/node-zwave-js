@@ -23,13 +23,18 @@ type PayloadValidationFunction = (...assertions: unknown[]) => void;
 
 interface ValidatePayload extends PayloadValidationFunction {
 	/**
-	 * @param reason The optional reason for a rejection
+	 * @param reason The optional reason for a rejection. Strings will be logged, error codes will be used for internal communication
 	 */
-	withReason(reason: string): PayloadValidationFunction;
+	withReason(reason: string | ZWaveErrorCodes): PayloadValidationFunction;
+
+	/**
+	 * @param reason The reason for a rejection. Strings will be logged, error codes will be used for internal communication
+	 */
+	fail(reason: string | ZWaveErrorCodes): never;
 }
 
 function validatePayloadInternal(
-	reason: string | undefined,
+	reason: string | ZWaveErrorCodes | undefined,
 	...assertions: unknown[]
 ): void {
 	if (!assertions.every(Boolean)) {
@@ -46,8 +51,10 @@ export const validatePayload = validatePayloadInternal.bind(
 	undefined,
 	undefined,
 ) as ValidatePayload;
-validatePayload.withReason = (reason: string) =>
+validatePayload.withReason = (reason: string | ZWaveErrorCodes) =>
 	validatePayloadInternal.bind(undefined, reason);
+validatePayload.fail = (reason: string | ZWaveErrorCodes) =>
+	validatePayload.withReason(reason)(false) as unknown as never;
 
 /**
  * Determines how many bits a value must be shifted to be right-aligned with a given bit mask
@@ -65,6 +72,27 @@ export function getMinimumShiftForBitMask(mask: number): number {
 	while (mask % 2 === 0) {
 		mask >>>= 1;
 		if (mask === 0) break;
+		i++;
+	}
+	return i;
+}
+
+/**
+ * Determines how many wide a given bit mask is
+ * Example:
+ * ```txt
+ *   Mask = 00110000
+ *            ^^---- => 2 bits
+ *
+ *   Mask = 00110001
+ *            ^....^ => 6 bits
+ * ```
+ */
+export function getBitMaskWidth(mask: number): number {
+	mask = mask >>> getMinimumShiftForBitMask(mask);
+	let i = 0;
+	while (mask > 0) {
+		mask >>>= 1;
 		i++;
 	}
 	return i;

@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Primary Notification Volume Level",
 			"description": "Set the volume level",
 			"valueSize": 1,
@@ -38,7 +38,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Primary Notification Length",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +66,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Secondary Notification Length",
 			"valueSize": 1,
 			"minValue": 0,
@@ -96,7 +98,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Secondary Notification Volume Level",
 			"valueSize": 1,
 			"minValue": 1,
@@ -118,7 +121,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Primary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
@@ -168,7 +172,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Secondary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
@@ -218,7 +223,8 @@
 				}
 			]
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Toggle Secondary Chime",
 			"valueSize": 1,
 			"minValue": 1,
@@ -236,12 +242,41 @@
 				}
 			]
 		},
-		"8": {
-			"label": "Power Level",
+		{
+			"#": "8",
+			"label": "Primary Strobe (LED Ring)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Secondary Strobe (LED Ring)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
-	}
+	]
 }

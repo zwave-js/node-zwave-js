@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Latch Hold Time",
 			"description": "Defines how long the latch is kept open.",
 			"unit": "s",
@@ -24,7 +24,8 @@
 			"maxValue": 20,
 			"defaultValue": 3
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Latch Torque",
 			"description": "Defines the torque of the latch.",
 			"valueSize": 1,
@@ -47,7 +48,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Acoustic Feedback",
 			"description": "Defines Acoustic Feedback signals. Button-, Low-Battery-, Error- and Alarm-Signals can not be adjusted.",
 			"valueSize": 1,
@@ -78,7 +80,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Travel Time",
 			"description": "This parameter defines the travel path of the Lock.",
 			"valueSize": 1,
@@ -101,7 +104,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Touch Panel Settings",
 			"description": "This parameter defines Touch Panel settings.",
 			"valueSize": 1,
@@ -128,7 +132,8 @@
 				}
 			]
 		},
-		"6": {
+		{
+			"#": "6",
 			"label": "Motor Force",
 			"description": "This parameter defines the motor force, when turning the lock.",
 			"valueSize": 1,
@@ -147,7 +152,8 @@
 				}
 			]
 		},
-		"250": {
+		{
+			"#": "250",
 			"label": "Lock status",
 			"valueSize": 1,
 			"minValue": 0,
@@ -187,7 +193,8 @@
 				}
 			]
 		},
-		"251": {
+		{
+			"#": "251",
 			"label": "Drive cycles Trap",
 			"description": "Counter, how often the trap was activated.",
 			"valueSize": 4,
@@ -197,7 +204,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"252": {
+		{
+			"#": "252",
 			"label": "Driving cycles unlocked",
 			"description": "Counter, how often it has been unlocked.",
 			"valueSize": 4,
@@ -207,7 +215,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"253": {
+		{
+			"#": "253",
 			"label": "Driving cycles interlocked",
 			"description": "Counter, how often it has been interlocked.",
 			"valueSize": 4,
@@ -217,7 +226,8 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		},
-		"254": {
+		{
+			"#": "254",
 			"label": "ABUS Firmware Version",
 			"description": "Version of the ABUS Firmware, e.g. 1.05",
 			"valueSize": 2,
@@ -228,5 +238,5 @@
 			"readOnly": true,
 			"allowManualEntry": false
 		}
-	}
+	]
 }

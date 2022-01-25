@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "By default, the LED will turn OFF when the lead attached is turned ON.",
 			"valueSize": 1,
@@ -34,7 +35,8 @@
 				}
 			]
 		},
-		"4": {
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"description": "To change the top of the switch to OFF and the bottom of the switch ON.",
 			"valueSize": 1,
@@ -54,5 +56,8 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }

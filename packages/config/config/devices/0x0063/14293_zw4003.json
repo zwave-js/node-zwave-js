@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -34,7 +35,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to include a device to the Z-Wave network.\n2. Once the controller is ready to add your device,\npress toggle up and release to include it in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device,\npress toggle up or down to exclude it from the network",

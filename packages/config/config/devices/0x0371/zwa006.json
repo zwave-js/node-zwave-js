@@ -1,0 +1,123 @@
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA006",
+	"description": "Smart Boost Timer Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x00b4",
+			"zwaveAllianceId": 3067
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off_schedule"
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#led_indicator_three_options",
+			"options": [
+				{
+					"label": "Always off",
+					"value": 0
+				},
+				{
+					"label": "On when load is on",
+					"value": 1
+				},
+				{
+					"label": "Momentary mode (5 seconds)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_off_timer"
+		},
+		{
+			"#": "4",
+			"$import": "~/0x0086/templates/aeotec_template.json#current_overload"
+		},
+		{
+			"#": "5",
+			"label": "Boost Time",
+			"description": "Time to add on each boost button press",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "LED Indicator: Power Change Setting",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3000,
+			"defaultValue": 100,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/0x0086/templates/aeotec_template.json#kwh_threshold"
+		},
+		{
+			"#": "21",
+			"$import": "~/0x0086/templates/aeotec_template.json#power_threshold",
+			"maxValue": 2500,
+			"defaultValue": 100
+		},
+		{
+			"#": "22",
+			"$import": "~/0x0086/templates/aeotec_template.json#current_threshold",
+			"valueSize": 2,
+			"maxValue": 130
+		},
+		{
+			"#": "23",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_watt"
+		},
+		{
+			"#": "24",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_kwh"
+		},
+		{
+			"#": "25",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_v"
+		},
+		{
+			"#": "26",
+			"$import": "~/0x0086/templates/aeotec_template.json#auto_report_interval_amp"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Power on the device, and the power led will blink blue slowly.\n2. Put the Z-Wave Primary Controller into inclusion mode (If you don’t know how to do this, refer to its manual)\n3. Press and hold the action button, and when the yellow LED is on, release the button. It indicates the device has enter learn mode.\n4. If added successfully, the power LED will remain green for 2 seconds, then turn off",
+		"exclusion": "1. Power on the device.\n2. Put the Primary Controller into exclusion mode (If you don’t know how to do this refer to its manual)\n3. Press and hold the action button, and when the purple LED turns on, release the button. This indicates that the device has entered learn mode. If removal is successful, the blue LED will blink slowly",
+		"reset": "Please use this procedure only when the primary controller is missing or inoperable.\n\n1. Make sure the device has been powered.\n2. Press and hold the action button for 15 seconds. When the red LED turns on, release the button. Then, the device will enter factory reset mode. If the reset is successful, the LED will blink blue slowly.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3067/Smart%20Boost%20Timer%20Switch%20User%20Manual-V1.9.pdf"
+	}
+}

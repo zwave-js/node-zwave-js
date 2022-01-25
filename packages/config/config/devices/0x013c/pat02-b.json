@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"5": {
+	"paramInformation": [
+		{
+			"#": "5",
 			"label": "Operation Mode",
 			"description": "set Operation Mode using bit to control",
 			"valueSize": 1,
@@ -24,7 +24,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"7": {
+		{
+			"#": "7",
 			"label": "Customer Function",
 			"description": "Customer Function switch using bit control",
 			"valueSize": 1,
@@ -33,7 +34,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto Report Battery Time",
 			"description": "The interval time for auto reporting the battery level.",
 			"valueSize": 1,
@@ -41,7 +43,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Auto Report Temperature Time",
 			"description": "The interval time for auto reporting the temperature state.",
 			"valueSize": 1,
@@ -49,7 +52,8 @@
 			"maxValue": 127,
 			"defaultValue": 12
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Auto Report Humidity Time",
 			"description": "The interval time for auto reporting the humidity state.",
 			"valueSize": 1,
@@ -57,7 +61,8 @@
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"20": {
+		{
+			"#": "20",
 			"label": "Auto Report Tick Interval",
 			"description": "The interval time for auto report each tick.",
 			"valueSize": 1,
@@ -66,19 +71,21 @@
 			"defaultValue": 30,
 			"unsigned": true
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0
 		},
-		"23": {
+		{
+			"#": "23",
 			"label": "Humidity Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 5
 		}
-	}
+	]
 }

@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"4": {
+	"paramInformation": [
+		{
+			"#": "4",
 			"label": "Invert switch",
 			"valueSize": 1,
 			"minValue": 0,
@@ -33,12 +34,13 @@
 				}
 			]
 		},
-		"29": {
+		{
+			"#": "29",
 			"label": "Load Sensing",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0
 		}
-	}
+	]
 }

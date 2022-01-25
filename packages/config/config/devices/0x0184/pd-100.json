@@ -14,8 +14,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "LED Backlight",
 			"valueSize": 1,
 			"minValue": 0,
@@ -38,7 +39,8 @@
 				}
 			]
 		},
-		"9": {
+		{
+			"#": "9",
 			"label": "Dim Rate Steps",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
@@ -47,7 +49,8 @@
 			"defaultValue": 1,
 			"unsigned": true
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Dim Rate Timing",
 			"description": "Timing of steps",
 			"valueSize": 1,
@@ -57,7 +60,7 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	},
+	],
 	"metadata": {
 		"inclusion": "1. Plug the 2-pin AC power plugs of lighting device to the receptacle of PD-100\n2. Insert the module's 3-pin plug into an AC outlet of your preferred location. In normal operating mode, the LED on the front panel will be lit. \n3. Add(Include) the module into your network by a Z-Wave certified controller.\n Normally, the sequence is as follows:\na. Place your network controller into inclusion mode by following the controller manufacturer's instructions\nb. When the controller is ready, single click the button on the front of PD-100 \nc. The controller should indicate that the new device was added successfully.",
 		"exclusion": "a. Place your network controller into exclusion mode by following the controller manufacturer's instructions\nb. When the controller is ready, single click the button on the front of PD-100 \nc. The controller should indicate that the device was excluded successfully.",

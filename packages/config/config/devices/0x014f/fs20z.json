@@ -13,8 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"paramInformation": {
-		"3": {
+	"paramInformation": [
+		{
+			"#": "3",
 			"label": "Night Light",
 			"description": "Nightlight: LED turns ON when the switch is turned OFF",
 			"valueSize": 1,
@@ -34,5 +35,5 @@
 				}
 			]
 		}
-	}
+	]
 }

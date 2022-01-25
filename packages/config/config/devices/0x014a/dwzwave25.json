@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Send Basic Set",
 			"description": "Send Basic Set to Association Group 2",
 			"valueSize": 1,
@@ -35,7 +35,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Send Sensor Binary Report",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,5 +55,8 @@
 				}
 			]
 		}
+	],
+	"compat": {
+		"forceNotificationIdleReset": true
 	}
 }

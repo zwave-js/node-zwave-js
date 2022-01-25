@@ -37,8 +37,9 @@
 			"maxNodes": 10
 		}
 	},
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Button 1 And 3 Pair Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -61,7 +62,8 @@
 				}
 			]
 		},
-		"2": {
+		{
+			"#": "2",
 			"label": "Button 2 And 4 Pair Mode",
 			"description": " works with group b, double click with group d",
 			"valueSize": 1,
@@ -85,7 +87,8 @@
 				}
 			]
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Command to Send Control Group A",
 			"valueSize": 1,
 			"minValue": 0,
@@ -132,7 +135,8 @@
 				}
 			]
 		},
-		"12": {
+		{
+			"#": "12",
 			"label": "Command to Send Control Group B",
 			"valueSize": 1,
 			"minValue": 0,
@@ -179,7 +183,8 @@
 				}
 			]
 		},
-		"13": {
+		{
+			"#": "13",
 			"label": "Command to Send Control Group C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -226,7 +231,8 @@
 				}
 			]
 		},
-		"14": {
+		{
+			"#": "14",
 			"label": "Command to to Send Control Group D",
 			"valueSize": 1,
 			"minValue": 0,
@@ -273,7 +279,8 @@
 				}
 			]
 		},
-		"21": {
+		{
+			"#": "21",
 			"label": "Switch All Commands to Send",
 			"valueSize": 1,
 			"minValue": 1,
@@ -296,7 +303,8 @@
 				}
 			]
 		},
-		"22": {
+		{
+			"#": "22",
 			"label": "Invert Buttons",
 			"valueSize": 1,
 			"minValue": 0,
@@ -315,7 +323,8 @@
 				}
 			]
 		},
-		"25": {
+		{
+			"#": "25",
 			"label": "Block Wakeup",
 			"valueSize": 1,
 			"minValue": 0,
@@ -334,7 +343,8 @@
 				}
 			]
 		},
-		"30": {
+		{
+			"#": "30",
 			"label": "Send Battery Report On Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
@@ -357,7 +367,7 @@
 				}
 			]
 		}
-	},
+	],
 	"metadata": {
 		"reset": "Enter management mode by push all four buttons together for one second - green led blinks slowly), then hit button 3 followed by keeping button 4 pushed down for 10 seconds. The first five seconds the green LED still blinks followed by a long red, shot green sequence. Once LEDs go off, reset was executed. Please use this\nprocedure only if the device is secondary controller and the primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2134/MT2653_en.pdf"

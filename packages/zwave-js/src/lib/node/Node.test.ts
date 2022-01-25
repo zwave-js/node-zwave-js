@@ -1,17 +1,25 @@
 import {
+	applicationCCs,
 	assertZWaveError,
 	CommandClasses,
 	CommandClassInfo,
+	getCCName,
+	NodeType,
+	nonApplicationCCs,
+	ProtocolVersion,
+	topologicalSort,
 	ValueDB,
 	ValueID,
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { wait } from "alcalzone-shared/async";
 import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
 import {
 	BinarySwitchCCReport,
 	BinarySwitchCommand,
 } from "../commandclass/BinarySwitchCC";
+import { getCCConstructor } from "../commandclass/CommandClass";
 import {
 	EntryControlCCNotification,
 	EntryControlCommand,
@@ -31,13 +39,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import {
-	InterviewStage,
-	NodeStatus,
-	NodeType,
-	ProtocolVersion,
-	ZWaveNodeEvents,
-} from "./Types";
+import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {
@@ -53,24 +55,12 @@ class TestNode extends ZWaveNode {
 	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
 	}
-	// public async queryManufacturerSpecific(): Promise<void> {
-	// 	return super.queryManufacturerSpecific();
-	// }
-	// public async queryCCVersions(): Promise<void> {
-	// 	return super.queryCCVersions();
-	// }
 	// public async queryEndpoints(): Promise<void> {
 	// 	return super.queryEndpoints();
 	// }
 	// public async configureWakeup(): Promise<void> {
 	// 	return super.configureWakeup();
 	// }
-	// public async requestStaticValues(): Promise<void> {
-	// 	return super.requestStaticValues();
-	// }
-	public async queryNeighbors(): Promise<void> {
-		return super["queryNeighbors"]();
-	}
 	public get implementedCommandClasses(): Map<
 		CommandClasses,
 		CommandClassInfo
@@ -88,9 +78,12 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("constructor", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		let fakeDriver: Driver;
 
 		beforeAll(async () => {
+			fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -199,6 +192,9 @@ describe("lib/node/Node", () => {
 			fakeDriver = createEmptyMockDriver();
 			node = new ZWaveNode(2, fakeDriver as any);
 			(fakeDriver.controller.nodes as any).set(node.id, node);
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -215,7 +211,7 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				fakeDriver.sendMessage.mockClear();
 
-				expected = ({
+				expected = {
 					isListening: true,
 					isFrequentListening: false,
 					isRouting: true,
@@ -230,7 +226,7 @@ describe("lib/node/Node", () => {
 						0x03,
 						0x02,
 					),
-				} as unknown) as GetNodeProtocolInfoResponse;
+				} as unknown as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 			});
@@ -400,6 +396,75 @@ describe("lib/node/Node", () => {
 
 			it.todo("test that the CC interview methods are called");
 
+			it("the CC interviews happen in the correct order", () => {
+				require("../commandclass/index");
+				expect(getCCConstructor(49)).not.toBeUndefined();
+
+				const node = new ZWaveNode(2, fakeDriver as any);
+				const CCs = [
+					CommandClasses["Z-Wave Plus Info"],
+					CommandClasses["Device Reset Locally"],
+					CommandClasses["Firmware Update Meta Data"],
+					CommandClasses["CRC-16 Encapsulation"],
+					CommandClasses["Multi Channel"],
+					CommandClasses["Multilevel Switch"],
+					CommandClasses.Configuration,
+					CommandClasses["Multilevel Sensor"],
+					CommandClasses.Meter,
+					CommandClasses.Protection,
+					CommandClasses.Association,
+					CommandClasses["Multi Channel Association"],
+					CommandClasses["Association Group Information"],
+					CommandClasses.Notification,
+					CommandClasses["Manufacturer Specific"],
+					CommandClasses.Version,
+				];
+				for (const cc of CCs) {
+					node.addCC(cc, { isSupported: true, version: 1 });
+				}
+
+				const rootInterviewGraphPart1 = node.buildCCInterviewGraph([
+					CommandClasses.Security,
+					CommandClasses["Security 2"],
+					CommandClasses["Manufacturer Specific"],
+					CommandClasses.Version,
+					...applicationCCs,
+				]);
+				const rootInterviewGraphPart2 = node.buildCCInterviewGraph([
+					...nonApplicationCCs,
+				]);
+
+				const rootInterviewOrderPart1 = topologicalSort(
+					rootInterviewGraphPart1,
+				);
+				const rootInterviewOrderPart2 = topologicalSort(
+					rootInterviewGraphPart2,
+				);
+
+				expect(
+					rootInterviewOrderPart1.map((cc) => getCCName(cc)),
+				).toEqual([
+					"Z-Wave Plus Info",
+					"Device Reset Locally",
+					"Firmware Update Meta Data",
+					"CRC-16 Encapsulation",
+					"Multi Channel",
+					"Association",
+					"Multi Channel Association",
+					"Association Group Information",
+				]);
+				expect(
+					rootInterviewOrderPart2.map((cc) => getCCName(cc)),
+				).toEqual([
+					"Multilevel Switch",
+					"Configuration",
+					"Multilevel Sensor",
+					"Meter",
+					"Protection",
+					"Notification",
+				]);
+			});
+
 			// it("should not send anything if the node is the controller", async () => {
 			// 	// Temporarily make this node the controller node
 			// 	fakeDriver.controller.ownNodeId = node.id;
@@ -506,7 +571,6 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
 					queryNodeInfo: InterviewStage.NodeInfo,
 					interviewCCs: InterviewStage.CommandClasses,
-					queryNeighbors: InterviewStage.Neighbors,
 				};
 				const returnValues: Partial<Record<keyof TestNode, any>> = {
 					ping: true,
@@ -516,7 +580,6 @@ describe("lib/node/Node", () => {
 					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
 					queryNodeInfo: node["queryNodeInfo"].bind(node),
 					interviewCCs: node["interviewCCs"].bind(node),
-					queryNeighbors: node["queryNeighbors"].bind(node),
 				};
 				for (const method of Object.keys(
 					originalMethods,
@@ -649,7 +712,7 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(canSleep: boolean = false): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			node["_isListening"] = !canSleep;
 			node["_isFrequentListening"] = false;
 			// node.addCC(CommandClasses["Wake Up"], { isSupported: true });
@@ -713,7 +776,7 @@ describe("lib/node/Node", () => {
 		const fakeDriver = createEmptyMockDriver();
 
 		function makeNode(): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			node["_isListening"] = false;
 			node["_isFrequentListening"] = false;
 			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
@@ -771,7 +834,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getCCVersion()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		it("should return 0 if a command class is not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
@@ -791,7 +854,7 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("removeCC()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		it("should mark a CC as not supported", () => {
 			const node = new ZWaveNode(2, fakeDriver);
@@ -838,7 +901,11 @@ describe("lib/node/Node", () => {
 		let node: ZWaveNode;
 		beforeEach(async () => {
 			const fakeDriver = createEmptyMockDriver();
+
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
+
 			node = new ZWaveNode(
 				2,
 				fakeDriver as any,
@@ -944,9 +1011,11 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("serialize() / deserialize()", () => {
-		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 		beforeAll(async () => {
+			// Loading configuration may take a while on CI
+			if (process.env.CI) jest.setTimeout(30000);
 			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
@@ -963,11 +1032,16 @@ describe("lib/node/Node", () => {
 			isRouting: false,
 			supportedDataRates: [40000],
 			supportsSecurity: false,
-			isSecure: "unknown",
 			supportsBeaming: true,
 			protocolVersion: 3,
 			nodeType: "Controller",
-			neighbors: [2, 3, 4],
+			securityClasses: {
+				S2_AccessControl: false,
+				S2_Authenticated: true,
+				S2_Unauthenticated: true,
+				S0_Legacy: false,
+			},
+			dsk: "00000-00001-00002-00003-00004-00005-00006-00007",
 			commandClasses: {
 				"0x25": {
 					name: "Binary Switch",
@@ -1013,13 +1087,23 @@ describe("lib/node/Node", () => {
 				isFrequentListening: true, // --> 1000ms
 				isBeaming: true,
 				maxBaudRate: 40000,
+				isSecure: true, // --> securityClasses.S0_Legacy: true
 			};
 			// @ts-expect-error We want to test this!
 			delete legacy.protocolVersion;
+			// @ts-expect-error We want to test this!
+			delete legacy.securityClasses;
 			node.deserialize(legacy);
 			const expected = {
 				...serializedTestNode,
 				isFrequentListening: "1000ms",
+				securityClasses: {
+					S0_Legacy: true,
+					// S2 classes are not granted when deserializing legacy caches
+					S2_AccessControl: false,
+					S2_Authenticated: false,
+					S2_Unauthenticated: false,
+				},
 			};
 			expect(node.serialize()).toEqual(expected);
 			node.destroy();
@@ -1086,11 +1170,11 @@ describe("lib/node/Node", () => {
 		it("deserialize() should also accept numbers for the interview stage", () => {
 			const input = {
 				...serializedTestNode,
-				interviewStage: InterviewStage.Neighbors,
+				interviewStage: InterviewStage.Complete,
 			};
 			const node = new ZWaveNode(1, fakeDriver);
 			node.deserialize(input);
-			expect(node.interviewStage).toBe(InterviewStage.Neighbors);
+			expect(node.interviewStage).toBe(InterviewStage.Complete);
 			node.destroy();
 		});
 
@@ -1126,7 +1210,7 @@ describe("lib/node/Node", () => {
 			node.destroy();
 		});
 
-		it("deserialize() should skip any primitive properties that have the wrong type", () => {
+		it("deserialize() should skip any primitive properties that have the wrong type or format", () => {
 			const node = new ZWaveNode(1, fakeDriver);
 			const wrongInputs: [string, any][] = [
 				["isListening", 1],
@@ -1136,6 +1220,7 @@ describe("lib/node/Node", () => {
 				["supportsSecurity", 3],
 				["supportsSecurity", "3"],
 				["protocolVersion", false],
+				["dsk", "foo"],
 			];
 			for (const [prop, val] of wrongInputs) {
 				const input = {
@@ -1255,7 +1340,7 @@ describe("lib/node/Node", () => {
 		const onValueRemoved = jest.fn();
 
 		function createNode(): void {
-			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver)
+			node = new ZWaveNode(1, fakeDriver as unknown as Driver)
 				.on("value added", onValueAdded)
 				.on("value updated", onValueUpdated)
 				.on("value removed", onValueRemoved);
@@ -1332,7 +1417,7 @@ describe("lib/node/Node", () => {
 		}
 
 		function performTest(options: TestOptions): void {
-			const node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(1, fakeDriver as unknown as Driver);
 			node["_status"] = undefined as any;
 			const spy = jest.fn();
 			node.on(options.expectedEvent, spy);
@@ -1449,7 +1534,7 @@ describe("lib/node/Node", () => {
 		};
 
 		beforeEach(() => {
-			node = new ZWaveNode(1, (fakeDriver as unknown) as Driver);
+			node = new ZWaveNode(1, fakeDriver as unknown as Driver);
 			fakeDriver.controller.nodes.set(1, node);
 		});
 
@@ -1498,7 +1583,7 @@ describe("lib/node/Node", () => {
 		function makeNode(
 			ccs: [CommandClasses, Partial<CommandClassInfo>][] = [],
 		): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			fakeDriver.controller.nodes.set(node.id, node);
 			for (const [cc, info] of ccs) {
 				node.addCC(cc, info);
@@ -1508,7 +1593,7 @@ describe("lib/node/Node", () => {
 
 		beforeEach(() => fakeDriver.sendMessage.mockClear());
 
-		it("should map commands from the root endpoint to endpoint 1 if MultiChannelAssociationCC is V1/V2", async () => {
+		it("should map commands from the root endpoint to endpoint 1 if configured", async () => {
 			const node = makeNode([
 				[
 					CommandClasses["Multi Channel Association"],
@@ -1536,9 +1621,15 @@ describe("lib/node/Node", () => {
 				isSupported: true,
 			});
 
+			node["_deviceConfig"] = {
+				compat: {
+					mapRootReportsToEndpoint: 1,
+				},
+			} as any;
+
 			// Handle a command for the root endpoint
 			const command = new BinarySwitchCCReport(
-				(fakeDriver as unknown) as Driver,
+				fakeDriver as unknown as Driver,
 				{
 					nodeId: 2,
 					data: Buffer.from([
@@ -1590,7 +1681,7 @@ describe("lib/node/Node", () => {
 			]);
 
 			const command = new EntryControlCCNotification(
-				(fakeDriver as unknown) as Driver,
+				fakeDriver as unknown as Driver,
 				{
 					nodeId: node.id,
 					data: buf,
@@ -1609,6 +1700,50 @@ describe("lib/node/Node", () => {
 				dataType: EntryControlDataTypes.ASCII,
 				eventType: EntryControlEventTypes.DisarmAll,
 				eventData: "1234",
+			});
+
+			node.destroy();
+		});
+	});
+
+	describe("waitForWakeup()", () => {
+		const fakeDriver = createEmptyMockDriver();
+
+		function makeNode(canSleep: boolean = false): ZWaveNode {
+			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+			node["_isListening"] = !canSleep;
+			node["_isFrequentListening"] = false;
+			if (canSleep)
+				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			fakeDriver.controller.nodes.set(node.id, node);
+			return node;
+		}
+
+		it("resolves when a sleeping node wakes up", async () => {
+			const node = makeNode(true);
+			node.markAsAsleep();
+
+			const promise = node.waitForWakeup();
+			await wait(1);
+			node.markAsAwake();
+			await expect(promise).toResolve();
+
+			node.destroy();
+		});
+
+		it("resolves immediately when called on an awake node", async () => {
+			const node = makeNode(true);
+			node.markAsAwake();
+
+			await expect(node.waitForWakeup()).toResolve();
+			node.destroy();
+		});
+
+		it("throws when called on a non-sleeping node", async () => {
+			const node = makeNode(false);
+
+			await assertZWaveError(() => node.waitForWakeup(), {
+				errorCode: ZWaveErrorCodes.CC_NotSupported,
 			});
 
 			node.destroy();

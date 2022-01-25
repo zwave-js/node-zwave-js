@@ -1,0 +1,8 @@
+pull_request_rules:
+  - name: Automatic merge for dependency updates
+    conditions:
+      - author=renovate[bot]
+      - label=automerge
+    actions:
+      merge:
+        method: squash

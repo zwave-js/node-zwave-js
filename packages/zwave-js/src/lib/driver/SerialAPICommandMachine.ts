@@ -1,7 +1,7 @@
 import {
 	assign,
+	createMachine,
 	Interpreter,
-	Machine,
 	MachineConfig,
 	MachineOptions,
 	StateMachine,
@@ -195,11 +195,7 @@ export function getSerialAPICommandMachineConfig(
 							lastError: (_) => "NAK",
 						}),
 					},
-					ACK: [
-						{
-							target: "waitForResponse",
-						},
-					],
+					ACK: "waitForResponse",
 				},
 				after: {
 					ACK_TIMEOUT: {
@@ -381,7 +377,7 @@ export function createSerialAPICommandMachine(
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
-	return Machine(
+	return createMachine(
 		getSerialAPICommandMachineConfig(
 			message,
 			implementations,

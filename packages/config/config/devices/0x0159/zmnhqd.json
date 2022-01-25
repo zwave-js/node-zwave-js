@@ -13,9 +13,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
+	"paramInformation": [
+		{
+			"#": "1",
 			"label": "Digital input type",
 			"description": "Defines the type of input device connected to digital input.",
 			"valueSize": 1,
@@ -42,7 +42,8 @@
 				}
 			]
 		},
-		"3": {
+		{
+			"#": "3",
 			"label": "Turn off alarming",
 			"valueSize": 1,
 			"minValue": 0,
@@ -60,7 +61,8 @@
 				}
 			]
 		},
-		"5": {
+		{
+			"#": "5",
 			"label": "Motion sensor memory timer",
 			"description": "Time after which the output triggered by motion sensor is turned off.",
 			"unit": "seconds",
@@ -69,7 +71,8 @@
 			"maxValue": 32535,
 			"defaultValue": 10
 		},
-		"10": {
+		{
+			"#": "10",
 			"label": "Auto-on timer",
 			"description": "Defines the time after which the device is turned to last known state.",
 			"unit": "seconds",
@@ -78,7 +81,8 @@
 			"maxValue": 32535,
 			"defaultValue": 0
 		},
-		"11": {
+		{
+			"#": "11",
 			"label": "Auto-off timer",
 			"description": "Defines the time after which the device is turned to last known state.",
 			"unit": "seconds",
@@ -87,25 +91,12 @@
 			"maxValue": 32535,
 			"defaultValue": 0
 		},
-		"30": {
-			"label": "Restore state on power failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
-		"50": {
+		{
+			"#": "50",
 			"label": "Enable/disable beeper",
 			"valueSize": 1,
 			"minValue": 0,
@@ -123,5 +114,5 @@
 				}
 			]
 		}
-	}
+	]
 }
