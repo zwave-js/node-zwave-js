@@ -48,26 +48,27 @@
 		},
 		{
 			"#": "10",
-			"label": "Activate / Desactivate function ALL ON / ALL OFF",
+			"label": "All On / All Off Function",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 32535,
+			"maxValue": 255,
 			"defaultValue": 255,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALL ON is not active, ALL OFF is not active",
+					"label": "Disable both",
 					"value": 0
 				},
 				{
-					"label": "ALL ON is not active, ALL OFF active",
+					"label": "Disable All On, Enable All Off",
 					"value": 1
 				},
 				{
-					"label": "ALL ON active, ALL OFF is not active",
+					"label": "Enable All On, Disable All Off",
 					"value": 2
 				},
 				{
-					"label": "255 - ALL ON active, ALL OFF active",
+					"label": "Enable both",
 					"value": 255
 				}
 			]
