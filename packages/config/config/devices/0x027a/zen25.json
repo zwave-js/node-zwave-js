@@ -82,7 +82,6 @@
 		{
 			"#": "6",
 			"label": "Current (A) Report Frequency",
-			"description": "Electrical Current (A) Report Frequency",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 5,
