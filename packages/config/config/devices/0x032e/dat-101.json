@@ -47,11 +47,11 @@
 		{
 			"#": "2",
 			"label": "Hysteresis",
-			"unit": "°С",
+			"unit": "°C",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 7,
-			"defaultValue": 1,
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
@@ -95,44 +95,35 @@
 			]
 		},
 		{
-			"#": "5",
-			"label": "Maximum Data Waiting Time For External Temperature Sensor",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 100,
-			"maxValue": 30000,
-			"defaultValue": 30000,
-		},
-		{
 			"#": "6",
-			"label": "Minimal Temperature",
-			"unit": "°С",
+			"label": "Minimum Temperature",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
-			"defaultValue": 4,
+			"defaultValue": 4
 		},
 		{
 			"#": "7",
-			"label": "Maximal Temperature,
-			"unit": "°С",
+			"label": "Maximum Temperature",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": -127,
 			"maxValue": 127,
-			"defaultValue": 30,
+			"defaultValue": 30
 		},
 		{
 			"#": "8",
-			"label": "Time In Turbo Mode",
+			"label": "Turbo Mode: Duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 1200,
-			"defaultValue": 120,
+			"defaultValue": 120
 		},
 		{
 			"#": "9",
-			"label": "Consider Thermostat Mode When Turning On Turbo Mode",
+			"label": "Turbo Mode: Consider Thermostat Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -152,6 +143,7 @@
 		{
 			"#": "10",
 			"label": "Thermostat Temperature Sensor Type",
+			"description": "When polling, the external sensor must be added to the 2nd association group. When listening, the DAT-101 must be added to the corresponding association group of the external sensor.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -162,36 +154,46 @@
 					"value": 0
 				},
 				{
-					"label": "Poll external room temperature sensor (External sensor has to be in 2nd association group)",
+					"label": "External temperature sensor (polling)",
 					"value": 1
 				},
 				{
-					"label": "Waiting for data from room temperature sensor (DAT-101 has to be in corresponding assiciation group of external temp sensor)",
+					"label": "External temperature sensor (listening)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "External Temperature Sensor Poll Period",
+			"label": "External Temperature Sensor: Poll Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 600,
-			"defaultValue": 300,
+			"defaultValue": 300
+		},
+		{
+			"#": "5",
+			"label": "External Temperature Sensor: Report Timeout",
+			"description": "After the specified timeout, lack of temperature reports from the external sensor will be considered a failure.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 30000
 		},
 		{
 			"#": "12",
-			"label": "The Temperature Change To Send Values To The 1st Group Of Associations,
-			"unit": "°С",
+			"label": "Automatic Reports: Temperature Change Threshold",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 16,
-			"defaultValue": 1,
+			"defaultValue": 1
 		},
 		{
 			"#": "13",
-			"label": "Time Interval To Force Data Transmission",
+			"label": "Automatic Reports: Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
@@ -200,7 +202,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Send Temperature To The 1st Group of Associations After Changing Relay State.",
+			"label": "Automatic Reports: After Changing Relay State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -208,11 +210,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Send",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Do not send",
+					"label": "Disable",
 					"value": 1
 				}
 			]
@@ -273,8 +275,8 @@
 		},
 		{
 			"#": "40",
-			"label": "Adjustment of the Temperature Sensor No.1",
-			"unit": "°С",
+			"label": "Temperature Sensor 1: Calibration",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
@@ -282,55 +284,55 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0",
+					"label": "+/- 0",
 					"value": 0
 				},
 				{
-					"label": "t +1°С",
+					"label": "+1",
 					"value": 1
 				},
 				{
-					"label": "t +2°С",
+					"label": "+2",
 					"value": 2
 				},
 				{
-					"label": "t +3°С",
+					"label": "+3",
 					"value": 3
 				},
 				{
-					"label": "t +4°С",
+					"label": "+4",
 					"value": 4
 				},
 				{
-					"label": "t +5°С",
+					"label": "+5",
 					"value": 5
 				},
 				{
-					"label": "t -1°С",
+					"label": "-1",
 					"value": 6
 				},
 				{
-					"label": "t -2°С",
+					"label": "-2",
 					"value": 7
 				},
 				{
-					"label": "t -3°С",
+					"label": "-3",
 					"value": 8
 				},
 				{
-					"label": "t -4°С",
+					"label": "-4",
 					"value": 9
 				},
 				{
-					"label": "t -5°С",
+					"label": "-5",
 					"value": 10
 				}
 			]
 		},
 		{
 			"#": "41",
-			"label": "Adjustment of the temperature sensor No.2",
-			"unit": "°С",
+			"label": "Temperature Sensor 2: Calibration",
+			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
@@ -338,47 +340,47 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "0",
+					"label": "+/- 0",
 					"value": 0
 				},
 				{
-					"label": "t +1°С",
+					"label": "+1",
 					"value": 1
 				},
 				{
-					"label": "t +2°С",
+					"label": "+2",
 					"value": 2
 				},
 				{
-					"label": "t +3°С",
+					"label": "+3",
 					"value": 3
 				},
 				{
-					"label": "t +4°С",
+					"label": "+4",
 					"value": 4
 				},
 				{
-					"label": "t +5°С",
+					"label": "+5",
 					"value": 5
 				},
 				{
-					"label": "t -1°С",
+					"label": "-1",
 					"value": 6
 				},
 				{
-					"label": "t -2°С",
+					"label": "-2",
 					"value": 7
 				},
 				{
-					"label": "t -3°С",
+					"label": "-3",
 					"value": 8
 				},
 				{
-					"label": "t -4°С",
+					"label": "-4",
 					"value": 9
 				},
 				{
-					"label": "t -5°С",
+					"label": "-5",
 					"value": 10
 				}
 			]
