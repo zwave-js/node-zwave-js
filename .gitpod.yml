@@ -1,13 +1,9 @@
 # Commands to start on workspace startup
+# For reference, these env variables are set in the project settings:
+# - YARN_CACHE_FOLDER=".yarn/cache"
+# - YARN_ENABLE_GLOBAL_CACHE="false"
 tasks:
-  - before: |
-      # set env variables for this terminal
-      export YARN_CACHE_FOLDER=".yarn/cache"
-      export YARN_ENABLE_GLOBAL_CACHE="false"
-      # Persist the env variables for other terminals
-      echo "export YARN_CACHE_FOLDER=\".yarn/cache\"" >> ~/.bashrc
-      echo "export YARN_ENABLE_GLOBAL_CACHE=\"false\"" >> ~/.bashrc
-    init: |
+  - init: |
       yarn install
       yarn build
     command: |
@@ -16,10 +12,6 @@ tasks:
 
   - name: Print help
     openMode: split-right
-    before: |
-      # set env variables for this terminal
-      export YARN_CACHE_FOLDER=".yarn/cache"
-      export YARN_ENABLE_GLOBAL_CACHE="false"
     command: bash .gitpod/help.sh
 
 # Auto-install VSCode extensions
