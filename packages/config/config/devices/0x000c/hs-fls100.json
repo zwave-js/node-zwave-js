@@ -22,7 +22,7 @@
 		{
 			"#": "2",
 			"label": "Light Level Threshold",
-			"description": "Floodlight activated and Basic Set Command sent when PIR is triggered if light level is below this threshold.",
+			"description": "Activate floodlight and send Basic Set Command when PIR is triggered while light level is below this threshold.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
