@@ -364,6 +364,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -461,7 +462,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "8[0x7f000000]",

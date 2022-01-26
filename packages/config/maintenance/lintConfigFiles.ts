@@ -1,4 +1,8 @@
-import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
+import {
+	getBitMaskWidth,
+	getIntegerLimits,
+	getMinimumShiftForBitMask,
+} from "@zwave-js/core";
 import { reportProblem } from "@zwave-js/maintenance";
 import { formatId, getErrorMessage, num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -604,42 +608,43 @@ Consider converting this parameter to unsigned using ${white(
 				for (const [key, param] of partialParams) {
 					const bitMask = key.valueBitMask!;
 					const shiftAmount = getMinimumShiftForBitMask(bitMask);
+					const bitMaskWidth = getBitMaskWidth(bitMask);
 					const shiftedBitMask = bitMask >>> shiftAmount;
-					// TODO: Find out how to test this with negative values
-					if (
-						param.minValue >= 0 &&
-						(param.minValue & shiftedBitMask) !== param.minValue
-					) {
+					const minValue =
+						param.unsigned || bitMaskWidth == 1
+							? 0
+							: -(1 << bitMaskWidth) / 2;
+					const maxValue =
+						param.unsigned || bitMaskWidth == 1
+							? (1 << bitMaskWidth) - 1
+							: (1 << bitMaskWidth) / 2 - 1;
+					if (param.minValue < minValue) {
 						addError(
 							file,
 							`Parameter #${key.parameter}[${num2hex(
 								bitMask,
 							)}]: minimum value ${
 								param.minValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Minimum value expected to be greater than ${minValue}. All values are relative to the rightmost bit of the mask!
 Did you mean to use ${param.minValue >>> shiftAmount}?`,
 							variant,
 						);
 					}
-					if (
-						param.maxValue >= 0 &&
-						(param.maxValue & shiftedBitMask) !== param.maxValue
-					) {
+					if (param.maxValue > maxValue) {
 						addError(
 							file,
 							`Parameter #${key.parameter}[${num2hex(
 								bitMask,
 							)}]: maximum value ${
 								param.maxValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Maximum value expected to be less than ${maxValue}. All values are relative to the rightmost bit of the mask!
 Did you mean to use ${param.maxValue >>> shiftAmount}?`,
 							variant,
 						);
 					}
 					if (
-						param.defaultValue >= 0 &&
-						(param.defaultValue & shiftedBitMask) !==
-							param.defaultValue
+						param.defaultValue < minValue ||
+						param.defaultValue > maxValue
 					) {
 						addError(
 							file,
@@ -647,7 +652,7 @@ Did you mean to use ${param.maxValue >>> shiftAmount}?`,
 								bitMask,
 							)}]: default value ${
 								param.defaultValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). All values are relative to the rightmost bit of the mask!
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Default value expected to be between ${minValue} and ${maxValue}. All values are relative to the rightmost bit of the mask!
 Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 							variant,
 						);
@@ -685,16 +690,25 @@ Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 				for (const [key, param] of partialParamsWithOptions) {
 					const bitMask = key.valueBitMask!;
 					const shiftAmount = getMinimumShiftForBitMask(bitMask);
+					const bitMaskWidth = getBitMaskWidth(bitMask);
 					const shiftedBitMask = bitMask >>> shiftAmount;
 					for (const opt of param.options) {
-						if ((opt.value & shiftedBitMask) !== opt.value) {
+						const minValue =
+							param.unsigned || bitMaskWidth == 1
+								? 0
+								: -(1 << bitMaskWidth) / 2;
+						const maxValue =
+							param.unsigned || bitMaskWidth == 1
+								? (1 << bitMaskWidth) - 1
+								: (1 << bitMaskWidth) / 2 - 1;
+						if (opt.value < minValue || opt.value > maxValue) {
 							addError(
 								file,
 								`Parameter #${key.parameter}[${num2hex(
 									bitMask,
 								)}]: Option ${
 									opt.value
-								} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Option values are always relative to the rightmost bit of the mask!
+								} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Value expected to be between ${minValue} and ${maxValue}. Option values are always relative to the rightmost bit of the mask!
 Did you mean to use ${opt.value >>> shiftAmount}?`,
 								variant,
 							);

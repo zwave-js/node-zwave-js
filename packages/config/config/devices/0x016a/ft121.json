@@ -220,6 +220,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Constant Speed",
@@ -235,6 +236,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -258,7 +260,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 254,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "37[0xff0000]",
@@ -277,6 +280,7 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -309,6 +313,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

@@ -373,7 +373,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 221
+			"defaultValue": 221,
+			"unsigned": true
 		},
 		{
 			"#": "83[0xff00]",
@@ -381,7 +382,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 160
+			"defaultValue": 160,
+			"unsigned": true
 		},
 		{
 			"#": "83[0xff0000]",
@@ -390,7 +392,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 221
+			"defaultValue": 221,
+			"unsigned": true
 		},
 		{
 			"#": "84[0xff]",
@@ -399,7 +402,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50
+			"defaultValue": 50,
+			"unsigned": true
 		},
 		{
 			"#": "84[0xff00]",
@@ -408,7 +412,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50
+			"defaultValue": 50,
+			"unsigned": true
 		},
 		{
 			"#": "84[0xff0000]",
@@ -417,7 +422,8 @@
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50
+			"defaultValue": 50,
+			"unsigned": true
 		}
 	]
 }
