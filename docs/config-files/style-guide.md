@@ -233,7 +233,30 @@ or
 
 ### Special Note: Enable/Disable
 
-Whenever a parameter only allows two options, formulate the label and/or description in a way that allows the options to be `Enable/Disable` if possible. Ultimately some UIs may choose to present these parameters using a simple switch. Avoid `Yes/No`, `True/False`, etc.
+Whenever a parameter only allows two options, formulate the label and/or description in a way that allows the options to be `Enable/Disable` if possible. Ultimately some UIs may choose to present these parameters using a simple switch. Avoid `Yes/No`, `True/False`, etc. Avoid using `Enable` or `Disable` in the label, eg:
+
+```diff
+	{
+		"#": "8",
++		"label": "Auto-Off (Left Outlet)",
+-		"label": "Enable Auto-Off (Left Outlet)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+```
 
 ### Min/Max Values
 
