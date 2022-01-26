@@ -17,7 +17,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": [
 		{
 			"#": "1",
@@ -344,7 +343,7 @@
 		},
 		{
 			"#": "35",
-			"label": "Alarm: Duration",
+			"label": "Alarm Duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -359,43 +358,35 @@
 		},
 		{
 			"#": "40[0x01]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "First Button: Send Scene on Single Press"
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
 		},
 		{
 			"#": "40[0x02]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "First Button: Send Scene on Double Press"
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
 		},
 		{
 			"#": "40[0x04]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "First Button: Send Scene on Triple Press"
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
 		},
 		{
 			"#": "40[0x08]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "First Button: Send Scene on Press and Release"
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
 		},
 		{
 			"#": "41[0x01]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Second Button: Send Scene on Single Press"
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
 		},
 		{
 			"#": "41[0x02]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Second Button: Send Scene on Double Press"
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
 		},
 		{
 			"#": "41[0x04]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Second Button: Send Scene on Triple Press"
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
 		},
 		{
 			"#": "41[0x08]",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Second Button: Send Scene on Press and Release"
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
 		},
 		{
 			"#": "60",
@@ -416,7 +407,7 @@
 		{
 			"#": "65",
 			"$import": "templates/fibaro_template.json#energy_report_threshold",
-			"maxValue": 32400,
+			"maxValue": 500,
 			"defaultValue": 10
 		},
 		{
@@ -550,7 +541,7 @@
 		},
 		{
 			"#": "162",
-			"label": "Time Delay: Burnt Out Bulb and Overload Detection",
+			"label": "Burnt Out Bulb and Overload Detection: Time Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -559,7 +550,7 @@
 		},
 		{
 			"#": "163",
-			"label": "First Button ON Value Sent to Association Groups",
+			"label": "First Button ON: Value Sent to Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -573,7 +564,7 @@
 		},
 		{
 			"#": "164",
-			"label": "Second Button OFF Value Sent to Association Groups",
+			"label": "Second Button OFF: Value Sent to Association Groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -664,7 +655,7 @@
 		},
 		{
 			"#": "174",
-			"label": "Soft-start Duration",
+			"label": "Soft-Start Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -687,7 +678,7 @@
 		},
 		{
 			"#": "175",
-			"label": "Auto-calibration Trigger",
+			"label": "Auto-Calibration Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
