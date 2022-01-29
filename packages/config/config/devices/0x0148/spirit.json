@@ -150,5 +150,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"comments": {
+			"level": "warning",
+			"text": "The thermostat is missing \"Manufacturer Specific\" from its list of supported modes, although the mode is supported. Application-specific workarounds may be necessary to switch to \"Manufacturer Specific\" mode."
+		}
+	}
 }
