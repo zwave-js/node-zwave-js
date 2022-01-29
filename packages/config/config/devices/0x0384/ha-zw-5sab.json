@@ -1,0 +1,258 @@
+{
+	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5SAB",
+	"description": "4-in-1 Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0009",
+			"zwaveAllianceId": 2943
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "10",
+			"label": "Low Battery Power Level",
+			"description": "Low battery power level of alarm threshold values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "100",
+			"label": "Set 101 ~ 104 to Default",
+			"description": "Set 101 ~ 104 to default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "101",
+			"label": "The Interval Time of Sending The Temperature Reporting",
+			"description": "The interval time of sending the temperature reporting. if setting to 0 then the temperature reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The temperature reporting is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "The Interval Time of Sending The Humidity Reporting",
+			"description": "The interval time of sending the humidity reporting. if setting to 0 then the humidity reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The luminance reporting is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "103",
+			"label": "The Interval Time of Sending The Luminance Reporting",
+			"description": "The interval time of sending the luminance reporting. if setting to 0 then the luminance reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The luminance reporting is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "104",
+			"label": "The Interval Time of Sending The Battery Level Reporting",
+			"description": "The interval time of sending the battery level reporting. if setting to 0 then the battery level reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 86400,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The battery level reporting is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "110",
+			"label": "Enable 111 ~ 114 Temperature/Humidity/Luminance/ Battery Level Change Reporting",
+			"description": "Enable 111 ~ 114 temperature/humidity/luminance/ battery level change reporting. 0 = unable 1 = enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "111",
+			"label": "Configuration Temperature Change Threshold",
+			"description": "The temperature change threshold value(unit 0.1℃)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "112",
+			"label": "Configuration Humidity Change Threshold",
+			"description": "Humidity change threshold value(unit %)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "113",
+			"label": "Configuration Luminance Change Threshold",
+			"description": "Configuration luminance change threshold. valid values: 1-65528(unit lx)",
+			"valueSize": 2,
+			"minValue": -32767,
+			"maxValue": 32766,
+			"defaultValue": 150,
+			"unsigned": true
+		},
+		{
+			"#": "114",
+			"label": "Configuration Battery Level Change Threshold",
+			"description": "Battery level change threshold value(unit)%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Turn On/Off Pir",
+			"description": "0x0a indicates the highest sensitivity, 0x00 means off PIR detection function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Pir Triggers The Waiting Time Value",
+			"description": "Pir triggers the waiting time value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 30,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "14",
+			"label": "Whether The Basic Set Command is Sent After The PIR is Triggered",
+			"description": "Whether the Basic Set command is sent after the PIR is triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Pir Triggers The Correspondence Between The Value of The Basic Set And The PIR State",
+			"description": "Pir triggers the correspondence between the value of the Basic Set and the PIR state, when value is 0x00 PIR triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00, otherwise PIR triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Pir triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00",
+					"value": 0
+				},
+				{
+					"label": "Pir triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Add 4-in-1 Motion Sensor into a Z-Wave network: \na. Let the primary controller go into inclusion mode (If you don’t know how to do this, refer to its manual).\nb. Short Press one time this Z-Button.\nc. The 4-in-1 Motion Sensor LED will blink, If the inclusion is successful, then LED will keep on 2 seconds. Otherwise, the LED will blink until timeout, in which case you need to repeat the process from step b.",
+		"exclusion": "Remove 4-in-1 Motion Sensor from a Z-Wave network: \na. Let the primary controller go into exclusion mode (If you don’t know how to do this, refer to its manual).\nb. Short Press one time this Z-Button.\nc. The 4-in-1 Motion Sensor LED will keep on, If the remove is successful, then LED will blink 2 seconds. Otherwise, the LED will keep on until timeout, in which case you need to repeat the process from step b.\n\nNote: 4-in-1 Motion Sensor will go away “Z-Wave SmartStart” Inclusion when it is removed from a Z-Wave network.",
+		"reset": "Reset 4-in-1 Motion Sensor to factory Default:\n1. Press and hold the Z-Button for 5 seconds.\n2. If holding time is more than 5 seconds, the LED will blink fast at acceleration. If reset success 4-in-1 Motion Sensor LED will turn off. When the Z-Button is released, it will send “Device Reset Locally Command”. Otherwise please repeat step 2.\n\nNote:\n1, This procedure should only be used when the primary controller is inoperable.\n2, Reset 4-in-1 Motion Sensor to factory default settings. It will set the 4-in-1 Motion Sensor to not in Z-Wave network state; delete the Association setting and restore the Configuration setting to the default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2943/AIBASE%20Z-Wave%20Multi-Sensor%20UserGuide%2020180606.pdf"
+	}
+}
