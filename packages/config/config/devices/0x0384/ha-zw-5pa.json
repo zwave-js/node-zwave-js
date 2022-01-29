@@ -1,0 +1,247 @@
+{
+	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5PA",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x000b",
+			"zwaveAllianceId": 3007
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Overcurrent Protection",
+			"description": "Smart plug keep detecting the load power, once the ac current exceeds 16.5a for more than 4 seconds, smart plug's relay will turn off",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "The function is enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "100",
+			"label": "Setting The Parameters 101~104 to The Default States",
+			"description": "Available settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 85,
+			"defaultValue": 85,
+			"unsigned": true
+		},
+		{
+			"#": "101",
+			"label": "Setting Time For Sending Meter Report (watt)",
+			"description": "The interval time of sending meter report (watt) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "Setting Time For Sending Meter Report (kwh)",
+			"description": "The interval of sending meter report (kwh) to association device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "103",
+			"label": "Setting Time For Sending Meter Report (voltage)",
+			"description": "The interval of sending meter report (voltage) to association device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "104",
+			"label": "Setting Time For Sending Meter Report (current)",
+			"description": "The interval time of sending meter report (current) to associated device (group lifeline)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "The Value Here Represents Minimum Change in Wattage (in Terms of Wattage) For a Meter Report to Be Sent",
+			"description": "When the change value of load power exceeds the setting value, smart plug will send meter report (watt) to associated device (group lifeline)",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "The Value Here Represents Minimum Change in Wattage Percent (in Terms of Percentage) For a Meter Report (watt) to Be Sent",
+			"description": "When the change value of the load power exceeds the setting value, smart plug will send meter report to associated device (group lifeline)",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Setting Device Status After Power Failure",
+			"description": "Define how the plug reacts after the power supply is back on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smart plug memorizes its state after a power failure",
+					"value": 0
+				},
+				{
+					"label": "Smart plug does not memorize its state after a power failure. connected device will be on after the power supply is reconnected",
+					"value": 1
+				},
+				{
+					"label": "Smart plug does not memorize its state after a power failure. connected device will be off after the power supply is reconnected",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "254",
+			"label": "Enable/Disable The Configuration Command",
+			"description": "Lock/unlock all configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Notification When Load Status Change",
+			"description": "Smart plug can send notifications to associated device (group lifeline) when the status of smart plug’s load is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED status follows the load change",
+					"value": 0
+				},
+				{
+					"label": "When operating the load, the LED lights for 5 seconds and then turns off",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Led Load Indicator Mode Selection",
+			"description": "Configure LED display mode to prevent light pollution at night",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED status follows the load change",
+					"value": 0
+				},
+				{
+					"label": "When operating the load, the LED lights for 5 seconds and then turns off",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "To add the product to the Z-Wave network:\na. Make sure that the Smart Plug has been connected to the power supply.\nb. Set the Z-Wave network main controller into inclusion mode.\nc. Power on.\nd. The LED will blink fast until the inclusion is completed and then the LED will keep turning on or off. Otherwise, the LED will still blink slowly, in which you need to repeat the process from step b",
+		"exclusion": "To remove the product from the Z-Wave network:\na. Insert the Smart Plug to power socket, the LED will follow the status (on or off) of its load’s power level.\nb. Set the Z-Wave network main controller into exclusion mode.\nc. Short press Button 3 times within 1.5 second.\nd. The LED will blink fast until the exclusion is completed, then the LED will keep on blinking slowly. Otherwise, the LED will keep on blink fast for 35 seconds and then follow the status (on or off) of its load status",
+		"reset": "Reset Smart Plug to factory default:\n1. Make sure that the Smart Plug has been connected to the power supply.\n2. Press and hold the Button for 5 seconds.\n3. If holding time is more than one second, the LED will blink faster and faster. If holding time is more than 5 seconds, the LED will be solid for 3 seconds to indicate that the resetting is successful. Otherwise, repeat step 2.\nNote:\nReset to factory will remove Smart Plug from the Z-Wave network. Use this procedure only in the event that the network primary controller missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3007/Aibase%20Smart%20Plug%20(Z-Wave)%20User%20Guide.pdf"
+	}
+}
