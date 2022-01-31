@@ -4197,7 +4197,7 @@ __metadata:
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
     js-levenshtein: ^1.1.6
-    json-logic-js: ^2.0.1
+    json-logic-js: ^2.0.2
     json5: ^2.2.0
     pegjs: ^0.10.0
     semver: ^7.3.5
@@ -9668,10 +9668,10 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"json-logic-js@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "json-logic-js@npm:2.0.1"
-  checksum: bc004af7adee17b45749374cdb09d05e8c0964cd302c9b375e7cd6e7fbb9ba459ef85c5efb42d5478fee13542ddb3158eeed409cf7ede039146153eb10be3157
+"json-logic-js@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "json-logic-js@npm:2.0.2"
+  checksum: 34846500b76a25a86de65560afe358e844b384f0f61c1832fed6a9dfc8f45d884be0b0c8ab033d1a2df7c92b33910d8cee1b3d28e0f461cc55c715d2761219ef
   languageName: node
   linkType: hard
 
