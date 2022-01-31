@@ -83,7 +83,7 @@
     "@types/semver": "^7.3.9",
     "@types/serialport": "^8.0.2",
     "@types/source-map-support": "^0",
-    "@xstate/test": "^0.5.0",
+    "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "8.10.2",
     "@zwave-js/testing": "8.10.2",
     "esbuild": "*",
