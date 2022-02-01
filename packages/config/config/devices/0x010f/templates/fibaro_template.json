@@ -410,7 +410,7 @@
 		"unsigned": true
 		// The options are device specific
 	},
-	"alarm_configuration_indicator_blink_color":{
+	"alarm_configuration_indicator_blink_color": {
 		// This generally uses a bitmask of 0xf0
 		// The label depends on the slot this is for, should be something like
 		// Alarm Configuration - 1st Slot LED Indicator
