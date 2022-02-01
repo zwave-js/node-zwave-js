@@ -6,7 +6,8 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 4206
 		}
 	],
 	"firmwareVersion": {
@@ -88,13 +89,21 @@
 		},
 		{
 			"#": "5",
-			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
-			"maxValue": 45
+			"label": "Minimum Dim Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 45,
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"$import": "~/templates/master_template.json#maximum_dim_level_1-99",
-			"minValue": 55
+			"label": "Maximum Dim Level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 55,
+			"maxValue": 99,
+			"defaultValue": 99
 		},
 		{
 			"#": "7",
@@ -118,8 +127,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Default Level (Manual)",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Default Level (Manual)",
 			"defaultValue": 0,
 			"options": [
 				{
@@ -130,8 +139,8 @@
 		},
 		{
 			"#": "10",
-			"label": "Default Level (Z-Wave)",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Default Level (Z-Wave)",
 			"defaultValue": 0,
 			"options": [
 				{
@@ -180,8 +189,8 @@
 		},
 		{
 			"#": "12[0x01]",
-			"label": "Association Behavior: Local",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Association Behavior: Local",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -362,28 +371,31 @@
 		{
 			"#": "15",
 			"$import": "#paramInformation/14",
-			"label": "LED Indicator: Brightness When Off"
+			"label": "LED Indicator: Brightness When Off",
+			"defaultValue": 1
 		},
 		{
-			"#": "16[0x000000ff]",
+			"#": "16[0xff]",
 			"$import": "#paramInformation/13",
 			"label": "LED Indicator: Effect Color",
-			"valueSize": 4
+			"valueSize": 4,
+			"defaultValue": 0
 		},
 		{
-			"#": "16[0x0000ff00]",
+			"#": "16[0xff00]",
 			"$import": "#paramInformation/14",
 			"label": "LED Indicator: Effect Brightness",
-			"valueSize": 4
+			"valueSize": 4,
+			"defaultValue": 0
 		},
 		{
-			"#": "16[0x00ff0000]",
+			"#": "16[0xff0000]",
 			"label": "LED Indicator: Effect Duration",
 			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 0
 		},
 		{
 			"#": "16[0x7f000000]",
@@ -431,8 +443,8 @@
 		},
 		{
 			"#": "18",
-			"label": "Power Report Threshold",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Power Report Threshold",
 			"unit": "%",
 			"defaultValue": 10
 		},
@@ -458,8 +470,8 @@
 		{
 			"#": "20",
 			"$if": "firmwareVersion < 1.43",
-			"label": "Energy Report Threshold",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Energy Report Threshold",
 			"unit": "%",
 			"defaultValue": 10
 		},
@@ -550,7 +562,8 @@
 			"#": "52",
 			"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Smart Bulb Mode"
+			"label": "Smart Bulb Mode",
+			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch."
 		}
 	],
 	"metadata": {
