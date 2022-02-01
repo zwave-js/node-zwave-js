@@ -20,8 +20,8 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Association LED",
-			"$import": "~/templates/master_template.json#base_enable_disable_255"
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Association LED"
 		},
 		{
 			"#": "12",
@@ -45,8 +45,8 @@
 		},
 		{
 			"#": "13",
-			"label": "Buttons Lock",
-			"$import": "~/templates/master_template.json#base_enable_disable_255"
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Buttons Lock"
 		},
 		{
 			"#": "15",
@@ -110,9 +110,9 @@
 		},
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Identify",
 			"description": "LED Indicator blinks for 5 seconds to help identify the device.",
-			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"writeOnly": true
 		},
 		{
@@ -126,38 +126,38 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "B0 (0x01 represents load is on)",
+					"label": "0x01 represents load is on",
 					"value": 176
 				},
 				{
-					"label": "B1 (0xFF represents load is on)",
+					"label": "0xFF represents load is on",
 					"value": 177
 				}
 			]
 		},
 		{
 			"#": "25",
-			"label": "Off Value",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Off Value",
 			"defaultValue": 0
 		},
 		{
 			"#": "26",
-			"label": "On Value",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "On Value",
 			"defaultValue": 0
 		},
 		{
 			"#": "27",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
 			"label": "Long Press Lock",
-			"description": "Prevents sending Node Info on a long press (2-10 seconds)",
-			"$import": "~/templates/master_template.json#base_enable_disable_255"
+			"description": "Prevents sending Node Info on a long press (2-10 seconds)"
 		},
 		{
 			"#": "28",
+			"$import": "~/templates/master_template.json#base_enable_disable_255_inverted",
 			"label": "Consult Associated Device",
 			"description": "If there is 1 associated device, confirm device state before sending command to association group. (Ensure toggle actions function correctly)",
-			"$import": "~/templates/master_template.json#base_enable_disable_255_inverted",
 			"defaultValue": 0
 		},
 		{
