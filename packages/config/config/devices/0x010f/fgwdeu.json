@@ -176,13 +176,13 @@
 			"defaultValue": 0
 		},
 		{
-			"#": "30[0x00ff0000]",
+			"#": "30[0xff0000]",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"label": "Alarm Configuration: 1st Slot: Notification Event",
 			"defaultValue": 0
 		},
 		{
-			"#": "30[0x00000003]",
+			"#": "30[0x03]",
 			"label": "Alarm Configuration: 1st Slot: Load Action",
 			"valueSize": 4,
 			"minValue": 0,
@@ -210,40 +210,9 @@
 			]
 		},
 		{
-			"#": "30[0x000000f0]",
-			"label": "Alarm Configuration: 1st Slot: LED Indicator",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No change",
-					"value": 0
-				},
-				{
-					"label": "Blink red",
-					"value": 1
-				},
-				{
-					"label": "Blink green",
-					"value": 2
-				},
-				{
-					"label": "Blink blue",
-					"value": 4
-				},
-				{
-					"label": "Disable LED",
-					"value": 8
-				},
-				{
-					"label": "Blink red-white-blue",
-					"value": 15
-				}
-			]
+			"#": "30[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 1st Slot: LED Indicator"
 		},
 		{
 			"#": "31[0xff000000]",
@@ -252,22 +221,21 @@
 			"defaultValue": 5
 		},
 		{
-			"#": "31[0x00ff0000]",
+			"#": "31[0xff0000]",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"label": "Alarm Configuration: 2nd Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
-			"#": "31[0x00000003]",
-			"$import": "#paramInformation/30[0x00000003]",
+			"#": "31[0x03]",
+			"$import": "#paramInformation/30[0x03]",
 			"label": "Alarm Configuration: 2nd Slot: Load Action",
 			"defaultValue": 0
 		},
 		{
-			"#": "31[0x000000f0]",
-			"$import": "#paramInformation/30[0x000000f0]",
-			"label": "Alarm Configuration: 2nd Slot: LED Indicator",
-			"defaultValue": 0
+			"#": "31[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 2nd Slot: LED Indicator"
 		},
 		{
 			"#": "32[0xff000000]",
@@ -276,22 +244,21 @@
 			"defaultValue": 1
 		},
 		{
-			"#": "32[0x00ff0000]",
+			"#": "32[0xff0000]",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"label": "Alarm Configuration: 3rd Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
-			"#": "32[0x00000003]",
-			"$import": "#paramInformation/30[0x00000003]",
+			"#": "32[0x03]",
+			"$import": "#paramInformation/30[0x03]",
 			"label": "Alarm Configuration: 3rd Slot: Load Action",
 			"defaultValue": 0
 		},
 		{
-			"#": "32[0x000000f0]",
-			"$import": "#paramInformation/30[0x000000f0]",
-			"label": "Alarm Configuration: 3rd Slot: LED Indicator",
-			"defaultValue": 0
+			"#": "32[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 3rd Slot: LED Indicator"
 		},
 		{
 			"#": "33[0xff000000]",
@@ -300,22 +267,21 @@
 			"defaultValue": 2
 		},
 		{
-			"#": "33[0x00ff0000]",
+			"#": "33[0xff0000]",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"label": "Alarm Configuration: 4th Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
-			"#": "33[0x00000003]",
-			"$import": "#paramInformation/30[0x00000003]",
+			"#": "33[0x03]",
+			"$import": "#paramInformation/30[0x03]",
 			"label": "Alarm Configuration: 4th Slot: Load Action",
 			"defaultValue": 0
 		},
 		{
-			"#": "33[0x000000f0]",
-			"$import": "#paramInformation/30[0x000000f0]",
-			"label": "Alarm Configuration: 4th Slot: LED Indicator",
-			"defaultValue": 0
+			"#": "33[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 4th Slot: LED Indicator"
 		},
 		{
 			"#": "34[0xff000000]",
@@ -324,22 +290,21 @@
 			"defaultValue": 4
 		},
 		{
-			"#": "34[0x00ff0000]",
+			"#": "34[0xff0000]",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
 			"label": "Alarm Configuration: 5th Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
-			"#": "34[0x00000003]",
-			"$import": "#paramInformation/30[0x00000003]",
+			"#": "34[0x03]",
+			"$import": "#paramInformation/30[0x03]",
 			"label": "Alarm Configuration: 5th Slot: Load Action",
 			"defaultValue": 0
 		},
 		{
-			"#": "34[0x000000f0]",
-			"$import": "#paramInformation/30[0x000000f0]",
-			"label": "Alarm Configuration: 5th Slot: LED Indicator",
-			"defaultValue": 0
+			"#": "34[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 5th Slot: LED Indicator"
 		},
 		{
 			"#": "35",
