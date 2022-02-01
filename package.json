@@ -41,7 +41,7 @@
     "@babel/plugin-transform-typescript": "*",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-typescript": "^7.16.7",
-    "@commitlint/cli": "^16.0.1",
+    "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
     "@tsconfig/node12": "^1.0.9",
     "@types/fs-extra": "^9.0.13",
