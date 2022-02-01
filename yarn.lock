@@ -4292,7 +4292,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.5
     ts-pegjs: ^0.3.1
-    typescript: 4.5.4
+    typescript: 4.5.5
     winston: ^3.3.4
     xml2json: ^0.12.0
     yargs: ^17.3.1
@@ -4318,7 +4318,7 @@ __metadata:
     logform: ^2.3.2
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.5.4
+    typescript: 4.5.5
     winston: ^3.3.4
     winston-transport: ^4.4.2
   languageName: unknown
@@ -4355,7 +4355,7 @@ __metadata:
     prettier: ^2.5.1
     reflect-metadata: ^0.1.13
     ts-morph: ^13.0.3
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: ^17.3.1
   languageName: unknown
   linkType: soft
@@ -4378,7 +4378,7 @@ __metadata:
     jest-extended: ^0.11.5
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    typescript: 4.5.4
+    typescript: 4.5.5
     yargs: ^17.3.1
   bin:
     nvmedit: bin/nvmedit.js
@@ -4439,7 +4439,7 @@ __metadata:
     semver: ^7.3.5
     source-map-support: ^0.5.21
     ts-node: ^10.4.0
-    typescript: 4.5.4
+    typescript: 4.5.5
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4462,7 +4462,7 @@ __metadata:
     esbuild-register: ^3.3.1
     jest-extended: ^0.11.5
     serialport: ^9.2.8
-    typescript: 4.5.4
+    typescript: 4.5.5
     winston: ^3.3.4
   languageName: unknown
   linkType: soft
@@ -4479,7 +4479,7 @@ __metadata:
     esbuild-register: ^3.3.1
     fs-extra: ^10.0.0
     jest-extended: ^0.11.5
-    typescript: 4.5.4
+    typescript: 4.5.5
   languageName: unknown
   linkType: soft
 
@@ -4496,7 +4496,7 @@ __metadata:
     esbuild-register: ^3.3.1
     jest-extended: ^0.11.5
     triple-beam: "*"
-    typescript: 4.5.4
+    typescript: 4.5.5
     winston-transport: ^4.4.2
   languageName: unknown
   linkType: soft
@@ -13755,23 +13755,23 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.5.4":
-  version: 4.5.4
-  resolution: "typescript@npm:4.5.4"
+"typescript@npm:4.5.5":
+  version: 4.5.5
+  resolution: "typescript@npm:4.5.5"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 59f3243f9cd6fe3161e6150ff6bf795fc843b4234a655dbd938a310515e0d61afd1ac942799e7415e4334255e41c2c49b7dd5d9fd38a17acd25a6779ca7e0961
+  checksum: 506f4c919dc8aeaafa92068c997f1d213b9df4d9756d0fae1a1e7ab66b585ab3498050e236113a1c9e57ee08c21ec6814ca7a7f61378c058d79af50a4b1f5a5e
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.5.4#~builtin<compat/typescript>":
-  version: 4.5.4
-  resolution: "typescript@patch:typescript@npm%3A4.5.4#~builtin<compat/typescript>::version=4.5.4&hash=493e53"
+"typescript@patch:typescript@4.5.5#~builtin<compat/typescript>":
+  version: 4.5.5
+  resolution: "typescript@patch:typescript@npm%3A4.5.5#~builtin<compat/typescript>::version=4.5.5&hash=493e53"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 2e488dde7d2c4a2fa2e79cf2470600f8ce81bc0563c276b72df8ff412d74456ae532ba824650ae936ce207440c79720ddcfaa25e3cb4477572b8534fa4e34d49
+  checksum: c05c318d79c690f101d7ffb34cd6c7d6bbd884d3af9cefe7749ad0cd6be43c7082f098280982ca945dcba23fde34a08fed9602bb26540936baf8c0520727d3ba
   languageName: node
   linkType: hard
 
@@ -14537,7 +14537,7 @@ typescript@^4.4.3:
     semver: ^7.3.5
     serialport: ^9.2.8
     source-map-support: ^0.5.21
-    typescript: 4.5.4
+    typescript: 4.5.5
     winston: ^3.3.4
     xstate: ^4.27.0
   languageName: unknown
