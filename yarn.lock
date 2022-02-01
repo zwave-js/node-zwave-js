@@ -4241,24 +4241,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xstate/graph@npm:^1.4.0":
-  version: 1.4.0
-  resolution: "@xstate/graph@npm:1.4.0"
+"@xstate/graph@npm:^1.4.1":
+  version: 1.4.1
+  resolution: "@xstate/graph@npm:1.4.1"
   peerDependencies:
-    xstate: ^4.9.0
-  checksum: 9368e1d706069069a955579a1e50bc2d8c28baa1d1e074373b6fbcb8d0daa1bbe3020a4e516225952d20c1de804037ee9f23bd26ec7a4f5ce1945fff1684807b
+    xstate: ^4.29.0
+  checksum: 1f23d95baaddd05bb7934cf29cce044ca21f3373446a5c57299a52b862533b9b7a983b075b31c93a46710f0dc2fc3090f0ed318b4afe49aa7a5810ca40391e4b
   languageName: node
   linkType: hard
 
-"@xstate/test@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@xstate/test@npm:0.5.0"
+"@xstate/test@npm:^0.5.1":
+  version: 0.5.1
+  resolution: "@xstate/test@npm:0.5.1"
   dependencies:
-    "@xstate/graph": ^1.4.0
+    "@xstate/graph": ^1.4.1
     chalk: ^2.4.2
   peerDependencies:
-    xstate: ^4.9.0
-  checksum: b672694d382ae7e700d27f832a1736a97f4b35532344a9d3116429c07c5ba68d3db0d0934b6ea6468de0b806b87870c1036089c7b1d6caa9a8c381e360458813
+    xstate: ^4.29.0
+  checksum: be1d239a9c778d95b831b4b75f8daf226c1ca759d24310eac65065c8f2bf8a003f548d71a481773f74c936406c3cb7ff2242321a229b33954a60f73cf96bc71d
   languageName: node
   linkType: hard
 
@@ -14505,7 +14505,7 @@ typescript@^4.4.3:
     "@types/semver": ^7.3.9
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
-    "@xstate/test": ^0.5.0
+    "@xstate/test": ^0.5.1
     "@zwave-js/config": 8.11.2
     "@zwave-js/core": 8.10.2
     "@zwave-js/maintenance": 8.10.2
