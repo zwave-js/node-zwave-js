@@ -51,6 +51,11 @@
 			"valueSize": 2
 		},
 		{
+			"#": "38",
+			"$if": "firmwareVersion >= 3.25",
+			"$import": "templates/aeotec_template.json#stop_action_button"
+		},
+		{
 			"#": "80",
 			"$import": "templates/aeotec_template.json#enable_notifications"
 		},
