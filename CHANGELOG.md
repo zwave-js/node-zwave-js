@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.3 (2022-02-02)
 ### Config file changes
 * Add new product id to Shenzhen Neo NAS-PD07ZU1
 * Various abandoned PRs and issues
