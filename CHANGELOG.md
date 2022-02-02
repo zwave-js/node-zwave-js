@@ -4,6 +4,35 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add new product id to Shenzhen Neo NAS-PD07ZU1
+* Various abandoned PRs and issues
+* Fix sent scenes configuration for Fibaro Walli Roller FGWREU-111
+* Fix sent scenes configuration for Fibaro Walli Dimmer FGWDEU
+* Update Inovelli LZW31-SN device config to match official documentation
+* Add unit and mention range for Qubino ZMNHTD1 param 42
+* Add LED indicator parameters to GE Fan Controller 14287
+* Update Fibaro FGK-101 device config with units and options
+* Fixed incorrect parameter range for HomeSeer Floodlight Sensor HS-FLS100+
+* Add SmartDHOME MyOT
+* Add Simon Tech Master Blind Button
+* Add param 38 to Aeotec Siren Gen5, FW 3.25+
+* Add fingerprint `0x0811:0x23a8` to "Kwikset HC620"
+* Add warning to Eurotronics Spirit TRV about missing mode
+* Add fingerprint `0x0102:0x0064` to "Fantem FT100"
+* Add iblinds V3/V3.1 parameters (8-10)
+* Fix ZEN25 parameter units and align with style guide
+* Add parameter 10 (all on, all off) to Qubino SmartMeter ZMNHTD
+* Add fingerprint to Fibaro FGD212
+* Add Relay Load Power for Heltun HE-RS01
+* Add Defaro DAT-101 and a fingerprint for Fibaro FGFS101
+* Added inclusion, exclusion and reset instructions to Danfoss MT02650
+* Add association to Leviton DZ15S switch
+
+### Changes under the hood
+* Correctly check min/max/default values for signed partial parameters
+
 ## 8.11.2 (2022-01-18)
 ### Config file changes
 * Add Eurotronic Temperature & Humidity Sensor
