@@ -1,6 +1,7 @@
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import {
+	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
 	isConsecutiveArray,
 	stripUndefined,
@@ -116,6 +117,33 @@ describe("lib/util/misc", () => {
 			];
 			for (const { input, expected } of tests) {
 				expect(getMinimumShiftForBitMask(input)).toBe(expected);
+			}
+		});
+	});
+
+	describe("getLegalRangeForBitMask", () => {
+		it("returns [0,0] if the mask is 0", () => {
+			expect(getLegalRangeForBitMask(0, true)).toEqual([0, 0]);
+			expect(getLegalRangeForBitMask(0, false)).toEqual([0, 0]);
+		});
+
+		it("returns the correct ranges otherwise", () => {
+			const tests = [
+				// 1-bit masks always match [0,1]
+				{ mask: 0b1, expSigned: [0, 1], expUnsigned: [0, 1] },
+				{ mask: 0b10, expSigned: [0, 1], expUnsigned: [0, 1] },
+				{ mask: 0b100, expSigned: [0, 1], expUnsigned: [0, 1] },
+				{ mask: 0b1000, expSigned: [0, 1], expUnsigned: [0, 1] },
+				{ mask: 0b1010, expSigned: [-4, 3], expUnsigned: [0, 7] },
+				{ mask: 0b1100, expSigned: [-2, 1], expUnsigned: [0, 3] },
+				{ mask: 0b1111, expSigned: [-8, 7], expUnsigned: [0, 15] },
+				{ mask: 0b1011, expSigned: [-8, 7], expUnsigned: [0, 15] },
+			];
+			for (const { mask, expSigned, expUnsigned } of tests) {
+				expect(getLegalRangeForBitMask(mask, true)).toEqual(
+					expUnsigned,
+				);
+				expect(getLegalRangeForBitMask(mask, false)).toEqual(expSigned);
 			}
 		});
 	});

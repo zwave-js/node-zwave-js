@@ -1757,7 +1757,8 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true
+		"writeOnly": true,
+		"unsigned": true
 	},
 	"blink_length": {
 		"label": "LED Blink Cycle Length",
@@ -1767,7 +1768,8 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true
+		"writeOnly": true,
+		"unsigned": true
 	},
 	"motion_timeout": {
 		"label": "Motion Sensor Timeout",

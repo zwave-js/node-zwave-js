@@ -379,7 +379,49 @@
 			"$import": "#paramInformation/13",
 			"label": "LED Indicator: Effect Color",
 			"valueSize": 4,
-			"defaultValue": 0
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				},
+				{
+					"$if": "firmwareVersion >= 1.47",
+					"label": "White",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "16[0xff00]",
@@ -395,7 +437,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "16[0x7f000000]",

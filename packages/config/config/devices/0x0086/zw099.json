@@ -30,11 +30,13 @@
 	"paramInformation": [
 		{
 			"#": "2[0xff]",
-			"$import": "templates/aeotec_template.json#blink_duration"
+			"$import": "templates/aeotec_template.json#blink_duration",
+			"unsigned": true
 		},
 		{
 			"#": "2[0xff00]",
-			"$import": "templates/aeotec_template.json#blink_length"
+			"$import": "templates/aeotec_template.json#blink_length",
+			"unsigned": true
 		},
 		{
 			"#": "3",

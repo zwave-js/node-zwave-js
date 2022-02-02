@@ -57,7 +57,7 @@
 		{
 			"#": "3",
 			"label": "Send Reports",
-			"description": "Disabling Z-Wave Reports is useful for systems that poll iblinds immediately after sending a position command. Disable this if an immediate report is causing iblinds motor to function improperly.",
+			"description": "Used to disable Z-Wave Reports. This is useful for systems that poll iblinds immediately after sending a position command. Disable this if an immediate report is causing iblinds motor to function improperly.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -129,6 +129,48 @@
 				},
 				{
 					"label": "Start calibration",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Minimum Tilt Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 0,
+			"writeOnly": true
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Maximum Tilt Level",
+			"valueSize": 1,
+			"minValue": 75,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"writeOnly": true
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 3.7",
+			"label": "Override Response to ON Command",
+			"description": "Overrides Set commands with a value of 99 to use the value defined in parameter 4 (Default ON Value) instead",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"writeOnly": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
 					"value": 1
 				}
 			]

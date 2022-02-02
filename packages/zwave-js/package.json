@@ -55,8 +55,8 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.4.1",
     "@alcalzone/pak": "^0.7.0",
-    "@sentry/integrations": "^6.16.1",
-    "@sentry/node": "^6.16.1",
+    "@sentry/integrations": "^6.17.3",
+    "@sentry/node": "^6.17.3",
     "@zwave-js/config": "8.11.2",
     "@zwave-js/core": "8.10.2",
     "@zwave-js/nvmedit": "8.10.2",
@@ -72,7 +72,7 @@
     "semver": "^7.3.5",
     "serialport": "^9.2.8",
     "source-map-support": "^0.5.21",
-    "winston": "^3.3.4",
+    "winston": "^3.5.1",
     "xstate": "^4.27.0"
   },
   "devDependencies": {
@@ -83,13 +83,13 @@
     "@types/semver": "^7.3.9",
     "@types/serialport": "^8.0.2",
     "@types/source-map-support": "^0",
-    "@xstate/test": "^0.5.0",
+    "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "8.10.2",
     "@zwave-js/testing": "8.10.2",
     "esbuild": "*",
-    "esbuild-register": "^3.3.1",
+    "esbuild-register": "^3.3.2",
     "jest-extended": "^0.11.5",
     "mockdate": "^3.0.5",
-    "typescript": "4.5.4"
+    "typescript": "4.5.5"
   }
 }

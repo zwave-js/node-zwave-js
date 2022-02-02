@@ -47,6 +47,33 @@
 			]
 		},
 		{
+			"#": "10",
+			"label": "All On / All Off Function",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable both",
+					"value": 0
+				},
+				{
+					"label": "Disable All On, Enable All Off",
+					"value": 1
+				},
+				{
+					"label": "Enable All On, Disable All Off",
+					"value": 2
+				},
+				{
+					"label": "Enable both",
+					"value": 255
+				}
+			]
+		},
+		{
 			"#": "11",
 			"label": "Timer turning off IR external relay",
 			"unit": "seconds",
