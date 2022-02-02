@@ -37,7 +37,6 @@
 		{
 			"#": "2",
 			"label": "Number of Heat Stages",
-			"description": "Heat Stages 0-3 Default is 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -46,7 +45,6 @@
 		{
 			"#": "3",
 			"label": "Number of Cool Stages",
-			"description": "Cool Stages 0-2 Default is 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -55,7 +53,6 @@
 		{
 			"#": "4",
 			"label": "Heat Fuel Type",
-			"description": "Choose type of fuel. Reality - whether unit is boiler vs forced air.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -78,8 +75,8 @@
 			"description": "Allowable range: -10 to 10 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -100,
+			"maxValue": 100,
 			"defaultValue": 0,
 			"options": [
 				{
@@ -88,7 +85,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "5[0xe0000000]",
 			"label": "Calibration Temperature Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -129,15 +126,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "6[0xffff00]",
 			"label": "Swing",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 30,
 			"defaultValue": 50,
 			"options": [
 				{
@@ -146,7 +143,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "6[0xe0000000]",
 			"label": "Swing Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -187,15 +184,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "7[0xffff00]",
 			"label": "Overshoot",
 			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 30,
 			"defaultValue": 0,
 			"options": [
 				{
@@ -204,7 +201,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "7[0xe0000000]",
 			"label": "Overshoot Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -245,7 +242,7 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "8",
 			"label": "Heat Staging Delay",
@@ -270,8 +267,8 @@
 			"description": "Allowable range: 0 to 95 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 950,
 			"defaultValue": 300,
 			"options": [
 				{
@@ -280,7 +277,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "10[0xe0000000]",
 			"label": "Balance Setpoint Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -321,7 +318,7 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "12",
 			"label": "Fan Circulation Period",
@@ -356,8 +353,8 @@
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 950,
 			"defaultValue": 950,
 			"options": [
 				{
@@ -366,7 +363,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "15[0xe0000000]",
 			"label": "Maximum Heat Setpoint Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -407,15 +404,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "16[0xffff00]",
 			"label": "Minimum Heat Setpoint",
 			"description": "Allowable range: 35 to 95 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 950,
 			"defaultValue": 350,
 			"options": [
 				{
@@ -424,7 +421,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "16[0xe0000000]",
 			"label": "Minimum Heat Setpoint Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -465,15 +462,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "17[0xffff00]",
 			"label": "Maximum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 950,
 			"defaultValue": 950,
 			"options": [
 				{
@@ -482,7 +479,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "17[0xe0000000]",
 			"label": "Maximum Cool Setpoint Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -523,15 +520,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "18[0xffff00]",
 			"label": "Minimum Cool Setpoint",
 			"description": "Allowable range: 50 to 95 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 950,
 			"defaultValue": 500,
 			"options": [
 				{
@@ -540,7 +537,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "18[0xe0000000]",
 			"label": "Minimum Cool Setpoint Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -581,7 +578,7 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "19",
 			"label": "Thermostat Lock",
@@ -618,7 +615,6 @@
 		{
 			"#": "23",
 			"label": "Temperature Display Units",
-			"description": "Celsius or Farenheit for temperature display.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1293,8 +1289,8 @@
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 100,
 			"defaultValue": 30,
 			"options": [
 				{
@@ -1303,7 +1299,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "31[0xe0000000]",
 			"label": "Heat Differential Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -1344,15 +1340,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "32[0xffff00]",
 			"label": "Cool Differential",
 			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 100,
 			"defaultValue": 30,
 			"options": [
 				{
@@ -1361,7 +1357,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "32[0xe0000000]",
 			"label": "Cool Differential Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -1402,15 +1398,15 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "33[0xffff00]",
 			"label": "Temperature Reporting Threshold",
 			"description": "Allowable range: 0.5 to 2 in 0.5 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 20,
 			"defaultValue": 10,
 			"options": [
 				{
@@ -1419,7 +1415,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "33[0xe0000000]",
 			"label": "Temperature Reporting Threshold Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -1460,34 +1456,20 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "35",
 			"label": "Z-Wave Echo Association Reports",
 			"description": "Enable/Disabled Echo Assoc. Reports.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "36[0xffff00]",
 			"label": "C-Wire Power Thermistor Offset",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -100,
+			"maxValue": 100,
 			"defaultValue": -20,
 			"options": [
 				{
@@ -1496,7 +1478,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "36[0xe0000000]",
 			"label": "C-Wire Power Thermistor Offset Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -1537,634 +1519,215 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "37",
 			"label": "Run Fan With Auxiliary Heat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "38[0x00000001]",
 			"label": "Z-Wave Association Report: Thermostat Mode",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000008]",
 			"label": "Z-Wave Association Report: Thermostat Operating State",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000010]",
 			"label": "Z-Wave Association Report: Thermostat Fan Mode",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000020]",
 			"label": "Z-Wave Association Report: Thermostat Fan State",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000040]",
 			"label": "Z-Wave Association Report: Ambiant Temperature",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000080]",
 			"label": "Z-Wave Association Report: Relative Humidity",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000200]",
 			"label": "Z-Wave Association Report: Battery Low Notification",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000400]",
 			"label": "Z-Wave Association Report: Battery Very Low Notification",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000800]",
 			"label": "Z-Wave Association Report: Thermostat Supported Modes",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00001000]",
 			"label": "Z-Wave Association Report: Remote Enable Report",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00002000]",
 			"label": "Z-Wave Association Report: Humidity Control Operating State Report",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00004000]",
 			"label": "Z-Wave Association Report: HVAC Type",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00008000]",
 			"label": "Z-Wave Association Report: Number of Cool/Pump Stages",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00010000]",
 			"label": "Z-Wave Association Report: Number of Heat/Aux Stages",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00020000]",
 			"label": "Z-Wave Association Report: Relay Status",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00040000]",
 			"label": "Z-Wave Association Report: Power Source",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00080000]",
 			"label": "Z-Wave Association Report: Notification Report Power Applied",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00100000]",
 			"label": "Z-Wave Association Report: Notification Report Mains Disconnected",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00200000]",
 			"label": "Z-Wave Association Report: Notification Report Mains Reconnected",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"unsigned": true
 		},
 		{
 			"#": "38[0x00400000]",
 			"label": "Z-Wave Association Report: Notification Report Replace Battery Soon",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00800000]",
 			"label": "Z-Wave Association Report: Notification Report Replace Battery Now",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x01000000]",
 			"label": "Z-Wave Association Report: Notification Report System Hardware Failure",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x02000000]",
 			"label": "Z-Wave Association Report: Notification Report System Software Failure",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x04000000]",
 			"label": "Z-Wave Association Report: Notification Report System Hardware Failure with Code",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x08000000]",
 			"label": "Z-Wave Association Report: Notification Report System Software Failure with Code",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x10000000]",
 			"label": "Z-Wave Association Report: Display Units",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x20000000]",
 			"label": "Z-Wave Association Report: Heat Fuel Type",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x40000000]",
 			"label": "Z-Wave Association Report: Humidity Control Mode",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38[0x80000000]",
 			"label": "Z-Wave Association Report: Humidity Control Setpoints",
-			"description": "Bitmask to selectively enable non-required Z-wave association reports.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "39",
@@ -2182,8 +1745,8 @@
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 990,
 			"defaultValue": 250,
 			"options": [
 				{
@@ -2192,7 +1755,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "40[0xe0000000]",
 			"label": "Remote Temperature Differential Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -2233,7 +1796,7 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "41",
 			"label": "Remote Temperature ACK Failure Limit",
@@ -2245,21 +1808,8 @@
 		{
 			"#": "42",
 			"label": "Remote Temperature Display Enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "43",
@@ -2286,8 +1836,8 @@
 			"description": "Allowable range: 0 to 10 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
+			"minValue": -1,
+			"maxValue": 100,
 			"defaultValue": 30,
 			"options": [
 				{
@@ -2296,7 +1846,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "46[0xe0000000]",
 			"label": "Dehumidify by AC Offset Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -2337,69 +1887,29 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "48",
 			"label": "PIR Enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "49",
 			"label": "Humidity Display",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
 		},
 		{
 			"#": "50[0x80000000]",
 			"label": "System configuration: Aux Fan",
-			"description": "Summarized report of system configuration",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
-			"unsigned": true,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "50[0x60000000]",
 			"label": "System configuration: Cool Stages",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -2409,7 +1919,6 @@
 		{
 			"#": "50[0x18000000]",
 			"label": "System configuration: Heat Stages",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -2419,7 +1928,6 @@
 		{
 			"#": "50[0x04000000]",
 			"label": "System configuration: Fuel",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -2439,7 +1947,6 @@
 		{
 			"#": "50[0x03000000]",
 			"label": "System configuration: HVAC Type",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 3,
@@ -2459,7 +1966,6 @@
 		{
 			"#": "50[0x00f00000]",
 			"label": "System configuration: Z2 Configuration",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
@@ -2491,7 +1997,6 @@
 		{
 			"#": "50[0x000f0000]",
 			"label": "System configuration: Z1 Configuration",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
@@ -2523,7 +2028,6 @@
 		{
 			"#": "50[0x00000100]",
 			"label": "System configuration: Override",
-			"description": "Summarized report of system configuration",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -2595,9 +2099,9 @@
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
-			"defaultValue": -32768,
+			"minValue": -1,
+			"maxValue": 990,
+			"defaultValue": -1,
 			"options": [
 				{
 					"label": "Disabled",
@@ -2605,7 +2109,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "55[0xe0000000]",
 			"label": "Vent Maximum Outdoor Temperature Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -2646,16 +2150,16 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "56[0xffff00]",
 			"label": "Vent Minimum Outdoor Temperature",
 			"description": "Allowable range: 0 to 99 in 1 °F increments.",
 			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": -32768,
-			"maxValue": 32767,
-			"defaultValue": -32768,
+			"minValue": -1,
+			"maxValue": 990,
+			"defaultValue": -1,
 			"options": [
 				{
 					"label": "Disabled",
@@ -2663,7 +2167,7 @@
 				}
 			]
 		},
-		{
+		/*{
 			"#": "56[0xe0000000]",
 			"label": "Vent Minimum Outdoor Temperature Precision",
 			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
@@ -2704,7 +2208,7 @@
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": true
-		},
+		},*/
 		{
 			"#": "57",
 			"label": "Relay Harvest Level",
