@@ -58,27 +58,36 @@
 			"#": "1",
 			"$if": "firmwareVersion <= 3.1",
 			"label": "IN1 Alarm Cancellation Delay",
-			"description": "Additional delay after an alarm from input IN1 has ceased.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"unit": "seconds"
 		},
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Operations mode",
-			"description": "Parameter defines device operation mode",
+			"label": "Operations Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Door sensor or external alarm sensor",
+					"value": 0
+				},
+				{
+					"label": "External button",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Status change signalled by LED",
+			"label": "Status Change Signalled By LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -103,17 +112,26 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Door/Window or alarm status",
-			"description": "Parameter defines state of the sensor when the magnet ...",
+			"label": "Door State when Magnet is Close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Closed",
+					"value": 0
+				},
+				{
+					"label": "Open",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "3",
-			"$if": "firmwareVersion <= 2.4 && firmwareVersion <= 3.1",
-			"label": "Type of input no. 1",
+			"$if": "firmwareVersion <= 2.4",
+			"label": "Input 1 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -122,11 +140,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed",
+					"label": "Normally closed",
 					"value": 1
 				},
 				{
@@ -140,65 +158,80 @@
 			]
 		},
 		{
-			"#": "3",
+			"#": "3[0x01]",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Visual LED indications",
-			"description": "This parameter defines events indicated by the visual ...",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator Purpose: Open/Close Status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
-			"defaultValue": 6
+			"defaultValue": 0
+		},
+		{
+			"#": "3[0x02]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator Purpose: Wake Up",
+			"valueSize": 1,
+			"defaultValue": 1
+		},
+		{
+			"#": "3[0x04]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "LED Indicator Purpose: Device Tampering",
+			"valueSize": 1,
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Range test after double click",
-			"description": "Allows to enable activation of Z-Wave range test with ...",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Range Test After Double Click"
 		},
 		{
 			"#": "5",
-			"label": "Type of control frame transmitted for group 1",
+			"$if": "firmwareVersion <= 3.1",
+			"label": "Type of Alarm Frame for Group 1",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "ALARM SMOKE frame",
+					"label": "General purpose alarm (door/window)",
+					"value": 0
+				},
+				{
+					"label": "Smoke alarm",
 					"value": 1
 				},
 				{
-					"label": "ALARM CO frame",
+					"label": "CO alarm",
 					"value": 2
 				},
 				{
-					"label": "ALARM CO2 frame",
+					"label": "CO2 alarm",
 					"value": 3
 				},
 				{
-					"label": "ALARM HEAT frame",
+					"label": "Heat alarm",
 					"value": 4
 				},
 				{
-					"label": "ALARM WATER frame",
+					"label": "Flood alarm",
 					"value": 5
 				},
 				{
-					"label": "Control frame BASIC_SET",
+					"label": "Basic Set",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "7",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Forced Level of Dimming group 1",
-			"description": "Parameter for dimming/opening blinds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -207,93 +240,69 @@
 		},
 		{
 			"#": "9",
-			"$if": "firmwareVersion <= 2.4",
-			"label": "Enable/Disable transmission cancelling alarm",
+			"$if": "firmwareVersion <= 3.1",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"label": "Disabling of Alarms for Group 1",
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 2.5 && firmwareVersion <= 3.1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Tamper Alarm",
+			"defaultValue": 1
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 3.2",
+			"label": "2nd Association Group Triggers",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Groups 1 and 2 sent",
+					"label": "After opening and closing",
 					"value": 0
 				},
 				{
-					"label": "Group 1 sent, Group 2 not sent.",
+					"label": "After opening",
 					"value": 1
 				},
 				{
-					"label": "Group 2 sent, Group 1 not sent.",
+					"label": "After closing",
 					"value": 2
 				}
 			]
 		},
 		{
-			"#": "9",
-			"$if": "firmwareVersion >= 2.5",
-			"label": "Enable/Disable cancelling alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Group no. 1 information is sent",
-					"value": 0
-				},
-				{
-					"label": "Group no. 1 information is not sent",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "10",
-			"$if": "firmwareVersion >= 2.5 && firmwareVersion <= 3.1",
-			"label": "Tamper alarm",
-			"description": "Enable/disable tamper alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Tamper alarm cancellation inactive",
-					"value": 0
-				},
-				{
-					"label": "Tamper alarm cancellation active",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "10",
-			"$if": "firmwareVersion >= 3.2",
-			"label": "2nd association group triggers",
-			"description": "Parameter defines events which result in sending on/off ...",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0
-		},
-		{
 			"#": "11",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Commands sent to 2nd association group",
+			"label": "Commands Sent to 2nd Association Group",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"options": [
+				{
+					"label": "On",
+					"value": 0
+				},
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "On & off",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Sensitivity to temperature changes",
+			"label": "Temperature Change Threshold",
+			"description": "Parameter / 16 = Celcius value.  Parameter / 80/9 = Fahrenheit value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -303,7 +312,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "ON command sent to 2nd assoc. group",
+			"label": "Value of ON Command Sent to 2nd Association Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -312,28 +321,27 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Transmitting the alarm or control frame broadcast",
-			"description": "Enabling/Disabling broadcast alarm for IN and TMP",
+			"label": "Send Alarm or Basic Set in Broadcast Mode",
+			"description": "Parameter 5 controls type of message.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "IN and TMP Broadcast mode inactive",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "IN broadcast active, TMP broadcast inactive",
+					"label": "Input is broadcast",
 					"value": 1
 				},
 				{
-					"label": "IN broadcast inactive, TMP broadcast active",
+					"label": "Tamper is broadcast",
 					"value": 2
 				},
 				{
-					"label": "IN and TMP broadcast mode active",
+					"label": "Input and tamper both broadcast",
 					"value": 3
 				}
 			]
@@ -341,8 +349,7 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "OFF command sent to 2nd assoc. group",
-			"description": "The value of 0 turns OFF the device, 255 turns it ON.",
+			"label": "Value of OFF Sent to 2nd Association Group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -350,63 +357,24 @@
 		},
 		{
 			"#": "14",
-			"$if": "firmwareVersion <= 2.4",
-			"label": "Scene activation",
-			"description": "Enable/Disable scene functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		{
-			"#": "14",
-			"$if": "firmwareVersion >= 2.5 && firmwareVersion <= 3.1",
-			"label": "Scene activation",
-			"description": "Enable/Disable scene functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$if": "firmwareVersion <= 3.1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene Functionality"
 		},
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Time delay of ON command frame",
-			"description": "Time period after which ON command frame will be sent.",
+			"label": "Time Delay of ON Command Frame",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "seconds"
 		},
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 2.5 && firmwareVersion <= 3.1",
-			"label": "DS18B20",
-			"description": "Status of DS18B20 sensor",
+			"label": "DS18B20 Sensor Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -415,15 +383,15 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "DS18B20 is working properly",
+					"label": "Working",
 					"value": 0
 				},
 				{
-					"label": "DS18B20 is not working properly",
+					"label": "Not working",
 					"value": 1
 				},
 				{
-					"label": "No DS18B20 temperature sensor",
+					"label": "No sensor",
 					"value": 255
 				}
 			]
@@ -431,142 +399,257 @@
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Time delay of OFF command frame",
-			"description": "Time period after which OFF command frame will be sent.",
+			"label": "Off Command Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "seconds"
 		},
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Type of sent alarm frames",
-			"description": "Type of control frames transmitted to the main controller ...",
+			"label": "Type of Alarm Frame",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "General purpose alarm (door/window)",
+					"value": 0
+				},
+				{
+					"label": "Smoke alarm",
+					"value": 1
+				},
+				{
+					"label": "CO alarm",
+					"value": 2
+				},
+				{
+					"label": "CO2 alarm",
+					"value": 3
+				},
+				{
+					"label": "Heat alarm",
+					"value": 4
+				},
+				{
+					"label": "Flood alarm",
+					"value": 5
+				}
+			]
 		},
 		{
 			"#": "30",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Delay of tamper alarm cancellation",
-			"description": "Time period after which a tamper alarm will be cancelled.",
+			"label": "Tamper Alarm Duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 5
+			"defaultValue": 5,
+			"unit": "seconds"
 		},
 		{
 			"#": "31",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Reporting tamper alarm cancellation",
-			"description": "Reporting cancellation of tamper alarm to the controller ...",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Tamper Cancellation Reports",
 			"defaultValue": 1
 		},
 		{
 			"#": "50",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Interval of temperature measurements",
-			"description": "This parameter defines how often the temperature will ...",
+			"label": "Temperature Measurement Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 300
+			"defaultValue": 300,
+			"unit": "seconds"
 		},
 		{
 			"#": "51",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature reports threshold",
-			"description": "This parameter defines the change of temperature in ...",
+			"label": "Temperature Reports Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "52",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Interval of temperature reports",
-			"description": "This parameter determines how often the temperature ...",
+			"label": "Temperature Reports Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "seconds"
 		},
 		{
 			"#": "53",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature offset",
-			"description": "The value to be added to the actual temperature, measured ...",
+			"label": "Temperature Calibration",
 			"valueSize": 4,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "0.1 °C"
 		},
 		{
-			"#": "54",
+			"#": "54[0x01]",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature alarm reports",
-			"description": "Temperature alarms reported to the Z-Wave controller.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "High Temperature Alarm",
+			"valueSize": 1
+		},
+		{
+			"#": "54[0x02]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Low Temperature Alarm",
+			"valueSize": 1
 		},
 		{
 			"#": "55",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "High temperature alarm threshold",
-			"description": "If temperature is higher than set value, overheat ...",
+			"label": "High Temperature Alarm Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
-			"defaultValue": 540
+			"defaultValue": 540,
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "56",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Low temperature alarm threshold",
-			"description": "If temperature is lower than the set value, underheat ...",
+			"label": "Low Temperature Alarm Threshold",
 			"valueSize": 2,
 			"minValue": -300,
 			"maxValue": 700,
-			"defaultValue": 40
+			"defaultValue": 40,
+			"unit": "0.1 °C"
 		},
 		{
-			"#": "70",
+			"#": "70[0x01]",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Scene activation functionality",
-			"description": "The device can trigger scenes using scene IDs assigned ...",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2048,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Opening Door",
+			"valueSize": 2
 		},
 		{
-			"#": "71",
+			"#": "70[0x02]",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Alarm broadcast",
-			"description": "Settings for broadcasting ON/OFF commands, sensor ...",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Closing Door",
+			"valueSize": 2
 		},
 		{
-			"#": "72",
+			"#": "70[0x04]",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Associations in Z-Wave network Security Mode",
-			"description": "This parameter defines how commands are sent in ...",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Holding",
+			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x08]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Releasing",
+			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x10]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Double Click",
+			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x20]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Triple Click",
+			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x0100]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: High Temperature - Door Open",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x0200]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: High Temperature - Door Closed",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x0400]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Low Temperature - Door Open",
+			"valueSize": 2
+		},
+		{
+			"#": "70[0x0800]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Scene: Low Temperature - Door Closed",
+			"valueSize": 2
+		},
+		{
+			"#": "71[0x01]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Broadcast On/Off Commands",
+			"valueSize": 1
+		},
+		{
+			"#": "71[0x02]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Broadcast Sensor Alarm",
+			"valueSize": 1
+		},
+		{
+			"#": "71[0x04]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Broadcast Tamper Alarm",
+			"valueSize": 1
+		},
+		{
+			"#": "72[0x01]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
+			"defaultValue": 1
+		},
+		{
+			"#": "72[0x02]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
+			"defaultValue": 1
+		},
+		{
+			"#": "72[0x04]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
+			"defaultValue": 1
+		},
+		{
+			"#": "72[0x08]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group5",
+			"defaultValue": 1
 		}
 	],
 	"compat": {

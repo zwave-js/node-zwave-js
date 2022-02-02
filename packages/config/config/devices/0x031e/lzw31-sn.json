@@ -107,65 +107,71 @@
 		},
 		{
 			"#": "7",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Invert Switch"
 		},
 		{
 			"#": "8",
-			"label": "Auto Off Timer",
+			"label": "Auto-off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0
-		},
-		{
-			"#": "9",
-			"label": "Default Level",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Default Level (Manual)",
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Previous State",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Default Level (Z-Wave)",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Last State",
+					"label": "Previous State",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Power On State",
+			"$if": "firmwareVersion >= 1.43",
+			"label": "Brightness After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 101,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Previous state",
+					"value": 101
+				}
+			]
+		},
+		{
+			"#": "11",
+			"$if": "firmwareVersion < 1.43",
+			"label": "Brightness After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
@@ -176,13 +182,14 @@
 					"value": 0
 				},
 				{
-					"label": "Last State",
+					"label": "Previous state",
 					"value": 101
 				}
 			]
 		},
 		{
 			"#": "12[0x01]",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "Association Behavior: Local",
 			"valueSize": 1,
 			"minValue": 0,
@@ -259,9 +266,9 @@
 		},
 		{
 			"#": "13",
-			"label": "LED Indicator Color",
+			"label": "LED Indicator: Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
@@ -300,7 +307,7 @@
 					"value": 234
 				},
 				{
-					"$if": "firmwareVersion >= 1.47",
+					"$if": "firmwareVersion >= 1.45",
 					"label": "White",
 					"value": 255
 				}
@@ -308,7 +315,7 @@
 		},
 		{
 			"#": "14",
-			"label": "LED Indicator Brightness",
+			"label": "LED Indicator: Brightness When On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -363,63 +370,14 @@
 		},
 		{
 			"#": "15",
-			"label": "LED Indicator Brightness When Off",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "10%",
-					"value": 1
-				},
-				{
-					"label": "20%",
-					"value": 2
-				},
-				{
-					"label": "30%",
-					"value": 3
-				},
-				{
-					"label": "40%",
-					"value": 4
-				},
-				{
-					"label": "50%",
-					"value": 5
-				},
-				{
-					"label": "60%",
-					"value": 6
-				},
-				{
-					"label": "70%",
-					"value": 7
-				},
-				{
-					"label": "80%",
-					"value": 8
-				},
-				{
-					"label": "90%",
-					"value": 9
-				},
-				{
-					"label": "100%",
-					"value": 10
-				}
-			]
+			"$import": "#paramInformation/14",
+			"label": "LED Indicator: Brightness When Off",
+			"defaultValue": 1
 		},
 		{
 			"#": "16[0xff]",
-			"label": "LED Effect Color",
-			"description": "Uses a scaled hue value (realHue / 360 * 255).",
+			"$import": "#paramInformation/13",
+			"label": "LED Indicator: Effect Color",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -467,72 +425,24 @@
 		},
 		{
 			"#": "16[0xff00]",
-			"label": "LED Effect Brightness",
+			"$import": "#paramInformation/14",
+			"label": "LED Indicator: Effect Brightness",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 3,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off",
-					"value": 0
-				},
-				{
-					"label": "10%",
-					"value": 1
-				},
-				{
-					"label": "20%",
-					"value": 2
-				},
-				{
-					"label": "30%",
-					"value": 3
-				},
-				{
-					"label": "40%",
-					"value": 4
-				},
-				{
-					"label": "50%",
-					"value": 5
-				},
-				{
-					"label": "60%",
-					"value": 6
-				},
-				{
-					"label": "70%",
-					"value": 7
-				},
-				{
-					"label": "80%",
-					"value": 8
-				},
-				{
-					"label": "90%",
-					"value": 9
-				},
-				{
-					"label": "100%",
-					"value": 10
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "16[0xff0000]",
-			"label": "LED Effect Duration",
-			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely",
+			"label": "LED Indicator: Effect Duration",
+			"description": "0 = disabled, 1 to 60 = seconds, 61 to 120 = minutes (minus 60), 121 - 254 = hours (minus 120), 255 = indefinitely.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255,
+			"defaultValue": 0,
 			"unsigned": true
 		},
 		{
 			"#": "16[0x7f000000]",
-			"label": "LED Effect Type",
+			"label": "LED Indicator: Effect Type",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
@@ -567,7 +477,7 @@
 		},
 		{
 			"#": "17",
-			"label": "LED Indicator Timeout",
+			"label": "LED Indicator: Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -576,16 +486,14 @@
 		},
 		{
 			"#": "18",
-			"label": "Active Power Reports",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Power Report Threshold",
 			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
 			"defaultValue": 10
 		},
 		{
 			"#": "19",
-			"label": "Periodic Power & Energy Reports",
+			"label": "Power & Energy Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -594,11 +502,20 @@
 		},
 		{
 			"#": "20",
-			"label": "Energy Reports",
-			"unit": "%",
+			"$if": "firmwareVersion >= 1.43",
+			"label": "Energy Report Threshold",
+			"unit": "0.01 kWh",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 127,
+			"defaultValue": 10
+		},
+		{
+			"#": "20",
+			"$if": "firmwareVersion < 1.43",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Energy Report Threshold",
+			"unit": "%",
 			"defaultValue": 10
 		},
 		{
@@ -646,8 +563,8 @@
 		{
 			"#": "50",
 			"$if": "firmwareVersion >= 1.49",
-			"label": "Physical Button Delay Period",
-			"unit": "100ms",
+			"label": "Button Delay Period",
+			"unit": "0.1 seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -656,29 +573,14 @@
 		{
 			"#": "51",
 			"$if": "firmwareVersion >= 1.47",
-			"label": "Button Delay and Scene Control",
-			"description": "Disabling this allows the switch to respond instantly to physical actions",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button Delay",
+			"description": "Note: Disabling the delay also disables scene control for Buttons 2-6."
 		},
 		{
 			"#": "52",
 			"$if": "firmwareVersion >= 1.54",
-			"label": "Smart Bulb Mode",
-			"description": "Change the working mode of the dimmer. Choose either on / off only which makes the device work like an on / off switch. Or choose smart bulb mode which optimized the device for interaction with smart bulbs. (firmware 1.54+)",
+			"label": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -686,11 +588,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Normal",
 					"value": 0
 				},
 				{
-					"label": "On / Off Only",
+					"label": "On/Off Only",
 					"value": 1
 				},
 				{
@@ -702,23 +604,9 @@
 		{
 			"#": "52",
 			"$if": "firmwareVersion >= 1.47 && firmwareVersion < 1.54",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Smart Bulb Mode",
-			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim & makes it act like an ON / OFF switch."
 		}
 	],
 	"metadata": {

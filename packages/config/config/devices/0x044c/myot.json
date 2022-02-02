@@ -1,0 +1,75 @@
+{
+	"manufacturer": "SmartDHOME",
+	"manufacturerId": "0x044c",
+	"label": "MyOT",
+	"description": "OpenTherm Actuator",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum Boiler Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum Boiler Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum DHW Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum DHW Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Summer Mode",
+			"valueSize": 2
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Flag",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Code",
+			"valueSize": 2,
+			"readOnly": true
+		}
+	],
+	"metadata": {
+		"inclusion": "By pressing the FUNCTIONS button for 8 seconds",
+		"exclusion": "By pressing the FUNCTIONS button for 8 seconds",
+		"manual": "https://www.myvirtuosohome.com/en/downloads/send/4-manuals/209-z-wave-interface-actuator-manual-opentherm-boilers.html"
+	}
+}
