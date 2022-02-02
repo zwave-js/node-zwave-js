@@ -65,8 +65,8 @@
 		},
 		{
 			"#": "13",
-			"label": "LED Indicator: Brightness",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "LED Indicator: Brightness",
 			"defaultValue": 100,
 			"unit": "%"
 		},
@@ -95,14 +95,14 @@
 		},
 		{
 			"#": "30[0xff000000]",
-			"label": "Alarm Configuration: 1st Slot: Notification Type",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 1st Slot: Notification Type",
 			"defaultValue": 0
 		},
 		{
 			"#": "30[0xff0000]",
-			"label": "Alarm Configuration: 1st Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 1st Slot: Notification Event",
 			"defaultValue": 0
 		},
 		{
@@ -136,14 +136,14 @@
 		},
 		{
 			"#": "31[0xff000000]",
-			"label": "Alarm Configuration: 2nd Slot: Notification Type",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 2nd Slot: Notification Type",
 			"defaultValue": 5
 		},
 		{
 			"#": "31[0xff0000]",
-			"label": "Alarm Configuration: 2nd Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 2nd Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
@@ -165,8 +165,8 @@
 		},
 		{
 			"#": "32[0xff0000]",
-			"label": "Alarm Configuration: 3rd Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 3rd Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
@@ -182,14 +182,14 @@
 		},
 		{
 			"#": "33[0xff000000]",
-			"label": "Alarm Configuration: 4th Slot: Notification Type",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 4th Slot: Notification Type",
 			"defaultValue": 2
 		},
 		{
 			"#": "33[0xff0000]",
-			"label": "Alarm Configuration: 4th Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 4th Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
@@ -205,14 +205,14 @@
 		},
 		{
 			"#": "34[0xff000000]",
-			"label": "Alarm Configuration: 5th Slot: Notification Type",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 5th Slot: Notification Type",
 			"defaultValue": 4
 		},
 		{
 			"#": "34[0xff0000]",
-			"label": "Alarm Configuration: 5th Slot: Notification Event",
 			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 5th Slot: Notification Event",
 			"defaultValue": 255
 		},
 		{
@@ -275,8 +275,8 @@
 		},
 		{
 			"#": "60",
-			"label": "Power Report: Include Self-consumption",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Power Report: Include Self-consumption"
 		},
 		{
 			"#": "61",
@@ -285,8 +285,8 @@
 		},
 		{
 			"#": "62",
-			"label": "Power Reports: Interval",
 			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Power Reports: Interval",
 			"maxValue": 32400
 		},
 		{
@@ -297,8 +297,8 @@
 		},
 		{
 			"#": "66",
-			"label": "Energy Reports: Interval",
 			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Energy Reports: Interval",
 			"maxValue": 32400
 		},
 		{
@@ -321,8 +321,8 @@
 		},
 		{
 			"#": "150[0x02]",
-			"label": "Force Calibration",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Force Calibration"
 		},
 		{
 			"#": "151",

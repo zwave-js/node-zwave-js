@@ -16,40 +16,40 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Maximum Boiler Setpoint",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum Boiler Setpoint",
 			"unit": "°C",
 			"valueSize": 2,
 			"readOnly": true
 		},
 		{
 			"#": "2",
-			"label": "Minimum Boiler Setpoint",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum Boiler Setpoint",
 			"unit": "°C",
 			"valueSize": 2,
 			"readOnly": true
 		},
 		{
 			"#": "3",
-			"label": "Maximum DHW Setpoint",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum DHW Setpoint",
 			"unit": "°C",
 			"valueSize": 2,
 			"readOnly": true
 		},
 		{
 			"#": "4",
-			"label": "Minimum DHW Setpoint",
 			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum DHW Setpoint",
 			"unit": "°C",
 			"valueSize": 2,
 			"readOnly": true
 		},
 		{
 			"#": "5",
-			"label": "Summer Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Summer Mode",
 			"valueSize": 2
 		},
 		{
