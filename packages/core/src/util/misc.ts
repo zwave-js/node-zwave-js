@@ -97,3 +97,28 @@ export function getBitMaskWidth(mask: number): number {
 	}
 	return i;
 }
+
+/**
+ * Determines the legal range of values that can be encoded at with the given bit mask
+ * Example:
+ * ```txt
+ *   Mask = 00110000
+ *            ^^---- => 0..3 unsigned OR -2..+1 signed
+ *
+ *   Mask = 00110001
+ *            ^....^ => 0..63 unsigned OR -32..+31 signed (with gaps)
+ * ```
+ */
+export function getLegalRangeForBitMask(
+	mask: number,
+	unsigned: boolean,
+): [min: number, max: number] {
+	if (mask === 0) return [0, 0];
+	const bitMaskWidth = getBitMaskWidth(mask);
+	const min = unsigned || bitMaskWidth == 1 ? 0 : -(2 ** (bitMaskWidth - 1));
+	const max =
+		unsigned || bitMaskWidth == 1
+			? 2 ** bitMaskWidth - 1
+			: 2 ** (bitMaskWidth - 1) - 1;
+	return [min, max];
+}
