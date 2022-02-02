@@ -61,7 +61,7 @@
     "@types/xml2json": "^0.11.4",
     "@types/yargs": "^17.0.8",
     "@zwave-js/maintenance": "8.11.3",
-    "axios": "^0.24.0",
+    "axios": "^0.25.0",
     "comment-json": "^4.1.1",
     "esbuild": "*",
     "esbuild-register": "^3.3.2",
