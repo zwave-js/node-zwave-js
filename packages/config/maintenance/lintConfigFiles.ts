@@ -1,6 +1,6 @@
 import {
-	getBitMaskWidth,
 	getIntegerLimits,
+	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
 } from "@zwave-js/core";
 import { reportProblem } from "@zwave-js/maintenance";
@@ -608,16 +608,11 @@ Consider converting this parameter to unsigned using ${white(
 				for (const [key, param] of partialParams) {
 					const bitMask = key.valueBitMask!;
 					const shiftAmount = getMinimumShiftForBitMask(bitMask);
-					const bitMaskWidth = getBitMaskWidth(bitMask);
 					const shiftedBitMask = bitMask >>> shiftAmount;
-					const minValue =
-						param.unsigned || bitMaskWidth == 1
-							? 0
-							: -(1 << bitMaskWidth) / 2;
-					const maxValue =
-						param.unsigned || bitMaskWidth == 1
-							? (1 << bitMaskWidth) - 1
-							: (1 << bitMaskWidth) / 2 - 1;
+					const [minValue, maxValue] = getLegalRangeForBitMask(
+						bitMask,
+						!!param.unsigned,
+					);
 					if (param.minValue < minValue) {
 						addError(
 							file,
@@ -625,8 +620,7 @@ Consider converting this parameter to unsigned using ${white(
 								bitMask,
 							)}]: minimum value ${
 								param.minValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Minimum value expected to be greater than ${minValue}. All values are relative to the rightmost bit of the mask!
-Did you mean to use ${param.minValue >>> shiftAmount}?`,
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Minimum value expected to be >= ${minValue}.`,
 							variant,
 						);
 					}
@@ -637,8 +631,7 @@ Did you mean to use ${param.minValue >>> shiftAmount}?`,
 								bitMask,
 							)}]: maximum value ${
 								param.maxValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Maximum value expected to be less than ${maxValue}. All values are relative to the rightmost bit of the mask!
-Did you mean to use ${param.maxValue >>> shiftAmount}?`,
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Maximum value expected to be <= ${maxValue}.`,
 							variant,
 						);
 					}
@@ -652,8 +645,7 @@ Did you mean to use ${param.maxValue >>> shiftAmount}?`,
 								bitMask,
 							)}]: default value ${
 								param.defaultValue
-							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Default value expected to be between ${minValue} and ${maxValue}. All values are relative to the rightmost bit of the mask!
-Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
+							} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Default value expected to be between ${minValue} and ${maxValue}.`,
 							variant,
 						);
 					}
@@ -690,17 +682,12 @@ Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 				for (const [key, param] of partialParamsWithOptions) {
 					const bitMask = key.valueBitMask!;
 					const shiftAmount = getMinimumShiftForBitMask(bitMask);
-					const bitMaskWidth = getBitMaskWidth(bitMask);
 					const shiftedBitMask = bitMask >>> shiftAmount;
 					for (const opt of param.options) {
-						const minValue =
-							param.unsigned || bitMaskWidth == 1
-								? 0
-								: -(1 << bitMaskWidth) / 2;
-						const maxValue =
-							param.unsigned || bitMaskWidth == 1
-								? (1 << bitMaskWidth) - 1
-								: (1 << bitMaskWidth) / 2 - 1;
+						const [minValue, maxValue] = getLegalRangeForBitMask(
+							bitMask,
+							!!param.unsigned,
+						);
 						if (opt.value < minValue || opt.value > maxValue) {
 							addError(
 								file,
@@ -708,8 +695,7 @@ Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 									bitMask,
 								)}]: Option ${
 									opt.value
-								} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Value expected to be between ${minValue} and ${maxValue}. Option values are always relative to the rightmost bit of the mask!
-Did you mean to use ${opt.value >>> shiftAmount}?`,
+								} is incompatible with the bit mask (${bitMask}, aligned ${shiftedBitMask}). Value expected to be between ${minValue} and ${maxValue}`,
 								variant,
 							);
 						}

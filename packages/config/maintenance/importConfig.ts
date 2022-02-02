@@ -14,6 +14,7 @@ import {
 	formatId,
 	getErrorMessage,
 	num2hex,
+	padVersion,
 	stringify,
 } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
@@ -840,9 +841,8 @@ async function parseZWAFiles(): Promise<void> {
 	for (const file of jsonData) {
 		// Lookup the manufacturer
 		const manufacturerId = parseInt(file.ManufacturerId, 16);
-		const manufacturerName = configManager.lookupManufacturer(
-			manufacturerId,
-		);
+		const manufacturerName =
+			configManager.lookupManufacturer(manufacturerId);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (Number.isNaN(manufacturerId)) {
@@ -1251,8 +1251,9 @@ async function parseZWAProduct(
 	const exclusion = product?.Texts?.find(
 		(document: any) => document.Type === 2,
 	)?.value;
-	const reset = product?.Texts?.find((document: any) => document.Type === 5)
-		?.value;
+	const reset = product?.Texts?.find(
+		(document: any) => document.Type === 5,
+	)?.value;
 	let manual = product?.Documents?.find(
 		(document: any) => document.Type === 1,
 	)?.value;
