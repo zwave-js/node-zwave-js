@@ -1,4 +1,5 @@
 import {
+	getBitMaskWidth,
 	getIntegerLimits,
 	getLegalRangeForBitMask,
 	getMinimumShiftForBitMask,
@@ -861,7 +862,6 @@ Consider converting this parameter to unsigned using ${white(
 				...conditionalConfig.paramInformation.entries(),
 			].filter(([k]) => !!k.valueBitMask);
 
-			// Check if there are parameters with a single bit mask
 			const partialParamCounts = partialParams
 				.map(([k]) => k)
 				.reduce((map, key) => {
@@ -869,12 +869,24 @@ Consider converting this parameter to unsigned using ${white(
 					map.set(key.parameter, map.get(key.parameter)! + 1);
 					return map;
 				}, new Map<number, number>());
-			for (const [param, count] of partialParamCounts.entries()) {
-				if (count === 1) {
-					addError(
-						file,
-						`Parameter #${param} has a single bit mask defined. Either add more, or delete the bit mask.`,
-					);
+
+			for (const [key, paramInfos] of partialParams) {
+				if (partialParamCounts.get(key.parameter) == 1) {
+					for (const param of paramInfos) {
+						const bitMask = key.valueBitMask!;
+						const shiftAmount = getMinimumShiftForBitMask(bitMask);
+						const bitMaskWidth = getBitMaskWidth(bitMask);
+
+						if (
+							shiftAmount == 0 &&
+							param.valueSize >= bitMaskWidth / 8
+						) {
+							addError(
+								file,
+								`Parameter #${key.parameter} has a single bit mask defined which covers the entire value. Either add more, or delete the bit mask.`,
+							);
+						}
+					}
 				}
 			}
 		}
