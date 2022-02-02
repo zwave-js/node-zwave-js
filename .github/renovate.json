@@ -26,5 +26,5 @@
 			"automerge": true
 		}
 	],
-	"ignoreDeps": ["node"]
+	"ignoreDeps": ["node", "esbuild"]
 }
