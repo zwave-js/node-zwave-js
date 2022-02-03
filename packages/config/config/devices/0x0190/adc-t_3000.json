@@ -98,23 +98,12 @@
 		},
 		{
 			"#": "5[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Calibration Temperature Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "5[0x07000000]",
@@ -135,7 +124,7 @@
 			"valueSize": 4,
 			"minValue": -1,
 			"maxValue": 30,
-			"defaultValue": 50,
+			"defaultValue": 5,
 			"options": [
 				{
 					"label": "Disabled",
@@ -156,23 +145,12 @@
 		},
 		{
 			"#": "6[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Swing Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "6[0x07000000]",
@@ -214,23 +192,12 @@
 		},
 		{
 			"#": "7[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Overshoot Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "7[0x07000000]",
@@ -290,23 +257,12 @@
 		},
 		{
 			"#": "10[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Balance Setpoint Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "10[0x07000000]",
@@ -376,23 +332,12 @@
 		},
 		{
 			"#": "15[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Maximum Heat Setpoint Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "15[0x07000000]",
@@ -434,23 +379,12 @@
 		},
 		{
 			"#": "16[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Minimum Heat Setpoint Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "16[0x07000000]",
@@ -492,23 +426,12 @@
 		},
 		{
 			"#": "17[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Maximum Cool Setpoint Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "17[0x07000000]",
@@ -550,23 +473,12 @@
 		},
 		{
 			"#": "18[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Minimum Cool Setpoint Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "18[0x07000000]",
@@ -614,27 +526,13 @@
 		},
 		{
 			"#": "23",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Temperature Display Units",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Farenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "24",
 			"label": "HVAC Modes Enabled",
-			"description": "Which heating/cooling modes are available.",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 31,
@@ -674,7 +572,6 @@
 		{
 			"#": "25[0x00ff]",
 			"label": "Configurable Terminal Setting Z2",
-			"description": "Changes control of configurable terminal",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4,
@@ -706,7 +603,6 @@
 		{
 			"#": "25[0xff00]",
 			"label": "Configurable Terminal Setting Z1",
-			"description": "Changes control of configurable terminal",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4,
@@ -737,8 +633,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Power Source",
-			"description": "Which source of power is utilized.",
+			"label": "Active Power Source",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1232,27 +1127,14 @@
 		},
 		{
 			"#": "30[0x00ff]",
-			"label": "Remote Temperature Enable",
-			"description": "Enables remote temperature sensor instead of built-in.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Remote Temperature Sensor",
+			"description": "Use remote temperature sensor instead of built-in.",
+			"valueSize": 2
 		},
 		{
 			"#": "30[0xff00]",
-			"label": "Remote Temperature Status",
+			"label": "Remote Temperature Sensor Status",
 			"description": "Status of the remote temperature sensor.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -1312,23 +1194,12 @@
 		},
 		{
 			"#": "31[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Heat Differential Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "31[0x07000000]",
@@ -1370,23 +1241,12 @@
 		},
 		{
 			"#": "32[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Cool Differential Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "32[0x07000000]",
@@ -1428,23 +1288,12 @@
 		},
 		{
 			"#": "33[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Temperature Reporting Threshold Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "33[0x07000000]",
@@ -1459,9 +1308,8 @@
 		},*/
 		{
 			"#": "35",
-			"label": "Z-Wave Echo Association Reports",
-			"description": "Enable/Disabled Echo Assoc. Reports.",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Echo Association Reports"
 		},
 		{
 			"#": "36[0xffff00]",
@@ -1491,23 +1339,12 @@
 		},
 		{
 			"#": "36[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "C-Wire Power Thermistor Offset Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "36[0x07000000]",
@@ -1522,210 +1359,210 @@
 		},*/
 		{
 			"#": "37",
-			"label": "Run Fan With Auxiliary Heat",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Run Fan With Auxiliary Heat"
 		},
 		{
 			"#": "38[0x00000001]",
-			"label": "Z-Wave Association Report: Thermostat Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Mode",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000008]",
-			"label": "Z-Wave Association Report: Thermostat Operating State",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Operating State",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000010]",
-			"label": "Z-Wave Association Report: Thermostat Fan Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Fan Mode",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000020]",
-			"label": "Z-Wave Association Report: Thermostat Fan State",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Fan State",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000040]",
-			"label": "Z-Wave Association Report: Ambiant Temperature",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Ambiant Temperature",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000080]",
-			"label": "Z-Wave Association Report: Relative Humidity",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Relative Humidity",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000200]",
-			"label": "Z-Wave Association Report: Battery Low Notification",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Battery Low Notification",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000400]",
-			"label": "Z-Wave Association Report: Battery Very Low Notification",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Battery Very Low Notification",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00000800]",
-			"label": "Z-Wave Association Report: Thermostat Supported Modes",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Supported Modes",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00001000]",
-			"label": "Z-Wave Association Report: Remote Enable Report",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Remote Enable Report",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00002000]",
-			"label": "Z-Wave Association Report: Humidity Control Operating State Report",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Operating State Report",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00004000]",
-			"label": "Z-Wave Association Report: HVAC Type",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: HVAC Type",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00008000]",
-			"label": "Z-Wave Association Report: Number of Cool/Pump Stages",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Number of Cool/Pump Stages",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00010000]",
-			"label": "Z-Wave Association Report: Number of Heat/Aux Stages",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Number of Heat/Aux Stages",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00020000]",
-			"label": "Z-Wave Association Report: Relay Status",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Relay Status",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00040000]",
-			"label": "Z-Wave Association Report: Power Source",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Power Source",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00080000]",
-			"label": "Z-Wave Association Report: Notification Report Power Applied",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Power Applied",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00100000]",
-			"label": "Z-Wave Association Report: Notification Report Mains Disconnected",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Mains Disconnected",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00200000]",
-			"label": "Z-Wave Association Report: Notification Report Mains Reconnected",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Mains Reconnected",
 			"valueSize": 4,
 			"defaultValue": 1,
 			"unsigned": true
 		},
 		{
 			"#": "38[0x00400000]",
-			"label": "Z-Wave Association Report: Notification Report Replace Battery Soon",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Replace Battery Soon",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x00800000]",
-			"label": "Z-Wave Association Report: Notification Report Replace Battery Now",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Replace Battery Now",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x01000000]",
-			"label": "Z-Wave Association Report: Notification Report System Hardware Failure",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Hardware Failure",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x02000000]",
-			"label": "Z-Wave Association Report: Notification Report System Software Failure",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Software Failure",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x04000000]",
-			"label": "Z-Wave Association Report: Notification Report System Hardware Failure with Code",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Hardware Failure with Code",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x08000000]",
-			"label": "Z-Wave Association Report: Notification Report System Software Failure with Code",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Software Failure with Code",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x10000000]",
-			"label": "Z-Wave Association Report: Display Units",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Display Units",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x20000000]",
-			"label": "Z-Wave Association Report: Heat Fuel Type",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Heat Fuel Type",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x40000000]",
-			"label": "Z-Wave Association Report: Humidity Control Mode",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Mode",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
 		{
 			"#": "38[0x80000000]",
-			"label": "Z-Wave Association Report: Humidity Control Setpoints",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Setpoints",
 			"valueSize": 4,
 			"defaultValue": 1
 		},
@@ -1768,23 +1605,12 @@
 		},
 		{
 			"#": "40[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Remote Temperature Differential Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "40[0x07000000]",
@@ -1807,8 +1633,8 @@
 		},
 		{
 			"#": "42",
-			"label": "Remote Temperature Display Enable",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Remote Temperature Display Enable",
 			"defaultValue": 1
 		},
 		{
@@ -1859,23 +1685,12 @@
 		},
 		{
 			"#": "46[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Dehumidify by AC Offset Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "46[0x07000000]",
@@ -1890,20 +1705,20 @@
 		},*/
 		{
 			"#": "48",
-			"label": "PIR Enable",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "PIR Enable",
 			"defaultValue": 1
 		},
 		{
 			"#": "49",
-			"label": "Humidity Display",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Humidity Display",
 			"defaultValue": 1
 		},
 		{
 			"#": "50[0x80000000]",
-			"label": "System configuration: Aux Fan",
 			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "System configuration: Aux Fan",
 			"valueSize": 4,
 			"readOnly": true
 		},
@@ -2122,23 +1937,12 @@
 		},
 		{
 			"#": "55[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Vent Maximum Outdoor Temperature Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "55[0x07000000]",
@@ -2180,23 +1984,12 @@
 		},
 		{
 			"#": "56[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Vent Minimum Outdoor Temperature Scale",
 			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
-			"readOnly": true,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"readOnly": true
 		},
 		{
 			"#": "56[0x07000000]",

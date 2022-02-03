@@ -878,8 +878,8 @@ Consider converting this parameter to unsigned using ${white(
 						const bitMaskWidth = getBitMaskWidth(bitMask);
 
 						if (
-							shiftAmount == 0 &&
-							param.valueSize >= bitMaskWidth / 8
+							shiftAmount === 0 &&
+							param.valueSize === bitMaskWidth / 8
 						) {
 							addError(
 								file,
