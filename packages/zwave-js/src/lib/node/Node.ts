@@ -1946,6 +1946,11 @@ protocol version:      ${this._protocolVersion}`;
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake
 		this.markAsAwake();
 
+		// Check to see if manual refresh is required
+		this.checkManualValueRefresh();
+	}
+
+	private checkManualValueRefresh() {
 		// SDS14223 Unless unsolicited <XYZ> Report Commands are received,
 		// a controlling node MUST probe the current values when the
 		// supporting node issues a Wake Up Notification Command for sleeping nodes.
@@ -2589,7 +2594,11 @@ protocol version:      ${this._protocolVersion}`;
 			version: 1,
 		});
 
+
 		this.markAsAwake();
+
+		// Check to see if manual refresh is required
+		this.checkManualValueRefresh();
 
 		// From the specs:
 		// A controlling node SHOULD read the Wake Up Interval of a supporting node when the delays between
