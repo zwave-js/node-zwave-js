@@ -28,60 +28,19 @@
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Top button function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
-			"label": "LED indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
-			"label": "Timed auto-off",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Timed auto-off"
 		},
 		{
 			"#": "5",
@@ -96,22 +55,8 @@
 		},
 		{
 			"#": "6",
-			"label": "Send meter reports",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send meter reports"
 		},
 		{
 			"#": "7",
@@ -135,8 +80,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Power report threshold",
-			"description": "Change in power consumption that triggers a report",
+			"label": "Current report threshold",
+			"description": "Change in current consumption that triggers a report",
 			"unit": "0.01 A",
 			"valueSize": 2,
 			"minValue": 1,
