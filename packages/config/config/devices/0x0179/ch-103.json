@@ -20,12 +20,12 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Commands for S1",
+			"label": "Switch S1",
 			"maxNodes": 10,
 			"isLifeline": false
 		},
 		"3": {
-			"label": "Commands for S2",
+			"label": "Switch S2",
 			"maxNodes": 10,
 			"isLifeline": false
 		}
@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "50",
-			"label": "Response Mode",
+			"label": "Respond to Non-Encrypted Commands When Included Securely",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -129,52 +129,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Security and regular commands",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Security commands only",
+					"label": "Disable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "51",
-			"label": "2nd Association Group",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Click",
-					"value": 0
-				},
-				{
-					"label": "Press",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Secure Commands to 2nd Association Group",
+			"description": "Only active when the node is included securely"
 		},
 		{
 			"#": "52",
-			"label": "3rd Association Group",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Click",
-					"value": 0
-				},
-				{
-					"label": "Press",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Secure Commands to 3rd Association Group",
+			"description": "Only active when the node is included securely"
 		}
 	],
 	"metadata": {
