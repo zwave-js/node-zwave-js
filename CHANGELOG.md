@@ -4,6 +4,17 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The 500-to-700 series NVM conversion routine now correctly considers all potentially existing nodes
+* The Home ID is no longer lost after restoring a 500 series NVM onto a 700 series stick
+
+### Config file changes
+* Add fingerprint for AU/NZ model of Aeotec NanoMote Quad
+* Add ConnectHome CH-103
+* Add RU fingerprint to Sunricher ZV9101
+* Add Alarm.com Smart Thermostat ADC-T3000
+
 ## 8.11.3 (2022-02-02)
 ### Config file changes
 * Add new product id to Shenzhen Neo NAS-PD07ZU1
