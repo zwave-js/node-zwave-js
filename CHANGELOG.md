@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.4 (2022-02-06)
 ### Bugfixes
 * The 500-to-700 series NVM conversion routine now correctly considers all potentially existing nodes
 * The Home ID is no longer lost after restoring a 500 series NVM onto a 700 series stick
