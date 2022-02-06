@@ -1,0 +1,129 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH3901-Z",
+	"description": "Boiler Thermostat",
+	"devices": [
+		{
+			"productType": "0x3910",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Automatic temperature value reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Only report the difference, current and last temperature of certain value to trigger the reporting",
+					"value": 1
+				},
+				{
+					"label": "Regular reporting only",
+					"value": 2
+				},
+				{
+					"label": "Difference and interval reporting",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature difference setting",
+			"description": "Based on 0.1 °C unit: n * 0.1 °C = 0.5 °C",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 995,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Timed report intervals",
+			"description": "Based in 1s unit. Suggested > 30s",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Association 2 SET command retransmission times",
+			"description": "0: not resend, 1-127: resend times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3
+		},
+		{
+			"#": "7",
+			"label": "Set the number of units for the heating period (menu P07)",
+			"description": "Total length of a heating cycle",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 120,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Set the number of units the heater is on within the heating period (menu P08)",
+			"description": "The length within the heating cycle the heater is on. Lenght shoudl be less than P07",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 120,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "255",
+			"label": "Reset to Factory Default Setting",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 39090,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore default complex parameters",
+					"value": 17185
+				},
+				{
+					"label": "Completely factory reset",
+					"value": 39030
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "From the opening menu, long-press S1 and S3 to enter inclusion/exclusion menu. Short press S2 to enter learning mode.",
+		"manual": "http://www.mcohome.com/MH3901-Z-PG3887693"
+	}
+}
