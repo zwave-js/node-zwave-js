@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature reporting",
+			"label": "Temperature Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -51,8 +51,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Temperature difference setting",
-			"description": "Based on 0.1 °C unit: n * 0.1 °C = 0.5 °C",
+			"label": "Temperature Difference Setting",
 			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 3,
@@ -62,8 +61,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Report interval time",
-			"description": "Based in 1s unit. Suggested > 30s",
+			"label": "Report Interval Time",
+			"description": "Suggested > 30 seconds.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
@@ -73,17 +72,23 @@
 		},
 		{
 			"#": "5",
-			"label": "Association 2 SET command retransmission times",
-			"description": "0: not resend, 1-127: resend times",
+			"label": "Retransmission Times",
+			"description": "Association SET 2 Command retransmission times",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 3
+			"defaultValue": 3,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "7",
-			"label": "Set the number of units for the heating period (menu P07)",
-			"description": "Total length of a heating cycle",
+			"label": "Heating Cycle Duration",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 120,
@@ -92,8 +97,8 @@
 		},
 		{
 			"#": "8",
-			"label": "Set the number of units the heater is on within the heating period (menu P08)",
-			"description": "The length within the heating cycle the heater is on. Lenght shoudl be less than P07",
+			"label": "Heating Time within Cycle",
+			"description": "Should be less than Heating Period Setting Unit",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 120,
@@ -112,7 +117,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Restore default complex parameters",
+					"label": "Restore complex parameters to its default",
 					"value": 17185
 				},
 				{
