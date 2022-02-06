@@ -824,6 +824,16 @@ export function jsonToNVMObjects_v1_to_v4(
 		}
 	}
 
+	// For v3+ targets, the ControllerInfoFile must contain the LongRange properties
+	// or the controller will ignore the file and not have a home ID
+	if (format >= 3) {
+		target.controller.lastNodeIdLR ??= 255;
+		target.controller.maxNodeIdLR ??= 0;
+		target.controller.reservedIdLR ??= 0;
+		target.controller.primaryLongRangeChannelId ??= 0;
+		target.controller.dcdcConfig ??= 255;
+	}
+
 	addProtocolObjects(...serializeCommonProtocolObjects(target));
 
 	addProtocolObjects(

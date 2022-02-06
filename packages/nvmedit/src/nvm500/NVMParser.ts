@@ -223,6 +223,7 @@ export class NVMParser {
 		const lastNodeId = this.getOne<number>(
 			"EX_NVM_LAST_USED_NODE_ID_START_far",
 		);
+		const maxNodeId = this.getOne<number>("EX_NVM_MAX_NODE_ID_far");
 
 		const nodeInfos = this.getAll<NVM500NodeInfo>(
 			"EX_NVM_NODE_TABLE_START_far",
@@ -257,7 +258,7 @@ export class NVMParser {
 		).slice(0, numCCs);
 
 		const nodes: Record<number, NVM500JSONNode> = {};
-		for (let nodeId = 1; nodeId <= lastNodeId; nodeId++) {
+		for (let nodeId = 1; nodeId <= MAX_NODES; nodeId++) {
 			const nodeInfo = nodeInfos[nodeId - 1];
 			const isVirtual = virtualNodes.has(nodeId);
 			if (!nodeInfo) {
@@ -314,7 +315,7 @@ export class NVMParser {
 				sucUpdateEntries: this.getAll<SUCUpdateEntry>(
 					"EX_NVM_SUC_NODE_LIST_START_far",
 				).filter(Boolean),
-				maxNodeId: this.getOne<number>("EX_NVM_MAX_NODE_ID_far"),
+				maxNodeId,
 				reservedId: this.getOne<number>("EX_NVM_RESERVED_ID_far"),
 				systemState: this.getOne<number>("NVM_SYSTEM_STATE"),
 				watchdogStarted: this.getOne<number>(
