@@ -23,7 +23,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Automatic temperature value reporting",
+			"label": "Temperature reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -36,11 +36,11 @@
 					"value": 0
 				},
 				{
-					"label": "Only report the difference, current and last temperature of certain value to trigger the reporting",
+					"label": "Difference reporting only",
 					"value": 1
 				},
 				{
-					"label": "Regular reporting only",
+					"label": "Interval reporting only",
 					"value": 2
 				},
 				{
@@ -62,9 +62,9 @@
 		},
 		{
 			"#": "3",
-			"label": "Timed report intervals",
+			"label": "Report interval time",
 			"description": "Based in 1s unit. Suggested > 30s",
-			"unit": "s",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 32767,
@@ -102,7 +102,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Reset to Factory Default Setting",
+			"label": "Reset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 39090,
@@ -116,7 +116,7 @@
 					"value": 17185
 				},
 				{
-					"label": "Completely factory reset",
+					"label": "Factory reset",
 					"value": 39030
 				}
 			]
