@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.5 (2022-02-08)
 ### Bugfixes
 * Fixed a `TypeError` that could happen when parsing a controller's NVM backup
 * After healing, battery-powered nodes are sent back to sleep again
