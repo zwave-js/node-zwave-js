@@ -4,6 +4,12 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a `TypeError` that could happen when parsing a controller's NVM backup
+* After healing, battery-powered nodes are sent back to sleep again
+* Added a workaround for thermostats that don't advertise all their supported thermostat modes. When such a thermostat enters such an "unsupported" mode, the mode is now dynamically added to the list of supported modes.
+
 ## 8.11.4 (2022-02-06)
 ### Bugfixes
 * The 500-to-700 series NVM conversion routine now correctly considers all potentially existing nodes
