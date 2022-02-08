@@ -334,8 +334,10 @@ export function nvmObjectsToJSON(
 					ZWaveErrorCodes.NVM_NotSupported,
 				);
 			}
-			node.lwr = routeCache.lwr;
-			node.nlwr = routeCache.nlwr;
+			if (routeCache) {
+				node.lwr = routeCache.lwr;
+				node.nlwr = routeCache.nlwr;
+			}
 		}
 
 		// @ts-expect-error Some fields include a nodeId, but we don't need it
