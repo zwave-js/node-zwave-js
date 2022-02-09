@@ -117,7 +117,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Restore complex parameters to its default",
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Reset configuration parameters to default settings",
 					"value": 17185
 				},
 				{
