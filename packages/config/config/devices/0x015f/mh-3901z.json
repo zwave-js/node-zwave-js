@@ -89,6 +89,7 @@
 		{
 			"#": "7",
 			"label": "Heating Cycle Duration",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 120,
@@ -97,8 +98,9 @@
 		},
 		{
 			"#": "8",
-			"label": "Heating Time within Cycle",
+			"label": "Heating Time within Heating Cycle",
 			"description": "Must be less than Heating Cycle Duration (parameter 7)",
+			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 120,
