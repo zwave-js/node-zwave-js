@@ -107,7 +107,7 @@
 		},
 		{
 			"#": "255",
-			"label": "Reset",
+			"label": "Reset to Factory Default Setting",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 39090,
