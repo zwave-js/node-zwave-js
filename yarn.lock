@@ -73,6 +73,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@alcalzone/pak@npm:^0.8.0":
+  version: 0.8.0
+  resolution: "@alcalzone/pak@npm:0.8.0"
+  dependencies:
+    axios: ^0.21.1
+    execa: ^5.0.0
+    fs-extra: ^9.1.0
+  checksum: ec3267df0b6ee76e7f56aae4cdf9c67c240b198c91af74c56e5085fc46dd3e35b65bd8de0340674c856e6b42da9ddf4cd59ec3090dec95f0f6f0c508dcd01736
+  languageName: node
+  linkType: hard
+
 "@alcalzone/release-script-core@npm:3.5.0":
   version: 3.5.0
   resolution: "@alcalzone/release-script-core@npm:3.5.0"
@@ -14507,7 +14518,7 @@ typescript@^4.4.3:
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
     "@alcalzone/jsonl-db": ^2.4.3
-    "@alcalzone/pak": ^0.7.0
+    "@alcalzone/pak": ^0.8.0
     "@sentry/integrations": ^6.17.3
     "@sentry/node": ^6.17.3
     "@types/fs-extra": ^9.0.13
