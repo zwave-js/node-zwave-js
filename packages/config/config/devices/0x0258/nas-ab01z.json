@@ -39,7 +39,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Configure Alarm music volume",
+			"label": "Alarm Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -61,7 +61,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Alarm music duration time",
+			"label": "Alarm Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -87,7 +87,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Door bell music duration time",
+			"label": "Doorbell Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -106,7 +106,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Door bell music volume",
+			"label": "Doorbell Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -128,7 +128,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Alarm music index",
+			"label": "Alarm Sound Selection",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Door bell music index",
+			"label": "Doorbell Sound Selection",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -144,18 +144,18 @@
 		},
 		{
 			"#": "7",
-			"label": "Default Siren on mode",
+			"label": "Default Siren Sound",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Alarm music",
+					"label": "Alarm Sound",
 					"value": 1
 				},
 				{
-					"label": "Door bell music",
+					"label": "Doorbell Sound",
 					"value": 2
 				}
 			]
@@ -163,13 +163,13 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Alarm LED enable",
+			"label": "Alarm LED",
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Door bell LED enable"
+			"label": "Doorbell LED"
 		}
 	]
 }

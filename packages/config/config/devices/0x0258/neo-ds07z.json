@@ -94,7 +94,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "No Delay",
+					"label": "No delay",
 					"value": 0
 				}
 			]

@@ -25,8 +25,8 @@
 		{
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Back light Enable",
-			"description": "Enable back light when Light Switch is powered on.",
+			"label": "Backlight",
+			"description": "Backlight when switch is on",
 			"defaultValue": 1
 		},
 		{
@@ -41,7 +41,7 @@
 		{
 			"#": "4",
 			"label": "Root Device Mapped Setting",
-			"description": "Endpoint device mapping setting for associated devices.",
+			"description": "Endpoint device mapping setting for associated devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -61,7 +61,7 @@
 					"value": 2
 				},
 				{
-					"label": "Endpoint 1 and 2",
+					"label": "All endpoints",
 					"value": 3
 				}
 			]

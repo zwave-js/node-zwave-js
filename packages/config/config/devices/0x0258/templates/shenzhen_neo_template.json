@@ -61,7 +61,7 @@
 	"low_brightness_sensor": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Low Brightness Sensor",
-		"description": "When enabled, send Basic Set if brightness falls below threshold."
+		"description": "Send Basic Set if brightness falls below threshold"
 	},
 	"light_sensor_report_threshold": {
 		"label": "Light Sensor Differential Report Threshold",

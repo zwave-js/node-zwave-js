@@ -21,8 +21,8 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Backlight Enable",
-			"description": "Enable back light when Light Switch is powered on.",
+			"label": "Backlight",
+			"description": "Backlight when switch is on",
 			"defaultValue": 1
 		},
 		{
@@ -33,7 +33,7 @@
 		{
 			"#": "4",
 			"label": "Root Device Mapped Setting",
-			"description": "Endpoint device mapping setting for associated devices.",
+			"description": "Endpoint device mapping setting for associated devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -57,7 +57,7 @@
 					"value": 3
 				},
 				{
-					"label": "All three endpoints",
+					"label": "All endpoints",
 					"value": 4
 				}
 			]
@@ -65,20 +65,19 @@
 		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Button Switch Function Disable",
-			"description": "Enables/disables button",
+			"label": "Switch Operation",
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Timer enable",
-			"description": "Timer to turn off the relay automatically"
+			"label": "Auto-Off",
+			"description": "Auto-Off timer for the relay"
 		},
 		{
 			"#": "7",
-			"label": "Channel 1 Off Time Settings",
-			"description": "Delay timer to turn off the channel",
+			"label": "Channel 1 Auto-Off Delay",
+			"description": "Auto-off timer for the channel",
 			"unit": "Minute",
 			"valueSize": 2,
 			"minValue": 0,
@@ -87,8 +86,8 @@
 		},
 		{
 			"#": "8",
-			"label": "Channel 2 Off Time Settings",
-			"description": "Delay timer to turn off the channel",
+			"label": "Channel 2 Auto-Off Delay",
+			"description": "Auto-off timer for the channel",
 			"unit": "minute",
 			"valueSize": 2,
 			"minValue": 0,
@@ -97,8 +96,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Channel 3 Off Time Settings",
-			"description": "Delay timer to turn off the channel",
+			"label": "Channel 3 Auto-Off Delay",
+			"description": "Auto-off timer for the channel",
 			"unit": "minute",
 			"valueSize": 2,
 			"minValue": 0,

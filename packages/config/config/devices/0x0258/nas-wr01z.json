@@ -29,12 +29,12 @@
 		{
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Send meter reports",
+			"label": "Send Meter Reports",
 			"defaultValue": 1
 		},
 		{
 			"#": "2",
-			"label": "Meter report interval",
+			"label": "Meter Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
@@ -44,8 +44,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Maximum current",
-			"description": "Maximum current the plug can provide to load",
+			"label": "Overcurrent Protection Threshold",
+			"description": "Threshold at which the plug enters overcurrent protection mode",
 			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
@@ -54,8 +54,8 @@
 		},
 		{
 			"#": "4",
-			"label": "Alarm current threshold",
-			"description": "An over-current notification is sent when the current is higher than this value",
+			"label": "Overcurrent Alarm Threshold",
+			"description": "Threshold at which the plug sends an overcurrent notification",
 			"unit": "A",
 			"valueSize": 1,
 			"minValue": 1,
@@ -69,7 +69,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Power report threshold",
+			"label": "Power Report Threshold",
 			"description": "Change in power consumption that triggers a report",
 			"unit": "%",
 			"valueSize": 1,
@@ -84,11 +84,11 @@
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Timed auto-off"
+			"label": "Auto-Off Timer"
 		},
 		{
 			"#": "9",
-			"label": "Timed auto-off period",
+			"label": "Auto-Off Delay",
 			"description": "Delay time after which the plug is automatically switched off",
 			"unit": "minutes",
 			"valueSize": 2,
@@ -100,7 +100,7 @@
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Top button function",
+			"label": "Button",
 			"defaultValue": 1
 		}
 	]

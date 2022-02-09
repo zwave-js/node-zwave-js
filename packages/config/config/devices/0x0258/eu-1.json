@@ -25,8 +25,8 @@
 		{
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Back light Enable",
-			"description": "Enable back light when Light Switch is powered on.",
+			"label": "Backlight",
+			"description": "Enable backlight when switch is on",
 			"defaultValue": 1
 		},
 		{
