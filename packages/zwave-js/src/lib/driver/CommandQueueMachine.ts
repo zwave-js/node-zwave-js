@@ -77,7 +77,11 @@ export type CommandQueueDoneData = SerialAPICommandDoneData & {
 export type CommandQueueMachine = StateMachine<
 	CommandQueueContext,
 	CommandQueueStateSchema,
-	CommandQueueEvent
+	CommandQueueEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type CommandQueueInterpreter = Interpreter<
 	CommandQueueContext,

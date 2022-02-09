@@ -23,7 +23,11 @@ export type NodeReadyEvent =
 export type NodeReadyMachine = StateMachine<
 	NodeReadyContext,
 	NodeReadyStateSchema,
-	NodeReadyEvent
+	NodeReadyEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type NodeReadyInterpreter = Interpreter<
 	NodeReadyContext,

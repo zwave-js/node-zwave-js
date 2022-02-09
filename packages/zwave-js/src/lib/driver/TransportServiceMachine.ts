@@ -32,7 +32,11 @@ export type TransportServiceRXEvent = { type: "segment"; index: number };
 export type TransportServiceRXMachine = StateMachine<
 	TransportServiceRXContext,
 	TransportServiceRXStateSchema,
-	TransportServiceRXEvent
+	TransportServiceRXEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type TransportServiceRXInterpreter = Interpreter<
 	TransportServiceRXContext,
