@@ -17,43 +17,12 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator"
 		},
 		{
 			"#": "2",
-			"label": "Binary Sensor Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report"
 		},
 		{
 			"#": "3",
@@ -68,7 +37,7 @@
 		{
 			"#": "4",
 			"label": "Humidity Offset Value",
-			"unit": "0.1 (RH%).",
+			"unit": "0.1 (RH%)",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 120,
@@ -125,7 +94,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "No Delay",
+					"label": "No delay",
 					"value": 0
 				}
 			]
