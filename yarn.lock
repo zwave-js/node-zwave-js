@@ -4262,7 +4262,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@zwave-js/config@8.11.3, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
+"@zwave-js/config@8.11.4, @zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
   dependencies:
@@ -4360,7 +4360,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/nvmedit@8.11.3, @zwave-js/nvmedit@workspace:*, @zwave-js/nvmedit@workspace:packages/nvmedit":
+"@zwave-js/nvmedit@8.11.5, @zwave-js/nvmedit@workspace:*, @zwave-js/nvmedit@workspace:packages/nvmedit":
   version: 0.0.0-use.local
   resolution: "@zwave-js/nvmedit@workspace:packages/nvmedit"
   dependencies:
@@ -14518,10 +14518,10 @@ typescript@^4.4.3:
     "@types/serialport": ^8.0.2
     "@types/source-map-support": ^0
     "@xstate/test": ^0.5.1
-    "@zwave-js/config": 8.11.3
+    "@zwave-js/config": 8.11.4
     "@zwave-js/core": 8.11.3
     "@zwave-js/maintenance": 8.11.3
-    "@zwave-js/nvmedit": 8.11.3
+    "@zwave-js/nvmedit": 8.11.5
     "@zwave-js/serial": 8.11.3
     "@zwave-js/shared": 8.11.3
     "@zwave-js/testing": 8.11.3

@@ -2834,9 +2834,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Don't try to heal dead nodes
 		const node = this.nodes.getOrThrow(nodeId);
 
-		// And keep battery powered nodes awake during the process
-		const keepAwake = node.keepAwake;
-
 		// Don't start the process twice
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
@@ -2858,176 +2855,195 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		try {
 			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
-			node.keepAwake = true;
 			return await this.healNodeInternal(nodeId);
 		} finally {
 			this._healNetworkActive = false;
-			node.keepAwake = keepAwake;
 		}
 	}
 
 	private async healNodeInternal(nodeId: number): Promise<boolean> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		this.driver.controllerLog.logNode(nodeId, {
-			message: `healing node...`,
-			direction: "none",
-		});
-
-		// The healing process consists of four steps
-		// Each step is tried up to 5 times before the healing process is considered failed
-		const maxAttempts = 5;
-
-		// 1. command the node to refresh its neighbor list
-		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			// If the process was stopped in the meantime, cancel
-			if (!this._healNetworkActive) return false;
-
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `refreshing neighbor list (attempt ${attempt})...`,
-				direction: "outbound",
-			});
-			try {
-				const resp =
-					await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
-						new RequestNodeNeighborUpdateRequest(this.driver, {
-							nodeId,
-						}),
-					);
-				if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
-					this.driver.controllerLog.logNode(nodeId, {
-						message: "neighbor list refreshed...",
-						direction: "inbound",
-					});
-					// this step was successful, continue with the next
-					break;
-				} else {
-					// UpdateFailed
-					this.driver.controllerLog.logNode(nodeId, {
-						message: "refreshing neighbor list failed...",
-						direction: "inbound",
-						level: "warn",
-					});
-				}
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					nodeId,
-					`refreshing neighbor list failed: ${getErrorMessage(e)}`,
-					"warn",
-				);
-			}
-			if (attempt === maxAttempts) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `failed to update the neighbor list after ${maxAttempts} attempts, healing failed`,
-					level: "warn",
-					direction: "none",
-				});
-				return false;
-			}
-		}
-
-		// 2. re-create the SUC return route, just in case
-		if (await this.deleteSUCReturnRoute(nodeId)) {
-			node.hasSUCReturnRoute = false;
-		}
-		node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
-
-		// 3. delete all return routes so we can assign new ones
-		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			this.driver.controllerLog.logNode(nodeId, {
-				message: `deleting return routes (attempt ${attempt})...`,
-				direction: "outbound",
-			});
-
-			try {
-				await this.driver.sendMessage(
-					new DeleteReturnRouteRequest(this.driver, { nodeId }),
-				);
-				// this step was successful, continue with the next
-				break;
-			} catch (e) {
-				this.driver.controllerLog.logNode(
-					nodeId,
-					`deleting return routes failed: ${getErrorMessage(e)}`,
-					"warn",
-				);
-			}
-			if (attempt === maxAttempts) {
-				this.driver.controllerLog.logNode(nodeId, {
-					message: `failed to delete return routes after ${maxAttempts} attempts, healing failed`,
-					level: "warn",
-					direction: "none",
-				});
-				return false;
-			}
-		}
-
-		// 4. Assign up to 4 return routes for associations, one of which should be the controller
-		let associatedNodes: number[] = [];
-		const maxReturnRoutes = 4;
+		// Keep battery powered nodes awake during the healing process
+		// and make sure that the flag gets reset at the end
+		const keepAwake = node.keepAwake;
 		try {
-			associatedNodes = distinct(
-				flatMap<number, AssociationAddress[]>(
-					[...(this.getAssociations({ nodeId }).values() as any)],
-					(assocs: AssociationAddress[]) =>
-						assocs.map((a) => a.nodeId),
-				),
-			).sort();
-		} catch {
-			/* ignore */
-		}
-		// Always include ourselves first
-		if (!associatedNodes.includes(this._ownNodeId!)) {
-			associatedNodes.unshift(this._ownNodeId!);
-		}
-		if (associatedNodes.length > maxReturnRoutes) {
-			associatedNodes = associatedNodes.slice(0, maxReturnRoutes);
-		}
-		this.driver.controllerLog.logNode(nodeId, {
-			message: `assigning return routes to the following nodes:
-${associatedNodes.join(", ")}`,
-			direction: "outbound",
-		});
-		for (const destinationNodeId of associatedNodes) {
+			node.keepAwake = true;
+
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `healing node...`,
+				direction: "none",
+			});
+
+			// The healing process consists of four steps
+			// Each step is tried up to 5 times before the healing process is considered failed
+			const maxAttempts = 5;
+
+			// 1. command the node to refresh its neighbor list
 			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+				// If the process was stopped in the meantime, cancel
+				if (!this._healNetworkActive) return false;
+
 				this.driver.controllerLog.logNode(nodeId, {
-					message: `assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+					message: `refreshing neighbor list (attempt ${attempt})...`,
 					direction: "outbound",
 				});
-
 				try {
-					await this.driver.sendMessage(
-						new AssignReturnRouteRequest(this.driver, {
-							nodeId,
-							destinationNodeId,
-						}),
-					);
-					// this step was successful, continue with the next
-					break;
+					const resp =
+						await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
+							new RequestNodeNeighborUpdateRequest(this.driver, {
+								nodeId,
+							}),
+						);
+					if (
+						resp.updateStatus ===
+						NodeNeighborUpdateStatus.UpdateDone
+					) {
+						this.driver.controllerLog.logNode(nodeId, {
+							message: "neighbor list refreshed...",
+							direction: "inbound",
+						});
+						// this step was successful, continue with the next
+						break;
+					} else {
+						// UpdateFailed
+						this.driver.controllerLog.logNode(nodeId, {
+							message: "refreshing neighbor list failed...",
+							direction: "inbound",
+							level: "warn",
+						});
+					}
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						nodeId,
-						`assigning return route failed: ${getErrorMessage(e)}`,
+						`refreshing neighbor list failed: ${getErrorMessage(
+							e,
+						)}`,
 						"warn",
 					);
 				}
 				if (attempt === maxAttempts) {
 					this.driver.controllerLog.logNode(nodeId, {
-						message: `failed to assign return route after ${maxAttempts} attempts, healing failed`,
+						message: `failed to update the neighbor list after ${maxAttempts} attempts, healing failed`,
 						level: "warn",
 						direction: "none",
 					});
 					return false;
 				}
 			}
+
+			// 2. re-create the SUC return route, just in case
+			if (await this.deleteSUCReturnRoute(nodeId)) {
+				node.hasSUCReturnRoute = false;
+			}
+			node.hasSUCReturnRoute = await this.assignSUCReturnRoute(nodeId);
+
+			// 3. delete all return routes so we can assign new ones
+			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+				this.driver.controllerLog.logNode(nodeId, {
+					message: `deleting return routes (attempt ${attempt})...`,
+					direction: "outbound",
+				});
+
+				try {
+					await this.driver.sendMessage(
+						new DeleteReturnRouteRequest(this.driver, { nodeId }),
+					);
+					// this step was successful, continue with the next
+					break;
+				} catch (e) {
+					this.driver.controllerLog.logNode(
+						nodeId,
+						`deleting return routes failed: ${getErrorMessage(e)}`,
+						"warn",
+					);
+				}
+				if (attempt === maxAttempts) {
+					this.driver.controllerLog.logNode(nodeId, {
+						message: `failed to delete return routes after ${maxAttempts} attempts, healing failed`,
+						level: "warn",
+						direction: "none",
+					});
+					return false;
+				}
+			}
+
+			// 4. Assign up to 4 return routes for associations, one of which should be the controller
+			let associatedNodes: number[] = [];
+			const maxReturnRoutes = 4;
+			try {
+				associatedNodes = distinct(
+					flatMap<number, AssociationAddress[]>(
+						[...(this.getAssociations({ nodeId }).values() as any)],
+						(assocs: AssociationAddress[]) =>
+							assocs.map((a) => a.nodeId),
+					),
+				).sort();
+			} catch {
+				/* ignore */
+			}
+			// Always include ourselves first
+			if (!associatedNodes.includes(this._ownNodeId!)) {
+				associatedNodes.unshift(this._ownNodeId!);
+			}
+			if (associatedNodes.length > maxReturnRoutes) {
+				associatedNodes = associatedNodes.slice(0, maxReturnRoutes);
+			}
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `assigning return routes to the following nodes:
+${associatedNodes.join(", ")}`,
+				direction: "outbound",
+			});
+			for (const destinationNodeId of associatedNodes) {
+				for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+					this.driver.controllerLog.logNode(nodeId, {
+						message: `assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
+						direction: "outbound",
+					});
+
+					try {
+						await this.driver.sendMessage(
+							new AssignReturnRouteRequest(this.driver, {
+								nodeId,
+								destinationNodeId,
+							}),
+						);
+						// this step was successful, continue with the next
+						break;
+					} catch (e) {
+						this.driver.controllerLog.logNode(
+							nodeId,
+							`assigning return route failed: ${getErrorMessage(
+								e,
+							)}`,
+							"warn",
+						);
+					}
+					if (attempt === maxAttempts) {
+						this.driver.controllerLog.logNode(nodeId, {
+							message: `failed to assign return route after ${maxAttempts} attempts, healing failed`,
+							level: "warn",
+							direction: "none",
+						});
+						return false;
+					}
+				}
+			}
+
+			this.driver.controllerLog.logNode(nodeId, {
+				message: `healed successfully`,
+				direction: "none",
+			});
+
+			return true;
+		} finally {
+			node.keepAwake = keepAwake;
+			if (!keepAwake) {
+				setImmediate(() => {
+					this.driver.debounceSendNodeToSleep(node);
+				});
+			}
 		}
-
-		this.driver.controllerLog.logNode(nodeId, {
-			message: `healed successfully`,
-			direction: "none",
-		});
-
-		return true;
 	}
 
 	/** Configures the given Node to be SUC/SIS or not */

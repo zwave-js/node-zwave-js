@@ -334,8 +334,10 @@ export function nvmObjectsToJSON(
 					ZWaveErrorCodes.NVM_NotSupported,
 				);
 			}
-			node.lwr = routeCache.lwr;
-			node.nlwr = routeCache.nlwr;
+			if (routeCache) {
+				node.lwr = routeCache.lwr;
+				node.nlwr = routeCache.nlwr;
+			}
 		}
 
 		// @ts-expect-error Some fields include a nodeId, but we don't need it
@@ -822,6 +824,16 @@ export function jsonToNVMObjects_v1_to_v4(
 				nlwr: node.nlwr ?? getEmptyRoute(),
 			});
 		}
+	}
+
+	// For v3+ targets, the ControllerInfoFile must contain the LongRange properties
+	// or the controller will ignore the file and not have a home ID
+	if (format >= 3) {
+		target.controller.lastNodeIdLR ??= 255;
+		target.controller.maxNodeIdLR ??= 0;
+		target.controller.reservedIdLR ??= 0;
+		target.controller.primaryLongRangeChannelId ??= 0;
+		target.controller.dcdcConfig ??= 255;
 	}
 
 	addProtocolObjects(...serializeCommonProtocolObjects(target));
