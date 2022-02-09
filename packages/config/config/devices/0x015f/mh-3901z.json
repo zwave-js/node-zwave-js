@@ -98,7 +98,7 @@
 		{
 			"#": "8",
 			"label": "Heating Time within Cycle",
-			"description": "Should be less than Heating Period Setting Unit",
+			"description": "Must be less than Heating Cycle Duration (parameter 7)",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 120,
