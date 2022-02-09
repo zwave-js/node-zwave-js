@@ -22,7 +22,7 @@
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Backlight",
-			"description": "Backlight when switch is on",
+			"description": "Enable backlight when switch is on",
 			"defaultValue": 1
 		},
 		{
@@ -71,14 +71,12 @@
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Auto-Off",
-			"description": "Auto-Off timer for the relay"
+			"label": "Auto-Off"
 		},
 		{
 			"#": "7",
-			"label": "Channel 1 Auto-Off Delay",
-			"description": "Auto-off timer for the channel",
-			"unit": "Minute",
+			"label": "Auto-Off Delay (Channel 1)",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -86,9 +84,8 @@
 		},
 		{
 			"#": "8",
-			"label": "Channel 2 Auto-Off Delay",
-			"description": "Auto-off timer for the channel",
-			"unit": "minute",
+			"label": "Auto-Off Delay (Channel 2)",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -96,9 +93,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Channel 3 Auto-Off Delay",
-			"description": "Auto-off timer for the channel",
-			"unit": "minute",
+			"label": "Auto-Off Delay (Channel 3)",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,

@@ -40,7 +40,7 @@
 		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Auto-Off Timer"
+			"label": "Auto-Off"
 		},
 		{
 			"#": "5",

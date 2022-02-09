@@ -37,7 +37,7 @@
 		{
 			"#": "4",
 			"label": "Humidity Offset Value",
-			"unit": "0.1 (RH%).",
+			"unit": "0.1 (RH%)",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 120,
