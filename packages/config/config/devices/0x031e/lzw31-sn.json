@@ -268,7 +268,7 @@
 			"#": "13",
 			"label": "LED Indicator: Color",
 			"description": "Uses a scaled hue value (realHue / 360 * 255).",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
