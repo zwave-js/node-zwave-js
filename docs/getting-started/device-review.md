@@ -2,7 +2,7 @@
 
 ## Disclaimer
 
-?> This is an alphabetic list of manufacturers from which I would buy devices or not. It is highly **subjective**, but I'll give explanations for each recommendation - positive or negative. My impressions are based on 4 years of tech support in this repository, personal experience with some of the devices and information others in the community have posted about them.
+?> This is an alphabetic list of manufacturers from which I would buy devices or not. It is highly **subjective**, but I'll give explanations for each recommendation - positive or negative. My review is based on 4 years of tech support in this repository, personal experience with some of the devices and information others in the community have posted about them.
 Take everything with a grain of salt and do what you want with it.  
 _&ndash; AlCalzone (the maintainer)_
 
