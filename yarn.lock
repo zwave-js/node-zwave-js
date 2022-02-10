@@ -62,17 +62,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/pak@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@alcalzone/pak@npm:0.7.0"
-  dependencies:
-    axios: ^0.21.1
-    execa: ^5.0.0
-    fs-extra: ^9.1.0
-  checksum: cfeca8ce7357ad1d76e2d4bf190fddb926dc6d1061951ed1c349a7ce3d5b91d6172f282fe9ab4beffed1a1ca53895fff2b2fc65690989be688e7c13fb8d2ce76
-  languageName: node
-  linkType: hard
-
 "@alcalzone/pak@npm:^0.8.0":
   version: 0.8.0
   resolution: "@alcalzone/pak@npm:0.8.0"
@@ -132,15 +121,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-package@npm:3.5.0":
-  version: 3.5.0
-  resolution: "@alcalzone/release-script-plugin-package@npm:3.5.0"
+"@alcalzone/release-script-plugin-package@npm:3.5.2":
+  version: 3.5.2
+  resolution: "@alcalzone/release-script-plugin-package@npm:3.5.2"
   dependencies:
-    "@alcalzone/pak": ^0.7.0
+    "@alcalzone/pak": ^0.8.0
     "@alcalzone/release-script-core": 3.5.0
     alcalzone-shared: ^4.0.0
     semver: ^7.3.5
-  checksum: 67918c7e0cf8f910aa80cc5d99aefe8b2340e0c8cfa9a5dbecd08bd2b6b81924d09d932d8ea39aabe5de36f20dc61aa143bb630d003014a163971d2854d77a4e
+  checksum: e73ba343ce1ea30d8f2b07bd60f0a4fd65d6e58227f5dd7a0f3f1b0a711dfb4e2eaf2de67d3005ceee820b1e6797ba6679ece23552fc963739e16f98cf346dbf
   languageName: node
   linkType: hard
 
@@ -156,15 +145,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:~3.5.0":
-  version: 3.5.0
-  resolution: "@alcalzone/release-script@npm:3.5.0"
+"@alcalzone/release-script@npm:~3.5.2":
+  version: 3.5.2
+  resolution: "@alcalzone/release-script@npm:3.5.2"
   dependencies:
     "@alcalzone/release-script-core": 3.5.0
     "@alcalzone/release-script-plugin-changelog": 3.5.0
     "@alcalzone/release-script-plugin-exec": 3.5.0
     "@alcalzone/release-script-plugin-git": 3.5.0
-    "@alcalzone/release-script-plugin-package": 3.5.0
+    "@alcalzone/release-script-plugin-package": 3.5.2
     "@alcalzone/release-script-plugin-version": 3.5.0
     alcalzone-shared: ^4.0.0
     axios: ^0.21.4
@@ -176,7 +165,7 @@ __metadata:
     yargs: ^17.1.1
   bin:
     release-script: bin/release.js
-  checksum: e127c087f104b08492ba1ac4a5c1f4b2c36ab47c3cbc954e09056f76d28eb09d0affbcce5118dff9fb81869a6cc5d9605bfb6bc03e40e26553020630ee930935
+  checksum: ecdb44f3a279e8cc0e35fa7635cba38b097d231862bac7b23a9f0e8b2c53b1110fda7be189fab5d92bd9a6764c96fcf39f131e913d1779e3260bdfed961ac399
   languageName: node
   linkType: hard
 
@@ -4404,7 +4393,7 @@ __metadata:
     "@actions/exec": ^1.1.0
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^2.4.3
-    "@alcalzone/release-script": ~3.5.0
+    "@alcalzone/release-script": ~3.5.2
     "@alcalzone/release-script-plugin-lerna": ~3.5.0
     "@babel/core": ^7.16.12
     "@babel/plugin-proposal-class-properties": "*"
