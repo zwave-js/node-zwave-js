@@ -46,7 +46,7 @@
     "nrf-intel-hex": "^1.3.0",
     "triple-beam": "*",
     "winston": "^3.5.1",
-    "winston-transport": "^4.4.2"
+    "winston-transport": "^4.5.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",
