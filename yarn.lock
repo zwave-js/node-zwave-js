@@ -4381,7 +4381,7 @@ __metadata:
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     axios: ^0.25.0
-    comment-json: ^4.1.1
+    comment-json: ^4.2.2
     esbuild: "*"
     esbuild-register: ^3.3.2
     fs-extra: ^10.0.0
@@ -4519,7 +4519,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
-    comment-json: ^4.1.1
+    comment-json: ^4.2.2
     commitizen: ^4.2.4
     coveralls: ^3.1.1
     cz-conventional-changelog: ^3.3.0
@@ -5856,16 +5856,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"comment-json@npm:^4.1.1":
-  version: 4.1.1
-  resolution: "comment-json@npm:4.1.1"
+"comment-json@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "comment-json@npm:4.2.2"
   dependencies:
     array-timsort: ^1.0.3
-    core-util-is: ^1.0.2
+    core-util-is: ^1.0.3
     esprima: ^4.0.1
     has-own-prop: ^2.0.0
     repeat-string: ^1.6.1
-  checksum: 8437a04be25c45255583e91ab0bbe90e3a40ed0bff2112123dc29ce48494e80c1e2de87f5f4ae24f7cf9ac421392925f2c4cbe1cde489eafcc3c60c5284edb3e
+  checksum: eb77124bf048c69384ef3df4ae03ab01229118232527476411580ae5f101292849807f937da59efdcbf05945e10f4392837f66bb82f7d69cc85240e762b76805
   languageName: node
   linkType: hard
 
@@ -6118,10 +6118,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-util-is@npm:1.0.2, core-util-is@npm:^1.0.2, core-util-is@npm:~1.0.0":
+"core-util-is@npm:1.0.2, core-util-is@npm:~1.0.0":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
   checksum: 7a4c925b497a2c91421e25bf76d6d8190f0b2359a9200dbeed136e63b2931d6294d3b1893eda378883ed363cd950f44a12a401384c609839ea616befb7927dab
+  languageName: node
+  linkType: hard
+
+"core-util-is@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "core-util-is@npm:1.0.3"
+  checksum: 9de8597363a8e9b9952491ebe18167e3b36e7707569eed0ebf14f8bba773611376466ae34575bca8cfe3c767890c859c74056084738f09d4e4a6f902b2ad7d99
   languageName: node
   linkType: hard
 
