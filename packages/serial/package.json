@@ -44,7 +44,7 @@
     "winston": "^3.5.1"
   },
   "devDependencies": {
-    "@serialport/binding-mock": "^9.2.4",
+    "@serialport/binding-mock": "^10.2.2",
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/serialport": "^8.0.2",

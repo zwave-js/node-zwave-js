@@ -2882,13 +2882,30 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/binding-mock@npm:9.2.4, @serialport/binding-mock@npm:^9.2.4":
+"@serialport/binding-mock@npm:9.2.4":
   version: 9.2.4
   resolution: "@serialport/binding-mock@npm:9.2.4"
   dependencies:
     "@serialport/binding-abstract": 9.2.3
     debug: ^4.3.2
   checksum: c67de00e61de5d7745ff8ac1c7c77c5edebc77c187c76844aa651f4823aa6f070861ceeeb650c21e65eba696f984013a77ee43ca173792281d087cb8a0f9f7fe
+  languageName: node
+  linkType: hard
+
+"@serialport/binding-mock@npm:^10.2.2":
+  version: 10.2.2
+  resolution: "@serialport/binding-mock@npm:10.2.2"
+  dependencies:
+    "@serialport/bindings-interface": ^1.2.1
+    debug: ^4.3.3
+  checksum: 2f36d66e9f8ea4c370878c35eab3f81f8377e256b33e0c9f9807508f4bf01513ca8ab666552a29c456238ce30533fe7d627182748c1bfb97b3f94926b91e93b9
+  languageName: node
+  linkType: hard
+
+"@serialport/bindings-interface@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "@serialport/bindings-interface@npm:1.2.1"
+  checksum: 9d3b8231ecbcf67cc85eb0d4f1db617de3353d71f6ab8124c68ec7009a18ef47bdf9c226e8174e393120def37941a7f61a997bd806370a737c63c5e6ec13a0de
   languageName: node
   linkType: hard
 
@@ -3642,7 +3659,7 @@ __metadata:
   resolution: "@zwave-js/serial@workspace:packages/serial"
   dependencies:
     "@sentry/node": ^6.17.6
-    "@serialport/binding-mock": ^9.2.4
+    "@serialport/binding-mock": ^10.2.2
     "@types/jest": ^26.0.24
     "@types/node": ^15.12.5
     "@types/serialport": ^8.0.2
@@ -5198,6 +5215,18 @@ __metadata:
   dependencies:
     ms: 2.0.0
   checksum: d2f51589ca66df60bf36e1fa6e4386b318c3f1e06772280eea5b1ae9fd3d05e9c2b7fd8a7d862457d00853c75b00451aa2d7459b924629ee385287a650f58fe6
+  languageName: node
+  linkType: hard
+
+"debug@npm:^4.3.3":
+  version: 4.3.3
+  resolution: "debug@npm:4.3.3"
+  dependencies:
+    ms: 2.1.2
+  peerDependenciesMeta:
+    supports-color:
+      optional: true
+  checksum: 14472d56fe4a94dbcfaa6dbed2dd3849f1d72ba78104a1a328047bb564643ca49df0224c3a17fa63533fd11dd3d4c8636cd861191232a2c6735af00cc2d4de16
   languageName: node
   linkType: hard
 
