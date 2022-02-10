@@ -1,8 +1,8 @@
-# AlCalzone's Device Recommendations {docsify-ignore-all}
+# AlCalzone's Device/Manufacturer Review {docsify-ignore-all}
 
 ## Disclaimer
 
-?> This is an alphabetic list of manufacturers from which I would buy devices or not. It is highly **subjective**, but I'll give explanations for each recommendation - positive or negative. My impressions are based on 4 years of tech support in this repository and personal experience with some of the devices.
+?> This is an alphabetic list of manufacturers from which I would buy devices or not. It is highly **subjective**, but I'll give explanations for each recommendation - positive or negative. My impressions are based on 4 years of tech support in this repository, personal experience with some of the devices and information others in the community have posted about them.
 Take everything with a grain of salt and do what you want with it.  
 _&ndash; AlCalzone (the maintainer)_
 
@@ -23,7 +23,7 @@ _&ndash; AlCalzone (the maintainer)_
 
 ## Undecided
 
-?> I don't have enough experience to give a definite recommendation for these, just some thoughts...
+?> I don't have enough experience with these, so here are some preliminary thoughts...
 
 -   **GE** - I'm not US-based, so I can't test. Very popular, but many reports of these just breaking after several years. No firmware updates ❌. Probably 👎🏻
 -   **Inovelli** - Very popular, some issues here and there, but support seems to be interested in fixing bugs. Firmware updates ✔. Probably 👍🏻
