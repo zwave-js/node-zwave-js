@@ -142,5 +142,8 @@
 			"defaultValue": 3,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"manualValueRefreshDelayMs": 250
+	}
 }
