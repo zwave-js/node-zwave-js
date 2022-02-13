@@ -117,11 +117,14 @@ export function encodeNVM(
 	options?: EncodeNVMOptions,
 ): Buffer {
 	const {
-		pageSize = FLASH_MAX_PAGE_SIZE,
 		deviceFamily = 2047,
 		writeSize = PageWriteSize.WRITE_SIZE_16,
 		memoryMapped = true,
 	} = options ?? {};
+	const pageSize = Math.min(
+		options?.pageSize ?? FLASH_MAX_PAGE_SIZE,
+		FLASH_MAX_PAGE_SIZE,
+	);
 
 	const createEmptyPage = (): Buffer => {
 		const ret = Buffer.alloc(pageSize, 0xff);
