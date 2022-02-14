@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When converting an NVM, the page size is now limited to the maximum supported by Z-Wave sticks, even if the existing metadata contains a larger page size.
+
+### Config file changes
+5288c857 fix(config): update GE/Jasco ZW3012 Configuration to correct LED status (#4234)
+586cd12a feat(config): add config for Keemple KP-SO-02 Smart Socket (#4125)
+d71c8c94 fix(config): cleanup Shenzhen Neo device configs (#4186)
+effbf9f8 feat(config): configuration file MCO Home 3901-Z thermostat (#4198)
+96b3304a fix(config): regression of bug #1581 (wrong valueSize, param 13 of LZW31-SN) (#4212)
+
+### Changes under the hood
+* Several dependency updates
+
 ## 8.11.5 (2022-02-08)
 ### Bugfixes
 * Fixed a `TypeError` that could happen when parsing a controller's NVM backup
