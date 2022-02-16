@@ -12,5 +12,11 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"overwiew": "The smart smoke sensor detects smoke, and sends an alarm signals to alert of danger. When the smart smoke sensor detects smoke, it will send an alarm notification to your controller through wireless Z-Wave communication protocol.",
+		"inclusion": "Device ADD for Inclusion\n- Press the pin 3 times within 1.5s, Green LED is Blinking 3 times within 1 second. If Inclusion Process is successful, Green led will turn off.",
+		"exclusion": "Device Remove for Exclusion\n- Press the pin 3 times within 1.5s. If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
+		"wakeup": "Wake up Information\n- Wake up Notification is transmitted every 24 hours by default. Wake up Notification is transmitted after Notification Report is Transmitted."
 	}
 }
