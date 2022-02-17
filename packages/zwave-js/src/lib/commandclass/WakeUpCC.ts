@@ -34,6 +34,13 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
+export function getControllerNodeIdValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Wake Up"],
+		property: "controllerNodeId",
+	};
+}
+
 export function getWakeUpIntervalValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Wake Up"],
@@ -287,7 +294,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
 					this.getValueDB().setValue(
-						getWakeUpIntervalValueId(),
+						getControllerNodeIdValueId(),
 						ownNodeId,
 					);
 					this.driver.controllerLog.logNode(
