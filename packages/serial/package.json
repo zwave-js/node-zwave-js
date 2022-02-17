@@ -40,14 +40,15 @@
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
-    "serialport": "^9.2.8",
+    "serialport": "^10.3.0",
     "winston": "^3.5.1"
   },
   "devDependencies": {
     "@serialport/binding-mock": "^10.2.2",
+    "@serialport/bindings-interface": "*",
+    "@serialport/stream": "*",
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
-    "@types/serialport": "^8.0.2",
     "@zwave-js/testing": "workspace:*",
     "ansi-colors": "^4.1.1",
     "esbuild": "*",
