@@ -880,7 +880,7 @@ export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 	const parser = createNVM500Parser(buffer);
 	if (!parser)
 		throw new ZWaveError(
-			"Did not find a matching NVM 500 parser implementation!",
+			"Did not find a matching NVM 500 parser implementation! Make sure that the NVM data belongs to a controller with Z-Wave SDK 6.61 or higher.",
 			ZWaveErrorCodes.NVM_NotSupported,
 		);
 	return parser.toJSON();
