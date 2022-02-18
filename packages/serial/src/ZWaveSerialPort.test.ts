@@ -1,14 +1,12 @@
 import { MockBinding, MockPortBinding } from "@serialport/binding-mock";
 import { ZWaveLogContainer } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
-import type { SerialPortMock } from "serialport";
+import { SerialPortMock } from "serialport";
 import { PassThrough } from "stream";
 import { MessageHeaders } from "./MessageHeaders";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";
 
-async function createAndOpenMockedZWaveSerialPort(
-	open: boolean = true,
-): Promise<{
+async function createAndOpenMockedZWaveSerialPort(): Promise<{
 	port: ZWaveSerialPort;
 	binding: MockPortBinding;
 }> {
@@ -23,12 +21,11 @@ async function createAndOpenMockedZWaveSerialPort(
 		new ZWaveLogContainer({
 			enabled: false,
 		}),
-		// @ts-ignore
-		MockPortBinding,
+		// @ts-expect-error We're using an internal signature here
+		SerialPortMock,
 	);
-	const binding = (port["serial"] as SerialPortMock) // @ts-expect-error serialport typings are weird
-		.binding as MockPortBinding;
-	if (open) await port.open();
+	await port.open();
+	const binding = (port["serial"] as SerialPortMock).port!;
 	return { port, binding };
 }
 
