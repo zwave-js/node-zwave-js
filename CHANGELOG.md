@@ -9,11 +9,11 @@
 * When converting an NVM, the page size is now limited to the maximum supported by Z-Wave sticks, even if the existing metadata contains a larger page size.
 
 ### Config file changes
-5288c857 fix(config): update GE/Jasco ZW3012 Configuration to correct LED status (#4234)
-586cd12a feat(config): add config for Keemple KP-SO-02 Smart Socket (#4125)
-d71c8c94 fix(config): cleanup Shenzhen Neo device configs (#4186)
-effbf9f8 feat(config): configuration file MCO Home 3901-Z thermostat (#4198)
-96b3304a fix(config): regression of bug #1581 (wrong valueSize, param 13 of LZW31-SN) (#4212)
+* Update GE/Jasco ZW3012 Configuration to correct LED status
+* Add config for Keemple KP-SO-02 Smart Socket
+* Cleanup Shenzhen Neo device configs
+* Add MCO Home 3901-Z thermostat
+* Fix regression of bug #1581 (wrong valueSize, param 13 of LZW31-SN)
 
 ### Changes under the hood
 * Several dependency updates
