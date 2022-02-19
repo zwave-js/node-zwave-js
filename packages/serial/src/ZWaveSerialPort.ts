@@ -1,5 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
-import type SerialPort from "serialport";
+import { SerialPort } from "serialport";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
 interface DisconnectError extends Error {
@@ -17,12 +17,13 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 	constructor(
 		port: string,
 		loggers: ZWaveLogContainer,
-		Binding: typeof SerialPort = require("serialport"),
+		Binding: typeof SerialPort = SerialPort,
 	) {
 		super(
 			{
 				create: () =>
-					new Binding(port, {
+					new Binding({
+						path: port,
 						autoOpen: false,
 						baudRate: 115200,
 						dataBits: 8,
