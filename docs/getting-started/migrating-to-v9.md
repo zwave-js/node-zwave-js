@@ -27,3 +27,7 @@ While working on the SmartStart feature it was noticed that some properties and 
 ## Converted the `isControllerNode` method on the `ZWaveNode` class to a readonly property
 
 While there is no hard style guide governing this, we tend to use readonly properties for static things like a node's IDs and methods for (potentially) dynamic things like endpoint counts. Since the controller node ID doesn't change during usage, this feels more "correct".
+
+## Upgraded `serialport` library to version 10.x
+
+The `serialport` library was upgraded to version 10.x. It is now built using N-API, which should avoid having to recompile it after upgrades. Due to slight API changes, overwriting the dependency to specific `9.x` versions is no longer possible.
