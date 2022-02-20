@@ -84,6 +84,7 @@ import {
 	getFirmwareVersionsValueId,
 } from "../commandclass/VersionCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
+import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -4270,66 +4271,63 @@ ${associatedNodes.join(", ")}`,
 	 * @internal
 	 * Deserializes the controller information and all nodes from the cache.
 	 */
-	public async deserialize(serialized: any): Promise<void> {
-		if (isObject(serialized.controller)) {
-			// Parse whether the controller supports soft reset
-			if (typeof serialized.controller.supportsSoftReset === "boolean") {
-				this.supportsSoftReset =
-					serialized.controller.supportsSoftReset;
-			}
-			// Parse the controller's Smart Start provisioning list
-			if (isArray(serialized.controller.provisioningList)) {
-				entries: for (const entry of serialized.controller
-					.provisioningList) {
-					if (!isObject(entry)) continue;
-					const {
-						dsk,
-						securityClasses: secClasses,
-						// Node ID is ignored - we update it when deserializing nodes
-						nodeId,
-						...rest
-					} = entry;
-					if (typeof entry.dsk !== "string") continue;
-					if (!isArray(entry.securityClasses)) continue;
-					if (!isValidDSK(entry.dsk)) continue;
+	public async deserialize(): Promise<void> {
+		if (!this.driver.networkCache) return;
+		const cache = this.driver.networkCache;
 
-					const securityClasses: SecurityClass[] = [];
-					for (const s of secClasses) {
-						if (typeof s !== "string") continue entries;
-						const secClass = (SecurityClass as any)[s];
-						if (typeof secClass !== "number") continue entries;
-						securityClasses.push(secClass);
-					}
+		// Parse whether the controller supports soft reset
+		const supportsSoftReset = cache.get(
+			cacheKeys.controller.supportsSoftReset,
+		);
+		if (typeof supportsSoftReset === "boolean") {
+			this.supportsSoftReset = supportsSoftReset;
+		}
+		// Parse the controller's Smart Start provisioning list
+		const provisioningList = cache.get(
+			cacheKeys.controller.provisioningList,
+		);
+		if (isArray(provisioningList)) {
+			entries: for (const entry of provisioningList) {
+				if (!isObject(entry)) continue;
+				const {
+					dsk,
+					securityClasses: secClasses,
+					// Node ID is ignored - we update it when deserializing nodes
+					nodeId,
+					...rest
+				} = entry;
+				if (typeof entry.dsk !== "string") continue;
+				if (!isArray(entry.securityClasses)) continue;
+				if (!isValidDSK(entry.dsk)) continue;
 
-					this._provisioningList.push({
-						dsk: entry.dsk,
-						securityClasses,
-						// The user-defined properties are not validated further
-						...rest,
-					});
+				const securityClasses: SecurityClass[] = [];
+				for (const s of secClasses as unknown[]) {
+					if (typeof s !== "string") continue entries;
+					const secClass = (SecurityClass as any)[s];
+					if (typeof secClass !== "number") continue entries;
+					securityClasses.push(secClass);
 				}
+
+				this._provisioningList.push({
+					dsk: entry.dsk,
+					securityClasses,
+					// The user-defined properties are not validated further
+					...rest,
+				});
 			}
 		}
 
-		if (isObject(serialized.nodes)) {
-			for (const nodeId of Object.keys(serialized.nodes)) {
-				const serializedNode = serialized.nodes[nodeId];
-				if (
-					!serializedNode ||
-					typeof serializedNode.id !== "number" ||
-					serializedNode.id.toString() !== nodeId
-				) {
-					throw new ZWaveError(
-						"The cache file is invalid",
-						ZWaveErrorCodes.Driver_InvalidCache,
-					);
-				}
+		// Deserialize information for all nodes
+		for (const node of this.nodes.values()) {
+			await node.deserialize();
+			this.markNodeOnProvisioningList(node);
+		}
 
-				if (this.nodes.has(serializedNode.id)) {
-					const node = this.nodes.getOrThrow(serializedNode.id);
-					await node.deserialize(serializedNode);
-					this.markNodeOnProvisioningList(node);
-				}
+		// Remove nodes which no longer exist from the cache
+		for (const cacheKey of cache.keys()) {
+			const nodeId = cacheKeyUtils.nodeIdFromKey(cacheKey);
+			if (nodeId && !this.nodes.has(nodeId)) {
+				cache.delete(cacheKey);
 			}
 		}
 	}

@@ -5,9 +5,8 @@ import type {
 } from "@zwave-js/config";
 import {
 	actuatorCCs,
+	allCCs,
 	applicationCCs,
-	CacheMetadata,
-	CacheValue,
 	CommandClasses,
 	CommandClassInfo,
 	CRC16_CCITT,
@@ -161,6 +160,7 @@ import {
 	TXReport,
 } from "../controller/SendDataShared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
+import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
@@ -3714,20 +3714,28 @@ protocol version:      ${this._protocolVersion}`;
 	 * @internal
 	 * Deserializes the information of this node from a cache.
 	 */
-	public async deserialize(obj: any): Promise<void> {
-		if (obj.interviewStage in InterviewStage) {
+	public async deserialize(): Promise<void> {
+		if (!this.driver.networkCache) return;
+		const cache = this.driver.networkCache;
+
+		const nodeCacheKeys = cacheKeys.node(this.id);
+
+		const interviewStage = cache.get(nodeCacheKeys.interviewStage) as any;
+		if (interviewStage in InterviewStage) {
 			this.interviewStage =
-				typeof obj.interviewStage === "number"
-					? obj.interviewStage
-					: InterviewStage[obj.interviewStage];
+				typeof interviewStage === "number"
+					? interviewStage
+					: (InterviewStage as any)[interviewStage];
 
 			// Mark already-interviewed nodes as potentially ready
 			if (this.interviewStage === InterviewStage.Complete) {
 				this.readyMachine.send("RESTART_FROM_CACHE");
 			}
 		}
-		if (isObject(obj.deviceClass)) {
-			const { basic, generic, specific } = obj.deviceClass;
+
+		const deviceClass = cache.get(nodeCacheKeys.deviceClass);
+		if (isObject(deviceClass)) {
+			const { basic, generic, specific } = deviceClass;
 			if (
 				typeof basic === "number" &&
 				typeof generic === "number" &&
@@ -3744,33 +3752,27 @@ protocol version:      ${this._protocolVersion}`;
 
 		// Parse single properties
 		const tryParse = (
-			key: Extract<keyof ZWaveNode, string>,
+			cacheKey: string,
+			ownProp: Extract<keyof ZWaveNode, string>,
 			type: "boolean" | "number" | "string",
 		): void => {
-			if (typeof obj[key] === type)
-				this[`_${key}` as keyof this] = obj[key];
+			const value = cache.get(cacheKey) as any;
+			if (typeof value === type)
+				this[`_${ownProp}` as keyof this] = value;
 		};
-		const tryParseLegacy = (
-			keys: string[],
-			types: ("boolean" | "number" | "string")[],
-		): void => {
-			for (const key of keys) {
-				if (types.includes(typeof obj[key] as any)) {
-					this[`_${keys[0]}` as keyof this] = obj[key];
-					return;
-				}
-			}
-		};
-		tryParse("isListening", "boolean");
-		tryParseLegacy(["isFrequentListening"], ["string", "boolean"]);
-		if ((this._isFrequentListening as any) === true) {
-			// fallback for legacy cache files
-			this._isFrequentListening = "1000ms";
-		}
-		tryParse("isRouting", "boolean");
+
+		tryParse(nodeCacheKeys.isListening, "isListening", "boolean");
+		tryParse(
+			nodeCacheKeys.isFrequentListening,
+			"isFrequentListening",
+			"string",
+		);
+		tryParse(nodeCacheKeys.isRouting, "isRouting", "boolean");
+
 		// Parse security classes
-		if (isObject(obj.securityClasses)) {
-			for (const [key, val] of Object.entries(obj.securityClasses)) {
+		const securityClasses = cache.get(nodeCacheKeys.securityClasses);
+		if (isObject(securityClasses)) {
+			for (const [key, val] of Object.entries(securityClasses)) {
 				if (
 					key in SecurityClass &&
 					typeof (SecurityClass as any)[key] === "number" &&
@@ -3779,42 +3781,32 @@ protocol version:      ${this._protocolVersion}`;
 					this.securityClasses.set((SecurityClass as any)[key], val);
 				}
 			}
-		} else if (typeof obj.isSecure === "boolean") {
-			// Fallback to "isSecure" === S0 for legacy cache files
-			this.securityClasses.set(SecurityClass.S0_Legacy, obj.isSecure);
-
-			this.securityClasses.set(SecurityClass.S2_AccessControl, false);
-			this.securityClasses.set(SecurityClass.S2_Authenticated, false);
-			this.securityClasses.set(SecurityClass.S2_Unauthenticated, false);
 		}
-		if (typeof obj.dsk === "string") {
+		const dsk = cache.get(nodeCacheKeys.dsk);
+		if (typeof dsk === "string") {
 			try {
-				this._dsk = dskFromString(obj.dsk);
+				this._dsk = dskFromString(dsk);
 			} catch {
 				// ignore
 			}
 		}
-		tryParse("supportsSecurity", "boolean");
-		tryParse("supportsBeaming", "boolean");
-		tryParseLegacy(["supportsBeaming", "isBeaming"], ["string"]);
-		tryParse("protocolVersion", "number");
-		if (!this._protocolVersion) {
-			// The legacy version field was off by 1
-			if (typeof obj.version === "number") {
-				this._protocolVersion = obj.version - 1;
-			}
+		tryParse(nodeCacheKeys.supportsSecurity, "supportsSecurity", "boolean");
+		tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "boolean");
+		tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "string");
+		tryParse(nodeCacheKeys.protocolVersion, "protocolVersion", "number");
+
+		const nodeType = cache.get(nodeCacheKeys.nodeType) as any;
+		if (nodeType in NodeType) {
+			this._nodeType = NodeType[nodeType] as any;
 		}
-		if (obj.nodeType in NodeType) {
-			this._nodeType = NodeType[obj.nodeType] as any;
-		}
-		if (typeof obj.maxBaudRate === "number") {
-			this._supportedDataRates = [obj.maxBaudRate];
-		}
+
+		const supportedDataRates = cache.get(nodeCacheKeys.supportedDataRates);
 		if (
-			isArray(obj.supportedDataRates) &&
-			obj.supportedDataRates.every((r: unknown) => typeof r === "number")
+			isArray(supportedDataRates) &&
+			supportedDataRates.every((r: unknown) => typeof r === "number")
 		) {
-			this._supportedDataRates = obj.supportedDataRates;
+			this._supportedDataRates =
+				supportedDataRates as readonly DataRate[];
 		}
 
 		function enforceType(
@@ -3831,125 +3823,44 @@ protocol version:      ${this._protocolVersion}`;
 		>();
 
 		// Parse CommandClasses
-		if (isObject(obj.commandClasses)) {
-			const ccDict = obj.commandClasses;
-			for (const ccHex of Object.keys(ccDict)) {
-				// First make sure this key describes a valid CC
-				if (!/^0x[0-9a-fA-F]+$/.test(ccHex)) continue;
-				const ccNum = parseInt(ccHex);
-				if (!(ccNum in CommandClasses)) continue;
+		// Because for the jsonl DB, the CC info is not contained in a single object,
+		// so we have to loop through all existing CCs and check if a corresponding key is present
+		const nodeKeys = [...cache.keys()].filter((k) =>
+			k.startsWith(nodeCacheKeys._baseKey),
+		);
+		for (const ccId of allCCs) {
+			const ccCacheKeys = nodeCacheKeys.commandClass(ccId);
+			const endpointKeys = nodeKeys.filter(
+				(k) =>
+					k.startsWith(ccCacheKeys._baseKey) &&
+					cacheKeyUtils.isEndpointKey(k),
+			);
+			// dictionary of CC support information
+			const support = new Map<number, Partial<CommandClassInfo>>();
+			for (const key of endpointKeys) {
+				const endpointIndex = cacheKeyUtils.endpointIndexFromKey(key);
+				if (typeof endpointIndex !== "number") continue;
 
-				// Parse the information we have
-				const {
-					values,
-					metadata,
-					// Starting with v2.4.2, the CC versions are stored in the endpoints object
-					endpoints,
-					// These are for compatibility with older versions
-					isSupported,
-					isControlled,
-					version,
-				} = ccDict[ccHex];
-				if (isObject(endpoints)) {
-					// New cache file with a dictionary of CC support information
-					const support = new Map<
-						number,
-						Partial<CommandClassInfo>
-					>();
-					for (const endpointIndex of Object.keys(endpoints)) {
-						// First make sure this key is a number
-						if (!/^\d+$/.test(endpointIndex)) continue;
-						const numEndpointIndex = parseInt(endpointIndex, 10);
+				const endpoint = cache.get(key);
+				if (isObject(endpoint)) {
+					// Verify the info object
+					const info = endpoint as any as CommandClassInfo;
+					info.isSupported = enforceType(info.isSupported, "boolean");
+					info.isControlled = enforceType(
+						info.isControlled,
+						"boolean",
+					);
+					info.version = enforceType(info.version, "number");
 
-						// Verify the info object
-						const info = endpoints[
-							endpointIndex
-						] as CommandClassInfo;
-						info.isSupported = enforceType(
-							info.isSupported,
-							"boolean",
-						);
-						info.isControlled = enforceType(
-							info.isControlled,
-							"boolean",
-						);
-						info.version = enforceType(info.version, "number");
-
-						// Update the root endpoint immediately, save non-root endpoint information for later
-						if (numEndpointIndex === 0) {
-							this.addCC(ccNum, info);
-						} else {
-							support.set(numEndpointIndex, info);
-						}
-					}
-					endpointCCSupport.set(ccNum, support);
-				} else {
-					// Legacy cache with single properties for the root endpoint
-					this.addCC(ccNum, {
-						isSupported: enforceType(isSupported, "boolean"),
-						isControlled: enforceType(isControlled, "boolean"),
-						version: enforceType(version, "number"),
-					});
-				}
-
-				// In pre-3.0 cache files, the metadata and values array must be deserialized before creating endpoints
-				// Post 3.0, the driver takes care of loading them before deserializing nodes
-				// In order to understand pre-3.0 cache files, leave this deserialization code in
-
-				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
-				if (isArray(metadata) && metadata.length > 0) {
-					// If any exist, deserialize the metadata aswell
-					const ccInstance = this.createCCInstanceUnsafe(ccNum);
-					if (ccInstance) {
-						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
-						for (const m of metadata) {
-							if ("propertyName" in m) {
-								m.property = m.propertyName;
-								delete m.propertyName;
-							}
-						}
-						try {
-							ccInstance.deserializeMetadataFromCache(
-								metadata as CacheMetadata[],
-							);
-						} catch (e) {
-							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC value metadata from cache:\n${getErrorMessage(
-									e,
-									true,
-								)}`,
-								level: "error",
-							});
-						}
-					}
-				}
-				if (isArray(values) && values.length > 0) {
-					// If any exist, deserialize the values aswell
-					const ccInstance = this.createCCInstanceUnsafe(ccNum);
-					if (ccInstance) {
-						// In v2.0.0, propertyName was changed to property. The network caches might still reference the old property names
-						for (const v of values) {
-							if ("propertyName" in v) {
-								v.property = v.propertyName;
-								delete v.propertyName;
-							}
-						}
-						try {
-							ccInstance.deserializeValuesFromCache(
-								values as CacheValue[],
-							);
-						} catch (e) {
-							this.driver.controllerLog.logNode(this.id, {
-								message: `Error during deserialization of CC values from cache:\n${getErrorMessage(
-									e,
-									true,
-								)}`,
-								level: "error",
-							});
-						}
+					// Update the root endpoint immediately, save non-root endpoint information for later
+					if (endpointIndex === 0) {
+						this.addCC(ccId, info);
+					} else {
+						support.set(endpointIndex, info);
 					}
 				}
 			}
+			endpointCCSupport.set(ccId, support);
 		}
 
 		// Now restore the CC versions for each non-root endpoint
