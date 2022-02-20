@@ -313,7 +313,7 @@
 			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
-			"unit": "1/10 sec",
+			"unit": "Watts",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
