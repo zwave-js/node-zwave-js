@@ -26,12 +26,28 @@
 		"2": {
 			"label": "On/Off control",
 			"maxNodes": 8
+		},
+		"3": {
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Internal temperature sensor",
+			"maxNodes": 8
+		},
+		"4": {
+			"$if": "firmwareVersion >= 1.92",
+			"label": "External temperature sensor",
+			"maxNodes": 8
+		},
+		"5": {
+			"$if": "firmwareVersion >= 1.92",
+			"label": "Floor temperature sensor",
+			"maxNodes": 8
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
 			"label": "Operation mode",
+			"description": "Defines operation mode of the thermostat",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 11,
@@ -60,6 +76,7 @@
 			"#": "2",
 			"$if": "firmwareVersion >= 1.8",
 			"label": "Sensor mode",
+			"description": "Determines which sensor is in use",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5,
@@ -96,6 +113,8 @@
 			"#": "3",
 			"$if": "firmwareVersion >= 1.8",
 			"label": "Floor sensor type",
+			"description": "The resistance (type) of the external room sensor.",
+			"unit": "Ohm",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5,
@@ -211,6 +230,7 @@
 			"#": "12",
 			"$if": "firmwareVersion >= 1.8",
 			"label": "P setting",
+			"description": "Power mode. 0 is always off, 10 is always on.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10,
