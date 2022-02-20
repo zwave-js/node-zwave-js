@@ -21,6 +21,30 @@
 		"label": "Auto Turn-On Timer",
 		"$import": "#auto_timer_base"
 	},
+	"auto_timer_variable_unit_base": {
+		"$import": "#auto_timer_base",
+		"valueSize": 2,
+		"description": "Unit is minutes or seconds, depending on time unit parameter",
+		"unit": "min/sec"
+	},
+	"auto_timer_unit_select": {
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Minutes",
+				"value": 1
+			},
+			{
+				"label": "Seconds",
+				"value": 2
+			}
+		],
+		"label": "Auto Timer Time Unit"
+	},
 	"enable_scene_control": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable/Disable Scene Control",
@@ -251,5 +275,92 @@
 				"value": 0
 			}
 		]
+	},
+	"external_switch_type_0-3": {
+		"label": "External Switch Type",
+		"valueSize": 1,
+		"unsigned": true,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 2,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle switch",
+				"value": 0
+			},
+			{
+				"label": "Momentary switch",
+				"value": 1
+			},
+			{
+				"label": "Toggle switch with fixed actions",
+				"value": 2
+			},
+			{
+				"label": "3-way impulse control",
+				"value": 3
+			}
+		]
+	},
+	"external_switch_type_0-4": {
+		"$import": "#external_switch_type_0-3",
+		"maxValue": 4,
+		"options": [
+			{
+				"label": "Toggle switch",
+				"value": 0
+			},
+			{
+				"label": "Momentary switch",
+				"value": 1
+			},
+			{
+				"label": "Toggle switch with fixed actions",
+				"value": 2
+			},
+			{
+				"label": "3-way impulse control",
+				"value": 3
+			},
+			{
+				"label": "Garage door mode (simulate momentary)",
+				"value": 4
+			}
+		]
+	},
+	"impulse_duration": {
+		"label": "Impulse Duration",
+		"description": "Choose the duration of the impulse if you're using this relay with 3-way impulse control",
+		"valueSize": 1,
+		"minValue": 2,
+		"maxValue": 200,
+		"defaultValue": 10,
+		"unsigned": true,
+		"unit": "seconds"
+	},
+	"relay_type_behavior": {
+		"label": "Relay Type",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normally open (reports off when relay is open / on when relay is closed)",
+				"value": 0
+			},
+			{
+				"label": "Normally closed (reports off when relay is open / on when relay is closed)",
+				"value": 1
+			}
+		]
+	},
+	"zen5x_metadata": {
+		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion. \nSCAN THE QR CODE / ENTER THE 5-DIGIT PIN if using the new SmartStart method. The SmartStart security PIN is located on the back of the relay, next to the Z-Wave Plus logo.\n3. The LED indicator will blink green to signal communication and turn green for 2 seconds if inclusion is successful or turn red for 2 seconds if the pairing attempt fails",
+		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the relay if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Click the Z-Wave button on the relay 3 times quickly (the LED indicator will start blinking green)\n4. Your hub will confirm exclusion, the LED indicator on the relay will turn green for 2 seconds, and the device will disappear from your controller's device list",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To reset the relay, click the Z-Wave button twice and hold it for 15 seconds. The LED indicator will flash during the process and turn red for 3 seconds to confirm successful reset."
 	}
 }
