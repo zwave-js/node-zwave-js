@@ -151,7 +151,12 @@ import {
 	sendStatistics,
 } from "../telemetry/statistics";
 import { createMessageGenerator } from "./MessageGenerators";
-import { cacheKeys, migrateLegacyNetworkCache } from "./NetworkCache";
+import {
+	cacheKeys,
+	deserializeNetworkCacheValue,
+	migrateLegacyNetworkCache,
+	serializeNetworkCacheValue,
+} from "./NetworkCache";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -644,9 +649,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
 		return this._metadataDB;
 	}
-	private _networkCache: JsonlDB | undefined;
+	private _networkCache: JsonlDB<any> | undefined;
 	/** @internal */
-	public get networkCache(): JsonlDB {
+	public get networkCache(): JsonlDB<any> {
 		if (this._networkCache == undefined) {
 			throw new ZWaveError(
 				"The network cache was not yet initialized!",
@@ -952,7 +957,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.cacheDir,
 			`${homeId.toString(16)}.jsonl`,
 		);
-		this._networkCache = new JsonlDB(networkCacheFile, options);
+		this._networkCache = new JsonlDB(networkCacheFile, {
+			...options,
+			serializer: (key, value) =>
+				serializeNetworkCacheValue(this, key, value),
+			reviver: (key, value) =>
+				deserializeNetworkCacheValue(this, key, value),
+		});
 		await this._networkCache.open();
 
 		if (process.env.NO_CACHE === "true") {

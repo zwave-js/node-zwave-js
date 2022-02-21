@@ -1,8 +1,20 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
-import type { CommandClasses } from "@zwave-js/core";
+import {
+	CommandClasses,
+	dskFromString,
+	dskToString,
+	NodeType,
+	SecurityClass,
+	securityClassOrder,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { num2hex, pickDeep } from "@zwave-js/shared";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
+import { DeviceClass } from "../node/DeviceClass";
+import { InterviewStage } from "../node/Types";
+import type { Driver } from "./Driver";
 import type { FileSystem } from "./FileSystem";
 
 /**
@@ -13,6 +25,7 @@ export const cacheKeys = {
 		provisioningList: "controller.provisioningList",
 		supportsSoftReset: "controller.supportsSoftReset",
 	},
+	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => ({
 		_baseKey: `node.${nodeId}`,
 		interviewStage: `node.${nodeId}.interviewStage`,
@@ -46,6 +59,10 @@ export const cacheKeyUtils = {
 			return parseInt(match.groups!.nodeId, 10);
 		}
 	},
+	nodePropertyFromKey: (key: string): string | undefined => {
+		const match = /^node\.\d+\.(?<property>[^\.]+)$/.exec(key);
+		return match?.groups?.property;
+	},
 	isEndpointKey: (key: string): boolean => {
 		return /endpoints\.(?<index>\d+)$/.test(key);
 	},
@@ -56,6 +73,169 @@ export const cacheKeyUtils = {
 		}
 	},
 } as const;
+
+export function deserializeNetworkCacheValue(
+	driver: Driver,
+	key: string,
+	value: unknown,
+): unknown {
+	function ensureType<T extends "boolean" | "number" | "string">(
+		value: any,
+		type: T,
+	): T | boolean {
+		if (typeof value === type) return value as T;
+		throw new ZWaveError(
+			`Incorrect type ${typeof value} for property "${key}"`,
+			ZWaveErrorCodes.Driver_InvalidCache,
+		);
+	}
+
+	function fail() {
+		throw new ZWaveError(
+			`Failed to deserialize property "${key}"`,
+			ZWaveErrorCodes.Driver_InvalidCache,
+		);
+	}
+
+	switch (cacheKeyUtils.nodePropertyFromKey(key)) {
+		case "interviewStage": {
+			if (
+				(typeof value === "string" || typeof value === "number") &&
+				value in InterviewStage
+			) {
+				return typeof value === "number"
+					? value
+					: (InterviewStage as any)[value];
+			}
+			throw fail();
+		}
+		case "deviceClass": {
+			if (isObject(value)) {
+				const { basic, generic, specific } = value;
+				if (
+					typeof basic === "number" &&
+					typeof generic === "number" &&
+					typeof specific === "number"
+				) {
+					return new DeviceClass(
+						driver.configManager,
+						basic,
+						generic,
+						specific,
+					);
+				}
+			}
+			throw fail();
+		}
+		case "isListening":
+		case "isRouting":
+			return ensureType(value, "boolean");
+
+		case "isFrequentListening": {
+			switch (value) {
+				case "1000ms":
+				case true:
+					return "1000ms";
+				case "250ms":
+					return "250ms";
+				case false:
+					return false;
+			}
+			throw fail();
+		}
+
+		case "securityClasses": {
+			const securityClasses = value;
+			if (isObject(securityClasses)) {
+				const ret = {} as Record<SecurityClass, boolean>;
+				for (const [key, val] of Object.entries(securityClasses)) {
+					if (
+						key in SecurityClass &&
+						typeof (SecurityClass as any)[key] === "number" &&
+						typeof val === "boolean"
+					) {
+						ret[(SecurityClass as any)[key] as SecurityClass] = val;
+					}
+				}
+				return ret;
+			}
+			throw fail();
+		}
+
+		case "dsk": {
+			if (typeof value === "string") {
+				return dskFromString(value);
+			}
+			throw fail();
+		}
+
+		case "supportsSecurity":
+			return ensureType(value, "boolean");
+		case "supportsBeaming":
+			return ensureType(value, "boolean");
+		case "supportsBeaming":
+			return ensureType(value, "string");
+		case "protocolVersion":
+			return ensureType(value, "number");
+
+		case "nodeType": {
+			if (typeof value === "string" && value in NodeType) {
+				return (NodeType as any)[value];
+			}
+			throw fail();
+		}
+
+		case "supportedDataRates": {
+			if (
+				isArray(value) &&
+				value.every((r: unknown) => typeof r === "number")
+			) {
+				return value;
+			}
+			throw fail();
+		}
+	}
+
+	return value;
+}
+
+export function serializeNetworkCacheValue(
+	driver: Driver,
+	key: string,
+	value: unknown,
+): unknown {
+	// Node-specific properties
+	switch (cacheKeyUtils.nodePropertyFromKey(key)) {
+		case "interviewStage": {
+			return InterviewStage[value as any];
+		}
+		case "deviceClass": {
+			const deviceClass = value as DeviceClass;
+			return {
+				basic: deviceClass.basic.key,
+				generic: deviceClass.generic.key,
+				specific: deviceClass.specific.key,
+			};
+		}
+		case "nodeType": {
+			return NodeType[value as any];
+		}
+		case "securityClasses": {
+			const ret: Record<string, boolean> = {};
+			// Save security classes where they are known
+			for (const secClass of securityClassOrder) {
+				if (secClass in (value as any)) {
+					ret[SecurityClass[secClass]] = (value as any)[secClass];
+				}
+			}
+		}
+		case "dsk": {
+			return dskToString(value as Buffer);
+		}
+	}
+
+	return value;
+}
 
 /** Defines the JSON paths that were used to store certain properties in the legacy network cache */
 const legacyPaths = {

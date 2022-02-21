@@ -503,7 +503,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public get supportsSoftReset(): boolean | undefined {
 		return this.driver.networkCache.get(
 			cacheKeys.controller.supportsSoftReset,
-		) as any;
+		);
 	}
 	/** @internal */
 	public set supportsSoftReset(value: boolean | undefined) {
@@ -563,7 +563,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public get provisioningList(): readonly SmartStartProvisioningEntry[] {
 		return this.driver.networkCache.get(
 			cacheKeys.controller.provisioningList,
-		) as any;
+		);
 	}
 	private set provisioningList(
 		value: readonly SmartStartProvisioningEntry[],
@@ -4291,6 +4291,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		// Remove nodes which no longer exist from the cache
+		// TODO: Do the same when removing a node
 		for (const cacheKey of cache.keys()) {
 			const nodeId = cacheKeyUtils.nodeIdFromKey(cacheKey);
 			if (nodeId && !this.nodes.has(nodeId)) {

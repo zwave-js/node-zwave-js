@@ -7,11 +7,11 @@ import {
 	actuatorCCs,
 	allCCs,
 	applicationCCs,
+	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
 	CRC16_CCITT,
 	DataRate,
-	dskFromString,
 	dskToString,
 	FLiRS,
 	getCCName,
@@ -257,6 +257,12 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 				},
 			);
 		}
+
+		this.securityClasses = new CacheBackedMap(
+			this.driver.networkCache,
+			cacheKeys.node(this.id).securityClasses,
+			true,
+		);
 
 		// Add optional controlled CCs - endpoints don't have this
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
@@ -551,7 +557,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	}
 
 	/** @internal */
-	public readonly securityClasses = new Map<SecurityClass, boolean>();
+	public readonly securityClasses: Map<SecurityClass, boolean>;
 
 	private _dsk: Buffer | undefined;
 	/**
@@ -1208,7 +1214,20 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	/**
 	 * This tells us which interview stage was last completed
 	 */
-	public interviewStage: InterviewStage = InterviewStage.None;
+
+	public get interviewStage(): InterviewStage {
+		return (
+			this.driver.networkCache.get(
+				cacheKeys.node(this.id).interviewStage,
+			) ?? InterviewStage.None
+		);
+	}
+	public set interviewStage(value: InterviewStage) {
+		this.driver.networkCache.set(
+			cacheKeys.node(this.id).interviewStage,
+			value,
+		);
+	}
 
 	private _interviewAttempts: number = 0;
 	/** How many attempts to interview this node have already been made */
@@ -3720,35 +3739,35 @@ protocol version:      ${this._protocolVersion}`;
 
 		const nodeCacheKeys = cacheKeys.node(this.id);
 
-		const interviewStage = cache.get(nodeCacheKeys.interviewStage) as any;
-		if (interviewStage in InterviewStage) {
-			this.interviewStage =
-				typeof interviewStage === "number"
-					? interviewStage
-					: (InterviewStage as any)[interviewStage];
+		// const interviewStage = cache.get(nodeCacheKeys.interviewStage) as any;
+		// if (interviewStage in InterviewStage) {
+		// 	this.interviewStage =
+		// 		typeof interviewStage === "number"
+		// 			? interviewStage
+		// 			: (InterviewStage as any)[interviewStage];
 
-			// Mark already-interviewed nodes as potentially ready
-			if (this.interviewStage === InterviewStage.Complete) {
-				this.readyMachine.send("RESTART_FROM_CACHE");
-			}
-		}
+		// 	// Mark already-interviewed nodes as potentially ready
+		// 	if (this.interviewStage === InterviewStage.Complete) {
+		// 		this.readyMachine.send("RESTART_FROM_CACHE");
+		// 	}
+		// }
 
-		const deviceClass = cache.get(nodeCacheKeys.deviceClass);
-		if (isObject(deviceClass)) {
-			const { basic, generic, specific } = deviceClass;
-			if (
-				typeof basic === "number" &&
-				typeof generic === "number" &&
-				typeof specific === "number"
-			) {
-				this._deviceClass = new DeviceClass(
-					this.driver.configManager,
-					basic,
-					generic,
-					specific,
-				);
-			}
-		}
+		// const deviceClass = cache.get(nodeCacheKeys.deviceClass);
+		// if (isObject(deviceClass)) {
+		// 	const { basic, generic, specific } = deviceClass;
+		// 	if (
+		// 		typeof basic === "number" &&
+		// 		typeof generic === "number" &&
+		// 		typeof specific === "number"
+		// 	) {
+		// 		this._deviceClass = new DeviceClass(
+		// 			this.driver.configManager,
+		// 			basic,
+		// 			generic,
+		// 			specific,
+		// 		);
+		// 	}
+		// }
 
 		// Parse single properties
 		const tryParse = (
@@ -3761,53 +3780,53 @@ protocol version:      ${this._protocolVersion}`;
 				this[`_${ownProp}` as keyof this] = value;
 		};
 
-		tryParse(nodeCacheKeys.isListening, "isListening", "boolean");
-		tryParse(
-			nodeCacheKeys.isFrequentListening,
-			"isFrequentListening",
-			"string",
-		);
-		tryParse(nodeCacheKeys.isRouting, "isRouting", "boolean");
+		// tryParse(nodeCacheKeys.isListening, "isListening", "boolean");
+		// tryParse(
+		// 	nodeCacheKeys.isFrequentListening,
+		// 	"isFrequentListening",
+		// 	"string",
+		// );
+		// tryParse(nodeCacheKeys.isRouting, "isRouting", "boolean");
 
 		// Parse security classes
-		const securityClasses = cache.get(nodeCacheKeys.securityClasses);
-		if (isObject(securityClasses)) {
-			for (const [key, val] of Object.entries(securityClasses)) {
-				if (
-					key in SecurityClass &&
-					typeof (SecurityClass as any)[key] === "number" &&
-					typeof val === "boolean"
-				) {
-					this.securityClasses.set((SecurityClass as any)[key], val);
-				}
-			}
-		}
-		const dsk = cache.get(nodeCacheKeys.dsk);
-		if (typeof dsk === "string") {
-			try {
-				this._dsk = dskFromString(dsk);
-			} catch {
-				// ignore
-			}
-		}
-		tryParse(nodeCacheKeys.supportsSecurity, "supportsSecurity", "boolean");
-		tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "boolean");
-		tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "string");
-		tryParse(nodeCacheKeys.protocolVersion, "protocolVersion", "number");
+		// const securityClasses = cache.get(nodeCacheKeys.securityClasses);
+		// if (isObject(securityClasses)) {
+		// 	for (const [key, val] of Object.entries(securityClasses)) {
+		// 		if (
+		// 			key in SecurityClass &&
+		// 			typeof (SecurityClass as any)[key] === "number" &&
+		// 			typeof val === "boolean"
+		// 		) {
+		// 			this.securityClasses.set((SecurityClass as any)[key], val);
+		// 		}
+		// 	}
+		// }
+		// const dsk = cache.get(nodeCacheKeys.dsk);
+		// if (typeof dsk === "string") {
+		// 	try {
+		// 		this._dsk = dskFromString(dsk);
+		// 	} catch {
+		// 		// ignore
+		// 	}
+		// }
+		// tryParse(nodeCacheKeys.supportsSecurity, "supportsSecurity", "boolean");
+		// tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "boolean");
+		// tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "string");
+		// tryParse(nodeCacheKeys.protocolVersion, "protocolVersion", "number");
 
-		const nodeType = cache.get(nodeCacheKeys.nodeType) as any;
-		if (nodeType in NodeType) {
-			this._nodeType = NodeType[nodeType] as any;
-		}
+		// const nodeType = cache.get(nodeCacheKeys.nodeType) as any;
+		// if (nodeType in NodeType) {
+		// 	this._nodeType = NodeType[nodeType] as any;
+		// }
 
-		const supportedDataRates = cache.get(nodeCacheKeys.supportedDataRates);
-		if (
-			isArray(supportedDataRates) &&
-			supportedDataRates.every((r: unknown) => typeof r === "number")
-		) {
-			this._supportedDataRates =
-				supportedDataRates as readonly DataRate[];
-		}
+		// const supportedDataRates = cache.get(nodeCacheKeys.supportedDataRates);
+		// if (
+		// 	isArray(supportedDataRates) &&
+		// 	supportedDataRates.every((r: unknown) => typeof r === "number")
+		// ) {
+		// 	this._supportedDataRates =
+		// 		supportedDataRates as readonly DataRate[];
+		// }
 
 		function enforceType(
 			val: any,
