@@ -11,7 +11,6 @@ import {
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
-	isValidDSK,
 	isZWaveError,
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
@@ -43,7 +42,6 @@ import {
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { composeObject } from "alcalzone-shared/objects";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
@@ -502,14 +500,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportsTimers;
 	}
 
-	private _supportsSoftReset: boolean | undefined;
 	/** Whether the controller is known to support soft reset */
 	public get supportsSoftReset(): boolean | undefined {
-		return this._supportsSoftReset;
+		return this.driver.networkCache.get(
+			cacheKeys.controller.supportsSoftReset,
+		) as any;
 	}
 	/** @internal */
 	public set supportsSoftReset(value: boolean | undefined) {
-		this._supportsSoftReset = value;
+		if (value === undefined) {
+			this.driver.networkCache.delete(
+				cacheKeys.controller.supportsSoftReset,
+			);
+		} else {
+			this.driver.networkCache.set(
+				cacheKeys.controller.supportsSoftReset,
+				value,
+			);
+		}
 	}
 
 	private _nodes: ThrowingMap<number, ZWaveNode>;
@@ -552,10 +560,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
-	private _provisioningList: SmartStartProvisioningEntry[] = [];
 	/** @internal */
 	public get provisioningList(): readonly SmartStartProvisioningEntry[] {
-		return this._provisioningList;
+		return this.driver.networkCache.get(
+			cacheKeys.controller.provisioningList,
+		) as any;
+	}
+	private set provisioningList(
+		value: readonly SmartStartProvisioningEntry[],
+	) {
+		this.driver.networkCache.set(
+			cacheKeys.controller.provisioningList,
+			value,
+		);
 	}
 
 	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
@@ -563,17 +580,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Make sure the controller supports SmartStart
 		this.assertFeature(ZWaveFeature.SmartStart);
 
-		const index = this._provisioningList.findIndex(
-			(e) => e.dsk === entry.dsk,
-		);
+		const provisioningList = [...this.provisioningList];
+
+		const index = provisioningList.findIndex((e) => e.dsk === entry.dsk);
 		if (index === -1) {
-			this._provisioningList.push(entry);
+			provisioningList.push(entry);
 			// If this is an entry for an existing node, mark it as included
 			const node = this.getNodeByDSK(entry.dsk);
-			if (node) this.markNodeOnProvisioningList(node);
+			if (node) this.markNodeOnProvisioningList(provisioningList, node);
 		} else {
-			this._provisioningList[index] = entry;
+			provisioningList[index] = entry;
 		}
+		this.provisioningList = provisioningList;
+
 		this.autoProvisionSmartStart();
 		void this.driver.saveNetworkToCache();
 	}
@@ -584,7 +603,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
 	 */
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
-		const index = this._provisioningList.findIndex(
+		const provisioningList = [...this.provisioningList];
+
+		const index = provisioningList.findIndex(
 			(e) =>
 				e.dsk === dskOrNodeId ||
 				(typeof dskOrNodeId === "number" &&
@@ -592,9 +613,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					e.nodeId === dskOrNodeId),
 		);
 		if (index >= 0) {
-			this._provisioningList.splice(index, 1);
+			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
 			void this.driver.saveNetworkToCache();
+			this.provisioningList = provisioningList;
 		}
 	}
 
@@ -603,8 +625,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public getProvisioningEntry(
 		dsk: string,
-	): SmartStartProvisioningEntry | undefined {
-		return this._provisioningList.find((e) => e.dsk === dsk);
+	): Readonly<SmartStartProvisioningEntry> | undefined {
+		return this.provisioningList.find((e) => e.dsk === dsk);
 	}
 
 	/**
@@ -612,7 +634,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public getProvisioningEntries(): SmartStartProvisioningEntry[] {
 		// Make copies so no one can modify the internal list (except for user info)
-		return this._provisioningList.map((e) => {
+		return this.provisioningList.map((e) => {
 			const { dsk, securityClasses, nodeId, ...rest } = e;
 			return {
 				dsk,
@@ -625,7 +647,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Returns whether the SmartStart provisioning list contains entries that have not been included yet */
 	public hasPlannedProvisioningEntries(): boolean {
-		return this._provisioningList.some((e) => !("nodeId" in e));
+		return this.provisioningList.some((e) => !("nodeId" in e));
 	}
 
 	/**
@@ -647,18 +669,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
-	private markNodeOnProvisioningList(node: ZWaveNode): void {
+	private markNodeOnProvisioningList(
+		provisioningList: SmartStartProvisioningEntry[],
+		node: ZWaveNode,
+	): void {
 		// If this node's DSK is on the provisioning list, remember the node ID
 		if (node.dsk) {
-			const entry = this._provisioningList.find(
+			const entry = provisioningList.find(
 				(e) => e.dsk === dskToString(node.dsk!),
 			);
 			if (entry) (entry as IncludedProvisioningEntry).nodeId = node.id;
 		}
 	}
 
-	private unmarkNodeOnProvisioningList(nodeId: number): void {
-		const entry = this._provisioningList.find(
+	private unmarkNodeOnProvisioningList(
+		provisioningList: SmartStartProvisioningEntry[],
+		nodeId: number,
+	): void {
+		const entry = provisioningList.find(
 			(e) => "nodeId" in e && e.nodeId === nodeId,
 		);
 		if (entry) delete entry.nodeId;
@@ -2418,7 +2446,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// We're done adding this node, notify listeners
 				const result: InclusionResult = {};
 				if (lowSecurity) result.lowSecurity = true;
-				this.markNodeOnProvisioningList(newNode);
+				const provisioningList = [...this.provisioningList];
+				this.markNodeOnProvisioningList(provisioningList, newNode);
+				this.provisioningList = provisioningList;
 				this.emit("node added", newNode, result);
 
 				this.setInclusionState(InclusionState.Idle);
@@ -2492,9 +2522,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 				if (this._nodePendingReplace) {
 					this.emit("node removed", this._nodePendingReplace, true);
+					let provisioningList = [...this.provisioningList];
 					this.unmarkNodeOnProvisioningList(
+						provisioningList,
 						this._nodePendingReplace.id,
 					);
+					this.provisioningList = provisioningList;
 					this._nodes.delete(this._nodePendingReplace.id);
 
 					// We're technically done with the replacing but should not include
@@ -2562,7 +2595,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					if (lowSecurity) result.lowSecurity = true;
 
 					this.setInclusionState(InclusionState.Idle);
-					this.markNodeOnProvisioningList(newNode);
+					provisioningList = [...this.provisioningList];
+					this.markNodeOnProvisioningList(provisioningList, newNode);
+					this.provisioningList = provisioningList;
 					this.emit("node added", newNode, result);
 				}
 
@@ -2646,7 +2681,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);
 				// and forget the node
-				this.unmarkNodeOnProvisioningList(nodeId);
+				const provisioningList = [...this.provisioningList];
+				this.unmarkNodeOnProvisioningList(provisioningList, nodeId);
+				this.provisioningList = provisioningList;
 				this._nodes.delete(nodeId);
 				this._nodePendingExclusion = undefined;
 
@@ -3914,7 +3951,9 @@ ${associatedNodes.join(", ")}`,
 					// Emit the removed event so the driver and applications can react
 					this.emit("node removed", this.nodes.get(nodeId)!, false);
 					// and forget the node
-					this.unmarkNodeOnProvisioningList(nodeId);
+					const provisioningList = [...this.provisioningList];
+					this.unmarkNodeOnProvisioningList(provisioningList, nodeId);
+					this.provisioningList = provisioningList;
 					this._nodes.delete(nodeId);
 
 					return;
@@ -4275,53 +4314,55 @@ ${associatedNodes.join(", ")}`,
 		if (!this.driver.networkCache) return;
 		const cache = this.driver.networkCache;
 
-		// Parse whether the controller supports soft reset
-		const supportsSoftReset = cache.get(
-			cacheKeys.controller.supportsSoftReset,
-		);
-		if (typeof supportsSoftReset === "boolean") {
-			this.supportsSoftReset = supportsSoftReset;
-		}
-		// Parse the controller's Smart Start provisioning list
-		const provisioningList = cache.get(
-			cacheKeys.controller.provisioningList,
-		);
-		if (isArray(provisioningList)) {
-			entries: for (const entry of provisioningList) {
-				if (!isObject(entry)) continue;
-				const {
-					dsk,
-					securityClasses: secClasses,
-					// Node ID is ignored - we update it when deserializing nodes
-					nodeId,
-					...rest
-				} = entry;
-				if (typeof entry.dsk !== "string") continue;
-				if (!isArray(entry.securityClasses)) continue;
-				if (!isValidDSK(entry.dsk)) continue;
+		// // Parse whether the controller supports soft reset
+		// const supportsSoftReset = cache.get(
+		// 	cacheKeys.controller.supportsSoftReset,
+		// );
+		// if (typeof supportsSoftReset === "boolean") {
+		// 	this.supportsSoftReset = supportsSoftReset;
+		// }
+		// // Parse the controller's Smart Start provisioning list
+		// const provisioningList = cache.get(
+		// 	cacheKeys.controller.provisioningList,
+		// );
+		// if (isArray(provisioningList)) {
+		// 	entries: for (const entry of provisioningList) {
+		// 		if (!isObject(entry)) continue;
+		// 		const {
+		// 			dsk,
+		// 			securityClasses: secClasses,
+		// 			// Node ID is ignored - we update it when deserializing nodes
+		// 			nodeId,
+		// 			...rest
+		// 		} = entry;
+		// 		if (typeof entry.dsk !== "string") continue;
+		// 		if (!isArray(entry.securityClasses)) continue;
+		// 		if (!isValidDSK(entry.dsk)) continue;
 
-				const securityClasses: SecurityClass[] = [];
-				for (const s of secClasses as unknown[]) {
-					if (typeof s !== "string") continue entries;
-					const secClass = (SecurityClass as any)[s];
-					if (typeof secClass !== "number") continue entries;
-					securityClasses.push(secClass);
-				}
+		// 		const securityClasses: SecurityClass[] = [];
+		// 		for (const s of secClasses as unknown[]) {
+		// 			if (typeof s !== "string") continue entries;
+		// 			const secClass = (SecurityClass as any)[s];
+		// 			if (typeof secClass !== "number") continue entries;
+		// 			securityClasses.push(secClass);
+		// 		}
 
-				this._provisioningList.push({
-					dsk: entry.dsk,
-					securityClasses,
-					// The user-defined properties are not validated further
-					...rest,
-				});
-			}
-		}
+		// 		this._provisioningList.push({
+		// 			dsk: entry.dsk,
+		// 			securityClasses,
+		// 			// The user-defined properties are not validated further
+		// 			...rest,
+		// 		});
+		// 	}
+		// }
 
 		// Deserialize information for all nodes
+		const provisioningList = [...this.provisioningList];
 		for (const node of this.nodes.values()) {
 			await node.deserialize();
-			this.markNodeOnProvisioningList(node);
+			this.markNodeOnProvisioningList(provisioningList, node);
 		}
+		this.provisioningList = provisioningList;
 
 		// Remove nodes which no longer exist from the cache
 		for (const cacheKey of cache.keys()) {
@@ -4718,7 +4759,7 @@ ${associatedNodes.join(", ")}`,
 
 		// After restoring an NVM backup, the controller's capabilities may have changed.
 		// At the very least reset the information about the soft reset capability.
-		this._supportsSoftReset = undefined;
+		this.supportsSoftReset = undefined;
 		// Also, we could be talking to different nodes than the cache file contains.
 		// Reset all info about all nodes, so they get re-interviewed.
 		this._nodes.clear();
@@ -4774,7 +4815,7 @@ ${associatedNodes.join(", ")}`,
 
 		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
 		// about soft reset capability
-		this._supportsSoftReset = undefined;
+		this.supportsSoftReset = undefined;
 
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.

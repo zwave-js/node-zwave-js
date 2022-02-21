@@ -151,7 +151,7 @@ import {
 	sendStatistics,
 } from "../telemetry/statistics";
 import { createMessageGenerator } from "./MessageGenerators";
-import { migrateLegacyNetworkCache } from "./NetworkCache";
+import { cacheKeys, migrateLegacyNetworkCache } from "./NetworkCache";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -646,7 +646,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	}
 	private _networkCache: JsonlDB | undefined;
 	/** @internal */
-	public get networkCache(): JsonlDB | undefined {
+	public get networkCache(): JsonlDB {
+		if (this._networkCache == undefined) {
+			throw new ZWaveError(
+				"The network cache was not yet initialized!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
 		return this._networkCache;
 	}
 
@@ -926,7 +932,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
-	private async initValueDBs(homeId: number): Promise<void> {
+	private getJsonlDBOptions(): JsonlDBOptions<any> {
 		const options: JsonlDBOptions<any> = {
 			ignoreReadErrors: true,
 			...throttlePresets[this.options.storage.throttle],
@@ -936,6 +942,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				directory: this.options.storage.lockDir,
 			};
 		}
+		return options;
+	}
+
+	private async initNetworkCache(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
 
 		const networkCacheFile = path.join(
 			this.cacheDir,
@@ -943,6 +954,16 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		);
 		this._networkCache = new JsonlDB(networkCacheFile, options);
 		await this._networkCache.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since the network cache is append-only, we need to
+			// clear it if the cache should be ignored
+			this._networkCache.clear();
+		}
+	}
+
+	private async initValueDBs(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
 
 		const valueDBFile = path.join(
 			this.cacheDir,
@@ -963,9 +984,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {
-			// Since cache and value/metadata DBs are append-only, we need to
+			// Since value/metadata DBs are append-only, we need to
 			// clear them if the cache should be ignored
-			this._networkCache.clear();
 			this._valueDB.clear();
 			this._metadataDB.clear();
 		}
@@ -993,8 +1013,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
+			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this.options.enableSoftReset && !(await this.maySoftReset())) {
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -1029,7 +1050,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					`Controller identification returned invalid node ID 0 - trying again...`,
 					"warn",
 				);
+				// We might end up with a different home ID, so close the cache before re-identifying the controller
+				await this._networkCache?.close();
 				await this.controller.identify();
+				await this.initNetworkCache(this.controller.homeId!);
 			}
 
 			if (this.controller.ownNodeId === 0) {
@@ -1733,29 +1757,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
-	private async maySoftReset(): Promise<boolean> {
+	private maySoftReset(): boolean {
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		let supportsSoftReset: boolean | undefined;
-		if (this._controllerInterviewed) {
-			supportsSoftReset = this.controller.supportsSoftReset;
-		} else {
-			// The controller wasn't interviewed yet, read the json file manually
-			const fs = this.options.storage.driver;
-
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-			supportsSoftReset = json?.controller?.supportsSoftReset;
-		}
+		const supportsSoftReset = this._networkCache!.get(
+			cacheKeys.controller.supportsSoftReset,
+		) as boolean | undefined;
 		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
@@ -2099,13 +2105,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		}
 
+		// Attempt to close the value DBs and network cache
 		try {
-			// Attempt to close the value DBs
 			await this._valueDB?.close();
+		} catch (e) {
+			this.driverLog.print(
+				`Closing the value DB failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		try {
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${getErrorMessage(e)}`,
+				`Closing the metadata DB failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		try {
+			await this._networkCache?.close();
+		} catch (e) {
+			this.driverLog.print(
+				`Closing the network cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
