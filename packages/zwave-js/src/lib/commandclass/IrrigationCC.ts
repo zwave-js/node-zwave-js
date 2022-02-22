@@ -1,18 +1,24 @@
 import {
 	CommandClasses,
+	encodeFloatWithScale,
+	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
 	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
+	CCCommandOptions,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
 
@@ -36,6 +42,18 @@ export enum IrrigationCommand {
 	ValveTableReport = 0x10,
 	ValveTableRun = 0x11,
 	SystemShutoff = 0x12,
+}
+
+// @publicAPI
+export enum IrrigationSensorPolarity {
+	Low = 0,
+	High = 1,
+}
+
+// @publicAPI
+export enum ValveType {
+	ZoneValve = 0,
+	MasterValve = 1,
 }
 
 @commandClass(CommandClasses.Irrigation)
@@ -243,3 +261,251 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 @CCCommand(IrrigationCommand.SystemStatusGet)
 @expectedCCResponse(IrrigationCCSystemStatusReport)
 export class IrrigationCCSystemStatusGet extends IrrigationCC {}
+
+interface IrrigationCCSystemConfigSetOptions extends CCCommandOptions {
+	masterValveDelay: number;
+	highPressureThreshold: number;
+	lowPressureThreshold: number;
+	rainSensorPolarity?: IrrigationSensorPolarity;
+	moistureSensorPolarity?: IrrigationSensorPolarity;
+}
+
+@CCCommand(IrrigationCommand.SystemConfigSet)
+export class IrrigationCCSystemConfigSet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCSystemConfigSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.masterValveDelay = options.masterValveDelay;
+			this.highPressureThreshold = options.highPressureThreshold;
+			this.lowPressureThreshold = options.lowPressureThreshold;
+			this.rainSensorPolarity = options.rainSensorPolarity;
+			this.moistureSensorPolarity = options.moistureSensorPolarity;
+		}
+	}
+
+	public masterValveDelay: number;
+	public highPressureThreshold: number;
+	public lowPressureThreshold: number;
+	public rainSensorPolarity?: IrrigationSensorPolarity;
+	public moistureSensorPolarity?: IrrigationSensorPolarity;
+
+	public serialize(): Buffer {
+		let polarity = 0;
+		if (this.rainSensorPolarity != undefined) polarity |= 0b1;
+		if (this.moistureSensorPolarity != undefined) polarity |= 0b10;
+		if (
+			this.rainSensorPolarity == undefined &&
+			this.moistureSensorPolarity == undefined
+		) {
+			// Valid bit
+			polarity |= 0b1000_0000;
+		}
+		this.payload = Buffer.concat([
+			Buffer.from([this.masterValveDelay]),
+			encodeFloatWithScale(this.highPressureThreshold, 0 /* kPa */),
+			encodeFloatWithScale(this.lowPressureThreshold, 0 /* kPa */),
+			Buffer.from([polarity]),
+		]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(IrrigationCommand.SystemConfigReport)
+export class IrrigationCCSystemConfigReport extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload(this.payload.length >= 2);
+		this.masterValveDelay = this.payload[0];
+		let offset = 1;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				this.payload.slice(offset),
+			);
+			validatePayload(scale === 0 /* kPa */);
+			this.highPressureThreshold = value;
+			offset += bytesRead;
+		}
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				this.payload.slice(offset),
+			);
+			validatePayload(scale === 0 /* kPa */);
+			this.lowPressureThreshold = value;
+			offset += bytesRead;
+		}
+		validatePayload(this.payload.length >= offset + 1);
+		const polarity = this.payload[offset];
+		if (!!(polarity & 0b1000_0000)) {
+			// The valid bit is set
+			this.rainSensorPolarity = polarity & 0b1;
+			this.moistureSensorPolarity = polarity & 0b10;
+		}
+		this.persistValues();
+	}
+
+	public readonly masterValveDelay: number;
+	public readonly highPressureThreshold: number;
+	public readonly lowPressureThreshold: number;
+	public readonly rainSensorPolarity?: IrrigationSensorPolarity;
+	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
+}
+
+@CCCommand(IrrigationCommand.SystemConfigGet)
+@expectedCCResponse(IrrigationCCSystemConfigReport)
+export class IrrigationCCSystemConfigGet extends IrrigationCC {}
+
+@CCCommand(IrrigationCommand.ValveInfoReport)
+export class IrrigationCCValveInfoReport extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload(this.payload.length >= 4);
+		this.valveType = this.payload[0] & 0b1;
+		this.connected = !!(this.payload[0] & 0b10);
+		this.valveId = this.payload[1];
+		this.nominalCurrent = this.payload[2];
+		this.errorShortCircuit = !!(this.payload[3] & 0b1);
+		this.errorHighCurrent = !!(this.payload[3] & 0b10);
+		this.errorLowCurrent = !!(this.payload[3] & 0b100);
+		if (this.valveType === ValveType.ZoneValve) {
+			this.errorMaximumFlow = !!(this.payload[3] & 0b1000);
+			this.errorHighFlow = !!(this.payload[3] & 0b1_0000);
+			this.errorLowFlow = !!(this.payload[3] & 0b10_0000);
+		}
+		this.persistValues();
+	}
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyNumber,
+		min: ValveType.ZoneValve,
+		max: ValveType.MasterValve,
+		states: enumValuesToMetadataStates(ValveType),
+		label: "Valve type",
+	})
+	public readonly valveType: ValveType;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Valve connected",
+	})
+	public readonly connected: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Valve ID",
+	})
+	public readonly valveId: number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Nominal current",
+		unit: "10 mA",
+	})
+	public readonly nominalCurrent: number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Short circuit detected",
+	})
+	public readonly errorShortCircuit: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Current above high threshold",
+	})
+	public readonly errorHighCurrent: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Current below low threshold",
+	})
+	public readonly errorLowCurrent: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Maximum flow detected",
+	})
+	public readonly errorMaximumFlow?: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Flow above high threshold",
+	})
+	public readonly errorHighFlow?: boolean;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Error: Flow below low threshold",
+	})
+	public readonly errorLowFlow?: boolean;
+}
+
+type IrrigationCCValveInfoGetOptions =
+	| {
+			masterValve: true;
+			valveId?: undefined;
+	  }
+	| {
+			masterValve: false;
+			valveId: number;
+	  };
+
+@CCCommand(IrrigationCommand.ValveInfoGet)
+@expectedCCResponse(IrrigationCCValveInfoReport)
+export class IrrigationCCValveInfoGet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| (IrrigationCCValveInfoGetOptions & CCCommandOptions),
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.masterValve = options.masterValve;
+			this.valveId = options.valveId;
+		}
+	}
+
+	public masterValve: boolean;
+	public valveId?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.masterValve ? 1 : 0,
+			this.masterValve ? 1 : this.valveId || 1,
+		]);
+		return super.serialize();
+	}
+}
