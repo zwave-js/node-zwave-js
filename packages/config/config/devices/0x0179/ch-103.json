@@ -1,0 +1,160 @@
+{
+	"manufacturer": "ConnectHome",
+	"manufacturerId": "0x0179",
+	"label": "CH-103",
+	"description": "CH-103 Relay",
+	"devices": [
+		{
+			"productType": "0x0041",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Temperature and Alarm Reports",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Switch S1",
+			"maxNodes": 10,
+			"isLifeline": false
+		},
+		"3": {
+			"label": "Switch S2",
+			"maxNodes": 10,
+			"isLifeline": false
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Calibrate",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard",
+					"value": 0
+				},
+				{
+					"label": "Motor with limit switchs",
+					"value": 1
+				},
+				{
+					"label": "Blind Control",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Rotation Time",
+			"description": "Time of full rotation of lamellas or 180° in the blind mode",
+			"unit": "0.1 s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "4",
+			"label": "Open Operating Time",
+			"unit": "0.1 s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "5",
+			"label": "Close Operating Time",
+			"unit": "0.1 s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "6",
+			"label": "Open Delay",
+			"unit": "0.1 s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "7",
+			"label": "Close Delay",
+			"unit": "0.1 s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 0
+		},
+		{
+			"#": "50",
+			"label": "Respond to Non-Encrypted Commands When Included Securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "51",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Secure Commands to 2nd Association Group",
+			"description": "Only active when the node is included securely"
+		},
+		{
+			"#": "52",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Secure Commands to 3rd Association Group",
+			"description": "Only active when the node is included securely"
+		}
+	],
+	"metadata": {
+		"inclusion": "Press the system button located on the top cover three times.",
+		"exclusion": "Press the system button located on the top cover three times.",
+		"reset": "Exclude causes factory reset.",
+		"manual": "https://connecthome.com.ua/product/ch103#anc_5"
+	}
+}

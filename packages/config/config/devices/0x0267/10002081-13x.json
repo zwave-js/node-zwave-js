@@ -1,0 +1,190 @@
+{
+	"manufacturer": "SimonTech S.L.U",
+	"manufacturerId": "0x0267",
+	"label": "10002081-13x",
+	"description": "Simon IO: Master Roller Blind",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x01c3"
+		},
+		{
+			"productType": "0x0005",
+			"productId": "0x00f4"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Association LED"
+		},
+		{
+			"#": "12",
+			"label": "LED Indicator Idle Brightness",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "20%",
+					"value": 255
+				}
+			]
+		},
+		{
+			"#": "13",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Buttons Lock"
+		},
+		{
+			"#": "15",
+			"label": "Reset to Default",
+			"valueSize": 2,
+			"minValue": 17170,
+			"maxValue": 39015,
+			"defaultValue": 39015,
+			"writeOnly": true,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Parameters, Groups, and Z-Wave status are restored to default.",
+					"value": 39015
+				},
+				{
+					"label": "Parameters, except Lock long press are restored to default.",
+					"value": 17170
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Short Press Action",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle on/off",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Turn off",
+					"value": 2
+				},
+				{
+					"label": "Left button sends off, right button sends on",
+					"value": 3
+				},
+				{
+					"label": "Turn on, long press to turn off",
+					"value": 4
+				},
+				{
+					"label": "Left button sends off value (parameter 25), right button sends on value (parameter 26)",
+					"value": 6
+				},
+				{
+					"label": "Follows instruction manual",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Identify",
+			"description": "LED Indicator blinks for 5 seconds to help identify the device.",
+			"writeOnly": true
+		},
+		{
+			"#": "21",
+			"label": "Device Mode",
+			"valueSize": 2,
+			"minValue": 176,
+			"maxValue": 177,
+			"defaultValue": 176,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0x01 represents load is on",
+					"value": 176
+				},
+				{
+					"label": "0xFF represents load is on",
+					"value": 177
+				}
+			]
+		},
+		{
+			"#": "25",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "Off Value",
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"label": "On Value",
+			"defaultValue": 0
+		},
+		{
+			"#": "27",
+			"$import": "~/templates/master_template.json#base_enable_disable_255",
+			"label": "Long Press Lock",
+			"description": "Prevents sending Node Info on a long press (2-10 seconds)"
+		},
+		{
+			"#": "28",
+			"$import": "~/templates/master_template.json#base_enable_disable_255_inverted",
+			"label": "Consult Associated Device",
+			"description": "If there is 1 associated device, confirm device state before sending command to association group. (Ensure toggle actions function correctly)",
+			"defaultValue": 0
+		},
+		{
+			"#": "29",
+			"label": "No Associated Devices Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Central Scene Notification",
+					"value": 0
+				},
+				{
+					"label": "Send error signal",
+					"value": 255
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Set the Z-Wave Controller to inclusion mode.\n Press the button for between 2 and 30 seconds.",
+		"exclusion": "Set the Z-Wave Controller to exclusion mode.\n Press the button for between 2 and 30 seconds.",
+		"reset": "Long press button for more than 30 secounds in the product.\nMain LED lights up for 2.5 seconds，then turns off.",
+		"manual": "https://static.simonelectric.com/estaticos/extras/ficheros/contenidos/00/00/01/15/15//10002081-13x%20Tecla%20Master%20persianas%20IO_2.pdf"
+	}
+}

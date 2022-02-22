@@ -4,6 +4,66 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 8.11.6 (2022-02-14)
+### Bugfixes
+* When converting an NVM, the page size is now limited to the maximum supported by Z-Wave sticks, even if the existing metadata contains a larger page size.
+
+### Config file changes
+* Update GE/Jasco ZW3012 Configuration to correct LED status
+* Add config for Keemple KP-SO-02 Smart Socket
+* Cleanup Shenzhen Neo device configs
+* Add MCO Home 3901-Z thermostat
+* Fix regression of bug #1581 (wrong valueSize, param 13 of LZW31-SN)
+
+### Changes under the hood
+* Several dependency updates
+
+## 8.11.5 (2022-02-08)
+### Bugfixes
+* Fixed a `TypeError` that could happen when parsing a controller's NVM backup
+* After healing, battery-powered nodes are sent back to sleep again
+* Added a workaround for thermostats that don't advertise all their supported thermostat modes. When such a thermostat enters such an "unsupported" mode, the mode is now dynamically added to the list of supported modes.
+
+## 8.11.4 (2022-02-06)
+### Bugfixes
+* The 500-to-700 series NVM conversion routine now correctly considers all potentially existing nodes
+* The Home ID is no longer lost after restoring a 500 series NVM onto a 700 series stick
+
+### Config file changes
+* Add fingerprint for AU/NZ model of Aeotec NanoMote Quad
+* Add ConnectHome CH-103
+* Add RU fingerprint to Sunricher ZV9101
+* Add Alarm.com Smart Thermostat ADC-T3000
+
+## 8.11.3 (2022-02-02)
+### Config file changes
+* Add new product id to Shenzhen Neo NAS-PD07ZU1
+* Various abandoned PRs and issues
+* Fix sent scenes configuration for Fibaro Walli Roller FGWREU-111
+* Fix sent scenes configuration for Fibaro Walli Dimmer FGWDEU
+* Update Inovelli LZW31-SN device config to match official documentation
+* Add unit and mention range for Qubino ZMNHTD1 param 42
+* Add LED indicator parameters to GE Fan Controller 14287
+* Update Fibaro FGK-101 device config with units and options
+* Fixed incorrect parameter range for HomeSeer Floodlight Sensor HS-FLS100+
+* Add SmartDHOME MyOT
+* Add Simon Tech Master Blind Button
+* Add param 38 to Aeotec Siren Gen5, FW 3.25+
+* Add fingerprint `0x0811:0x23a8` to "Kwikset HC620"
+* Add warning to Eurotronics Spirit TRV about missing mode
+* Add fingerprint `0x0102:0x0064` to "Fantem FT100"
+* Add iblinds V3/V3.1 parameters (8-10)
+* Fix ZEN25 parameter units and align with style guide
+* Add parameter 10 (all on, all off) to Qubino SmartMeter ZMNHTD
+* Add fingerprint to Fibaro FGD212
+* Add Relay Load Power for Heltun HE-RS01
+* Add Defaro DAT-101 and a fingerprint for Fibaro FGFS101
+* Added inclusion, exclusion and reset instructions to Danfoss MT02650
+* Add association to Leviton DZ15S switch
+
+### Changes under the hood
+* Correctly check min/max/default values for signed partial parameters
+
 ## 8.11.2 (2022-01-18)
 ### Config file changes
 * Add Eurotronic Temperature & Humidity Sensor

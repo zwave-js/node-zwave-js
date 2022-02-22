@@ -218,6 +218,14 @@
 			}
 		]
 	},
+	"relay_load_power": {
+		"description": "Power of the relay load. Used to calculate energy consumption.",
+		"unit": "W",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 1100,
+		"defaultValue": 0
+	},
 	"relay_timer_mode_duration": {
 		"description": "Used to open/close garage doors, blinds, curtains, etc. or to turn attached devices like door lock or security OFF for a short time",
 		"unit": "seconds",

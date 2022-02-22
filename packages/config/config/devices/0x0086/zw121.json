@@ -129,6 +129,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -153,6 +154,7 @@
 			"minValue": 0,
 			"maxValue": 31,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Constant speed",
@@ -171,6 +173,7 @@
 			"description": "Allowable range: 1-254",
 			"valueSize": 4,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Unlimited",
@@ -188,6 +191,7 @@
 			"label": "Brightness",
 			"description": "Allowable range: 1-99",
 			"valueSize": 4,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Inactive",
@@ -202,6 +206,7 @@
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -233,6 +238,7 @@
 			"minValue": 0,
 			"maxValue": 0,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -248,6 +254,7 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

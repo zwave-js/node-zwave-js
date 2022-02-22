@@ -300,7 +300,29 @@
 			}
 		]
 	},
-	"notification_report_type": {
+	"multilevel_report_type": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 1
+			},
+			{
+				"label": "MultiLevel Switch CC Report",
+				"value": 2
+			}
+		]
+	},
+	"multilevel_set_report_type": {
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -317,7 +339,7 @@
 				"value": 1
 			},
 			{
-				"label": "MultiLevel Switch CC Report",
+				"label": "MultiLevel Switch CC Set",
 				"value": 2
 			}
 		]
@@ -1757,7 +1779,8 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true
+		"writeOnly": true,
+		"unsigned": true
 	},
 	"blink_length": {
 		"label": "LED Blink Cycle Length",
@@ -1767,7 +1790,8 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 0,
-		"writeOnly": true
+		"writeOnly": true,
+		"unsigned": true
 	},
 	"motion_timeout": {
 		"label": "Motion Sensor Timeout",
@@ -1999,7 +2023,7 @@
 				"value": 2
 			},
 			{
-				"label": "Load and association group 3",
+				"label": "Load and association group 4",
 				"value": 3
 			}
 		]

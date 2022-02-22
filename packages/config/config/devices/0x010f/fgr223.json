@@ -313,7 +313,7 @@
 			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
-			"unit": "1/10 sec",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -368,7 +368,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "30[0xff0000]",
@@ -378,6 +379,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -392,7 +394,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "31[0xff]",
@@ -402,6 +405,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -425,7 +429,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "31[0xff0000]",
@@ -435,6 +440,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -449,7 +455,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5 // Water
+			"defaultValue": 5, // Water
+			"unsigned": true
 		},
 		{
 			"#": "32[0xff]",
@@ -459,6 +466,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -482,7 +490,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "32[0xff0000]",
@@ -492,6 +501,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -506,7 +516,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1 // Smoke
+			"defaultValue": 1, // Smoke
+			"unsigned": true
 		},
 		{
 			"#": "33[0xff]",
@@ -516,6 +527,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -539,7 +551,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "33[0xff0000]",
@@ -549,6 +562,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -563,7 +577,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 2 // CO
+			"defaultValue": 2, // CO
+			"unsigned": true
 		},
 		{
 			"#": "34[0xff]",
@@ -573,6 +588,7 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -596,7 +612,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "34[0xff0000]",
@@ -606,6 +623,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -620,7 +638,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 4 // Heat
+			"defaultValue": 4, // Heat
+			"unsigned": true
 		}
 	]
 }
