@@ -56,6 +56,17 @@ export enum ValveType {
 	MasterValve = 1,
 }
 
+// @publicAPI
+export type ValveId =
+	| {
+			masterValve: true;
+			valveId?: undefined;
+	  }
+	| {
+			masterValve: false;
+			valveId: number;
+	  };
+
 @commandClass(CommandClasses.Irrigation)
 @implementedVersion(1)
 export class IrrigationCC extends CommandClass {
@@ -466,15 +477,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public readonly errorLowFlow?: boolean;
 }
 
-type IrrigationCCValveInfoGetOptions =
-	| {
-			masterValve: true;
-			valveId?: undefined;
-	  }
-	| {
-			masterValve: false;
-			valveId: number;
-	  };
+type IrrigationCCValveInfoGetOptions = ValveId & CCCommandOptions;
 
 @CCCommand(IrrigationCommand.ValveInfoGet)
 @expectedCCResponse(IrrigationCCValveInfoReport)
@@ -483,7 +486,167 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| (IrrigationCCValveInfoGetOptions & CCCommandOptions),
+			| IrrigationCCValveInfoGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.masterValve = options.masterValve;
+			this.valveId = options.valveId;
+		}
+	}
+
+	public masterValve: boolean;
+	public valveId?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.masterValve ? 1 : 0,
+			this.masterValve ? 1 : this.valveId || 1,
+		]);
+		return super.serialize();
+	}
+}
+
+type IrrigationCCValveConfigSetOptions = ValveId & {
+	nominalCurrentHighThreshold: number;
+	nominalCurrentLowThreshold: number;
+	maximumFlow: number;
+	highFlowThreshold: number;
+	lowFlowThreshold: number;
+	useRainSensor: boolean;
+	useMoistureSensor: boolean;
+};
+
+@CCCommand(IrrigationCommand.ValveConfigSet)
+export class IrrigationCCValveConfigSet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| (IrrigationCCValveConfigSetOptions & CCCommandOptions),
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.masterValve = options.masterValve;
+			this.valveId = options.valveId;
+			this.nominalCurrentHighThreshold =
+				options.nominalCurrentHighThreshold;
+			this.nominalCurrentLowThreshold =
+				options.nominalCurrentLowThreshold;
+			this.maximumFlow = options.maximumFlow;
+			this.highFlowThreshold = options.highFlowThreshold;
+			this.lowFlowThreshold = options.lowFlowThreshold;
+			this.useRainSensor = options.useRainSensor;
+			this.useMoistureSensor = options.useMoistureSensor;
+		}
+	}
+
+	public masterValve: boolean;
+	public valveId?: number;
+	public nominalCurrentHighThreshold: number;
+	public nominalCurrentLowThreshold: number;
+	public maximumFlow: number;
+	public highFlowThreshold: number;
+	public lowFlowThreshold: number;
+	public useRainSensor: boolean;
+	public useMoistureSensor: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([
+				this.masterValve ? 1 : 0,
+				this.masterValve ? 1 : this.valveId || 1,
+				this.nominalCurrentHighThreshold,
+				this.nominalCurrentLowThreshold,
+			]),
+			encodeFloatWithScale(this.maximumFlow, 0 /* l/h */),
+			encodeFloatWithScale(this.highFlowThreshold, 0 /* l/h */),
+			encodeFloatWithScale(this.lowFlowThreshold, 0 /* l/h */),
+			Buffer.from([
+				(this.useRainSensor ? 0b1 : 0) |
+					(this.useMoistureSensor ? 0b10 : 0),
+			]),
+		]);
+		return super.serialize();
+	}
+}
+
+@CCCommand(IrrigationCommand.ValveConfigReport)
+export class IrrigationCCValveConfigReport extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload(this.payload.length >= 4);
+		this.masterValve = !!(this.payload[0] & 0b1);
+		if (!this.masterValve) this.valveId = this.payload[1];
+		this.nominalCurrentHighThreshold = this.payload[2];
+		this.nominalCurrentLowThreshold = this.payload[3];
+
+		let offset = 4;
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				this.payload.slice(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			this.maximumFlow = value;
+			offset += bytesRead;
+		}
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				this.payload.slice(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			this.highFlowThreshold = value;
+			offset += bytesRead;
+		}
+		{
+			const { value, scale, bytesRead } = parseFloatWithScale(
+				this.payload.slice(offset),
+			);
+			validatePayload(scale === 0 /* l/h */);
+			this.lowFlowThreshold = value;
+			offset += bytesRead;
+		}
+		validatePayload(this.payload.length >= offset + 1);
+		this.useRainSensor = !!(this.payload[offset] & 0b1);
+		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
+	}
+
+	public masterValve: boolean;
+	public valveId?: number;
+	public nominalCurrentHighThreshold: number;
+	public nominalCurrentLowThreshold: number;
+	public maximumFlow: number;
+	public highFlowThreshold: number;
+	public lowFlowThreshold: number;
+	public useRainSensor: boolean;
+	public useMoistureSensor: boolean;
+}
+
+type IrrigationCCValveConfigGetOptions = ValveId & CCCommandOptions;
+
+@CCCommand(IrrigationCommand.ValveConfigGet)
+@expectedCCResponse(IrrigationCCValveConfigReport)
+export class IrrigationCCValveConfigGet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCValveConfigGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
