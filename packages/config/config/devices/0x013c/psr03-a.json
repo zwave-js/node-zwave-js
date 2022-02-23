@@ -1,13 +1,13 @@
 {
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
-	"label": "PSR03",
-	"description": "Remote",
+	"label": "PSR03-A",
+	"description": "Keyfob",
 	"devices": [
 		{
 			"productType": "0x0008",
-			"productId": "0x0027",
-			"zwaveAllianceId": 1407
+			"productId": "0x0026",
+			"zwaveAllianceId": 1397
 		}
 	],
 	"firmwareVersion": {
@@ -16,40 +16,52 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 4,
 			"isLifeline": true
+		},
+		"2": {
+			"label": "Lighting Group 1 (Left)",
+			"maxNodes": 4
+		},
+		"3": {
+			"label": "Lighting Group 2 (Right)",
+			"maxNodes": 4
 		}
 	},
 	"paramInformation": [
 		{
-			"#": "10",
-			"label": "Auto Report Battery Time",
-			"description": "The interval time for auto report the battery level\"",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 12,
-			"defaultValue": 12,
-			"unsigned": true
+			"#": "2",
+			"$import": "philio_template.json#basic_set_value"
 		},
 		{
-			"#": "2",
-			"label": "Basic Set Level",
-			"description": "Setting the basic command value to turn on the light. the 0xff(-1) means turn on the light. for dimmer equipment 1 to 100 means  the light strength. 0 means turn off the light",
-			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 99,
-			"defaultValue": -1,
+			"#": "7[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button Function",
 			"options": [
 				{
-					"label": "1 (0xff) means turn the light on",
-					"value": -1
+					"label": "AV control",
+					"value": 0
 				},
 				{
-					"label": "Turn off the light",
-					"value": 0
+					"label": "Lighting group control",
+					"value": 1
 				}
 			]
+		},
+		{
+			"#": "10",
+			"$import": "philio_template.json#battery_report_interval"
+		},
+		{
+			"#": "82",
+			"$import": "philio_template.json#association_basic_set_value",
+			"label": "Left Key: Basic Set Value"
+		},
+		{
+			"#": "83",
+			"$import": "philio_template.json#association_basic_set_value",
+			"label": "Right Key: Basic Set Value"
 		}
 	],
 	"metadata": {
