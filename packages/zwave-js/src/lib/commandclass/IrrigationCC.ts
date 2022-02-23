@@ -4,6 +4,7 @@ import {
 	enumValuesToMetadataStates,
 	parseFloatWithScale,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -67,10 +68,36 @@ export type ValveId =
 			valveId: number;
 	  };
 
+// @publicAPI
+export interface ValveTableEntry {
+	valveId: number;
+	duration: number;
+}
+
+export function getMaxValveTableSize(endpointIndex?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Irrigation,
+		endpoint: endpointIndex,
+		property: "maxValveTableSize",
+	};
+}
+
 @commandClass(CommandClasses.Irrigation)
 @implementedVersion(1)
 export class IrrigationCC extends CommandClass {
 	declare ccCommand: IrrigationCommand;
+
+	/**
+	 * Returns the maximum number of valve table entries reported by the node.
+	 * This only works AFTER the node has been interviewed.
+	 */
+	protected getMaxValveTableSizeCached(): number {
+		return (
+			this.getValueDB().getValue(
+				getMaxValveTableSize(this.endpointIndex),
+			) || 0
+		);
+	}
 }
 
 @CCCommand(IrrigationCommand.SystemInfoReport)
@@ -399,6 +426,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			this.errorHighFlow = !!(this.payload[3] & 0b1_0000);
 			this.errorLowFlow = !!(this.payload[3] & 0b10_0000);
 		}
+
 		this.persistValues();
 	}
 
@@ -624,6 +652,8 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		validatePayload(this.payload.length >= offset + 1);
 		this.useRainSensor = !!(this.payload[offset] & 0b1);
 		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
+
+		this.persistValues();
 	}
 
 	public masterValve: boolean;
@@ -669,6 +699,228 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 			this.masterValve ? 1 : 0,
 			this.masterValve ? 1 : this.valveId || 1,
 		]);
+		return super.serialize();
+	}
+}
+
+type IrrigationCCValveRunOptions = ValveId & {
+	duration: number;
+};
+
+@CCCommand(IrrigationCommand.ValveRun)
+export class IrrigationCCValveRun extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| (IrrigationCCValveRunOptions & CCCommandOptions),
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.masterValve = options.masterValve;
+			this.valveId = options.valveId;
+			this.duration = options.duration;
+		}
+	}
+
+	public masterValve: boolean;
+	public valveId?: number;
+	public duration: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.masterValve ? 1 : 0,
+			this.masterValve ? 1 : this.valveId || 1,
+			0,
+			0,
+		]);
+		this.payload.writeUInt16BE(this.duration, 2);
+		return super.serialize();
+	}
+}
+
+interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
+	tableId: number;
+	entries: ValveTableEntry[];
+}
+
+@CCCommand(IrrigationCommand.ValveTableSet)
+export class IrrigationCCValveTableSet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCValveTableSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.tableId = options.tableId;
+			this.entries = options.entries;
+
+			const maxValveTableSize = this.getMaxValveTableSizeCached();
+			if (this.entries.length > maxValveTableSize) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The number of valve table entries must not exceed ${maxValveTableSize}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+	}
+
+	public tableId: number;
+	public entries: ValveTableEntry[];
+
+	public serialize(): Buffer {
+		this.payload = Buffer.allocUnsafe(1 + this.entries.length * 3);
+		this.payload[0] = this.tableId;
+		for (let i = 0; i < this.entries.length; i++) {
+			const entry = this.entries[i];
+			const offset = 1 + i * 3;
+			this.payload[offset] = entry.valveId;
+			this.payload.writeUInt16BE(entry.duration, offset + 1);
+		}
+		return super.serialize();
+	}
+}
+
+@CCCommand(IrrigationCommand.ValveTableReport)
+export class IrrigationCCValveTableReport extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+		validatePayload((this.payload.length - 1) % 3 === 0);
+		this.tableId = this.payload[0];
+		this.entries = [];
+		for (let offset = 1; offset < this.payload.length; offset += 3) {
+			this.entries.push({
+				valveId: this.payload[offset],
+				duration: this.payload.readUInt16BE(offset + 1),
+			});
+		}
+		this.persistValues();
+	}
+
+	public readonly tableId: number;
+	public readonly entries: ValveTableEntry[];
+}
+
+interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
+	tableId: number;
+}
+
+@CCCommand(IrrigationCommand.ValveTableGet)
+@expectedCCResponse(IrrigationCCValveTableReport)
+export class IrrigationCCValveTableGet extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCValveTableGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.tableId = options.tableId;
+		}
+	}
+
+	public tableId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.tableId]);
+		return super.serialize();
+	}
+}
+
+interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
+	tableIDs: number[];
+}
+
+@CCCommand(IrrigationCommand.ValveTableRun)
+export class IrrigationCCValveTableRun extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCValveTableRunOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.tableIDs = options.tableIDs;
+			if (this.tableIDs.length < 1) {
+				throw new ZWaveError(
+					`${this.constructor.name}: At least one table ID must be specified.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+	}
+
+	public tableIDs: number[];
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from(this.tableIDs);
+		return super.serialize();
+	}
+}
+
+interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
+	/**
+	 * The duration in minutes the system must stay off.
+	 * 255 or `undefined` will prevent schedules from running.
+	 */
+	duration?: number;
+}
+
+@CCCommand(IrrigationCommand.SystemShutoff)
+export class IrrigationCCSystemShutoff extends IrrigationCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| IrrigationCCSystemShutoffOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.duration = options.duration;
+		}
+	}
+
+	public duration?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.duration ?? 255]);
 		return super.serialize();
 	}
 }
