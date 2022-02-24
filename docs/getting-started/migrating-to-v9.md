@@ -27,3 +27,9 @@ While working on the SmartStart feature it was noticed that some properties and 
 ## Converted the `isControllerNode` method on the `ZWaveNode` class to a readonly property
 
 While there is no hard style guide governing this, we tend to use readonly properties for static things like a node's IDs and methods for (potentially) dynamic things like endpoint counts. Since the controller node ID doesn't change during usage, this feels more "correct".
+
+## Error-reporting is now opt-in
+
+It was found that the global `unhandledRejection` event handler which Sentry registers, has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning. While we do believe no rejection should be silently unhandled, we don't want to break existing applications.
+
+Therefore, error reporting is now opt-in using `driver.enableErrorReporting()`. We kindly ask you to do so in production environments, so unhandled errors in the library can be discovered more quickly.
