@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	encodeFloatWithScale,
 	enumValuesToMetadataStates,
+	Maybe,
 	parseFloatWithScale,
 	validatePayload,
 	ValueID,
@@ -9,8 +10,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -74,12 +79,333 @@ export interface ValveTableEntry {
 	duration: number;
 }
 
-export function getMaxValveTableSize(endpointIndex?: number): ValueID {
+export function getMaxValveTableSizeValueId(endpointIndex?: number): ValueID {
 	return {
 		commandClass: CommandClasses.Irrigation,
 		endpoint: endpointIndex,
 		property: "maxValveTableSize",
 	};
+}
+
+// export function getNumValvesValueId(endpointIndex?: number): ValueID {
+// 	return {
+// 		commandClass: CommandClasses.Irrigation,
+// 		endpoint: endpointIndex,
+// 		property: "numValves",
+// 	};
+// }
+
+// export function getNumValveTablesValueId(endpointIndex?: number): ValueID {
+// 	return {
+// 		commandClass: CommandClasses.Irrigation,
+// 		endpoint: endpointIndex,
+// 		property: "numValveTables",
+// 	};
+// }
+
+// export function getSupportsMasterValveValueId(endpointIndex?: number): ValueID {
+// 	return {
+// 		commandClass: CommandClasses.Irrigation,
+// 		endpoint: endpointIndex,
+// 		property: "supportsMasterValve",
+// 	};
+// }
+
+@API(CommandClasses.Irrigation)
+export class IrrigationCCAPI extends CCAPI {
+	public supportsCommand(cmd: IrrigationCommand): Maybe<boolean> {
+		switch (cmd) {
+			case IrrigationCommand.SystemInfoGet:
+			case IrrigationCommand.SystemStatusGet:
+			case IrrigationCommand.SystemConfigSet:
+			case IrrigationCommand.SystemConfigGet:
+			case IrrigationCommand.ValveInfoGet:
+			case IrrigationCommand.ValveConfigSet:
+			case IrrigationCommand.ValveConfigGet:
+			case IrrigationCommand.ValveRun:
+			case IrrigationCommand.ValveTableSet:
+			case IrrigationCommand.ValveTableGet:
+			case IrrigationCommand.ValveTableRun:
+			case IrrigationCommand.SystemShutoff:
+				// These are all mandatory in V1
+				return true;
+		}
+		return super.supportsCommand(cmd);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getSystemInfo() {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.SystemInfoGet,
+		);
+
+		const cc = new IrrigationCCSystemInfoGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCSystemInfoReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, [
+				"numValves",
+				"numValveTables",
+				"supportsMasterValve",
+				"maxValveTableSize",
+			]);
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getSystemStatus() {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.SystemStatusGet,
+		);
+
+		const cc = new IrrigationCCSystemStatusGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCSystemStatusReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, [
+				"systemVoltage",
+				"flowSensorActive",
+				"pressureSensorActive",
+				"rainSensorActive",
+				"moistureSensorActive",
+				"flow",
+				"pressure",
+				"shutoffDuration",
+				"errorNotProgrammed",
+				"errorEmergencyShutdown",
+				"errorHighPressure",
+				"errorLowPressure",
+				"errorValve",
+				"masterValveOpen",
+				"firstOpenZoneId",
+			]);
+		}
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getSystemConfig() {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.SystemConfigGet,
+		);
+
+		const cc = new IrrigationCCSystemConfigGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCSystemConfigReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, [
+				"masterValveDelay",
+				"highPressureThreshold",
+				"lowPressureThreshold",
+				"rainSensorPolarity",
+				"moistureSensorPolarity",
+			]);
+		}
+	}
+
+	public async setSystemConfig(
+		config: IrrigationCCSystemConfigSetOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.SystemConfigSet,
+		);
+
+		const cc = new IrrigationCCSystemConfigSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...config,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getValveInfo(valveId: ValveId) {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveInfoGet,
+		);
+
+		const cc = new IrrigationCCValveInfoGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...valveId,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCValveInfoReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, [
+				"valveType",
+				"connected",
+				"nominalCurrent",
+				"errorShortCircuit",
+				"errorHighCurrent",
+				"errorLowCurrent",
+				"errorMaximumFlow",
+				"errorHighFlow",
+				"errorLowFlow",
+			]);
+		}
+	}
+
+	public async setValveConfig(
+		options: IrrigationCCValveConfigSetOptions,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveConfigSet,
+		);
+
+		const cc = new IrrigationCCValveConfigSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getValveConfig(valveId: ValveId) {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveConfigGet,
+		);
+
+		const cc = new IrrigationCCValveConfigGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...valveId,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCValveConfigReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, [
+				"nominalCurrentHighThreshold",
+				"nominalCurrentLowThreshold",
+				"maximumFlow",
+				"highFlowThreshold",
+				"lowFlowThreshold",
+				"useRainSensor",
+				"useMoistureSensor",
+			]);
+		}
+	}
+
+	public async runValve(valveId: ValveId, duration: number): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveRun,
+		);
+
+		const cc = new IrrigationCCValveRun(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...valveId,
+			duration,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async setValveTable(
+		tableId: number,
+		entries: ValveTableEntry[],
+	): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveTableSet,
+		);
+
+		const cc = new IrrigationCCValveTableSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tableId,
+			entries,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async getValveTable(
+		tableId: number,
+	): Promise<ValveTableEntry[] | undefined> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveTableGet,
+		);
+
+		const cc = new IrrigationCCValveTableGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tableId,
+		});
+		const response =
+			await this.driver.sendCommand<IrrigationCCValveTableReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return response?.entries;
+		}
+	}
+
+	public async runTables(tableIDs: number[]): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.ValveTableRun,
+		);
+
+		const cc = new IrrigationCCValveTableRun(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tableIDs,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async shutoffSystem(duration?: number): Promise<void> {
+		this.assertSupportsCommand(
+			IrrigationCommand,
+			IrrigationCommand.SystemShutoff,
+		);
+
+		const cc = new IrrigationCCSystemShutoff(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			duration,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
 }
 
 @commandClass(CommandClasses.Irrigation)
@@ -94,9 +420,60 @@ export class IrrigationCC extends CommandClass {
 	protected getMaxValveTableSizeCached(): number {
 		return (
 			this.getValueDB().getValue(
-				getMaxValveTableSize(this.endpointIndex),
+				getMaxValveTableSizeValueId(this.endpointIndex),
 			) || 0
 		);
+	}
+
+	public async interview(): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses.Irrigation.withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "Querying irrigation system info...",
+			direction: "outbound",
+		});
+
+		const systemInfo = await api.getSystemInfo();
+		if (!systemInfo) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Time out while querying irrigation system info, skipping interview...",
+				level: "warn",
+			});
+			return;
+		}
+		const logMessage = `received irrigation system info:
+supports master valve: ${systemInfo.supportsMasterValve}
+no. of valves:         ${systemInfo.numValves}
+no. of valve tables:   ${systemInfo.numValveTables}
+max. valve table size: ${systemInfo.maxValveTableSize}`;
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: logMessage,
+			direction: "inbound",
+		});
+
+		// Query current values
+		await this.refreshValues();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
+
+	public async refreshValues(): Promise<void> {
+		// TODO:
 	}
 }
 
@@ -300,13 +677,14 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 @expectedCCResponse(IrrigationCCSystemStatusReport)
 export class IrrigationCCSystemStatusGet extends IrrigationCC {}
 
-interface IrrigationCCSystemConfigSetOptions extends CCCommandOptions {
+// @publicAPI
+export type IrrigationCCSystemConfigSetOptions = {
 	masterValveDelay: number;
 	highPressureThreshold: number;
 	lowPressureThreshold: number;
 	rainSensorPolarity?: IrrigationSensorPolarity;
 	moistureSensorPolarity?: IrrigationSensorPolarity;
-}
+};
 
 @CCCommand(IrrigationCommand.SystemConfigSet)
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
@@ -314,7 +692,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| IrrigationCCSystemConfigSetOptions,
+			| (IrrigationCCSystemConfigSetOptions & CCCommandOptions),
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -395,10 +773,50 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		this.persistValues();
 	}
 
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.UInt8,
+		label: "Master valve delay",
+		description:
+			"The delay between turning on the master valve and turning on any zone valve",
+		unit: "seconds",
+	})
 	public readonly masterValveDelay: number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Number,
+		label: "High pressure threshold",
+		unit: "kPa",
+	})
 	public readonly highPressureThreshold: number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Number,
+		label: "Low pressure threshold",
+		unit: "kPa",
+	})
 	public readonly lowPressureThreshold: number;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Number,
+		label: "Rain sensor polarity",
+		min: 0,
+		max: 1,
+		states: enumValuesToMetadataStates(IrrigationSensorPolarity),
+	})
 	public readonly rainSensorPolarity?: IrrigationSensorPolarity;
+
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Number,
+		label: "Moisture sensor polarity",
+		min: 0,
+		max: 1,
+		states: enumValuesToMetadataStates(IrrigationSensorPolarity),
+	})
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 }
 
@@ -430,6 +848,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 		this.persistValues();
 	}
 
+	// TODO: these need to be persisted manually per valve
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyNumber,
@@ -541,7 +960,8 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 	}
 }
 
-type IrrigationCCValveConfigSetOptions = ValveId & {
+// @publicAPI
+export type IrrigationCCValveConfigSetOptions = ValveId & {
 	nominalCurrentHighThreshold: number;
 	nominalCurrentLowThreshold: number;
 	maximumFlow: number;
