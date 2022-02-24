@@ -537,20 +537,14 @@
 		"scope": "typescript",
 		"prefix": "zwcctestresponse",
 		"body": [
-			"const testResponseFor${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}${2}Get: CCResponsePredicate = (",
+			"function testResponseFor${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}${2}Get(",
 			"\tsent: ${1}CC${2}Get,",
-			"\treceived,",
-			"\tisPositiveTransmitReport,",
-			") => {",
-			"\treturn received instanceof ${1}CC${2}Report &&",
-			"\t\treceived.${3:type} === sent.${3}",
-			"\t\t? \"final\"",
-			"\t\t: isPositiveTransmitReport",
-			"\t\t? \"confirmation\"",
-			"\t\t: \"unexpected\";",
-			"};"
+			"\treceived: ${1}CC${2}Report,",
+			") {",
+			"\treturn received.${3:type} === sent.${3};",
+			"}"
 		],
-		"description": "Returns the CC response role of a received message"
+		"description": "Tests if a received message belongs to this Get-type command"
 	},
 	"Readonly property": {
 		"scope": "typescript",
