@@ -48,7 +48,7 @@ import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
-import SerialPort from "serialport";
+import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
