@@ -1,10 +1,6 @@
-// To test with Sentry reporting:
-// import { Driver } from "../packages/zwave-js";
-
-// To test without Sentry reporting
 import path from "path";
 import "reflect-metadata";
-import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
+import { Driver } from "../packages/zwave-js";
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
