@@ -32,7 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"$import": "philio_template.json#basic_set_value"
+			"$import": "templates/philio_template.json#basic_set_value"
 		},
 		{
 			"#": "7[0x01]",
@@ -51,16 +51,16 @@
 		},
 		{
 			"#": "10",
-			"$import": "philio_template.json#battery_report_interval"
+			"$import": "templates/philio_template.json#battery_report_interval"
 		},
 		{
 			"#": "82",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Left Key: Basic Set Value"
 		},
 		{
 			"#": "83",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Right Key: Basic Set Value"
 		}
 	],

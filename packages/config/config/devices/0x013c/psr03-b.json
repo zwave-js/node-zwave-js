@@ -56,7 +56,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"$import": "philio_template.json#basic_set_value"
+			"$import": "templates/philio_template.json#basic_set_value"
 		},
 		{
 			"#": "7[0x01]",
@@ -75,46 +75,46 @@
 		},
 		{
 			"#": "10",
-			"$import": "philio_template.json#battery_report_interval"
+			"$import": "templates/philio_template.json#battery_report_interval"
 		},
 		{
 			"#": "82",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 1: Basic Set Value"
 		},
 		{
 			"#": "83",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 2: Basic Set Value"
 		},
 		{
 			"#": "84",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 3: Basic Set Value"
 		},
 		{
 			"#": "85",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 4: Basic Set Value"
 		},
 		{
 			"#": "86",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 5: Basic Set Value"
 		},
 		{
 			"#": "87",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 6: Basic Set Value"
 		},
 		{
 			"#": "88",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 7: Basic Set Value"
 		},
 		{
 			"#": "89",
-			"$import": "philio_template.json#association_basic_set_value",
+			"$import": "templates/philio_template.json#association_basic_set_value",
 			"label": "Lighting Group 8: Basic Set Value"
 		}
 	],

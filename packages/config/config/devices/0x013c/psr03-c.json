@@ -24,7 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "10",
-			"$import": "philio_template.json#battery_report_interval"
+			"$import": "templates/philio_template.json#battery_report_interval"
 		}
 	],
 	"metadata": {
