@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/nvmedit",
-  "version": "8.11.3",
+  "version": "8.11.6",
   "description": "zwave-js: library to edit NVM backups",
   "publishConfig": {
     "access": "public"
@@ -33,7 +33,7 @@
     "node": ">=v12.22.2"
   },
   "dependencies": {
-    "@zwave-js/core": "8.11.3",
+    "@zwave-js/core": "8.11.6",
     "@zwave-js/shared": "8.11.3",
     "alcalzone-shared": "^4.0.1",
     "fs-extra": "^10.0.0",

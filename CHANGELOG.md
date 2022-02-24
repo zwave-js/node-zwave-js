@@ -4,6 +4,37 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 8.11.6 (2022-02-14)
+### Bugfixes
+* When converting an NVM, the page size is now limited to the maximum supported by Z-Wave sticks, even if the existing metadata contains a larger page size.
+
+### Config file changes
+* Update GE/Jasco ZW3012 Configuration to correct LED status
+* Add config for Keemple KP-SO-02 Smart Socket
+* Cleanup Shenzhen Neo device configs
+* Add MCO Home 3901-Z thermostat
+* Fix regression of bug #1581 (wrong valueSize, param 13 of LZW31-SN)
+
+### Changes under the hood
+* Several dependency updates
+
+## 8.11.5 (2022-02-08)
+### Bugfixes
+* Fixed a `TypeError` that could happen when parsing a controller's NVM backup
+* After healing, battery-powered nodes are sent back to sleep again
+* Added a workaround for thermostats that don't advertise all their supported thermostat modes. When such a thermostat enters such an "unsupported" mode, the mode is now dynamically added to the list of supported modes.
+
+## 8.11.4 (2022-02-06)
+### Bugfixes
+* The 500-to-700 series NVM conversion routine now correctly considers all potentially existing nodes
+* The Home ID is no longer lost after restoring a 500 series NVM onto a 700 series stick
+
+### Config file changes
+* Add fingerprint for AU/NZ model of Aeotec NanoMote Quad
+* Add ConnectHome CH-103
+* Add RU fingerprint to Sunricher ZV9101
+* Add Alarm.com Smart Thermostat ADC-T3000
+
 ## 8.11.3 (2022-02-02)
 ### Config file changes
 * Add new product id to Shenzhen Neo NAS-PD07ZU1

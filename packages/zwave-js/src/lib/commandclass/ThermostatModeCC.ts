@@ -70,6 +70,22 @@ export enum ThermostatMode {
 	"Manufacturer specific" = 0x1f,
 }
 
+export function getThermostatModeValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Mode"],
+		endpoint: endpointIndex,
+		property: "mode",
+	};
+}
+
+export function getSupportedModesValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Mode"],
+		endpoint: endpointIndex,
+		property: "supportedModes",
+	};
+}
+
 @API(CommandClasses["Thermostat Mode"])
 export class ThermostatModeCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatModeCommand): Maybe<boolean> {
@@ -357,6 +373,39 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		this.persistValues();
 	}
 
+	public persistValues(): boolean {
+		// Update the supported modes if a mode is used that wasn't previously
+		// reported to be supported. This shouldn't happen, but well... it does anyways
+		const valueDB = this.getValueDB();
+		const modeValueId = getThermostatModeValueId(this.endpointIndex);
+		const supportedModesValueId = getSupportedModesValueId(
+			this.endpointIndex,
+		);
+		const supportedModes = valueDB.getValue<ThermostatMode[]>(
+			supportedModesValueId,
+		);
+
+		if (
+			supportedModes &&
+			this._mode in ThermostatMode &&
+			!supportedModes.includes(this._mode)
+		) {
+			supportedModes.push(this._mode);
+			supportedModes.sort();
+
+			valueDB.setValue(supportedModesValueId, supportedModes);
+			valueDB.setMetadata(modeValueId, {
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(
+					ThermostatMode,
+					supportedModes,
+				),
+			});
+		}
+
+		return super.persistValues();
+	}
+
 	private _mode: ThermostatMode;
 	@ccValue()
 	@ccValueMetadata({
@@ -402,12 +451,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		this._supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
 
 		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "mode",
-		};
-		// Only update the dynamic part
+		const valueId: ValueID = getThermostatModeValueId(this.endpointIndex);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(

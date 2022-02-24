@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/serial",
-  "version": "8.11.3",
+  "version": "8.11.6",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
     "access": "public"
@@ -36,8 +36,8 @@
     "watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
-    "@sentry/node": "^6.17.3",
-    "@zwave-js/core": "8.11.3",
+    "@sentry/node": "^6.17.6",
+    "@zwave-js/core": "8.11.6",
     "@zwave-js/shared": "8.11.3",
     "alcalzone-shared": "^4.0.1",
     "serialport": "^9.2.8",
@@ -48,7 +48,7 @@
     "@types/jest": "^26.0.24",
     "@types/node": "^15.12.5",
     "@types/serialport": "^8.0.2",
-    "@zwave-js/testing": "8.11.3",
+    "@zwave-js/testing": "8.11.6",
     "ansi-colors": "^4.1.1",
     "esbuild": "*",
     "esbuild-register": "^3.3.2",

@@ -147,6 +147,11 @@
 		{
 			"#": "22",
 			"$import": "templates/zooz_template.json#night_light_mode"
+		},
+		{
+			"#": "26",
+			"$if": "firmwareVersion >= 10.0",
+			"$import": "templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {

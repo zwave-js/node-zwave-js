@@ -38,7 +38,11 @@ export type NodeStatusEvent =
 export type NodeStatusMachine = StateMachine<
 	any,
 	NodeStatusStateSchema,
-	NodeStatusEvent
+	NodeStatusEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type NodeStatusInterpreter = Interpreter<
 	any,

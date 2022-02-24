@@ -96,7 +96,11 @@ export type SendThreadEvent =
 export type SendThreadMachine = StateMachine<
 	SendThreadContext,
 	any,
-	SendThreadEvent
+	SendThreadEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type SendThreadInterpreter = Interpreter<
 	SendThreadContext,
@@ -170,7 +174,9 @@ const sortQueue: AssignAction<SendThreadContext, any> = assign({
 	},
 });
 
-const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
+const guards: NonNullable<
+	MachineOptions<SendThreadContext, SendThreadEvent>["guards"]
+> = {
 	mayStartTransaction: (ctx, evt: any, meta) => {
 		// We may not send anything if the send thread is paused
 		if (ctx.paused) return false;
@@ -495,7 +501,7 @@ export function createSendThreadMachine(
 				every: (ctx, event, { cond }) => {
 					const keys = (cond as any).guards as string[];
 					return keys.every((guardKey: string) =>
-						guards[guardKey](ctx, event, undefined as any),
+						guards[guardKey]?.(ctx, event, undefined as any),
 					);
 				},
 			},

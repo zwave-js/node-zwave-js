@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/core",
-  "version": "8.11.3",
+  "version": "8.11.6",
   "description": "zwave-js: core components",
   "publishConfig": {
     "access": "public"
@@ -36,7 +36,7 @@
     "watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.4.1",
+    "@alcalzone/jsonl-db": "^2.5.1",
     "@zwave-js/shared": "8.11.3",
     "@zwave-js/winston-daily-rotate-file": "^4.5.6-1",
     "alcalzone-shared": "^4.0.1",
@@ -46,7 +46,7 @@
     "nrf-intel-hex": "^1.3.0",
     "triple-beam": "*",
     "winston": "^3.5.1",
-    "winston-transport": "^4.4.2"
+    "winston-transport": "^4.5.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.24",

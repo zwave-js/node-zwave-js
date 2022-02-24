@@ -108,7 +108,11 @@ export type SerialAPICommandMachineConfig = MachineConfig<
 export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
-	SerialAPICommandEvent
+	SerialAPICommandEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type SerialAPICommandInterpreter = Interpreter<
 	SerialAPICommandContext,
@@ -377,7 +381,7 @@ export function createSerialAPICommandMachine(
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
-	return createMachine(
+	return createMachine<SerialAPICommandContext, SerialAPICommandEvent>(
 		getSerialAPICommandMachineConfig(
 			message,
 			implementations,
