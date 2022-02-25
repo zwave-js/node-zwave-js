@@ -4,7 +4,7 @@
 
 const zjsLogRegex = /\[.*\]\(http.*zwavejs_.*\.(log|txt)\)/;
 const markdownLinkRegex = /\[.*\]\(http.*\)/;
-const codeBlockRegex = /`{3,4}(?<code>(?:.|\n)*?)`{3,4}/;
+const codeBlockRegex = /`{3,4}(.*?)`{3,4}/s;
 
 const LOGFILE_COMMENT_TAG = "<!-- LOGFILE_COMMENT_TAG -->";
 
@@ -26,9 +26,7 @@ async function main(param) {
 	);
 	const hasLink = markdownLinkRegex.test(logfileSection);
 	const hasZjsLog = zjsLogRegex.test(logfileSection);
-	const codeBlockContent = codeBlockRegex
-		.exec(logfileSection)
-		?.groups?.code.trim();
+	const codeBlockContent = codeBlockRegex.exec(logfileSection)?.[1]?.trim();
 
 	console.log(`logfileSection: ${logfileSection}`);
 	console.log(`hasLink: ${hasLink}`);
