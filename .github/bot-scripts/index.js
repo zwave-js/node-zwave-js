@@ -7,6 +7,7 @@ module.exports = {
 		require("./addFingerprintCreatePR")(...args),
 	approveWorkflows: (...args) => require("./approveWorkflows")(...args),
 	checkAuthorized: (...args) => require("./checkAuthorized")(...args),
+	ensureLog: (...args) => require("./ensureLog")(...args),
 	fixLintFeedback: (...args) => require("./fixLintFeedback")(...args),
 	getFixLintInfo: (...args) => require("./getFixLintInfo")(...args),
 	rebaseFeedback: (...args) => require("./rebaseFeedback")(...args),

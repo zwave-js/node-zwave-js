@@ -1,0 +1,24 @@
+name: 'Z-Wave Bot: Issue created/edited'
+
+on:
+  issues:
+    types: [created, edited]
+
+jobs:
+  # Notify issue author when they post the wrong log
+  publish-pr:
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x] # This should be LTS
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+
+    - uses: actions/github-script@v5
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.ensureLog({github, context});
