@@ -30,6 +30,7 @@ async function main(param) {
 		.exec(logfileSection)
 		?.groups?.code.trim();
 
+	console.log(`logfileSection: ${logfileSection}`);
 	console.log(`hasLink: ${hasLink}`);
 	console.log(`hasZjsLog: ${hasZjsLog}`);
 	console.log(
