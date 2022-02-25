@@ -75,11 +75,6 @@ import {
 	getCompatEventValueId as getBasicCCCompatEventValueId,
 	getCurrentValueValueId as getBasicCCCurrentValueValueId,
 } from "../commandclass/BasicCC";
- import {
- 	MultilevelSwitchCC,
- 	MultilevelSwitchCCSet,
- 	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
- } from "../commandclass/MultilevelSwitchCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -115,6 +110,13 @@ import {
 	getEndpointDeviceClassValueId,
 	getEndpointIndizesValueId,
 } from "../commandclass/MultiChannelCC";
+import {
+	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
+	MultilevelSwitchCC,
+	MultilevelSwitchCCSet,
+	MultilevelSwitchCCStartLevelChange,
+	MultilevelSwitchCCStopLevelChange,
+} from "../commandclass/MultilevelSwitchCC";
 import {
 	getNodeLocationValueId,
 	getNodeNameValueId,
@@ -2817,26 +2819,55 @@ protocol version:      ${this._protocolVersion}`;
 			}
 		}
 	}
-	
-	
+
 	/** Handles the receipt of a MultilevelCC Set or Report */
 	private handleMultilevelSwitchCommand(command: MultilevelSwitchCC): void {
 		// Retrieve the endpoint the command is coming from
 		const sourceEndpoint =
 			this.getEndpoint(command.endpointIndex ?? 0) ?? this;
-	if (command instanceof MultilevelSwitchCCSet) {
-				this.driver.controllerLog.logNode(this.id, {
-					endpoint: command.endpointIndex,
-					message: "treating BasicCC::Set as a value event",
-				});
-				this._valueDB.setValue(
-					getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
-					command.targetValue,
-					{
-						stateful: false,
-					},
-				);
-				return;
+		if (command instanceof MultilevelSwitchCCSet) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message: "treating MultiLevelSwitchCCSet::Set as a value event",
+			});
+			this._valueDB.setValue(
+				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				command.targetValue,
+				{
+					stateful: false,
+				},
+			);
+			return;
+		}
+		if (command instanceof MultilevelSwitchCCStartLevelChange) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message:
+					"treating MultilevelSwitchCCStartLevelChange::Set as a value event",
+			});
+			this._valueDB.setValue(
+				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				command.direction,
+				{
+					stateful: false,
+				},
+			);
+			return;
+		}
+		if (command instanceof MultilevelSwitchCCStopLevelChange) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message:
+					"treating MultilevelSwitchCCStopLevelChange::Set as a value event",
+			});
+			this._valueDB.setValue(
+				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				"stop",
+				{
+					stateful: false,
+				},
+			);
+			return;
 		}
 	}
 
