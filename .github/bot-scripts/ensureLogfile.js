@@ -53,14 +53,16 @@ Thanks for opening an issue! It doesn't look like you provided a logfile though.
 
 Please consider uploading a logfile that captures your problem.`;
 	}
-	if (!message) return;
-
-	message += LOGFILE_COMMENT_TAG;
 
 	const options = {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 	};
+
+	// When all is good, remove any existing comment
+	if (message) {
+		message += LOGFILE_COMMENT_TAG;
+	}
 
 	// Try to check if there is already a comment tagged with LOGFILE_COMMENT_TAG
 	try {
@@ -74,24 +76,34 @@ Please consider uploading a logfile that captures your problem.`;
 				c.body.includes(LOGFILE_COMMENT_TAG),
 		);
 		if (existing) {
-			// Comment found, update it
-			await github.rest.issues.updateComment({
-				...options,
-				comment_id: existing.id,
-				body: message,
-			});
+			if (message) {
+				// Comment found, update it
+				await github.rest.issues.updateComment({
+					...options,
+					comment_id: existing.id,
+					body: message,
+				});
+			} else {
+				// No need to have a comment, all is ok
+				await github.rest.issues.deleteComment({
+					...options,
+					comment_id: existing.id,
+				});
+			}
 			return;
 		}
 	} catch {
-		// Ok make a new one
+		// Ok make a new one maybe
 	}
 
-	// Make a new one otherwise
-	await github.rest.issues.createComment({
-		...options,
-		issue_number: context.issue.number,
-		body: message,
-	});
+	if (message) {
+		// Make a new one otherwise
+		await github.rest.issues.createComment({
+			...options,
+			issue_number: context.issue.number,
+			body: message,
+		});
+	}
 }
 
 module.exports = main;
