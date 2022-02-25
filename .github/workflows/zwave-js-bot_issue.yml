@@ -2,7 +2,7 @@ name: 'Z-Wave Bot: Issue created/edited'
 
 on:
   issues:
-    types: [created, edited]
+    types: [opened, edited]
 
 jobs:
   # Notify issue author when they post the wrong log

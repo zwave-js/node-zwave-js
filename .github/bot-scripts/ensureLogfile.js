@@ -34,17 +34,11 @@ async function main(param) {
 
 	let message = "";
 	if (codeBlockContent) {
-		if (codeBlockContent.split("\n").length > 10) {
+		if (codeBlockContent.split("\n").length > 20) {
 			// This code block is too long and should be a logfile instead
 			message = `👋 Hey @${user}!
 
 It looks like you copied the contents of a logfile. Please attach it as a file instead, so it is easier to work with.
-_Note: You can just drag & drop files into the textbox. Just make sure to use a supported file extension like \`.log\` or \`.txt\`_`;
-		} else {
-			// This is a short log that might not have enough info to work with
-			message = `👋 Hey @${user}!
-
-It looks like you copied a few log lines here. Note that we often need a lot of context to diagnose issues, so please attach the full logfile instead.
 _Note: You can just drag & drop files into the textbox. Just make sure to use a supported file extension like \`.log\` or \`.txt\`_`;
 		}
 	} else if (hasLink) {
@@ -59,6 +53,7 @@ Thanks for opening an issue! It doesn't look like you provided a logfile though.
 
 Please consider uploading a logfile that captures your problem.`;
 	}
+	if (!message) return;
 
 	message += LOGFILE_COMMENT_TAG;
 
