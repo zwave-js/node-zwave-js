@@ -37,28 +37,28 @@ async function main(param) {
 		)}): ${codeBlockContent}`,
 	);
 
-	if (hasZjsLog) return; // all good!
-
 	let message = "";
-	if (codeBlockContent) {
-		if (codeBlockContent.split("\n").length > 20) {
-			// This code block is too long and should be a logfile instead
-			message = `👋 Hey @${user}!
+	if (!hasZjsLog) {
+		if (codeBlockContent) {
+			if (codeBlockContent.split("\n").length > 20) {
+				// This code block is too long and should be a logfile instead
+				message = `👋 Hey @${user}!
 
 It looks like you copied the contents of a logfile. Please attach it as a file instead, so it is easier to work with.
 _Note: You can just drag & drop files into the textbox. Just make sure to use a supported file extension like \`.log\` or \`.txt\`_`;
-		}
-	} else if (hasLink) {
-		// This doesn't look like a driver logfile
-		message = `👋 Hey @${user}!
+			}
+		} else if (hasLink) {
+			// This doesn't look like a driver logfile
+			message = `👋 Hey @${user}!
 
 It looks like you attached a logfile, but its filename doesn't look like it a [driver log](https://zwave-js.github.io/zwavejs2mqtt/#/troubleshooting/generating-logs?id=driver-logs) that came from Z-Wave JS. Please make sure you upload the correct one.`;
-	} else {
-		message = `👋 Hey @${user}!
+		} else {
+			message = `👋 Hey @${user}!
 
 Thanks for opening an issue! It doesn't look like you provided a logfile though. While not strictly necessary for every issue, having a [driver log](https://zwave-js.github.io/zwavejs2mqtt/#/troubleshooting/generating-logs?id=driver-logs) is required to diagnose most issues.
 
 Please consider uploading a logfile that captures your problem.`;
+		}
 	}
 
 	const options = {
@@ -71,7 +71,7 @@ Please consider uploading a logfile that captures your problem.`;
 		message += LOGFILE_COMMENT_TAG;
 	}
 
-	// Try to check if there is already a comment tagged with LOGFILE_COMMENT_TAG
+	// Existing comments are tagged with LOGFILE_COMMENT_TAG
 	try {
 		const { data: comments } = await github.rest.issues.listComments({
 			...options,
