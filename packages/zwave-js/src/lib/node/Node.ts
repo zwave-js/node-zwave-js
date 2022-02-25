@@ -75,6 +75,11 @@ import {
 	getCompatEventValueId as getBasicCCCompatEventValueId,
 	getCurrentValueValueId as getBasicCCCurrentValueValueId,
 } from "../commandclass/BasicCC";
+ import {
+ 	MultilevelSwitchCC,
+ 	MultilevelSwitchCCSet,
+ 	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
+ } from "../commandclass/MultilevelSwitchCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -2239,6 +2244,8 @@ protocol version:      ${this._protocolVersion}`;
 
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
+		} else if (command instanceof MultilevelSwitchCC) {
+			return this.handleMultilevelSwitchCommand(command);
 		} else if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
@@ -2808,6 +2815,28 @@ protocol version:      ${this._protocolVersion}`;
 					}
 				}
 			}
+		}
+	}
+	
+	
+	/** Handles the receipt of a MultilevelCC Set or Report */
+	private handleMultilevelSwitchCommand(command: MultilevelSwitchCC): void {
+		// Retrieve the endpoint the command is coming from
+		const sourceEndpoint =
+			this.getEndpoint(command.endpointIndex ?? 0) ?? this;
+	if (command instanceof MultilevelSwitchCCSet) {
+				this.driver.controllerLog.logNode(this.id, {
+					endpoint: command.endpointIndex,
+					message: "treating BasicCC::Set as a value event",
+				});
+				this._valueDB.setValue(
+					getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+					command.targetValue,
+					{
+						stateful: false,
+					},
+				);
+				return;
 		}
 	}
 

@@ -109,6 +109,14 @@ function getSuperviseStartStopLevelChangeValueId(): ValueID {
 	};
 }
 
+export function getCompatEventValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Switch"],
+		endpoint,
+		property: "event",
+	};
+}
+
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
@@ -497,6 +505,17 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		await this.refreshValues();
 
+		// create compat event value if necessary
+		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+			const valueId = getCompatEventValueId(this.endpointIndex);
+			if (!node.valueDB.hasMetadata(valueId)) {
+				node.valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Event value",
+				});
+			}
+		}
+
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
@@ -581,24 +600,49 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
+			validatePayload(this.payload.length >= 1);
+			this.currentValue = parseMaybeNumber(
+				this.payload[0],
+				driver.options.preserveUnknownValues,
 			);
+
+			if (this.version >= 2 && this.payload.length >= 2) {
+				this.targetValue = parseNumber(this.payload[0]);
+				this.duration = Duration.parseReport(this.payload[1]);
+			}
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = options.duration;
 		}
 	}
 
-	public targetValue: number;
-	public duration: Duration | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyLevel,
+		label: "Current value",
+	})
+	public readonly currentValue: Maybe<number> | undefined;
+
+	@ccValue({ forceCreation: true })
+	@ccValueMetadata({
+		...ValueMetadata.Level,
+		label: "Target value",
+	})
+	public readonly targetValue: number | undefined;
+
+	@ccValue({ minVersion: 2 })
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyDuration,
+		label: "Remaining duration until target value",
+	})
+	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const payload = [this.targetValue];
-		if (this.version >= 2 && this.duration) {
-			payload.push(this.duration.serializeSet());
+		const payload: number[] = [
+			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
+		];
+		if (this.version >= 2 && this.targetValue && this.duration) {
+			payload.push(this.targetValue, this.duration.serializeReport());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
