@@ -30,6 +30,14 @@ async function main(param) {
 		.exec(logfileSection)
 		?.groups?.code.trim();
 
+	github.log.debug(`hasLink: ${hasLink}`);
+	github.log.debug(`hasZjsLog: ${hasZjsLog}`);
+	github.log.debug(
+		`codeBlockContent (matches = ${codeBlockRegex.test(
+			codeBlockContent,
+		)}): ${codeBlockContent}`,
+	);
+
 	if (hasZjsLog) return; // all good!
 
 	let message = "";
