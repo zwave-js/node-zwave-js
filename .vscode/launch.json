@@ -24,6 +24,9 @@
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
+			// https://github.com/microsoft/vscode/issues/142830#issuecomment-1048240356 🤷🏻‍♂️
+			"outFiles": [],
+			"resolveSourceMapLocations": null,
 			"sourceMaps": true
 		},
 		{

@@ -51,4 +51,5 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 
 <p>
   <a href="https://www.nabucasa.com/" target="_blank"><img src="docs/sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
+  <a href="https://www.getseam.com/" target="_blank"><img src="docs/sponsors/seam.png" width="120" alt="Seam" /></a>
 </p>

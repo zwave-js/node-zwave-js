@@ -3248,5 +3248,24 @@
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "WallSwipe Reset Function",
 		"defaultValue": 1
+	},
+	// Wall Switch settings
+	"wallswitch_command_type": {
+		"label": "Command Type to Send Association Groups",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 2,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Basic CC Set",
+				"value": 1
+			},
+			{
+				"label": "Binary Switch CC Set",
+				"value": 2
+			}
+		]
 	}
 }
