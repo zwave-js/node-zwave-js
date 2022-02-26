@@ -44,6 +44,7 @@
         -   [Humidity Control Operating State CC](api/CCs/HumidityControlOperatingState.md)
         -   [Humidity Control Setpoint CC](api/CCs/HumidityControlSetpoint.md)
         -   [Indicator CC](api/CCs/Indicator.md)
+        -   [Irrigation CC](api/CCs/Irrigation.md)
         -   [Language CC](api/CCs/Language.md)
         -   [Lock CC](api/CCs/Lock.md)
         -   [Manufacturer Proprietary CC](api/CCs/ManufacturerProprietary.md)
