@@ -31,3 +31,9 @@ While there is no hard style guide governing this, we tend to use readonly prope
 ## Upgraded `serialport` library to version 10.x
 
 The `serialport` library was upgraded to version 10.x. It is now built using N-API, which should avoid having to recompile it after upgrades. Due to slight API changes, overwriting the dependency to specific `9.x` versions is no longer possible.
+
+## Error-reporting is now opt-in
+
+It was found that the global `unhandledRejection` event handler which Sentry registers, has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning. While we do believe no rejection should be silently unhandled, we don't want to break existing applications.
+
+Therefore, error reporting is now opt-in using `driver.enableErrorReporting()`. We kindly ask you to do so in production environments, so unhandled errors in the library can be discovered more quickly.

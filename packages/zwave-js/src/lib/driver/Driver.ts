@@ -144,6 +144,7 @@ import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
 import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
+import { initSentry } from "../telemetry/sentry";
 import {
 	AppInfo,
 	compileStatistics,
@@ -173,7 +174,8 @@ const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require(packageJsonPath);
 const libraryRootDir = path.dirname(packageJsonPath);
-const libVersion: string = packageJson.version;
+export const libVersion: string = packageJson.version;
+export const libName: string = packageJson.name;
 
 // This is made with cfonts:
 const libNameString = `
@@ -1400,6 +1402,24 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		void this.compileAndSendStatistics().catch(() => {
 			/* ignore */
 		});
+	}
+
+	/**
+	 * Enables error reporting via Sentry. This is turned off by default, because it registers a
+	 * global `unhandledRejection` event handler, which has an influence how the application will
+	 * behave in case of an unhandled rejection.
+	 */
+	public enableErrorReporting(): void {
+		// Init sentry, unless we're running a a test or some custom-built userland or PR test versions
+		if (
+			process.env.NODE_ENV !== "test" &&
+			!/\-[a-f0-9]{7,}$/.test(libVersion) &&
+			!/\-pr\-\d+\-$/.test(libVersion)
+		) {
+			void initSentry(libraryRootDir, libName, libVersion).catch(() => {
+				/* ignore */
+			});
+		}
 	}
 
 	private _statisticsEnabled: boolean = false;
