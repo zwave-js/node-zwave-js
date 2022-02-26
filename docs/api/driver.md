@@ -32,6 +32,16 @@ The following table gives you an overview of what happens during the startup pro
 |  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
 |  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
+### `enableErrorReporting`
+
+```ts
+enableErrorReporting(): void
+```
+
+Enable sending crash reports using [Sentry](https://sentry.io). These reports are important for quickly discovering unhandled errors in the library, so we **we kindly ask you** to enable them. Please do **not** enable them in dev environments where frequent errors are to be expected.
+
+> [!NOTE] Sentry registers a global `unhandledRejection` event handler, which has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning.
+
 ### `enableStatistics`
 
 ```ts
