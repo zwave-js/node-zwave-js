@@ -1402,7 +1402,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			if (this.interviewStage === InterviewStage.NodeInfo) {
 				// Only advance the interview if it was completed, otherwise abort
 				if (await this.interviewCCs()) {
-					await this.setInterviewStage(InterviewStage.CommandClasses);
+					this.setInterviewStage(InterviewStage.CommandClasses);
 				} else {
 					return false;
 				}
@@ -1419,7 +1419,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			await this.overwriteConfig();
 		}
 
-		await this.setInterviewStage(InterviewStage.Complete);
+		this.setInterviewStage(InterviewStage.Complete);
 		this.readyMachine.send("INTERVIEW_DONE");
 
 		// Tell listeners that the interview is completed
@@ -1429,9 +1429,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	}
 
 	/** Updates this node's interview stage and saves to cache when appropriate */
-	private async setInterviewStage(
-		completedStage: InterviewStage,
-	): Promise<void> {
+	private setInterviewStage(completedStage: InterviewStage): void {
 		this.interviewStage = completedStage;
 		this.emit(
 			"interview stage completed",
@@ -1491,7 +1489,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		}
 
-		await this.setInterviewStage(InterviewStage.ProtocolInfo);
+		this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}
 
 	/** Node interview: pings the node to see if it responds */
@@ -1588,7 +1586,7 @@ protocol version:      ${this.protocolVersion}`;
 			});
 			this.updateNodeInfo(resp.nodeInformation);
 		}
-		await this.setInterviewStage(InterviewStage.NodeInfo);
+		this.setInterviewStage(InterviewStage.NodeInfo);
 	}
 
 	/**
@@ -2231,7 +2229,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		}
 
-		await this.setInterviewStage(InterviewStage.OverwriteConfig);
+		this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
 	/**
