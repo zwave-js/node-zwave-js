@@ -5,7 +5,6 @@ import type {
 } from "@zwave-js/config";
 import {
 	actuatorCCs,
-	allCCs,
 	applicationCCs,
 	CacheBackedMap,
 	CommandClasses,
@@ -160,7 +159,7 @@ import {
 	TXReport,
 } from "../controller/SendDataShared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
-import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
+import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
@@ -521,55 +520,76 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		return this._ready;
 	}
 
-	private _isListening: boolean | undefined;
 	/** Whether this node is always listening or not */
 	public get isListening(): boolean | undefined {
-		return this._isListening;
+		return this.driver.cacheGet(cacheKeys.node(this.id).isListening);
+	}
+	private set isListening(value: boolean | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).isListening, value);
 	}
 
-	private _isFrequentListening: FLiRS | undefined;
 	/** Indicates the wakeup interval if this node is a FLiRS node. `false` if it isn't. */
 	public get isFrequentListening(): FLiRS | undefined {
-		return this._isFrequentListening;
+		return this.driver.cacheGet(
+			cacheKeys.node(this.id).isFrequentListening,
+		);
+	}
+	private set isFrequentListening(value: FLiRS | undefined) {
+		this.driver.cacheSet(
+			cacheKeys.node(this.id).isFrequentListening,
+			value,
+		);
 	}
 
 	public get canSleep(): boolean | undefined {
-		if (this._isListening == undefined) return undefined;
-		if (this._isFrequentListening == undefined) return undefined;
-		return !this._isListening && !this._isFrequentListening;
+		if (this.isListening == undefined) return undefined;
+		if (this.isFrequentListening == undefined) return undefined;
+		return !this.isListening && !this.isFrequentListening;
 	}
 
-	private _isRouting: boolean | undefined;
 	/** Whether the node supports routing/forwarding messages. */
 	public get isRouting(): boolean | undefined {
-		return this._isRouting;
+		return this.driver.cacheGet(cacheKeys.node(this.id).isRouting);
+	}
+	private set isRouting(value: boolean | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).isRouting, value);
 	}
 
-	private _supportedDataRates: readonly DataRate[] | undefined;
 	public get supportedDataRates(): readonly DataRate[] | undefined {
-		return this._supportedDataRates;
+		return this.driver.cacheGet(cacheKeys.node(this.id).supportedDataRates);
+	}
+	private set supportedDataRates(value: readonly DataRate[] | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).supportedDataRates, value);
 	}
 
 	public get maxDataRate(): DataRate | undefined {
-		if (this._supportedDataRates) {
-			return Math.max(...this._supportedDataRates) as DataRate;
+		if (this.supportedDataRates) {
+			return Math.max(...this.supportedDataRates) as DataRate;
 		}
 	}
 
 	/** @internal */
+	// This a CacheBackedMap that's assigned in the constructor
 	public readonly securityClasses: Map<SecurityClass, boolean>;
 
-	private _dsk: Buffer | undefined;
 	/**
 	 * The device specific key (DSK) of this node in binary format.
 	 * This is only set if included with Security S2.
 	 */
 	public get dsk(): Buffer | undefined {
-		return this._dsk;
+		return this.driver.cacheGet(cacheKeys.node(this.id).dsk, {
+			reviver: (value) =>
+				typeof value === "string"
+					? Buffer.from(value, "hex")
+					: undefined,
+		});
 	}
 	/** @internal */
 	public set dsk(value: Buffer | undefined) {
-		this._dsk = value;
+		const cacheKey = cacheKeys.node(this.id).dsk;
+		this.driver.cacheSet(cacheKey, value, {
+			serializer: (value) => value.toString("hex"),
+		});
 	}
 
 	/** Whether the node was granted at least one security class */
@@ -598,31 +618,39 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		return missingSome ? undefined : SecurityClass.None;
 	}
 
-	private _protocolVersion: ProtocolVersion | undefined;
 	/** The Z-Wave protocol version this node implements */
 	public get protocolVersion(): ProtocolVersion | undefined {
-		return this._protocolVersion;
+		return this.driver.cacheGet(cacheKeys.node(this.id).protocolVersion);
+	}
+	private set protocolVersion(value: ProtocolVersion | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).protocolVersion, value);
 	}
 
-	private _nodeType: NodeType | undefined;
 	/** Whether this node is a controller (can calculate routes) or an end node (relies on route info) */
 	public get nodeType(): NodeType | undefined {
-		return this._nodeType;
+		return this.driver.cacheGet(cacheKeys.node(this.id).nodeType);
+	}
+	private set nodeType(value: NodeType | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).nodeType, value);
 	}
 
-	private _supportsSecurity: boolean | undefined;
 	/**
 	 * Whether this node supports security (S0 or S2).
 	 * **WARNING:** Nodes often report this incorrectly - do not blindly trust it.
 	 */
 	public get supportsSecurity(): boolean | undefined {
-		return this._supportsSecurity;
+		return this.driver.cacheGet(cacheKeys.node(this.id).supportsSecurity);
+	}
+	private set supportsSecurity(value: boolean | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).supportsSecurity, value);
 	}
 
-	private _supportsBeaming: boolean | undefined;
 	/** Whether this node can issue wakeup beams to FLiRS nodes */
 	public get supportsBeaming(): boolean | undefined {
-		return this._supportsBeaming;
+		return this.driver.cacheGet(cacheKeys.node(this.id).supportsBeaming);
+	}
+	private set supportsBeaming(value: boolean | undefined) {
+		this.driver.cacheSet(cacheKeys.node(this.id).supportsBeaming, value);
 	}
 
 	public get manufacturerId(): number | undefined {
@@ -1217,16 +1245,12 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public get interviewStage(): InterviewStage {
 		return (
-			this.driver.networkCache.get(
-				cacheKeys.node(this.id).interviewStage,
-			) ?? InterviewStage.None
+			this.driver.cacheGet(cacheKeys.node(this.id).interviewStage) ??
+			InterviewStage.None
 		);
 	}
 	public set interviewStage(value: InterviewStage) {
-		this.driver.networkCache.set(
-			cacheKeys.node(this.id).interviewStage,
-			value,
-		);
+		this.driver.cacheSet(cacheKeys.node(this.id).interviewStage, value);
 	}
 
 	private _interviewAttempts: number = 0;
@@ -1277,14 +1301,14 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		this.interviewStage = InterviewStage.None;
 		this._ready = false;
 		this._deviceClass = undefined;
-		this._isListening = undefined;
-		this._isFrequentListening = undefined;
-		this._isRouting = undefined;
-		this._supportedDataRates = undefined;
-		this._protocolVersion = undefined;
-		this._nodeType = undefined;
-		this._supportsSecurity = undefined;
-		this._supportsBeaming = undefined;
+		this.isListening = undefined;
+		this.isFrequentListening = undefined;
+		this.isRouting = undefined;
+		this.supportedDataRates = undefined;
+		this.protocolVersion = undefined;
+		this.nodeType = undefined;
+		this.supportsSecurity = undefined;
+		this.supportsBeaming = undefined;
 		this._deviceConfig = undefined;
 		this._hasEmittedNoS0NetworkKeyError = false;
 		this._hasEmittedNoS2NetworkKeyError = false;
@@ -1304,9 +1328,6 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		// Restore the previously saved name/location
 		if (name != undefined) this.name = name;
 		if (location != undefined) this.location = location;
-
-		// Also remove the information from the cache
-		await this.driver.saveNetworkToCache();
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
@@ -1420,14 +1441,6 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			this,
 			getEnumMemberName(InterviewStage, completedStage),
 		);
-		// Also save to the cache after certain stages
-		switch (completedStage) {
-			case InterviewStage.ProtocolInfo:
-			case InterviewStage.NodeInfo:
-			case InterviewStage.CommandClasses:
-			case InterviewStage.Complete:
-				await this.driver.saveNetworkToCache();
-		}
 		this.driver.controllerLog.interviewStage(this);
 	}
 
@@ -1442,14 +1455,14 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 				requestedNodeId: this.id,
 			}),
 		);
-		this._isListening = resp.isListening;
-		this._isFrequentListening = resp.isFrequentListening;
-		this._isRouting = resp.isRouting;
-		this._supportedDataRates = resp.supportedDataRates;
-		this._protocolVersion = resp.protocolVersion;
-		this._nodeType = resp.nodeType;
-		this._supportsSecurity = resp.supportsSecurity;
-		this._supportsBeaming = resp.supportsBeaming;
+		this.isListening = resp.isListening;
+		this.isFrequentListening = resp.isFrequentListening;
+		this.isRouting = resp.isRouting;
+		this.supportedDataRates = resp.supportedDataRates;
+		this.protocolVersion = resp.protocolVersion;
+		this.nodeType = resp.nodeType;
+		this.supportsSecurity = resp.supportsSecurity;
+		this.supportsBeaming = resp.supportsBeaming;
 
 		this.applyDeviceClass(resp.deviceClass);
 
@@ -1457,14 +1470,14 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 basic device class:    ${this.deviceClass!.basic.label}
 generic device class:  ${this.deviceClass!.generic.label}
 specific device class: ${this.deviceClass!.specific.label}
-node type:             ${getEnumMemberName(NodeType, this._nodeType)}
+node type:             ${getEnumMemberName(NodeType, this.nodeType)}
 is always listening:   ${this.isListening}
 is frequent listening: ${this.isFrequentListening}
 can route messages:    ${this.isRouting}
-supports security:     ${this._supportsSecurity}
-supports beaming:      ${this._supportsBeaming}
+supports security:     ${this.supportsSecurity}
+supports beaming:      ${this.supportsBeaming}
 maximum data rate:     ${this.maxDataRate} kbps
-protocol version:      ${this._protocolVersion}`;
+protocol version:      ${this.protocolVersion}`;
 		this.driver.controllerLog.logNode(this.id, {
 			message: logMessage,
 			direction: "inbound",
@@ -1677,17 +1690,6 @@ protocol version:      ${this._protocolVersion}`;
 				}
 				// we want to pass all other errors through
 				throw e;
-			}
-
-			try {
-				await this.driver.saveNetworkToCache();
-			} catch (e) {
-				this.driver.controllerLog.print(
-					`${getCCName(
-						cc,
-					)}: Error after interview:\n${getErrorMessage(e)}`,
-					"error",
-				);
 			}
 		};
 
@@ -3735,161 +3737,6 @@ protocol version:      ${this._protocolVersion}`;
 	 */
 	public async deserialize(): Promise<void> {
 		if (!this.driver.networkCache) return;
-		const cache = this.driver.networkCache;
-
-		const nodeCacheKeys = cacheKeys.node(this.id);
-
-		// const interviewStage = cache.get(nodeCacheKeys.interviewStage) as any;
-		// if (interviewStage in InterviewStage) {
-		// 	this.interviewStage =
-		// 		typeof interviewStage === "number"
-		// 			? interviewStage
-		// 			: (InterviewStage as any)[interviewStage];
-
-		// 	// Mark already-interviewed nodes as potentially ready
-		// 	if (this.interviewStage === InterviewStage.Complete) {
-		// 		this.readyMachine.send("RESTART_FROM_CACHE");
-		// 	}
-		// }
-
-		// const deviceClass = cache.get(nodeCacheKeys.deviceClass);
-		// if (isObject(deviceClass)) {
-		// 	const { basic, generic, specific } = deviceClass;
-		// 	if (
-		// 		typeof basic === "number" &&
-		// 		typeof generic === "number" &&
-		// 		typeof specific === "number"
-		// 	) {
-		// 		this._deviceClass = new DeviceClass(
-		// 			this.driver.configManager,
-		// 			basic,
-		// 			generic,
-		// 			specific,
-		// 		);
-		// 	}
-		// }
-
-		// Parse single properties
-		const tryParse = (
-			cacheKey: string,
-			ownProp: Extract<keyof ZWaveNode, string>,
-			type: "boolean" | "number" | "string",
-		): void => {
-			const value = cache.get(cacheKey) as any;
-			if (typeof value === type)
-				this[`_${ownProp}` as keyof this] = value;
-		};
-
-		// tryParse(nodeCacheKeys.isListening, "isListening", "boolean");
-		// tryParse(
-		// 	nodeCacheKeys.isFrequentListening,
-		// 	"isFrequentListening",
-		// 	"string",
-		// );
-		// tryParse(nodeCacheKeys.isRouting, "isRouting", "boolean");
-
-		// Parse security classes
-		// const securityClasses = cache.get(nodeCacheKeys.securityClasses);
-		// if (isObject(securityClasses)) {
-		// 	for (const [key, val] of Object.entries(securityClasses)) {
-		// 		if (
-		// 			key in SecurityClass &&
-		// 			typeof (SecurityClass as any)[key] === "number" &&
-		// 			typeof val === "boolean"
-		// 		) {
-		// 			this.securityClasses.set((SecurityClass as any)[key], val);
-		// 		}
-		// 	}
-		// }
-		// const dsk = cache.get(nodeCacheKeys.dsk);
-		// if (typeof dsk === "string") {
-		// 	try {
-		// 		this._dsk = dskFromString(dsk);
-		// 	} catch {
-		// 		// ignore
-		// 	}
-		// }
-		// tryParse(nodeCacheKeys.supportsSecurity, "supportsSecurity", "boolean");
-		// tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "boolean");
-		// tryParse(nodeCacheKeys.supportsBeaming, "supportsBeaming", "string");
-		// tryParse(nodeCacheKeys.protocolVersion, "protocolVersion", "number");
-
-		// const nodeType = cache.get(nodeCacheKeys.nodeType) as any;
-		// if (nodeType in NodeType) {
-		// 	this._nodeType = NodeType[nodeType] as any;
-		// }
-
-		// const supportedDataRates = cache.get(nodeCacheKeys.supportedDataRates);
-		// if (
-		// 	isArray(supportedDataRates) &&
-		// 	supportedDataRates.every((r: unknown) => typeof r === "number")
-		// ) {
-		// 	this._supportedDataRates =
-		// 		supportedDataRates as readonly DataRate[];
-		// }
-
-		function enforceType(
-			val: any,
-			type: "boolean" | "number" | "string",
-		): any {
-			return typeof val === type ? val : undefined;
-		}
-
-		// We need to cache the endpoint CC support until all CCs have been deserialized
-		const endpointCCSupport = new Map<
-			number,
-			Map<number, Partial<CommandClassInfo>>
-		>();
-
-		// Parse CommandClasses
-		// Because for the jsonl DB, the CC info is not contained in a single object,
-		// so we have to loop through all existing CCs and check if a corresponding key is present
-		const nodeKeys = [...cache.keys()].filter((k) =>
-			k.startsWith(nodeCacheKeys._baseKey),
-		);
-		for (const ccId of allCCs) {
-			const ccCacheKeys = nodeCacheKeys.commandClass(ccId);
-			const endpointKeys = nodeKeys.filter(
-				(k) =>
-					k.startsWith(ccCacheKeys._baseKey) &&
-					cacheKeyUtils.isEndpointKey(k),
-			);
-			// dictionary of CC support information
-			const support = new Map<number, Partial<CommandClassInfo>>();
-			for (const key of endpointKeys) {
-				const endpointIndex = cacheKeyUtils.endpointIndexFromKey(key);
-				if (typeof endpointIndex !== "number") continue;
-
-				const endpoint = cache.get(key);
-				if (isObject(endpoint)) {
-					// Verify the info object
-					const info = endpoint as any as CommandClassInfo;
-					info.isSupported = enforceType(info.isSupported, "boolean");
-					info.isControlled = enforceType(
-						info.isControlled,
-						"boolean",
-					);
-					info.version = enforceType(info.version, "number");
-
-					// Update the root endpoint immediately, save non-root endpoint information for later
-					if (endpointIndex === 0) {
-						this.addCC(ccId, info);
-					} else {
-						support.set(endpointIndex, info);
-					}
-				}
-			}
-			endpointCCSupport.set(ccId, support);
-		}
-
-		// Now restore the CC versions for each non-root endpoint
-		for (const [cc, support] of endpointCCSupport) {
-			for (const [endpointIndex, info] of support) {
-				const endpoint = this.getEndpoint(endpointIndex);
-				if (!endpoint) continue;
-				endpoint.addCC(cc, info);
-			}
-		}
 
 		// Restore the device config
 		await this.loadDeviceConfig();

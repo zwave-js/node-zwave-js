@@ -501,22 +501,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Whether the controller is known to support soft reset */
 	public get supportsSoftReset(): boolean | undefined {
-		return this.driver.networkCache.get(
-			cacheKeys.controller.supportsSoftReset,
-		);
+		return this.driver.cacheGet(cacheKeys.controller.supportsSoftReset);
 	}
 	/** @internal */
 	public set supportsSoftReset(value: boolean | undefined) {
-		if (value === undefined) {
-			this.driver.networkCache.delete(
-				cacheKeys.controller.supportsSoftReset,
-			);
-		} else {
-			this.driver.networkCache.set(
-				cacheKeys.controller.supportsSoftReset,
-				value,
-			);
-		}
+		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
 	private _nodes: ThrowingMap<number, ZWaveNode>;
@@ -561,17 +550,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** @internal */
 	public get provisioningList(): readonly SmartStartProvisioningEntry[] {
-		return this.driver.networkCache.get(
-			cacheKeys.controller.provisioningList,
+		return (
+			this.driver.cacheGet(cacheKeys.controller.provisioningList) ?? []
 		);
 	}
 	private set provisioningList(
 		value: readonly SmartStartProvisioningEntry[],
 	) {
-		this.driver.networkCache.set(
-			cacheKeys.controller.provisioningList,
-			value,
-		);
+		this.driver.cacheSet(cacheKeys.controller.provisioningList, value);
 	}
 
 	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
@@ -590,7 +576,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this.provisioningList = provisioningList;
 
 		this.autoProvisionSmartStart();
-		void this.driver.saveNetworkToCache();
 	}
 
 	/**
@@ -611,7 +596,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
-			void this.driver.saveNetworkToCache();
 			this.provisioningList = provisioningList;
 		}
 	}
@@ -4690,7 +4674,6 @@ ${associatedNodes.join(", ")}`,
 		// Also, we could be talking to different nodes than the cache file contains.
 		// Reset all info about all nodes, so they get re-interviewed.
 		this._nodes.clear();
-		await this.driver.saveNetworkToCache();
 
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.

@@ -35,7 +35,6 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
-	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -1043,7 +1042,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						e.code === ZWaveErrorCodes.Driver_Failed
 					) {
 						// Remember that soft reset is not supported by this stick
-						await this.rememberNoSoftReset();
+						this.driverLog.print(
+							"Soft reset seems not to be supported by this stick, disabling it.",
+							"warn",
+						);
+						this.controller.supportsSoftReset = false;
 						// Then fail the driver
 						await this.destroy();
 						return;
@@ -1809,52 +1812,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return true;
 	}
 
-	private async rememberNoSoftReset(): Promise<void> {
-		this.driverLog.print(
-			"Soft reset seems not to be supported by this stick, disabling it.",
-			"warn",
-		);
-		this.controller.supportsSoftReset = false;
-
-		if (this._controllerInterviewed) {
-			// We can use the normal method for this
-			await this.saveNetworkToCacheInternal();
-		} else {
-			// saveNetworkToCache won't write anything, just edit the file "manually"
-
-			// TODO: This is ugly, rework this when changing how the network data is saved
-
-			const fs = this.options.storage.driver;
-
-			await fs.ensureDir(this.cacheDir);
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-
-			// Change the supportsSoftReset flag
-			json ??= {};
-			json.controller ??= {};
-			json.controller.supportsSoftReset = false;
-
-			// And save it again
-			const jsonString = stringify(json);
-			await this.options.storage.driver.writeFile(
-				cacheFile,
-				jsonString,
-				"utf8",
-			);
-		}
-	}
-
 	/**
 	 * Soft-resets the controller if the feature is enabled
 	 */
@@ -2104,16 +2061,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.serial.removeAllListeners();
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
-		}
-
-		try {
-			// Attempt to save the network to cache
-			await this.saveNetworkToCacheInternal();
-		} catch (e) {
-			this.driverLog.print(
-				`Saving the network to cache failed: ${getErrorMessage(e)}`,
-				"error",
-			);
 		}
 
 		// Attempt to close the value DBs and network cache
@@ -3940,60 +3887,46 @@ ${handlers.length} left`,
 	private isSavingToCache: boolean = false;
 
 	/**
-	 * Does the work for saveNetworkToCache. This is not throttled, so any call
-	 * to this method WILL save the network.
+	 * @internal
+	 * Helper function to read and convert potentially existing values from the network cache
 	 */
-	private async saveNetworkToCacheInternal(): Promise<void> {
-		// Avoid overwriting the cache with empty data if the controller wasn't interviewed yet
-		if (
-			!this._controller ||
-			this._controller.homeId == undefined ||
-			!this._controllerInterviewed
-		)
-			return;
-
-		await this.options.storage.driver.ensureDir(this.cacheDir);
-		const cacheFile = path.join(
-			this.cacheDir,
-			this._controller.homeId.toString(16) + ".json",
-		);
-
-		const serializedObj = this._controller.serialize();
-		const jsonString = stringify(serializedObj);
-		await this.options.storage.driver.writeFile(
-			cacheFile,
-			jsonString,
-			"utf8",
-		);
+	public cacheGet<T>(
+		cacheKey: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): T | undefined {
+		let ret = this.networkCache.get(cacheKey);
+		if (ret !== undefined && typeof options?.reviver === "function") {
+			try {
+				ret = options.reviver(ret);
+			} catch {
+				// ignore, invalid entry
+			}
+		}
+		return ret;
 	}
 
 	/**
-	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
-	 * For performance reasons, these calls may be throttled.
+	 * @internal
+	 * Helper function to convert values and write them to the network cache
 	 */
-	public async saveNetworkToCache(): Promise<void> {
-		// TODO: Detect if the network needs to be saved at all
-		if (!this._controller || this._controller.homeId == undefined) return;
-		// Ensure this method isn't being executed too often
-		if (
-			this.isSavingToCache ||
-			Date.now() - this.lastSaveToCache < this.saveToCacheInterval
-		) {
-			// Schedule a save in a couple of ms to collect changes
-			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(
-					() => void this.saveNetworkToCache(),
-					this.saveToCacheInterval,
-				);
-			}
-			return;
-		} else {
-			this.saveToCacheTimer = undefined;
+	public cacheSet<T>(
+		cacheKey: string,
+		value: T | undefined,
+		options?: {
+			serializer?: (value: T) => any;
+		},
+	): void {
+		if (value !== undefined && typeof options?.serializer === "function") {
+			value = options.serializer(value);
 		}
-		this.isSavingToCache = true;
-		await this.saveNetworkToCacheInternal();
-		this.isSavingToCache = false;
-		this.lastSaveToCache = Date.now();
+
+		if (value === undefined) {
+			this.networkCache.delete(cacheKey);
+		} else {
+			this.networkCache.set(cacheKey, value);
+		}
 	}
 
 	/**
