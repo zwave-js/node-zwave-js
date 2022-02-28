@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { num2hex, pickDeep } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
 import { DeviceClass } from "../node/DeviceClass";
@@ -28,6 +28,7 @@ export const cacheKeys = {
 	// TODO: somehow these functions should be combined with the pattern matching below
 	node: (nodeId: number) => ({
 		_baseKey: `node.${nodeId}`,
+		_securityClassBaseKey: `node.${nodeId}.securityClasses`,
 		interviewStage: `node.${nodeId}.interviewStage`,
 		deviceClass: `node.${nodeId}.deviceClass`,
 		isListening: `node.${nodeId}.isListening`,
@@ -38,7 +39,11 @@ export const cacheKeys = {
 		nodeType: `node.${nodeId}.nodeType`,
 		supportsSecurity: `node.${nodeId}.supportsSecurity`,
 		supportsBeaming: `node.${nodeId}.supportsBeaming`,
-		securityClasses: `node.${nodeId}.securityClasses`,
+		securityClass: (secClass: SecurityClass) =>
+			`node.${nodeId}.securityClasses.${getEnumMemberName(
+				SecurityClass,
+				secClass,
+			)}`,
 		dsk: `node.${nodeId}.dsk`,
 		endpoint: (index: number) => {
 			const baseKey = `node.${nodeId}.endpoint.${index}`;
@@ -52,15 +57,6 @@ export const cacheKeys = {
 				},
 			};
 		},
-		// commandClass: (ccId: CommandClasses) => {
-		// 	const ccAsHex = num2hex(ccId);
-		// 	const baseKey = `node.${nodeId}.commandClass.${ccAsHex}`;
-		// 	return {
-		// 		_baseKey: baseKey,
-		// 		name: `${baseKey}.name`,
-		// 		endpoint: (index: number) => `${baseKey}.endpoints.${index}`,
-		// 	};
-		// },
 	}),
 } as const;
 
@@ -85,6 +81,62 @@ export const cacheKeyUtils = {
 		}
 	},
 } as const;
+
+function tryParseInterviewStage(value: unknown): InterviewStage | undefined {
+	if (
+		(typeof value === "string" || typeof value === "number") &&
+		value in InterviewStage
+	) {
+		return typeof value === "number"
+			? value
+			: (InterviewStage as any)[value];
+	}
+}
+
+function tryParseDeviceClass(
+	driver: Driver,
+	value: unknown,
+): DeviceClass | undefined {
+	if (isObject(value)) {
+		const { basic, generic, specific } = value;
+		if (
+			typeof basic === "number" &&
+			typeof generic === "number" &&
+			typeof specific === "number"
+		) {
+			return new DeviceClass(
+				driver.configManager,
+				basic,
+				generic,
+				specific,
+			);
+		}
+	}
+}
+
+function tryParseSecurityClasses(
+	value: unknown,
+): Map<SecurityClass, boolean> | undefined {
+	if (isObject(value)) {
+		const ret = new Map<SecurityClass, boolean>();
+		for (const [key, val] of Object.entries(value)) {
+			if (
+				key in SecurityClass &&
+				typeof (SecurityClass as any)[key] === "number" &&
+				typeof val === "boolean"
+			) {
+				ret.set((SecurityClass as any)[key] as SecurityClass, val);
+			}
+		}
+		return ret;
+	}
+}
+
+function tryParseNodeType(value: unknown): NodeType | undefined {
+	if (typeof value === "string" && value in NodeType) {
+		return (NodeType as any)[value];
+	}
+}
 
 export function deserializeNetworkCacheValue(
 	driver: Driver,
@@ -111,32 +163,13 @@ export function deserializeNetworkCacheValue(
 
 	switch (cacheKeyUtils.nodePropertyFromKey(key)) {
 		case "interviewStage": {
-			if (
-				(typeof value === "string" || typeof value === "number") &&
-				value in InterviewStage
-			) {
-				return typeof value === "number"
-					? value
-					: (InterviewStage as any)[value];
-			}
+			value = tryParseInterviewStage(value);
+			if (value) return value;
 			throw fail();
 		}
 		case "deviceClass": {
-			if (isObject(value)) {
-				const { basic, generic, specific } = value;
-				if (
-					typeof basic === "number" &&
-					typeof generic === "number" &&
-					typeof specific === "number"
-				) {
-					return new DeviceClass(
-						driver.configManager,
-						basic,
-						generic,
-						specific,
-					);
-				}
-			}
+			value = tryParseDeviceClass(driver, value);
+			if (value) return value;
 			throw fail();
 		}
 		case "isListening":
@@ -156,24 +189,6 @@ export function deserializeNetworkCacheValue(
 			throw fail();
 		}
 
-		case "securityClasses": {
-			const securityClasses = value;
-			if (isObject(securityClasses)) {
-				const ret = {} as Record<SecurityClass, boolean>;
-				for (const [key, val] of Object.entries(securityClasses)) {
-					if (
-						key in SecurityClass &&
-						typeof (SecurityClass as any)[key] === "number" &&
-						typeof val === "boolean"
-					) {
-						ret[(SecurityClass as any)[key] as SecurityClass] = val;
-					}
-				}
-				return ret;
-			}
-			throw fail();
-		}
-
 		case "dsk": {
 			if (typeof value === "string") {
 				return dskFromString(value);
@@ -184,16 +199,17 @@ export function deserializeNetworkCacheValue(
 		case "supportsSecurity":
 			return ensureType(value, "boolean");
 		case "supportsBeaming":
-			return ensureType(value, "boolean");
-		case "supportsBeaming":
-			return ensureType(value, "string");
+			try {
+				return ensureType(value, "boolean");
+			} catch {
+				return ensureType(value, "string");
+			}
 		case "protocolVersion":
 			return ensureType(value, "number");
 
 		case "nodeType": {
-			if (typeof value === "string" && value in NodeType) {
-				return (NodeType as any)[value];
-			}
+			value = tryParseNodeType(value);
+			if (value) return value;
 			throw fail();
 		}
 
@@ -240,6 +256,7 @@ export function serializeNetworkCacheValue(
 					ret[SecurityClass[secClass]] = (value as any)[secClass];
 				}
 			}
+			return ret;
 		}
 		case "dsk": {
 			return dskToString(value as Buffer);
@@ -280,6 +297,7 @@ const legacyPaths = {
 } as const;
 
 export async function migrateLegacyNetworkCache(
+	driver: Driver,
 	homeId: number,
 	networkCache: JsonlDB,
 	storageDriver: FileSystem,
@@ -294,8 +312,10 @@ export async function migrateLegacyNetworkCache(
 		targetKey: string,
 		source: Record<string, any>,
 		sourcePath: string,
+		converter?: (value: any) => any,
 	): void {
-		const val = pickDeep(source, sourcePath);
+		let val = pickDeep(source, sourcePath);
+		if (converter) val = converter(val);
 		if (val != undefined) jsonl.set(targetKey, val);
 	}
 
@@ -324,11 +344,13 @@ export async function migrateLegacyNetworkCache(
 				nodeCacheKeys.interviewStage,
 				node,
 				legacyPaths.node.interviewStage,
+				tryParseInterviewStage,
 			);
 			tryMigrate(
 				nodeCacheKeys.deviceClass,
 				node,
 				legacyPaths.node.deviceClass,
+				(v) => tryParseDeviceClass(driver, v),
 			);
 			tryMigrate(
 				nodeCacheKeys.isListening,
@@ -355,7 +377,12 @@ export async function migrateLegacyNetworkCache(
 				node,
 				legacyPaths.node.protocolVersion,
 			);
-			tryMigrate(nodeCacheKeys.nodeType, node, legacyPaths.node.nodeType);
+			tryMigrate(
+				nodeCacheKeys.nodeType,
+				node,
+				legacyPaths.node.nodeType,
+				tryParseNodeType,
+			);
 			tryMigrate(
 				nodeCacheKeys.supportsSecurity,
 				node,
@@ -366,11 +393,15 @@ export async function migrateLegacyNetworkCache(
 				node,
 				legacyPaths.node.supportsBeaming,
 			);
-			tryMigrate(
-				nodeCacheKeys.securityClasses,
-				node,
-				legacyPaths.node.securityClasses,
+			// Convert security classes to single entries
+			const securityClasses = tryParseSecurityClasses(
+				pickDeep(node, legacyPaths.node.securityClasses),
 			);
+			if (securityClasses) {
+				for (const [secClass, val] of securityClasses) {
+					jsonl.set(nodeCacheKeys.securityClass(secClass), val);
+				}
+			}
 			tryMigrate(nodeCacheKeys.dsk, node, legacyPaths.node.dsk);
 
 			// ... and command classes

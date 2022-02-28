@@ -3944,6 +3944,7 @@ ${handlers.length} left`,
 
 			try {
 				await migrateLegacyNetworkCache(
+					this,
 					this.controller.homeId,
 					this._networkCache,
 					this.options.storage.driver,

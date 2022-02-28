@@ -254,11 +254,19 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			);
 		}
 
-		this.securityClasses = new CacheBackedMap(
-			this.driver.networkCache,
-			cacheKeys.node(this.id).securityClasses,
-			true,
-		);
+		this.securityClasses = new CacheBackedMap(this.driver.networkCache, {
+			prefix: cacheKeys.node(this.id)._securityClassBaseKey + ".",
+			suffixSerializer: (value: SecurityClass) =>
+				getEnumMemberName(SecurityClass, value),
+			suffixDeserializer: (key: string) => {
+				if (
+					key in SecurityClass &&
+					typeof (SecurityClass as any)[key] === "number"
+				) {
+					return (SecurityClass as any)[key];
+				}
+			},
+		});
 
 		// Add optional controlled CCs - endpoints don't have this
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });

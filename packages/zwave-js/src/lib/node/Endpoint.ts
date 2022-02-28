@@ -1,13 +1,14 @@
 import {
 	actuatorCCs,
+	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
-	FlatCacheBackedMap,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { isDeepStrictEqual } from "util";
 import type { MultiChannelAssociationCC } from "../commandclass";
 import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
@@ -78,7 +79,7 @@ export class Endpoint {
 	private _implementedCommandClasses: Map<
 		CommandClasses,
 		Readonly<CommandClassInfo>
-	> = new FlatCacheBackedMap(this.driver.networkCache, {
+	> = new CacheBackedMap(this.driver.networkCache, {
 		prefix:
 			cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey + ".",
 		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
@@ -127,14 +128,20 @@ export class Endpoint {
 		// Endpoints cannot support Multi Channel CC
 		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
 
-		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
-			isSupported: false,
-			isControlled: false,
-			secure: false,
-			version: 0,
-		};
-		ccInfo = Object.assign({}, ccInfo, info);
-		this._implementedCommandClasses.set(cc, ccInfo);
+		const original = this._implementedCommandClasses.get(cc);
+		const updated = Object.assign(
+			{},
+			original ?? {
+				isSupported: false,
+				isControlled: false,
+				secure: false,
+				version: 0,
+			},
+			info,
+		);
+		if (!isDeepStrictEqual(original, updated)) {
+			this._implementedCommandClasses.set(cc, updated);
+		}
 	}
 
 	/**
