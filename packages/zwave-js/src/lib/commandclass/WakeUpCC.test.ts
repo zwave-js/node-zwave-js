@@ -76,10 +76,10 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 
 		it("should not send anything if the node is frequent listening", async () => {
 			// Temporarily make this node frequent listening
-			(node as any)._isFrequentListening = true;
+			(node as any)["isFrequentListening"] = true;
 			await cc.interview();
 			expect(fakeDriver.sendMessage).not.toBeCalled();
-			(node as any)._isFrequentListening = false;
+			(node as any)["isFrequentListening"] = false;
 		});
 
 		it.skip("if the node is V2+, it should send a WakeUpCCIntervalCapabilitiesGet", async () => {

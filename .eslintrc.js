@@ -128,6 +128,7 @@ module.exports = {
 				"@typescript-eslint/require-await": "off",
 				"@typescript-eslint/unbound-method": "off",
 				"@typescript-eslint/no-unused-vars": "warn",
+				"@typescript-eslint/dot-notation": "off",
 			},
 		},
 		{

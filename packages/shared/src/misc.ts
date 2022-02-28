@@ -18,6 +18,34 @@ export function pick<T extends Record<any, any>, K extends keyof T>(
 	return ret;
 }
 
+/**
+ * Traverses an object and returns the property identified by the given path. For example, picking from
+ * ```json
+ * {
+ *  "foo": {
+ *   "bar": [
+ *     1, 2, 3
+ *   ]
+ * }
+ * ```
+ * with path `foo.bar.1` will return `2`.
+ */
+export function pickDeep<T = unknown>(
+	object: Record<string, any>,
+	path: string,
+): T {
+	function _pickDeep(obj: Record<string, any>, pathArr: string[]): unknown {
+		// are we there yet? then return obj
+		if (!pathArr.length) return obj;
+		// are we not looking at an object or array? Then bail
+		if (!isObject(obj) && !isArray(obj)) return undefined;
+		// go deeper
+		const propName = pathArr.shift()!;
+		return _pickDeep(obj[propName], pathArr);
+	}
+	return _pickDeep(object, path.split(".")) as T;
+}
+
 /** Calls the map function of the given array and flattens the result by one level */
 export function flatMap<U, T extends any[]>(
 	array: T[],

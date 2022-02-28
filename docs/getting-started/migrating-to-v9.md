@@ -37,3 +37,12 @@ The `serialport` library was upgraded to version 10.x. It is now built using N-A
 It was found that the global `unhandledRejection` event handler which Sentry registers, has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning. While we do believe no rejection should be silently unhandled, we don't want to break existing applications.
 
 Therefore, error reporting is now opt-in using `driver.enableErrorReporting()`. We kindly ask you to do so in production environments, so unhandled errors in the library can be discovered more quickly.
+
+## Migrated the `<homeid>.json` network cache file to `<homeid>.jsonl`
+
+Many centuries (or maybe months) ago, the the value and metadata DBs were migrated to append-only `.jsonl` files, which are resistant against data loss during crashes. However the main network cache file was still a `.json` file, which could lead to the driver "forgetting" the security status of devices.
+
+In version 9, the network cache is now also a `.jsonl` file. This has several implications:
+
+1. If you're backing up the network cache files, make sure to backup the `.jsonl` files. The network cache is automatically migrated from `.json` to `.jsonl` when the driver starts up, so make sure to still have the `.json` file for the first startup after upgrading.
+2. Support for legacy versions of the `.json` cache file from before `v8.1.0` has been removed. When upgrading from older versions, the upgrade must be done in two steps. First upgrade to the latest available `8.x` version, then upgrade to v9.
