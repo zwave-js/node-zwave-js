@@ -32,11 +32,13 @@ While there is no hard style guide governing this, we tend to use readonly prope
 
 The `serialport` library was upgraded to version 10.x. It is now built using N-API, which should avoid having to recompile it after upgrades. Due to slight API changes, overwriting the dependency to specific `9.x` versions is no longer possible.
 
-## Error-reporting is now opt-in
+## Error-reporting is now opt-in and less disruptive
 
-It was found that the global `unhandledRejection` event handler which Sentry registers, has an influence how the application will behave in case of an unhandled rejection. This can affect applications on Node.js before `v15`, which are going to crash instead of logging a warning. While we do believe no rejection should be silently unhandled, we don't want to break existing applications.
+It was found that the global `unhandledRejection` event handler, which Sentry registers, has an influence how the application will behave in case of an unhandled rejection.
+The default behavior of Node.js is to log a warning before `v15` and to crash on `v15` or later, unless the `--unhandled-rejections` flag is changed. With the Sentry event handler, the application would always crash, regardless of any other `unhandledRejection` event handlers.
+The Sentry event handler has been changed so that it no longer force-exits the process in case of an unhandled rejection. This is now the application's responsibility.
 
-Therefore, error reporting is now opt-in using `driver.enableErrorReporting()`. We kindly ask you to do so in production environments, so unhandled errors in the library can be discovered more quickly.
+In addition, error reporting is now opt-in using `driver.enableErrorReporting()`. We kindly ask you to do so in production environments, so unhandled errors in the library can be discovered more quickly.
 
 ## Migrated the `<homeid>.json` network cache file to `<homeid>.jsonl`
 
