@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.7 (2022-02-28)
 ### Bugfixes
 * Restoring an NVM backup with an unsupported format on a stick with an unsupported NVM format is possible again. This enables working with backups on legacy (before SDK 6.61) controllers.
 * The wakeup node ID which is determined when including a node is now stored under the correct value and no longer overwrites the wakeup interval.
