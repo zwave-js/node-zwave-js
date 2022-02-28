@@ -4650,7 +4650,9 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
-	 * If the given buffer is in a different NVM format, it is converted automatically. If the conversion is not supported, the operation fails.
+	 * If the given buffer is in a different NVM format, it is converted automatically. If a conversion is required but not supported, the operation will be aborted.
+	 *
+	 * **WARNING:** If both the source and target NVM use an an unsupported format, they will NOT be checked for compatibility!
 	 *
 	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
 	 *

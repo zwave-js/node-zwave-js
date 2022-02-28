@@ -151,6 +151,19 @@ export interface NVMJSONVirtualNode {
 
 export type NVMJSONNode = NVMJSONNodeWithInfo | NVMJSONVirtualNode;
 
+type ParsedNVM =
+	| {
+			type: 500;
+			json: Required<NVM500JSON>;
+	  }
+	| {
+			type: 700;
+			json: Required<NVMJSON>;
+	  }
+	| {
+			type: "unknown";
+	  };
+
 export function nodeHasInfo(node: NVMJSONNode): node is NVMJSONNodeWithInfo {
 	return !node.isVirtual || Object.keys(node).length > 1;
 }
@@ -880,7 +893,7 @@ export function nvm500ToJSON(buffer: Buffer): Required<NVM500JSON> {
 	const parser = createNVM500Parser(buffer);
 	if (!parser)
 		throw new ZWaveError(
-			"Did not find a matching NVM 500 parser implementation!",
+			"Did not find a matching NVM 500 parser implementation! Make sure that the NVM data belongs to a controller with Z-Wave SDK 6.61 or higher.",
 			ZWaveErrorCodes.NVM_NotSupported,
 		);
 	return parser.toJSON();
@@ -967,7 +980,7 @@ export function jsonToNVM500(
 
 	if (!impl) {
 		throw new ZWaveError(
-			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${json.meta.library}.`,
+			`Did not find a matching implementation for protocol version ${protocolVersion} and library ${json.meta.library}. To convert 500-series NVMs, both the source and the target controller must be using Z-Wave SDK 6.61 or higher.`,
 			ZWaveErrorCodes.NVM_NotSupported,
 		);
 	}
@@ -1154,91 +1167,113 @@ export function json700To500(json: NVMJSON): NVM500JSON {
 }
 
 /** Converts the given source NVM into a format that is compatible with the given target NVM */
-export function migrateNVM(source: Buffer, target: Buffer): Buffer {
-	let sourceJSON: Required<NVMJSON> | Required<NVM500JSON>;
-	let targetJSON: Required<NVMJSON> | Required<NVM500JSON>;
-	let sourceIs500: boolean;
-	let targetIs500: boolean;
+export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
+	let source: ParsedNVM;
+	let target: ParsedNVM;
 	try {
-		sourceJSON = nvmToJSON(source);
-		sourceIs500 = false;
+		source = {
+			type: 700,
+			json: nvmToJSON(sourceNVM),
+		};
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
-			sourceJSON = nvm500ToJSON(source);
-			sourceIs500 = true;
+			source = {
+				type: 500,
+				json: nvm500ToJSON(sourceNVM),
+			};
 		} else {
-			throw e;
+			source = { type: "unknown" };
 		}
 	}
 
 	try {
-		targetJSON = nvmToJSON(target);
-		targetIs500 = false;
+		target = {
+			type: 700,
+			json: nvmToJSON(targetNVM),
+		};
 	} catch (e) {
 		if (isZWaveError(e) && e.code === ZWaveErrorCodes.NVM_InvalidFormat) {
 			// This is not a 700 series NVM, maybe it is a 500 series one?
-			targetJSON = nvm500ToJSON(target);
-			targetIs500 = true;
+			target = {
+				type: 500,
+				json: nvm500ToJSON(targetNVM),
+			};
 		} else {
-			throw e;
+			target = { type: "unknown" };
 		}
 	}
 
-	// Short circuit if the source and target protocol versions are compatible
-	if (!sourceIs500 && !targetIs500) {
-		const sourceProtocolVersion = sourceJSON.controller.protocolVersion;
-		const targetProtocolVersion = targetJSON.controller.protocolVersion;
+	// Short circuit if...
+	if (source.type === 700 && target.type === 700) {
+		//... the source and target protocol versions are compatible without conversion
+		const sourceProtocolVersion = source.json.controller.protocolVersion;
+		const targetProtocolVersion = target.json.controller.protocolVersion;
 
 		// The 700 series firmware can automatically upgrade backups from a previous protocol version
-		// Not sure when that ability was added, but let's assume 7.16 supports it to be on the safe side
+		// Not sure when that ability was added. To be on the safe side, allow it for 7.16+ which definitely supports it.
 		if (
 			semver.gte(targetProtocolVersion, "7.16.0") &&
 			semver.gte(targetProtocolVersion, sourceProtocolVersion)
 		) {
-			return source;
+			return sourceNVM;
 		}
+	} else if (source.type === "unknown" && target.type !== "unknown") {
+		// ...only the source has an unsupported format, so we have to convert but can't
+		throw new ZWaveError(
+			`The source NVM has an unsupported format, which cannot be restored on a ${target.type}-series NVM!`,
+			ZWaveErrorCodes.NVM_NotSupported,
+		);
+	} else if (source.type !== "unknown" && target.type === "unknown") {
+		// ...only the target has an unsupported format, so we have to convert but can't
+		throw new ZWaveError(
+			`The target NVM has an unsupported format, cannot restore ${source.type}-series NVM onto it!`,
+			ZWaveErrorCodes.NVM_NotSupported,
+		);
+	} else if (source.type === "unknown" && target.type === "unknown") {
+		// ...both are an unsupported format, meaning pre-6.61 SDK, which we cannot convert
+		return sourceNVM;
 	}
 
-	// In any case, preserve the application version of the target stick
-	sourceJSON.controller.applicationVersion =
-		targetJSON.controller.applicationVersion;
+	// TypeScript doesn't understand multi-variable narrowings (yet)
+	source = source as Exclude<ParsedNVM, { type: "unknown" }>;
+	target = target as Exclude<ParsedNVM, { type: "unknown" }>;
 
-	if (sourceIs500 && targetIs500) {
+	// In any case, preserve the application version of the target stick
+	source.json.controller.applicationVersion =
+		target.json.controller.applicationVersion;
+
+	if (source.type === 500 && target.type === 500) {
 		// Both are 500, so we just need to update the metadata to match the target
 		const json: Required<NVM500JSON> = {
-			...(sourceJSON as Required<NVM500JSON>),
-			meta: (targetJSON as Required<NVM500JSON>).meta,
+			...source.json,
+			meta: target.json.meta,
 		};
 		// If the target is a 500 series stick, preserve the RF config
-		json.controller.rfConfig = (
-			targetJSON as Required<NVM500JSON>
-		).controller.rfConfig;
-		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
-	} else if (sourceIs500 && !targetIs500) {
+		json.controller.rfConfig = target.json.controller.rfConfig;
+		return jsonToNVM500(json, target.json.controller.protocolVersion);
+	} else if (source.type === 500 && target.type === 700) {
 		// We need to upgrade the source to 700 series
 		const json: Required<NVMJSON> = {
-			...json500To700(sourceJSON as Required<NVM500JSON>, true),
-			meta: (targetJSON as Required<NVMJSON>).meta,
+			...json500To700(source.json, true),
+			meta: target.json.meta,
 		};
-		return jsonToNVM(json, targetJSON.controller.protocolVersion);
-	} else if (!sourceIs500 && targetIs500) {
+		return jsonToNVM(json, target.json.controller.protocolVersion);
+	} else if (source.type === 700 && target.type === 500) {
 		// We need to downgrade the source to 500 series
 		const json: Required<NVM500JSON> = {
-			...json700To500(sourceJSON as Required<NVMJSON>),
-			meta: (targetJSON as Required<NVM500JSON>).meta,
+			...json700To500(source.json),
+			meta: target.json.meta,
 		};
 		// If the target is a 500 series stick, preserve the RF config
-		json.controller.rfConfig = (
-			targetJSON as Required<NVM500JSON>
-		).controller.rfConfig;
-		return jsonToNVM500(json, targetJSON.controller.protocolVersion);
+		json.controller.rfConfig = target.json.controller.rfConfig;
+		return jsonToNVM500(json, target.json.controller.protocolVersion);
 	} else {
 		// Both are 700, so we just need to update the metadata to match the target
 		const json: Required<NVMJSON> = {
-			...(sourceJSON as Required<NVMJSON>),
-			meta: (targetJSON as Required<NVMJSON>).meta,
+			...(source.json as Required<NVMJSON>),
+			meta: (target.json as Required<NVMJSON>).meta,
 		};
-		return jsonToNVM(json, targetJSON.controller.protocolVersion);
+		return jsonToNVM(json, target.json.controller.protocolVersion);
 	}
 }

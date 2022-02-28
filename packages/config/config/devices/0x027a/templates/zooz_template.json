@@ -358,6 +358,25 @@
 			}
 		]
 	},
+	"paddle_programming": {
+		"label": "Paddle Programming",
+		"description": "Disables inclusion/exclusion commands on paddle for use with scene controls.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
+	},
 	"zen5x_metadata": {
 		"inclusion": "1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP UP 3 TIMES QUICKLY if using traditional Z-Wave inclusion. \nSCAN THE QR CODE / ENTER THE 5-DIGIT PIN if using the new SmartStart method. The SmartStart security PIN is located on the back of the relay, next to the Z-Wave Plus logo.\n3. The LED indicator will blink green to signal communication and turn green for 2 seconds if inclusion is successful or turn red for 2 seconds if the pairing attempt fails",
 		"exclusion": "1. Bring your Z-Wave gateway (hub) close to the relay if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. Click the Z-Wave button on the relay 3 times quickly (the LED indicator will start blinking green)\n4. Your hub will confirm exclusion, the LED indicator on the relay will turn green for 2 seconds, and the device will disappear from your controller's device list",

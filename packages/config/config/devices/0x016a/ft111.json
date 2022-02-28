@@ -62,12 +62,12 @@
 		},
 		{
 			"#": "81",
-			"$import": "~/0x0086/templates/aeotec_template.json#notification_report_type",
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_notification_basic_set_only",
 			"label": "Send Notifications to Associated Devices (Group 3)"
 		},
 		{
 			"#": "82",
-			"$import": "~/0x0086/templates/aeotec_template.json#notification_report_type",
+			"$import": "~/0x0086/templates/aeotec_template.json#enable_notification_basic_set_only",
 			"label": "Send Notifications to Associated Devices (Group 4)"
 		},
 		{
