@@ -2,6 +2,7 @@ import {
 	actuatorCCs,
 	CommandClasses,
 	CommandClassInfo,
+	FlatCacheBackedMap,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -32,6 +33,7 @@ import {
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
 import type { Driver } from "../driver/Driver";
+import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
 
@@ -73,17 +75,28 @@ export class Endpoint {
 		this._commandClassAPIs.clear();
 	}
 
-	private _implementedCommandClasses = new Map<
+	private _implementedCommandClasses: Map<
 		CommandClasses,
-		CommandClassInfo
-	>();
+		Readonly<CommandClassInfo>
+	> = new FlatCacheBackedMap(this.driver.networkCache, {
+		prefix:
+			cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey + ".",
+		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+		suffixDeserializer: (key: string) => {
+			const ccId = parseInt(key, 16);
+			if (ccId in CommandClasses) {
+				return (CommandClasses as any)[ccId];
+			}
+		},
+	});
+
 	/**
 	 * @internal
 	 * Information about the implemented Command Classes of this endpoint.
 	 */
 	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
-		CommandClassInfo
+		Readonly<CommandClassInfo>
 	> {
 		return this._implementedCommandClasses;
 	}
@@ -122,7 +135,7 @@ export class Endpoint {
 			secure: false,
 			version: 0,
 		};
-		ccInfo = Object.assign(ccInfo, info);
+		ccInfo = Object.assign({}, ccInfo, info);
 		this._implementedCommandClasses.set(cc, ccInfo);
 	}
 

@@ -40,15 +40,27 @@ export const cacheKeys = {
 		supportsBeaming: `node.${nodeId}.supportsBeaming`,
 		securityClasses: `node.${nodeId}.securityClasses`,
 		dsk: `node.${nodeId}.dsk`,
-		commandClass: (ccId: CommandClasses) => {
-			const ccAsHex = num2hex(ccId);
-			const baseKey = `node.${nodeId}.commandClass.${ccAsHex}`;
+		endpoint: (index: number) => {
+			const baseKey = `node.${nodeId}.endpoint.${index}`;
+			const ccBaseKey = `${baseKey}.commandClass`;
 			return {
 				_baseKey: baseKey,
-				name: `${baseKey}.name`,
-				endpoint: (index: number) => `${baseKey}.endpoints.${index}`,
+				_ccBaseKey: ccBaseKey,
+				commandClass: (ccId: CommandClasses) => {
+					const ccAsHex = num2hex(ccId);
+					return `${ccBaseKey}.${ccAsHex}`;
+				},
 			};
 		},
+		// commandClass: (ccId: CommandClasses) => {
+		// 	const ccAsHex = num2hex(ccId);
+		// 	const baseKey = `node.${nodeId}.commandClass.${ccAsHex}`;
+		// 	return {
+		// 		_baseKey: baseKey,
+		// 		name: `${baseKey}.name`,
+		// 		endpoint: (index: number) => `${baseKey}.endpoints.${index}`,
+		// 	};
+		// },
 	}),
 } as const;
 
@@ -362,23 +374,23 @@ export async function migrateLegacyNetworkCache(
 			tryMigrate(nodeCacheKeys.dsk, node, legacyPaths.node.dsk);
 
 			// ... and command classes
+			// The nesting was inverted from the legacy cache: node -> EP -> CCs
+			// as opposed to node -> CC -> EPs
 			if (isObject(node.commandClasses)) {
 				for (const [ccIdHex, cc] of Object.entries<any>(
 					node.commandClasses,
 				)) {
 					const ccId = parseInt(ccIdHex, 16);
-					const cacheKey = nodeCacheKeys.commandClass(ccId);
-
-					tryMigrate(
-						cacheKey.name,
-						cc,
-						legacyPaths.commandClass.name,
-					);
 					if (isObject(cc.endpoints)) {
 						for (const endpointId of Object.keys(cc.endpoints)) {
 							const endpointIndex = parseInt(endpointId, 10);
+
+							const cacheKey = nodeCacheKeys
+								.endpoint(endpointIndex)
+								.commandClass(ccId);
+
 							tryMigrate(
-								cacheKey.endpoint(endpointIndex),
+								cacheKey,
 								cc,
 								legacyPaths.commandClass.endpoint(
 									endpointIndex,
