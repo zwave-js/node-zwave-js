@@ -74,11 +74,11 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 				}
 
 				if (canSleep) {
-					node4["_isListening"] = false;
-					node4["_isFrequentListening"] = false;
+					node4["isListening"] = false;
+					node4["isFrequentListening"] = false;
 				} else {
-					node4["_isListening"] = true;
-					node4["_isFrequentListening"] = false;
+					node4["isListening"] = true;
+					node4["isFrequentListening"] = false;
 				}
 
 				if (initialStatus === NodeStatus.Asleep) {
