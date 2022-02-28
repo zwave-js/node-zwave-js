@@ -8,10 +8,8 @@ import {
 	applicationCCs,
 	CacheBackedMap,
 	CommandClasses,
-	CommandClassInfo,
 	CRC16_CCITT,
 	DataRate,
-	dskToString,
 	FLiRS,
 	getCCName,
 	getNodeMetaValueID,
@@ -47,7 +45,6 @@ import {
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
-	JSONObject,
 	Mixin,
 	num2hex,
 	ObjectKeyMap,
@@ -3672,63 +3669,6 @@ protocol version:      ${this.protocolVersion}`;
 			CommandClasses.Powerlevel,
 			pick(command, ["testNodeId", "status", "acknowledgedFrames"]),
 		);
-	}
-
-	/**
-	 * @internal
-	 * Serializes this node in order to store static data in a cache
-	 */
-	public serialize(): JSONObject {
-		const ret = {
-			id: this.id,
-			interviewStage: InterviewStage[this.interviewStage],
-			deviceClass: this.deviceClass && {
-				basic: this.deviceClass.basic.key,
-				generic: this.deviceClass.generic.key,
-				specific: this.deviceClass.specific.key,
-			},
-			isListening: this.isListening,
-			isFrequentListening: this.isFrequentListening,
-			isRouting: this.isRouting,
-			supportedDataRates: this.supportedDataRates,
-			protocolVersion: this.protocolVersion,
-			nodeType:
-				this.nodeType != undefined
-					? NodeType[this.nodeType]
-					: undefined,
-			supportsSecurity: this.supportsSecurity,
-			supportsBeaming: this.supportsBeaming,
-			securityClasses: {} as JSONObject,
-			dsk: this.dsk ? dskToString(this.dsk) : undefined,
-			commandClasses: {} as JSONObject,
-		};
-		// Save security classes where they are known
-		for (const secClass of securityClassOrder) {
-			const hasClass = this.hasSecurityClass(secClass);
-			if (typeof hasClass === "boolean") {
-				ret.securityClasses[SecurityClass[secClass]] = hasClass;
-			}
-		}
-		// Sort the CCs by their key before writing to the object
-		const sortedCCs = [...this.implementedCommandClasses.keys()].sort(
-			(a, b) => Math.sign(a - b),
-		);
-		for (const cc of sortedCCs) {
-			const serializedCC = {
-				name: CommandClasses[cc],
-				endpoints: {} as Record<string, CommandClassInfo>,
-			};
-			// We store the support and version information in this location rather than in the version CC
-			// Therefore request the information from all endpoints
-			for (const endpoint of this.getAllEndpoints()) {
-				if (endpoint.implementedCommandClasses.has(cc)) {
-					serializedCC.endpoints[endpoint.index.toString()] =
-						endpoint.implementedCommandClasses.get(cc)!;
-				}
-			}
-			ret.commandClasses[num2hex(cc)] = serializedCC as any;
-		}
-		return ret as any as JSONObject;
 	}
 
 	/**

@@ -26,7 +26,6 @@ import {
 	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
-	JSONObject,
 	Mixin,
 	num2hex,
 	ObjectKeyMap,
@@ -41,7 +40,6 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { composeObject } from "alcalzone-shared/objects";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
@@ -4224,41 +4222,6 @@ ${associatedNodes.join(", ")}`,
 			});
 		}
 		return ret;
-	}
-
-	/**
-	 * @internal
-	 * Serializes the controller information and all nodes to store them in a cache.
-	 */
-	public serialize(): JSONObject {
-		return {
-			controller: {
-				supportsSoftReset: this.supportsSoftReset,
-				provisioningList: this.provisioningList.map((e) => {
-					const {
-						dsk,
-						securityClasses,
-						// Node ID is not saved - we update it when deserializing nodes
-						nodeId,
-						...rest
-					} = e;
-					return {
-						dsk,
-						securityClasses: securityClasses.map(
-							(s) => SecurityClass[s],
-						),
-						// The user-defined properties are saved as-is
-						...rest,
-					};
-				}),
-			},
-			nodes: composeObject(
-				[...this.nodes.entries()].map(
-					([id, node]) =>
-						[id.toString(), node.serialize()] as [string, unknown],
-				),
-			),
-		};
 	}
 
 	/**

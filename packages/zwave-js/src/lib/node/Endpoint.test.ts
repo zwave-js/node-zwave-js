@@ -184,7 +184,7 @@ describe("lib/node/Endpoint", () => {
 			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			const node = new ZWaveNode(1, fakeDriver);
 			(fakeDriver.controller.nodes as any).set(1, node);
-			node["_isListening"] = true;
+			node["isListening"] = true;
 			node["applyDeviceClass"](soundSwitch);
 
 			expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
