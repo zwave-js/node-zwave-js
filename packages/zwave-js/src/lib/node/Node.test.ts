@@ -392,7 +392,10 @@ describe("lib/node/Node", () => {
 					Promise.resolve(),
 				),
 			);
-			beforeEach(() => fakeDriver.sendMessage.mockClear());
+			beforeEach(() => {
+				fakeDriver.sendMessage.mockClear();
+				fakeDriver.networkCache.clear();
+			});
 
 			it.todo("test that the CC interview methods are called");
 
@@ -715,6 +718,11 @@ describe("lib/node/Node", () => {
 			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 			node["isListening"] = !canSleep;
 			node["isFrequentListening"] = false;
+			// If the node doesn't support Z-Wave+ Info CC, the node instance
+			// will try to poll the device for changes. We don't want this to happen in tests.
+			node.addCC(CommandClasses["Z-Wave Plus Info"], {
+				isSupported: true,
+			});
 			// node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
 			return node;
@@ -724,6 +732,10 @@ describe("lib/node/Node", () => {
 			supportedCCs: [],
 			controlledCCs: [],
 		};
+
+		beforeEach(() => {
+			fakeDriver.networkCache.clear();
+		});
 
 		it("marks a sleeping node as awake", () => {
 			const node = makeNode(true);

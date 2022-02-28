@@ -90,7 +90,10 @@
 			"disableOptimisticBPs": true,
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "yarn",
-			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
+			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"],
+			// https://github.com/microsoft/vscode/issues/142830#issuecomment-1048240356 🤷🏻‍♂️
+			"outFiles": [],
+			"resolveSourceMapLocations": null
 		}
 	]
 }

@@ -84,9 +84,7 @@ export class Endpoint {
 		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
 		suffixDeserializer: (key: string) => {
 			const ccId = parseInt(key, 16);
-			if (ccId in CommandClasses) {
-				return (CommandClasses as any)[ccId];
-			}
+			if (ccId in CommandClasses) return ccId;
 		},
 	});
 
