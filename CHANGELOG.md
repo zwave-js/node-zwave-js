@@ -4,6 +4,26 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Restoring an NVM backup with an unsupported format on a stick with an unsupported NVM format is possible again. This enables working with backups on legacy (before SDK 6.61) controllers.
+* The wakeup node ID which is determined when including a node is now stored under the correct value and no longer overwrites the wakeup interval.
+
+### Config file changes
+* Correct volume parameter for Aeotec Siren Gen5
+* Add Philio PSR03-A, -B and -C
+* Add support for paddle programming on Zooz 700 Dimmers
+* Association command type for Aeotec illumino switches
+* Fix parameter 155 unit (W instead of seconds) for FGR223
+* Fix configurations for Aeotec ZW111 and FT111
+* Align Trane XL624 config with XR524
+* Add AU/NZ fingerprint to Aeotec Home Energy Meter - Gen5
+
+### Changes under the hood
+* Our bot now bugs the author of the issue when no logfile or the wrong logfile is provided, despite the description filling half a screen
+* Set some options in `.vscode/launch.json` to prevent the debugger from locking up in VSCode 1.64+ 🤷🏻‍♂️
+* In config files, `min/maxValue` is now optional if `allowManualEntry` is `false`
+
 ## 8.11.6 (2022-02-14)
 ### Bugfixes
 * When converting an NVM, the page size is now limited to the maximum supported by Z-Wave sticks, even if the existing metadata contains a larger page size.
