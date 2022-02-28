@@ -35,7 +35,6 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
-	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -151,6 +150,12 @@ import {
 	sendStatistics,
 } from "../telemetry/statistics";
 import { createMessageGenerator } from "./MessageGenerators";
+import {
+	cacheKeys,
+	deserializeNetworkCacheValue,
+	migrateLegacyNetworkCache,
+	serializeNetworkCacheValue,
+} from "./NetworkCache";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -643,6 +648,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
 		return this._metadataDB;
 	}
+	private _networkCache: JsonlDB<any> | undefined;
+	/** @internal */
+	public get networkCache(): JsonlDB<any> {
+		if (this._networkCache == undefined) {
+			throw new ZWaveError(
+				"The network cache was not yet initialized!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._networkCache;
+	}
 
 	public readonly configManager: ConfigManager;
 	public get configVersion(): string {
@@ -920,15 +936,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
-	private async initValueDBs(homeId: number): Promise<void> {
-		// Always start the value and metadata databases
+	private getJsonlDBOptions(): JsonlDBOptions<any> {
 		const options: JsonlDBOptions<any> = {
 			ignoreReadErrors: true,
 			...throttlePresets[this.options.storage.throttle],
 		};
 		if (this.options.storage.lockDir) {
-			options.lockfileDirectory = this.options.storage.lockDir;
+			options.lockfile = {
+				directory: this.options.storage.lockDir,
+			};
 		}
+		return options;
+	}
+
+	private async initNetworkCache(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
+
+		const networkCacheFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.jsonl`,
+		);
+		this._networkCache = new JsonlDB(networkCacheFile, {
+			...options,
+			serializer: (key, value) =>
+				serializeNetworkCacheValue(this, key, value),
+			reviver: (key, value) =>
+				deserializeNetworkCacheValue(this, key, value),
+		});
+		await this._networkCache.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since the network cache is append-only, we need to
+			// clear it if the cache should be ignored
+			this._networkCache.clear();
+		}
+	}
+
+	private async initValueDBs(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
 
 		const valueDBFile = path.join(
 			this.cacheDir,
@@ -949,8 +994,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {
-			// Since value/metadata DBs are append-only, we need to clear them
-			// if the cache should be ignored
+			// Since value/metadata DBs are append-only, we need to
+			// clear them if the cache should be ignored
 			this._valueDB.clear();
 			this._metadataDB.clear();
 		}
@@ -978,8 +1023,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
+			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this.options.enableSoftReset && !(await this.maySoftReset())) {
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -996,7 +1042,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						e.code === ZWaveErrorCodes.Driver_Failed
 					) {
 						// Remember that soft reset is not supported by this stick
-						await this.rememberNoSoftReset();
+						this.driverLog.print(
+							"Soft reset seems not to be supported by this stick, disabling it.",
+							"warn",
+						);
+						this.controller.supportsSoftReset = false;
 						// Then fail the driver
 						await this.destroy();
 						return;
@@ -1014,7 +1064,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					`Controller identification returned invalid node ID 0 - trying again...`,
 					"warn",
 				);
+				// We might end up with a different home ID, so close the cache before re-identifying the controller
+				await this._networkCache?.close();
 				await this.controller.identify();
+				await this.initNetworkCache(this.controller.homeId!);
 			}
 
 			if (this.controller.ownNodeId === 0) {
@@ -1718,29 +1771,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
-	private async maySoftReset(): Promise<boolean> {
+	private maySoftReset(): boolean {
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		let supportsSoftReset: boolean | undefined;
-		if (this._controllerInterviewed) {
-			supportsSoftReset = this.controller.supportsSoftReset;
-		} else {
-			// The controller wasn't interviewed yet, read the json file manually
-			const fs = this.options.storage.driver;
-
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-			supportsSoftReset = json?.controller?.supportsSoftReset;
-		}
+		const supportsSoftReset = this._networkCache!.get(
+			cacheKeys.controller.supportsSoftReset,
+		) as boolean | undefined;
 		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
@@ -1775,52 +1810,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 
 		return true;
-	}
-
-	private async rememberNoSoftReset(): Promise<void> {
-		this.driverLog.print(
-			"Soft reset seems not to be supported by this stick, disabling it.",
-			"warn",
-		);
-		this.controller.supportsSoftReset = false;
-
-		if (this._controllerInterviewed) {
-			// We can use the normal method for this
-			await this.saveNetworkToCacheInternal();
-		} else {
-			// saveNetworkToCache won't write anything, just edit the file "manually"
-
-			// TODO: This is ugly, rework this when changing how the network data is saved
-
-			const fs = this.options.storage.driver;
-
-			await fs.ensureDir(this.cacheDir);
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-
-			// Change the supportsSoftReset flag
-			json ??= {};
-			json.controller ??= {};
-			json.controller.supportsSoftReset = false;
-
-			// And save it again
-			const jsonString = stringify(json);
-			await this.options.storage.driver.writeFile(
-				cacheFile,
-				jsonString,
-				"utf8",
-			);
-		}
 	}
 
 	/**
@@ -2074,23 +2063,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.serial = undefined;
 		}
 
+		// Attempt to close the value DBs and network cache
 		try {
-			// Attempt to save the network to cache
-			await this.saveNetworkToCacheInternal();
+			await this._valueDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${getErrorMessage(e)}`,
+				`Closing the value DB failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
-
 		try {
-			// Attempt to close the value DBs
-			await this._valueDB?.close();
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${getErrorMessage(e)}`,
+				`Closing the metadata DB failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		try {
+			await this._networkCache?.close();
+		} catch (e) {
+			this.driverLog.print(
+				`Closing the network cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -3893,73 +3887,82 @@ ${handlers.length} left`,
 	private isSavingToCache: boolean = false;
 
 	/**
-	 * Does the work for saveNetworkToCache. This is not throttled, so any call
-	 * to this method WILL save the network.
+	 * @internal
+	 * Helper function to read and convert potentially existing values from the network cache
 	 */
-	private async saveNetworkToCacheInternal(): Promise<void> {
-		// Avoid overwriting the cache with empty data if the controller wasn't interviewed yet
-		if (
-			!this._controller ||
-			this._controller.homeId == undefined ||
-			!this._controllerInterviewed
-		)
-			return;
-
-		await this.options.storage.driver.ensureDir(this.cacheDir);
-		const cacheFile = path.join(
-			this.cacheDir,
-			this._controller.homeId.toString(16) + ".json",
-		);
-
-		const serializedObj = this._controller.serialize();
-		const jsonString = stringify(serializedObj);
-		await this.options.storage.driver.writeFile(
-			cacheFile,
-			jsonString,
-			"utf8",
-		);
+	public cacheGet<T>(
+		cacheKey: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): T | undefined {
+		let ret = this.networkCache.get(cacheKey);
+		if (ret !== undefined && typeof options?.reviver === "function") {
+			try {
+				ret = options.reviver(ret);
+			} catch {
+				// ignore, invalid entry
+			}
+		}
+		return ret;
 	}
 
 	/**
-	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
-	 * For performance reasons, these calls may be throttled.
+	 * @internal
+	 * Helper function to convert values and write them to the network cache
 	 */
-	public async saveNetworkToCache(): Promise<void> {
-		// TODO: Detect if the network needs to be saved at all
-		if (!this._controller || this._controller.homeId == undefined) return;
-		// Ensure this method isn't being executed too often
-		if (
-			this.isSavingToCache ||
-			Date.now() - this.lastSaveToCache < this.saveToCacheInterval
-		) {
-			// Schedule a save in a couple of ms to collect changes
-			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(
-					() => void this.saveNetworkToCache(),
-					this.saveToCacheInterval,
-				);
-			}
-			return;
-		} else {
-			this.saveToCacheTimer = undefined;
+	public cacheSet<T>(
+		cacheKey: string,
+		value: T | undefined,
+		options?: {
+			serializer?: (value: T) => any;
+		},
+	): void {
+		if (value !== undefined && typeof options?.serializer === "function") {
+			value = options.serializer(value);
 		}
-		this.isSavingToCache = true;
-		await this.saveNetworkToCacheInternal();
-		this.isSavingToCache = false;
-		this.lastSaveToCache = Date.now();
+
+		if (value === undefined) {
+			this.networkCache.delete(cacheKey);
+		} else {
+			this.networkCache.set(cacheKey, value);
+		}
 	}
 
 	/**
 	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
 	public async restoreNetworkStructureFromCache(): Promise<void> {
-		if (!this._controller || !this.controller.homeId) return;
+		if (!this._controller || !this.controller.homeId || !this._networkCache)
+			return;
 
-		const cacheFile = path.join(
-			this.cacheDir,
-			`${this.controller.homeId.toString(16)}.json`,
-		);
-		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
+		// In v9, the network cache was switched from a json file to use a Jsonl-DB
+		// Therefore the legacy cache file must be migrated to the new format
+		if (this._networkCache.size === 0) {
+			// version the cache format, so migrations in the future are easier
+			this._networkCache.set("cacheFormat", 1);
+
+			try {
+				await migrateLegacyNetworkCache(
+					this,
+					this.controller.homeId,
+					this._networkCache,
+					this.options.storage.driver,
+					this.cacheDir,
+				);
+			} catch (e) {
+				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
+					e,
+					true,
+				)}`;
+				this.driverLog.print(message, "error");
+			}
+		}
+
+		if (this._networkCache.size <= 1) {
+			// If the size is 0 or 1, the cache is empty, so we cannot restore it
+			return;
+		}
 
 		try {
 			this.driverLog.print(
@@ -3967,11 +3970,7 @@ ${handlers.length} left`,
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheString = await this.options.storage.driver.readFile(
-				cacheFile,
-				"utf8",
-			);
-			await this.controller.deserialize(JSON.parse(cacheString));
+			await this.controller.deserialize();
 			this.driverLog.print(
 				`Restoring the network from cache was successful!`,
 			);

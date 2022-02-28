@@ -47,9 +47,6 @@ export function createEmptyMockDriver() {
 	const ret = {
 		sendMessage: jest.fn().mockImplementation(() => Promise.resolve()),
 		sendCommand: jest.fn(),
-		saveNetworkToCache: jest
-			.fn()
-			.mockImplementation(() => Promise.resolve()),
 		getSafeCCVersionForNode: jest
 			.fn()
 			.mockImplementation(
@@ -82,6 +79,50 @@ export function createEmptyMockDriver() {
 		},
 		valueDB: new Map(),
 		metadataDB: new Map(),
+		networkCache: new Map(),
+		cacheGet: jest.fn().mockImplementation(
+			<T>(
+				cacheKey: string,
+				options?: {
+					reviver?: (value: any) => T;
+				},
+			): T | undefined => {
+				let _ret = ret.networkCache.get(cacheKey);
+				if (
+					_ret !== undefined &&
+					typeof options?.reviver === "function"
+				) {
+					try {
+						_ret = options.reviver(_ret);
+					} catch {
+						// ignore, invalid entry
+					}
+				}
+				return _ret;
+			},
+		),
+		cacheSet: jest.fn().mockImplementation(
+			<T>(
+				cacheKey: string,
+				value: T | undefined,
+				options?: {
+					serializer?: (value: T) => any;
+				},
+			): void => {
+				if (
+					value !== undefined &&
+					typeof options?.serializer === "function"
+				) {
+					value = options.serializer(value);
+				}
+
+				if (value === undefined) {
+					ret.networkCache.delete(cacheKey);
+				} else {
+					ret.networkCache.set(cacheKey, value);
+				}
+			},
+		),
 		options: {
 			timeouts: {
 				ack: 1000,

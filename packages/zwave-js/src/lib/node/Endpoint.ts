@@ -1,5 +1,6 @@
 import {
 	actuatorCCs,
+	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
 	GraphNode,
@@ -7,6 +8,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { isDeepStrictEqual } from "util";
 import type { MultiChannelAssociationCC } from "../commandclass";
 import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
@@ -32,6 +34,7 @@ import {
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
 import type { Driver } from "../driver/Driver";
+import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
 
@@ -73,17 +76,26 @@ export class Endpoint {
 		this._commandClassAPIs.clear();
 	}
 
-	private _implementedCommandClasses = new Map<
+	private _implementedCommandClasses: Map<
 		CommandClasses,
-		CommandClassInfo
-	>();
+		Readonly<CommandClassInfo>
+	> = new CacheBackedMap(this.driver.networkCache, {
+		prefix:
+			cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey + ".",
+		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+		suffixDeserializer: (key: string) => {
+			const ccId = parseInt(key, 16);
+			if (ccId in CommandClasses) return ccId;
+		},
+	});
+
 	/**
 	 * @internal
 	 * Information about the implemented Command Classes of this endpoint.
 	 */
 	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
-		CommandClassInfo
+		Readonly<CommandClassInfo>
 	> {
 		return this._implementedCommandClasses;
 	}
@@ -116,14 +128,20 @@ export class Endpoint {
 		// Endpoints cannot support Multi Channel CC
 		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
 
-		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
-			isSupported: false,
-			isControlled: false,
-			secure: false,
-			version: 0,
-		};
-		ccInfo = Object.assign(ccInfo, info);
-		this._implementedCommandClasses.set(cc, ccInfo);
+		const original = this._implementedCommandClasses.get(cc);
+		const updated = Object.assign(
+			{},
+			original ?? {
+				isSupported: false,
+				isControlled: false,
+				secure: false,
+				version: 0,
+			},
+			info,
+		);
+		if (!isDeepStrictEqual(original, updated)) {
+			this._implementedCommandClasses.set(cc, updated);
+		}
 	}
 
 	/**
