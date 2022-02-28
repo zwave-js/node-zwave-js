@@ -242,7 +242,7 @@ export async function initSentry(
 		integrations: [
 			new Sentry.Integrations.OnUncaughtException(),
 			new Sentry.Integrations.OnUnhandledRejection({
-				mode: "strict",
+				mode: "none", // Let applications take care of force-exiting
 			}),
 			new Sentry.Integrations.FunctionToString(),
 			new Integrations.Dedupe() as any,
