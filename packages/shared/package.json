@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "alcalzone-shared": "^4.0.1",
-    "fs-extra": "^10.0.0"
+    "fs-extra": "^10.0.1"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
