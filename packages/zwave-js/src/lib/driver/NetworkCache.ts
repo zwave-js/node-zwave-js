@@ -402,7 +402,12 @@ export async function migrateLegacyNetworkCache(
 					jsonl.set(nodeCacheKeys.securityClass(secClass), val);
 				}
 			}
-			tryMigrate(nodeCacheKeys.dsk, node, legacyPaths.node.dsk);
+			tryMigrate(
+				nodeCacheKeys.dsk,
+				node,
+				legacyPaths.node.dsk,
+				dskFromString,
+			);
 
 			// ... and command classes
 			// The nesting was inverted from the legacy cache: node -> EP -> CCs
