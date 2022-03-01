@@ -315,7 +315,7 @@ export async function migrateLegacyNetworkCache(
 		converter?: (value: any) => any,
 	): void {
 		let val = pickDeep(source, sourcePath);
-		if (converter) val = converter(val);
+		if (val != undefined && converter) val = converter(val);
 		if (val != undefined) jsonl.set(targetKey, val);
 	}
 
