@@ -16,7 +16,7 @@ jobs:
         node-version: [14.x] # This should be LTS
 
     steps:
-    - uses: actions/github-script@v5
+    - uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
