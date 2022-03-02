@@ -59,7 +59,7 @@ jobs:
       run: git switch -c temp
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -400,7 +400,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -508,7 +508,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -628,7 +628,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
