@@ -4468,7 +4468,7 @@ __metadata:
     esbuild: "*"
     esbuild-register: ^3.3.2
     jest-extended: ^0.11.5
-    logform: ^2.3.2
+    logform: ^2.4.0
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
     typescript: 4.6.2
