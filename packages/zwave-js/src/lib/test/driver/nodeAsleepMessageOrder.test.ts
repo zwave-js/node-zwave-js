@@ -28,7 +28,6 @@ describe("regression tests", () => {
 	});
 
 	it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
-		jest.setTimeout(5000);
 		// Repro from #1107
 
 		// Node 10's awake timer elapses before its ping is rejected,
@@ -145,5 +144,5 @@ describe("regression tests", () => {
 		await expect(pingPromise17).resolves.toBeFalse();
 
 		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	});
+	}, 5000);
 });
