@@ -3,6 +3,8 @@ import {
 	encodeFloatWithScale,
 	enumValuesToMetadataStates,
 	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	parseFloatWithScale,
 	validatePayload,
 	ValueID,
@@ -1255,6 +1257,18 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 
 	@ccValue({ internal: true })
 	public readonly maxValveTableSize: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supports master valve": this.supportsMasterValve,
+				"no. of valves": this.numValves,
+				"no. of valve tables": this.numValveTables,
+				"max. valve table size": this.maxValveTableSize,
+			},
+		};
+	}
 }
 
 @CCCommand(IrrigationCommand.SystemInfoGet)
@@ -1416,6 +1430,52 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		label: "First open zone valve ID",
 	})
 	public firstOpenZoneId?: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"system voltage": `${this.systemVoltage} V`,
+			"active sensors": [
+				this.flowSensorActive ? "flow" : undefined,
+				this.pressureSensorActive ? "pressure" : undefined,
+				this.rainSensorActive ? "rain" : undefined,
+				this.moistureSensorActive ? "moisture" : undefined,
+			]
+				.filter(Boolean)
+				.join(", "),
+		};
+		if (this.flow != undefined) {
+			message.flow = `${this.flow} l/h`;
+		}
+		if (this.pressure != undefined) {
+			message.pressure = `${this.pressure} kPa`;
+		}
+		message["remaining shutoff duration"] = `${this.shutoffDuration} hours`;
+		message["master valve status"] = this.masterValveOpen
+			? "open"
+			: "closed";
+		message["first open zone valve"] = this.firstOpenZoneId || "none";
+		const errors = [
+			this.errorNotProgrammed ? "device not programmed" : undefined,
+			this.errorEmergencyShutdown ? "emergency shutdown" : undefined,
+			this.errorHighPressure
+				? "high pressure threshold triggered"
+				: undefined,
+			this.errorLowPressure
+				? "low pressure threshold triggered"
+				: undefined,
+			this.errorValve
+				? "a valve or the master valve has an error"
+				: undefined,
+		].filter(Boolean);
+		if (errors.length > 0) {
+			message.errors = errors.map((e) => `\n· ${e}`).join("");
+		}
+
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(IrrigationCommand.SystemStatusGet)
@@ -1479,6 +1539,30 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			Buffer.from([polarity]),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"master valve delay": `${this.masterValveDelay} s`,
+			"high pressure threshold": `${this.highPressureThreshold} kPa`,
+			"low pressure threshold": `${this.lowPressureThreshold} kPa`,
+		};
+		if (this.rainSensorPolarity != undefined) {
+			message["rain sensor polarity"] = getEnumMemberName(
+				IrrigationSensorPolarity,
+				this.rainSensorPolarity,
+			);
+		}
+		if (this.moistureSensorPolarity != undefined) {
+			message["moisture sensor polarity"] = getEnumMemberName(
+				IrrigationSensorPolarity,
+				this.moistureSensorPolarity,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
@@ -1563,6 +1647,30 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		states: enumValuesToMetadataStates(IrrigationSensorPolarity),
 	})
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"master valve delay": `${this.masterValveDelay} s`,
+			"high pressure threshold": `${this.highPressureThreshold} kPa`,
+			"low pressure threshold": `${this.lowPressureThreshold} kPa`,
+		};
+		if (this.rainSensorPolarity != undefined) {
+			message["rain sensor polarity"] = getEnumMemberName(
+				IrrigationSensorPolarity,
+				this.rainSensorPolarity,
+			);
+		}
+		if (this.moistureSensorPolarity != undefined) {
+			message["moisture sensor polarity"] = getEnumMemberName(
+				IrrigationSensorPolarity,
+				this.moistureSensorPolarity,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(IrrigationCommand.SystemConfigGet)
@@ -1722,6 +1830,29 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 
 		return true;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"valve ID": this.valveId,
+			connected: this.connected,
+			"nominal current": `${this.nominalCurrent} mA`,
+		};
+		const errors = [
+			this.errorShortCircuit ? "short circuit" : undefined,
+			this.errorHighCurrent ? "current above high threshold" : undefined,
+			this.errorLowCurrent ? "current below low threshold" : undefined,
+			this.errorMaximumFlow ? "maximum flow" : undefined,
+			this.errorHighFlow ? "flow above high threshold" : undefined,
+			this.errorLowFlow ? "flow below low threshold" : undefined,
+		].filter(Boolean);
+		if (errors.length > 0) {
+			message.errors = errors.map((e) => `\n· ${e}`).join("");
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
@@ -1760,6 +1891,15 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"valve ID": this.valveId,
+			},
+		};
 	}
 }
 
@@ -1830,6 +1970,22 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 			]),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"valve ID": this.valveId,
+				"nominal current high threshold": `${this.nominalCurrentHighThreshold} mA`,
+				"nominal current low threshold": `${this.nominalCurrentLowThreshold} mA`,
+				"maximum flow": `${this.maximumFlow} l/h`,
+				"high flow threshold": `${this.highFlowThreshold} l/h`,
+				"low flow threshold": `${this.lowFlowThreshold} l/h`,
+				"use rain sensor": this.useRainSensor,
+				"use moisture sensor": this.useMoistureSensor,
+			},
+		};
 	}
 }
 
@@ -1973,6 +2129,22 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public lowFlowThreshold: number;
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"valve ID": this.valveId,
+				"nominal current high threshold": `${this.nominalCurrentHighThreshold} mA`,
+				"nominal current low threshold": `${this.nominalCurrentLowThreshold} mA`,
+				"maximum flow": `${this.maximumFlow} l/h`,
+				"high flow threshold": `${this.highFlowThreshold} l/h`,
+				"low flow threshold": `${this.lowFlowThreshold} l/h`,
+				"use rain sensor": this.useRainSensor,
+				"use moisture sensor": this.useMoistureSensor,
+			},
+		};
+	}
 }
 
 interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
@@ -2011,6 +2183,15 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 			this.valveId === "master" ? 1 : this.valveId || 1,
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"valve ID": this.valveId,
+			},
+		};
 	}
 }
 
@@ -2052,6 +2233,21 @@ export class IrrigationCCValveRun extends IrrigationCC {
 		]);
 		this.payload.writeUInt16BE(this.duration, 2);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"valve ID": this.valveId,
+		};
+		if (this.duration) {
+			message.duration = `${this.duration} s`;
+		} else {
+			message.action = "turn off";
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
@@ -2103,6 +2299,25 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"table ID": this.tableId,
+		};
+		for (let i = 0; i < this.entries.length; i++) {
+			const entry = this.entries[i];
+			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
+			if (entry.duration) {
+				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
+			} else {
+				message[`valve ${valveLabel} action`] = `turn off`;
+			}
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(IrrigationCommand.ValveTableReport)
@@ -2126,6 +2341,25 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 
 	public readonly tableId: number;
 	public readonly entries: ValveTableEntry[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"table ID": this.tableId,
+		};
+		for (let i = 0; i < this.entries.length; i++) {
+			const entry = this.entries[i];
+			const valveLabel = padStart(entry.valveId.toString(), 3, "0");
+			if (entry.duration) {
+				message[`valve ${valveLabel} duration`] = `${entry.duration} s`;
+			} else {
+				message[`valve ${valveLabel} action`] = `turn off`;
+			}
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 interface IrrigationCCValveTableGetOptions extends CCCommandOptions {
@@ -2169,6 +2403,15 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 		this.payload = Buffer.from([this.tableId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"table ID": this.tableId,
+			},
+		};
+	}
 }
 
 interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
@@ -2207,6 +2450,17 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 		this.payload = Buffer.from(this.tableIDs);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"table IDs": this.tableIDs
+					.map((id) => padStart(id.toString(), 3, "0"))
+					.join(", "),
+			},
+		};
+	}
 }
 
 interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
@@ -2242,5 +2496,19 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.duration ?? 255]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				duration:
+					this.duration === 0
+						? "temporarily"
+						: this.duration === 255 || this.duration === undefined
+						? "permanently"
+						: `${this.duration} hours`,
+			},
+		};
 	}
 }
