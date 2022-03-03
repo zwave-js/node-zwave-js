@@ -116,6 +116,7 @@ import {
 	MultilevelSwitchCCSet,
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
+	MultilevelSwitchCommand,
 } from "../commandclass/MultilevelSwitchCC";
 import {
 	getNodeLocationValueId,
@@ -2822,9 +2823,6 @@ protocol version:      ${this._protocolVersion}`;
 
 	/** Handles the receipt of a MultilevelCC Set or Report */
 	private handleMultilevelSwitchCommand(command: MultilevelSwitchCC): void {
-		// Retrieve the endpoint the command is coming from
-		const sourceEndpoint =
-			this.getEndpoint(command.endpointIndex ?? 0) ?? this;
 		if (command instanceof MultilevelSwitchCCSet) {
 			this.driver.controllerLog.logNode(this.id, {
 				endpoint: command.endpointIndex,
@@ -2845,12 +2843,12 @@ protocol version:      ${this._protocolVersion}`;
 				message:
 					"treating MultilevelSwitchCCStartLevelChange::Set as a value event",
 			});
-			this._valueDB.setValue(
-				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
-				command.direction,
-				{
-					stateful: false,
-				},
+			// Notify listeners
+			this.emit(
+				"notification",
+				this,
+				CommandClasses["Multilevel Switch"],
+				pick(command, ["eventType", "direction"]),
 			);
 			return;
 		}
@@ -2860,12 +2858,11 @@ protocol version:      ${this._protocolVersion}`;
 				message:
 					"treating MultilevelSwitchCCStopLevelChange::Set as a value event",
 			});
-			this._valueDB.setValue(
-				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
-				"stop",
-				{
-					stateful: false,
-				},
+			this.emit(
+				"notification",
+				this,
+				CommandClasses["Multilevel Switch"],
+				{ eventType: MultilevelSwitchCommand.StopLevelChange },
 			);
 			return;
 		}

@@ -282,6 +282,9 @@
 				"treatBasicSetAsEvent": {
 					"const": true
 				},
+				"treatMultilevelSwitchAsEvent": {
+					"const": true
+				},
 				"treatDestinationEndpointAsSource": {
 					"const": true
 				}

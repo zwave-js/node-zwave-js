@@ -15,6 +15,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
@@ -117,6 +118,25 @@ export function getCompatEventValueId(endpoint?: number): ValueID {
 		property: "event",
 	};
 }
+
+/**
+ * @publicAPI
+ * This is emitted when a start or stop event is received
+ */
+export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	eventType: MultilevelSwitchCommand;
+	direction?: string;
+}
+
+/**
+ * @publicAPI
+ * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Multilevel Switch"],
+	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+];
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
@@ -507,7 +527,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		await this.refreshValues();
 
 		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+		if (node.deviceConfig?.compat?.treatMultilevelSwitchAsEvent) {
 			const valueId = getCompatEventValueId(this.endpointIndex);
 			if (!node.valueDB.hasMetadata(valueId)) {
 				node.valueDB.setMetadata(valueId, {
@@ -602,10 +622,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.currentValue = parseMaybeNumber(
-				this.payload[0],
-				driver.options.preserveUnknownValues,
-			);
+			this.targetValue = parseNumber(this.payload[0]);
 
 			if (this.version >= 2 && this.payload.length >= 2) {
 				this.targetValue = parseNumber(this.payload[0]);
@@ -617,33 +634,15 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		}
 	}
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyLevel,
-		label: "Current value",
-	})
-	public readonly currentValue: Maybe<number> | undefined;
-
-	@ccValue({ forceCreation: true })
-	@ccValueMetadata({
-		...ValueMetadata.Level,
-		label: "Target value",
-	})
-	public readonly targetValue: number | undefined;
-
-	@ccValue({ minVersion: 2 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration until target value",
-	})
-	public readonly duration: Duration | undefined;
+	public targetValue: number | undefined;
+	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const payload: number[] = [
-			typeof this.currentValue !== "number" ? 0xfe : this.currentValue,
+		const payload = [
+			typeof this.targetValue !== "number" ? 0xfe : this.targetValue,
 		];
-		if (this.version >= 2 && this.targetValue && this.duration) {
-			payload.push(this.targetValue, this.duration.serializeReport());
+		if (this.version >= 2 && this.duration) {
+			payload.push(this.duration.serializeSet());
 		}
 		this.payload = Buffer.from(payload);
 		return super.serialize();
@@ -760,14 +759,17 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.ignoreStartLevel = !!ignoreStartLevel;
 			this.startLevel = startLevel;
 			this.direction = direction ? "down" : "up";
+			this.eventType = MultilevelSwitchCommand.StartLevelChange;
 		} else {
 			this.duration = options.duration;
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;
+			this.eventType = MultilevelSwitchCommand.StartLevelChange;
 		}
 	}
 
+	public eventType: MultilevelSwitchCommand;
 	public duration: Duration | undefined;
 	public startLevel: number;
 	public ignoreStartLevel: boolean;
