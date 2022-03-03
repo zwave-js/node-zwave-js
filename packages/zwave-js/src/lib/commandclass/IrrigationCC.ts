@@ -1513,7 +1513,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		if (!!(polarity & 0b1000_0000)) {
 			// The valid bit is set
 			this.rainSensorPolarity = polarity & 0b1;
-			this.moistureSensorPolarity = polarity & 0b10;
+			this.moistureSensorPolarity = (polarity & 0b10) >>> 1;
 		}
 		this.persistValues();
 	}
