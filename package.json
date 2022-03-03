@@ -45,7 +45,7 @@
     "@commitlint/config-conventional": "^16.2.1",
     "@tsconfig/node12": "^1.0.9",
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.4.1",
     "@types/node": "^15.12.5",
     "@types/semver": "^7.3.9",
     "@types/source-map-support": "^0",
