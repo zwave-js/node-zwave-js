@@ -229,7 +229,7 @@ jobs:
         BODY="${BODY//$'\r'/'%0D'}"
         echo "::set-output name=BODY::$BODY"
         if [[ $VERSION == *"-"* ]] ; then
-          echo "::set-output name=TAG::--dist-tag next"
+          echo "::set-output name=TAG::--tag next"
         fi
 
     - name: Install dependencies
