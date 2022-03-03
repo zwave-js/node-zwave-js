@@ -1275,27 +1275,21 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		this.rainSensorActive = !!(this.payload[1] & 0x04);
 		this.moistureSensorActive = !!(this.payload[1] & 0x08);
 
-		let offset: number;
-		if (!this.flowSensorActive) {
-			validatePayload(this.payload[2] === 1);
-			offset = 4;
-		} else {
+		let offset = 2;
+		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(2),
+				this.payload.slice(offset),
 			);
 			validatePayload(scale === 0);
-			this.flow = value;
-			offset = bytesRead + 2;
+			if (this.flowSensorActive) this.flow = value;
+			offset += bytesRead;
 		}
-		if (!this.pressureSensorActive) {
-			validatePayload(this.payload[offset] === 1);
-			offset += 2;
-		} else {
+		{
 			const { value, scale, bytesRead } = parseFloatWithScale(
-				this.payload.slice(2),
+				this.payload.slice(offset),
 			);
 			validatePayload(scale === 0);
-			this.pressure = value;
+			if (this.pressureSensorActive) this.pressure = value;
 			offset += bytesRead;
 		}
 
