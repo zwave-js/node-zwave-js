@@ -946,9 +946,9 @@ export class IrrigationCCAPI extends CCAPI {
 					// Stop a valve run
 					await this.shutoffValve(property);
 				}
+			} else {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 			}
-
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
 	};
 
