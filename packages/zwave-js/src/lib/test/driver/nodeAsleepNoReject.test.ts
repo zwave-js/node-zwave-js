@@ -31,7 +31,6 @@ describe("regression tests", () => {
 	});
 
 	it("when a node does not respond because it is asleep, the transaction does not get rejected", async () => {
-		jest.setTimeout(5000);
 		// Repro from #1078
 
 		const node2 = new ZWaveNode(2, driver);
@@ -115,5 +114,5 @@ describe("regression tests", () => {
 					.command as BasicCCSet
 			).targetValue,
 		).toBe(50);
-	});
+	}, 5000);
 });
