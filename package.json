@@ -69,7 +69,7 @@
     "fs-extra": "^10.0.1",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^2.0.0",
     "prettier": "^2.5.1",
     "prettier-plugin-organize-imports": "^2.3.4",
     "reflect-metadata": "^0.1.13",

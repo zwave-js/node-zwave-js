@@ -54,7 +54,7 @@
     "@types/triple-beam": "^1.3.2",
     "esbuild": "0.14.1",
     "esbuild-register": "^3.3.2",
-    "jest-extended": "^0.11.5",
+    "jest-extended": "^2.0.0",
     "typescript": "4.6.2"
   }
 }
