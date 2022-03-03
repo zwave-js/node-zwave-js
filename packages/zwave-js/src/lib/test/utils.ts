@@ -53,6 +53,8 @@ export async function createAndStartDriver(
 	driver["_valueDB"]!.close = () => Promise.resolve();
 	driver["_metadataDB"] = new Map() as any;
 	driver["_metadataDB"]!.close = () => Promise.resolve();
+	driver["_networkCache"] = new Map() as any;
+	driver["_networkCache"]!.close = () => Promise.resolve();
 
 	// Mock the controller as it will not be initialized with skipInterview: true
 	driver["_controller"] = {

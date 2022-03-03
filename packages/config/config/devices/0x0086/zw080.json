@@ -59,7 +59,7 @@
 		},
 		{
 			"#": "37[0xff]",
-			"$import": "templates/aeotec_template.json#wattage_percent_trigger",
+			"$import": "~/templates/master_template.json#volume_three",
 			"valueSize": 2
 		},
 		{

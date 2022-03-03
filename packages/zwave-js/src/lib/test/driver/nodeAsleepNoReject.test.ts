@@ -41,8 +41,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node2["_isListening"] = false;
-		node2["_isFrequentListening"] = false;
+		node2["isListening"] = false;
+		node2["isFrequentListening"] = false;
 		node2.markAsAwake();
 		expect(node2.status).toBe(NodeStatus.Awake);
 

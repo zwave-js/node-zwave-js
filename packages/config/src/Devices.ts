@@ -1040,6 +1040,7 @@ export class ConditionalParamInformation {
 		valueBitMask: number | undefined,
 		definition: JSONObject,
 	) {
+		this.parent = parent;
 		this.parameterNumber = parameterNumber;
 		this.valueBitMask = valueBitMask;
 		// No need to validate here, this should be done one level higher
@@ -1078,7 +1079,10 @@ Parameter #${parameterNumber} has an invalid value size`,
 		}
 		this.valueSize = definition.valueSize;
 
-		if (typeof definition.minValue !== "number") {
+		if (
+			definition.minValue != undefined &&
+			typeof definition.minValue !== "number"
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
@@ -1087,7 +1091,10 @@ Parameter #${parameterNumber} has a non-numeric property minValue`,
 		}
 		this.minValue = definition.minValue;
 
-		if (typeof definition.maxValue !== "number") {
+		if (
+			definition.maxValue != undefined &&
+			typeof definition.maxValue !== "number"
+		) {
 			throwInvalidConfig(
 				"devices",
 				`packages/config/config/devices/${parent.filename}:
@@ -1195,13 +1202,14 @@ Parameter #${parameterNumber}: options is malformed!`,
 			) ?? [];
 	}
 
+	private parent: ConditionalDeviceConfig;
 	public readonly parameterNumber: number;
 	public readonly valueBitMask?: number;
 	public readonly label: string;
 	public readonly description?: string;
 	public readonly valueSize: number;
-	public readonly minValue: number;
-	public readonly maxValue: number;
+	public readonly minValue?: number;
+	public readonly maxValue?: number;
 	public readonly unsigned?: boolean;
 	public readonly defaultValue: number;
 	public readonly unit?: string;
@@ -1223,7 +1231,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 			return;
 		}
 
-		return {
+		const ret = {
 			...pick(this, [
 				"parameterNumber",
 				"valueBitMask",
@@ -1243,13 +1251,43 @@ Parameter #${parameterNumber}: options is malformed!`,
 				.map((o) => o.evaluateCondition(deviceId))
 				.filter((o): o is ConfigOption => !!o),
 		};
+		// Infer minValue from options if possible
+		if (ret.minValue == undefined) {
+			if (ret.allowManualEntry === false && ret.options.length > 0) {
+				ret.minValue = Math.min(...ret.options.map((o) => o.value));
+			} else {
+				throw throwInvalidConfig(
+					"devices",
+					`packages/config/config/devices/${this.parent.filename}:
+Parameter #${this.parameterNumber} is missing required property "minValue"!`,
+				);
+			}
+		}
+		if (ret.maxValue == undefined) {
+			if (ret.allowManualEntry === false && ret.options.length > 0) {
+				ret.maxValue = Math.max(...ret.options.map((o) => o.value));
+			} else {
+				throw throwInvalidConfig(
+					"devices",
+					`packages/config/config/devices/${this.parent.filename}:
+Parameter #${this.parameterNumber} is missing required property "maxValue"!`,
+				);
+			}
+		}
+
+		// @ts-expect-error TS doesn't seem to understand that we do set min/maxValue
+		return ret;
 	}
 }
 
 export type ParamInformation = Omit<
 	ConditionalParamInformation,
-	"condition" | "evaluateCondition" | "options"
-> & { options: readonly ConfigOption[] };
+	"condition" | "evaluateCondition" | "options" | "minValue" | "maxValue"
+> & {
+	options: readonly ConfigOption[];
+	minValue: NonNullable<ConditionalParamInformation["minValue"]>;
+	maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
+};
 
 export class ConditionalConfigOption {
 	public constructor(

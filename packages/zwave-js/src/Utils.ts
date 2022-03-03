@@ -10,6 +10,7 @@ export type {
 	Protocols,
 	QRProvisioningInformation,
 } from "@zwave-js/core";
+export { rssiToString } from "./lib/controller/SendDataShared";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,
