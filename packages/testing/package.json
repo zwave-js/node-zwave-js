@@ -39,7 +39,7 @@
     "@types/triple-beam": "^1.3.2",
     "@zwave-js/core": "workspace:*",
     "ansi-colors": "^4.1.1",
-    "esbuild": "*",
+    "esbuild": "0.14.1",
     "esbuild-register": "^3.3.2",
     "jest-extended": "^0.11.5",
     "triple-beam": "*",
