@@ -11,7 +11,6 @@ import {
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
-	isValidDSK,
 	isZWaveError,
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
@@ -27,7 +26,6 @@ import {
 	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
-	JSONObject,
 	Mixin,
 	num2hex,
 	ObjectKeyMap,
@@ -42,8 +40,6 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
-import { composeObject } from "alcalzone-shared/objects";
-import { isArray, isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
@@ -84,13 +80,14 @@ import {
 	getFirmwareVersionsValueId,
 } from "../commandclass/VersionCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
+import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
+import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
 import {
 	GetBackgroundRSSIRequest,
@@ -201,7 +198,6 @@ import {
 } from "./GetSUCNodeIdMessages";
 import { HardResetRequest } from "./HardResetRequest";
 import {
-	IncludedProvisioningEntry,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -251,7 +247,7 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-export type SerialAPIVersion =
+export type SDKVersion =
 	| `${number}.${number}`
 	| `${number}.${number}.${number}`;
 
@@ -321,14 +317,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		);
 	}
 
-	private _libraryVersion: string | undefined;
-	public get libraryVersion(): string | undefined {
-		return this._libraryVersion;
-	}
-
 	private _type: ZWaveLibraryTypes | undefined;
 	public get type(): ZWaveLibraryTypes | undefined {
 		return this._type;
+	}
+
+	private _sdkVersion: string | undefined;
+	public get sdkVersion(): string | undefined {
+		return this._sdkVersion;
 	}
 
 	private _homeId: number | undefined;
@@ -373,48 +369,39 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isSlave;
 	}
 
-	private _serialApiVersion: string | undefined;
-	public get serialApiVersion(): string | undefined {
-		return this._serialApiVersion;
-	}
-
-	/** Checks if the Serial API version is greater than the given one */
-	public serialApiGt(version: SerialAPIVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+	/** Checks if the SDK version is greater than the given one */
+	public sdkVersionGt(version: SDKVersion): boolean | undefined {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.gt(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is greater than or equal to the given one */
-	public serialApiGte(version: SerialAPIVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+	/** Checks if the SDK version is greater than or equal to the given one */
+	public sdkVersionGte(version: SDKVersion): boolean | undefined {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.gte(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is lower than the given one */
-	public serialApiLt(version: SerialAPIVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+	/** Checks if the SDK version is lower than the given one */
+	public sdkVersionLt(version: SDKVersion): boolean | undefined {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.lt(padVersion(sdkVersion), padVersion(version));
 	}
 
-	/** Checks if the Serial API version is lower than or equal to the given one */
-	public serialApiLte(version: SerialAPIVersion): boolean | undefined {
-		// TODO: Rename these to sdkVersionGt(e) etc...
-		if (this._libraryVersion === undefined) {
+	/** Checks if the SDK version is lower than or equal to the given one */
+	public sdkVersionLte(version: SDKVersion): boolean | undefined {
+		if (this._sdkVersion === undefined) {
 			return undefined;
 		}
-		const sdkVersion = protocolVersionToSDKVersion(this._libraryVersion);
+		const sdkVersion = protocolVersionToSDKVersion(this._sdkVersion);
 		return semver.lte(padVersion(sdkVersion), padVersion(version));
 	}
 
@@ -431,6 +418,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _productId: number | undefined;
 	public get productId(): number | undefined {
 		return this._productId;
+	}
+
+	private _firmwareVersion: string | undefined;
+	public get firmwareVersion(): string | undefined {
+		return this._firmwareVersion;
 	}
 
 	private _supportedFunctionTypes: FunctionType[] | undefined;
@@ -478,7 +470,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public supportsFeature(feature: ZWaveFeature): boolean | undefined {
 		switch (feature) {
 			case ZWaveFeature.SmartStart:
-				return this.serialApiGte(minFeatureVersions[feature]);
+				return this.sdkVersionGte(minFeatureVersions[feature]);
 		}
 	}
 
@@ -505,14 +497,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._supportsTimers;
 	}
 
-	private _supportsSoftReset: boolean | undefined;
 	/** Whether the controller is known to support soft reset */
 	public get supportsSoftReset(): boolean | undefined {
-		return this._supportsSoftReset;
+		return this.driver.cacheGet(cacheKeys.controller.supportsSoftReset);
 	}
 	/** @internal */
 	public set supportsSoftReset(value: boolean | undefined) {
-		this._supportsSoftReset = value;
+		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
 	private _nodes: ThrowingMap<number, ZWaveNode>;
@@ -555,10 +546,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return new VirtualNode(undefined, this.driver, nodes);
 	}
 
-	private _provisioningList: SmartStartProvisioningEntry[] = [];
 	/** @internal */
 	public get provisioningList(): readonly SmartStartProvisioningEntry[] {
-		return this._provisioningList;
+		return (
+			this.driver.cacheGet(cacheKeys.controller.provisioningList) ?? []
+		);
+	}
+	private set provisioningList(
+		value: readonly SmartStartProvisioningEntry[],
+	) {
+		this.driver.cacheSet(cacheKeys.controller.provisioningList, value);
 	}
 
 	/** Adds the given entry (DSK and security classes) to the controller's SmartStart provisioning list or replaces an existing entry */
@@ -566,19 +563,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Make sure the controller supports SmartStart
 		this.assertFeature(ZWaveFeature.SmartStart);
 
-		const index = this._provisioningList.findIndex(
-			(e) => e.dsk === entry.dsk,
-		);
+		const provisioningList = [...this.provisioningList];
+
+		const index = provisioningList.findIndex((e) => e.dsk === entry.dsk);
 		if (index === -1) {
-			this._provisioningList.push(entry);
-			// If this is an entry for an existing node, mark it as included
-			const node = this.getNodeByDSK(entry.dsk);
-			if (node) this.markNodeOnProvisioningList(node);
+			provisioningList.push(entry);
 		} else {
-			this._provisioningList[index] = entry;
+			provisioningList[index] = entry;
 		}
+		this.provisioningList = provisioningList;
+
 		this.autoProvisionSmartStart();
-		void this.driver.saveNetworkToCache();
 	}
 
 	/**
@@ -587,7 +582,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * **Note:** If this entry corresponds to an included node, it will **NOT** be excluded
 	 */
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
-		const index = this._provisioningList.findIndex(
+		const provisioningList = [...this.provisioningList];
+
+		const index = provisioningList.findIndex(
 			(e) =>
 				e.dsk === dskOrNodeId ||
 				(typeof dskOrNodeId === "number" &&
@@ -595,9 +592,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					e.nodeId === dskOrNodeId),
 		);
 		if (index >= 0) {
-			this._provisioningList.splice(index, 1);
+			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
-			void this.driver.saveNetworkToCache();
+			this.provisioningList = provisioningList;
 		}
 	}
 
@@ -606,21 +603,37 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 */
 	public getProvisioningEntry(
 		dsk: string,
-	): SmartStartProvisioningEntry | undefined {
-		return this._provisioningList.find((e) => e.dsk === dsk);
+	): Readonly<SmartStartProvisioningEntry> | undefined {
+		const entry = this.provisioningList.find((e) => e.dsk === dsk);
+		// Try to look up the node ID for this entry
+		if (entry) {
+			const ret: SmartStartProvisioningEntry = {
+				...entry,
+			};
+			const node = this.getNodeByDSK(dsk);
+			if (node) ret.nodeId = node.id;
+			return ret;
+		}
 	}
 
 	/**
 	 * Returns all entries from the controller's SmartStart provisioning list.
 	 */
 	public getProvisioningEntries(): SmartStartProvisioningEntry[] {
+		// Determine which DSKs belong to which node IDs
+		const dskNodeMap = new Map<string, number>();
+		for (const node of this.nodes.values()) {
+			if (node.dsk) dskNodeMap.set(dskToString(node.dsk), node.id);
+		}
 		// Make copies so no one can modify the internal list (except for user info)
-		return this._provisioningList.map((e) => {
+		return this.provisioningList.map((e) => {
 			const { dsk, securityClasses, nodeId, ...rest } = e;
 			return {
 				dsk,
 				securityClasses: [...securityClasses],
-				...(nodeId != undefined ? { nodeId } : {}),
+				...(dskNodeMap.has(dsk)
+					? { nodeId: dskNodeMap.get(dsk)! }
+					: {}),
 				...rest,
 			};
 		});
@@ -628,7 +641,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 	/** Returns whether the SmartStart provisioning list contains entries that have not been included yet */
 	public hasPlannedProvisioningEntries(): boolean {
-		return this._provisioningList.some((e) => !("nodeId" in e));
+		return this.provisioningList.some((e) => !this.getNodeByDSK(e.dsk));
 	}
 
 	/**
@@ -648,23 +661,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
 			void this.disableSmartStart().catch(() => {});
 		}
-	}
-
-	private markNodeOnProvisioningList(node: ZWaveNode): void {
-		// If this node's DSK is on the provisioning list, remember the node ID
-		if (node.dsk) {
-			const entry = this._provisioningList.find(
-				(e) => e.dsk === dskToString(node.dsk!),
-			);
-			if (entry) (entry as IncludedProvisioningEntry).nodeId = node.id;
-		}
-	}
-
-	private unmarkNodeOnProvisioningList(nodeId: number): void {
-		const entry = this._provisioningList.find(
-			(e) => "nodeId" in e && e.nodeId === nodeId,
-		);
-		if (entry) delete entry.nodeId;
 	}
 
 	/**
@@ -695,14 +691,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._serialApiVersion = apiCaps.serialApiVersion;
+		this._firmwareVersion = apiCaps.firmwareVersion;
 		this._manufacturerId = apiCaps.manufacturerId;
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
 		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
 		this.driver.controllerLog.print(
 			`received API capabilities:
-  serial API version:  ${this._serialApiVersion}
+  firmware version:    ${this._firmwareVersion}
   manufacturer ID:     ${num2hex(this._manufacturerId)}
   product type:        ${num2hex(this._productType)}
   product ID:          ${num2hex(this._productId)}
@@ -729,12 +725,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._libraryVersion = version.libraryVersion;
+		this._sdkVersion = version.sdkVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
   controller type: ${ZWaveLibraryTypes[this._type]}
-  library version: ${this._libraryVersion}`,
+  library version: ${this._sdkVersion}`,
 		);
 
 		this.driver.controllerLog.print(
@@ -948,7 +944,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			getFirmwareVersionsMetadata(),
 		);
 		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
-			this._serialApiVersion,
+			this._firmwareVersion,
 		]);
 
 		if (
@@ -2421,7 +2417,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// We're done adding this node, notify listeners
 				const result: InclusionResult = {};
 				if (lowSecurity) result.lowSecurity = true;
-				this.markNodeOnProvisioningList(newNode);
 				this.emit("node added", newNode, result);
 
 				this.setInclusionState(InclusionState.Idle);
@@ -2495,9 +2490,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 				if (this._nodePendingReplace) {
 					this.emit("node removed", this._nodePendingReplace, true);
-					this.unmarkNodeOnProvisioningList(
-						this._nodePendingReplace.id,
-					);
 					this._nodes.delete(this._nodePendingReplace.id);
 
 					// We're technically done with the replacing but should not include
@@ -2565,7 +2557,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					if (lowSecurity) result.lowSecurity = true;
 
 					this.setInclusionState(InclusionState.Idle);
-					this.markNodeOnProvisioningList(newNode);
 					this.emit("node added", newNode, result);
 				}
 
@@ -2649,7 +2640,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);
 				// and forget the node
-				this.unmarkNodeOnProvisioningList(nodeId);
 				this._nodes.delete(nodeId);
 				this._nodePendingExclusion = undefined;
 
@@ -3917,7 +3907,6 @@ ${associatedNodes.join(", ")}`,
 					// Emit the removed event so the driver and applications can react
 					this.emit("node removed", this.nodes.get(nodeId)!, false);
 					// and forget the node
-					this.unmarkNodeOnProvisioningList(nodeId);
 					this._nodes.delete(nodeId);
 
 					return;
@@ -4216,104 +4205,44 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
-	 * @internal
-	 * Serializes the controller information and all nodes to store them in a cache.
+	 * Returns the known routes the controller will use to communicate with the nodes.
+	 *
+	 * This information is dynamically built using TX status reports and may not be accurate at all times.
+	 * Also, it may not be available immediately after startup or at all if the controller doesn't support this feature.
+	 *
+	 * **Note:** To keep information returned by this method updated, use the information contained in each node's `"statistics"` event.
 	 */
-	public serialize(): JSONObject {
-		return {
-			controller: {
-				supportsSoftReset: this.supportsSoftReset,
-				provisioningList: this.provisioningList.map((e) => {
-					const {
-						dsk,
-						securityClasses,
-						// Node ID is not saved - we update it when deserializing nodes
-						nodeId,
-						...rest
-					} = e;
-					return {
-						dsk,
-						securityClasses: securityClasses.map(
-							(s) => SecurityClass[s],
-						),
-						// The user-defined properties are saved as-is
-						...rest,
-					};
-				}),
-			},
-			nodes: composeObject(
-				[...this.nodes.entries()].map(
-					([id, node]) =>
-						[id.toString(), node.serialize()] as [string, unknown],
-				),
-			),
-		};
+	public getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes> {
+		const ret = new Map<number, LifelineRoutes>();
+		for (const node of this.nodes.values()) {
+			if (node.isControllerNode) continue;
+			ret.set(node.id, {
+				lwr: node.statistics.lwr,
+				nlwr: node.statistics.nlwr,
+			});
+		}
+		return ret;
 	}
 
 	/**
 	 * @internal
 	 * Deserializes the controller information and all nodes from the cache.
 	 */
-	public async deserialize(serialized: any): Promise<void> {
-		if (isObject(serialized.controller)) {
-			// Parse whether the controller supports soft reset
-			if (typeof serialized.controller.supportsSoftReset === "boolean") {
-				this.supportsSoftReset =
-					serialized.controller.supportsSoftReset;
-			}
-			// Parse the controller's Smart Start provisioning list
-			if (isArray(serialized.controller.provisioningList)) {
-				entries: for (const entry of serialized.controller
-					.provisioningList) {
-					if (!isObject(entry)) continue;
-					const {
-						dsk,
-						securityClasses: secClasses,
-						// Node ID is ignored - we update it when deserializing nodes
-						nodeId,
-						...rest
-					} = entry;
-					if (typeof entry.dsk !== "string") continue;
-					if (!isArray(entry.securityClasses)) continue;
-					if (!isValidDSK(entry.dsk)) continue;
+	public async deserialize(): Promise<void> {
+		if (!this.driver.networkCache) return;
+		const cache = this.driver.networkCache;
 
-					const securityClasses: SecurityClass[] = [];
-					for (const s of secClasses) {
-						if (typeof s !== "string") continue entries;
-						const secClass = (SecurityClass as any)[s];
-						if (typeof secClass !== "number") continue entries;
-						securityClasses.push(secClass);
-					}
-
-					this._provisioningList.push({
-						dsk: entry.dsk,
-						securityClasses,
-						// The user-defined properties are not validated further
-						...rest,
-					});
-				}
-			}
+		// Deserialize information for all nodes
+		for (const node of this.nodes.values()) {
+			await node.deserialize();
 		}
 
-		if (isObject(serialized.nodes)) {
-			for (const nodeId of Object.keys(serialized.nodes)) {
-				const serializedNode = serialized.nodes[nodeId];
-				if (
-					!serializedNode ||
-					typeof serializedNode.id !== "number" ||
-					serializedNode.id.toString() !== nodeId
-				) {
-					throw new ZWaveError(
-						"The cache file is invalid",
-						ZWaveErrorCodes.Driver_InvalidCache,
-					);
-				}
-
-				if (this.nodes.has(serializedNode.id)) {
-					const node = this.nodes.getOrThrow(serializedNode.id);
-					await node.deserialize(serializedNode);
-					this.markNodeOnProvisioningList(node);
-				}
+		// Remove nodes which no longer exist from the cache
+		// TODO: Do the same when removing a node
+		for (const cacheKey of cache.keys()) {
+			const nodeId = cacheKeyUtils.nodeIdFromKey(cacheKey);
+			if (nodeId && !this.nodes.has(nodeId)) {
+				cache.delete(cacheKey);
 			}
 		}
 	}
@@ -4552,7 +4481,7 @@ ${associatedNodes.join(", ")}`,
 
 		let ret: Buffer;
 		try {
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				ret = await this.backupNVMRaw700(onProgress);
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
@@ -4650,7 +4579,9 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Restores an NVM backup that was created with `backupNVMRaw`. The Z-Wave radio is turned off/on automatically.
-	 * If the given buffer is in a different NVM format, it is converted automatically. If the conversion is not supported, the operation fails.
+	 * If the given buffer is in a different NVM format, it is converted automatically. If a conversion is required but not supported, the operation will be aborted.
+	 *
+	 * **WARNING:** If both the source and target NVM use an an unsupported format, they will NOT be checked for compatibility!
 	 *
 	 * **WARNING:** A failure during this process may brick your controller. Use at your own risk!
 	 *
@@ -4681,7 +4612,7 @@ ${associatedNodes.join(", ")}`,
 				"Converting NVM to target format...",
 			);
 			let targetNVM: Buffer;
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				targetNVM = await this.backupNVMRaw700(convertProgress);
 			} else {
 				targetNVM = await this.backupNVMRaw500(convertProgress);
@@ -4689,7 +4620,7 @@ ${associatedNodes.join(", ")}`,
 			const convertedNVM = migrateNVM(nvmData, targetNVM);
 
 			this.driver.controllerLog.print("Restoring NVM backup...");
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				await this.restoreNVMRaw700(convertedNVM, restoreProgress);
 			} else {
 				await this.restoreNVMRaw500(convertedNVM, restoreProgress);
@@ -4702,11 +4633,10 @@ ${associatedNodes.join(", ")}`,
 
 		// After restoring an NVM backup, the controller's capabilities may have changed.
 		// At the very least reset the information about the soft reset capability.
-		this._supportsSoftReset = undefined;
+		this.supportsSoftReset = undefined;
 		// Also, we could be talking to different nodes than the cache file contains.
 		// Reset all info about all nodes, so they get re-interviewed.
 		this._nodes.clear();
-		await this.driver.saveNetworkToCache();
 
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.
@@ -4741,7 +4671,7 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		try {
-			if (this.serialApiGte("7.0")) {
+			if (this.sdkVersionGte("7.0")) {
 				await this.restoreNVMRaw700(nvmData, onProgress);
 			} else {
 				await this.restoreNVMRaw500(nvmData, onProgress);
@@ -4758,7 +4688,7 @@ ${associatedNodes.join(", ")}`,
 
 		// After a restored NVM backup, the controller's capabilities may have changed. At the very least reset the information
 		// about soft reset capability
-		this._supportsSoftReset = undefined;
+		this.supportsSoftReset = undefined;
 
 		// Normally we'd only need to soft reset the stick, but we also need to re-interview the controller and potentially all nodes.
 		// Just forcing a restart of the driver seems easier.

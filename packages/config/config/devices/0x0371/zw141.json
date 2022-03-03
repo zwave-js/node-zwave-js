@@ -250,22 +250,8 @@
 		},
 		{
 			"#": "80",
-			"$import": "~/0x0086/templates/aeotec_template.json#notification_report_type",
-			"label": "Command Report Type",
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic CC Report",
-					"value": 1
-				},
-				{
-					"label": "MultiLevel Switch CC Report",
-					"value": 2
-				}
-			]
+			"$import": "~/0x0086/templates/aeotec_template.json#multilevel_report_type",
+			"label": "Command Report Type"
 		},
 		{
 			"#": "85",

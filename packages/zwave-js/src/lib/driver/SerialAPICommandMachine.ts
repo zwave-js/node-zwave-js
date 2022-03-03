@@ -108,7 +108,11 @@ export type SerialAPICommandMachineConfig = MachineConfig<
 export type SerialAPICommandMachine = StateMachine<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
-	SerialAPICommandEvent
+	SerialAPICommandEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type SerialAPICommandInterpreter = Interpreter<
 	SerialAPICommandContext,
@@ -316,7 +320,11 @@ export function getSerialAPICommandMachineOptions(
 ): SerialAPICommandMachineOptions {
 	return {
 		services: {
-			send: (ctx) => sendData(ctx.data),
+			send: (ctx) => {
+				// Mark the message as sent immediately before actually sending
+				ctx.msg.markAsSent();
+				return sendData(ctx.data);
+			},
 			notifyRetry: (ctx) => {
 				notifyRetry?.(
 					"SerialAPI",
@@ -377,7 +385,7 @@ export function createSerialAPICommandMachine(
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
-	return createMachine(
+	return createMachine<SerialAPICommandContext, SerialAPICommandEvent>(
 		getSerialAPICommandMachineConfig(
 			message,
 			implementations,

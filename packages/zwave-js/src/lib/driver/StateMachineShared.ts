@@ -208,7 +208,7 @@ export const respondUnsolicited: SendAction<any, any, any> = respond(
 /** Creates an auto-forwarding wrapper state machine that can be used to test machines that use sendParent */
 export function createWrapperMachine(
 	testMachine: StateMachine<any, any, any>,
-): StateMachine<any, any, any> {
+): StateMachine<any, any, any, any, any, any, any> {
 	return Machine<any, any, any>({
 		context: {
 			child: undefined,

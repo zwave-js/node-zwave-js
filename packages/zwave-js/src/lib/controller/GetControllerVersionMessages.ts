@@ -25,8 +25,8 @@ export class GetControllerVersionResponse extends Message {
 		super(driver, options);
 
 		// The payload consists of a zero-terminated string and a uint8 for the controller type
-		this._libraryVersion = cpp2js(this.payload.toString("ascii"));
-		this._controllerType = this.payload[this.libraryVersion.length + 1];
+		this._sdkVersion = cpp2js(this.payload.toString("ascii"));
+		this._controllerType = this.payload[this.sdkVersion.length + 1];
 	}
 
 	private _controllerType: ZWaveLibraryTypes;
@@ -34,15 +34,15 @@ export class GetControllerVersionResponse extends Message {
 		return this._controllerType;
 	}
 
-	private _libraryVersion: string;
-	public get libraryVersion(): string {
-		return this._libraryVersion;
+	private _sdkVersion: string;
+	public get sdkVersion(): string {
+		return this._sdkVersion;
 	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			controllerType: this.controllerType,
-			libraryVersion: this.libraryVersion,
+			sdkVersion: this.sdkVersion,
 		});
 	}
 }

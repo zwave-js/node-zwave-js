@@ -251,5 +251,24 @@
 				"value": 0
 			}
 		]
+	},
+	"paddle_programming": {
+		"label": "Paddle Programming",
+		"description": "Disables inclusion/exclusion commands on paddle for use with scene controls.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Enable",
+				"value": 0
+			},
+			{
+				"label": "Disable",
+				"value": 1
+			}
+		]
 	}
 }

@@ -77,7 +77,11 @@ export type CommandQueueDoneData = SerialAPICommandDoneData & {
 export type CommandQueueMachine = StateMachine<
 	CommandQueueContext,
 	CommandQueueStateSchema,
-	CommandQueueEvent
+	CommandQueueEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type CommandQueueInterpreter = Interpreter<
 	CommandQueueContext,
@@ -330,8 +334,6 @@ export function createCommandQueueMachine(
 		{
 			services: {
 				executeSerialAPICommand: (ctx) => {
-					// If there is an error while creating the command machine (e.g. during message serialization)
-					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
 							ctx.currentTransaction!.parts.current!,
@@ -339,6 +341,8 @@ export function createCommandQueueMachine(
 							params,
 						);
 					} catch (e) {
+						// If there is an error while creating the command machine (e.g. during message serialization)
+						// wrap it in a rejected promise, so xstate can handle it
 						implementations.log(
 							`Unexpected error during SerialAPI command: ${getErrorMessage(
 								e,

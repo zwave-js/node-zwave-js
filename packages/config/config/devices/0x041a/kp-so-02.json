@@ -1,0 +1,101 @@
+{
+	// Device is rebranded Shenzhen Neo NAS-WR01ZE
+	"manufacturer": "Keemple",
+	"manufacturerId": "0x041a",
+	"label": "KP-SO-02",
+	"description": "Smart Socket",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Button",
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto-Off"
+		},
+		{
+			"#": "5",
+			"label": "Auto-Off Delay",
+			"description": "Delay time after the plug is switched off",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 120,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Send Meter Reports"
+		},
+		{
+			"#": "7",
+			"label": "Meter Report Interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Overcurrent Protection Threshold",
+			"description": "Threshold at which the plug enters overcurrent protection mode",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 16
+		},
+		{
+			"#": "9",
+			"label": "Current Report Threshold",
+			"description": "Change in current consumption that triggers a report",
+			"unit": "0.01 A",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1600,
+			"defaultValue": 50
+		},
+		{
+			"#": "10",
+			"label": "Overcurrent Alarm Threshold",
+			"description": "Threshold at which the plug sends an overcurrent notification",
+			"unit": "A",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 13
+		}
+	],
+	"metadata": {
+		"comments": {
+			"level": "warning",
+			"text": "This device is buggy and sends large negative Meter Reports from time to time."
+		}
+	}
+}

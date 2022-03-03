@@ -21,6 +21,7 @@ It is recommended to either use TypeScript when consuming the library or work in
 
 <p>
   <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
+  <a href="https://www.getseam.com/" target="_blank"><img src="sponsors/seam.png" width="120" alt="Seam" /></a>
 </p>
 
 <!--

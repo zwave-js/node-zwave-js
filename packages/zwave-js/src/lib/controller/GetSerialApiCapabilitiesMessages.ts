@@ -29,7 +29,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		super(driver, options);
 
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
-		this._serialApiVersion = `${this.payload[0]}.${this.payload[1]}`;
+		this._firmwareVersion = `${this.payload[0]}.${this.payload[1]}`;
 		this._manufacturerId = this.payload.readUInt16BE(2);
 		this._productType = this.payload.readUInt16BE(4);
 		this._productId = this.payload.readUInt16BE(6);
@@ -38,9 +38,9 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 		this._supportedFunctionTypes = parseBitMask(functionBitMask);
 	}
 
-	private _serialApiVersion: string;
-	public get serialApiVersion(): string {
-		return this._serialApiVersion;
+	private _firmwareVersion: string;
+	public get firmwareVersion(): string {
+		return this._firmwareVersion;
 	}
 
 	private _manufacturerId: number;
@@ -65,7 +65,7 @@ export class GetSerialApiCapabilitiesResponse extends Message {
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			serialApiVersion: this.serialApiVersion,
+			firmwareVersion: this.firmwareVersion,
 			manufacturerId: this.manufacturerId,
 			productType: this.productType,
 			productId: this.productId,

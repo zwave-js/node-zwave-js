@@ -18,6 +18,7 @@ export * from "./util/firmware";
 export * from "./util/graph";
 export * from "./util/misc";
 export * from "./values/Cache";
+export * from "./values/CacheBackedMap";
 export * from "./values/Duration";
 export * from "./values/Metadata";
 export * from "./values/Primitive";
