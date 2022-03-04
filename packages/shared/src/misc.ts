@@ -55,6 +55,13 @@ export function flatMap<U, T extends any[]>(
 	return mapped.reduce((acc, cur) => [...acc, ...cur], [] as U[]);
 }
 
+/**
+ * Returns a human-readable representation of the given enum value.
+ * If the given value is not found in the enum object, `"unknown (<value-as-hex>)"` is returned.
+ *
+ * @param enumeration The enumeration object the value comes from
+ * @param value The enum value to be pretty-printed
+ */
 export function getEnumMemberName(enumeration: unknown, value: number): string {
 	return (enumeration as any)[value] || `unknown (${num2hex(value)})`;
 }

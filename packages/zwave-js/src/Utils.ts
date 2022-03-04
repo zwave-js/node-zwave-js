@@ -10,6 +10,12 @@ export type {
 	Protocols,
 	QRProvisioningInformation,
 } from "@zwave-js/core";
+export {
+	buffer2hex,
+	formatId,
+	getEnumMemberName,
+	num2hex,
+} from "@zwave-js/shared";
 export { rssiToString } from "./lib/controller/SendDataShared";
 export {
 	formatLifelineHealthCheckRound,
