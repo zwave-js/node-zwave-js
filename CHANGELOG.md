@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.8 (2022-03-04)
 ### Bugfixes
 * Increase default controller response timeout to 10s (#4259)
 
