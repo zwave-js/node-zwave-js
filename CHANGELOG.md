@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Increase default controller response timeout to 10s (#4259)
+
 ## 8.11.7 (2022-02-28)
 ### Bugfixes
 * Restoring an NVM backup with an unsupported format on a stick with an unsupported NVM format is possible again. This enables working with backups on legacy (before SDK 6.61) controllers.

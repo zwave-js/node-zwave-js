@@ -603,9 +603,9 @@ interface ZWaveOptions {
 
 		/**
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling
+		 * so this is merely a safeguard against the driver stalling.
 		 */
-		response: number; // [500...5000], default: 1600 ms
+		response: number; // [500...20000], default: 10000 ms
 
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
