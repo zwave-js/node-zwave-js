@@ -43,7 +43,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.4.1",
     "@types/node": "^15.12.5",
-    "esbuild": "0.14.1",
+    "esbuild": "0.14.25",
     "esbuild-register": "^3.3.2",
     "jest-extended": "^2.0.0",
     "typescript": "4.6.2"

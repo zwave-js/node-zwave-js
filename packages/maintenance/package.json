@@ -44,7 +44,7 @@
     "@zwave-js/shared": "workspace:*",
     "ansi-colors": "^4.1.1",
     "clipboardy": "^2.3.0",
-    "esbuild": "0.14.1",
+    "esbuild": "0.14.25",
     "esbuild-register": "^3.3.2",
     "fs-extra": "^10.0.1",
     "jest-extended": "^2.0.0",
