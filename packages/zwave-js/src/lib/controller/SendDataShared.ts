@@ -112,6 +112,9 @@ export function tryParseRSSI(
 	return parseRSSI(payload, offset);
 }
 
+/**
+ * Converts an RSSI value to a human readable format, i.e. the measurement including the unit or the corresponding error message.
+ */
 export function rssiToString(rssi: RSSI): string {
 	switch (rssi) {
 		case RssiError.NotAvailable:
