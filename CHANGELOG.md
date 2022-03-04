@@ -4,9 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.1 (2022-03-03)
-_**Note:** 9.0.0-beta.0 was re-released because the first release failed. Use `zwave-js@9.0.0-beta.0` to install this version._ 
-
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -18,11 +16,14 @@ _**Note:** 9.0.0-beta.0 was re-released because the first release failed. Use `z
 ### Features
 * The node statistics now include RSSI and the actual routes taken (LWR, NLWR) for communication (#4022)
 * A utility method `rssiToString` was added to convert RSSI values to a human readable string
+* Export some commonly used string formatting utilities (#4318)
+* Add support for `Irrigation CC` (#4270)
 
 ### Bugfixes
 * Error reporting is now opt-in (#4279) and should no longer force-exit the application when an unhandled rejection occurs (#4291)
 
 ### Config file changes
+* Correct device description for Leviton DZMX1 (#4317)
 
 ### Changes under the hood
 * Lots of dependency updates
