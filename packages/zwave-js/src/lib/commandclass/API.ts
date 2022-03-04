@@ -425,6 +425,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Humidity Control Setpoint"
 	: [CC] extends [typeof CommandClasses["Indicator"]]
 	? "Indicator"
+	: [CC] extends [typeof CommandClasses["Irrigation"]]
+	? "Irrigation"
 	: [CC] extends [typeof CommandClasses["Language"]]
 	? "Language"
 	: [CC] extends [typeof CommandClasses["Lock"]]
@@ -557,6 +559,7 @@ export interface CCAPIs {
 	"Humidity Control Operating State": import("./HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
 	"Humidity Control Setpoint": import("./HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
+	Irrigation: import("./IrrigationCC").IrrigationCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	Lock: import("./LockCC").LockCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;
