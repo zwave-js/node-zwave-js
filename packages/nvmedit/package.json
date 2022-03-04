@@ -51,7 +51,7 @@
     "@types/jest": "^27.4.1",
     "@types/node": "^15.12.5",
     "@types/semver": "^7.3.9",
-    "@types/yargs": "^17.0.8",
+    "@types/yargs": "^17.0.9",
     "esbuild": "0.14.1",
     "esbuild-register": "^3.3.2",
     "jest-extended": "^2.0.0",
