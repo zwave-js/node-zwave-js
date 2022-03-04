@@ -64,7 +64,7 @@
     "esbuild": "0.14.1",
     "esbuild-register": "^3.3.2",
     "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.4.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "fs-extra": "^10.0.1",
     "husky": "^7.0.4",
