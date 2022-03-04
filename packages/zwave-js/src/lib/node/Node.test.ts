@@ -1344,6 +1344,10 @@ describe("lib/node/Node", () => {
 	// 	});
 	// });
 
+	it.todo(
+		"deserialize() should mark a sleeping node as ready if it was interviewed completely",
+	);
+
 	describe("the emitted events", () => {
 		let node: ZWaveNode;
 		const fakeDriver = createEmptyMockDriver();

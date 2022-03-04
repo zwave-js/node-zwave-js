@@ -3687,13 +3687,18 @@ protocol version:      ${this.protocolVersion}`;
 		// Restore the device config
 		await this.loadDeviceConfig();
 
-		// And remove the Basic CC if it should be hidden
+		// Remove the Basic CC if it should be hidden
 		// TODO: Do this as part of loadDeviceConfig
 		const compat = this._deviceConfig?.compat;
 		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
 			for (const endpoint of this.getAllEndpoints()) {
 				endpoint.hideBasicCCInFavorOfActuatorCCs();
 			}
+		}
+
+		// Mark already-interviewed nodes as potentially ready
+		if (this.interviewStage === InterviewStage.Complete) {
+			this.readyMachine.send("RESTART_FROM_CACHE");
 		}
 	}
 
