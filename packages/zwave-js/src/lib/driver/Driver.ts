@@ -3933,7 +3933,12 @@ ${handlers.length} left`,
 	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
 	public async restoreNetworkStructureFromCache(): Promise<void> {
-		if (!this._controller || !this.controller.homeId || !this._networkCache)
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache ||
+			!this._valueDB
+		)
 			return;
 
 		// In v9, the network cache was switched from a json file to use a Jsonl-DB
@@ -3947,9 +3952,19 @@ ${handlers.length} left`,
 					this,
 					this.controller.homeId,
 					this._networkCache,
+					this._valueDB,
 					this.options.storage.driver,
 					this.cacheDir,
 				);
+
+				// Go through the value DB and remove all keys referencing commandClass -1, which used to be a
+				// hacky way to store non-CC specific values
+				for (const key of this._valueDB.keys()) {
+					if (-1 === key.indexOf(`,"commandClass":-1,`)) {
+						continue;
+					}
+					this._valueDB.delete(key);
+				}
 			} catch (e) {
 				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
 					e,

@@ -12,7 +12,6 @@ import {
 	DataRate,
 	FLiRS,
 	getCCName,
-	getNodeMetaValueID,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -739,12 +738,12 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	/** Whether a SUC return route was configured for this node */
 	public get hasSUCReturnRoute(): boolean {
-		return !!this.valueDB.getValue<boolean>(
-			getNodeMetaValueID("hasSUCReturnRoute"),
+		return !!this.driver.cacheGet(
+			cacheKeys.node(this.id).hasSUCReturnRoute,
 		);
 	}
 	public set hasSUCReturnRoute(value: boolean) {
-		this.valueDB.setValue(getNodeMetaValueID("hasSUCReturnRoute"), value);
+		this.driver.cacheSet(cacheKeys.node(this.id).hasSUCReturnRoute, value);
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
