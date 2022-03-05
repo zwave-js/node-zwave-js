@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.2 (2022-03-04)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -21,6 +21,7 @@
 
 ### Bugfixes
 * Error reporting is now opt-in (#4279) and should no longer force-exit the application when an unhandled rejection occurs (#4291)
+* Increase the default controller response timeout to 10s to work around an issue where some 500 series controllers take too long to confirm execution of a SendData command when the target node is unresponsive (#4259)
 
 ### Config file changes
 * Correct device description for Leviton DZMX1 (#4317)
