@@ -6,7 +6,7 @@
 -->
 ## 8.11.8 (2022-03-04)
 ### Bugfixes
-* Increase default controller response timeout to 10s (#4259)
+* Increase the default controller response timeout to 10s to work around an issue where some 500 series controllers take too long to confirm execution of a SendData command when the target node is unresponsive (#4259)
 
 ## 8.11.7 (2022-02-28)
 ### Bugfixes
