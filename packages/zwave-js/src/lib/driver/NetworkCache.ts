@@ -57,6 +57,7 @@ export const cacheKeys = {
 				},
 			};
 		},
+		hasSUCReturnRoute: `node.${nodeId}.hasSUCReturnRoute`,
 	}),
 } as const;
 
@@ -174,6 +175,7 @@ export function deserializeNetworkCacheValue(
 		}
 		case "isListening":
 		case "isRouting":
+		case "hasSUCReturnRoute":
 			return ensureType(value, "boolean");
 
 		case "isFrequentListening": {
@@ -300,6 +302,7 @@ export async function migrateLegacyNetworkCache(
 	driver: Driver,
 	homeId: number,
 	networkCache: JsonlDB,
+	valueDB: JsonlDB,
 	storageDriver: FileSystem,
 	cacheDir: string,
 ): Promise<void> {
@@ -435,6 +438,19 @@ export async function migrateLegacyNetworkCache(
 						}
 					}
 				}
+			}
+
+			// In addition, try to move the hacky value ID for hasSUCReturnRoute from the value DB to the network cache
+			const dbKey = JSON.stringify({
+				nodeId: node.id,
+				commandClass: -1,
+				endpoint: 0,
+				property: "hasSUCReturnRoute",
+			});
+			if (valueDB.has(dbKey)) {
+				const hasSUCReturnRoute = valueDB.get(dbKey);
+				valueDB.delete(dbKey);
+				jsonl.set(nodeCacheKeys.hasSUCReturnRoute, hasSUCReturnRoute);
 			}
 		}
 	}
