@@ -31,23 +31,19 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
-			"label": "Auto Off Timer"
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit"
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
-			"label": "Auto On Timer"
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit"
 		},
 		{
 			"#": "10",
-			"$import": "templates/zooz_template.json#auto_timer_unit_select",
-			"label": "Timer Unit"
+			"$import": "templates/zooz_template.json#auto_timer_unit_select"
 		},
 		{
 			"#": "4",
-			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
-			"label": "State After Power Failure"
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
 		},
 		{
 			"#": "5",
@@ -55,8 +51,7 @@
 		},
 		{
 			"#": "6",
-			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
-			"label": "Smart Switch Mode"
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		{
 			"#": "7",

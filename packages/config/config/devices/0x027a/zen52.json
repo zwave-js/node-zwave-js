@@ -31,12 +31,12 @@
 		},
 		{
 			"#": "3",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
 			"label": "Relay 1: Auto Off Timer"
 		},
 		{
 			"#": "4",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
 			"label": "Relay 1: Auto On Timer"
 		},
 		{
@@ -71,12 +71,12 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
 			"label": "Relay 2: Auto Off Timer"
 		},
 		{
 			"#": "6",
-			"$import": "templates/zooz_template.json#auto_timer_variable_unit_base",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
 			"label": "Relay 2: Auto On Timer"
 		},
 		{
