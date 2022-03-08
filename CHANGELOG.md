@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 8.11.9 (2022-03-08)
 ### Bugfixes
 * Fix parsing of BridgeApplicationCommandRequest that do not contain an RSSI reading (#4337)
 
