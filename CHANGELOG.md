@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fix parsing of BridgeApplicationCommandRequest that do not contain an RSSI reading (#4337)
+
 ## 8.11.8 (2022-03-04)
 ### Bugfixes
 * Increase the default controller response timeout to 10s to work around an issue where some 500 series controllers take too long to confirm execution of a SendData command when the target node is unresponsive (#4259)
