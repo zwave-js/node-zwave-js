@@ -65,5 +65,12 @@
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	]
+	],
+	"metadata": {
+		"wakeup": "Press the Z-Wave button on your sensor's main unit. Your sensor will now remain awake for 10 minutes.",
+		"inclusion": "1.Remove the spacing tab to connect the batteries. Its LED will blink for 3 seconds.\n2.Press the Include button on your primary Z-Wave controller/gateway.\n3. Press the Z-Wave button on your sensor. If it has been successfully added to your Z-Wave network, its LED will illuminate for 10 minutes. During this period your primary Z-Wave controller/gateway is able to configure your sensor.\n4.Your sensor will then automatically exit setup mode at the end of 10 minutes. To exit it sooner you can quickly click your sensor’s tamper switch 3 times.",
+		"exclusion": "1.Press the Exclude button on your primary Z-Wave controller/gateway.\n2. Press the Z-Wave button on your sensor. If it has been successfully removed from your Z-Wave network, its LED will blink for 3 seconds. If the removal was unseccessful the light will be solid after pressing your sensor's Z-Wave button.",
+		"reset": "1. Press and hold your sensor's Z-Wave button for 20 seconds.\n2. Your Door/Window Sensor will reset to its factory default configuration. Its LED will blink for 3 seconds to let you know the reset was successful.",
+		"manual": "https://fccid.io/XBADSB29/User-Manual/User-Manual-1977568.pdf"
+	}
 }
