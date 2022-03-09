@@ -58,5 +58,12 @@
 			"#": "255",
 			"$import": "templates/aeotec_template.json#factory_reset"
 		}
-	]
+	],
+	"metadata": {
+		"wakeup": "Press and release the button which is on Micro Smart Energy Switch G2.",
+		"inclusion": "1. Start by placing the controller into inclusion mode.\n2. While the Micro Smart Energy Switch G2 is powered in a 3-wire system, the external switch/button can be toggled to initiate pairing into the Z-Wave network. Or the internal button can be pushed to initiate pairing into the Z-Wave network if the Micro Smart Energy Switch G2 was not put into in-wall box.",
+		"exclusion": "1. Start by placing the controller into exclusion mode.\n2. While the Micro Smart Energy Switch G2 is powered in a 3-wire system, the external switch/button can be toggled 10 times in quick succession to initiate removing from the Z-Wave network. Or the internal button can be pushed to initiate pairing into the Z-Wave network if Micro Smart Energy Switch G2 was not put into in-wall box.",
+		"reset": "Press and hold the button which is on Micro Smart Energy Switch G2 for 20 seconds",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1498/D.W.%20Zwave%20Manual%20R1.04.docx"
+	}
 }
