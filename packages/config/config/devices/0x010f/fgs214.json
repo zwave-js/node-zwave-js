@@ -36,7 +36,7 @@
 		{
 			"#": "1",
 			"label": "Remember relays state",
-			"description": "This parameter determines the state of relays power supply failure (e.g. power outage). auto OFF and flashing modes the parameter not relevant and the relay will always remain off.",
+			"description": "This parameter determines the state of relays power supply failure (e.g. power outage). For auto Off and flashing modes the parameter not relevant and the relay will always remain switched Off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -45,7 +45,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Relays remain switched off after restoring power",
+					"label": "Relays remain switched Off after restoring power",
 					"value": 0
 				},
 				{
@@ -61,11 +61,11 @@
 		{
 			"#": "20",
 			"label": "S1 input – switch type",
-			"description": "S1 - Inputs type configuration",
+			"description": "This parameter defines as what type the device should treat the switch connected to the S1 terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2,
+			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
@@ -74,7 +74,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"label": "Toggle switch (contact closed - On, contact opened - Off)",
 					"value": 1
 				},
 				{
@@ -86,11 +86,11 @@
 		{
 			"#": "21",
 			"label": "S2 input – switch type",
-			"description": "S2 - Inputs type configuration",
+			"description": "This parameter defines as what type the device should treat the switch connected to the S2 terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 2,
+			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
@@ -99,7 +99,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"label": "Toggle switch (contact closed - On, contact opened - Off)",
 					"value": 1
 				},
 				{
@@ -130,9 +130,40 @@
 			]
 		},
 		{
+			"#": "35",
+			"label": "Alarm configuration – duration",
+			"description": "This parameter defines duration of alarm sequence. When time set in this parameter elapses, alarm is cancelled and relays restore normal operation, but do not recover state from before the alarm.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"unit": "s",
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "40",
+			"label": "S1 input – scenes sent",
+			"description": "0 = no scenes sent, 1 = Key pressed 1 time, 2 = Key pressed 2 times, 4 = Key pressed 3 times, 8 = Key hold down and key released",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "41",
+			"label": "S2 input – scenes sent",
+			"description": "0 = no scenes sent, 1 = Key pressed 1 time, 2 = Key pressed 2 times, 4 = Key pressed 3 times, 8 = Key hold down and key released",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
 			"#": "150",
-			"label": "First channel - operating mode",
-			"description": "This parameter allows to choose operating for channel controlled with Q/Q1 output. timed modes (value 1, 2 or 3), time is set parameter 154 and reaction to input is set with parameter 152.",
+			"label": "Q output - operating mode",
+			"description": "This parameter allows to choose operating mode for channel controlled with Q output. For timed modes (value 1, 2 or 3), time is set with parameter 154 and reaction to input change is set with parameter 152.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -160,8 +191,8 @@
 		},
 		{
 			"#": "152",
-			"label": "First channel - reaction to input change in delayed/auto OFF modes",
-			"description": "This parameter determines how the device when changing state of S1 input in timed for first channel.",
+			"label": "Q output - reaction to input change in delayed/auto Off modes",
+			"description": "This parameter determines how the device reacts when changing state of S1 input in timed modes.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -185,8 +216,8 @@
 		},
 		{
 			"#": "154",
-			"label": "First channel – time parameter for delayed/auto OFF and flashing modes",
-			"description": "This parameter allows to set time parameter used in timed modes.",
+			"label": "Q output – time parameter for delayed/auto Off and flashing modes",
+			"description": "This parameter allows to set time parameter used in timed modes. For delayed/auto Off modes it determines duration, for flashing mode it determines cycle period.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -196,8 +227,8 @@
 		},
 		{
 			"#": "156",
-			"label": "S1 Switch ON value sent to 2nd association group",
-			"description": "This parameter determines value sent with Switch On command to devices associated in 2nd association group.",
+			"label": "S1 Switch On value sent to 2nd association group",
+			"description": "This parameter defines value sent with Switch On command to devices in 2nd association group.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -206,8 +237,8 @@
 		},
 		{
 			"#": "157",
-			"label": "S1 Switch OFF value sent to 2nd association group",
-			"description": "This parameter determines value sent with Switch Off command to devices associated in 2nd association group.",
+			"label": "S1 Switch Off value sent to 2nd association group",
+			"description": "This parameter defines value sent with Switch Off command to devices in 2nd association group.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -216,8 +247,8 @@
 		},
 		{
 			"#": "158",
-			"label": "S1 Switch Double Click value sent to 2nd association groups",
-			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd association group.",
+			"label": "S1 Double Click value sent to 2nd association groups",
+			"description": "This parameter defines value sent with Double Click command to devices in 2nd association group.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -225,9 +256,19 @@
 			"unsigned": true
 		},
 		{
+			"#": "159",
+			"label": "S2 Switch On value sent to 3rd association group",
+			"description": "This parameter defines value sent with Switch On command to devices in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
 			"#": "160",
-			"label": "S2 Switch OFF value sent to 3rd association group",
-			"description": "This parameter determines value sent with Switch Off command to devices associated in 3rd association group.",
+			"label": "S2 Switch Off value sent to 3rd association group",
+			"description": "This parameter defines value sent with Switch Off command to devices in 3rd association group.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -235,9 +276,19 @@
 			"unsigned": true
 		},
 		{
+			"#": "161",
+			"label": "S2 Double Click value sent to 3rd association groups",
+			"description": "This parameter defines value sent with Double Click command to devices in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
 			"#": "162",
-			"label": "Q/Q1 output type",
-			"description": "This parameter determines type of Q/Q1 output.",
+			"label": "Q output type",
+			"description": "This parameter determines type of Q output.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -246,11 +297,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open (relay contacts opened turned off, closed when turned on)",
+					"label": "Normally Open (relay contacts opened turned Off, closed when turned On)",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed (relay contacts closed turned off, opened when turned on)",
+					"label": "Normally Closed (relay contacts closed turned Off, opened when turned On)",
 					"value": 1
 				}
 			]
