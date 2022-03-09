@@ -58,5 +58,12 @@
 	],
 	"compat": {
 		"forceNotificationIdleReset": true
+	},
+	"metadata": {
+		"wakeup": "Removing the top case from the sensor will put in device into a tampered mode in which the sensor will stay awake and able to receive messages.",
+		"inclusion": "1. Start by placing the controller into inclusion mode.\n2. Activate inclusion mode for the sensor by removing the plastic pull-tab from the back of the sensor. When the inclusion process is complete, the LED on the sensor will be solid blue, then go out.\n3. Test the sensor. Place the magnet next to the sensor to represent a closed position. If the LED flashes ONE TIME, it is successfully communicating on your Zwave network. If the LED on the sensor flashes slow and steady for 5 seconds, you need to repeat the inclusion process.\nNotes: If you need to repeat the inclusion process, repeat STEP ONE above, then for STEP TWO you will need to simply remove the cover of the sensor, remove the battery for 10 seconds, reinsert the battery, and replace the sensor cover. This will re-enter the sensor in inclusion mode.",
+		"exclusion": "1. Start by placing the controller into exclusion mode.\n2. Remove the cover of the sensor, remove the battery for 10 seconds, reinsert the battery, and replace the sensor cover.",
+		"reset": "To restore this sensor to factory default settings, follow the instructions to exclude this sensor from the Z-Wave network. Upon completion of removal from the network the sensor will restore itself to factory default settings automatically.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1498/D.W.%20Zwave%20Manual%20R1.04.docx"
 	}
 }
