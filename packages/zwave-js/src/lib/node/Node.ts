@@ -3089,11 +3089,13 @@ protocol version:      ${this.protocolVersion}`;
 		// minute difference)
 		const now = new Date();
 		// local time
-		const hours = now.getHours();
+		let hours = now.getHours();
 		let minutes = now.getMinutes();
 		// A sending node knowing the current time with seconds precision SHOULD round its
 		// current time to the nearest minute when sending this command.
 		if (now.getSeconds() >= 30) {
+			// 18:59:31 should be rounded to 19:00, not 18:00
+			if (minutes === 59) hours++;
 			minutes = (minutes + 1) % 60;
 		}
 		// Sunday is 0 in JS, but 7 in Z-Wave
