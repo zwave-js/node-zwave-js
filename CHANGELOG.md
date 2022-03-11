@@ -23,11 +23,15 @@
 * Error reporting is now opt-in (#4279) and should no longer force-exit the application when an unhandled rejection occurs (#4291)
 * Increase the default controller response timeout to 10s to work around an issue where some 500 series controllers take too long to confirm execution of a SendData command when the target node is unresponsive (#4259)
 * Fix parsing of BridgeApplicationCommandRequest that do not contain an RSSI reading (#4337)
+* Fixed an issue with automatic clock correction where rounding the time up could lead to the clock being 1 hour late (#4346)
 
 ### Config file changes
 * Correct device description for Leviton DZMX1 (#4317)
 * Add metadata to Zooz ZSE18 (#4338)
 * Add metadata to AEON Labs DSB29 (#4334)
+* Add metadata to Vision Security GZ8101 (#4350)
+* Add metadata to AEON Labs DSC26 (#4343)
+* Add metadata to Ecolink DWZWAVE25 (#4339)
 
 ### Changes under the hood
 * Lots of dependency updates
