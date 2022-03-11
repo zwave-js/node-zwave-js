@@ -29,5 +29,10 @@
 		"enableBasicSetMapping": true,
 		// The device does not idle its own notifications
 		"forceNotificationIdleReset": true
+	},
+	"metadata": {
+		"wakeup": "Remove the cover of ZG8101",
+		"inclusion": "1. Initiate inclusion on your Z Wave controller. The distance between sensor and controller is suggested to be less than 1 meter.\n2. Press the program switch of the ZG8101 for at least 1 second.\n3. The LED on the ZG8101 should go solid, if not, please try again.",
+		"exclusion": "1. Initiate exclusion on your Z Wave controller.\n2. Press the program switch of ZG8101 for 1 second at least to be excluded."
 	}
 }
