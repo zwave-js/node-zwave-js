@@ -47,6 +47,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import type { NotificationEventPayload } from "./NotificationEventPayload";
 
 // All the supported commands
 export enum UserCodeCommand {
@@ -985,7 +986,10 @@ export class UserCodeCCSet extends UserCodeCC {
 }
 
 @CCCommand(UserCodeCommand.Report)
-export class UserCodeCCReport extends UserCodeCC {
+export class UserCodeCCReport
+	extends UserCodeCC
+	implements NotificationEventPayload
+{
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -1058,6 +1062,11 @@ export class UserCodeCCReport extends UserCodeCC {
 						: buffer2hex(this.userCode),
 			},
 		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public toNotificationEventParameters() {
+		return { userId: this.userId };
 	}
 }
 
