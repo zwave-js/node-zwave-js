@@ -56,7 +56,7 @@ export enum FunctionType {
 
 	SoftReset = 0x08,
 
-	UNKNOWN_FUNC_UNKNOWN_0x09 = 0x09, // ??
+	GetProtocolVersion = 0x09, // Used to request the Z-Wave Protocol version data (700 series)
 	SerialAPIStarted = 0x0a, // Sent by the controller after the serial API has been started (again)
 
 	SerialAPISetup = 0x0b, // Configure the Serial API

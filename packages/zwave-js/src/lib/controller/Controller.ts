@@ -14,6 +14,7 @@ import {
 	isZWaveError,
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
+	ProtocolType,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -89,6 +90,10 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import {
+	GetProtocolVersionRequest,
+	GetProtocolVersionResponse,
+} from "../serialapi/capability/GetProtocolVersionMessages";
 import {
 	GetBackgroundRSSIRequest,
 	GetBackgroundRSSIResponse,
@@ -732,6 +737,38 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
   controller type: ${ZWaveLibraryTypes[this._type]}
   library version: ${this._sdkVersion}`,
 		);
+
+		// If supported, get more fine-grained version info
+		if (this.isFunctionSupported(FunctionType.GetProtocolVersion)) {
+			this.driver.controllerLog.print(
+				`querying protocol version info...`,
+			);
+			const protocol =
+				await this.driver.sendMessage<GetProtocolVersionResponse>(
+					new GetProtocolVersionRequest(this.driver),
+				);
+
+			// Overwrite the SDK version with the more fine grained protocol version. We can assume this to be
+			// valid for 7.x firmwares, where SDK and protocol version are the same.
+			this._sdkVersion = protocol.protocolVersion;
+
+			let message = `received protocol version info:
+  protocol type:             ${getEnumMemberName(
+		ProtocolType,
+		protocol.protocolType,
+  )}
+  protocol version:          ${protocol.protocolVersion}`;
+			if (protocol.applicationFrameworkBuildNumber) {
+				message += `
+  appl. framework build no.: ${protocol.applicationFrameworkBuildNumber}`;
+			}
+			if (protocol.gitCommitHash) {
+				message += `
+  git commit hash:           ${protocol.gitCommitHash}`;
+			}
+
+			this.driver.controllerLog.print(message);
+		}
 
 		this.driver.controllerLog.print(
 			`supported Z-Wave features: ${Object.keys(ZWaveFeature)
