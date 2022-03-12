@@ -3087,17 +3087,18 @@ protocol version:      ${this.protocolVersion}`;
 		// A controlling node SHOULD compare the received time and weekday with its current time and set the
 		// time again at the supporting node if a deviation is observed (e.g. different weekday or more than a
 		// minute difference)
-		const now = new Date();
-		// local time
-		let hours = now.getHours();
-		let minutes = now.getMinutes();
+
 		// A sending node knowing the current time with seconds precision SHOULD round its
 		// current time to the nearest minute when sending this command.
-		if (now.getSeconds() >= 30) {
-			// 18:59:31 should be rounded to 19:00, not 18:00
-			if (minutes === 59) hours++;
-			minutes = (minutes + 1) % 60;
+		let now = new Date();
+		const seconds = now.getSeconds();
+		if (seconds >= 30) {
+			now = new Date(now.getTime() + (60 - seconds) * 1000);
 		}
+
+		// Get desired time in local time
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
 		// Sunday is 0 in JS, but 7 in Z-Wave
 		let weekday = now.getDay();
 		if (weekday === 0) weekday = 7;
