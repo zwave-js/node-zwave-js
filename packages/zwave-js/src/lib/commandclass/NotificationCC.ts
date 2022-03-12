@@ -41,6 +41,7 @@ import {
 	implementedVersion,
 	InvalidCC,
 } from "./CommandClass";
+import { isNotificationEventPayload } from "./NotificationEventPayload";
 import { UserCodeCommand } from "./UserCodeCC";
 
 export enum NotificationCommand {
@@ -1064,16 +1065,21 @@ export class NotificationCCReport extends NotificationCC {
 					});
 					validatePayload(!(cc instanceof InvalidCC));
 
-					let json = cc.toJSON();
-					// If a CC has no good toJSON() representation, we're only interested in the payload
-					if (
-						"nodeId" in json &&
-						"ccId" in json &&
-						"payload" in json
-					) {
-						json = pick(json, ["payload"]);
+					if (isNotificationEventPayload(cc)) {
+						this.eventParameters =
+							cc.toNotificationEventParameters();
+					} else {
+						// If a CC has no good toJSON() representation, we're only interested in the payload
+						let json = cc.toJSON();
+						if (
+							"nodeId" in json &&
+							"ccId" in json &&
+							"payload" in json
+						) {
+							json = pick(json, ["payload"]);
+						}
+						this.eventParameters = json;
 					}
-					this.eventParameters = json;
 				} catch (e) {
 					if (
 						isZWaveError(e) &&
