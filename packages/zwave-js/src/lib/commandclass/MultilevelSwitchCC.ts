@@ -124,7 +124,9 @@ export function getCompatEventValueId(endpoint?: number): ValueID {
  * This is emitted when a start or stop event is received
  */
 export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-	eventType: MultilevelSwitchCommand.StartLevelChange | MultilevelSwitchCommand.StopLevelChange;
+	eventType:
+		| MultilevelSwitchCommand.StartLevelChange
+		| MultilevelSwitchCommand.StopLevelChange;
 	direction?: string;
 }
 
@@ -637,9 +639,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
-		const payload = [
-			this.targetValue,
-		];
+		const payload = [this.targetValue];
 		if (this.version >= 2 && this.duration) {
 			payload.push(this.duration.serializeSet());
 		}

@@ -2884,7 +2884,10 @@ protocol version:      ${this.protocolVersion}`;
 				"notification",
 				this,
 				CommandClasses["Multilevel Switch"],
-				{ eventType: MultilevelSwitchCommand.StartLevelChange, direction: command.direction },
+				{
+					eventType: MultilevelSwitchCommand.StartLevelChange,
+					direction: command.direction,
+				},
 			);
 			return;
 		}
