@@ -124,7 +124,7 @@ export function getCompatEventValueId(endpoint?: number): ValueID {
  * This is emitted when a start or stop event is received
  */
 export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-	eventType: MultilevelSwitchCommand;
+	eventType: MultilevelSwitchCommand.StartLevelChange | MultilevelSwitchCommand.StopLevelChange;
 	direction?: string;
 }
 
@@ -527,7 +527,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		await this.refreshValues();
 
 		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatMultilevelSwitchAsEvent) {
+		if (node.deviceConfig?.compat?.treatMultilevelSwitchSetAsEvent) {
 			const valueId = getCompatEventValueId(this.endpointIndex);
 			if (!node.valueDB.hasMetadata(valueId)) {
 				node.valueDB.setMetadata(valueId, {
@@ -622,10 +622,9 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.targetValue = parseNumber(this.payload[0]);
+			this.targetValue = this.payload[0];
 
-			if (this.version >= 2 && this.payload.length >= 2) {
-				this.targetValue = parseNumber(this.payload[0]);
+			if (this.payload.length >= 2) {
 				this.duration = Duration.parseReport(this.payload[1]);
 			}
 		} else {
@@ -634,12 +633,12 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		}
 	}
 
-	public targetValue: number | undefined;
+	public targetValue: number;
 	public duration: Duration | undefined;
 
 	public serialize(): Buffer {
 		const payload = [
-			typeof this.targetValue !== "number" ? 0xfe : this.targetValue,
+			this.targetValue,
 		];
 		if (this.version >= 2 && this.duration) {
 			payload.push(this.duration.serializeSet());
@@ -759,17 +758,14 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.ignoreStartLevel = !!ignoreStartLevel;
 			this.startLevel = startLevel;
 			this.direction = direction ? "down" : "up";
-			this.eventType = MultilevelSwitchCommand.StartLevelChange;
 		} else {
 			this.duration = options.duration;
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;
-			this.eventType = MultilevelSwitchCommand.StartLevelChange;
 		}
 	}
 
-	public eventType: MultilevelSwitchCommand;
 	public duration: Duration | undefined;
 	public startLevel: number;
 	public ignoreStartLevel: boolean;
