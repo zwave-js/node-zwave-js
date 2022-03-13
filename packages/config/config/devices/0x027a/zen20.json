@@ -22,7 +22,7 @@
 			"#": "2",
 			"label": "Power Wattage Report Value Threshold",
 			"description": "Choose how you want your Power Strip to report power consumption to your hub",
-			"valueSize": 2,
+			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 5,
