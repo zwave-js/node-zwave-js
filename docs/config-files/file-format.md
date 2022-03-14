@@ -397,10 +397,14 @@ Some devices spam the network with hundreds of invalid `ConfigurationCC::InfoRep
 
 ### `treatBasicSetAsEvent`
 
-By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"value"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
+By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"event"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
 
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
+
+### `treatMultilevelSwitchSetAsEvent`
+
+By default, `Multilevel Switch CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value event` for the `"event"` property instead, so applications can react to these commands, e.g. for remotes.
 
 ### `treatDestinationEndpointAsSource`
 
