@@ -8,6 +8,7 @@ import type {
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
 import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
+import type { ZWaveNotificationCallbackParams_MultilevelSwitchCC } from "../commandclass/MultilevelSwitchCC";
 import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
 import type {
 	Powerlevel,
@@ -88,6 +89,7 @@ export type ZWaveNotificationCallback = (
 		| ZWaveNotificationCallbackParams_NotificationCC
 		| ZWaveNotificationCallbackParams_EntryControlCC
 		| ZWaveNotificationCallbackParams_PowerlevelCC
+		| ZWaveNotificationCallbackParams_MultilevelSwitchCC
 ) => void;
 
 export interface ZWaveNodeValueEventCallbacks {

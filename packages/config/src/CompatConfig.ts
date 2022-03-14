@@ -187,6 +187,19 @@ error in compat option treatBasicSetAsEvent`,
 			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
 		}
 
+		if (definition.treatMultilevelSwitchSetAsEvent != undefined) {
+			if (definition.treatMultilevelSwitchSetAsEvent !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+					error in compat option treatMultilevelSwitchSetAsEvent`,
+				);
+			}
+
+			this.treatMultilevelSwitchSetAsEvent =
+				definition.treatMultilevelSwitchSetAsEvent;
+		}
+
 		if (definition.treatDestinationEndpointAsSource != undefined) {
 			if (definition.treatDestinationEndpointAsSource !== true) {
 				throwInvalidConfig(
@@ -459,6 +472,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	public readonly preserveEndpoints?: "*" | readonly number[];
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
+	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
 	public readonly treatDestinationEndpointAsSource?: boolean;
 	public readonly queryOnWakeup?: readonly [
 		string,

@@ -348,7 +348,11 @@ export {
 	MultilevelSwitchCCSupportedReport,
 	SwitchType,
 } from "./MultilevelSwitchCC";
-export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
+export type {
+	MultilevelSwitchLevelChangeMetadata,
+	ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
+} from "./MultilevelSwitchCC";
 export {
 	NodeNamingAndLocationCC,
 	NodeNamingAndLocationCCLocationGet,

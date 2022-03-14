@@ -107,6 +107,14 @@ import {
 	getEndpointIndizesValueId,
 } from "../commandclass/MultiChannelCC";
 import {
+	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
+	MultilevelSwitchCC,
+	MultilevelSwitchCCSet,
+	MultilevelSwitchCCStartLevelChange,
+	MultilevelSwitchCCStopLevelChange,
+	MultilevelSwitchCommand,
+} from "../commandclass/MultilevelSwitchCC";
+import {
 	getNodeLocationValueId,
 	getNodeNameValueId,
 } from "../commandclass/NodeNamingCC";
@@ -2274,6 +2282,8 @@ protocol version:      ${this.protocolVersion}`;
 
 		if (command instanceof BasicCC) {
 			return this.handleBasicCommand(command);
+		} else if (command instanceof MultilevelSwitchCC) {
+			return this.handleMultilevelSwitchCommand(command);
 		} else if (command instanceof CentralSceneCCNotification) {
 			return this.handleCentralSceneNotification(command);
 		} else if (command instanceof WakeUpCCWakeUpNotification) {
@@ -2843,6 +2853,50 @@ protocol version:      ${this.protocolVersion}`;
 					}
 				}
 			}
+		}
+	}
+
+	/** Handles the receipt of a MultilevelCC Set or Report */
+	private handleMultilevelSwitchCommand(command: MultilevelSwitchCC): void {
+		if (command instanceof MultilevelSwitchCCSet) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message: "treating MultiLevelSwitchCCSet::Set as a value event",
+			});
+			this._valueDB.setValue(
+				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				command.targetValue,
+				{
+					stateful: false,
+				},
+			);
+		} else if (command instanceof MultilevelSwitchCCStartLevelChange) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message:
+					"treating MultilevelSwitchCC::StartLevelChange as a notification",
+			});
+			this.emit(
+				"notification",
+				this,
+				CommandClasses["Multilevel Switch"],
+				{
+					eventType: MultilevelSwitchCommand.StartLevelChange,
+					direction: command.direction,
+				},
+			);
+		} else if (command instanceof MultilevelSwitchCCStopLevelChange) {
+			this.driver.controllerLog.logNode(this.id, {
+				endpoint: command.endpointIndex,
+				message:
+					"treating MultilevelSwitchCC::StopLevelChange as a notification",
+			});
+			this.emit(
+				"notification",
+				this,
+				CommandClasses["Multilevel Switch"],
+				{ eventType: MultilevelSwitchCommand.StopLevelChange },
+			);
 		}
 	}
 
