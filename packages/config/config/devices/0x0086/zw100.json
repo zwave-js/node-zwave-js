@@ -397,7 +397,7 @@
 		},
 		{
 			"#": "81",
-			"$if": "firmwareVersion == 1.8 || firmwareVersion == 1.9 || firmwareVersion >= 1.13",
+			"$if": "firmwareVersion === 1.8 || firmwareVersion === 1.9 || firmwareVersion >= 1.13",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "LED Blinking",
 			"defaultValue": 0
