@@ -2871,15 +2871,12 @@ protocol version:      ${this.protocolVersion}`;
 					stateful: false,
 				},
 			);
-			return;
-		}
-		if (command instanceof MultilevelSwitchCCStartLevelChange) {
+		} else if (command instanceof MultilevelSwitchCCStartLevelChange) {
 			this.driver.controllerLog.logNode(this.id, {
 				endpoint: command.endpointIndex,
 				message:
-					"treating MultilevelSwitchCCStartLevelChange::Set as a value event",
+					"treating MultilevelSwitchCC::StartLevelChange as a notification",
 			});
-			// Notify listeners
 			this.emit(
 				"notification",
 				this,
@@ -2889,13 +2886,11 @@ protocol version:      ${this.protocolVersion}`;
 					direction: command.direction,
 				},
 			);
-			return;
-		}
-		if (command instanceof MultilevelSwitchCCStopLevelChange) {
+		} else if (command instanceof MultilevelSwitchCCStopLevelChange) {
 			this.driver.controllerLog.logNode(this.id, {
 				endpoint: command.endpointIndex,
 				message:
-					"treating MultilevelSwitchCCStopLevelChange::Set as a value event",
+					"treating MultilevelSwitchCC::StopLevelChange as a notification",
 			});
 			this.emit(
 				"notification",
@@ -2903,7 +2898,6 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{ eventType: MultilevelSwitchCommand.StopLevelChange },
 			);
-			return;
 		}
 	}
 
