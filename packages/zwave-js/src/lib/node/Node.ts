@@ -592,19 +592,12 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 * This is only set if included with Security S2.
 	 */
 	public get dsk(): Buffer | undefined {
-		return this.driver.cacheGet(cacheKeys.node(this.id).dsk, {
-			reviver: (value) =>
-				typeof value === "string"
-					? Buffer.from(value, "hex")
-					: undefined,
-		});
+		return this.driver.cacheGet(cacheKeys.node(this.id).dsk);
 	}
 	/** @internal */
 	public set dsk(value: Buffer | undefined) {
 		const cacheKey = cacheKeys.node(this.id).dsk;
-		this.driver.cacheSet(cacheKey, value, {
-			serializer: (value) => value.toString("hex"),
-		});
+		this.driver.cacheSet(cacheKey, value);
 	}
 
 	/** Whether the node was granted at least one security class */
