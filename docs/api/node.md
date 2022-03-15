@@ -829,6 +829,14 @@ declare enum ProtocolVersion {
 }
 ```
 
+### `sdkVersion`
+
+```ts
+readonly sdkVersion: string
+```
+
+The version of the Z-Wave SDK this node's firmware is built with.
+
 ### `firmwareVersion`
 
 ```ts

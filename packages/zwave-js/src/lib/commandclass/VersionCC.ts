@@ -48,6 +48,13 @@ export function getFirmwareVersionsMetadata(): ValueMetadata {
 	};
 }
 
+export function getSDKVersionValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Version,
+		property: "sdkVersion",
+	};
+}
+
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
