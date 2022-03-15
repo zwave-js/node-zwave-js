@@ -3955,6 +3955,15 @@ protocol version:      ${this.protocolVersion}`;
 			})...`,
 		);
 
+		if (this.canSleep && this.status !== NodeStatus.Awake) {
+			// Wait for node to wake up to avoid incorrectly long delays in the first health check round
+			this.driver.controllerLog.logNode(
+				this.id,
+				`waiting for node to wake up...`,
+			);
+			await this.waitForWakeup();
+		}
+
 		const results: LifelineHealthCheckResult[] = [];
 		for (let round = 1; round <= rounds; round++) {
 			// Determine the number of repeating neighbors
@@ -3975,6 +3984,7 @@ protocol version:      ${this.protocolVersion}`;
 					txReport = report;
 				},
 			});
+
 			for (let i = 1; i <= healthCheckTestFrameCount; i++) {
 				const start = Date.now();
 				const pingResult = await pingAPI.send().then(
