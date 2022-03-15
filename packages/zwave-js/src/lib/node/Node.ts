@@ -4114,7 +4114,20 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 		}
 
 		const otherNode = this.driver.controller.nodes.getOrThrow(targetNodeId);
-		if (
+		if (otherNode.canSleep) {
+			throw new ZWaveError(
+				"Nodes which can sleep are not a valid target for a route health check!",
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (
+			this.canSleep &&
+			!this.supportsCC(CommandClasses.Powerlevel)
+		) {
+			throw new ZWaveError(
+				"Route health checks require that nodes which can sleep support Powerlevel CC!",
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (
 			!this.supportsCC(CommandClasses.Powerlevel) &&
 			!otherNode.supportsCC(CommandClasses.Powerlevel)
 		) {
@@ -4239,8 +4252,11 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 				}
 			}
 
-			// And do the same with the other node
-			if (otherNode.supportsCC(CommandClasses.Powerlevel)) {
+			// And do the same with the other node - unless the current node is a sleeping node, then this doesn't make sense
+			if (
+				!this.canSleep &&
+				otherNode.supportsCC(CommandClasses.Powerlevel)
+			) {
 				try {
 					const powerlevel = await discreteBinarySearch(
 						Powerlevel["Normal Power"], // minimum reduction
