@@ -4119,23 +4119,20 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 				"Nodes which can sleep are not a valid target for a route health check!",
 				ZWaveErrorCodes.CC_NotSupported,
 			);
-		}
-
-		if (
+		} else if (
+			this.canSleep &&
+			!this.supportsCC(CommandClasses.Powerlevel)
+		) {
+			throw new ZWaveError(
+				"Route health checks require that nodes which can sleep support Powerlevel CC!",
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		} else if (
 			!this.supportsCC(CommandClasses.Powerlevel) &&
 			!otherNode.supportsCC(CommandClasses.Powerlevel)
 		) {
 			throw new ZWaveError(
 				"For a route health check, at least one of the nodes must support Powerlevel CC!",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		} else if (
-			!this.supportsCC(CommandClasses.Powerlevel) &&
-			this.canSleep &&
-			otherNode.supportsCC(CommandClasses.Powerlevel)
-		) {
-			throw new ZWaveError(
-				"Route health checks involving nodes that can sleep require the sleeping node to support Powerlevel CC!",
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
