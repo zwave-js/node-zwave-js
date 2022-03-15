@@ -3845,7 +3845,10 @@ protocol version:      ${this.protocolVersion}`;
 				? 5000
 				: 1000;
 
+		// Track how often we failed to get a response from the node, so we can abort if the connection is too bad
 		let continuousErrors = 0;
+		// Also track how many times in a row there was no progress, which also indicates a bad connection
+		let previousProgress = 0;
 		while (true) {
 			// The node might send an unsolicited update when it finishes the test
 			const report = await this.driver
@@ -3862,13 +3865,18 @@ protocol version:      ${this.protocolVersion}`;
 				: // If it didn't come in the wait time, poll for an update
 				  await api.getNodeTestStatus().catch(() => undefined);
 
-			// If we didn't get a result, try again next iteration
-			if (!status) {
-				// Safeguard against infinite loop
+			// Safeguard against infinite loop:
+			// If we didn't get a result, or there was no progress, try again next iteration
+			if (
+				!status ||
+				(status.status === PowerlevelTestStatus["In Progress"] &&
+					status.acknowledgedFrames === previousProgress)
+			) {
 				if (continuousErrors > 5) return result(0);
 				continuousErrors++;
 				continue;
 			} else {
+				previousProgress = status.acknowledgedFrames;
 				continuousErrors = 0;
 			}
 
