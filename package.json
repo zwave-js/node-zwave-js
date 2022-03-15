@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/repo",
-  "version": "9.0.0-beta.4",
+  "version": "9.0.0-beta.5",
   "private": true,
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
