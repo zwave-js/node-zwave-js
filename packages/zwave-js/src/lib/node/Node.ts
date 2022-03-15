@@ -4240,6 +4240,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 						failedPingsToTarget = failedPings;
 					} else {
 						minPowerlevelSource = powerlevel;
+						failedPingsToTarget = 0;
 					}
 				} catch (e) {
 					if (
@@ -4272,6 +4273,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 						failedPingsToSource = failedPings;
 					} else {
 						minPowerlevelTarget = powerlevel;
+						failedPingsToSource = 0;
 					}
 				} catch (e) {
 					if (
