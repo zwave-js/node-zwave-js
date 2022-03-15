@@ -781,6 +781,23 @@ export function jsonToNVMObjects_v1_to_v4(
 	});
 	addApplicationObjects(applVersionFile.serialize());
 
+	// When converting it can be that the rfConfig doesn't exist. Make sure
+	// that it is initialized with proper defaults.
+	target.controller.rfConfig ??= {
+		rfRegion: 0xff, // default
+		txPower: 0.0,
+		measured0dBm: +3.3,
+		enablePTI: null,
+		maxTXPower: null,
+	};
+
+	// For v3+ targets, the enablePTI and maxTxPower must be set in the rfConfig
+	// or the controller will ignore the file and not accept any changes to the RF config
+	if (format >= 3) {
+		target.controller.rfConfig.enablePTI ??= 0;
+		target.controller.rfConfig.maxTXPower ??= 14.0;
+	}
+
 	addApplicationObjects(...serializeCommonApplicationObjects(target));
 
 	// Protocol files
