@@ -24,9 +24,6 @@
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			// https://github.com/microsoft/vscode/issues/142830#issuecomment-1048240356 🤷🏻‍♂️
-			"outFiles": [],
-			"resolveSourceMapLocations": null,
 			"sourceMaps": true
 		},
 		{
@@ -90,10 +87,7 @@
 			"disableOptimisticBPs": true,
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "yarn",
-			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"],
-			// https://github.com/microsoft/vscode/issues/142830#issuecomment-1048240356 🤷🏻‍♂️
-			"outFiles": [],
-			"resolveSourceMapLocations": null
+			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
 		}
 	]
 }
