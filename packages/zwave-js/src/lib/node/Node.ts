@@ -134,7 +134,10 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
-import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
+import {
+	getFirmwareVersionsValueId,
+	getSDKVersionValueId,
+} from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
 	getWakeUpOnDemandSupportedValueId,
@@ -680,6 +683,10 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	public get firmwareVersion(): string | undefined {
 		// We're only interested in the first (main) firmware
 		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+	}
+
+	public get sdkVersion(): string | undefined {
+		return this.getValue(getSDKVersionValueId());
 	}
 
 	public get zwavePlusVersion(): number | undefined {
