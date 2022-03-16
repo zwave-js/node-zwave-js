@@ -45,7 +45,6 @@
   "scripts": {
     "b": "yarn ts maintenance/_build.ts",
     "build": "yarn b prebuild && tsc -b tsconfig.build.json --verbose",
-    "build_deps": "tsc -b tsconfig.build.json --verbose",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn b prebuild && tsc -b tsconfig.build.json --watch --pretty",
     "lint_zwave": "yarn b lint",
