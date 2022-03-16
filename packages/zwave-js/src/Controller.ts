@@ -14,4 +14,10 @@ export {
 	TXReport,
 } from "./lib/controller/SendDataShared";
 export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
+export {
+	ControllerLogContext,
+	ControllerNodeLogContext,
+	ControllerSelfLogContext,
+	ControllerValueLogContext,
+} from "./lib/log/Controller";
 export { RFRegion } from "./lib/serialapi/misc/SerialAPISetupMessages";
