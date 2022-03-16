@@ -2786,6 +2786,21 @@ protocol version:      ${this.protocolVersion}`;
 						CommandClasses["Multilevel Switch"],
 					);
 					break;
+				case 0x12: // Remote Switch
+					switch (sourceEndpoint.deviceClass.specific.key) {
+						case 0x01: // Binary Remote Switch
+							mappedTargetCC =
+								sourceEndpoint.createCCInstanceUnsafe(
+									CommandClasses["Binary Switch"],
+								);
+							break;
+						case 0x02: // Multilevel Remote Switch
+							mappedTargetCC =
+								sourceEndpoint.createCCInstanceUnsafe(
+									CommandClasses["Multilevel Switch"],
+								);
+							break;
+					}
 			}
 		}
 
