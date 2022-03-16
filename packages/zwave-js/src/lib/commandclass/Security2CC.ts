@@ -1542,7 +1542,8 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 					SecurityClass,
 					this.grantedKey,
 				),
-				"network key": buffer2hex(this.networkKey),
+				// This shouldn't be logged, so users can safely post their logs online
+				// "network key": buffer2hex(this.networkKey),
 			},
 		};
 	}
