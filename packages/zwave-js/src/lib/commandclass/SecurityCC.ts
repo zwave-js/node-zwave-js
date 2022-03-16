@@ -785,12 +785,13 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
-		return {
-			...super.toLogEntry(),
-			message: { "network key": buffer2hex(this.networkKey) },
-		};
-	}
+	// The network key shouldn't be logged, so users can safely post their logs online
+	// public toLogEntry(): MessageOrCCLogEntry {
+	// 	return {
+	// 		...super.toLogEntry(),
+	// 		message: { "network key": buffer2hex(this.networkKey) },
+	// 	};
+	// }
 }
 
 @CCCommand(SecurityCommand.CommandsSupportedReport)
