@@ -2,7 +2,7 @@
 
 /// <reference path="types.d.ts" />
 
-const zjsLogRegex = /\[.*\]\(http.*zwavejs_.*\.(log|txt)\)/;
+const zjsLogRegex = /\[.*\]\(http.*zwavejs_.*\.(log|txt|zip)\)/;
 const markdownLinkRegex = /\[.*\]\(http.*\)/;
 const codeBlockRegex = /`{3,4}(.*?)`{3,4}/s;
 
