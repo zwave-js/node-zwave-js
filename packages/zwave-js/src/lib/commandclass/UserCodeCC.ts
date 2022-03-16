@@ -311,7 +311,7 @@ function persistUserCode(
 }
 
 /** Formats a user code in a way that's safe to print in public logs */
-function userCodeToLogString(userCode: string | Buffer): string {
+export function userCodeToLogString(userCode: string | Buffer): string {
 	if (userCode === "") return "(empty)";
 	return "*".repeat(userCode.length);
 }
