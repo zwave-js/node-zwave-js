@@ -29,15 +29,39 @@
 	},
 	"paramInformation": [
 		{
+			"#": "7",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm",
+					"value": 1
+				},
+				{
+					"label": "Doorbell",
+					"value": 2
+				}
+			]
+		},
+		{
 			"#": "1",
 			"label": "Alarm Volume",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
 				{
 					"label": "Low",
 					"value": 1
@@ -56,12 +80,16 @@
 			"#": "2",
 			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
 				{
 					"label": "30 Seconds",
 					"value": 1
@@ -77,9 +105,38 @@
 			]
 		},
 		{
+			"#": "5",
+			"label": "Alarm Sound",
+			"description": "Sound Index",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Alarm LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "3",
-			"label": "Configuring doorbell music duration time",
-			"description": "Duration",
+			"label": "Doorbell Duration",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -95,8 +152,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Configure doorbell music volume",
-			"description": "Low, Medium, High",
+			"label": "Doorbell Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -119,24 +175,34 @@
 			]
 		},
 		{
-			"#": "5",
-			"label": "Configure alarm sound index",
-			"description": "Sound types",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 9,
-			"unsigned": true
-		},
-		{
 			"#": "6",
-			"label": "Configure doorbell music index",
-			"description": "Sound types",
+			"label": "Doorbell Sound",
+			"description": "Sound index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
 			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Doorbell LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
