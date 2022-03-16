@@ -13,11 +13,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	buffer2hex,
 	getEnumMemberName,
 	isPrintableASCII,
 	isPrintableASCIIWithNewlines,
-	JSONObject,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
@@ -310,6 +308,12 @@ function persistUserCode(
 	}
 
 	return true;
+}
+
+/** Formats a user code in a way that's safe to print in public logs */
+function userCodeToLogString(userCode: string | Buffer): string {
+	if (userCode === "") return "(empty)";
+	return "*".repeat(userCode.length);
 }
 
 @API(CommandClasses["User Code"])
@@ -966,22 +970,9 @@ export class UserCodeCCSet extends UserCodeCC {
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code":
-					typeof this.userCode === "string"
-						? this.userCode
-						: buffer2hex(this.userCode),
+				"user code": userCodeToLogString(this.userCode),
 			},
 		};
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			userId: this.userId,
-			userCode:
-				typeof this.userCode === "string"
-					? this.userCode
-					: buffer2hex(this.userCode),
-		});
 	}
 }
 
@@ -1056,10 +1047,7 @@ export class UserCodeCCReport
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code":
-					typeof this.userCode === "string"
-						? this.userCode
-						: buffer2hex(this.userCode),
+				"user code": userCodeToLogString(this.userCode),
 			},
 		};
 	}
@@ -1428,7 +1416,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "master code": this.masterCode },
+			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
 }
@@ -1461,7 +1449,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "master code": this.masterCode },
+			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
 }
@@ -1637,12 +1625,9 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[
-				`code #${userId}`
-			] = `${userCode} (status: ${getEnumMemberName(
-				UserIDStatus,
-				userIdStatus,
-			)})`;
+			message[`code #${userId}`] = `${userCodeToLogString(
+				userCode,
+			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -1691,12 +1676,9 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[
-				`code #${userId}`
-			] = `${userCode} (status: ${getEnumMemberName(
-				UserIDStatus,
-				userIdStatus,
-			)})`;
+			message[`code #${userId}`] = `${userCodeToLogString(
+				userCode,
+			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		message["next user id"] = this.nextUserId;
 		return {

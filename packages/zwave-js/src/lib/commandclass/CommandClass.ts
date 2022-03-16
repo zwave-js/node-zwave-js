@@ -10,7 +10,6 @@ import {
 	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
-	stripUndefined,
 	ValueDB,
 	ValueID,
 	valueIdToString,
@@ -431,11 +430,6 @@ export class CommandClass {
 			ret.payload = "0x" + this.payload.toString("hex");
 		}
 		return ret;
-	}
-
-	protected toJSONInherited(props: JSONObject): JSONObject {
-		const { payload, ...ret } = this.toJSONInternal();
-		return stripUndefined({ ...ret, ...props });
 	}
 
 	protected throwMissingCriticalInterviewResponse(): never {

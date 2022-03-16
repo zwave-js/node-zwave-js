@@ -21,7 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, JSONObject, num2hex, pick } from "@zwave-js/shared";
+import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -992,24 +992,6 @@ export class NotificationCCReport extends NotificationCC {
 			...super.toLogEntry(),
 			message,
 		};
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			alarmType: this.alarmType,
-			notificationType:
-				this.notificationType != undefined
-					? this.driver.configManager.lookupNotification(
-							this.notificationType,
-					  )?.name
-					: this.notificationType,
-			notificationStatus: this.notificationStatus,
-			notificationEvent: this.notificationEvent,
-			alarmLevel: this.alarmLevel,
-			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
-			eventParameters: this.eventParameters,
-			sequenceNumber: this.sequenceNumber,
-		});
 	}
 
 	private parseEventParameters(): void {
