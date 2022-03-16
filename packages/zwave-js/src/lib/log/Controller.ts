@@ -30,19 +30,24 @@ interface LogNodeOptions {
 	endpoint?: number;
 }
 
-export interface ControllerLogContext extends LogContext<"controller"> {
-	type?: "controller" | "node" | "value";
-}
-
-export type ControllerNodeLogContext = ControllerLogContext &
+export type ControllerNodeLogContext = LogContext<"controller"> &
 	NodeLogContext & { endpoint?: number; direction: string };
 
-export type ControllerValueLogContext = ControllerLogContext &
+export type ControllerValueLogContext = LogContext<"controller"> &
 	ValueLogContext & {
 		direction?: string;
 		change?: "added" | "updated" | "removed" | "notification";
 		internal?: boolean;
 	};
+
+export type ControllerSelfLogContext = LogContext<"controller"> & {
+	type: "controller";
+};
+
+export type ControllerLogContext =
+	| ControllerSelfLogContext
+	| ControllerNodeLogContext
+	| ControllerValueLogContext;
 
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
@@ -61,7 +66,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 
 	/**
 	 * Logs a message
-	 * @param msg The message to output
+	 * @param message The message to output
 	 */
 	public print(message: string, level?: "verbose" | "warn" | "error"): void {
 		const actualLevel = level || CONTROLLER_LOGLEVEL;
