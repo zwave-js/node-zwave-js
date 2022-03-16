@@ -1,3 +1,4 @@
+export { SerialLogContext } from "./Logger";
 export * from "./MessageHeaders";
 export * from "./MockSerialPort";
 export * from "./SerialAPIParser";

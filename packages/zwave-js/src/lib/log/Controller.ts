@@ -30,7 +30,9 @@ interface LogNodeOptions {
 	endpoint?: number;
 }
 
-export type ControllerLogContext = LogContext<"controller">;
+export interface ControllerLogContext extends LogContext<"controller"> {
+	type?: "controller" | "node" | "value";
+}
 
 export type ControllerNodeLogContext = ControllerLogContext &
 	NodeLogContext & { endpoint?: number; direction: string };
