@@ -80,8 +80,9 @@
   },
   "scripts": {
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
-    "build": "yarn foreach -t run build",
-    "watch": "yarn foreach -t --exclude zwave-js run build && yarn workspace zwave-js run watch",
+    "prebuild": "yarn workspace @zwave-js/maintenance run build",
+    "build": "yarn prebuild && yarn workspace zwave-js run build",
+    "watch": "yarn prebuild && yarn workspace zwave-js run watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "yarn run test:ts --runInBand",

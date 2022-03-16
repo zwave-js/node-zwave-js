@@ -44,9 +44,7 @@
   },
   "scripts": {
     "b": "yarn ts maintenance/_build.ts",
-    "deprecated": "node -p '\\\"\\\\n \\\\n \\\\033[31;1;4mThe \\\\\"build:full\\\\\" script has been deprecated. Use \\\\\"build\\\\\" instead!\\\\033[0m\\\\n \\\\n\\\"'",
-    "build_full": "yarn run deprecated && yarn run build",
-    "build": "yarn b prebuild && tsc -b tsconfig.build.json",
+    "build": "yarn b prebuild && tsc -b tsconfig.build.json --verbose",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn b prebuild && tsc -b tsconfig.build.json --watch --pretty",
     "lint_zwave": "yarn b lint",
