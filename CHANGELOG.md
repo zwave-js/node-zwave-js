@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.6 (2022-03-15)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -22,6 +22,9 @@
 * Added a compat flag to expose received `MultilevelSwitchCCSet` commands via the `event` property (#4282)
 * Received `MultilevelSwitchCC` `Start/StopLevelChange` commands are now emitted as notifications (#4282)
 * Added an `sdkVersion` property for nodes (#4371)
+* `LogContext` and related types are now exported (#4378)
+* Map `Basic CC Set` to appropriate CCs for devices with `Remote Switch` device class (#4382)
+* User codes and network keys are no longer logged (#4383)
 
 ### Bugfixes
 * Error reporting is now opt-in (#4279) and should no longer force-exit the application when an unhandled rejection occurs (#4291)
@@ -47,7 +50,9 @@
 * Add parameters and correct default values for Fibaro Smart Module FGS214 and Double Smart Module FGS224 (#4345)
 * Correct value size for Zooz ZEN20 v2 (#4358)
 * Preserve all endpoints for Qubino ZMNKAD1 Luxy Smart Switch (#4366)
+* Enable Multilevel Switch `event` value for Aeotec ZW111 (#4380)
 
 ### Changes under the hood
 * Lots of dependency updates
 * We no longer use `lerna` for monorepo management. It is largely unmaintained and doesn't support `yarn`'s `workspace:` protocol (#4071)
+* The bot now considers `zip` a valid extension for Z-Wave JS logfiles
