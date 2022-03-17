@@ -21,8 +21,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Siren status",
-			"description": "is assigned to the siren status - ON/OFF. Allows for sending a controlled command to the associated device whenever the Indoor siren is turned ON (or OFF).",
+			"label": "Siren Status",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -59,7 +58,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -107,7 +106,6 @@
 		{
 			"#": "5",
 			"label": "Alarm Sound",
-			"description": "Sound Index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -116,23 +114,9 @@
 		},
 		{
 			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Alarm LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
@@ -145,7 +129,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 255
 				}
 			]
@@ -177,7 +161,6 @@
 		{
 			"#": "6",
 			"label": "Doorbell Sound",
-			"description": "Sound index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -186,23 +169,8 @@
 		},
 		{
 			"#": "9",
-			"label": "Doorbell LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Doorbell LED"
 		}
 	],
 	"metadata": {
