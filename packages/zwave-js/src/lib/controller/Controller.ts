@@ -79,6 +79,8 @@ import {
 import {
 	getFirmwareVersionsMetadata,
 	getFirmwareVersionsValueId,
+	getSDKVersionMetadata,
+	getSDKVersionValueId,
 } from "../commandclass/VersionCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
@@ -983,6 +985,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
 			this._firmwareVersion,
 		]);
+		controllerValueDB.setMetadata(
+			getSDKVersionValueId(),
+			getSDKVersionMetadata(),
+		);
+		controllerValueDB.setValue(getSDKVersionValueId(), this._sdkVersion);
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"] &&
