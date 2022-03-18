@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.0-beta.7 (2022-03-18)
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -19,6 +19,7 @@
 * Export some commonly used string formatting utilities (#4318)
 * Add support for `Irrigation CC` (#4270)
 * The controller's `sdkVersion` property now includes the build number (or minor version) if supported (#4355)
+* Also expose `sdkVersion` on the controller node (#4388)
 * Added a compat flag to expose received `MultilevelSwitchCCSet` commands via the `event` property (#4282)
 * Received `MultilevelSwitchCC` `Start/StopLevelChange` commands are now emitted as notifications (#4282)
 * Added an `sdkVersion` property for nodes (#4371)
