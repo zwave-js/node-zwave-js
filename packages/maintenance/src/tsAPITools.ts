@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import * as path from "path";
-import ts, { ImportDeclaration } from "typescript";
+import ts from "typescript";
 
 // Find this project's root dir
 export const projectRoot = process.cwd();
@@ -111,7 +111,7 @@ export function findImportDeclaration(
 	importName: string,
 ): ts.ImportDeclaration | undefined {
 	const importDeclarations = sourceFile.statements
-		.filter((s): s is ImportDeclaration => ts.isImportDeclaration(s))
+		.filter((s): s is ts.ImportDeclaration => ts.isImportDeclaration(s))
 		.filter(
 			(i) =>
 				i.moduleSpecifier
