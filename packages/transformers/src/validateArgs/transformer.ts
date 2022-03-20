@@ -23,13 +23,13 @@ export default function transformer(
 	program: ts.Program,
 	options?: { [Key: string]: unknown },
 ): ts.TransformerFactory<ts.SourceFile> {
-	// if (options && options.verbose) {
-	// 	console.log(
-	// 		`typescript-is: transforming program with ${
-	// 			program.getSourceFiles().length
-	// 		} source files; using TypeScript ${ts.version}.`,
-	// 	);
-	// }
+	if (options?.verbose) {
+		console.log(
+			`@zwave-js/transformer: transforming program with ${
+				program.getSourceFiles().length
+			} source files; using TypeScript ${ts.version}.`,
+		);
+	}
 
 	const visitorContext: PartialVisitorContext = {
 		program,
@@ -45,6 +45,16 @@ export default function transformer(
 		canonicalPaths: new Map(),
 	};
 	return (context: ts.TransformationContext) => (file: ts.SourceFile) => {
+		// Bail early if there is no import for "@zwave-js/transformers". In this case, there's nothing to transform
+		if (file.getFullText().indexOf("@zwave-js/transformers") === -1) {
+			if (options?.verbose) {
+				console.log(
+					`@zwave-js/transformers not imported in ${file.fileName}, skipping`,
+				);
+			}
+			return file;
+		}
+
 		const factory = context.factory;
 		const fileVisitorContext: FileSpecificVisitorContext = {
 			...visitorContext,
