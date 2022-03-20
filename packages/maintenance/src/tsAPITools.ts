@@ -96,36 +96,3 @@ export function getCommandClassFromClassDeclaration(
 		}
 	}
 }
-
-export function hasNamedImport(
-	sourceFile: ts.SourceFile,
-	moduleName: string,
-	importName: string,
-): boolean {
-	return !!findImportDeclaration(sourceFile, moduleName, importName);
-}
-
-export function findImportDeclaration(
-	sourceFile: ts.SourceFile,
-	moduleName: string,
-	importName: string,
-): ts.ImportDeclaration | undefined {
-	const importDeclarations = sourceFile.statements
-		.filter((s): s is ts.ImportDeclaration => ts.isImportDeclaration(s))
-		.filter(
-			(i) =>
-				i.moduleSpecifier
-					.getText(sourceFile)
-					.replace(/^["']|["']$/g, "") === moduleName,
-		);
-	for (const decl of importDeclarations) {
-		const named = decl.importClause?.namedBindings;
-		if (!named) continue;
-		if (
-			ts.isNamedImports(named) &&
-			named.elements.some((e) => e.name.getText() === importName)
-		) {
-			return decl;
-		}
-	}
-}
