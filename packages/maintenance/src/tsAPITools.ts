@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import * as path from "path";
-import ts from "typescript";
+import ts, { ImportDeclaration } from "typescript";
 
 // Find this project's root dir
 export const projectRoot = process.cwd();
@@ -93,6 +93,39 @@ export function getCommandClassFromClassDeclaration(
 		for (const decorator of node.decorators) {
 			const ccId = getCommandClassFromDecorator(sourceFile, decorator);
 			if (ccId != undefined) return ccId;
+		}
+	}
+}
+
+export function hasNamedImport(
+	sourceFile: ts.SourceFile,
+	moduleName: string,
+	importName: string,
+): boolean {
+	return !!findImportDeclaration(sourceFile, moduleName, importName);
+}
+
+export function findImportDeclaration(
+	sourceFile: ts.SourceFile,
+	moduleName: string,
+	importName: string,
+): ts.ImportDeclaration | undefined {
+	const importDeclarations = sourceFile.statements
+		.filter((s): s is ImportDeclaration => ts.isImportDeclaration(s))
+		.filter(
+			(i) =>
+				i.moduleSpecifier
+					.getText(sourceFile)
+					.replace(/^["']|["']$/g, "") === moduleName,
+		);
+	for (const decl of importDeclarations) {
+		const named = decl.importClause?.namedBindings;
+		if (!named) continue;
+		if (
+			ts.isNamedImports(named) &&
+			named.elements.some((e) => e.name.getText() === importName)
+		) {
+			return decl;
 		}
 	}
 }

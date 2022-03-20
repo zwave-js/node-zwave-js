@@ -211,6 +211,31 @@ export class ZWaveError extends Error {
 	}
 }
 
+// export class ZWaveArgumentError extends ZWaveError {
+// 	public constructor(
+// 		public readonly message: string,
+// 		public readonly code: ZWaveErrorCodes,
+// 		/** Additional info required to handle this error (e.g. the Z-Wave message indicating the failure) */
+// 		public readonly context?: unknown,
+// 		/** If this error corresponds to a failed transaction, this contains the stack where it was created */
+// 		public readonly transactionSource?: string,
+// 	) {
+// 		super();
+
+// 		// Add the error code to the message to be able to identify it even when the stack trace is garbled somehow
+// 		this.message = appendErrorSuffix(message, code);
+
+// 		// We need to set the prototype explicitly
+// 		Object.setPrototypeOf(this, ZWaveError.prototype);
+// 		Object.getPrototypeOf(this).name = "ZWaveError";
+
+// 		// If there's a better stack, use it
+// 		if (typeof transactionSource === "string") {
+// 			this.stack = `ZWaveError: ${this.message}\n${transactionSource}`;
+// 		}
+// 	}
+// }
+
 export function isZWaveError(e: unknown): e is ZWaveError {
 	return e instanceof Error && Object.getPrototypeOf(e).name === "ZWaveError";
 }
