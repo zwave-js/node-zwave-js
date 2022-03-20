@@ -31,13 +31,12 @@
   "scripts": {
     "build": "tsc -b tsconfig.build.json --verbose",
     "clean": "yarn run build --clean",
-    "watch": "yarn run build --watch --pretty"
+    "watch": "yarn run build --watch --pretty",
+    "test": "yarn run build && tsc -p tsconfig.test.json; node test/test1"
   },
   "devDependencies": {
-    "@zwave-js/core": "workspace:*",
-    "@zwave-js/shared": "workspace:*",
+    "@zwave-js/maintenance": "workspace:*",
     "reflect-metadata": "^0.1.13",
-    "ts-morph": "^14.0.0",
     "tsutils": "^3.21.0",
     "typescript": "4.6.2"
   }

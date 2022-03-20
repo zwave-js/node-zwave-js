@@ -1,9 +1,7 @@
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
-import { sliceSet } from "./utils";
 import type { VisitorContext } from "./visitor-context";
 import * as VisitorIndexedAccess from "./visitor-indexed-access";
-import * as VisitorIsStringKeyof from "./visitor-is-string-keyof";
 import * as VisitorKeyof from "./visitor-keyof";
 import * as VisitorTypeName from "./visitor-type-name";
 import * as VisitorUtils from "./visitor-utils";
@@ -12,15 +10,16 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const name = VisitorTypeName.visitType(type, visitorContext, {
 		type: "type-check",
 	});
+	const f = visitorContext.factory;
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-		return ts.createFunctionDeclaration(
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
@@ -31,14 +30,14 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 				),
 			],
 			undefined,
-			ts.createBlock(
+			f.createBlock(
 				[
-					ts.createVariableStatement(
+					f.createVariableStatement(
 						undefined,
-						ts.createVariableDeclarationList(
+						f.createVariableDeclarationList(
 							[
-								ts.createVariableDeclaration(
-									ts.createIdentifier("nativeDateObject"),
+								f.createVariableDeclaration(
+									f.createIdentifier("nativeDateObject"),
 									undefined,
 									undefined,
 								),
@@ -46,50 +45,52 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 							ts.NodeFlags.Let,
 						),
 					),
-					ts.createIf(
-						ts.createBinary(
-							ts.createTypeOf(ts.createIdentifier("global")),
-							ts.createToken(
+					f.createIfStatement(
+						f.createBinaryExpression(
+							f.createTypeOfExpression(
+								f.createIdentifier("global"),
+							),
+							f.createToken(
 								ts.SyntaxKind.EqualsEqualsEqualsToken,
 							),
-							ts.createStringLiteral("undefined"),
+							f.createStringLiteral("undefined"),
 						),
-						ts.createExpressionStatement(
-							ts.createBinary(
-								ts.createIdentifier("nativeDateObject"),
-								ts.createToken(ts.SyntaxKind.EqualsToken),
-								ts.createPropertyAccess(
-									ts.createIdentifier("window"),
-									ts.createIdentifier("Date"),
+						f.createExpressionStatement(
+							f.createBinaryExpression(
+								f.createIdentifier("nativeDateObject"),
+								f.createToken(ts.SyntaxKind.EqualsToken),
+								f.createPropertyAccessExpression(
+									f.createIdentifier("window"),
+									f.createIdentifier("Date"),
 								),
 							),
 						),
-						ts.createExpressionStatement(
-							ts.createBinary(
-								ts.createIdentifier("nativeDateObject"),
-								ts.createToken(ts.SyntaxKind.EqualsToken),
-								ts.createPropertyAccess(
-									ts.createIdentifier("global"),
-									ts.createIdentifier("Date"),
+						f.createExpressionStatement(
+							f.createBinaryExpression(
+								f.createIdentifier("nativeDateObject"),
+								f.createToken(ts.SyntaxKind.EqualsToken),
+								f.createPropertyAccessExpression(
+									f.createIdentifier("global"),
+									f.createIdentifier("Date"),
 								),
 							),
 						),
 					),
-					ts.createIf(
-						ts.createLogicalNot(
-							ts.createBinary(
-								ts.createIdentifier("object"),
-								ts.createToken(ts.SyntaxKind.InstanceOfKeyword),
-								ts.createIdentifier("nativeDateObject"),
+					f.createIfStatement(
+						f.createLogicalNot(
+							f.createBinaryExpression(
+								f.createIdentifier("object"),
+								f.createToken(ts.SyntaxKind.InstanceOfKeyword),
+								f.createIdentifier("nativeDateObject"),
 							),
 						),
-						ts.createReturn(
+						f.createReturnStatement(
 							VisitorUtils.createErrorObject(
 								{ type: "date" },
 								visitorContext,
 							),
 						),
-						ts.createReturn(ts.createNull()),
+						f.createReturnStatement(f.createNull()),
 					),
 				],
 				true,
@@ -104,15 +105,16 @@ function createRecursiveCall(
 	pathExpression: ts.Expression,
 	visitorContext: VisitorContext,
 ): ts.Statement[] {
-	const errorIdentifier = ts.createIdentifier("error");
+	const f = visitorContext.factory;
+	const errorIdentifier = f.createIdentifier("error");
 	const emitDetailedErrors = !!visitorContext.options.emitDetailedErrors;
 
 	const statements: ts.Statement[] = [];
 	if (emitDetailedErrors) {
 		statements.push(
-			ts.createExpressionStatement(
-				ts.createCall(
-					ts.createPropertyAccess(
+			f.createExpressionStatement(
+				f.createCallExpression(
+					f.createPropertyAccessExpression(
 						VisitorUtils.pathIdentifier,
 						"push",
 					),
@@ -128,14 +130,15 @@ function createRecursiveCall(
 		);
 	}
 	statements.push(
-		ts.createVariableStatement(
-			[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+		f.createVariableStatement(
+			[f.createModifier(ts.SyntaxKind.ConstKeyword)],
 			[
-				ts.createVariableDeclaration(
+				f.createVariableDeclaration(
 					errorIdentifier,
 					undefined,
-					ts.createCall(
-						ts.createIdentifier(functionName),
+					undefined,
+					f.createCallExpression(
+						f.createIdentifier(functionName),
 						undefined,
 						[functionArgument],
 					),
@@ -145,9 +148,12 @@ function createRecursiveCall(
 	);
 	if (emitDetailedErrors) {
 		statements.push(
-			ts.createExpressionStatement(
-				ts.createCall(
-					ts.createPropertyAccess(VisitorUtils.pathIdentifier, "pop"),
+			f.createExpressionStatement(
+				f.createCallExpression(
+					f.createPropertyAccessExpression(
+						VisitorUtils.pathIdentifier,
+						"pop",
+					),
 					undefined,
 					undefined,
 				),
@@ -155,7 +161,10 @@ function createRecursiveCall(
 		);
 	}
 	statements.push(
-		ts.createIf(errorIdentifier, ts.createReturn(errorIdentifier)),
+		f.createIfStatement(
+			errorIdentifier,
+			f.createReturnStatement(errorIdentifier),
+		),
 	);
 	return statements;
 }
@@ -164,6 +173,7 @@ function visitTupleObjectType(
 	type: ts.TupleType,
 	visitorContext: VisitorContext,
 ) {
+	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
 		type: "type-check",
 	});
@@ -182,14 +192,14 @@ function visitTupleObjectType(
 			}
 		}
 
-		return ts.createFunctionDeclaration(
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
@@ -200,36 +210,36 @@ function visitTupleObjectType(
 				),
 			],
 			undefined,
-			ts.createBlock([
+			f.createBlock([
 				VisitorUtils.createStrictNullCheckStatement(
 					VisitorUtils.objectIdentifier,
 					visitorContext,
 				),
-				ts.createIf(
+				f.createIfStatement(
 					VisitorUtils.createBinaries(
 						[
-							ts.createLogicalNot(
-								ts.createCall(
-									ts.createPropertyAccess(
-										ts.createIdentifier("Array"),
+							f.createLogicalNot(
+								f.createCallExpression(
+									f.createPropertyAccessExpression(
+										f.createIdentifier("Array"),
 										"isArray",
 									),
 									undefined,
 									[VisitorUtils.objectIdentifier],
 								),
 							),
-							ts.createBinary(
-								ts.createPropertyAccess(
+							f.createBinaryExpression(
+								f.createPropertyAccessExpression(
 									VisitorUtils.objectIdentifier,
 									"length",
 								),
 								ts.SyntaxKind.LessThanToken,
-								ts.createNumericLiteral(minLength.toString()),
+								f.createNumericLiteral(minLength.toString()),
 							),
-							ts.createBinary(
-								ts.createNumericLiteral(maxLength.toString()),
+							f.createBinaryExpression(
+								f.createNumericLiteral(maxLength.toString()),
 								ts.SyntaxKind.LessThanToken,
-								ts.createPropertyAccess(
+								f.createPropertyAccessExpression(
 									VisitorUtils.objectIdentifier,
 									"length",
 								),
@@ -237,7 +247,7 @@ function visitTupleObjectType(
 						],
 						ts.SyntaxKind.BarBarToken,
 					),
-					ts.createReturn(
+					f.createReturnStatement(
 						VisitorUtils.createErrorObject(
 							{ type: "tuple", minLength, maxLength },
 							visitorContext,
@@ -245,19 +255,19 @@ function visitTupleObjectType(
 					),
 				),
 				...functionNames.map((functionName, index) =>
-					ts.createBlock(
+					f.createBlock(
 						createRecursiveCall(
 							functionName,
-							ts.createElementAccess(
+							f.createElementAccessExpression(
 								VisitorUtils.objectIdentifier,
 								index,
 							),
-							ts.createStringLiteral(`[${index}]`),
+							f.createStringLiteral(`[${index}]`),
 							visitorContext,
 						),
 					),
 				),
-				ts.createReturn(ts.createNull()),
+				f.createReturnStatement(f.createNull()),
 			]),
 		);
 	});
@@ -267,6 +277,7 @@ function visitArrayObjectType(
 	type: ts.ObjectType,
 	visitorContext: VisitorContext,
 ) {
+	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
 		type: "type-check",
 	});
@@ -281,16 +292,16 @@ function visitArrayObjectType(
 			);
 		}
 		const functionName = visitType(numberIndexType, visitorContext);
-		const indexIdentifier = ts.createIdentifier("i");
+		const indexIdentifier = f.createIdentifier("i");
 
-		return ts.createFunctionDeclaration(
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
@@ -301,61 +312,62 @@ function visitArrayObjectType(
 				),
 			],
 			undefined,
-			ts.createBlock([
+			f.createBlock([
 				VisitorUtils.createStrictNullCheckStatement(
 					VisitorUtils.objectIdentifier,
 					visitorContext,
 				),
-				ts.createIf(
-					ts.createLogicalNot(
-						ts.createCall(
-							ts.createPropertyAccess(
-								ts.createIdentifier("Array"),
+				f.createIfStatement(
+					f.createLogicalNot(
+						f.createCallExpression(
+							f.createPropertyAccessExpression(
+								f.createIdentifier("Array"),
 								"isArray",
 							),
 							undefined,
 							[VisitorUtils.objectIdentifier],
 						),
 					),
-					ts.createReturn(
+					f.createReturnStatement(
 						VisitorUtils.createErrorObject(
 							{ type: "array" },
 							visitorContext,
 						),
 					),
 				),
-				ts.createFor(
-					ts.createVariableDeclarationList(
+				f.createForStatement(
+					f.createVariableDeclarationList(
 						[
-							ts.createVariableDeclaration(
+							f.createVariableDeclaration(
 								indexIdentifier,
 								undefined,
-								ts.createNumericLiteral("0"),
+								undefined,
+								f.createNumericLiteral("0"),
 							),
 						],
 						ts.NodeFlags.Let,
 					),
-					ts.createBinary(
+					f.createBinaryExpression(
 						indexIdentifier,
 						ts.SyntaxKind.LessThanToken,
-						ts.createPropertyAccess(
+						f.createPropertyAccessExpression(
 							VisitorUtils.objectIdentifier,
 							"length",
 						),
 					),
-					ts.createPostfixIncrement(indexIdentifier),
-					ts.createBlock(
+					f.createPostfixIncrement(indexIdentifier),
+					f.createBlock(
 						createRecursiveCall(
 							functionName,
-							ts.createElementAccess(
+							f.createElementAccessExpression(
 								VisitorUtils.objectIdentifier,
 								indexIdentifier,
 							),
 							VisitorUtils.createBinaries(
 								[
-									ts.createStringLiteral("["),
+									f.createStringLiteral("["),
 									indexIdentifier,
-									ts.createStringLiteral("]"),
+									f.createStringLiteral("]"),
 								],
 								ts.SyntaxKind.PlusToken,
 							),
@@ -363,7 +375,7 @@ function visitArrayObjectType(
 						),
 					),
 				),
-				ts.createReturn(ts.createNull()),
+				f.createReturnStatement(f.createNull()),
 			]),
 		);
 	});
@@ -373,10 +385,9 @@ function visitRegularObjectType(
 	type: ts.ObjectType,
 	visitorContext: VisitorContext,
 ) {
+	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
 		type: "type-check",
-		superfluousPropertyCheck:
-			visitorContext.options.disallowSuperfluousObjectProperties,
 	});
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 		const propertyInfos = visitorContext.checker
@@ -391,15 +402,15 @@ function visitRegularObjectType(
 		const stringIndexFunctionName = stringIndexType
 			? visitType(stringIndexType, visitorContext)
 			: undefined;
-		const keyIdentifier = ts.createIdentifier("key");
-		return ts.createFunctionDeclaration(
+		const keyIdentifier = f.createIdentifier("key");
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
@@ -410,25 +421,27 @@ function visitRegularObjectType(
 				),
 			],
 			undefined,
-			ts.createBlock([
+			f.createBlock([
 				VisitorUtils.createStrictNullCheckStatement(
 					VisitorUtils.objectIdentifier,
 					visitorContext,
 				),
-				ts.createIf(
+				f.createIfStatement(
 					VisitorUtils.createBinaries(
 						[
-							ts.createStrictInequality(
-								ts.createTypeOf(VisitorUtils.objectIdentifier),
-								ts.createStringLiteral("object"),
+							f.createStrictInequality(
+								f.createTypeOfExpression(
+									VisitorUtils.objectIdentifier,
+								),
+								f.createStringLiteral("object"),
 							),
-							ts.createStrictEquality(
+							f.createStrictEquality(
 								VisitorUtils.objectIdentifier,
-								ts.createNull(),
+								f.createNull(),
 							),
-							ts.createCall(
-								ts.createPropertyAccess(
-									ts.createIdentifier("Array"),
+							f.createCallExpression(
+								f.createPropertyAccessExpression(
+									f.createIdentifier("Array"),
 									"isArray",
 								),
 								undefined,
@@ -437,7 +450,7 @@ function visitRegularObjectType(
 						],
 						ts.SyntaxKind.BarBarToken,
 					),
-					ts.createReturn(
+					f.createReturnStatement(
 						VisitorUtils.createErrorObject(
 							{ type: "object" },
 							visitorContext,
@@ -446,40 +459,37 @@ function visitRegularObjectType(
 				),
 				...propertyInfos.map((propertyInfo) => {
 					if (propertyInfo.isSymbol) {
-						return ts.createEmptyStatement();
+						return f.createEmptyStatement();
 					}
-					const functionName = propertyInfo.isMethod
-						? VisitorUtils.getIgnoredTypeFunction(visitorContext)
-						: propertyInfo.isFunction
-						? visitorContext.options.functionBehavior === "basic"
-							? VisitorUtils.getFunctionFunction(visitorContext)
-							: VisitorUtils.getIgnoredTypeFunction(
+					const functionName =
+						propertyInfo.isMethod || propertyInfo.isFunction
+							? VisitorUtils.getIgnoredTypeFunction(
 									visitorContext,
 							  )
-						: visitType(propertyInfo.type!, visitorContext);
-					return ts.createBlock([
-						ts.createIf(
-							ts.createBinary(
-								ts.createStringLiteral(propertyInfo.name),
+							: visitType(propertyInfo.type!, visitorContext);
+					return f.createBlock([
+						f.createIfStatement(
+							f.createBinaryExpression(
+								f.createStringLiteral(propertyInfo.name),
 								ts.SyntaxKind.InKeyword,
 								VisitorUtils.objectIdentifier,
 							),
-							ts.createBlock(
+							f.createBlock(
 								createRecursiveCall(
 									functionName,
-									ts.createElementAccess(
+									f.createElementAccessExpression(
 										VisitorUtils.objectIdentifier,
-										ts.createStringLiteral(
+										f.createStringLiteral(
 											propertyInfo.name,
 										),
 									),
-									ts.createStringLiteral(propertyInfo.name),
+									f.createStringLiteral(propertyInfo.name),
 									visitorContext,
 								),
 							),
 							propertyInfo.optional
 								? undefined
-								: ts.createReturn(
+								: f.createReturnStatement(
 										VisitorUtils.createErrorObject(
 											{
 												type: "missing-property",
@@ -491,25 +501,13 @@ function visitRegularObjectType(
 						),
 					]);
 				}),
-				...(visitorContext.options
-					.disallowSuperfluousObjectProperties &&
-				stringIndexFunctionName === undefined
-					? [
-							VisitorUtils.createSuperfluousPropertiesLoop(
-								propertyInfos.map(
-									(propertyInfo) => propertyInfo.name,
-								),
-								visitorContext,
-							),
-					  ]
-					: []),
 				...(stringIndexFunctionName
 					? [
-							ts.createForOf(
+							f.createForOfStatement(
 								undefined,
-								ts.createVariableDeclarationList(
+								f.createVariableDeclarationList(
 									[
-										ts.createVariableDeclaration(
+										f.createVariableDeclaration(
 											keyIdentifier,
 											undefined,
 											undefined,
@@ -517,18 +515,18 @@ function visitRegularObjectType(
 									],
 									ts.NodeFlags.Const,
 								),
-								ts.createCall(
-									ts.createPropertyAccess(
-										ts.createIdentifier("Object"),
+								f.createCallExpression(
+									f.createPropertyAccessExpression(
+										f.createIdentifier("Object"),
 										"keys",
 									),
 									undefined,
 									[VisitorUtils.objectIdentifier],
 								),
-								ts.createBlock(
+								f.createBlock(
 									createRecursiveCall(
 										stringIndexFunctionName,
-										ts.createElementAccess(
+										f.createElementAccessExpression(
 											VisitorUtils.objectIdentifier,
 											keyIdentifier,
 										),
@@ -539,7 +537,7 @@ function visitRegularObjectType(
 							),
 					  ]
 					: []),
-				ts.createReturn(ts.createNull()),
+				f.createReturnStatement(f.createNull()),
 			]),
 		);
 	});
@@ -588,18 +586,6 @@ function visitTypeParameter(type: ts.Type, visitorContext: VisitorContext) {
 	return visitType(mappedType, visitorContext);
 }
 
-function visitFunctionType(type: ts.Type, visitorContext: VisitorContext) {
-	if (visitorContext.options.functionBehavior === "error") {
-		throw new Error(
-			"Encountered a function declaration, but functions are not supported. Issue: https://github.com/woutervh-/typescript-is/issues/50",
-		);
-	} else if (visitorContext.options.functionBehavior === "basic") {
-		return VisitorUtils.getFunctionFunction(visitorContext);
-	} else {
-		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
-	}
-}
-
 function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	if (VisitorUtils.checkIsClass(type, visitorContext)) {
 		// Dates
@@ -607,14 +593,10 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 			return visitDateType(type, visitorContext);
 		}
 
-		// all other classes
-		if (visitorContext.options.ignoreClasses) {
-			return VisitorUtils.getIgnoredTypeFunction(visitorContext);
-		} else {
-			throw new Error(
-				"Classes cannot be validated. https://github.com/woutervh-/typescript-is/issues/3",
-			);
-		}
+		// TODO: impement checks for supported classes
+
+		// Ignore all other classes
+		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	}
 	if (tsutils.isTupleType(type)) {
 		// Tuple with finite length.
@@ -631,22 +613,14 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 			ts.SyntaxKind.MethodDeclaration ||
 			type.symbol.valueDeclaration.kind === ts.SyntaxKind.FunctionType)
 	) {
-		if (visitorContext.options.functionBehavior === "ignore") {
-			return VisitorUtils.getIgnoredTypeFunction(visitorContext);
-		} else if (visitorContext.options.functionBehavior === "basic") {
-			return VisitorUtils.getFunctionFunction(visitorContext);
-		} else {
-			throw new Error(
-				"Encountered a function declaration, but functions are not supported. Issue: https://github.com/woutervh-/typescript-is/issues/50",
-			);
-		}
+		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	} else if (
 		type.symbol &&
 		type.symbol.declarations &&
 		type.symbol.declarations.length >= 1 &&
 		ts.isFunctionTypeNode(type.symbol.declarations[0])
 	) {
-		return visitFunctionType(type, visitorContext);
+		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	} else {
 		// Index type is string -> regular object type.
 		return visitRegularObjectType(type, visitorContext);
@@ -657,6 +631,7 @@ function visitLiteralType(
 	type: ts.LiteralType,
 	visitorContext: VisitorContext,
 ) {
+	const f = visitorContext.factory;
 	if (typeof type.value === "string") {
 		const name = VisitorTypeName.visitType(type, visitorContext, {
 			type: "type-check",
@@ -664,9 +639,9 @@ function visitLiteralType(
 		const value = type.value;
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			return VisitorUtils.createAssertionFunction(
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createStringLiteral(value),
+					f.createStringLiteral(value),
 				),
 				{ type: "string-literal", value },
 				name,
@@ -684,9 +659,9 @@ function visitLiteralType(
 		const value = type.value;
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			return VisitorUtils.createAssertionFunction(
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createNumericLiteral(value.toString()),
+					f.createNumericLiteral(value.toString()),
 				),
 				{ type: "number-literal", value },
 				name,
@@ -706,12 +681,6 @@ function visitUnionOrIntersectionType(
 	type: ts.UnionOrIntersectionType,
 	visitorContext: VisitorContext,
 ) {
-	let disallowSuperfluousPropertyCheck =
-		visitorContext.options.disallowSuperfluousObjectProperties;
-	if (visitorContext.overrideDisallowSuperfluousObjectProperies) {
-		visitorContext.overrideDisallowSuperfluousObjectProperies = false;
-		disallowSuperfluousPropertyCheck = false;
-	}
 	const typeUnion = type;
 	if (tsutils.isUnionType(typeUnion)) {
 		const name = VisitorTypeName.visitType(type, visitorContext, {
@@ -732,34 +701,11 @@ function visitUnionOrIntersectionType(
 	if (tsutils.isIntersectionType(intersectionType)) {
 		const name = VisitorTypeName.visitType(type, visitorContext, {
 			type: "type-check",
-			superfluousPropertyCheck:
-				visitorContext.options.disallowSuperfluousObjectProperties,
 		});
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			const functionNames = intersectionType.types.map((type) =>
-				visitType(type, {
-					...visitorContext,
-					overrideDisallowSuperfluousObjectProperies: true,
-				}),
+				visitType(type, { ...visitorContext }),
 			);
-			if (disallowSuperfluousPropertyCheck) {
-				// Check object keys at intersection type level. https://github.com/woutervh-/typescript-is/issues/21
-				const keys = VisitorIsStringKeyof.visitType(
-					type,
-					visitorContext,
-				);
-				if (keys instanceof Set) {
-					const loop = VisitorUtils.createSuperfluousPropertiesLoop(
-						sliceSet(keys),
-						visitorContext,
-					);
-					return VisitorUtils.createConjunctionFunction(
-						functionNames,
-						name,
-						[loop],
-					);
-				}
-			}
 			return VisitorUtils.createConjunctionFunction(functionNames, name);
 		});
 	}
@@ -770,13 +716,14 @@ function visitUnionOrIntersectionType(
 
 function visitBooleanLiteral(type: ts.Type, visitorContext: VisitorContext) {
 	const intrinsicName = VisitorUtils.getIntrinsicName(type);
+	const f = visitorContext.factory;
 	if (intrinsicName === "true") {
 		const name = "_true";
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			return VisitorUtils.createAssertionFunction(
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createTrue(),
+					f.createTrue(),
 				),
 				{ type: "boolean-literal", value: true },
 				name,
@@ -791,9 +738,9 @@ function visitBooleanLiteral(type: ts.Type, visitorContext: VisitorContext) {
 		const name = "_false";
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			return VisitorUtils.createAssertionFunction(
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createFalse(),
+					f.createFalse(),
 				),
 				{ type: "boolean-literal", value: false },
 				name,
@@ -813,29 +760,30 @@ function visitBooleanLiteral(type: ts.Type, visitorContext: VisitorContext) {
 
 function visitNonPrimitiveType(type: ts.Type, visitorContext: VisitorContext) {
 	const intrinsicName = VisitorUtils.getIntrinsicName(type);
+	const f = visitorContext.factory;
 	if (intrinsicName === "object") {
 		const name = "_object";
 		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
 			const conditions: ts.Expression[] = [
-				ts.createStrictInequality(
-					ts.createTypeOf(VisitorUtils.objectIdentifier),
-					ts.createStringLiteral("boolean"),
+				f.createStrictInequality(
+					f.createTypeOfExpression(VisitorUtils.objectIdentifier),
+					f.createStringLiteral("boolean"),
 				),
-				ts.createStrictInequality(
-					ts.createTypeOf(VisitorUtils.objectIdentifier),
-					ts.createStringLiteral("number"),
+				f.createStrictInequality(
+					f.createTypeOfExpression(VisitorUtils.objectIdentifier),
+					f.createStringLiteral("number"),
 				),
-				ts.createStrictInequality(
-					ts.createTypeOf(VisitorUtils.objectIdentifier),
-					ts.createStringLiteral("string"),
+				f.createStrictInequality(
+					f.createTypeOfExpression(VisitorUtils.objectIdentifier),
+					f.createStringLiteral("string"),
 				),
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createNull(),
+					f.createNull(),
 				),
-				ts.createStrictInequality(
+				f.createStrictInequality(
 					VisitorUtils.objectIdentifier,
-					ts.createIdentifier("undefined"),
+					f.createIdentifier("undefined"),
 				),
 			];
 			const condition = VisitorUtils.createBinaries(
@@ -843,7 +791,7 @@ function visitNonPrimitiveType(type: ts.Type, visitorContext: VisitorContext) {
 				ts.SyntaxKind.AmpersandAmpersandToken,
 			);
 			return VisitorUtils.createAssertionFunction(
-				ts.createLogicalNot(condition),
+				f.createLogicalNot(condition),
 				{ type: "non-primitive" },
 				name,
 				visitorContext,
@@ -921,6 +869,7 @@ function visitTemplateLiteralType(
 	type: ts.TemplateLiteralType,
 	visitorContext: VisitorContext,
 ) {
+	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
 		type: "type-check",
 	});
@@ -945,52 +894,46 @@ function visitTemplateLiteralType(
 		visitorContext,
 	);
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () =>
-		ts.factory.createFunctionDeclaration(
+		f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.factory.createParameterDeclaration(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
 					VisitorUtils.objectIdentifier,
 					undefined,
-					ts.factory.createKeywordTypeNode(
-						ts.SyntaxKind.StringKeyword,
-					),
+					f.createKeywordTypeNode(ts.SyntaxKind.StringKeyword),
 					undefined,
 				),
 			],
 			undefined,
-			ts.factory.createBlock(
+			f.createBlock(
 				[
-					ts.factory.createVariableStatement(
+					f.createVariableStatement(
 						undefined,
-						ts.factory.createVariableDeclarationList(
+						f.createVariableDeclarationList(
 							[
-								ts.factory.createVariableDeclaration(
-									ts.factory.createIdentifier("typePairs"),
+								f.createVariableDeclaration(
+									f.createIdentifier("typePairs"),
 									undefined,
 									undefined,
-									ts.factory.createArrayLiteralExpression(
+									f.createArrayLiteralExpression(
 										typePairs.map(([text, type]) =>
-											ts.factory.createArrayLiteralExpression(
-												[
-													ts.factory.createStringLiteral(
-														text,
-													),
-													typeof type === "undefined"
-														? ts.factory.createIdentifier(
-																"undefined",
-														  )
-														: ts.factory.createStringLiteral(
-																type,
-														  ),
-												],
-											),
+											f.createArrayLiteralExpression([
+												f.createStringLiteral(text),
+												typeof type === "undefined"
+													? f.createIdentifier(
+															"undefined",
+													  )
+													: f.createStringLiteral(
+															type,
+													  ),
+											]),
 										),
 										false,
 									),
@@ -999,40 +942,36 @@ function visitTemplateLiteralType(
 							ts.NodeFlags.Const,
 						),
 					),
-					ts.factory.createVariableStatement(
+					f.createVariableStatement(
 						undefined,
-						ts.factory.createVariableDeclarationList(
+						f.createVariableDeclarationList(
 							[
-								ts.factory.createVariableDeclaration(
-									ts.factory.createIdentifier("position"),
+								f.createVariableDeclaration(
+									f.createIdentifier("position"),
 									undefined,
 									undefined,
-									ts.factory.createNumericLiteral("0"),
+									f.createNumericLiteral("0"),
 								),
 							],
 							ts.NodeFlags.Let,
 						),
 					),
-					ts.factory.createForOfStatement(
+					f.createForOfStatement(
 						undefined,
-						ts.factory.createVariableDeclarationList(
+						f.createVariableDeclarationList(
 							[
-								ts.factory.createVariableDeclaration(
-									ts.factory.createArrayBindingPattern([
-										ts.factory.createBindingElement(
+								f.createVariableDeclaration(
+									f.createArrayBindingPattern([
+										f.createBindingElement(
 											undefined,
 											undefined,
-											ts.factory.createIdentifier(
-												"index",
-											),
+											f.createIdentifier("index"),
 											undefined,
 										),
-										ts.factory.createBindingElement(
+										f.createBindingElement(
 											undefined,
 											undefined,
-											ts.factory.createIdentifier(
-												"typePair",
-											),
+											f.createIdentifier("typePair"),
 											undefined,
 										),
 									]),
@@ -1043,106 +982,100 @@ function visitTemplateLiteralType(
 							],
 							ts.NodeFlags.Const,
 						),
-						ts.factory.createCallExpression(
-							ts.factory.createPropertyAccessExpression(
-								ts.factory.createIdentifier("typePairs"),
-								ts.factory.createIdentifier("entries"),
+						f.createCallExpression(
+							f.createPropertyAccessExpression(
+								f.createIdentifier("typePairs"),
+								f.createIdentifier("entries"),
 							),
 							undefined,
 							[],
 						),
-						ts.factory.createBlock(
+						f.createBlock(
 							[
-								ts.factory.createVariableStatement(
+								f.createVariableStatement(
 									undefined,
-									ts.factory.createVariableDeclarationList(
+									f.createVariableDeclarationList(
 										[
-											ts.factory.createVariableDeclaration(
-												ts.factory.createArrayBindingPattern(
-													[
-														ts.factory.createBindingElement(
-															undefined,
-															undefined,
-															ts.factory.createIdentifier(
-																"currentText",
-															),
-															undefined,
+											f.createVariableDeclaration(
+												f.createArrayBindingPattern([
+													f.createBindingElement(
+														undefined,
+														undefined,
+														f.createIdentifier(
+															"currentText",
 														),
-														ts.factory.createBindingElement(
-															undefined,
-															undefined,
-															ts.factory.createIdentifier(
-																"currentType",
-															),
-															undefined,
+														undefined,
+													),
+													f.createBindingElement(
+														undefined,
+														undefined,
+														f.createIdentifier(
+															"currentType",
 														),
-													],
-												),
+														undefined,
+													),
+												]),
 												undefined,
 												undefined,
-												ts.factory.createIdentifier(
-													"typePair",
-												),
+												f.createIdentifier("typePair"),
 											),
 										],
 										ts.NodeFlags.Const,
 									),
 								),
-								ts.factory.createVariableStatement(
+								f.createVariableStatement(
 									undefined,
-									ts.factory.createVariableDeclarationList(
+									f.createVariableDeclarationList(
 										[
-											ts.factory.createVariableDeclaration(
-												ts.factory.createArrayBindingPattern(
-													[
-														ts.factory.createBindingElement(
-															undefined,
-															undefined,
-															ts.factory.createIdentifier(
-																"nextText",
-															),
-															undefined,
+											f.createVariableDeclaration(
+												f.createArrayBindingPattern([
+													f.createBindingElement(
+														undefined,
+														undefined,
+														f.createIdentifier(
+															"nextText",
 														),
-														ts.factory.createBindingElement(
-															undefined,
-															undefined,
-															ts.factory.createIdentifier(
-																"nextType",
-															),
-															undefined,
+														undefined,
+													),
+													f.createBindingElement(
+														undefined,
+														undefined,
+														f.createIdentifier(
+															"nextType",
 														),
-													],
-												),
+														undefined,
+													),
+												]),
 												undefined,
 												undefined,
-												ts.factory.createBinaryExpression(
-													ts.factory.createElementAccessExpression(
-														ts.factory.createIdentifier(
+												f.createBinaryExpression(
+													f.createElementAccessExpression(
+														f.createIdentifier(
 															"typePairs",
 														),
-														ts.factory.createBinaryExpression(
-															ts.factory.createIdentifier(
+														f.createBinaryExpression(
+															f.createIdentifier(
 																"index",
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.PlusToken,
 															),
-															ts.factory.createNumericLiteral(
+															f.createNumericLiteral(
 																"1",
 															),
 														),
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.QuestionQuestionToken,
 													),
-													ts.factory.createArrayLiteralExpression(
+													f.createArrayLiteralExpression(
 														[
-															ts.factory.createIdentifier(
+															f.createIdentifier(
 																"undefined",
 															),
-															ts.factory.createIdentifier(
+															f.createIdentifier(
 																"undefined",
 															),
 														],
@@ -1154,110 +1087,94 @@ function visitTemplateLiteralType(
 										ts.NodeFlags.Const,
 									),
 								),
-								ts.factory.createIfStatement(
-									ts.factory.createBinaryExpression(
-										ts.factory.createCallExpression(
-											ts.factory.createPropertyAccessExpression(
+								f.createIfStatement(
+									f.createBinaryExpression(
+										f.createCallExpression(
+											f.createPropertyAccessExpression(
 												VisitorUtils.objectIdentifier,
-												ts.factory.createIdentifier(
-													"substr",
-												),
+												f.createIdentifier("substr"),
 											),
 											undefined,
 											[
-												ts.factory.createIdentifier(
-													"position",
-												),
-												ts.factory.createPropertyAccessExpression(
-													ts.factory.createIdentifier(
+												f.createIdentifier("position"),
+												f.createPropertyAccessExpression(
+													f.createIdentifier(
 														"currentText",
 													),
-													ts.factory.createIdentifier(
+													f.createIdentifier(
 														"length",
 													),
 												),
 											],
 										),
-										ts.factory.createToken(
+										f.createToken(
 											ts.SyntaxKind
 												.ExclamationEqualsEqualsToken,
 										),
-										ts.factory.createIdentifier(
-											"currentText",
-										),
+										f.createIdentifier("currentText"),
 									),
-									ts.factory.createReturnStatement(
+									f.createReturnStatement(
 										templateLiteralTypeError,
 									),
 									undefined,
 								),
-								ts.factory.createExpressionStatement(
-									ts.factory.createBinaryExpression(
-										ts.factory.createIdentifier("position"),
-										ts.factory.createToken(
+								f.createExpressionStatement(
+									f.createBinaryExpression(
+										f.createIdentifier("position"),
+										f.createToken(
 											ts.SyntaxKind.PlusEqualsToken,
 										),
-										ts.factory.createPropertyAccessExpression(
-											ts.factory.createIdentifier(
-												"currentText",
-											),
-											ts.factory.createIdentifier(
-												"length",
-											),
+										f.createPropertyAccessExpression(
+											f.createIdentifier("currentText"),
+											f.createIdentifier("length"),
 										),
 									),
 								),
-								ts.factory.createIfStatement(
-									ts.factory.createBinaryExpression(
-										ts.factory.createBinaryExpression(
-											ts.factory.createIdentifier(
-												"nextText",
-											),
-											ts.factory.createToken(
+								f.createIfStatement(
+									f.createBinaryExpression(
+										f.createBinaryExpression(
+											f.createIdentifier("nextText"),
+											f.createToken(
 												ts.SyntaxKind
 													.EqualsEqualsEqualsToken,
 											),
-											ts.factory.createStringLiteral(""),
+											f.createStringLiteral(""),
 										),
-										ts.factory.createToken(
+										f.createToken(
 											ts.SyntaxKind
 												.AmpersandAmpersandToken,
 										),
-										ts.factory.createBinaryExpression(
-											ts.factory.createIdentifier(
-												"nextType",
-											),
-											ts.factory.createToken(
+										f.createBinaryExpression(
+											f.createIdentifier("nextType"),
+											f.createToken(
 												ts.SyntaxKind
 													.ExclamationEqualsEqualsToken,
 											),
-											ts.factory.createIdentifier(
-												"undefined",
-											),
+											f.createIdentifier("undefined"),
 										),
 									),
-									ts.factory.createBlock(
+									f.createBlock(
 										[
-											ts.factory.createVariableStatement(
+											f.createVariableStatement(
 												undefined,
-												ts.factory.createVariableDeclarationList(
+												f.createVariableDeclarationList(
 													[
-														ts.factory.createVariableDeclaration(
-															ts.factory.createIdentifier(
+														f.createVariableDeclaration(
+															f.createIdentifier(
 																"char",
 															),
 															undefined,
 															undefined,
-															ts.factory.createCallExpression(
-																ts.factory.createPropertyAccessExpression(
+															f.createCallExpression(
+																f.createPropertyAccessExpression(
 																	VisitorUtils.objectIdentifier,
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"charAt",
 																	),
 																),
 																undefined,
 																[
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"position",
 																	),
 																],
@@ -1267,62 +1184,62 @@ function visitTemplateLiteralType(
 													ts.NodeFlags.Const,
 												),
 											),
-											ts.factory.createIfStatement(
-												ts.factory.createBinaryExpression(
-													ts.factory.createParenthesizedExpression(
-														ts.factory.createBinaryExpression(
-															ts.factory.createParenthesizedExpression(
-																ts.factory.createBinaryExpression(
-																	ts.factory.createBinaryExpression(
-																		ts.factory.createIdentifier(
+											f.createIfStatement(
+												f.createBinaryExpression(
+													f.createParenthesizedExpression(
+														f.createBinaryExpression(
+															f.createParenthesizedExpression(
+																f.createBinaryExpression(
+																	f.createBinaryExpression(
+																		f.createIdentifier(
 																			"currentType",
 																		),
-																		ts.factory.createToken(
+																		f.createToken(
 																			ts
 																				.SyntaxKind
 																				.EqualsEqualsEqualsToken,
 																		),
-																		ts.factory.createStringLiteral(
+																		f.createStringLiteral(
 																			"number",
 																		),
 																	),
-																	ts.factory.createToken(
+																	f.createToken(
 																		ts
 																			.SyntaxKind
 																			.BarBarToken,
 																	),
-																	ts.factory.createBinaryExpression(
-																		ts.factory.createIdentifier(
+																	f.createBinaryExpression(
+																		f.createIdentifier(
 																			"currentType",
 																		),
-																		ts.factory.createToken(
+																		f.createToken(
 																			ts
 																				.SyntaxKind
 																				.EqualsEqualsEqualsToken,
 																		),
-																		ts.factory.createStringLiteral(
+																		f.createStringLiteral(
 																			"bigint",
 																		),
 																	),
 																),
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.AmpersandAmpersandToken,
 															),
-															ts.factory.createCallExpression(
-																ts.factory.createIdentifier(
+															f.createCallExpression(
+																f.createIdentifier(
 																	"isNaN",
 																),
 																undefined,
 																[
-																	ts.factory.createCallExpression(
-																		ts.factory.createIdentifier(
+																	f.createCallExpression(
+																		f.createIdentifier(
 																			"Number",
 																		),
 																		undefined,
 																		[
-																			ts.factory.createIdentifier(
+																			f.createIdentifier(
 																				"char",
 																			),
 																		],
@@ -1331,68 +1248,68 @@ function visitTemplateLiteralType(
 															),
 														),
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.BarBarToken,
 													),
-													ts.factory.createParenthesizedExpression(
-														ts.factory.createBinaryExpression(
-															ts.factory.createParenthesizedExpression(
-																ts.factory.createBinaryExpression(
-																	ts.factory.createBinaryExpression(
-																		ts.factory.createIdentifier(
+													f.createParenthesizedExpression(
+														f.createBinaryExpression(
+															f.createParenthesizedExpression(
+																f.createBinaryExpression(
+																	f.createBinaryExpression(
+																		f.createIdentifier(
 																			"currentType",
 																		),
-																		ts.factory.createToken(
+																		f.createToken(
 																			ts
 																				.SyntaxKind
 																				.EqualsEqualsEqualsToken,
 																		),
-																		ts.factory.createStringLiteral(
+																		f.createStringLiteral(
 																			"string",
 																		),
 																	),
-																	ts.factory.createToken(
+																	f.createToken(
 																		ts
 																			.SyntaxKind
 																			.BarBarToken,
 																	),
-																	ts.factory.createBinaryExpression(
-																		ts.factory.createIdentifier(
+																	f.createBinaryExpression(
+																		f.createIdentifier(
 																			"currentType",
 																		),
-																		ts.factory.createToken(
+																		f.createToken(
 																			ts
 																				.SyntaxKind
 																				.EqualsEqualsEqualsToken,
 																		),
-																		ts.factory.createStringLiteral(
+																		f.createStringLiteral(
 																			"any",
 																		),
 																	),
 																),
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.AmpersandAmpersandToken,
 															),
-															ts.factory.createBinaryExpression(
-																ts.factory.createIdentifier(
+															f.createBinaryExpression(
+																f.createIdentifier(
 																	"char",
 																),
-																ts.factory.createToken(
+																f.createToken(
 																	ts
 																		.SyntaxKind
 																		.EqualsEqualsEqualsToken,
 																),
-																ts.factory.createStringLiteral(
+																f.createStringLiteral(
 																	"",
 																),
 															),
 														),
 													),
 												),
-												ts.factory.createReturnStatement(
+												f.createReturnStatement(
 													templateLiteralTypeError,
 												),
 												undefined,
@@ -1402,41 +1319,41 @@ function visitTemplateLiteralType(
 									),
 									undefined,
 								),
-								ts.factory.createVariableStatement(
+								f.createVariableStatement(
 									undefined,
-									ts.factory.createVariableDeclarationList(
+									f.createVariableDeclarationList(
 										[
-											ts.factory.createVariableDeclaration(
-												ts.factory.createIdentifier(
+											f.createVariableDeclaration(
+												f.createIdentifier(
 													"nextTextOrType",
 												),
 												undefined,
 												undefined,
-												ts.factory.createConditionalExpression(
-													ts.factory.createBinaryExpression(
-														ts.factory.createIdentifier(
+												f.createConditionalExpression(
+													f.createBinaryExpression(
+														f.createIdentifier(
 															"nextText",
 														),
-														ts.factory.createToken(
+														f.createToken(
 															ts.SyntaxKind
 																.EqualsEqualsEqualsToken,
 														),
-														ts.factory.createStringLiteral(
+														f.createStringLiteral(
 															"",
 														),
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.QuestionToken,
 													),
-													ts.factory.createIdentifier(
+													f.createIdentifier(
 														"nextType",
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.ColonToken,
 													),
-													ts.factory.createIdentifier(
+													f.createIdentifier(
 														"nextText",
 													),
 												),
@@ -1445,81 +1362,81 @@ function visitTemplateLiteralType(
 										ts.NodeFlags.Const,
 									),
 								),
-								ts.factory.createVariableStatement(
+								f.createVariableStatement(
 									undefined,
-									ts.factory.createVariableDeclarationList(
+									f.createVariableDeclarationList(
 										[
-											ts.factory.createVariableDeclaration(
-												ts.factory.createIdentifier(
+											f.createVariableDeclaration(
+												f.createIdentifier(
 													"resolvedPlaceholder",
 												),
 												undefined,
 												undefined,
-												ts.factory.createCallExpression(
-													ts.factory.createPropertyAccessExpression(
+												f.createCallExpression(
+													f.createPropertyAccessExpression(
 														VisitorUtils.objectIdentifier,
-														ts.factory.createIdentifier(
+														f.createIdentifier(
 															"substring",
 														),
 													),
 													undefined,
 													[
-														ts.factory.createIdentifier(
+														f.createIdentifier(
 															"position",
 														),
-														ts.factory.createConditionalExpression(
-															ts.factory.createBinaryExpression(
-																ts.factory.createTypeOfExpression(
-																	ts.factory.createIdentifier(
+														f.createConditionalExpression(
+															f.createBinaryExpression(
+																f.createTypeOfExpression(
+																	f.createIdentifier(
 																		"nextTextOrType",
 																	),
 																),
-																ts.factory.createToken(
+																f.createToken(
 																	ts
 																		.SyntaxKind
 																		.EqualsEqualsEqualsToken,
 																),
-																ts.factory.createStringLiteral(
+																f.createStringLiteral(
 																	"undefined",
 																),
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.QuestionToken,
 															),
-															ts.factory.createBinaryExpression(
-																ts.factory.createPropertyAccessExpression(
+															f.createBinaryExpression(
+																f.createPropertyAccessExpression(
 																	VisitorUtils.objectIdentifier,
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"length",
 																	),
 																),
-																ts.factory.createToken(
+																f.createToken(
 																	ts
 																		.SyntaxKind
 																		.MinusToken,
 																),
-																ts.factory.createNumericLiteral(
+																f.createNumericLiteral(
 																	"1",
 																),
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.ColonToken,
 															),
-															ts.factory.createCallExpression(
-																ts.factory.createPropertyAccessExpression(
+															f.createCallExpression(
+																f.createPropertyAccessExpression(
 																	VisitorUtils.objectIdentifier,
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"indexOf",
 																	),
 																),
 																undefined,
 																[
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"nextTextOrType",
 																	),
-																	ts.factory.createIdentifier(
+																	f.createIdentifier(
 																		"position",
 																	),
 																],
@@ -1532,41 +1449,41 @@ function visitTemplateLiteralType(
 										ts.NodeFlags.Const,
 									),
 								),
-								ts.factory.createIfStatement(
-									ts.factory.createBinaryExpression(
-										ts.factory.createBinaryExpression(
-											ts.factory.createBinaryExpression(
-												ts.factory.createParenthesizedExpression(
-													ts.factory.createBinaryExpression(
-														ts.factory.createBinaryExpression(
-															ts.factory.createIdentifier(
+								f.createIfStatement(
+									f.createBinaryExpression(
+										f.createBinaryExpression(
+											f.createBinaryExpression(
+												f.createParenthesizedExpression(
+													f.createBinaryExpression(
+														f.createBinaryExpression(
+															f.createIdentifier(
 																"currentType",
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.EqualsEqualsEqualsToken,
 															),
-															ts.factory.createStringLiteral(
+															f.createStringLiteral(
 																"number",
 															),
 														),
-														ts.factory.createToken(
+														f.createToken(
 															ts.SyntaxKind
 																.AmpersandAmpersandToken,
 														),
-														ts.factory.createCallExpression(
-															ts.factory.createIdentifier(
+														f.createCallExpression(
+															f.createIdentifier(
 																"isNaN",
 															),
 															undefined,
 															[
-																ts.factory.createCallExpression(
-																	ts.factory.createIdentifier(
+																f.createCallExpression(
+																	f.createIdentifier(
 																		"Number",
 																	),
 																	undefined,
 																	[
-																		ts.factory.createIdentifier(
+																		f.createIdentifier(
 																			"resolvedPlaceholder",
 																		),
 																	],
@@ -1575,63 +1492,63 @@ function visitTemplateLiteralType(
 														),
 													),
 												),
-												ts.factory.createToken(
+												f.createToken(
 													ts.SyntaxKind.BarBarToken,
 												),
-												ts.factory.createParenthesizedExpression(
-													ts.factory.createBinaryExpression(
-														ts.factory.createBinaryExpression(
-															ts.factory.createIdentifier(
+												f.createParenthesizedExpression(
+													f.createBinaryExpression(
+														f.createBinaryExpression(
+															f.createIdentifier(
 																"currentType",
 															),
-															ts.factory.createToken(
+															f.createToken(
 																ts.SyntaxKind
 																	.EqualsEqualsEqualsToken,
 															),
-															ts.factory.createStringLiteral(
+															f.createStringLiteral(
 																"bigint",
 															),
 														),
-														ts.factory.createToken(
+														f.createToken(
 															ts.SyntaxKind
 																.AmpersandAmpersandToken,
 														),
-														ts.factory.createParenthesizedExpression(
-															ts.factory.createBinaryExpression(
-																ts.factory.createCallExpression(
-																	ts.factory.createPropertyAccessExpression(
-																		ts.factory.createIdentifier(
+														f.createParenthesizedExpression(
+															f.createBinaryExpression(
+																f.createCallExpression(
+																	f.createPropertyAccessExpression(
+																		f.createIdentifier(
 																			"resolvedPlaceholder",
 																		),
-																		ts.factory.createIdentifier(
+																		f.createIdentifier(
 																			"includes",
 																		),
 																	),
 																	undefined,
 																	[
-																		ts.factory.createStringLiteral(
+																		f.createStringLiteral(
 																			".",
 																		),
 																	],
 																),
-																ts.factory.createToken(
+																f.createToken(
 																	ts
 																		.SyntaxKind
 																		.BarBarToken,
 																),
-																ts.factory.createCallExpression(
-																	ts.factory.createIdentifier(
+																f.createCallExpression(
+																	f.createIdentifier(
 																		"isNaN",
 																	),
 																	undefined,
 																	[
-																		ts.factory.createCallExpression(
-																			ts.factory.createIdentifier(
+																		f.createCallExpression(
+																			f.createIdentifier(
 																				"Number",
 																			),
 																			undefined,
 																			[
-																				ts.factory.createIdentifier(
+																				f.createIdentifier(
 																					"resolvedPlaceholder",
 																				),
 																			],
@@ -1643,96 +1560,94 @@ function visitTemplateLiteralType(
 													),
 												),
 											),
-											ts.factory.createToken(
+											f.createToken(
 												ts.SyntaxKind.BarBarToken,
 											),
-											ts.factory.createParenthesizedExpression(
-												ts.factory.createBinaryExpression(
-													ts.factory.createBinaryExpression(
-														ts.factory.createIdentifier(
+											f.createParenthesizedExpression(
+												f.createBinaryExpression(
+													f.createBinaryExpression(
+														f.createIdentifier(
 															"currentType",
 														),
-														ts.factory.createToken(
+														f.createToken(
 															ts.SyntaxKind
 																.EqualsEqualsEqualsToken,
 														),
-														ts.factory.createStringLiteral(
+														f.createStringLiteral(
 															"undefined",
 														),
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.AmpersandAmpersandToken,
 													),
-													ts.factory.createBinaryExpression(
-														ts.factory.createIdentifier(
+													f.createBinaryExpression(
+														f.createIdentifier(
 															"resolvedPlaceholder",
 														),
-														ts.factory.createToken(
+														f.createToken(
 															ts.SyntaxKind
 																.ExclamationEqualsEqualsToken,
 														),
-														ts.factory.createStringLiteral(
+														f.createStringLiteral(
 															"undefined",
 														),
 													),
 												),
 											),
 										),
-										ts.factory.createToken(
+										f.createToken(
 											ts.SyntaxKind.BarBarToken,
 										),
-										ts.factory.createParenthesizedExpression(
-											ts.factory.createBinaryExpression(
-												ts.factory.createBinaryExpression(
-													ts.factory.createIdentifier(
+										f.createParenthesizedExpression(
+											f.createBinaryExpression(
+												f.createBinaryExpression(
+													f.createIdentifier(
 														"currentType",
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.EqualsEqualsEqualsToken,
 													),
-													ts.factory.createStringLiteral(
+													f.createStringLiteral(
 														"null",
 													),
 												),
-												ts.factory.createToken(
+												f.createToken(
 													ts.SyntaxKind
 														.AmpersandAmpersandToken,
 												),
-												ts.factory.createBinaryExpression(
-													ts.factory.createIdentifier(
+												f.createBinaryExpression(
+													f.createIdentifier(
 														"resolvedPlaceholder",
 													),
-													ts.factory.createToken(
+													f.createToken(
 														ts.SyntaxKind
 															.ExclamationEqualsEqualsToken,
 													),
-													ts.factory.createStringLiteral(
+													f.createStringLiteral(
 														"null",
 													),
 												),
 											),
 										),
 									),
-									ts.factory.createReturnStatement(
+									f.createReturnStatement(
 										templateLiteralTypeError,
 									),
 									undefined,
 								),
-								ts.factory.createExpressionStatement(
-									ts.factory.createBinaryExpression(
-										ts.factory.createIdentifier("position"),
-										ts.factory.createToken(
+								f.createExpressionStatement(
+									f.createBinaryExpression(
+										f.createIdentifier("position"),
+										f.createToken(
 											ts.SyntaxKind.PlusEqualsToken,
 										),
-										ts.factory.createPropertyAccessExpression(
-											ts.factory.createIdentifier(
+										f.createPropertyAccessExpression(
+											f.createIdentifier(
 												"resolvedPlaceholder",
 											),
-											ts.factory.createIdentifier(
-												"length",
-											),
+											f.createIdentifier("length"),
 										),
 									),
 								),
@@ -1740,7 +1655,7 @@ function visitTemplateLiteralType(
 							true,
 						),
 					),
-					ts.factory.createReturnStatement(ts.factory.createNull()),
+					f.createReturnStatement(f.createNull()),
 				],
 				true,
 			),
@@ -1835,18 +1750,19 @@ export function visitUndefinedOrType(
 	type: ts.Type,
 	visitorContext: VisitorContext,
 ): string {
+	const f = visitorContext.factory;
 	const functionName = visitType(type, visitorContext);
 	const name = `optional_${functionName}`;
 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-		const errorIdentifier = ts.createIdentifier("error");
-		return ts.createFunctionDeclaration(
+		const errorIdentifier = f.createIdentifier("error");
+		return f.createFunctionDeclaration(
 			undefined,
 			undefined,
 			undefined,
 			name,
 			undefined,
 			[
-				ts.createParameter(
+				f.createParameterDeclaration(
 					undefined,
 					undefined,
 					undefined,
@@ -1857,34 +1773,35 @@ export function visitUndefinedOrType(
 				),
 			],
 			undefined,
-			ts.createBlock([
-				ts.createIf(
-					ts.createStrictInequality(
+			f.createBlock([
+				f.createIfStatement(
+					f.createStrictInequality(
 						VisitorUtils.objectIdentifier,
-						ts.createIdentifier("undefined"),
+						f.createIdentifier("undefined"),
 					),
-					ts.createBlock([
-						ts.createVariableStatement(
-							[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+					f.createBlock([
+						f.createVariableStatement(
+							[f.createModifier(ts.SyntaxKind.ConstKeyword)],
 							[
-								ts.createVariableDeclaration(
+								f.createVariableDeclaration(
 									errorIdentifier,
 									undefined,
-									ts.createCall(
-										ts.createIdentifier(functionName),
+									undefined,
+									f.createCallExpression(
+										f.createIdentifier(functionName),
 										undefined,
 										[VisitorUtils.objectIdentifier],
 									),
 								),
 							],
 						),
-						ts.createIf(
+						f.createIfStatement(
 							errorIdentifier,
-							ts.createReturn(errorIdentifier),
+							f.createReturnStatement(errorIdentifier),
 						),
 					]),
 				),
-				ts.createReturn(ts.createNull()),
+				f.createReturnStatement(f.createNull()),
 			]),
 		);
 	});

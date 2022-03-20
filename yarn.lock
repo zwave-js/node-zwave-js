@@ -3676,7 +3676,6 @@ __metadata:
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.1
     typescript: 4.6.2
-    typescript-is: "git@github.com:AlCalzone/typescript-is.git#head=patched"
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -3739,14 +3738,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@zwave-js/transformers@workspace:packages/transformers":
+"@zwave-js/transformers@workspace:*, @zwave-js/transformers@workspace:packages/transformers":
   version: 0.0.0-use.local
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
-    "@zwave-js/core": "workspace:*"
-    "@zwave-js/shared": "workspace:*"
+    "@zwave-js/maintenance": "workspace:*"
     reflect-metadata: ^0.1.13
-    ts-morph: ^14.0.0
     tsutils: ^3.21.0
     typescript: 4.6.2
   languageName: unknown
@@ -8263,13 +8260,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nested-error-stacks@npm:^2":
-  version: 2.1.0
-  resolution: "nested-error-stacks@npm:2.1.0"
-  checksum: 206ee736f9eb83489cc093d43e7d3024255ec93c66a31eaee58ca14d5ad9d925d813494725dcf5dec264e70cd8430167b7f82a2d00b0dd099f83c78d9ca650fd
-  languageName: node
-  linkType: hard
-
 "nice-napi@npm:^1.0.2":
   version: 1.0.2
   resolution: "nice-napi@npm:1.0.2"
@@ -9034,7 +9024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reflect-metadata@npm:>=0.1.12, reflect-metadata@npm:^0.1.13":
+"reflect-metadata@npm:^0.1.13":
   version: 0.1.13
   resolution: "reflect-metadata@npm:0.1.13"
   checksum: 798d379a7b6f6455501145419505c97dd11cbc23857a386add2b9ef15963ccf15a48d9d15507afe01d4cd74116df8a213247200bac00320bd7c11ddeaa5e8fb4
@@ -10157,7 +10147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tsutils@npm:^3.17.1, tsutils@npm:^3.21.0":
+"tsutils@npm:^3.21.0":
   version: 3.21.0
   resolution: "tsutils@npm:3.21.0"
   dependencies:
@@ -10257,22 +10247,6 @@ __metadata:
   dependencies:
     is-typedarray: ^1.0.0
   checksum: 99c11aaa8f45189fcfba6b8a4825fd684a321caa9bd7a76a27cf0c7732c174d198b99f449c52c3818107430b5f41c0ccbbfb75cb2ee3ca4a9451710986d61a60
-  languageName: node
-  linkType: hard
-
-"typescript-is@git@github.com:AlCalzone/typescript-is.git#head=patched":
-  version: 0.19.0
-  resolution: "typescript-is@git@github.com:AlCalzone/typescript-is.git#commit=1db98662ae4f8ba31030a5426d07314880b95c80"
-  dependencies:
-    nested-error-stacks: ^2
-    reflect-metadata: ">=0.1.12"
-    tsutils: ^3.17.1
-  peerDependencies:
-    typescript: ^4.1.5
-  dependenciesMeta:
-    reflect-metadata:
-      optional: true
-  checksum: e6773318dc7286d4d9d9355675e12bb33cb518cbf6b70df3fdbe929714d117c24f226002c9c849d74fbb406e9f90181b7ceb7a4716f1e15ecda48744f878afb0
   languageName: node
   linkType: hard
 
@@ -10808,6 +10782,7 @@ typescript@^4.4.3:
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
+    "@zwave-js/transformers": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     axios: ^0.26.0
@@ -10823,7 +10798,6 @@ typescript@^4.4.3:
     serialport: ^10.3.0
     source-map-support: ^0.5.21
     typescript: 4.6.2
-    typescript-is: "git@github.com:AlCalzone/typescript-is.git#head=patched"
     winston: ^3.6.0
     xstate: ^4.29.0
   languageName: unknown

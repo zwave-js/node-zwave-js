@@ -8,7 +8,6 @@ import { checkIsDateClass } from "./visitor-utils";
 
 interface TypeCheckNameMode {
 	type: "type-check";
-	superfluousPropertyCheck?: boolean;
 }
 
 interface KeyofNameMode {
@@ -215,9 +214,6 @@ export function visitType(
 			type: "type-check",
 		});
 		name += `_ia__${indexTypeName}`;
-	}
-	if (mode.type === "type-check" && !!mode.superfluousPropertyCheck) {
-		name += "_s";
 	}
 	if (tsutils.isTypeReference(type) && type.typeArguments !== undefined) {
 		for (const typeArgument of type.typeArguments) {

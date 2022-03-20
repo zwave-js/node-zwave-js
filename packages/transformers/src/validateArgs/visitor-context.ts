@@ -2,23 +2,19 @@ import type ts from "typescript";
 
 interface Options {
 	shortCircuit: boolean;
-	ignoreClasses: boolean;
-	ignoreMethods: boolean;
-	functionBehavior: "error" | "ignore" | "basic";
-	disallowSuperfluousObjectProperties: boolean;
 	transformNonNullExpressions: boolean;
 	emitDetailedErrors: boolean | "auto";
 }
 
-export interface VisitorContext extends VisitorContextWithFactory {
+export interface VisitorContext extends FileSpecificVisitorContext {
 	functionNames: Set<string>;
 	functionMap: Map<string, ts.FunctionDeclaration>;
 	typeIdMap: Map<string, string>;
-	overrideDisallowSuperfluousObjectProperies?: boolean;
 }
 
-export interface VisitorContextWithFactory extends PartialVisitorContext {
+export interface FileSpecificVisitorContext extends PartialVisitorContext {
 	factory: ts.NodeFactory;
+	typeAssertions: Map<string, ts.ArrowFunction>;
 }
 
 export interface PartialVisitorContext {

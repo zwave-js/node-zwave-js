@@ -117,16 +117,6 @@ export function getPropertyInfo(
 		isFunction =
 			valueDeclaration.type !== undefined &&
 			ts.isFunctionTypeNode(valueDeclaration.type);
-		if (isMethod && !visitorContext.options.ignoreMethods) {
-			throw new Error(
-				"Encountered a method declaration, but methods are not supported. Issue: https://github.com/woutervh-/typescript-is/issues/5",
-			);
-		}
-		if (isFunction && visitorContext.options.functionBehavior === "error") {
-			throw new Error(
-				"Encountered a function declaration, but functions are not supported. Issue: https://github.com/woutervh-/typescript-is/issues/50",
-			);
-		}
 		if (valueDeclaration.type === undefined) {
 			if (!isMethod) {
 				throw new Error("Found property without type.");

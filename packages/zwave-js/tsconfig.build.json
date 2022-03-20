@@ -13,9 +13,6 @@
 			"path": "../core/tsconfig.build.json"
 		},
 		{
-			"path": "../maintenance/tsconfig.build.json"
-		},
-		{
 			"path": "../nvmedit/tsconfig.build.json"
 		},
 		{
@@ -23,6 +20,9 @@
 		},
 		{
 			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../transformers/tsconfig.build.json"
 		}
 	],
 	"include": ["src/**/*.ts"],

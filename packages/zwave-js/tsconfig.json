@@ -3,13 +3,7 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"plugins": [
-			{
-				"transform": "@zwave-js/maintenance/build/validateArgs"
-			},
-			{
-				"transform": "typescript-is/lib/transform-inline/transformer",
-				"verbose": true
-			},
+			{ "transform": "@zwave-js/transformers" },
 			{ "transform": "ts-nameof", "type": "raw" }
 		]
 	},
@@ -34,6 +28,9 @@
 		},
 		{
 			"path": "../testing/tsconfig.build.json"
+		},
+		{
+			"path": "../transformers/tsconfig.build.json"
 		}
 	],
 	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
