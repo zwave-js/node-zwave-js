@@ -151,12 +151,12 @@ function isValidateArgsDecorator(
 	return false;
 }
 
-/** Figures out an appropriate human-readable name for the variable designated by `node`. */
-function extractVariableName(node: ts.Node | undefined) {
-	return node !== undefined && ts.isIdentifier(node)
-		? node.escapedText.toString()
-		: "$";
-}
+// /** Figures out an appropriate human-readable name for the variable designated by `node`. */
+// function extractVariableName(node: ts.Node | undefined) {
+// 	return node !== undefined && ts.isIdentifier(node)
+// 		? node.escapedText.toString()
+// 		: "$";
+// }
 
 function transformDecoratedMethod(
 	method: ts.MethodDeclaration,
@@ -172,9 +172,11 @@ function transformDecoratedMethod(
 		if (!param.type) continue;
 
 		let typeName: string | undefined;
+		let publicTypeName: string | undefined;
 		const type = visitorContext.checker.getTypeFromTypeNode(param.type);
-		let anonymous: boolean;
 		let arrowFunction: ts.ArrowFunction;
+
+		const optional = !!(param.initializer || param.questionToken);
 
 		switch (param.type.kind) {
 			case ts.SyntaxKind.NumberKeyword:
@@ -183,9 +185,13 @@ function transformDecoratedMethod(
 			case ts.SyntaxKind.BigIntKeyword:
 			case ts.SyntaxKind.TypeReference:
 				// This is a type with an "easy" name we can factor out of the method body
-				typeName = param.type.getText();
-				anonymous = false;
-				arrowFunction = createArrowFunction(type, typeName, false, {
+				publicTypeName = typeName = param.type.getText();
+				if (optional) {
+					publicTypeName = `(optional) ${publicTypeName}`;
+					typeName = `optional_${typeName}`;
+				}
+
+				arrowFunction = createArrowFunction(type, typeName, optional, {
 					...visitorContext,
 					options: {
 						...visitorContext.options,
@@ -210,12 +216,13 @@ function transformDecoratedMethod(
 						typeIdMap: new Map(),
 					};
 
-					typeName = visitType(type, typeContext);
-					anonymous = true;
+					typeName =
+						(optional ? "optional_" : "") +
+						visitType(type, typeContext);
 					arrowFunction = createArrowFunction(
 						type,
 						typeName,
-						false,
+						optional,
 						typeContext,
 					);
 				}
@@ -225,7 +232,7 @@ function transformDecoratedMethod(
 					f,
 					argName,
 					typeName,
-					anonymous!,
+					publicTypeName,
 				);
 				if (!visitorContext.typeAssertions.has(typeName)) {
 					visitorContext.typeAssertions.set(typeName, arrowFunction!);
@@ -432,7 +439,7 @@ function createLocalAssertExpression(
 	factory: ts.NodeFactory,
 	argName: string,
 	typeName: string,
-	anonymousType: boolean,
+	publicTypeName: string | undefined,
 ): ts.ExpressionStatement {
 	return factory.createExpressionStatement(
 		factory.createCallExpression(
@@ -440,9 +447,9 @@ function createLocalAssertExpression(
 			undefined,
 			[
 				factory.createStringLiteral(argName),
-				anonymousType
-					? factory.createIdentifier("undefined")
-					: factory.createStringLiteral(typeName),
+				publicTypeName
+					? factory.createStringLiteral(publicTypeName)
+					: factory.createIdentifier("undefined"),
 				factory.createCallExpression(
 					factory.createPropertyAccessExpression(
 						factory.createIdentifier(`__assertType__${typeName}`),
@@ -466,32 +473,6 @@ export function transformNode(
 	visitorContext: FileSpecificVisitorContext,
 ): ts.Node {
 	const f = visitorContext.factory;
-	// if (
-	// 	ts.isParameter(node) &&
-	// 	node.type !== undefined &&
-	// 	node.decorators !== undefined
-	// ) {
-	// 	const type = visitorContext.checker.getTypeFromTypeNode(node.type);
-	// 	const required = !node.initializer && !node.questionToken;
-	// 	const mappedDecorators = node.decorators.map((decorator) =>
-	// 		transformDecorator(
-	// 			decorator,
-	// 			type,
-	// 			extractVariableName(node.name),
-	// 			!required,
-	// 			visitorContext,
-	// 		),
-	// 	);
-	// 	return f.updateParameterDeclaration(
-	// 		node,
-	// 		mappedDecorators,
-	// 		node.modifiers,
-	// 		node.dotDotDotToken,
-	// 		node.name,
-	// 		node.questionToken,
-	// 		node.type,
-	// 		node.initializer,
-	// 	);
 	if (ts.isMethodDeclaration(node) && node.decorators?.length) {
 		// @validateArgs()
 		const validateArgsDecorator = node.decorators.find((d) =>
@@ -505,51 +486,51 @@ export function transformNode(
 				visitorContext,
 			);
 		}
-	} else if (ts.isCallExpression(node)) {
-		// is(), createIs()
-		const signature = visitorContext.checker.getResolvedSignature(node);
-		if (
-			signature !== undefined &&
-			signature.declaration !== undefined &&
-			VisitorUtils.getCanonicalPath(
-				path.resolve(signature.declaration.getSourceFile().fileName),
-				visitorContext,
-			) ===
-				path.resolve(path.join(__dirname, "../../build/index.d.ts")) &&
-			node.typeArguments !== undefined &&
-			node.typeArguments.length === 1
-		) {
-			// const name = visitorContext.checker.getTypeAtLocation(
-			// 	signature.declaration,
-			// ).symbol.name;
-			const isAssert = false;
-			// name === "assertType" || name === "createAssertType";
-			const emitDetailedErrors =
-				visitorContext.options.emitDetailedErrors === "auto"
-					? isAssert
-					: visitorContext.options.emitDetailedErrors;
+		// } else if (ts.isCallExpression(node)) {
+		// 	// is(), createIs()
+		// 	const signature = visitorContext.checker.getResolvedSignature(node);
+		// 	if (
+		// 		signature !== undefined &&
+		// 		signature.declaration !== undefined &&
+		// 		VisitorUtils.getCanonicalPath(
+		// 			path.resolve(signature.declaration.getSourceFile().fileName),
+		// 			visitorContext,
+		// 		) ===
+		// 			path.resolve(path.join(__dirname, "../../build/index.d.ts")) &&
+		// 		node.typeArguments !== undefined &&
+		// 		node.typeArguments.length === 1
+		// 	) {
+		// 		// const name = visitorContext.checker.getTypeAtLocation(
+		// 		// 	signature.declaration,
+		// 		// ).symbol.name;
+		// 		const isAssert = false;
+		// 		// name === "assertType" || name === "createAssertType";
+		// 		const emitDetailedErrors =
+		// 			visitorContext.options.emitDetailedErrors === "auto"
+		// 				? isAssert
+		// 				: visitorContext.options.emitDetailedErrors;
 
-			const typeArgument = node.typeArguments[0];
-			const type =
-				visitorContext.checker.getTypeFromTypeNode(typeArgument);
-			const arrowFunction = createArrowFunction(
-				type,
-				extractVariableName(node.arguments[0]),
-				false,
-				{
-					...visitorContext,
-					options: {
-						...visitorContext.options,
-						emitDetailedErrors,
-					},
-				},
-			);
+		// 		const typeArgument = node.typeArguments[0];
+		// 		const type =
+		// 			visitorContext.checker.getTypeFromTypeNode(typeArgument);
+		// 		const arrowFunction = createArrowFunction(
+		// 			type,
+		// 			extractVariableName(node.arguments[0]),
+		// 			false,
+		// 			{
+		// 				...visitorContext,
+		// 				options: {
+		// 					...visitorContext.options,
+		// 					emitDetailedErrors,
+		// 				},
+		// 			},
+		// 		);
 
-			return ts.updateCall(node, node.expression, node.typeArguments, [
-				...node.arguments,
-				arrowFunction,
-			]);
-		}
+		// 		return ts.updateCall(node, node.expression, node.typeArguments, [
+		// 			...node.arguments,
+		// 			arrowFunction,
+		// 		]);
+		// 	}
 	} else if (
 		visitorContext.options.transformNonNullExpressions &&
 		ts.isNonNullExpression(node)

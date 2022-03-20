@@ -12,7 +12,7 @@ type Bar = {
 
 class Test {
 	@validateArgs()
-	foo(arg1: number, arg2: Foo, arg3: Foo & Bar): void {
+	foo(arg1: number, arg2: Foo = { a: 1, b: 2 }, arg3?: Foo & Bar): void {
 		arg1;
 		arg2;
 		arg3;
@@ -21,13 +21,33 @@ class Test {
 }
 
 const test = new Test();
-// This should not throw
+// These should not throw
 test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2, c: 3 });
+test.foo(1, { a: 1, b: 2 }, undefined);
 
 // These should throw
-// @ts-expect-error
-assert.throws(() => test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2 }));
-// @ts-expect-error
-assert.throws(() => test.foo(1, { a: 1, b: "2" }, { a: 1, b: 2, c: 3 }));
-// @ts-expect-error
-assert.throws(() => test.foo(true, { a: 1, b: 2 }, { a: 1, b: 2, c: 3 }));
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2 }),
+	/arg3 has the wrong type/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(1, { a: 1, b: "2" }, { a: 1, b: 2, c: 3 }),
+	/arg2 is not a \(optional\) Foo/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(true, { a: 1, b: 2 }, undefined),
+	/arg1 is not a number/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(undefined, { a: 1, b: 2 }, undefined),
+	/arg1 is not a number/,
+);
+assert.throws(
+	// @ts-expect-error
+	() => test.foo(2, 2, undefined),
+	/arg2 is not a \(optional\) Foo/,
+);
