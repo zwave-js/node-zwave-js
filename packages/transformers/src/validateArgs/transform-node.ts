@@ -70,7 +70,7 @@ function createArrowFunction(
 		],
 		undefined,
 		undefined,
-		f.createBlock([
+		VisitorUtils.createBlock(f, [
 			...variableDeclarations,
 			...functionDeclarations,
 			f.createReturnStatement(
@@ -570,32 +570,29 @@ export function transformNode(
 								f.createToken(
 									ts.SyntaxKind.EqualsGreaterThanToken,
 								),
-								f.createBlock(
-									[
-										f.createThrowStatement(
-											f.createNewExpression(
-												f.createIdentifier("Error"),
-												undefined,
-												[
-													f.createTemplateExpression(
-														f.createTemplateHead(
-															`${expression.getText()} was non-null asserted but is `,
-														),
-														[
-															f.createTemplateSpan(
-																expression,
-																f.createTemplateTail(
-																	"",
-																),
-															),
-														],
+								VisitorUtils.createBlock(f, [
+									f.createThrowStatement(
+										f.createNewExpression(
+											f.createIdentifier("Error"),
+											undefined,
+											[
+												f.createTemplateExpression(
+													f.createTemplateHead(
+														`${expression.getText()} was non-null asserted but is `,
 													),
-												],
-											),
+													[
+														f.createTemplateSpan(
+															expression,
+															f.createTemplateTail(
+																"",
+															),
+														),
+													],
+												),
+											],
 										),
-									],
-									false,
-								),
+									),
+								]),
 							),
 						),
 						undefined,

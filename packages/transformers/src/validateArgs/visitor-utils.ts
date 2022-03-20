@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as tsutils from "tsutils/typeguard/3.0";
-import ts, { ModifierFlags } from "typescript";
+import ts, { ModifierFlags, NodeFactory } from "typescript";
 import type { Reason } from "./reason";
 import type { PartialVisitorContext, VisitorContext } from "./visitor-context";
 
@@ -13,7 +13,7 @@ export type TemplateLiteralPair = [
 	"string" | "number" | "bigint" | "any" | "undefined" | "null" | undefined,
 ];
 
-export const objectIdentifier = ts.createIdentifier("object");
+export const objectIdentifier = ts.createIdentifier("$o");
 export const pathIdentifier = ts.createIdentifier("path");
 const keyIdentifier = ts.createIdentifier("key");
 
@@ -405,11 +405,14 @@ export function getNeverFunction(visitorContext: VisitorContext): string {
 				),
 			],
 			undefined,
-			ts.createBlock([
-				ts.createReturn(
-					createErrorObject({ type: "never" }, visitorContext),
-				),
-			]),
+			ts.createBlock(
+				[
+					ts.createReturn(
+						createErrorObject({ type: "never" }, visitorContext),
+					),
+				],
+				true,
+			),
 		);
 	});
 }
@@ -460,7 +463,7 @@ export function createAcceptingFunction(
 		undefined,
 		[],
 		undefined,
-		ts.createBlock([ts.createReturn(ts.createNull())]),
+		ts.createBlock([ts.createReturn(ts.createNull())], true),
 	);
 }
 
@@ -490,56 +493,64 @@ export function createConjunctionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock([
-			ts.createVariableStatement(
-				[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-				[
-					ts.createVariableDeclaration(
-						conditionsIdentifier,
-						undefined,
-						ts.createArrayLiteral(
-							functionNames.map((functionName) =>
-								ts.createIdentifier(functionName),
-							),
-						),
-					),
-				],
-			),
-			ts.createForOf(
-				undefined,
-				ts.createVariableDeclarationList(
+		ts.createBlock(
+			[
+				ts.createVariableStatement(
+					[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
 					[
 						ts.createVariableDeclaration(
-							conditionIdentifier,
+							conditionsIdentifier,
 							undefined,
-							undefined,
+							ts.createArrayLiteral(
+								functionNames.map((functionName) =>
+									ts.createIdentifier(functionName),
+								),
+							),
 						),
 					],
-					ts.NodeFlags.Const,
 				),
-				conditionsIdentifier,
-				ts.createBlock([
-					ts.createVariableStatement(
-						[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+				ts.createForOf(
+					undefined,
+					ts.createVariableDeclarationList(
 						[
 							ts.createVariableDeclaration(
-								errorIdentifier,
+								conditionIdentifier,
 								undefined,
-								ts.createCall(conditionIdentifier, undefined, [
-									objectIdentifier,
-								]),
+								undefined,
 							),
 						],
+						ts.NodeFlags.Const,
 					),
-					ts.createIf(
-						errorIdentifier,
-						ts.createReturn(errorIdentifier),
+					conditionsIdentifier,
+					ts.createBlock(
+						[
+							ts.createVariableStatement(
+								[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+								[
+									ts.createVariableDeclaration(
+										errorIdentifier,
+										undefined,
+										ts.createCall(
+											conditionIdentifier,
+											undefined,
+											[objectIdentifier],
+										),
+									),
+								],
+							),
+							ts.createIf(
+								errorIdentifier,
+								ts.createReturn(errorIdentifier),
+							),
+						],
+						true,
 					),
-				]),
-			),
-			...(extraStatements || []),
-			ts.createReturn(ts.createNull()),
-		]),
+				),
+				...(extraStatements || []),
+				ts.createReturn(ts.createNull()),
+			],
+			true,
+		),
 	);
 }
 
@@ -580,57 +591,65 @@ export function createDisjunctionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock([
-			ts.createVariableStatement(
-				[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-				[
-					ts.createVariableDeclaration(
-						conditionsIdentifier,
-						undefined,
-						ts.createArrayLiteral(
-							functionNames.map((functionName) =>
-								ts.createIdentifier(functionName),
-							),
-						),
-					),
-				],
-			),
-			ts.createForOf(
-				undefined,
-				ts.createVariableDeclarationList(
+		ts.createBlock(
+			[
+				ts.createVariableStatement(
+					[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
 					[
 						ts.createVariableDeclaration(
-							conditionIdentifier,
+							conditionsIdentifier,
 							undefined,
-							undefined,
+							ts.createArrayLiteral(
+								functionNames.map((functionName) =>
+									ts.createIdentifier(functionName),
+								),
+							),
 						),
 					],
-					ts.NodeFlags.Const,
 				),
-				conditionsIdentifier,
-				ts.createBlock([
-					ts.createVariableStatement(
-						[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+				ts.createForOf(
+					undefined,
+					ts.createVariableDeclarationList(
 						[
 							ts.createVariableDeclaration(
-								errorIdentifier,
+								conditionIdentifier,
 								undefined,
-								ts.createCall(conditionIdentifier, undefined, [
-									objectIdentifier,
-								]),
+								undefined,
 							),
 						],
+						ts.NodeFlags.Const,
 					),
-					ts.createIf(
-						ts.createLogicalNot(errorIdentifier),
-						ts.createReturn(ts.createNull()),
+					conditionsIdentifier,
+					ts.createBlock(
+						[
+							ts.createVariableStatement(
+								[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
+								[
+									ts.createVariableDeclaration(
+										errorIdentifier,
+										undefined,
+										ts.createCall(
+											conditionIdentifier,
+											undefined,
+											[objectIdentifier],
+										),
+									),
+								],
+							),
+							ts.createIf(
+								ts.createLogicalNot(errorIdentifier),
+								ts.createReturn(ts.createNull()),
+							),
+						],
+						true,
 					),
-				]),
-			),
-			ts.createReturn(
-				createErrorObject({ type: "union" }, visitorContext),
-			),
-		]),
+				),
+				ts.createReturn(
+					createErrorObject({ type: "union" }, visitorContext),
+				),
+			],
+			true,
+		),
 	);
 }
 
@@ -656,19 +675,22 @@ function createNullableTypeCheck(
 			),
 		],
 		undefined,
-		ts.createBlock([
-			ts.createIf(
-				ts.createStrictEquality(objectIdentifier, ts.createNull()),
-				ts.createReturn(ts.createNull()),
-				ts.createReturn(
-					ts.createCall(
-						ts.createIdentifier(typeCheckFunction),
-						undefined,
-						[objectIdentifier],
+		ts.createBlock(
+			[
+				ts.createIf(
+					ts.createStrictEquality(objectIdentifier, ts.createNull()),
+					ts.createReturn(ts.createNull()),
+					ts.createReturn(
+						ts.createCall(
+							ts.createIdentifier(typeCheckFunction),
+							undefined,
+							[objectIdentifier],
+						),
 					),
 				),
-			),
-		]),
+			],
+			true,
+		),
 	);
 }
 
@@ -718,14 +740,19 @@ export function createAssertionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock([
-			...otherStatements,
-			ts.createIf(
-				failureCondition,
-				ts.createReturn(createErrorObject(expected, visitorContext)),
-				ts.createReturn(ts.createNull()),
-			),
-		]),
+		ts.createBlock(
+			[
+				...otherStatements.filter((o) => !ts.isEmptyStatement(o)),
+				ts.createIf(
+					failureCondition,
+					ts.createReturn(
+						createErrorObject(expected, visitorContext),
+					),
+					ts.createReturn(ts.createNull()),
+				),
+			],
+			true,
+		),
 	);
 }
 
@@ -744,26 +771,29 @@ export function createSuperfluousPropertiesLoop(
 			undefined,
 			[objectIdentifier],
 		),
-		ts.createBlock([
-			ts.createIf(
-				createBinaries(
-					propertyNames.map((propertyName) =>
-						ts.createStrictInequality(
-							keyIdentifier,
-							ts.createStringLiteral(propertyName),
+		ts.createBlock(
+			[
+				ts.createIf(
+					createBinaries(
+						propertyNames.map((propertyName) =>
+							ts.createStrictInequality(
+								keyIdentifier,
+								ts.createStringLiteral(propertyName),
+							),
+						),
+						ts.SyntaxKind.AmpersandAmpersandToken,
+						ts.createTrue(),
+					),
+					ts.createReturn(
+						createErrorObject(
+							{ type: "superfluous-property" },
+							visitorContext,
 						),
 					),
-					ts.SyntaxKind.AmpersandAmpersandToken,
-					ts.createTrue(),
 				),
-				ts.createReturn(
-					createErrorObject(
-						{ type: "superfluous-property" },
-						visitorContext,
-					),
-				),
-			),
-		]),
+			],
+			true,
+		),
 	);
 }
 
@@ -953,4 +983,14 @@ export function getCanonicalPath(
 		context.canonicalPaths.set(path, fs.realpathSync(path));
 	}
 	return context.canonicalPaths.get(path)!;
+}
+
+export function createBlock(
+	factory: NodeFactory,
+	statements: ts.Statement[],
+): ts.Block {
+	return factory.createBlock(
+		statements.filter((s) => !ts.isEmptyStatement(s)),
+		true,
+	);
 }
