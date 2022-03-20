@@ -22,6 +22,7 @@ class Test {
 
 const test = new Test();
 // This should not throw
+test.foo(1, { a: 1, b: 2 }, { a: 1, b: 2, c: 3 });
 
 // These should throw
 // @ts-expect-error
