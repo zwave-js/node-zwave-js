@@ -35,8 +35,6 @@
     "test": "yarn run build && tsc -p tsconfig.test.json; node test/test1"
   },
   "devDependencies": {
-    "@zwave-js/maintenance": "workspace:*",
-    "reflect-metadata": "^0.1.13",
     "tsutils": "^3.21.0",
     "typescript": "4.6.2"
   }

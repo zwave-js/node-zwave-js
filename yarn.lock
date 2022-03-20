@@ -3742,8 +3742,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/transformers@workspace:packages/transformers"
   dependencies:
-    "@zwave-js/maintenance": "workspace:*"
-    reflect-metadata: ^0.1.13
     tsutils: ^3.21.0
     typescript: 4.6.2
   languageName: unknown
