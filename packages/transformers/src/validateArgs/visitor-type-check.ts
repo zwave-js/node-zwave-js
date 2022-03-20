@@ -124,19 +124,22 @@ function createRecursiveCall(
 	}
 	statements.push(
 		f.createVariableStatement(
-			[f.createModifier(ts.SyntaxKind.ConstKeyword)],
-			[
-				f.createVariableDeclaration(
-					errorIdentifier,
-					undefined,
-					undefined,
-					f.createCallExpression(
-						f.createIdentifier(functionName),
+			undefined,
+			f.createVariableDeclarationList(
+				[
+					f.createVariableDeclaration(
+						errorIdentifier,
 						undefined,
-						[functionArgument],
+						undefined,
+						f.createCallExpression(
+							f.createIdentifier(functionName),
+							undefined,
+							[functionArgument],
+						),
 					),
-				),
-			],
+				],
+				ts.NodeFlags.Const,
+			),
 		),
 	);
 	if (emitDetailedErrors) {
@@ -1696,19 +1699,22 @@ export function visitUndefinedOrType(
 					),
 					VisitorUtils.createBlock(f, [
 						f.createVariableStatement(
-							[f.createModifier(ts.SyntaxKind.ConstKeyword)],
-							[
-								f.createVariableDeclaration(
-									errorIdentifier,
-									undefined,
-									undefined,
-									f.createCallExpression(
-										f.createIdentifier(functionName),
+							undefined,
+							f.createVariableDeclarationList(
+								[
+									f.createVariableDeclaration(
+										errorIdentifier,
 										undefined,
-										[VisitorUtils.objectIdentifier],
+										undefined,
+										f.createCallExpression(
+											f.createIdentifier(functionName),
+											undefined,
+											[VisitorUtils.objectIdentifier],
+										),
 									),
-								),
-							],
+								],
+								ts.NodeFlags.Const,
+							),
 						),
 						f.createIfStatement(
 							errorIdentifier,

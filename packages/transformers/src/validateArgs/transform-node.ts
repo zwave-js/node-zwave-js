@@ -39,17 +39,20 @@ function createArrowFunction(
 	if (emitDetailedErrors) {
 		variableDeclarations.push(
 			f.createVariableStatement(
-				[f.createModifier(ts.SyntaxKind.ConstKeyword)],
-				[
-					f.createVariableDeclaration(
-						VisitorUtils.pathIdentifier,
-						undefined,
-						undefined,
-						f.createArrayLiteralExpression([
-							f.createStringLiteral(rootName),
-						]),
-					),
-				],
+				undefined,
+				f.createVariableDeclarationList(
+					[
+						f.createVariableDeclaration(
+							VisitorUtils.pathIdentifier,
+							undefined,
+							undefined,
+							f.createArrayLiteralExpression([
+								f.createStringLiteral(rootName),
+							]),
+						),
+					],
+					ts.NodeFlags.Const,
+				),
 			),
 		);
 	}

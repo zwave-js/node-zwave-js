@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as tsutils from "tsutils/typeguard/3.0";
-import ts, { ModifierFlags, NodeFactory } from "typescript";
+import ts from "typescript";
 import type { Reason } from "./reason";
 import type { PartialVisitorContext, VisitorContext } from "./visitor-context";
 
@@ -60,7 +60,7 @@ export function checkIsDateClass(type: ts.ObjectType): boolean {
 		type.symbol.valueDeclaration !== undefined &&
 		type.symbol.escapedName === "Date" &&
 		(ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ModifierFlags.Ambient) !==
+			ts.ModifierFlags.Ambient) !==
 			0
 	);
 }
@@ -496,18 +496,21 @@ export function createConjunctionFunction(
 		ts.createBlock(
 			[
 				ts.createVariableStatement(
-					[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-					[
-						ts.createVariableDeclaration(
-							conditionsIdentifier,
-							undefined,
-							ts.createArrayLiteral(
-								functionNames.map((functionName) =>
-									ts.createIdentifier(functionName),
+					undefined,
+					ts.createVariableDeclarationList(
+						[
+							ts.createVariableDeclaration(
+								conditionsIdentifier,
+								undefined,
+								ts.createArrayLiteral(
+									functionNames.map((functionName) =>
+										ts.createIdentifier(functionName),
+									),
 								),
 							),
-						),
-					],
+						],
+						ts.NodeFlags.Const,
+					),
 				),
 				ts.createForOf(
 					undefined,
@@ -525,18 +528,21 @@ export function createConjunctionFunction(
 					ts.createBlock(
 						[
 							ts.createVariableStatement(
-								[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-								[
-									ts.createVariableDeclaration(
-										errorIdentifier,
-										undefined,
-										ts.createCall(
-											conditionIdentifier,
+								undefined,
+								ts.createVariableDeclarationList(
+									[
+										ts.createVariableDeclaration(
+											errorIdentifier,
 											undefined,
-											[objectIdentifier],
+											ts.createCall(
+												conditionIdentifier,
+												undefined,
+												[objectIdentifier],
+											),
 										),
-									),
-								],
+									],
+									ts.NodeFlags.Const,
+								),
 							),
 							ts.createIf(
 								errorIdentifier,
@@ -594,18 +600,21 @@ export function createDisjunctionFunction(
 		ts.createBlock(
 			[
 				ts.createVariableStatement(
-					[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-					[
-						ts.createVariableDeclaration(
-							conditionsIdentifier,
-							undefined,
-							ts.createArrayLiteral(
-								functionNames.map((functionName) =>
-									ts.createIdentifier(functionName),
+					undefined,
+					ts.createVariableDeclarationList(
+						[
+							ts.createVariableDeclaration(
+								conditionsIdentifier,
+								undefined,
+								ts.createArrayLiteral(
+									functionNames.map((functionName) =>
+										ts.createIdentifier(functionName),
+									),
 								),
 							),
-						),
-					],
+						],
+						ts.NodeFlags.Const,
+					),
 				),
 				ts.createForOf(
 					undefined,
@@ -623,18 +632,21 @@ export function createDisjunctionFunction(
 					ts.createBlock(
 						[
 							ts.createVariableStatement(
-								[ts.createModifier(ts.SyntaxKind.ConstKeyword)],
-								[
-									ts.createVariableDeclaration(
-										errorIdentifier,
-										undefined,
-										ts.createCall(
-											conditionIdentifier,
+								undefined,
+								ts.createVariableDeclarationList(
+									[
+										ts.createVariableDeclaration(
+											errorIdentifier,
 											undefined,
-											[objectIdentifier],
+											ts.createCall(
+												conditionIdentifier,
+												undefined,
+												[objectIdentifier],
+											),
 										),
-									),
-								],
+									],
+									ts.NodeFlags.Const,
+								),
 							),
 							ts.createIf(
 								ts.createLogicalNot(errorIdentifier),
@@ -722,14 +734,15 @@ export function createAssertionFunction(
 	visitorContext: VisitorContext,
 	...otherStatements: ts.Statement[]
 ): ts.FunctionDeclaration {
-	return ts.createFunctionDeclaration(
+	const f = visitorContext.factory;
+	return f.createFunctionDeclaration(
 		undefined,
 		undefined,
 		undefined,
 		functionName,
 		undefined,
 		[
-			ts.createParameter(
+			f.createParameterDeclaration(
 				undefined,
 				undefined,
 				undefined,
@@ -740,15 +753,17 @@ export function createAssertionFunction(
 			),
 		],
 		undefined,
-		ts.createBlock(
+		f.createBlock(
 			[
 				...otherStatements.filter((o) => !ts.isEmptyStatement(o)),
-				ts.createIf(
-					failureCondition,
-					ts.createReturn(
+				f.createReturnStatement(
+					f.createConditionalExpression(
+						failureCondition,
+						f.createToken(ts.SyntaxKind.QuestionToken),
 						createErrorObject(expected, visitorContext),
+						f.createToken(ts.SyntaxKind.ColonToken),
+						f.createNull(),
 					),
-					ts.createReturn(ts.createNull()),
 				),
 			],
 			true,
@@ -986,7 +1001,7 @@ export function getCanonicalPath(
 }
 
 export function createBlock(
-	factory: NodeFactory,
+	factory: ts.NodeFactory,
 	statements: ts.Statement[],
 ): ts.Block {
 	return factory.createBlock(
