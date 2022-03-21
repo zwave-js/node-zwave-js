@@ -1,5 +1,6 @@
 import * as path from "path";
 import ts from "typescript";
+import type { ValidateArgsOptions } from "..";
 import { sliceMapValues } from "./utils";
 import type {
 	FileSpecificVisitorContext,
@@ -154,6 +155,27 @@ function isValidateArgsDecorator(
 	return false;
 }
 
+function getValidateArgsOptions(
+	decorator: ts.Decorator & { expression: ts.CallExpression },
+): ValidateArgsOptions | undefined {
+	if (decorator.expression.arguments.length !== 1) return;
+	const options = decorator.expression.arguments[0];
+	if (!ts.isObjectLiteralExpression(options)) return;
+	const ret: ValidateArgsOptions = {};
+	for (const prop of options.properties) {
+		if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name))
+			continue;
+		switch (prop.name.escapedText) {
+			case "strictEnums":
+				if (prop.initializer.kind === ts.SyntaxKind.TrueKeyword) {
+					ret.strictEnums = true;
+				}
+				break;
+		}
+	}
+	return ret;
+}
+
 // /** Figures out an appropriate human-readable name for the variable designated by `node`. */
 // function extractVariableName(node: ts.Node | undefined) {
 // 	return node !== undefined && ts.isIdentifier(node)
@@ -165,6 +187,7 @@ function transformDecoratedMethod(
 	method: ts.MethodDeclaration,
 	validateArgsDecorator: ts.Decorator,
 	visitorContext: FileSpecificVisitorContext,
+	options?: ValidateArgsOptions,
 ) {
 	// Remove the decorator and TODO: prepend its body with the validation code
 	const f = visitorContext.factory;
@@ -176,7 +199,7 @@ function transformDecoratedMethod(
 
 		let typeName: string | undefined;
 		let publicTypeName: string | undefined;
-		const type = visitorContext.checker.getTypeFromTypeNode(param.type);
+		let type = visitorContext.checker.getTypeFromTypeNode(param.type);
 		let arrowFunction: ts.ArrowFunction;
 
 		const optional = !!(param.initializer || param.questionToken);
@@ -188,7 +211,21 @@ function transformDecoratedMethod(
 			case ts.SyntaxKind.BigIntKeyword:
 			case ts.SyntaxKind.TypeReference:
 				// This is a type with an "easy" name we can factor out of the method body
-				publicTypeName = typeName = param.type.getText();
+
+				// Disable strict value checks for numeric enums
+				const isNumericEnum =
+					!!(type.flags & ts.TypeFlags.EnumLiteral) &&
+					type.isUnion() &&
+					type.types.every((t) => t.isNumberLiteral());
+				if (isNumericEnum && !options?.strictEnums) {
+					// Fake the number type
+					type = { flags: ts.TypeFlags.Number } as ts.Type;
+					publicTypeName = param.type.getText();
+					typeName = "number";
+				} else {
+					publicTypeName = typeName = param.type.getText();
+				}
+
 				if (optional) {
 					publicTypeName = `(optional) ${publicTypeName}`;
 					typeName = `optional_${typeName}`;
@@ -201,7 +238,6 @@ function transformDecoratedMethod(
 						emitDetailedErrors: false,
 					},
 				});
-				createLocalAssertExpression;
 
 			// Fall through
 
@@ -478,8 +514,9 @@ export function transformNode(
 	const f = visitorContext.factory;
 	if (ts.isMethodDeclaration(node) && node.decorators?.length) {
 		// @validateArgs()
-		const validateArgsDecorator = node.decorators.find((d) =>
-			isValidateArgsDecorator(d, visitorContext),
+		const validateArgsDecorator = node.decorators.find(
+			(d): d is ts.Decorator & { expression: ts.CallExpression } =>
+				isValidateArgsDecorator(d, visitorContext),
 		);
 		if (validateArgsDecorator) {
 			// This is a method which was decorated with @validateArgs
@@ -487,6 +524,7 @@ export function transformNode(
 				node,
 				validateArgsDecorator,
 				visitorContext,
+				getValidateArgsOptions(validateArgsDecorator),
 			);
 		}
 		// } else if (ts.isCallExpression(node)) {

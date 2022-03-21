@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 // function checkGetErrorObject(
 // 	getErrorObject: unknown,
 // ): asserts getErrorObject is (obj: any) => any {
@@ -47,9 +49,17 @@
 // 	return (obj) => is(obj, getErrorObject);
 // }
 
+export interface ValidateArgsOptions {
+	/**
+	 * Enable strict value checks for numeric enums. By default, a numeric enum will accept any number.
+	 * Turning this flag on will ensure that the passed value is one of the defined enum members.
+	 */
+	strictEnums?: boolean;
+}
+
 /** Generates code at build time which validates all arguments of this method */
-export function validateArgs(): PropertyDecorator {
-	return (_target: unknown, _property: string | number | symbol) => {
+export function validateArgs(options?: ValidateArgsOptions): PropertyDecorator {
+	return (target: unknown, property: string | number | symbol) => {
 		// this is a no-op that gets replaced during the build process using the transformer below
 		// Throw an error when this doesn't get transformed
 		throw new Error(
