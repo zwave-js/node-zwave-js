@@ -16,7 +16,15 @@ export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
 		private readonly cacheKeys: CacheBackedMapKeys<K>,
 	) {
 		this.map = new Map();
-		this.rebuild();
+		for (const [key, value] of this.cache.entries()) {
+			if (key.startsWith(this.cacheKeys.prefix)) {
+				const suffix = key.substring(this.cacheKeys.prefix.length);
+				const suffixKey = this.cacheKeys.suffixDeserializer(suffix);
+				if (suffixKey !== undefined) {
+					this.map.set(suffixKey, value);
+				}
+			}
+		}
 
 		// Bind all map properties we can use directly
 		this.forEach = this.map.forEach.bind(this.map);
@@ -31,22 +39,6 @@ export class CacheBackedMap<K extends string | number, V> implements Map<K, V> {
 	private map: Map<K, V>;
 	private keyToCacheKey(key: K): string {
 		return this.cacheKeys.prefix + this.cacheKeys.suffixSerializer(key);
-	}
-
-	/**
-	 * Discards the locally-cached entries and rebuilds the map with up-to-date information from the cache
-	 */
-	rebuild(): void {
-		this.map.clear();
-		for (const [key, value] of this.cache.entries()) {
-			if (key.startsWith(this.cacheKeys.prefix)) {
-				const suffix = key.substring(this.cacheKeys.prefix.length);
-				const suffixKey = this.cacheKeys.suffixDeserializer(suffix);
-				if (suffixKey !== undefined) {
-					this.map.set(suffixKey, value);
-				}
-			}
-		}
 	}
 
 	clear(): void {

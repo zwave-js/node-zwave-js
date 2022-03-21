@@ -65,9 +65,29 @@ export class Endpoint {
 		}
 	}
 
-	protected _deviceClass: DeviceClass | undefined;
+	/**
+	 * Only used for endpoints which store their device class differently than nodes.
+	 * DO NOT ACCESS directly!
+	 */
+	private _deviceClass: DeviceClass | undefined;
 	public get deviceClass(): DeviceClass | undefined {
-		return this._deviceClass;
+		if (this.index > 0) {
+			return this._deviceClass;
+		} else {
+			return this.driver.cacheGet(
+				cacheKeys.node(this.nodeId).deviceClass,
+			);
+		}
+	}
+	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+		if (this.index > 0) {
+			this._deviceClass = deviceClass;
+		} else {
+			this.driver.cacheSet(
+				cacheKeys.node(this.nodeId).deviceClass,
+				deviceClass,
+			);
+		}
 	}
 
 	/** Resets all stored information of this endpoint */
@@ -105,9 +125,9 @@ export class Endpoint {
 	 * **Note:** This does nothing if the device class was already configured
 	 */
 	protected applyDeviceClass(deviceClass?: DeviceClass): void {
-		if (this._deviceClass) return;
+		if (this.deviceClass) return;
 
-		this._deviceClass = deviceClass;
+		this.deviceClass = deviceClass;
 		// Add mandatory CCs
 		if (deviceClass) {
 			for (const cc of deviceClass.mandatorySupportedCCs) {

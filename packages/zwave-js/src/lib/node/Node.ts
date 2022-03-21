@@ -1119,16 +1119,16 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
-		if (deviceClass && this._deviceClass) {
+		if (deviceClass && this.deviceClass) {
 			return new DeviceClass(
 				this.driver.configManager,
-				this._deviceClass.basic.key,
+				this.deviceClass.basic.key,
 				deviceClass.generic,
 				deviceClass.specific,
 			);
 		}
 		// fall back to the node's device class if it is known
-		return this._deviceClass;
+		return this.deviceClass;
 	}
 
 	private getEndpointCCs(index: number): CommandClasses[] | undefined {
@@ -1312,7 +1312,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
 		this._ready = false;
-		this._deviceClass = undefined;
+		this.deviceClass = undefined;
 		this.isListening = undefined;
 		this.isFrequentListening = undefined;
 		this.isRouting = undefined;

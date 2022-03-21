@@ -1,3 +1,4 @@
+import { ConfigManager } from "@zwave-js/config";
 import {
 	applicationCCs,
 	assertZWaveError,
@@ -79,12 +80,18 @@ describe("lib/node/Node", () => {
 
 	describe("constructor", () => {
 		let fakeDriver: Driver;
+		let configManager: ConfigManager;
 
 		beforeAll(async () => {
-			fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			// Loading configuration may take a while on CI
 			if (process.env.CI) jest.setTimeout(30000);
-			await fakeDriver.configManager.loadDeviceClasses();
+			configManager = new ConfigManager();
+			await configManager.loadDeviceClasses();
+		});
+
+		beforeEach(() => {
+			fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			(fakeDriver as any).configManager = configManager;
 		});
 
 		it("stores the given Node ID", () => {
