@@ -69,7 +69,7 @@ async function publishPr() {
 			...options,
 			issue_number: pr,
 			body: `🎉 The packages have been published.
-You can now install the test version with \`npm install zwave-js@${newVersion}\`.`,
+You can now install the test version with \`yarn add zwave-js@${newVersion}\`.`,
 		});
 	} else {
 		octokit.issues.createComment({
