@@ -1230,9 +1230,12 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	}
 }
 
-// This indirection is necessary to be able to define the same CC as the response
-function getResponseForV1CommandEncapsulation() {
-	return MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation(
+	sent: MultiChannelCCV1CommandEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return MultiChannelCCV1CommandEncapsulation;
+	}
 }
 
 function testResponseForV1CommandEncapsulation(
