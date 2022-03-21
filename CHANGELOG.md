@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.8 (2022-03-21)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -18,7 +18,7 @@
 * A utility method `rssiToString` was added to convert RSSI values to a human readable string
 * Export some commonly used string formatting utilities (#4318)
 * Add support for `Irrigation CC` (#4270)
-* The controller's `sdkVersion` property now includes the build number (or minor version) if supported (#4355)
+* The controller's `sdkVersion` property now includes the build number (or minor version) if supported (#4355, #4398)
 * Also expose `sdkVersion` on the controller node (#4388)
 * Added a compat flag to expose received `MultilevelSwitchCCSet` commands via the `event` property (#4282)
 * Received `MultilevelSwitchCC` `Start/StopLevelChange` commands are now emitted as notifications (#4282)
@@ -38,6 +38,7 @@
 * Route health checks can no longer have sleeping nodes as the target (#4373)
 * Lifeline health checks now wait for sleeping nodes to wake up instead of considering the wait time latency (#4376)
 * Route health check rounds now indicate when there were zero failed pings (#4377)
+* Multi Channel encapsulation now correctly uses V1 commands if this is the highest supported version of a node (#4387)
 
 ### Config file changes
 * Correct device description for Leviton DZMX1 (#4317)
@@ -59,4 +60,5 @@
 * We no longer use `lerna` for monorepo management. It is largely unmaintained and doesn't support `yarn`'s `workspace:` protocol (#4071)
 * The bot now considers `zip` a valid extension for Z-Wave JS logfiles
 * Added missing `toLogEntry` implementations (#4389)
-* Implemented a transformer-based codegen to auto-implement method argument checks based on types (#4394)
+* Implemented a transformer-based codegen to auto-implement method argument checks based on types (#4394, #4396)
+* In VSCode, the project now gets precompiled before running the test script (#4397)
