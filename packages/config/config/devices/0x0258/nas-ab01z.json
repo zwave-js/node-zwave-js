@@ -82,6 +82,10 @@
 				{
 					"label": "5 minutes",
 					"value": 3
+				},
+				{
+					"label": "Always on",
+					"value": 255
 				}
 			]
 		},
@@ -132,7 +136,49 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 9
+			"defaultValue": 9,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Fur Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "6",
@@ -140,7 +186,49 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Fur Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "7",
