@@ -1,6 +1,6 @@
 import path from "path";
 import "reflect-metadata";
-import { Driver } from "../packages/zwave-js/src";
+import { Driver } from "zwave-js";
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
