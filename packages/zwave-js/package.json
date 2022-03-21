@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "9.0.0-beta.6",
+  "version": "9.0.0-beta.8",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "build/index.js",
@@ -83,6 +83,7 @@
     "@xstate/test": "^0.5.1",
     "@zwave-js/maintenance": "workspace:*",
     "@zwave-js/testing": "workspace:*",
+    "@zwave-js/transformers": "workspace:*",
     "esbuild": "0.14.27",
     "esbuild-register": "^3.3.2",
     "jest-extended": "^2.0.0",

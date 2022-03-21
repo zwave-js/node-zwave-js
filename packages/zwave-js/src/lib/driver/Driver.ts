@@ -2,6 +2,7 @@ import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
+	CacheBackedMap,
 	CommandClasses,
 	deserializeCacheValue,
 	dskFromString,
@@ -3964,6 +3965,21 @@ ${handlers.length} left`,
 						continue;
 					}
 					this._valueDB.delete(key);
+				}
+
+				// Re-create cache-backed maps which are operating on outdated information now
+				for (const node of this.controller.nodes.values()) {
+					(
+						node.securityClasses as CacheBackedMap<any, any>
+					).rebuild();
+					for (const ep of node.getAllEndpoints()) {
+						(
+							ep.implementedCommandClasses as CacheBackedMap<
+								any,
+								any
+							>
+						).rebuild();
+					}
 				}
 			} catch (e) {
 				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(

@@ -55,6 +55,13 @@ export function getSDKVersionValueId(): ValueID {
 	};
 }
 
+export function getSDKVersionMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnlyString,
+		label: "SDK version",
+	};
+}
+
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
@@ -636,10 +643,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 
 	private _sdkVersion: string;
 	@ccValue({ minVersion: 3 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyString,
-		label: "SDK version",
-	})
+	@ccValueMetadata(getSDKVersionMetadata())
 	public get sdkVersion(): string {
 		return this._sdkVersion;
 	}
