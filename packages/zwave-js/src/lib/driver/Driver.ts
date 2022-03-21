@@ -2,7 +2,6 @@ import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
-	CacheBackedMap,
 	CommandClasses,
 	deserializeCacheValue,
 	dskFromString,
@@ -1002,6 +1001,50 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 	}
 
+	private async performCacheMigration(): Promise<void> {
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache ||
+			!this._valueDB
+		) {
+			return;
+		}
+
+		// In v9, the network cache was switched from a json file to use a Jsonl-DB
+		// Therefore the legacy cache file must be migrated to the new format
+		if (this._networkCache.size === 0) {
+			// version the cache format, so migrations in the future are easier
+			this._networkCache.set("cacheFormat", 1);
+
+			try {
+				await migrateLegacyNetworkCache(
+					this,
+					this.controller.homeId,
+					this._networkCache,
+					this._valueDB,
+					this.options.storage.driver,
+					this.cacheDir,
+				);
+
+				// Go through the value DB and remove all keys referencing commandClass -1, which used to be a
+				// hacky way to store non-CC specific values
+				for (const key of this._valueDB.keys()) {
+					if (-1 === key.indexOf(`,"commandClass":-1,`)) {
+						continue;
+					}
+					this._valueDB.delete(key);
+				}
+			} catch (e) {
+				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
+					e,
+					true,
+				)}`;
+				this.driverLog.print(message, "error");
+			}
+		}
+	}
+
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -1082,6 +1125,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// now that we know the home ID, we can open the databases
 			await this.initValueDBs(this.controller.homeId!);
+			await this.performCacheMigration();
 
 			// Interview the controller.
 			await this._controller.interview(async () => {
@@ -3937,57 +3981,9 @@ ${handlers.length} left`,
 		if (
 			!this._controller ||
 			!this.controller.homeId ||
-			!this._networkCache ||
-			!this._valueDB
-		)
+			!this._networkCache
+		) {
 			return;
-
-		// In v9, the network cache was switched from a json file to use a Jsonl-DB
-		// Therefore the legacy cache file must be migrated to the new format
-		if (this._networkCache.size === 0) {
-			// version the cache format, so migrations in the future are easier
-			this._networkCache.set("cacheFormat", 1);
-
-			try {
-				await migrateLegacyNetworkCache(
-					this,
-					this.controller.homeId,
-					this._networkCache,
-					this._valueDB,
-					this.options.storage.driver,
-					this.cacheDir,
-				);
-
-				// Go through the value DB and remove all keys referencing commandClass -1, which used to be a
-				// hacky way to store non-CC specific values
-				for (const key of this._valueDB.keys()) {
-					if (-1 === key.indexOf(`,"commandClass":-1,`)) {
-						continue;
-					}
-					this._valueDB.delete(key);
-				}
-
-				// Re-create cache-backed maps which are operating on outdated information now
-				for (const node of this.controller.nodes.values()) {
-					(
-						node.securityClasses as CacheBackedMap<any, any>
-					).rebuild();
-					for (const ep of node.getAllEndpoints()) {
-						(
-							ep.implementedCommandClasses as CacheBackedMap<
-								any,
-								any
-							>
-						).rebuild();
-					}
-				}
-			} catch (e) {
-				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
-					e,
-					true,
-				)}`;
-				this.driverLog.print(message, "error");
-			}
 		}
 
 		if (this._networkCache.size <= 1) {
