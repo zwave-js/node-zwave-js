@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.7 (2022-03-18)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -52,8 +52,11 @@
 * Correct value size for Zooz ZEN20 v2 (#4358)
 * Preserve all endpoints for Qubino ZMNKAD1 Luxy Smart Switch (#4366)
 * Enable Multilevel Switch `event` value for Aeotec ZW111 (#4380)
+* Add metadata to AEON Labs DSB09 (#4391)
 
 ### Changes under the hood
 * Lots of dependency updates
 * We no longer use `lerna` for monorepo management. It is largely unmaintained and doesn't support `yarn`'s `workspace:` protocol (#4071)
 * The bot now considers `zip` a valid extension for Z-Wave JS logfiles
+* Added missing `toLogEntry` implementations (#4389)
+* Implemented a transformer-based codegen to auto-implement method argument checks based on types (#4394)
