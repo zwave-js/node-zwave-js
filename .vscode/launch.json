@@ -13,7 +13,6 @@
 			"runtimeArgs": [
 				"node",
 				"--async-stack-traces",
-				"--inspect-brk=9229",
 				"-r",
 				"esbuild-register",
 				"${workspaceFolder}/test/run.ts"
@@ -24,7 +23,8 @@
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
