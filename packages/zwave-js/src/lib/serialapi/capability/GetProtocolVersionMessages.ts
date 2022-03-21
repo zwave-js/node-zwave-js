@@ -28,8 +28,10 @@ export class GetProtocolVersionResponse extends Message {
 			this.payload[2],
 			this.payload[3],
 		].join(".");
-		const appBuild = this.payload.readUInt16BE(4);
-		if (appBuild !== 0) this.applicationFrameworkBuildNumber = appBuild;
+		if (this.payload.length >= 6) {
+			const appBuild = this.payload.readUInt16BE(4);
+			if (appBuild !== 0) this.applicationFrameworkBuildNumber = appBuild;
+		}
 		if (this.payload.length >= 22) {
 			const commitHash = this.payload.slice(6, 22);
 			if (!commitHash.every((b) => b === 0)) {

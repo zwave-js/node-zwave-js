@@ -58,7 +58,8 @@
 			],
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
