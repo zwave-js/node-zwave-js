@@ -3019,6 +3019,32 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ts-nameof/common@npm:^4.2.0":
+  version: 4.2.1
+  resolution: "@ts-nameof/common@npm:4.2.1"
+  checksum: fd107fbbc1c46d6c918858786536275ed330d85d91a9a4afe33c29e269d747c626438e78c2786a6104e02f8609ff18ffacedfa16971cc44fef86c89775bd91bf
+  languageName: node
+  linkType: hard
+
+"@ts-nameof/transforms-common@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@ts-nameof/transforms-common@npm:4.2.1"
+  dependencies:
+    "@ts-nameof/common": ^4.2.0
+  checksum: 434f9e632cd932d0b152018074731d2cd59b9b053a6213b59b8393befeb7fb5c94d5c3df9c886a790d690793d4f02ecefb135a77f4e2462a74cf33f3c37dfe2a
+  languageName: node
+  linkType: hard
+
+"@ts-nameof/transforms-ts@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@ts-nameof/transforms-ts@npm:4.2.1"
+  dependencies:
+    "@ts-nameof/common": ^4.2.0
+    "@ts-nameof/transforms-common": ^4.2.1
+  checksum: 9c1d3f5dbed313d471bfd2d1ba419ce4435aa4313a592afd84cfb8e1574b4b5b9bd201ede81a13cfc8695322fac4fed0162e417b561dcd012a81ec08ecd3e18a
+  languageName: node
+  linkType: hard
+
 "@tsconfig/node10@npm:^1.0.7":
   version: 1.0.8
   resolution: "@tsconfig/node10@npm:1.0.8"
@@ -3290,6 +3316,13 @@ __metadata:
   version: 1.3.2
   resolution: "@types/triple-beam@npm:1.3.2"
   checksum: dd7b4a563fb710abc992e5d59eac481bed9e303fada2e276e37b00be31c392e03300ee468e57761e616512872e77935f92472877d0704a19688d15a726cee17b
+  languageName: node
+  linkType: hard
+
+"@types/ts-nameof@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "@types/ts-nameof@npm:4.2.1"
+  checksum: 586c4bb8269193671b61c327ca7032b9581b67a1faf3b78d908c405aeae40324621bf9c1090da2bd00685569e30c52fcc7eb55f03d0112b38541effb6372c178
   languageName: node
   linkType: hard
 
@@ -3613,6 +3646,7 @@ __metadata:
     "@types/node": ^15.12.5
     "@types/semver": ^7.3.9
     "@types/source-map-support": ^0
+    "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.13.0
     "@typescript-eslint/parser": ^5.13.0
     "@zwave-js/config": "workspace:*"
@@ -3639,6 +3673,8 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     source-map-support: ^0.5.21
+    ts-nameof: ^5.0.0
+    ts-patch: ^2.0.1
     typescript: 4.6.2
     zwave-js: "workspace:*"
   languageName: unknown
@@ -3699,6 +3735,15 @@ __metadata:
     triple-beam: "*"
     typescript: 4.6.2
     winston-transport: ^4.5.0
+  languageName: unknown
+  linkType: soft
+
+"@zwave-js/transformers@workspace:*, @zwave-js/transformers@workspace:packages/transformers":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/transformers@workspace:packages/transformers"
+  dependencies:
+    tsutils: ^3.21.0
+    typescript: 4.6.2
   languageName: unknown
   linkType: soft
 
@@ -4437,6 +4482,16 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 036e973e665ba1a32c975e291d5f3d549bceeb7b1b983320d4598fb75d70fe20c5db5d62971ec0fe76cdbce83985a00ee42372416abfc3a5584465005a7855ed
+  languageName: node
+  linkType: hard
+
+"chalk@npm:^4.1.0":
+  version: 4.1.2
+  resolution: "chalk@npm:4.1.2"
+  dependencies:
+    ansi-styles: ^4.1.0
+    supports-color: ^7.1.0
+  checksum: fe75c9d5c76a7a98d45495b91b2172fa3b7a09e0cc9370e5c8feb1c567b85c4288e2b3fded7cfdd7359ac28d6b3844feb8b82b8686842e93d23c827c417e83fc
   languageName: node
   linkType: hard
 
@@ -6223,6 +6278,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"glob@npm:^7.0.0, glob@npm:^7.1.6, glob@npm:^7.1.7":
+  version: 7.2.0
+  resolution: "glob@npm:7.2.0"
+  dependencies:
+    fs.realpath: ^1.0.0
+    inflight: ^1.0.4
+    inherits: 2
+    minimatch: ^3.0.4
+    once: ^1.3.0
+    path-is-absolute: ^1.0.0
+  checksum: 78a8ea942331f08ed2e055cb5b9e40fe6f46f579d7fd3d694f3412fe5db23223d29b7fee1575440202e9a7ff9a72ab106a39fee39934c7bedafe5e5f8ae20134
+  languageName: node
+  linkType: hard
+
 "glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4":
   version: 7.1.7
   resolution: "glob@npm:7.1.7"
@@ -6267,6 +6336,17 @@ __metadata:
     is-windows: ^1.0.1
     which: ^1.2.14
   checksum: 061b43470fe498271bcd514e7746e8a8535032b17ab9570517014ae27d700ff0dca749f76bbde13ba384d185be4310d8ba5712cb0e74f7d54d59390db63dd9a0
+  languageName: node
+  linkType: hard
+
+"global-prefix@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "global-prefix@npm:3.0.0"
+  dependencies:
+    ini: ^1.3.5
+    kind-of: ^6.0.2
+    which: ^1.3.1
+  checksum: 8a82fc1d6f22c45484a4e34656cc91bf021a03e03213b0035098d605bfc612d7141f1e14a21097e8a0413b4884afd5b260df0b6a25605ce9d722e11f1df2881d
   languageName: node
   linkType: hard
 
@@ -6646,7 +6726,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ini@npm:^1.3.4":
+"ini@npm:^1.3.4, ini@npm:^1.3.5":
   version: 1.3.8
   resolution: "ini@npm:1.3.8"
   checksum: dfd98b0ca3a4fc1e323e38a6c8eb8936e31a97a918d3b377649ea15bdb15d481207a0dda1021efbd86b464cae29a0d33c1d7dcaf6c5672bee17fa849bc50a1b3
@@ -6671,6 +6751,13 @@ __metadata:
     strip-ansi: ^5.1.0
     through: ^2.3.6
   checksum: 175ad4cd1ebed493b231b240185f1da5afeace5f4e8811dfa83cf55dcae59c3255eaed990aa71871b0fd31aa9dc212f43c44c50ed04fb529364405e72f484d28
+  languageName: node
+  linkType: hard
+
+"interpret@npm:^1.0.0":
+  version: 1.4.0
+  resolution: "interpret@npm:1.4.0"
+  checksum: 2e5f51268b5941e4a17e4ef0575bc91ed0ab5f8515e3cf77486f7c14d13f3010df9c0959f37063dcc96e78d12dc6b0bb1b9e111cdfe69771f4656d2993d36155
   languageName: node
   linkType: hard
 
@@ -6701,6 +6788,15 @@ __metadata:
   dependencies:
     has: ^1.0.3
   checksum: c498902d4c4d0e8eba3a2e8293ccd442158cfe49a71d7cfad136ccf9902b6a41de34ddaa86cdc95c8b7c22f872e59572d8a5d994cbec04c8ecf27ffe75137119
+  languageName: node
+  linkType: hard
+
+"is-core-module@npm:^2.8.1":
+  version: 2.8.1
+  resolution: "is-core-module@npm:2.8.1"
+  dependencies:
+    has: ^1.0.3
+  checksum: 418b7bc10768a73c41c7ef497e293719604007f88934a6ffc5f7c78702791b8528102fb4c9e56d006d69361549b3d9519440214a74aefc7e0b79e5e4411d377f
   languageName: node
   linkType: hard
 
@@ -7663,7 +7759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kind-of@npm:^6.0.3":
+"kind-of@npm:^6.0.2, kind-of@npm:^6.0.3":
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
   checksum: 3ab01e7b1d440b22fe4c31f23d8d38b4d9b91d9f291df683476576493d5dfd2e03848a8b05813dd0c3f0e835bc63f433007ddeceb71f05cb25c45ae1b19c6d3b
@@ -8626,7 +8722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-parse@npm:^1.0.6":
+"path-parse@npm:^1.0.6, path-parse@npm:^1.0.7":
   version: 1.0.7
   resolution: "path-parse@npm:1.0.7"
   checksum: 49abf3d81115642938a8700ec580da6e830dde670be21893c62f4e10bd7dd4c3742ddc603fe24f898cba7eb0c6bc1777f8d9ac14185d34540c6d4d80cd9cae8a
@@ -8907,6 +9003,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rechoir@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "rechoir@npm:0.6.2"
+  dependencies:
+    resolve: ^1.1.6
+  checksum: fe76bf9c21875ac16e235defedd7cbd34f333c02a92546142b7911a0f7c7059d2e16f441fe6fb9ae203f459c05a31b2bcf26202896d89e390eda7514d5d2702b
+  languageName: node
+  linkType: hard
+
 "redent@npm:^3.0.0":
   version: 3.0.0
   resolution: "redent@npm:3.0.0"
@@ -9093,6 +9198,32 @@ __metadata:
     is-core-module: ^2.2.0
     path-parse: ^1.0.6
   checksum: 40cf70b2cde00ef57f99daf2dc63c6a56d6c14a1b7fc51735d06a6f0a3b97cb67b4fb7ef6c747b4e13a7baba83b0ef625d7c4ce92a483cd5af923c3b65fd16fe
+  languageName: node
+  linkType: hard
+
+"resolve@npm:^1.1.6":
+  version: 1.22.0
+  resolution: "resolve@npm:1.22.0"
+  dependencies:
+    is-core-module: ^2.8.1
+    path-parse: ^1.0.7
+    supports-preserve-symlinks-flag: ^1.0.0
+  bin:
+    resolve: bin/resolve
+  checksum: a2d14cc437b3a23996f8c7367eee5c7cf8149c586b07ca2ae00e96581ce59455555a1190be9aa92154785cf9f2042646c200d0e00e0bbd2b8a995a93a0ed3e4e
+  languageName: node
+  linkType: hard
+
+"resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>":
+  version: 1.22.0
+  resolution: "resolve@patch:resolve@npm%3A1.22.0#~builtin<compat/resolve>::version=1.22.0&hash=07638b"
+  dependencies:
+    is-core-module: ^2.8.1
+    path-parse: ^1.0.7
+    supports-preserve-symlinks-flag: ^1.0.0
+  bin:
+    resolve: bin/resolve
+  checksum: c79ecaea36c872ee4a79e3db0d3d4160b593f2ca16e031d8283735acd01715a203607e9ded3f91f68899c2937fa0d49390cddbe0fb2852629212f3cda283f4a7
   languageName: node
   linkType: hard
 
@@ -9306,6 +9437,19 @@ __metadata:
   version: 3.0.0
   resolution: "shebang-regex@npm:3.0.0"
   checksum: 1a2bcae50de99034fcd92ad4212d8e01eedf52c7ec7830eedcf886622804fe36884278f2be8be0ea5fde3fd1c23911643a4e0f726c8685b61871c8908af01222
+  languageName: node
+  linkType: hard
+
+"shelljs@npm:^0.8.4":
+  version: 0.8.5
+  resolution: "shelljs@npm:0.8.5"
+  dependencies:
+    glob: ^7.0.0
+    interpret: ^1.0.0
+    rechoir: ^0.6.2
+  bin:
+    shjs: bin/shjs
+  checksum: 7babc46f732a98f4c054ec1f048b55b9149b98aa2da32f6cf9844c434b43c6251efebd6eec120937bd0999e13811ebd45efe17410edb3ca938f82f9381302748
   languageName: node
   linkType: hard
 
@@ -9701,6 +9845,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"supports-preserve-symlinks-flag@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
+  checksum: 53b1e247e68e05db7b3808b99b892bd36fb096e6fba213a06da7fab22045e97597db425c724f2bbd6c99a3c295e1e73f3e4de78592289f38431049e1277ca0ae
+  languageName: node
+  linkType: hard
+
 "symbol-tree@npm:^3.2.4":
   version: 3.2.4
   resolution: "symbol-tree@npm:3.2.4"
@@ -9899,6 +10050,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ts-nameof@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "ts-nameof@npm:5.0.0"
+  dependencies:
+    "@ts-nameof/common": ^4.2.0
+    "@ts-nameof/transforms-ts": ^4.2.1
+    glob: ^7.1.6
+  peerDependencies:
+    typescript: "*"
+  checksum: bbbe5aeed2375d82865e04fdbca0ebe601536ce52c9b5aca75761cdb602c8c844ee7be929984a7f7ee4beeb5a328d066f56b7da829d523436cda518c3aeb4cfb
+  languageName: node
+  linkType: hard
+
 "ts-node@npm:^10.4.0":
   version: 10.4.0
   resolution: "ts-node@npm:10.4.0"
@@ -9932,6 +10096,25 @@ __metadata:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 3933ac0a937d33c45e04a6750fcdd3e765eb2897d1da1307cd97ac52af093bcfb632ec0453a75000a65c8b5b7bdb32b1077050a186dcc556e62657cb592e6d49
+  languageName: node
+  linkType: hard
+
+"ts-patch@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "ts-patch@npm:2.0.1"
+  dependencies:
+    chalk: ^4.1.0
+    glob: ^7.1.7
+    global-prefix: ^3.0.0
+    minimist: ^1.2.5
+    resolve: ^1.20.0
+    shelljs: ^0.8.4
+    strip-ansi: ^6.0.0
+  peerDependencies:
+    typescript: ">=4.0.0"
+  bin:
+    ts-patch: bin/cli.js
+  checksum: 0460cf3b79655ebac6909383af85675769dd8031464782b02b71900409f75a09df929abdfe903f1fd0c6f89afc8dfacea1cf80dfb5a527f53a7ad4c16d3ad790
   languageName: node
   linkType: hard
 
@@ -10324,7 +10507,7 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"which@npm:^1.2.14, which@npm:^1.2.9":
+"which@npm:^1.2.14, which@npm:^1.2.9, which@npm:^1.3.1":
   version: 1.3.1
   resolution: "which@npm:1.3.1"
   dependencies:
@@ -10597,6 +10780,7 @@ typescript@^4.4.3:
     "@zwave-js/serial": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
+    "@zwave-js/transformers": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     axios: ^0.26.0

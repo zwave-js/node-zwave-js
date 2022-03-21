@@ -7,10 +7,7 @@
 	},
 	"references": [
 		{
-			"path": "../core/tsconfig.build.json"
-		},
-		{
-			"path": "../shared/tsconfig.build.json"
+			"path": "../maintenance/tsconfig.build.json"
 		}
 	],
 	"include": ["src/**/*.ts"],

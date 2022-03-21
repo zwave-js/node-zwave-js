@@ -23,7 +23,7 @@
 
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": ["node", "jest", "jest-extended"],
+		"types": ["node", "jest", "jest-extended", "ts-nameof"],
 		"noErrorTruncation": true
 	},
 	"include": [

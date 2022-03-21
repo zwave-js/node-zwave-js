@@ -3,16 +3,17 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"lib": ["ES2020"],
-		"newLine": "lf"
+		"newLine": "lf",
+		"experimentalDecorators": true,
+		"paths": {
+			"@zwave-js/transformers": ["./src"]
+		}
 	},
 	"references": [
 		{
-			"path": "../core/tsconfig.build.json"
-		},
-		{
-			"path": "../shared/tsconfig.build.json"
+			"path": "../maintenance/tsconfig.build.json"
 		}
 	],
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "test/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }
