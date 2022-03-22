@@ -93,6 +93,8 @@
 			"#": "3",
 			"label": "Doorbell Duration",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"options": [
