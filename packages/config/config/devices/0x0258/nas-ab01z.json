@@ -63,9 +63,8 @@
 			"#": "2",
 			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
@@ -134,9 +133,8 @@
 			"#": "5",
 			"label": "Alarm Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 9,
+			"defaultValue": 10,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Doorbell",
@@ -184,9 +182,8 @@
 			"#": "6",
 			"label": "Doorbell Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 10,
+			"defaultValue": 9,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Doorbell",
