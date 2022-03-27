@@ -530,51 +530,6 @@ export function transformNode(
 				getValidateArgsOptions(validateArgsDecorator),
 			);
 		}
-		// } else if (ts.isCallExpression(node)) {
-		// 	// is(), createIs()
-		// 	const signature = visitorContext.checker.getResolvedSignature(node);
-		// 	if (
-		// 		signature !== undefined &&
-		// 		signature.declaration !== undefined &&
-		// 		VisitorUtils.getCanonicalPath(
-		// 			path.resolve(signature.declaration.getSourceFile().fileName),
-		// 			visitorContext,
-		// 		) ===
-		// 			path.resolve(path.join(__dirname, "../../build/index.d.ts")) &&
-		// 		node.typeArguments !== undefined &&
-		// 		node.typeArguments.length === 1
-		// 	) {
-		// 		// const name = visitorContext.checker.getTypeAtLocation(
-		// 		// 	signature.declaration,
-		// 		// ).symbol.name;
-		// 		const isAssert = false;
-		// 		// name === "assertType" || name === "createAssertType";
-		// 		const emitDetailedErrors =
-		// 			visitorContext.options.emitDetailedErrors === "auto"
-		// 				? isAssert
-		// 				: visitorContext.options.emitDetailedErrors;
-
-		// 		const typeArgument = node.typeArguments[0];
-		// 		const type =
-		// 			visitorContext.checker.getTypeFromTypeNode(typeArgument);
-		// 		const arrowFunction = createArrowFunction(
-		// 			type,
-		// 			extractVariableName(node.arguments[0]),
-		// 			false,
-		// 			{
-		// 				...visitorContext,
-		// 				options: {
-		// 					...visitorContext.options,
-		// 					emitDetailedErrors,
-		// 				},
-		// 			},
-		// 		);
-
-		// 		return ts.updateCall(node, node.expression, node.typeArguments, [
-		// 			...node.arguments,
-		// 			arrowFunction,
-		// 		]);
-		// 	}
 	} else if (
 		visitorContext.options.transformNonNullExpressions &&
 		ts.isNonNullExpression(node)

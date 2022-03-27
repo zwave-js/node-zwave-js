@@ -60,7 +60,8 @@ export default function transformer(
 			...visitorContext,
 			factory,
 			typeAssertions: new Map(),
-			fileName: file.fileName,
+			typeIdModuleMap: new Map(),
+			sourceFile: file,
 		};
 		file = transformNodeAndChildren(
 			file,

@@ -1,4 +1,3 @@
-import path from "path";
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
 import type { VisitorContext } from "./visitor-context";
@@ -104,16 +103,19 @@ function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const typeSourceFileName =
 		type.symbol.valueDeclaration?.getSourceFile().fileName;
 	let importPath: string | undefined;
-	if (typeSourceFileName && typeSourceFileName !== visitorContext.fileName) {
-		importPath = path
-			.relative(
-				path.dirname(visitorContext.fileName) + "/",
-				typeSourceFileName,
-			)
-			.replace(/\\/g, "/")
-			.replace(/\.ts$/, "");
-		if (!importPath.startsWith("./") && !importPath.startsWith("../")) {
-			importPath = `./${importPath}`;
+	if (
+		typeSourceFileName &&
+		typeSourceFileName !== visitorContext.sourceFile.fileName
+	) {
+		// We don't rely on the resolved path because the import specifier might refer to an absolute node_module
+		importPath = VisitorUtils.resolveModuleSpecifierForType(
+			type,
+			visitorContext,
+		);
+		if (!importPath) {
+			throw new Error(
+				`Failed to resolve module specifier for type ${identifier}`,
+			);
 		}
 	}
 
