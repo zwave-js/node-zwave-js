@@ -11,6 +11,7 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import { AllOrNone, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -142,8 +143,6 @@ export class BasicCCAPI extends CCAPI {
 		}
 	};
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
 	}): Promise<unknown> => {
@@ -179,6 +178,7 @@ export class BasicCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 

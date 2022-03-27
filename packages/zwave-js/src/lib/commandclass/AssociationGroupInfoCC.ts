@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -299,6 +300,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async getGroupName(groupId: number): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -318,6 +320,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		if (response) return response.name;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
 		this.assertSupportsCommand(
@@ -348,6 +351,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,

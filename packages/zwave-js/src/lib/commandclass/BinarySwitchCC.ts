@@ -12,6 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -89,13 +90,12 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
 	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 */
+	@validateArgs()
 	public async set(
 		targetValue: boolean,
 		duration?: Duration | string,

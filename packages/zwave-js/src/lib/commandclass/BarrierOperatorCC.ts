@@ -9,6 +9,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -146,6 +147,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		targetState: BarrierState.Open | BarrierState.Closed,
 	): Promise<void> {
@@ -162,6 +164,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getSignalingCapabilities(): Promise<
 		readonly SubsystemType[] | undefined
 	> {
@@ -182,6 +185,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.supportedSubsystemTypes;
 	}
 
+	@validateArgs()
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
 	): Promise<SubsystemState | undefined> {
@@ -203,6 +207,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.subsystemState;
 	}
 
+	@validateArgs()
 	public async setEventSignaling(
 		subsystemType: SubsystemType,
 		subsystemState: SubsystemState,
