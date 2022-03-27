@@ -9,8 +9,8 @@ describe("TypeScript transformers", () => {
 
 	beforeAll(async () => {
 		await execa("yarn", ["run", "pretest"], { cwd: __dirname });
-		const jsFiles = (await fs.readdir(fixturesDir)).filter((f) =>
-			f.endsWith(".js"),
+		const jsFiles = (await fs.readdir(fixturesDir)).filter(
+			(f) => f.startsWith("test") && f.endsWith(".js"),
 		);
 		files.push(...jsFiles);
 	}, 60000);

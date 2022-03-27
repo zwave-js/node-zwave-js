@@ -967,6 +967,10 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString("expected a non-primitive");
 		case "date":
 			return createAssertionString("expected a Date");
+		case "class":
+			return createAssertionString(
+				`expected instance of class '${reason.name}'`,
+			);
 		case "function":
 			return createAssertionString("expected a function");
 		case "template-literal":

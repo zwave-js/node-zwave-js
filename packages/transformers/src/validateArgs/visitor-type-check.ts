@@ -1,3 +1,4 @@
+import path from "path";
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
 import type { VisitorContext } from "./visitor-context";
@@ -88,6 +89,60 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 					f.createReturnStatement(f.createNull()),
 				),
 			]),
+		);
+	});
+}
+
+function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
+	const f = visitorContext.factory;
+	const name = VisitorTypeName.visitType(type, visitorContext, {
+		type: "type-check",
+	});
+	const identifier = type.symbol.getName();
+
+	// Figure out if something needs to be imported
+	const typeSourceFileName =
+		type.symbol.valueDeclaration?.getSourceFile().fileName;
+	let importPath: string | undefined;
+	if (typeSourceFileName && typeSourceFileName !== visitorContext.fileName) {
+		importPath = path
+			.relative(
+				path.dirname(visitorContext.fileName) + "/",
+				typeSourceFileName,
+			)
+			.replace(/\\/g, "/")
+			.replace(/\.ts$/, "");
+		if (!importPath.startsWith("./") && !importPath.startsWith("../")) {
+			importPath = `./${importPath}`;
+		}
+	}
+
+	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+		return VisitorUtils.createAssertionFunction(
+			// !(foo instanceof require("./bar").Foo)
+			f.createPrefixUnaryExpression(
+				ts.SyntaxKind.ExclamationToken,
+				f.createParenthesizedExpression(
+					f.createBinaryExpression(
+						VisitorUtils.objectIdentifier,
+						f.createToken(ts.SyntaxKind.InstanceOfKeyword),
+						// Create an import for classes in other files
+						importPath
+							? f.createPropertyAccessExpression(
+									f.createCallExpression(
+										f.createIdentifier("require"),
+										undefined,
+										[f.createStringLiteral(importPath)],
+									),
+									f.createIdentifier(identifier),
+							  )
+							: f.createIdentifier(identifier),
+					),
+				),
+			),
+			{ type: "class", name: identifier },
+			name,
+			visitorContext,
 		);
 	});
 }
@@ -595,12 +650,9 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		// Dates
 		if (VisitorUtils.checkIsDateClass(type)) {
 			return visitDateType(type, visitorContext);
+		} else {
+			return visitClassType(type, visitorContext);
 		}
-
-		// TODO: impement checks for supported classes
-
-		// Ignore all other classes
-		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	}
 	if (tsutils.isTupleType(type)) {
 		// Tuple with finite length.

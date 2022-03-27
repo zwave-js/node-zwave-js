@@ -60,6 +60,7 @@ export default function transformer(
 			...visitorContext,
 			factory,
 			typeAssertions: new Map(),
+			fileName: file.fileName,
 		};
 		file = transformNodeAndChildren(
 			file,
@@ -90,10 +91,10 @@ export default function transformer(
 			);
 		}
 
-		if (fileVisitorContext.typeAssertions.size > 0) {
-			// Add top-level declarations
-			const newStatements: ts.Statement[] = [];
+		// Add top-level declarations
+		const newStatements: ts.Statement[] = [];
 
+		if (fileVisitorContext.typeAssertions.size > 0) {
 			// Generic assert function used by all assertions
 			newStatements.push(createGenericAssertFunction(factory));
 			// And the individual "named" assertions
@@ -120,7 +121,9 @@ export default function transformer(
 					),
 				);
 			}
+		}
 
+		if (newStatements.length > 0) {
 			file = context.factory.updateSourceFile(
 				file,
 				[...newStatements, ...file.statements],
