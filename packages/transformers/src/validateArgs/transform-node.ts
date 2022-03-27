@@ -280,10 +280,13 @@ function transformDecoratedMethod(
 		}
 	}
 	body = f.updateBlock(body, [...newStatements, ...body.statements]);
+	const decorators = method.decorators?.filter(
+		(d) => d !== validateArgsDecorator,
+	);
 
 	return f.updateMethodDeclaration(
 		method,
-		method.decorators?.filter((d) => d !== validateArgsDecorator),
+		decorators && decorators.length > 0 ? decorators : undefined,
 		method.modifiers,
 		method.asteriskToken,
 		method.name,
