@@ -55,10 +55,11 @@ export function lintCCValidateArgs(): Promise<void> {
 				.find((cc) => cc != undefined);
 			if (!cc) return;
 
-			// Check all public method declarations that are not called supportsCommand
+			// Check all public method declarations with arguments that are not called supportsCommand
 			const methods = node.members
-				.filter((m): m is ts.MethodDeclaration =>
-					ts.isMethodDeclaration(m),
+				.filter(
+					(m): m is ts.MethodDeclaration =>
+						ts.isMethodDeclaration(m) && m.parameters.length > 0,
 				)
 				.filter(
 					(m) =>
