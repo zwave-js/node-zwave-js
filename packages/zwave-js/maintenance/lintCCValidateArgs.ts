@@ -64,7 +64,8 @@ export function lintCCValidateArgs(): Promise<void> {
 				.filter(
 					(m) =>
 						ts.isIdentifier(m.name) &&
-						m.name.text !== "supportsCommand",
+						m.name.text !== "supportsCommand" &&
+						m.name.text !== "isSetValueOptimistic",
 				)
 				.filter((m) =>
 					m.modifiers?.some(
