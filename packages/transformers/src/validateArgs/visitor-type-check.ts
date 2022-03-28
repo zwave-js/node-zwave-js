@@ -92,6 +92,31 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	});
 }
 
+function visitBufferType(type: ts.ObjectType, visitorContext: VisitorContext) {
+	const name = VisitorTypeName.visitType(type, visitorContext, {
+		type: "type-check",
+	});
+	const f = visitorContext.factory;
+	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+		return VisitorUtils.createAssertionFunction(
+			f.createPrefixUnaryExpression(
+				ts.SyntaxKind.ExclamationToken,
+				f.createCallExpression(
+					f.createPropertyAccessExpression(
+						f.createIdentifier("Buffer"),
+						f.createIdentifier("isBuffer"),
+					),
+					undefined,
+					[VisitorUtils.objectIdentifier],
+				),
+			),
+			{ type: "buffer" },
+			name,
+			visitorContext,
+		);
+	});
+}
+
 function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
 	const f = visitorContext.factory;
 	const name = VisitorTypeName.visitType(type, visitorContext, {
@@ -652,6 +677,8 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		// Dates
 		if (VisitorUtils.checkIsDateClass(type)) {
 			return visitDateType(type, visitorContext);
+		} else if (VisitorUtils.checkIsNodeBuffer(type)) {
+			return visitBufferType(type, visitorContext);
 		} else {
 			return visitClassType(type, visitorContext);
 		}

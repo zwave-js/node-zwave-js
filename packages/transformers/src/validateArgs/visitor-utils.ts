@@ -63,9 +63,22 @@ export function checkIsDateClass(type: ts.ObjectType): boolean {
 		type.symbol !== undefined &&
 		type.symbol.valueDeclaration !== undefined &&
 		type.symbol.escapedName === "Date" &&
-		(ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ts.ModifierFlags.Ambient) !==
-			0
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
+	);
+}
+
+export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
+	return (
+		type.symbol !== undefined &&
+		type.symbol.valueDeclaration !== undefined &&
+		type.symbol.escapedName === "Buffer" &&
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
 	);
 }
 
@@ -971,6 +984,8 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString("expected a non-primitive");
 		case "date":
 			return createAssertionString("expected a Date");
+		case "buffer":
+			return createAssertionString("expected a Buffer");
 		case "class":
 			return createAssertionString(
 				`expected instance of class '${reason.name}'`,
