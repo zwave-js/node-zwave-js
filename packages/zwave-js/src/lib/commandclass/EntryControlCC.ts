@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { buffer2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -204,6 +205,7 @@ export class EntryControlCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async setConfiguration(
 		keyCacheSize: number,

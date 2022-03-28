@@ -15,6 +15,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -245,8 +246,6 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(
@@ -278,6 +277,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(mode: DoorLockMode): Promise<void> {
 		this.assertSupportsCommand(
 			DoorLockCommand,
@@ -292,6 +292,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async setConfiguration(
 		configuration: DoorLockCCConfigurationSetOptions,
 	): Promise<void> {

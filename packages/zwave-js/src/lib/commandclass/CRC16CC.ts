@@ -1,5 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
 import {
@@ -32,6 +33,7 @@ export class CRC16CCAPI extends CCAPI {
 		// return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async sendEncapsulated(encapsulatedCC: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			CRC16Command,

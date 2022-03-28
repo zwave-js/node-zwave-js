@@ -8,6 +8,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -174,6 +175,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Retrieves the specified audit record. Defaults to the latest one. */
+	@validateArgs()
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 	): Promise<DoorLockLoggingRecord | undefined> {

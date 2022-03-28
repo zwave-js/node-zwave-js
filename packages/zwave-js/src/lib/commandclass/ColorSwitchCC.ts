@@ -12,6 +12,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -205,6 +206,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return response?.supportedColorComponents;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(component: ColorComponent) {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
@@ -223,6 +225,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(options: ColorSwitchCCSetOptions): Promise<void> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
@@ -325,6 +328,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async startLevelChange(
 		options: ColorSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
@@ -342,6 +346,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async stopLevelChange(
 		colorComponent: ColorComponent,
 	): Promise<void> {
