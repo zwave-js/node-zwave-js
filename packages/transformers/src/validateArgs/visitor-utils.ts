@@ -82,6 +82,18 @@ export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
 	);
 }
 
+export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
+	return (
+		type.symbol !== undefined &&
+		type.symbol.valueDeclaration !== undefined &&
+		["Set", "Map"].includes(type.symbol.name) &&
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
+	);
+}
+
 export function setFunctionIfNotExists(
 	name: string,
 	visitorContext: VisitorContext,

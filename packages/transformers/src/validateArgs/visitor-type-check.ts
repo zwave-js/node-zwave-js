@@ -679,6 +679,9 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 			return visitDateType(type, visitorContext);
 		} else if (VisitorUtils.checkIsNodeBuffer(type)) {
 			return visitBufferType(type, visitorContext);
+		} else if (VisitorUtils.checkIsIgnoredIntrinsic(type)) {
+			// This is an intrinsic type we can't check properly, so we just ignore it.
+			return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 		} else {
 			return visitClassType(type, visitorContext);
 		}

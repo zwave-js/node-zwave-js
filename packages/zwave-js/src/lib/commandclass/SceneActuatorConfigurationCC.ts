@@ -253,7 +253,6 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	// TODO: @validateArgs() - Pick<...> not supported
 	public async getActive(): Promise<
 		| Pick<
 				SceneActuatorConfigurationCCReport,

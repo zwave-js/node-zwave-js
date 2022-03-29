@@ -189,7 +189,13 @@ function transformDecoratedMethod(
 	visitorContext: FileSpecificVisitorContext,
 	options?: ValidateArgsOptions,
 ) {
-	// Remove the decorator and TODO: prepend its body with the validation code
+	if (
+		method.name.getText(visitorContext.sourceFile) === "set" &&
+		visitorContext.sourceFile.fileName.includes("UserCodeCC")
+	) {
+		debugger;
+	}
+	// Remove the decorator and prepend its body with the validation code
 	const f = visitorContext.factory;
 
 	let body = method.body ?? f.createBlock([], true);
@@ -210,34 +216,45 @@ function transformDecoratedMethod(
 			case ts.SyntaxKind.BooleanKeyword:
 			case ts.SyntaxKind.BigIntKeyword:
 			case ts.SyntaxKind.TypeReference:
-				// This is a type with an "easy" name we can factor out of the method body
+				const hasTypeArguments =
+					ts.isTypeReferenceNode(param.type) &&
+					param.type.typeArguments;
 
-				// Disable strict value checks for numeric enums
-				const isNumericEnum =
-					!!(type.flags & ts.TypeFlags.EnumLiteral) &&
-					type.isUnion() &&
-					type.types.every((t) => t.isNumberLiteral());
-				if (isNumericEnum && !options?.strictEnums) {
-					// Fake the number type
-					type = { flags: ts.TypeFlags.Number } as ts.Type;
-					publicTypeName = param.type.getText();
-					typeName = "number";
-				} else {
-					publicTypeName = typeName = param.type.getText();
+				if (!hasTypeArguments) {
+					// This is a type with an "easy" name we can factor out of the method body
+
+					// Disable strict value checks for numeric enums
+					const isNumericEnum =
+						!!(type.flags & ts.TypeFlags.EnumLiteral) &&
+						type.isUnion() &&
+						type.types.every((t) => t.isNumberLiteral());
+					if (isNumericEnum && !options?.strictEnums) {
+						// Fake the number type
+						type = { flags: ts.TypeFlags.Number } as ts.Type;
+						publicTypeName = param.type.getText();
+						typeName = "number";
+					} else {
+						publicTypeName = typeName = param.type.getText();
+					}
+
+					if (optional) {
+						publicTypeName = `(optional) ${publicTypeName}`;
+						typeName = `optional_${typeName}`;
+					}
+
+					arrowFunction = createArrowFunction(
+						type,
+						typeName,
+						optional,
+						{
+							...visitorContext,
+							options: {
+								...visitorContext.options,
+								emitDetailedErrors: false,
+							},
+						},
+					);
 				}
-
-				if (optional) {
-					publicTypeName = `(optional) ${publicTypeName}`;
-					typeName = `optional_${typeName}`;
-				}
-
-				arrowFunction = createArrowFunction(type, typeName, optional, {
-					...visitorContext,
-					options: {
-						...visitorContext.options,
-						emitDetailedErrors: false,
-					},
-				});
 
 			// Fall through
 

@@ -603,7 +603,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets a new value for a given config parameter of the device.
 	 */
-	// TODO: @validateArgs() - Set isn't supported yet
+	@validateArgs({ strictEnums: true })
 	public async set(
 		...args:
 			| [
@@ -666,7 +666,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
 	 */
-	// TODO: @validateArgs() - Set isn't supported yet
+	@validateArgs({ strictEnums: true })
 	public async setBulk(
 		values: ConfigurationCCAPISetOptions[],
 	): Promise<void> {

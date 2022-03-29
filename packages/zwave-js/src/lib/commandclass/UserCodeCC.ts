@@ -545,7 +545,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Configures a single user code */
-	// TODO: @validateArgs() - Exclude<...> not supported
+	@validateArgs()
 	public async set(
 		userId: number,
 		userIdStatus: Exclude<

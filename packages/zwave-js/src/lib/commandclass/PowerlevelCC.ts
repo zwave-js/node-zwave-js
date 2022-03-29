@@ -156,7 +156,6 @@ export class PowerlevelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	// TODO: @validateArgs() - Pick<...> not supported yet
 	public async getNodeTestStatus(): Promise<
 		| Pick<
 				PowerlevelCCTestNodeReport,
