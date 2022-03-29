@@ -138,6 +138,7 @@ export function lintCCValidateArgs(): Promise<void> {
 								)} decorator on the ${blue(
 									(method.name as ts.Identifier).text,
 								)} method.
+Public CC API methods should have argument validation to catch user errors.
 If this is a false-positive, consider suppressing this error with a ${green(
 									"// @noValidateArgs",
 								)} comment before the method implementation.`,
