@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -98,6 +99,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		setbackType: SetbackType,
 		setbackState: SetbackState,

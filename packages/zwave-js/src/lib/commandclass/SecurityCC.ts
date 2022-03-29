@@ -87,6 +87,7 @@ const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
 
+// @noValidateArgs
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
 	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {

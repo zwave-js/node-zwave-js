@@ -16,6 +16,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -234,6 +235,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		local: LocalProtectionState,
 		rf?: RFProtectionState,
@@ -293,6 +295,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.exclusiveControlNodeId;
 	}
 
+	@validateArgs()
 	public async setExclusiveControl(nodeId: number): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
@@ -325,6 +328,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.timeout;
 	}
 
+	@validateArgs()
 	public async setTimeout(timeout: Timeout): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,

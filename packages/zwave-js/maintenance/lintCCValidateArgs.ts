@@ -13,6 +13,23 @@ import { blue, green } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
 
+function hasNoValidateArgsComment(
+	node: ts.Node,
+	sourceFile: ts.SourceFile,
+): boolean {
+	return (
+		ts
+			.getLeadingCommentRanges(
+				sourceFile.getFullText(),
+				node.getFullStart(),
+			)
+			?.some((r) => {
+				const text = sourceFile.getFullText().slice(r.pos, r.end);
+				return text.includes("@noValidateArgs");
+			}) ?? false
+	);
+}
+
 export function lintCCValidateArgs(): Promise<void> {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
@@ -41,9 +58,11 @@ export function lintCCValidateArgs(): Promise<void> {
 
 		// Visit each CC API class and see if it overwrites determineRequiredCCInterviews
 		ts.forEachChild(sourceFile, (node) => {
-			// Only look at class decorations that are annotated with @API
+			// Only look at class decorations that are annotated with @API and don't have a // @noValidateArgs comment
 			if (!ts.isClassDeclaration(node)) return;
 			if (!node.decorators) return;
+			if (hasNoValidateArgsComment(node, sourceFile)) return;
+
 			const cc = node.decorators
 				.filter(
 					(d) =>
@@ -59,7 +78,10 @@ export function lintCCValidateArgs(): Promise<void> {
 			const methods = node.members
 				.filter(
 					(m): m is ts.MethodDeclaration =>
-						ts.isMethodDeclaration(m) && m.parameters.length > 0,
+						ts.isMethodDeclaration(m) &&
+						// Ignore overload declarations
+						!!m.body &&
+						m.parameters.length > 0,
 				)
 				.filter(
 					(m) =>
@@ -95,18 +117,7 @@ export function lintCCValidateArgs(): Promise<void> {
 						});
 					};
 
-					const hasNoValidateArgsComment = ts
-						.getLeadingCommentRanges(
-							sourceFile.getFullText(),
-							method.getFullStart(),
-						)
-						?.some((r) => {
-							const text = sourceFile
-								.getFullText()
-								.slice(r.pos, r.end);
-							return text.includes("@noValidateArgs");
-						});
-					if (hasNoValidateArgsComment) {
+					if (hasNoValidateArgsComment(method, sourceFile)) {
 						// ignored
 						return;
 					} else {

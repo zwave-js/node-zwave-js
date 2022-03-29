@@ -246,7 +246,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.members;
 	}
 
-	// TODO: @validateArgs() - Omit<...> isn't supported yet
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulated(
 		options: Omit<
 			MultiChannelCCCommandEncapsulationOptions,
@@ -285,7 +286,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.endpointCount;
 	}
 
-	@validateArgs()
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,

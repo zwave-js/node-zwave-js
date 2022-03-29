@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -243,6 +244,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async disable(groupId: number): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -252,6 +254,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		return this.set(groupId, 0, new Duration(0, "seconds"));
 	}
 
+	@validateArgs()
 	public async set(
 		groupId: number,
 		sceneId: number,
@@ -273,6 +276,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	// TODO: @validateArgs() - Pick<...> not supported
 	public async getLastActivated(): Promise<
 		| Pick<
 				SceneControllerConfigurationCCReport,
@@ -304,6 +308,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async get(
 		groupId: number,
 	): Promise<
