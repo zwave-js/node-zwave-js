@@ -2,9 +2,10 @@
  * This scripts checks which CCs have `toLogEntry` implemented
  */
 
-import { getCCName } from "@zwave-js/core";
+import { CommandClasses, getCCName } from "@zwave-js/core";
 import {
 	getCommandClassFromDecorator,
+	hasComment,
 	loadTSConfig,
 	projectRoot,
 	reportProblem,
@@ -17,16 +18,18 @@ function hasNoValidateArgsComment(
 	node: ts.Node,
 	sourceFile: ts.SourceFile,
 ): boolean {
-	return (
-		ts
-			.getLeadingCommentRanges(
-				sourceFile.getFullText(),
-				node.getFullStart(),
-			)
-			?.some((r) => {
-				const text = sourceFile.getFullText().slice(r.pos, r.end);
-				return text.includes("@noValidateArgs");
-			}) ?? false
+	return hasComment(sourceFile, node, (text) =>
+		text.includes("@noValidateArgs"),
+	);
+}
+
+function hasInternalJsDoc(node: ts.Node, sourceFile: ts.SourceFile): boolean {
+	return hasComment(
+		sourceFile,
+		node,
+		(text, kind) =>
+			text.includes("@internal") &&
+			kind === ts.SyntaxKind.MultiLineCommentTrivia,
 	);
 }
 
@@ -74,6 +77,8 @@ export function lintCCValidateArgs(): Promise<void> {
 				.find((cc) => cc != undefined);
 			if (!cc) return;
 
+			if (cc === CommandClasses.Notification) debugger;
+
 			// Check all public method declarations with arguments that are not called supportsCommand
 			const methods = node.members
 				.filter(
@@ -93,7 +98,9 @@ export function lintCCValidateArgs(): Promise<void> {
 					m.modifiers?.some(
 						(mod) => mod.kind === ts.SyntaxKind.PublicKeyword,
 					),
-				);
+				)
+				// Ignore methods marked with @internal
+				.filter((m) => !hasInternalJsDoc(m, sourceFile));
 
 			if (methods.length === 0) {
 				// ignore empty classes

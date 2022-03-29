@@ -74,7 +74,7 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 				f.createIfStatement(
 					f.createLogicalNot(
 						f.createBinaryExpression(
-							f.createIdentifier("object"),
+							VisitorUtils.objectIdentifier,
 							f.createToken(ts.SyntaxKind.InstanceOfKeyword),
 							f.createIdentifier("nativeDateObject"),
 						),
