@@ -61,7 +61,8 @@ export interface ValidateArgsOptions {
 export function validateArgs(options?: ValidateArgsOptions): PropertyDecorator {
 	return (target: unknown, property: string | number | symbol) => {
 		// this is a no-op that gets replaced during the build process using the transformer below
-		// Throw an error when this doesn't get transformed
+		if (process.env.NODE_ENV === "test") return;
+		// Throw an error at runtime when this didn't get transformed
 		throw new Error(
 			"validateArgs is a compile-time decorator and must be compiled with a transformer",
 		);
