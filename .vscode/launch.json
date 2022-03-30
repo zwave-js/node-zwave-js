@@ -14,7 +14,7 @@
 				"node",
 				"--async-stack-traces",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
@@ -37,7 +37,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -72,7 +72,7 @@
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
 			],
