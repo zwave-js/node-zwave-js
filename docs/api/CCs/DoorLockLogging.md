@@ -13,6 +13,7 @@ async getRecordsCount(): Promise<number | undefined>;
 ### `getRecord`
 
 ```ts
+@validateArgs()
 async getRecord(
 	recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 ): Promise<DoorLockLoggingRecord | undefined>;

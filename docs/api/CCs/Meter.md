@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(options?: MeterCCGetOptions): Promise<Pick<MeterCCReport, "type" | "scale" | "value" | "previousValue" | "rateType" | "deltaTime"> | undefined>;
 ```
 
@@ -25,5 +26,6 @@ async getSupported(): Promise<Pick<MeterCCSupportedReport, "type" | "supportsRes
 ### `reset`
 
 ```ts
+@validateArgs()
 async reset(options: MeterCCResetOptions): Promise<void>;
 ```

@@ -13,6 +13,7 @@ async get(): Promise<Pick<VersionCCReport, "libraryType" | "protocolVersion" | "
 ### `getCCVersion`
 
 ```ts
+@validateArgs()
 async getCCVersion(
 	requestedCC: CommandClasses,
 ): Promise<number | undefined>;

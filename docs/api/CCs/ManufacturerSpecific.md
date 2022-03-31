@@ -13,6 +13,7 @@ async get(): Promise<Pick<ManufacturerSpecificCCReport, "manufacturerId" | "prod
 ### `deviceSpecificGet`
 
 ```ts
+@validateArgs()
 async deviceSpecificGet(
 	deviceIdType: DeviceIdType,
 ): Promise<string | undefined>;

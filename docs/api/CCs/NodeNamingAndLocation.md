@@ -13,6 +13,7 @@ async getName(): Promise<string | undefined>;
 ### `setName`
 
 ```ts
+@validateArgs()
 async setName(name: string): Promise<void>;
 ```
 
@@ -25,5 +26,6 @@ async getLocation(): Promise<string | undefined>;
 ### `setLocation`
 
 ```ts
+@validateArgs()
 async setLocation(location: string): Promise<void>;
 ```

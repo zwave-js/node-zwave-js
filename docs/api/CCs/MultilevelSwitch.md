@@ -13,6 +13,7 @@ async get(): Promise<Pick<MultilevelSwitchCCReport, "currentValue" | "targetValu
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	targetValue: number,
 	duration?: Duration | string,
@@ -29,6 +30,7 @@ Sets the switch to a new value.
 ### `startLevelChange`
 
 ```ts
+@validateArgs()
 async startLevelChange(
 	options: MultilevelSwitchCCStartLevelChangeOptions,
 ): Promise<void>;

@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	parameter: number,
 	options?: {
@@ -24,6 +25,7 @@ is thrown with the `argument` property set to the reported parameter number.
 ### `getBulk`
 
 ```ts
+@validateArgs()
 async getBulk(
 	options: {
 		parameter: number;
@@ -59,6 +61,7 @@ Sets a new value for a given config parameter of the device.
 ### `setBulk`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async setBulk(
 	values: ConfigurationCCAPISetOptions[],
 ): Promise<void>;
@@ -69,6 +72,7 @@ Sets new values for multiple config parameters of the device. Uses the `BulkSet`
 ### `reset`
 
 ```ts
+@validateArgs()
 async reset(parameter: number): Promise<void>;
 ```
 
@@ -79,6 +83,7 @@ WARNING: This will throw on legacy devices (ConfigurationCC v3 and below).
 ### `resetBulk`
 
 ```ts
+@validateArgs()
 async resetBulk(parameters: number[]): Promise<void>;
 ```
 
@@ -97,12 +102,14 @@ Resets all configuration parameters to their default value.
 ### `getProperties`
 
 ```ts
+@validateArgs()
 async getProperties(parameter: number): Promise<Pick<ConfigurationCCPropertiesReport, "valueSize" | "valueFormat" | "minValue" | "maxValue" | "defaultValue" | "nextParameter" | "altersCapabilities" | "isReadonly" | "isAdvanced" | "noBulkSupport"> | undefined>;
 ```
 
 ### `getName`
 
 ```ts
+@validateArgs()
 async getName(parameter: number): Promise<string | undefined>;
 ```
 
@@ -111,6 +118,7 @@ Requests the name of a configuration parameter from the node.
 ### `getInfo`
 
 ```ts
+@validateArgs()
 async getInfo(parameter: number): Promise<string | undefined>;
 ```
 

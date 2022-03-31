@@ -13,6 +13,7 @@ async get(): Promise<Pick<BarrierOperatorCCReport, "currentState" | "position"> 
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	targetState: BarrierState.Open | BarrierState.Closed,
 ): Promise<void>;
@@ -21,6 +22,7 @@ async set(
 ### `getSignalingCapabilities`
 
 ```ts
+@validateArgs()
 async getSignalingCapabilities(): Promise<
 	readonly SubsystemType[] | undefined
 >;
@@ -29,6 +31,7 @@ async getSignalingCapabilities(): Promise<
 ### `getEventSignaling`
 
 ```ts
+@validateArgs()
 async getEventSignaling(
 	subsystemType: SubsystemType,
 ): Promise<SubsystemState | undefined>;
@@ -37,6 +40,7 @@ async getEventSignaling(
 ### `setEventSignaling`
 
 ```ts
+@validateArgs()
 async setEventSignaling(
 	subsystemType: SubsystemType,
 	subsystemState: SubsystemState,

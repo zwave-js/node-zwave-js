@@ -7,12 +7,14 @@
 ### `get`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async get(setpointType: ThermostatSetpointType): Promise<{ value: number; scale: Scale; } | undefined>;
 ```
 
 ### `set`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async set(
 	setpointType: ThermostatSetpointType,
 	value: number,
@@ -23,6 +25,7 @@ async set(
 ### `getCapabilities`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async getCapabilities(setpointType: ThermostatSetpointType): Promise<Pick<ThermostatSetpointCCCapabilitiesReport, "minValue" | "maxValue" | "minValueScale" | "maxValueScale"> | undefined>;
 ```
 

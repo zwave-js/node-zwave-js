@@ -13,6 +13,7 @@ async setNormalPowerlevel(): Promise<void>;
 ### `setCustomPowerlevel`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async setCustomPowerlevel(
 	powerlevel: Powerlevel,
 	timeout: number,
@@ -30,6 +31,7 @@ async getPowerlevel(): Promise<
 ### `startNodeTest`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async startNodeTest(
 	testNodeId: number,
 	powerlevel: Powerlevel,

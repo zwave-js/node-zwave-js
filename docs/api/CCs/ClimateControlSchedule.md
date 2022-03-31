@@ -7,6 +7,7 @@
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	weekday: Weekday,
 	switchPoints: Switchpoint[],
@@ -16,6 +17,7 @@ async set(
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	weekday: Weekday,
 ): Promise<readonly Switchpoint[] | undefined>;
@@ -36,6 +38,7 @@ async getOverride(): Promise<{ type: ScheduleOverrideType; state: SetbackState; 
 ### `setOverride`
 
 ```ts
+@validateArgs()
 async setOverride(
 	type: ScheduleOverrideType,
 	state: SetbackState,

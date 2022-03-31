@@ -13,6 +13,7 @@ async get(): Promise<Pick<ThermostatSetbackCCReport, "setbackType" | "setbackSta
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	setbackType: SetbackType,
 	setbackState: SetbackState,

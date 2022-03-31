@@ -7,6 +7,7 @@
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	sceneId: number,
 	dimmingDuration?: Duration | string,

@@ -13,6 +13,7 @@ async get(): Promise<Pick<ProtectionCCReport, "local" | "rf"> | undefined>;
 ### `set`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async set(
 	local: LocalProtectionState,
 	rf?: RFProtectionState,
@@ -34,6 +35,7 @@ async getExclusiveControl(): Promise<number | undefined>;
 ### `setExclusiveControl`
 
 ```ts
+@validateArgs()
 async setExclusiveControl(nodeId: number): Promise<void>;
 ```
 
@@ -46,5 +48,6 @@ async getTimeout(): Promise<Timeout | undefined>;
 ### `setTimeout`
 
 ```ts
+@validateArgs()
 async setTimeout(timeout: Timeout): Promise<void>;
 ```

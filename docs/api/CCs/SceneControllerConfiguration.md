@@ -7,12 +7,14 @@
 ### `disable`
 
 ```ts
+@validateArgs()
 async disable(groupId: number): Promise<void>;
 ```
 
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	groupId: number,
 	sceneId: number,
@@ -35,6 +37,7 @@ async getLastActivated(): Promise<
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	groupId: number,
 ): Promise<

@@ -13,6 +13,7 @@ async getEndpoints(): Promise<{ isDynamicEndpointCount: boolean; identicalCapabi
 ### `getEndpointCapabilities`
 
 ```ts
+@validateArgs()
 async getEndpointCapabilities(
 	endpoint: number,
 ): Promise<EndpointCapability | undefined>;
@@ -21,6 +22,7 @@ async getEndpointCapabilities(
 ### `findEndpoints`
 
 ```ts
+@validateArgs()
 async findEndpoints(
 	genericClass: number,
 	specificClass: number,
@@ -30,6 +32,7 @@ async findEndpoints(
 ### `getAggregatedMembers`
 
 ```ts
+@validateArgs()
 async getAggregatedMembers(
 	endpoint: number,
 ): Promise<readonly number[] | undefined>;
@@ -49,6 +52,7 @@ async sendEncapsulated(
 ### `getEndpointCountV1`
 
 ```ts
+@validateArgs()
 async getEndpointCountV1(
 	ccId: CommandClasses,
 ): Promise<number | undefined>;

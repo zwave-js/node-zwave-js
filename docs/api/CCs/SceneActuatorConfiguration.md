@@ -7,6 +7,7 @@
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	sceneId: number,
 	dimmingDuration?: Duration,
@@ -29,6 +30,7 @@ async getActive(): Promise<
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	sceneId: number,
 ): Promise<

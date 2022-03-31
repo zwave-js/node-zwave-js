@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	setpointType: HumidityControlSetpointType,
 ): Promise<HumidityControlSetpointValue | undefined>;
@@ -15,6 +16,7 @@ async get(
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	setpointType: HumidityControlSetpointType,
 	value: number,
@@ -25,6 +27,7 @@ async set(
 ### `getCapabilities`
 
 ```ts
+@validateArgs()
 async getCapabilities(
 	setpointType: HumidityControlSetpointType,
 ): Promise<HumidityControlSetpointCapabilities | undefined>;
@@ -41,6 +44,7 @@ async getSupportedSetpointTypes(): Promise<
 ### `getSupportedScales`
 
 ```ts
+@validateArgs()
 async getSupportedScales(
 	setpointType: HumidityControlSetpointType,
 ): Promise<readonly Scale[] | undefined>;

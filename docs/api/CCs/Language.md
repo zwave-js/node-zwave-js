@@ -13,5 +13,6 @@ async get(): Promise<Pick<LanguageCCReport, "language" | "country"> | undefined>
 ### `set`
 
 ```ts
+@validateArgs()
 async set(language: string, country?: string): Promise<void>;
 ```

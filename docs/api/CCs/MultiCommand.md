@@ -7,5 +7,6 @@
 ### `send`
 
 ```ts
+@validateArgs()
 async send(commands: CommandClass[]): Promise<void>;
 ```

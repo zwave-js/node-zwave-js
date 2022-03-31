@@ -19,5 +19,6 @@ async getConfiguration(): Promise<Pick<CentralSceneCCConfigurationReport, "slowR
 ### `setConfiguration`
 
 ```ts
+@validateArgs()
 async setConfiguration(slowRefresh: boolean): Promise<void>;
 ```

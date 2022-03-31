@@ -13,12 +13,14 @@ async getToneCount(): Promise<number | undefined>;
 ### `getToneInfo`
 
 ```ts
+@validateArgs()
 async getToneInfo(toneId: number): Promise<Pick<SoundSwitchCCToneInfoReport, "duration" | "name"> | undefined>;
 ```
 
 ### `setConfiguration`
 
 ```ts
+@validateArgs()
 async setConfiguration(
 	defaultToneId: number,
 	defaultVolume: number,
@@ -34,6 +36,7 @@ async getConfiguration(): Promise<Pick<SoundSwitchCCConfigurationReport, "defaul
 ### `play`
 
 ```ts
+@validateArgs()
 async play(toneId: number, volume?: number): Promise<void>;
 ```
 

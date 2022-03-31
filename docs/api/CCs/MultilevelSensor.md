@@ -32,6 +32,7 @@ async getSupportedSensorTypes(): Promise<
 ### `getSupportedScales`
 
 ```ts
+@validateArgs()
 async getSupportedScales(
 	sensorType: number,
 ): Promise<readonly number[] | undefined>;
@@ -40,6 +41,7 @@ async getSupportedScales(
 ### `sendReport`
 
 ```ts
+@validateArgs()
 async sendReport(
 	sensorType: number,
 	scale: number | Scale,

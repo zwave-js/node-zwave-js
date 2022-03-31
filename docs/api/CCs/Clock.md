@@ -13,6 +13,7 @@ async get(): Promise<Pick<ClockCCReport, "weekday" | "hour" | "minute"> | undefi
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	hour: number,
 	minute: number,

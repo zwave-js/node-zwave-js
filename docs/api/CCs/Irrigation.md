@@ -25,6 +25,7 @@ async getSystemConfig(): Promise<Pick<IrrigationCCSystemConfigReport, "masterVal
 ### `setSystemConfig`
 
 ```ts
+@validateArgs()
 async setSystemConfig(
 	config: IrrigationCCSystemConfigSetOptions,
 ): Promise<void>;
@@ -33,12 +34,14 @@ async setSystemConfig(
 ### `getValveInfo`
 
 ```ts
+@validateArgs()
 async getValveInfo(valveId: ValveId): Promise<Pick<IrrigationCCValveInfoReport, "connected" | "nominalCurrent" | "errorShortCircuit" | "errorHighCurrent" | "errorLowCurrent" | "errorMaximumFlow" | "errorHighFlow" | "errorLowFlow"> | undefined>;
 ```
 
 ### `setValveConfig`
 
 ```ts
+@validateArgs()
 async setValveConfig(
 	options: IrrigationCCValveConfigSetOptions,
 ): Promise<void>;
@@ -47,24 +50,28 @@ async setValveConfig(
 ### `getValveConfig`
 
 ```ts
+@validateArgs()
 async getValveConfig(valveId: ValveId): Promise<Pick<IrrigationCCValveConfigReport, "nominalCurrentHighThreshold" | "nominalCurrentLowThreshold" | "maximumFlow" | "highFlowThreshold" | "lowFlowThreshold" | "useRainSensor" | "useMoistureSensor"> | undefined>;
 ```
 
 ### `runValve`
 
 ```ts
+@validateArgs()
 async runValve(valveId: ValveId, duration: number): Promise<void>;
 ```
 
 ### `shutoffValve`
 
 ```ts
+@validateArgs()
 shutoffValve(valveId: ValveId): Promise<void>;
 ```
 
 ### `setValveTable`
 
 ```ts
+@validateArgs()
 async setValveTable(
 	tableId: number,
 	entries: ValveTableEntry[],
@@ -74,6 +81,7 @@ async setValveTable(
 ### `getValveTable`
 
 ```ts
+@validateArgs()
 async getValveTable(
 	tableId: number,
 ): Promise<ValveTableEntry[] | undefined>;
@@ -82,12 +90,14 @@ async getValveTable(
 ### `runTables`
 
 ```ts
+@validateArgs()
 async runTables(tableIDs: number[]): Promise<void>;
 ```
 
 ### `shutoffSystem`
 
 ```ts
+@validateArgs()
 async shutoffSystem(duration: number): Promise<void>;
 ```
 

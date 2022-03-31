@@ -19,12 +19,14 @@ async get(): Promise<Pick<DoorLockCCOperationReport, "currentMode" | "targetMode
 ### `set`
 
 ```ts
+@validateArgs()
 async set(mode: DoorLockMode): Promise<void>;
 ```
 
 ### `setConfiguration`
 
 ```ts
+@validateArgs()
 async setConfiguration(
 	configuration: DoorLockCCConfigurationSetOptions,
 ): Promise<void>;

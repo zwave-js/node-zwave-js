@@ -13,5 +13,6 @@ async get(): Promise<Date | undefined>;
 ### `set`
 
 ```ts
+@validateArgs()
 async set(dateAndTime: Date): Promise<void>;
 ```

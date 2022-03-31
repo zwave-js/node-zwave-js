@@ -15,6 +15,7 @@ Requests information about the current firmware on the device.
 ### `requestUpdate`
 
 ```ts
+@validateArgs()
 async requestUpdate(
 	options: FirmwareUpdateMetaDataCCRequestGetOptions,
 ): Promise<FirmwareUpdateRequestStatus>;
@@ -26,6 +27,7 @@ WARNING: This method may wait up to 60 seconds for a reply.
 ### `sendFirmwareFragment`
 
 ```ts
+@validateArgs()
 async sendFirmwareFragment(
 	fragmentNumber: number,
 	isLastFragment: boolean,
@@ -38,6 +40,7 @@ Sends a fragment of the new firmware to the device.
 ### `activateFirmware`
 
 ```ts
+@validateArgs()
 async activateFirmware(
 	options: FirmwareUpdateMetaDataCCActivationSetOptions,
 ): Promise<FirmwareUpdateActivationStatus | undefined>;

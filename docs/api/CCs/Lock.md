@@ -13,6 +13,7 @@ async get(): Promise<boolean | undefined>;
 ### `set`
 
 ```ts
+@validateArgs()
 async set(locked: boolean): Promise<void>;
 ```
 

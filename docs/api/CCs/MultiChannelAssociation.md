@@ -16,6 +16,7 @@ Association groups are consecutive, starting at 1.
 ### `getGroup`
 
 ```ts
+@validateArgs()
 async getGroup(groupId: number): Promise<Pick<MultiChannelAssociationCCReport, "maxNodes" | "nodeIds" | "endpoints"> | undefined>;
 ```
 
@@ -24,6 +25,7 @@ Returns information about an association group.
 ### `addDestinations`
 
 ```ts
+@validateArgs()
 async addDestinations(
 	options: MultiChannelAssociationCCSetOptions,
 ): Promise<void>;
@@ -34,6 +36,7 @@ Adds new nodes or endpoints to an association group.
 ### `removeDestinations`
 
 ```ts
+@validateArgs()
 async removeDestinations(
 	options: MultiChannelAssociationCCRemoveOptions,
 ): Promise<void>;

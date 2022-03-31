@@ -13,6 +13,7 @@ async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | unde
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	targetValue: boolean,
 	duration?: Duration | string,

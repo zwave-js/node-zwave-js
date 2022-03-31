@@ -13,5 +13,6 @@ async get(): Promise<Pick<BasicCCReport, "currentValue" | "targetValue" | "durat
 ### `set`
 
 ```ts
+@validateArgs()
 async set(targetValue: number): Promise<void>;
 ```

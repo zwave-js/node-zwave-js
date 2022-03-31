@@ -13,6 +13,7 @@ async get(): Promise<Pick<ThermostatFanModeCCReport, "mode" | "off"> | undefined
 ### `set`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async set(mode: ThermostatFanMode, off?: boolean): Promise<void>;
 ```
 

@@ -29,6 +29,7 @@ async get(
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	userId: number,
 	userIdStatus: Exclude<
@@ -44,6 +45,7 @@ Configures a single user code.
 ### `setMany`
 
 ```ts
+@validateArgs()
 async setMany(codes: UserCodeCCSetOptions[]): Promise<void>;
 ```
 
@@ -52,6 +54,7 @@ Configures multiple user codes.
 ### `clear`
 
 ```ts
+@validateArgs()
 async clear(userId: number = 0): Promise<void>;
 ```
 
@@ -76,6 +79,7 @@ async getKeypadMode(): Promise<KeypadMode | undefined>;
 ### `setKeypadMode`
 
 ```ts
+@validateArgs({ strictEnums: true })
 async setKeypadMode(keypadMode: KeypadMode): Promise<void>;
 ```
 
@@ -88,6 +92,7 @@ async getMasterCode(): Promise<string | undefined>;
 ### `setMasterCode`
 
 ```ts
+@validateArgs()
 async setMasterCode(masterCode: string): Promise<void>;
 ```
 

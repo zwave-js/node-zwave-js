@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	sensorType?: BinarySensorType,
 ): Promise<boolean | undefined>;

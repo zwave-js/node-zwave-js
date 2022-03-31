@@ -13,6 +13,7 @@ async get(): Promise<HumidityControlMode | undefined>;
 ### `set`
 
 ```ts
+@validateArgs()
 async set(mode: HumidityControlMode): Promise<void>;
 ```
 

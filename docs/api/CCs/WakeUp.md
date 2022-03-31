@@ -19,6 +19,7 @@ async getIntervalCapabilities(): Promise<Pick<WakeUpCCIntervalCapabilitiesReport
 ### `setInterval`
 
 ```ts
+@validateArgs()
 async setInterval(
 	wakeUpInterval: number,
 	controllerNodeId: number,

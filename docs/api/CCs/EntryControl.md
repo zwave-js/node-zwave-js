@@ -25,6 +25,7 @@ async getConfiguration(): Promise<Pick<EntryControlCCConfigurationReport, "keyCa
 ### `setConfiguration`
 
 ```ts
+@validateArgs()
 async setConfiguration(
 	keyCacheSize: number,
 	keyCacheTimeout: number,

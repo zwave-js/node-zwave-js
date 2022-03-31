@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(
 	indicatorId?: number,
 ): Promise<number | IndicatorObject[] | undefined>;
@@ -15,12 +16,14 @@ async get(
 ### `set`
 
 ```ts
+@validateArgs()
 async set(value: number | IndicatorObject[]): Promise<void>;
 ```
 
 ### `getSupported`
 
 ```ts
+@validateArgs()
 async getSupported(indicatorId: number): Promise<
 	| {
 			indicatorId?: number;

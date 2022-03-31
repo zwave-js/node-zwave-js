@@ -7,6 +7,7 @@
 ### `sendData`
 
 ```ts
+@validateArgs()
 async sendData(
 	manufacturerId: number,
 	data?: Buffer,
@@ -22,11 +23,13 @@ async fibaroVenetianBlindsGet(): Promise<Pick<FibaroVenetianBlindCCReport, "posi
 ### `fibaroVenetianBlindsSetPosition`
 
 ```ts
+@validateArgs()
 async fibaroVenetianBlindsSetPosition(value: number): Promise<void>;
 ```
 
 ### `fibaroVenetianBlindsSetTilt`
 
 ```ts
+@validateArgs()
 async fibaroVenetianBlindsSetTilt(value: number): Promise<void>;
 ```

@@ -7,6 +7,7 @@
 ### `get`
 
 ```ts
+@validateArgs()
 async get(sensorType?: AlarmSensorType): Promise<Pick<AlarmSensorCCReport, "state" | "severity" | "duration"> | undefined>;
 ```
 

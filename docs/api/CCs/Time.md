@@ -19,6 +19,7 @@ async getDate(): Promise<Pick<TimeCCDateReport, "day" | "month" | "year"> | unde
 ### `setTimezone`
 
 ```ts
+@validateArgs()
 async setTimezone(timezone: DSTInfo): Promise<void>;
 ```
 

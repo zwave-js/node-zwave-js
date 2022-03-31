@@ -17,6 +17,7 @@ async getInternal(
 ### `sendReport`
 
 ```ts
+@validateArgs()
 async sendReport(
 	options: NotificationCCReportOptions,
 ): Promise<void>;
@@ -25,12 +26,14 @@ async sendReport(
 ### `get`
 
 ```ts
+@validateArgs()
 async get(options: NotificationCCGetSpecificOptions): Promise<Pick<NotificationCCReport, "notificationStatus" | "notificationEvent" | "alarmLevel" | "zensorNetSourceNodeId" | "eventParameters" | "sequenceNumber"> | undefined>;
 ```
 
 ### `set`
 
 ```ts
+@validateArgs()
 async set(
 	notificationType: number,
 	notificationStatus: boolean,
@@ -46,6 +49,7 @@ async getSupported(): Promise<Pick<NotificationCCSupportedReport, "supportsV1Ala
 ### `getSupportedEvents`
 
 ```ts
+@validateArgs()
 async getSupportedEvents(
 	notificationType: number,
 ): Promise<readonly number[] | undefined>;
