@@ -88,11 +88,14 @@ const assignees = [
 
 	// Create a commit
 	await exec.exec("git", ["add", "."]);
-	await exec.exec("git", [
-		"commit",
-		"-m",
-		"docs: update typed documentation",
-	]);
+	await exec.exec(
+		"git",
+		["commit", "-m", "docs: update typed documentation"],
+		// Don't care if this fails due to no changes
+		{
+			ignoreReturnCode: true,
+		},
+	);
 
 	// And push it (real good)
 	if (branchExists) {
