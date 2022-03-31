@@ -58,6 +58,7 @@ export class VirtualEndpoint {
 			return endpoint?.supportsCC(cc) && !endpoint?.isCCSecure(cc);
 		});
 	}
+
 	/**
 	 * Retrieves the minimum non-zero version of the given CommandClass the physical endpoints implement
 	 * Returns 0 if the CC is not supported at all.
