@@ -1,3 +1,5 @@
+// @ts-check
+
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
@@ -94,10 +96,10 @@ const assignees = [
 
 	// And push it (real good)
 	if (branchExists) {
-		// Point the new local branch at the remote and update it
-		await exec.exec("git", ["branch", "-u", `origin/${branchName}`]);
-		await exec.exec("git", ["push", "-f"]);
+		console.log(`Force-pushing to remote...`);
+		await exec.exec("git", ["push", "origin", branchName, "--force"]);
 	} else {
+		console.log(`Pushing new branch...`);
 		await exec.exec("git", [
 			"push",
 			"--set-upstream",
