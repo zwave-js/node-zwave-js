@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.9 (2022-03-21)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
@@ -12,6 +12,7 @@
 * Converted the `isControllerNode` method on the `ZWaveNode` class to a readonly property (#3972)
 * (possibly breaking) Upgraded `serialport` library to version 10.x (#4225)
 * The legacy network cache file `<homeid>.json` was converted to an appendonly `.jsonl` file in order to prevent data loss (#4263)
+* Almost all CC API methods now validate their arguments and will throw if they don't match the expected type (#4405)
 
 ### Features
 * The node statistics now include RSSI and the actual routes taken (LWR, NLWR) for communication (#4022)
@@ -39,6 +40,7 @@
 * Lifeline health checks now wait for sleeping nodes to wake up instead of considering the wait time latency (#4376)
 * Route health check rounds now indicate when there were zero failed pings (#4377)
 * Multi Channel encapsulation now correctly uses V1 commands if this is the highest supported version of a node (#4387)
+* The versions of CCs that are not supported by the root device but only endpoints are now correctly queried (#4419)
 
 ### Config file changes
 * Correct device description for Leviton DZMX1 (#4317)
@@ -54,6 +56,9 @@
 * Preserve all endpoints for Qubino ZMNKAD1 Luxy Smart Switch (#4366)
 * Enable Multilevel Switch `event` value for Aeotec ZW111 (#4380)
 * Add metadata to AEON Labs DSB09 (#4391)
+* Correct value for Brightness After Power Failure for LZW31-SN (#4409)
+* Add value 3 to param 4 for Zooz Zen16 (#4404)
+* Add values for Alarm and Doorbell Sound Selection to Shenzhen Neo Siren Alarm (#4400)
 
 ### Changes under the hood
 * Lots of dependency updates
