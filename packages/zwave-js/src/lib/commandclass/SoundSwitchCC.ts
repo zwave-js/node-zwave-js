@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -107,6 +108,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		return response?.toneCount;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getToneInfo(toneId: number) {
 		this.assertSupportsCommand(
@@ -127,6 +129,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
+	@validateArgs()
 	public async setConfiguration(
 		defaultToneId: number,
 		defaultVolume: number,
@@ -166,6 +169,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async play(toneId: number, volume?: number): Promise<void> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,

@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import {
@@ -69,6 +70,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
@@ -87,6 +89,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async get(
 		weekday: Weekday,
 	): Promise<readonly Switchpoint[] | undefined> {
@@ -150,6 +153,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setOverride(
 		type: ScheduleOverrideType,
 		state: SetbackState,

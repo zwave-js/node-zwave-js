@@ -135,6 +135,8 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 
 const DECRYPT_ATTEMPTS = 5;
 
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
 	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {

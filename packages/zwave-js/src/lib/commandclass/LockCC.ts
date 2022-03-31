@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -75,6 +76,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	 * Locks or unlocks the lock
 	 * @param locked Whether the lock should be locked
 	 */
+	@validateArgs()
 	public async set(locked: boolean): Promise<void> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 

@@ -10,6 +10,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -80,6 +81,7 @@ export class SceneActivationCCAPI extends CCAPI {
 	 * Activates the Scene with the given ID
 	 * @param duration The duration specifying how long the transition should take. Can be a Duration instance or a user-friendly duration string like `"1m17s"`.
 	 */
+	@validateArgs()
 	public async set(
 		sceneId: number,
 		dimmingDuration?: Duration | string,

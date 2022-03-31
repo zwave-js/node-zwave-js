@@ -15,6 +15,8 @@ export interface VisitorContext extends FileSpecificVisitorContext {
 export interface FileSpecificVisitorContext extends PartialVisitorContext {
 	factory: ts.NodeFactory;
 	typeAssertions: Map<string, ts.ArrowFunction>;
+	typeIdModuleMap: Map<number, string>;
+	sourceFile: ts.SourceFile;
 }
 
 export interface PartialVisitorContext {

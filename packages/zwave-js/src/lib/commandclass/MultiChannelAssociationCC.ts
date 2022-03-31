@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -235,6 +236,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(
@@ -260,6 +262,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes or endpoints to an association group
 	 */
+	@validateArgs()
 	public async addDestinations(
 		options: MultiChannelAssociationCCSetOptions,
 	): Promise<void> {
@@ -279,6 +282,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes or endpoints from an association group
 	 */
+	@validateArgs()
 	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
 	): Promise<void> {

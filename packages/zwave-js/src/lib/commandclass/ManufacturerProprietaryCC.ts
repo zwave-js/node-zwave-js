@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick, staticExtends } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import {
@@ -34,6 +35,7 @@ import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
+	@validateArgs()
 	public async sendData(
 		manufacturerId: number,
 		data?: Buffer,
@@ -66,6 +68,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
 		const { FibaroVenetianBlindCCSet } =
 			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");
@@ -77,6 +80,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
 		const { FibaroVenetianBlindCCSet } =
 			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro");

@@ -16,6 +16,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -210,6 +211,8 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		sensorType: number,
 		scale: number,
 	): Promise<number | undefined>;
+
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
@@ -286,6 +289,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.supportedSensorTypes;
 	}
 
+	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
 	): Promise<readonly number[] | undefined> {
@@ -307,6 +311,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.sensorSupportedScales;
 	}
 
+	@validateArgs()
 	public async sendReport(
 		sensorType: number,
 		scale: number | Scale,

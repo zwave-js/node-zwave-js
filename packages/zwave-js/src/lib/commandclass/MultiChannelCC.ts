@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -177,6 +178,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getEndpointCapabilities(
 		endpoint: number,
 	): Promise<EndpointCapability | undefined> {
@@ -198,6 +200,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.capability;
 	}
 
+	@validateArgs()
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
@@ -221,6 +224,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.foundEndpoints;
 	}
 
+	@validateArgs()
 	public async getAggregatedMembers(
 		endpoint: number,
 	): Promise<readonly number[] | undefined> {
@@ -242,6 +246,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.members;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulated(
 		options: Omit<
 			MultiChannelCCCommandEncapsulationOptions,
@@ -260,6 +266,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getEndpointCountV1(
 		ccId: CommandClasses,
 	): Promise<number | undefined> {
@@ -279,6 +286,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.endpointCount;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,

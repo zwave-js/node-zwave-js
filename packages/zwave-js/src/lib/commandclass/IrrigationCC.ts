@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -654,6 +655,7 @@ export class IrrigationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setSystemConfig(
 		config: IrrigationCCSystemConfigSetOptions,
 	): Promise<void> {
@@ -671,6 +673,7 @@ export class IrrigationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getValveInfo(valveId: ValveId) {
 		this.assertSupportsCommand(
@@ -702,6 +705,7 @@ export class IrrigationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setValveConfig(
 		options: IrrigationCCValveConfigSetOptions,
 	): Promise<void> {
@@ -719,6 +723,7 @@ export class IrrigationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getValveConfig(valveId: ValveId) {
 		this.assertSupportsCommand(
@@ -749,6 +754,7 @@ export class IrrigationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async runValve(valveId: ValveId, duration: number): Promise<void> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
@@ -765,10 +771,12 @@ export class IrrigationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public shutoffValve(valveId: ValveId): Promise<void> {
 		return this.runValve(valveId, 0);
 	}
 
+	@validateArgs()
 	public async setValveTable(
 		tableId: number,
 		entries: ValveTableEntry[],
@@ -788,6 +796,7 @@ export class IrrigationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getValveTable(
 		tableId: number,
 	): Promise<ValveTableEntry[] | undefined> {
@@ -811,6 +820,7 @@ export class IrrigationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async runTables(tableIDs: number[]): Promise<void> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
@@ -830,6 +840,7 @@ export class IrrigationCCAPI extends CCAPI {
 	 * Shuts off the entire system for the given duration.
 	 * @param duration Shutoff duration in hours. A value of 255 will shut off the entire system permanently and prevents schedules from running.
 	 */
+	@validateArgs()
 	public async shutoffSystem(duration: number): Promise<void> {
 		this.assertSupportsCommand(
 			IrrigationCommand,

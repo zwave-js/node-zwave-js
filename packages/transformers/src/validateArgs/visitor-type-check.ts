@@ -74,7 +74,7 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 				f.createIfStatement(
 					f.createLogicalNot(
 						f.createBinaryExpression(
-							f.createIdentifier("object"),
+							VisitorUtils.objectIdentifier,
 							f.createToken(ts.SyntaxKind.InstanceOfKeyword),
 							f.createIdentifier("nativeDateObject"),
 						),
@@ -88,6 +88,88 @@ function visitDateType(type: ts.ObjectType, visitorContext: VisitorContext) {
 					f.createReturnStatement(f.createNull()),
 				),
 			]),
+		);
+	});
+}
+
+function visitBufferType(type: ts.ObjectType, visitorContext: VisitorContext) {
+	const name = VisitorTypeName.visitType(type, visitorContext, {
+		type: "type-check",
+	});
+	const f = visitorContext.factory;
+	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+		return VisitorUtils.createAssertionFunction(
+			f.createPrefixUnaryExpression(
+				ts.SyntaxKind.ExclamationToken,
+				f.createCallExpression(
+					f.createPropertyAccessExpression(
+						f.createIdentifier("Buffer"),
+						f.createIdentifier("isBuffer"),
+					),
+					undefined,
+					[VisitorUtils.objectIdentifier],
+				),
+			),
+			{ type: "buffer" },
+			name,
+			visitorContext,
+		);
+	});
+}
+
+function visitClassType(type: ts.ObjectType, visitorContext: VisitorContext) {
+	const f = visitorContext.factory;
+	const name = VisitorTypeName.visitType(type, visitorContext, {
+		type: "type-check",
+	});
+	const identifier = type.symbol.getName();
+
+	// Figure out if something needs to be imported
+	const typeSourceFileName =
+		type.symbol.valueDeclaration?.getSourceFile().fileName;
+	let importPath: string | undefined;
+	if (
+		typeSourceFileName &&
+		typeSourceFileName !== visitorContext.sourceFile.fileName
+	) {
+		// We don't rely on the resolved path because the import specifier might refer to an absolute node_module
+		importPath = VisitorUtils.resolveModuleSpecifierForType(
+			type,
+			visitorContext,
+		);
+		if (!importPath) {
+			throw new Error(
+				`Failed to resolve module specifier for type ${identifier}`,
+			);
+		}
+	}
+
+	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+		return VisitorUtils.createAssertionFunction(
+			// !(foo instanceof require("./bar").Foo)
+			f.createPrefixUnaryExpression(
+				ts.SyntaxKind.ExclamationToken,
+				f.createParenthesizedExpression(
+					f.createBinaryExpression(
+						VisitorUtils.objectIdentifier,
+						f.createToken(ts.SyntaxKind.InstanceOfKeyword),
+						// Create an import for classes in other files
+						importPath
+							? f.createPropertyAccessExpression(
+									f.createCallExpression(
+										f.createIdentifier("require"),
+										undefined,
+										[f.createStringLiteral(importPath)],
+									),
+									f.createIdentifier(identifier),
+							  )
+							: f.createIdentifier(identifier),
+					),
+				),
+			),
+			{ type: "class", name: identifier },
+			name,
+			visitorContext,
 		);
 	});
 }
@@ -595,12 +677,14 @@ function visitObjectType(type: ts.ObjectType, visitorContext: VisitorContext) {
 		// Dates
 		if (VisitorUtils.checkIsDateClass(type)) {
 			return visitDateType(type, visitorContext);
+		} else if (VisitorUtils.checkIsNodeBuffer(type)) {
+			return visitBufferType(type, visitorContext);
+		} else if (VisitorUtils.checkIsIgnoredIntrinsic(type)) {
+			// This is an intrinsic type we can't check properly, so we just ignore it.
+			return VisitorUtils.getIgnoredTypeFunction(visitorContext);
+		} else {
+			return visitClassType(type, visitorContext);
 		}
-
-		// TODO: impement checks for supported classes
-
-		// Ignore all other classes
-		return VisitorUtils.getIgnoredTypeFunction(visitorContext);
 	}
 	if (tsutils.isTupleType(type)) {
 		// Tuple with finite length.

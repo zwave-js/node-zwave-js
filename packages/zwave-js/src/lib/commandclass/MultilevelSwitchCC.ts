@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -183,6 +184,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 * @returns A promise indicating whether the command was completed
 	 */
+	@validateArgs()
 	public async set(
 		targetValue: number,
 		duration?: Duration | string,
@@ -224,6 +226,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		);
 	}
 
+	@validateArgs()
 	public async startLevelChange(
 		options: MultilevelSwitchCCStartLevelChangeOptions,
 	): Promise<void> {

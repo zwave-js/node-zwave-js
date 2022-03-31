@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -247,6 +248,7 @@ export class IndicatorCCAPI extends CCAPI {
 		throwUnsupportedProperty(this.ccId, property);
 	};
 
+	@validateArgs()
 	public async get(
 		indicatorId?: number,
 	): Promise<number | IndicatorObject[] | undefined> {
@@ -266,6 +268,7 @@ export class IndicatorCCAPI extends CCAPI {
 		return response.value!;
 	}
 
+	@validateArgs()
 	public async set(value: number | IndicatorObject[]): Promise<void> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
@@ -277,6 +280,7 @@ export class IndicatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
 				indicatorId?: number;

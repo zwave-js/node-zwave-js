@@ -2,7 +2,11 @@ import * as fs from "fs";
 import * as tsutils from "tsutils/typeguard/3.0";
 import ts from "typescript";
 import type { Reason } from "./reason";
-import type { PartialVisitorContext, VisitorContext } from "./visitor-context";
+import type {
+	FileSpecificVisitorContext,
+	PartialVisitorContext,
+	VisitorContext,
+} from "./visitor-context";
 
 /**
  * a pair of {@link ts.TemplateLiteralType.texts} and the `intrinsicName`s for {@link ts.TemplateLiteralType.types},
@@ -59,9 +63,34 @@ export function checkIsDateClass(type: ts.ObjectType): boolean {
 		type.symbol !== undefined &&
 		type.symbol.valueDeclaration !== undefined &&
 		type.symbol.escapedName === "Date" &&
-		(ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
-			ts.ModifierFlags.Ambient) !==
-			0
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
+	);
+}
+
+export function checkIsNodeBuffer(type: ts.ObjectType): boolean {
+	return (
+		type.symbol !== undefined &&
+		type.symbol.valueDeclaration !== undefined &&
+		type.symbol.escapedName === "Buffer" &&
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
+	);
+}
+
+export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
+	return (
+		type.symbol !== undefined &&
+		type.symbol.valueDeclaration !== undefined &&
+		["Set", "Map"].includes(type.symbol.name) &&
+		!!(
+			ts.getCombinedModifierFlags(type.symbol.valueDeclaration) &
+			ts.ModifierFlags.Ambient
+		)
 	);
 }
 
@@ -967,6 +996,12 @@ function createErrorMessage(reason: Reason): ts.Expression {
 			return createAssertionString("expected a non-primitive");
 		case "date":
 			return createAssertionString("expected a Date");
+		case "buffer":
+			return createAssertionString("expected a Buffer");
+		case "class":
+			return createAssertionString(
+				`expected instance of class '${reason.name}'`,
+			);
 		case "function":
 			return createAssertionString("expected a function");
 		case "template-literal":
@@ -1008,4 +1043,41 @@ export function createBlock(
 		statements.filter((s) => !ts.isEmptyStatement(s)),
 		true,
 	);
+}
+
+export function resolveModuleSpecifierForType(
+	type: ts.Type,
+	visitorContext: FileSpecificVisitorContext,
+): string | undefined {
+	// @ts-expect-error We're using TS internals here
+	const typeId: number = type.id;
+
+	// Prefer cached resolutions
+	if (visitorContext.typeIdModuleMap.has(typeId)) {
+		return visitorContext.typeIdModuleMap.get(typeId)!;
+	}
+
+	// Otherwise scan all imports to determine which one resolves to the same type
+	const importDeclarations = visitorContext.sourceFile.statements.filter(
+		(n): n is ts.ImportDeclaration => ts.isImportDeclaration(n),
+	);
+	for (const imp of importDeclarations) {
+		if (!imp.importClause?.namedBindings) continue;
+		if (!ts.isNamedImports(imp.importClause.namedBindings)) continue;
+
+		// Remember where each type was imported from
+		const specifier = (imp.moduleSpecifier as ts.StringLiteral).text;
+		for (const e of imp.importClause.namedBindings.elements) {
+			const symbol = visitorContext.checker.getSymbolAtLocation(e.name);
+			if (!symbol) continue;
+			const type = visitorContext.checker.getDeclaredTypeOfSymbol(symbol);
+			if (!type) continue;
+			// @ts-expect-error We're using TS internals here
+			const id: number = type.id;
+			if (!visitorContext.typeIdModuleMap.has(id)) {
+				visitorContext.typeIdModuleMap.set(id, specifier);
+			}
+			if (id === typeId) return specifier;
+		}
+	}
 }

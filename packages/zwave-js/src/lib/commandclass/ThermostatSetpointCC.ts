@@ -16,6 +16,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -212,6 +213,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs({ strictEnums: true })
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(
@@ -240,6 +242,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			  };
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		setpointType: ThermostatSetpointType,
 		value: number,
@@ -260,6 +263,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(

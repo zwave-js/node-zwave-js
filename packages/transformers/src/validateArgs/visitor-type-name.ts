@@ -4,7 +4,7 @@ import type { VisitorContext } from "./visitor-context";
 import * as VisitorIndexedAccess from "./visitor-indexed-access";
 import * as VisitorKeyof from "./visitor-keyof";
 import * as VisitorUtils from "./visitor-utils";
-import { checkIsDateClass } from "./visitor-utils";
+import { checkIsDateClass, checkIsNodeBuffer } from "./visitor-utils";
 
 interface TypeCheckNameMode {
 	type: "type-check";
@@ -108,6 +108,8 @@ function visitObjectType(
 ) {
 	if (tsutils.isTupleType(type)) {
 		return visitTupleObjectType(type, visitorContext, mode);
+	} else if (checkIsNodeBuffer(type)) {
+		return "_buffer";
 	} else if (
 		visitorContext.checker.getIndexTypeOfType(type, ts.IndexKind.Number)
 	) {

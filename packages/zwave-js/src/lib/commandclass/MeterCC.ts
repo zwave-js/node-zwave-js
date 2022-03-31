@@ -21,6 +21,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -220,6 +221,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 	};
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options?: MeterCCGetOptions) {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
@@ -302,6 +304,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async reset(options: MeterCCResetOptions): Promise<void> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
 

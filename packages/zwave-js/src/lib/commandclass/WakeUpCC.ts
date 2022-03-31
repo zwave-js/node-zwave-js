@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -153,6 +154,7 @@ export class WakeUpCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setInterval(
 		wakeUpInterval: number,
 		controllerNodeId: number,

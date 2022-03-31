@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -133,6 +134,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getCCVersion(
 		requestedCC: CommandClasses,
 	): Promise<number | undefined> {

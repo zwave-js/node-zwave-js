@@ -41,6 +41,15 @@ export interface ExpectedDate {
 	type: "date";
 }
 
+export interface ExpectedBuffer {
+	type: "buffer";
+}
+
+export interface ExpectedClass {
+	type: "class";
+	name: string;
+}
+
 export interface ExpectedNonPrimitive {
 	type: "non-primitive";
 }
@@ -103,6 +112,8 @@ export type Reason =
 	| ExpectedBoolean
 	| ExpectedObject
 	| ExpectedDate
+	| ExpectedBuffer
+	| ExpectedClass
 	| ExpectedNonPrimitive
 	| MissingObjectProperty
 	| SuperfluousObjectProperty

@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -181,6 +182,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	 * Requests the device to start the firmware update process.
 	 * WARNING: This method may wait up to 60 seconds for a reply.
 	 */
+	@validateArgs()
 	public async requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
 	): Promise<FirmwareUpdateRequestStatus> {
@@ -211,6 +213,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	/**
 	 * Sends a fragment of the new firmware to the device
 	 */
+	@validateArgs()
 	public async sendFirmwareFragment(
 		fragmentNumber: number,
 		isLastFragment: boolean,
@@ -232,6 +235,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Activates a previously transferred firmware image */
+	@validateArgs()
 	public async activateFirmware(
 		options: FirmwareUpdateMetaDataCCActivationSetOptions,
 	): Promise<FirmwareUpdateActivationStatus | undefined> {

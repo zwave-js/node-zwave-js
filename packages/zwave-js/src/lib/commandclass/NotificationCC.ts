@@ -22,6 +22,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -179,6 +180,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		);
 	}
 
+	@validateArgs()
 	public async sendReport(
 		options: NotificationCCReportOptions,
 	): Promise<void> {
@@ -195,6 +197,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const response = await this.getInternal(options);
@@ -210,6 +213,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		notificationType: number,
 		notificationStatus: boolean,
@@ -252,6 +256,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
 	): Promise<readonly number[] | undefined> {

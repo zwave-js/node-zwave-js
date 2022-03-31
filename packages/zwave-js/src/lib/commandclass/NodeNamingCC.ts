@@ -7,6 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -122,6 +123,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.name;
 	}
 
+	@validateArgs()
 	public async setName(name: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
@@ -154,6 +156,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.location;
 	}
 
+	@validateArgs()
 	public async setLocation(location: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
