@@ -285,6 +285,7 @@ function fixPrinterErrors(text: string): string {
 
 function printMethodDeclaration(method: MethodDeclaration): string {
 	method = method.toggleModifier("public", false);
+	method.getDecorators().forEach((d) => d.remove());
 	const start = method.getStart();
 	const end = method.getBody()!.getStart();
 	let ret = method
