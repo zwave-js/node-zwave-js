@@ -63,9 +63,9 @@
 			"#": "2",
 			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
@@ -82,6 +82,10 @@
 				{
 					"label": "5 minutes",
 					"value": 3
+				},
+				{
+					"label": "Always on",
+					"value": 255
 				}
 			]
 		},
@@ -130,17 +134,99 @@
 			"#": "5",
 			"label": "Alarm Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 9
+			"defaultValue": 10,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Für Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "6",
 			"label": "Doorbell Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 10
+			"defaultValue": 9,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Für Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "7",
