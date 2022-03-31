@@ -51,18 +51,9 @@ const assignees = [
 		return;
 	}
 
-	// create new branch for PR or check out the existing branch
+	// create new branch for PR
 	await exec.exec("git", ["fetch", "origin"]);
-	if (branchExists) {
-		await exec.exec("git", [
-			"checkout",
-			"-b",
-			`${branchName}`,
-			`origin/${branchName}`,
-		]);
-	} else {
-		await exec.exec("git", ["checkout", "-b", `${branchName}`]);
-	}
+	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 
 	if (branchExists) {
 		// check if our local working copy is different from the remote branch
@@ -103,6 +94,8 @@ const assignees = [
 
 	// And push it (real good)
 	if (branchExists) {
+		// Point the new local branch at the remote and update it
+		await exec.exec("git", ["branch", "-u", `origin/${branchName}`]);
 		await exec.exec("git", ["push", "-f"]);
 	} else {
 		await exec.exec("git", [
