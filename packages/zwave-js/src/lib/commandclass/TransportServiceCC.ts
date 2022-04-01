@@ -300,7 +300,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public expectMoreMessages(
 		session: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): boolean {
 		if (!(session[0] instanceof TransportServiceCCFirstSegment)) {
@@ -331,7 +331,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public mergePartialCCs(
 		partials: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): void {
 		// Concat the CC buffers

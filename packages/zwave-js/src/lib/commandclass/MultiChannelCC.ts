@@ -116,10 +116,10 @@ function areAllEndpointsDifferent(
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
-		const deviceClass =
-			node.getValue<{ generic: number; specific: number }>(
-				devClassValueId,
-			);
+		const deviceClass = node.getValue<{
+			generic: number;
+			specific: number;
+		}>(devClassValueId);
 		if (deviceClass) {
 			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
 		}
