@@ -48,3 +48,21 @@ In version 9, the network cache is now also a `.jsonl` file. This has several im
 
 1. If you're backing up the network cache files, make sure to backup the `.jsonl` files. The network cache is automatically migrated from `.json` to `.jsonl` when the driver starts up, so make sure to still have the `.json` file for the first startup after upgrading.
 2. Support for legacy versions of the `.json` cache file from before `v8.1.0` has been removed. When upgrading from older versions, the upgrade must be done in two steps. First upgrade to the latest available `8.x` version, then upgrade to v9.
+
+## Validation of CC API method arguments
+
+Previously, none of the public API method arguments were validated, except `setValue` and `pollValue`. This made it very easy to send nonsensical commands to nodes, potentially resulting in invalid behavior.
+
+With some exceptions, CC API methods now validate their arguments at runtime. For example, this code will now throw an error with code `ZWaveErrorCodes.ArgumentInvalid`:
+
+```ts
+const node = driver.controller.nodes.get(2);
+await node.commandClasses["Binary Switch"].set(2);
+//                                             ^-- targetValue is not a boolean!
+
+// or this, which is easier to get wrong:
+await node.invokeCCAPI("Binary Switch", "set", 2);
+//                                             ^-- targetValue is not a boolean!
+```
+
+This shouldn't matter when your code respects the available type definitions and don't give users the ability to call arbitrary CC API methods, but still has the potential to be breaking.
