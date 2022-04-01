@@ -36,7 +36,7 @@
     "watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
-    "@sentry/node": "^6.18.1",
+    "@sentry/node": "^6.19.3",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
