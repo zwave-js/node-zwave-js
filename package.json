@@ -30,7 +30,7 @@
   "devDependencies": {
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.1",
-    "@actions/github": "^5.0.0",
+    "@actions/github": "^5.0.1",
     "@alcalzone/jsonl-db": "^2.5.1",
     "@alcalzone/release-script": "~3.5.3",
     "@babel/core": "^7.17.8",
