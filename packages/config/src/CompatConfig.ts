@@ -482,7 +482,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			| number
 			| boolean
 			| Pick<ValueID, "property" | "propertyKey">
-		)[]
+		)[],
 	][];
 }
 
