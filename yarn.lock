@@ -3012,9 +3012,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@serialport/bindings-cpp@npm:10.6.3":
-  version: 10.6.3
-  resolution: "@serialport/bindings-cpp@npm:10.6.3"
+"@serialport/bindings-cpp@npm:10.7.0":
+  version: 10.7.0
+  resolution: "@serialport/bindings-cpp@npm:10.7.0"
   dependencies:
     "@serialport/bindings-interface": 1.2.1
     "@serialport/parser-readline": ^10.2.1
@@ -3022,7 +3022,7 @@ __metadata:
     node-addon-api: ^4.3.0
     node-gyp: latest
     node-gyp-build: ^4.3.0
-  checksum: ce4872908fcab3178029150fe3762818435f4167dc1cebb19e2ea1df304112c5acd93eca5861987db398359ce4ff09842808535e78be046160eb5112f3cf95eb
+  checksum: 970e705f43c2a7d54e80d5f8f63c1bffe41374e840ad069574263c923377df30e4aab4dcc90030988f35d55ec140bba377d94b0281c31dc124c64c4be38d5564
   languageName: node
   linkType: hard
 
@@ -3831,7 +3831,7 @@ __metadata:
     esbuild: 0.14.29
     esbuild-register: ^3.3.2
     jest-extended: ^2.0.0
-    serialport: ^10.3.0
+    serialport: ^10.4.0
     typescript: 4.6.3
     winston: ^3.6.0
   languageName: unknown
@@ -9526,12 +9526,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialport@npm:^10.3.0":
-  version: 10.3.0
-  resolution: "serialport@npm:10.3.0"
+"serialport@npm:^10.4.0":
+  version: 10.4.0
+  resolution: "serialport@npm:10.4.0"
   dependencies:
     "@serialport/binding-mock": 10.2.2
-    "@serialport/bindings-cpp": 10.6.3
+    "@serialport/bindings-cpp": 10.7.0
     "@serialport/parser-byte-length": 10.3.0
     "@serialport/parser-cctalk": 10.3.0
     "@serialport/parser-delimiter": 10.3.0
@@ -9544,7 +9544,7 @@ __metadata:
     "@serialport/parser-spacepacket": 10.3.0
     "@serialport/stream": 10.3.0
     debug: ^4.3.3
-  checksum: 61a7d6db93e08a838b88924f21268a5aa803d6c257286e00eea14140396fb5ec0b74d13f342a1c66993a3b6142b768b86afd25e3b17931f00ccbf86a84ae2814
+  checksum: 343703dd0cf71ee2912bdd6eab740d5294243a906f1dc4b5a00b1e7ac1d4d5a1ce674f0592fc7891184695f6add7da26714dd24301e10d977373ba176522f487
   languageName: node
   linkType: hard
 
@@ -10940,7 +10940,7 @@ typescript@^4.4.3:
     proper-lockfile: ^4.1.2
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
-    serialport: ^10.3.0
+    serialport: ^10.4.0
     source-map-support: ^0.5.21
     typescript: 4.6.3
     winston: ^3.6.0
