@@ -14,12 +14,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@actions/exec@npm:1.1.0"
+"@actions/exec@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@actions/exec@npm:1.1.1"
   dependencies:
     "@actions/io": ^1.0.1
-  checksum: 1fad630ec2ca02438e0c05a9596f375edb3b04de50bf8cd712d6b79aec9f3cc3a175836d3ea610667e32431e7749cb93d8f4dec4947a48e29a720cfc3220216c
+  checksum: d976e66dd51ab03d76a143da8e1406daa1bcdee06046168e6e0bec681c87a12999eefaad7a81cb81f28e4190610f55a58b8458ae4b82cbaaba13200490f4e8c2
   languageName: node
   linkType: hard
 
@@ -3726,7 +3726,7 @@ __metadata:
   resolution: "@zwave-js/repo@workspace:."
   dependencies:
     "@actions/core": ^1.6.0
-    "@actions/exec": ^1.1.0
+    "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.0
     "@alcalzone/jsonl-db": ^2.5.1
     "@alcalzone/release-script": ~3.5.3
