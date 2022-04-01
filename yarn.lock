@@ -3666,7 +3666,7 @@ __metadata:
     "@zwave-js/winston-daily-rotate-file": ^4.5.6-1
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
-    dayjs: ^1.10.8
+    dayjs: ^1.11.0
     esbuild: 0.14.29
     esbuild-register: ^3.3.2
     jest-extended: ^2.0.0
@@ -5147,10 +5147,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.10.8":
-  version: 1.10.8
-  resolution: "dayjs@npm:1.10.8"
-  checksum: 5a6b358a0646a780b7dbbec07b8c4400425143f88bf127f456bd2e75a854046f54808d65da2bf964c8267b82dbde0530e990376757ce7d961349d9cde8716a1d
+"dayjs@npm:^1.11.0":
+  version: 1.11.0
+  resolution: "dayjs@npm:1.11.0"
+  checksum: 2d36f6d71345114cdcd89147adf9e05b4f8fe81684e08c8bf1f86b140aa0b86ecc3cae661a9348d96feb7fbefd03e1bc3697303688e95209670abcb36b4ece15
   languageName: node
   linkType: hard
 
