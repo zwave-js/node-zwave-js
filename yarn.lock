@@ -3484,12 +3484,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.9":
-  version: 17.0.9
-  resolution: "@types/yargs@npm:17.0.9"
+"@types/yargs@npm:^17.0.10":
+  version: 17.0.10
+  resolution: "@types/yargs@npm:17.0.10"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 333621b33785622974bd10269201d999d48729d5ffa619930fcf1f85e2d0b4785cff3f7b08c8e0ee2e8f75b2ead846bb0acc90ec4d5a652f1a95388e51f84037
+  checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
   languageName: node
   linkType: hard
 
@@ -3643,7 +3643,7 @@ __metadata:
     "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.9
     "@types/xml2json": ^0.11.4
-    "@types/yargs": ^17.0.9
+    "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -3664,7 +3664,7 @@ __metadata:
     typescript: 4.6.3
     winston: ^3.6.0
     xml2json: ^0.12.0
-    yargs: ^17.3.1
+    yargs: ^17.4.0
   languageName: unknown
   linkType: soft
 
@@ -3711,7 +3711,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^15.12.5
     "@types/prettier": ^2
-    "@types/yargs": ^17.0.9
+    "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     ansi-colors: ^4.1.1
@@ -3725,7 +3725,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     ts-morph: ^14.0.0
     typescript: 4.6.3
-    yargs: ^17.3.1
+    yargs: ^17.4.0
   languageName: unknown
   linkType: soft
 
@@ -3737,7 +3737,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^15.12.5
     "@types/semver": ^7.3.9
-    "@types/yargs": ^17.0.9
+    "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
@@ -3748,7 +3748,7 @@ __metadata:
     reflect-metadata: ^0.1.13
     semver: ^7.3.5
     typescript: 4.6.3
-    yargs: ^17.3.1
+    yargs: ^17.4.0
   bin:
     nvmedit: bin/nvmedit.js
   languageName: unknown
@@ -10888,6 +10888,21 @@ typescript@^4.4.3:
     y18n: ^5.0.5
     yargs-parser: ^21.0.0
   checksum: 64fc2e32c56739f1d14d2d24acd17a6944c3c8e3e3558f09fc1953ac112e868cc16013d282886b9d5be22187f8b9ed4f60741a6b1011f595ce2718805a656852
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^17.4.0":
+  version: 17.4.0
+  resolution: "yargs@npm:17.4.0"
+  dependencies:
+    cliui: ^7.0.2
+    escalade: ^3.1.1
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.3
+    y18n: ^5.0.5
+    yargs-parser: ^21.0.0
+  checksum: 63985bddddf1fb6b9c98744591e8b70f99839591521cb84eea60903d52ec0da35ab46c42c325d151f3ab5c41935f976c10da096b5a7067c217714a91c0bd4be3
   languageName: node
   linkType: hard
 

@@ -59,7 +59,7 @@
     "@types/pegjs": "^0.10.3",
     "@types/semver": "^7.3.9",
     "@types/xml2json": "^0.11.4",
-    "@types/yargs": "^17.0.9",
+    "@types/yargs": "^17.0.10",
     "@zwave-js/maintenance": "workspace:*",
     "axios": "^0.26.1",
     "comment-json": "^4.2.2",
@@ -71,6 +71,6 @@
     "ts-pegjs": "^0.3.1",
     "typescript": "4.6.3",
     "xml2json": "^0.12.0",
-    "yargs": "^17.3.1"
+    "yargs": "^17.4.0"
   }
 }
