@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.1 (2022-04-03)
 ### Bugfixes
 * The auto-generated argument validation now considers `{ prop1: undefined }` and `{}` to be equivalent.
 
