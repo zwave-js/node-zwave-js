@@ -5,6 +5,10 @@
 	"description": "Walli Double Switch",
 	"devices": [
 		{
+			"productType": "0x1a01",
+			"productId": "0x1000"
+		},
+		{
 			"productType": "0x1b01",
 			"productId": "0x1000"
 		}

@@ -4,8 +4,6 @@ describe("lib/config/Devices", () => {
 	describe("lookupDevice (regression tests)", () => {
 		it("Z-TRM3 with commandClasses.add compat should work", async () => {
 			// This test might take a while
-			jest.setTimeout(60000);
-
 			const configManager = new ConfigManager();
 			const config = await configManager.lookupDevice(
 				0x019b,
@@ -15,14 +13,12 @@ describe("lib/config/Devices", () => {
 			);
 			expect(config).not.toBeUndefined();
 			expect(config?.compat?.addCCs?.get(49)?.endpoints.size).toBe(3);
-		});
+		}, 60000);
 
 		it("Associations on endpoints should work - including imports", async () => {
 			// Logic Group ZDB5100
 
 			// This test might take a while
-			jest.setTimeout(60000);
-
 			const configManager = new ConfigManager();
 			const config = await configManager.lookupDevice(
 				0x0234,
@@ -50,6 +46,6 @@ describe("lib/config/Devices", () => {
 				label: "Button 4 (Binary Switch Set)",
 				maxNodes: 5,
 			});
-		});
+		}, 60000);
 	});
 });

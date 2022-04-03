@@ -1,7 +1,12 @@
 // tsconfig for IntelliSense - active in all files in the current package
 {
 	"extends": "../../tsconfig.json",
-	"compilerOptions": {},
+	"compilerOptions": {
+		"plugins": [
+			{ "transform": "@zwave-js/transformers" },
+			{ "transform": "ts-nameof", "type": "raw" }
+		]
+	},
 	"references": [
 		{
 			"path": "../config/tsconfig.build.json"
@@ -23,6 +28,9 @@
 		},
 		{
 			"path": "../testing/tsconfig.build.json"
+		},
+		{
+			"path": "../transformers/tsconfig.build.json"
 		}
 	],
 	"include": ["maintenance/**/*.ts", "src/**/*.ts"],

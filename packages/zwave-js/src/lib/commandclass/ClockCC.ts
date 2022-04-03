@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -74,6 +75,7 @@ export class ClockCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		hour: number,
 		minute: number,

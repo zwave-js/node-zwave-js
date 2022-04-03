@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
@@ -61,6 +62,7 @@ export class LanguageCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(language: string, country?: string): Promise<void> {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
 

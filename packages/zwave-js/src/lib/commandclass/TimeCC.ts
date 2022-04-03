@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -89,6 +90,7 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setTimezone(timezone: DSTInfo): Promise<void> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
 

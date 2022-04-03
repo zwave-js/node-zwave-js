@@ -8,12 +8,14 @@ import type {
 } from "@zwave-js/core";
 import type { FirmwareUpdateStatus } from "../commandclass";
 import type { ZWaveNotificationCallbackParams_EntryControlCC } from "../commandclass/EntryControlCC";
+import type { ZWaveNotificationCallbackParams_MultilevelSwitchCC } from "../commandclass/MultilevelSwitchCC";
 import type { ZWaveNotificationCallbackParams_NotificationCC } from "../commandclass/NotificationCC";
 import type {
 	Powerlevel,
 	ZWaveNotificationCallbackParams_PowerlevelCC,
 } from "../commandclass/PowerlevelCC";
 import type { ZWaveNode } from "./Node";
+import type { RouteStatistics } from "./NodeStatistics";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -87,6 +89,7 @@ export type ZWaveNotificationCallback = (
 		| ZWaveNotificationCallbackParams_NotificationCC
 		| ZWaveNotificationCallbackParams_EntryControlCC
 		| ZWaveNotificationCallbackParams_PowerlevelCC
+		| ZWaveNotificationCallbackParams_MultilevelSwitchCC
 ) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
@@ -293,4 +296,12 @@ export interface RefreshInfoOptions {
 	 * Default: true
 	 */
 	waitForWakeup?: boolean;
+}
+
+/** The last known routes between the controller and a node */
+export interface LifelineRoutes {
+	/** The last working route from the controller to this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route from the controller to this node. */
+	nlwr?: RouteStatistics;
 }

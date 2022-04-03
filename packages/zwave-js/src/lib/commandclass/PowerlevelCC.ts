@@ -8,6 +8,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
@@ -100,6 +101,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setCustomPowerlevel(
 		powerlevel: Powerlevel,
 		timeout: number,
@@ -133,6 +135,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async startNodeTest(
 		testNodeId: number,
 		powerlevel: Powerlevel,

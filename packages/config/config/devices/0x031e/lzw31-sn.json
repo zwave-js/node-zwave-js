@@ -155,7 +155,7 @@
 			"label": "Brightness After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 101,
+			"maxValue": 100,
 			"defaultValue": 100,
 			"options": [
 				{
@@ -164,7 +164,7 @@
 				},
 				{
 					"label": "Previous state",
-					"value": 101
+					"value": 100
 				}
 			]
 		},

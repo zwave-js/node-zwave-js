@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -187,6 +188,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async get(
 		setpointType: HumidityControlSetpointType,
 	): Promise<HumidityControlSetpointValue | undefined> {
@@ -216,6 +218,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			  };
 	}
 
+	@validateArgs()
 	public async set(
 		setpointType: HumidityControlSetpointType,
 		value: number,
@@ -236,6 +239,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getCapabilities(
 		setpointType: HumidityControlSetpointType,
 	): Promise<HumidityControlSetpointCapabilities | undefined> {
@@ -284,6 +288,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		return response?.supportedSetpointTypes;
 	}
 
+	@validateArgs()
 	public async getSupportedScales(
 		setpointType: HumidityControlSetpointType,
 	): Promise<readonly Scale[] | undefined> {

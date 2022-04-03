@@ -300,7 +300,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public expectMoreMessages(
 		session: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): boolean {
 		if (!(session[0] instanceof TransportServiceCCFirstSegment)) {
@@ -331,7 +331,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public mergePartialCCs(
 		partials: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): void {
 		// Concat the CC buffers
@@ -473,6 +473,16 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"session ID": this.sessionId,
+				offset: this.datagramOffset,
+			},
+		};
+	}
 }
 
 interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
@@ -502,6 +512,13 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		this.payload = Buffer.from([(this.sessionId & 0b1111) << 4]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "session ID": this.sessionId },
+		};
+	}
 }
 
 interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
@@ -530,5 +547,12 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.pendingSegments]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "pending segments": this.pendingSegments },
+		};
 	}
 }

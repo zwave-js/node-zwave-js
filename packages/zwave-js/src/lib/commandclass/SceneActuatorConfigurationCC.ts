@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -227,6 +228,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async set(
 		sceneId: number,
 		dimmingDuration?: Duration,
@@ -279,6 +281,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async get(
 		sceneId: number,
 	): Promise<

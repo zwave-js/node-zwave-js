@@ -8,6 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -178,6 +179,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
@@ -202,6 +204,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes to an association group
 	 */
+	@validateArgs()
 	public async addNodeIds(
 		groupId: number,
 		...nodeIds: number[]
@@ -220,6 +223,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from an association group
 	 */
+	@validateArgs()
 	public async removeNodeIds(
 		options: AssociationCCRemoveOptions,
 	): Promise<void> {
@@ -239,6 +243,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from all association groups
 	 */
+	@validateArgs()
 	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,

@@ -1,19 +1,22 @@
-import type { MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
@@ -109,6 +112,35 @@ function getSuperviseStartStopLevelChangeValueId(): ValueID {
 	};
 }
 
+export function getCompatEventValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Switch"],
+		endpoint,
+		property: "event",
+	};
+}
+
+/**
+ * @publicAPI
+ * This is emitted when a start or stop event is received
+ */
+export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	eventType:
+		| MultilevelSwitchCommand.StartLevelChange
+		| MultilevelSwitchCommand.StopLevelChange;
+	direction?: string;
+}
+
+/**
+ * @publicAPI
+ * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
+ */
+export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Multilevel Switch"],
+	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+];
+
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
@@ -152,6 +184,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 * @returns A promise indicating whether the command was completed
 	 */
+	@validateArgs()
 	public async set(
 		targetValue: number,
 		duration?: Duration | string,
@@ -193,6 +226,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		);
 	}
 
+	@validateArgs()
 	public async startLevelChange(
 		options: MultilevelSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
@@ -497,6 +531,17 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		await this.refreshValues();
 
+		// create compat event value if necessary
+		if (node.deviceConfig?.compat?.treatMultilevelSwitchSetAsEvent) {
+			const valueId = getCompatEventValueId(this.endpointIndex);
+			if (!node.valueDB.hasMetadata(valueId)) {
+				node.valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Event value",
+				});
+			}
+		}
+
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
@@ -581,11 +626,12 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.targetValue = this.payload[0];
+
+			if (this.payload.length >= 2) {
+				this.duration = Duration.parseReport(this.payload[1]);
+			}
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = options.duration;
@@ -705,11 +751,16 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 3);
+			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
+			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
+			const startLevel = this.payload[1];
+			const duration = this.payload[2];
+
+			this.duration = Duration.parseReport(duration);
+			this.ignoreStartLevel = !!ignoreStartLevel;
+			this.startLevel = startLevel;
+			this.direction = direction ? "down" : "up";
 		} else {
 			this.duration = options.duration;
 			this.ignoreStartLevel = options.ignoreStartLevel;

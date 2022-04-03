@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -153,6 +154,7 @@ export class WakeUpCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setInterval(
 		wakeUpInterval: number,
 		controllerNodeId: number,
@@ -227,7 +229,7 @@ export class WakeUpCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
-		if (node.isControllerNode()) {
+		if (node.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,

@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -121,6 +122,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
 	): Promise<string | undefined> {
@@ -160,7 +162,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (!node.isControllerNode()) {
+		if (!node.isControllerNode) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,

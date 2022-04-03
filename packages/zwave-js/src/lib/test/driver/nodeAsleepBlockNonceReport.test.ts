@@ -40,8 +40,6 @@ describe("regression tests", () => {
 	});
 
 	it("when a NonceReport does not get delivered, it does not block further nonce requests", async () => {
-		jest.setTimeout(5000);
-
 		const node44 = new ZWaveNode(44, driver);
 		(driver.controller.nodes as Map<number, ZWaveNode>).set(44, node44);
 		// Add event handlers for the nodes
@@ -50,8 +48,8 @@ describe("regression tests", () => {
 		}
 		driver["lastCallbackId"] = 2;
 
-		node44["_isListening"] = false;
-		node44["_isFrequentListening"] = false;
+		node44["isListening"] = false;
+		node44["isFrequentListening"] = false;
 		node44.addCC(CommandClasses.Security, { isSupported: true });
 		node44.markAsAsleep();
 		expect(node44.status).toBe(NodeStatus.Asleep);
@@ -119,5 +117,5 @@ describe("regression tests", () => {
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
-	});
+	}, 5000);
 });

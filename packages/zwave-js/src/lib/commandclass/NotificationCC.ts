@@ -21,7 +21,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, JSONObject, num2hex, pick } from "@zwave-js/shared";
+import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -41,6 +42,7 @@ import {
 	implementedVersion,
 	InvalidCC,
 } from "./CommandClass";
+import { isNotificationEventPayload } from "./NotificationEventPayload";
 import { UserCodeCommand } from "./UserCodeCC";
 
 export enum NotificationCommand {
@@ -178,6 +180,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		);
 	}
 
+	@validateArgs()
 	public async sendReport(
 		options: NotificationCCReportOptions,
 	): Promise<void> {
@@ -194,6 +197,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const response = await this.getInternal(options);
@@ -209,6 +213,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		notificationType: number,
 		notificationStatus: boolean,
@@ -251,6 +256,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
 	): Promise<readonly number[] | undefined> {
@@ -993,24 +999,6 @@ export class NotificationCCReport extends NotificationCC {
 		};
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			alarmType: this.alarmType,
-			notificationType:
-				this.notificationType != undefined
-					? this.driver.configManager.lookupNotification(
-							this.notificationType,
-					  )?.name
-					: this.notificationType,
-			notificationStatus: this.notificationStatus,
-			notificationEvent: this.notificationEvent,
-			alarmLevel: this.alarmLevel,
-			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
-			eventParameters: this.eventParameters,
-			sequenceNumber: this.sequenceNumber,
-		});
-	}
-
 	private parseEventParameters(): void {
 		if (
 			this.notificationType == undefined ||
@@ -1064,16 +1052,21 @@ export class NotificationCCReport extends NotificationCC {
 					});
 					validatePayload(!(cc instanceof InvalidCC));
 
-					let json = cc.toJSON();
-					// If a CC has no good toJSON() representation, we're only interested in the payload
-					if (
-						"nodeId" in json &&
-						"ccId" in json &&
-						"payload" in json
-					) {
-						json = pick(json, ["payload"]);
+					if (isNotificationEventPayload(cc)) {
+						this.eventParameters =
+							cc.toNotificationEventParameters();
+					} else {
+						// If a CC has no good toJSON() representation, we're only interested in the payload
+						let json = cc.toJSON();
+						if (
+							"nodeId" in json &&
+							"ccId" in json &&
+							"payload" in json
+						) {
+							json = pick(json, ["payload"]);
+						}
+						this.eventParameters = json;
 					}
-					this.eventParameters = json;
 				} catch (e) {
 					if (
 						isZWaveError(e) &&

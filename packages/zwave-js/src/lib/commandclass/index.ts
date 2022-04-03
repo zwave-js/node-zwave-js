@@ -229,6 +229,35 @@ export {
 } from "./IndicatorCC";
 export type { IndicatorMetadata } from "./IndicatorCC";
 export {
+	IrrigationCC,
+	IrrigationCCSystemConfigGet,
+	IrrigationCCSystemConfigReport,
+	IrrigationCCSystemConfigSet,
+	IrrigationCCSystemInfoGet,
+	IrrigationCCSystemInfoReport,
+	IrrigationCCSystemShutoff,
+	IrrigationCCSystemStatusGet,
+	IrrigationCCSystemStatusReport,
+	IrrigationCCValveConfigGet,
+	IrrigationCCValveConfigReport,
+	IrrigationCCValveConfigSet,
+	IrrigationCCValveInfoGet,
+	IrrigationCCValveInfoReport,
+	IrrigationCCValveRun,
+	IrrigationCCValveTableGet,
+	IrrigationCCValveTableReport,
+	IrrigationCCValveTableRun,
+	IrrigationCCValveTableSet,
+	IrrigationSensorPolarity,
+	ValveType,
+} from "./IrrigationCC";
+export type {
+	IrrigationCCSystemConfigSetOptions,
+	IrrigationCCValveConfigSetOptions,
+	ValveId,
+	ValveTableEntry,
+} from "./IrrigationCC";
+export {
 	LanguageCC,
 	LanguageCCGet,
 	LanguageCCReport,
@@ -319,7 +348,11 @@ export {
 	MultilevelSwitchCCSupportedReport,
 	SwitchType,
 } from "./MultilevelSwitchCC";
-export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
+export type {
+	MultilevelSwitchLevelChangeMetadata,
+	ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
+} from "./MultilevelSwitchCC";
 export {
 	NodeNamingAndLocationCC,
 	NodeNamingAndLocationCCLocationGet,

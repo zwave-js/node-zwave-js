@@ -282,6 +282,9 @@
 				"treatBasicSetAsEvent": {
 					"const": true
 				},
+				"treatMultilevelSwitchSetAsEvent": {
+					"const": true
+				},
 				"treatDestinationEndpointAsSource": {
 					"const": true
 				}
@@ -517,7 +520,7 @@
 				},
 				"allowManualEntry": {
 					"const": false,
-					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
+					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, minValue and maxValue are optional, but options must be used to specify the allowed values."
 				},
 				"options": {
 					"type": "array",
@@ -563,23 +566,10 @@
 						}
 					},
 					"then": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue"
-						]
+						"required": ["#", "label", "valueSize"]
 					},
 					"else": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue",
-							"defaultValue"
-						]
+						"required": ["#", "label", "valueSize", "defaultValue"]
 					}
 				},
 				{

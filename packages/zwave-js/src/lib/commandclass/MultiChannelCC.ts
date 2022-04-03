@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -115,10 +116,10 @@ function areAllEndpointsDifferent(
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
-		const deviceClass =
-			node.getValue<{ generic: number; specific: number }>(
-				devClassValueId,
-			);
+		const deviceClass = node.getValue<{
+			generic: number;
+			specific: number;
+		}>(devClassValueId);
 		if (deviceClass) {
 			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
 		}
@@ -177,6 +178,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getEndpointCapabilities(
 		endpoint: number,
 	): Promise<EndpointCapability | undefined> {
@@ -198,6 +200,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.capability;
 	}
 
+	@validateArgs()
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
@@ -221,6 +224,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.foundEndpoints;
 	}
 
+	@validateArgs()
 	public async getAggregatedMembers(
 		endpoint: number,
 	): Promise<readonly number[] | undefined> {
@@ -242,6 +246,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.members;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulated(
 		options: Omit<
 			MultiChannelCCCommandEncapsulationOptions,
@@ -260,6 +266,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getEndpointCountV1(
 		ccId: CommandClasses,
 	): Promise<number | undefined> {
@@ -279,6 +286,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.endpointCount;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
@@ -317,7 +326,8 @@ export class MultiChannelCC extends CommandClass {
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			cc.endpointIndex !== 0 &&
-			!(cc instanceof MultiChannelCCCommandEncapsulation)
+			!(cc instanceof MultiChannelCCCommandEncapsulation) &&
+			!(cc instanceof MultiChannelCCV1CommandEncapsulation)
 		);
 	}
 
@@ -325,12 +335,24 @@ export class MultiChannelCC extends CommandClass {
 	public static encapsulate(
 		driver: Driver,
 		cc: CommandClass,
-	): MultiChannelCCCommandEncapsulation {
-		return new MultiChannelCCCommandEncapsulation(driver, {
-			nodeId: cc.nodeId,
-			encapsulated: cc,
-			destination: cc.endpointIndex,
-		});
+	):
+		| MultiChannelCCCommandEncapsulation
+		| MultiChannelCCV1CommandEncapsulation {
+		const ccVersion = cc
+			.getNode()
+			?.getCCVersion(CommandClasses["Multi Channel"]);
+		if (ccVersion === 1) {
+			return new MultiChannelCCV1CommandEncapsulation(driver, {
+				nodeId: cc.nodeId,
+				encapsulated: cc,
+			});
+		} else {
+			return new MultiChannelCCCommandEncapsulation(driver, {
+				nodeId: cc.nodeId,
+				encapsulated: cc,
+				destination: cc.endpointIndex,
+			});
+		}
 	}
 
 	public skipEndpointInterview(): boolean {
@@ -1217,9 +1239,22 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	}
 }
 
-// This indirection is necessary to be able to define the same CC as the response
-function getResponseForV1CommandEncapsulation() {
-	return MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation(
+	sent: MultiChannelCCV1CommandEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return MultiChannelCCV1CommandEncapsulation;
+	}
+}
+
+function testResponseForV1CommandEncapsulation(
+	sent: MultiChannelCCV1CommandEncapsulation,
+	received: MultiChannelCCV1CommandEncapsulation,
+) {
+	if (sent.endpointIndex === received.endpointIndex) {
+		return "checkEncapsulated";
+	}
+	return false;
 }
 
 interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
@@ -1227,7 +1262,10 @@ interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiChannelCommand.CommandEncapsulationV1)
-@expectedCCResponse(getResponseForV1CommandEncapsulation)
+@expectedCCResponse(
+	getResponseForV1CommandEncapsulation,
+	testResponseForV1CommandEncapsulation,
+)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: Driver,

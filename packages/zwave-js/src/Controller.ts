@@ -7,6 +7,17 @@ export type {
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";
-export { RSSI, RssiError, TXReport } from "./lib/controller/SendDataShared";
+export {
+	isRssiError,
+	RSSI,
+	RssiError,
+	TXReport,
+} from "./lib/controller/SendDataShared";
 export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
+export {
+	ControllerLogContext,
+	ControllerNodeLogContext,
+	ControllerSelfLogContext,
+	ControllerValueLogContext,
+} from "./lib/log/Controller";
 export { RFRegion } from "./lib/serialapi/misc/SerialAPISetupMessages";

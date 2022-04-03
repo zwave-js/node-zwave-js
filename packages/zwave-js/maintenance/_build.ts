@@ -3,10 +3,16 @@ import { generateCCAPIInterface } from "./generateCCAPIInterface";
 import { generateCCExports } from "./generateCCExports";
 import { lintCCConstructors } from "./lintCCConstructor";
 import { lintCCInterview } from "./lintCCInterview";
+import { lintCCValidateArgs } from "./lintCCValidateArgs";
 
 const argv = process.argv.slice(2);
 
-const lint = () => Promise.all([lintCCInterview(), lintCCConstructors()]);
+const lint = () =>
+	Promise.all([
+		lintCCInterview(),
+		lintCCConstructors(),
+		lintCCValidateArgs(),
+	]);
 const prebuild = () =>
 	Promise.all([generateCCAPIInterface(), generateCCExports()]);
 

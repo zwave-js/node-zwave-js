@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -179,6 +180,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(mode: ThermostatFanMode, off?: boolean): Promise<void> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,

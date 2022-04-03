@@ -175,6 +175,32 @@
 		},
 		{
 			"#": "4",
+			"$if": "firmwareVersion <= 1.1",
+			"label": "Switch 3: Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle (change state on toggle)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$if": "firmwareVersion >= 1.2",
 			"label": "Switch 3: Type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -194,6 +220,10 @@
 				{
 					"label": "Toggle (change state on toggle)",
 					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode for Z-Wave control)",
+					"value": 3
 				}
 			]
 		},

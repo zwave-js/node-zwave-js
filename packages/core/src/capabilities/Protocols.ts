@@ -20,3 +20,9 @@ export enum RouteProtocolDataRate {
 }
 
 export const protocolDataRateMask = 0b111;
+
+export enum ProtocolType {
+	"Z-Wave" = 0,
+	"Z-Wave AV" = 1,
+	"Z-Wave for IP" = 2,
+}

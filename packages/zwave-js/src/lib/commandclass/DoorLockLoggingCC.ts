@@ -7,7 +7,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, isPrintableASCII, num2hex } from "@zwave-js/shared";
+import { isPrintableASCII, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -23,6 +24,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { userCodeToLogString } from "./UserCodeCC";
 
 interface DateSegments {
 	year: number;
@@ -173,6 +175,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Retrieves the specified audit record. Defaults to the latest one. */
+	@validateArgs()
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 	): Promise<DoorLockLoggingRecord | undefined> {
@@ -358,10 +361,9 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				message["user ID"] = this.record.userId;
 			}
 			if (this.record.userCode) {
-				message["user code"] =
-					typeof this.record.userCode === "string"
-						? this.record.userCode
-						: buffer2hex(this.record.userCode);
+				message["user code"] = userCodeToLogString(
+					this.record.userCode,
+				);
 			}
 		}
 		return {

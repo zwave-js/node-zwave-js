@@ -200,5 +200,10 @@
 		"exclusion": "1. Connect the device to the power supply.\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion.\n3. Enable exclusion mode on your Z-Wave gateway (hub).\n4. Press once on button 3 – right. One press on button 4 – down for enabling full white. When full white is enabled, press, and hold button 3 – right for 5 seconds. After 5 seconds, the device starts flashing red 1 second ON, 0.5 second OFF. \nOnce the device loses node ID (after 10 seconds), it stops flashing and turns full red. The procedure is always available. \nNOTE: LEARN MODE state allows the device to receive network information from the controller",
 		"reset": "1. Connect the device to the power supply\n2. Press once on button 3 – right. One press on button 4 – down for enabling full white. When full white is enabled, press and hold button 5 – left for 10 seconds. After 10 seconds, the device starts flashing blue 1 second on, 0.5 second off. \nAfter 10 seconds the device stops flashing and turns full blue. The procedure is available always. By resetting the device, all custom parameters previously set on the device will return to their default values, and a node ID will be deleted. Use this reset procedure only when the gateway (hub) is missing or otherwise inoperable.\nNOTE: See extended manual for custom settings and parameters available for this device.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4079/Qubino%20Luxy%20Smart%20Switch%20installation%20certification.pdf"
+	},
+	"compat": {
+		// This device has two endpoints which are considered "unnecessary",
+		// but the root endpoint doesn't expose all their functionality.
+		"preserveEndpoints": "*"
 	}
 }

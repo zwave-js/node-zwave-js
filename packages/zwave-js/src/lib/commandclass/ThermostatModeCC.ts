@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -162,6 +163,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 		manufacturerData: Buffer,
 	): Promise<void>;
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
 		manufacturerData?: Buffer,

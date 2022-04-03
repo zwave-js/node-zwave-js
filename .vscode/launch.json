@@ -13,9 +13,8 @@
 			"runtimeArgs": [
 				"node",
 				"--async-stack-traces",
-				"--inspect-brk=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
@@ -24,10 +23,8 @@
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			// https://github.com/microsoft/vscode/issues/142830#issuecomment-1048240356 🤷🏻‍♂️
-			"outFiles": [],
-			"resolveSourceMapLocations": null,
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
@@ -40,7 +37,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -61,7 +58,8 @@
 			],
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
@@ -74,7 +72,7 @@
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
 			],

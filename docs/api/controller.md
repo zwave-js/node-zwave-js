@@ -269,6 +269,71 @@ To get around this:
 2. Batch all `getNodeNeighbors` requests together
 3. Turn the radio back on with `controller.toggleRF(true`)
 
+### `getKnownLifelineRoutes`
+
+The routing table of the controller is stored in its memory and not easily accessible during normal operation. Z-Wave JS gets around this by keeping statistics for each node that include the last used routes, the used repeaters, procotol and speed, as well as RSSI readings. This information can be read using
+
+```ts
+getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>
+```
+
+This has some limitations:
+
+-   The information is dynamically built using TX status reports and may not be accurate at all times.
+-   It may not be available immediately after startup or at all if the controller doesn't support this feature.
+-   It only includes information about the routes between the controller and nodes, not between individual nodes.
+
+> [!NOTE] To keep information returned by this method updated, subscribe to each node's `"statistics"` event and use the included information.
+
+The returned objects have the following shape:
+
+<!-- #import LifelineRoutes from "zwave-js" -->
+
+```ts
+interface LifelineRoutes {
+	/** The last working route from the controller to this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route from the controller to this node. */
+	nlwr?: RouteStatistics;
+}
+```
+
+<!-- #import RouteStatistics from "zwave-js" -->
+
+```ts
+interface RouteStatistics {
+	/** The protocol and used data rate for this route */
+	protocolDataRate: ProtocolDataRate;
+	/** Which nodes are repeaters for this route */
+	repeaters: number[];
+
+	/** The RSSI of the ACK frame received by the controller */
+	rssi?: RSSI;
+	/**
+	 * The RSSI of the ACK frame received by each repeater.
+	 * If this is set, it has the same length as the repeaters array.
+	 */
+	repeaterRSSI?: RSSI[];
+
+	/**
+	 * The node IDs of the nodes between which the transmission failed most recently.
+	 * Is only set if there recently was a transmission failure.
+	 */
+	routeFailedBetween?: [number, number];
+}
+```
+
+<!-- #import ProtocolDataRate from "zwave-js" -->
+
+```ts
+declare enum ProtocolDataRate {
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
+}
+```
+
 ### `healNode`
 
 ```ts
@@ -640,13 +705,13 @@ readonly nodes: ReadonlyMap<number, ZWaveNode>
 
 This property contains a map of all nodes that you can access by their node ID, e.g. `nodes.get(2)` for node 2.
 
-### `libraryVersion`
+### `sdkVersion`
 
 ```ts
-readonly libraryVersion: string
+readonly sdkVersion: string
 ```
 
-Returns the Z-Wave library version that is supported by the controller hardware.
+Returns the Z-Wave SDK version that is supported by the controller hardware.
 
 > [!WARNING]
 > This property is only defined after the controller interview!
@@ -657,7 +722,7 @@ Returns the Z-Wave library version that is supported by the controller hardware.
 readonly type: ZWaveLibraryTypes
 ```
 
-Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are possible:
+Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are defined, although only `"Static Controller"` or `"Bridge Controller"` will realistically be possible:
 
 <!-- #import ZWaveLibraryTypes from "zwave-js" -->
 
@@ -710,7 +775,7 @@ Returns the ID of the controller in the current network.
 * readonly wasRealPrimary: boolean
 * readonly isStaticUpdateController: boolean
 * readonly isSlave: boolean
-* readonly serialApiVersion: string
+* readonly firmwareVersion: string
 * readonly manufacturerId: number
 * readonly productType: number
 * readonly productId: number
