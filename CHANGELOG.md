@@ -4,7 +4,11 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 9.0.0-beta.10 (2022-03-31)
+## __WORK IN PROGRESS__ · _„You had my curiosity. But now you have my attention.”_
+
+Roughly nine months after the [last major release](https://github.com/zwave-js/node-zwave-js/releases/tag/v8.0.1), we've reached a new milestone.
+Z-Wave JS is now 4 years old, its usage has more than doubled over the course of the `v8.x` release line and it is still growing steadily. There are many exciting things yet to come, so stay tuned!
+
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v9)
 * The `route` parameter in `SendDataBridgeRequest` has been removed, since it isn't supported in any known SDK version (#3741)
 * Faster timeout while waiting for a response to a GET request (#3756)
