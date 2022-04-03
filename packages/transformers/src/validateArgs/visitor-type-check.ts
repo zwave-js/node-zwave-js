@@ -551,9 +551,29 @@ function visitRegularObjectType(
 						return [
 							f.createIfStatement(
 								f.createBinaryExpression(
-									f.createStringLiteral(propertyInfo.name),
-									ts.SyntaxKind.InKeyword,
-									VisitorUtils.objectIdentifier,
+									f.createBinaryExpression(
+										f.createStringLiteral(
+											propertyInfo.name,
+										),
+										ts.SyntaxKind.InKeyword,
+										VisitorUtils.objectIdentifier,
+									),
+									f.createToken(
+										ts.SyntaxKind.AmpersandAmpersandToken,
+									),
+									f.createBinaryExpression(
+										f.createElementAccessExpression(
+											VisitorUtils.objectIdentifier,
+											f.createStringLiteral(
+												propertyInfo.name,
+											),
+										),
+										f.createToken(
+											ts.SyntaxKind
+												.ExclamationEqualsEqualsToken,
+										),
+										f.createIdentifier("undefined"),
+									),
 								),
 								VisitorUtils.createBlock(
 									f,
