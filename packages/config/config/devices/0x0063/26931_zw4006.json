@@ -212,11 +212,10 @@
 		{
 			"#": "15",
 			"label": "Reset Cycle",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 110,
 			"defaultValue": 2,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -242,7 +241,8 @@
 					"label": "27 mins",
 					"value": 110
 				}
-			]
+			],
+			"description": "Steps of 15 seconds for value 5 through 109"
 		},
 		{
 			"#": "19",
