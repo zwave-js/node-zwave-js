@@ -212,6 +212,7 @@
 		{
 			"#": "15",
 			"label": "Reset Cycle",
+			"description": "Values 5 to 109 are 15 second intervals, starting at 60 seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 110,
@@ -238,11 +239,10 @@
 					"value": 4
 				},
 				{
-					"label": "27 mins",
+					"label": "27 mins, 15 seconds",
 					"value": 110
 				}
-			],
-			"description": "Steps of 15 seconds for value 5 through 109"
+			]
 		},
 		{
 			"#": "19",
