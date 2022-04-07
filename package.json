@@ -81,6 +81,9 @@
     "typescript": "4.6.3",
     "zwave-js": "workspace:*"
   },
+  "resolutions": {
+    "minimist": "^1.2.6"
+  },
   "scripts": {
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
     "prebuild": "yarn workspace @zwave-js/maintenance run build",
