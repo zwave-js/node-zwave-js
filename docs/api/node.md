@@ -1081,6 +1081,35 @@ interface ZWaveNotificationCallbackArgs_EntryControlCC {
 }
 ```
 
+#### `Multilevel Switch CC`
+
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_MultilevelSwitchCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
+	ccId: CommandClasses.Notification,
+	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_MultilevelSwitchCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	/** The numeric identifier for the event type */
+	eventType:
+		| MultilevelSwitchCommand.StartLevelChange
+		| MultilevelSwitchCommand.StopLevelChange;
+	/** The direction of the level change */
+	direction?: string;
+}
+```
+
 #### `Notification CC`
 
 uses the following signature
