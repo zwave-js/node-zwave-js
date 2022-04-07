@@ -344,12 +344,12 @@
 			]
 		}
 	],
-	"metadata": {
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2108/26933%20EnFrSp%20QSG%20v1.3%20and%20Parameters.pdf"
-	},
 	// Add compat flag to re-enable basic command events to replicate central scene functionality.
 	// Allows user to detect switch button presses as events when zwave controller is added to Group 2 or 3.
 	"compat": {
 		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2108/26933%20EnFrSp%20QSG%20v1.3%20and%20Parameters.pdf"
 	}
 }
