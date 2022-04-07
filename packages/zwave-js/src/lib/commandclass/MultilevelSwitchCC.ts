@@ -125,9 +125,11 @@ export function getCompatEventValueId(endpoint?: number): ValueID {
  * This is emitted when a start or stop event is received
  */
 export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	/** The numeric identifier for the event type */
 	eventType:
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
+	/** The direction of the level change */
 	direction?: string;
 }
 
