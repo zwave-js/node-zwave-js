@@ -1090,7 +1090,7 @@ uses the following signature
 ```ts
 type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 	node: ZWaveNode,
-	ccId: CommandClasses.Notification,
+	ccId: typeof CommandClasses["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
 ```
