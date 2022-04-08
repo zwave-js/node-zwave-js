@@ -1,13 +1,14 @@
 {
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
-	"label": "TF021",
+	"label": "TF016 / TF021",
 	"description": "ZWave Thermostat",
 	"devices": [
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": 1234
+			// One of these is labeled TF016, the other TF021
+			"zwaveAllianceId": [1182, 1234]
 		},
 		{
 			"productType": "0x0003",
@@ -20,7 +21,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 8,
 			"isLifeline": true
 		},
@@ -233,9 +234,9 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "INCLUSION/EXCLUSION\nTo include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start add device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately\n2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion\nfails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
-		"exclusion": "INCLUSION/EXCLUSION\nTo include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start add device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately\n2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion\nfails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
-		"reset": "FACTORY RESET - RES\nBy pressing buttons Left and Center (up and confirm) for 20 seconds, the thermostat will perform a complete factory reset.\nNB! Please use this procedure only when the primary controller is missing or otherwise inoperable",
+		"inclusion": "To include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start adding the device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
+		"exclusion": "To exclude the thermostat from your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start removing the device in your home automation software. Enter exclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If exclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
+		"reset": "By pressing buttons Left and Center (up and confirm) for 20 seconds, the thermostat will perform a complete factory reset.\nPlease use this procedure only when the primary controller is missing or otherwise inoperable",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1234/Manual_Multireg%20Z-Wave_Ver2015-A.pdf"
 	}
 }
