@@ -150,7 +150,8 @@
 		},
 		{
 			"#": "7",
-			"label": "LED indicator mode",
+			"$if": "firmwareVersion < 32.32",
+			"label": "LED Indicator Mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -172,6 +173,30 @@
 				{
 					"label": "No Temperature, Flashing Motion",
 					"value": 4
+				}
+			]
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 32.32",
+			"label": "LED Indicator Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "Pulsing Temperature, Flashing Motion",
+					"value": 2
+				},
+				{
+					"label": "Flashing Temperature and Motion",
+					"value": 3
 				}
 			]
 		}
