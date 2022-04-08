@@ -176,7 +176,7 @@
 				}
 			]
 		},
-				{
+		{
 			"#": "7",
 			"$if": "firmwareVersion >= 32.32",
 			"label": "LED Indicator Mode",
