@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Config file changes
+* Add metadata to ZooZ ZEN26 (#4348)
+* Add metadata to ZooZ ZEN21 (#4349)
+* Add metadata to ZooZ ZEN27 (#4347)
+* Remove option 4 of LED Indicator Mode for Zooz ZSE40, FW 32.32+ (#4451)
+* Extend Heatit TF016 config to include TF021 (#4452)
+* Correct valueSize for param 15 on GE/Jasco 26931 / ZW4006 (#4441)
+* Add manual to GE/Jasco 26932 / 26933 / ZW3008 (#4446)
+
+### Changes under the hood
+* Added documentation for the `Multilevel Switch CC` notifications (#4444)
+
 ## 9.0.1 (2022-04-03)
 ### Bugfixes
 * The auto-generated argument validation now considers `{ prop1: undefined }` and `{}` to be equivalent.
