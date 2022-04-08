@@ -91,7 +91,7 @@ export function getCurrentModeValueId(endpoint: number): ValueID {
 	};
 }
 
-function getOperationTypeValueId(endpoint: number): ValueID {
+export function getOperationTypeValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -99,7 +99,7 @@ function getOperationTypeValueId(endpoint: number): ValueID {
 	};
 }
 
-function getLatchSupportedValueId(endpoint: number): ValueID {
+export function getLatchSupportedValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -107,7 +107,7 @@ function getLatchSupportedValueId(endpoint: number): ValueID {
 	};
 }
 
-function getBoltSupportedValueId(endpoint: number): ValueID {
+export function getBoltSupportedValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -115,7 +115,7 @@ function getBoltSupportedValueId(endpoint: number): ValueID {
 	};
 }
 
-function getDoorSupportedValueId(endpoint: number): ValueID {
+export function getDoorSupportedValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -123,7 +123,7 @@ function getDoorSupportedValueId(endpoint: number): ValueID {
 	};
 }
 
-function getLatchStatusValueId(endpoint: number): ValueID {
+export function getLatchStatusValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -137,7 +137,7 @@ function getLatchStatusValueMetadata(): ValueMetadata {
 	};
 }
 
-function getBoltStatusValueId(endpoint: number): ValueID {
+export function getBoltStatusValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
@@ -151,7 +151,7 @@ function getBoltStatusValueMetadata(): ValueMetadata {
 	};
 }
 
-function getDoorStatusValueId(endpoint: number): ValueID {
+export function getDoorStatusValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
