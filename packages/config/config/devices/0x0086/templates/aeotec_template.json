@@ -1,8 +1,6 @@
 {
 	"base_remote_mode_5": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 5,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -44,8 +42,6 @@
 	},
 	"base_color_options": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 8,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
@@ -89,8 +85,6 @@
 	},
 	"base_color_options_9": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 9,
 		"defaultValue": 9,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -156,8 +150,6 @@
 	"notification_type": {
 		"label": "Notification Type",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 11,
 		"defaultValue": 6,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -211,8 +203,6 @@
 	"motion_report_type": {
 		"label": "Motion Sensor Report Type to Send",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -230,8 +220,6 @@
 	"sensor_report_type": {
 		"label": "Report Type to Send",
 		"valueSize": 4,
-		"minValue": 16,
-		"maxValue": 256,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -253,8 +241,6 @@
 	"binary_report_type": {
 		"label": "Report Type To Send",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 2,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -276,8 +262,6 @@
 	"binary_report_type_3": {
 		"label": "Motion Sensor Triggered Command",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -302,8 +286,6 @@
 	},
 	"multilevel_report_type": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -324,8 +306,6 @@
 	},
 	"multilevel_set_report_type": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -357,8 +337,6 @@
 	"celsius_fahrenheit": {
 		"label": "Temperature Unit",
 		"valueSize": 4,
-		"minValue": 1,
-		"maxValue": 2,
 		"defaultValue": 1,
 		"allowManualEntry": false,
 		"options": [
@@ -447,8 +425,6 @@
 	"factory_reset": {
 		"label": "Reset to Factory Defaults",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -467,13 +443,15 @@
 	"factory_reset_exclude": {
 		"label": "Reset to Factory Default Setting",
 		"valueSize": 4,
-		"minValue": 0,
-		"maxValue": 1431655765,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
 		"allowManualEntry": false,
 		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
 			{
 				"label": "Reset the product to factory default setting and exclude from Z-Wave network",
 				"value": 1431655765
@@ -487,8 +465,6 @@
 	"factory_reset_complete": {
 		"label": "Reset to Factory Default Setting",
 		"valueSize": 4,
-		"minValue": 0,
-		"maxValue": 4294967295,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -598,8 +574,6 @@
 	},
 	"reset_parameters": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -618,8 +592,6 @@
 	"enable_notification_basic_report_only": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -637,8 +609,6 @@
 	"enable_notification_basic_set_only": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -656,8 +626,6 @@
 	"enable_notifications": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -679,8 +647,6 @@
 	"enable_notifications_0-3": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -706,8 +672,6 @@
 	"enable_notifications_0-4": {
 		"label": "Send Notifications to Associated Devices (Group 1)",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -728,7 +692,6 @@
 				"label": "Multilevel Switch CC Report",
 				"value": 3
 			},
-
 			{
 				"label": "Hail CC (when using the manual switch to change the load state)",
 				"value": 4
@@ -1392,8 +1355,6 @@
 	"partner_id_aeotec": {
 		"label": "Partner ID",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 0,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1407,8 +1368,6 @@
 	"partner_id_att": {
 		"label": "Partner ID",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1426,8 +1385,6 @@
 	"partner_id_other": {
 		"label": "Partner ID",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1463,8 +1420,6 @@
 	"association_group_2_trigger": {
 		"label": "Association Group 2: Trigger",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1486,8 +1441,6 @@
 	"association_group_2_command_type": {
 		"label": "Association Group 2: Command Type ",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 2,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1637,8 +1590,6 @@
 	"external_switch_3way_auto": {
 		"label": "External Switch Type",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1668,8 +1619,6 @@
 	"external_switch_toggle_no_nc": {
 		"label": "External Switch Type",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1691,8 +1640,6 @@
 	"external_switch_dimmers": {
 		"label": "External Switch Type",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1752,8 +1699,6 @@
 	"led_function": {
 		"label": "LED Indicator Function",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 2,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -1942,8 +1887,6 @@
 	"current_power_mode": {
 		"label": "Current Power Mode",
 		"valueSize": 2,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -1962,8 +1905,6 @@
 	"sleep_state": {
 		"label": "Sleep State",
 		"valueSize": 2,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"readOnly": true,
 		"allowManualEntry": false,
@@ -1985,8 +1926,6 @@
 	"switch_destination_s1": {
 		"label": "Control Destination (S1)",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 3,
 		"defaultValue": 3,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2008,8 +1947,6 @@
 	"switch_destination_s2": {
 		"label": "Control Destination (S2)",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 3,
 		"defaultValue": 3,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2049,8 +1986,6 @@
 	"current_working_mode": {
 		"label": "Current Working Mode",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2088,8 +2023,6 @@
 	"load_type": {
 		"label": "Load Type",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2136,8 +2069,6 @@
 	"brightness_single_tap": {
 		"label": "Brightness on Single Tap",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2167,8 +2098,6 @@
 	"load_recognition_method": {
 		"label": "Load Recognition Method",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 2,
 		"defaultValue": 2,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2190,8 +2119,6 @@
 	// Doorbells/Sirens
 	"base_light_index": {
 		"valueSize": 4,
-		"minValue": 1,
-		"maxValue": 127,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2264,8 +2191,6 @@
 	},
 	"base_tone_play_mode": {
 		"valueSize": 4,
-		"minValue": 0,
-		"maxValue": 255,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -2587,8 +2512,6 @@
 	},
 	"base_basic_set_command": {
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 4,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
@@ -2657,8 +2580,10 @@
 	"button_unpair": {
 		"label": "Button Unpairing",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 7,
+		// "minValue": 0,
+		// Theoretically these options can be combined, but not doing it
+		// is easier to understand
+		// "maxValue": 7,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -2685,8 +2610,6 @@
 	"button_pair": {
 		"label": "Button Pairing",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
 		"writeOnly": true,
@@ -2713,8 +2636,6 @@
 	"button_pairing_status": {
 		"label": "Pairing Mode Status",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 4,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2741,8 +2662,6 @@
 	"button_status_1": {
 		"label": "Status: Button 1",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2761,8 +2680,6 @@
 	"button_status_2": {
 		"label": "Status: Button 2",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2781,8 +2698,6 @@
 	"button_status_3": {
 		"label": "Status: Button 3",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"readOnly": true,
@@ -2994,8 +2909,6 @@
 	"wallmote_report_type": {
 		"label": "Report Type",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 3,
 		"defaultValue": 1,
 		"unsigned": true,
 		"allowManualEntry": false,
@@ -3253,8 +3166,6 @@
 	"wallswitch_command_type": {
 		"label": "Command Type to Send Association Groups",
 		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 2,
 		"defaultValue": 1,
 		"allowManualEntry": false,
 		"options": [
