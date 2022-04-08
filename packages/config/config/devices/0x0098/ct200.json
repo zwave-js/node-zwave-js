@@ -24,8 +24,6 @@
 			"label": "Temperature Reporting Threshold (8-bit)",
 			"description": "This value determines the reporting threshold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"writeOnly": true,
 			"allowManualEntry": false,
@@ -74,8 +72,6 @@
 			"label": "C-Wire/Battery Status",
 			"description": "Query power which source is in use",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": true,
 			"allowManualEntry": false,
@@ -113,8 +109,6 @@
 			"description": "Temperature spread between the on and off temperatures",
 			"unit": "degrees Fahrenheit",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -157,8 +151,6 @@
 			"label": "Thermostat Diff Temp",
 			"description": "How far off from target temp before turning on unit",
 			"valueSize": 1,
-			"minValue": 4,
-			"maxValue": 12,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -189,8 +181,6 @@
 			"label": "Thermostat Recovery Mode",
 			"description": "Bring a space back to a normal occupied temp",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -208,8 +198,6 @@
 			"#": "11",
 			"label": "Simple UI Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -228,8 +216,6 @@
 			"label": "Multicast",
 			"description": "Toggle Multicast Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -248,8 +234,6 @@
 			"label": "Main Display Selection",
 			"description": "Control which info is displayed in the main display area",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -294,8 +278,6 @@
 			"label": "Display Units",
 			"description": "Celsius or Fahrenheit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

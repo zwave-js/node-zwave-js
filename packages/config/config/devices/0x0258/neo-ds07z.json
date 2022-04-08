@@ -13,7 +13,6 @@
 		"min": "2.0",
 		"max": "255.255"
 	},
-
 	"paramInformation": [
 		{
 			"#": "1",
@@ -116,7 +115,6 @@
 			]
 		}
 	],
-
 	"metadata": {
 		"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
 		"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",

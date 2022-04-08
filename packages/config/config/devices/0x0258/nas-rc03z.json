@@ -34,8 +34,6 @@
 			"#": "3",
 			"label": "SOS Key",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -53,8 +51,6 @@
 			"#": "4",
 			"label": "SOS Alarm Event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

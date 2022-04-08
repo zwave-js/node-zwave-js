@@ -19,8 +19,6 @@
 			"label": "Dim level when the light bulb is turned On",
 			"description": "Turn Dim Level Memory ON/OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

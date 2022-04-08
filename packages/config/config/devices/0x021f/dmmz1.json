@@ -48,8 +48,6 @@
 			"label": "Set Firing Mode",
 			"description": "This parameter sets the “firing mode” of the Mouser.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +75,6 @@
 			"label": "Enable/Disable LED Alarm",
 			"description": "Enables or disables the indicator LED alarm when the trap is tripped",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

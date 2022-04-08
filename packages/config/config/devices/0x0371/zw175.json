@@ -95,8 +95,6 @@
 			"#": "8",
 			"label": "Switch Action on Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

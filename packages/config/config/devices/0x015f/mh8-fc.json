@@ -43,8 +43,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Temperature Unit Setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +61,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Upload Temperature Automatically",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

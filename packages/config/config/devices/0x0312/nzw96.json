@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "LED Invert/Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

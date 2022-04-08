@@ -41,8 +41,6 @@
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

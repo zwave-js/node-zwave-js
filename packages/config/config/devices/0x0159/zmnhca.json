@@ -46,8 +46,6 @@
 			"label": "ALL ON / ALL OFF",
 			"description": "Responds to commands ALL ON / ALL OFF from Main Controller",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"allowManualEntry": false,
 			"options": [
@@ -92,8 +90,6 @@
 			"label": "Operating modes",
 			"description": "Operation Mode (Shutter or Venetian)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -120,8 +116,6 @@
 			"#": "73",
 			"label": "Slats position",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -170,8 +164,6 @@
 			"#": "80",
 			"label": "Reporting to controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

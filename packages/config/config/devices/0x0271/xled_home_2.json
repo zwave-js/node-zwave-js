@@ -70,8 +70,6 @@
 			"label": "External Ambient Light Sensor",
 			"description": "Measurements from associated Z-Wave light sensors are preferred if not older than 30 minutes.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -90,8 +88,6 @@
 			"label": "External Control",
 			"description": "When enabled, the lamp is controlled externally via Z-Wave and internal sensors are not used.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +106,6 @@
 			"label": "Gateway Check",
 			"description": "External Control disabled: Lamp signalizes failure to reach the gateway. External Control enabled: Lamp falls back to normal mode after gateway could not be reached repeatedly.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -130,8 +124,6 @@
 			"label": "Permanently On",
 			"description": "When enabled, overrides the External Control and Gateway Check parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -103,8 +103,6 @@
 			"#": "7",
 			"label": "Locator LED Status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -127,8 +125,6 @@
 			"#": "8",
 			"label": "Load Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

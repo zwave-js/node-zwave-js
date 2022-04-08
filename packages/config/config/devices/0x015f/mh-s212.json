@@ -33,8 +33,6 @@
 			"#": "2",
 			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -52,8 +50,6 @@
 			"#": "3",
 			"label": "2-State Switches",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -71,8 +67,6 @@
 			"#": "4",
 			"label": "Switch 1 - Operation Report to Association Group 1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -94,8 +88,6 @@
 			"#": "5",
 			"label": "Switch 1 - Off Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -122,8 +114,6 @@
 			"#": "7",
 			"label": "Switch 1 - Operation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -141,8 +131,6 @@
 			"#": "8",
 			"label": "Switch 2 - Operation Report to Association Group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -164,8 +152,6 @@
 			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,

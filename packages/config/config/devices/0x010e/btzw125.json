@@ -23,8 +23,6 @@
 			"#": "1",
 			"label": "Direction",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "2",
 			"label": "Speed (Torque)",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -73,8 +69,6 @@
 			"#": "3",
 			"label": "Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -112,8 +106,6 @@
 			"#": "6",
 			"label": "Sound",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +123,6 @@
 			"#": "7",
 			"label": "Battery Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -162,8 +152,6 @@
 			"#": "9",
 			"label": "TurnAndGo",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -182,8 +170,6 @@
 			"label": "BrakeAndGoBack",
 			"description": "Turn 75 degrees back after x seconds",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -258,8 +244,6 @@
 			"label": "Async",
 			"description": "Used if the lock is using an optional rotation sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -278,8 +262,6 @@
 			"label": "ReportType",
 			"description": "Door lock operation report type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

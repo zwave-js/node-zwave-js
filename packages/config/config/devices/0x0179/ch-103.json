@@ -35,8 +35,6 @@
 			"#": "1",
 			"label": "Calibration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -54,8 +52,6 @@
 			"#": "2",
 			"label": "Operation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +119,6 @@
 			"#": "50",
 			"label": "Respond to Non-Encrypted Commands When Included Securely",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

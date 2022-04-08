@@ -19,8 +19,6 @@
 			"label": "HVAC System Type",
 			"description": "Configures the type of heating system used.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -57,8 +55,6 @@
 			"label": "Heat Fuel Type",
 			"description": "Choose type of fuel. Reality - whether unit is boiler vs forced air.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +127,6 @@
 			"label": "Recovery Settings",
 			"description": "Whether thermostat uses intelligence to try and make the best of energy usage.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -215,8 +209,6 @@
 			"label": "Thermostat Lock",
 			"description": "Lock out physical thermostat controls.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -263,8 +255,6 @@
 			"label": "Temperature Display Units",
 			"description": "Celsius or Farenheit for temperature display.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -283,8 +273,6 @@
 			"label": "HVAC Modes Enabled",
 			"description": "Which heating/cooling modes are available.",
 			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 31,
 			"defaultValue": 15,
 			"allowManualEntry": false,
 			"options": [
@@ -323,8 +311,6 @@
 			"label": "Configurable Terminal Setting",
 			"description": "Changes control of configurable terminal",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -351,8 +337,6 @@
 			"label": "Power Source",
 			"description": "Which source of power is utilized.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -389,8 +373,6 @@
 			"label": "Remote Temperature Enable",
 			"description": "Enables remote temperature sensor instead of built-in.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -436,8 +418,6 @@
 			"label": "O/B Select",
 			"description": "Configuration of O/B terminal.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -456,8 +436,6 @@
 			"label": "Z-Wave Echo Association Reports",
 			"description": "Enable/Disabled Echo Assoc. Reports.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

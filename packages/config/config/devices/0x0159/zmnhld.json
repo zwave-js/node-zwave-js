@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Input I1 switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -37,8 +35,6 @@
 			"#": "2",
 			"label": "Input I2 switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +52,6 @@
 			"#": "3",
 			"label": "Input I3 switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +69,6 @@
 			"#": "4",
 			"label": "Input 1 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -94,8 +86,6 @@
 			"#": "5",
 			"label": "Input 2 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -113,8 +103,6 @@
 			"#": "6",
 			"label": "Input 3 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -132,8 +120,6 @@
 			"#": "10",
 			"label": "Activate / deactivate ALL ON/ALL OFF",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"allowManualEntry": false,
 			"options": [
@@ -159,8 +145,6 @@
 			"#": "11",
 			"label": "I1 Functionality selection",
 			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 32767,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -182,8 +166,6 @@
 			"#": "12",
 			"label": "I2 Functionality selection",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
 			"defaultValue": 32767,
 			"allowManualEntry": false,
 			"options": [
@@ -201,8 +183,6 @@
 			"#": "13",
 			"label": "I3 Functionality selection",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
 			"defaultValue": 32767,
 			"allowManualEntry": false,
 			"options": [
@@ -331,8 +311,6 @@
 			"#": "59",
 			"label": "Thermostat mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -368,8 +346,6 @@
 			"#": "63",
 			"label": "Output Switch selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -458,8 +434,6 @@
 			"#": "78",
 			"label": "Scale Selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -477,8 +451,6 @@
 			"#": "100",
 			"label": "Enable/Disable I1 or select Type and Event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -520,8 +492,6 @@
 			"#": "101",
 			"label": "Enable/Disable Endpoint I2 or select type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -563,8 +533,6 @@
 			"#": "102",
 			"label": "Enable/Disable Endpoint I3 or select type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -623,8 +591,6 @@
 			"#": "121",
 			"label": "Digital temperature sensor / setpoint selector",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

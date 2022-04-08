@@ -94,8 +94,6 @@
 			"label": "Consumption",
 			"description": "Measure energy consumed by the Wall Plug itself",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -132,8 +130,6 @@
 			"label": "Controlling",
 			"description": "Controlling 3rd association group devices",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -232,8 +228,6 @@
 			"label": "Active Alarms",
 			"description": "Network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 63,
 			"defaultValue": 63,
 			"allowManualEntry": false,
 			"options": [
@@ -313,8 +307,6 @@
 			"label": "LED frame color On",
 			"description": "LED frame color when controlled device is on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -365,8 +357,6 @@
 			"label": "LED frame color Off",
 			"description": "LED frame color when controlled device is off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -413,8 +403,6 @@
 			"label": "LED frame color Z-Wave",
 			"description": "Z-Wave alarm illumination",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

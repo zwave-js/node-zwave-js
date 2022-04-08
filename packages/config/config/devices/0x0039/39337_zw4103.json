@@ -20,8 +20,6 @@
 			"label": "Led Light",
 			"description": "Led light off when device is turned off (default)",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

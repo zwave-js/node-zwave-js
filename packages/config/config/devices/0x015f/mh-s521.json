@@ -26,8 +26,6 @@
 			"#": "3",
 			"label": "ALL ON/ALL OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -62,8 +60,6 @@
 			"#": "5",
 			"label": "Key Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -119,8 +115,6 @@
 			"#": "17",
 			"label": "Key1 Scene Activate Mode Setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -164,8 +158,6 @@
 			"#": "20",
 			"label": "Key2 Scene Activate Mode Setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -209,8 +201,6 @@
 			"#": "23",
 			"label": "Key3 Scene Activate Mode Setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

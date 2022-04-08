@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Over current protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "3",
 			"label": "Notification Load Status Change",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -65,8 +61,6 @@
 			"#": "4",
 			"label": "LED Indicator Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -117,8 +111,6 @@
 			"#": "100",
 			"label": "Parameters 101 to 104",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -196,8 +188,6 @@
 			"#": "254",
 			"label": "Configuration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

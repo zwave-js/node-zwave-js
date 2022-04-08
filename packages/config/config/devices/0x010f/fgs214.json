@@ -37,8 +37,6 @@
 			"#": "1",
 			"label": "Relays State After Power Failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"#": "20",
 			"label": "S1 Input – Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +79,6 @@
 			"#": "21",
 			"label": "S2 Input – Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -106,8 +100,6 @@
 			"#": "24",
 			"label": "Inputs Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -311,8 +303,6 @@
 			"#": "150",
 			"label": "Q Output – Operating Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -338,8 +328,6 @@
 			"#": "152",
 			"label": "Q Output – Reaction to Input Change in Timed Modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -431,8 +419,6 @@
 			"#": "162",
 			"label": "Q Output Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

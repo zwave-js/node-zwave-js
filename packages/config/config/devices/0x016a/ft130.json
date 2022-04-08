@@ -19,8 +19,6 @@
 			"label": "Touch sound",
 			"description": "Enable/disable the touch sound.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"label": "Touch vibration",
 			"description": "Enable/disable the touch vibration.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,8 +55,6 @@
 			"label": "Button slide",
 			"description": "Enable/disable the function of button slide.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +73,6 @@
 			"label": "Notification report",
 			"description": "Which notification to be sent to the associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -106,8 +98,6 @@
 			"#": "255",
 			"label": "Reset the WallMote Quad",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

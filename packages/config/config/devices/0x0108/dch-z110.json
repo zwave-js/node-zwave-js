@@ -164,8 +164,6 @@
 			"#": "7[0x08]",
 			"label": "Disable send of BASIC OFF after door closed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -183,8 +181,6 @@
 			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -202,8 +198,6 @@
 			"#": "7[0x20]",
 			"label": "Disable Multi CC in auto report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -221,8 +215,6 @@
 			"#": "7[0x40]",
 			"label": "Disable to report battery state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -23,8 +23,6 @@
 			"label": "Enable configuration",
 			"description": "Lock/unlock all configuration parameters.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -43,8 +41,6 @@
 			"label": "Reset/Remove",
 			"description": "Reset the sensor or remove from the Z-Wave network.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

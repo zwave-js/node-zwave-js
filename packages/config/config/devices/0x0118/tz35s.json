@@ -27,8 +27,6 @@
 			"#": "1",
 			"label": "Ignore start level bit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "Night light",
 			"description": "Indicates if LED is on when load is ON",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -66,8 +62,6 @@
 			"#": "4",
 			"label": "Invert switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -86,8 +80,6 @@
 			"label": "LED transmission indicator",
 			"description": "LED flickering during transmission",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

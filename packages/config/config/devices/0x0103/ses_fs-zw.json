@@ -27,8 +27,6 @@
 			"label": "Default switch state",
 			"description": "Behaviour after mains failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -111,8 +109,6 @@
 			"label": "Safety shutdown configuration",
 			"description": "Behaviour in the event of a safety shutdown",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +127,6 @@
 			"label": "Reset of overcurrent shutdown",
 			"description": "Activation despite 3x safety shutdown",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"writeOnly": true,
 			"allowManualEntry": false,
@@ -152,8 +146,6 @@
 			"label": "Night mode",
 			"description": "Set Night mode of the Status LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -172,8 +164,6 @@
 			"label": "Info LED colour",
 			"description": "Set color of the Info LED",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

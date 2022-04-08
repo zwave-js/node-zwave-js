@@ -29,8 +29,6 @@
 			"label": "Operating Mode",
 			"description": "Selecting the operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

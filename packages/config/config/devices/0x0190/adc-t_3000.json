@@ -19,8 +19,6 @@
 			"label": "HVAC System Type",
 			"description": "Configures the type of heating system used.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -54,8 +52,6 @@
 			"#": "4",
 			"label": "Heat Fuel Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -496,8 +492,6 @@
 			"label": "Thermostat Lock",
 			"description": "Lock out physical thermostat controls.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -534,8 +528,6 @@
 			"#": "24",
 			"label": "HVAC Modes Enabled",
 			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 31,
 			"defaultValue": 15,
 			"allowManualEntry": false,
 			"options": [
@@ -573,8 +565,6 @@
 			"#": "25[0x00ff]",
 			"label": "Configurable Terminal Setting Z2",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -604,8 +594,6 @@
 			"#": "25[0xff00]",
 			"label": "Configurable Terminal Setting Z1",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -635,8 +623,6 @@
 			"#": "26",
 			"label": "Active Power Source",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"readOnly": true,
@@ -1137,8 +1123,6 @@
 			"label": "Remote Temperature Sensor Status",
 			"description": "Status of the remote temperature sensor.",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"readOnly": true,
@@ -1863,8 +1847,6 @@
 			"#": "52",
 			"label": "Vent Options",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -2006,8 +1988,6 @@
 			"#": "57",
 			"label": "Relay Harvest Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 12,
 			"defaultValue": 12,
 			"allowManualEntry": false,
 			"options": [
@@ -2037,8 +2017,6 @@
 			"#": "58",
 			"label": "Relay Harvest Interval",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -2117,8 +2095,6 @@
 			"#": "65",
 			"label": "Humidify Options",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

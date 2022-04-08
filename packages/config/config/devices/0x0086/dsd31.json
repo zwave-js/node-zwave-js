@@ -18,8 +18,6 @@
 			"#": "37[0xff00]",
 			"label": "Siren Sound",
 			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

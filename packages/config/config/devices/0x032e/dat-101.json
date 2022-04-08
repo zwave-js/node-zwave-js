@@ -29,8 +29,6 @@
 			"#": "1",
 			"label": "Relay NO/NC Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -57,8 +55,6 @@
 			"#": "3",
 			"label": "Hysteresis Offset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -125,8 +121,6 @@
 			"#": "9",
 			"label": "Turbo Mode: Consider Thermostat Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -204,8 +198,6 @@
 			"#": "14",
 			"label": "Automatic Reports: After Changing Relay State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -223,8 +215,6 @@
 			"#": "15",
 			"label": "Switch 1 Mode (Thermostat Mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -250,8 +240,6 @@
 			"#": "16",
 			"label": "Switch 2 Mode (Turbo mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -278,8 +266,6 @@
 			"label": "Temperature Sensor 1: Calibration",
 			"unit": "°C",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -334,8 +320,6 @@
 			"label": "Temperature Sensor 2: Calibration",
 			"unit": "°C",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

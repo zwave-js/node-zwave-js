@@ -26,8 +26,6 @@
 			"label": "State after Power Loss",
 			"description": "This state will be chosen when the power is restored",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -40,8 +40,6 @@
 			"label": "Unsolicited Report Configuration",
 			"description": "Send unsolicited status report to primary controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

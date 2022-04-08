@@ -30,8 +30,6 @@
 			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -54,8 +52,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +71,6 @@
 			"label": "Ramp Rate Control",
 			"description": "Choose from 2 ramp rate options (fade-in / fade-out effect)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +99,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -186,8 +178,6 @@
 			"label": "Double Tap Function",
 			"description": "Choose if you want the dimmer to turn on to full brightness or custom brightness level after you toggle the switch up twice quickly.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -207,8 +197,6 @@
 			"label": "Scene Control Enable",
 			"description": "Enable or disable scene control functionality for quick double tap triggers.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -228,8 +216,6 @@
 			"label": "Double & Single Tap Enable",
 			"description": "Enable or disable the double tap function and assign brightness level to single tap.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -253,8 +239,6 @@
 			"label": "Local Toggle Control",
 			"description": "Enable or disable manual on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through the physical switch.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -288,8 +272,6 @@
 			"label": "Z-Wave Ramp Rate Control",
 			"description": "Choose if you want to set the Z-Wave ramp rate independently of the physical ramp rate (using an appropriate command in your hub) or if you want them to match.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -319,8 +301,6 @@
 			"label": "3-Way Switch Type",
 			"description": "Choose the type of 3-way switch you want to use with this dimmer in a 3-way set-up. Changing this setting can allow you to control brightness and dim the light from both 3-way locations. Use a regular momentary switch (like the Zooz ZAC99 accessory switch) if value is set to 2. See Zooz website for details.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -348,8 +328,6 @@
 			"label": "Report for Holding PhysicalToggle",
 			"description": "Choose how you'd like the dimmer to report when the toggle is held and physical / Z-Wave control is enabled or disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -369,8 +347,6 @@
 			"label": "Report status when toggle is disabled",
 			"description": "Report light status when both physical and Z-Wave control are disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

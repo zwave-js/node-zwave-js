@@ -407,8 +407,6 @@
 			"$if": "firmwareVersion >= 1.10 && firmwareVersion <= 1.12",
 			"label": "LED Blinking",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

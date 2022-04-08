@@ -7,7 +7,9 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0077",
-			"zwaveAllianceId": [4188, 4194, 4207, 4210, 4213, 4214, 4215, 4251, 4252, 4259]
+			"zwaveAllianceId": [
+				4188, 4194, 4207, 4210, 4213, 4214, 4215, 4251, 4252, 4259
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -126,8 +128,6 @@
 			"#": "5",
 			"label": "External Switch Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

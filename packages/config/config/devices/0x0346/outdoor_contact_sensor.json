@@ -54,8 +54,6 @@
 			"#": "4",
 			"label": "LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

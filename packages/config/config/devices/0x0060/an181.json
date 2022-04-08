@@ -48,8 +48,6 @@
 			"label": "Remember status",
 			"description": "Set whether to remember the last status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

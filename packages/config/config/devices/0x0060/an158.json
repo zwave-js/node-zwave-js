@@ -41,8 +41,6 @@
 			"label": "Send Out Basic Command",
 			"description": "Enable or Disable the status message function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

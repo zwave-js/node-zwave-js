@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Input IN1 configuration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -69,8 +67,6 @@
 			"#": "2",
 			"label": "Input IN2 configuration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 7,
 			"allowManualEntry": false,
 			"options": [
@@ -120,8 +116,6 @@
 			"#": "3",
 			"label": "Input IN3 configuration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 8,
 			"allowManualEntry": false,
 			"options": [
@@ -171,8 +165,6 @@
 			"#": "4",
 			"label": "Input IN4 configuration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -223,8 +215,6 @@
 			"label": "Auto scene mode set",
 			"description": "Activation of the programmed scene changing color shades.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -268,8 +258,6 @@
 			"label": "Memorize device status at power cut",
 			"description": "Device will be set to status memorized before power cut.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -335,8 +323,6 @@
 			"#": "14",
 			"label": "4 Dimmers mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

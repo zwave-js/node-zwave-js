@@ -52,8 +52,6 @@
 			"#": "8",
 			"label": "External Input Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +77,6 @@
 			"#": "9",
 			"label": "Operating Mode for External Input Action",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 6,
 			"allowManualEntry": false,
 			"options": [
@@ -121,8 +117,6 @@
 			"#": "11",
 			"label": "Source Sensor",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -219,8 +213,6 @@
 			"#": "20",
 			"label": "Time Format",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -275,8 +267,6 @@
 			"#": "26",
 			"label": "Mode To Switch After Dry Mode Operation Completion",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -307,8 +297,6 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Child Lock Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -686,8 +674,6 @@
 			"label": "Basic Set Action",
 			"description": "Activate this mode when a Basic Set is received",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

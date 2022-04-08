@@ -58,8 +58,6 @@
 			"label": "Central Scene ID",
 			"description": "Defines if different user codes shall cause individual or similar scene ID.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +75,6 @@
 			"#": "6",
 			"label": "Buzzer Confirmation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -41,8 +41,6 @@
 			"label": "Calibration",
 			"description": "To calibrate, first select Discalibrated, then Calibrated",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"#": "13",
 			"label": "Response to Basic Set (0xff)",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

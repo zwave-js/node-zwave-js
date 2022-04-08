@@ -37,8 +37,6 @@
 			"#": "5",
 			"label": "Disable the Flood function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

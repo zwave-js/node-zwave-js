@@ -49,8 +49,6 @@
 			"#": "20",
 			"label": "Input 1 - Operating Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -150,8 +148,6 @@
 			"label": "Input 2 - Operating Mode",
 			"description": "This parameter allows to choose mode of 2nd input (in2). change it depending on connected device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -210,7 +206,6 @@
 			"defaultValue": 10,
 			"unsigned": true
 		},
-
 		{
 			"#": "153",
 			"label": "Input 2: Alarm Cancellation Delay",
@@ -348,13 +343,10 @@
 				}
 			]
 		},
-
 		{
 			"#": "154",
 			"label": "Output 1: Default State ",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -389,8 +381,6 @@
 			"#": "155",
 			"label": "Output 2: Default State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
