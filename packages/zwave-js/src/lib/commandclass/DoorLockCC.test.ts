@@ -1,5 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
+import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
 	DoorLockCCCapabilitiesGet,
@@ -13,9 +14,10 @@ import {
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
+	getBoltSupportedValueId,
+	getDoorSupportedValueId,
+	getLatchSupportedValueId,
 } from "./DoorLockCC";
-
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -27,6 +29,34 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/DoorLockCC => ", () => {
+	let fakeDriver: Driver;
+	let node1: ZWaveNode;
+	let node2: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = createEmptyMockDriver() as unknown as Driver;
+		node1 = new ZWaveNode(1, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(node1.id, node1);
+
+		// Node 1 supports all Door Lock sensors
+		node1.valueDB.setValue(getDoorSupportedValueId(0), true);
+		node1.valueDB.setValue(getBoltSupportedValueId(0), true);
+		node1.valueDB.setValue(getLatchSupportedValueId(0), true);
+
+		node2 = new ZWaveNode(2, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(node2.id, node2);
+
+		// Node 2 doesn't support the door sensor
+		node2.valueDB.setValue(getDoorSupportedValueId(0), false);
+		node2.valueDB.setValue(getBoltSupportedValueId(0), true);
+		node2.valueDB.setValue(getLatchSupportedValueId(0), true);
+	});
+
+	afterAll(() => {
+		node1.destroy();
+		node2.destroy();
+	});
+
 	it("the OperationGet command should serialize correctly", () => {
 		const cc = new DoorLockCCOperationGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(
@@ -102,7 +132,7 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 			]),
 		);
 		const cc = new DoorLockCCOperationReport(fakeDriver, {
-			nodeId: 1,
+			nodeId: 2,
 			data: ccData,
 		});
 
@@ -117,7 +147,7 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 		expect(cc.lockTimeout).toBeUndefined();
 		expect(cc.latchStatus).toBe("closed");
 		expect(cc.boltStatus).toBe("locked");
-		expect(cc.doorStatus).toBe("closed");
+		expect(cc.doorStatus).toBe(undefined);
 		expect(cc.targetMode).toBe(DoorLockMode.Secured);
 		expect(cc.duration).toEqual(new Duration(1, "seconds"));
 	});
