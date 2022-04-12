@@ -351,7 +351,7 @@
 		]
 	},
 	"celsius_fahrenheit_0": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Temperature Unit",
 		"valueSize": 4,
 		"options": [
@@ -699,7 +699,7 @@
 		]
 	},
 	"invert_state_report": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Invert Binary Report Value",
 		"options": [
 			{
@@ -713,7 +713,7 @@
 		]
 	},
 	"invert_basic_set": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Invert Basic Set on Open/Close Event",
 		"options": [
 			{
@@ -808,7 +808,7 @@
 		"unsigned": true
 	},
 	"report_power_voltage": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Multilevel Sensor Report Content",
 		"options": [
 			{
@@ -1400,7 +1400,7 @@
 		]
 	},
 	"sensor_operation_mode": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Sensor Operation Mode",
 		"options": [
 			{
@@ -1534,7 +1534,7 @@
 		"defaultValue": 1
 	},
 	"external_switch_two": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "External Switch Type",
 		"options": [
 			{
@@ -1663,7 +1663,7 @@
 		]
 	},
 	"switch_mode_state_s1": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Switch Mode (S1): State Sync",
 		"allowManualEntry": false,
 		"options": [
@@ -1678,7 +1678,7 @@
 		]
 	},
 	"switch_mode_state_s2": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Switch Mode (S2): State Sync",
 		"allowManualEntry": false,
 		"options": [
@@ -2006,7 +2006,7 @@
 		]
 	},
 	"dimming_principle": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Dimming Principle",
 		"defaultValue": 1,
 		"options": [
@@ -2924,7 +2924,7 @@
 		]
 	},
 	"wallmote_command_type": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Command Type to Send Association Groups",
 		"options": [
 			{
@@ -2969,7 +2969,7 @@
 		"defaultValue": 1
 	},
 	"wave_option": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "Wave Option",
 		"valueSize": 4,
 		"defaultValue": 1,
@@ -3144,7 +3144,7 @@
 		"label": "WallSwipe Sensitivity"
 	},
 	"wallswipe_status": {
-		"$import": "~/templates/master_template.json#base_0-1_nounit",
+		"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 		"label": "WallSwipe Status",
 		"options": [
 			{

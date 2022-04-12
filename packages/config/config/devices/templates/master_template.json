@@ -63,8 +63,11 @@
 			}
 		]
 	},
-	"base_0-1_nounit": {
+	"base_0-1_options_nounit": {
+		// This template is meant to be used for parameters that have predefined options
 		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 1,
 		"defaultValue": 0,
 		"allowManualEntry": false
 	},

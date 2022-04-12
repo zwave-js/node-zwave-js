@@ -117,7 +117,7 @@
 		},
 		{
 			"#": "10",
-			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"label": "Define The Function of Button- and Button+",
 			"options": [
 				{
@@ -132,7 +132,7 @@
 		},
 		{
 			"#": "11",
-			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
