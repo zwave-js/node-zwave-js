@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Cherubini S.p.A.",
+	"manufacturer": "Cherubini SpA",
 	"manufacturerId": "0x0455",
 	"label": "Ora ZRX",
-	"description": "Dual radio motor with electronic limit switch for awnings and pergolas",
+	"description": "Z-Wave Tubular Motor For Awnings And Pergolas",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -16,31 +16,31 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Life Line Group",
+			"description": "Lifeline group",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Follow me",
-			"description": "The device in this group level.",
+			"label": "Follow Me",
+			"description": "The device in this group level",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Scene activation",
-			"description": "Receive an activation Scene ID if an obstacle are reach during its operation. The scene Id can be define by using parameters 30, 31.",
+			"label": "Scene Activation",
+			"description": "Receive an activation scene ID if an obstacle are reach during its operation. The scene ID can be define by using parameters 30, 31",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Follow me weather",
-			"description": "The device in this group will follow the device level if the change is due by the weather condition. The parameter Id sent by this command can be configured by using  parameter 32.",
+			"label": "Follow Me Weather",
+			"description": "The device in this group will follow the device level if the change is due by the weather condition. The parameter ID sent by this command can be configured by using parameter 32",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "30",
-			"label": "OPEN_COLLISION_SCENE_ID",
-			"description": "Scene ID sent if a collision is detected during opening operation.",
+			"label": "Open Collision Scene",
+			"description": "Scene ID sent if a collision is detected during opening operation",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -55,8 +55,8 @@
 		},
 		{
 			"#": "31",
-			"label": "CLOSE_COLLISION_SCENE_ID",
-			"description": "Scene ID sent if a collision is detected during closing operation.",
+			"label": "Close Collision Scene",
+			"description": "Scene ID sent if a collision is detected during closing operation",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -71,8 +71,8 @@
 		},
 		{
 			"#": "32",
-			"label": "PARAM_ID",
-			"description": "Parameter ID used by the window covering set on group: Follow me weather.",
+			"label": "Parameter for Window Covering",
+			"description": "Parameter ID used by the window covering set on group Follow Me Weather",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 23,
@@ -81,8 +81,8 @@
 		},
 		{
 			"#": "33",
-			"label": "MOVEMENT_TRIGGER",
-			"description": "Read-only parameter used to tell the reason of the last movement.",
+			"label": "Movement Trigger",
+			"description": "Parameter used to tell the reason of the last movement",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -91,7 +91,7 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Request by the user",
+					"label": "Requested by user",
 					"value": 0
 				},
 				{
@@ -110,13 +110,14 @@
 		},
 		{
 			"#": "34",
-			"label": "AUTOMATION_CONFIG",
-			"description": "The value of this parameter is the sum of Wind, Sun and Rain status. It can be used to set the automation status. Since Automation for Wind and Rain are always activated the only valid values are: 5 to disable the Sun automation 7 to enabled it.",
+			"label": "Automation Configuration",
+			"description": "The value of this parameter is the sum of wind, sun and rain status. Since automation for wind and rain are always activated the only valid values are: 5 to disable the sun automation or 7 to enabled it",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 7,
 			"defaultValue": 5,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable sun automation",
@@ -130,8 +131,8 @@
 		},
 		{
 			"#": "35",
-			"label": "SENSOR_ACTIVATION_STATUS",
-			"description": "It allows to know which sensor has been associated to the motor. The value of this parameter is the sum of Wind, Sun and Rain status.",
+			"label": "Sensor Activation Status",
+			"description": "Allows to know which sensor has been associated to the motor. The value of this parameter is the sum of wind, sun and rain status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
@@ -141,8 +142,8 @@
 		},
 		{
 			"#": "36",
-			"label": "LOST_LIFE_SIGNAL",
-			"description": "It allows you to know if the radio connection is operative or if the motor has lost the connection with its sensors.",
+			"label": "Lost Life Signal",
+			"description": "Allows to know if the radio connection is operative or if the motor has lost the connection with its sensors",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -162,8 +163,9 @@
 		},
 		{
 			"#": "37",
-			"label": "LEVEL_REPORT_PERIOD",
-			"description": "Used to define the level report frequency when the motor is moving. Valid values are from 2 (report updated every 2 seconds) to 60 (report updated every 60 seconds).",
+			"label": "Level Report Period",
+			"description": "Defines the level report frequency when the motor is moving",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 60,
@@ -172,13 +174,14 @@
 		},
 		{
 			"#": "38",
-			"label": "SEND_MULTILEVEL_REPORT",
-			"description": "For backward compatibility the device can send the multilevel report together with the Switch Multilevel report in addition to the update with Windows Covering report.",
+			"label": "Send Multilevel Report",
+			"description": "For backward compatibility: device can send the multilevel report together with the switch multilevel report in addition to the update with windows covering report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Multilevel report will not be sent",
@@ -192,9 +195,9 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "01) Prepare the Z-Wave controller for inclusion of a device (see your controller’s instructions).\n02) On the motor, run the programming sequence for inclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP\n03) The motor performs a few short movements to signal that the inclusion procedure is in progress.\n04) Check the controller to verify that the procedure was successful.",
-		"exclusion": "01) Prepare the Z-Wave controller for exclusion of a device (see your controller’s instructions).\n02) On the motor, run the programming sequence for exclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP\n03) The motor performs a few short movements to signal that the exclusion procedure is in progress.\n04) Check the controller to verify that the procedure was successful.",
-		"reset": "01) From the remote control: AB - AC - BC (4 seconds), wait for confirmation movements to be executed.\n02) From the button (if the end stops are not adjusted, you can use either sequence indifferently):\na. With the motor on the high limit switch: UP-UP-UP-DOWN-UP-DOWN\nb. With the motor on the low limit switch: DOWN-DOWN-DOWN-UP-DOWN-UP\nINFO: If the reset is performed while the device is still part of a network, it notifies the other devices in the lifeline group that it has been removed (Device Reset Locally Notification).",
+		"inclusion": "1) Prepare the Z-Wave controller for inclusion of a device (see your controller’s instructions).\n2) On the motor, run the programming sequence for inclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN.\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP.\n3) The motor performs a few short movements to signal that the inclusion procedure is in progress.\n4) Check the controller to verify that the procedure was successful.",
+		"exclusion": "1) Prepare the Z-Wave controller for exclusion of a device (see your controller’s instructions).\n2) On the motor, run the programming sequence for exclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN.\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP.\n3) The motor performs a few short movements to signal that the exclusion procedure is in progress.\n4) Check the controller to verify that the procedure was successful.",
+		"reset": "1) From the remote control: AB - AC - BC (4 seconds), wait for confirmation movements to be executed.\n2) From the button (if the end stops are not adjusted, you can use either sequence indifferently):\na. With the motor on the high limit switch: UP-UP-UP-DOWN-UP-DOWN.\nb. With the motor on the low limit switch: DOWN-DOWN-DOWN-UP-DOWN-UP.\nINFO: If the reset is performed while the device is still part of a network, it notifies the other devices in the lifeline group that it has been removed.",
 		"manual": "https://www.cherubini-group.com/Content/uploads/2021/10/ORA_A4518_6N14_EN.pdf"
 	}
 }
