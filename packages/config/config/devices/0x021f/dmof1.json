@@ -34,8 +34,6 @@
 			"label": "Disable Meter Functionality",
 			"description": "Enable/Disable the meter report.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -85,8 +83,6 @@
 			"label": "Enable/Disable Indicator LED",
 			"description": "This parameter enables or disables the indicator LED.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -115,8 +111,6 @@
 			"label": "Remember On/Off status",
 			"description": "Remember status from last plug in.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -135,8 +129,6 @@
 			"label": "Enable/Disable Timer Function",
 			"description": "Timer once plugged in before it turn off the device.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -165,8 +157,6 @@
 			"label": "Enable/Disable BUTTON",
 			"description": "Turn off the button",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -19,8 +19,6 @@
 			"label": "Invert",
 			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

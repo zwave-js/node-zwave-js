@@ -23,8 +23,6 @@
 			"label": "Send Basic report",
 			"description": "send the basic report to the Lifeline when the load state changed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "4",
 			"label": "Default fade time",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -86,8 +82,6 @@
 			"#": "7",
 			"label": "MOSFET driving type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +99,6 @@
 			"#": "9",
 			"label": "Added to and removed from a network",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -125,8 +117,6 @@
 			"label": "Detect load",
 			"description": "Enable/disable to detect load",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -166,8 +156,6 @@
 			"#": "13",
 			"label": "Over current protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -22,8 +22,6 @@
 			"#": "1",
 			"label": "LCD Invert",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"#": "3",
 			"label": "Backlight",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +71,6 @@
 			"#": "4",
 			"label": "Battery report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -112,8 +106,6 @@
 			"#": "7",
 			"label": "Window open detection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

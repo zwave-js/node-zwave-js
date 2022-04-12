@@ -41,8 +41,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Enable / Disable Motion Reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

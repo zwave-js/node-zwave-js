@@ -23,8 +23,6 @@
 			"label": "Siren Strobe Mode",
 			"description": "Defines the reaction of the siren",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "Alarm auto stop",
 			"description": "Defines the auto time out of the alarm indication",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

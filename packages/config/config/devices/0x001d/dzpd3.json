@@ -79,8 +79,6 @@
 			"#": "7",
 			"label": "LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -104,8 +102,6 @@
 			"label": "Load Type",
 			"description": "Type of lamp",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

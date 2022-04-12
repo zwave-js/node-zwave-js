@@ -56,8 +56,6 @@
 			"#": "5",
 			"label": "Double press function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": true,
 			"allowManualEntry": false,
@@ -76,8 +74,6 @@
 			"#": "6",
 			"label": "Scene controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

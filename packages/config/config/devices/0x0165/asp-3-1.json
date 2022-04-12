@@ -60,8 +60,6 @@
 			"#": "3",
 			"label": "Follow State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -87,8 +85,6 @@
 			"#": "4",
 			"label": "Always On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

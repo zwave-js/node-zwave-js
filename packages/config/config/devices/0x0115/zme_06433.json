@@ -37,8 +37,6 @@
 			"label": "LED mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -76,8 +74,6 @@
 			"label": "What to do on RF off command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -100,8 +96,6 @@
 			"label": "Ignore start level",
 			"description": "ignore start level in StartLevelChange",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -142,8 +136,6 @@
 			"label": "Set maximum light level on On click",
 			"description": "set action on ON command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -165,8 +157,6 @@
 			"#": "11",
 			"label": "Invert Buttons",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -185,8 +175,6 @@
 			"label": "Action on button single press or hold",
 			"description": "Defines which command should be sent on button single press or hold. Basic commands are sent to Association group. Switch All commands are sent broadcast.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -209,8 +197,6 @@
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold. Basic commands are sent to Association group. This will introduce a small delay for single click commands",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

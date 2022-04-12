@@ -19,8 +19,6 @@
 			"label": "LED Indicator",
 			"description": "Controls LED behavior when switch state is on/off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

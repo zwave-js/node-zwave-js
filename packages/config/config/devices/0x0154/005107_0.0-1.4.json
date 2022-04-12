@@ -19,8 +19,6 @@
 			"label": "Triggering mode",
 			"description": "Sets the tamper triggering mode when removed from the holder",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -85,8 +83,6 @@
 			"label": "Switch mode",
 			"description": "Switch mode : siren only, flash only, flash + siren",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

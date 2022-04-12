@@ -20,8 +20,6 @@
 			"label": "Calibration",
 			"description": "Unit calibration state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 129,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

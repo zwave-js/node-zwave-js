@@ -83,8 +83,6 @@
 			"label": "Activate/Deactivate WUT standby mode",
 			"description": "0: Always wake up, 1: Enter standby mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -103,8 +101,6 @@
 			"label": "Activate/Deactivate Tamper alarm mode",
 			"description": "0: Disable, 1: Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -133,8 +129,6 @@
 			"label": "Interval time for sending battery report",
 			"unit": "Minutes",
 			"valueSize": 1,
-			"minValue": 3,
-			"maxValue": 10,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

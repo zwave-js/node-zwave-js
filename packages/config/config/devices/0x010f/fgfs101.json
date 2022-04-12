@@ -80,8 +80,6 @@
 			"label": "Select alarm type (visual/acoustic)",
 			"description": "This parameter allows for deactivation visual and acoustic alarm.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -108,8 +106,6 @@
 			"label": "Type alarm frame sent to 1st assoc group",
 			"description": "Type of cmd frame sent in case of flooding",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -139,8 +135,6 @@
 			"label": "Device off and alarm cancellations",
 			"description": "Enable/disable device off/alarm cancellation updates to 2nd/3rd assoc groups",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -198,8 +192,6 @@
 			"label": "Alarm BROADCAST",
 			"description": "Transmit the alarm or control frame in 'broadcast' mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -263,8 +255,6 @@
 			"label": "Visual temperature indicator",
 			"description": "Enable or disable visual temperature indicator via device's LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -296,8 +286,6 @@
 			"label": "Alarm frame for movement/tamper",
 			"description": "Movement/tamper alarm sent to 1st & 4th assoc. group",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -365,8 +353,6 @@
 			"label": "Flood sensor functionality turned off",
 			"description": "Allows the internal flood sensor to be turned off.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -386,8 +372,6 @@
 			"label": "Associations in Z-Wave network security mode",
 			"description": "Defines whether commands are sent as secure or non-secure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 7,
 			"allowManualEntry": false,
 			"options": [

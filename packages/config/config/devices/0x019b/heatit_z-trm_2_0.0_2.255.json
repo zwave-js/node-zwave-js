@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Operation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 11,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "2",
 			"label": "Sensor Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -80,8 +76,6 @@
 			"#": "3",
 			"label": "Floor sensor type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -230,8 +224,6 @@
 			"#": "17",
 			"label": "Temperature display",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

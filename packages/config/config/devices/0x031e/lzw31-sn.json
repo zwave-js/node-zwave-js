@@ -211,8 +211,6 @@
 			"#": "12[0x02]",
 			"label": "Association Behavior: 3-Way",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -230,8 +228,6 @@
 			"#": "12[0x04]",
 			"label": "Association Behavior: Z-Wave Hub",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -249,8 +245,6 @@
 			"#": "12[0x08]",
 			"label": "Association Behavior: Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -317,8 +311,6 @@
 			"#": "14",
 			"label": "LED Indicator: Brightness When On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -444,8 +436,6 @@
 			"#": "16[0x7f000000]",
 			"label": "LED Indicator: Effect Type",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -522,8 +512,6 @@
 			"#": "21",
 			"label": "AC Power Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -541,8 +529,6 @@
 			"#": "22",
 			"label": "Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -582,8 +568,6 @@
 			"$if": "firmwareVersion >= 1.54",
 			"label": "Operation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

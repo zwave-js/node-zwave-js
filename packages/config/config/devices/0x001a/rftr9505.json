@@ -53,8 +53,6 @@
 			"#": "5",
 			"label": "State After Power Loss",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -76,8 +74,6 @@
 			"#": "6",
 			"label": "Enable/Disable Panic Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -95,8 +91,6 @@
 			"#": "13",
 			"label": "LED Brightness When On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -122,8 +116,6 @@
 			"#": "14",
 			"label": "LED Brightness When Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [

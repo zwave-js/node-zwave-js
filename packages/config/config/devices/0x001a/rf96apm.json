@@ -20,8 +20,6 @@
 			"label": "Remember The Last Status",
 			"description": "1: remember (0: do not remember)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -142,8 +142,6 @@
 			"#": "15",
 			"label": "Supervision Commands",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

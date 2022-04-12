@@ -19,8 +19,6 @@
 			"label": "Memory function",
 			"description": "The thermostat will recover the operating mode after a power failure.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

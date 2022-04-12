@@ -38,8 +38,6 @@
 			"label": "LED is on when load is on",
 			"description": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -86,8 +84,6 @@
 			"#": "11",
 			"label": "Enable automatic notifications",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

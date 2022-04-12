@@ -36,8 +36,6 @@
 			"label": "Night Light",
 			"description": "Defines the behavior of the blue LED. Default is on when switch is off.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

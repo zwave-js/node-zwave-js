@@ -19,8 +19,6 @@
 			"label": "Central Scene notifications",
 			"description": "Enable/disable Central Scene notifications for 2x-5x button presses.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,8 +57,6 @@
 			"label": "Button mode",
 			"description": "Switching mode of the push buttons T1 ... T4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

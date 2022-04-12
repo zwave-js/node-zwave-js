@@ -42,8 +42,6 @@
 			"label": "Status upon receipt of 1 click",
 			"description": "Defines the status of the output O1/O2 after 1 Click",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -74,8 +72,6 @@
 			"label": "Status upon receipt of 2 clicks",
 			"description": "Defines the status of the output O1/O2 after 2 Clicks",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -111,8 +107,6 @@
 			"label": "Number of clicks that control the device",
 			"description": "Defines the Clicks on the Switches that control associated devices",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -188,8 +182,6 @@
 			"label": "Status after Multi-Channel Basic Set command",
 			"description": "Defines how Basic Set commands controlling outputs",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -216,8 +208,6 @@
 			"label": "Outputs status upon receipt of a Basic Set command",
 			"description": "Define which channels are controlled by Basic Set command",
 			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -236,8 +226,6 @@
 			"label": "Start-up status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -268,8 +256,6 @@
 			"label": "Configuration reset",
 			"description": "Defines which parameters should be reset to default values",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -300,8 +286,6 @@
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

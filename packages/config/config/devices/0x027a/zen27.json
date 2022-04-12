@@ -30,8 +30,6 @@
 			"$if": "firmwareVersion <= 2.7",
 			"label": "Paddle Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -50,8 +48,6 @@
 			"$if": "firmwareVersion >= 2.8",
 			"label": "Invert Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -73,8 +69,6 @@
 			"#": "2",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -100,8 +94,6 @@
 			"#": "3",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +119,6 @@
 			"#": "5",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -155,8 +145,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Control Group 2 With Physical Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -175,8 +163,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Control Group 2 With Connected 3-Way Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -195,8 +181,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Control Group 2 With Z-Wave Commands",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -215,8 +199,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Control Group 2 With On/Off Timers",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -264,8 +246,6 @@
 			"label": "Double-Tap Upper Paddle Behavior",
 			"description": "Set the brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -285,8 +265,6 @@
 			"label": "Scene Control",
 			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -305,8 +283,6 @@
 			"$if": "firmwareVersion >= 2.1",
 			"label": "Enable Double Tap Function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -329,8 +305,6 @@
 			"$if": "firmwareVersion >= 2.1 && firmwareVersion <= 2.6",
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -349,8 +323,6 @@
 			"$if": "firmwareVersion >= 2.7",
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -383,8 +355,6 @@
 			"$if": "firmwareVersion === 2.7",
 			"label": "Z-Wave Ramp Rate Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -403,8 +373,6 @@
 			"$if": "firmwareVersion >= 2.8",
 			"label": "Z-Wave Ramp Rate",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -434,8 +402,6 @@
 			"label": "Dimming Reporting",
 			"description": "Set how the dimmer to reports when paddles are tapped and held.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -455,8 +421,6 @@
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

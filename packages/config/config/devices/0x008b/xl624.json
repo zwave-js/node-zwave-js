@@ -22,8 +22,6 @@
 			"#": "1",
 			"label": "Outdoor Unit Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "2",
 			"label": "Fan Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -64,8 +60,6 @@
 			"#": "3",
 			"label": "Change Over Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +77,6 @@
 			"#": "4",
 			"label": "Indoor Unit Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +94,6 @@
 			"#": "6",
 			"label": "Indoor Heat Stages",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -206,8 +196,6 @@
 			"#": "75",
 			"label": "Recovery Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -225,8 +213,6 @@
 			"#": "76",
 			"label": "Schedule",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -244,8 +230,6 @@
 			"#": "77",
 			"label": "ESM",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -263,8 +247,6 @@
 			"#": "78",
 			"label": "Aux Heat Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -282,8 +264,6 @@
 			"#": "79",
 			"label": "2nd Stage Cool Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

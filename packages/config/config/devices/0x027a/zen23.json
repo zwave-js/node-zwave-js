@@ -35,8 +35,6 @@
 			"$if": "firmwareVersion >= 1.5 && firmwareVersion < 3.0 || firmwareVersion === 20.15",
 			"label": "Switch behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -55,8 +53,6 @@
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
 			"label": "Switch behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +75,6 @@
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
 			"label": "Auto Turn-Off Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +104,6 @@
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14 || firmwareVersion >= 20.17",
 			"label": "Auto Turn-On Timer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -147,8 +139,6 @@
 			"label": "Enable/Disable Scene Control",
 			"description": "Enable or disable scene control functionality for quick 2-tap.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -168,8 +158,6 @@
 			"label": "Smart Bulb Mode (Disable Physical Switch)",
 			"description": "Enable/Disable Toggle / Z-Wave Control. NOTE: tap the upper paddle 10 times quickly to change this mode.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -193,8 +181,6 @@
 			"label": "3-Way Switch Type",
 			"description": "Choose the type of 3-way switch you want to use with this dimmer in a 3-way set-up.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -214,8 +200,6 @@
 			"label": "Report status when toggle is disabled",
 			"description": "Report light status when both physical and Z-Wave control are disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

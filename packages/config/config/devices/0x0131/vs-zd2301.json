@@ -21,8 +21,6 @@
 			"description": "Select the temperature report unit, celsius or fahrenheit",
 			"valueSize": 1,
 			"unit": "°C",
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

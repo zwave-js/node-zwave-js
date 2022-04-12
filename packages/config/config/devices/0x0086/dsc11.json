@@ -357,8 +357,6 @@
 			"#": "253",
 			"label": "Meter Calibration Mode",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,

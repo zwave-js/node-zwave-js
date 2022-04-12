@@ -18,8 +18,6 @@
 			"#": "3",
 			"label": "Current Overload Protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -37,8 +35,6 @@
 			"#": "4",
 			"label": "Overheat protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -66,8 +62,6 @@
 			"#": "20",
 			"label": "Output status after re-power",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -90,8 +84,6 @@
 			"label": "Group 1 notifications",
 			"description": "Group 1 notifications when the state of Nano Switch's load is changed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -118,8 +110,6 @@
 			"label": "Group 3 notifications",
 			"description": "Notification to sent for Group 3 when using the external switch 1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -138,8 +128,6 @@
 			"label": "Group 4 notifications",
 			"description": "Notification to sent for Group 4 when using the external switch 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -157,8 +145,6 @@
 			"#": "83",
 			"label": "Configure the state of LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -207,8 +193,6 @@
 			"#": "90",
 			"label": "Enables/disables parameter 91 and 92",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -256,8 +240,6 @@
 			"label": "Set group 1 reports",
 			"description": "To set which reports need to be sent in Report group 1.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -284,8 +266,6 @@
 			"label": "Set group 2 reports",
 			"description": "To set which reports need to be sent in Report group 2.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -312,8 +292,6 @@
 			"label": "Set group 3 reports",
 			"description": "To set which reports need to be sent in Report group 3.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -373,8 +351,6 @@
 			"#": "120",
 			"label": "External switch mode for S1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -400,8 +376,6 @@
 			"#": "121",
 			"label": "External switch mode for S2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -427,8 +401,6 @@
 			"#": "122",
 			"label": "Control destination of external switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -450,8 +422,6 @@
 			"#": "252",
 			"label": "Lock/unlock configuration parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -469,8 +439,6 @@
 			"#": "255",
 			"label": "Reset the Nano Switch",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

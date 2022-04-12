@@ -37,8 +37,6 @@
 			"#": "2",
 			"label": "External Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"#": "3",
 			"label": "Toggle Switch Behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +71,6 @@
 			"#": "4",
 			"label": "Switch 1: Report to Association Group 1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -115,8 +109,6 @@
 			"label": "Operation Mode",
 			"description": "Determines if relay switches when command is received, or when AC voltage next crosses 0V.  Zero crossing mode may reduce possibility of relay failure.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -134,8 +126,6 @@
 			"#": "8",
 			"label": "Switch 2: Operation Report to Association Group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -157,8 +147,6 @@
 			"#": "255",
 			"label": "Factory Reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,

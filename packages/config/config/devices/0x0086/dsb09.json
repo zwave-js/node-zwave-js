@@ -36,8 +36,6 @@
 			"#": "1",
 			"label": "Operating Voltage",
 			"valueSize": 2,
-			"minValue": 120,
-			"maxValue": 240,
 			"defaultValue": 240,
 			"allowManualEntry": false,
 			"options": [

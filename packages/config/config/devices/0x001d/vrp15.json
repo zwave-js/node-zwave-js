@@ -31,8 +31,6 @@
 			"label": "Locator LED Status",
 			"description": "Controls state of on-device LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -22,8 +22,6 @@
 			"#": "1",
 			"label": "Use custom mode for LED animations",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "2",
 			"label": "Enable/Disable Strobe over Custom Color",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -93,8 +89,6 @@
 			"label": "Enable notifications",
 			"description": "Enable notifications to associated devices (Group 1) when the state is changed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

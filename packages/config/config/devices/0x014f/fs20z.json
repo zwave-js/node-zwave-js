@@ -19,8 +19,6 @@
 			"label": "Night Light",
 			"description": "Nightlight: LED turns ON when the switch is turned OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

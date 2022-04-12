@@ -45,8 +45,6 @@
 			"#": "5[0x02]",
 			"label": "Test Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -64,8 +62,6 @@
 			"#": "5[0x08]",
 			"label": "Temperature Scale",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +79,6 @@
 			"#": "5[0x10]",
 			"label": "Illumination Report on Trigger",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +96,6 @@
 			"#": "5[0x20]",
 			"label": "Temperature Report on Trigger",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -121,8 +113,6 @@
 			"#": "6",
 			"label": "PIR Integrate Illumination",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -140,8 +130,6 @@
 			"#": "7[0x02]",
 			"label": "Send Motion Off Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -159,8 +147,6 @@
 			"#": "7[0x04]",
 			"label": "PIR Super Sensitivity Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -178,8 +164,6 @@
 			"#": "7[0x10]",
 			"label": "Notification Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -197,8 +181,6 @@
 			"#": "7[0x20]",
 			"label": "Multi Command Encapsulated Auto Reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -216,8 +198,6 @@
 			"#": "7[0x40]",
 			"label": "Report Battery State When Triggered",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -83,8 +83,6 @@
 			"label": "Control Items",
 			"description": "This parameter is used to implement the control items",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -119,7 +117,7 @@
 		},
 		{
 			"#": "10",
-			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"label": "Define The Function of Button- and Button+",
 			"options": [
 				{
@@ -134,7 +132,7 @@
 		},
 		{
 			"#": "11",
-			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{
@@ -177,8 +175,6 @@
 			"label": "Pair Wireless Button With Doorbell",
 			"description": "Start the wireless button pairing mode",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

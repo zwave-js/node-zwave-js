@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Input I1 switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -37,8 +35,6 @@
 			"#": "4",
 			"label": "Input 1 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -96,8 +92,6 @@
 			"#": "59",
 			"label": "Thermostat mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +125,6 @@
 			"#": "63",
 			"label": "Output switch selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -150,8 +142,6 @@
 			"#": "78",
 			"label": "Scale Selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

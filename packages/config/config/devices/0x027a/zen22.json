@@ -19,8 +19,6 @@
 			"$if": "firmwareVersion <= 2.255 || firmwareVersion >= 20.14",
 			"label": "Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14",
 			"label": "Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"$if": "firmwareVersion <= 2.255 || firmwareVersion >= 20.15",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -91,8 +85,6 @@
 			"$if": "firmwareVersion >= 3.0 || firmwareVersion === 20.14",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -120,8 +112,6 @@
 			"label": "LED Indicator Control",
 			"description": "Choose LED Functionality",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -140,8 +130,6 @@
 			"$if": "firmwareVersion >= 20.15",
 			"label": "Enable / Disable LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -161,8 +149,6 @@
 			"label": "Ramp Rate Control",
 			"description": "Choose from 2 ramp rate options (fade-in / fade-out effect)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -190,8 +176,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Enable/Disable Auto Turn-On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -220,8 +204,6 @@
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -242,8 +224,6 @@
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -264,8 +244,6 @@
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -286,8 +264,6 @@
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -339,8 +315,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Double Tap: Brightness Level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -359,8 +333,6 @@
 			"$if": "firmwareVersion >= 3.1",
 			"label": "Enable/Disable Scene Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -380,8 +352,6 @@
 			"label": "Enable/Disable Double Tap",
 			"description": "Allows control of the double tap function and assigning the brightness level to single tap.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -405,8 +375,6 @@
 			"label": "Smart Bulb Mode: Enable/Disable Local Control",
 			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -439,8 +407,6 @@
 			"$if": "firmwareVersion >= 3.4",
 			"label": "Z-Wave Ramp Rate",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -469,8 +435,6 @@
 			"$if": "firmwareVersion >= 3.5",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -497,8 +461,6 @@
 			"$if": "firmwareVersion >= 3.5",
 			"label": "Send Reports When Tapped or Held",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -518,8 +480,6 @@
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

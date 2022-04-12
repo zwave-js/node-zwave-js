@@ -19,8 +19,6 @@
 			"label": "LED Operation Mode",
 			"description": "Defines when the LED shall shine and how",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -49,8 +47,6 @@
 			"label": "Switching behavior",
 			"description": "Switching behavior when receiving wireless OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"label": "Button Mode",
 			"description": "This parameter defines if the local button ...",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -100,8 +94,6 @@
 			"#": "21",
 			"label": "LED Color on OFF state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +115,6 @@
 			"#": "22",
 			"label": "LED Color on ON state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

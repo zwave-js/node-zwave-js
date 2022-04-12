@@ -23,8 +23,6 @@
 			"label": "Night light",
 			"description": "LED behaviour control.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -43,8 +41,6 @@
 			"label": "Memory function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"label": "Invert switch",
 			"description": "Swap top and bottom switch/button.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -82,8 +76,6 @@
 			"#": "4",
 			"label": "LED transmission indication",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -106,8 +98,6 @@
 			"label": "Suspend group 4",
 			"description": "Group 4 command sending behaviour control.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

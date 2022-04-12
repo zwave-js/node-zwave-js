@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Status LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -55,8 +53,6 @@
 			"label": "Thermistor Type Input 1",
 			"description": "This parameter decides which kind of thermistor is connected to input 1.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +71,6 @@
 			"label": "Thermistor Type Input 2",
 			"description": "This parameter decides which kind of thermistor is connected to input 2.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -159,8 +153,6 @@
 			"label": "Auto Relay On",
 			"description": "Configures which events will cause the relay to be turned on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -183,8 +175,6 @@
 			"label": "Auto Relay Off",
 			"description": "Configures which events will cause the relay to be turned off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

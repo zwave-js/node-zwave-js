@@ -39,8 +39,6 @@
 			"$if": "firmwareVersion <= 2.255",
 			"label": "Sensor type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -61,8 +59,6 @@
 			"label": "Sensor type",
 			"description": "Defines the type of sensor",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

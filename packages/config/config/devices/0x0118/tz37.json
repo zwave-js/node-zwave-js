@@ -19,8 +19,6 @@
 			"label": "Night light",
 			"description": "Configure LED to reflect load's status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"label": "Memory Function",
 			"description": "Toggles the Switch's memory function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,8 +55,6 @@
 			"label": "Invert switch",
 			"description": "Inverts switch's top/bottom",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +73,6 @@
 			"label": "LED transmission indication",
 			"description": "LED flickers when transmitting data to any group",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +94,6 @@
 			"#": "5",
 			"label": "Don't transmit to Group 4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

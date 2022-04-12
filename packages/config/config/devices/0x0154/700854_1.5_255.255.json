@@ -20,8 +20,6 @@
 			"description": "Sets the tamper triggering mode when removed from the holder",
 			"valueSize": 1,
 			"unit": "int",
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -44,8 +42,6 @@
 			"label": "Siren mode",
 			"description": "Determines how the Siren shall react on alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

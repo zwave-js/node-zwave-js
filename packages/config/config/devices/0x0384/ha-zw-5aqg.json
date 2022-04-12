@@ -34,8 +34,6 @@
 			"#": "255",
 			"label": "Factory Reset Device",
 			"valueSize": 4,
-			"minValue": -2013265920,
-			"maxValue": 0,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

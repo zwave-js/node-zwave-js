@@ -19,8 +19,6 @@
 			"label": "Digital input type",
 			"description": "Defines the type of input device connected to digital input.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -46,8 +44,6 @@
 			"#": "3",
 			"label": "Turn off alarming",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -99,8 +95,6 @@
 			"#": "50",
 			"label": "Enable/disable beeper",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

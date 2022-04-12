@@ -19,8 +19,6 @@
 			"label": "LED Indicator",
 			"description": "Change the behavior of the LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

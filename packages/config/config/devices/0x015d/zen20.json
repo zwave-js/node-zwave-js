@@ -75,8 +75,6 @@
 			"label": "CH1 Auto Turn-Off Timer",
 			"description": "Enable or disable the auto turn-off timer for CH1 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +103,6 @@
 			"label": "CH1 Auto Turn-On Timer",
 			"description": "Enable or disable the auto turn-on timer for CH1 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -135,8 +131,6 @@
 			"label": "CH2 Auto Turn-Off Timer",
 			"description": "Enable or disable the auto turn-off timer for CH2 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -165,8 +159,6 @@
 			"label": "CH2 Auto Turn-On Timer",
 			"description": "Enable or disable the auto turn-on timer for CH2 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -195,8 +187,6 @@
 			"label": "CH3 Auto Turn-Off Timer",
 			"description": "Enable or disable the auto turn-off timer for CH3 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -225,8 +215,6 @@
 			"label": "CH3 Auto Turn-On Timer",
 			"description": "Enable or disable the auto turn-on timer for CH3 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -255,8 +243,6 @@
 			"label": "CH4 Auto Turn-Off Timer",
 			"description": "Enable or disable the auto turn-off timer for CH4 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -285,8 +271,6 @@
 			"label": "CH4 Auto Turn-On Timer",
 			"description": "Enable or disable the auto turn-on timer for CH4 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -315,8 +299,6 @@
 			"label": "CH5 Auto Turn-Off Timer",
 			"description": "Enable or disable the auto turn-off timer for CH5 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -345,8 +327,6 @@
 			"label": "CH5 Auto Turn-On Timer",
 			"description": "Enable or disable the auto turn-on timer for CH5 outlet",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -375,8 +355,6 @@
 			"label": "Manual Control",
 			"description": "Enable / Disable Physical Button Functionality",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -395,8 +373,6 @@
 			"label": "LED Indicator Mode",
 			"description": "LED Outlet Indicator Behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
