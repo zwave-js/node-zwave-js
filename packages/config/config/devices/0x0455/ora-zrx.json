@@ -1,8 +1,8 @@
 {
-	"manufacturer": "Cherubini SpA",
+	"manufacturer": "Cherubini S.p.A.",
 	"manufacturerId": "0x0455",
 	"label": "Ora ZRX",
-	"description": "Z-Wave Tubular Motor For Awnings And Pergolas",
+	"description": "Z-Wave Tubular Motor",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -152,11 +152,11 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Connection with the sensor is operative",
+					"label": "Connection is operative",
 					"value": 0
 				},
 				{
-					"label": "Connection with the sensor has been lost",
+					"label": "Connection has been lost",
 					"value": 1
 				}
 			]
