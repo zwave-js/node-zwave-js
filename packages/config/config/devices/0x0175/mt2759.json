@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "(I1) Input 1 switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -38,8 +36,6 @@
 			"#": "2",
 			"label": "(I2) Input 2 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -57,8 +53,6 @@
 			"#": "3",
 			"label": "(I3) Input 3 contact type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +71,6 @@
 			"label": "ALL ON/ALL OFF",
 			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -136,8 +128,6 @@
 			"label": "Auto off / on, s or ms selection",
 			"description": "Automatic turning off / on seconds or milliseconds selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -188,8 +178,6 @@
 			"#": "63",
 			"label": "Output Switch selection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -208,8 +196,6 @@
 			"label": "Enable / Disable Endpoint I2",
 			"description": "Enable / Disable Endpoint I2 or select Notification Type and Event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -248,8 +234,6 @@
 			"label": "Enable / Disable Endpoint I3",
 			"description": "Enable / Disable Endpoint I3 or select Notification Type and Event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

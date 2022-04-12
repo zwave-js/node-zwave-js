@@ -33,8 +33,6 @@
 			"#": "1",
 			"label": "Primary Notification Volume",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"#": "2",
 			"label": "Primary Notification Length",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -104,8 +100,6 @@
 			"#": "4",
 			"label": "Secondary Notification Volume",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +121,6 @@
 			"#": "5",
 			"label": "Primary Notification Sound",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 9,
 			"allowManualEntry": false,
 			"options": [
@@ -178,8 +170,6 @@
 			"#": "6",
 			"label": "Secondary Notification Sound",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 10,
 			"allowManualEntry": false,
 			"options": [
@@ -229,8 +219,6 @@
 			"#": "7",
 			"label": "Toggle notification sound",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

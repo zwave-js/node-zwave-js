@@ -23,8 +23,6 @@
 			"label": "Temp. Scale",
 			"description": "0=C, 1=F",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -44,8 +42,6 @@
 			"description": "1=1F/0.5C - 4=4F/2C",
 			"unit": "1F / 0.5C",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -73,8 +69,6 @@
 			"description": "1=1F/0.5C - 4=4F/2C",
 			"unit": "1F/0.5C",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

@@ -19,8 +19,6 @@
 			"label": "Default State",
 			"description": "Status after a power outage or after being plugged",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -43,8 +41,6 @@
 			"label": "Follow State",
 			"description": "Allows to enable or disable Group 2 & Group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -71,8 +67,6 @@
 			"label": "Always On",
 			"description": "Forces the Micro Smart Plug status to be ON",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -435,8 +429,6 @@
 			"label": "Power Threshold Action",
 			"description": "Defines actions if the power Low/High Threshold are reached.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 20,
 			"defaultValue": 7,
 			"allowManualEntry": false,
 			"options": [

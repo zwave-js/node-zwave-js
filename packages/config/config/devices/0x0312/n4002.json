@@ -77,7 +77,6 @@
 			"#": "19",
 			"$import": "~/0x0312/templates/minoston_template.json#external_switch_type_four_options"
 		},
-
 		{
 			"#": "20",
 			"$import": "~/0x0312/templates/minoston_template.json#association_reports"

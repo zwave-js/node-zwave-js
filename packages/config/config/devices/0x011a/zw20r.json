@@ -19,8 +19,6 @@
 			"label": "Toggle LED mode",
 			"description": "Set to 1 for LED to be in sync with switch.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

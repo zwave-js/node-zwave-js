@@ -19,8 +19,6 @@
 			"label": "Input 1 switch function selection",
 			"description": "IR external relay or External Relay control mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -50,8 +48,6 @@
 			"#": "10",
 			"label": "All On / All Off Function",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"allowManualEntry": false,
 			"options": [
@@ -143,8 +139,6 @@
 			"#": "45",
 			"label": "Reset Power counters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -174,8 +168,6 @@
 			"#": "100",
 			"label": "Configure External Relay Endpoints",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -228,8 +220,6 @@
 			"#": "112",
 			"label": "Relay to power off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

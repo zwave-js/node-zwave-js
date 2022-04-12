@@ -25,8 +25,6 @@
 			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -62,8 +60,6 @@
 			"#": "3",
 			"label": "RF Off command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -89,8 +85,6 @@
 			"#": "4",
 			"label": "Ignore start level",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -126,8 +120,6 @@
 			"#": "7",
 			"label": "Behavior when ON received",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -224,8 +216,6 @@
 			"label": "Pulse type",
 			"description": "NB: Do not touch these settings if you are not sure what they mean!",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

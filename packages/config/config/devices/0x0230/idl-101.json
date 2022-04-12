@@ -19,8 +19,6 @@
 			"label": "Door Lock Mode",
 			"description": "Sets the door lock mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

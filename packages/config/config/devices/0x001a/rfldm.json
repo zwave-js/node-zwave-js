@@ -63,8 +63,6 @@
 			"#": "5",
 			"label": "Power p State",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -86,8 +84,6 @@
 			"#": "6",
 			"label": "Panic Mode Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

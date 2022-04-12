@@ -22,8 +22,6 @@
 			"#": "3",
 			"label": "Scene Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -41,8 +39,6 @@
 			"#": "4",
 			"label": "Scene Command Targer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

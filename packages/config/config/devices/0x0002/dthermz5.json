@@ -69,8 +69,6 @@
 			"description": "0=Disabled 1=Enabled",
 			"valueSize": 1,
 			"unit": "int",
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -90,8 +88,6 @@
 			"description": "0=Disabled 1=Enabled",
 			"valueSize": 1,
 			"unit": "int",
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +106,6 @@
 			"label": "Set-point type in Thermostat_Setpoint_Reports",
 			"description": "1=Heating 2=Cooling 10=Auto Changeover",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -153,8 +147,6 @@
 			"label": "LED color",
 			"description": "1=Green 2=Red",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

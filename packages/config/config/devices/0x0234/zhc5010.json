@@ -22,8 +22,6 @@
 			"#": "1",
 			"label": "Upper paddle buttons mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -41,8 +39,6 @@
 			"#": "2",
 			"label": "Lower paddle buttons mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -61,8 +57,6 @@
 			"$if": "firmwareVersion <= 1.255",
 			"label": "LED indication #1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +99,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED indication #1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -153,8 +145,6 @@
 			"$if": "firmwareVersion <= 1.255",
 			"label": "LED indication #2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -197,8 +187,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED indication #2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -245,8 +233,6 @@
 			"$if": "firmwareVersion <= 1.255",
 			"label": "LED indication #3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -289,8 +275,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED indication #3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -337,8 +321,6 @@
 			"$if": "firmwareVersion <= 1.255",
 			"label": "LED indication #4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -381,8 +363,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED indication #4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -494,8 +474,6 @@
 			"#": "15",
 			"label": "Relay mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 13,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -561,8 +539,6 @@
 			"#": "16",
 			"label": "Indicator mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -580,8 +556,6 @@
 			"#": "17",
 			"label": "Scene notification offset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 200,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -600,8 +574,6 @@
 			"#": "18",
 			"label": "Disable House Cleaning",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -619,8 +591,6 @@
 			"#": "19[0x01]",
 			"label": "Multilevel Switch (button #1)",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -655,8 +625,6 @@
 			"#": "20[0x01]",
 			"label": "Multilevel Switch (button #2)",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -691,8 +659,6 @@
 			"#": "21[0x01]",
 			"label": "Multilevel Switch (button #3)",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -727,8 +693,6 @@
 			"#": "22[0x01]",
 			"label": "Multilevel Switch (button #4)",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -763,8 +727,6 @@
 			"#": "23",
 			"label": "Control of association groups (button #1)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -782,8 +744,6 @@
 			"#": "24",
 			"label": "Control of association groups (button #2)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -801,8 +761,6 @@
 			"#": "25",
 			"label": "Control of association groups (button #3)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -820,8 +778,6 @@
 			"#": "26",
 			"label": "Control of association groups (button #4)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

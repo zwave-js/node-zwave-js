@@ -29,8 +29,6 @@
 			"label": "Relay type",
 			"description": "0 normal open, 1 normal close, 2 switching",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

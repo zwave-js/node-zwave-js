@@ -23,8 +23,6 @@
 			"label": "Enable/Disable Basic Set Command",
 			"description": "The flood sensor can send BASIC SET command to nodes associated",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -43,8 +41,6 @@
 			"label": "value of the Basic Set",
 			"description": "The flood sensor can send BASIC SET command to nodes associated",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"label": "Flooding Alarm",
 			"description": "Enable/Disable flooding alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +77,6 @@
 			"label": "Shock Alarm",
 			"description": "Enable/Disable shock alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +94,6 @@
 			"#": "19",
 			"label": "High Temperature Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +121,6 @@
 			"label": "Low Temperature Alarm",
 			"description": "Enable/Disable low temperature alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -160,8 +148,6 @@
 			"label": "Blinking LED",
 			"description": "Enable/Disable blinking LED when alarm being triggered",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

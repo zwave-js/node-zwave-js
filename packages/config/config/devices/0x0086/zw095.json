@@ -37,8 +37,6 @@
 			"#": "2",
 			"label": "Energy Detection Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

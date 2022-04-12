@@ -30,8 +30,6 @@
 			"label": "Send double alarms",
 			"description": "Causes the device to send double alarm messages",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

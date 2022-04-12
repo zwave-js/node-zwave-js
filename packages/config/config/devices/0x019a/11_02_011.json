@@ -19,8 +19,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "LED alarm event reporting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"$if": "firmwareVersion <= 0.2",
 			"label": "Temperature reporting mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "Temperature & Light reporting frequency",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +77,6 @@
 			"$if": "firmwareVersion <= 0.2",
 			"label": "Temperature reporting unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -103,8 +95,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "Temperature reporting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +113,6 @@
 			"label": "High Temperature alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -159,8 +147,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "Temperature alarms",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -180,8 +166,6 @@
 			"label": "Low Temperature alarm",
 			"description": "0:Off 1:On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -224,8 +208,6 @@
 			"$if": "firmwareVersion <= 0.2",
 			"label": "Ambient light reporting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -244,8 +226,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "Ambient light reporting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -268,8 +248,6 @@
 			"$if": "firmwareVersion <= 0.2",
 			"label": "Leakage alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -326,8 +304,6 @@
 			"$if": "firmwareVersion >= 0.3",
 			"label": "Leakage alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

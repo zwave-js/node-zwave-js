@@ -60,8 +60,6 @@
 			"label": "Wheel position",
 			"description": "Wheel position on the GreenWave device (read-only)",
 			"valueSize": 1,
-			"minValue": 128,
-			"maxValue": 137,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -113,8 +111,6 @@
 			"label": "Power-on state",
 			"description": "Default state after power loss",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -137,8 +133,6 @@
 			"label": "LED for network error",
 			"description": "If the LED should indicate a network error by flashing or not",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -46,8 +46,6 @@
 			"#": "3",
 			"label": "Tilt Angle Closed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -69,8 +67,6 @@
 			"#": "4",
 			"label": "Tilt Angle Open",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Set LED indication mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -52,8 +50,6 @@
 			"label": "Function of RF off command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -80,8 +76,6 @@
 			"label": "Switch on/off by holding buttons",
 			"description": "Defines if the switch should change its state to on/off if being hold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -100,8 +94,6 @@
 			"label": "Restore switch state after power cycle",
 			"description": "Defines if the switch should restore state to the last state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -119,8 +111,6 @@
 			"#": "11",
 			"label": "Invert buttons",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -139,8 +129,6 @@
 			"label": "Switch by buttons",
 			"description": "If disabled, the local operations by buttons will not switch the load",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -162,8 +150,6 @@
 			"#": "13",
 			"label": "Action on button single press or hold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -210,8 +196,6 @@
 			"label": "Action on button double press or hold",
 			"description": "Defines which command should be sent on button double press or press-hold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -257,8 +241,6 @@
 			"#": "15",
 			"label": "Send the following switch all commands",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -281,8 +263,6 @@
 			"#": "16",
 			"label": "What to do on button Down press",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

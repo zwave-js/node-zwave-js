@@ -19,8 +19,6 @@
 			"label": "Auto Calibration Torque",
 			"description": "Adjust Torque Value for Auto Calibration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -19,8 +19,6 @@
 			"label": "Door lock mode",
 			"description": "Set if the lock is in away mode and if automatic locking should be enabled",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"$if": "firmwareVersion >= 1.6",
 			"label": "RFID Mode",
 			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 9,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -67,8 +63,6 @@
 			"label": "Door Hinge Position Mode",
 			"description": "Tell the lock which side your hinges are on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -87,8 +81,6 @@
 			"label": "Door Audio Volume Level",
 			"description": "Set the Audio Volume Level of the Lock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +119,6 @@
 			"label": "Door ReLock Mode",
 			"description": "Sets if the door should relock or not",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -148,8 +138,6 @@
 			"label": "Service PIN Mode",
 			"description": "Sets the validity of the service PIN",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -189,8 +177,6 @@
 			"label": "Service PIN Mode",
 			"description": "Sets the validity of the service PIN",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 254,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -257,8 +243,6 @@
 			"label": "Updater Mode",
 			"description": "Enables use of the Updater app",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -286,8 +270,6 @@
 			"label": "Master PIN Unlock Mode",
 			"description": "Configures if the Master PIN can unlock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

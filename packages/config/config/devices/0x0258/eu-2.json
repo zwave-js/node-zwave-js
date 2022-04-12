@@ -43,8 +43,6 @@
 			"label": "Root Device Mapped Setting",
 			"description": "Endpoint device mapping setting for associated devices",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

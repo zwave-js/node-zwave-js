@@ -28,8 +28,6 @@
 			"#": "64",
 			"label": "Power Up Memory",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"#": "65",
 			"label": "Button Type - Channel 1",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -74,8 +70,6 @@
 			"#": "66",
 			"label": "Button Type - Channel 2",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -101,8 +95,6 @@
 			"#": "67",
 			"label": "Button Type - Channel 3",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -128,8 +120,6 @@
 			"#": "68",
 			"label": "Button Type - Channel 4",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -155,8 +145,6 @@
 			"#": "69",
 			"label": "Button Type - Channel 5",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -182,8 +170,6 @@
 			"#": "70",
 			"label": "Button Type - Channel 6",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -209,8 +195,6 @@
 			"#": "71",
 			"label": "Button Type - Channel 7",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -236,8 +220,6 @@
 			"#": "72",
 			"label": "Button Type - Channel 8",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -263,8 +245,6 @@
 			"#": "73",
 			"label": "Button Type - Channel 9",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -290,8 +270,6 @@
 			"#": "74",
 			"label": "Button Type - Channel 10",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

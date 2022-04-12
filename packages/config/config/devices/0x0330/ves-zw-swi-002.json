@@ -34,8 +34,6 @@
 			"#": "5",
 			"label": "Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"unsigned": true,

@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Dim Level When Powered On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

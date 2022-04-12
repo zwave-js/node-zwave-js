@@ -84,8 +84,6 @@
 			"label": "Bit 1: Motion OFF Reporting",
 			"description": "Sends notification when motion has completed.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -103,8 +101,6 @@
 			"#": "7[0x04]",
 			"label": "Bit 2: Enable PIR super sensitivity mode.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +119,6 @@
 			"label": "Bit 4: Notification Type",
 			"description": "Method used to send notifications on motion",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -142,8 +136,6 @@
 			"#": "7[0x20]",
 			"label": "Bit 5: Send Multi CC in auto report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -162,8 +154,6 @@
 			"label": "Bit 6: Send Battery Report when Triggered",
 			"description": "Whether or not a battery status report should be sent when triggered",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -29,8 +29,6 @@
 			"label": "Latch Torque",
 			"description": "Defines the torque of the latch.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -53,8 +51,6 @@
 			"label": "Acoustic Feedback",
 			"description": "Defines Acoustic Feedback signals. Button-, Low-Battery-, Error- and Alarm-Signals can not be adjusted.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -85,8 +81,6 @@
 			"label": "Travel Time",
 			"description": "This parameter defines the travel path of the Lock.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -109,8 +103,6 @@
 			"label": "Touch Panel Settings",
 			"description": "This parameter defines Touch Panel settings.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -137,8 +129,6 @@
 			"label": "Motor Force",
 			"description": "This parameter defines the motor force, when turning the lock.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -156,8 +146,6 @@
 			"#": "250",
 			"label": "Lock status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"unsigned": true,
 			"defaultValue": 0,
 			"readOnly": true,

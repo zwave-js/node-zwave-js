@@ -38,8 +38,6 @@
 			"label": "Ignore start level",
 			"description": "Ignore start level when transmitting a dim command to the dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -57,8 +55,6 @@
 			"#": "2",
 			"label": "Suspend Group 4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"label": "Blue LED light Behavior",
 			"description": "Defines the behavior of the blue LED.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -97,8 +91,6 @@
 			"label": "Invert Switch",
 			"description": "To change the top of the switch to off and the botton to on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -116,8 +108,6 @@
 			"#": "14",
 			"label": "Enable Shade Control Group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -135,8 +125,6 @@
 			"#": "15",
 			"label": "Enable Shade Control Group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -155,8 +143,6 @@
 			"label": "Blue LED light behavior on transmission",
 			"description": "Defines the behavior of the blue LED when transmission of data",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -189,8 +175,6 @@
 			"label": "Poll Group 2",
 			"description": "Should Group 2 be pulled?",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

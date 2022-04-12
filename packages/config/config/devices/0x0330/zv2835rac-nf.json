@@ -22,8 +22,6 @@
 			"#": "3",
 			"label": "Send Basic Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +75,6 @@
 			"#": "7",
 			"label": "MOSFET Driving Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +101,6 @@
 			"label": "Added Removed A Network",
 			"description": "Allows external switch to be excluded or included by triple pressing within 1.5 seconds",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -124,8 +118,6 @@
 			"#": "10",
 			"label": "Detect Load",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -165,8 +157,6 @@
 			"#": "13",
 			"label": "Over Current Protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -238,8 +228,6 @@
 			"#": "31",
 			"label": "Dimming Curve",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

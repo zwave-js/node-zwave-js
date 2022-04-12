@@ -27,8 +27,6 @@
 			"label": "Valve Type",
 			"description": "Type of Valve being controlled",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "Heat Load Strategy",
 			"description": "Set Head Load Strategy (0 = Stacking, 1 = Spreading)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -67,8 +63,6 @@
 			"label": "PWM period",
 			"description": "Pulse-width modulation period",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

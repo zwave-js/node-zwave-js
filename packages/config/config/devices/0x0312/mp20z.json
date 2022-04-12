@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Status LED Configuration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

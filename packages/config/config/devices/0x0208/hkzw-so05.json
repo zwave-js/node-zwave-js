@@ -19,8 +19,6 @@
 			"label": "Overload Protection",
 			"description": "Turn off if the load power exceeds 0.5A for more than 5s.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"writeOnly": true,
 			"allowManualEntry": false,
@@ -44,8 +42,6 @@
 			"label": "Load Status Change Notification",
 			"description": "Send notification to associated devices when load is changed.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -68,8 +64,6 @@
 			"label": "Indicator Modes",
 			"description": "The RGB LED indicator will indicate the load.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

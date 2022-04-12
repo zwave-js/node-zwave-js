@@ -49,8 +49,6 @@
 			"#": "3",
 			"label": "Selected Relay",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -72,8 +70,6 @@
 			"#": "4",
 			"label": "Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -112,8 +108,6 @@
 			"#": "7",
 			"label": "Relay control mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -131,8 +125,6 @@
 			"#": "8",
 			"label": "Restore Relay state mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -154,8 +146,6 @@
 			"#": "9",
 			"label": "Existence of Endpoint3",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

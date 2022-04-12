@@ -26,8 +26,6 @@
 			"label": "Overload Protection",
 			"description": "turns relay off once voltage exceeds 16.5A for over 5 secs if enabled",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -50,8 +48,6 @@
 			"label": "On/Off Status Change Notifications",
 			"description": "Send notifications to associated devices",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -73,8 +69,6 @@
 			"#": "27",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

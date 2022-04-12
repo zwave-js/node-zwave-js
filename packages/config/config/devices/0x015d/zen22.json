@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Paddle Functions",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -37,8 +35,6 @@
 			"#": "2",
 			"label": "LED Indicator Function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +52,6 @@
 			"#": "3",
 			"label": "Enable / Disable LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

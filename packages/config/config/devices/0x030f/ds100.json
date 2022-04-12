@@ -38,8 +38,6 @@
 			"#": "3",
 			"label": "Selected Relay",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -61,8 +59,6 @@
 			"#": "4",
 			"label": "Edge or Pulse mode or Edge-Toggle mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

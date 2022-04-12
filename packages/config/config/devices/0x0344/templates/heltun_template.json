@@ -193,7 +193,6 @@
 		"minValue": 0,
 		"maxValue": 54,
 		"defaultValue": 0,
-		"allowManualEntry": false,
 		"options": [
 			{
 				"label": "Disable",

@@ -37,8 +37,6 @@
 			"#": "1",
 			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"#": "2",
 			"label": "Configure Open/Close Reports Sent",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -75,8 +71,6 @@
 			"#": "3",
 			"label": "Switch Between Notification and Binary Sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -94,8 +88,6 @@
 			"#": "4",
 			"label": "Enable/Disable Temperature Sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -121,8 +113,6 @@
 			"#": "6",
 			"label": "Temperature Units",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

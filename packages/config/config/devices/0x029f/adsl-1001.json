@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Set Door Open Notification On Or Off",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 254,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

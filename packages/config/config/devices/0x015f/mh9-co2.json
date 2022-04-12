@@ -114,8 +114,6 @@
 			"$if": "firmwareVersion >= 2.4",
 			"label": "Reset to Factory Settings",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,

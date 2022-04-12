@@ -68,8 +68,6 @@
 			"#": "11",
 			"label": "LED Frame – Color When On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -119,8 +117,6 @@
 			"#": "12",
 			"label": "LED Frame – Color When Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -211,8 +207,6 @@
 			"#": "24",
 			"label": "Switch Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -231,8 +225,6 @@
 			"label": "Outputs Orientation",
 			"description": "Only in double switch mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -550,8 +542,6 @@
 			"#": "150",
 			"label": "First Channel – Operating Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -578,8 +568,6 @@
 			"#": "152",
 			"label": "First Channel - Reaction to Switch for Timed Modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "factory reset",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 21930,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

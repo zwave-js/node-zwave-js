@@ -35,8 +35,6 @@
 			"description": "Amount of time the light stays on after motion stops",
 			"unit": "seconds",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 5,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -82,8 +80,6 @@
 			"label": "Operation Mode",
 			"description": "Sets how the light responds to motion",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -105,8 +101,6 @@
 			"#": "4",
 			"label": "Association Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -125,8 +119,6 @@
 			"label": "Invert Switch",
 			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -145,8 +137,6 @@
 			"label": "Motion Sensor",
 			"description": "Enable/Disable Motion Sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -229,8 +219,6 @@
 			"label": "Motion Sensor Sensitivity",
 			"description": "Sets the amount of motion required to trigger the motion sensor.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -253,8 +241,6 @@
 			"label": "Light Sensing",
 			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -281,8 +267,6 @@
 			"label": "Switch Mode",
 			"description": "Enable / Disable plain switch functionality",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -309,8 +293,6 @@
 			"#": "18",
 			"label": "Dim Up Rate",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -328,8 +310,6 @@
 			"#": "19",
 			"label": "Exclusion mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

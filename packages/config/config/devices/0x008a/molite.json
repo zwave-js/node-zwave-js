@@ -66,8 +66,6 @@
 			"label": "The mode",
 			"description": "The mode that is entered after detection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

@@ -550,6 +550,40 @@ Consider converting this parameter to unsigned using ${white(
 							);
 						}
 					}
+
+					// Check if writable params without manual entry have unnecessarily wide min/max value ranges
+					if (!value.readOnly && value.allowManualEntry === false) {
+						const actualMin = Math.min(
+							...value.options.map((o) => o.value),
+						);
+						const actualMax = Math.max(
+							...value.options.map((o) => o.value),
+						);
+						if (value.minValue < actualMin) {
+							addError(
+								file,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: minValue ${
+									value.minValue
+								} is less than the minimum option value ${actualMin}! If allowManualEntry is false, minValue must be omitted or match the option values.`,
+								variant,
+							);
+						}
+						if (value.maxValue > actualMax) {
+							addError(
+								file,
+								`${paramNoToString(
+									parameter,
+									valueBitMask,
+								)} is invalid: maxValue ${
+									value.maxValue
+								} is greater than the maximum option value ${actualMax}! If allowManualEntry is false, maxValue must be omitted or match the option values.`,
+								variant,
+							);
+						}
+					}
 				}
 
 				// Check if there are parameters with identical labels

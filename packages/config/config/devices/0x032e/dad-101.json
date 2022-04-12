@@ -19,8 +19,6 @@
 			"label": "Load type",
 			"description": "Dimmer load type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -107,8 +105,6 @@
 			"#": "7",
 			"label": "Powerfail recovery mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +123,6 @@
 			"label": "Lighting autolevel",
 			"description": "Autolevel behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -237,8 +231,6 @@
 			"#": "16",
 			"label": "S1 button mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -268,8 +260,6 @@
 			"#": "17",
 			"label": "S2 button mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -296,8 +286,6 @@
 			"label": "Double click to max",
 			"description": "Level up to max on double click",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -316,8 +304,6 @@
 			"label": "Sensor driven dimmer",
 			"description": "Sets sensor for dimmer control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

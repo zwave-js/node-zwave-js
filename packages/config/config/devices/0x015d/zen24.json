@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Control Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

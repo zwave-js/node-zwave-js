@@ -70,8 +70,6 @@
 			"label": "Enable/Disable Basic Set Command",
 			"description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -89,8 +87,6 @@
 			"#": "15",
 			"label": "value of basic set command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -108,8 +104,6 @@
 			"#": "17",
 			"label": "enable/disable shock alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

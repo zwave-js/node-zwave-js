@@ -34,8 +34,6 @@
 			"label": "LED Indicator Mode",
 			"description": "Sets whether LED should indicate device is on (1) or off (0)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -54,8 +52,6 @@
 			"label": "Memory Function",
 			"description": "determines if current state is memorized on power failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

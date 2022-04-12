@@ -25,8 +25,6 @@
 			"#": "1",
 			"label": "Relay mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -53,8 +51,6 @@
 			"#": "3",
 			"label": "Point mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"label": "Thermostat status at failure",
 			"description": "Operating mode in case a thermostat doesn't receive data from a temp sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -142,8 +136,6 @@
 			"#": "10",
 			"label": "Temperature sensor mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -193,8 +185,6 @@
 			"label": "Type of switch 1",
 			"description": "Set Type of switch 1 (thermostat operating mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -221,8 +211,6 @@
 			"label": "Type of switch 2",
 			"description": "Set type of switch 2 (turbo mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -249,8 +237,6 @@
 			"label": "Adjusment of a temperature sensor",
 			"description": "Adjust temperature sensor if required.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

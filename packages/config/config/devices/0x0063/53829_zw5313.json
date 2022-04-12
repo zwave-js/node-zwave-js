@@ -36,8 +36,6 @@
 			"label": "Control Groups 2 & 3",
 			"description": "Determines whether Groups 2 & 3 are operational.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
