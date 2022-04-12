@@ -12,6 +12,7 @@ import {
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
+import type { SmartStartProvisioningEntry } from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/Types";
 import type { Driver } from "./Driver";
@@ -226,6 +227,42 @@ export function deserializeNetworkCacheValue(
 		}
 	}
 
+	// Other properties
+	switch (key) {
+		case cacheKeys.controller.provisioningList: {
+			const ret: SmartStartProvisioningEntry[] = [];
+			if (!isArray(value)) throw fail();
+			for (const entry of value) {
+				if (
+					isObject(entry) &&
+					typeof entry.dsk === "string" &&
+					isArray(entry.securityClasses) &&
+					// securityClasses are stored as strings, not the enum values
+					entry.securityClasses.every(
+						(s) =>
+							typeof s === "string" &&
+							s in SecurityClass &&
+							typeof SecurityClass[s as any] === "number",
+					)
+				) {
+					// This is at least a PlannedProvisioningEntry, maybe it is an IncludedProvisioningEntry
+					if ("nodeId" in entry && typeof entry.nodeId !== "number") {
+						throw fail();
+					}
+
+					const parsed = { ...entry } as SmartStartProvisioningEntry;
+					parsed.securityClasses = entry.securityClasses.map(
+						(s) => SecurityClass[s as any] as any as SecurityClass,
+					);
+					ret.push(parsed);
+				} else {
+					throw fail();
+				}
+			}
+			return ret;
+		}
+	}
+
 	return value;
 }
 
@@ -262,6 +299,21 @@ export function serializeNetworkCacheValue(
 		}
 		case "dsk": {
 			return dskToString(value as Buffer);
+		}
+	}
+
+	// Other properties
+	switch (key) {
+		case cacheKeys.controller.provisioningList: {
+			const ret: any = [];
+			for (const entry of value as SmartStartProvisioningEntry[]) {
+				const serialized: Record<string, any> = { ...entry };
+				serialized.securityClasses = entry.securityClasses.map((c) =>
+					getEnumMemberName(SecurityClass, c),
+				);
+				ret.push(serialized);
+			}
+			return ret;
 		}
 	}
 
