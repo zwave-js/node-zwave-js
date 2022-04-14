@@ -83,6 +83,10 @@ function dtsToTs(filename: string): string {
 	return filename.replace(/\/build\/(.*?)\.d\.ts$/, "/src/$1.ts");
 }
 
+function relativeToProject(filename: string): string {
+	return path.relative(projectRoot, filename).replace(/\\/g, "/");
+}
+
 export function lintNoExternalImports(): Promise<void> {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
@@ -98,9 +102,7 @@ export function lintNoExternalImports(): Promise<void> {
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
-		const relativePath = path
-			.relative(projectRoot, sourceFile.fileName)
-			.replace(/\\/g, "/");
+		const relativePath = relativeToProject(sourceFile.fileName);
 
 		// Only look at files inside the packages directory
 		if (!relativePath.startsWith("packages/")) continue;
@@ -118,7 +120,7 @@ export function lintNoExternalImports(): Promise<void> {
 			visitedSourceFiles.add(current.file.fileName);
 			const importStack = [
 				...current.importStack,
-				dtsToTs(current.file.fileName),
+				dtsToTs(relativeToProject(current.file.fileName)),
 			];
 
 			const imports = getImports(current.file, checker);
