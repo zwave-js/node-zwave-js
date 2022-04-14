@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.2 (2022-04-14)
 ### Bugfixes
 * The door/latch/bolt status sensors are no longer created if unsupported by the door lock (#4448)
 * Fixed an issue where `securityClasses` in provisioning entries were returned as strings instead of their enum values (#4462)
