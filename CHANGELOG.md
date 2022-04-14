@@ -5,6 +5,10 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
+### Bugfixes
+* The door/latch/bolt status sensors are no longer created if unsupported by the door lock (#4448)
+* Fixed an issue where `securityClasses` in provisioning entries were returned as strings instead of their enum values (#4462)
+
 ### Config file changes
 * Add metadata to ZooZ ZEN26 (#4348)
 * Add metadata to ZooZ ZEN21 (#4349)
@@ -13,6 +17,8 @@
 * Extend Heatit TF016 config to include TF021 (#4452)
 * Correct valueSize for param 15 on GE/Jasco 26931 / ZW4006 (#4441)
 * Add manual to GE/Jasco 26932 / 26933 / ZW3008 (#4446)
+* Correct reporting groups for Aeotec ZW132 Dual Nano Switch (#4447)
+* Removed the optional `min/maxValue` from many config files where the values were unnecessary or incorrect (#4455)
 
 ### Changes under the hood
 * Added documentation for the `Multilevel Switch CC` notifications (#4444)
