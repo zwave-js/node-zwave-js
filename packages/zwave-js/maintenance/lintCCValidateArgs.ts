@@ -1,5 +1,5 @@
 /*!
- * This scripts checks which CCs have `toLogEntry` implemented
+ * This scripts checks that all CC API classes have a @noValidateArgs decorator on their methods which need one
  */
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
@@ -59,7 +59,6 @@ export function lintCCValidateArgs(): Promise<void> {
 			continue;
 		}
 
-		// Visit each CC API class and see if it overwrites determineRequiredCCInterviews
 		ts.forEachChild(sourceFile, (node) => {
 			// Only look at class decorations that are annotated with @API and don't have a // @noValidateArgs comment
 			if (!ts.isClassDeclaration(node)) return;
