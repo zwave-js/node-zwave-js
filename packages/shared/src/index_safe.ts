@@ -1,7 +1,6 @@
-export * from "./docker";
+/* @noExternalImports */
+
 export * from "./errors";
-export * from "./EventEmitter";
-export * from "./fs";
 export * from "./inheritance";
 export { ObjectKeyMap } from "./ObjectKeyMap";
 export type { ReadonlyObjectKeyMap } from "./ObjectKeyMap";

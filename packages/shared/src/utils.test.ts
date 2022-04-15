@@ -1,4 +1,4 @@
-import { cloneDeep, discreteBinarySearch, throttle } from "./misc";
+import { cloneDeep, discreteBinarySearch, throttle } from "./utils";
 
 describe("throttle()", () => {
 	const originalDateNow = Date.now;
