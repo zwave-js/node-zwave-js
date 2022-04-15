@@ -8,6 +8,19 @@ import ts from "typescript";
 import { reportProblem } from "./reportProblem";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
 
+// Whitelist some imports that are known not to import forbidden modules
+const whitelistedImports = [
+	"alcalzone-shared/arrays",
+	"alcalzone-shared/async",
+	"alcalzone-shared/comparable",
+	"alcalzone-shared/deferred-promise",
+	"alcalzone-shared/math",
+	"alcalzone-shared/objects",
+	"alcalzone-shared/sorted-list",
+	"alcalzone-shared/strings",
+	"alcalzone-shared/typeguards",
+];
+
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
 		ts.isImportEqualsDeclaration(node) &&
@@ -91,7 +104,7 @@ export function lintNoExternalImports(): Promise<void> {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig("zwave-js");
+	const tsConfig = loadTSConfig(undefined, false);
 	const program = ts.createProgram(tsConfig.fileNames, {
 		...tsConfig.options,
 		preserveSymlinks: false,
@@ -108,7 +121,7 @@ export function lintNoExternalImports(): Promise<void> {
 		if (!relativePath.startsWith("packages/")) continue;
 
 		// And only those with a @noExternalImports comment
-		if (!sourceFile.text.includes("/* @noExternalImports */")) continue;
+		if (!/^\/\* @noExternalImports \*\//m.test(sourceFile.text)) continue;
 
 		// Resolve the import tree
 		const visitedSourceFiles = new Set<string>();
@@ -125,7 +138,10 @@ export function lintNoExternalImports(): Promise<void> {
 
 			const imports = getImports(current.file, checker);
 			for (const imp of imports) {
-				if (imp.sourceFile.fileName.includes("node_modules")) {
+				if (
+					imp.sourceFile.fileName.includes("node_modules") &&
+					!whitelistedImports.includes(imp.name.replace(/"/g, ""))
+				) {
 					hasError = true;
 
 					const message = `Found forbidden import of external module ${
@@ -146,9 +162,7 @@ ${[...importStack, `❌ ${imp.name}`]
 						line: imp.line,
 						message: message,
 					});
-				}
-
-				if (!visitedSourceFiles.has(imp.sourceFile.fileName)) {
+				} else if (!visitedSourceFiles.has(imp.sourceFile.fileName)) {
 					todo.push({
 						file: imp.sourceFile,
 						importStack,
