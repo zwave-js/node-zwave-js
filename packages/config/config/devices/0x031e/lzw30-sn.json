@@ -477,6 +477,14 @@
 					"value": 4
 				}
 			]
+		},
+		{
+			"#": "8",
+			"label": "Bulk set Param 8",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 100600575
 		}
 	],
 	"metadata": {

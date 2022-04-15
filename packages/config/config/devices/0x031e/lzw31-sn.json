@@ -466,6 +466,14 @@
 			]
 		},
 		{
+			"#": "16",
+			"label": "Bulk set Param 16",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"minValue": 0,
+			"maxValue": 100600575
+		},		
+		{
 			"#": "17",
 			"label": "LED Indicator: Timeout",
 			"unit": "seconds",
