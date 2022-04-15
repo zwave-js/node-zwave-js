@@ -765,7 +765,7 @@
 			"defaultValue": 0,
 			"minValue": 0,
 			"maxValue": 100600575
-		},		
+		},
 		{
 			"#": "25[0x7f000000]",
 			"label": "Fan LED Effect Type",
@@ -915,7 +915,7 @@
 			"defaultValue": 0,
 			"minValue": 0,
 			"maxValue": 100600575
-		},		
+		},
 		{
 			"#": "26",
 			"label": "Light LED Strip Timeout",
