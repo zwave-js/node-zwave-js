@@ -16,31 +16,26 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Lifeline group",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "Follow Me",
-			"description": "The device in this group level",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Scene Activation",
-			"description": "Receive an activation scene ID if an obstacle are reach during its operation. The scene ID can be define by using parameters 30, 31",
 			"maxNodes": 5
 		},
 		"4": {
 			"label": "Follow Me Weather",
-			"description": "The device in this group will follow the device level if the change is due by the weather condition. The parameter ID sent by this command can be configured by using parameter 32",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "30",
-			"label": "Open Collision Scene",
-			"description": "Scene ID sent if a collision is detected during opening operation",
+			"label": "Send Scene ID: Jam When Opening",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -48,7 +43,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Do not send the scene activation",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -56,7 +51,7 @@
 		{
 			"#": "31",
 			"label": "Close Collision Scene",
-			"description": "Scene ID sent if a collision is detected during closing operation",
+			"description": "Send Scene ID: Jam When Closing",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -64,7 +59,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Do not send the scene activation",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -81,8 +76,7 @@
 		},
 		{
 			"#": "33",
-			"label": "Movement Trigger",
-			"description": "Parameter used to tell the reason of the last movement",
+			"label": "Last Movement Trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -110,7 +104,7 @@
 		},
 		{
 			"#": "34",
-			"label": "Automation Configuration",
+			"label": "Sun Activation",
 			"description": "The value of this parameter is the sum of wind, sun and rain status. Since automation for wind and rain are always activated the only valid values are: 5 to disable the sun automation or 7 to enabled it",
 			"valueSize": 1,
 			"minValue": 5,
@@ -120,11 +114,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable sun automation",
+					"label": "Disable",
 					"value": 5
 				},
 				{
-					"label": "Enable sun automation",
+					"label": "Enable",
 					"value": 7
 				}
 			]
@@ -142,7 +136,7 @@
 		},
 		{
 			"#": "36",
-			"label": "Lost Life Signal",
+			"label": "Signal Connection Status",
 			"description": "Allows to know if the radio connection is operative or if the motor has lost the connection with its sensors",
 			"valueSize": 1,
 			"minValue": 0,
@@ -152,19 +146,18 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Connection is operative",
+					"label": "Active",
 					"value": 0
 				},
 				{
-					"label": "Connection has been lost",
+					"label": "Lost",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "37",
-			"label": "Level Report Period",
-			"description": "Defines the level report frequency when the motor is moving",
+			"label": "Level Reporting Frequency",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 2,
@@ -175,7 +168,6 @@
 		{
 			"#": "38",
 			"label": "Send Multilevel Report",
-			"description": "For backward compatibility: device can send the multilevel report together with the switch multilevel report in addition to the update with windows covering report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -184,11 +176,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Multilevel report will not be sent",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Multilevel report will be sent",
+					"label": "Enable",
 					"value": 1
 				}
 			]
