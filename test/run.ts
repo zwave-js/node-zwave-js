@@ -1,3 +1,4 @@
+import os from "os";
 import path from "path";
 import "reflect-metadata";
 import { Driver } from "zwave-js";
@@ -6,7 +7,12 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
-const driver = new Driver("COM5", {
+const zwavepath =
+	os.platform() === "win32"
+		? "COM5"
+		: "/dev/serial/by-id/usb-Silicon_Labs_CP2102N_USB_to_UART_Bridge_Controller_8ad925bd7b84e911a7a7a1d6217343c2-if00-port0";
+
+const driver = new Driver(zwavepath, {
 	// logConfig: {
 	// 	logToFile: true,
 	// },
