@@ -1,5 +1,5 @@
 {
-	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
 	"label": "MP22Z",
 	"description": "Z-Wave Outdoor Smart Plug",
@@ -26,11 +26,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "BASIC SET",
+			"label": "Basic Set",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "BASIC SET",
+			"label": "Basic Set",
 			"maxNodes": 5
 		}
 	},
@@ -100,129 +100,11 @@
 		{
 			"#": "26",
 			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
-		},
-		{
-			"#": "1",
-			"label": "Locally Button Function",
-			"description": "Parameter=1，size=1，value=0 up button: on   down button: off value=1 up button: off   down button: on  value=2 up button: on/off down button: on/off default = 0",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Up button on,down button off",
-					"value": 0
-				},
-				{
-					"label": "Up button off,down button on",
-					"value": 1
-				},
-				{
-					"label": "Up button on/off,down button on/off",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "18",
-			"label": "Custom Brightness Level",
-			"description": "Custom brightness level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "19",
-			"label": "3-way Switch Type",
-			"description": "3-way switch type parameter=19,size=1,value=0 toggle switch(device changes status when switch changes  status,it can only turn on or turn off lamp,it can’t dimmer)(default); value = 1 toggle switch(press 1x change device status;quickly press 2x the result depend on par11/par12; quickly press 3x it trigger dimmer in loop(dimmer up/dimmer down ) value=2 momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down ) value=3 momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down – but after double click to full brightness, hold will dim down always instead of trying to increase brightness) >> this value is missing, please add to setting  notice: when the value=1,or value=2,the switch can’t respond immediately,because it need to recognize multiple press",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Toggle switch (device changes status when switch changes status)",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch(press 1x change device status;quickly press 2x the result depend on par11/par12; quickly press 3x it trigger dimmer in loop(dimmer up/dimmer down )",
-					"value": 1
-				},
-				{
-					"label": "Momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down )",
-					"value": 2
-				},
-				{
-					"label": "Momentary switch (press 1x change device status;quickly press 2x the result depend on par11/par12;hold trigger dimmer in loop(dimmer up/dimmer down – but after double click to full brightness, hold will dim down always instead of trying to increase brightness) >> this value is missing, please add to setting",
-					"value": 3
-				}
-			]
-		},
-		{
-			"#": "24",
-			"label": "Led Indicator Brightness",
-			"description": "Led indicator brightness parameter=24，size=1，value=0 bright (100%) value=1 medium (60%)  value=2 low (30%)  default =1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Bright (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "25",
-			"label": "Single Tap Behavior",
-			"description": "Single tap behavior: when switch is off and press upper paddle 1 time, switch turns on to x brightness （local button）  parameter=25，size=1，  value = 0 last brightness level   value = 1 custom value set in parameter 18   value = 2 maximum brightness set in parameter 11  value = 3 full 100% brightness  default = 0",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last brightness level",
-					"value": 0
-				},
-				{
-					"label": "Custom value set in parameter 18",
-					"value": 1
-				},
-				{
-					"label": "Maximum brightness set in parameter 11",
-					"value": 2
-				},
-				{
-					"label": "Full 100% brightness",
-					"value": 3
-				}
-			]
 		}
 	],
 	"metadata": {
-		"inclusion": "Adding Your Device To A Hub\nThe device support two methods of inclusion,When using a Z-Wave Plus™ certified controller choose Network Wide Inclusion or SmartStart,\nNetwork Wide Inclusion To A Z-Wave™ Network\n1,Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2,When prompted by your primary controller, click the button three times in one second",
-		"exclusion": "Adding Your Device To A Hub\nThe device support two methods of inclusion,When using a Z-Wave Plus™ certified controller choose Network Wide Inclusion or SmartStart,\nNetwork Wide Inclusion To A Z-Wave™ Network\n1,Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2,When prompted by your primary controller, click the button three times in one second",
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
 		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4254/MP22ZD-manual-20210728.pdf"
 	}
