@@ -595,6 +595,7 @@
 		{
 			"#": "16",
 			"label": "Button 15 Type",
+			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
