@@ -16,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 2,
 			"isLifeline": true
 		},
@@ -203,150 +203,427 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1",
-			"label": "Reserved",
-			"description": "Reserved",
+			"#": "2",
+			"label": "Button 1 Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reserved",
+					"label": "Central Scene",
 					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Button 2 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Button 3 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Button 4 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Button 5 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Button 6 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Button 8 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
 				}
 			]
 		},
 		{
 			"#": "10",
 			"label": "Button 9 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "11",
 			"label": "Button 10 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "12",
 			"label": "Button 11 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "13",
 			"label": "Button 12 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "14",
 			"label": "Button 13 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "15",
 			"label": "Button 14 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
 		},
 		{
 			"#": "16",
 			"label": "Button 15 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "17",
-			"label": "Reserved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "",
+					"label": "Central Scene",
 					"value": 0
-				}
-			]
-		},
-		{
-			"#": "18",
-			"label": "Reserved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
+				},
 				{
-					"label": "",
-					"value": 0
-				}
-			]
-		},
-		{
-			"#": "19",
-			"label": "Reserved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
 				{
-					"label": "",
-					"value": 0
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
 				}
 			]
-		},
-		{
-			"#": "2",
-			"label": "Button 1 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
 		},
 		{
 			"#": "20",
-			"label": "Touch Calibration",
-			"description": "1 = least sensitive 10 = most sensitive",
+			"label": "Touch Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -356,53 +633,35 @@
 		{
 			"#": "21",
 			"label": "Screen Contrast",
-			"description": "1=less contrast, 10=more contrast",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 7,
+			"maxValue": 10,
 			"defaultValue": 7,
 			"unsigned": true
 		},
 		{
-			"#": "22",
-			"label": "Reserved",
-			"description": "Reserved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Reserved",
-					"value": 0
-				}
-			]
-		},
-		{
 			"#": "23",
 			"label": "Button LED Level",
-			"description": "1=10% 10 = 100%",
 			"valueSize": 1,
+			"unit": "10%",
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true
 		},
 		{
 			"#": "24",
 			"label": "Backlight Level",
-			"description": "1=10% 10 = 100%",
 			"valueSize": 1,
+			"unit": "10%",
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 10,
 			"defaultValue": 5,
 			"unsigned": true
 		},
 		{
 			"#": "25",
-			"label": "Scene Button Press Backlight Timeout",
-			"description": "Seconds",
+			"label": "Backlight Timeout: Scene Button",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -412,8 +671,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Page Button Press Backlight Timeout",
-			"description": "Seconds",
+			"label": "Backlight Timeout: Page Button",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -422,24 +680,8 @@
 			"unsigned": true
 		},
 		{
-			"#": "27",
-			"label": "Reserved",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "",
-					"value": 0
-				}
-			]
-		},
-		{
 			"#": "28",
-			"label": "Screen Timeout",
-			"description": "Screen timeout - number of minutes after the last button press till the screen goes blank",
+			"label": "Screen Timeout: Delay",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
@@ -448,36 +690,44 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "29",
-			"label": "Screen Timeout Primary Page",
-			"description": "0 = no change, 1=page1, 2=page2, 3=page3",
+			"label": "Screen Timeout: Primary Page",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "3",
-			"label": "Button 2 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Page 1",
+					"value": 1
+				},
+				{
+					"label": "Page 2",
+					"value": 2
+				},
+				{
+					"label": "Page 3",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "30",
-			"label": "Battery Stat Shutdown Threshold",
-			"description": "%",
+			"label": "Battery Level: Shutdown Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 5,
@@ -485,9 +735,9 @@
 		},
 		{
 			"#": "31",
-			"label": "Battery Radio Cutoff Threshold",
-			"description": "%",
+			"label": "Battery Level: Radio Disable Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
@@ -495,9 +745,9 @@
 		},
 		{
 			"#": "32",
-			"label": "Battery Lowbatt Indicator Threshold",
-			"description": "%",
+			"label": "Battery Level: Indicator Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 20,
 			"defaultValue": 20,
@@ -505,62 +755,12 @@
 		},
 		{
 			"#": "33",
-			"label": "Battery Threshold Value For Midlevel",
-			"description": "%",
+			"label": "Battery Level: Midpoint Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 50,
-			"unsigned": true
-		},
-		{
-			"#": "4",
-			"label": "Button 3 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "5",
-			"label": "Button 4 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "6",
-			"label": "Button 5 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "7",
-			"label": "Button 6 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
-			"unsigned": true
-		},
-		{
-			"#": "9",
-			"label": "Button 8 Type",
-			"description": "0x00 = central scene 0x01 = scene control momentary 0x02 = basicset toggle 0x03 = scene control/basicset toggle 0x04 = thermostat",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0,
 			"unsigned": true
 		}
 	],
