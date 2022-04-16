@@ -50,8 +50,7 @@
 		},
 		{
 			"#": "31",
-			"label": "Close Collision Scene",
-			"description": "Send Scene ID: Jam When Closing",
+			"label": "Send Scene ID: Jam When Closing",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
