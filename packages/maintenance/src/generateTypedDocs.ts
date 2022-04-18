@@ -325,7 +325,7 @@ async function processCCDocFile(
 
 ?> CommandClass ID: \`${num2hex((CommandClasses as any)[ccName])}\`
 `;
-	const generatedIndex = `\n- [${ccName} CC](api/CCs/${filename}) · \`${num2hex(
+	const generatedIndex = `\n- [${ccName} CC](./${filename}) · \`${num2hex(
 		(CommandClasses as any)[ccName],
 	)}\``;
 	const generatedSidebar = `\n\t\t- [${ccName} CC](api/CCs/${filename})`;
