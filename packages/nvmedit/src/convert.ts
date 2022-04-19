@@ -7,8 +7,8 @@ import {
 	stripUndefined,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import { cloneDeep, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import { cloneDeep, pick } from "@zwave-js/shared/safe";
 import semver from "semver";
 import {
 	ApplicationCCsFile,

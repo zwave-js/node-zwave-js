@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import {
 	FLASH_MAX_PAGE_SIZE,
 	NVM3_MIN_PAGE_SIZE,

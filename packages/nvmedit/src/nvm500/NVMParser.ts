@@ -5,8 +5,8 @@ import {
 	parseBitMask,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import { num2hex, pick, sum } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import { num2hex, pick, sum } from "@zwave-js/shared/safe";
 import { SUC_MAX_UPDATES } from "../consts";
 import { nodeHasInfo } from "../convert";
 import {
