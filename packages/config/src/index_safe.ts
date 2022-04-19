@@ -1,11 +1,9 @@
-export * from "./ConfigManager";
+/* @noExternalImports */
+
 export * from "./DeviceClasses";
-export * from "./Devices";
 export * from "./Indicators";
 export * from "./Logger_safe";
-export * from "./Manufacturers";
 export * from "./Meters";
 export * from "./Notifications";
 export * from "./Scales";
 export * from "./SensorTypes";
-export { externalConfigDir } from "./utils";

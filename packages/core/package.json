@@ -15,7 +15,7 @@
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
-      "build/index_safe.d.ts": [
+      "safe": [
         "build/index_safe.d.ts"
       ]
     }

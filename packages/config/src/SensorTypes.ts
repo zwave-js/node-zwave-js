@@ -1,71 +1,12 @@
-import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
-import JSON5 from "json5";
-import path from "path";
 import type { ConfigManager } from "./ConfigManager";
 import { Scale, ScaleGroup } from "./Scales";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegexNDigits,
-	throwInvalidConfig,
-} from "./utils";
+import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export type SensorTypeMap = ReadonlyMap<number, SensorType>;
-
-/** @internal */
-export async function loadSensorTypesInternal(
-	manager: ConfigManager,
-	externalConfig?: boolean,
-): Promise<SensorTypeMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"sensorTypes.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The sensor types config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"sensor types",
-				`the dictionary is not an object`,
-			);
-		}
-
-		const sensorTypes = new Map();
-		for (const [key, sensorDefinition] of entries(definition)) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"sensor types",
-					`found invalid key "${key}" at the root. Sensor types must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			sensorTypes.set(
-				keyNum,
-				new SensorType(manager, keyNum, sensorDefinition as JSONObject),
-			);
-		}
-		return sensorTypes;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("sensor types");
-		}
-	}
-}
 
 const namedScalesMarker = "$SCALES:";
 
