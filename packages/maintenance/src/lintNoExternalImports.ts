@@ -21,6 +21,9 @@ const whitelistedImports = [
 	"alcalzone-shared/typeguards",
 ];
 
+// Whitelist some more imports that should be ignored in the checking
+const ignoredImports = ["@zwave-js/transformers"];
+
 function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 	if (
 		ts.isImportEqualsDeclaration(node) &&
@@ -138,9 +141,12 @@ export function lintNoExternalImports(): Promise<void> {
 
 			const imports = getImports(current.file, checker);
 			for (const imp of imports) {
+				const trimmedImport = imp.name.replace(/"/g, "");
+				if (ignoredImports.includes(trimmedImport)) continue;
+
 				if (
 					imp.sourceFile.fileName.includes("node_modules") &&
-					!whitelistedImports.includes(imp.name.replace(/"/g, ""))
+					!whitelistedImports.includes(trimmedImport)
 				) {
 					hasError = true;
 
