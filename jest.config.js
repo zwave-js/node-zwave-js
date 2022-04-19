@@ -14,13 +14,23 @@ module.exports = {
 	moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 	moduleNameMapper: {
 		"^@zwave-js/(.*)/package.json": "<rootDir>/packages/$1/package.json",
+		"^@zwave-js/config/safe": "<rootDir>/packages/config/src/index_safe",
 		"^@zwave-js/config(.*)": "<rootDir>/packages/config/src$1",
+		"^@zwave-js/core/safe": "<rootDir>/packages/core/src/index_safe",
 		"^@zwave-js/core(.*)": "<rootDir>/packages/core/src$1",
+		"^@zwave-js/nvmedit/safe": "<rootDir>/packages/nvmedit/src/index_safe",
 		"^@zwave-js/nvmedit(.*)": "<rootDir>/packages/nvmedit/src$1",
+		"^@zwave-js/maintenance/safe":
+			"<rootDir>/packages/maintenance/src/index_safe",
 		"^@zwave-js/maintenance(.*)": "<rootDir>/packages/maintenance/src$1",
+		"^@zwave-js/serial/safe": "<rootDir>/packages/serial/src/index_safe",
 		"^@zwave-js/serial(.*)": "<rootDir>/packages/serial/src$1",
+		"^@zwave-js/shared/safe": "<rootDir>/packages/shared/src/index_safe",
 		"^@zwave-js/shared(.*)": "<rootDir>/packages/shared/src$1",
+		"^@zwave-js/testing/safe": "<rootDir>/packages/testing/src/index_safe",
 		"^@zwave-js/testing(.*)": "<rootDir>/packages/testing/src$1",
+		"^@zwave-js/transformers/safe":
+			"<rootDir>/packages/transformers/src/index_safe",
 		"^@zwave-js/transformers(.*)": "<rootDir>/packages/transformers/src$1",
 	},
 	globalSetup: "./test/jest.globalSetup.ts",
