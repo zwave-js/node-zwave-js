@@ -16,7 +16,6 @@ import { buffer2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -39,6 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { EntryControlDataTypes, EntryControlEventTypes } from "./_Types";
 
 // All the supported commands
 export enum EntryControlCommand {
@@ -51,61 +51,6 @@ export enum EntryControlCommand {
 	ConfigurationGet = 0x07,
 	ConfigurationReport = 0x08,
 }
-
-export enum EntryControlEventTypes {
-	Caching = 0x00,
-	CachedKeys = 0x01,
-	Enter = 0x02,
-	DisarmAll = 0x03,
-	ArmAll = 0x04,
-	ArmAway = 0x05,
-	ArmHome = 0x06,
-	ExitDelay = 0x07,
-	Arm1 = 0x08,
-	Arm2 = 0x09,
-	Arm3 = 0x0a,
-	Arm4 = 0x0b,
-	Arm5 = 0x0c,
-	Arm6 = 0x0d,
-	Rfid = 0x0e,
-	Bell = 0x0f,
-	Fire = 0x10,
-	Police = 0x11,
-	AlertPanic = 0x12,
-	AlertMedical = 0x13,
-	GateOpen = 0x14,
-	GateClose = 0x15,
-	Lock = 0x16,
-	Unlock = 0x17,
-	Test = 0x18,
-	Cancel = 0x19,
-}
-
-export enum EntryControlDataTypes {
-	None = 0x00,
-	Raw = 0x01,
-	ASCII = 0x02,
-	MD5 = 0x03,
-}
-
-/**
- * @publicAPI
- */
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	eventType: EntryControlEventTypes;
-	dataType: EntryControlDataTypes;
-	eventData?: Buffer | string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
-	args: ZWaveNotificationCallbackArgs_EntryControlCC,
-];
 
 function getValueID(property: string, endpoint: number): ValueID {
 	return {

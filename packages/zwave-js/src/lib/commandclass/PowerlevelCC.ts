@@ -10,8 +10,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -24,6 +23,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { Powerlevel, PowerlevelTestStatus } from "./_Types";
 
 // All the supported commands
 export enum PowerlevelCommand {
@@ -34,47 +34,6 @@ export enum PowerlevelCommand {
 	TestNodeGet = 0x05,
 	TestNodeReport = 0x06,
 }
-
-/** @publicAPI */
-export enum Powerlevel {
-	"Normal Power" = 0x00,
-	"-1 dBm" = 0x01,
-	"-2 dBm" = 0x02,
-	"-3 dBm" = 0x03,
-	"-4 dBm" = 0x04,
-	"-5 dBm" = 0x05,
-	"-6 dBm" = 0x06,
-	"-7 dBm" = 0x07,
-	"-8 dBm" = 0x08,
-	"-9 dBm" = 0x09,
-}
-
-/** @publicAPI */
-export enum PowerlevelTestStatus {
-	Failed = 0x00,
-	Success = 0x01,
-	"In Progress" = 0x02,
-}
-
-/**
- * @publicAPI
- * This is emitted when an unsolicited powerlevel test report is received
- */
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-	testNodeId: number;
-	status: PowerlevelTestStatus;
-	acknowledgedFrames: number;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNode,
-	ccId: CommandClasses.Powerlevel,
-	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
-];
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends CCAPI {

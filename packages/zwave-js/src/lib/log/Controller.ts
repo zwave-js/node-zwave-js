@@ -17,7 +17,7 @@ import {
 } from "@zwave-js/core";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage } from "../node/Types";
+import { InterviewStage } from "../node/_Types";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";

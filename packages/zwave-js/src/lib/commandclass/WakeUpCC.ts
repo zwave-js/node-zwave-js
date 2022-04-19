@@ -11,7 +11,7 @@ import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import {
 	CCAPI,
 	PollValueImplementation,

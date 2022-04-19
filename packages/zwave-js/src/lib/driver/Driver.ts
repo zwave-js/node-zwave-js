@@ -125,10 +125,9 @@ import {
 	isSendDataTransmitReport,
 	isTransmitReport,
 	SendDataMessage,
-	TransmitOptions,
-	TXReport,
 } from "../controller/SendDataShared";
 import { SoftResetRequest } from "../controller/SoftResetRequest";
+import { TransmitOptions, TXReport } from "../controller/_Types";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -140,7 +139,7 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isSuccessIndicator } from "../message/SuccessIndicator";
 import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
+import { InterviewStage, NodeStatus } from "../node/_Types";
 import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import { initSentry } from "../telemetry/sentry";

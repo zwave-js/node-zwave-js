@@ -56,8 +56,11 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import type { Message } from "../..";
-import { PowerlevelCCTestNodeReport } from "../commandclass";
+import {
+	Powerlevel,
+	PowerlevelCCTestNodeReport,
+	PowerlevelTestStatus,
+} from "../commandclass";
 import type {
 	CCAPI,
 	PollValueImplementation,
@@ -112,7 +115,6 @@ import {
 	MultilevelSwitchCCSet,
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
-	MultilevelSwitchCommand,
 } from "../commandclass/MultilevelSwitchCC";
 import {
 	getNodeLocationValueId,
@@ -124,7 +126,6 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
-import { Powerlevel, PowerlevelTestStatus } from "../commandclass/PowerlevelCC";
 import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
 	Security2CCNonceGet,
@@ -150,6 +151,7 @@ import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/ZWavePlusCC";
+import { MultilevelSwitchCommand } from "../commandclass/_Types";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -159,18 +161,14 @@ import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../controller/GetNodeProtocolInfoMessages";
-import {
-	isRssiError,
-	RSSI,
-	RssiError,
-	TXReport,
-} from "../controller/SendDataShared";
+import { isRssiError, RSSI, RssiError, TXReport } from "../controller/_Types";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
+import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -206,8 +204,8 @@ import type {
 	TranslatedValueID,
 	ZWaveNodeEventCallbacks,
 	ZWaveNodeValueEventCallbacks,
-} from "./Types";
-import { InterviewStage, NodeStatus } from "./Types";
+} from "./_Types";
+import { InterviewStage, NodeStatus } from "./_Types";
 
 export interface ZWaveNode
 	extends TypedEventEmitter<

@@ -12,9 +12,8 @@ import {
 	EntryControlCCKeySupportedReport,
 	EntryControlCCNotification,
 	EntryControlCommand,
-	EntryControlDataTypes,
-	EntryControlEventTypes,
 } from "./EntryControlCC";
+import { EntryControlDataTypes, EntryControlEventTypes } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

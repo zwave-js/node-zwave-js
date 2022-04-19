@@ -3,7 +3,7 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
-import { NodeStatus } from "../../node/Types";
+import { NodeStatus } from "../../node/_Types";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 

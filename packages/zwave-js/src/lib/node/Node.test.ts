@@ -24,11 +24,13 @@ import { getCCConstructor } from "../commandclass/CommandClass";
 import {
 	EntryControlCCNotification,
 	EntryControlCommand,
-	EntryControlDataTypes,
-	EntryControlEventTypes,
 } from "../commandclass/EntryControlCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
+import {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "../commandclass/_Types";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
@@ -40,7 +42,7 @@ import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
 import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
-import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./Types";
+import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./_Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
 class TestNode extends ZWaveNode {

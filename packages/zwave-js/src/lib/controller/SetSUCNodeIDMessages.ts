@@ -21,7 +21,7 @@ import {
 	priority,
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { TransmitOptions } from "./SendDataShared";
+import { TransmitOptions } from "./_Types";
 
 export enum SetSUCNodeIdStatus {
 	Succeeded = 0x05,

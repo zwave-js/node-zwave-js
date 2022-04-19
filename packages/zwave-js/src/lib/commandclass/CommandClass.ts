@@ -29,8 +29,8 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage } from "../node/Types";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
+import { InterviewStage } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,

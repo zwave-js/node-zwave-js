@@ -1,10 +1,6 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
-import {
-	parseRSSI,
-	RSSI,
-	rssiToString,
-	tryParseRSSI,
-} from "../../controller/SendDataShared";
+import { parseRSSI, tryParseRSSI } from "../../controller/SendDataShared";
+import { RSSI, rssiToString } from "../../controller/_Types";
 import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,

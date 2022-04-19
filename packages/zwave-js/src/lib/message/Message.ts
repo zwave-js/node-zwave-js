@@ -7,9 +7,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders } from "@zwave-js/serial";
-import type { JSONObject } from "@zwave-js/shared";
-import { num2hex, staticExtends } from "@zwave-js/shared";
+import { MessageHeaders } from "@zwave-js/serial/safe";
+import type { JSONObject } from "@zwave-js/shared/safe";
+import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";

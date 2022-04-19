@@ -5,7 +5,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import type { Driver } from "./Driver";
 import {
 	MessageGenerator,

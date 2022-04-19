@@ -19,7 +19,8 @@ import {
 	priority,
 } from "../message/Message";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
-import { RSSI, RssiError, tryParseRSSI } from "./SendDataShared";
+import { tryParseRSSI } from "./SendDataShared";
+import { RSSI, RssiError } from "./_Types";
 
 @messageTypes(MessageType.Request, FunctionType.BridgeApplicationCommand)
 // This does not expect a response. The controller sends us this when a node sends a command

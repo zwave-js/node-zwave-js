@@ -23,7 +23,7 @@ import {
 } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./SendDataShared";
+import { TransmitStatus } from "./_Types";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)

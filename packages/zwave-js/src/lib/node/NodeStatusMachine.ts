@@ -1,6 +1,6 @@
 import { Interpreter, Machine, StateMachine } from "xstate";
 import type { ZWaveNode } from "./Node";
-import { NodeStatus } from "./Types";
+import { NodeStatus } from "./_Types";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface NodeStatusStateSchema {

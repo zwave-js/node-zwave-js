@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import type { TXReport } from "../controller/SendDataShared";
+import type { TXReport } from "../controller/_Types";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";

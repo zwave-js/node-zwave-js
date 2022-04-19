@@ -13,7 +13,7 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "../controller/SendDataMessages";
-import { TransmitStatus } from "../controller/SendDataShared";
+import { TransmitStatus } from "../controller/_Types";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
