@@ -71,7 +71,105 @@
 			"minValue": 0,
 			"maxValue": 23,
 			"defaultValue": 13,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Outbound edge towards the left (Open/Close)",
+					"value": 0
+				},
+				{
+					"label": "Outbound edge towards the left (Position)",
+					"value": 1
+				},
+				{
+					"label": "Outbound edge towards the right (Open/Close)",
+					"value": 2
+				},
+				{
+					"label": "Outbound edge towards the right (Position)",
+					"value": 3
+				},
+				{
+					"label": "Inbound edge towards the left (Open/Close)",
+					"value": 4
+				},
+				{
+					"label": "Inbound edge towards the left (Position)",
+					"value": 5
+				},
+				{
+					"label": "Inbound edge towards the right (Open/Close)",
+					"value": 6
+				},
+				{
+					"label": "Inbound edge towards the right (Position)",
+					"value": 7
+				},
+				{
+					"label": "Both horizontal inbound edges (Open/Close)",
+					"value": 8
+				},
+				{
+					"label": "Both horizontal inbound edges (Position)",
+					"value": 9
+				},
+				{
+					"label": "Vertical slats angle (Open/Close)",
+					"value": 10
+				},
+				{
+					"label": "Vertical slats angle (Position)",
+					"value": 11
+				},
+				{
+					"label": "Outbound edge towards the bottom (Open/Close)",
+					"value": 12
+				},
+				{
+					"label": "Outbound edge towards the bottom (Position)",
+					"value": 13
+				},
+				{
+					"label": "Outbound edge towards the top (Open/Close)",
+					"value": 14
+				},
+				{
+					"label": "Outbound edge towards the top (Position)",
+					"value": 15
+				},
+				{
+					"label": "Inbound edge towards the bottom (Open/Close)",
+					"value": 16
+				},
+				{
+					"label": "Inbound edge towards the bottom (Position)",
+					"value": 17
+				},
+				{
+					"label": "Inbound edge towards the top (Open/Close)",
+					"value": 18
+				},
+				{
+					"label": "Inbound edge towards the top (Position)",
+					"value": 19
+				},
+				{
+					"label": "Both vertical inbound edges (Open/Close)",
+					"value": 20
+				},
+				{
+					"label": "Both vertical inbound edges (Position)",
+					"value": 21
+				},
+				{
+					"label": "Horizontal slats angle (Open/Close)",
+					"value": 22
+				},
+				{
+					"label": "Horizontal slats angle (Position)",
+					"value": 23
+				}
+			]
 		},
 		{
 			"#": "33",
