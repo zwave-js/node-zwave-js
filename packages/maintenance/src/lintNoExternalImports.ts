@@ -12,6 +12,7 @@ import { loadTSConfig, projectRoot } from "./tsAPITools";
 
 // Whitelist some imports that are known not to import forbidden modules
 const whitelistedImports = [
+	"reflect-metadata",
 	"alcalzone-shared/arrays",
 	"alcalzone-shared/async",
 	"alcalzone-shared/comparable",

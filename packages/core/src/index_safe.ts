@@ -7,7 +7,6 @@ export * from "./capabilities/Protocols";
 export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/shared_safe";
-export * from "./security/crypto";
 export * from "./security/DSK";
 export * from "./security/SecurityClass";
 export * from "./test/assertZWaveError";
