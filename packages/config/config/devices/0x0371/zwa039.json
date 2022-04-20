@@ -281,9 +281,15 @@
 			"description": "To determine the battery calibration value, you must set each step in order",
 			"unsigned": true,
 			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
 			"allowManualEntry": false,
 			"defaultValue": 83951616,
 			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
 				{
 					"label": "Step 1",
 					"value": 83951616
