@@ -1,3 +1,5 @@
+import { padStart } from "alcalzone-shared/strings";
+
 // Based on INS13954-13, chapter 7
 const versions = Object.freeze([
 	// Z-Wave 700 uses 7.x SDK versions but also a different NVM format,
@@ -330,6 +332,16 @@ const versions = Object.freeze([
 ]);
 
 /**
+ * Converts versions determined using GetProtocolVersion (x.y.z) into the legacy format
+ * so they can be used to look up the SDK version.
+ */
+function semverToLegacy(version: string): string {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [major, minor, _patch] = version.split(".", 3);
+	return `${major}.${padStart(minor, 2, "0")}`;
+}
+
+/**
  * Looks up which SDK version is being used for a given protocol version.
  * Defaults to the protocol version itself, which is the case for v7+
  */
@@ -338,9 +350,11 @@ export function protocolVersionToSDKVersion(protocolVersion: string): string {
 		protocolVersion = protocolVersion.substr(7);
 	}
 
+	const normalizedVersion = semverToLegacy(protocolVersion);
 	let ret = versions.find(
-		(v) => v.protocolVersion === protocolVersion,
+		(v) => v.protocolVersion === normalizedVersion,
 	)?.sdkVersion;
+
 	if (!ret) {
 		// Remove leading zeroes and stuff
 		ret = protocolVersion
