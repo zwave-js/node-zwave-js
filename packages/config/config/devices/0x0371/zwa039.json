@@ -275,6 +275,30 @@
 			"valueSize": 1
 		},
 		{
+			"#": "92",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Battery Calibration Check",
+			"description": "To determine the battery calibration value, set each step in order and wait for the value to update. If the returned values are NOT 0, the battery is still calibrated.",
+			"unsigned": true,
+			"valueSize": 4,
+			"defaultValue": 83951616,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Step 1",
+					"value": 83951616
+				},
+				{
+					"label": "Step 2",
+					"value": 84017152
+				},
+				{
+					"label": "Step 3",
+					"value": 84082688
+				}
+			]
+		},
+		{
 			"#": "255",
 			"$import": "~/0x0086/templates/aeotec_template.json#factory_reset_complete"
 		}
