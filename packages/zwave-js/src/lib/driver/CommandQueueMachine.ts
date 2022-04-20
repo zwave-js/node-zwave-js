@@ -19,7 +19,10 @@ import {
 	SerialAPICommandMachine,
 	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
-import type { ServiceImplementations } from "./StateMachineShared";
+import {
+	notifyUnsolicited,
+	ServiceImplementations,
+} from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 
 /*
@@ -150,11 +153,6 @@ const notifyError = sendParent((ctx: CommandQueueContext, evt: any) => ({
 		error: evt.data,
 		transaction: ctx.currentTransaction,
 	},
-}));
-
-const notifyUnsolicited = sendParent((ctx: CommandQueueContext, evt: any) => ({
-	type: "unsolicited",
-	message: evt.message,
 }));
 
 export function createCommandQueueMachine(
