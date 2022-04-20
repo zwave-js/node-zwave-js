@@ -1,4 +1,4 @@
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared/safe";
 import { padStart } from "alcalzone-shared/strings";
 import { Powerlevel } from "../commandclass/_Types";
 import type {

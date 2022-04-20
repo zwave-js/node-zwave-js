@@ -2,7 +2,7 @@ import { padStart } from "alcalzone-shared/strings";
 import type { TransformableInfo } from "logform";
 import type { Logger } from "winston";
 import type Transport from "winston-transport";
-import type { ValueID } from "../values/ValueDB";
+import type { ValueID } from "../values/_Types";
 
 export const timestampFormatShort = "HH:mm:ss.SSS";
 export const timestampPaddingShort = " ".repeat(

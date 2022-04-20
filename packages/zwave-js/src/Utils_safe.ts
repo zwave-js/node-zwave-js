@@ -1,4 +1,3 @@
-export { extractFirmware, guessFirmwareFileFormat } from "@zwave-js/core/safe";
 export type {
 	Firmware,
 	FirmwareFileFormat,

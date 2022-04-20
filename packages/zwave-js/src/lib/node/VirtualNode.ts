@@ -9,7 +9,7 @@ import {
 	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core/safe";
+} from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
