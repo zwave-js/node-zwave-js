@@ -34,10 +34,16 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 		return node.moduleReference.expression;
 	} else if (ts.isImportDeclaration(node)) {
 		// Only return import declarations where there is at least one non-typeonly import specifier
-		if (
-			node.importClause &&
+		if (!node.importClause) {
+			// import "bar"
+			return node.moduleSpecifier;
+		} else if (
 			!node.importClause.isTypeOnly &&
+			// import foo from "bar"
 			(!node.importClause.namedBindings ||
+				// import * as foo from "bar"
+				ts.isNamespaceImport(node.importClause.namedBindings) ||
+				// import {foo, type baz} from "bar"
 				(ts.isNamedImports(node.importClause.namedBindings) &&
 					node.importClause.namedBindings.elements.some(
 						(e) => !e.isTypeOnly,
@@ -49,7 +55,11 @@ function getExternalModuleName(node: ts.Node): ts.Expression | undefined {
 		// Only return export declarations where there is at least one non-typeonly export specifier
 		if (
 			!node.isTypeOnly &&
+			// export * from "bar"
 			(!node.exportClause ||
+				// export * as foo from "bar"
+				ts.isNamespaceExport(node.exportClause) ||
+				// export {foo, type baz} from "bar"
 				(ts.isNamedExports(node.exportClause) &&
 					node.exportClause.elements.some((e) => !e.isTypeOnly)))
 		) {
