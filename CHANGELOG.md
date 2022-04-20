@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.3 (2022-04-20)
 ### Bugfixes
 * Fixed an issue where version based feature testing of 500 series controllers with support for the `GetProtocolVersion` API would fail
 * Fixed an issue causing certain unsolicited messages like `Notification CC Reports` not to be processed while an API command was ongoing
