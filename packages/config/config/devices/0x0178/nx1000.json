@@ -234,393 +234,68 @@
 		},
 		{
 			"#": "3",
-			"label": "Button 2 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 2 Type"
 		},
 		{
 			"#": "4",
-			"label": "Button 3 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 3 Type"
 		},
 		{
 			"#": "5",
-			"label": "Button 4 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 4 Type"
 		},
 		{
 			"#": "6",
-			"label": "Button 5 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 5 Type"
 		},
 		{
 			"#": "7",
-			"label": "Button 6 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 6 Type"
 		},
 		{
 			"#": "9",
-			"label": "Button 8 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 8 Type"
 		},
 		{
 			"#": "10",
-			"label": "Button 9 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 9 Type"
 		},
 		{
 			"#": "11",
-			"label": "Button 10 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 10 Type"
 		},
 		{
 			"#": "12",
-			"label": "Button 11 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 11 Type"
 		},
 		{
 			"#": "13",
-			"label": "Button 12 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 12 Type"
 		},
 		{
 			"#": "14",
-			"label": "Button 13 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 13 Type"
 		},
 		{
 			"#": "15",
-			"label": "Button 14 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 14 Type"
 		},
 		{
 			"#": "16",
-			"label": "Button 15 Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central Scene",
-					"value": 0
-				},
-				{
-					"label": "Momentary Scene Control",
-					"value": 1
-				},
-				{
-					"label": "Basic Set: Toggle",
-					"value": 2
-				},
-				{
-					"label": "Basic Set: Scene Control",
-					"value": 3
-				},
-				{
-					"label": "Thermostat",
-					"value": 4
-				}
-			]
+			"$import": "#paramInformation/2",
+			"label": "Button 15 Type"
 		},
 		{
 			"#": "20",
