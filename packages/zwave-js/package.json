@@ -18,13 +18,27 @@
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
-      "CommandClass": ["./build/CommandClass.d.ts"],
-      "Driver": ["./build/Driver.d.ts"],
-      "Error": ["./build/Error.d.ts"],
-      "Node": ["./build/Node.d.ts"],
-      "Utils": ["./build/Utils.d.ts"],
-      "Values": ["./build/Values.d.ts"],
-      "safe": ["./build/index_safe.d.ts"]
+      "CommandClass": [
+        "./build/CommandClass.d.ts"
+      ],
+      "Driver": [
+        "./build/Driver.d.ts"
+      ],
+      "Error": [
+        "./build/Error.d.ts"
+      ],
+      "Node": [
+        "./build/Node.d.ts"
+      ],
+      "Utils": [
+        "./build/Utils.d.ts"
+      ],
+      "Values": [
+        "./build/Values.d.ts"
+      ],
+      "safe": [
+        "./build/index_safe.d.ts"
+      ]
     }
   },
   "files": [

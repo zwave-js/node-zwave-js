@@ -3,7 +3,9 @@
  * anything from outside the monorepo.
  */
 
-import * as path from "path";
+import { bold, red } from "ansi-colors";
+import fs from "fs";
+import path from "path";
 import ts from "typescript";
 import { reportProblem } from "./reportProblem";
 import { loadTSConfig, projectRoot } from "./tsAPITools";
@@ -95,9 +97,63 @@ function getImports(
 	return output;
 }
 
-function dtsToTs(filename: string): string {
-	return filename.replace(/\/build\/(.*?)\.d\.ts$/, "/src/$1.ts");
+interface LinterContext {
+	program: ts.Program;
+	resolvedSourceFiles: Map<string, string>;
 }
+
+/** Given a definition file, this tries to resolve the original source file */
+function resolveSourceFileFromDefinition(
+	context: LinterContext,
+	file: ts.SourceFile,
+): ts.SourceFile {
+	if (context.resolvedSourceFiles.has(file.fileName)) {
+		return (
+			context.program.getSourceFile(
+				context.resolvedSourceFiles.get(file.fileName)!,
+			) ?? file
+		);
+	}
+
+	function bail() {
+		context.resolvedSourceFiles.set(file.fileName, file.fileName);
+		return file;
+	}
+
+	const sourceMappingURL = /^\/\/# sourceMappingURL=(.*)$/gm.exec(
+		file.text,
+	)?.[1];
+	if (!sourceMappingURL) return file;
+
+	const mapPath = path.resolve(path.dirname(file.fileName), sourceMappingURL);
+	let map: any;
+	try {
+		map = JSON.parse(fs.readFileSync(mapPath, "utf8"));
+	} catch {
+		return bail();
+	}
+
+	let originalFileName = map.sources?.[0];
+	if (typeof originalFileName !== "string") {
+		return bail();
+	}
+
+	originalFileName = path.resolve(
+		path.dirname(file.fileName),
+		originalFileName,
+	);
+	const originalFile = context.program.getSourceFile(originalFileName);
+	if (originalFile) {
+		context.resolvedSourceFiles.set(file.fileName, originalFile.fileName);
+		return originalFile;
+	}
+
+	return bail();
+}
+
+// function dtsToTs(filename: string): string {
+// 	return filename.replace(/\/build\/(.*?)\.d\.ts$/, "/src/$1.ts");
+// }
 
 function relativeToProject(filename: string): string {
 	return path.relative(projectRoot, filename).replace(/\\/g, "/");
@@ -114,7 +170,12 @@ export function lintNoExternalImports(): Promise<void> {
 	});
 	const checker = program.getTypeChecker();
 
-	let hasError = false;
+	const context: LinterContext = {
+		program,
+		resolvedSourceFiles: new Map(),
+	};
+
+	let numErrors = 0;
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
@@ -136,7 +197,7 @@ export function lintNoExternalImports(): Promise<void> {
 			visitedSourceFiles.add(current.file.fileName);
 			const importStack = [
 				...current.importStack,
-				dtsToTs(relativeToProject(current.file.fileName)),
+				relativeToProject(current.file.fileName),
 			];
 
 			const imports = getImports(current.file, checker);
@@ -148,7 +209,7 @@ export function lintNoExternalImports(): Promise<void> {
 					imp.sourceFile.fileName.includes("node_modules") &&
 					!whitelistedImports.includes(trimmedImport)
 				) {
-					hasError = true;
+					numErrors++;
 
 					const message = `Found forbidden import of external module ${
 						imp.name
@@ -168,17 +229,35 @@ ${[...importStack, `❌ ${imp.name}`]
 						line: imp.line,
 						message: message,
 					});
-				} else if (!visitedSourceFiles.has(imp.sourceFile.fileName)) {
-					todo.push({
-						file: imp.sourceFile,
-						importStack,
-					});
+				} else {
+					// try to resolve the original source file for declaration files
+					const next: ts.SourceFile = imp.sourceFile.isDeclarationFile
+						? resolveSourceFileFromDefinition(
+								context,
+								imp.sourceFile,
+						  )
+						: imp.sourceFile;
+
+					if (!visitedSourceFiles.has(next.fileName)) {
+						todo.push({
+							file: next,
+							importStack,
+						});
+					}
 				}
 			}
 		}
 	}
 
-	if (hasError) {
+	if (numErrors) {
+		console.error();
+		console.error(
+			red(
+				`Found ${bold(numErrors.toString())} error${
+					numErrors !== 1 ? "s" : ""
+				}!`,
+			),
+		);
 		return Promise.reject(
 			new Error(
 				"The noExternalImports rule had an error! See log output for details.",
