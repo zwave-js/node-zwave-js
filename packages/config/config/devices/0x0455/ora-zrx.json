@@ -104,7 +104,6 @@
 		{
 			"#": "34",
 			"label": "Sun Activation",
-			"description": "The value of this parameter is the sum of wind, sun and rain status. Since automation for wind and rain are always activated the only valid values are: 5 to disable the sun automation or 7 to enabled it",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 7,
@@ -125,7 +124,7 @@
 		{
 			"#": "35",
 			"label": "Sensor Activation Status",
-			"description": "Allows to know which sensor has been associated to the motor. The value of this parameter is the sum of wind, sun and rain status",
+			"description": "Which sensor has been associated to the motor. The value is the sum of wind, sun and rain status.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
@@ -136,7 +135,6 @@
 		{
 			"#": "36",
 			"label": "Signal Connection Status",
-			"description": "Allows to know if the radio connection is operative or if the motor has lost the connection with its sensors",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
