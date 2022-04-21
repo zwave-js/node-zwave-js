@@ -1,4 +1,9 @@
-import { cloneDeep, discreteBinarySearch, throttle } from "./misc";
+import {
+	cloneDeep,
+	discreteBinarySearch,
+	discreteLinearSearch,
+	throttle,
+} from "./misc";
 
 describe("throttle()", () => {
 	const originalDateNow = Date.now;
@@ -153,6 +158,80 @@ describe("discreteBinarySearch()", () => {
 		const values: number[] = [];
 		expect(
 			await discreteBinarySearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(undefined);
+	});
+});
+
+describe("discreteLinearSearch()", () => {
+	it("test case 1", async () => {
+		const [rangeMin, rangeMax] = [0, 9];
+		const values = [0, 0, 0, 0, 0, 1, 1, 1, 1, 1];
+		expect(
+			await discreteLinearSearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(4);
+	});
+
+	it("test case 2", async () => {
+		const [rangeMin, rangeMax] = [0, 9];
+		const values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+		expect(
+			await discreteLinearSearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(9);
+	});
+
+	it("test case 3", async () => {
+		const [rangeMin, rangeMax] = [0, 6];
+		const values = [0, 1, 1, 1, 1, 1, 1];
+		expect(
+			await discreteLinearSearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(0);
+	});
+
+	it("test case 4", async () => {
+		const [rangeMin, rangeMax] = [0, 6];
+		const values = [1, 1, 1, 1, 1, 1, 1];
+		expect(
+			await discreteLinearSearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(undefined);
+	});
+
+	it("test case 5", async () => {
+		const [rangeMin, rangeMax] = [0, 0];
+		const values = [0];
+		expect(
+			await discreteLinearSearch(
+				rangeMin,
+				rangeMax,
+				(i) => values[i] === 0,
+			),
+		).toBe(0);
+	});
+
+	it("test case 6", async () => {
+		const [rangeMin, rangeMax] = [1, -1];
+		const values: number[] = [];
+		expect(
+			await discreteLinearSearch(
 				rangeMin,
 				rangeMax,
 				(i) => values[i] === 0,
