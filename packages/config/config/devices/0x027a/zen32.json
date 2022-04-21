@@ -519,6 +519,46 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "22",
+			"$if": "firmwareVersion >= 10.0",
+			"label": "Programming through Relay Button",
+			"description": "Controls whether certain features (inclusion, exclusion, LED indicator modes) can be programmed through the relay button. Disabling this frees up the triple tap action for scene control. Factory reset will always work regardless of this setting.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$if": "firmwareVersion >= 10.20",
+			"label": "LED Settings Indicator",
+			"description": "When enabled, the relay button LED indicator will flash to confirm the receipt of settings.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
