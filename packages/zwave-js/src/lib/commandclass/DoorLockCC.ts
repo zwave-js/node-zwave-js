@@ -494,20 +494,34 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			}
 		}
 
-		// Create or delete metadata for the status values, depending on support
-		const valueDB = this.getValueDB();
-		valueDB.setMetadata(
-			getDoorStatusValueId(this.endpointIndex),
-			doorSupported ? getDoorStatusValueMetadata() : undefined,
-		);
-		valueDB.setMetadata(
-			getBoltStatusValueId(this.endpointIndex),
-			boltSupported ? getBoltStatusValueMetadata() : undefined,
-		);
-		valueDB.setMetadata(
-			getLatchStatusValueId(this.endpointIndex),
-			latchSupported ? getLatchStatusValueMetadata() : undefined,
-		);
+		if (!hadCriticalTimeout) {
+			// Save support information for the status values
+			const valueDB = this.getValueDB();
+			valueDB.setMetadata(
+				getDoorStatusValueId(this.endpointIndex),
+				doorSupported ? getDoorStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getBoltStatusValueId(this.endpointIndex),
+				boltSupported,
+			);
+			valueDB.setMetadata(
+				getLatchStatusValueId(this.endpointIndex),
+				latchSupported ? getLatchStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getDoorStatusValueId(this.endpointIndex),
+				doorSupported,
+			);
+			valueDB.setMetadata(
+				getBoltStatusValueId(this.endpointIndex),
+				boltSupported ? getBoltStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getLatchStatusValueId(this.endpointIndex),
+				latchSupported,
+			);
+		}
 
 		await this.refreshValues();
 
@@ -1183,13 +1197,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue({ internal: true, minVersion: 4 })
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly latchSupported: boolean;
-
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly boltSupported: boolean;
-
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly doorSupported: boolean;
 
 	@ccValue({ internal: true, minVersion: 4 })
