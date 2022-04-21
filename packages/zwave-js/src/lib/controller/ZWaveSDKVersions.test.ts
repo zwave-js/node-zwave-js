@@ -17,4 +17,9 @@ describe("protocolVersionToSDKVersion", () => {
 	it("finds protocol version 6.02", () => {
 		expect(protocolVersionToSDKVersion("6.02")).toBe("6.81.1");
 	});
+
+	it("handles both the legacy x.0y and x.y.z versions", () => {
+		expect(protocolVersionToSDKVersion("6.07")).toBe("6.81.6");
+		expect(protocolVersionToSDKVersion("6.7.0")).toBe("6.81.6");
+	});
 });

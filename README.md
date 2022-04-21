@@ -40,14 +40,13 @@ Built on Node.js and compatible with all known 500 and 700 series Z-Wave control
 
 ## Supporting Z-Wave JS
 
-Started in 2018, **Z-Wave JS** has breathed new life into the Z-Wave ecosystem and is now powering thousands of smart homes all over the world. We strive to build the best open source Z-Wave device driver out there and hold ourselves to the highest standards. This requires a lot of effort and is done entirely in our free time. We'd love to spend more time on **Z-Wave JS**, but need your support to do so.
+Started in 2018, **Z-Wave JS** has breathed new life into the Z-Wave ecosystem and is now powering thousands of smart homes all over the world. We strive to build the best open source Z-Wave device driver out there and hold ourselves to the highest standards.
 
 If you'd like to help support the future of the project and make the Z-Wave world a better place, please consider:
 
 -   Contributing [configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/overview) for new devices, so we have our hands free for the actual development.
 -   Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
--   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps.
--   Providing a part-time salary for @AlCalzone by becoming a [sponsor](https://github.com/sponsors/AlCalzone) - [read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring).
+-   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps. [Read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring)...
 
 **Top Sponsors:**
 

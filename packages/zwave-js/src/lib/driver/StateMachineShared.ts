@@ -7,13 +7,12 @@ import {
 	Interpreter,
 	InterpreterOptions,
 	Machine,
-	SendAction,
 	spawn,
 	StateMachine,
 	StateSchema,
 	Typestate,
 } from "xstate";
-import { respond } from "xstate/lib/actions";
+import { respond, sendParent } from "xstate/lib/actions";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
@@ -199,8 +198,20 @@ export function isSerialCommandError(error: unknown): boolean {
 	return false;
 }
 
-export const respondUnsolicited: SendAction<any, any, any> = respond(
+// respondUnsolicited and notifyUnsolicited are extremely similar, but we need both.
+// Ideally we'd only use notifyUnsolicited, but then the state machine tests are failing.
+export const respondUnsolicited = respond(
 	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
+
+export const notifyUnsolicited = sendParent(
+	(
+		_ctx: any,
+		evt: SerialAPICommandEvent & { type: "message" | "unsolicited" },
+	) => ({
 		type: "unsolicited",
 		message: evt.message,
 	}),

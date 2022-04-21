@@ -34,12 +34,10 @@ describe("lib/controller/Controller", () => {
 	describe("getAssociationGroups()", () => {
 		let fakeDriver: Driver;
 		beforeAll(async () => {
-			jest.setTimeout(60000);
-
 			fakeDriver = createEmptyMockDriver() as unknown as Driver;
 			fakeDriver.registerRequestHandler = () => {};
 			await fakeDriver.configManager.loadAll();
-		});
+		}, 60000);
 
 		it("should respect the endpoint definition format when AGI is supported", async () => {
 			const ctrl = new ZWaveController(fakeDriver);

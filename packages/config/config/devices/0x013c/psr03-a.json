@@ -69,5 +69,9 @@
 		"exclusion": "1. Have Z-Wave ™ Controller entered remove mode.\n2. Press the key three times within 1.5 seconds to enter the \nremove mode.\nNode ID has been excluded",
 		"reset": "Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable.\n1. Press the key three times,and do not release the key in the 4 th pressed, and the LED will light ON.\n2. After 3 seconds the LED will turn OFF, after that within 2 seconds, release the keys. If successful, the LED will light ON one second. Otherwise, the LED will flash once.\n3. IDs are remove and all settings will reset to factory \ndefault",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1407/PSR03_ABC_version_Manual.pdf"
+	},
+	"compat": {
+		// The device uses Basic Set to indicate pressed buttons in Lighting Control Mode
+		"treatBasicSetAsEvent": true
 	}
 }

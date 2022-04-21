@@ -1,0 +1,290 @@
+{
+	"manufacturer": "Cherubini S.p.A.",
+	"manufacturerId": "0x0455",
+	"label": "Ora ZRX",
+	"description": "Z-Wave Tubular Motor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Follow Me",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Scene Activation",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Follow Me Weather",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "30",
+			"label": "Send Scene ID: Jam When Opening",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Send Scene ID: Jam When Closing",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Parameter for Window Covering",
+			"description": "Parameter ID used by the window covering set on group Follow Me Weather",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 23,
+			"defaultValue": 13,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Outbound edge towards the left (Open/Close)",
+					"value": 0
+				},
+				{
+					"label": "Outbound edge towards the left (Position)",
+					"value": 1
+				},
+				{
+					"label": "Outbound edge towards the right (Open/Close)",
+					"value": 2
+				},
+				{
+					"label": "Outbound edge towards the right (Position)",
+					"value": 3
+				},
+				{
+					"label": "Inbound edge towards the left (Open/Close)",
+					"value": 4
+				},
+				{
+					"label": "Inbound edge towards the left (Position)",
+					"value": 5
+				},
+				{
+					"label": "Inbound edge towards the right (Open/Close)",
+					"value": 6
+				},
+				{
+					"label": "Inbound edge towards the right (Position)",
+					"value": 7
+				},
+				{
+					"label": "Both horizontal inbound edges (Open/Close)",
+					"value": 8
+				},
+				{
+					"label": "Both horizontal inbound edges (Position)",
+					"value": 9
+				},
+				{
+					"label": "Vertical slats angle (Open/Close)",
+					"value": 10
+				},
+				{
+					"label": "Vertical slats angle (Position)",
+					"value": 11
+				},
+				{
+					"label": "Outbound edge towards the bottom (Open/Close)",
+					"value": 12
+				},
+				{
+					"label": "Outbound edge towards the bottom (Position)",
+					"value": 13
+				},
+				{
+					"label": "Outbound edge towards the top (Open/Close)",
+					"value": 14
+				},
+				{
+					"label": "Outbound edge towards the top (Position)",
+					"value": 15
+				},
+				{
+					"label": "Inbound edge towards the bottom (Open/Close)",
+					"value": 16
+				},
+				{
+					"label": "Inbound edge towards the bottom (Position)",
+					"value": 17
+				},
+				{
+					"label": "Inbound edge towards the top (Open/Close)",
+					"value": 18
+				},
+				{
+					"label": "Inbound edge towards the top (Position)",
+					"value": 19
+				},
+				{
+					"label": "Both vertical inbound edges (Open/Close)",
+					"value": 20
+				},
+				{
+					"label": "Both vertical inbound edges (Position)",
+					"value": 21
+				},
+				{
+					"label": "Horizontal slats angle (Open/Close)",
+					"value": 22
+				},
+				{
+					"label": "Horizontal slats angle (Position)",
+					"value": 23
+				}
+			]
+		},
+		{
+			"#": "33",
+			"label": "Last Movement Trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Requested by user",
+					"value": 0
+				},
+				{
+					"label": "Wind",
+					"value": 1
+				},
+				{
+					"label": "Sun",
+					"value": 2
+				},
+				{
+					"label": "Rain",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "34",
+			"label": "Sun Activation",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 7,
+			"defaultValue": 5,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 5
+				},
+				{
+					"label": "Enable",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "35",
+			"label": "Sensor Activation Status",
+			"description": "Which sensor has been associated to the motor. The value is the sum of wind, sun and rain status.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "36",
+			"label": "Signal Connection Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Active",
+					"value": 0
+				},
+				{
+					"label": "Lost",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "37",
+			"label": "Level Reporting Frequency",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "38",
+			"label": "Send Multilevel Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1) Prepare the Z-Wave controller for inclusion of a device (see your controller’s instructions).\n2) On the motor, run the programming sequence for inclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN.\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP.\n3) The motor performs a few short movements to signal that the inclusion procedure is in progress.\n4) Check the controller to verify that the procedure was successful.",
+		"exclusion": "1) Prepare the Z-Wave controller for exclusion of a device (see your controller’s instructions).\n2) On the motor, run the programming sequence for exclusion:\na. By the remote control: AB - AC - AB (2 seconds), wait for confirmation movements.\nb. By the button (if the end stops are not adjusted, you can use either sequence indifferently):\ni. With the motor on the high limit switch: UP-UP-UP-UP-UP-DOWN.\nii. With the motor on the low limit switch: DOWN-DOWN-DOWN-DOWN-DOWN-UP.\n3) The motor performs a few short movements to signal that the exclusion procedure is in progress.\n4) Check the controller to verify that the procedure was successful.",
+		"reset": "1) From the remote control: AB - AC - BC (4 seconds), wait for confirmation movements to be executed.\n2) From the button (if the end stops are not adjusted, you can use either sequence indifferently):\na. With the motor on the high limit switch: UP-UP-UP-DOWN-UP-DOWN.\nb. With the motor on the low limit switch: DOWN-DOWN-DOWN-UP-DOWN-UP.\nINFO: If the reset is performed while the device is still part of a network, it notifies the other devices in the lifeline group that it has been removed.",
+		"manual": "https://www.cherubini-group.com/Content/uploads/2021/10/ORA_A4518_6N14_EN.pdf"
+	}
+}

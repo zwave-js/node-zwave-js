@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 9.0.3 (2022-04-20)
+### Bugfixes
+* Fixed an issue where version based feature testing of 500 series controllers with support for the `GetProtocolVersion` API would fail
+* Fixed an issue causing certain unsolicited messages like `Notification CC Reports` not to be processed while an API command was ongoing
+
+### Config file changes
+* Treat Basic Set as event for Philio PSR03-B (#4487)
+* Treat Basic Set as event for Philio PSR03-A (#4488)
+* Add metadata to Shenzhen Heiman HS1SA-Z (#4244)
+* Add Nexia One Touch NX1000 (#4231)
+* Add Minoston Outdoor Plug Dimmer MP22ZD (#4342)
+* Add Cherubini Ora ZRX (#4463)
+* Add param 92 (Battery Calibration Check) to aërQ v2.01 (#4472)
+
+### Changes under the hood
+* The CC index in the documentation now uses relative paths, so it also works in the non-rendered version on GitHub  (#4476)
+
 ## 9.0.2 (2022-04-14)
 ### Bugfixes
 * The door/latch/bolt status sensors are no longer created if unsupported by the door lock (#4448)

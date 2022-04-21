@@ -7,12 +7,9 @@ process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
-const zwavepath =
-	os.platform() === "win32"
-		? "COM5"
-		: "/dev/serial/by-id/usb-Silicon_Labs_CP2102N_USB_to_UART_Bridge_Controller_8ad925bd7b84e911a7a7a1d6217343c2-if00-port0";
+const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 
-const driver = new Driver(zwavepath, {
+const driver = new Driver(port, {
 	// logConfig: {
 	// 	logToFile: true,
 	// },

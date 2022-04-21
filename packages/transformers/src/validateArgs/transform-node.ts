@@ -189,12 +189,6 @@ function transformDecoratedMethod(
 	visitorContext: FileSpecificVisitorContext,
 	options?: ValidateArgsOptions,
 ) {
-	if (
-		method.name.getText(visitorContext.sourceFile) === "set" &&
-		visitorContext.sourceFile.fileName.includes("UserCodeCC")
-	) {
-		debugger;
-	}
 	// Remove the decorator and prepend its body with the validation code
 	const f = visitorContext.factory;
 

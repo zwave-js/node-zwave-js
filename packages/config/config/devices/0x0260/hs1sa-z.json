@@ -12,5 +12,9 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press the pin 3 times within 1.5s, Green LED is Blinking 3 times within 1 second. If Inclusion Process is successful, Green led will turn off.",
+		"exclusion": "Press the pin 3 times within 1.5s. If Exclusion Process is successful, Green led is Blinking 6 times, then turn off."
 	}
 }
