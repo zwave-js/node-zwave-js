@@ -146,7 +146,10 @@ export function padVersion(version: string): string {
 	return version + ".0";
 }
 
-/** Finds the highest discrete value in [rangeMin...rangeMax] where executor returns true. */
+/**
+ * Using a binary search, this finds the highest discrete value in [rangeMin...rangeMax] where executor returns true, assuming that
+ * increasing the value will at some point cause the executor to return false.
+ */
 export async function discreteBinarySearch(
 	rangeMin: number,
 	rangeMax: number,
@@ -171,6 +174,35 @@ export async function discreteBinarySearch(
 		if (!result) return undefined;
 	}
 	return min;
+}
+
+/**
+ * Using a linear search, this finds the highest discrete value in [rangeMin...rangeMax] where executor returns true, assuming that
+ * increasing the value will at some point cause the executor to return false.
+ */
+export async function discreteLinearSearch(
+	rangeMin: number,
+	rangeMax: number,
+	executor: (value: number) => boolean | PromiseLike<boolean>,
+): Promise<number | undefined> {
+	for (let val = rangeMin; val <= rangeMax; val++) {
+		const result = await executor(val);
+		if (!result) {
+			// Found the first value where it no longer returns true
+			if (val === rangeMin) {
+				// No success at all
+				break;
+			} else {
+				// The previous test was successful
+				return val - 1;
+			}
+		} else {
+			if (val === rangeMax) {
+				// Everything was successful
+				return rangeMax;
+			}
+		}
+	}
 }
 
 export function sum(values: number[]): number {
