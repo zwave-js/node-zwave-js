@@ -502,7 +502,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				doorSupported ? getDoorStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getBoltStatusValueId(this.endpointIndex),
+				getBoltSupportedValueId(this.endpointIndex),
 				boltSupported,
 			);
 			valueDB.setMetadata(
@@ -510,7 +510,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				latchSupported ? getLatchStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getDoorStatusValueId(this.endpointIndex),
+				getDoorSupportedValueId(this.endpointIndex),
 				doorSupported,
 			);
 			valueDB.setMetadata(
@@ -518,7 +518,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				boltSupported ? getBoltStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getLatchStatusValueId(this.endpointIndex),
+				getLatchSupportedValueId(this.endpointIndex),
 				latchSupported,
 			);
 		}
