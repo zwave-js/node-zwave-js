@@ -6,5 +6,5 @@ inputs:
     description: 'The github token to use for authentication'
     required: true
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'main.js'

@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -85,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
@@ -117,7 +117,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        node-version: [12.x, 14.x, 16.x]
+        node-version: [14.x, 16.x, 18.x]
         os: [ubuntu-latest]
 
     steps:
@@ -160,7 +160,7 @@ jobs:
   #   runs-on: ubuntu-latest
   #   strategy:
   #     matrix:
-  #       node-version: [14.x] # This should be LTS
+  #       node-version: [16.x] # This should be LTS
 
   #   steps:
   #   - name: Checkout code
@@ -204,7 +204,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x] # This should be LTS
+        node-version: [16.x] # This should be LTS
 
     steps:
     - name: Checkout code
