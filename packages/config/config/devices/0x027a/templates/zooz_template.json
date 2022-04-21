@@ -366,9 +366,13 @@
 			}
 		]
 	},
-	"paddle_programming": {
-		"label": "Paddle Programming",
-		"description": "Disables inclusion/exclusion commands on paddle for use with scene controls.",
+	"local_programming": {
+		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+		"label": "Local Programming",
+		"description": "Disables inclusion/exclusion commands on paddle for use with scene controls."
+	},
+	"3way_switch_type": {
+		"label": "3-Way Switch Type",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -376,11 +380,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Enable",
+				"label": "Toggle switch",
 				"value": 0
 			},
 			{
-				"label": "Disable",
+				"label": "Momentary switch",
 				"value": 1
 			}
 		]

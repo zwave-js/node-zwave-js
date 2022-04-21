@@ -147,7 +147,7 @@
 		{
 			"#": "26",
 			"$if": "firmwareVersion >= 10.0",
-			"$import": "templates/zooz_template.json#paddle_programming"
+			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],
 	"metadata": {

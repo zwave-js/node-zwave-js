@@ -504,18 +504,29 @@
 		{
 			"#": "21",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "3-Way Switch Type",
+			"$import": "templates/zooz_template.json#3way_switch_type"
+		},
+		{
+			"#": "22",
+			"$if": "firmwareVersion >= 10.0",
+			"$import": "templates/zooz_template.json#local_programming"
+		},
+		{
+			"#": "23",
+			"$if": "firmwareVersion >= 10.20",
+			"label": "LED Settings Indicator",
+			"description": "When enabled, the relay button LED indicator will flash to confirm the receipt of settings.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Mechanical switch",
+					"label": "Enable",
 					"value": 0
 				},
 				{
-					"label": "Momentary switch",
+					"label": "Disable",
 					"value": 1
 				}
 			]
