@@ -18,12 +18,8 @@ import { CompatConfig } from "./CompatConfig";
 import { clearTemplateCache, readJsonWithTemplate } from "./JsonTemplate";
 import type { ConfigLogger } from "./Logger";
 import { evaluate } from "./Logic";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegex4Digits,
-	throwInvalidConfig,
-} from "./utils";
+import { configDir, externalConfigDir } from "./utils";
+import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe";
 
 export interface FirmwareVersionRange {
 	min: string;

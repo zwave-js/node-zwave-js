@@ -16,7 +16,6 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
@@ -42,16 +41,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { SupervisionStatus } from "./SupervisionCC";
-
-export enum MultilevelSwitchCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	StartLevelChange = 0x04,
-	StopLevelChange = 0x05,
-	SupportedGet = 0x06,
-	SupportedReport = 0x07,
-}
+import { MultilevelSwitchCommand } from "./_Types";
 
 /**
  * @publicAPI
@@ -119,29 +109,6 @@ export function getCompatEventValueId(endpoint?: number): ValueID {
 		property: "event",
 	};
 }
-
-/**
- * @publicAPI
- * This is emitted when a start or stop event is received
- */
-export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-	/** The numeric identifier for the event type */
-	eventType:
-		| MultilevelSwitchCommand.StartLevelChange
-		| MultilevelSwitchCommand.StopLevelChange;
-	/** The direction of the level change */
-	direction?: string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNode,
-	ccId: typeof CommandClasses["Multilevel Switch"],
-	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
-];
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {

@@ -2,7 +2,7 @@ export * from "./ConfigManager";
 export * from "./DeviceClasses";
 export * from "./Devices";
 export * from "./Indicators";
-export { ConfigLogContext } from "./Logger";
+export * from "./Logger_safe";
 export * from "./Manufacturers";
 export * from "./Meters";
 export * from "./Notifications";

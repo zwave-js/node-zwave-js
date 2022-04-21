@@ -26,7 +26,8 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "../controller/SendDataMessages";
-import { isSendData, TransmitStatus } from "../controller/SendDataShared";
+import { isSendData } from "../controller/SendDataShared";
+import { TransmitStatus } from "../controller/_Types";
 import type { DriverLogger } from "../log/Driver";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";

@@ -1,4 +1,4 @@
-import { encodeBitMask, NODE_ID_MAX, parseBitMask } from "@zwave-js/core";
+import { encodeBitMask, NODE_ID_MAX, parseBitMask } from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,

@@ -1,5 +1,9 @@
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { num2hex, staticExtends } from "@zwave-js/shared";
+import {
+	CommandClasses,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core/safe";
+import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	APIMethodsOf,

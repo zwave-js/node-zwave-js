@@ -5,12 +5,8 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegex4Digits,
-	throwInvalidConfig,
-} from "./utils";
+import { configDir, externalConfigDir } from "./utils";
+import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe";
 
 export type ManufacturersMap = Map<number, string>;
 

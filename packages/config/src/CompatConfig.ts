@@ -1,7 +1,11 @@
-import type { CommandClasses, CommandClassInfo, ValueID } from "@zwave-js/core";
-import { JSONObject, pick } from "@zwave-js/shared";
+import type {
+	CommandClasses,
+	CommandClassInfo,
+	ValueID,
+} from "@zwave-js/core/safe";
+import { JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { hexKeyRegex2Digits, throwInvalidConfig } from "./utils";
+import { hexKeyRegex2Digits, throwInvalidConfig } from "./utils_safe";
 
 export class CompatConfig {
 	private valueIdRegex = /^\$value\$\[.+\]$/;

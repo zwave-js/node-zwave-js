@@ -14,7 +14,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
 import type { SmartStartProvisioningEntry } from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
-import { InterviewStage } from "../node/Types";
+import { InterviewStage } from "../node/_Types";
 import type { Driver } from "./Driver";
 import type { FileSystem } from "./FileSystem";
 

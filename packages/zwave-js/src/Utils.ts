@@ -7,16 +7,21 @@ export {
 export type {
 	Firmware,
 	FirmwareFileFormat,
+	ProtocolDataRate,
+	protocolDataRateToString,
 	Protocols,
+	ProtocolType,
+	ProtocolVersion,
 	QRProvisioningInformation,
+	RouteProtocolDataRate,
 } from "@zwave-js/core";
 export {
 	buffer2hex,
 	formatId,
 	getEnumMemberName,
 	num2hex,
-} from "@zwave-js/shared";
-export { rssiToString } from "./lib/controller/SendDataShared";
+} from "@zwave-js/shared/safe";
+export { rssiToString } from "./lib/controller/_Types";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,

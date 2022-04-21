@@ -1,5 +1,5 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { pick } from "@zwave-js/shared/safe";
 import {
 	FLASH_MAX_PAGE_SIZE,
 	NVM3_COUNTER_SIZE,

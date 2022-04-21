@@ -1,4 +1,3 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { formatId, padVersion } from "@zwave-js/shared";
 import * as fs from "fs-extra";
 import path from "path";
@@ -11,18 +10,6 @@ export const configDir = path.resolve(__dirname, "../config");
 /** The (optional) absolute path of an external configuration directory */
 export function externalConfigDir(): string | undefined {
 	return process.env.ZWAVEJS_EXTERNAL_CONFIG;
-}
-
-export const hexKeyRegexNDigits = /^0x[a-f0-9]+$/;
-export const hexKeyRegex4Digits = /^0x[a-f0-9]{4}$/;
-export const hexKeyRegex2Digits = /^0x[a-f0-9]{2}$/;
-
-export function throwInvalidConfig(which: string, reason?: string): never {
-	throw new ZWaveError(
-		`The ${which ? which + " " : ""}config file is malformed!` +
-			(reason ? `\n${reason}` : ""),
-		ZWaveErrorCodes.Config_Invalid,
-	);
 }
 
 export function getDeviceEntryPredicate(

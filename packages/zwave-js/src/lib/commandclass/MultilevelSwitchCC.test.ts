@@ -9,8 +9,8 @@ import {
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
 	MultilevelSwitchCCSupportedGet,
-	MultilevelSwitchCommand,
 } from "./MultilevelSwitchCC";
+import { MultilevelSwitchCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

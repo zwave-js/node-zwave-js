@@ -169,10 +169,6 @@ export {
 	EntryControlCCKeySupportedReport,
 	EntryControlCCNotification,
 } from "./EntryControlCC";
-export type {
-	ZWaveNotificationCallbackArgs_EntryControlCC,
-	ZWaveNotificationCallbackParams_EntryControlCC,
-} from "./EntryControlCC";
 export {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
@@ -348,11 +344,7 @@ export {
 	MultilevelSwitchCCSupportedReport,
 	SwitchType,
 } from "./MultilevelSwitchCC";
-export type {
-	MultilevelSwitchLevelChangeMetadata,
-	ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
-	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
-} from "./MultilevelSwitchCC";
+export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
 export {
 	NodeNamingAndLocationCC,
 	NodeNamingAndLocationCCLocationGet,
@@ -373,13 +365,8 @@ export {
 	NotificationCCSupportedGet,
 	NotificationCCSupportedReport,
 } from "./NotificationCC";
-export type {
-	NotificationMetadata,
-	ZWaveNotificationCallbackArgs_NotificationCC,
-	ZWaveNotificationCallbackParams_NotificationCC,
-} from "./NotificationCC";
+export type { NotificationMetadata } from "./NotificationCC";
 export {
-	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
 	PowerlevelCCReport,
@@ -387,11 +374,6 @@ export {
 	PowerlevelCCTestNodeGet,
 	PowerlevelCCTestNodeReport,
 	PowerlevelCCTestNodeSet,
-	PowerlevelTestStatus,
-} from "./PowerlevelCC";
-export type {
-	ZWaveNotificationCallbackArgs_PowerlevelCC,
-	ZWaveNotificationCallbackParams_PowerlevelCC,
 } from "./PowerlevelCC";
 export {
 	LocalProtectionState,
@@ -597,3 +579,20 @@ export {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "./ZWavePlusCC";
+export {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+} from "./_Types";
+export type {
+	ZWaveNotificationCallbackArgs_EntryControlCC,
+	ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+	ZWaveNotificationCallbackArgs_NotificationCC,
+	ZWaveNotificationCallbackArgs_PowerlevelCC,
+	ZWaveNotificationCallbackParams_EntryControlCC,
+	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
+	ZWaveNotificationCallbackParams_NotificationCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "./_Types";

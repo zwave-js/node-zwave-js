@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import {
 	FragmentType,
 	NVM3_CODE_LARGE_SHIFT,

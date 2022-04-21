@@ -26,7 +26,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -64,32 +63,6 @@ export type NotificationMetadata = ValueMetadata & {
 		notificationType: number;
 	};
 };
-
-/**
- * @publicAPI
- */
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-	/** The numeric identifier for the notification type */
-	type: number;
-	/** The human-readable label for the notification type */
-	label: string;
-	/** The numeric identifier for the notification event */
-	event: number;
-	/** The human-readable label for the notification event */
-	eventLabel: string;
-	/** Additional information related to the event */
-	parameters?: NotificationCCReport["eventParameters"];
-}
-
-/**
- * @publicAPI
- * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNode,
-	ccId: CommandClasses.Notification,
-	args: ZWaveNotificationCallbackArgs_NotificationCC,
-];
 
 /** Returns the ValueID used to store whether a node supports V1 Alarms */
 export function getSupportsV1AlarmValueId(): ValueID {

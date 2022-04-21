@@ -1,4 +1,4 @@
-import { cloneDeep } from "@zwave-js/shared";
+import { cloneDeep } from "@zwave-js/shared/safe";
 import fs from "fs-extra";
 import path from "path";
 import { jsonToNVM, migrateNVM } from ".";

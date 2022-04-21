@@ -4,7 +4,7 @@ import {
 	parseCCList,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import {
 	SUC_MAX_UPDATES,
 	SUC_UPDATE_ENTRY_SIZE,

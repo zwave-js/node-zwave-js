@@ -32,13 +32,8 @@ import {
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
-import {
-	parseTXReport,
-	TransmitOptions,
-	TransmitStatus,
-	TXReport,
-	txReportToMessageRecord,
-} from "./SendDataShared";
+import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
+import { TransmitOptions, TransmitStatus, TXReport } from "./_Types";
 
 export const MAX_SEND_ATTEMPTS = 5;
 

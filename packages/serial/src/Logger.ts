@@ -2,20 +2,12 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
-	LogContext,
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { SerialLogContext, SERIAL_LABEL, SERIAL_LOGLEVEL } from "./Logger_safe";
 import { MessageHeaders } from "./MessageHeaders";
-
-export const SERIAL_LABEL = "SERIAL";
-const SERIAL_LOGLEVEL = "debug";
-
-export interface SerialLogContext extends LogContext<"serial"> {
-	direction: DataDirection;
-	header?: string;
-}
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	constructor(loggers: ZWaveLogContainer) {

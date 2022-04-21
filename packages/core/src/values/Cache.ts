@@ -1,9 +1,9 @@
 import type { JSONObject } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import type { ValueID } from "../values/ValueDB";
 import { Duration } from "./Duration";
 import type { ValueMetadata } from "./Metadata";
+import type { ValueID } from "./_Types";
 
 // export type SerializableValue = number | string | boolean | Map<string | number, any> | JSONObject;
 type SerializedValue = number | string | boolean | JSONObject | undefined;

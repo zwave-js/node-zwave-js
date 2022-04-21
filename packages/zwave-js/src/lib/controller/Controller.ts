@@ -90,8 +90,8 @@ import type { Message } from "../message/Message";
 import type { SuccessIndicator } from "../message/SuccessIndicator";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
-import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/Types";
 import { VirtualNode } from "../node/VirtualNode";
+import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
 import {
 	GetProtocolVersionRequest,
 	GetProtocolVersionResponse,
@@ -244,7 +244,6 @@ import {
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
 } from "./RequestNodeNeighborUpdateMessages";
-import type { RSSI } from "./SendDataShared";
 import {
 	SetSerialApiTimeoutsRequest,
 	SetSerialApiTimeoutsResponse,
@@ -252,6 +251,7 @@ import {
 import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
+import type { RSSI } from "./_Types";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 export type SDKVersion =

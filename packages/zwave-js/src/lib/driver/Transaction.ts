@@ -7,7 +7,7 @@ import {
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import type { Driver } from "./Driver";
 
 export interface MessageGenerator {

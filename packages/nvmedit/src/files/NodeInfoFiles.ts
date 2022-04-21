@@ -6,8 +6,8 @@ import {
 	NUM_NODEMASK_BYTES,
 	parseBitMask,
 	parseNodeProtocolInfo,
-} from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import { pick } from "@zwave-js/shared/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	gotDeserializationOptions,

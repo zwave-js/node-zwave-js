@@ -4,7 +4,7 @@ import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { FunctionType } from "../../message/Constants";
 import { ZWaveNode } from "../../node/Node";
-import { NodeStatus } from "../../node/Types";
+import { NodeStatus } from "../../node/_Types";
 import { createAndStartDriver } from "../utils";
 
 // Test mock for isFunctionSupported to control which commands are getting used

@@ -3,7 +3,7 @@ import {
 	discreteBinarySearch,
 	discreteLinearSearch,
 	throttle,
-} from "./misc";
+} from "./utils";
 
 describe("throttle()", () => {
 	const originalDateNow = Date.now;
