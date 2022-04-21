@@ -8,6 +8,7 @@
     ".": "./build/index.js",
     "./package.json": "./package.json",
     "./CommandClass": "./build/CommandClass.js",
+    "./Controller": "./build/Controller.js",
     "./Driver": "./build/Driver.js",
     "./Error": "./build/Error.js",
     "./Node": "./build/Node.js",
@@ -20,6 +21,9 @@
     "*": {
       "CommandClass": [
         "./build/CommandClass.d.ts"
+      ],
+      "Controller": [
+        "./build/Controller.d.ts"
       ],
       "Driver": [
         "./build/Driver.d.ts"
