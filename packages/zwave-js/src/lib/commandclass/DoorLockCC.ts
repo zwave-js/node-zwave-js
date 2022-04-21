@@ -502,24 +502,24 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				doorSupported ? getDoorStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getBoltSupportedValueId(this.endpointIndex),
-				boltSupported,
+				getDoorSupportedValueId(this.endpointIndex),
+				doorSupported,
 			);
 			valueDB.setMetadata(
 				getLatchStatusValueId(this.endpointIndex),
 				latchSupported ? getLatchStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getDoorSupportedValueId(this.endpointIndex),
-				doorSupported,
+				getLatchSupportedValueId(this.endpointIndex),
+				latchSupported,
 			);
 			valueDB.setMetadata(
 				getBoltStatusValueId(this.endpointIndex),
 				boltSupported ? getBoltStatusValueMetadata() : undefined,
 			);
 			valueDB.setValue(
-				getLatchSupportedValueId(this.endpointIndex),
-				latchSupported,
+				getBoltSupportedValueId(this.endpointIndex),
+				boltSupported,
 			);
 		}
 
