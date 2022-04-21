@@ -40,7 +40,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	discreteBinarySearch,
+	discreteLinearSearch,
 	formatId,
 	getEnumMemberName,
 	getErrorMessage,
@@ -4066,7 +4066,7 @@ protocol version:      ${this.protocolVersion}`;
 					return failedPingsController === 0;
 				};
 				try {
-					const powerlevel = await discreteBinarySearch(
+					const powerlevel = await discreteLinearSearch(
 						Powerlevel["Normal Power"], // minimum reduction
 						Powerlevel["-9 dBm"], // maximum reduction
 						executor,
@@ -4242,7 +4242,10 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 			// Now instruct this node to ping the other one, figuring out the minimum powerlevel
 			if (this.supportsCC(CommandClasses.Powerlevel)) {
 				try {
-					const powerlevel = await discreteBinarySearch(
+					// We have to start with the maximum powerlevel and work our way down
+					// Otherwise some nodes get stuck trying to complete the check at a bad powerlevel
+					// causing the following measurements to fail.
+					const powerlevel = await discreteLinearSearch(
 						Powerlevel["Normal Power"], // minimum reduction
 						Powerlevel["-9 dBm"], // maximum reduction
 						executor(this, otherNode),
@@ -4275,7 +4278,7 @@ ${formatLifelineHealthCheckSummary(summary)}`,
 				otherNode.supportsCC(CommandClasses.Powerlevel)
 			) {
 				try {
-					const powerlevel = await discreteBinarySearch(
+					const powerlevel = await discreteLinearSearch(
 						Powerlevel["Normal Power"], // minimum reduction
 						Powerlevel["-9 dBm"], // maximum reduction
 						executor(otherNode, this),
