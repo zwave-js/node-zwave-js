@@ -28,11 +28,7 @@ describe("lib/node/VirtualEndpoint", () => {
 	let serialport: MockSerialPort;
 
 	beforeEach(async () => {
-		try {
-			({ driver, serialport } = await createAndStartDriver());
-		} catch (e) {
-			debugger;
-		}
+		({ driver, serialport } = await createAndStartDriver());
 		driver["_controller"] = new ZWaveController(driver);
 		driver["_controller"].isFunctionSupported = isFunctionSupported;
 	});

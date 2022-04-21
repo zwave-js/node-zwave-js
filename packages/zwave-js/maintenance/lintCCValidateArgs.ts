@@ -2,7 +2,7 @@
  * This scripts checks which CCs have `toLogEntry` implemented
  */
 
-import { CommandClasses, getCCName } from "@zwave-js/core";
+import { getCCName } from "@zwave-js/core";
 import {
 	getCommandClassFromDecorator,
 	hasComment,
@@ -76,8 +76,6 @@ export function lintCCValidateArgs(): Promise<void> {
 				.map((d) => getCommandClassFromDecorator(sourceFile, d))
 				.find((cc) => cc != undefined);
 			if (!cc) return;
-
-			if (cc === CommandClasses.Notification) debugger;
 
 			// Check all public method declarations with arguments that are not called supportsCommand
 			const methods = node.members
