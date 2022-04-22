@@ -4,21 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
-<!-- ### Breaking changes
-
-### Features -->
-
+## 9.0.4 (2022-04-22)
 ### Bugfixes
 * Route health checks now approach the minimum power level linearly from the normal power to avoid nodes with a suboptimal implementation getting stuck in test mode and causing a wrong test result (#4494)
 * For `Door Lock CC` V3 and below, the lock/bolt/latch sensors are now created again, since support cannot be tested in these versions (#4490)
 * The initial connection to a TCP socket is now retried if the connection cannot be established immediately (#4492)
 
-<!-- ### Config file changes -->
-
 ### Changes under the hood
 * Expose "safe" entrypoint in each package which can be used from non-Node.js contexts (#4469)
-
 
 ## 9.0.3 (2022-04-20)
 ### Bugfixes
