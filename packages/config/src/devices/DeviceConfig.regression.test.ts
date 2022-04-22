@@ -1,4 +1,4 @@
-import { ConfigManager } from "./ConfigManager";
+import { ConfigManager } from "../ConfigManager";
 
 describe("lib/config/Devices", () => {
 	describe("lookupDevice (regression tests)", () => {

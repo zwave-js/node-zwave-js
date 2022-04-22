@@ -2,9 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
-	JSONObject,
 	ObjectKeyMap,
-	pick,
 	ReadonlyObjectKeyMap,
 	stringify,
 } from "@zwave-js/shared";
@@ -14,24 +12,26 @@ import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { CompatConfig } from "./CompatConfig";
-import { clearTemplateCache, readJsonWithTemplate } from "./JsonTemplate";
-import type { ConfigLogger } from "./Logger";
-import { evaluate } from "./Logic";
-import { configDir, externalConfigDir } from "./utils";
-import { hexKeyRegex4Digits, throwInvalidConfig } from "./utils_safe";
-
-export interface FirmwareVersionRange {
-	min: string;
-	max: string;
-}
-
-export interface DeviceID {
-	manufacturerId: number;
-	productType: number;
-	productId: number;
-	firmwareVersion?: string;
-}
+import { CompatConfig } from "../CompatConfig";
+import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
+import type { ConfigLogger } from "../Logger";
+import { configDir, externalConfigDir } from "../utils";
+import { hexKeyRegex4Digits, throwInvalidConfig } from "../utils_safe";
+import {
+	ConditionalAssociationConfig,
+	type AssociationConfig,
+} from "./AssociationConfig";
+import { evaluateDeep } from "./ConditionalItem";
+import {
+	ConditionalDeviceMetadata,
+	type DeviceMetadata,
+} from "./DeviceMetadata";
+import { ConditionalEndpointConfig, EndpointConfig } from "./EndpointConfig";
+import {
+	ConditionalParamInformation,
+	ParamInformation,
+} from "./ParamInformation";
+import type { DeviceID, FirmwareVersionRange } from "./shared";
 
 export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
@@ -355,17 +355,6 @@ function isFirmwareVersion(val: any): val is string {
 	);
 }
 
-function conditionApplies(condition: string, context: unknown): boolean {
-	try {
-		return !!evaluate(condition, context);
-	} catch (e) {
-		throw new ZWaveError(
-			`Invalid condition "${condition}"!`,
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-}
-
 /** This class represents a device config entry whose conditional settings have not been evaluated yet */
 export class ConditionalDeviceConfig {
 	public static async from(
@@ -662,7 +651,10 @@ compat is not an object`,
 metadata is not an object`,
 				);
 			}
-			this.metadata = new DeviceMetadata(filename, definition.metadata);
+			this.metadata = new ConditionalDeviceMetadata(
+				filename,
+				definition.metadata,
+			);
 		}
 	}
 
@@ -691,29 +683,14 @@ metadata is not an object`,
 	/** Contains compatibility options */
 	public readonly compat?: CompatConfig;
 	/** Contains instructions and other metadata for the device */
-	public readonly metadata?: DeviceMetadata;
+	public readonly metadata?: ConditionalDeviceMetadata;
 
 	/** Whether this is an embedded configuration or not */
 	public readonly isEmbedded: boolean;
 
 	public evaluate(deviceId?: DeviceID): DeviceConfig {
-		let associations: Map<number, AssociationConfig> | undefined;
-		if (this.associations) {
-			associations = new Map();
-			for (const [group, assoc] of this.associations) {
-				const evaluated = assoc.evaluateCondition(deviceId);
-				if (evaluated) associations.set(group, evaluated);
-			}
-		}
-
-		let endpoints: Map<number, EndpointConfig> | undefined;
-		if (this.endpoints) {
-			endpoints = new Map();
-			for (const [group, assoc] of this.endpoints) {
-				const evaluated = assoc.evaluateCondition(deviceId);
-				if (evaluated) endpoints.set(group, evaluated);
-			}
-		}
+		const associations = evaluateDeep(this.associations, deviceId);
+		const endpoints = evaluateDeep(this.endpoints, deviceId);
 
 		let paramInformation:
 			| ObjectKeyMap<
@@ -732,6 +709,8 @@ metadata is not an object`,
 			}
 		}
 
+		const metadata = evaluateDeep(this.metadata, deviceId);
+
 		return new DeviceConfig(
 			this.filename,
 			this.isEmbedded,
@@ -746,7 +725,7 @@ metadata is not an object`,
 			paramInformation,
 			this.proprietary,
 			this.compat,
-			this.metadata,
+			metadata,
 		);
 	}
 }
@@ -813,557 +792,4 @@ export class DeviceConfig {
 			return this.endpoints?.get(endpointIndex)?.associations?.get(group);
 		}
 	}
-}
-
-export class ConditionalEndpointConfig {
-	public constructor(
-		filename: string,
-		index: number,
-		definition: JSONObject,
-	) {
-		this.index = index;
-
-		if (definition.$if != undefined && typeof definition.$if !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Endpoint ${index} has a non-string $if condition`,
-			);
-		}
-		this.condition = definition.$if;
-
-		if (definition.associations != undefined) {
-			const associations = new Map<
-				number,
-				ConditionalAssociationConfig
-			>();
-			if (!isObject(definition.associations)) {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-Endpoint ${index}: associations is not an object`,
-				);
-			}
-			for (const [key, assocDefinition] of entries(
-				definition.associations,
-			)) {
-				if (!/^[1-9][0-9]*$/.test(key)) {
-					throwInvalidConfig(
-						`device`,
-						`packages/config/config/devices/${filename}:
-Endpoint ${index}: found non-numeric group id "${key}" in associations`,
-					);
-				}
-
-				const keyNum = parseInt(key, 10);
-				associations.set(
-					keyNum,
-					new ConditionalAssociationConfig(
-						filename,
-						keyNum,
-						assocDefinition,
-					),
-				);
-			}
-			this.associations = associations;
-		}
-	}
-
-	public readonly index: number;
-	public readonly condition?: string;
-
-	public readonly associations?: ReadonlyMap<
-		number,
-		ConditionalAssociationConfig
-	>;
-
-	public evaluateCondition(deviceId?: DeviceID): EndpointConfig | undefined {
-		if (
-			deviceId &&
-			this.condition &&
-			!conditionApplies(this.condition, deviceId)
-		) {
-			return;
-		}
-
-		let associations: Map<number, AssociationConfig> | undefined;
-		if (this.associations) {
-			associations = new Map();
-			for (const [group, assoc] of this.associations) {
-				const evaluated = assoc.evaluateCondition(deviceId);
-				if (evaluated) associations.set(group, evaluated);
-			}
-		}
-
-		return {
-			...pick(this, ["index"]),
-			associations,
-		};
-	}
-}
-
-export type EndpointConfig = Omit<
-	ConditionalEndpointConfig,
-	"condition" | "evaluateCondition" | "associations"
-> & {
-	associations: Map<number, AssociationConfig> | undefined;
-};
-
-export class ConditionalAssociationConfig {
-	public constructor(
-		filename: string,
-		groupId: number,
-		definition: JSONObject,
-	) {
-		this.groupId = groupId;
-
-		if (definition.$if != undefined && typeof definition.$if !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Association ${groupId} has a non-string $if condition`,
-			);
-		}
-		this.condition = definition.$if;
-
-		if (typeof definition.label !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Association ${groupId} has a non-string label`,
-			);
-		}
-		this.label = definition.label;
-
-		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Association ${groupId} has a non-string description`,
-			);
-		}
-		this.description = definition.description;
-
-		if (typeof definition.maxNodes !== "number") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-maxNodes for association ${groupId} is not a number`,
-			);
-		}
-		this.maxNodes = definition.maxNodes;
-
-		if (
-			definition.isLifeline != undefined &&
-			typeof definition.isLifeline !== "boolean"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-isLifeline in association ${groupId} must be a boolean`,
-			);
-		}
-		this.isLifeline = !!definition.isLifeline;
-
-		if (
-			definition.multiChannel != undefined &&
-			typeof definition.multiChannel !== "boolean"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-multiChannel in association ${groupId} must be a boolean`,
-			);
-		}
-		// Default to the "auto" strategy
-		this.multiChannel = definition.multiChannel ?? "auto";
-	}
-
-	public readonly condition?: string;
-
-	public readonly groupId: number;
-	public readonly label: string;
-	public readonly description?: string;
-	public readonly maxNodes: number;
-	/**
-	 * Whether this association group is used to report updates to the controller.
-	 * While Z-Wave+ defines a single lifeline, older devices may have multiple lifeline associations.
-	 */
-	public readonly isLifeline: boolean;
-	/**
-	 * Controls the strategy of setting up lifeline associations:
-	 *
-	 * * `true` - Use a multi channel association (if possible)
-	 * * `false` - Use a node association (if possible)
-	 * * `"auto"` - Prefer node associations, fall back to multi channel associations
-	 */
-	public readonly multiChannel: boolean | "auto";
-
-	public evaluateCondition(
-		deviceId?: DeviceID,
-	): AssociationConfig | undefined {
-		if (
-			deviceId &&
-			this.condition &&
-			!conditionApplies(this.condition, deviceId)
-		) {
-			return;
-		}
-
-		return pick(this, [
-			"groupId",
-			"label",
-			"description",
-			"maxNodes",
-			"isLifeline",
-			"multiChannel",
-		]);
-	}
-}
-
-export type AssociationConfig = Omit<
-	ConditionalAssociationConfig,
-	"condition" | "evaluateCondition"
->;
-
-export class ConditionalParamInformation {
-	public constructor(
-		parent: ConditionalDeviceConfig,
-		parameterNumber: number,
-		valueBitMask: number | undefined,
-		definition: JSONObject,
-	) {
-		this.parent = parent;
-		this.parameterNumber = parameterNumber;
-		this.valueBitMask = valueBitMask;
-		// No need to validate here, this should be done one level higher
-		this.condition = definition.$if;
-
-		if (typeof definition.label !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-string label`,
-			);
-		}
-		this.label = definition.label;
-
-		if (
-			definition.description != undefined &&
-			typeof definition.description !== "string"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-string description`,
-			);
-		}
-		this.description = definition.description;
-
-		if (
-			typeof definition.valueSize !== "number" ||
-			definition.valueSize <= 0
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has an invalid value size`,
-			);
-		}
-		this.valueSize = definition.valueSize;
-
-		if (
-			definition.minValue != undefined &&
-			typeof definition.minValue !== "number"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-numeric property minValue`,
-			);
-		}
-		this.minValue = definition.minValue;
-
-		if (
-			definition.maxValue != undefined &&
-			typeof definition.maxValue !== "number"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-numeric property maxValue`,
-			);
-		}
-		this.maxValue = definition.maxValue;
-
-		if (
-			definition.unsigned != undefined &&
-			typeof definition.unsigned !== "boolean"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-boolean property unsigned`,
-			);
-		}
-		this.unsigned = definition.unsigned === true;
-
-		if (
-			definition.unit != undefined &&
-			typeof definition.unit !== "string"
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-string unit`,
-			);
-		}
-		this.unit = definition.unit;
-
-		if (definition.readOnly != undefined && definition.readOnly !== true) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-		Parameter #${parameterNumber}: readOnly must true or omitted!`,
-			);
-		}
-		this.readOnly = definition.readOnly;
-
-		if (
-			definition.writeOnly != undefined &&
-			definition.writeOnly !== true
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-		Parameter #${parameterNumber}: writeOnly must be true or omitted!`,
-			);
-		}
-		this.writeOnly = definition.writeOnly;
-
-		if (definition.defaultValue == undefined) {
-			if (!this.readOnly) {
-				throwInvalidConfig(
-					"devices",
-					`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} is missing defaultValue, which is required unless the parameter is readOnly`,
-				);
-			}
-		} else if (typeof definition.defaultValue !== "number") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber} has a non-numeric property defaultValue`,
-			);
-		}
-		this.defaultValue = definition.defaultValue;
-
-		if (
-			definition.allowManualEntry != undefined &&
-			definition.allowManualEntry !== false
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: allowManualEntry must be false or omitted!`,
-			);
-		}
-		// Default to allowing manual entry, except if the param is readonly
-		this.allowManualEntry =
-			definition.allowManualEntry ?? (this.readOnly ? false : true);
-
-		if (
-			isArray(definition.options) &&
-			!definition.options.every(
-				(opt: unknown) =>
-					isObject(opt) &&
-					typeof opt.label === "string" &&
-					typeof opt.value === "number",
-			)
-		) {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${parent.filename}:
-Parameter #${parameterNumber}: options is malformed!`,
-			);
-		}
-
-		this.options =
-			definition.options?.map(
-				(opt: any) =>
-					new ConditionalConfigOption(opt.value, opt.label, opt.$if),
-			) ?? [];
-	}
-
-	private parent: ConditionalDeviceConfig;
-	public readonly parameterNumber: number;
-	public readonly valueBitMask?: number;
-	public readonly label: string;
-	public readonly description?: string;
-	public readonly valueSize: number;
-	public readonly minValue?: number;
-	public readonly maxValue?: number;
-	public readonly unsigned?: boolean;
-	public readonly defaultValue: number;
-	public readonly unit?: string;
-	public readonly readOnly?: true;
-	public readonly writeOnly?: true;
-	public readonly allowManualEntry: boolean;
-	public readonly options: readonly ConditionalConfigOption[];
-
-	public readonly condition?: string;
-
-	public evaluateCondition(
-		deviceId?: DeviceID,
-	): ParamInformation | undefined {
-		if (
-			deviceId &&
-			this.condition &&
-			!conditionApplies(this.condition, deviceId)
-		) {
-			return;
-		}
-
-		const ret = {
-			...pick(this, [
-				"parameterNumber",
-				"valueBitMask",
-				"label",
-				"description",
-				"valueSize",
-				"minValue",
-				"maxValue",
-				"unsigned",
-				"defaultValue",
-				"unit",
-				"readOnly",
-				"writeOnly",
-				"allowManualEntry",
-			]),
-			options: this.options
-				.map((o) => o.evaluateCondition(deviceId))
-				.filter((o): o is ConfigOption => !!o),
-		};
-		// Infer minValue from options if possible
-		if (ret.minValue == undefined) {
-			if (ret.allowManualEntry === false && ret.options.length > 0) {
-				ret.minValue = Math.min(...ret.options.map((o) => o.value));
-			} else {
-				throw throwInvalidConfig(
-					"devices",
-					`packages/config/config/devices/${this.parent.filename}:
-Parameter #${this.parameterNumber} is missing required property "minValue"!`,
-				);
-			}
-		}
-		if (ret.maxValue == undefined) {
-			if (ret.allowManualEntry === false && ret.options.length > 0) {
-				ret.maxValue = Math.max(...ret.options.map((o) => o.value));
-			} else {
-				throw throwInvalidConfig(
-					"devices",
-					`packages/config/config/devices/${this.parent.filename}:
-Parameter #${this.parameterNumber} is missing required property "maxValue"!`,
-				);
-			}
-		}
-
-		// @ts-expect-error TS doesn't seem to understand that we do set min/maxValue
-		return ret;
-	}
-}
-
-export type ParamInformation = Omit<
-	ConditionalParamInformation,
-	"condition" | "evaluateCondition" | "options" | "minValue" | "maxValue"
-> & {
-	options: readonly ConfigOption[];
-	minValue: NonNullable<ConditionalParamInformation["minValue"]>;
-	maxValue: NonNullable<ConditionalParamInformation["maxValue"]>;
-};
-
-export class ConditionalConfigOption {
-	public constructor(
-		public readonly value: number,
-		public readonly label: string,
-		public readonly condition?: string,
-	) {}
-
-	public evaluateCondition(deviceId?: DeviceID): ConfigOption | undefined {
-		if (
-			deviceId &&
-			this.condition &&
-			!conditionApplies(this.condition, deviceId)
-		) {
-			return;
-		}
-
-		return pick(this, ["value", "label"]);
-	}
-}
-
-export interface ConfigOption {
-	value: number;
-	label: string;
-}
-
-export class DeviceMetadata {
-	public constructor(filename: string, definition: JSONObject) {
-		for (const prop of [
-			"wakeup",
-			"inclusion",
-			"exclusion",
-			"reset",
-			"manual",
-			"comments",
-		] as const) {
-			if (prop in definition) {
-				const value = definition[prop];
-				if (prop === "comments") {
-					const isComment = (opt: unknown) =>
-						isObject(opt) &&
-						typeof opt.level === "string" &&
-						typeof opt.text === "string";
-
-					const isValid =
-						(isArray(value) && value.every(isComment)) ||
-						isComment(value);
-					if (!isValid)
-						throwInvalidConfig(
-							"devices",
-							`packages/config/config/devices/${filename}:
-The metadata entry comments is invalid!`,
-						);
-				} else if (typeof value !== "string") {
-					throwInvalidConfig(
-						"devices",
-						`packages/config/config/devices/${filename}:
-The metadata entry ${prop} must be a string!`,
-					);
-				}
-				this[prop] = value;
-			}
-		}
-	}
-
-	/** How to wake up the device manually */
-	public readonly wakeup?: string;
-	/** Inclusion instructions */
-	public readonly inclusion?: string;
-	/** Exclusion instructions */
-	public readonly exclusion?: string;
-	/** Instructions for resetting the device to factory defaults */
-	public readonly reset?: string;
-	/** A link to the device manual */
-	public readonly manual?: string;
-	/** Comments for this device */
-	public readonly comments?: DeviceComment | DeviceComment[];
-}
-
-export interface DeviceComment {
-	level: "info" | "warning" | "error";
-	text: string;
 }

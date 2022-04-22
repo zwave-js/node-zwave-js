@@ -580,6 +580,9 @@
 		"comment": {
 			"type": "object",
 			"properties": {
+				"$if": {
+					"$ref": "#/definitions/condition"
+				},
 				"level": {
 					"type": "string",
 					"enum": ["info", "warning", "error"]
