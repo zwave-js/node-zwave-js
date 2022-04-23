@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Keemple",
 	"manufacturerId": "0x041a",
-	"label": "KP-SO-07",
+	"label": "KP-SW-07",
 	"description": "Light Switch 1 Channel",
 	"devices": [
 		{

@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Keemple",
 	"manufacturerId": "0x041a",
-	"label": "KP-SO-08",
+	"label": "KP-SW-08",
 	"description": "Light Switch 2 Channel",
 	"devices": [
 		{
