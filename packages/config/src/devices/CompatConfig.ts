@@ -5,7 +5,7 @@ import type {
 } from "@zwave-js/core/safe";
 import { JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { hexKeyRegex2Digits, throwInvalidConfig } from "./utils_safe";
+import { hexKeyRegex2Digits, throwInvalidConfig } from "../utils_safe";
 
 export class CompatConfig {
 	private valueIdRegex = /^\$value\$\[.+\]$/;

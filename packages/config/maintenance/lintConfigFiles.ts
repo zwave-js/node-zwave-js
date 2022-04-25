@@ -17,8 +17,8 @@ import { ConfigManager } from "../src/ConfigManager";
 import {
 	ConditionalDeviceConfig,
 	DeviceConfig,
-	DeviceID,
-} from "../src/Devices";
+} from "../src/devices/DeviceConfig";
+import type { DeviceID } from "../src/devices/shared";
 import { parseLogic } from "../src/Logic";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 

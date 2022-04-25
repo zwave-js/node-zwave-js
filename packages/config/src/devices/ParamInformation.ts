@@ -219,7 +219,7 @@ Parameter #${parameterNumber}: options is malformed!`,
 				"writeOnly",
 				"allowManualEntry",
 			]),
-			options: evaluateDeep(this.options, deviceId),
+			options: evaluateDeep(this.options, deviceId, true),
 		};
 		// Infer minValue from options if possible
 		if (ret.minValue == undefined) {

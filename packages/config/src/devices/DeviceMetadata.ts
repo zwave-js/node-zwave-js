@@ -6,6 +6,10 @@ import {
 	conditionApplies,
 	evaluateDeep,
 } from "./ConditionalItem";
+import {
+	ConditionalPrimitive,
+	parseConditionalPrimitive,
+} from "./ConditionalPrimitive";
 import type { DeviceID } from "./shared";
 
 export class ConditionalDeviceMetadata
@@ -20,15 +24,13 @@ export class ConditionalDeviceMetadata
 			"manual",
 		] as const) {
 			if (prop in definition) {
-				const value = definition[prop];
-				if (typeof value !== "string") {
-					throwInvalidConfig(
-						"devices",
-						`packages/config/config/devices/${filename}:
-The metadata entry ${prop} must be a string!`,
-					);
-				}
-				this[prop] = value;
+				this[prop] = parseConditionalPrimitive(
+					filename,
+					"string",
+					prop,
+					definition[prop],
+					"The metadata entry ",
+				);
 			}
 		}
 
@@ -64,42 +66,49 @@ The metadata entry comments is invalid!`,
 
 	public evaluateCondition(deviceId?: DeviceID): DeviceMetadata | undefined {
 		if (!conditionApplies(this, deviceId)) return;
-		const ret: DeviceMetadata = {
-			...pick(this, [
-				"wakeup",
-				"inclusion",
-				"exclusion",
-				"reset",
-				"manual",
-			]),
-		};
-		const comments = evaluateDeep(this.comments, deviceId);
+		const ret: DeviceMetadata = {};
+		for (const prop of [
+			"wakeup",
+			"inclusion",
+			"exclusion",
+			"reset",
+			"manual",
+		] as const) {
+			if (this[prop]) {
+				const evaluated = evaluateDeep(this[prop], deviceId);
+				if (evaluated) ret[prop] = evaluated;
+			}
+		}
+		const comments = evaluateDeep(this.comments, deviceId, true);
 		if (comments) ret.comments = comments;
+
 		return ret;
 	}
 
 	/** How to wake up the device manually */
-	public readonly wakeup?: string;
+	public readonly wakeup?: ConditionalPrimitive<string>;
 	/** Inclusion instructions */
-	public readonly inclusion?: string;
+	public readonly inclusion?: ConditionalPrimitive<string>;
 	/** Exclusion instructions */
-	public readonly exclusion?: string;
+	public readonly exclusion?: ConditionalPrimitive<string>;
 	/** Instructions for resetting the device to factory defaults */
-	public readonly reset?: string;
+	public readonly reset?: ConditionalPrimitive<string>;
 	/** A link to the device manual */
-	public readonly manual?: string;
+	public readonly manual?: ConditionalPrimitive<string>;
 	/** Comments for this device */
 	public readonly comments?:
 		| ConditionalDeviceComment
 		| ConditionalDeviceComment[];
 }
 
-export type DeviceMetadata = Omit<
-	ConditionalDeviceMetadata,
-	"condition" | "evaluateCondition" | "comments"
-> & {
+export interface DeviceMetadata {
+	wakeup?: string;
+	inclusion?: string;
+	exclusion?: string;
+	reset?: string;
+	manual?: string;
 	comments?: DeviceComment | DeviceComment[];
-};
+}
 
 export class ConditionalDeviceComment
 	implements ConditionalItem<DeviceComment>

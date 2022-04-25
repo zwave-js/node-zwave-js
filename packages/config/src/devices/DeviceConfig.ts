@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	enumFilesRecursive,
 	formatId,
+	JSONObject,
 	ObjectKeyMap,
 	ReadonlyObjectKeyMap,
 	stringify,
@@ -12,7 +13,6 @@ import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import { CompatConfig } from "../CompatConfig";
 import { clearTemplateCache, readJsonWithTemplate } from "../JsonTemplate";
 import type { ConfigLogger } from "../Logger";
 import { configDir, externalConfigDir } from "../utils";
@@ -21,7 +21,12 @@ import {
 	ConditionalAssociationConfig,
 	type AssociationConfig,
 } from "./AssociationConfig";
+import { CompatConfig } from "./CompatConfig";
 import { evaluateDeep } from "./ConditionalItem";
+import {
+	ConditionalPrimitive,
+	parseConditionalPrimitive,
+} from "./ConditionalPrimitive";
 import {
 	ConditionalDeviceMetadata,
 	type DeviceMetadata,
@@ -374,7 +379,11 @@ export class ConditionalDeviceConfig {
 		return new ConditionalDeviceConfig(relativePath, isEmbedded, json);
 	}
 
-	public constructor(filename: string, isEmbedded: boolean, definition: any) {
+	public constructor(
+		filename: string,
+		isEmbedded: boolean,
+		definition: JSONObject,
+	) {
 		this.filename = filename;
 		this.isEmbedded = isEmbedded;
 
@@ -388,14 +397,12 @@ manufacturer id must be a lowercase hexadecimal number with 4 digits`,
 		this.manufacturerId = parseInt(definition.manufacturerId, 16);
 
 		for (const prop of ["manufacturer", "label", "description"] as const) {
-			if (typeof definition[prop] !== "string") {
-				throwInvalidConfig(
-					`device`,
-					`packages/config/config/devices/${filename}:
-${prop} is not a string`,
-				);
-			}
-			this[prop] = definition[prop];
+			this[prop] = parseConditionalPrimitive(
+				filename,
+				"string",
+				prop,
+				definition[prop],
+			);
 		}
 
 		if (
@@ -660,10 +667,10 @@ metadata is not an object`,
 
 	public readonly filename: string;
 
-	public readonly manufacturer!: string;
+	public readonly manufacturer!: ConditionalPrimitive<string>;
 	public readonly manufacturerId: number;
-	public readonly label!: string;
-	public readonly description!: string;
+	public readonly label!: ConditionalPrimitive<string>;
+	public readonly description!: ConditionalPrimitive<string>;
 	public readonly devices: readonly {
 		productType: number;
 		productId: number;
@@ -689,43 +696,21 @@ metadata is not an object`,
 	public readonly isEmbedded: boolean;
 
 	public evaluate(deviceId?: DeviceID): DeviceConfig {
-		const associations = evaluateDeep(this.associations, deviceId);
-		const endpoints = evaluateDeep(this.endpoints, deviceId);
-
-		let paramInformation:
-			| ObjectKeyMap<
-					{ parameter: number; valueBitMask?: number },
-					ParamInformation
-			  >
-			| undefined;
-		if (this.paramInformation) {
-			paramInformation = new ObjectKeyMap();
-			for (const [key, params] of this.paramInformation.entries()) {
-				// Only take the first matching parameter
-				for (const param of params) {
-					const evaluated = param.evaluateCondition(deviceId);
-					if (evaluated) paramInformation.set(key, evaluated);
-				}
-			}
-		}
-
-		const metadata = evaluateDeep(this.metadata, deviceId);
-
 		return new DeviceConfig(
 			this.filename,
 			this.isEmbedded,
-			this.manufacturer,
+			evaluateDeep(this.manufacturer, deviceId),
 			this.manufacturerId,
-			this.label,
-			this.description,
+			evaluateDeep(this.label, deviceId),
+			evaluateDeep(this.description, deviceId),
 			this.devices,
 			this.firmwareVersion,
-			endpoints,
-			associations,
-			paramInformation,
+			evaluateDeep(this.endpoints, deviceId),
+			evaluateDeep(this.associations, deviceId),
+			evaluateDeep(this.paramInformation, deviceId),
 			this.proprietary,
 			this.compat,
-			metadata,
+			evaluateDeep(this.metadata, deviceId),
 		);
 	}
 }
