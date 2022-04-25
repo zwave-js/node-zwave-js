@@ -21,7 +21,7 @@ import {
 	ConditionalAssociationConfig,
 	type AssociationConfig,
 } from "./AssociationConfig";
-import { CompatConfig } from "./CompatConfig";
+import { CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
 import { evaluateDeep } from "./ConditionalItem";
 import {
 	ConditionalPrimitive,
@@ -640,14 +640,25 @@ proprietary is not an object`,
 		}
 
 		if (definition.compat != undefined) {
-			if (!isObject(definition.compat)) {
+			if (
+				isArray(definition.compat) &&
+				definition.compat.every((item: any) => isObject(item))
+			) {
+				this.compat = definition.compat.map(
+					(item: any) => new ConditionalCompatConfig(filename, item),
+				);
+			} else if (isObject(definition.compat)) {
+				this.compat = new ConditionalCompatConfig(
+					filename,
+					definition.compat,
+				);
+			} else {
 				throwInvalidConfig(
 					`device`,
 					`packages/config/config/devices/${filename}:
-compat is not an object`,
+compat must be an object or any array of conditional objects`,
 				);
 			}
-			this.compat = new CompatConfig(filename, definition.compat);
 		}
 
 		if (definition.metadata != undefined) {
@@ -688,7 +699,9 @@ metadata is not an object`,
 	 */
 	public readonly proprietary?: Record<string, unknown>;
 	/** Contains compatibility options */
-	public readonly compat?: CompatConfig;
+	public readonly compat?:
+		| ConditionalCompatConfig
+		| ConditionalCompatConfig[];
 	/** Contains instructions and other metadata for the device */
 	public readonly metadata?: ConditionalDeviceMetadata;
 
@@ -709,7 +722,7 @@ metadata is not an object`,
 			evaluateDeep(this.associations, deviceId),
 			evaluateDeep(this.paramInformation, deviceId),
 			this.proprietary,
-			this.compat,
+			evaluateDeep(this.compat, deviceId, false),
 			evaluateDeep(this.metadata, deviceId),
 		);
 	}

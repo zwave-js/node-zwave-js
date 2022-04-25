@@ -180,6 +180,60 @@ describe("lib/config/Devices", () => {
 				},
 			]);
 		});
+
+		it("parses a device config with conditional compat flags", () => {
+			const json = {
+				manufacturer: "Silicon Labs",
+				manufacturerId: "0x0000",
+				label: "ZST10-700",
+				description: "700 Series-based Controller",
+				devices: [
+					{
+						productType: "0x0004",
+						productId: "0x0004",
+					},
+				],
+				firmwareVersion: {
+					min: "0.0",
+					max: "255.255",
+				},
+				compat: [
+					{
+						$if: "firmwareVersion < 1.0",
+						enableBasicSetMapping: true,
+					},
+					// {
+					// 	forceNotificationIdleReset: true,
+					// },
+				],
+			};
+
+			const condConfig = new ConditionalDeviceConfig(
+				"test.json",
+				true,
+				json,
+			);
+			// Ensure that evaluating the config works
+			const deviceId = {
+				manufacturerId: 0x0000,
+				productType: 0x0004,
+				productId: 0x0004,
+			};
+
+			const evaluated1 = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "0.5",
+			});
+			expect(evaluated1.compat).toEqual({
+				enableBasicSetMapping: true,
+			});
+
+			const evaluated2 = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "1.0",
+			});
+			expect(evaluated2.compat).toBeUndefined();
+		});
 	});
 
 	describe("lookupDevice (regression tests)", () => {
