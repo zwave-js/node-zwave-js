@@ -22,7 +22,7 @@ import {
 	type AssociationConfig,
 } from "./AssociationConfig";
 import { CompatConfig, ConditionalCompatConfig } from "./CompatConfig";
-import { evaluateDeep } from "./ConditionalItem";
+import { evaluateDeep, validateCondition } from "./ConditionalItem";
 import {
 	ConditionalPrimitive,
 	parseConditionalPrimitive,
@@ -527,6 +527,15 @@ required property "#" missing in at least one entry of paramInformation`,
 					);
 				}
 
+				// And a valid $if condition
+				for (const entry of definition.paramInformation) {
+					validateCondition(
+						filename,
+						entry,
+						`At least one entry of paramInformation contains an`,
+					);
+				}
+
 				for (const paramDefinition of definition.paramInformation) {
 					const { ["#"]: paramNo, ...defn } = paramDefinition;
 					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(
@@ -644,6 +653,15 @@ proprietary is not an object`,
 				isArray(definition.compat) &&
 				definition.compat.every((item: any) => isObject(item))
 			) {
+				// Make sure all conditions are valid
+				for (const entry of definition.compat) {
+					validateCondition(
+						filename,
+						entry,
+						`At least one entry of compat contains an`,
+					);
+				}
+
 				this.compat = definition.compat.map(
 					(item: any) => new ConditionalCompatConfig(filename, item),
 				);

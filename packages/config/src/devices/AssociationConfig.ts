@@ -1,6 +1,10 @@
 import { JSONObject, pick } from "@zwave-js/shared/safe";
 import { throwInvalidConfig } from "../utils_safe";
-import { ConditionalItem, conditionApplies } from "./ConditionalItem";
+import {
+	ConditionalItem,
+	conditionApplies,
+	validateCondition,
+} from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
 export class ConditionalAssociationConfig
@@ -13,13 +17,11 @@ export class ConditionalAssociationConfig
 	) {
 		this.groupId = groupId;
 
-		if (definition.$if != undefined && typeof definition.$if !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Association ${groupId} has a non-string $if condition`,
-			);
-		}
+		validateCondition(
+			filename,
+			definition,
+			`Association ${groupId} contains an`,
+		);
 		this.condition = definition.$if;
 
 		if (typeof definition.label !== "string") {

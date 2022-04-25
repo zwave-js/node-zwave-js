@@ -202,9 +202,6 @@ describe("lib/config/Devices", () => {
 						$if: "firmwareVersion < 1.0",
 						enableBasicSetMapping: true,
 					},
-					// {
-					// 	forceNotificationIdleReset: true,
-					// },
 				],
 			};
 
@@ -233,6 +230,99 @@ describe("lib/config/Devices", () => {
 				firmwareVersion: "1.0",
 			});
 			expect(evaluated2.compat).toBeUndefined();
+		});
+
+		it("parses a device config with conditional config parameter options", () => {
+			const json = {
+				manufacturer: "Silicon Labs",
+				manufacturerId: "0x0000",
+				label: "ZST10-700",
+				description: "700 Series-based Controller",
+				devices: [
+					{
+						productType: "0x0004",
+						productId: "0x0004",
+					},
+				],
+				firmwareVersion: {
+					min: "0.0",
+					max: "255.255",
+				},
+				paramInformation: [
+					{
+						"#": "1",
+						label: "This is a parameter",
+						valueSize: 1,
+						defaultValue: 1,
+						allowManualEntry: false,
+						options: [
+							{
+								label: "Yes",
+								value: 1,
+							},
+							{
+								label: "No",
+								value: 2,
+							},
+							{
+								$if: "firmwareVersion < 1.0",
+								label: "Maybe",
+								value: 3,
+							},
+						],
+					},
+				],
+			};
+
+			const condConfig = new ConditionalDeviceConfig(
+				"test.json",
+				true,
+				json,
+			);
+			// Ensure that evaluating the config works
+			const deviceId = {
+				manufacturerId: 0x0000,
+				productType: 0x0004,
+				productId: 0x0004,
+			};
+
+			const evaluated1 = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "0.5",
+			});
+			expect(
+				evaluated1.paramInformation?.get({ parameter: 1 })?.options,
+			).toEqual([
+				{
+					label: "Yes",
+					value: 1,
+				},
+				{
+					label: "No",
+					value: 2,
+				},
+				{
+					label: "Maybe",
+					value: 3,
+				},
+			]);
+
+			const evaluated2 = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "1.0",
+			});
+			expect(
+				evaluated2.paramInformation?.get({ parameter: 1 })?.options,
+			).toEqual([
+				{
+					label: "Yes",
+					value: 1,
+				},
+				{
+					label: "No",
+					value: 2,
+				},
+			]);
 		});
 	});
 

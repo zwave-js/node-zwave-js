@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { ObjectKeyMap } from "@zwave-js/shared/safe";
 import { isArray } from "alcalzone-shared/typeguards";
 import { evaluate } from "../Logic";
+import { throwInvalidConfig } from "../utils_safe";
 import type { DeviceID } from "./shared";
 
 /** A conditional config item */
@@ -41,6 +42,20 @@ export function conditionApplies<T>(
 		throw new ZWaveError(
 			`Invalid condition "${self.condition}"!`,
 			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+}
+
+export function validateCondition(
+	filename: string,
+	definition: Record<string, any>,
+	errorPrefix: string,
+): void {
+	if (definition.$if != undefined && typeof definition.$if !== "string") {
+		throwInvalidConfig(
+			"devices",
+			`packages/config/config/devices/${filename}:
+${errorPrefix} invalid $if condition`,
 		);
 	}
 }

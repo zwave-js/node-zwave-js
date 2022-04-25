@@ -10,6 +10,7 @@ import {
 	ConditionalItem,
 	conditionApplies,
 	evaluateDeep,
+	validateCondition,
 } from "./ConditionalItem";
 import type { DeviceID } from "./shared";
 
@@ -23,13 +24,11 @@ export class ConditionalEndpointConfig
 	) {
 		this.index = index;
 
-		if (definition.$if != undefined && typeof definition.$if !== "string") {
-			throwInvalidConfig(
-				"devices",
-				`packages/config/config/devices/${filename}:
-Endpoint ${index} has a non-string $if condition`,
-			);
-		}
+		validateCondition(
+			filename,
+			definition,
+			`Endpoint ${index} contains an`,
+		);
 		this.condition = definition.$if;
 
 		if (definition.associations != undefined) {
