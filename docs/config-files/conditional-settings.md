@@ -17,12 +17,48 @@ The logic supports the JavaScript operators `<`, `<=`, `>`, `>=` and `===`, as w
 
 You can use `"$if"` in the following locations:
 
+-   In the top-level `manufacturer`, `label` or `description` properties
 -   Inside endpoint definitions
 -   Inside association groups
 -   Inside config parameters
 -   Inside config parameter options
+-   As part of the `compat` flag definition
+-   In each property of the device `metadata`, including `comments`
 
-It is also possible to select one of multiple variants of a config parameter by specifying an array. In this case `"$if"` is mandatory in each parameter, except the last one. The first matching definition will be used, the others don't apply.
+Whenever a primitive value (usually a string) should be made conditional, it needs to be converted into an object and put into the `"value"` property. The fallback value may be specified as a string:
+
+```json
+{
+	// static:
+	"manufacturer": "Z-Wave JS",
+
+	// conditional (string fallback):
+	"manufacturer": [
+		{
+			// This variant is active for firmware version 1.0 and below
+			"$if": "firmwareVersion < 1.0",
+			"value": "Z-Wave"
+		},
+		// This one for all others
+		"Z-Wave JS"
+	],
+
+	// conditional (object fallback):
+	"manufacturer": [
+		{
+			// This variant is active for firmware version 1.0 and below
+			"$if": "firmwareVersion < 1.0",
+			"value": "Z-Wave"
+		},
+		{
+			// This one for all others
+			"value": "Z-Wave JS"
+		}
+	]
+}
+```
+
+When selecting one of multiple variants of a property, `"$if"` is mandatory in array item, except the last one. The first matching definition will be used, the others don't apply.
 
 ```json
 {
@@ -48,3 +84,5 @@ It is also possible to select one of multiple variants of a config parameter by 
 	]
 }
 ```
+
+An exception are properties which may contain multiple values, e.g. `metadata.comments` or parameter `options`. Here, the non-matching variants are filtered out.
