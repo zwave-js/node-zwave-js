@@ -25,15 +25,13 @@ export function parseConditionalPrimitive<
 		(definition as any[]).every(
 			(i, index, dfn) =>
 				// In arrays, only the last item may be non-conditional
-				(isObject(i) &&
-					typeof i.value === valueType &&
-					typeof i.$if === "string") ||
+				(isObject(i) && typeof i.value === valueType) ||
 				(index === dfn.length - 1 && typeof i === valueType),
 		)
 	) {
 		return definition.map((d: any) =>
 			typeof d === valueType
-				? d
+				? new ConditionalPrimitiveVariant<ToPrimitive<T>>(d)
 				: new ConditionalPrimitiveVariant<ToPrimitive<T>>(
 						d.value,
 						typeof d.$if === "string" ? d.$if : undefined,
@@ -52,7 +50,7 @@ ${errorMessagePrefix}${propertyName} must be a ${valueType} or an array of condi
 
 export type ConditionalPrimitive<T extends number | string | boolean> =
 	| T
-	| ConditionalPrimitiveVariant<T>;
+	| ConditionalPrimitiveVariant<T>[];
 
 export class ConditionalPrimitiveVariant<T extends number | string | boolean>
 	implements ConditionalItem<T>

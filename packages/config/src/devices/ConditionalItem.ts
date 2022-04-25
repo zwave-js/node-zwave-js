@@ -79,7 +79,7 @@ export type EvaluateDeepReturnType<
 > = T extends undefined
 	? undefined
 	: T extends ConditionalItem<infer R>[]
-	? PreserveArray extends true
+	? [PreserveArray] extends [true]
 		? R[]
 		: R
 	: T extends ConditionalItem<infer R>
@@ -90,6 +90,10 @@ export type EvaluateDeepReturnType<
 	? Map<K, EvaluateDeepReturnType<V, false>>
 	: T extends Map<infer K, infer V>
 	? Map<K, EvaluateDeepReturnType<V, false>>
+	: T extends unknown[]
+	? [PreserveArray] extends [true]
+		? T
+		: T[number]
 	: T;
 
 export function evaluateDeep<

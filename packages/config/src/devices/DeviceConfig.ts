@@ -740,7 +740,7 @@ metadata is not an object`,
 			evaluateDeep(this.associations, deviceId),
 			evaluateDeep(this.paramInformation, deviceId),
 			this.proprietary,
-			evaluateDeep(this.compat, deviceId, false),
+			evaluateDeep(this.compat, deviceId),
 			evaluateDeep(this.metadata, deviceId),
 		);
 	}
