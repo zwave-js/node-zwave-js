@@ -122,5 +122,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"enableBasicSetMapping": true
+	}
 }
