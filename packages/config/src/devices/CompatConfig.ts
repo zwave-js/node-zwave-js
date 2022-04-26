@@ -5,12 +5,16 @@ import type {
 } from "@zwave-js/core/safe";
 import { JSONObject, pick } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { hexKeyRegex2Digits, throwInvalidConfig } from "./utils_safe";
+import { hexKeyRegex2Digits, throwInvalidConfig } from "../utils_safe";
+import { ConditionalItem, conditionApplies } from "./ConditionalItem";
+import type { DeviceID } from "./shared";
 
-export class CompatConfig {
+export class ConditionalCompatConfig implements ConditionalItem<CompatConfig> {
 	private valueIdRegex = /^\$value\$\[.+\]$/;
 
 	public constructor(filename: string, definition: JSONObject) {
+		this.condition = definition.$if;
+
 		if (definition.queryOnWakeup != undefined) {
 			if (
 				!isArray(definition.queryOnWakeup) ||
@@ -488,7 +492,38 @@ compat option alarmMapping must be an array where all items are objects!`,
 			| Pick<ValueID, "property" | "propertyKey">
 		)[],
 	][];
+
+	public readonly condition?: string | undefined;
+
+	public evaluateCondition(deviceId?: DeviceID): CompatConfig | undefined {
+		if (!conditionApplies(this, deviceId)) return;
+		return pick(this, [
+			"alarmMapping",
+			"addCCs",
+			"removeCCs",
+			"disableBasicMapping",
+			"disableStrictEntryControlDataValidation",
+			"enableBasicSetMapping",
+			"forceNotificationIdleReset",
+			"forceSceneControllerGroupCount",
+			"manualValueRefreshDelayMs",
+			"mapRootReportsToEndpoint",
+			"overrideFloatEncoding",
+			"preserveRootApplicationCCValueIDs",
+			"preserveEndpoints",
+			"skipConfigurationInfoQuery",
+			"treatBasicSetAsEvent",
+			"treatMultilevelSwitchSetAsEvent",
+			"treatDestinationEndpointAsSource",
+			"queryOnWakeup",
+		]);
+	}
 }
+
+export type CompatConfig = Omit<
+	ConditionalCompatConfig,
+	"condition" | "evaluateCondition"
+>;
 
 export class CompatAddCC {
 	public constructor(filename: string, definition: JSONObject) {

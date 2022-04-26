@@ -28,7 +28,7 @@ import {
 	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
-} from "./Devices";
+} from "./devices/DeviceConfig";
 import {
 	IndicatorMap,
 	IndicatorPropertiesMap,

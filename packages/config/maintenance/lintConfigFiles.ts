@@ -8,7 +8,7 @@ import { reportProblem } from "@zwave-js/maintenance";
 import { formatId, getErrorMessage, num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { wait } from "alcalzone-shared/async";
-import { isObject } from "alcalzone-shared/typeguards";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { green, red, white } from "ansi-colors";
 import levenshtein from "js-levenshtein";
 import type { RulesLogic } from "json-logic-js";
@@ -17,8 +17,8 @@ import { ConfigManager } from "../src/ConfigManager";
 import {
 	ConditionalDeviceConfig,
 	DeviceConfig,
-	DeviceID,
-} from "../src/Devices";
+} from "../src/devices/DeviceConfig";
+import type { DeviceID } from "../src/devices/shared";
 import { parseLogic } from "../src/Logic";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
@@ -102,6 +102,18 @@ function getAllConditions(
 		}
 	}
 
+	for (const prop of ["manufacturer", "label", "description"] as const) {
+		const value = config[prop];
+		if (isArray(value)) {
+			for (const item of value) {
+				if (item.condition) {
+					const logic = parseLogic(item.condition);
+					walkLogic(logic);
+				}
+			}
+		}
+	}
+
 	if (config.associations) {
 		for (const assoc of config.associations.values()) {
 			if (assoc.condition) {
@@ -124,6 +136,46 @@ function getAllConditions(
 						walkLogic(logic);
 					}
 				}
+			}
+		}
+	}
+
+	if (config.compat) {
+		if (isArray(config.compat)) {
+			for (const compat of config.compat) {
+				if (compat.condition) {
+					const logic = parseLogic(compat.condition);
+					walkLogic(logic);
+				}
+			}
+		} else if (config.compat.condition) {
+			const logic = parseLogic(config.compat.condition);
+			walkLogic(logic);
+		}
+	}
+
+	if (config.metadata) {
+		for (const prop of [
+			"wakeup",
+			"inclusion",
+			"exclusion",
+			"reset",
+			"manual",
+			"comments",
+		] as const) {
+			const value = config.metadata[prop];
+			if (!value || typeof value === "string") continue;
+
+			if (isArray(value)) {
+				for (const entry of value) {
+					if (entry.condition) {
+						const logic = parseLogic(entry.condition);
+						walkLogic(logic);
+					}
+				}
+			} else if (isObject(value) && value.condition) {
+				const logic = parseLogic(value.condition);
+				walkLogic(logic);
 			}
 		}
 	}
@@ -237,6 +289,21 @@ async function lintDevices(): Promise<void> {
 			}
 
 			// Validate that the file is semantically correct
+
+			// By evaluating conditionals, we may end up with a file without manufacturer, label or description
+			if (config.manufacturer == undefined) {
+				addError(
+					file,
+					"The manufacturer property is undefined",
+					variant,
+				);
+			}
+			if (config.label == undefined) {
+				addError(file, "The device label is undefined", variant);
+			}
+			if (config.description == undefined) {
+				addError(file, "The device description is undefined", variant);
+			}
 
 			if (config.paramInformation?.size) {
 				for (const [
@@ -865,25 +932,87 @@ Consider converting this parameter to unsigned using ${white(
 			}
 		}
 
-		// Ensure that for a given param, the one without a condition comes last
+		const unconditionalComesLast = (
+			definitions: { condition?: string }[],
+		): boolean => {
+			return definitions.every(
+				(d, index) =>
+					d.condition !== undefined ||
+					index === definitions.length - 1,
+			);
+		};
+
+		// In all situations where one conditional gets selected from an array,
+		// ensure that the one without a condition comes last
+
+		// Device manufacturer/label/description
+		if (isArray(conditionalConfig.manufacturer)) {
+			if (!unconditionalComesLast(conditionalConfig.manufacturer)) {
+				addError(
+					file,
+					`The device manufacturer is invalid: When there are multiple conditional definitions, every definition except the last one MUST have an "$if" condition!`,
+				);
+			}
+		}
+		if (isArray(conditionalConfig.label)) {
+			if (!unconditionalComesLast(conditionalConfig.label)) {
+				addError(
+					file,
+					`The device label is invalid: When there are multiple conditional definitions, every definition except the last one MUST have an "$if" condition!`,
+				);
+			}
+		}
+		if (isArray(conditionalConfig.description)) {
+			if (!unconditionalComesLast(conditionalConfig.description)) {
+				addError(
+					file,
+					`The device description is invalid: When there are multiple conditional definitions, every definition except the last one MUST have an "$if" condition!`,
+				);
+			}
+		}
+
+		// Param information
 		if (conditionalConfig.paramInformation) {
 			for (const [
 				key,
 				definitions,
 			] of conditionalConfig.paramInformation) {
-				if (
-					!definitions.every(
-						(d, index) =>
-							d.condition !== undefined ||
-							index === definitions.length - 1,
-					)
-				) {
+				if (!unconditionalComesLast(definitions)) {
 					addError(
 						file,
 						`${paramNoToString(
 							key.parameter,
 							key.valueBitMask,
 						)} is either invalid or duplicated: When there are multiple definitions, every definition except the last one MUST have an "$if" condition!`,
+					);
+				}
+			}
+		}
+
+		// Compat flags
+		if (isArray(conditionalConfig.compat)) {
+			if (!unconditionalComesLast(conditionalConfig.compat)) {
+				addError(
+					file,
+					`The compat description is invalid: When there are multiple conditional definitions, every definition except the last one MUST have an "$if" condition!`,
+				);
+			}
+		}
+
+		// Metadata
+		if (conditionalConfig.metadata) {
+			for (const prop of [
+				"wakeup",
+				"inclusion",
+				"exclusion",
+				"reset",
+				"manual",
+			] as const) {
+				const value = conditionalConfig.metadata[prop];
+				if (isArray(value) && !unconditionalComesLast(value)) {
+					addError(
+						file,
+						`The ${prop} metadata is invalid: When there are multiple conditional definitions, every definition except the last one MUST have an "$if" condition!`,
 					);
 				}
 			}

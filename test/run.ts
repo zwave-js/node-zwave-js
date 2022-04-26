@@ -36,6 +36,10 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code
+		const node3 = driver.controller.nodes.getOrThrow(3);
+		for (let i = 1; i <= 10; i++) {
+			await node3.commandClasses["Binary Sensor"].get();
+		}
 	});
 void driver.start();
 // driver.enableStatistics({
