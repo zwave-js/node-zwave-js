@@ -332,15 +332,15 @@ export function nvmObjectsToJSON(
 		node.sucPendingUpdate = sucPendingUpdate.has(id);
 		node.pendingDiscovery = pendingDiscovery.has(id);
 		if (routeCacheExists.has(id)) {
-			let routeCache: RouteCache;
+			let routeCache: RouteCache | undefined;
 			if (protocolFileFormat === 0) {
 				const fileId = nodeIdToRouteCacheFileIDV0(id);
-				const file = getFileOrThrow<RouteCacheFileV0>(fileId);
-				routeCache = file.routeCache;
+				const file = getFile<RouteCacheFileV0>(fileId);
+				routeCache = file?.routeCache;
 			} else if (protocolFileFormat <= 4) {
 				const fileId = nodeIdToRouteCacheFileIDV1(id);
-				const file = getFileOrThrow<RouteCacheFileV1>(fileId);
-				routeCache = file.routeCaches.find((i) => i.nodeId === id)!;
+				const file = getFile<RouteCacheFileV1>(fileId);
+				routeCache = file?.routeCaches.find((i) => i.nodeId === id);
 			} else {
 				throw new ZWaveError(
 					`Unsupported protocol file format: ${protocolFileFormat}`,
