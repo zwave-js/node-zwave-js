@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.5 (2022-04-26)
 ### Bugfixes
 * When converting an NVM, missing routing information is now ignored instead of throwing an error (#4509)
 * Fixed serial disconnect detection during usage (#4505)
