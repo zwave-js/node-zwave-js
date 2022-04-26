@@ -512,21 +512,7 @@
 		{
 			"#": "30",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Enable/Disable Programming on the Dimmer Paddles",
-			"description": "If this setting is disabled, then inclusion, exclusion, smart bulb mode no longer work when dimmer paddles are activated (factory reset and scene control will still work) - that means you can now use triple-tap triggers on the dimmer for scenes and remote control of other devices.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Programming enabled",
-					"value": 0
-				},
-				{
-					"label": "Programming disabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {
