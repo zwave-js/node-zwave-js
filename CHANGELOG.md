@@ -4,6 +4,19 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* When converting an NVM, missing routing information is now ignored instead of throwing an error (#4509)
+* Fixed serial disconnect detection during usage (#4505)
+
+### Config file changes
+* Add ABUS SHLM10000 (#4498)
+* Enable Basic Set mapping for Eaton RF9542-Z (#4507)
+* Force scene count of Leviton VRCS2 to 4 (#4504)
+
+### Changes under the hood
+* More device config file properties now support conditionals (#4501)
+
 ## 9.0.4 (2022-04-22)
 ### Bugfixes
 * Route health checks now approach the minimum power level linearly from the normal power to avoid nodes with a suboptimal implementation getting stuck in test mode and causing a wrong test result (#4494)
@@ -26,9 +39,6 @@
 * Add Minoston Outdoor Plug Dimmer MP22ZD (#4342)
 * Add Cherubini Ora ZRX (#4463)
 * Add param 92 (Battery Calibration Check) to aërQ v2.01 (#4472)
-
-### Changes under the hood
-* The CC index in the documentation now uses relative paths, so it also works in the non-rendered version on GitHub  (#4476)
 
 ## 9.0.2 (2022-04-14)
 ### Bugfixes
