@@ -306,7 +306,7 @@
 				"value": 2
 			},
 			{
-				"label": "3-way impulse control",
+				"label": "Split 3-Way",
 				"value": 3
 			}
 		]
@@ -328,7 +328,7 @@
 				"value": 2
 			},
 			{
-				"label": "3-way impulse control",
+				"label": "Split 3-Way",
 				"value": 3
 			},
 			{
@@ -339,7 +339,7 @@
 	},
 	"impulse_duration": {
 		"label": "Impulse Duration",
-		"description": "Choose the duration of the impulse if you're using this relay with 3-way impulse control",
+		"description": "Expected duration of the impulse in Split 3-Way mode",
 		"valueSize": 1,
 		"unit": "seconds",
 		"minValue": 2,
