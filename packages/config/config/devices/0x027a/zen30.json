@@ -473,7 +473,7 @@
 		},
 		{
 			"#": "28",
-			"$if": "firmwareVersion >= 2.1",
+			"$if": "firmwareVersion >= 1.2",
 			"label": "Enable/Disable Scene Control for Dimmer",
 			"description": "Enable or disable scene control functionality for quick double tap triggers on the dimmer.",
 			"valueSize": 1,
@@ -492,7 +492,7 @@
 		},
 		{
 			"#": "29",
-			"$if": "firmwareVersion >= 2.1",
+			"$if": "firmwareVersion >= 1.2",
 			"label": "Enable/Disable Scene Control for Relay",
 			"description": "Enable or disable scene control functionality for quick double tap triggers on the relay button.",
 			"valueSize": 1,
