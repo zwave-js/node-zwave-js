@@ -512,7 +512,7 @@
 		{
 			"#": "30",
 			"$if": "firmwareVersion >= 1.2",
-			"$import": "~/templates/zooz_template.json#paddle_programming"
+			"$import": "~/0x027a/templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {
