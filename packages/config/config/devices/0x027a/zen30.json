@@ -470,6 +470,63 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Enable/Disable Scene Control for Dimmer",
+			"description": "Enable or disable scene control functionality for quick double tap triggers on the dimmer.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene control disabled",
+					"value": 0
+				},
+				{
+					"label": "Scene control enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29",
+			"$if": "firmwareVersion >= 2.1",
+			"label": "Enable/Disable Scene Control for Relay",
+			"description": "Enable or disable scene control functionality for quick double tap triggers on the relay button.",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene control disabled",
+					"value": 0
+				},
+				{
+					"label": "Scene control enabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Enable/Disable Programming on the Dimmer Paddles",
+			"description": "If this setting is disabled, then inclusion, exclusion, smart bulb mode no longer work when dimmer paddles are activated (factory reset and scene control will still work) - that means you can now use triple-tap triggers on the dimmer for scenes and remote control of other devices.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Programming enabled",
+					"value": 0
+				},
+				{
+					"label": "Programming disabled",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
