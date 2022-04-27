@@ -492,8 +492,7 @@
 		{
 			"#": "29",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Enable/Disable Scene Control for Relay",
-			"description": "Enable or disable scene control functionality for quick double tap triggers on the relay button.",
+			"label": "Scene Control (Relay)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
