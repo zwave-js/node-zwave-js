@@ -480,11 +480,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene control disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Scene control enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
