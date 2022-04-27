@@ -474,8 +474,7 @@
 		{
 			"#": "28",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Enable/Disable Scene Control for Dimmer",
-			"description": "Enable or disable scene control functionality for quick double tap triggers on the dimmer.",
+			"label": "Scene Control (Dimmer)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
