@@ -240,13 +240,7 @@
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 200,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "15",
@@ -255,13 +249,7 @@
 			"valueSize": 1,
 			"minValue": -50,
 			"maxValue": 50,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "65[0x01]",
