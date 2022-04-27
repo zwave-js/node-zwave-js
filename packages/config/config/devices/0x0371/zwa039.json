@@ -235,10 +235,8 @@
 		},
 		{
 			"#": "14",
-			"label": "Offset value for Temperature",
-			"description": "Can add or minus this setting value to calibrate temperature when checked. Allowable range: -200 to 200.",
+			"label": "Temperature Calibration",
 			"unit": "0.1 °(C/F)",
-			"unsigned": false,
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 200,
@@ -252,10 +250,8 @@
 		},
 		{
 			"#": "15",
-			"label": "Offset value for Humidity",
-			"description": "Can add or minus this setting value to calibrate humidity when checked.",
+			"label": "Humidity Calibration",
 			"unit": "%",
-			"unsigned": false,
 			"valueSize": 1,
 			"minValue": -50,
 			"maxValue": 50,
