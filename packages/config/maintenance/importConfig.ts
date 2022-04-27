@@ -139,6 +139,25 @@ function isNullishOrEmptyString(
 	return value == undefined || value === "";
 }
 
+const xmlParserOptions_default: xml2js.ParserOptions = {
+	// Don't separate xml attributes from children
+	mergeAttrs: true,
+	// We normalize to arrays where necessary, no need to do it globally
+	explicitArray: false,
+};
+
+const xmlParserOptions_coerce: xml2js.ParserOptions = {
+	// Coerce strings to numbers and booleans where it makes sense
+	attrValueProcessors: [
+		xml2js_parsers.parseBooleans,
+		xml2js_parsers.parseNumbers,
+	],
+	valueProcessors: [
+		xml2js_parsers.parseBooleans,
+		xml2js_parsers.parseNumbers,
+	],
+};
+
 /** Updates a numeric value with a new value, sanitizing the input. Falls back to the previous value (if it exists) or a default one */
 function updateNumberOrDefault(
 	newN: number | string,
@@ -242,11 +261,7 @@ async function parseOZWConfig(): Promise<void> {
 	const manufacturerJson: Record<string, any> =
 		await xml2js.parseStringPromise(
 			await fs.readFile(manufacturerFile, "utf8"),
-			{
-				mergeAttrs: true,
-				// We normalize to arrays where necessary
-				explicitArray: false,
-			},
+			xmlParserOptions_default,
 		);
 
 	// Load our existing config files to cross-reference
@@ -551,16 +566,8 @@ async function parseOZWProduct(
 	// Parse the OZW xml file
 	const json = (
 		await xml2js.parseStringPromise(productFile, {
-			mergeAttrs: true,
-			// Coerce strings to numbers and booleans where it makes sense
-			attrValueProcessors: [
-				xml2js_parsers.parseBooleans,
-				xml2js_parsers.parseNumbers,
-			],
-			valueProcessors: [
-				xml2js_parsers.parseBooleans,
-				xml2js_parsers.parseNumbers,
-			],
+			...xmlParserOptions_default,
+			...xmlParserOptions_coerce,
 		})
 	).Product as Record<string, any>;
 
