@@ -233,6 +233,40 @@
 			"maxValue": 10,
 			"defaultValue": 0
 		},
+    {
+			"#": "14",
+			"label": "Offset value for Temperature",
+			"description": "Can add or minus this setting value to calibrate temperature when checked. Allowable range: -200 to 200.",
+			"unit": "0.1 °(C/F)",
+			"unsigned": false,
+			"valueSize": 2,
+			"minValue": -200,
+			"maxValue": 200,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Offset value for Humidity",
+			"description": "Can add or minus this setting value to calibrate humidity when checked.",
+			"unit": "%",
+			"unsigned": false,
+			"valueSize": 1,
+			"minValue": -50,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
 		{
 			"#": "65[0x01]",
 			"label": "Sensor Report after Inclusion: Battery",
