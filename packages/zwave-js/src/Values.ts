@@ -1,9 +1,8 @@
 // TODO: auto-generate this
 
 export type { Scale, SensorType } from "@zwave-js/config";
-export { ValueMetadata } from "@zwave-js/core/safe";
+export { Duration, ValueMetadata } from "@zwave-js/core/safe";
 export type {
-	Duration,
 	DurationUnit,
 	ValueID,
 	ValueMetadataAny,
