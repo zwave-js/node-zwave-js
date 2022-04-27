@@ -50,7 +50,6 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.1",
     "@zwave-js/shared": "workspace:*",
-    "@zwave-js/winston-daily-rotate-file": "^4.5.6-1",
     "alcalzone-shared": "^4.0.1",
     "ansi-colors": "^4.1.1",
     "dayjs": "^1.11.0",
@@ -58,6 +57,7 @@
     "nrf-intel-hex": "^1.3.0",
     "triple-beam": "*",
     "winston": "^3.6.0",
+    "winston-daily-rotate-file": "^4.6.1",
     "winston-transport": "^4.5.0"
   },
   "devDependencies": {
