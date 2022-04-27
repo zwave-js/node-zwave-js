@@ -1,0 +1,70 @@
+{
+	"manufacturer": "Keemple",
+	"manufacturerId": "0x041a",
+	"label": "KP-SW-08",
+	"description": "Light Switch 2 Channel",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3587
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Scene Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch 1 Status",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Switch 2 Status",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
+			"defaultValue": 0
+		},
+		{
+			"#": "24",
+			"label": "Load Status Change Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Enabled (manual control only)",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "• Connect the power supply. \n• Set the Z-Wave network main controller into learning mode. \n• Press and hold the button 1 (the red light flashes slowly) until the pink light flashes slowly and then release, the device sends the network k information (blue light flashes quickly). \n• After the network is successfully connected, the LED indicator of the device is steady blue, and the load is off by default.",
+		"exclusion": "• Power on the switch. \n• Set the Z-Wave network controller into the exclusion mode. \n• Long press the switch button 1 (Red LED blink slowly) when Pink LED indicator light blink slowly, release the button, then the device start to send out exclusion information(Blue LED indicator in quick blinking). \n• When exclusion successfully, LED display is steady blue, load is off.",
+		"reset": "Reset procedure will delete all information in the Z-Wave network or Z-Wave gateway, and will restore switch to factory default settings. \n• Make sure switch is powered. \n• Press and hold the Switch button 1 for 20 seconds. \n• Until the pink light is always on, release the button. \n Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3587/KP-SW-08.pdf"
+	}
+}
