@@ -233,7 +233,7 @@
 			"maxValue": 10,
 			"defaultValue": 0
 		},
-    {
+		{
 			"#": "14",
 			"label": "Offset value for Temperature",
 			"description": "Can add or minus this setting value to calibrate temperature when checked. Allowable range: -200 to 200.",
