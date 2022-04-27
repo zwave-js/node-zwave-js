@@ -17,23 +17,19 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Lifeline (primary controller)",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Scene control",
-			"description": "Scene control",
+			"label": "Scene Control",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Endpoint 1",
-			"description": "Endpoint 1: Switch status report",
+			"label": "Switch 1 Status",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Endpoint 2",
-			"description": "Endpoint 2: Switch status report",
+			"label": "Switch 2 Status",
 			"maxNodes": 5
 		}
 	},
@@ -41,14 +37,11 @@
 		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off",
-			"label": "Setting device status after power failure",
-			"description": "Define how the Switch reacts after the power supply is back on",
 			"defaultValue": 0
 		},
 		{
 			"#": "24",
-			"label": "Notification when Load status change",
-			"description": "Touch Switch can send notifications to association device when state of Touch Switch’s load change.",
+			"label": "Load Status Change Reports",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -62,7 +55,7 @@
 					"value": 1
 				},
 				{
-					"label": "Enabled only when Load condition is not changed by Z-WAVE Command",
+					"label": "Enabled (manual control only)",
 					"value": 2
 				}
 			]
