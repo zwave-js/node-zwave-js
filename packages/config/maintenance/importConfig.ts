@@ -28,7 +28,8 @@ import * as JSON5 from "json5";
 import * as path from "path";
 import { compare } from "semver";
 import { promisify } from "util";
-import xml2json from "xml2json";
+import xml2js from "xml2js";
+import xml2js_parsers from "xml2js/lib/processors.js";
 import yargs from "yargs";
 import { ConfigManager, DeviceConfigIndexEntry } from "../src";
 
@@ -138,6 +139,25 @@ function isNullishOrEmptyString(
 	return value == undefined || value === "";
 }
 
+const xmlParserOptions_default: xml2js.ParserOptions = {
+	// Don't separate xml attributes from children
+	mergeAttrs: true,
+	// We normalize to arrays where necessary, no need to do it globally
+	explicitArray: false,
+};
+
+const xmlParserOptions_coerce: xml2js.ParserOptions = {
+	// Coerce strings to numbers and booleans where it makes sense
+	attrValueProcessors: [
+		xml2js_parsers.parseBooleans,
+		xml2js_parsers.parseNumbers,
+	],
+	valueProcessors: [
+		xml2js_parsers.parseBooleans,
+		xml2js_parsers.parseNumbers,
+	],
+};
+
 /** Updates a numeric value with a new value, sanitizing the input. Falls back to the previous value (if it exists) or a default one */
 function updateNumberOrDefault(
 	newN: number | string,
@@ -238,12 +258,11 @@ async function parseOZWConfig(): Promise<void> {
 		ozwConfigFolder,
 		"manufacturer_specific.xml",
 	);
-	const manufacturerJson: Record<string, any> = xml2json.toJson(
-		await fs.readFile(manufacturerFile, "utf8"),
-		{
-			object: true,
-		},
-	);
+	const manufacturerJson: Record<string, any> =
+		await xml2js.parseStringPromise(
+			await fs.readFile(manufacturerFile, "utf8"),
+			xmlParserOptions_default,
+		);
 
 	// Load our existing config files to cross-reference
 	await configManager.loadManufacturers();
@@ -545,10 +564,12 @@ async function parseOZWProduct(
 	}
 
 	// Parse the OZW xml file
-	const json = xml2json.toJson(productFile, {
-		object: true,
-		coerce: true, // coerce types
-	}).Product as Record<string, any>;
+	const json = (
+		await xml2js.parseStringPromise(productFile, {
+			...xmlParserOptions_default,
+			...xmlParserOptions_coerce,
+		})
+	).Product as Record<string, any>;
 
 	// const metadata = ensureArray(json.MetaData?.MetaDataItem);
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
