@@ -81,9 +81,9 @@ Now that we got this out of the way, here's a collection of **common** issues an
 
 🐛 [Connectivity issues](troubleshooting/connectivity-issues.md) (unreliable communication, slow network, no responses from devices, etc.)
 
-🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
+🐛 [Problems with 700 series sticks](troubleshooting/otw-upgrade.md)
 
-🐛 [Problems with 700 series sticks](troubleshooting/700-series-issues.md) (healing, delays, wrong neighbors, ...)
+🐛 [Missing updates from a device](troubleshooting/no-updates.md), e.g. when toggling it physically
 
 🐛 [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
 
