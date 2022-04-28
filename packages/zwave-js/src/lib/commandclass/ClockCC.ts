@@ -75,7 +75,7 @@ export class ClockCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async set(
 		hour: number,
 		minute: number,

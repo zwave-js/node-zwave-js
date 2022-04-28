@@ -655,7 +655,7 @@ export class IrrigationCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async setSystemConfig(
 		config: IrrigationCCSystemConfigSetOptions,
 	): Promise<void> {

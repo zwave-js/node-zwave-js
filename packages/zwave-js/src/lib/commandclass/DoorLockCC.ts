@@ -343,7 +343,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async set(mode: DoorLockMode): Promise<void> {
 		this.assertSupportsCommand(
 			DoorLockCommand,

@@ -118,7 +118,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async get(
 		sensorType?: BinarySensorType,
 	): Promise<boolean | undefined> {

@@ -70,7 +70,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
@@ -89,7 +89,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async get(
 		weekday: Weekday,
 	): Promise<readonly Switchpoint[] | undefined> {
@@ -153,7 +153,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async setOverride(
 		type: ScheduleOverrideType,
 		state: SetbackState,
