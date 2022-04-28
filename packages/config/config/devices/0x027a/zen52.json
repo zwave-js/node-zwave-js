@@ -1,0 +1,126 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN52",
+	"description": "Z-Wave Plus 700 Series Double Relay",
+	"devices": [
+		{
+			"productType": "0x0104",
+			"productId": "0x0202",
+			"zwaveAllianceId": 4609
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#enable_led_indicator"
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
+			"label": "Relay 1: Auto Off Timer"
+		},
+		{
+			"#": "4",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
+			"label": "Relay 1: Auto On Timer"
+		},
+		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select",
+			"label": "Relay 1: Timer Unit"
+		},
+		{
+			"#": "14",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"label": "Relay 1: State After Power Failure"
+		},
+		{
+			"#": "17",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
+			"label": "Relay 1: Smart Switch Mode"
+		},
+		{
+			"#": "20",
+			"$import": "templates/zooz_template.json#external_switch_type_0-3",
+			"label": "Relay 1: External Switch Type"
+		},
+		{
+			"#": "22",
+			"$import": "templates/zooz_template.json#impulse_duration",
+			"label": "Relay 1: Impulse Duration"
+		},
+		{
+			"#": "25",
+			"$import": "templates/zooz_template.json#relay_type_behavior",
+			"label": "Relay 1: Type"
+		},
+		{
+			"#": "5",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit",
+			"label": "Relay 2: Auto Off Timer"
+		},
+		{
+			"#": "6",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit",
+			"label": "Relay 2: Auto On Timer"
+		},
+		{
+			"#": "8",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select",
+			"label": "Relay 2: Timer Unit"
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"label": "Relay 2: State After Power Failure"
+		},
+		{
+			"#": "18",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
+			"label": "Relay 2: Smart Switch Mode"
+		},
+		{
+			"#": "21",
+			"$import": "templates/zooz_template.json#external_switch_type_0-3",
+			"label": "Relay 2: External Switch Type"
+		},
+		{
+			"#": "23",
+			"$import": "templates/zooz_template.json#impulse_duration",
+			"label": "Relay 2: Impulse Duration"
+		},
+		{
+			"#": "26",
+			"$import": "templates/zooz_template.json#relay_type_behavior",
+			"label": "Relay 2: Type"
+		},
+		{
+			"#": "16",
+			"$import": "templates/zooz_template.json#enable_scene_control"
+		},
+		{
+			"#": "24",
+			"$import": "templates/zooz_template.json#association_reports"
+		}
+	],
+	"metadata": {
+		"$import": "templates/zooz_template.json#zen5x_metadata",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-700-series-z-wave-plus-double-relay-zen52-manual.pdf"
+	}
+}

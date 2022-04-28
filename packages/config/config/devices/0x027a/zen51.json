@@ -1,0 +1,78 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN51",
+	"description": "Z-Wave Plus 700 Series Dry Contact Relay",
+	"devices": [
+		{
+			"productType": "0x0104",
+			"productId": "0x0201",
+			"zwaveAllianceId": 4610
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off Control",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#enable_led_indicator"
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#auto_off_timer_variable_unit"
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#auto_on_timer_variable_unit"
+		},
+		{
+			"#": "10",
+			"$import": "templates/zooz_template.json#auto_timer_unit_select"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "5",
+			"$import": "templates/zooz_template.json#enable_scene_control"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
+		},
+		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#external_switch_type_0-4"
+		},
+		{
+			"#": "8",
+			"$import": "templates/zooz_template.json#association_reports"
+		},
+		{
+			"#": "9",
+			"$import": "templates/zooz_template.json#relay_type_behavior"
+		},
+		{
+			"#": "11",
+			"$import": "templates/zooz_template.json#impulse_duration"
+		}
+	],
+	"metadata": {
+		"$import": "templates/zooz_template.json#zen5x_metadata",
+		"manual": "https://cdn.shopify.com/s/files/1/0218/7704/files/zooz-700-series-z-wave-plus-dry-contact-relay-zen51-manual.pdf"
+	}
+}
