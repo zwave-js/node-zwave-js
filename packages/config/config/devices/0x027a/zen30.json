@@ -470,6 +470,47 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Scene Control (Dimmer)",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Scene Control (Relay)",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "~/0x027a/templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {
