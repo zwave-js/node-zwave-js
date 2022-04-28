@@ -206,7 +206,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return response?.supportedColorComponents;
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(component: ColorComponent) {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
@@ -328,7 +328,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async startLevelChange(
 		options: ColorSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
@@ -346,7 +346,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async stopLevelChange(
 		colorComponent: ColorComponent,
 	): Promise<void> {

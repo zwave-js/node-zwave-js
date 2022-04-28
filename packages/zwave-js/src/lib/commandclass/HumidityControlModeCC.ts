@@ -121,7 +121,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async set(mode: HumidityControlMode): Promise<void> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,

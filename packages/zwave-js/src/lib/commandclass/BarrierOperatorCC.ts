@@ -147,7 +147,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async set(
 		targetState: BarrierState.Open | BarrierState.Closed,
 	): Promise<void> {
@@ -185,7 +185,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.supportedSubsystemTypes;
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
 	): Promise<SubsystemState | undefined> {
@@ -207,7 +207,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.subsystemState;
 	}
 
-	@validateArgs()
+	@validateArgs({ strictEnums: true })
 	public async setEventSignaling(
 		subsystemType: SubsystemType,
 		subsystemState: SubsystemState,
