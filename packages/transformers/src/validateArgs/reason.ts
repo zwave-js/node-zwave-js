@@ -54,6 +54,11 @@ export interface ExpectedNonPrimitive {
 	type: "non-primitive";
 }
 
+export interface ExpectedEnum {
+	type: "enum";
+	name: string;
+}
+
 export interface MissingObjectProperty {
 	type: "missing-property";
 	property: string;
@@ -127,4 +132,5 @@ export type Reason =
 	| ExpectedStringLiteral
 	| ExpectedNumberLiteral
 	| ExpectedBooleanLiteral
-	| ExpectedTemplateLiteral;
+	| ExpectedTemplateLiteral
+	| ExpectedEnum;

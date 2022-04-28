@@ -94,6 +94,16 @@ export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
 	);
 }
 
+export function isNumericEnum(
+	type: ts.Type,
+): type is ts.UnionType & { types: ts.NumberLiteralType[] } {
+	return (
+		!!(type.flags & ts.TypeFlags.EnumLiteral) &&
+		type.isUnion() &&
+		type.types.every((t) => t.isNumberLiteral())
+	);
+}
+
 export function setFunctionIfNotExists(
 	name: string,
 	visitorContext: VisitorContext,
@@ -1003,6 +1013,10 @@ function createErrorMessage(reason: Reason): ts.Expression {
 		case "class":
 			return createAssertionString(
 				`expected instance of class '${reason.name}'`,
+			);
+		case "enum":
+			return createAssertionString(
+				`expected value from enum '${reason.name}'`,
 			);
 		case "function":
 			return createAssertionString("expected a function");

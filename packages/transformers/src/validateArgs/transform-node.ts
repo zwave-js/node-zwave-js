@@ -218,11 +218,10 @@ function transformDecoratedMethod(
 					// This is a type with an "easy" name we can factor out of the method body
 
 					// Disable strict value checks for numeric enums
-					const isNumericEnum =
-						!!(type.flags & ts.TypeFlags.EnumLiteral) &&
-						type.isUnion() &&
-						type.types.every((t) => t.isNumberLiteral());
-					if (isNumericEnum && !options?.strictEnums) {
+					if (
+						VisitorUtils.isNumericEnum(type) &&
+						!options?.strictEnums
+					) {
 						// Fake the number type
 						type = { flags: ts.TypeFlags.Number } as ts.Type;
 						publicTypeName = param.type.getText();
