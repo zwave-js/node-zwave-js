@@ -324,6 +324,70 @@ describe("lib/config/Devices", () => {
 				},
 			]);
 		});
+
+		it("supports x.y.z firmware versions", () => {
+			const json = {
+				manufacturer: "Silicon Labs",
+				manufacturerId: "0x0000",
+				label: "ZST10-700",
+				description: "700 Series-based Controller",
+				devices: [
+					{
+						productType: "0x0004",
+						productId: "0x0004",
+					},
+				],
+				firmwareVersion: {
+					min: "0.0",
+					max: "255.255",
+				},
+				metadata: {
+					comments: [
+						{
+							$if: "firmwareVersion < 7.17.2",
+							level: "warning",
+							text: "Woah, this is buggy!",
+						},
+					],
+				},
+			};
+
+			const condConfig = new ConditionalDeviceConfig(
+				"test.json",
+				true,
+				json,
+			);
+			// Ensure that evaluating the config works
+			const deviceId = {
+				manufacturerId: 0x0000,
+				productType: 0x0004,
+				productId: 0x0004,
+			};
+
+			const evaluatedXY_warning = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "7.17",
+			});
+			expect(evaluatedXY_warning.metadata?.comments).toHaveLength(1);
+
+			const evaluatedXY_ok = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "7.18",
+			});
+			expect(evaluatedXY_ok.metadata?.comments).toBeEmpty();
+
+			const evaluatedXYZ_warning = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "7.17.1",
+			});
+			expect(evaluatedXYZ_warning.metadata?.comments).toHaveLength(1);
+
+			const evaluatedXYZ_ok = condConfig.evaluate({
+				...deviceId,
+				firmwareVersion: "7.17.2",
+			});
+			expect(evaluatedXYZ_ok.metadata?.comments).toBeEmpty();
+		});
 	});
 
 	describe("lookupDevice (regression tests)", () => {

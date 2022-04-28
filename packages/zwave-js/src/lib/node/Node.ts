@@ -673,7 +673,18 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public get firmwareVersion(): string | undefined {
 		// We're only interested in the first (main) firmware
-		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+		const ret = this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+
+		// Special case for the official 700 series firmwares which are aligned with the SDK version
+		// We want to work with the full x.y.z firmware version here.
+		if (ret && this.isControllerNode) {
+			const sdkVersion = this.sdkVersion;
+			if (sdkVersion && sdkVersion.startsWith(`${ret}.`)) {
+				return sdkVersion;
+			}
+		}
+		// For all others, just return the simple x.y firmware version
+		return ret;
 	}
 
 	public get sdkVersion(): string | undefined {
