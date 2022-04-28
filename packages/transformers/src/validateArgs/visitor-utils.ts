@@ -94,6 +94,16 @@ export function checkIsIgnoredIntrinsic(type: ts.ObjectType): boolean {
 	);
 }
 
+export function isNumericEnum(
+	type: ts.Type,
+): type is ts.UnionType & { types: ts.NumberLiteralType[] } {
+	return (
+		!!(type.flags & ts.TypeFlags.EnumLiteral) &&
+		type.isUnion() &&
+		type.types.every((t) => t.isNumberLiteral())
+	);
+}
+
 export function setFunctionIfNotExists(
 	name: string,
 	visitorContext: VisitorContext,
@@ -594,16 +604,18 @@ export function createDisjunctionFunction(
 	functionName: string,
 	visitorContext: VisitorContext,
 ): ts.FunctionDeclaration {
-	if (functionNames.length === 2) {
-		const nullTypeCheckFunction = getNullFunction(visitorContext);
-		const nullIndex = functionNames.indexOf(nullTypeCheckFunction);
-		if (nullIndex > -1) {
-			return createNullableTypeCheck(
-				functionNames[1 - nullIndex],
-				functionName,
-			);
-		}
-	}
+	// Not sure why this was here. It created spurious uncalled _null methods
+	//
+	// if (functionNames.length === 2) {
+	// 	const nullTypeCheckFunction = getNullFunction(visitorContext);
+	// 	const nullIndex = functionNames.indexOf(nullTypeCheckFunction);
+	// 	if (nullIndex > -1) {
+	// 		return createNullableTypeCheck(
+	// 			functionNames[1 - nullIndex],
+	// 			functionName,
+	// 		);
+	// 	}
+	// }
 
 	const conditionsIdentifier = ts.createIdentifier("conditions");
 	const conditionIdentifier = ts.createIdentifier("condition");
@@ -694,46 +706,46 @@ export function createDisjunctionFunction(
 	);
 }
 
-function createNullableTypeCheck(
-	typeCheckFunction: string,
-	functionName: string,
-) {
-	return ts.createFunctionDeclaration(
-		undefined,
-		undefined,
-		undefined,
-		functionName,
-		undefined,
-		[
-			ts.createParameter(
-				undefined,
-				undefined,
-				undefined,
-				objectIdentifier,
-				undefined,
-				undefined,
-				undefined,
-			),
-		],
-		undefined,
-		ts.createBlock(
-			[
-				ts.createIf(
-					ts.createStrictEquality(objectIdentifier, ts.createNull()),
-					ts.createReturn(ts.createNull()),
-					ts.createReturn(
-						ts.createCall(
-							ts.createIdentifier(typeCheckFunction),
-							undefined,
-							[objectIdentifier],
-						),
-					),
-				),
-			],
-			true,
-		),
-	);
-}
+// function createNullableTypeCheck(
+// 	typeCheckFunction: string,
+// 	functionName: string,
+// ) {
+// 	return ts.createFunctionDeclaration(
+// 		undefined,
+// 		undefined,
+// 		undefined,
+// 		functionName,
+// 		undefined,
+// 		[
+// 			ts.createParameter(
+// 				undefined,
+// 				undefined,
+// 				undefined,
+// 				objectIdentifier,
+// 				undefined,
+// 				undefined,
+// 				undefined,
+// 			),
+// 		],
+// 		undefined,
+// 		ts.createBlock(
+// 			[
+// 				ts.createIf(
+// 					ts.createStrictEquality(objectIdentifier, ts.createNull()),
+// 					ts.createReturn(ts.createNull()),
+// 					ts.createReturn(
+// 						ts.createCall(
+// 							ts.createIdentifier(typeCheckFunction),
+// 							undefined,
+// 							[objectIdentifier],
+// 						),
+// 					),
+// 				),
+// 			],
+// 			true,
+// 		),
+// 	);
+// }
 
 export function createStrictNullCheckStatement(
 	identifier: ts.Identifier,
@@ -1001,6 +1013,10 @@ function createErrorMessage(reason: Reason): ts.Expression {
 		case "class":
 			return createAssertionString(
 				`expected instance of class '${reason.name}'`,
+			);
+		case "enum":
+			return createAssertionString(
+				`expected value from enum '${reason.name}'`,
 			);
 		case "function":
 			return createAssertionString("expected a function");
