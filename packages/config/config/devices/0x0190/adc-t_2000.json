@@ -35,7 +35,6 @@
 		{
 			"#": "2",
 			"label": "Number of Heat Stages",
-			"description": "Heat Stages 0-3 Default is 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -44,7 +43,6 @@
 		{
 			"#": "3",
 			"label": "Number of Cool Stages",
-			"description": "Cool Stages 0-2 Default is 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -53,7 +51,6 @@
 		{
 			"#": "4",
 			"label": "Heat Fuel Type",
-			"description": "Choose type of fuel. Reality - whether unit is boiler vs forced air.",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -69,32 +66,146 @@
 			]
 		},
 		{
-			"#": "5",
+			"#": "5[0xffff00]",
 			"label": "Calibration Temperature",
-			"description": "Calibration Temperature Range (in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: -10 to 10 in 1 °F increments.",
+			"unit": "0.1°F",
 			"valueSize": 4,
 			"minValue": -100,
 			"maxValue": 100,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "5[0xe0000000]",
+			"label": "Calibration Temperature Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "6",
+			"#": "5[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Calibration Temperature Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "5[0x07000000]",
+			"label": "Calibration Temperature Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "6[0xffff00]",
 			"label": "Overshoot",
-			"description": "Overshoot Range (in deg. F) Precision is tenths of a degree. Default is 5.",
+			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "6[0xe0000000]",
+			"label": "Overshoot Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 30,
-			"defaultValue": 5
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "7",
-			"label": "Swing",
-			"description": "Swing Range (in deg. F) Precision is tenths of a degree.",
+			"#": "6[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Overshoot Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "6[0x07000000]",
+			"label": "Overshoot Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
 			"valueSize": 4,
 			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "7[0xffff00]",
+			"label": "Swing",
+			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
 			"maxValue": 30,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
 		},
+		/*{
+			"#": "7[0xe0000000]",
+			"label": "Swing Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "7[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Swing Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "7[0x07000000]",
+			"label": "Swing Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
 		{
 			"#": "8",
 			"label": "Heat Staging Delay",
@@ -114,14 +225,52 @@
 			"defaultValue": 10
 		},
 		{
-			"#": "10",
+			"#": "10[0xffff00]",
 			"label": "Balance Setpoint",
-			"description": "Balance Setpont Range (in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: 0 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 350,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "10[0xe0000000]",
+			"label": "Balance Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 950,
-			"defaultValue": 350
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
+		{
+			"#": "10[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Balance Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "10[0x07000000]",
+			"label": "Balance Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
 		{
 			"#": "11",
 			"label": "Recovery Settings",
@@ -153,7 +302,7 @@
 		{
 			"#": "13",
 			"label": "Fan Circulation Duty Cycle",
-			"description": "Duty Cycle (percentage)",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -162,48 +311,200 @@
 		{
 			"#": "14",
 			"label": "Fan Purge Time",
-			"description": "Purge Time (in s)",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
 			"defaultValue": 60
 		},
 		{
-			"#": "15",
+			"#": "15[0xffff00]",
 			"label": "Maximum Heat Setpoint",
-			"description": "Max Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: 35 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": 350,
+			"minValue": -1,
 			"maxValue": 950,
-			"defaultValue": 950
+			"defaultValue": 950,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "15[0xe0000000]",
+			"label": "Maximum Heat Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "16",
+			"#": "15[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Maximum Heat Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "15[0x07000000]",
+			"label": "Maximum Heat Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "16[0xffff00]",
 			"label": "Minimum Heat Setpoint",
-			"description": "Min Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: 35 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": 350,
+			"minValue": -1,
 			"maxValue": 950,
-			"defaultValue": 350
+			"defaultValue": 350,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "16[0xe0000000]",
+			"label": "Minimum Heat Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "17",
+			"#": "16[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Minimum Heat Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "16[0x07000000]",
+			"label": "Minimum Heat Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "17[0xffff00]",
 			"label": "Maximum Cool Setpoint",
-			"description": "Max Cool Setpoint Range(in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: 50 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": 500,
+			"minValue": -1,
 			"maxValue": 950,
-			"defaultValue": 950
+			"defaultValue": 950,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "17[0xe0000000]",
+			"label": "Maximum Cool Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "18",
-			"label": "Minimum Cool Setpoint",
-			"description": "Min Cool Setpoint (in deg. F) Precision is tenths of a degree.",
+			"#": "17[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Maximum Cool Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 500,
-			"maxValue": 950,
-			"defaultValue": 500
+			"defaultValue": 1,
+			"readOnly": true
 		},
+		{
+			"#": "17[0x07000000]",
+			"label": "Maximum Cool Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "18[0xffff00]",
+			"label": "Minimum Cool Setpoint",
+			"description": "Allowable range: 50 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 500,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "18[0xe0000000]",
+			"label": "Minimum Cool Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "18[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Minimum Cool Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "18[0x07000000]",
+			"label": "Minimum Cool Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
 		{
 			"#": "19",
 			"label": "Thermostat Lock",
@@ -252,21 +553,9 @@
 		},
 		{
 			"#": "23",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Temperature Display Units",
-			"description": "Celsius or Farenheit for temperature display.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Farenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "24",
@@ -334,8 +623,7 @@
 		},
 		{
 			"#": "26",
-			"label": "Power Source",
-			"description": "Which source of power is utilized.",
+			"label": "Active Power Source",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -353,7 +641,7 @@
 		{
 			"#": "27",
 			"label": "Battery Alert Threshold Low",
-			"description": "Battery Alert Range (percentage)",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -362,7 +650,7 @@
 		{
 			"#": "28",
 			"label": "Battery Alert Threshold Very Low",
-			"description": "Very Low Battery Alert Range (percentage)",
+			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -370,49 +658,151 @@
 		},
 		{
 			"#": "30",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Remote Temperature Enable",
-			"description": "Enables remote temperature sensor instead of built-in.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
+			"description": "Use remote temperature sensor instead of built-in."
+		},
+		{
+			"#": "31[0xffff00]",
+			"label": "Heat Differential",
+			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 100,
+			"defaultValue": 30,
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
+					"value": -1
 				}
 			]
 		},
-		{
-			"#": "31",
-			"label": "Heat Differential",
-			"description": "Heat Differential (in deg. F) Precision is tenths of a degree.",
+		/*{
+			"#": "31[0xe0000000]",
+			"label": "Heat Differential Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
 			"valueSize": 4,
-			"minValue": 10,
-			"maxValue": 100,
-			"defaultValue": 30
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "32",
+			"#": "31[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Heat Differential Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "31[0x07000000]",
+			"label": "Heat Differential Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "32[0xffff00]",
 			"label": "Cool Differential",
-			"description": "Cool Differential (in deg. F) Precision is tenths of a degree.",
+			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
+			"unit": "0.1°F",
 			"valueSize": 4,
-			"minValue": 10,
+			"minValue": -1,
 			"maxValue": 100,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "32[0xe0000000]",
+			"label": "Cool Differential Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
 		},
 		{
-			"#": "33",
-			"label": "Temperature Reporting Threshold",
-			"description": "Temperature Reporting Range (in deg. F) Precision is tenths of a degree.",
+			"#": "32[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Cool Differential Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
 			"valueSize": 4,
-			"minValue": 5,
-			"maxValue": 20,
-			"defaultValue": 10
+			"defaultValue": 1,
+			"readOnly": true
 		},
+		{
+			"#": "32[0x07000000]",
+			"label": "Cool Differential Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "33[0xffff00]",
+			"label": "Temperature Reporting Threshold",
+			"description": "Allowable range: 0.5 to 2 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "33[0xe0000000]",
+			"label": "Temperature Reporting Threshold Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "33[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Temperature Reporting Threshold Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "33[0x07000000]",
+			"label": "Temperature Reporting Threshold Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
 		{
 			"#": "34",
 			"label": "O/B Select",
@@ -433,21 +823,8 @@
 		},
 		{
 			"#": "35",
-			"label": "Z-Wave Echo Association Reports",
-			"description": "Enable/Disabled Echo Assoc. Reports.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Echo Association Reports"
 		}
 	]
 }
