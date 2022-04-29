@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed an issue where `Color Switch CC Set` V2 could contain a random duration value (#4526)
+
+### Config file changes
+* Add KP-SW-07 and KP-SW-08 Keemple Wall Switches (#4503)
+* Add missing parameters to Zooz ZEN30 (#4510)
+* Add config for Zooz ZEN51 and ZEN52 Smart Relays (#4262)
+* Add conditional warnings to devices with known buggy firmware ranges, fix `x.y.z` version support (#4515)
+* Add temp and humidity calibration params to Aeotec aërQ ZWA039 (#4516)
+* Convert ADC-T2000 temperature values to partial parameters (#4522)
+
+### Changes under the hood
+* Improved some auto-generated argument checks (#4519)
+* All CC specific enums and types were moved into a single file, so they can be imported from non-Node.js contexts (#4525)
+
 ## 9.0.6 (2022-04-27)
 ### Bugfixes
 * Convert some exports from type-only to value (#4512)
