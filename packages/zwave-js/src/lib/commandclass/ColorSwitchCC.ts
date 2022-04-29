@@ -445,7 +445,9 @@ export class ColorSwitchCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getSupportsHexColorValueID(0).property, true);
+		this.registerValue(getSupportsHexColorValueID(0).property, {
+			internal: true,
+		});
 	}
 
 	public async interview(): Promise<void> {

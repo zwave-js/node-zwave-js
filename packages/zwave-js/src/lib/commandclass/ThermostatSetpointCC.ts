@@ -276,12 +276,13 @@ export class ThermostatSetpointCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(
-			getSetpointTypesInterpretationValueID(0).property,
-			true,
-		);
+		this.registerValue(getSetpointTypesInterpretationValueID(0).property, {
+			internal: true,
+		});
 		// The setpoint scale is only used internally
-		this.registerValue(getSetpointScaleValueID(0, 0).property, true);
+		this.registerValue(getSetpointScaleValueID(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public translatePropertyKey(

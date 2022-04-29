@@ -327,15 +327,15 @@ export class NotificationCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		// mark some value IDs as internal
-		this.registerValue(getNotificationModeValueId().property, true);
-		this.registerValue(
-			getSupportedNotificationTypesValueId().property,
-			true,
-		);
-		this.registerValue(
-			getSupportedNotificationEventsValueId(0).property,
-			true,
-		);
+		this.registerValue(getNotificationModeValueId().property, {
+			internal: true,
+		});
+		this.registerValue(getSupportedNotificationTypesValueId().property, {
+			internal: true,
+		});
+		this.registerValue(getSupportedNotificationEventsValueId(0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {

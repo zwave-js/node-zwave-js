@@ -96,7 +96,7 @@ export class CommandClass {
 			("supervised" in options ? options.supervised : undefined) ?? false;
 
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
-		this.registerValue("interviewComplete", true);
+		this.registerValue("interviewComplete", { internal: true });
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -534,7 +534,10 @@ export class CommandClass {
 	}
 
 	/** Which variables should be persisted when requested */
-	private _registeredCCValues = new Map<string | number, boolean>();
+	private _registeredCCValues = new Map<
+		string | number,
+		Pick<CCValueOptions, "internal" | "secret">
+	>();
 	/**
 	 * Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()`
 	 * @param property The property the value belongs to
@@ -542,9 +545,11 @@ export class CommandClass {
 	 */
 	public registerValue(
 		property: string | number,
-		internal: boolean = false,
+		options: Pick<CCValueOptions, "internal" | "secret"> = {},
 	): void {
-		this._registeredCCValues.set(property, internal);
+		options.internal ??= false;
+		options.secret ??= false;
+		this._registeredCCValues.set(property, options);
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
@@ -595,19 +600,17 @@ export class CommandClass {
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
 				(valueId) =>
-					!this._registeredCCValues.has(valueId.property) ||
-					this._registeredCCValues.get(valueId.property)! === false,
+					this._registeredCCValues.get(valueId.property)?.internal !==
+					true,
 			)
-			// allow the value id if it is NOT defined or it is defined as non-internal
+			// allow the value ID if it is NOT defined or it is defined as non-internal
 			.filter(
 				(valueId) =>
-					!valueDefinitions.has(valueId.property) ||
-					valueDefinitions.get(valueId.property)! === false,
+					valueDefinitions.get(valueId.property)?.internal !== true,
 			)
 			.filter(
 				(valueId) =>
-					!kvpDefinitions.has(valueId.property) ||
-					kvpDefinitions.get(valueId.property)! === false,
+					kvpDefinitions.get(valueId.property)?.internal !== true,
 			);
 		existingValueIds.forEach(({ property, propertyKey }) =>
 			addValueId(property, propertyKey),
@@ -619,8 +622,9 @@ export class CommandClass {
 	/** Determines if the given value is an internal value */
 	public isInternalValue(property: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(property as string) === true)
+		if (this._registeredCCValues.get(property as string)?.internal) {
 			return true;
+		}
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			property as string,
 		);
@@ -629,6 +633,23 @@ export class CommandClass {
 			property as string,
 		);
 		if (ccKeyValuePairDefinition?.internal === true) return true;
+		return false;
+	}
+
+	/** Determines if the given value is an secret value */
+	public isSecretValue(property: keyof this): boolean {
+		// A value is secret if any of the possible definitions say so (true)
+		if (this._registeredCCValues.get(property as string)?.secret) {
+			return true;
+		}
+		const ccValueDefinition = getCCValueDefinitions(this).get(
+			property as string,
+		);
+		if (ccValueDefinition?.secret === true) return true;
+		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
+			property as string,
+		);
+		if (ccKeyValuePairDefinition?.secret === true) return true;
 		return false;
 	}
 
@@ -1356,8 +1377,7 @@ export function getCCResponsePredicate<T extends CommandClass>(
 
 export interface CCValueOptions {
 	/**
-	 * Whether the decorated CC value is internal. Internal values are not
-	 * exposed to the user.
+	 * Whether the decorated CC value is internal. Internal values are not exposed to the user.
 	 */
 	internal?: boolean;
 	/**
@@ -1372,6 +1392,10 @@ export interface CCValueOptions {
 	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
 	 */
 	stateful?: boolean;
+	/**
+	 * Omit this value from value logs. Default: `false`
+	 */
+	secret?: boolean;
 }
 
 /**

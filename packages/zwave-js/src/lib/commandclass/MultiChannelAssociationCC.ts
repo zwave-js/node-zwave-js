@@ -307,9 +307,15 @@ export class MultiChannelAssociationCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		// Make valueIDs internal
-		this.registerValue(getMaxNodesValueId(0, 0).property, true);
-		this.registerValue(getNodeIdsValueId(0, 0).property, true);
-		this.registerValue(getEndpointsValueId(0, 0).property, true);
+		this.registerValue(getMaxNodesValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getNodeIdsValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getEndpointsValueId(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
