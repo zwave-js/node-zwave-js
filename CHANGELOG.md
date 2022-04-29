@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.0.7 (2022-04-29)
 ### Bugfixes
 * Fixed an issue where `Color Switch CC Set` V2 could contain a random duration value (#4526)
 
