@@ -50,6 +50,9 @@ export class ApplicationUpdateRequest extends Message {
 				CommandConstructor =
 					ApplicationUpdateRequestSmartStartHomeIDReceived;
 				break;
+			case ApplicationUpdateTypes.SmartStart_NodeInfo_Received:
+				CommandConstructor =
+					ApplicationUpdateRequestSmartStartNodeInfoReceived;
 		}
 
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
@@ -130,6 +133,31 @@ export class ApplicationUpdateRequestSmartStartHomeIDReceived extends Applicatio
 			"supported CCs": this.supportedCCs
 				.map((cc) => `\n· ${getCCName(cc)}`)
 				.join(""),
+		};
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
+}
+
+export class ApplicationUpdateRequestSmartStartNodeInfoReceived extends ApplicationUpdateRequest {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this.remoteNodeId = this.payload[0];
+		// payload[1] is rxStatus
+		// payload[2] is reserved
+		this.nwiHomeId = this.payload.slice(3, 7);
+	}
+
+	public readonly remoteNodeId: number;
+	public readonly nwiHomeId: Buffer;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			type: getEnumMemberName(ApplicationUpdateTypes, this.updateType),
+			"remote node ID": this.remoteNodeId,
+			"NWI home ID": buffer2hex(this.nwiHomeId),
 		};
 		return {
 			...super.toLogEntry(),

@@ -103,6 +103,7 @@ import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
+	ApplicationUpdateRequestSmartStartNodeInfoReceived,
 } from "../controller/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
@@ -3126,7 +3127,10 @@ ${handlers.length} left`,
 					return;
 				}
 			} else if (
-				msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
+				msg instanceof
+					ApplicationUpdateRequestSmartStartHomeIDReceived ||
+				msg instanceof
+					ApplicationUpdateRequestSmartStartNodeInfoReceived
 			) {
 				// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
 				this.controllerLog.print(
