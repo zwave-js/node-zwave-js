@@ -41,14 +41,6 @@ export enum RemoveFailedNodeStatus {
 	NodeRemoved = 1,
 	/** The failed node was not removed from the failing nodes list */
 	NodeNotRemoved = 2,
-
-	// /* ZW_ReplaceFailedNode callback status definitions */
-	// /** The failed node are ready to be replaced and controller is ready to add new node with nodeID of the failed node */
-	// ZW_FAILED_NODE_REPLACE = 3,
-	// /** The failed node has been replaced */
-	// ZW_FAILED_NODE_REPLACE_DONE = 4,
-	// /** The failed node has not been replaced */
-	// ZW_FAILED_NODE_REPLACE_FAILED = 5,
 }
 
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)

@@ -15,6 +15,7 @@ import {
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
 	ProtocolType,
+	RFRegion,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -112,8 +113,6 @@ import {
 } from "../serialapi/capability/GetSerialApiInitDataMessages";
 import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
 import {
-	NodeIDType,
-	RFRegion,
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
 	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
@@ -163,6 +162,10 @@ import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturn
 import { AssignSUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequest } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
 import { DeleteSUCReturnRouteRequest } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "../serialapi/network-mgmt/GetRoutingInfoMessages";
 import {
 	GetSUCNodeIdRequest,
 	GetSUCNodeIdResponse,
@@ -227,15 +230,12 @@ import {
 	NVMOperationStatus,
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
+import { NodeIDType, ZWaveLibraryTypes } from "../serialapi/_Types";
 import {
 	ControllerStatistics,
 	ControllerStatisticsHost,
 } from "./ControllerStatistics";
 import { minFeatureVersions, ZWaveFeature } from "./Features";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "./GetRoutingInfoMessages";
 import {
 	InclusionOptions,
 	InclusionOptionsInternal,
@@ -247,7 +247,6 @@ import {
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
-import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { RSSI } from "./_Types";
 
@@ -734,7 +733,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
-  controller type: ${ZWaveLibraryTypes[this._type]}
+  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
   library version: ${this._sdkVersion}`,
 		);
 

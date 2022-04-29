@@ -14,9 +14,9 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
+import { ZWaveLibraryTypes } from "../serialapi/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,

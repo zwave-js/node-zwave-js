@@ -1,5 +1,4 @@
 import { cpp2js, JSONObject } from "@zwave-js/shared";
-import type { ZWaveLibraryTypes } from "../../controller/ZWaveLibraryTypes";
 import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
@@ -13,6 +12,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveLibraryTypes } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)

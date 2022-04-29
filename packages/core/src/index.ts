@@ -2,6 +2,7 @@ export * from "./capabilities/CommandClasses";
 export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/NodeInfo";
 export * from "./capabilities/Protocols";
+export * from "./capabilities/RFRegion";
 export * from "./consts";
 export * from "./error/ZWaveError";
 export * from "./log/shared";

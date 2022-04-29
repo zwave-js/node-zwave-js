@@ -4,6 +4,7 @@ import {
 	isZWaveError,
 	NodeProtocolInfo,
 	NodeType,
+	RFRegion,
 	stripUndefined,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -119,7 +120,7 @@ export interface NVMJSONController {
 }
 
 export interface NVMJSONControllerRFConfig {
-	rfRegion: number; // TODO: Should be RF Region
+	rfRegion: RFRegion;
 	txPower: number;
 	measured0dBm: number;
 	enablePTI: number | null;
@@ -784,7 +785,7 @@ export function jsonToNVMObjects_v1_to_v4(
 	// When converting it can be that the rfConfig doesn't exist. Make sure
 	// that it is initialized with proper defaults.
 	target.controller.rfConfig ??= {
-		rfRegion: 0xff, // default
+		rfRegion: RFRegion["Default (EU)"],
 		txPower: 0.0,
 		measured0dBm: +3.3,
 		enablePTI: null,
