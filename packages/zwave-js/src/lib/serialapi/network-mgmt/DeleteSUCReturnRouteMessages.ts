@@ -4,12 +4,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import { TransmitStatus } from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -20,41 +21,42 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./_Types";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { INodeQuery } from "../../node/INodeQuery";
 
-@messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
+@messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
-export class AssignReturnRouteRequestBase extends Message {
+export class DeleteSUCReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== AssignReturnRouteRequestTransmitReport
+			(new.target as any) !== DeleteSUCReturnRouteRequestTransmitReport
 		) {
-			return new AssignReturnRouteRequestTransmitReport(driver, options);
+			return new DeleteSUCReturnRouteRequestTransmitReport(
+				driver,
+				options,
+			);
 		}
 		super(driver, options);
 	}
 }
 
-export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
+export interface DeleteSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
-	destinationNodeId: number;
 }
 
-@expectedResponse(FunctionType.AssignReturnRoute)
-@expectedCallback(FunctionType.AssignReturnRoute)
-export class AssignReturnRouteRequest
-	extends AssignReturnRouteRequestBase
+@expectedResponse(FunctionType.DeleteSUCReturnRoute)
+@expectedCallback(FunctionType.DeleteSUCReturnRoute)
+export class DeleteSUCReturnRouteRequest
+	extends DeleteSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| AssignReturnRouteRequestOptions,
+			| DeleteSUCReturnRouteRequestOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -63,63 +65,51 @@ export class AssignReturnRouteRequest
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (options.nodeId === options.destinationNodeId) {
-				throw new ZWaveError(
-					`The source and destination node must not be identical`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 			this.nodeId = options.nodeId;
-			this.destinationNodeId = options.destinationNodeId;
 		}
 	}
 
 	public nodeId: number;
-	public destinationNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.nodeId,
-			this.destinationNodeId,
-			this.callbackId,
-		]);
+		this.payload = Buffer.from([this.nodeId, this.callbackId]);
 
 		return super.serialize();
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.AssignReturnRoute)
-export class AssignReturnRouteResponse
+@messageTypes(MessageType.Response, FunctionType.DeleteSUCReturnRoute)
+export class DeleteSUCReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
-		this.hasStarted = this.payload[0] !== 0;
+		this.wasExecuted = this.payload[0] !== 0;
 	}
 
 	public isOK(): boolean {
-		return this.hasStarted;
+		return this.wasExecuted;
 	}
 
-	public readonly hasStarted: boolean;
+	public readonly wasExecuted: boolean;
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			hasStarted: this.hasStarted,
+			wasExecuted: this.wasExecuted,
 		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "has started": this.hasStarted },
+			message: { "was executed": this.wasExecuted },
 		};
 	}
 }
 
-export class AssignReturnRouteRequestTransmitReport
-	extends AssignReturnRouteRequestBase
+export class DeleteSUCReturnRouteRequestTransmitReport
+	extends DeleteSUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
@@ -129,13 +119,13 @@ export class AssignReturnRouteRequestTransmitReport
 		this._transmitStatus = this.payload[1];
 	}
 
-	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
-	}
-
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
+	}
+
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

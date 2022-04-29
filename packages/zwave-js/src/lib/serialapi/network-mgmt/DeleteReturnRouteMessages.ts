@@ -4,12 +4,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import { TransmitStatus } from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -20,43 +21,39 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./_Types";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { INodeQuery } from "../../node/INodeQuery";
 
-@messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
+@messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
-export class AssignSUCReturnRouteRequestBase extends Message {
+export class DeleteReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== AssignSUCReturnRouteRequestTransmitReport
+			(new.target as any) !== DeleteReturnRouteRequestTransmitReport
 		) {
-			return new AssignSUCReturnRouteRequestTransmitReport(
-				driver,
-				options,
-			);
+			return new DeleteReturnRouteRequestTransmitReport(driver, options);
 		}
 		super(driver, options);
 	}
 }
 
-export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
+export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@expectedResponse(FunctionType.AssignSUCReturnRoute)
-@expectedCallback(FunctionType.AssignSUCReturnRoute)
-export class AssignSUCReturnRouteRequest
-	extends AssignSUCReturnRouteRequestBase
+@expectedResponse(FunctionType.DeleteReturnRoute)
+@expectedCallback(FunctionType.DeleteReturnRoute)
+export class DeleteReturnRouteRequest
+	extends DeleteReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| AssignSUCReturnRouteRequestOptions,
+			| DeleteReturnRouteRequestOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -78,38 +75,38 @@ export class AssignSUCReturnRouteRequest
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
-export class AssignSUCReturnRouteResponse
+@messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
+export class DeleteReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
-		this.wasExecuted = this.payload[0] !== 0;
+		this.hasStarted = this.payload[0] !== 0;
 	}
 
 	public isOK(): boolean {
-		return this.wasExecuted;
+		return this.hasStarted;
 	}
 
-	public readonly wasExecuted: boolean;
+	public readonly hasStarted: boolean;
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
-			wasExecuted: this.wasExecuted,
+			hasStarted: this.hasStarted,
 		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "was executed": this.wasExecuted },
+			message: { "has started": this.hasStarted },
 		};
 	}
 }
 
-export class AssignSUCReturnRouteRequestTransmitReport
-	extends AssignSUCReturnRouteRequestBase
+export class DeleteReturnRouteRequestTransmitReport
+	extends DeleteReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
@@ -119,13 +116,13 @@ export class AssignSUCReturnRouteRequestTransmitReport
 		this._transmitStatus = this.payload[1];
 	}
 
-	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
-	}
-
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
+	}
+
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

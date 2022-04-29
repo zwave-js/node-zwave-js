@@ -3,12 +3,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
+import { TransmitOptions } from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -19,9 +20,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { TransmitOptions } from "./_Types";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum SetSUCNodeIdStatus {
 	Succeeded = 0x05,

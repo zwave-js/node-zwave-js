@@ -3,10 +3,10 @@ import {
 	protocolDataRateToString,
 	stripUndefined,
 } from "@zwave-js/core/safe";
-import { AssignReturnRouteRequestTransmitReport } from "./AssignReturnRouteMessages";
-import { AssignSUCReturnRouteRequestTransmitReport } from "./AssignSUCReturnRouteMessages";
-import { DeleteReturnRouteRequestTransmitReport } from "./DeleteReturnRouteMessages";
-import { DeleteSUCReturnRouteRequestTransmitReport } from "./DeleteSUCReturnRouteMessages";
+import { AssignReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
+import { DeleteReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,

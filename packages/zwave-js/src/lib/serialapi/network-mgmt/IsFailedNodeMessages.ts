@@ -1,9 +1,9 @@
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
@@ -11,7 +11,7 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "../../message/Message";
 
 export interface IsFailedNodeRequestOptions extends MessageBaseOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request

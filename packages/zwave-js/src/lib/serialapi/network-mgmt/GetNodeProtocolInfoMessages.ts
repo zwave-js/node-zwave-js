@@ -6,12 +6,12 @@ import {
 	ProtocolVersion,
 } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
@@ -19,8 +19,8 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import { DeviceClass } from "../node/DeviceClass";
+} from "../../message/Message";
+import { DeviceClass } from "../../node/DeviceClass";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	requestedNodeId: number;

@@ -1,11 +1,11 @@
 import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	gotDeserializationOptions,
@@ -15,11 +15,11 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "../../message/Message";
 import type {
 	MultiStageCallback,
 	SuccessIndicator,
-} from "../message/SuccessIndicator";
+} from "../../message/SuccessIndicator";
 import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {

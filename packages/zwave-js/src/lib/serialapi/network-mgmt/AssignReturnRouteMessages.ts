@@ -4,12 +4,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import { TransmitStatus } from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -20,40 +21,40 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./_Types";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { INodeQuery } from "../../node/INodeQuery";
 
-@messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
+@messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)
-export class DeleteReturnRouteRequestBase extends Message {
+export class AssignReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== DeleteReturnRouteRequestTransmitReport
+			(new.target as any) !== AssignReturnRouteRequestTransmitReport
 		) {
-			return new DeleteReturnRouteRequestTransmitReport(driver, options);
+			return new AssignReturnRouteRequestTransmitReport(driver, options);
 		}
 		super(driver, options);
 	}
 }
 
-export interface DeleteReturnRouteRequestOptions extends MessageBaseOptions {
+export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
+	destinationNodeId: number;
 }
 
-@expectedResponse(FunctionType.DeleteReturnRoute)
-@expectedCallback(FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteRequest
-	extends DeleteReturnRouteRequestBase
+@expectedResponse(FunctionType.AssignReturnRoute)
+@expectedCallback(FunctionType.AssignReturnRoute)
+export class AssignReturnRouteRequest
+	extends AssignReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| DeleteReturnRouteRequestOptions,
+			| AssignReturnRouteRequestOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -62,21 +63,33 @@ export class DeleteReturnRouteRequest
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			if (options.nodeId === options.destinationNodeId) {
+				throw new ZWaveError(
+					`The source and destination node must not be identical`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 			this.nodeId = options.nodeId;
+			this.destinationNodeId = options.destinationNodeId;
 		}
 	}
 
 	public nodeId: number;
+	public destinationNodeId: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId, this.callbackId]);
+		this.payload = Buffer.from([
+			this.nodeId,
+			this.destinationNodeId,
+			this.callbackId,
+		]);
 
 		return super.serialize();
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.DeleteReturnRoute)
-export class DeleteReturnRouteResponse
+@messageTypes(MessageType.Response, FunctionType.AssignReturnRoute)
+export class AssignReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
@@ -105,8 +118,8 @@ export class DeleteReturnRouteResponse
 	}
 }
 
-export class DeleteReturnRouteRequestTransmitReport
-	extends DeleteReturnRouteRequestBase
+export class AssignReturnRouteRequestTransmitReport
+	extends AssignReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
@@ -116,13 +129,13 @@ export class DeleteReturnRouteRequestTransmitReport
 		this._transmitStatus = this.payload[1];
 	}
 
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
+	}
+
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
-	}
-
-	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

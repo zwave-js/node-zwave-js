@@ -1,10 +1,10 @@
 import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	gotDeserializationOptions,
@@ -14,8 +14,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum RemoveNodeType {
 	Any = 1,

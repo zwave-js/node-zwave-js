@@ -4,12 +4,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import { TransmitStatus } from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -20,20 +21,19 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import type { INodeQuery } from "../node/INodeQuery";
-import { TransmitStatus } from "./_Types";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { INodeQuery } from "../../node/INodeQuery";
 
-@messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
+@messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
-export class DeleteSUCReturnRouteRequestBase extends Message {
+export class AssignSUCReturnRouteRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== DeleteSUCReturnRouteRequestTransmitReport
+			(new.target as any) !== AssignSUCReturnRouteRequestTransmitReport
 		) {
-			return new DeleteSUCReturnRouteRequestTransmitReport(
+			return new AssignSUCReturnRouteRequestTransmitReport(
 				driver,
 				options,
 			);
@@ -42,21 +42,21 @@ export class DeleteSUCReturnRouteRequestBase extends Message {
 	}
 }
 
-export interface DeleteSUCReturnRouteRequestOptions extends MessageBaseOptions {
+export interface AssignSUCReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@expectedResponse(FunctionType.DeleteSUCReturnRoute)
-@expectedCallback(FunctionType.DeleteSUCReturnRoute)
-export class DeleteSUCReturnRouteRequest
-	extends DeleteSUCReturnRouteRequestBase
+@expectedResponse(FunctionType.AssignSUCReturnRoute)
+@expectedCallback(FunctionType.AssignSUCReturnRoute)
+export class AssignSUCReturnRouteRequest
+	extends AssignSUCReturnRouteRequestBase
 	implements INodeQuery
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| DeleteSUCReturnRouteRequestOptions,
+			| AssignSUCReturnRouteRequestOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -78,8 +78,8 @@ export class DeleteSUCReturnRouteRequest
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.DeleteSUCReturnRoute)
-export class DeleteSUCReturnRouteResponse
+@messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
+export class AssignSUCReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
@@ -108,8 +108,8 @@ export class DeleteSUCReturnRouteResponse
 	}
 }
 
-export class DeleteSUCReturnRouteRequestTransmitReport
-	extends DeleteSUCReturnRouteRequestBase
+export class AssignSUCReturnRouteRequestTransmitReport
+	extends AssignSUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
@@ -119,13 +119,13 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 		this._transmitStatus = this.payload[1];
 	}
 
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
+	}
+
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
-	}
-
-	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

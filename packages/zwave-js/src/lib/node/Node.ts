@@ -155,10 +155,6 @@ import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../controller/ApplicationUpdateRequest";
-import {
-	GetNodeProtocolInfoRequest,
-	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
 import { isRssiError, RSSI, RssiError, TXReport } from "../controller/_Types";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
@@ -167,6 +163,14 @@ import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import {
+	GetNodeProtocolInfoRequest,
+	type GetNodeProtocolInfoResponse,
+} from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "../serialapi/network-mgmt/RequestNodeInfoMessages";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -189,10 +193,6 @@ import {
 	NodeStatusInterpreter,
 	nodeStatusMachineStateToNodeStatus,
 } from "./NodeStatusMachine";
-import {
-	RequestNodeInfoRequest,
-	RequestNodeInfoResponse,
-} from "./RequestNodeInfoMessages";
 import type {
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,

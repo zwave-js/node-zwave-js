@@ -2,13 +2,13 @@ import type { JSONObject } from "@zwave-js/shared";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../controller/ApplicationUpdateRequest";
-import type { Driver } from "../driver/Driver";
+} from "../../controller/ApplicationUpdateRequest";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -17,9 +17,9 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import type { INodeQuery } from "./INodeQuery";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { INodeQuery } from "../../node/INodeQuery";
 
 function testCallbackForRequestNodeInfoRequest(
 	sent: RequestNodeInfoRequest,
