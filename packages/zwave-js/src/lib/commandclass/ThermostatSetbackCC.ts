@@ -34,21 +34,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ThermostatSetbackCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
-
-/**
- * @publicAPI
- */
-export enum SetbackType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import { SetbackType, ThermostatSetbackCommand } from "./_Types";
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together

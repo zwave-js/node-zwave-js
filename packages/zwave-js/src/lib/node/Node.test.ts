@@ -15,21 +15,19 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
-import { BasicCC, BasicCommand } from "../commandclass/BasicCC";
-import {
-	BinarySwitchCCReport,
-	BinarySwitchCommand,
-} from "../commandclass/BinarySwitchCC";
+import { BasicCC } from "../commandclass/BasicCC";
+import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
 import { getCCConstructor } from "../commandclass/CommandClass";
-import {
-	EntryControlCCNotification,
-	EntryControlCommand,
-} from "../commandclass/EntryControlCC";
+import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
+import { WakeUpCC } from "../commandclass/WakeUpCC";
 import {
+	BasicCommand,
+	BinarySwitchCommand,
+	EntryControlCommand,
 	EntryControlDataTypes,
 	EntryControlEventTypes,
+	WakeUpCommand,
 } from "../commandclass/_Types";
 import {
 	GetNodeProtocolInfoRequest,

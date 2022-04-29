@@ -3,12 +3,11 @@ import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
 import {
-	ThermostatFanState,
 	ThermostatFanStateCC,
 	ThermostatFanStateCCGet,
 	ThermostatFanStateCCReport,
-	ThermostatFanStateCommand,
 } from "./ThermostatFanStateCC";
+import { ThermostatFanState, ThermostatFanStateCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

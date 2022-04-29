@@ -9,9 +9,8 @@ import {
 	DoorLockLoggingCCRecordReport,
 	DoorLockLoggingCCRecordsSupportedGet,
 	DoorLockLoggingCCRecordsSupportedReport,
-	DoorLockLoggingCommand,
-	EventType,
 } from "./DoorLockLoggingCC";
+import { DoorLockLoggingCommand, DoorLockLoggingEventType } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
@@ -78,7 +77,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 				0x2a, // RecordStatus.HoldsData, 10 (hour)
 				40, // minute
 				30, // second
-				EventType.LockCode, // event type
+				DoorLockLoggingEventType.LockCode, // event type
 				1, // user id
 				0, // user code length
 				0, // user code data

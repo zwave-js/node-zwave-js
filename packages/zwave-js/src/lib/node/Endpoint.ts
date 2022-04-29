@@ -9,7 +9,6 @@ import {
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
-import type { MultiChannelAssociationCC } from "../commandclass";
 import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
 	AssociationCC,
@@ -24,15 +23,18 @@ import {
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
 import {
-	AssociationAddress,
-	EndpointAddress,
 	getEndpointsValueId,
 	getNodeIdsValueId,
+	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import {
 	getInstallerIconValueId,
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
+import type {
+	AssociationAddress,
+	EndpointAddress,
+} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";

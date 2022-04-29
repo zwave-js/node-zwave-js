@@ -31,6 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SceneActivationCommand } from "./_Types";
 
 // @noInterview This CC is write-only
 
@@ -48,11 +49,6 @@ export function getDimmingDurationValueID(endpoint: number): ValueID {
 		endpoint,
 		property: "dimmingDuration",
 	};
-}
-
-// All the supported commands
-export enum SceneActivationCommand {
-	Set = 0x01,
 }
 
 @API(CommandClasses["Scene Activation"])

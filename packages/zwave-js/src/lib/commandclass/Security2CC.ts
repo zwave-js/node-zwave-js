@@ -49,24 +49,7 @@ import {
 	SPANExtension,
 } from "./Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "./Security2/shared";
-
-// All the supported commands
-export enum Security2Command {
-	NonceGet = 0x01,
-	NonceReport = 0x02,
-	MessageEncapsulation = 0x03,
-	KEXGet = 0x04,
-	KEXReport = 0x05,
-	KEXSet = 0x06,
-	KEXFail = 0x07,
-	PublicKeyReport = 0x08,
-	NetworkKeyGet = 0x09,
-	NetworkKeyReport = 0x0a,
-	NetworkKeyVerify = 0x0b,
-	TransferEnd = 0x0c,
-	CommandsSupportedGet = 0x0d,
-	CommandsSupportedReport = 0x0e,
-}
+import { Security2Command } from "./_Types";
 
 function securityClassToBitMask(key: SecurityClass): Buffer {
 	return encodeBitMask(

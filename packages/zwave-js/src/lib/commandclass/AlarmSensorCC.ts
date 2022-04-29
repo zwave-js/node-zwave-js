@@ -27,34 +27,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum AlarmSensorCommand {
-	Get = 0x01,
-	Report = 0x02,
-	SupportedGet = 0x03,
-	SupportedReport = 0x04,
-}
-
-// @publicAPI
-export enum AlarmSensorType {
-	"General Purpose" = 0x00,
-	Smoke,
-	CO,
-	CO2,
-	Heat,
-	"Water Leak",
-	Any = 0xff,
-}
-
-/**
- * @publicAPI
- */
-export type AlarmSensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: AlarmSensorType;
-	};
-};
+import { AlarmSensorCommand, AlarmSensorType } from "./_Types";
 
 export function getAlarmSensorStateValueId(
 	endpointIndex: number | undefined,

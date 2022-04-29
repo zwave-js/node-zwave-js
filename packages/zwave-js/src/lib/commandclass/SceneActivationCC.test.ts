@@ -1,11 +1,8 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
-import {
-	SceneActivationCC,
-	SceneActivationCCSet,
-	SceneActivationCommand,
-} from "./SceneActivationCC";
+import { SceneActivationCC, SceneActivationCCSet } from "./SceneActivationCC";
+import { SceneActivationCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

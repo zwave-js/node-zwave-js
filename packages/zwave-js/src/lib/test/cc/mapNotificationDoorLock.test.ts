@@ -1,9 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
-import {
-	DoorLockMode,
-	getCurrentModeValueId as getCurrentLockModeValueId,
-} from "../../commandclass/DoorLockCC";
+import { getCurrentModeValueId as getCurrentLockModeValueId } from "../../commandclass/DoorLockCC";
 import { NotificationCCReport } from "../../commandclass/NotificationCC";
+import { DoorLockMode } from "../../commandclass/_Types";
 import type { ThrowingMap } from "../../controller/Controller";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";

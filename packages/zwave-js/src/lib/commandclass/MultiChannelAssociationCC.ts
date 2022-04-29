@@ -29,20 +29,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export interface AssociationAddress {
-	nodeId: number;
-	endpoint?: number;
-}
-
-/**
- * @publicAPI
- * @deprecated use AssociationAddress instead
- */
-export type Association = AssociationAddress;
+import {
+	AssociationAddress,
+	EndpointAddress,
+	MultiChannelAssociationCommand,
+} from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -90,11 +81,6 @@ export function getGroupCountValueId(endpointIndex: number): ValueID {
 		endpoint: endpointIndex,
 		property: "groupCount",
 	};
-}
-
-export interface EndpointAddress {
-	nodeId: number;
-	endpoint: number | number[];
 }
 
 function endpointAddressesToString(
@@ -179,16 +165,6 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 	}
 
 	return { nodeIds, endpoints };
-}
-
-// All the supported commands
-export enum MultiChannelAssociationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	Remove = 0x04,
-	SupportedGroupingsGet = 0x05,
-	SupportedGroupingsReport = 0x06,
 }
 
 // @noSetValueAPI

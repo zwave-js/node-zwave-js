@@ -1,7 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
-import { BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import {
@@ -12,9 +12,9 @@ import {
 	MultiChannelCCEndPointFind,
 	MultiChannelCCEndPointGet,
 	MultiChannelCCV1CommandEncapsulation,
-	MultiChannelCommand,
 } from "./MultiChannelCC";
 import { MultiCommandCC } from "./MultiCommandCC";
+import { BasicCommand, MultiChannelCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

@@ -23,17 +23,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { Powerlevel, PowerlevelTestStatus } from "./_Types";
-
-// All the supported commands
-export enum PowerlevelCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	TestNodeSet = 0x04,
-	TestNodeGet = 0x05,
-	TestNodeReport = 0x06,
-}
+import { Powerlevel, PowerlevelCommand, PowerlevelTestStatus } from "./_Types";
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends CCAPI {

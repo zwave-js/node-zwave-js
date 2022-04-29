@@ -33,6 +33,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { VersionCommand } from "./_Types";
 
 export function getFirmwareVersionsValueId(): ValueID {
 	return {
@@ -61,17 +62,6 @@ export function getSDKVersionMetadata(): ValueMetadata {
 		...ValueMetadata.ReadOnlyString,
 		label: "SDK version",
 	};
-}
-
-export enum VersionCommand {
-	Get = 0x11,
-	Report = 0x12,
-	CommandClassGet = 0x13,
-	CommandClassReport = 0x14,
-	CapabilitiesGet = 0x15,
-	CapabilitiesReport = 0x16,
-	ZWaveSoftwareGet = 0x17,
-	ZWaveSoftwareReport = 0x18,
 }
 
 function parseVersion(buffer: Buffer): string {

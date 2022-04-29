@@ -31,43 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum BinarySensorCommand {
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x01,
-	SupportedReport = 0x04,
-}
-
-/**
- * @publicAPI
- */
-export enum BinarySensorType {
-	"General Purpose" = 0x01,
-	Smoke = 0x02,
-	CO = 0x03,
-	CO2 = 0x04,
-	Heat = 0x05,
-	Water = 0x06,
-	Freeze = 0x07,
-	Tamper = 0x08,
-	Aux = 0x09,
-	"Door/Window" = 0x0a,
-	Tilt = 0x0b,
-	Motion = 0x0c,
-	"Glass Break" = 0x0d,
-	Any = 0xff,
-}
-
-/**
- * @publicAPI
- */
-export type BinarySensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: BinarySensorType;
-	};
-};
+import { BinarySensorCommand, BinarySensorType } from "./_Types";
 
 export function getBinarySensorValueId(
 	endpointIndex: number | undefined,

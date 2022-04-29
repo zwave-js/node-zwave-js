@@ -31,19 +31,10 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { NodeNamingAndLocationCommand } from "./_Types";
 
 function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
-}
-
-// All the supported commands
-export enum NodeNamingAndLocationCommand {
-	NameSet = 0x01,
-	NameGet = 0x02,
-	NameReport = 0x03,
-	LocationSet = 0x04,
-	LocationGet = 0x05,
-	LocationReport = 0x06,
 }
 
 export function getNodeNameValueId(): ValueID {

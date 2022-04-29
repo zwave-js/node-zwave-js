@@ -13,10 +13,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultiCommandCommand {
-	CommandEncapsulation = 0x01,
-}
+import { MultiCommandCommand } from "./_Types";
 
 // TODO: Handle this command when received
 

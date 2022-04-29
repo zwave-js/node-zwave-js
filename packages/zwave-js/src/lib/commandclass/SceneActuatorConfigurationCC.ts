@@ -35,13 +35,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum SceneActuatorConfigurationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { SceneActuatorConfigurationCommand } from "./_Types";
 
 export function getLevelValueID(
 	endpoint: number | undefined,

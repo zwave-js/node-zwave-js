@@ -55,6 +55,7 @@ import {
 	FirmwareUpdateStatus,
 	Security2CC,
 	Security2CCNonceReport,
+	SupervisionResult,
 } from "../commandclass";
 import {
 	assertValidCCs,
@@ -82,8 +83,6 @@ import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	SupervisionResult,
-	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
 import {
 	isTransportServiceEncapsulation,
@@ -98,6 +97,7 @@ import {
 	getWakeUpIntervalValueId,
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
+import { SupervisionStatus } from "../commandclass/_Types";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,

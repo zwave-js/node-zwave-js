@@ -31,33 +31,13 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
+import {
+	BatteryChargingStatus,
+	BatteryCommand,
+	BatteryReplacementStatus,
+} from "./_Types";
 
 // @noSetValueAPI This CC is read-only
-
-/**
- * @publicAPI
- */
-export enum BatteryChargingStatus {
-	Discharging = 0x00,
-	Charging = 0x01,
-	Maintaining = 0x02,
-}
-
-/**
- * @publicAPI
- */
-export enum BatteryReplacementStatus {
-	No = 0x00,
-	Soon = 0x01,
-	Now = 0x02,
-}
-
-export enum BatteryCommand {
-	Get = 0x02,
-	Report = 0x03,
-	HealthGet = 0x04,
-	HealthReport = 0x05,
-}
 
 @API(CommandClasses.Battery)
 export class BatteryCCAPI extends PhysicalCCAPI {

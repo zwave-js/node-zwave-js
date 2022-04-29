@@ -53,10 +53,7 @@ import {
 	Security2CCTransferEnd,
 } from "../commandclass";
 import type { AssociationCC } from "../commandclass/AssociationCC";
-import type {
-	AssociationGroup,
-	AssociationGroupInfoCC,
-} from "../commandclass/AssociationGroupInfoCC";
+import type { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
 import {
 	getManufacturerIdValueId,
 	getManufacturerIdValueMetadata,
@@ -65,11 +62,7 @@ import {
 	getProductTypeValueId,
 	getProductTypeValueMetadata,
 } from "../commandclass/ManufacturerSpecificCC";
-import type {
-	AssociationAddress,
-	EndpointAddress,
-	MultiChannelAssociationCC,
-} from "../commandclass/MultiChannelAssociationCC";
+import type { MultiChannelAssociationCC } from "../commandclass/MultiChannelAssociationCC";
 import {
 	ECDHProfiles,
 	inclusionTimeouts,
@@ -82,6 +75,11 @@ import {
 	getSDKVersionMetadata,
 	getSDKVersionValueId,
 } from "../commandclass/VersionCC";
+import type {
+	AssociationAddress,
+	AssociationGroup,
+	EndpointAddress,
+} from "../commandclass/_Types";
 import type { Driver, RequestHandler } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";

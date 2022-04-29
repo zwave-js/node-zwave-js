@@ -20,7 +20,6 @@ import {
 	Switchpoint,
 } from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import { Weekday } from "./ClockCC";
 import {
 	API,
 	CCCommand,
@@ -34,26 +33,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ClimateControlScheduleCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	ChangedGet = 0x04,
-	ChangedReport = 0x05,
-	OverrideSet = 0x06,
-	OverrideGet = 0x07,
-	OverrideReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export enum ScheduleOverrideType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import {
+	ClimateControlScheduleCommand,
+	ScheduleOverrideType,
+	Weekday,
+} from "./_Types";
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {

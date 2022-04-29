@@ -36,22 +36,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
-export enum HumidityControlMode {
-	"Off" = 0x00,
-	"Humidify" = 0x01,
-	"De-humidify" = 0x02,
-	"Auto" = 0x03,
-}
+import { HumidityControlMode, HumidityControlModeCommand } from "./_Types";
 
 @API(CommandClasses["Humidity Control Mode"])
 export class HumidityControlModeCCAPI extends CCAPI {

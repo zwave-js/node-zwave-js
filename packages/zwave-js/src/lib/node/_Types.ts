@@ -6,8 +6,8 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
-import type { FirmwareUpdateStatus } from "../commandclass/FirmwareUpdateMetaDataCC";
 import type {
+	FirmwareUpdateStatus,
 	Powerlevel,
 	ZWaveNotificationCallbackParams_EntryControlCC,
 	ZWaveNotificationCallbackParams_MultilevelSwitchCC,

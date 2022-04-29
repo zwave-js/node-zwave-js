@@ -26,18 +26,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlOperatingStateCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-export enum HumidityControlOperatingState {
-	"Idle" = 0x00,
-	"Humidifying" = 0x01,
-	"De-humidifying" = 0x02,
-}
+import {
+	HumidityControlOperatingState,
+	HumidityControlOperatingStateCommand,
+} from "./_Types";
 
 @API(CommandClasses["Humidity Control Operating State"])
 export class HumidityControlOperatingStateCCAPI extends CCAPI {

@@ -31,13 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum LockCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { LockCommand } from "./_Types";
 
 export function getLockedValueId(endpoint: number): ValueID {
 	return {

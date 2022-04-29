@@ -15,9 +15,11 @@ import {
 	HumidityControlSetpointCCSet,
 	HumidityControlSetpointCCSupportedGet,
 	HumidityControlSetpointCCSupportedReport,
+} from "./HumidityControlSetpointCC";
+import {
 	HumidityControlSetpointCommand,
 	HumidityControlSetpointType,
-} from "./HumidityControlSetpointCC";
+} from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

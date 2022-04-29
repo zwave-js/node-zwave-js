@@ -37,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SoundSwitchCommand, ToneId } from "./_Types";
 
 export function getVolumeValueId(endpointIndex: number | undefined): ValueID {
 	return {
@@ -52,26 +53,6 @@ export function getToneIdValueId(endpointIndex: number | undefined): ValueID {
 		endpoint: endpointIndex,
 		property: "toneId",
 	};
-}
-
-// All the supported commands
-export enum SoundSwitchCommand {
-	TonesNumberGet = 0x01,
-	TonesNumberReport = 0x02,
-	ToneInfoGet = 0x03,
-	ToneInfoReport = 0x04,
-	ConfigurationSet = 0x05,
-	ConfigurationGet = 0x06,
-	ConfigurationReport = 0x07,
-	TonePlaySet = 0x08,
-	TonePlayGet = 0x09,
-	TonePlayReport = 0x0a,
-}
-
-// @publicAPI
-export enum ToneId {
-	Off = 0x00,
-	Default = 0xff,
 }
 
 @API(CommandClasses["Sound Switch"])

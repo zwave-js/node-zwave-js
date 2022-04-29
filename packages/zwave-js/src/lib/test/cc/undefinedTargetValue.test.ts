@@ -2,12 +2,12 @@ import { CommandClasses, ValueID } from "@zwave-js/core";
 import {
 	BinarySwitchCC,
 	BinarySwitchCCReport,
-	BinarySwitchCommand,
 } from "../../commandclass/BinarySwitchCC";
 import {
 	CommandClass,
 	getCommandClassStatic,
 } from "../../commandclass/CommandClass";
+import { BinarySwitchCommand } from "../../commandclass/_Types";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";

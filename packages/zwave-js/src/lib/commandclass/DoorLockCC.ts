@@ -41,39 +41,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum DoorLockCommand {
-	OperationSet = 0x01,
-	OperationGet = 0x02,
-	OperationReport = 0x03,
-	ConfigurationSet = 0x04,
-	ConfigurationGet = 0x05,
-	ConfigurationReport = 0x06,
-	CapabilitiesGet = 0x07,
-	CapabilitiesReport = 0x08,
-}
-
-// @publicAPI
-export enum DoorLockMode {
-	Unsecured = 0x00,
-	UnsecuredWithTimeout = 0x01,
-	InsideUnsecured = 0x10,
-	InsideUnsecuredWithTimeout = 0x11,
-	OutsideUnsecured = 0x20,
-	OutsideUnsecuredWithTimeout = 0x21,
-	Unknown = 0xfe,
-	Secured = 0xff,
-}
-
-// @publicAPI
-export enum DoorLockOperationType {
-	Constant = 0x01,
-	Timed = 0x02,
-}
-
-// @publicAPI
-export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
+import {
+	DoorHandleStatus,
+	DoorLockCommand,
+	DoorLockMode,
+	DoorLockOperationType,
+} from "./_Types";
 
 export function getTargetModeValueId(endpoint: number): ValueID {
 	return {

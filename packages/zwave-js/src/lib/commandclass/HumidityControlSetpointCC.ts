@@ -37,26 +37,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlSetpointCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	ScaleSupportedGet = 0x06,
-	ScaleSupportedReport = 0x07,
-	CapabilitiesGet = 0x08,
-	CapabilitiesReport = 0x09,
-}
-
-export enum HumidityControlSetpointType {
-	"N/A" = 0x00,
-	"Humidifier" = 0x01, // CC v1
-	"De-humidifier" = 0x02, // CC v1
-	"Auto" = 0x03, // CC v2
-}
+import {
+	HumidityControlSetpointCapabilities,
+	HumidityControlSetpointCommand,
+	HumidityControlSetpointType,
+	HumidityControlSetpointValue,
+} from "./_Types";
 
 const humidityControlSetpointScaleName = "humidity";
 function getScale(configManager: ConfigManager, scale: number): Scale {
@@ -68,27 +54,6 @@ function getScale(configManager: ConfigManager, scale: number): Scale {
 function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 	return getScale(configManager, scale).unit ?? "";
 }
-
-export interface HumidityControlSetpointValue {
-	value: number;
-	scale: number;
-}
-
-export interface HumidityControlSetpointCapabilities {
-	minValue: number;
-	minValueScale: number;
-	maxValue: number;
-	maxValueScale: number;
-}
-
-/**
- * @publicAPI
- */
-export type HumidityControlSetpointMetadata = ValueMetadata & {
-	ccSpecific: {
-		setpointType: HumidityControlSetpointType;
-	};
-};
 
 function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
 	return {

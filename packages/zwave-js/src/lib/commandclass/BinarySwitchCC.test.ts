@@ -6,8 +6,8 @@ import {
 	BinarySwitchCCGet,
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
-	BinarySwitchCommand,
 } from "./BinarySwitchCC";
+import { BinarySwitchCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

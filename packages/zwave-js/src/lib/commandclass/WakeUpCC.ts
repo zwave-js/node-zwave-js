@@ -34,6 +34,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { WakeUpCommand } from "./_Types";
 
 export function getControllerNodeIdValueId(): ValueID {
 	return {
@@ -54,16 +55,6 @@ export function getWakeUpOnDemandSupportedValueId(): ValueID {
 		commandClass: CommandClasses["Wake Up"],
 		property: "wakeUpOnDemandSupported",
 	};
-}
-
-export enum WakeUpCommand {
-	IntervalSet = 0x04,
-	IntervalGet = 0x05,
-	IntervalReport = 0x06,
-	WakeUpNotification = 0x07,
-	NoMoreInformation = 0x08,
-	IntervalCapabilitiesGet = 0x09,
-	IntervalCapabilitiesReport = 0x0a,
 }
 
 @API(CommandClasses["Wake Up"])

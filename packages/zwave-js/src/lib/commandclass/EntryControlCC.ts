@@ -38,19 +38,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { EntryControlDataTypes, EntryControlEventTypes } from "./_Types";
-
-// All the supported commands
-export enum EntryControlCommand {
-	Notification = 0x01,
-	KeySupportedGet = 0x02,
-	KeySupportedReport = 0x03,
-	EventSupportedGet = 0x04,
-	EventSupportedReport = 0x05,
-	ConfigurationSet = 0x06,
-	ConfigurationGet = 0x07,
-	ConfigurationReport = 0x08,
-}
+import {
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "./_Types";
 
 function getValueID(property: string, endpoint: number): ValueID {
 	return {

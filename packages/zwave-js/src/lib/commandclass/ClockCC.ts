@@ -22,27 +22,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ClockCommand {
-	Set = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum Weekday {
-	Unknown = 0x00,
-	Monday = 0x01,
-	Tuesday = 0x02,
-	Wednesday = 0x03,
-	Thursday = 0x04,
-	Friday = 0x05,
-	Saturday = 0x06,
-	Sunday = 0x07,
-}
+import { ClockCommand, Weekday } from "./_Types";
 
 // @noSetValueAPI - This CC has no simple value to set
 

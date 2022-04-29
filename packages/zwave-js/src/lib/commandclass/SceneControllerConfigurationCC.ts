@@ -37,13 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum SceneControllerConfigurationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { SceneControllerConfigurationCommand } from "./_Types";
 
 export function getSceneIdValueID(
 	endpoint: number | undefined,

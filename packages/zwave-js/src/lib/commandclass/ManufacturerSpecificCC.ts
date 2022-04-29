@@ -24,6 +24,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { DeviceIdType, ManufacturerSpecificCommand } from "./_Types";
 
 export function getManufacturerIdValueId(): ValueID {
 	return {
@@ -65,22 +66,6 @@ export function getProductIdValueMetadata(): ValueMetadata {
 		...ValueMetadata.ReadOnlyUInt16,
 		label: "Product ID",
 	};
-}
-
-export enum ManufacturerSpecificCommand {
-	Get = 0x04,
-	Report = 0x05,
-	DeviceSpecificGet = 0x06,
-	DeviceSpecificReport = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum DeviceIdType {
-	FactoryDefault = 0x00,
-	SerialNumber = 0x01,
-	PseudoRandom = 0x02,
 }
 
 // @noSetValueAPI This CC is read-only
