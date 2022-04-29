@@ -20,11 +20,11 @@ import {
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority } from "../message/Constants";
+import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,

@@ -1,5 +1,4 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
-import { parseRSSI, tryParseRSSI } from "../../controller/SendDataShared";
 import { RSSI, rssiToString } from "../../controller/_Types";
 import type { Driver } from "../../driver/Driver";
 import {
@@ -14,6 +13,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.GetBackgroundRSSI)
 @priority(MessagePriority.Normal)

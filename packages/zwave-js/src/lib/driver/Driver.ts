@@ -98,35 +98,8 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestSmartStartHomeIDReceived,
-} from "../controller/ApplicationUpdateRequest";
-import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
-import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import { InclusionState } from "../controller/Inclusion";
-import {
-	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
-} from "../controller/SendDataBridgeMessages";
-import {
-	MAX_SEND_ATTEMPTS,
-	SendDataAbort,
-	SendDataMulticastRequest,
-	SendDataRequest,
-} from "../controller/SendDataMessages";
-import {
-	hasTXReport,
-	isSendData,
-	isSendDataSinglecast,
-	isSendDataTransmitReport,
-	isTransmitReport,
-	SendDataMessage,
-} from "../controller/SendDataShared";
-import { SoftResetRequest } from "../controller/SoftResetRequest";
 import { TransmitOptions, TXReport } from "../controller/_Types";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
@@ -140,7 +113,34 @@ import { isSuccessIndicator } from "../message/SuccessIndicator";
 import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/_Types";
-import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
+} from "../serialapi/application/ApplicationUpdateRequest";
+import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
+import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
+import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
+import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "../serialapi/transport/SendDataBridgeMessages";
+import {
+	MAX_SEND_ATTEMPTS,
+	SendDataAbort,
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "../serialapi/transport/SendDataMessages";
+import {
+	hasTXReport,
+	isSendData,
+	isSendDataSinglecast,
+	isSendDataTransmitReport,
+	isTransmitReport,
+	SendDataMessage,
+} from "../serialapi/transport/SendDataShared";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
 import { initSentry } from "../telemetry/sentry";
 import {

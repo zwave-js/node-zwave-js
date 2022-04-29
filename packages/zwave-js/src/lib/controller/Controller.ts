@@ -15,6 +15,7 @@ import {
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
 	ProtocolType,
+	RFRegion,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -91,16 +92,27 @@ import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
 import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
 import {
+	GetControllerCapabilitiesRequest,
+	GetControllerCapabilitiesResponse,
+} from "../serialapi/capability/GetControllerCapabilitiesMessages";
+import {
+	GetControllerVersionRequest,
+	GetControllerVersionResponse,
+} from "../serialapi/capability/GetControllerVersionMessages";
+import {
 	GetProtocolVersionRequest,
 	GetProtocolVersionResponse,
 } from "../serialapi/capability/GetProtocolVersionMessages";
 import {
-	GetBackgroundRSSIRequest,
-	GetBackgroundRSSIResponse,
-} from "../serialapi/misc/GetBackgroundRSSIMessages";
+	GetSerialApiCapabilitiesRequest,
+	GetSerialApiCapabilitiesResponse,
+} from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
 import {
-	NodeIDType,
-	RFRegion,
+	GetSerialApiInitDataRequest,
+	GetSerialApiInitDataResponse,
+} from "../serialapi/capability/GetSerialApiInitDataMessages";
+import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
+import {
 	SerialAPISetupCommand,
 	SerialAPISetup_CommandUnsupportedResponse,
 	SerialAPISetup_GetLRMaximumPayloadSizeRequest,
@@ -121,11 +133,73 @@ import {
 	SerialAPISetup_SetRFRegionResponse,
 	SerialAPISetup_SetTXStatusReportRequest,
 	SerialAPISetup_SetTXStatusReportResponse,
-} from "../serialapi/misc/SerialAPISetupMessages";
+} from "../serialapi/capability/SerialAPISetupMessages";
+import {
+	GetControllerIdRequest,
+	GetControllerIdResponse,
+} from "../serialapi/memory/GetControllerIdMessages";
+import {
+	GetBackgroundRSSIRequest,
+	GetBackgroundRSSIResponse,
+} from "../serialapi/misc/GetBackgroundRSSIMessages";
 import {
 	SetRFReceiveModeRequest,
 	SetRFReceiveModeResponse,
 } from "../serialapi/misc/SetRFReceiveModeMessages";
+import {
+	SetSerialApiTimeoutsRequest,
+	SetSerialApiTimeoutsResponse,
+} from "../serialapi/misc/SetSerialApiTimeoutsMessages";
+import {
+	AddNodeDSKToNetworkRequest,
+	AddNodeStatus,
+	AddNodeToNetworkRequest,
+	AddNodeToNetworkRequestStatusReport,
+	AddNodeType,
+	EnableSmartStartListenRequest,
+} from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
+import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequest } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
+import { DeleteReturnRouteRequest } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequest } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
+import {
+	GetRoutingInfoRequest,
+	GetRoutingInfoResponse,
+} from "../serialapi/network-mgmt/GetRoutingInfoMessages";
+import {
+	GetSUCNodeIdRequest,
+	GetSUCNodeIdResponse,
+} from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
+import {
+	IsFailedNodeRequest,
+	IsFailedNodeResponse,
+} from "../serialapi/network-mgmt/IsFailedNodeMessages";
+import {
+	RemoveFailedNodeRequest,
+	RemoveFailedNodeResponse,
+	RemoveFailedNodeStartFlags,
+	RemoveFailedNodeStatus,
+	type RemoveFailedNodeRequestStatusReport,
+} from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
+import {
+	RemoveNodeFromNetworkRequest,
+	RemoveNodeFromNetworkRequestStatusReport,
+	RemoveNodeStatus,
+	RemoveNodeType,
+} from "../serialapi/network-mgmt/RemoveNodeFromNetworkRequest";
+import {
+	ReplaceFailedNodeRequest,
+	ReplaceFailedNodeRequestStatusReport,
+	ReplaceFailedNodeResponse,
+	ReplaceFailedNodeStartFlags,
+	ReplaceFailedNodeStatus,
+} from "../serialapi/network-mgmt/ReplaceFailedNodeRequest";
+import {
+	NodeNeighborUpdateStatus,
+	RequestNodeNeighborUpdateReport,
+	RequestNodeNeighborUpdateRequest,
+} from "../serialapi/network-mgmt/RequestNodeNeighborUpdateMessages";
+import { SetSUCNodeIdRequest } from "../serialapi/network-mgmt/SetSUCNodeIDMessages";
 import {
 	ExtNVMReadLongBufferRequest,
 	ExtNVMReadLongBufferResponse,
@@ -156,52 +230,12 @@ import {
 	NVMOperationStatus,
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
-import {
-	AddNodeDSKToNetworkRequest,
-	AddNodeStatus,
-	AddNodeToNetworkRequest,
-	AddNodeToNetworkRequestStatusReport,
-	AddNodeType,
-	EnableSmartStartListenRequest,
-} from "./AddNodeToNetworkRequest";
-import { AssignReturnRouteRequest } from "./AssignReturnRouteMessages";
-import { AssignSUCReturnRouteRequest } from "./AssignSUCReturnRouteMessages";
+import { NodeIDType, ZWaveLibraryTypes } from "../serialapi/_Types";
 import {
 	ControllerStatistics,
 	ControllerStatisticsHost,
 } from "./ControllerStatistics";
-import { DeleteReturnRouteRequest } from "./DeleteReturnRouteMessages";
-import { DeleteSUCReturnRouteRequest } from "./DeleteSUCReturnRouteMessages";
 import { minFeatureVersions, ZWaveFeature } from "./Features";
-import {
-	GetControllerCapabilitiesRequest,
-	GetControllerCapabilitiesResponse,
-} from "./GetControllerCapabilitiesMessages";
-import {
-	GetControllerIdRequest,
-	GetControllerIdResponse,
-} from "./GetControllerIdMessages";
-import {
-	GetControllerVersionRequest,
-	GetControllerVersionResponse,
-} from "./GetControllerVersionMessages";
-import {
-	GetRoutingInfoRequest,
-	GetRoutingInfoResponse,
-} from "./GetRoutingInfoMessages";
-import {
-	GetSerialApiCapabilitiesRequest,
-	GetSerialApiCapabilitiesResponse,
-} from "./GetSerialApiCapabilitiesMessages";
-import {
-	GetSerialApiInitDataRequest,
-	GetSerialApiInitDataResponse,
-} from "./GetSerialApiInitDataMessages";
-import {
-	GetSUCNodeIdRequest,
-	GetSUCNodeIdResponse,
-} from "./GetSUCNodeIdMessages";
-import { HardResetRequest } from "./HardResetRequest";
 import {
 	InclusionOptions,
 	InclusionOptionsInternal,
@@ -213,41 +247,6 @@ import {
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
-import {
-	IsFailedNodeRequest,
-	IsFailedNodeResponse,
-} from "./IsFailedNodeMessages";
-import {
-	RemoveFailedNodeRequest,
-	RemoveFailedNodeRequestStatusReport,
-	RemoveFailedNodeResponse,
-	RemoveFailedNodeStartFlags,
-	RemoveFailedNodeStatus,
-} from "./RemoveFailedNodeMessages";
-import {
-	RemoveNodeFromNetworkRequest,
-	RemoveNodeFromNetworkRequestStatusReport,
-	RemoveNodeStatus,
-	RemoveNodeType,
-} from "./RemoveNodeFromNetworkRequest";
-import {
-	ReplaceFailedNodeRequest,
-	ReplaceFailedNodeRequestStatusReport,
-	ReplaceFailedNodeResponse,
-	ReplaceFailedNodeStartFlags,
-	ReplaceFailedNodeStatus,
-} from "./ReplaceFailedNodeRequest";
-import {
-	NodeNeighborUpdateStatus,
-	RequestNodeNeighborUpdateReport,
-	RequestNodeNeighborUpdateRequest,
-} from "./RequestNodeNeighborUpdateMessages";
-import {
-	SetSerialApiTimeoutsRequest,
-	SetSerialApiTimeoutsResponse,
-} from "./SetSerialApiTimeoutsMessages";
-import { SetSUCNodeIdRequest } from "./SetSUCNodeIDMessages";
-import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { RSSI } from "./_Types";
 
@@ -734,7 +733,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
-  controller type: ${ZWaveLibraryTypes[this._type]}
+  controller type: ${getEnumMemberName(ZWaveLibraryTypes, this._type)}
   library version: ${this._sdkVersion}`,
 		);
 

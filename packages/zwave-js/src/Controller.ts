@@ -1,4 +1,4 @@
-export { ProtocolDataRate } from "@zwave-js/core/safe";
+export { ProtocolDataRate, RFRegion } from "@zwave-js/core/safe";
 export type {
 	ControllerEvents,
 	HealNodeStatus,
@@ -7,7 +7,6 @@ export type {
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";
-export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
 export {
 	isRssiError,
 	RSSI,
@@ -20,4 +19,4 @@ export {
 	ControllerSelfLogContext,
 	ControllerValueLogContext,
 } from "./lib/log/Controller";
-export { RFRegion } from "./lib/serialapi/misc/SerialAPISetupMessages";
+export type { ZWaveLibraryTypes } from "./lib/serialapi/_Types";

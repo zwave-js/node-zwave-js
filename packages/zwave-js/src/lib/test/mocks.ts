@@ -1,7 +1,6 @@
 import { ConfigManager } from "@zwave-js/config";
 import type { CommandClasses } from "@zwave-js/core";
 import { getImplementedVersion } from "../commandclass/CommandClass";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import {
 	FunctionType,
@@ -15,6 +14,7 @@ import {
 	priority,
 } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 const MockRequestMessageWithExpectation_FunctionType =
 	0xfa as unknown as FunctionType;

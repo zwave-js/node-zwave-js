@@ -29,17 +29,17 @@ import {
 	EntryControlEventTypes,
 	WakeUpCommand,
 } from "../commandclass/_Types";
+import type { Driver } from "../driver/Driver";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
-} from "../controller/GetNodeProtocolInfoMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
-import type { Driver } from "../driver/Driver";
+} from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
+import { RequestNodeInfoRequest } from "../serialapi/network-mgmt/RequestNodeInfoMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";
 import { ZWaveNode } from "./Node";
-import { RequestNodeInfoRequest } from "./RequestNodeInfoMessages";
 import { InterviewStage, NodeStatus, ZWaveNodeEvents } from "./_Types";
 
 /** This is an ugly hack to be able to test the private methods without resorting to @internal */
