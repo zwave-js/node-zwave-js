@@ -42,6 +42,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -691,6 +692,14 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 @implementedVersion(2)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
+
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		// Hide user codes from value logs
+		this.registerValue(getUserCodeValueID(undefined, 0).property, {
+			secret: true,
+		});
+	}
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
@@ -1405,7 +1414,10 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		this.persistValues();
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue({
+		minVersion: 2,
+		secret: true,
+	})
 	@ccValueMetadata({
 		...ValueMetadata.String,
 		label: "Master Code",

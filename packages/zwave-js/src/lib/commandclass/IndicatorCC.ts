@@ -337,11 +337,11 @@ export class IndicatorCC extends CommandClass {
 		super(driver, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
-			true,
+			{ internal: true },
 		);
 		this.registerValue(
 			getSupportedPropertyIDsValueID(undefined, 0).property,
-			true,
+			{ internal: true },
 		);
 	}
 

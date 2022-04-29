@@ -927,7 +927,9 @@ export class ConfigurationCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue("isParamInformationFromConfig" as any, true);
+		this.registerValue("isParamInformationFromConfig" as any, {
+			internal: true,
+		});
 	}
 
 	public async interview(): Promise<void> {

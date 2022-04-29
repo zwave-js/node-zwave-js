@@ -176,8 +176,12 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0, 0).property, true);
-		this.registerValue(getGroupInfoValueID(0, 0).property, true);
+		this.registerValue(getGroupNameValueID(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getGroupInfoValueID(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {

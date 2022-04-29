@@ -428,10 +428,9 @@ export class MultilevelSwitchCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(
-			getSuperviseStartStopLevelChangeValueId().property,
-			true,
-		);
+		this.registerValue(getSuperviseStartStopLevelChangeValueId().property, {
+			internal: true,
+		});
 	}
 
 	public async interview(): Promise<void> {

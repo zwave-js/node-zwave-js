@@ -377,9 +377,15 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 		}
 
 		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
-		const isInternalValue =
-			ccInstance && ccInstance.isInternalValue(arg.property as any);
-		if ((arg as any as ValueUpdatedArgs).source !== "driver") {
+		const isInternalValue = ccInstance?.isInternalValue(
+			arg.property as any,
+		);
+		// Check whether this value change may be logged
+		const isSecretValue = !!ccInstance?.isSecretValue(arg.property as any);
+		if (
+			!isSecretValue &&
+			(arg as any as ValueUpdatedArgs).source !== "driver"
+		) {
 			// Log the value change, except for updates caused by the driver itself
 			// I don't like the splitting and any but its the easiest solution here
 			const [changeTarget, changeType] = eventName.split(" ");
