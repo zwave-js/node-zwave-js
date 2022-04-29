@@ -899,8 +899,10 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
-		if (this.version >= 2 && this.duration) {
-			this.payload[i] = this.duration.serializeSet();
+		if (this.version >= 2) {
+			this.payload[i] = (
+				this.duration ?? Duration.from("default")
+			).serializeSet();
 		}
 		return super.serialize();
 	}
