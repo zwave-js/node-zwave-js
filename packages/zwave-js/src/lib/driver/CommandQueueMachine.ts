@@ -11,8 +11,8 @@ import {
 	StateMachine,
 } from "xstate";
 import { forwardTo, pure, raise, sendParent, stop } from "xstate/lib/actions";
-import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,

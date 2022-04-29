@@ -8,14 +8,14 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
-import { FunctionType, MessageType } from "../message/Constants";
+import type { Driver } from "../../driver/Driver";
+import { FunctionType, MessageType } from "../../message/Constants";
 import {
 	Message,
 	MessageDeserializationOptions,
 	messageTypes,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
 
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up

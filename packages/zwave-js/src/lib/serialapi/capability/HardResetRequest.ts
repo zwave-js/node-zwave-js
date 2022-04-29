@@ -2,8 +2,8 @@ import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
-import { Message, messageTypes, priority } from "../message/Message";
+} from "../../message/Constants";
+import { Message, messageTypes, priority } from "../../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.HardReset)
 // This will be responded to with a HardResetRequest

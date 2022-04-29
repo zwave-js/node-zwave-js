@@ -29,13 +29,13 @@ import {
 	EntryControlEventTypes,
 	WakeUpCommand,
 } from "../commandclass/_Types";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
 import { RequestNodeInfoRequest } from "../serialapi/network-mgmt/RequestNodeInfoMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { DeviceClass } from "./DeviceClass";

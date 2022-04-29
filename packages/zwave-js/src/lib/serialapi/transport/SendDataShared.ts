@@ -3,10 +3,16 @@ import {
 	protocolDataRateToString,
 	stripUndefined,
 } from "@zwave-js/core/safe";
-import { AssignReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
-import { AssignSUCReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
-import { DeleteReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/DeleteReturnRouteMessages";
-import { DeleteSUCReturnRouteRequestTransmitReport } from "../serialapi/network-mgmt/DeleteSUCReturnRouteMessages";
+import {
+	RSSI,
+	RssiError,
+	rssiToString,
+	TXReport,
+} from "../../controller/_Types";
+import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
+import { AssignSUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignSUCReturnRouteMessages";
+import { DeleteReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteReturnRouteMessages";
+import { DeleteSUCReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteSUCReturnRouteMessages";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
@@ -19,7 +25,6 @@ import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
 } from "./SendDataMessages";
-import { RSSI, RssiError, rssiToString, TXReport } from "./_Types";
 
 export type SendDataMessage =
 	| SendDataRequest

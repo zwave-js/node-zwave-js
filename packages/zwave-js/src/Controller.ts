@@ -20,4 +20,4 @@ export {
 	ControllerSelfLogContext,
 	ControllerValueLogContext,
 } from "./lib/log/Controller";
-export { RFRegion } from "./lib/serialapi/misc/SerialAPISetupMessages";
+export { RFRegion } from "./lib/serialapi/capability/SerialAPISetupMessages";

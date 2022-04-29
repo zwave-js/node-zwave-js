@@ -91,13 +91,26 @@ import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
 import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
 import {
+	GetControllerCapabilitiesRequest,
+	GetControllerCapabilitiesResponse,
+} from "../serialapi/capability/GetControllerCapabilitiesMessages";
+import {
+	GetControllerVersionRequest,
+	GetControllerVersionResponse,
+} from "../serialapi/capability/GetControllerVersionMessages";
+import {
 	GetProtocolVersionRequest,
 	GetProtocolVersionResponse,
 } from "../serialapi/capability/GetProtocolVersionMessages";
 import {
-	GetBackgroundRSSIRequest,
-	GetBackgroundRSSIResponse,
-} from "../serialapi/misc/GetBackgroundRSSIMessages";
+	GetSerialApiCapabilitiesRequest,
+	GetSerialApiCapabilitiesResponse,
+} from "../serialapi/capability/GetSerialApiCapabilitiesMessages";
+import {
+	GetSerialApiInitDataRequest,
+	GetSerialApiInitDataResponse,
+} from "../serialapi/capability/GetSerialApiInitDataMessages";
+import { HardResetRequest } from "../serialapi/capability/HardResetRequest";
 import {
 	NodeIDType,
 	RFRegion,
@@ -121,11 +134,23 @@ import {
 	SerialAPISetup_SetRFRegionResponse,
 	SerialAPISetup_SetTXStatusReportRequest,
 	SerialAPISetup_SetTXStatusReportResponse,
-} from "../serialapi/misc/SerialAPISetupMessages";
+} from "../serialapi/capability/SerialAPISetupMessages";
+import {
+	GetControllerIdRequest,
+	GetControllerIdResponse,
+} from "../serialapi/memory/GetControllerIdMessages";
+import {
+	GetBackgroundRSSIRequest,
+	GetBackgroundRSSIResponse,
+} from "../serialapi/misc/GetBackgroundRSSIMessages";
 import {
 	SetRFReceiveModeRequest,
 	SetRFReceiveModeResponse,
 } from "../serialapi/misc/SetRFReceiveModeMessages";
+import {
+	SetSerialApiTimeoutsRequest,
+	SetSerialApiTimeoutsResponse,
+} from "../serialapi/misc/SetSerialApiTimeoutsMessages";
 import {
 	AddNodeDSKToNetworkRequest,
 	AddNodeStatus,
@@ -208,30 +233,9 @@ import {
 } from "./ControllerStatistics";
 import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
-	GetControllerCapabilitiesRequest,
-	GetControllerCapabilitiesResponse,
-} from "./GetControllerCapabilitiesMessages";
-import {
-	GetControllerIdRequest,
-	GetControllerIdResponse,
-} from "./GetControllerIdMessages";
-import {
-	GetControllerVersionRequest,
-	GetControllerVersionResponse,
-} from "./GetControllerVersionMessages";
-import {
 	GetRoutingInfoRequest,
 	GetRoutingInfoResponse,
 } from "./GetRoutingInfoMessages";
-import {
-	GetSerialApiCapabilitiesRequest,
-	GetSerialApiCapabilitiesResponse,
-} from "./GetSerialApiCapabilitiesMessages";
-import {
-	GetSerialApiInitDataRequest,
-	GetSerialApiInitDataResponse,
-} from "./GetSerialApiInitDataMessages";
-import { HardResetRequest } from "./HardResetRequest";
 import {
 	InclusionOptions,
 	InclusionOptionsInternal,
@@ -243,10 +247,6 @@ import {
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
-import {
-	SetSerialApiTimeoutsRequest,
-	SetSerialApiTimeoutsResponse,
-} from "./SetSerialApiTimeoutsMessages";
 import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { RSSI } from "./_Types";

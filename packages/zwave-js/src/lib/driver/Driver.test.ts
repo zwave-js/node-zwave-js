@@ -15,12 +15,12 @@ import { MultiCommandCCCommandEncapsulation } from "../commandclass/MultiCommand
 import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { AssociationCommand } from "../commandclass/_Types";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { TransmitOptions } from "../controller/_Types";
 import { FunctionType, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
 import { Driver } from "./Driver";
 

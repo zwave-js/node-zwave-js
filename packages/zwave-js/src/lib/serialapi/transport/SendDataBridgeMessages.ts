@@ -10,14 +10,19 @@ import type {
 	CommandClass,
 	MulticastCC,
 	SinglecastCC,
-} from "../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { Driver } from "../driver/Driver";
+} from "../../commandclass/CommandClass";
+import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
+import {
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
+} from "../../controller/_Types";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -28,54 +33,57 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { SuccessIndicator } from "../message/SuccessIndicator";
-import { ApplicationCommandRequest } from "./ApplicationCommandRequest";
-import { BridgeApplicationCommandRequest } from "./BridgeApplicationCommandRequest";
+} from "../../message/Message";
+import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
+import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
+import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
 import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
-import { TransmitOptions, TransmitStatus, TXReport } from "./_Types";
 
-export const MAX_SEND_ATTEMPTS = 5;
-
-@messageTypes(MessageType.Request, FunctionType.SendData)
+@messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
-export class SendDataRequestBase extends Message {
+export class SendDataBridgeRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== SendDataRequestTransmitReport
+			(new.target as any) !== SendDataBridgeRequestTransmitReport
 		) {
-			return new SendDataRequestTransmitReport(driver, options);
+			return new SendDataBridgeRequestTransmitReport(driver, options);
 		}
 		super(driver, options);
 	}
 }
 
-interface SendDataRequestOptions<CCType extends CommandClass = CommandClass>
-	extends MessageBaseOptions {
+interface SendDataBridgeRequestOptions<
+	CCType extends CommandClass = CommandClass,
+> extends MessageBaseOptions {
 	command: CCType;
+	sourceNodeId?: number;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
 }
 
-@expectedResponse(FunctionType.SendData)
-@expectedCallback(FunctionType.SendData)
-export class SendDataRequest<CCType extends CommandClass = CommandClass>
-	extends SendDataRequestBase
+@expectedResponse(FunctionType.SendDataBridge)
+@expectedCallback(FunctionType.SendDataBridge)
+export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
+	extends SendDataBridgeRequestBase
 	implements ICommandClassContainer
 {
 	public constructor(
 		driver: Driver,
-		options: SendDataRequestOptions<CCType>,
+		options: SendDataBridgeRequestOptions<CCType>,
 	) {
 		super(driver, options);
 
 		if (!options.command.isSinglecast()) {
 			throw new ZWaveError(
-				`SendDataRequest can only be used for singlecast and broadcast CCs`,
+				`SendDataBridgeRequest can only be used for singlecast and broadcast CCs`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
+
+		this.sourceNodeId =
+			options.sourceNodeId ?? driver.controller.ownNodeId!;
 
 		this.command = options.command;
 		this.transmitOptions =
@@ -83,6 +91,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.maxSendAttempts =
 			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
+
+	/** Which Node ID this command originates from */
+	public sourceNodeId: number;
 
 	/** The command this message contains */
 	public command: SinglecastCC<CCType>;
@@ -101,9 +112,13 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	public serialize(): Buffer {
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
-			Buffer.from([this.command.nodeId, serializedCC.length]),
+			Buffer.from([
+				this.sourceNodeId,
+				this.command.nodeId,
+				serializedCC.length,
+			]),
 			serializedCC,
-			Buffer.from([this.transmitOptions, this.callbackId]),
+			Buffer.from([this.transmitOptions, 0, 0, 0, 0, this.callbackId]),
 		]);
 
 		return super.serialize();
@@ -111,6 +126,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
+			sourceNodeId: this.sourceNodeId,
 			transmitOptions: this.transmitOptions,
 			callbackId: this.callbackId,
 			command: this.command,
@@ -121,6 +137,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		return {
 			...super.toLogEntry(),
 			message: {
+				"source node id": this.sourceNodeId,
 				"transmit options": num2hex(this.transmitOptions),
 				"callback id": this.callbackId,
 			},
@@ -148,20 +165,21 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 }
 
-interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
+interface SendDataBridgeRequestTransmitReportOptions
+	extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
 
-export class SendDataRequestTransmitReport
-	extends SendDataRequestBase
+export class SendDataBridgeRequestTransmitReport
+	extends SendDataBridgeRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| SendDataRequestTransmitReportOptions,
+			| SendDataBridgeRequestTransmitReportOptions,
 	) {
 		super(driver, options);
 
@@ -210,12 +228,14 @@ export class SendDataRequestTransmitReport
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.SendData)
-export class SendDataResponse extends Message implements SuccessIndicator {
+@messageTypes(MessageType.Response, FunctionType.SendDataBridge)
+export class SendDataBridgeResponse
+	extends Message
+	implements SuccessIndicator
+{
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
-		// if (!this._wasSent) this._errorCode = this.payload[0];
 	}
 
 	isOK(): boolean {
@@ -227,15 +247,9 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 		return this._wasSent;
 	}
 
-	// private _errorCode: number;
-	// public get errorCode(): number {
-	// 	return this._errorCode;
-	// }
-
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
 			wasSent: this.wasSent,
-			// errorCode: this.errorCode,
 		});
 	}
 
@@ -247,44 +261,48 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 	}
 }
 
-@messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
+@messageTypes(MessageType.Request, FunctionType.SendDataMulticastBridge)
 @priority(MessagePriority.Normal)
-export class SendDataMulticastRequestBase extends Message {
+export class SendDataMulticastBridgeRequestBase extends Message {
 	public constructor(driver: Driver, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
-			(new.target as any) !== SendDataMulticastRequestTransmitReport
+			(new.target as any) !== SendDataMulticastBridgeRequestTransmitReport
 		) {
-			return new SendDataMulticastRequestTransmitReport(driver, options);
+			return new SendDataMulticastBridgeRequestTransmitReport(
+				driver,
+				options,
+			);
 		}
 		super(driver, options);
 	}
 }
 
-interface SendDataMulticastRequestOptions<CCType extends CommandClass>
+interface SendDataMulticastBridgeRequestOptions<CCType extends CommandClass>
 	extends MessageBaseOptions {
 	command: CCType;
+	sourceNodeId?: number;
 	transmitOptions?: TransmitOptions;
 	maxSendAttempts?: number;
 }
 
-@expectedResponse(FunctionType.SendDataMulticast)
-@expectedCallback(FunctionType.SendDataMulticast)
-export class SendDataMulticastRequest<
+@expectedResponse(FunctionType.SendDataMulticastBridge)
+@expectedCallback(FunctionType.SendDataMulticastBridge)
+export class SendDataMulticastBridgeRequest<
 		CCType extends CommandClass = CommandClass,
 	>
-	extends SendDataMulticastRequestBase
+	extends SendDataMulticastBridgeRequestBase
 	implements ICommandClassContainer
 {
 	public constructor(
 		driver: Driver,
-		options: SendDataMulticastRequestOptions<CCType>,
+		options: SendDataMulticastBridgeRequestOptions<CCType>,
 	) {
 		super(driver, options);
 
 		if (!options.command.isMulticast()) {
 			throw new ZWaveError(
-				`SendDataMulticastRequest can only be used for multicast CCs`,
+				`SendDataMulticastBridgeRequest can only be used for multicast CCs`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		} else if (options.command.nodeId.length === 0) {
@@ -299,12 +317,17 @@ export class SendDataMulticastRequest<
 			);
 		}
 
+		this.sourceNodeId =
+			options.sourceNodeId ?? driver.controller.ownNodeId!;
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
 		this.maxSendAttempts =
 			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
+
+	/** Which Node ID this command originates from */
+	public sourceNodeId: number;
 
 	/** The command this message contains */
 	public command: MulticastCC<CCType>;
@@ -326,6 +349,7 @@ export class SendDataMulticastRequest<
 		this.payload = Buffer.concat([
 			// # of target nodes and nodeIds
 			Buffer.from([
+				this.sourceNodeId,
 				this.command.nodeId.length,
 				...this.command.nodeId,
 				serializedCC.length,
@@ -340,6 +364,7 @@ export class SendDataMulticastRequest<
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
+			sourceNodeId: this.sourceNodeId,
 			transmitOptions: this.transmitOptions,
 			callbackId: this.callbackId,
 			command: this.command,
@@ -350,6 +375,7 @@ export class SendDataMulticastRequest<
 		return {
 			...super.toLogEntry(),
 			message: {
+				"source node id": this.sourceNodeId,
 				"target nodes": this.command.nodeId.join(", "),
 				"transmit options": num2hex(this.transmitOptions),
 				"callback id": this.callbackId,
@@ -358,29 +384,27 @@ export class SendDataMulticastRequest<
 	}
 }
 
-interface SendDataMulticastRequestTransmitReportOptions
+interface SendDataMulticastBridgeRequestTransmitReportOptions
 	extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
 }
 
-export class SendDataMulticastRequestTransmitReport
-	extends SendDataMulticastRequestBase
+export class SendDataMulticastBridgeRequestTransmitReport
+	extends SendDataMulticastBridgeRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
 		driver: Driver,
 		options:
 			| MessageDeserializationOptions
-			| SendDataMulticastRequestTransmitReportOptions,
+			| SendDataMulticastBridgeRequestTransmitReportOptions,
 	) {
 		super(driver, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
 			this._transmitStatus = this.payload[1];
-			// not sure what bytes 2 and 3 mean
-			// the CC seems not to be included in this, but rather come in an application command later
 		} else {
 			this.callbackId = options.callbackId;
 			this._transmitStatus = options.transmitStatus;
@@ -417,15 +441,14 @@ export class SendDataMulticastRequestTransmitReport
 	}
 }
 
-@messageTypes(MessageType.Response, FunctionType.SendDataMulticast)
-export class SendDataMulticastResponse
+@messageTypes(MessageType.Response, FunctionType.SendDataMulticastBridge)
+export class SendDataMulticastBridgeResponse
 	extends Message
 	implements SuccessIndicator
 {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
-		// if (!this._wasSent) this._errorCode = this.payload[0];
 	}
 
 	public isOK(): boolean {
@@ -450,7 +473,3 @@ export class SendDataMulticastResponse
 		};
 	}
 }
-
-@messageTypes(MessageType.Request, FunctionType.SendDataAbort)
-@priority(MessagePriority.Controller)
-export class SendDataAbort extends Message {}

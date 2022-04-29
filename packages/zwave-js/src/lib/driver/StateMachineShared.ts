@@ -13,23 +13,23 @@ import {
 	Typestate,
 } from "xstate";
 import { respond, sendParent } from "xstate/lib/actions";
+import { TransmitStatus } from "../controller/_Types";
+import type { DriverLogger } from "../log/Driver";
+import type { Message } from "../message/Message";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
 	SendDataMulticastBridgeRequestTransmitReport,
-} from "../controller/SendDataBridgeMessages";
+} from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataMulticastRequestTransmitReport,
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-} from "../controller/SendDataMessages";
-import { isSendData } from "../controller/SendDataShared";
-import { TransmitStatus } from "../controller/_Types";
-import type { DriverLogger } from "../log/Driver";
-import type { Message } from "../message/Message";
+} from "../serialapi/transport/SendDataMessages";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { SendDataErrorData } from "./SendThreadMachine";
 import type {
 	SerialAPICommandError,

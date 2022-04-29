@@ -1,19 +1,19 @@
 import { NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import { parseNodeBitMask } from "../../controller/NodeBitMask";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import { parseNodeBitMask } from "./NodeBitMask";
+} from "../../message/Message";
 
 enum InitCapabilityFlags {
 	Slave = 1 << 0, // Controller is a slave

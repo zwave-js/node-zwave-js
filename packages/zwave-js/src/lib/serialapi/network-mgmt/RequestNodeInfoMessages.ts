@@ -1,8 +1,4 @@
 import type { JSONObject } from "@zwave-js/shared";
-import {
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestNodeInfoRequestFailed,
-} from "../../controller/ApplicationUpdateRequest";
 import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
@@ -20,6 +16,10 @@ import {
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 import type { INodeQuery } from "../../node/INodeQuery";
+import {
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "../application/ApplicationUpdateRequest";
 
 function testCallbackForRequestNodeInfoRequest(
 	sent: RequestNodeInfoRequest,

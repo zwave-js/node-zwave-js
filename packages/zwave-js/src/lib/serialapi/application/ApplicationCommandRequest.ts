@@ -4,14 +4,14 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { Driver } from "../driver/Driver";
+import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
+import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	gotDeserializationOptions,
 	Message,
@@ -19,7 +19,7 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "../../message/Message";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application

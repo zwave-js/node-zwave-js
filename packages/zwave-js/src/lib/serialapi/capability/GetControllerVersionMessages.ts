@@ -1,18 +1,18 @@
 import { cpp2js, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveLibraryTypes } from "../../controller/ZWaveLibraryTypes";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
-import type { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
+} from "../../message/Message";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
 @expectedResponse(FunctionType.GetControllerVersion)

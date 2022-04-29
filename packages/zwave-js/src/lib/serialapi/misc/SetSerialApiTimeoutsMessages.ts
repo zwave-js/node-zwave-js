@@ -1,10 +1,10 @@
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
@@ -12,7 +12,7 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "../../message/Message";
 
 interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 	ackTimeout: number;

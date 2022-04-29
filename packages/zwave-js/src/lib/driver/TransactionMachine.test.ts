@@ -4,18 +4,18 @@ import { assign, StateValue } from "xstate";
 import { interpret, Interpreter } from "xstate/lib/interpreter";
 import { createMachine } from "xstate/lib/Machine";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	GetControllerIdRequest,
-	GetControllerIdResponse,
-} from "../controller/GetControllerIdMessages";
-import {
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-} from "../controller/SendDataMessages";
 import { TransmitStatus } from "../controller/_Types";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
+import {
+	GetControllerIdRequest,
+	GetControllerIdResponse,
+} from "../serialapi/memory/GetControllerIdMessages";
+import {
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+} from "../serialapi/transport/SendDataMessages";
 import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import { createMessageGenerator } from "./MessageGenerators";

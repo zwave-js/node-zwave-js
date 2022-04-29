@@ -1,19 +1,19 @@
 import { parseBitMask } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import { num2hex } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
 	MessagePriority,
 	MessageType,
-} from "../message/Constants";
+} from "../../message/Constants";
 import {
 	expectedResponse,
 	Message,
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "../../message/Message";
 
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;

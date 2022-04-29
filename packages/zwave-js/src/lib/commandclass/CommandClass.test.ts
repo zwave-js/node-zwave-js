@@ -3,9 +3,9 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCC, BasicCCSet } from "./BasicCC";
 import { CentralSceneCCNotification } from "./CentralSceneCC";
