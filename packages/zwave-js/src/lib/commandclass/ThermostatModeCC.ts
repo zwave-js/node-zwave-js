@@ -39,37 +39,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
-/**
- * @publicAPI
- */
-export enum ThermostatMode {
-	"Off" = 0x00,
-	"Heat" = 0x01,
-	"Cool" = 0x02,
-	"Auto" = 0x03,
-	"Auxiliary" = 0x04,
-	"Resume (on)" = 0x05,
-	"Fan" = 0x06,
-	"Furnace" = 0x07,
-	"Dry" = 0x08,
-	"Moist" = 0x09,
-	"Auto changeover" = 0x0a,
-	"Energy heat" = 0x0b,
-	"Energy cool" = 0x0c,
-	"Away" = 0x0d,
-	"Full power" = 0x0f,
-	"Manufacturer specific" = 0x1f,
-}
+import { ThermostatMode, ThermostatModeCommand } from "./_Types";
 
 export function getThermostatModeValueId(endpointIndex: number): ValueID {
 	return {

@@ -30,13 +30,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TimeParametersCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { TimeParametersCommand } from "./_Types";
 
 /**
  * Determines if the node expects local time instead of UTC.

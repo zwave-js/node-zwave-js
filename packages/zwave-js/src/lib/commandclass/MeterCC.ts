@@ -48,24 +48,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum MeterCommand {
-	Get = 0x01,
-	Report = 0x02,
-	SupportedGet = 0x03,
-	SupportedReport = 0x04,
-	Reset = 0x05,
-}
-
-/**
- * @publicAPI
- */
-export enum RateType {
-	Unspecified = 0x00,
-	Consumed = 0x01,
-	Produced = 0x02,
-}
+import { MeterCommand, RateType } from "./_Types";
 
 function toPropertyKey(
 	meterType: number,
@@ -86,17 +69,6 @@ function splitPropertyKey(key: number): {
 		meterType: key >>> 16,
 	};
 }
-
-/**
- * @publicAPI
- */
-export type MeterMetadata = ValueMetadata & {
-	ccSpecific: {
-		meterType: number;
-		rateType?: RateType;
-		scale?: number;
-	};
-};
 
 function getMeterTypeName(configManager: ConfigManager, type: number): string {
 	return (

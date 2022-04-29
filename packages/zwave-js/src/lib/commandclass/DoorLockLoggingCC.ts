@@ -25,6 +25,12 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { userCodeToLogString } from "./UserCodeCC";
+import {
+	DoorLockLoggingCommand,
+	DoorLockLoggingEventType,
+	DoorLockLoggingRecord,
+	DoorLockLoggingRecordStatus,
+} from "./_Types";
 
 interface DateSegments {
 	year: number;
@@ -46,51 +52,7 @@ function segmentsToDate(segments: DateSegments): Date {
 	);
 }
 
-// All the supported commands
-export enum DoorLockLoggingCommand {
-	RecordsSupportedGet = 0x01,
-	RecordsSupportedReport = 0x02,
-	RecordGet = 0x03,
-	RecordReport = 0x04,
-}
-
-// @publicAPI
-export enum EventType {
-	LockCode = 0x01,
-	UnlockCode = 0x02,
-	LockButton = 0x03,
-	UnlockButton = 0x04,
-	LockCodeOutOfSchedule = 0x05,
-	UnlockCodeOutOfSchedule = 0x06,
-	IllegalCode = 0x07,
-	LockManual = 0x08,
-	UnlockManual = 0x09,
-	LockAuto = 0x0a,
-	UnlockAuto = 0x0b,
-	LockRemoteCode = 0x0c,
-	UnlockRemoteCode = 0x0d,
-	LockRemote = 0x0e,
-	UnlockRemote = 0x0f,
-	LockRemoteCodeOutOfSchedule = 0x10,
-	UnlockRemoteCodeOutOfSchedule = 0x11,
-	RemoteIllegalCode = 0x12,
-	LockManual2 = 0x13,
-	UnlockManual2 = 0x14,
-	LockSecured = 0x15,
-	LockUnsecured = 0x16,
-	UserCodeAdded = 0x17,
-	UserCodeDeleted = 0x18,
-	AllUserCodesDeleted = 0x19,
-	MasterCodeChanged = 0x1a,
-	UserCodeChanged = 0x1b,
-	LockReset = 0x1c,
-	ConfigurationChanged = 0x1d,
-	LowBattery = 0x1e,
-	NewBattery = 0x1f,
-	Unknown = 0x20,
-}
-
-const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
+const eventTypeLabel = {
 	LockCode: "Locked via Access Code",
 	UnlockCode: "Unlocked via Access Code",
 	LockButton: "Locked via Lock Button",
@@ -125,23 +87,9 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 	LowBattery: "Low Battery",
 	NewBattery: "New Battery Installed",
 	Unknown: "Unknown",
-};
+} as const;
 
 const LATEST_RECORD_NUMBER_KEY = 0;
-
-export interface DoorLockLoggingRecord {
-	timestamp: string;
-	eventType: EventType;
-	label: string;
-	userId?: number;
-	userCode?: string | Buffer;
-}
-
-// @publicAPI
-export enum RecordStatus {
-	Empty = 0x00,
-	HoldsLegalData = 0x01,
-}
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
@@ -279,9 +227,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	}
 }
 
-function eventTypeToLabel(eventType: EventType): string {
+function eventTypeToLabel(eventType: DoorLockLoggingEventType): string {
 	return (
-		eventTypeLabel[EventType[eventType] as keyof typeof EventType] ??
+		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]] ??
 		`Unknown ${num2hex(eventType)}`
 	);
 }
@@ -301,7 +249,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 
 		this.recordNumber = this.payload[0];
 		const recordStatus = this.payload[5] >>> 5;
-		if (recordStatus === RecordStatus.Empty) {
+		if (recordStatus === DoorLockLoggingRecordStatus.Empty) {
 			return;
 		} else {
 			const dateSegments = {

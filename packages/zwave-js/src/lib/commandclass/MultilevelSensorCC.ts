@@ -39,33 +39,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultilevelSensorCommand {
-	GetSupportedSensor = 0x01,
-	SupportedSensorReport = 0x02,
-	GetSupportedScale = 0x03,
-	Get = 0x04,
-	Report = 0x05,
-	SupportedScaleReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export interface MultilevelSensorValue {
-	value: number;
-	scale: Scale;
-}
-
-/**
- * @publicAPI
- */
-export type MultilevelSensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: number;
-		scale: number;
-	};
-};
+import { MultilevelSensorCommand, MultilevelSensorValue } from "./_Types";
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,

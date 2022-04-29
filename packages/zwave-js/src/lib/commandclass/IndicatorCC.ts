@@ -38,16 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export type IndicatorMetadata = ValueMetadata & {
-	ccSpecific: {
-		indicatorId: number;
-		propertyId?: number; // only present on V2+ indicators
-	};
-};
+import { IndicatorCommand } from "./_Types";
 
 export function getSupportedIndicatorIDsValueID(
 	endpoint: number | undefined,
@@ -162,15 +153,6 @@ function getIndicatorName(
 		})`;
 	}
 	return indicatorName;
-}
-
-// All the supported commands
-export enum IndicatorCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
 }
 
 const MAX_INDICATOR_OBJECTS = 31;

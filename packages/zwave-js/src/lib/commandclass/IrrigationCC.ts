@@ -41,43 +41,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum IrrigationCommand {
-	SystemInfoGet = 0x01,
-	SystemInfoReport = 0x02,
-	SystemStatusGet = 0x03,
-	SystemStatusReport = 0x04,
-	SystemConfigSet = 0x05,
-	SystemConfigGet = 0x06,
-	SystemConfigReport = 0x07,
-	ValveInfoGet = 0x08,
-	ValveInfoReport = 0x09,
-	ValveConfigSet = 0x0a,
-	ValveConfigGet = 0x0b,
-	ValveConfigReport = 0x0c,
-	ValveRun = 0x0d,
-	ValveTableSet = 0x0e,
-	ValveTableGet = 0x0f,
-	ValveTableReport = 0x10,
-	ValveTableRun = 0x11,
-	SystemShutoff = 0x12,
-}
-
-// @publicAPI
-export enum IrrigationSensorPolarity {
-	Low = 0,
-	High = 1,
-}
-
-// @publicAPI
-export enum ValveType {
-	ZoneValve = 0,
-	MasterValve = 1,
-}
-
-// @publicAPI
-export type ValveId = "master" | number;
+import {
+	IrrigationCommand,
+	IrrigationSensorPolarity,
+	ValveId,
+	ValveTableEntry,
+	ValveType,
+} from "./_Types";
 
 function testResponseForIrrigationCommandWithValveId(
 	sent: {
@@ -93,12 +63,6 @@ function testResponseForIrrigationCommandWithValveId(
 function valveIdToMetadataPrefix(valveId: ValveId): string {
 	if (valveId === "master") return "Master valve";
 	return `Valve ${padStart(valveId.toString(), 3, "0")}`;
-}
-
-// @publicAPI
-export interface ValveTableEntry {
-	valveId: number;
-	duration: number;
 }
 
 export function getNumValvesValueId(endpointIndex?: number): ValueID {

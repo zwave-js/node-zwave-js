@@ -56,11 +56,6 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import {
-	Powerlevel,
-	PowerlevelCCTestNodeReport,
-	PowerlevelTestStatus,
-} from "../commandclass";
 import type {
 	CCAPI,
 	PollValueImplementation,
@@ -76,25 +71,18 @@ import {
 } from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
-	CentralSceneKeys,
 	getSceneValueId,
 	getSlowRefreshValueId,
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
 import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
-import {
-	DoorLockMode,
-	getCurrentModeValueId as getCurrentLockModeValueId,
-} from "../commandclass/DoorLockCC";
+import { getCurrentModeValueId as getCurrentLockModeValueId } from "../commandclass/DoorLockCC";
 import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
-	FirmwareUpdateCapabilities,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
-	FirmwareUpdateRequestStatus,
-	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -126,6 +114,7 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
+import { PowerlevelCCTestNodeReport } from "../commandclass/PowerlevelCC";
 import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
 import {
 	Security2CCNonceGet,
@@ -148,10 +137,19 @@ import {
 	getNodeTypeValueId,
 	getRoleTypeValueId,
 	getZWavePlusVersionValueId,
+} from "../commandclass/ZWavePlusCC";
+import {
+	CentralSceneKeys,
+	DoorLockMode,
+	FirmwareUpdateCapabilities,
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
-} from "../commandclass/ZWavePlusCC";
-import { MultilevelSwitchCommand } from "../commandclass/_Types";
+} from "../commandclass/_Types";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,

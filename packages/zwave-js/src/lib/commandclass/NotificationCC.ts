@@ -42,27 +42,7 @@ import {
 	InvalidCC,
 } from "./CommandClass";
 import { isNotificationEventPayload } from "./NotificationEventPayload";
-import { UserCodeCommand } from "./UserCodeCC";
-
-export enum NotificationCommand {
-	// All the supported commands
-	EventSupportedGet = 0x01,
-	EventSupportedReport = 0x02,
-	Get = 0x04,
-	Report = 0x05,
-	Set = 0x06,
-	SupportedGet = 0x07,
-	SupportedReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export type NotificationMetadata = ValueMetadata & {
-	ccSpecific: {
-		notificationType: number;
-	};
-};
+import { NotificationCommand, UserCodeCommand } from "./_Types";
 
 /** Returns the ValueID used to store whether a node supports V1 Alarms */
 export function getSupportsV1AlarmValueId(): ValueID {

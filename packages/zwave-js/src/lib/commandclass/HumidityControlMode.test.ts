@@ -5,15 +5,14 @@ import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
 import {
-	HumidityControlMode,
 	HumidityControlModeCC,
 	HumidityControlModeCCGet,
 	HumidityControlModeCCReport,
 	HumidityControlModeCCSet,
 	HumidityControlModeCCSupportedGet,
 	HumidityControlModeCCSupportedReport,
-	HumidityControlModeCommand,
 } from "./HumidityControlModeCC";
+import { HumidityControlMode, HumidityControlModeCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

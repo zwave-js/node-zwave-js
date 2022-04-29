@@ -54,25 +54,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ConfigurationCommand {
-	Set = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-	BulkSet = 0x07,
-	BulkGet = 0x08,
-	BulkReport = 0x09,
-	NameGet = 0x0a,
-	NameReport = 0x0b,
-	InfoGet = 0x0c,
-	InfoReport = 0x0d,
-	PropertiesGet = 0x0e,
-	PropertiesReport = 0x0f,
-	DefaultReset = 0x01,
-}
-
-/** @publicAPI */
-export type ConfigValue = import("@zwave-js/core").ConfigValue;
+import { ConfigurationCommand, ConfigValue } from "./_Types";
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();

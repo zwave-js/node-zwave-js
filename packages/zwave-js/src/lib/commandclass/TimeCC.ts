@@ -26,17 +26,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TimeCommand {
-	TimeGet = 0x01,
-	TimeReport = 0x02,
-	DateGet = 0x03,
-	DateReport = 0x04,
-	TimeOffsetSet = 0x05,
-	TimeOffsetGet = 0x06,
-	TimeOffsetReport = 0x07,
-}
+import { TimeCommand } from "./_Types";
 
 // @noSetValueAPI
 // Only the timezone information can be set and that accepts a non-primitive value

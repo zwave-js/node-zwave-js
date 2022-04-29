@@ -8,11 +8,7 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCC, BasicCCSet } from "./BasicCC";
-import {
-	CentralSceneCCNotification,
-	CentralSceneCommand,
-	CentralSceneKeys,
-} from "./CentralSceneCC";
+import { CentralSceneCCNotification } from "./CentralSceneCC";
 import {
 	CommandClass,
 	commandClass,
@@ -23,6 +19,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import "./index";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)

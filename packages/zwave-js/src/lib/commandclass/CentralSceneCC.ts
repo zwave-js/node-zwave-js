@@ -41,6 +41,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 /** Returns the ValueID used to store the current value of a Central Scene */
 export function getSceneValueId(sceneNumber: number): ValueID {
@@ -60,28 +61,6 @@ export function getSlowRefreshValueId(): ValueID {
 		commandClass: CommandClasses["Central Scene"],
 		property: "slowRefresh",
 	};
-}
-
-export enum CentralSceneCommand {
-	SupportedGet = 0x01,
-	SupportedReport = 0x02,
-	Notification = 0x03,
-	ConfigurationSet = 0x04,
-	ConfigurationGet = 0x05,
-	ConfigurationReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum CentralSceneKeys {
-	KeyPressed = 0x00,
-	KeyReleased = 0x01,
-	KeyHeldDown = 0x02,
-	KeyPressed2x = 0x03,
-	KeyPressed3x = 0x04,
-	KeyPressed4x = 0x05,
-	KeyPressed5x = 0x06,
 }
 
 @API(CommandClasses["Central Scene"])

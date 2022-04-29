@@ -41,35 +41,8 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { ThermostatSetpointCommand, ThermostatSetpointType } from "./_Types";
 
-export enum ThermostatSetpointCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	CapabilitiesGet = 0x09,
-	CapabilitiesReport = 0x0a,
-}
-
-// TODO: Can we merge this with ThermostatMode?
-/**
- * @publicAPI
- */
-export enum ThermostatSetpointType {
-	"N/A" = 0x00,
-	"Heating" = 0x01, // CC v1
-	"Cooling" = 0x02, // CC v1
-	"Furnace" = 0x07, // CC v1
-	"Dry Air" = 0x08, // CC v1
-	"Moist Air" = 0x09, // CC v1
-	"Auto Changeover" = 0x0a, // CC v1
-	"Energy Save Heating" = 0x0b, // CC v2
-	"Energy Save Cooling" = 0x0c, // CC v2
-	"Away Heating" = 0x0d, // CC v2
-	"Away Cooling" = 0x0e, // CC v3
-	"Full Power" = 0x0f, // CC v3
-}
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
 // prettier-ignore
@@ -82,27 +55,6 @@ function getScale(configManager: ConfigManager, scale: number): Scale {
 function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 	return getScale(configManager, scale).unit ?? "";
 }
-
-export interface ThermostatSetpointValue {
-	value: number;
-	scale: number;
-}
-
-export interface ThermostatSetpointCapabilities {
-	minValue: number;
-	minValueScale: number;
-	maxValue: number;
-	maxValueScale: number;
-}
-
-/**
- * @publicAPI
- */
-export type ThermostatSetpointMetadata = ValueMetadata & {
-	ccSpecific: {
-		setpointType: ThermostatSetpointType;
-	};
-};
 
 function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
 	return {

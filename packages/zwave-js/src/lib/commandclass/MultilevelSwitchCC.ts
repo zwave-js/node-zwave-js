@@ -40,31 +40,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { SupervisionStatus } from "./SupervisionCC";
-import { MultilevelSwitchCommand } from "./_Types";
+import {
+	LevelChangeDirection,
+	MultilevelSwitchCommand,
+	SupervisionStatus,
+	SwitchType,
+} from "./_Types";
 
-/**
- * @publicAPI
- */
-export enum LevelChangeDirection {
-	"up" = 0b0,
-	"down" = 0b1,
-	// "none" = 0b11,
-}
-
-/**
- * @publicAPI
- */
-export enum SwitchType {
-	"not supported" = 0x00,
-	"Off/On" = 0x01,
-	"Down/Up" = 0x02,
-	"Close/Open" = 0x03,
-	"CCW/CW" = 0x04,
-	"Left/Right" = 0x05,
-	"Reverse/Forward" = 0x06,
-	"Pull/Push" = 0x07,
-}
 /**
  * Translates a switch type into two actions that may be performed. Unknown types default to Down/Up
  */
@@ -76,15 +58,6 @@ const switchTypeProperties = Object.keys(SwitchType)
 	.filter((key) => key.indexOf("/") > -1)
 	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
-
-/**
- * @publicAPI
- */
-export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
-	ccSpecific: {
-		switchType: SwitchType;
-	};
-};
 
 function getCurrentValueValueId(endpoint: number): ValueID {
 	return {

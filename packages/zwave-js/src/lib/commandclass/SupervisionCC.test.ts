@@ -1,11 +1,8 @@
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCCSet } from "./BasicCC";
-import {
-	SupervisionCC,
-	SupervisionCCReport,
-	SupervisionStatus,
-} from "./SupervisionCC";
+import { SupervisionCC, SupervisionCCReport } from "./SupervisionCC";
+import { SupervisionStatus } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

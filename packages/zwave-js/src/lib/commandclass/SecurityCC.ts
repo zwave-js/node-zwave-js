@@ -38,23 +38,9 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { Security2CC } from "./Security2CC";
+import { SecurityCommand } from "./_Types";
 
 // @noSetValueAPI This is an encapsulation CC
-
-// All the supported commands
-export enum SecurityCommand {
-	CommandsSupportedGet = 0x02,
-	CommandsSupportedReport = 0x03,
-	SchemeGet = 0x04,
-	SchemeReport = 0x05,
-	SchemeInherit = 0x08,
-	NetworkKeySet = 0x06,
-	NetworkKeyVerify = 0x07,
-	NonceGet = 0x40,
-	NonceReport = 0x80,
-	CommandEncapsulation = 0x81,
-	CommandEncapsulationNonceGet = 0xc1,
-}
 
 function getAuthenticationData(
 	senderNonce: Buffer,

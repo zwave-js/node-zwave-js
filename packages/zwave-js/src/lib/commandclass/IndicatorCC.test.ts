@@ -9,8 +9,8 @@ import {
 	IndicatorCCGet,
 	IndicatorCCReport,
 	IndicatorCCSet,
-	IndicatorCommand,
 } from "./IndicatorCC";
+import { IndicatorCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -237,7 +237,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			const ccInstance = node1.createCCInstance(
 				CommandClasses.Indicator,
 			)!;
-			await ccInstance.interview(true);
+			await ccInstance.interview();
 
 			const indicatorIds = [0x30, 0x46, 0x47];
 			expect(node1.getValue(getSupportedIndicatorIDsValueID(0))).toEqual(

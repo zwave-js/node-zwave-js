@@ -5,12 +5,14 @@ import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
 import {
-	HumidityControlOperatingState,
 	HumidityControlOperatingStateCC,
 	HumidityControlOperatingStateCCGet,
 	HumidityControlOperatingStateCCReport,
-	HumidityControlOperatingStateCommand,
 } from "./HumidityControlOperatingStateCC";
+import {
+	HumidityControlOperatingState,
+	HumidityControlOperatingStateCommand,
+} from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

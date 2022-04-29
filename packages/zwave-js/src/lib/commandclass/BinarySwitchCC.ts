@@ -37,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { BinarySwitchCommand } from "./_Types";
 
 function getCurrentValueValueId(endpoint?: number): ValueID {
 	return {
@@ -44,13 +45,6 @@ function getCurrentValueValueId(endpoint?: number): ValueID {
 		endpoint,
 		property: "currentValue",
 	};
-}
-
-// All the supported commands
-export enum BinarySwitchCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
 }
 
 @API(CommandClasses["Binary Switch"])

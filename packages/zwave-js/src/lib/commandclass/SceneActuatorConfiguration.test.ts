@@ -7,8 +7,8 @@ import {
 	SceneActuatorConfigurationCCGet,
 	SceneActuatorConfigurationCCReport,
 	SceneActuatorConfigurationCCSet,
-	SceneActuatorConfigurationCommand,
 } from "./SceneActuatorConfigurationCC";
+import { SceneActuatorConfigurationCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

@@ -36,12 +36,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum BasicCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { BasicCommand } from "./_Types";
 
 export function getTargetValueValueId(endpoint?: number): ValueID {
 	return {

@@ -6,9 +6,8 @@ import {
 	PowerlevelCCGet,
 	PowerlevelCCReport,
 	PowerlevelCCSet,
-	PowerlevelCommand,
 } from "./PowerlevelCC";
-import { Powerlevel } from "./_Types";
+import { Powerlevel, PowerlevelCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

@@ -7,8 +7,8 @@ import {
 	TimeCCDateReport,
 	TimeCCTimeGet,
 	TimeCCTimeReport,
-	TimeCommand,
 } from "./TimeCC";
+import { TimeCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

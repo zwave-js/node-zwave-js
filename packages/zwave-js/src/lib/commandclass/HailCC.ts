@@ -5,10 +5,7 @@ import {
 	commandClass,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum HailCommand {
-	Hail = 0x01,
-}
+import { HailCommand } from "./_Types";
 
 // Decorators are applied in the reverse source order, so for @CCCommand to work,
 // it must come before @commandClass

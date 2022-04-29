@@ -11,13 +11,11 @@ import {
 	DoorLockCCOperationGet,
 	DoorLockCCOperationReport,
 	DoorLockCCOperationSet,
-	DoorLockCommand,
-	DoorLockMode,
-	DoorLockOperationType,
 	getBoltSupportedValueId,
 	getDoorSupportedValueId,
 	getLatchSupportedValueId,
 } from "./DoorLockCC";
+import { DoorLockCommand, DoorLockMode, DoorLockOperationType } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

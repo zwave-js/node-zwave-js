@@ -36,18 +36,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// @publicAPI
-export enum SubsystemType {
-	Audible = 0x01,
-	Visual = 0x02,
-}
-
-// @publicAPI
-export enum SubsystemState {
-	Off = 0x00,
-	On = 0xff,
-}
+import {
+	BarrierOperatorCommand,
+	BarrierState,
+	SubsystemState,
+	SubsystemType,
+} from "./_Types";
 
 function getSignalingStateValueId(
 	endpoint: number | undefined,
@@ -88,29 +82,6 @@ function getTargetStateValueId(endpoint: number | undefined): ValueID {
 		endpoint,
 		property: "targetState",
 	};
-}
-
-// All the supported commands
-export enum BarrierOperatorCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SignalingCapabilitiesGet = 0x04,
-	SignalingCapabilitiesReport = 0x05,
-	EventSignalingSet = 0x06,
-	EventSignalingGet = 0x07,
-	EventSignalingReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export enum BarrierState {
-	Closed = 0x00,
-	Closing = 0xfc,
-	Stopped = 0xfd,
-	Opening = 0xfe,
-	Open = 0xff,
 }
 
 @API(CommandClasses["Barrier Operator"])

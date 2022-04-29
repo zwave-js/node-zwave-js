@@ -3,7 +3,6 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
-	ColorComponent,
 	ColorSwitchCCGet,
 	ColorSwitchCCReport,
 	ColorSwitchCCSet,
@@ -11,8 +10,8 @@ import {
 	ColorSwitchCCStopLevelChange,
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
-	ColorSwitchCommand,
 } from "./ColorSwitchCC";
+import { ColorComponent, ColorSwitchCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

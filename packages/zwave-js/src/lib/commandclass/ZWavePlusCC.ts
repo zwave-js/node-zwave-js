@@ -14,33 +14,11 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ZWavePlusCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-/**
- * @publicAPI
- */
-export enum ZWavePlusRoleType {
-	CentralStaticController = 0x00,
-	SubStaticController = 0x01,
-	PortableController = 0x02,
-	PortableReportingController = 0x03,
-	PortableSlave = 0x04,
-	AlwaysOnSlave = 0x05,
-	SleepingReportingSlave = 0x06,
-	SleepingListeningSlave = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum ZWavePlusNodeType {
-	Node = 0x00, // ZWave+ Node
-	IPGateway = 0x02, // ZWave+ for IP Gateway
-}
+import {
+	ZWavePlusCommand,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "./_Types";
 
 // SDS13782 The advertised Z-Wave Plus Version, Role Type and Node Type information values
 // MUST be identical for the Root Device and all Multi Channel End Points

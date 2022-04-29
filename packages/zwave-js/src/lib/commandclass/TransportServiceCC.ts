@@ -20,15 +20,7 @@ import {
 	implementedVersion,
 	SinglecastCC,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TransportServiceCommand {
-	FirstSegment = 0xc0,
-	SegmentComplete = 0xe8,
-	SegmentRequest = 0xc8,
-	SegmentWait = 0xf0,
-	SubsequentSegment = 0xe0,
-}
+import { TransportServiceCommand } from "./_Types";
 
 const MAX_SEGMENT_SIZE = 39;
 

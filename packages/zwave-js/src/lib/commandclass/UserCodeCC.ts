@@ -47,47 +47,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import type { NotificationEventPayload } from "./NotificationEventPayload";
-
-// All the supported commands
-export enum UserCodeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	// V2+
-	UsersNumberGet = 0x04,
-	UsersNumberReport = 0x05,
-	CapabilitiesGet = 0x06,
-	CapabilitiesReport = 0x07,
-	KeypadModeSet = 0x08,
-	KeypadModeGet = 0x09,
-	KeypadModeReport = 0x0a,
-	ExtendedUserCodeSet = 0x0b,
-	ExtendedUserCodeGet = 0x0c,
-	ExtendedUserCodeReport = 0x0d,
-	MasterCodeSet = 0x0e,
-	MasterCodeGet = 0x0f,
-	MasterCodeReport = 0x10,
-	UserCodeChecksumGet = 0x11,
-	UserCodeChecksumReport = 0x12,
-}
-
-// @publicAPI
-export enum UserIDStatus {
-	Available = 0x00,
-	Enabled,
-	Disabled,
-	Messaging,
-	PassageMode,
-	StatusNotAvailable = 0xfe,
-}
-
-// @publicAPI
-export enum KeypadMode {
-	Normal = 0x00,
-	Vacation,
-	Privacy,
-	LockedOut,
-}
+import { KeypadMode, UserCodeCommand, UserIDStatus } from "./_Types";
 
 export function getSupportedUsersValueID(
 	endpoint: number | undefined,

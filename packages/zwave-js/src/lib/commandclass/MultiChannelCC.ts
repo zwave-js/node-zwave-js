@@ -33,24 +33,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultiChannelCommand {
-	// Legacy commands for V1 (Multi Instance)
-	GetV1 = 0x04,
-	ReportV1 = 0x05,
-	CommandEncapsulationV1 = 0x06,
-
-	// V2+
-	EndPointGet = 0x07,
-	EndPointReport = 0x08,
-	CapabilityGet = 0x09,
-	CapabilityReport = 0x0a,
-	EndPointFind = 0x0b,
-	EndPointFindReport = 0x0c,
-	CommandEncapsulation = 0x0d,
-	AggregatedMembersGet = 0x0e,
-	AggregatedMembersReport = 0x0f,
-}
+import { MultiChannelCommand } from "./_Types";
 
 // TODO: Handle removal reports of dynamic endpoints
 

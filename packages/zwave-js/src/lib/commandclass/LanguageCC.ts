@@ -24,12 +24,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum LanguageCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { LanguageCommand } from "./_Types";
 
 // @noSetValueAPI It doesn't make sense
 

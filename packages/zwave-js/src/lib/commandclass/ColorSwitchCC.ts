@@ -44,57 +44,17 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { LevelChangeDirection } from "./MultilevelSwitchCC";
-
-// All the supported commands
-export enum ColorSwitchCommand {
-	SupportedGet = 0x01,
-	SupportedReport = 0x02,
-	Get = 0x03,
-	Report = 0x04,
-	Set = 0x05,
-	StartLevelChange = 0x06,
-	StopLevelChange = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum ColorComponent {
-	"Warm White" = 0,
-	"Cold White",
-	Red,
-	Green,
-	Blue,
-	Amber,
-	Cyan,
-	Purple,
-	Index,
-}
-
-const ColorComponentMap = {
-	warmWhite: ColorComponent["Warm White"],
-	coldWhite: ColorComponent["Cold White"],
-	red: ColorComponent.Red,
-	green: ColorComponent.Green,
-	blue: ColorComponent.Blue,
-	amber: ColorComponent.Amber,
-	cyan: ColorComponent.Cyan,
-	purple: ColorComponent.Purple,
-	index: ColorComponent.Index,
-};
-type ColorKey = keyof typeof ColorComponentMap;
+import {
+	ColorComponent,
+	ColorComponentMap,
+	ColorKey,
+	ColorSwitchCommand,
+	ColorTable,
+	LevelChangeDirection,
+} from "./_Types";
 
 const hexColorRegex =
 	/^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
-
-// Accept both the kebabCase names and numeric components as table keys
-/**
- * @publicAPI
- */
-export type ColorTable =
-	| Partial<Record<ColorKey, number>>
-	| Partial<Record<ColorComponent, number>>;
 
 const colorTableKeys = [
 	...keysOf(ColorComponent),
