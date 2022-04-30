@@ -75,7 +75,7 @@
     "@zwave-js/maintenance": "workspace:*",
     "axios": "^0.26.1",
     "comment-json": "^4.2.2",
-    "esbuild": "0.14.29",
+    "esbuild": "0.14.38",
     "esbuild-register": "^3.3.2",
     "jest-extended": "^2.0.0",
     "js-levenshtein": "^1.1.6",
