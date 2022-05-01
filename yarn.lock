@@ -3722,7 +3722,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
-    axios: ^0.26.1
+    axios: ^0.27.2
     comment-json: ^4.2.2
     esbuild: 0.14.38
     esbuild-register: ^3.3.2
@@ -4267,16 +4267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^0.26.1":
-  version: 0.26.1
-  resolution: "axios@npm:0.26.1"
-  dependencies:
-    follow-redirects: ^1.14.8
-  checksum: d9eb58ff4bc0b36a04783fc9ff760e9245c829a5a1052ee7ca6013410d427036b1d10d04e7380c02f3508c5eaf3485b1ae67bd2adbfec3683704745c8d7a6e1a
-  languageName: node
-  linkType: hard
-
-"axios@npm:^0.27.1":
+"axios@npm:^0.27.1, axios@npm:^0.27.2":
   version: 0.27.2
   resolution: "axios@npm:0.27.2"
   dependencies:
@@ -10757,7 +10748,7 @@ typescript@^4.4.3:
     "@zwave-js/transformers": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
-    axios: ^0.26.1
+    axios: ^0.27.2
     esbuild: 0.14.38
     esbuild-register: ^3.3.2
     execa: ^5.1.1
