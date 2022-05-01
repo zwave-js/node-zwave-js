@@ -46,7 +46,7 @@
     "clipboardy": "^2.3.0",
     "esbuild": "0.14.38",
     "esbuild-register": "^3.3.2",
-    "fs-extra": "^10.0.1",
+    "fs-extra": "^10.1.0",
     "jest-extended": "^2.0.0",
     "piscina": "^3.2.0",
     "prettier": "^2.6.2",
