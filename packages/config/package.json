@@ -60,7 +60,7 @@
     "json-logic-js": "^2.0.2",
     "json5": "^2.2.1",
     "semver": "^7.3.7",
-    "winston": "^3.6.0"
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",

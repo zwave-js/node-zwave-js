@@ -3735,7 +3735,7 @@ __metadata:
     semver: ^7.3.7
     ts-pegjs: ^0.3.1
     typescript: 4.6.4
-    winston: ^3.6.0
+    winston: ^3.7.2
     xml2js: ^0.4.23
     yargs: ^17.4.0
   languageName: unknown
@@ -3760,7 +3760,7 @@ __metadata:
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
     typescript: 4.6.4
-    winston: ^3.6.0
+    winston: ^3.7.2
     winston-daily-rotate-file: ^4.6.1
     winston-transport: ^4.5.0
   languageName: unknown
@@ -3896,7 +3896,7 @@ __metadata:
     jest-extended: ^2.0.0
     serialport: ^10.4.0
     typescript: 4.6.4
-    winston: ^3.6.0
+    winston: ^3.7.2
   languageName: unknown
   linkType: soft
 
@@ -10515,9 +10515,9 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"winston@npm:^3.6.0":
-  version: 3.6.0
-  resolution: "winston@npm:3.6.0"
+"winston@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "winston@npm:3.7.2"
   dependencies:
     "@dabh/diagnostics": ^2.0.2
     async: ^3.2.3
@@ -10529,7 +10529,7 @@ typescript@^4.4.3:
     stack-trace: 0.0.x
     triple-beam: ^1.3.0
     winston-transport: ^4.5.0
-  checksum: 5641837781046a2f73111dfb2af500e88f4350521d01de184d33ac8ee60c28047a8897bd2ab7b438b3812fc31a88bbbee13fd9ed617d60bd16a56d0143e423dc
+  checksum: f1f1a860d2fa228b50880b20aaa6cc121085907791fe0d814ff9c062640f6b65da321726322094e7667eb63088b3bb67e7b4e219d998f29efcc6f583185a1cd3
   languageName: node
   linkType: hard
 
@@ -10770,7 +10770,7 @@ typescript@^4.4.3:
     serialport: ^10.4.0
     source-map-support: ^0.5.21
     typescript: 4.6.4
-    winston: ^3.6.0
+    winston: ^3.7.2
     xstate: ^4.29.0
   languageName: unknown
   linkType: soft
