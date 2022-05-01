@@ -3732,7 +3732,7 @@ __metadata:
     json-logic-js: ^2.0.2
     json5: ^2.2.1
     pegjs: ^0.10.0
-    semver: ^7.3.5
+    semver: ^7.3.7
     ts-pegjs: ^0.3.1
     typescript: 4.6.4
     winston: ^3.6.0
@@ -3810,7 +3810,7 @@ __metadata:
     fs-extra: ^10.0.1
     jest-extended: ^2.0.0
     reflect-metadata: ^0.1.13
-    semver: ^7.3.5
+    semver: ^7.3.7
     typescript: 4.6.4
     yargs: ^17.4.0
   bin:
@@ -3867,7 +3867,7 @@ __metadata:
     prettier: ^2.6.2
     prettier-plugin-organize-imports: ^2.3.4
     reflect-metadata: ^0.1.13
-    semver: ^7.3.5
+    semver: ^7.3.7
     source-map-support: ^0.5.21
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.1
@@ -10766,7 +10766,7 @@ typescript@^4.4.3:
     mockdate: ^3.0.5
     proper-lockfile: ^4.1.2
     reflect-metadata: ^0.1.13
-    semver: ^7.3.5
+    semver: ^7.3.7
     serialport: ^10.4.0
     source-map-support: ^0.5.21
     typescript: 4.6.4
