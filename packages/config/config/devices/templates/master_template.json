@@ -228,7 +228,7 @@
 	},
 	"dim_rate": {
 		"$import": "#base_1-99_nounit",
-		"label": "Dimming rate"
+		"label": "Dimming Rate"
 	},
 	"minimum_dim_level_0-99": {
 		"$import": "#base_0-99_nounit",
