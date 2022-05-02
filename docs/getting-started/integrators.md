@@ -16,7 +16,7 @@ For applications built with Node.js, the npm package `zwave-js` can be installed
 
 For all other languages, [`@zwave-js/server`](https://github.com/zwave-js/zwave-js-server) hosts Z-Wave JS in a Node.js process and exposes [an API](https://github.com/zwave-js/zwave-js-server#api) via websockets. Example applications for this approach can be found here:
 
--   [HomeAssistant](https://github.com/home-assistant-libs/zwave-js-server-python), client library written in Python
+-   [Home Assistant](https://github.com/home-assistant-libs/zwave-js-server-python), client library written in Python
 -   [ZWaveJS.NET](https://github.com/zwave-js/ZWaveJS.NET), a wrapper/client for the .NET ecosystem
 
 ## How to support the development
