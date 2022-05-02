@@ -38,7 +38,8 @@ class TestMessage extends Message {}
 
 describe("lib/driver/Driver => ", () => {
 	beforeEach(() => {
-		jest.useFakeTimers("legacy");
+		// @ts-expect-error This is added in jest v28
+		jest.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {
