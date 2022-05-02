@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Hide value added/changed/deleted logs for user codes (#4527)
+* Type `ConfigValue` is exported from `"zwave-js"` again (#4550)
+
+### Changes under the hood
+* Restructured the Serial API commands so they more closely resemble the structure of the Host API specification. Separated enums and types from the implementation of Serial API commands (#4528)
+
 ## 9.0.7 (2022-04-29)
 ### Bugfixes
 * Fixed an issue where `Color Switch CC Set` V2 could contain a random duration value (#4526)
