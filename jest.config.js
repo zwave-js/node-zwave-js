@@ -36,7 +36,7 @@ module.exports = {
 	globalSetup: "./test/jest.globalSetup.ts",
 	setupFilesAfterEnv: ["jest-extended/all"],
 	setupFiles: ["reflect-metadata", "./test/jest.setup.js"],
-	extraGlobals: ["Reflect"],
+	sandboxInjectedGlobals: ["Reflect"],
 	collectCoverage: false,
 	collectCoverageFrom: [
 		"packages/**/src/**/*.ts",
