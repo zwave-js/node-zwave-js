@@ -51,14 +51,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/jsonl-db@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "@alcalzone/jsonl-db@npm:2.5.1"
+"@alcalzone/jsonl-db@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "@alcalzone/jsonl-db@npm:2.5.2"
   dependencies:
     alcalzone-shared: ^4.0.1
-    fs-extra: ^10.0.0
+    fs-extra: ^10.1.0
     proper-lockfile: ^4.1.2
-  checksum: fa040010d8e7e83fced960d0373970d6276d54a9efa29cfabbfd269241f211ca8c3075b47b70da5921629856a8f8282fb4f46df36927fa1b83c232461c24c3d7
+  checksum: 06435a422c31ac6c1f29d4c1210f638ee2021d897c34d5a41c7781c540c86d849ffd48e64eb4cee4054eb9a2ec300637299dddec0f4144c6f1a7e198fc2e1335
   languageName: node
   linkType: hard
 
@@ -73,82 +73,82 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-core@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-core@npm:3.5.8"
+"@alcalzone/release-script-core@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-core@npm:3.5.9"
   dependencies:
     execa: ^5.1.1
-  checksum: 887062c62d7416c1087ffc483bb734d51b17ca8e873812fd684f764d4e24ae318509145b629d4a00eed1d9f28aeed70ef337c376d4b128a6b4b720cbba5bf115
+  checksum: df20c8fa6ae3aba48ca092e005963a382c2a5a527d156d932e1036bb9b10a35770172fef166e467cd8f1172df1d0789d70f83d3cb1fd1958ffb74c15fef91a55
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-changelog@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.5.8"
+"@alcalzone/release-script-plugin-changelog@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-plugin-changelog@npm:3.5.9"
   dependencies:
-    "@alcalzone/release-script-core": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
     alcalzone-shared: ^4.0.1
     fs-extra: ^10.1.0
-  checksum: 1ac26b56873ae8efb9e4847b12fd26d6c29060b4bfac1529f43ab414337382ab9b8da23dff2b6839b0c4aae28bc1bdbf76f7fb86cd9fa38b2e68572093d0b741
+  checksum: cf00f84f4ab283ab79e923e4d73c469f79c55614944f980e51e44114ac0a9a1e274d12fb4bdc3f28d72433ee5d74a3d1682b176fcc3814ec1dfd39b9376dde28
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-exec@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-plugin-exec@npm:3.5.8"
+"@alcalzone/release-script-plugin-exec@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-plugin-exec@npm:3.5.9"
   dependencies:
-    "@alcalzone/release-script-core": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
     alcalzone-shared: ^4.0.1
-  checksum: 8511a555baa009a3b076b40ece3666135a436d875275c6a6f8bc61662bf9eb1d7b193d9acea4bc0c35690f0064743e85af11938986af2398deb5913cd0cdb9d0
+  checksum: 509315a08258819324717730d0c95ee6de815e73f9a5a1bf36508b80b95a48b80f171ad0574effd8d2b835a2d703ebf3c849354b67b8aed5e0d13f39493566f8
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-git@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-plugin-git@npm:3.5.8"
+"@alcalzone/release-script-plugin-git@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-plugin-git@npm:3.5.9"
   dependencies:
-    "@alcalzone/release-script-core": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
     fs-extra: ^10.1.0
-  checksum: c70deb2446592a1089dd05f59e2ad1cefd029e03cb254d157454bcb8dd3f0668979dc874b6c3d68baf6493382dfa0bfecf430ebf45aa0c1a4aac8507306f7d38
+  checksum: 4c0d0d17b60616401a636f18ad96315c35876d2f564e87072d10c26207aa71396738d6ead1e1ba38cfbc33e166a7f41924e53766a80e051e2c291a9dffbc6ef1
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-package@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-plugin-package@npm:3.5.8"
+"@alcalzone/release-script-plugin-package@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-plugin-package@npm:3.5.9"
   dependencies:
     "@alcalzone/pak": ^0.8.1
-    "@alcalzone/release-script-core": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
     alcalzone-shared: ^4.0.1
     fs-extra: ^10.1.0
     semver: ^7.3.7
-  checksum: dae29e9d7b8dd193fe6ddfb202031e5d433cd05278529d35b60ec7e8140b1e54e6d6354c53d77370ce5cbfc1eba08649bd0ec80864f591b16076dfdb037dd1d1
+  checksum: d40c8f7334447b502a39dc4a436639083a83aaa513e9dd47a7d8046f1aee70c7f8dc2e7b5fe8592fff16eedf3fc2ec9b0472012e4bde81582f918dc3dbf2092a
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script-plugin-version@npm:3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script-plugin-version@npm:3.5.8"
+"@alcalzone/release-script-plugin-version@npm:3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script-plugin-version@npm:3.5.9"
   dependencies:
-    "@alcalzone/release-script-core": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
     alcalzone-shared: ^4.0.1
     fs-extra: ^10.1.0
     semver: ^7.3.7
     tiny-glob: ^0.2.9
-  checksum: aa104e2e43d0eb154b385b903151ff2bf21a0bb8aa7e51baacecbc0368fdc6fe8deb273cd0d2261cb5289f21f134e043155ca3541227df5e8a8c11bcbb9c6c6a
+  checksum: 8b6ca9d0cb0c0b1206140f45064792b697aa50a4bd446e571b7eedb512e820fc24629189bb33c20c8c082a038bee415551c57ffc1952762676df0efdd5ed6680
   languageName: node
   linkType: hard
 
-"@alcalzone/release-script@npm:~3.5.8":
-  version: 3.5.8
-  resolution: "@alcalzone/release-script@npm:3.5.8"
+"@alcalzone/release-script@npm:~3.5.9":
+  version: 3.5.9
+  resolution: "@alcalzone/release-script@npm:3.5.9"
   dependencies:
-    "@alcalzone/release-script-core": 3.5.8
-    "@alcalzone/release-script-plugin-changelog": 3.5.8
-    "@alcalzone/release-script-plugin-exec": 3.5.8
-    "@alcalzone/release-script-plugin-git": 3.5.8
-    "@alcalzone/release-script-plugin-package": 3.5.8
-    "@alcalzone/release-script-plugin-version": 3.5.8
+    "@alcalzone/release-script-core": 3.5.9
+    "@alcalzone/release-script-plugin-changelog": 3.5.9
+    "@alcalzone/release-script-plugin-exec": 3.5.9
+    "@alcalzone/release-script-plugin-git": 3.5.9
+    "@alcalzone/release-script-plugin-package": 3.5.9
+    "@alcalzone/release-script-plugin-version": 3.5.9
     alcalzone-shared: ^4.0.1
     axios: ^0.27.1
     enquirer: ^2.3.6
@@ -159,7 +159,7 @@ __metadata:
     yargs: ^17.4.1
   bin:
     release-script: bin/release.js
-  checksum: 5d43fe4e9f45f92a4340a04d18e7e3dfc9f1b2229da64fa910f0de2618c7f6e6c4649ff43a2efb9ac0fafdb89dfa5c8534d980f8b15acf2e6ad850b749b4af99
+  checksum: 3bf1c56fc0ba6efa2d463c9a6e812a771e8499345dec4abc77a341324ca554286f8eec9cde17fc50e0a3704927ca28ee87a65f7038f9c7f0a613dc4827560203
   languageName: node
   linkType: hard
 
@@ -3410,10 +3410,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^15.12.5":
-  version: 15.14.1
-  resolution: "@types/node@npm:15.14.1"
-  checksum: efcc7e52a2d4d2e64c9e80ec72e3a08271a8536a713ffbfaa8391bd2a34bce599b8c2926eddc2f060a32df1c5dbd6a5d58be20ef4ac3fc6a45920622d4c87707
+"@types/node@npm:^14.18.16":
+  version: 14.18.16
+  resolution: "@types/node@npm:14.18.16"
+  checksum: 1999799309dc8620a2adf9a5d5e48416af87321bae4c950b4aa8018fcef2c3b6c1fcf98c39eae06f6492c03a643a5a44e2bb3750cd2574d9cf7eac33bac50e24
   languageName: node
   linkType: hard
 
@@ -3676,7 +3676,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/js-levenshtein": ^1.1.1
     "@types/json-logic-js": ^1.2.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.9
     "@types/xml2js": ^0.4.11
@@ -3709,9 +3709,9 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/core@workspace:packages/core"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.1
+    "@alcalzone/jsonl-db": ^2.5.2
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
@@ -3737,7 +3737,7 @@ __metadata:
     "@types/clipboardy": ^2
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/prettier": ^2
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
@@ -3763,7 +3763,7 @@ __metadata:
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/semver": ^7.3.9
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
@@ -3789,8 +3789,8 @@ __metadata:
     "@actions/core": ^1.7.0
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.1
-    "@alcalzone/jsonl-db": ^2.5.1
-    "@alcalzone/release-script": ~3.5.8
+    "@alcalzone/jsonl-db": ^2.5.2
+    "@alcalzone/release-script": ~3.5.9
     "@babel/core": ^7.17.10
     "@babel/plugin-proposal-class-properties": "*"
     "@babel/plugin-proposal-decorators": ^7.17.9
@@ -3804,7 +3804,7 @@ __metadata:
     "@tsconfig/node12": ^1.0.9
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/semver": ^7.3.9
     "@types/source-map-support": ^0
     "@types/ts-nameof": ^4.2.1
@@ -3849,7 +3849,7 @@ __metadata:
     "@serialport/bindings-interface": "*"
     "@serialport/stream": "*"
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
@@ -3870,7 +3870,7 @@ __metadata:
   dependencies:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     alcalzone-shared: ^4.0.1
     esbuild: 0.14.38
     esbuild-register: ^3.3.2
@@ -3885,7 +3885,7 @@ __metadata:
   resolution: "@zwave-js/testing@workspace:packages/testing"
   dependencies:
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/triple-beam": ^1.3.2
     "@zwave-js/core": "workspace:*"
     ansi-colors: ^4.1.1
@@ -10288,13 +10288,13 @@ typescript@^4.4.3:
   version: 0.0.0-use.local
   resolution: "zwave-js@workspace:packages/zwave-js"
   dependencies:
-    "@alcalzone/jsonl-db": ^2.5.1
+    "@alcalzone/jsonl-db": ^2.5.2
     "@alcalzone/pak": ^0.8.1
     "@sentry/integrations": ^6.19.7
     "@sentry/node": ^6.19.7
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.4.1
-    "@types/node": ^15.12.5
+    "@types/node": ^14.18.16
     "@types/proper-lockfile": ^4
     "@types/semver": ^7.3.9
     "@types/source-map-support": ^0

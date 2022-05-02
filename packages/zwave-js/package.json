@@ -76,7 +76,7 @@
     "ts": "node -r esbuild-register"
   },
   "dependencies": {
-    "@alcalzone/jsonl-db": "^2.5.1",
+    "@alcalzone/jsonl-db": "^2.5.2",
     "@alcalzone/pak": "^0.8.1",
     "@sentry/integrations": "^6.19.7",
     "@sentry/node": "^6.19.7",
@@ -101,7 +101,7 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.4.1",
-    "@types/node": "^15.12.5",
+    "@types/node": "^14.18.16",
     "@types/proper-lockfile": "^4",
     "@types/semver": "^7.3.9",
     "@types/source-map-support": "^0",
