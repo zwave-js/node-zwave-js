@@ -53,7 +53,7 @@
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
     "serialport": "^10.4.0",
-    "winston": "^3.6.0"
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@serialport/binding-mock": "^10.2.2",
