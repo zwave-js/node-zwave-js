@@ -14,6 +14,16 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
 	"metadata": {
 		"inclusion": "- Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.\n- If Inclusion Process is successful, Green led will turn off.",
 		"exclusion": "- Press the Net_Button 3 times within 1.5s. \n- If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
