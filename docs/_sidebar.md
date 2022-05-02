@@ -2,6 +2,7 @@
 
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
+    -   [For Integrators / Why Z-Wave JS?](getting-started/integrators.md)
     -   [Our Philosophy](getting-started/philosophy.md)
     -   [Security S2](getting-started/security-s2.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
@@ -9,7 +10,6 @@
     -   [Migrating to v8](getting-started/migrating-to-v8.md)
     -   [Migrating to v9](getting-started/migrating-to-v9.md)
     -   [🦎's device review](getting-started/device-review.md)
-    -   [Sponsoring the development](getting-started/sponsoring.md)
 
 -   API
 
