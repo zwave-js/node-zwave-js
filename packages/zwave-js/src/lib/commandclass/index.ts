@@ -566,6 +566,7 @@ export type {
 	AssociationGroup,
 	BinarySensorValueMetadata,
 	ColorTable,
+	ConfigValue,
 	DoorHandleStatus,
 	DoorLockLoggingRecord,
 	FirmwareUpdateCapabilities,
