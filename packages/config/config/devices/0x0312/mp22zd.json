@@ -41,7 +41,7 @@
 		{
 			"#": "7",
 			"label": "Night Mode Brightness Level",
-			"description": "Sets the dim level the device will turn on to when the button is held for two seconds.",
+			"description": "Hold button for two seconds to enter night mode.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -56,12 +56,12 @@
 		{
 			"#": "9",
 			"$import": "~/templates/master_template.json#dim_rate",
-			"description": "Only when turning ON/OFF the light."
+			"label": "Dimming Rate (Manual On/Off)"
 		},
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#dim_rate",
-			"description": "Only when holding to change the brightness or control from HUB."
+			"label": "Dimming Rate (Manual Dimming / Z-Wave)"
 		},
 		{
 			"#": "11",
