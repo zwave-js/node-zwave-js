@@ -3920,7 +3920,7 @@ ${associatedNodes.join(", ")}`,
 		if (await node.ping()) {
 			throw new ZWaveError(
 				`The node removal process could not be started because the node responded to a ping.`,
-				ZWaveErrorCodes.ReplaceFailedNode_Failed,
+				ZWaveErrorCodes.RemoveFailedNode_Failed,
 			);
 		}
 

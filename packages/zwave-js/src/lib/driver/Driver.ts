@@ -1662,10 +1662,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	/** This is called when a node was removed from the network */
 	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
-		// Remove all listeners
+		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
+		if (this.sendNodeToSleepTimers.has(node.id)) {
+			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
+			this.sendNodeToSleepTimers.delete(node.id);
+		}
+		if (this.retryNodeInterviewTimeouts.has(node.id)) {
+			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id)!);
+			this.retryNodeInterviewTimeouts.delete(node.id);
+		}
 		// purge node values from the DB
 		node.valueDB.clear();
+		this.cachePurge(cacheKeys.node(node.id)._baseKey);
+
+		// Remove the node from all security manager instances
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -3970,6 +3983,14 @@ ${handlers.length} left`,
 			this.networkCache.delete(cacheKey);
 		} else {
 			this.networkCache.set(cacheKey, value);
+		}
+	}
+
+	private cachePurge(prefix: string): void {
+		for (const key of this.networkCache.keys()) {
+			if (key.startsWith(prefix)) {
+				this.networkCache.delete(key);
+			}
 		}
 	}
 

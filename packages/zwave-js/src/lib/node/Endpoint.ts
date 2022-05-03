@@ -102,8 +102,7 @@ export class Endpoint {
 		CommandClasses,
 		Readonly<CommandClassInfo>
 	> = new CacheBackedMap(this.driver.networkCache, {
-		prefix:
-			cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey + ".",
+		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
 		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
 		suffixDeserializer: (key: string) => {
 			const ccId = parseInt(key, 16);
