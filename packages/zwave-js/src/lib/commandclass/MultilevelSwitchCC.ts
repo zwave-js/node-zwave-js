@@ -538,6 +538,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
+				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}
@@ -545,6 +546,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
+				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}

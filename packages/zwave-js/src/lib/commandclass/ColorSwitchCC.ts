@@ -535,6 +535,7 @@ export class ColorSwitchCC extends CommandClass {
 				minLength: 6,
 				maxLength: 7, // to allow #rrggbb
 				label: `RGB Color`,
+				valueChangeOptions: ["transitionDuration"],
 			});
 		}
 
