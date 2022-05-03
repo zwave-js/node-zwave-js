@@ -1,8 +1,11 @@
 import {
 	CommandClasses,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	NodeType,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
+import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
@@ -150,6 +153,30 @@ export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.addNodeType === AddNodeType.Stop) {
+			message = { action: "Stop" };
+		} else {
+			message = {
+				"node type": getEnumMemberName(AddNodeType, this.addNodeType!),
+			};
+		}
+		message = {
+			...message,
+			"high power": this.highPower,
+			"network wide": this.networkWide,
+		};
+
+		if (this.hasCallbackId()) {
+			message["callback id"] = this.callbackId;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
@@ -161,6 +188,15 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 		this.payload = Buffer.from([control, this.callbackId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				action: "Enable Smart Start listening mode",
+			},
+		};
 	}
 }
 
@@ -197,6 +233,23 @@ export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 		]);
 
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			action: "Add Smart Start node",
+			"NWI Home ID": buffer2hex(this.nwiHomeId),
+			"high power": this.highPower,
+			"network wide": this.networkWide,
+		};
+		if (this.hasCallbackId()) {
+			message["callback id"] = this.callbackId;
+		}
+
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
@@ -239,6 +292,16 @@ export class AddNodeToNetworkRequestStatusReport
 
 	public readonly status: AddNodeStatus;
 	public readonly statusContext: AddNodeStatusContext | undefined;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				status: getEnumMemberName(AddNodeStatus, this.status),
+				"callback id": this.callbackId,
+			},
+		};
+	}
 }
 
 interface AddNodeStatusContext {

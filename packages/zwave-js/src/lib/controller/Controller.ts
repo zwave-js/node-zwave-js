@@ -1200,10 +1200,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 		}
 
-		if (this._inclusionState === InclusionState.SmartStart) {
-			// Disable listening mode so we can switch to inclusion mode
-			await this.stopInclusion();
-		}
+		// Leave SmartStart listening mode so we can switch to exclusion mode
+		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Including);
 		this._inclusionOptions = options;
@@ -1463,7 +1461,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				`disabling Smart Start listening mode...`,
 			);
 			try {
-				await this.stopInclusion();
+				await this.driver.sendMessage(
+					new AddNodeToNetworkRequest(this.driver, {
+						callbackId: 0, // disable callbacks
+						addNodeType: AddNodeType.Stop,
+						highPower: true,
+						networkWide: true,
+					}),
+				);
 				this.driver.controllerLog.print(
 					`Smart Start listening mode disabled`,
 				);
@@ -1488,6 +1493,40 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
+	private async pauseSmartStart(): Promise<boolean> {
+		if (!this.supportsFeature(ZWaveFeature.SmartStart)) return true;
+
+		if (this._inclusionState === InclusionState.SmartStart) {
+			this.driver.controllerLog.print(
+				`Leaving Smart Start listening mode...`,
+			);
+			try {
+				await this.driver.sendMessage(
+					new AddNodeToNetworkRequest(this.driver, {
+						callbackId: 0, // disable callbacks
+						addNodeType: AddNodeType.Stop,
+						highPower: true,
+						networkWide: true,
+					}),
+				);
+				this.driver.controllerLog.print(
+					`Left Smart Start listening mode`,
+				);
+				return true;
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Smart Start listening mode could not be left: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+				throw e;
+			}
+		} else {
+			return true;
+		}
+	}
+
 	/**
 	 * Starts the exclusion process of new nodes.
 	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
@@ -1505,10 +1544,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			return false;
 		}
 
-		if (this._inclusionState === InclusionState.SmartStart) {
-			// Disable listening mode so we can switch to exclusion mode
-			await this.stopInclusion();
-		}
+		// Leave SmartStart listening mode so we can switch to exclusion mode
+		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Excluding);
 		this.driver.controllerLog.print(`starting exclusion process...`);
@@ -3988,10 +4025,8 @@ ${associatedNodes.join(", ")}`,
 			return false;
 		}
 
-		if (this._inclusionState === InclusionState.SmartStart) {
-			// Disable listening mode so we can switch to exclusion mode
-			await this.stopInclusion();
-		}
+		// Leave SmartStart listening mode so we can switch to exclusion mode
+		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Busy);
 
