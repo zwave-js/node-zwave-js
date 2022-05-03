@@ -146,6 +146,26 @@
 			]
 		},
 		{
+			"#": "10",
+			"label": "Notify Accessory",
+			"description": "Ensures that changes to the master node automatically notify accessory switches",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [{
+					"label": "DISABLE",
+					"value": 0
+				},
+				{
+					"label": "ENABLE",
+					"value": 1
+				}
+			]
+		},		
+		{
 			"#": "11",
 			"label": "Minimum Dimmer Level",
 			"description": "The minimum dim level the switch will allow",
