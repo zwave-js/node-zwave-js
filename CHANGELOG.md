@@ -12,6 +12,8 @@
 ### Bugfixes
 * Hide value added/changed/deleted logs for user codes (#4527)
 * Type `ConfigValue` is exported from `"zwave-js"` again (#4550)
+* Leave SmartStart listening mode before adding/removing/replacing nodes (#4559)
+* Remove all information about a node from the network cache when it is replaced or removed. This fixes an issue where sleeping nodes would be sent to sleep during S2 bootstrapping if they replaced another sleeping node (#4561)
 
 ### Config file changes
 * Add separate config for MP22ZD, restore MP22Z (#4536)
