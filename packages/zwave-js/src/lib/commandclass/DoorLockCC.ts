@@ -734,7 +734,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 
 	@ccValue({ minVersion: 3 })
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
+		...ValueMetadata.ReadOnlyDuration,
 		label: "Remaining duration until target lock mode",
 	})
 	public readonly duration?: Duration;

@@ -91,7 +91,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration: Duration.from(dimmingDuration),
+			dimmingDuration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -105,7 +105,7 @@ export class SceneActivationCC extends CommandClass {
 
 interface SceneActivationCCSetOptions extends CCCommandOptions {
 	sceneId: number;
-	dimmingDuration?: Duration;
+	dimmingDuration?: Duration | string;
 }
 
 @CCCommand(SceneActivationCommand.Set)
@@ -126,7 +126,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			this.persistValues();
 		} else {
 			this.sceneId = options.sceneId;
-			this.dimmingDuration = options.dimmingDuration;
+			this.dimmingDuration = Duration.from(options.dimmingDuration);
 		}
 	}
 
@@ -141,7 +141,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Any,
+		...ValueMetadata.Duration,
 		label: "Dimming duration",
 	})
 	public dimmingDuration: Duration | undefined;

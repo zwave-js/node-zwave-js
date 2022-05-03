@@ -252,7 +252,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 	public async set(
 		groupId: number,
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -446,7 +446,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	sceneId: number;
-	dimmingDuration?: Duration;
+	dimmingDuration?: Duration | string;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
@@ -470,7 +470,8 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
-				options.dimmingDuration ?? new Duration(0, "default");
+				Duration.from(options.dimmingDuration) ??
+				new Duration(0, "default");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,
@@ -485,9 +486,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 	}
 
 	public groupId: number;
-
 	public sceneId: number;
-
 	public dimmingDuration: Duration;
 
 	public serialize(): Buffer {

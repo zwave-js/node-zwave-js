@@ -140,7 +140,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.from(duration),
+			duration,
 		});
 
 		// Multilevel Switch commands may take some time to be executed.
@@ -538,6 +538,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
+				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}
@@ -545,6 +546,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
+				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}
@@ -554,7 +556,7 @@ export class MultilevelSwitchCC extends CommandClass {
 interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 	targetValue: number;
 	// Version >= 2:
-	duration?: Duration;
+	duration?: Duration | string;
 }
 
 @CCCommand(MultilevelSwitchCommand.Set)
@@ -575,7 +577,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			}
 		} else {
 			this.targetValue = options.targetValue;
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -635,8 +637,8 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Transition duration",
+		...ValueMetadata.ReadOnlyDuration,
+		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
 
@@ -679,7 +681,7 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 	  }
 ) & {
 		// Version >= 2:
-		duration?: Duration;
+		duration?: Duration | string;
 	};
 
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
@@ -703,7 +705,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			this.startLevel = startLevel;
 			this.direction = direction ? "down" : "up";
 		} else {
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;
