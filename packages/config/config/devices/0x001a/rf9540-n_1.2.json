@@ -146,6 +146,27 @@
 			]
 		},
 		{
+			"#": "10",
+			"label": "Forward Z-Wave Commands",
+			"description": "Keep associated accessory switches in sync",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
 			"#": "11",
 			"label": "Minimum Dimmer Level",
 			"description": "The minimum dim level the switch will allow",
