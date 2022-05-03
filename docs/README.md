@@ -19,8 +19,8 @@ Z-Wave JS is the most advanced open source Z-Wave library available, with suppor
 
 # Top Sponsors
 
-<p>
-  <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" width="120" alt="Nabu Casa" /></a>
+<p align="center">
+  <a href="https://www.nabucasa.com/" target="_blank"><img src="sponsors/nabucasa.png" width="320" alt="Nabu Casa" /></a><br />
   <a href="https://www.getseam.com/" target="_blank"><img src="sponsors/seam.png" width="120" alt="Seam" /></a>
 </p>
 
