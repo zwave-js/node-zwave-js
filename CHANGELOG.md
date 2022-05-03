@@ -5,12 +5,22 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
+### Features
+* All CC APIs using durations now allow duration strings (like `1m12s`) as an alternative to `Duration` class instances (#4558)
+* CC values for the remaining duration until target are now readonly (#4558)
+
 ### Bugfixes
 * Hide value added/changed/deleted logs for user codes (#4527)
 * Type `ConfigValue` is exported from `"zwave-js"` again (#4550)
 
+### Config file changes
+* Add separate config for MP22ZD, restore MP22Z (#4536)
+* Add undocumented param to Eaton RF9501 & RF9540 (#4556)
+* Add RaZberry 7 Pro (#4556)
+
 ### Changes under the hood
 * Restructured the Serial API commands so they more closely resemble the structure of the Host API specification. Separated enums and types from the implementation of Serial API commands (#4528)
+* Updated several dependencies
 
 ## 9.0.7 (2022-04-29)
 ### Bugfixes
