@@ -106,8 +106,8 @@
 		},
 		{
 			"#": "10",
-			"label": "Notify Accessory",
-			"description": "Ensures that changes to the master node automatically notify accessory switches",
+			"label": "Forward Z-Wave Commands",
+			"description": "Keep associated accessory switches in sync",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -116,11 +116,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DISABLE",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "ENABLE",
+					"label": "Enable",
 					"value": 1
 				}
 			]

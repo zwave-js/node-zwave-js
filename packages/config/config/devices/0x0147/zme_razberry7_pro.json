@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
-	"label": "Razberry7 PRO",
-	"description": "Raspbery PI Z-Wave Controller",
+	"label": "RaZberry 7 Pro",
+	"description": "Z-Wave Shield for Raspberry Pi",
 	"devices": [
 		{
 			"productType": "0x0401",
