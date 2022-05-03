@@ -225,7 +225,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 	@validateArgs()
 	public async set(
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 		level?: number,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -240,7 +240,8 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration: dimmingDuration ?? new Duration(0, "seconds"),
+			dimmingDuration:
+				Duration.from(dimmingDuration) ?? new Duration(0, "seconds"),
 			level,
 		});
 

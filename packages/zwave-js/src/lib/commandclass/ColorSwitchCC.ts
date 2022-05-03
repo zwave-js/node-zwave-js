@@ -716,7 +716,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
+		...ValueMetadata.ReadOnlyDuration,
 		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
@@ -805,7 +805,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 }
 
 export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
-	duration?: Duration;
+	duration?: Duration | string;
 };
 
 @CCCommand(ColorSwitchCommand.Set)
@@ -841,7 +841,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			} else {
 				this.colorTable = pick(options, colorTableKeys as any[]);
 			}
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -902,7 +902,7 @@ type ColorSwitchCCStartLevelChangeOptions = {
 	  }
 ) & {
 		// Version >= 3:
-		duration?: Duration;
+		duration?: Duration | string;
 	};
 
 @CCCommand(ColorSwitchCommand.StartLevelChange)
@@ -921,7 +921,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;

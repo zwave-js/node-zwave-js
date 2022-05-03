@@ -103,7 +103,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.from(duration),
+			duration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -245,7 +245,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
-	duration?: Duration;
+	duration?: Duration | string;
 }
 
 @CCCommand(BinarySwitchCommand.Set)
@@ -262,7 +262,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			);
 		} else {
 			this.targetValue = options.targetValue;
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -335,8 +335,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Transition duration",
+		...ValueMetadata.ReadOnlyDuration,
+		label: "Remaining duration",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

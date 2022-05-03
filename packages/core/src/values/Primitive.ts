@@ -30,7 +30,7 @@ export function parseBoolean(val: number): boolean | undefined {
 	return val === 0 ? false : val === 0xff ? true : undefined;
 }
 
-/** Parses a single-byte number from 0 to 100, which might also be "unknown" */
+/** Parses a single-byte number from 0 to 99, which might also be "unknown" */
 export function parseMaybeNumber(
 	val: number,
 	preserveUnknown: boolean = true,
@@ -42,7 +42,7 @@ export function parseMaybeNumber(
 		: parseNumber(val);
 }
 
-/** Parses a single-byte number from 0 to 100 */
+/** Parses a single-byte number from 0 to 99 */
 export function parseNumber(val: number): number | undefined {
 	return val <= 99 ? val : val === 0xff ? 99 : undefined;
 }

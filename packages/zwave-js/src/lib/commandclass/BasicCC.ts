@@ -353,7 +353,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration until target value",
+		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
 
