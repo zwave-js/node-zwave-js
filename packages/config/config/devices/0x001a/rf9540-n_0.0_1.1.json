@@ -159,7 +159,8 @@
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
-			"options": [{
+			"options": [
+				{
 					"label": "DISABLE",
 					"value": 0
 				},
@@ -168,7 +169,7 @@
 					"value": 1
 				}
 			]
-		},				
+		},
 		{
 			"#": "11",
 			"label": "Minimum Dimmer Level",
