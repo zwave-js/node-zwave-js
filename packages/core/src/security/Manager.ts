@@ -129,7 +129,7 @@ export class SecurityManager {
 		);
 	}
 
-	/** Deletes ALL nonces that were issued for a given node, except the given nonce id */
+	/** Deletes ALL nonces that were issued for a given node */
 	public deleteAllNoncesForReceiver(receiver: number): void {
 		for (const [key, entry] of this._nonceStore) {
 			if (entry.receiver === receiver) {
