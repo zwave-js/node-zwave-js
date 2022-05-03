@@ -24,6 +24,6 @@ For all other languages, [`@zwave-js/server`](https://github.com/zwave-js/zwave-
 By openly working together on Z-Wave JS, access to Z-Wave is commoditized and everyone works on the same stable platform. This has worked great for Linux, which is powering the entire world now.
 If you'd like to help support the future of the project and make the Z-Wave world a better place, please consider:
 
+-   [Financially supporting Z-Wave JS to get priority support](https://github.com/sponsors/AlCalzone).
 -   Contributing [configuration files](config-files/overview) for new devices, so we have our hands free for the actual development.
 -   Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
--   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps.
