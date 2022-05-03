@@ -9,13 +9,13 @@
   🔥 <a href="https://twitter.com/acdlite/status/974390255393505280" target="_blank">blazing</a> fast
 </p>
 
-# Introduction
+# Introduction {docsify-ignore-all}
 
-`node-zwave-js` was started as an attempt to bring a spec compliant Z-Wave driver to the Node.js world but without the hassle of having to recompile static libraries whenever there is a major version upgrade. The only native dependency is [`node-serialport`](https://serialport.io/), which works flawlessly on all Node.js versions that this library supports (currently `>= 12.22.2`).
+Z-Wave JS (a.k.a. `node-zwave-js`) is a **standards-compliant**, **community-driven** and **Open Source** Z-Wave device driver. It is based on Node.js, but can be used from **any other language** with WebSocket support.
 
-For the following explanations it is assumed that you are familiar with `async/await` and `import` syntax. This library may still be used with `Promise` syntax and `require`, but the syntax changes slightly. For method and interface signatures, the [type annotation syntax](https://www.typescriptlang.org/docs/handbook/basic-types.html) from TypeScript is used.
+Z-Wave JS is the most advanced open source Z-Wave library available, with support for modern Z-Wave features like **Security S2**, **Smart Start** and soon to be **certified**!
 
-It is recommended to either use TypeScript when consuming the library or work in an IDE that understands TypeScript definitions (like VSCode or WebStorm).
+[Jump right in](getting-started/quickstart.md) or [learn more](getting-started/integrators.md) about why you should use Z-Wave JS and how to integrate it!
 
 # Top Sponsors
 

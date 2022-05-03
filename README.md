@@ -46,7 +46,7 @@ If you'd like to help support the future of the project and make the Z-Wave worl
 
 -   Contributing [configuration files](https://zwave-js.github.io/node-zwave-js/#/config-files/overview) for new devices, so we have our hands free for the actual development.
 -   Sending us devices to test. Working with an actual device is much more efficient than trying to debug with logfiles.
--   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps. [Read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/sponsoring)...
+-   Giving funds by becoming a [supporter](https://github.com/sponsors/AlCalzone). Personally or with your company, monthly or one-time - every little bit helps. [Read more](https://zwave-js.github.io/node-zwave-js/#/getting-started/integrators.md?id=how-to-support-the-development)...
 
 **Top Sponsors:**
 
