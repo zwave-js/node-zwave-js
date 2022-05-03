@@ -27,39 +27,42 @@ export const cacheKeys = {
 		supportsSoftReset: "controller.supportsSoftReset",
 	},
 	// TODO: somehow these functions should be combined with the pattern matching below
-	node: (nodeId: number) => ({
-		_baseKey: `node.${nodeId}`,
-		_securityClassBaseKey: `node.${nodeId}.securityClasses`,
-		interviewStage: `node.${nodeId}.interviewStage`,
-		deviceClass: `node.${nodeId}.deviceClass`,
-		isListening: `node.${nodeId}.isListening`,
-		isFrequentListening: `node.${nodeId}.isFrequentListening`,
-		isRouting: `node.${nodeId}.isRouting`,
-		supportedDataRates: `node.${nodeId}.supportedDataRates`,
-		protocolVersion: `node.${nodeId}.protocolVersion`,
-		nodeType: `node.${nodeId}.nodeType`,
-		supportsSecurity: `node.${nodeId}.supportsSecurity`,
-		supportsBeaming: `node.${nodeId}.supportsBeaming`,
-		securityClass: (secClass: SecurityClass) =>
-			`node.${nodeId}.securityClasses.${getEnumMemberName(
-				SecurityClass,
-				secClass,
-			)}`,
-		dsk: `node.${nodeId}.dsk`,
-		endpoint: (index: number) => {
-			const baseKey = `node.${nodeId}.endpoint.${index}`;
-			const ccBaseKey = `${baseKey}.commandClass`;
-			return {
-				_baseKey: baseKey,
-				_ccBaseKey: ccBaseKey,
-				commandClass: (ccId: CommandClasses) => {
-					const ccAsHex = num2hex(ccId);
-					return `${ccBaseKey}.${ccAsHex}`;
-				},
-			};
-		},
-		hasSUCReturnRoute: `node.${nodeId}.hasSUCReturnRoute`,
-	}),
+	node: (nodeId: number) => {
+		const nodeBaseKey = `node.${nodeId}.`;
+		return {
+			_baseKey: nodeBaseKey,
+			_securityClassBaseKey: `${nodeBaseKey}securityClasses`,
+			interviewStage: `${nodeBaseKey}interviewStage`,
+			deviceClass: `${nodeBaseKey}deviceClass`,
+			isListening: `${nodeBaseKey}isListening`,
+			isFrequentListening: `${nodeBaseKey}isFrequentListening`,
+			isRouting: `${nodeBaseKey}isRouting`,
+			supportedDataRates: `${nodeBaseKey}supportedDataRates`,
+			protocolVersion: `${nodeBaseKey}protocolVersion`,
+			nodeType: `${nodeBaseKey}nodeType`,
+			supportsSecurity: `${nodeBaseKey}supportsSecurity`,
+			supportsBeaming: `${nodeBaseKey}supportsBeaming`,
+			securityClass: (secClass: SecurityClass) =>
+				`${nodeBaseKey}securityClasses.${getEnumMemberName(
+					SecurityClass,
+					secClass,
+				)}`,
+			dsk: `${nodeBaseKey}dsk`,
+			endpoint: (index: number) => {
+				const endpointBaseKey = `${nodeBaseKey}endpoint.${index}.`;
+				const ccBaseKey = `${endpointBaseKey}commandClass.`;
+				return {
+					_baseKey: endpointBaseKey,
+					_ccBaseKey: ccBaseKey,
+					commandClass: (ccId: CommandClasses) => {
+						const ccAsHex = num2hex(ccId);
+						return `${ccBaseKey}${ccAsHex}`;
+					},
+				};
+			},
+			hasSUCReturnRoute: `${nodeBaseKey}hasSUCReturnRoute`,
+		};
+	},
 } as const;
 
 export const cacheKeyUtils = {

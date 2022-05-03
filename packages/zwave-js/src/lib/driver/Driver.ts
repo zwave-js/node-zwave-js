@@ -1674,6 +1674,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 		// purge node values from the DB
 		node.valueDB.clear();
+		this.cachePurge(cacheKeys.node(node.id)._baseKey);
+
 		// Remove the node from all security manager instances
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
@@ -3981,6 +3983,14 @@ ${handlers.length} left`,
 			this.networkCache.delete(cacheKey);
 		} else {
 			this.networkCache.set(cacheKey, value);
+		}
+	}
+
+	private cachePurge(prefix: string): void {
+		for (const key of this.networkCache.keys()) {
+			if (key.startsWith(prefix)) {
+				this.networkCache.delete(key);
+			}
 		}
 	}
 
