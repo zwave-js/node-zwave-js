@@ -148,6 +148,16 @@ describe("lib/log/Serial =>", () => {
 		});
 	});
 
+	describe("logs discarded data correctly", () => {
+		it("simple test", () => {
+			serialLogger.discarded(Buffer.from("02020202020202", "hex"));
+			const alignRight = " ".repeat(80 - 53);
+			assertMessage(spyTransport, {
+				message: `« [DISCARDED] invalid data 0x02020202020202 ${alignRight}(7 bytes)`,
+			});
+		});
+	});
+
 	// 	describe("logs the receive buffer correctly", () => {
 	// 		it("for short buffers", () => {
 	// 			serialLogger.receiveBuffer(Buffer.from([0, 8, 0x15]), true);

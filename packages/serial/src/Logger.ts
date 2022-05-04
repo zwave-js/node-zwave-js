@@ -46,20 +46,23 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	}
 
 	/**
-	 * Logs receipt of an unexpected byte, instead of a ACK, NAK, CAN, or data frame
+	 * Logs receipt of unexpected data while waiting for an ACK, NAK, CAN, or data frame
 	 */
-        public whut(direction: DataDirection, data: Buffer): void {
-		if (this.isVisible())
+	public discarded(data: Buffer): void {
+		if (this.isVisible()) {
+			const direction: DataDirection = "inbound";
 			this.logger.log({
-				level: SERIAL_LOGLEVEL,
-				message: `garble. unexpected byte 0x${data[0].toString("hex")}`,
+				level: "warn",
+				primaryTags: "[DISCARDED]",
+				message: `invalid data ${buffer2hex(data)}`,
 				secondaryTags: `(${data.length} bytes)`,
 				direction: getDirectionPrefix(direction),
 				context: {
 					source: "serial",
 					direction,
 				},
-		});
+			});
+		}
 	}
 
 	private logMessageHeader(
