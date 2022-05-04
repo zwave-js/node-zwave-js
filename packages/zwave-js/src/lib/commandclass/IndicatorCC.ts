@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -37,16 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export type IndicatorMetadata = ValueMetadata & {
-	ccSpecific: {
-		indicatorId: number;
-		propertyId?: number; // only present on V2+ indicators
-	};
-};
+import { IndicatorCommand } from "./_Types";
 
 export function getSupportedIndicatorIDsValueID(
 	endpoint: number | undefined,
@@ -163,15 +155,6 @@ function getIndicatorName(
 	return indicatorName;
 }
 
-// All the supported commands
-export enum IndicatorCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
 const MAX_INDICATOR_OBJECTS = 31;
 
 @API(CommandClasses.Indicator)
@@ -247,6 +230,7 @@ export class IndicatorCCAPI extends CCAPI {
 		throwUnsupportedProperty(this.ccId, property);
 	};
 
+	@validateArgs()
 	public async get(
 		indicatorId?: number,
 	): Promise<number | IndicatorObject[] | undefined> {
@@ -266,6 +250,7 @@ export class IndicatorCCAPI extends CCAPI {
 		return response.value!;
 	}
 
+	@validateArgs()
 	public async set(value: number | IndicatorObject[]): Promise<void> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
@@ -277,6 +262,7 @@ export class IndicatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
 				indicatorId?: number;
@@ -351,11 +337,11 @@ export class IndicatorCC extends CommandClass {
 		super(driver, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
-			true,
+			{ internal: true },
 		);
 		this.registerValue(
 			getSupportedPropertyIDsValueID(undefined, 0).property,
-			true,
+			{ internal: true },
 		);
 	}
 

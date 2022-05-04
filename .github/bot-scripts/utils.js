@@ -9,6 +9,12 @@ function formatWithPrettier(filename, sourceText) {
 	return prettier.format(sourceText, prettierOptions);
 }
 
+const urls = {
+	styleGuide:
+		"https://zwave-js.github.io/node-zwave-js/#/config-files/style-guide",
+};
+
 module.exports = {
 	formatWithPrettier,
+	urls,
 };

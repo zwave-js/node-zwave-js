@@ -1,104 +1,12 @@
-import {
-	CommandClasses,
-	isZWaveError,
-	ZWaveError,
-	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { CommandClasses } from "@zwave-js/core/safe";
+import { JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
-import JSON5 from "json5";
-import path from "path";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegexNDigits,
-	throwInvalidConfig,
-} from "./utils";
+import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export type BasicDeviceClassMap = ReadonlyMap<number, string>;
 export type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
-
-/** @internal */
-export async function loadDeviceClassesInternal(
-	externalConfig?: boolean,
-): Promise<{
-	basicDeviceClasses: BasicDeviceClassMap;
-	genericDeviceClasses: GenericDeviceClassMap;
-}> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"deviceClasses.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The device classes config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"device classes",
-				`the dictionary is not an object`,
-			);
-		}
-
-		if (!isObject(definition.basic)) {
-			throwInvalidConfig(
-				"device classes",
-				`The "basic" property is not an object`,
-			);
-		}
-		if (!isObject(definition.generic)) {
-			throwInvalidConfig(
-				"device classes",
-				`The "generic" property is not an object`,
-			);
-		}
-
-		const basicDeviceClasses = new Map<number, string>();
-		for (const [key, basicClass] of entries(definition.basic)) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"device classes",
-					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			basicDeviceClasses.set(keyNum, basicClass);
-		}
-
-		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
-		for (const [key, genericDefinition] of entries(definition.generic)) {
-			if (!hexKeyRegexNDigits.test(key)) {
-				throwInvalidConfig(
-					"device classes",
-					`found invalid key "${key}" in the generic device class definition. Device classes must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const keyNum = parseInt(key.slice(2), 16);
-			genericDeviceClasses.set(
-				keyNum,
-				new GenericDeviceClass(keyNum, genericDefinition),
-			);
-		}
-
-		return { basicDeviceClasses, genericDeviceClasses };
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("device classes");
-		}
-	}
-}
 
 export function getDefaultGenericDeviceClass(key: number): GenericDeviceClass {
 	return new GenericDeviceClass(key, {

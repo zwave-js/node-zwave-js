@@ -146,6 +146,7 @@
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "1 Light Zone",

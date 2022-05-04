@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import type { TXReport } from "../controller/SendDataShared";
+import type { TXReport } from "../controller/_Types";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -417,8 +417,16 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Entry Control"
 	: [CC] extends [typeof CommandClasses["Firmware Update Meta Data"]]
 	? "Firmware Update Meta Data"
+	: [CC] extends [typeof CommandClasses["Humidity Control Mode"]]
+	? "Humidity Control Mode"
+	: [CC] extends [typeof CommandClasses["Humidity Control Operating State"]]
+	? "Humidity Control Operating State"
+	: [CC] extends [typeof CommandClasses["Humidity Control Setpoint"]]
+	? "Humidity Control Setpoint"
 	: [CC] extends [typeof CommandClasses["Indicator"]]
 	? "Indicator"
+	: [CC] extends [typeof CommandClasses["Irrigation"]]
+	? "Irrigation"
 	: [CC] extends [typeof CommandClasses["Language"]]
 	? "Language"
 	: [CC] extends [typeof CommandClasses["Lock"]]
@@ -547,7 +555,11 @@ export interface CCAPIs {
 	"Door Lock Logging": import("./DoorLockLoggingCC").DoorLockLoggingCCAPI;
 	"Entry Control": import("./EntryControlCC").EntryControlCCAPI;
 	"Firmware Update Meta Data": import("./FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCAPI;
+	"Humidity Control Mode": import("./HumidityControlModeCC").HumidityControlModeCCAPI;
+	"Humidity Control Operating State": import("./HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
+	"Humidity Control Setpoint": import("./HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
+	Irrigation: import("./IrrigationCC").IrrigationCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	Lock: import("./LockCC").LockCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;

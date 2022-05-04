@@ -153,8 +153,6 @@
 			"label": "Relay And LED Configuration",
 			"description": "This configuration is used to change the relay LED status when relay is open/close and also enable to whether to retain the last relay status over power cycle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -5,6 +5,7 @@ import {
 	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
@@ -29,13 +30,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TimeParametersCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { TimeParametersCommand } from "./_Types";
 
 /**
  * Determines if the node expects local time instead of UTC.
@@ -154,6 +149,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		return response?.dateAndTime;
 	}
 
+	@validateArgs()
 	public async set(dateAndTime: Date): Promise<void> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,

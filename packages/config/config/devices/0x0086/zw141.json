@@ -53,8 +53,6 @@
 			"label": "Operation Mode of External Switch",
 			"description": "Refer to user manual for a description of operation modes 1 or 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

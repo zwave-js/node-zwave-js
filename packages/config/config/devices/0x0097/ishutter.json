@@ -39,8 +39,6 @@
 			"label": "Buttons Mode",
 			"description": "See overview",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +75,6 @@
 			"label": "What to do on RF close command",
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -113,8 +109,6 @@
 			"#": "5",
 			"label": "Invert buttons",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -133,8 +127,6 @@
 			"label": "Action on button press or hold",
 			"description": "Defines which command should be sent to Association group",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -153,8 +145,6 @@
 			"label": "LED mode",
 			"description": "Set LED indication mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -214,8 +204,6 @@
 			"#": "13",
 			"label": "Protected command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -233,8 +221,6 @@
 			"#": "14",
 			"label": "Invert open and close relays",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

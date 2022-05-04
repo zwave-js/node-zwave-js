@@ -16,7 +16,7 @@ async disable(groupId: number): Promise<void>;
 async set(
 	groupId: number,
 	sceneId: number,
-	dimmingDuration?: Duration,
+	dimmingDuration?: Duration | string,
 ): Promise<void>;
 ```
 

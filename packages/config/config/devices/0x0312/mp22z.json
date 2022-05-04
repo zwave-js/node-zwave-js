@@ -8,45 +8,57 @@
 			"productType": "0xff00",
 			"productId": "0xff07",
 			"zwaveAllianceId": 3711
-		},
-		{
-			"productType": "0xff07",
-			"productId": "0xff03",
-			"zwaveAllianceId": 4254
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
+			"#": "1",
+			"label": "Status LED Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load off, LED off when load on",
+					"value": 0
+				},
+				{
+					"label": "LED on when load on, LED off when load off",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		{
 			"#": "2",
-			"$import": "~/templates/master_template.json#led_indicator_four_options"
-		},
-		{
-			"#": "3",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
-		},
-		{
-			"#": "5",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
-		},
-		{
-			"#": "8",
-			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
-		},
-		{
-			"#": "9",
-			"$import": "~/templates/master_template.json#dim_rate"
-		},
-		{
-			"#": "10",
-			"$import": "~/templates/master_template.json#minimum_dim_level_0-99"
-		},
-		{
-			"#": "11",
-			"$import": "~/templates/master_template.json#maximum_dim_level_0-99",
+			"label": "Auto-Off Timer",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Disable",
@@ -55,42 +67,31 @@
 			]
 		},
 		{
-			"#": "12",
-			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
+			"#": "4",
+			"label": "Auto-On Timer",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
-			"#": "15",
-			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
-		},
-		{
-			"#": "21",
-			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
-		},
-		{
-			"#": "16",
-			"$import": "~/templates/master_template.json#dimming_speed_1-99_seconds"
-		},
-		{
-			"#": "20",
-			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
-		},
-		{
-			"#": "22",
-			"$import": "~/0x0312/templates/minoston_template.json#night_mode_brightness"
-		},
-		{
-			"#": "23",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
-		},
-		{
-			"#": "26",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev",
+			"defaultValue": 0
 		}
 	],
 	"metadata": {
-		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
-		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
-		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\n(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable.)",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4254/MP22ZD-manual-20210728.pdf"
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the PROG button five times in one second.",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the PROG button five times in one second.",
+		"reset": "Press click Z-Wave button 3 times quickly, and hold for at least 10 seconds at the third time to restore the device to the factory\nNode:Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3711/MP22Z-Manual191111.pdf"
 	}
 }

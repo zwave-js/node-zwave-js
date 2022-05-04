@@ -40,8 +40,6 @@
 			"label": "Selected endpoint",
 			"description": "Send Basic Command Class",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -64,8 +62,6 @@
 			"label": "Switch mode",
 			"description": "Change the external switch mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -89,8 +85,6 @@
 			"label": "Restore Switch State Mode",
 			"description": "Switch state after repowering",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -122,8 +116,6 @@
 			"$if": "firmwareVersion >= 1.8",
 			"label": "RF OFF command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -150,8 +142,6 @@
 			"$if": "firmwareVersion >= 1.8",
 			"label": "Existence of endpoint 3",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -170,8 +160,6 @@
 			"label": "Send Reports From Endpoints",
 			"description": "Enable this to distinguish between the relays.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

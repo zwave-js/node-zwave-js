@@ -13,15 +13,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { CRC16Command } from "./_Types";
 
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
 
-// All the supported commands
-export enum CRC16Command {
-	CommandEncapsulation = 0x01,
-}
-
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
 	public supportsCommand(_cmd: CRC16Command): Maybe<boolean> {

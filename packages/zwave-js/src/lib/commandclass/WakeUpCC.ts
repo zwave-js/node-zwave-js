@@ -7,10 +7,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -33,6 +34,14 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { WakeUpCommand } from "./_Types";
+
+export function getControllerNodeIdValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Wake Up"],
+		property: "controllerNodeId",
+	};
+}
 
 export function getWakeUpIntervalValueId(): ValueID {
 	return {
@@ -46,16 +55,6 @@ export function getWakeUpOnDemandSupportedValueId(): ValueID {
 		commandClass: CommandClasses["Wake Up"],
 		property: "wakeUpOnDemandSupported",
 	};
-}
-
-export enum WakeUpCommand {
-	IntervalSet = 0x04,
-	IntervalGet = 0x05,
-	IntervalReport = 0x06,
-	WakeUpNotification = 0x07,
-	NoMoreInformation = 0x08,
-	IntervalCapabilitiesGet = 0x09,
-	IntervalCapabilitiesReport = 0x0a,
 }
 
 @API(CommandClasses["Wake Up"])
@@ -146,6 +145,7 @@ export class WakeUpCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setInterval(
 		wakeUpInterval: number,
 		controllerNodeId: number,
@@ -220,7 +220,7 @@ export class WakeUpCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
-		if (node.isControllerNode()) {
+		if (node.isControllerNode) {
 			this.driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
@@ -287,7 +287,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
 					this.getValueDB().setValue(
-						getWakeUpIntervalValueId(),
+						getControllerNodeIdValueId(),
 						ownNodeId,
 					);
 					this.driver.controllerLog.logNode(

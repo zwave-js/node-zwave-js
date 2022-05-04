@@ -51,8 +51,6 @@
 			"label": "Light Threshold",
 			"description": "Setting the illumination threshold to turn on the light",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
 			"defaultValue": 100,
 			"allowManualEntry": false,
 			"options": [

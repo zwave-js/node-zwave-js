@@ -60,8 +60,6 @@
 			"#": "9[0xff]",
 			"label": "Current Power State",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
@@ -87,7 +85,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"unsigned": true
 		},
 		{
 			"#": "10[0xff00]",
@@ -95,7 +94,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 20
+			"defaultValue": 20,
+			"unsigned": true
 		},
 		{
 			"#": "10[0xffff0000]",
@@ -103,7 +103,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 120
+			"defaultValue": 120,
+			"unsigned": true
 		},
 		{
 			"#": "39",
@@ -121,7 +122,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 4
+			"defaultValue": 4,
+			"unsigned": true
 		},
 		{
 			"#": "49[0xff00]",
@@ -134,7 +136,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"unsigned": true
 		},
 		{
 			"#": "50[0xff00]",
@@ -153,8 +156,6 @@
 			"#": "84",
 			"label": "Tilt Sensor State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
@@ -211,8 +212,6 @@
 			"label": "Basic Set on Water Leak (Probe 1)",
 			"description": "Report is sent to Association Group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -236,8 +235,6 @@
 			"label": "Basic Set on Water Leak (Probe 2)",
 			"description": "Report is sent to Association Group 4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -258,7 +255,7 @@
 		},
 		{
 			"#": "94",
-			"$import": "~/templates/master_template.json#base_0-1_nounit",
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"label": "Battery Source to Report",
 			"options": [
 				{
@@ -282,8 +279,6 @@
 			"label": "Automatic Report Type",
 			"description": "For non-multichannel devices - Configuration CC will report to the Water Leak Status parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -310,8 +305,6 @@
 			"#": "136[0x01]",
 			"label": "Water Leak Status: Probe 1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
@@ -331,8 +324,6 @@
 			"#": "136[0x02]",
 			"label": "Water Leak Status: Probe 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,
@@ -352,8 +343,6 @@
 			"#": "101",
 			"label": "Automatic Secondary Report Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"allowManualEntry": false,

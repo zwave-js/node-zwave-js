@@ -18,7 +18,7 @@ jobs:
         node-version: [14.x] # This should be LTS
 
     steps:
-    - uses: actions/github-script@v5
+    - uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -49,16 +49,17 @@ jobs:
           })
 
     - name: Checkout merged code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{secrets.BOT_TOKEN}}
+        fetch-depth: 0 # We need the history for versioning with yarn
         ref: 'refs/pull/${{ github.event.issue.number }}/merge'
 
     - name: Switch to a branch
       run: git switch -c temp
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -90,13 +91,13 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         path: trusted
 
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -108,7 +109,7 @@ jobs:
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
       id: pr-info
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/trusted/.github/bot-scripts/index.js`);
@@ -132,7 +133,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.pr-info.outputs.result).pending
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.pr-info.outputs.result).repoName }}
@@ -169,7 +170,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
         PENDING: ${{ fromJSON(steps.pr-info.outputs.result).pending }}
@@ -196,11 +197,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -211,7 +212,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       id: get-pr
       with:
         script: |
@@ -236,7 +237,7 @@ jobs:
 
     - name: Checkout pull request
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
@@ -268,7 +269,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
       with:
@@ -294,11 +295,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
  
     - name: Check permissions and necessity
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -312,7 +313,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Retrieve PR information
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       id: get-pr
       with:
         script: |
@@ -327,7 +328,7 @@ jobs:
 
     - name: Checkout pull request
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0 # Fetch the history, or this action will break everything!
         token: ${{secrets.BOT_TOKEN}}
@@ -360,7 +361,7 @@ jobs:
 
     - name: Give feedback
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
       with:
@@ -384,11 +385,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -399,7 +400,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -416,7 +417,7 @@ jobs:
     - name: Get config file ID
       if: steps.check-permissions.outputs.result == 'true'
       id: config-id
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -461,7 +462,7 @@ jobs:
 
     - name: Create PR
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         RESULT: ${{ steps.import.outputs.result }}
         branchname: ${{ steps.import.outputs.branchname }}
@@ -492,11 +493,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -507,7 +508,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -524,7 +525,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -541,7 +542,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
         flag: ${{ fromJSON(steps.parse-command.outputs.result).flag }}
@@ -584,7 +585,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}
@@ -612,11 +613,11 @@ jobs:
 
     steps:
     - name: Checkout master branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
  
     - name: Check user's permissions to do this
       id: check-permissions
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
@@ -627,7 +628,7 @@ jobs:
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
       if: steps.check-permissions.outputs.result == 'true'
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -644,7 +645,7 @@ jobs:
     - name: Parse command
       if: steps.check-permissions.outputs.result == 'true'
       id: parse-command
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
@@ -661,7 +662,7 @@ jobs:
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
       id: add-fingerprint
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         fingerprint: ${{ fromJSON(steps.parse-command.outputs.result).fingerprint }}
         id: ${{ fromJSON(steps.parse-command.outputs.result).id }}
@@ -706,7 +707,7 @@ jobs:
       if: |
         steps.check-permissions.outputs.result == 'true' &&
         !fromJSON(steps.parse-command.outputs.result).skip
-      uses: actions/github-script@v5
+      uses: actions/github-script@v6
       env:
         RESULT: ${{ steps.commit-changes.outputs.result }}
         branchname: ${{ steps.commit-changes.outputs.branchname }}

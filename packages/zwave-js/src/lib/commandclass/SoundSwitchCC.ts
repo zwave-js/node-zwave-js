@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -36,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SoundSwitchCommand, ToneId } from "./_Types";
 
 export function getVolumeValueId(endpointIndex: number | undefined): ValueID {
 	return {
@@ -51,26 +53,6 @@ export function getToneIdValueId(endpointIndex: number | undefined): ValueID {
 		endpoint: endpointIndex,
 		property: "toneId",
 	};
-}
-
-// All the supported commands
-export enum SoundSwitchCommand {
-	TonesNumberGet = 0x01,
-	TonesNumberReport = 0x02,
-	ToneInfoGet = 0x03,
-	ToneInfoReport = 0x04,
-	ConfigurationSet = 0x05,
-	ConfigurationGet = 0x06,
-	ConfigurationReport = 0x07,
-	TonePlaySet = 0x08,
-	TonePlayGet = 0x09,
-	TonePlayReport = 0x0a,
-}
-
-// @publicAPI
-export enum ToneId {
-	Off = 0x00,
-	Default = 0xff,
 }
 
 @API(CommandClasses["Sound Switch"])
@@ -107,6 +89,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		return response?.toneCount;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getToneInfo(toneId: number) {
 		this.assertSupportsCommand(
@@ -127,6 +110,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
+	@validateArgs()
 	public async setConfiguration(
 		defaultToneId: number,
 		defaultVolume: number,
@@ -166,6 +150,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async play(toneId: number, volume?: number): Promise<void> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,

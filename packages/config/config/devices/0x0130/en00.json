@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Analog gas/heat port mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -49,8 +47,6 @@
 			"#": "3",
 			"label": "Analog electricity port mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -88,8 +84,6 @@
 			"#": "255",
 			"label": "Restart device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

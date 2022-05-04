@@ -1,0 +1,126 @@
+{
+	"manufacturer": "Eurotronic",
+	"manufacturerId": "0x0148",
+	"label": "TFS 700087",
+	"description": "Temperature & Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Temperature",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature Change Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unit": "0.1 K",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Humidity Change Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unit": "%rH",
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Temperature Scale",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Temperature Resolution",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No resolution (example 22 °C)",
+					"value": 0
+				},
+				{
+					"label": "1/10 resolution (example 22.3 °C)",
+					"value": 1
+				},
+				{
+					"label": "1/100 resolution (example 22.35 °C)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Humidity Resolution",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No resolution (example 33 %)",
+					"value": 0
+				},
+				{
+					"label": "1/10 resolution (example 33.4 %)",
+					"value": 1
+				},
+				{
+					"label": "1/100 resolution (example 33.45 %)",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"manual": "https://eurotronic.org/wp-content/uploads/2020/02/TFS-Z-Wave-Plus_BDA_web_EN.pdf"
+	}
+}

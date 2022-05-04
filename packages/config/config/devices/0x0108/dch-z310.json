@@ -20,8 +20,6 @@
 			"label": "Customer Function",
 			"description": "Customer function switch, using bit control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [

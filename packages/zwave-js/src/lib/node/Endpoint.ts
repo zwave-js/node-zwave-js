@@ -1,5 +1,6 @@
 import {
 	actuatorCCs,
+	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
 	GraphNode,
@@ -7,7 +8,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
-import type { MultiChannelAssociationCC } from "../commandclass";
+import { isDeepStrictEqual } from "util";
 import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
 	AssociationCC,
@@ -22,16 +23,20 @@ import {
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
 import {
-	AssociationAddress,
-	EndpointAddress,
 	getEndpointsValueId,
 	getNodeIdsValueId,
+	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import {
 	getInstallerIconValueId,
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
+import type {
+	AssociationAddress,
+	EndpointAddress,
+} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
+import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
 
@@ -62,9 +67,29 @@ export class Endpoint {
 		}
 	}
 
-	protected _deviceClass: DeviceClass | undefined;
+	/**
+	 * Only used for endpoints which store their device class differently than nodes.
+	 * DO NOT ACCESS directly!
+	 */
+	private _deviceClass: DeviceClass | undefined;
 	public get deviceClass(): DeviceClass | undefined {
-		return this._deviceClass;
+		if (this.index > 0) {
+			return this._deviceClass;
+		} else {
+			return this.driver.cacheGet(
+				cacheKeys.node(this.nodeId).deviceClass,
+			);
+		}
+	}
+	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+		if (this.index > 0) {
+			this._deviceClass = deviceClass;
+		} else {
+			this.driver.cacheSet(
+				cacheKeys.node(this.nodeId).deviceClass,
+				deviceClass,
+			);
+		}
 	}
 
 	/** Resets all stored information of this endpoint */
@@ -73,17 +98,25 @@ export class Endpoint {
 		this._commandClassAPIs.clear();
 	}
 
-	private _implementedCommandClasses = new Map<
+	private _implementedCommandClasses: Map<
 		CommandClasses,
-		CommandClassInfo
-	>();
+		Readonly<CommandClassInfo>
+	> = new CacheBackedMap(this.driver.networkCache, {
+		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
+		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+		suffixDeserializer: (key: string) => {
+			const ccId = parseInt(key, 16);
+			if (ccId in CommandClasses) return ccId;
+		},
+	});
+
 	/**
 	 * @internal
 	 * Information about the implemented Command Classes of this endpoint.
 	 */
 	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
-		CommandClassInfo
+		Readonly<CommandClassInfo>
 	> {
 		return this._implementedCommandClasses;
 	}
@@ -93,9 +126,9 @@ export class Endpoint {
 	 * **Note:** This does nothing if the device class was already configured
 	 */
 	protected applyDeviceClass(deviceClass?: DeviceClass): void {
-		if (this._deviceClass) return;
+		if (this.deviceClass) return;
 
-		this._deviceClass = deviceClass;
+		this.deviceClass = deviceClass;
 		// Add mandatory CCs
 		if (deviceClass) {
 			for (const cc of deviceClass.mandatorySupportedCCs) {
@@ -116,14 +149,20 @@ export class Endpoint {
 		// Endpoints cannot support Multi Channel CC
 		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
 
-		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
-			isSupported: false,
-			isControlled: false,
-			secure: false,
-			version: 0,
-		};
-		ccInfo = Object.assign(ccInfo, info);
-		this._implementedCommandClasses.set(cc, ccInfo);
+		const original = this._implementedCommandClasses.get(cc);
+		const updated = Object.assign(
+			{},
+			original ?? {
+				isSupported: false,
+				isControlled: false,
+				secure: false,
+				version: 0,
+			},
+			info,
+		);
+		if (!isDeepStrictEqual(original, updated)) {
+			this._implementedCommandClasses.set(cc, updated);
+		}
 	}
 
 	/**

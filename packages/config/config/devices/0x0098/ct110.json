@@ -42,8 +42,6 @@
 			"#": "3",
 			"label": "Utility Lock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -62,8 +60,6 @@
 			"#": "4",
 			"label": "C-Wire/Battery",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -81,8 +77,6 @@
 			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -108,8 +102,6 @@
 			"#": "6",
 			"label": "Auxiliary/Emergency Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +119,6 @@
 			"#": "7",
 			"label": "Thermostat Swing Temperature",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -170,8 +160,6 @@
 			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -189,8 +177,6 @@
 			"#": "11",
 			"label": "Simple UI Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -208,8 +194,6 @@
 			"#": "12",
 			"label": "Multicast",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -227,8 +211,6 @@
 			"#": "13",
 			"label": "Main Display Settings",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -256,9 +238,8 @@
 			"#": "2[0xff]",
 			"label": "HVAC Type",
 			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -277,15 +258,15 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "2[0xf000]",
 			"label": "Fuel Type",
 			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -304,7 +285,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 128,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "2[0x0f000000]",
@@ -312,7 +294,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "10[0xffff]",
@@ -320,7 +303,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
-			"defaultValue": 124
+			"defaultValue": 124,
+			"unsigned": true
 		},
 		{
 			"#": "10[0x0fff0000]",
@@ -328,7 +312,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
-			"defaultValue": 124
+			"defaultValue": 124,
+			"unsigned": true
 		}
 	]
 }

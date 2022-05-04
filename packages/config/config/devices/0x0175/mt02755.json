@@ -20,8 +20,6 @@
 			"label": "Operation Mode",
 			"description": "Setting the temperature scale",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -40,8 +38,6 @@
 			"label": "Multi Sensor Function Switch",
 			"description": "Disable the humidity report after event triggered",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 32,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -118,8 +114,6 @@
 			"#": "7[0x10]",
 			"label": "Customer Function: Notification Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -137,8 +131,6 @@
 			"#": "7[0x20]",
 			"label": "Customer Function: Disable Multi CC",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -37,8 +37,6 @@
 			"label": "Switch behavior",
 			"description": "Selects ON/OFF/BLINK modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -128,8 +126,6 @@
 			"label": "S1 powerfail recovery",
 			"description": "Powerfail recovery mode for S1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -156,8 +152,6 @@
 			"label": "Relay S2 mode",
 			"description": "Relay S2 mode of operation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -226,8 +220,6 @@
 			"label": "S2 powerfail recovery",
 			"description": "Powerfail recovery mode for S2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -245,8 +237,6 @@
 			"#": "15",
 			"label": "S1 button mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -272,8 +262,6 @@
 			"#": "16",
 			"label": "S2 button mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -307,8 +295,6 @@
 			"#": "50",
 			"label": "Forced secure mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -326,8 +312,6 @@
 			"#": "51",
 			"label": "Secure send for S1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -345,8 +329,6 @@
 			"#": "52",
 			"label": "Secure send for S2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

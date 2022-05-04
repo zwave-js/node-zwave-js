@@ -1,0 +1,2112 @@
+{
+	"manufacturer": "Building 36 Technologies",
+	"manufacturerId": "0x0190",
+	"label": "ADC-T 3000",
+	"description": "Alarm.com Smart Thermostat",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "HVAC System Type",
+			"description": "Configures the type of heating system used.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Heat Pump",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Number of Heat Stages",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2
+		},
+		{
+			"#": "3",
+			"label": "Number of Cool Stages",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2
+		},
+		{
+			"#": "4",
+			"label": "Heat Fuel Type",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fossil Fuel",
+					"value": 0
+				},
+				{
+					"label": "Electric",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5[0xffff00]",
+			"label": "Calibration Temperature",
+			"description": "Allowable range: -10 to 10 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "5[0xe0000000]",
+			"label": "Calibration Temperature Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "5[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Calibration Temperature Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "5[0x07000000]",
+			"label": "Calibration Temperature Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "6[0xffff00]",
+			"label": "Swing",
+			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "6[0xe0000000]",
+			"label": "Swing Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "6[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Swing Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "6[0x07000000]",
+			"label": "Swing Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "7[0xffff00]",
+			"label": "Overshoot",
+			"description": "Allowable range: 0 to 3 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "7[0xe0000000]",
+			"label": "Overshoot Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "7[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Overshoot Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "7[0x07000000]",
+			"label": "Overshoot Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "8",
+			"label": "Heat Staging Delay",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 30
+		},
+		{
+			"#": "9",
+			"label": "Cool Staging Delay",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 30
+		},
+		{
+			"#": "10[0xffff00]",
+			"label": "Balance Setpoint",
+			"description": "Allowable range: 0 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 300,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "10[0xe0000000]",
+			"label": "Balance Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "10[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Balance Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "10[0x07000000]",
+			"label": "Balance Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "12",
+			"label": "Fan Circulation Period",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 10,
+			"maxValue": 1440,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Fan Circulation Duty Cycle",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 25
+		},
+		{
+			"#": "14",
+			"label": "Fan Purge Time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 3600,
+			"defaultValue": 60
+		},
+		{
+			"#": "15[0xffff00]",
+			"label": "Maximum Heat Setpoint",
+			"description": "Allowable range: 35 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 950,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "15[0xe0000000]",
+			"label": "Maximum Heat Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "15[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Maximum Heat Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "15[0x07000000]",
+			"label": "Maximum Heat Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "16[0xffff00]",
+			"label": "Minimum Heat Setpoint",
+			"description": "Allowable range: 35 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 350,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "16[0xe0000000]",
+			"label": "Minimum Heat Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "16[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Minimum Heat Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "16[0x07000000]",
+			"label": "Minimum Heat Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "17[0xffff00]",
+			"label": "Maximum Cool Setpoint",
+			"description": "Allowable range: 50 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 950,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "17[0xe0000000]",
+			"label": "Maximum Cool Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "17[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Maximum Cool Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "17[0x07000000]",
+			"label": "Maximum Cool Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "18[0xffff00]",
+			"label": "Minimum Cool Setpoint",
+			"description": "Allowable range: 50 to 95 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 950,
+			"defaultValue": 500,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "18[0xe0000000]",
+			"label": "Minimum Cool Setpoint Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "18[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Minimum Cool Setpoint Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "18[0x07000000]",
+			"label": "Minimum Cool Setpoint Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "19",
+			"label": "Thermostat Lock",
+			"description": "Lock out physical thermostat controls.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Full Lock",
+					"value": 1
+				},
+				{
+					"label": "Partial Lock",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Compressor Delay",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 5
+		},
+		{
+			"#": "23",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Temperature Display Units",
+			"defaultValue": 1
+		},
+		{
+			"#": "24",
+			"label": "HVAC Modes Enabled",
+			"valueSize": 1,
+			"defaultValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off, Heat",
+					"value": 3
+				},
+				{
+					"label": "Off, Cool",
+					"value": 5
+				},
+				{
+					"label": "Off, Heat, Cool",
+					"value": 7
+				},
+				{
+					"label": "Off, Heat, Cool, Auto",
+					"value": 15
+				},
+				{
+					"label": "Off, Heat, Emergency Heat",
+					"value": 19
+				},
+				{
+					"label": "Off, Heat, Cool, Emergency Heat",
+					"value": 23
+				},
+				{
+					"label": "Off, Heat, Cool, Auto, Emergency Heat",
+					"value": 31
+				}
+			]
+		},
+		{
+			"#": "25[0x00ff]",
+			"label": "Configurable Terminal Setting Z2",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "W3, 3rd Stage Auxiliary Heat",
+					"value": 1
+				},
+				{
+					"label": "H, Humidifier",
+					"value": 2
+				},
+				{
+					"label": "DH, Dehumidifier",
+					"value": 3
+				},
+				{
+					"label": "External Air Baffle or Vent",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "25[0xff00]",
+			"label": "Configurable Terminal Setting Z1",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "W3, 3rd Stage Auxiliary Heat",
+					"value": 1
+				},
+				{
+					"label": "H, Humidifier",
+					"value": 2
+				},
+				{
+					"label": "DH, Dehumidifier",
+					"value": 3
+				},
+				{
+					"label": "External Air Baffle or Vent",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "26",
+			"label": "Active Power Source",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Battery",
+					"value": 0
+				},
+				{
+					"label": "C-Wire",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "27",
+			"label": "Battery Alert Threshold Low",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 30
+		},
+		{
+			"#": "28",
+			"label": "Battery Alert Threshold Very Low",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15
+		},
+		{
+			"#": "29[0x80000000]",
+			"label": "Current Relay State: Z1 Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x40000000]",
+			"label": "Current Relay State: Y2 Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x20000000]",
+			"label": "Current Relay State: Y Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x10000000]",
+			"label": "Current Relay State: W2 Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x08000000]",
+			"label": "Current Relay State: W Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x04000000]",
+			"label": "Current Relay State: G Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x02000000]",
+			"label": "Current Relay State: O Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00800000]",
+			"label": "Current Relay State: Override Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00100000]",
+			"label": "Current Relay State: C Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00080000]",
+			"label": "Current Relay State: RC Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00040000]",
+			"label": "Current Relay State: RH Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00020000]",
+			"label": "Current Relay State: Z2 Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00010000]",
+			"label": "Current Relay State: B Terminal Load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "No Load",
+					"value": 0
+				},
+				{
+					"label": "Load",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00008000]",
+			"label": "Current Relay State: Z1 Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00004000]",
+			"label": "Current Relay State: Y2 Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00002000]",
+			"label": "Current Relay State: Y Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00001000]",
+			"label": "Current Relay State: W2 Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000800]",
+			"label": "Current Relay State: W Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000400]",
+			"label": "Current Relay State: G Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000200]",
+			"label": "Current Relay State: O Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000008]",
+			"label": "Current Relay State: RC Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000004]",
+			"label": "Current Relay State: RH Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000002]",
+			"label": "Current Relay State: Z2 Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29[0x00000001]",
+			"label": "Current Relay State: B Relay State",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Not closed",
+					"value": 0
+				},
+				{
+					"label": "Closed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30[0x00ff]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Remote Temperature Sensor",
+			"description": "Use remote temperature sensor instead of built-in.",
+			"valueSize": 2
+		},
+		{
+			"#": "30[0xff00]",
+			"label": "Remote Temperature Sensor Status",
+			"description": "Status of the remote temperature sensor.",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Remote temperature disabled",
+					"value": 0
+				},
+				{
+					"label": "Active and functioning properly",
+					"value": 1
+				},
+				{
+					"label": "Inactive, timeout reached (see parameter 39)",
+					"value": 2
+				},
+				{
+					"label": "Inactive, temperature differential reached (see parameter 40)",
+					"value": 3
+				},
+				{
+					"label": "Inactive, 3 successive communication attempts failed",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "31[0xffff00]",
+			"label": "Heat Differential",
+			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "31[0xe0000000]",
+			"label": "Heat Differential Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "31[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Heat Differential Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "31[0x07000000]",
+			"label": "Heat Differential Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "32[0xffff00]",
+			"label": "Cool Differential",
+			"description": "Allowable range: 1 to 10 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "32[0xe0000000]",
+			"label": "Cool Differential Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "32[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Cool Differential Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "32[0x07000000]",
+			"label": "Cool Differential Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "33[0xffff00]",
+			"label": "Temperature Reporting Threshold",
+			"description": "Allowable range: 0.5 to 2 in 0.5 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "33[0xe0000000]",
+			"label": "Temperature Reporting Threshold Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "33[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Temperature Reporting Threshold Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "33[0x07000000]",
+			"label": "Temperature Reporting Threshold Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "35",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Echo Association Reports"
+		},
+		{
+			"#": "36[0xffff00]",
+			"label": "C-Wire Power Thermistor Offset",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": -20,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "36[0xe0000000]",
+			"label": "C-Wire Power Thermistor Offset Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "36[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "C-Wire Power Thermistor Offset Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "36[0x07000000]",
+			"label": "C-Wire Power Thermistor Offset Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "37",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Run Fan With Auxiliary Heat"
+		},
+		{
+			"#": "38[0x00000001]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Mode",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000008]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Operating State",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000010]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Fan Mode",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000020]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Fan State",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000040]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Ambiant Temperature",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000080]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Relative Humidity",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000200]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Battery Low Notification",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000400]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Battery Very Low Notification",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00000800]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Thermostat Supported Modes",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00001000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Remote Enable Report",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00002000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Operating State Report",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00004000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: HVAC Type",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00008000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Number of Cool/Pump Stages",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00010000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Number of Heat/Aux Stages",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00020000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Relay Status",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00040000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Power Source",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00080000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Power Applied",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00100000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Mains Disconnected",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00200000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Mains Reconnected",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "38[0x00400000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Replace Battery Soon",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x00800000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report Replace Battery Now",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x01000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Hardware Failure",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x02000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Software Failure",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x04000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Hardware Failure with Code",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x08000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Notification Report System Software Failure with Code",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x10000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Display Units",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x20000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Heat Fuel Type",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x40000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Mode",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "38[0x80000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Z-Wave Association Report: Humidity Control Setpoints",
+			"valueSize": 4,
+			"defaultValue": 1
+		},
+		{
+			"#": "39",
+			"label": "Remote Temperature Timeout",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 130,
+			"unsigned": true
+		},
+		{
+			"#": "40[0xffff00]",
+			"label": "Remote Temperature Differential",
+			"description": "Allowable range: 0 to 99 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 990,
+			"defaultValue": 250,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "40[0xe0000000]",
+			"label": "Remote Temperature Differential Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "40[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Remote Temperature Differential Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "40[0x07000000]",
+			"label": "Remote Temperature Differential Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "41",
+			"label": "Remote Temperature ACK Failure Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3
+		},
+		{
+			"#": "42",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Remote Temperature Display Enable",
+			"defaultValue": 1
+		},
+		{
+			"#": "43",
+			"label": "Outdoor Temperature Timeout",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1440,
+			"unsigned": true
+		},
+		{
+			"#": "45",
+			"label": "Heat Pump Expire",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2880,
+			"defaultValue": 0
+		},
+		{
+			"#": "46[0xffff00]",
+			"label": "Dehumidify by AC Offset",
+			"description": "Allowable range: 0 to 10 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "46[0xe0000000]",
+			"label": "Dehumidify by AC Offset Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "46[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Dehumidify by AC Offset Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "46[0x07000000]",
+			"label": "Dehumidify by AC Offset Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "48",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "PIR Enable",
+			"defaultValue": 1
+		},
+		{
+			"#": "49",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Humidity Display",
+			"defaultValue": 1
+		},
+		{
+			"#": "50[0x80000000]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "System configuration: Aux Fan",
+			"valueSize": 4,
+			"readOnly": true
+		},
+		{
+			"#": "50[0x60000000]",
+			"label": "System configuration: Cool Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 3,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "50[0x18000000]",
+			"label": "System configuration: Heat Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 3,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "50[0x04000000]",
+			"label": "System configuration: Fuel",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Fuel",
+					"value": 0
+				},
+				{
+					"label": "Electric",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "50[0x03000000]",
+			"label": "System configuration: HVAC Type",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 3,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Heat Pump",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "50[0x00f00000]",
+			"label": "System configuration: Z2 Configuration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "W3, 3rd Stage Auxiliary Heat",
+					"value": 1
+				},
+				{
+					"label": "H, Humidifier",
+					"value": 2
+				},
+				{
+					"label": "DH, Dehumidifier",
+					"value": 3
+				},
+				{
+					"label": "External Air Baffle or Vent",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "50[0x000f0000]",
+			"label": "System configuration: Z1 Configuration",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"unsigned": true,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "W3, 3rd Stage Auxiliary Heat",
+					"value": 1
+				},
+				{
+					"label": "H, Humidifier",
+					"value": 2
+				},
+				{
+					"label": "DH, Dehumidifier",
+					"value": 3
+				},
+				{
+					"label": "External Air Baffle or Vent",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "50[0x00000100]",
+			"label": "System configuration: Override",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "51",
+			"label": "Thermostat Reset",
+			"description": "Must write the magic value 2870 to take effect.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2870,
+			"defaultValue": 0,
+			"writeOnly": true
+		},
+		{
+			"#": "52",
+			"label": "Vent Options",
+			"valueSize": 1,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Always activate regardless of thermostat operating state",
+					"value": 1
+				},
+				{
+					"label": "Only activate when heating",
+					"value": 2
+				},
+				{
+					"label": "Only activate when cooling",
+					"value": 3
+				},
+				{
+					"label": "Only activate when heating or cooling",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "53",
+			"label": "Vent Circulation Period",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 1440,
+			"defaultValue": 60
+		},
+		{
+			"#": "54",
+			"label": "Vent Circulation Duty Cycle",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 25
+		},
+		{
+			"#": "55[0xffff00]",
+			"label": "Vent Maximum Outdoor Temperature",
+			"description": "Allowable range: 0 to 99 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 990,
+			"defaultValue": -1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "55[0xe0000000]",
+			"label": "Vent Maximum Outdoor Temperature Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "55[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Vent Maximum Outdoor Temperature Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "55[0x07000000]",
+			"label": "Vent Maximum Outdoor Temperature Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "56[0xffff00]",
+			"label": "Vent Minimum Outdoor Temperature",
+			"description": "Allowable range: 0 to 99 in 1 °F increments.",
+			"unit": "0.1°F",
+			"valueSize": 4,
+			"minValue": -1,
+			"maxValue": 990,
+			"defaultValue": -1,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": -1
+				}
+			]
+		},
+		/*{
+			"#": "56[0xe0000000]",
+			"label": "Vent Minimum Outdoor Temperature Precision",
+			"description": "The 'precision' part of a z-wave float representing this parameter. This is the number of decimal digits included in the temperature value. For example with a precision of 1, a value of 15 represents 1.5 °F",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "56[0x18000000]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"label": "Vent Minimum Outdoor Temperature Scale",
+			"description": "The 'scale' part of a z-wave float representing this parameter",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"readOnly": true
+		},
+		{
+			"#": "56[0x07000000]",
+			"label": "Vent Minimum Outdoor Temperature Size",
+			"description": "The 'size' part of a z-wave float representing this parameter, in bytes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": true
+		},*/
+		{
+			"#": "57",
+			"label": "Relay Harvest Level",
+			"valueSize": 1,
+			"defaultValue": 12,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "8 pulses",
+					"value": 9
+				},
+				{
+					"label": "16 pulses",
+					"value": 10
+				},
+				{
+					"label": "32 pulses",
+					"value": 11
+				},
+				{
+					"label": "64 pulses",
+					"value": 12
+				}
+			]
+		},
+		{
+			"#": "58",
+			"label": "Relay Harvest Interval",
+			"valueSize": 1,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "4 Milliseconds",
+					"value": 2
+				},
+				{
+					"label": "8 Milliseconds",
+					"value": 3
+				},
+				{
+					"label": "16 Milliseconds",
+					"value": 4
+				},
+				{
+					"label": "32 Milliseconds",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "59",
+			"label": "Minimum Battery Reporting Interval",
+			"description": "Minimum number of hours between battery reports",
+			"unit": "hours",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 60
+		},
+		{
+			"#": "60",
+			"label": "Humidity Control Swing",
+			"description": "Percent value the thermostat will add (for de-humidify) to or remove (for humidify) from the relevant humidity control setpoint.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "61",
+			"label": "Humidity Reporting Threshold",
+			"description": "The minimum percent the relative humidity must change between reported humidity values.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5
+		},
+		{
+			"#": "62",
+			"label": "Z-Wave Send Fail Limit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"unsigned": true,
+			"defaultValue": 10
+		},
+		{
+			"#": "64",
+			"label": "Vent Override Lockout",
+			"description": "Activate the vent if it has not been active in the specified period.",
+			"unit": "hours",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12
+		},
+		{
+			"#": "65",
+			"label": "Humidify Options",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always humidify regardless of thermostat operating state",
+					"value": 0
+				},
+				{
+					"label": "Only humidify when the thermostat operating state is heating, when in heat mode or when heating in auto mode. When in any other thermostat mode, the thermostat will humidify whenever it is necessary.",
+					"value": 1
+				}
+			]
+		}
+	]
+}

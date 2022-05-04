@@ -2,11 +2,14 @@
 
     -   [Introduction](README.md)
     -   [Quick Start](getting-started/quickstart.md)
+    -   [For Integrators / Why Z-Wave JS?](getting-started/integrators.md)
+    -   [Our Philosophy](getting-started/philosophy.md)
     -   [Security S2](getting-started/security-s2.md)
     -   [Migrating to v6](getting-started/migrating-to-v6.md)
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
     -   [Migrating to v8](getting-started/migrating-to-v8.md)
-    -   [Sponsoring the development](getting-started/sponsoring.md)
+    -   [Migrating to v9](getting-started/migrating-to-v9.md)
+    -   [🦎's device review](getting-started/device-review.md)
 
 -   API
 
@@ -39,7 +42,11 @@
         -   [Door Lock Logging CC](api/CCs/DoorLockLogging.md)
         -   [Entry Control CC](api/CCs/EntryControl.md)
         -   [Firmware Update Meta Data CC](api/CCs/FirmwareUpdateMetaData.md)
+        -   [Humidity Control Mode CC](api/CCs/HumidityControlMode.md)
+        -   [Humidity Control Operating State CC](api/CCs/HumidityControlOperatingState.md)
+        -   [Humidity Control Setpoint CC](api/CCs/HumidityControlSetpoint.md)
         -   [Indicator CC](api/CCs/Indicator.md)
+        -   [Irrigation CC](api/CCs/Irrigation.md)
         -   [Language CC](api/CCs/Language.md)
         -   [Lock CC](api/CCs/Lock.md)
         -   [Manufacturer Proprietary CC](api/CCs/ManufacturerProprietary.md)
@@ -86,11 +93,11 @@
     -   [Overview](troubleshooting/index.md)
     -   [Connectivity issues](troubleshooting/connectivity-issues.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
-    -   [Problems with 700 series sticks](troubleshooting/700-series-issues.md)
     -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
     -   [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)
     -   [A lock (or any secure device) cannot be controlled](troubleshooting/lock-uncontrollable.md)
     -   [Some values are missing](troubleshooting/missing-values.md)
+    -   [Upgrading the controller firmware](troubleshooting/otw-upgrade.md)
 
 -   Device Configuration Files
 

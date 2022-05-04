@@ -8,9 +8,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -23,57 +23,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum PowerlevelCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	TestNodeSet = 0x04,
-	TestNodeGet = 0x05,
-	TestNodeReport = 0x06,
-}
-
-/** @publicAPI */
-export enum Powerlevel {
-	"Normal Power" = 0x00,
-	"-1 dBm" = 0x01,
-	"-2 dBm" = 0x02,
-	"-3 dBm" = 0x03,
-	"-4 dBm" = 0x04,
-	"-5 dBm" = 0x05,
-	"-6 dBm" = 0x06,
-	"-7 dBm" = 0x07,
-	"-8 dBm" = 0x08,
-	"-9 dBm" = 0x09,
-}
-
-/** @publicAPI */
-export enum PowerlevelTestStatus {
-	Failed = 0x00,
-	Success = 0x01,
-	"In Progress" = 0x02,
-}
-
-/**
- * @publicAPI
- * This is emitted when an unsolicited powerlevel test report is received
- */
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-	testNodeId: number;
-	status: PowerlevelTestStatus;
-	acknowledgedFrames: number;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNode,
-	ccId: CommandClasses.Powerlevel,
-	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
-];
+import { Powerlevel, PowerlevelCommand, PowerlevelTestStatus } from "./_Types";
 
 @API(CommandClasses.Powerlevel)
 export class PowerlevelCCAPI extends CCAPI {
@@ -100,6 +50,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setCustomPowerlevel(
 		powerlevel: Powerlevel,
 		timeout: number,
@@ -133,6 +84,7 @@ export class PowerlevelCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async startNodeTest(
 		testNodeId: number,
 		powerlevel: Powerlevel,

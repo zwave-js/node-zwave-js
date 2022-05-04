@@ -22,8 +22,6 @@
 			"#": "3",
 			"label": "Current Overload Protection.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -41,8 +39,6 @@
 			"#": "4",
 			"label": "Overheat protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +56,6 @@
 			"#": "20",
 			"label": "Configure the output status after re-power on it.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -84,8 +78,6 @@
 			"label": "Group 1 notifications",
 			"description": "To set which notification would be sent to the associated devices (Group 1)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -112,8 +104,6 @@
 			"label": "Group 3 notifications",
 			"description": "To set which notification would be sent to association group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -132,8 +122,6 @@
 			"label": "Group 4 notifications",
 			"description": "To set which notification would be sent to association group 4",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -151,8 +139,6 @@
 			"#": "90",
 			"label": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -198,8 +184,6 @@
 			"label": "Set group 1 reports",
 			"description": "To set which reports need to be sent in Report group 1",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1776399,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -257,8 +241,6 @@
 			"#": "102",
 			"label": "Reports sent to Report group 2.",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1776399,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -316,8 +298,6 @@
 			"#": "103",
 			"label": "Reports sent to Report group 3",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1776399,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -408,8 +388,6 @@
 			"#": "120",
 			"label": "Configure the external switch mode for S1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -435,8 +413,6 @@
 			"#": "121",
 			"label": "Configure the external switch mode for S2.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -462,8 +438,6 @@
 			"#": "122",
 			"label": "Set the control destination for external switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -485,8 +459,6 @@
 			"#": "252",
 			"label": "Lock/unlock configuration parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -504,8 +476,6 @@
 			"#": "255",
 			"label": "Reset the Dual Nano Switch",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

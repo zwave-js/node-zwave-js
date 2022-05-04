@@ -131,8 +131,6 @@
 			"label": "Start-up Status",
 			"description": "Defines the status of the device following a restart",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -155,8 +153,6 @@
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

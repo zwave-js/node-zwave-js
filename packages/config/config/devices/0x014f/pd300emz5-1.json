@@ -28,8 +28,6 @@
 			"label": "Night Light",
 			"description": "LED \"Night Light\" behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -86,8 +84,6 @@
 			"label": "Power Monitoring",
 			"description": "Provide a visual display of the ammount of energy being consumed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

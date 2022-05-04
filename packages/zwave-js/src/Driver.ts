@@ -1,7 +1,8 @@
-export { Driver } from "./lib/driver/Driver";
+export { Driver, libName, libVersion } from "./lib/driver/Driver";
 export type { SendMessageOptions } from "./lib/driver/Driver";
 export type { FileSystem } from "./lib/driver/FileSystem";
 export type { ZWaveOptions } from "./lib/driver/ZWaveOptions";
+export { DriverLogContext } from "./lib/log/Driver";
 export {
 	FunctionType,
 	MessagePriority,

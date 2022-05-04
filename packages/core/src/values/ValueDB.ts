@@ -1,48 +1,17 @@
 import type { JsonlDB } from "@alcalzone/jsonl-db";
 import { TypedEventEmitter } from "@zwave-js/shared";
-import { CommandClasses } from "../capabilities/CommandClasses";
+import type { CommandClasses } from "../capabilities/CommandClasses";
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import type { ValueMetadata } from "../values/Metadata";
-
-/** Uniquely identifies to which CC, endpoint and property a value belongs to */
-export interface ValueID {
-	commandClass: CommandClasses;
-	endpoint?: number;
-	property: string | number;
-	propertyKey?: string | number;
-}
-
-export interface TranslatedValueID extends ValueID {
-	commandClassName: string;
-	propertyName?: string;
-	propertyKeyName?: string;
-}
-
-export interface ValueUpdatedArgs extends ValueID {
-	prevValue: unknown;
-	newValue: unknown;
-	/**
-	 * Whether this value update was caused by the driver itself or the node.
-	 * If not set, it is assumed that the value update was caused by the node.
-	 */
-	source?: "driver" | "node";
-}
-
-export interface ValueAddedArgs extends ValueID {
-	newValue: unknown;
-}
-
-export interface ValueRemovedArgs extends ValueID {
-	prevValue: unknown;
-}
-
-export interface ValueNotificationArgs extends ValueID {
-	value: unknown;
-}
-
-export interface MetadataUpdatedArgs extends ValueID {
-	metadata: ValueMetadata | undefined;
-}
+import type {
+	MetadataUpdatedArgs,
+	SetValueOptions,
+	ValueAddedArgs,
+	ValueID,
+	ValueNotificationArgs,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "./_Types";
 
 type ValueAddedCallback = (args: ValueAddedArgs) => void;
 type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
@@ -117,27 +86,6 @@ export function normalizeValueID(valueID: ValueID): ValueID {
 
 export function valueIdToString(valueID: ValueID): string {
 	return JSON.stringify(normalizeValueID(valueID));
-}
-
-/** Returns a Value ID that can be used to store node specific data without relating it to a CC */
-export function getNodeMetaValueID(property: string): ValueID {
-	return {
-		commandClass: CommandClasses._NONE,
-		property,
-	};
-}
-
-export interface SetValueOptions {
-	/** When this is true, no event will be emitted for the value change */
-	noEvent?: boolean;
-	/** When this is true,  */
-	noThrow?: boolean;
-	/**
-	 * When this is `false`, the value will not be stored and a `value notification` event will be emitted instead (implies `noEvent: false`).
-	 */
-	stateful?: boolean;
-	/** Allows defining the source of a value update */
-	source?: ValueUpdatedArgs["source"];
 }
 
 /**
@@ -240,13 +188,10 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 
 			this._index.add(dbKey);
 			this._db.set(dbKey, value);
-			if (
-				valueId.commandClass !== CommandClasses._NONE &&
-				options.noEvent !== true
-			) {
+			if (valueId.commandClass >= 0 && options.noEvent !== true) {
 				this.emit(event, cbArg);
 			}
-		} else if (valueId.commandClass !== CommandClasses._NONE) {
+		} else if (valueId.commandClass >= 0) {
 			// For non-stateful values just emit a notification
 			this.emit("value notification", {
 				...valueId,
@@ -270,10 +215,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
 
-			if (
-				valueId.commandClass !== CommandClasses._NONE &&
-				options.noEvent !== true
-			) {
+			if (valueId.commandClass >= 0 && options.noEvent !== true) {
 				const cbArg: ValueRemovedArgs = {
 					...valueId,
 					prevValue,
@@ -341,10 +283,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 				const prevValue = this._db.get(key);
 				this._db.delete(key);
 
-				if (
-					valueId.commandClass !== CommandClasses._NONE &&
-					options.noEvent !== true
-				) {
+				if (valueId.commandClass >= 0 && options.noEvent !== true) {
 					const cbArg: ValueRemovedArgs = {
 						...valueId,
 						prevValue,
@@ -355,10 +294,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			if (this._metadata.has(key)) {
 				this._metadata.delete(key);
 
-				if (
-					valueId.commandClass !== CommandClasses._NONE &&
-					options.noEvent !== true
-				) {
+				if (valueId.commandClass >= 0 && options.noEvent !== true) {
 					const cbArg: MetadataUpdatedArgs = {
 						...valueId,
 						metadata: undefined,
@@ -407,10 +343,7 @@ export class ValueDB extends TypedEventEmitter<ValueDBEventCallbacks> {
 			...valueId,
 			metadata,
 		};
-		if (
-			valueId.commandClass !== CommandClasses._NONE &&
-			options.noEvent !== true
-		) {
+		if (valueId.commandClass >= 0 && options.noEvent !== true) {
 			this.emit("metadata updated", cbArg);
 		}
 	}

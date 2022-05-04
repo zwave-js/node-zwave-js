@@ -102,8 +102,6 @@
 			"#": "7",
 			"label": "Fan Relay Output Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -121,8 +119,6 @@
 			"#": "8",
 			"label": "Heater Relay Output Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -140,8 +136,6 @@
 			"#": "9",
 			"label": "Cooler Relay Output Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -159,8 +153,6 @@
 			"#": "10",
 			"label": "Heating State Fan Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -178,8 +170,6 @@
 			"#": "11",
 			"label": "Cooling State Fan Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -265,8 +255,6 @@
 			"#": "19",
 			"label": "Time Correction by Controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -284,8 +272,6 @@
 			"#": "20",
 			"label": "Time Format",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -303,8 +289,6 @@
 			"#": "21",
 			"label": "Week Day Override",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -353,8 +337,6 @@
 			"description": "This Parameter determines the Climate Mode (Heating or Cooling)",
 			"unit": "minutes",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -673,8 +655,6 @@
 			"#": "142",
 			"label": "Control Energy Consumption Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -729,8 +709,6 @@
 			"label": "Basic Set Action",
 			"description": "Activate this mode when a Basic Set is received",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

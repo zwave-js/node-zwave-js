@@ -35,7 +35,6 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
-	stringify,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -48,7 +47,7 @@ import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
-import SerialPort from "serialport";
+import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
@@ -56,6 +55,7 @@ import {
 	FirmwareUpdateStatus,
 	Security2CC,
 	Security2CCNonceReport,
+	SupervisionResult,
 } from "../commandclass";
 import {
 	assertValidCCs,
@@ -83,8 +83,6 @@ import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	SupervisionResult,
-	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
 import {
 	isTransportServiceEncapsulation,
@@ -99,37 +97,10 @@ import {
 	getWakeUpIntervalValueId,
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestSmartStartHomeIDReceived,
-} from "../controller/ApplicationUpdateRequest";
-import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
+import { SupervisionStatus } from "../commandclass/_Types";
 import { ZWaveController } from "../controller/Controller";
-import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import { InclusionState } from "../controller/Inclusion";
-import {
-	SendDataBridgeRequest,
-	SendDataMulticastBridgeRequest,
-} from "../controller/SendDataBridgeMessages";
-import {
-	MAX_SEND_ATTEMPTS,
-	SendDataAbort,
-	SendDataMulticastRequest,
-	SendDataRequest,
-} from "../controller/SendDataMessages";
-import {
-	hasTXReport,
-	isSendData,
-	isSendDataSinglecast,
-	isSendDataTransmitReport,
-	isTransmitReport,
-	SendDataMessage,
-	TransmitOptions,
-	TXReport,
-} from "../controller/SendDataShared";
-import { SoftResetRequest } from "../controller/SoftResetRequest";
+import { TransmitOptions, TXReport } from "../controller/_Types";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
@@ -141,15 +112,49 @@ import { getDefaultPriority, Message } from "../message/Message";
 import { isSuccessIndicator } from "../message/SuccessIndicator";
 import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
-import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
+import { InterviewStage, NodeStatus } from "../node/_Types";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
+} from "../serialapi/application/ApplicationUpdateRequest";
+import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
+import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
+import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
+import {
+	SendDataBridgeRequest,
+	SendDataMulticastBridgeRequest,
+} from "../serialapi/transport/SendDataBridgeMessages";
+import {
+	MAX_SEND_ATTEMPTS,
+	SendDataAbort,
+	SendDataMulticastRequest,
+	SendDataRequest,
+} from "../serialapi/transport/SendDataMessages";
+import {
+	hasTXReport,
+	isSendData,
+	isSendDataSinglecast,
+	isSendDataTransmitReport,
+	isTransmitReport,
+	SendDataMessage,
+} from "../serialapi/transport/SendDataShared";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
+import { initSentry } from "../telemetry/sentry";
 import {
 	AppInfo,
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
 import { createMessageGenerator } from "./MessageGenerators";
+import {
+	cacheKeys,
+	deserializeNetworkCacheValue,
+	migrateLegacyNetworkCache,
+	serializeNetworkCacheValue,
+} from "./NetworkCache";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -173,7 +178,8 @@ const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require(packageJsonPath);
 const libraryRootDir = path.dirname(packageJsonPath);
-const libVersion: string = packageJson.version;
+export const libVersion: string = packageJson.version;
+export const libName: string = packageJson.name;
 
 // This is made with cfonts:
 const libNameString = `
@@ -189,8 +195,8 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		response: 1600,
-		report: 10000,
+		response: 10000,
+		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -238,15 +244,15 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.response < 500 || options.timeouts.response > 5000) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 20000) {
 		throw new ZWaveError(
-			`The Response timeout must be between 500 and 5000 milliseconds!`,
+			`The Response timeout must be between 500 and 20000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.report < 1000 || options.timeouts.report > 40000) {
+	if (options.timeouts.report < 500 || options.timeouts.report > 10000) {
 		throw new ZWaveError(
-			`The Report timeout must be between 1000 and 40000 milliseconds!`,
+			`The Report timeout must be between 500 and 10000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -641,6 +647,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
 		return this._metadataDB;
 	}
+	private _networkCache: JsonlDB<any> | undefined;
+	/** @internal */
+	public get networkCache(): JsonlDB<any> {
+		if (this._networkCache == undefined) {
+			throw new ZWaveError(
+				"The network cache was not yet initialized!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._networkCache;
+	}
 
 	public readonly configManager: ConfigManager;
 	public get configVersion(): string {
@@ -918,15 +935,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
-	private async initValueDBs(homeId: number): Promise<void> {
-		// Always start the value and metadata databases
+	private getJsonlDBOptions(): JsonlDBOptions<any> {
 		const options: JsonlDBOptions<any> = {
 			ignoreReadErrors: true,
 			...throttlePresets[this.options.storage.throttle],
 		};
 		if (this.options.storage.lockDir) {
-			options.lockfileDirectory = this.options.storage.lockDir;
+			options.lockfile = {
+				directory: this.options.storage.lockDir,
+			};
 		}
+		return options;
+	}
+
+	private async initNetworkCache(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
+
+		const networkCacheFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.jsonl`,
+		);
+		this._networkCache = new JsonlDB(networkCacheFile, {
+			...options,
+			serializer: (key, value) =>
+				serializeNetworkCacheValue(this, key, value),
+			reviver: (key, value) =>
+				deserializeNetworkCacheValue(this, key, value),
+		});
+		await this._networkCache.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since the network cache is append-only, we need to
+			// clear it if the cache should be ignored
+			this._networkCache.clear();
+		}
+	}
+
+	private async initValueDBs(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
 
 		const valueDBFile = path.join(
 			this.cacheDir,
@@ -947,10 +993,54 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {
-			// Since value/metadata DBs are append-only, we need to clear them
-			// if the cache should be ignored
+			// Since value/metadata DBs are append-only, we need to
+			// clear them if the cache should be ignored
 			this._valueDB.clear();
 			this._metadataDB.clear();
+		}
+	}
+
+	private async performCacheMigration(): Promise<void> {
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache ||
+			!this._valueDB
+		) {
+			return;
+		}
+
+		// In v9, the network cache was switched from a json file to use a Jsonl-DB
+		// Therefore the legacy cache file must be migrated to the new format
+		if (this._networkCache.size === 0) {
+			// version the cache format, so migrations in the future are easier
+			this._networkCache.set("cacheFormat", 1);
+
+			try {
+				await migrateLegacyNetworkCache(
+					this,
+					this.controller.homeId,
+					this._networkCache,
+					this._valueDB,
+					this.options.storage.driver,
+					this.cacheDir,
+				);
+
+				// Go through the value DB and remove all keys referencing commandClass -1, which used to be a
+				// hacky way to store non-CC specific values
+				for (const key of this._valueDB.keys()) {
+					if (-1 === key.indexOf(`,"commandClass":-1,`)) {
+						continue;
+					}
+					this._valueDB.delete(key);
+				}
+			} catch (e) {
+				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
+					e,
+					true,
+				)}`;
+				this.driverLog.print(message, "error");
+			}
 		}
 	}
 
@@ -976,8 +1066,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
+			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this.options.enableSoftReset && !(await this.maySoftReset())) {
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -994,7 +1085,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						e.code === ZWaveErrorCodes.Driver_Failed
 					) {
 						// Remember that soft reset is not supported by this stick
-						await this.rememberNoSoftReset();
+						this.driverLog.print(
+							"Soft reset seems not to be supported by this stick, disabling it.",
+							"warn",
+						);
+						this.controller.supportsSoftReset = false;
 						// Then fail the driver
 						await this.destroy();
 						return;
@@ -1012,7 +1107,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					`Controller identification returned invalid node ID 0 - trying again...`,
 					"warn",
 				);
+				// We might end up with a different home ID, so close the cache before re-identifying the controller
+				await this._networkCache?.close();
 				await this.controller.identify();
+				await this.initNetworkCache(this.controller.homeId!);
 			}
 
 			if (this.controller.ownNodeId === 0) {
@@ -1026,6 +1124,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// now that we know the home ID, we can open the databases
 			await this.initValueDBs(this.controller.homeId!);
+			await this.performCacheMigration();
 
 			// Interview the controller.
 			await this._controller.interview(async () => {
@@ -1402,6 +1501,24 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		});
 	}
 
+	/**
+	 * Enables error reporting via Sentry. This is turned off by default, because it registers a
+	 * global `unhandledRejection` event handler, which has an influence how the application will
+	 * behave in case of an unhandled rejection.
+	 */
+	public enableErrorReporting(): void {
+		// Init sentry, unless we're running a a test or some custom-built userland or PR test versions
+		if (
+			process.env.NODE_ENV !== "test" &&
+			!/\-[a-f0-9]{7,}$/.test(libVersion) &&
+			!/\-pr\-\d+\-$/.test(libVersion)
+		) {
+			void initSentry(libraryRootDir, libName, libVersion).catch(() => {
+				/* ignore */
+			});
+		}
+	}
+
 	private _statisticsEnabled: boolean = false;
 	/** Whether reporting usage statistics is currently enabled */
 	public get statisticsEnabled(): boolean {
@@ -1545,10 +1662,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	/** This is called when a node was removed from the network */
 	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
-		// Remove all listeners
+		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
+		if (this.sendNodeToSleepTimers.has(node.id)) {
+			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
+			this.sendNodeToSleepTimers.delete(node.id);
+		}
+		if (this.retryNodeInterviewTimeouts.has(node.id)) {
+			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id)!);
+			this.retryNodeInterviewTimeouts.delete(node.id);
+		}
 		// purge node values from the DB
 		node.valueDB.clear();
+		this.cachePurge(cacheKeys.node(node.id)._baseKey);
+
+		// Remove the node from all security manager instances
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -1698,29 +1828,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
-	private async maySoftReset(): Promise<boolean> {
+	private maySoftReset(): boolean {
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		let supportsSoftReset: boolean | undefined;
-		if (this._controllerInterviewed) {
-			supportsSoftReset = this.controller.supportsSoftReset;
-		} else {
-			// The controller wasn't interviewed yet, read the json file manually
-			const fs = this.options.storage.driver;
-
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-			supportsSoftReset = json?.controller?.supportsSoftReset;
-		}
+		const supportsSoftReset = this._networkCache!.get(
+			cacheKeys.controller.supportsSoftReset,
+		) as boolean | undefined;
 		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
@@ -1755,52 +1867,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 
 		return true;
-	}
-
-	private async rememberNoSoftReset(): Promise<void> {
-		this.driverLog.print(
-			"Soft reset seems not to be supported by this stick, disabling it.",
-			"warn",
-		);
-		this.controller.supportsSoftReset = false;
-
-		if (this._controllerInterviewed) {
-			// We can use the normal method for this
-			await this.saveNetworkToCacheInternal();
-		} else {
-			// saveNetworkToCache won't write anything, just edit the file "manually"
-
-			// TODO: This is ugly, rework this when changing how the network data is saved
-
-			const fs = this.options.storage.driver;
-
-			await fs.ensureDir(this.cacheDir);
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-
-			// Change the supportsSoftReset flag
-			json ??= {};
-			json.controller ??= {};
-			json.controller.supportsSoftReset = false;
-
-			// And save it again
-			const jsonString = stringify(json);
-			await this.options.storage.driver.writeFile(
-				cacheFile,
-				jsonString,
-				"utf8",
-			);
-		}
 	}
 
 	/**
@@ -2054,23 +2120,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.serial = undefined;
 		}
 
+		// Attempt to close the value DBs and network cache
 		try {
-			// Attempt to save the network to cache
-			await this.saveNetworkToCacheInternal();
+			await this._valueDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${getErrorMessage(e)}`,
+				`Closing the value DB failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
-
 		try {
-			// Attempt to close the value DBs
-			await this._valueDB?.close();
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${getErrorMessage(e)}`,
+				`Closing the metadata DB failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		try {
+			await this._networkCache?.close();
+		} catch (e) {
+			this.driverLog.print(
+				`Closing the network cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -3262,12 +3333,13 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsDroppedTX");
 				} else {
 					node.incrementStatistics("commandsTX");
+					node.updateRTT(msg);
 				}
 
 				// Notify listeners about the status report if one was received
 				if (hasTXReport(result)) {
 					options.onTXReport?.(result.txReport);
-					// TODO: Update statistics based on the TX report
+					node.updateRouteStatistics(result.txReport);
 				}
 			}
 
@@ -3500,10 +3572,7 @@ ${handlers.length} left`,
 	/** Wraps a CC in the correct SendData message to use for sending */
 	public createSendDataMessage(
 		command: CommandClass,
-		options: Pick<
-			SendCommandOptions,
-			"autoEncapsulate" | "maxSendAttempts" | "transmitOptions"
-		> = {},
+		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
 	): SendDataMessage {
 		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
@@ -3875,73 +3944,72 @@ ${handlers.length} left`,
 	private isSavingToCache: boolean = false;
 
 	/**
-	 * Does the work for saveNetworkToCache. This is not throttled, so any call
-	 * to this method WILL save the network.
+	 * @internal
+	 * Helper function to read and convert potentially existing values from the network cache
 	 */
-	private async saveNetworkToCacheInternal(): Promise<void> {
-		// Avoid overwriting the cache with empty data if the controller wasn't interviewed yet
-		if (
-			!this._controller ||
-			this._controller.homeId == undefined ||
-			!this._controllerInterviewed
-		)
-			return;
-
-		await this.options.storage.driver.ensureDir(this.cacheDir);
-		const cacheFile = path.join(
-			this.cacheDir,
-			this._controller.homeId.toString(16) + ".json",
-		);
-
-		const serializedObj = this._controller.serialize();
-		const jsonString = stringify(serializedObj);
-		await this.options.storage.driver.writeFile(
-			cacheFile,
-			jsonString,
-			"utf8",
-		);
+	public cacheGet<T>(
+		cacheKey: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): T | undefined {
+		let ret = this.networkCache.get(cacheKey);
+		if (ret !== undefined && typeof options?.reviver === "function") {
+			try {
+				ret = options.reviver(ret);
+			} catch {
+				// ignore, invalid entry
+			}
+		}
+		return ret;
 	}
 
 	/**
-	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
-	 * For performance reasons, these calls may be throttled.
+	 * @internal
+	 * Helper function to convert values and write them to the network cache
 	 */
-	public async saveNetworkToCache(): Promise<void> {
-		// TODO: Detect if the network needs to be saved at all
-		if (!this._controller || this._controller.homeId == undefined) return;
-		// Ensure this method isn't being executed too often
-		if (
-			this.isSavingToCache ||
-			Date.now() - this.lastSaveToCache < this.saveToCacheInterval
-		) {
-			// Schedule a save in a couple of ms to collect changes
-			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(
-					() => void this.saveNetworkToCache(),
-					this.saveToCacheInterval,
-				);
-			}
-			return;
-		} else {
-			this.saveToCacheTimer = undefined;
+	public cacheSet<T>(
+		cacheKey: string,
+		value: T | undefined,
+		options?: {
+			serializer?: (value: T) => any;
+		},
+	): void {
+		if (value !== undefined && typeof options?.serializer === "function") {
+			value = options.serializer(value);
 		}
-		this.isSavingToCache = true;
-		await this.saveNetworkToCacheInternal();
-		this.isSavingToCache = false;
-		this.lastSaveToCache = Date.now();
+
+		if (value === undefined) {
+			this.networkCache.delete(cacheKey);
+		} else {
+			this.networkCache.set(cacheKey, value);
+		}
+	}
+
+	private cachePurge(prefix: string): void {
+		for (const key of this.networkCache.keys()) {
+			if (key.startsWith(prefix)) {
+				this.networkCache.delete(key);
+			}
+		}
 	}
 
 	/**
 	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
 	public async restoreNetworkStructureFromCache(): Promise<void> {
-		if (!this._controller || !this.controller.homeId) return;
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache
+		) {
+			return;
+		}
 
-		const cacheFile = path.join(
-			this.cacheDir,
-			`${this.controller.homeId.toString(16)}.json`,
-		);
-		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
+		if (this._networkCache.size <= 1) {
+			// If the size is 0 or 1, the cache is empty, so we cannot restore it
+			return;
+		}
 
 		try {
 			this.driverLog.print(
@@ -3949,11 +4017,7 @@ ${handlers.length} left`,
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheString = await this.options.storage.driver.readFile(
-				cacheFile,
-				"utf8",
-			);
-			await this.controller.deserialize(JSON.parse(cacheString));
+			await this.controller.deserialize();
 			this.driverLog.print(
 				`Restoring the network from cache was successful!`,
 			);

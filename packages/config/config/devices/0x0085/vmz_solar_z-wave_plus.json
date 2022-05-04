@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -41,8 +39,6 @@
 			"#": "2",
 			"label": "Summer / Winter mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -91,8 +87,6 @@
 			"label": "STM active",
 			"description": "STM AutoShade active",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +104,6 @@
 			"#": "13",
 			"label": "Restore last position",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -187,8 +179,6 @@
 			"#": "99",
 			"label": "Restore default config values",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -206,8 +196,6 @@
 			"#": "100",
 			"label": "Autoexclude",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

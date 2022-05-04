@@ -43,8 +43,6 @@
 			"label": "Send Basic Command to Group 2",
 			"description": "Configure the unit to send command to other devices in Grouping 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

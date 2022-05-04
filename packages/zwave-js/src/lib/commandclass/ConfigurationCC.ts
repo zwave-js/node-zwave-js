@@ -24,6 +24,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
@@ -53,25 +54,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ConfigurationCommand {
-	Set = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-	BulkSet = 0x07,
-	BulkGet = 0x08,
-	BulkReport = 0x09,
-	NameGet = 0x0a,
-	NameReport = 0x0b,
-	InfoGet = 0x0c,
-	InfoReport = 0x0d,
-	PropertiesGet = 0x0e,
-	PropertiesReport = 0x0f,
-	DefaultReset = 0x01,
-}
-
-/** @publicAPI */
-export type ConfigValue = import("@zwave-js/core").ConfigValue;
+import { ConfigurationCommand, ConfigValue } from "./_Types";
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();
@@ -442,6 +425,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * If the node replied with a different parameter number, a `ConfigurationCCError`
 	 * is thrown with the `argument` property set to the reported parameter number.
 	 */
+	@validateArgs()
 	public async get(
 		parameter: number,
 		options?: {
@@ -503,6 +487,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * Requests the current value of the config parameters from the device.
 	 * When the node does not respond due to a timeout, the `value` in the returned array will be `undefined`.
 	 */
+	@validateArgs()
 	public async getBulk(
 		options: {
 			parameter: number;
@@ -600,6 +585,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets a new value for a given config parameter of the device.
 	 */
+	@validateArgs({ strictEnums: true })
 	public async set(
 		...args:
 			| [
@@ -662,6 +648,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
 	 */
+	@validateArgs({ strictEnums: true })
 	public async setBulk(
 		values: ConfigurationCCAPISetOptions[],
 	): Promise<void> {
@@ -724,6 +711,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
+	@validateArgs()
 	public async reset(parameter: number): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
@@ -744,6 +732,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
+	@validateArgs()
 	public async resetBulk(parameters: number[]): Promise<void> {
 		if (
 			isConsecutiveArray(parameters) &&
@@ -793,6 +782,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getProperties(parameter: number) {
 		// Get-type commands are only possible in singlecast
@@ -825,6 +815,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/** Requests the name of a configuration parameter from the node */
+	@validateArgs()
 	public async getName(parameter: number): Promise<string | undefined> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
@@ -843,6 +834,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/** Requests usage info for a configuration parameter from the node */
+	@validateArgs()
 	public async getInfo(parameter: number): Promise<string | undefined> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
@@ -935,7 +927,9 @@ export class ConfigurationCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue("isParamInformationFromConfig" as any, true);
+		this.registerValue("isParamInformationFromConfig" as any, {
+			internal: true,
+		});
 	}
 
 	public async interview(): Promise<void> {

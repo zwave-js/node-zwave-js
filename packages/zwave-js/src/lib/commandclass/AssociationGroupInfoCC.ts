@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -30,221 +31,12 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import {
+	AssociationGroupInfoCommand,
+	AssociationGroupInfoProfile,
+} from "./_Types";
 
 // @noSetValueAPI This CC only has get-type commands
-
-// All the supported commands
-export enum AssociationGroupInfoCommand {
-	NameGet = 0x01,
-	NameReport = 0x02,
-	InfoGet = 0x03,
-	InfoReport = 0x04,
-	CommandListGet = 0x05,
-	CommandListReport = 0x06,
-}
-
-// TODO: Check if this should be in a config file instead
-/**
- * @publicAPI
- */
-export enum AssociationGroupInfoProfile {
-	"General: N/A" = 0x00_00,
-	"General: Lifeline" = 0x00_01,
-
-	"Control: Key 01" = 0x20_01,
-	"Control: Key 02",
-	"Control: Key 03",
-	"Control: Key 04",
-	"Control: Key 05",
-	"Control: Key 06",
-	"Control: Key 07",
-	"Control: Key 08",
-	"Control: Key 09",
-	"Control: Key 10",
-	"Control: Key 11",
-	"Control: Key 12",
-	"Control: Key 13",
-	"Control: Key 14",
-	"Control: Key 15",
-	"Control: Key 16",
-	"Control: Key 17",
-	"Control: Key 18",
-	"Control: Key 19",
-	"Control: Key 20",
-	"Control: Key 21",
-	"Control: Key 22",
-	"Control: Key 23",
-	"Control: Key 24",
-	"Control: Key 25",
-	"Control: Key 26",
-	"Control: Key 27",
-	"Control: Key 28",
-	"Control: Key 29",
-	"Control: Key 30",
-	"Control: Key 31",
-	"Control: Key 32",
-
-	"Sensor: Air temperature" = 0x31_01,
-	"Sensor: General purpose",
-	"Sensor: Illuminance",
-	"Sensor: Power",
-	"Sensor: Humidity",
-	"Sensor: Velocity",
-	"Sensor: Direction",
-	"Sensor: Atmospheric pressure",
-	"Sensor: Barometric pressure",
-	"Sensor: Solar radiation",
-	"Sensor: Dew point",
-	"Sensor: Rain rate",
-	"Sensor: Tide level",
-	"Sensor: Weight",
-	"Sensor: Voltage",
-	"Sensor: Current",
-	"Sensor: Carbon dioxide (CO2) level",
-	"Sensor: Air flow",
-	"Sensor: Tank capacity",
-	"Sensor: Distance",
-	"Sensor: Angle position",
-	"Sensor: Rotation",
-	"Sensor: Water temperature",
-	"Sensor: Soil temperature",
-	"Sensor: Seismic Intensity",
-	"Sensor: Seismic magnitude",
-	"Sensor: Ultraviolet",
-	"Sensor: Electrical resistivity",
-	"Sensor: Electrical conductivity",
-	"Sensor: Loudness",
-	"Sensor: Moisture",
-	"Sensor: Frequency",
-	"Sensor: Time",
-	"Sensor: Target temperature",
-	"Sensor: Particulate Matter 2.5",
-	"Sensor: Formaldehyde (CH2O) level",
-	"Sensor: Radon concentration",
-	"Sensor: Methane (CH4) density",
-	"Sensor: Volatile Organic Compound level",
-	"Sensor: Carbon monoxide (CO) level",
-	"Sensor: Soil humidity",
-	"Sensor: Soil reactivity",
-	"Sensor: Soil salinity",
-	"Sensor: Heart rate",
-	"Sensor: Blood pressure",
-	"Sensor: Muscle mass",
-	"Sensor: Fat mass",
-	"Sensor: Bone mass",
-	"Sensor: Total body water (TBW)",
-	"Sensor: Basis metabolic rate (BMR)",
-	"Sensor: Body Mass Index (BMI)",
-	"Sensor: Acceleration X-axis",
-	"Sensor: Acceleration Y-axis",
-	"Sensor: Acceleration Z-axis",
-	"Sensor: Smoke density",
-	"Sensor: Water flow",
-	"Sensor: Water pressure",
-	"Sensor: RF signal strength",
-	"Sensor: Particulate Matter 10",
-	"Sensor: Respiratory rate",
-	"Sensor: Relative Modulation level",
-	"Sensor: Boiler water temperature",
-	"Sensor: Domestic Hot Water (DHW) temperature",
-	"Sensor: Outside temperature",
-	"Sensor: Exhaust temperature",
-	"Sensor: Water Chlorine level",
-	"Sensor: Water acidity",
-	"Sensor: Water Oxidation reduction potential",
-	"Sensor: Heart Rate LF/HF ratio",
-	"Sensor: Motion Direction",
-	"Sensor: Applied force on the sensor",
-	"Sensor: Return Air temperature",
-	"Sensor: Supply Air temperature",
-	"Sensor: Condenser Coil temperature",
-	"Sensor: Evaporator Coil temperature",
-	"Sensor: Liquid Line temperature",
-	"Sensor: Discharge Line temperature",
-	"Sensor: Suction Pressure",
-	"Sensor: Discharge Pressure",
-	"Sensor: Defrost temperature",
-
-	"Notification: Smoke Alarm" = 0x71_01,
-	"Notification: CO Alarm",
-	"Notification: CO2 Alarm",
-	"Notification: Heat Alarm",
-	"Notification: Water Alarm",
-	"Notification: Access Control",
-	"Notification: Home Security",
-	"Notification: Power Management",
-	"Notification: System",
-	"Notification: Emergency Alarm",
-	"Notification: Clock",
-	"Notification: Appliance",
-	"Notification: Home Health",
-	"Notification: Siren",
-	"Notification: Water Valve",
-	"Notification: Weather Alarm",
-	"Notification: Irrigation",
-	"Notification: Gas alarm",
-	"Notification: Pest Control",
-	"Notification: Light sensor",
-	"Notification: Water Quality Monitoring",
-	"Notification: Home monitoring",
-
-	"Meter: Electric" = 0x32_01,
-	"Meter: Gas",
-	"Meter: Water",
-	"Meter: Heating",
-	"Meter: Cooling",
-
-	"Irrigation: Channel 01" = 0x6b_01,
-	"Irrigation: Channel 02",
-	"Irrigation: Channel 03",
-	"Irrigation: Channel 04",
-	"Irrigation: Channel 05",
-	"Irrigation: Channel 06",
-	"Irrigation: Channel 07",
-	"Irrigation: Channel 08",
-	"Irrigation: Channel 09",
-	"Irrigation: Channel 10",
-	"Irrigation: Channel 11",
-	"Irrigation: Channel 12",
-	"Irrigation: Channel 13",
-	"Irrigation: Channel 14",
-	"Irrigation: Channel 15",
-	"Irrigation: Channel 16",
-	"Irrigation: Channel 17",
-	"Irrigation: Channel 18",
-	"Irrigation: Channel 19",
-	"Irrigation: Channel 20",
-	"Irrigation: Channel 21",
-	"Irrigation: Channel 22",
-	"Irrigation: Channel 23",
-	"Irrigation: Channel 24",
-	"Irrigation: Channel 25",
-	"Irrigation: Channel 26",
-	"Irrigation: Channel 27",
-	"Irrigation: Channel 28",
-	"Irrigation: Channel 29",
-	"Irrigation: Channel 30",
-	"Irrigation: Channel 31",
-	"Irrigation: Channel 32",
-}
-
-/**
- * @publicAPI
- */
-export interface AssociationGroup {
-	/** How many nodes this association group supports */
-	maxNodes: number;
-	/** Whether this is the lifeline association (where the Controller must not be removed) */
-	isLifeline: boolean;
-	/** Whether multi channel associations are allowed */
-	multiChannel: boolean;
-	/** The name of the group */
-	label: string;
-	/** The association group profile (if known) */
-	profile?: AssociationGroupInfoProfile;
-	/** A map of Command Classes and commands issued by this group (if known) */
-	issuedCommands?: ReadonlyMap<CommandClasses, readonly number[]>;
-}
 
 /** Returns the ValueID used to store the name of an association group */
 function getGroupNameValueID(endpointIndex: number, groupId: number): ValueID {
@@ -299,6 +91,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async getGroupName(groupId: number): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -318,6 +111,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		if (response) return response.name;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
 		this.assertSupportsCommand(
@@ -348,6 +142,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,
@@ -381,8 +176,12 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getGroupNameValueID(0, 0).property, true);
-		this.registerValue(getGroupInfoValueID(0, 0).property, true);
+		this.registerValue(getGroupNameValueID(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getGroupInfoValueID(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {

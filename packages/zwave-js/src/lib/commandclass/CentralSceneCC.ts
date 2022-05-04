@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -40,6 +41,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 /** Returns the ValueID used to store the current value of a Central Scene */
 export function getSceneValueId(sceneNumber: number): ValueID {
@@ -59,28 +61,6 @@ export function getSlowRefreshValueId(): ValueID {
 		commandClass: CommandClasses["Central Scene"],
 		property: "slowRefresh",
 	};
-}
-
-export enum CentralSceneCommand {
-	SupportedGet = 0x01,
-	SupportedReport = 0x02,
-	Notification = 0x03,
-	ConfigurationSet = 0x04,
-	ConfigurationGet = 0x05,
-	ConfigurationReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum CentralSceneKeys {
-	KeyPressed = 0x00,
-	KeyReleased = 0x01,
-	KeyHeldDown = 0x02,
-	KeyPressed2x = 0x03,
-	KeyPressed3x = 0x04,
-	KeyPressed4x = 0x05,
-	KeyPressed5x = 0x06,
 }
 
 @API(CommandClasses["Central Scene"])
@@ -143,6 +123,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {
 		this.assertSupportsCommand(
 			CentralSceneCommand,

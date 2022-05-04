@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -33,21 +34,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ThermostatSetbackCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
-
-/**
- * @publicAPI
- */
-export enum SetbackType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import { SetbackType, ThermostatSetbackCommand } from "./_Types";
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together
@@ -98,6 +85,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		setbackType: SetbackType,
 		setbackState: SetbackState,

@@ -34,8 +34,6 @@
 			"#": "35",
 			"label": "Interior Status LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -54,8 +52,6 @@
 			"label": "Audio Feedback",
 			"description": "Allows the user to get/set the audio feed back command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"#": "47",
 			"label": "Send Motor Load Alarms",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -96,8 +90,6 @@
 			"#": "36[0x01]",
 			"label": "Auto Relock Door",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -115,9 +107,8 @@
 			"#": "36[0xff00]",
 			"label": "Auto Relock Timing",
 			"valueSize": 2,
-			"minValue": 30,
-			"maxValue": 180,
 			"defaultValue": 30,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{

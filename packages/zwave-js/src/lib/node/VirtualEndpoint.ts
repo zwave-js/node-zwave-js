@@ -1,5 +1,9 @@
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { num2hex, staticExtends } from "@zwave-js/shared";
+import {
+	CommandClasses,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core/safe";
+import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	APIMethodsOf,
@@ -58,6 +62,7 @@ export class VirtualEndpoint {
 			return endpoint?.supportsCC(cc) && !endpoint?.isCCSecure(cc);
 		});
 	}
+
 	/**
 	 * Retrieves the minimum non-zero version of the given CommandClass the physical endpoints implement
 	 * Returns 0 if the CC is not supported at all.

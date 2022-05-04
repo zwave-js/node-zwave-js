@@ -7,7 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -31,19 +31,10 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { NodeNamingAndLocationCommand } from "./_Types";
 
 function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
-}
-
-// All the supported commands
-export enum NodeNamingAndLocationCommand {
-	NameSet = 0x01,
-	NameGet = 0x02,
-	NameReport = 0x03,
-	LocationSet = 0x04,
-	LocationGet = 0x05,
-	LocationReport = 0x06,
 }
 
 export function getNodeNameValueId(): ValueID {
@@ -123,6 +114,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.name;
 	}
 
+	@validateArgs()
 	public async setName(name: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
@@ -155,6 +147,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.location;
 	}
 
+	@validateArgs()
 	public async setLocation(location: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
@@ -399,10 +392,6 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			...super.toLogEntry(),
 			message: { location: this.location },
 		};
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({ location: this.location });
 	}
 }
 

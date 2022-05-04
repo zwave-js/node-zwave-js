@@ -2,13 +2,12 @@ import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
-	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
 	PowerlevelCCReport,
 	PowerlevelCCSet,
-	PowerlevelCommand,
 } from "./PowerlevelCC";
+import { Powerlevel, PowerlevelCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

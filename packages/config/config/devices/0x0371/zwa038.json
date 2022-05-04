@@ -56,7 +56,7 @@
 		},
 		{
 			"#": "82",
-			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
+			"$import": "~/0x0086/templates/aeotec_template.json#wallswitch_command_type"
 		},
 		{
 			"#": "83",

@@ -73,8 +73,6 @@
 			"label": "Disable battery alarm",
 			"description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -128,8 +126,6 @@
 			"label": "BLE Always allowed",
 			"description": "0 = Not always allowed. 1= Always allowed.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

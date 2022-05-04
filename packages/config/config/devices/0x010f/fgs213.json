@@ -34,8 +34,6 @@
 			"#": "10",
 			"label": "First channel operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -70,8 +68,6 @@
 			"label": "1st ch. reaction to switch",
 			"description": "First channel - reaction to switch for delay/auto ON/OFF modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -109,8 +105,6 @@
 			"#": "20",
 			"label": "Switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -132,8 +126,6 @@
 			"#": "21",
 			"label": "Flashing mode - reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -151,8 +143,6 @@
 			"#": "27",
 			"label": "Associations in Z-Wave network security mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
 			"defaultValue": 15,
 			"allowManualEntry": false,
 			"options": [
@@ -355,8 +345,6 @@
 			"#": "40",
 			"label": "Reaction to General Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -382,8 +370,6 @@
 			"#": "41",
 			"label": "Reaction to Flood Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -409,8 +395,6 @@
 			"#": "42",
 			"label": "Reaction to CO/CO2/Smoke Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -436,8 +420,6 @@
 			"#": "43",
 			"label": "Reaction to Heat Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -516,8 +498,6 @@
 			"label": "Measuring energy consumed by the device itself",
 			"description": "Determines if energy consumed by device should be included",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -13,47 +13,15 @@
 		"min": "2.0",
 		"max": "255.255"
 	},
-
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indication",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator"
 		},
 		{
 			"#": "2",
-			"label": "Binary Sensor Report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Binary Sensor Report"
 		},
 		{
 			"#": "3",
@@ -68,7 +36,7 @@
 		{
 			"#": "4",
 			"label": "Humidity Offset Value",
-			"unit": "0.1 (RH%).",
+			"unit": "0.1 (RH%)",
 			"valueSize": 1,
 			"minValue": -120,
 			"maxValue": 120,
@@ -125,7 +93,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "No Delay",
+					"label": "No delay",
 					"value": 0
 				}
 			]
@@ -147,7 +115,6 @@
 			]
 		}
 	],
-
 	"metadata": {
 		"inclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Inclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 1s Interval Until Inclusion Successful.",
 		"exclusion": "1. Power Up The Device.\n2. Set Z-Wave Controller Into Exclusion Mode\n3. Press And Hold The Button For 5s Until White Led Lights Is On, Then Release The Button Before Led Turn Off.\nBlue Led Will Blink With 0.5sinterval Until Exclusion Successful.",

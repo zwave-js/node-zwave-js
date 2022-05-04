@@ -16,6 +16,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -41,35 +42,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ProtectionCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	ExclusiveControlSet = 0x06,
-	ExclusiveControlGet = 0x07,
-	ExclusiveControlReport = 0x08,
-	TimeoutSet = 0x09,
-	TimeoutGet = 0x0a,
-	TimeoutReport = 0x0b,
-}
-
-// @publicAPI
-export enum LocalProtectionState {
-	Unprotected = 0,
-	ProtectedBySequence = 1,
-	NoOperationPossible = 2,
-}
-
-// @publicAPI
-export enum RFProtectionState {
-	Unprotected = 0,
-	NoControl = 1,
-	NoResponse = 2,
-}
+import {
+	LocalProtectionState,
+	ProtectionCommand,
+	RFProtectionState,
+} from "./_Types";
 
 export function getExclusiveControlNodeIdValueID(endpoint: number): ValueID {
 	return {
@@ -234,6 +211,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		local: LocalProtectionState,
 		rf?: RFProtectionState,
@@ -293,6 +271,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.exclusiveControlNodeId;
 	}
 
+	@validateArgs()
 	public async setExclusiveControl(nodeId: number): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
@@ -325,6 +304,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.timeout;
 	}
 
+	@validateArgs()
 	public async setTimeout(timeout: Timeout): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,

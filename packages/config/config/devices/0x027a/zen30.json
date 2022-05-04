@@ -34,8 +34,6 @@
 			"#": "1",
 			"label": "LED Indicator Mode for Dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -62,8 +60,6 @@
 			"#": "2",
 			"label": "LED Indicator Mode for Relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -90,8 +86,6 @@
 			"#": "3",
 			"label": "LED Indicator Color for Dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -118,8 +112,6 @@
 			"#": "4",
 			"label": "LED Indicator Color for Relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -146,8 +138,6 @@
 			"#": "5",
 			"label": "LED Indicator Brightness for Dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -170,8 +160,6 @@
 			"#": "6",
 			"label": "LED Indicator Brightness for Relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -194,8 +182,6 @@
 			"#": "7",
 			"label": "LED Indicator Mode for Scene Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -250,8 +236,6 @@
 			"#": "12",
 			"label": "On Off Status After Power Failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -323,8 +307,6 @@
 			"label": "Double Tap Function for Dimmer",
 			"description": "Brightness level after double-tapping the upper paddle.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -342,8 +324,6 @@
 			"#": "18",
 			"label": "Enable/Disable Double-tap for Dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -365,8 +345,6 @@
 			"#": "19",
 			"label": "Enable/Disable Load Control for Dimmer",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -388,8 +366,6 @@
 			"#": "20",
 			"label": "Enable/Disable Load Control for Relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -431,8 +407,6 @@
 			"label": "Dimmer Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable dimmer reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -452,8 +426,6 @@
 			"label": "Relay Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable relay reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -482,8 +454,6 @@
 			"$if": "firmwareVersion >= 1.4",
 			"label": "Paddle Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -500,6 +470,47 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "28",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Scene Control (Dimmer)",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Scene Control (Relay)",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "~/0x027a/templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {

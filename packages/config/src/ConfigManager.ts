@@ -4,8 +4,11 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import { getErrorMessage, num2hex } from "@zwave-js/shared";
-import { pathExists } from "fs-extra";
+import { getErrorMessage, JSONObject, num2hex } from "@zwave-js/shared";
+import { entries } from "alcalzone-shared/objects";
+import { isObject } from "alcalzone-shared/typeguards";
+import { pathExists, readFile } from "fs-extra";
+import JSON5 from "json5";
 import path from "path";
 import {
 	BasicDeviceClass,
@@ -14,7 +17,6 @@ import {
 	GenericDeviceClassMap,
 	getDefaultGenericDeviceClass,
 	getDefaultSpecificDeviceClass,
-	loadDeviceClassesInternal,
 	SpecificDeviceClass,
 } from "./DeviceClasses";
 import {
@@ -26,12 +28,11 @@ import {
 	getDevicesPaths,
 	loadDeviceIndexInternal,
 	loadFulltextDeviceIndexInternal,
-} from "./Devices";
+} from "./devices/DeviceConfig";
 import {
 	IndicatorMap,
 	IndicatorPropertiesMap,
 	IndicatorProperty,
-	loadIndicatorsInternal,
 } from "./Indicators";
 import { ConfigLogger } from "./Logger";
 import {
@@ -39,30 +40,15 @@ import {
 	ManufacturersMap,
 	saveManufacturersInternal,
 } from "./Manufacturers";
-import {
-	getDefaultMeterScale,
-	loadMetersInternal,
-	Meter,
-	MeterMap,
-	MeterScale,
-} from "./Meters";
-import {
-	loadNotificationsInternal,
-	Notification,
-	NotificationMap,
-} from "./Notifications";
+import { getDefaultMeterScale, Meter, MeterMap, MeterScale } from "./Meters";
+import { Notification, NotificationMap } from "./Notifications";
 import {
 	getDefaultScale,
-	loadNamedScalesInternal,
 	NamedScalesGroupMap,
 	Scale,
 	ScaleGroup,
 } from "./Scales";
-import {
-	loadSensorTypesInternal,
-	SensorType,
-	SensorTypeMap,
-} from "./SensorTypes";
+import { SensorType, SensorTypeMap } from "./SensorTypes";
 import {
 	configDir,
 	externalConfigDir,
@@ -70,6 +56,7 @@ import {
 	getEmbeddedConfigVersion,
 	syncExternalConfigDir,
 } from "./utils";
+import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 export interface ConfigManagerOptions {
 	logContainer?: ZWaveLogContainer;
@@ -759,5 +746,364 @@ export class ConfigManager {
 			this.lookupNotificationUnsafe(notificationType)?.name ??
 			`Unknown (${num2hex(notificationType)})`
 		);
+	}
+}
+
+/** @internal */
+export async function loadDeviceClassesInternal(
+	externalConfig?: boolean,
+): Promise<{
+	basicDeviceClasses: BasicDeviceClassMap;
+	genericDeviceClasses: GenericDeviceClassMap;
+}> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"deviceClasses.json",
+	);
+
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The device classes config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"device classes",
+				`the dictionary is not an object`,
+			);
+		}
+
+		if (!isObject(definition.basic)) {
+			throwInvalidConfig(
+				"device classes",
+				`The "basic" property is not an object`,
+			);
+		}
+		if (!isObject(definition.generic)) {
+			throwInvalidConfig(
+				"device classes",
+				`The "generic" property is not an object`,
+			);
+		}
+
+		const basicDeviceClasses = new Map<number, string>();
+		for (const [key, basicClass] of entries(definition.basic)) {
+			if (!hexKeyRegexNDigits.test(key)) {
+				throwInvalidConfig(
+					"device classes",
+					`found invalid key "${key}" in the basic device class definition. Device classes must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const keyNum = parseInt(key.slice(2), 16);
+			basicDeviceClasses.set(keyNum, basicClass);
+		}
+
+		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
+		for (const [key, genericDefinition] of entries(definition.generic)) {
+			if (!hexKeyRegexNDigits.test(key)) {
+				throwInvalidConfig(
+					"device classes",
+					`found invalid key "${key}" in the generic device class definition. Device classes must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const keyNum = parseInt(key.slice(2), 16);
+			genericDeviceClasses.set(
+				keyNum,
+				new GenericDeviceClass(keyNum, genericDefinition),
+			);
+		}
+
+		return { basicDeviceClasses, genericDeviceClasses };
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("device classes");
+		}
+	}
+}
+
+/** @internal */
+export async function loadIndicatorsInternal(
+	externalConfig?: boolean,
+): Promise<{
+	indicators: IndicatorMap;
+	properties: IndicatorPropertiesMap;
+}> {
+	const indicatorsConfigPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"indicators.json",
+	);
+
+	if (!(await pathExists(indicatorsConfigPath))) {
+		throw new ZWaveError(
+			"The config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(indicatorsConfigPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig("indicators", "the database is not an object");
+		}
+		if (!("indicators" in definition)) {
+			throwInvalidConfig(
+				"indicators",
+				`the required key "indicators" is missing`,
+			);
+		}
+		if (!("properties" in definition)) {
+			throwInvalidConfig(
+				"indicators",
+				`the required key "properties" is missing`,
+			);
+		}
+
+		const indicators = new Map<number, string>();
+		for (const [id, label] of entries(definition.indicators)) {
+			if (!hexKeyRegexNDigits.test(id)) {
+				throwInvalidConfig(
+					"indicators",
+					`found invalid key "${id}" in "indicators". Indicators must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const idNum = parseInt(id.slice(2), 16);
+			indicators.set(idNum, label);
+		}
+
+		const properties = new Map<number, IndicatorProperty>();
+		for (const [id, propDefinition] of entries(definition.properties)) {
+			if (!hexKeyRegexNDigits.test(id)) {
+				throwInvalidConfig(
+					"indicators",
+					`found invalid key "${id}" in "properties". Indicator properties must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const idNum = parseInt(id.slice(2), 16);
+			properties.set(idNum, new IndicatorProperty(idNum, propDefinition));
+		}
+
+		return { indicators, properties };
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("indicators");
+		}
+	}
+}
+
+/** @internal */
+export async function loadMetersInternal(
+	externalConfig?: boolean,
+): Promise<MeterMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"meters.json",
+	);
+
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig("meters", "the database is not an object");
+		}
+
+		const meters = new Map();
+		for (const [id, meterDefinition] of entries(definition)) {
+			if (!hexKeyRegexNDigits.test(id)) {
+				throwInvalidConfig(
+					"meters",
+					`found invalid key "${id}" at the root. Meters must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const idNum = parseInt(id.slice(2), 16);
+			meters.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
+		}
+		return meters;
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("meters");
+		}
+	}
+}
+
+/** @internal */
+export async function loadNotificationsInternal(
+	externalConfig?: boolean,
+): Promise<NotificationMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"notifications.json",
+	);
+
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"notifications",
+				"the database is not an object",
+			);
+		}
+
+		const notifications = new Map();
+		for (const [id, ntfcnDefinition] of entries(definition)) {
+			if (!hexKeyRegexNDigits.test(id)) {
+				throwInvalidConfig(
+					"notifications",
+					`found invalid key "${id}" at the root. Notifications must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const idNum = parseInt(id.slice(2), 16);
+			notifications.set(
+				idNum,
+				new Notification(idNum, ntfcnDefinition as JSONObject),
+			);
+		}
+		return notifications;
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("notifications");
+		}
+	}
+}
+
+/** @internal */
+export async function loadNamedScalesInternal(
+	externalConfig?: boolean,
+): Promise<NamedScalesGroupMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"scales.json",
+	);
+
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The named scales config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"named scales",
+				`the dictionary is not an object`,
+			);
+		}
+
+		const namedScales = new Map<string, ScaleGroup>();
+		for (const [name, scales] of entries(definition)) {
+			if (!/[\w\d]+/.test(name)) {
+				throwInvalidConfig(
+					"named scales",
+					`Name ${name} contains other characters than letters and numbers`,
+				);
+			}
+			const named: Map<number, Scale> & { name?: string } = new Map<
+				number,
+				Scale
+			>();
+			named.name = name;
+			for (const [key, scaleDefinition] of entries(
+				scales as JSONObject,
+			)) {
+				if (!hexKeyRegexNDigits.test(key)) {
+					throwInvalidConfig(
+						"named scales",
+						`found invalid key "${key}" in the definition for "${name}". Scales must have lowercase hexadecimal IDs.`,
+					);
+				}
+				const keyNum = parseInt(key.slice(2), 16);
+				named.set(keyNum, new Scale(keyNum, scaleDefinition));
+			}
+			namedScales.set(name, named);
+		}
+		return namedScales;
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("named scales");
+		}
+	}
+}
+
+/** @internal */
+export async function loadSensorTypesInternal(
+	manager: ConfigManager,
+	externalConfig?: boolean,
+): Promise<SensorTypeMap> {
+	const configPath = path.join(
+		(externalConfig && externalConfigDir()) || configDir,
+		"sensorTypes.json",
+	);
+
+	if (!(await pathExists(configPath))) {
+		throw new ZWaveError(
+			"The sensor types config file does not exist!",
+			ZWaveErrorCodes.Config_Invalid,
+		);
+	}
+
+	try {
+		const fileContents = await readFile(configPath, "utf8");
+		const definition = JSON5.parse(fileContents);
+		if (!isObject(definition)) {
+			throwInvalidConfig(
+				"sensor types",
+				`the dictionary is not an object`,
+			);
+		}
+
+		const sensorTypes = new Map();
+		for (const [key, sensorDefinition] of entries(definition)) {
+			if (!hexKeyRegexNDigits.test(key)) {
+				throwInvalidConfig(
+					"sensor types",
+					`found invalid key "${key}" at the root. Sensor types must have lowercase hexadecimal IDs.`,
+				);
+			}
+			const keyNum = parseInt(key.slice(2), 16);
+			sensorTypes.set(
+				keyNum,
+				new SensorType(manager, keyNum, sensorDefinition as JSONObject),
+			);
+		}
+		return sensorTypes;
+	} catch (e) {
+		if (isZWaveError(e)) {
+			throw e;
+		} else {
+			throwInvalidConfig("sensor types");
+		}
 	}
 }

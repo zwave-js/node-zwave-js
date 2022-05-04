@@ -1,0 +1,373 @@
+{
+	"manufacturer": "Defaro",
+	"manufacturerId": "0x032e",
+	"label": "DAT-101",
+	"description": "Thermostat Actuator",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x0021"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "State Changes",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "External Temperature Sensor",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Relay NO/NC Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal OPEN",
+					"value": 0
+				},
+				{
+					"label": "Normal CLOSE",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Hysteresis",
+			"unit": "°C",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1
+		},
+		{
+			"#": "3",
+			"label": "Hysteresis Offset",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn on at setpoint, turn off at setpoint + hysteresis",
+					"value": 0
+				},
+				{
+					"label": "Turn on at setpoint - hysteresis, turn off at setpoint",
+					"value": 1
+				},
+				{
+					"label": "Turn on at setpoint - ½ hysteresis, turn off at setpoint + ½ hysteresis",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Default Relay Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Relay OFF (recommended for electric floor heating)",
+					"value": 0
+				},
+				{
+					"label": "Relay ON",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Minimum Temperature",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 4
+		},
+		{
+			"#": "7",
+			"label": "Maximum Temperature",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 30
+		},
+		{
+			"#": "8",
+			"label": "Turbo Mode: Duration",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 1200,
+			"defaultValue": 120
+		},
+		{
+			"#": "9",
+			"label": "Turbo Mode: Consider Thermostat Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Consider",
+					"value": 0
+				},
+				{
+					"label": "Do not consider",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Thermostat Temperature Sensor Type",
+			"description": "When polling, the external sensor must be added to the 2nd association group. When listening, the DAT-101 must be added to the corresponding association group of the external sensor.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Stock temp sensor",
+					"value": 0
+				},
+				{
+					"label": "External temperature sensor (polling)",
+					"value": 1
+				},
+				{
+					"label": "External temperature sensor (listening)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "External Temperature Sensor: Poll Interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 600,
+			"defaultValue": 300
+		},
+		{
+			"#": "5",
+			"label": "External Temperature Sensor: Report Timeout",
+			"description": "After the specified timeout, lack of temperature reports from the external sensor will be considered a failure.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 30000
+		},
+		{
+			"#": "12",
+			"label": "Automatic Reports: Temperature Change Threshold",
+			"unit": "°C",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 1
+		},
+		{
+			"#": "13",
+			"label": "Automatic Reports: Interval",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 600,
+			"defaultValue": 300
+		},
+		{
+			"#": "14",
+			"label": "Automatic Reports: After Changing Relay State",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Switch 1 Mode (Thermostat Mode)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (every push will switch relay)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Switch 2 Mode (Turbo mode)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1 (contacts connected - ON, disconnected - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2 (contacts disconnected - ON, connected - OFF)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (every push will switch relay)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "40",
+			"label": "Temperature Sensor 1: Calibration",
+			"unit": "°C",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "+/- 0",
+					"value": 0
+				},
+				{
+					"label": "+1",
+					"value": 1
+				},
+				{
+					"label": "+2",
+					"value": 2
+				},
+				{
+					"label": "+3",
+					"value": 3
+				},
+				{
+					"label": "+4",
+					"value": 4
+				},
+				{
+					"label": "+5",
+					"value": 5
+				},
+				{
+					"label": "-1",
+					"value": 6
+				},
+				{
+					"label": "-2",
+					"value": 7
+				},
+				{
+					"label": "-3",
+					"value": 8
+				},
+				{
+					"label": "-4",
+					"value": 9
+				},
+				{
+					"label": "-5",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "41",
+			"label": "Temperature Sensor 2: Calibration",
+			"unit": "°C",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "+/- 0",
+					"value": 0
+				},
+				{
+					"label": "+1",
+					"value": 1
+				},
+				{
+					"label": "+2",
+					"value": 2
+				},
+				{
+					"label": "+3",
+					"value": 3
+				},
+				{
+					"label": "+4",
+					"value": 4
+				},
+				{
+					"label": "+5",
+					"value": 5
+				},
+				{
+					"label": "-1",
+					"value": 6
+				},
+				{
+					"label": "-2",
+					"value": 7
+				},
+				{
+					"label": "-3",
+					"value": 8
+				},
+				{
+					"label": "-4",
+					"value": 9
+				},
+				{
+					"label": "-5",
+					"value": 10
+				}
+			]
+		}
+	]
+}

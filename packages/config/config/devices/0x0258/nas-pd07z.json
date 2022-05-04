@@ -20,22 +20,9 @@
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Motion Detection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",
@@ -115,23 +102,9 @@
 		},
 		{
 			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Require Luminance Change for Basic Sets on Motion",
-			"description": "If enabled, a Basic Set will be set if the ambient light is below the level defined in Parameter 16",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"description": "If enabled, a Basic Set will be set if the ambient light is below the level defined in Parameter 16"
 		},
 		{
 			"#": "14",

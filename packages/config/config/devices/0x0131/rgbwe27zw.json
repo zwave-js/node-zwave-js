@@ -56,8 +56,6 @@
 			"label": "Enable or Disable Random Strobe Pulse Colors",
 			"description": "Values range are 0 (turn on) or 1 (turn off).",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -26,8 +26,6 @@
 			"#": "25",
 			"label": "Learn IR Code",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 32,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -208,8 +206,6 @@
 			"#": "30",
 			"label": "Auto Report Condition By Room Temp Change",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -251,8 +247,6 @@
 			"#": "32",
 			"label": "Built-in IR Emitter Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -271,8 +265,6 @@
 			"#": "33",
 			"label": "AC Swing Function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

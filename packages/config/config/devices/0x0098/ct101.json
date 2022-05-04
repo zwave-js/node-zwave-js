@@ -42,8 +42,6 @@
 			"#": "1",
 			"label": "Temperature Reporting Threshold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -73,9 +71,8 @@
 			"#": "2[0xff000000]",
 			"label": "HVAC Type",
 			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -95,15 +92,15 @@
 			"minValue": 0,
 			"maxValue": 15,
 			"readOnly": true,
+			"unsigned": true,
 			"allowManualEntry": false
 		},
 		{
 			"#": "2[0xf00000]",
 			"label": "Auxiliary Heat Type",
 			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2,
 			"readOnly": true,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -123,6 +120,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"readOnly": true,
+			"unsigned": true,
 			"allowManualEntry": false
 		},
 		{
@@ -132,14 +130,13 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"readOnly": true,
+			"unsigned": true,
 			"allowManualEntry": false
 		},
 		{
 			"#": "3",
 			"label": "Lock Setpoint Changes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,
@@ -159,8 +156,6 @@
 			"#": "4",
 			"label": "Thermostat Power Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"readOnly": true,
 			"allowManualEntry": false,
 			"options": [
@@ -178,8 +173,6 @@
 			"#": "5",
 			"label": "Humidity Reporting Threshold",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -206,8 +199,6 @@
 			"#": "6",
 			"label": "Auxiliary/Emergency Heating",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -227,8 +218,6 @@
 			"label": "Thermostat Hysteresis",
 			"description": "Variance allowed from setpoint to engage HVAC",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -270,8 +259,6 @@
 			"#": "8[0xff00]",
 			"label": "Heating Differential Temperature",
 			"valueSize": 2,
-			"minValue": 4,
-			"maxValue": 12,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -301,8 +288,6 @@
 			"#": "8[0xff]",
 			"label": "Cooling Differential Temperature",
 			"valueSize": 2,
-			"minValue": 4,
-			"maxValue": 12,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -332,8 +317,6 @@
 			"#": "9",
 			"label": "Thermostat Recovery Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

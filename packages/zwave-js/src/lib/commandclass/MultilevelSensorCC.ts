@@ -16,6 +16,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -38,33 +39,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultilevelSensorCommand {
-	GetSupportedSensor = 0x01,
-	SupportedSensorReport = 0x02,
-	GetSupportedScale = 0x03,
-	Get = 0x04,
-	Report = 0x05,
-	SupportedScaleReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export interface MultilevelSensorValue {
-	value: number;
-	scale: Scale;
-}
-
-/**
- * @publicAPI
- */
-export type MultilevelSensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: number;
-		scale: number;
-	};
-};
+import { MultilevelSensorCommand, MultilevelSensorValue } from "./_Types";
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
@@ -210,6 +185,8 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		sensorType: number,
 		scale: number,
 	): Promise<number | undefined>;
+
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
@@ -286,6 +263,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.supportedSensorTypes;
 	}
 
+	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
 	): Promise<readonly number[] | undefined> {
@@ -307,6 +285,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.sensorSupportedScales;
 	}
 
+	@validateArgs()
 	public async sendReport(
 		sensorType: number,
 		scale: number | Scale,

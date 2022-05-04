@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -38,33 +39,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatFanModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
-/**
- * @publicAPI
- */
-export enum ThermostatFanMode {
-	"Auto low" = 0x00,
-	"Low" = 0x01,
-	"Auto high" = 0x02,
-	"High" = 0x03,
-	"Auto medium" = 0x04,
-	"Medium" = 0x05,
-	"Circulation" = 0x06,
-	"Humidity circulation" = 0x07,
-	"Left and right" = 0x08,
-	"Up and down" = 0x09,
-	"Quiet" = 0x0a,
-	"External circulation" = 0x0b,
-}
+import { ThermostatFanMode, ThermostatFanModeCommand } from "./_Types";
 
 export function getOffStateValueID(endpoint: number): ValueID {
 	return {
@@ -179,6 +154,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(mode: ThermostatFanMode, off?: boolean): Promise<void> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,

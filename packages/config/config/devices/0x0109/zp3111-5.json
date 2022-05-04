@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Temperature Scale",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +75,6 @@
 			"label": "Motion Sensor Sensitivity",
 			"description": "Adjust sensitivity of the motion sensor.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -116,8 +112,6 @@
 			"#": "7",
 			"label": "LED indicator mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

@@ -20,7 +20,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import type { Message, ResponseRole } from "../message/Message";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";

@@ -39,7 +39,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Configure Alarm music volume",
+			"label": "Alarm Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -61,11 +61,11 @@
 		},
 		{
 			"#": "2",
-			"label": "Alarm music duration time",
+			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Off",
@@ -82,12 +82,16 @@
 				{
 					"label": "5 minutes",
 					"value": 3
+				},
+				{
+					"label": "Always on",
+					"value": 255
 				}
 			]
 		},
 		{
 			"#": "3",
-			"label": "Door bell music duration time",
+			"label": "Doorbell Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -106,7 +110,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Door bell music volume",
+			"label": "Doorbell Volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -128,73 +132,130 @@
 		},
 		{
 			"#": "5",
-			"label": "Alarm music index",
+			"label": "Alarm Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 9
+			"defaultValue": 10,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Für Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "6",
-			"label": "Door bell music index",
+			"label": "Doorbell Sound Selection",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 10
+			"defaultValue": 9,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Doorbell",
+					"value": 1
+				},
+				{
+					"label": "Für Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chimes",
+					"value": 3
+				},
+				{
+					"label": "Ding Dong",
+					"value": 4
+				},
+				{
+					"label": "William Tell",
+					"value": 5
+				},
+				{
+					"label": "Rondo Alla Turca",
+					"value": 6
+				},
+				{
+					"label": "Police Siren",
+					"value": 7
+				},
+				{
+					"label": "Evacuation",
+					"value": 8
+				},
+				{
+					"label": "Beep Beep",
+					"value": 9
+				},
+				{
+					"label": "Beep",
+					"value": 10
+				}
+			]
 		},
 		{
 			"#": "7",
-			"label": "Default Siren on mode",
+			"label": "Default Siren Sound",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
 			"options": [
 				{
-					"label": "Alarm music",
+					"label": "Alarm Sound",
 					"value": 1
 				},
 				{
-					"label": "Door bell music",
+					"label": "Doorbell Sound",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "8",
-			"label": "Alarm LED enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Alarm LED",
+			"defaultValue": 1
 		},
 		{
 			"#": "9",
-			"label": "Door bell LED enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Doorbell LED"
 		}
 	]
 }

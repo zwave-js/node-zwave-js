@@ -11,8 +11,8 @@ import {
 	StateMachine,
 } from "xstate";
 import { forwardTo, pure, raise, sendParent, stop } from "xstate/lib/actions";
-import { isSendData } from "../controller/SendDataShared";
 import type { Message } from "../message/Message";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
@@ -20,7 +20,7 @@ import {
 	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
-	respondUnsolicited,
+	notifyUnsolicited,
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
@@ -58,6 +58,7 @@ export type CommandQueueEvent =
 	| { type: "NAK" }
 	// Used for received messages. The message will be returned as unsolicited when it is not expected
 	| { type: "message"; message: Message }
+	| { type: "unsolicited"; message: Message }
 	| { type: "remove"; transaction: Transaction } // Used to abort the given transaction and remove it from the command queue
 	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
 	| ({ type: "command_success" } & Omit<
@@ -77,7 +78,11 @@ export type CommandQueueDoneData = SerialAPICommandDoneData & {
 export type CommandQueueMachine = StateMachine<
 	CommandQueueContext,
 	CommandQueueStateSchema,
-	CommandQueueEvent
+	CommandQueueEvent,
+	any,
+	any,
+	any,
+	any
 >;
 export type CommandQueueInterpreter = Interpreter<
 	CommandQueueContext,
@@ -213,7 +218,12 @@ export function createCommandQueueMachine(
 						cond: "isExecuting",
 						actions: forwardTo("execute"),
 					},
-					{ actions: respondUnsolicited },
+					{ actions: notifyUnsolicited },
+				],
+				unsolicited: [
+					// The Serial API has determined this message to be unsolicited
+					// Forward it to the SendThreadMachine
+					{ actions: notifyUnsolicited },
 				],
 
 				// Forward low-level messages to the correct actor
@@ -330,8 +340,6 @@ export function createCommandQueueMachine(
 		{
 			services: {
 				executeSerialAPICommand: (ctx) => {
-					// If there is an error while creating the command machine (e.g. during message serialization)
-					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
 							ctx.currentTransaction!.parts.current!,
@@ -339,6 +347,8 @@ export function createCommandQueueMachine(
 							params,
 						);
 					} catch (e) {
+						// If there is an error while creating the command machine (e.g. during message serialization)
+						// wrap it in a rejected promise, so xstate can handle it
 						implementations.log(
 							`Unexpected error during SerialAPI command: ${getErrorMessage(
 								e,

@@ -19,8 +19,6 @@
 			"label": "Local load control",
 			"description": "Defines which sequences of click control the local load.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -78,8 +76,6 @@
 			"#": "6",
 			"label": "Overvoltage Alarm Reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +119,6 @@
 			"#": "10",
 			"label": "Overcurrent Alarm Reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

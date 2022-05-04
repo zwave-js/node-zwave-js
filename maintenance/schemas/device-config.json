@@ -4,7 +4,7 @@
 	"properties": {
 		"$import": { "$ref": "#/definitions/import" },
 		"manufacturer": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "The full name of the manufacturer"
 		},
 		"manufacturerId": {
@@ -13,11 +13,11 @@
 			"pattern": "^0x[0-9a-f]{4}$"
 		},
 		"label": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "The device label that will be displayed by applications. Should usually be short."
 		},
 		"description": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "A slightly more detailed description of this device, explaining what kind of device this is"
 		},
 		"devices": {
@@ -88,8 +88,360 @@
 			"description": "A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation."
 		},
 		"compat": {
+			"anyOf": [
+				{ "$ref": "#/definitions/compatFlags" },
+				{
+					"type": "array",
+					"items": { "$ref": "#/definitions/compatFlags" },
+					"minItems": 1,
+					"additionalItems": false
+				}
+			]
+		},
+		"metadata": {
 			"type": "object",
 			"properties": {
+				"wakeup": {
+					"$ref": "#/definitions/conditionalString",
+					"description": "How to wake up the device manually"
+				},
+				"inclusion": {
+					"$ref": "#/definitions/conditionalString",
+					"description": "Inclusion instructions for this device"
+				},
+				"exclusion": {
+					"$ref": "#/definitions/conditionalString",
+					"description": "Exclusion instructions for this device"
+				},
+				"reset": {
+					"$ref": "#/definitions/conditionalString",
+					"description": "Instructions for resetting the device to factory defaults"
+				},
+				"manual": {
+					"$ref": "#/definitions/conditionalString",
+					"description": "A link to the device manual"
+				},
+				"comments": {
+					"oneOf": [
+						{
+							"type": "array",
+							"items": {
+								"$ref": "#/definitions/comment"
+							},
+							"minItems": 1
+						},
+						{
+							"$ref": "#/definitions/comment"
+						}
+					]
+				}
+			},
+			"additionalProperties": false,
+			"minProperties": 1
+		}
+	},
+	"anyOf": [
+		{
+			"required": [
+				"manufacturer",
+				"manufacturerId",
+				"label",
+				"description",
+				"devices",
+				"firmwareVersion"
+			]
+		},
+		{
+			"required": ["$import"]
+		}
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"import": {
+			"type": "string",
+			"description": "Used to import another config file or parts thereof",
+			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d\\[\\]_-]+/)*[\\w\\d\\[\\]_-]+)?$"
+		},
+		"condition": {
+			"type": "string",
+			"description": "A condition that must be fulfilled for this entry to exit."
+		},
+		"conditionalString": {
+			"anyOf": [
+				{ "type": "string" },
+				{
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"anyOf": [
+							{ "type": "string" },
+							{
+								"type": "object",
+								"properties": {
+									"$if": {
+										"$ref": "#/definitions/condition"
+									},
+									"value": {
+										"type": "string"
+									}
+								},
+								"required": ["value"],
+								"additionalProperties": false
+							}
+						]
+					}
+				}
+			]
+		},
+		"conditionalString2": {
+			"anyOf": [
+				{ "type": "string" },
+				{
+					"type": "array",
+					"minItems": 2,
+					"items": {
+						"anyOf": [
+							{ "type": "string" },
+							{
+								"type": "object",
+								"properties": {
+									"$if": {
+										"$ref": "#/definitions/condition"
+									},
+									"value": {
+										"type": "string"
+									}
+								},
+								"required": ["value"],
+								"additionalProperties": false
+							}
+						]
+					}
+				}
+			]
+		},
+		"endpoints": {
+			"type": "object",
+			"description": "Endpoint-specific configuration",
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"associations": { "$ref": "#/definitions/associations" }
+					},
+					"additionalProperties": false
+				},
+				"additionalProperties": false
+			}
+		},
+		"associations": {
+			"type": "object",
+			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
+			"properties": {
+				"$import": { "$ref": "#/definitions/import" }
+			},
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"$import": { "$ref": "#/definitions/import" },
+						"$if": { "$ref": "#/definitions/condition" },
+						"label": {
+							"type": "string",
+							"description": "How this association group is called"
+						},
+						"description": {
+							"type": "string",
+							"description": "What this association group does"
+						},
+						"maxNodes": {
+							"type": "number",
+							"description": "How many nodes may be assigned to this group",
+							"minimum": 1
+						},
+						"isLifeline": {
+							"type": "boolean",
+							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
+						},
+						"multiChannel": {
+							"type": "boolean",
+							"description": "`true`: Force a multi channel association (if possible); `false`: Force a node association (if possible)"
+						}
+					},
+					"anyOf": [
+						{
+							"required": ["label", "maxNodes"]
+						},
+						{
+							"required": ["$import"]
+						}
+					],
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"ccInfo": {
+			"type": "object",
+			"properties": {
+				"isSupported": {
+					"type": "boolean"
+				},
+				"isControlled": {
+					"type": "boolean"
+				},
+				"secure": {
+					"type": "boolean"
+				},
+				"version": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"ccInfoAndEndpoints": {
+			"type": "object",
+			"properties": {
+				"isSupported": {
+					"type": "boolean"
+				},
+				"isControlled": {
+					"type": "boolean"
+				},
+				"secure": {
+					"type": "boolean"
+				},
+				"version": {
+					"type": "number"
+				},
+				"endpoints": {
+					"type": "object",
+					"patternProperties": {
+						"^\\d+$": {
+							"$ref": "#/definitions/ccInfo"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"param": {
+			"type": "object",
+			"properties": {
+				"#": {
+					"type": "string",
+					"pattern": "^\\d+(\\[0x[0-9a-f]{1,8}\\])?$"
+				},
+				"$import": { "$ref": "#/definitions/import" },
+				"$if": { "$ref": "#/definitions/condition" },
+				"label": {
+					"type": "string",
+					"description": "A short name for the parameter"
+				},
+				"description": {
+					"type": "string",
+					"description": "A longer description what the parameter does"
+				},
+				"valueSize": {
+					"type": "number",
+					"minimum": 1,
+					"maximum": 4,
+					"description": "How many bytes the device uses for this value"
+				},
+				"minValue": {
+					"type": "number",
+					"description": "The minimum allowed value for this parameter"
+				},
+				"maxValue": {
+					"type": "number",
+					"description": "The maximum allowed value for this parameter"
+				},
+				"unit": {
+					"type": "string",
+					"description": "In which unit the value is interpreted"
+				},
+				"unsigned": {
+					"type": "boolean",
+					"description": "Whether this parameter is interpreted as an unsigned value by the device (default: false). This simplifies usage for the end user."
+				},
+				"defaultValue": {
+					"type": "number",
+					"description": "The factory default value of this parameter."
+				},
+				"readOnly": {
+					"const": true,
+					"description": "Whether this parameter can only be read"
+				},
+				"writeOnly": {
+					"const": true,
+					"description": "Whether this parameter can only be written"
+				},
+				"allowManualEntry": {
+					"const": false,
+					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, minValue and maxValue are optional, but options must be used to specify the allowed values."
+				},
+				"options": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "object",
+						"properties": {
+							"$import": {
+								"$ref": "#/definitions/import"
+							},
+							"$if": {
+								"$ref": "#/definitions/condition"
+							},
+							"label": {
+								"type": "string",
+								"description": "The option label to display"
+							},
+							"value": {
+								"type": "number",
+								"description": "Which value this option represents"
+							}
+						},
+						"anyOf": [
+							{
+								"required": ["label", "value"]
+							},
+							{
+								"required": ["$import"]
+							}
+						],
+						"additionalProperties": false
+					}
+				}
+			},
+			"additionalProperties": false,
+			"anyOf": [
+				{
+					"if": {
+						"properties": {
+							"readOnly": {
+								"const": true
+							}
+						}
+					},
+					"then": {
+						"required": ["#", "label", "valueSize"]
+					},
+					"else": {
+						"required": ["#", "label", "valueSize", "defaultValue"]
+					}
+				},
+				{
+					"required": ["#", "$import"]
+				}
+			]
+		},
+		"compatFlags": {
+			"type": "object",
+			"properties": {
+				"$if": { "$ref": "#/definitions/condition" },
 				"$import": { "$ref": "#/definitions/import" },
 				"alarmMapping": {
 					"description": "Is used to map legacy V1 alarm values to V2+ Notification events",
@@ -282,314 +634,21 @@
 				"treatBasicSetAsEvent": {
 					"const": true
 				},
+				"treatMultilevelSwitchSetAsEvent": {
+					"const": true
+				},
 				"treatDestinationEndpointAsSource": {
 					"const": true
 				}
 			},
 			"additionalProperties": false
 		},
-		"metadata": {
-			"type": "object",
-			"properties": {
-				"wakeup": {
-					"type": "string",
-					"description": "How to wake up the device manually"
-				},
-				"inclusion": {
-					"type": "string",
-					"description": "Inclusion instructions for this device"
-				},
-				"exclusion": {
-					"type": "string",
-					"description": "Exclusion instructions for this device"
-				},
-				"reset": {
-					"type": "string",
-					"description": "Instructions for resetting the device to factory defaults"
-				},
-				"manual": {
-					"type": "string",
-					"description": "A link to the device manual"
-				},
-				"comments": {
-					"oneOf": [
-						{
-							"type": "array",
-							"items": {
-								"$ref": "#/definitions/comment"
-							},
-							"minItems": 1
-						},
-						{
-							"$ref": "#/definitions/comment"
-						}
-					]
-				}
-			},
-			"additionalProperties": false,
-			"minProperties": 1
-		}
-	},
-	"anyOf": [
-		{
-			"required": [
-				"manufacturer",
-				"manufacturerId",
-				"label",
-				"description",
-				"devices",
-				"firmwareVersion"
-			]
-		},
-		{
-			"required": ["$import"]
-		}
-	],
-	"additionalProperties": false,
-	"definitions": {
-		"import": {
-			"type": "string",
-			"description": "Used to import another config file or parts thereof",
-			"pattern": "^((?<dir>((?:~/)?[\\w\\d_\\.-]+/)+)?(?<filename>[\\w\\d_-]+\\.json))?(?<selector>#([\\w\\d\\[\\]_-]+/)*[\\w\\d\\[\\]_-]+)?$"
-		},
-		"condition": {
-			"type": "string",
-			"description": "A condition that must be fulfilled for this entry to exit."
-		},
-		"endpoints": {
-			"type": "object",
-			"description": "Endpoint-specific configuration",
-			"patternProperties": {
-				"^\\d+$": {
-					"type": "object",
-					"properties": {
-						"$import": { "$ref": "#/definitions/import" },
-						"$if": { "$ref": "#/definitions/condition" },
-						"associations": { "$ref": "#/definitions/associations" }
-					},
-					"additionalProperties": false
-				},
-				"additionalProperties": false
-			}
-		},
-		"associations": {
-			"type": "object",
-			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" }
-			},
-			"patternProperties": {
-				"^\\d+$": {
-					"type": "object",
-					"properties": {
-						"$import": { "$ref": "#/definitions/import" },
-						"$if": { "$ref": "#/definitions/condition" },
-						"label": {
-							"type": "string",
-							"description": "How this association group is called"
-						},
-						"description": {
-							"type": "string",
-							"description": "What this association group does"
-						},
-						"maxNodes": {
-							"type": "number",
-							"description": "How many nodes may be assigned to this group",
-							"minimum": 1
-						},
-						"isLifeline": {
-							"type": "boolean",
-							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
-						},
-						"multiChannel": {
-							"type": "boolean",
-							"description": "`true`: Force a multi channel association (if possible); `false`: Force a node association (if possible)"
-						}
-					},
-					"anyOf": [
-						{
-							"required": ["label", "maxNodes"]
-						},
-						{
-							"required": ["$import"]
-						}
-					],
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
-		"ccInfo": {
-			"type": "object",
-			"properties": {
-				"isSupported": {
-					"type": "boolean"
-				},
-				"isControlled": {
-					"type": "boolean"
-				},
-				"secure": {
-					"type": "boolean"
-				},
-				"version": {
-					"type": "number"
-				}
-			},
-			"additionalProperties": false
-		},
-		"ccInfoAndEndpoints": {
-			"type": "object",
-			"properties": {
-				"isSupported": {
-					"type": "boolean"
-				},
-				"isControlled": {
-					"type": "boolean"
-				},
-				"secure": {
-					"type": "boolean"
-				},
-				"version": {
-					"type": "number"
-				},
-				"endpoints": {
-					"type": "object",
-					"patternProperties": {
-						"^\\d+$": {
-							"$ref": "#/definitions/ccInfo"
-						}
-					},
-					"additionalProperties": false
-				}
-			},
-			"additionalProperties": false
-		},
-		"param": {
-			"type": "object",
-			"properties": {
-				"#": {
-					"type": "string",
-					"pattern": "^\\d+(\\[0x[0-9a-f]{1,8}\\])?$"
-				},
-				"$import": { "$ref": "#/definitions/import" },
-				"$if": { "$ref": "#/definitions/condition" },
-				"label": {
-					"type": "string",
-					"description": "A short name for the parameter"
-				},
-				"description": {
-					"type": "string",
-					"description": "A longer description what the parameter does"
-				},
-				"valueSize": {
-					"type": "number",
-					"minimum": 1,
-					"maximum": 4,
-					"description": "How many bytes the device uses for this value"
-				},
-				"minValue": {
-					"type": "number",
-					"description": "The minimum allowed value for this parameter"
-				},
-				"maxValue": {
-					"type": "number",
-					"description": "The maximum allowed value for this parameter"
-				},
-				"unit": {
-					"type": "string",
-					"description": "In which unit the value is interpreted"
-				},
-				"unsigned": {
-					"type": "boolean",
-					"description": "Whether this parameter is interpreted as an unsigned value by the device (default: false). This simplifies usage for the end user."
-				},
-				"defaultValue": {
-					"type": "number",
-					"description": "The factory default value of this parameter."
-				},
-				"readOnly": {
-					"const": true,
-					"description": "Whether this parameter can only be read"
-				},
-				"writeOnly": {
-					"const": true,
-					"description": "Whether this parameter can only be written"
-				},
-				"allowManualEntry": {
-					"const": false,
-					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
-				},
-				"options": {
-					"type": "array",
-					"minItems": 1,
-					"items": {
-						"type": "object",
-						"properties": {
-							"$import": {
-								"$ref": "#/definitions/import"
-							},
-							"$if": {
-								"$ref": "#/definitions/condition"
-							},
-							"label": {
-								"type": "string",
-								"description": "The option label to display"
-							},
-							"value": {
-								"type": "number",
-								"description": "Which value this option represents"
-							}
-						},
-						"anyOf": [
-							{
-								"required": ["label", "value"]
-							},
-							{
-								"required": ["$import"]
-							}
-						],
-						"additionalProperties": false
-					}
-				}
-			},
-			"additionalProperties": false,
-			"anyOf": [
-				{
-					"if": {
-						"properties": {
-							"readOnly": {
-								"const": true
-							}
-						}
-					},
-					"then": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue"
-						]
-					},
-					"else": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue",
-							"defaultValue"
-						]
-					}
-				},
-				{
-					"required": ["#", "$import"]
-				}
-			]
-		},
 		"comment": {
 			"type": "object",
 			"properties": {
+				"$if": {
+					"$ref": "#/definitions/condition"
+				},
 				"level": {
 					"type": "string",
 					"enum": ["info", "warning", "error"]

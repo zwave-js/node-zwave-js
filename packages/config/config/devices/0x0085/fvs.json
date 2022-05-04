@@ -33,8 +33,6 @@
 			"#": "75",
 			"label": "Chain Outreach Length",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

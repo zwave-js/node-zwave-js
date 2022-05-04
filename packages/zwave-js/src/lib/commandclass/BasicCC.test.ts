@@ -2,14 +2,9 @@ import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
-import {
-	BasicCC,
-	BasicCCGet,
-	BasicCCReport,
-	BasicCCSet,
-	BasicCommand,
-} from "./BasicCC";
+import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 import { getCCValueMetadata } from "./CommandClass";
+import { BasicCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

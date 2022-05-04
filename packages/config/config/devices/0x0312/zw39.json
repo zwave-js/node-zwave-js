@@ -46,8 +46,6 @@
 			"label": "LED Indicator",
 			"description": "Turn LED indicator ON when light is ON (paddle switch only)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -74,8 +72,6 @@
 			"label": "Invert Switch",
 			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -103,8 +99,6 @@
 			"label": "Association Group 3 Setting",
 			"description": "Change how devices respond when associated in group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -141,8 +135,6 @@
 			"label": "Send command on local action",
 			"description": "When should the switch send commands to Group 3 devices?",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -161,8 +153,6 @@
 			"label": "Send command on 3-way action",
 			"description": "When should the switch send commands to Group 3 devices?",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -181,8 +171,6 @@
 			"label": "Send command on z-wave action",
 			"description": "When should the switch send commands to Group 3 devices?",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -201,8 +189,6 @@
 			"label": "Send command on auto off timer",
 			"description": "When should the switch send commands to Group 3 devices?",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

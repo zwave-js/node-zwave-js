@@ -12,15 +12,15 @@ export interface ZWaveOptions {
 
 		/**
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
-		 * so this is merely a safeguard against the driver stalling
+		 * so this is merely a safeguard against the driver stalling.
 		 */
-		response: number; // [500...5000], default: 1600 ms
+		response: number; // [500...20000], default: 10000 ms
 
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
 
 		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 10000 ms
+		report: number; // [500...10000], default: 1000 ms
 
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms

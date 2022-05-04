@@ -12,6 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -36,6 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { BinarySwitchCommand } from "./_Types";
 
 function getCurrentValueValueId(endpoint?: number): ValueID {
 	return {
@@ -43,13 +45,6 @@ function getCurrentValueValueId(endpoint?: number): ValueID {
 		endpoint,
 		property: "currentValue",
 	};
-}
-
-// All the supported commands
-export enum BinarySwitchCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
 }
 
 @API(CommandClasses["Binary Switch"])
@@ -89,13 +84,12 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
 	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 */
+	@validateArgs()
 	public async set(
 		targetValue: boolean,
 		duration?: Duration | string,
@@ -109,7 +103,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.from(duration),
+			duration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -251,7 +245,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
-	duration?: Duration;
+	duration?: Duration | string;
 }
 
 @CCCommand(BinarySwitchCommand.Set)
@@ -268,7 +262,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			);
 		} else {
 			this.targetValue = options.targetValue;
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -341,8 +335,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Transition duration",
+		...ValueMetadata.ReadOnlyDuration,
+		label: "Remaining duration",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

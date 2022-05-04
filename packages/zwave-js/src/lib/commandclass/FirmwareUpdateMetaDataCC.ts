@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -24,92 +25,16 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum FirmwareUpdateMetaDataCommand {
-	MetaDataGet = 0x01,
-	MetaDataReport = 0x02,
-	RequestGet = 0x03,
-	RequestReport = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-	StatusReport = 0x07,
-	ActivationSet = 0x08,
-	ActivationReport = 0x09,
-	PrepareGet = 0x0a,
-	PrepareReport = 0x0b,
-}
+import {
+	FirmwareDownloadStatus,
+	FirmwareUpdateActivationStatus,
+	FirmwareUpdateMetaDataCommand,
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+} from "./_Types";
 
 // @noSetValueAPI There are no values to set here
 // @noInterview   The "interview" is part of the update process
-
-// @publicAPI
-export enum FirmwareUpdateRequestStatus {
-	Error_InvalidManufacturerOrFirmwareID = 0,
-	Error_AuthenticationExpected = 1,
-	Error_FragmentSizeTooLarge = 2,
-	Error_NotUpgradable = 3,
-	Error_InvalidHardwareVersion = 4,
-	Error_FirmwareUpgradeInProgress = 5,
-	Error_BatteryLow = 6,
-	OK = 0xff,
-}
-
-// @publicAPI
-export enum FirmwareUpdateStatus {
-	// Error_Timeout is not part of the Z-Wave standard, but we use it to report
-	// that no status report was received
-	Error_Timeout = -1,
-
-	Error_Checksum = 0,
-	Error_TransmissionFailed = 1,
-	Error_InvalidManufacturerID = 2,
-	Error_InvalidFirmwareID = 3,
-	Error_InvalidFirmwareTarget = 4,
-	Error_InvalidHeaderInformation = 5,
-	Error_InvalidHeaderFormat = 6,
-	Error_InsufficientMemory = 7,
-	Error_InvalidHardwareVersion = 8,
-
-	// When adding more OK statuses, change the check in Node::finishFirmwareUpdate
-	OK_WaitingForActivation = 0xfd,
-	OK_NoRestart = 0xfe,
-	OK_RestartPending = 0xff,
-}
-
-// @publicAPI
-export enum FirmwareUpdateActivationStatus {
-	Error_InvalidFirmware = 0,
-	Error_ActivationFailed = 1,
-	OK = 0xff,
-}
-
-// @publicAPI
-export enum FirmwareDownloadStatus {
-	Error_InvalidManufacturerOrFirmwareID = 0,
-	Error_AuthenticationExpected = 1,
-	Error_FragmentSizeTooLarge = 2,
-	Error_NotDownloadable = 3,
-	Error_InvalidHardwareVersion = 4,
-	OK = 0xff,
-}
-
-// @publicAPI
-export type FirmwareUpdateCapabilities =
-	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: false;
-	  }
-	| {
-			/** Indicates whether the node's firmware can be upgraded */
-			readonly firmwareUpgradable: true;
-			/** An array of firmware targets that can be upgraded */
-			readonly firmwareTargets: readonly number[];
-			/** Indicates whether the node continues to function normally during an upgrade */
-			readonly continuesToFunction: Maybe<boolean>;
-			/** Indicates whether the node supports delayed activation of the new firmware */
-			readonly supportsActivation: Maybe<boolean>;
-	  };
 
 function getSupportsActivationValueId(): ValueID {
 	return {
@@ -181,6 +106,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	 * Requests the device to start the firmware update process.
 	 * WARNING: This method may wait up to 60 seconds for a reply.
 	 */
+	@validateArgs()
 	public async requestUpdate(
 		options: FirmwareUpdateMetaDataCCRequestGetOptions,
 	): Promise<FirmwareUpdateRequestStatus> {
@@ -211,6 +137,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	/**
 	 * Sends a fragment of the new firmware to the device
 	 */
+	@validateArgs()
 	public async sendFirmwareFragment(
 		fragmentNumber: number,
 		isLastFragment: boolean,
@@ -232,6 +159,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Activates a previously transferred firmware image */
+	@validateArgs()
 	public async activateFirmware(
 		options: FirmwareUpdateMetaDataCCActivationSetOptions,
 	): Promise<FirmwareUpdateActivationStatus | undefined> {

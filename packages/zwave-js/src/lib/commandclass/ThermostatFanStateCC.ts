@@ -27,24 +27,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatFanStateCommand {
-	Get = 0x02,
-	Report = 0x03,
-}
-
-export enum ThermostatFanState {
-	"Idle / off" = 0x00,
-	"Running / running low" = 0x01,
-	"Running high" = 0x02,
-	"Running medium" = 0x03,
-	"Circulation mode" = 0x04,
-	"Humidity circulation mode" = 0x05,
-	"Right - left circulation mode" = 0x06,
-	"Up - down circulation mode" = 0x07,
-	"Quiet circulation mode" = 0x08,
-}
+import { ThermostatFanState, ThermostatFanStateCommand } from "./_Types";
 
 @API(CommandClasses["Thermostat Fan State"])
 export class ThermostatFanStateCCAPI extends CCAPI {

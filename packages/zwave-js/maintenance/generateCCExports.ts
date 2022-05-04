@@ -4,6 +4,7 @@
 
 import {
 	formatWithPrettier,
+	hasComment,
 	loadTSConfig,
 	projectRoot,
 } from "@zwave-js/maintenance";
@@ -14,6 +15,13 @@ import ts from "typescript";
 
 // Define where the CC index file is located
 const ccIndexFile = path.join(projectRoot, "src/lib/commandclass/index.ts");
+
+function hasPublicAPIComment(
+	node: ts.Node,
+	sourceFile: ts.SourceFile,
+): boolean {
+	return hasComment(sourceFile, node, (text) => text.includes("@publicAPI"));
+}
 
 function findExports() {
 	// Create a Program to represent the project, then pull out the
@@ -92,40 +100,41 @@ function findExports() {
 					return;
 				}
 
-				// Export everything else that is marked with @publicAPI
-				const leadingComments = ts.getLeadingCommentRanges(
-					fileFullText,
-					node.pos,
-				);
-				if (!leadingComments) return;
+				if (!hasPublicAPIComment(node, sourceFile)) return;
 
-				for (const comment of leadingComments) {
-					const commentText = fileFullText.slice(
-						comment.pos,
-						comment.end,
+				// Make sure we're trying to access a node that is actually exported
+				if (
+					!node.modifiers?.some(
+						(m) => m.kind === ts.SyntaxKind.ExportKeyword,
+					)
+				) {
+					const location = ts.getLineAndCharacterOfPosition(
+						sourceFile,
+						node.getStart(sourceFile, false),
 					);
-					if (commentText.includes("@publicAPI")) {
-						// It has, make sure we're trying to access a node that is actually exported
-						if (
-							!node.modifiers?.some(
-								(m) => m.kind === ts.SyntaxKind.ExportKeyword,
-							)
-						) {
-							const location = ts.getLineAndCharacterOfPosition(
-								sourceFile,
-								node.getStart(sourceFile, false),
-							);
-							throw new Error(
-								`${relativePath}:${location.line} Found @publicAPI comment, but the node ${node.name.text} is not exported!`,
-							);
-						}
-						addExport(
-							sourceFile.fileName,
-							node.name.text,
-							ts.isTypeAliasDeclaration(node) ||
-								ts.isInterfaceDeclaration(node),
-						);
-					}
+					throw new Error(
+						`${relativePath}:${location.line} Found @publicAPI comment, but the node ${node.name.text} is not exported!`,
+					);
+				}
+				addExport(
+					sourceFile.fileName,
+					node.name.text,
+					ts.isTypeAliasDeclaration(node) ||
+						ts.isInterfaceDeclaration(node),
+				);
+			} else if (
+				ts.isExportDeclaration(node) &&
+				hasPublicAPIComment(node, sourceFile) &&
+				node.exportClause &&
+				ts.isNamedExports(node.exportClause)
+			) {
+				// Also include all re-exports from other locations in the project
+				for (const exportSpecifier of node.exportClause.elements) {
+					addExport(
+						sourceFile.fileName,
+						exportSpecifier.name.text,
+						node.isTypeOnly || exportSpecifier.isTypeOnly,
+					);
 				}
 			}
 		});

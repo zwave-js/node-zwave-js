@@ -18,8 +18,6 @@
 			"#": "37[0xff00]",
 			"label": "Siren Sound",
 			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 5,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -49,6 +47,11 @@
 			"#": "37[0xff]",
 			"$import": "~/templates/master_template.json#volume_three",
 			"valueSize": 2
+		},
+		{
+			"#": "38",
+			"$if": "firmwareVersion >= 3.25",
+			"$import": "templates/aeotec_template.json#stop_action_button"
 		},
 		{
 			"#": "80",

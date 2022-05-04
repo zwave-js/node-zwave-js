@@ -29,8 +29,6 @@
 			"#": "1",
 			"label": "configure LED light state",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -49,8 +47,6 @@
 			"label": "Reverse installed direction",
 			"description": "Control if switch up is on or off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

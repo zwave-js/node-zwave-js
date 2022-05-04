@@ -125,8 +125,6 @@
 			"label": "Bit 0: Slave Mode",
 			"description": "0=Disable, 1=Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -145,8 +143,6 @@
 			"label": "Bit 1: Central Unit checking",
 			"description": "0=Disable, 1=Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -165,8 +161,6 @@
 			"label": "Bit 2: Stupid Mode",
 			"description": "0=Disable, 1=Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

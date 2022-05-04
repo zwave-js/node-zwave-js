@@ -1,0 +1,673 @@
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWDSEU-221",
+	"description": "Walli Double Switch",
+	"devices": [
+		{
+			"productType": "0x1a01",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x1b01",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "2",
+			"label": "First Channel – Overload Safety Switch",
+			"description": "Allowable range: 10-45000 (single switch mode), 10-36200 (double switch mode)",
+			"valueSize": 4,
+			"unit": "0.1 W",
+			"minValue": 0,
+			"maxValue": 45000,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Second Channel – Overload Safety Switch",
+			"description": "Allowable range: 10-36200 (double switch mode)",
+			"valueSize": 4,
+			"unit": "0.1 W",
+			"minValue": 0,
+			"maxValue": 36200,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "LED Frame - Power Limit",
+			"description": "If param 11 is 8 or 9, the LED frame will flash violet when exceeding this limit. Allowable range: 500-36800 (single switch mode), 500-30000 (double switch mode)",
+			"valueSize": 4,
+			"unit": "0.1 W",
+			"minValue": 500,
+			"maxValue": 36800,
+			"defaultValue": 36800
+		},
+		{
+			"#": "11",
+			"label": "LED Frame – Color When On",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED disabled",
+					"value": 0
+				},
+				{
+					"label": "White",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Blue",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "Magenta",
+					"value": 7
+				},
+				{
+					"label": "Smoothly depending on measured power",
+					"value": 8
+				},
+				{
+					"label": "In steps depending on measured power",
+					"value": 9
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "LED Frame – Color When Off",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED disabled",
+					"value": 0
+				},
+				{
+					"label": "White",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Blue",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "Magenta",
+					"value": 7
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "LED Frame – Brightness",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 102,
+			"defaultValue": 100,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Proportional to power",
+					"value": 101
+				},
+				{
+					"label": "Inversely proportional to power",
+					"value": 102
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Switch Configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "S1 & S2 toggle the load/both channels",
+					"value": 1
+				},
+				{
+					"label": "S1 turns load/both channels on; S2 turns load/both channels off",
+					"value": 2
+				},
+				{
+					"label": "S1 toggles channel 1, S2 toggles channel 2 (double switch mode only)",
+					"value": 3
+				},
+				{
+					"label": "S1 single click turns channel 1 on, S1 double click turns channel 2 on, S2 single click turns both channels off (double switch mode only)",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Switch Orientation",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Reversed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "25",
+			"label": "Outputs Orientation",
+			"description": "Only in double switch mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Reversed",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration - 1st Slot Notification Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "30[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration - 1st Slot Notification Event",
+			"defaultValue": 0
+		},
+		{
+			"#": "30[0xff00]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event_parameter",
+			"label": "Alarm Configuration - 1st Slot Notification Event Parameter"
+		},
+		{
+			"#": "30[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_action",
+			"label": "Alarm Configuration - 1st Slot Action (Frame)",
+			"maxValue": 15,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Disable",
+					"value": 8
+				},
+				{
+					"label": "Blink red",
+					"value": 1
+				},
+				{
+					"label": "Blink green",
+					"value": 2
+				},
+				{
+					"label": "Blink blue",
+					"value": 4
+				},
+				{
+					"label": "Blink Red/White/Blue",
+					"value": 15
+				}
+			]
+		},
+		{
+			"#": "30[0x0f]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_action",
+			"label": "Alarm Configuration - 1st Slot Action (LED)",
+			"maxValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Turn off",
+					"value": 2
+				},
+				{
+					"label": "Turn on/off continuously",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "31[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Type",
+			"defaultValue": 5
+		},
+		{
+			"#": "31[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "31[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 2nd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		{
+			"#": "31[0xf0]",
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 2nd Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		{
+			"#": "31[0x0f]",
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 2nd Slot Action (LED)",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Type",
+			"defaultValue": 1
+		},
+		{
+			"#": "32[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "32[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 3rd Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0xf0]",
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 3rd Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0x0f]",
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 3rd Slot Action (LED)",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 4th Slot Notification Type",
+			"defaultValue": 2
+		},
+		{
+			"#": "33[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 4th Slot Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "33[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 4th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xf0]",
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 4th Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0x0f]",
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 4th Slot Action (LED)",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration - 5th Slot Notification Type",
+			"defaultValue": 4
+		},
+		{
+			"#": "34[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration - 5th Slot Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "34[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration - 5th Slot Notification Event Parameter",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xf0]",
+			"$import": "#paramInformation/30[0xf0]",
+			"label": "Alarm Configuration - 5th Slot Action (Frame)",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0x0f]",
+			"$import": "#paramInformation/30[0x0f]",
+			"label": "Alarm Configuration - 5th Slot Action (LED)",
+			"defaultValue": 0
+		},
+		{
+			"#": "35",
+			"label": "Alarm configuration – duration",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Infinite",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "40[0x01]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
+		},
+		{
+			"#": "40[0x02]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+		},
+		{
+			"#": "40[0x04]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
+		},
+		{
+			"#": "60",
+			"$import": "templates/fibaro_template.json#reports_include_self"
+		},
+		{
+			"#": "61",
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
+			"label": "First Channel - Power Reports: Relative Change Threshold",
+			"defaultValue": 15
+		},
+		{
+			"#": "62",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "First Channel - Periodic Power Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
+		},
+		{
+			"#": "63",
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
+			"label": "Second Channel - Power Reports: Relative Change Threshold",
+			"defaultValue": 15
+		},
+		{
+			"#": "64",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Second Channel - Periodic Power Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
+		},
+		{
+			"#": "65",
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "First Channel - Energy Report Threshold",
+			"maxValue": 500,
+			"defaultValue": 10
+		},
+		{
+			"#": "66",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "First Channel - Periodic Energy Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
+		},
+		{
+			"#": "67",
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
+			"label": "Second Channel - Energy Report Threshold",
+			"maxValue": 500,
+			"defaultValue": 10
+		},
+		{
+			"#": "68",
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Second Channel - Periodic Energy Reports",
+			"description": "Allowable Range: 30-32400",
+			"maxValue": 32400
+		},
+		{
+			"#": "150",
+			"label": "First Channel – Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard operation",
+					"value": 0
+				},
+				{
+					"label": "Turn off after delay",
+					"value": 1
+				},
+				{
+					"label": "Pulse - turn on, then turn off after delay",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "151",
+			"$import": "#paramInformation/150",
+			"label": "Second Channel – Operating Mode"
+		},
+		{
+			"#": "152",
+			"label": "First Channel - Reaction to Switch for Timed Modes",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel and set target state",
+					"value": 0
+				},
+				{
+					"label": "Ignore - mode runs until it ends",
+					"value": 1
+				},
+				{
+					"label": "Reset - start time from the beginning",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "153",
+			"$import": "#paramInformation/152",
+			"label": "Second Channel - Reaction to Switch for Timed Modes"
+		},
+		{
+			"#": "154",
+			"label": "First Channel - Time Parameter for Timed Modes",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0.1 seconds",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "155",
+			"$import": "#paramInformation/154",
+			"label": "Second Channel - Time Parameter for Timed Modes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 50
+		},
+		{
+			"#": "156",
+			"label": "Key S1 Associations: Switch ON Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "157",
+			"label": "Key S1 Associations: Switch OFF Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "158",
+			"label": "Key S1 Associations: Double Click Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
+			"#": "159",
+			"label": "Key S2 Associations: Switch ON Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
+			"#": "160",
+			"label": "Key S2 Associations: Switch OFF Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "161",
+			"label": "Key S2 Associations: Double Click Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true
+		}
+	]
+}

@@ -7,22 +7,20 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
-import {
-	AssociationCCReport,
-	AssociationCommand,
-} from "../commandclass/AssociationCC";
+import { AssociationCCReport } from "../commandclass/AssociationCC";
 import { BasicCCSet } from "../commandclass/BasicCC";
 import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { MultiChannelCCCommandEncapsulation } from "../commandclass/MultiChannelCC";
 import { MultiCommandCCCommandEncapsulation } from "../commandclass/MultiCommandCC";
 import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
-import { SendDataRequest } from "../controller/SendDataMessages";
-import { TransmitOptions } from "../controller/SendDataShared";
+import { AssociationCommand } from "../commandclass/_Types";
+import { TransmitOptions } from "../controller/_Types";
 import { FunctionType, MessageType } from "../message/Constants";
 import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { createAndStartDriver, PORT_ADDRESS } from "../test/utils";
 import { Driver } from "./Driver";
 
@@ -40,7 +38,8 @@ class TestMessage extends Message {}
 
 describe("lib/driver/Driver => ", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		// @ts-expect-error This is added in jest v28
+		jest.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {

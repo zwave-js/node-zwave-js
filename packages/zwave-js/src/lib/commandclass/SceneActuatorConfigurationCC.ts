@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -34,13 +35,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum SceneActuatorConfigurationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { SceneActuatorConfigurationCommand } from "./_Types";
 
 export function getLevelValueID(
 	endpoint: number | undefined,
@@ -227,9 +222,10 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async set(
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 		level?: number,
 	): Promise<void> {
 		this.assertSupportsCommand(
@@ -244,7 +240,8 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration: dimmingDuration ?? new Duration(0, "seconds"),
+			dimmingDuration:
+				Duration.from(dimmingDuration) ?? new Duration(0, "seconds"),
 			level,
 		});
 
@@ -279,6 +276,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async get(
 		sceneId: number,
 	): Promise<

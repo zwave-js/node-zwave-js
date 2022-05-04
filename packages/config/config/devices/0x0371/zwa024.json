@@ -8,6 +8,11 @@
 			"productType": "0x0102",
 			"productId": "0x0018",
 			"zwaveAllianceId": 4088
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0018",
+			"zwaveAllianceId": 4061
 		}
 	],
 	"firmwareVersion": {
@@ -102,8 +107,6 @@
 			"#": "5",
 			"label": "Motion Report Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -182,8 +185,6 @@
 			"#": "11",
 			"label": "Direct Association (Motion): Basic Set Value",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -296,7 +297,6 @@
 			"defaultValue": 100,
 			"unsigned": true
 		},
-
 		{
 			"#": "20",
 			"label": "Direct Association (High UV): Basic Set Threshold",
@@ -549,7 +549,6 @@
 			"defaultValue": 4,
 			"unsigned": true
 		},
-
 		{
 			"#": "60",
 			"label": "Threshold Reporting: UV Recover Limit",
@@ -739,7 +738,6 @@
 			"label": "LED Indicator Color (Wakeup Report)",
 			"defaultValue": 8
 		},
-
 		{
 			"#": "90",
 			"$import": "~/0x0086/templates/aeotec_template.json#base_color_options_9",

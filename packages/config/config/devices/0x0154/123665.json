@@ -65,8 +65,6 @@
 			"#": "5",
 			"label": "Ignore start level after pwr outage",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -88,8 +86,6 @@
 			"#": "11",
 			"label": "Disable Switching Funktion",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -40,8 +40,6 @@
 			"label": "BO IR support",
 			"description": "Enable/Disable BO IR Support",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

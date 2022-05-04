@@ -19,8 +19,6 @@
 			"label": "LED Light",
 			"description": "Adjust Button LED Light",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -106,8 +104,6 @@
 			"label": "load sensing",
 			"description": "turn ON when new bulb is sensed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

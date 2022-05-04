@@ -3,12 +3,11 @@ import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
-	ThermostatFanMode,
 	ThermostatFanModeCCGet,
 	ThermostatFanModeCCReport,
 	ThermostatFanModeCCSet,
-	ThermostatFanModeCommand,
 } from "./ThermostatFanModeCC";
+import { ThermostatFanMode, ThermostatFanModeCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

@@ -90,8 +90,6 @@
 			"#": "19",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -117,8 +115,6 @@
 			"#": "20",
 			"label": "Smart Switch Mode: Dim Reporting Behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -147,6 +143,11 @@
 		{
 			"#": "22",
 			"$import": "templates/zooz_template.json#night_light_mode"
+		},
+		{
+			"#": "26",
+			"$if": "firmwareVersion >= 10.0",
+			"$import": "templates/zooz_template.json#paddle_programming"
 		}
 	],
 	"metadata": {

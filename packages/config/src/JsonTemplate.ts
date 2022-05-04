@@ -1,5 +1,5 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { getErrorMessage } from "@zwave-js/shared";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
+import { getErrorMessage } from "@zwave-js/shared/safe";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import JSON5 from "json5";

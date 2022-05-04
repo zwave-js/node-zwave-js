@@ -1,96 +1,9 @@
-import {
-	isZWaveError,
-	ValueType,
-	ZWaveError,
-	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
-import { entries } from "alcalzone-shared/objects";
-import { isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
-import JSON5 from "json5";
-import path from "path";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegexNDigits,
-	throwInvalidConfig,
-} from "./utils";
+import type { ValueType } from "@zwave-js/core/safe";
+import { JSONObject, num2hex } from "@zwave-js/shared/safe";
+import { throwInvalidConfig } from "./utils_safe";
 
 export type IndicatorMap = ReadonlyMap<number, string>;
 export type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
-
-/** @internal */
-export async function loadIndicatorsInternal(
-	externalConfig?: boolean,
-): Promise<{
-	indicators: IndicatorMap;
-	properties: IndicatorPropertiesMap;
-}> {
-	const indicatorsConfigPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"indicators.json",
-	);
-
-	if (!(await pathExists(indicatorsConfigPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(indicatorsConfigPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig("indicators", "the database is not an object");
-		}
-		if (!("indicators" in definition)) {
-			throwInvalidConfig(
-				"indicators",
-				`the required key "indicators" is missing`,
-			);
-		}
-		if (!("properties" in definition)) {
-			throwInvalidConfig(
-				"indicators",
-				`the required key "properties" is missing`,
-			);
-		}
-
-		const indicators = new Map<number, string>();
-		for (const [id, label] of entries(definition.indicators)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"indicators",
-					`found invalid key "${id}" in "indicators". Indicators must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			indicators.set(idNum, label);
-		}
-
-		const properties = new Map<number, IndicatorProperty>();
-		for (const [id, propDefinition] of entries(definition.properties)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"indicators",
-					`found invalid key "${id}" in "properties". Indicator properties must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			properties.set(idNum, new IndicatorProperty(idNum, propDefinition));
-		}
-
-		return { indicators, properties };
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("indicators");
-		}
-	}
-}
 
 export class IndicatorProperty {
 	public constructor(id: number, definition: JSONObject) {

@@ -285,6 +285,7 @@ function fixPrinterErrors(text: string): string {
 
 function printMethodDeclaration(method: MethodDeclaration): string {
 	method = method.toggleModifier("public", false);
+	method.getDecorators().forEach((d) => d.remove());
 	const start = method.getStart();
 	const end = method.getBody()!.getStart();
 	let ret = method
@@ -500,33 +501,29 @@ async function main(): Promise<void> {
 	}
 }
 
+// To be able to use this as a worker thread, export the available methods
+let _program: Project | undefined;
+function getProgram(): Project {
+	if (!_program) {
+		_program = new Project({ tsConfigFilePath });
+	}
+	return _program;
+}
+
+export function processImport(filename: string): Promise<boolean> {
+	return processDocFile(getProgram(), filename);
+}
+
+export function processCC(
+	filename: string,
+): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
+	const sourceFile = getProgram().getSourceFileOrThrow(filename);
+	return processCCDocFile(sourceFile);
+}
+
+// If this is NOT run as a worker thread, execute the main function
 if (isMainThread) {
 	if (require.main === module) {
 		void main();
 	}
-} else {
-	// Worker thread, export the available methods
-	let _program: Project | undefined;
-	function getProgram(): Project {
-		if (!_program) {
-			_program = new Project({ tsConfigFilePath });
-		}
-		return _program;
-	}
-
-	function processImport(filename: string): Promise<boolean> {
-		return processDocFile(getProgram(), filename);
-	}
-
-	function processCC(
-		filename: string,
-	): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
-		const sourceFile = getProgram().getSourceFileOrThrow(filename);
-		return processCCDocFile(sourceFile);
-	}
-
-	module.exports = {
-		processImport,
-		processCC,
-	};
 }

@@ -24,11 +24,11 @@ import {
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import type { ZWaveController } from "../controller/Controller";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
-import { TransmitOptions } from "../controller/SendDataShared";
+import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority } from "../message/Constants";
+import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -49,24 +49,7 @@ import {
 	SPANExtension,
 } from "./Security2/Extension";
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "./Security2/shared";
-
-// All the supported commands
-export enum Security2Command {
-	NonceGet = 0x01,
-	NonceReport = 0x02,
-	MessageEncapsulation = 0x03,
-	KEXGet = 0x04,
-	KEXReport = 0x05,
-	KEXSet = 0x06,
-	KEXFail = 0x07,
-	PublicKeyReport = 0x08,
-	NetworkKeyGet = 0x09,
-	NetworkKeyReport = 0x0a,
-	NetworkKeyVerify = 0x0b,
-	TransferEnd = 0x0c,
-	CommandsSupportedGet = 0x0d,
-	CommandsSupportedReport = 0x0e,
-}
+import { Security2Command } from "./_Types";
 
 function securityClassToBitMask(key: SecurityClass): Buffer {
 	return encodeBitMask(
@@ -135,6 +118,8 @@ function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 
 const DECRYPT_ATTEMPTS = 5;
 
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses["Security 2"])
 export class Security2CCAPI extends CCAPI {
 	public supportsCommand(_cmd: Security2Command): Maybe<boolean> {
@@ -1542,7 +1527,8 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 					SecurityClass,
 					this.grantedKey,
 				),
-				"network key": buffer2hex(this.networkKey),
+				// This shouldn't be logged, so users can safely post their logs online
+				// "network key": buffer2hex(this.networkKey),
 			},
 		};
 	}

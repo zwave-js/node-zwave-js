@@ -8,9 +8,8 @@ import {
 	BinarySensorCCReport,
 	BinarySensorCCSupportedGet,
 	BinarySensorCCSupportedReport,
-	BinarySensorCommand,
-	BinarySensorType,
 } from "./BinarySensorCC";
+import { BinarySensorCommand, BinarySensorType } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

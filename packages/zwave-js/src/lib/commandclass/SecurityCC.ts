@@ -20,11 +20,11 @@ import {
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
-import { TransmitOptions } from "../controller/SendDataShared";
+import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
 import { FunctionType, MessagePriority } from "../message/Constants";
+import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -38,23 +38,9 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import { Security2CC } from "./Security2CC";
+import { SecurityCommand } from "./_Types";
 
 // @noSetValueAPI This is an encapsulation CC
-
-// All the supported commands
-export enum SecurityCommand {
-	CommandsSupportedGet = 0x02,
-	CommandsSupportedReport = 0x03,
-	SchemeGet = 0x04,
-	SchemeReport = 0x05,
-	SchemeInherit = 0x08,
-	NetworkKeySet = 0x06,
-	NetworkKeyVerify = 0x07,
-	NonceGet = 0x40,
-	NonceReport = 0x80,
-	CommandEncapsulation = 0x81,
-	CommandEncapsulationNonceGet = 0xc1,
-}
 
 function getAuthenticationData(
 	senderNonce: Buffer,
@@ -87,6 +73,8 @@ const HALF_NONCE_SIZE = 8;
 
 // TODO: Ignore commands if received via multicast
 
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses.Security)
 export class SecurityCCAPI extends PhysicalCCAPI {
 	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
@@ -785,12 +773,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
-		return {
-			...super.toLogEntry(),
-			message: { "network key": buffer2hex(this.networkKey) },
-		};
-	}
+	// @noLogEntry - The network key shouldn't be logged, so users can safely post their logs online
 }
 
 @CCCommand(SecurityCommand.CommandsSupportedReport)

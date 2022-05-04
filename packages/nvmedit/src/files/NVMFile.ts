@@ -1,4 +1,4 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import {
 	FragmentType,

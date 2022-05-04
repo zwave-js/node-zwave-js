@@ -24,29 +24,10 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SupervisionCommand, SupervisionStatus } from "./_Types";
 
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
-
-// All the supported commands
-export enum SupervisionCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-/** @publicAPI */
-export enum SupervisionStatus {
-	NoSupport = 0x00,
-	Working = 0x01,
-	Fail = 0x02,
-	Success = 0xff,
-}
-
-/** @publicAPI */
-export interface SupervisionResult {
-	status: SupervisionStatus;
-	remainingDuration?: Duration;
-}
 
 let sessionId = 0;
 /** Returns the next session ID to be used for supervision */
@@ -57,6 +38,8 @@ export function getNextSessionId(): number {
 	return sessionId;
 }
 
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {

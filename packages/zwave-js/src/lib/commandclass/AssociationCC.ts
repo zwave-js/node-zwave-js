@@ -8,6 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -27,7 +28,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { AssociationAddress } from "./MultiChannelAssociationCC";
+import { AssociationCommand, type AssociationAddress } from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -112,29 +113,6 @@ export function getLifelineGroupIds(endpoint: Endpoint): number[] {
 	return distinct(lifelineGroups).sort();
 }
 
-// All the supported commands
-export enum AssociationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	Remove = 0x04,
-	SupportedGroupingsGet = 0x05,
-	SupportedGroupingsReport = 0x06,
-	// TODO: These two commands are V2. I have no clue how this is supposed to function:
-	// SpecificGroupGet = 0x0b,
-	// SpecificGroupReport = 0x0c,
-
-	// Here's what the docs have to say:
-	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
-	// the identity of the key. The following sequence of events takes place:
-	// * The user activates a special identification sequence and pushes the button to be identified
-	// * The device issues a Node Information frame (NIF)
-	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
-	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
-	// * The multi-button device returns an Association Specific Group Report Command that advertises the
-	//   association group that represents the most recently detected button
-}
-
 // @noSetValueAPI
 
 @API(CommandClasses.Association)
@@ -178,6 +156,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
@@ -202,6 +181,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes to an association group
 	 */
+	@validateArgs()
 	public async addNodeIds(
 		groupId: number,
 		...nodeIds: number[]
@@ -220,6 +200,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from an association group
 	 */
+	@validateArgs()
 	public async removeNodeIds(
 		options: AssociationCCRemoveOptions,
 	): Promise<void> {
@@ -239,6 +220,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from all association groups
 	 */
+	@validateArgs()
 	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,
@@ -269,7 +251,9 @@ export class AssociationCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getHasLifelineValueId(0).property, true);
+		this.registerValue(getHasLifelineValueId(0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -302,7 +286,14 @@ export class AssociationCC extends CommandClass {
 		return (
 			this.getValueDB().getValue(
 				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ?? 0
+			) ??
+			// If the information is not available, fall back to the configuration file if possible
+			// This can happen on some legacy devices which have "hidden" association groups
+			this.getNodeUnsafe()?.deviceConfig?.getAssociationConfigForEndpoint(
+				this.endpointIndex,
+				groupId,
+			)?.maxNodes ??
+			0
 		);
 	}
 

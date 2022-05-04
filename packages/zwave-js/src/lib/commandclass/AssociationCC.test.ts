@@ -8,8 +8,8 @@ import {
 	AssociationCCSet,
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCSupportedGroupingsReport,
-	AssociationCommand,
 } from "./AssociationCC";
+import { AssociationCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

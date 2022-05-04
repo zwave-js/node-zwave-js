@@ -1,12 +1,13 @@
 import { CommandClasses } from "@zwave-js/core";
-import { SendDataRequest } from "../controller/SendDataMessages";
-import { TransmitOptions } from "../controller/SendDataShared";
+import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { assertCC } from "../test/assertCC";
 import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
-import { ZWavePlusCC, ZWavePlusCommand } from "./ZWavePlusCC";
+import { ZWavePlusCC } from "./ZWavePlusCC";
+import { ZWavePlusCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

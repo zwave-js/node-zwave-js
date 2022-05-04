@@ -25,35 +25,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatOperatingStateCommand {
-	Get = 0x02,
-	Report = 0x03,
-	// TODO: Implement V2 commands
-	// LoggingSupportedGet = 0x01,
-	// LoggingSupportedReport = 0x04,
-	// LoggingGet = 0x05,
-	// LoggingReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum ThermostatOperatingState {
-	"Idle" = 0x00,
-	"Heating" = 0x01,
-	"Cooling" = 0x02,
-	"Fan Only" = 0x03,
-	"Pending Heat" = 0x04,
-	"Pending Cool" = 0x05,
-	"Vent/Economizer" = 0x06,
-	"Aux Heating" = 0x07,
-	"2nd Stage Heating" = 0x08,
-	"2nd Stage Cooling" = 0x09,
-	"2nd Stage Aux Heat" = 0x0a,
-	"3rd Stage Aux Heat" = 0x0b,
-}
+import {
+	ThermostatOperatingState,
+	ThermostatOperatingStateCommand,
+} from "./_Types";
 
 // @noSetValueAPI This CC is read-only
 

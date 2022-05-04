@@ -19,8 +19,6 @@
 			"label": "Local Control Off",
 			"description": "Separates pushbutton and S1 input from relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

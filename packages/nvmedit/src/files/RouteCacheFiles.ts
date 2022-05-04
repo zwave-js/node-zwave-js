@@ -4,7 +4,7 @@ import {
 	MAX_REPEATERS,
 	protocolDataRateMask,
 	RouteProtocolDataRate,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	gotDeserializationOptions,

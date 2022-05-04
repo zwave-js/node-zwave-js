@@ -25,8 +25,6 @@
 			"#": "1",
 			"label": "System Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -44,8 +42,6 @@
 			"#": "2",
 			"label": "Fan Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"#": "3",
 			"label": "Change Over Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -82,8 +76,6 @@
 			"#": "4",
 			"label": "C/F Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -101,8 +93,6 @@
 			"#": "9",
 			"label": "Display Lock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -219,8 +209,6 @@
 			"label": "SB Mode",
 			"description": "Setback mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -238,8 +226,6 @@
 			"#": "69",
 			"label": "Service Mode (Test)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -273,8 +259,6 @@
 			"#": "77",
 			"label": "2nd Stage Heat Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -292,8 +276,6 @@
 			"#": "78",
 			"label": "Aux Heat Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -311,8 +293,6 @@
 			"#": "79",
 			"label": "2nd Stage Cool Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

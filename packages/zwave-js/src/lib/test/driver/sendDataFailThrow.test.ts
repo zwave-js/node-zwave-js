@@ -30,7 +30,6 @@ describe("regression tests", () => {
 	});
 
 	it("when a SendData request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
-		jest.setTimeout(5000);
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported =
 			isFunctionSupported_NoBridge;
@@ -85,10 +84,9 @@ describe("regression tests", () => {
 		expect(serialport.lastWrite).toEqual(ACK);
 
 		await expect(promise).toReject();
-	});
+	}, 5000);
 
 	it("when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
-		jest.setTimeout(5000);
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
 
@@ -149,5 +147,5 @@ describe("regression tests", () => {
 		expect(serialport.lastWrite).toEqual(ACK);
 
 		await expect(promise).toReject();
-	});
+	}, 5000);
 });

@@ -48,7 +48,7 @@ hex "hex number"
   = _ ("0x"[0-9a-f]i+) { return parseInt(text(), 16); }
 
 version "version string"
-  = _ version:([0-9]+"."[0-9]+) { return text(); }
+  = _ version:([0-9]+"."[0-9]+("."[0-9]+)?) { return text(); }
  
 string "string"
   = _ ("\""[^\"]*"\"") { return text(); }

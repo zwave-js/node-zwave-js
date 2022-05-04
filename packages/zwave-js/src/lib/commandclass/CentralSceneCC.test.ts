@@ -10,9 +10,8 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneCCSupportedGet,
 	CentralSceneCCSupportedReport,
-	CentralSceneCommand,
-	CentralSceneKeys,
 } from "./CentralSceneCC";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

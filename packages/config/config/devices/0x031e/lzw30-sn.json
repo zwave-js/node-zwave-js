@@ -19,8 +19,6 @@
 			"#": "1",
 			"label": "Power On State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "2",
 			"label": "Invert Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -126,8 +122,6 @@
 			"#": "6",
 			"label": "LED Indicator Brightness",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -181,8 +175,6 @@
 			"#": "7",
 			"label": "LED Indicator Brightness When Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -237,8 +229,6 @@
 			"label": "LED Strip Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -320,8 +310,6 @@
 			"$if": "firmwareVersion >= 1.17",
 			"label": "Load Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -341,8 +329,6 @@
 			"label": "Instant On",
 			"description": "Enabling this disables the 700ms button delay and multi-tap scenes.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -364,6 +350,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Red",
@@ -403,8 +390,6 @@
 			"#": "8[0xff00]",
 			"label": "LED Effect Brightness",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -461,14 +446,13 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "8[0x7f000000]",
 			"label": "LED Effect Type",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

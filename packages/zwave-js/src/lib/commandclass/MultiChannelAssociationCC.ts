@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -28,20 +29,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export interface AssociationAddress {
-	nodeId: number;
-	endpoint?: number;
-}
-
-/**
- * @publicAPI
- * @deprecated use AssociationAddress instead
- */
-export type Association = AssociationAddress;
+import {
+	AssociationAddress,
+	EndpointAddress,
+	MultiChannelAssociationCommand,
+} from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -89,11 +81,6 @@ export function getGroupCountValueId(endpointIndex: number): ValueID {
 		endpoint: endpointIndex,
 		property: "groupCount",
 	};
-}
-
-export interface EndpointAddress {
-	nodeId: number;
-	endpoint: number | number[];
 }
 
 function endpointAddressesToString(
@@ -180,16 +167,6 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 	return { nodeIds, endpoints };
 }
 
-// All the supported commands
-export enum MultiChannelAssociationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	Remove = 0x04,
-	SupportedGroupingsGet = 0x05,
-	SupportedGroupingsReport = 0x06,
-}
-
 // @noSetValueAPI
 
 @API(CommandClasses["Multi Channel Association"])
@@ -235,6 +212,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(
@@ -260,6 +238,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes or endpoints to an association group
 	 */
+	@validateArgs()
 	public async addDestinations(
 		options: MultiChannelAssociationCCSetOptions,
 	): Promise<void> {
@@ -279,6 +258,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes or endpoints from an association group
 	 */
+	@validateArgs()
 	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
 	): Promise<void> {
@@ -327,9 +307,15 @@ export class MultiChannelAssociationCC extends CommandClass {
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
 		// Make valueIDs internal
-		this.registerValue(getMaxNodesValueId(0, 0).property, true);
-		this.registerValue(getNodeIdsValueId(0, 0).property, true);
-		this.registerValue(getEndpointsValueId(0, 0).property, true);
+		this.registerValue(getMaxNodesValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getNodeIdsValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getEndpointsValueId(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {

@@ -2,11 +2,11 @@
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
 	"label": "NAS-RC03Z",
-	"description": "SOS/Remote Control 1 Button",
+	"description": "SOS/Remote Control",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x108f"
+			"productId": "0x108a"
 		}
 	],
 	"firmwareVersion": {
@@ -17,7 +17,6 @@
 		{
 			"#": "1",
 			"label": "Basic Set Level",
-			"description": "Basic Set Command will be sent when SOS is triggered",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -26,7 +25,6 @@
 		{
 			"#": "2",
 			"label": "SOS Event Clear Time",
-			"description": "Time to clear emergency event after emergency event is triggered",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
@@ -34,20 +32,38 @@
 		},
 		{
 			"#": "3",
-			"label": "SOS Configuration",
-			"description": "Key function configured as emergency event key or central scene notification key",
+			"label": "SOS Key",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable Scene Mode",
+					"label": "Scene Mode",
 					"value": 1
 				},
 				{
 					"label": "SOS Mode",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "SOS Alarm Event",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Police",
+					"value": 0
+				},
+				{
+					"label": "Fire Services",
+					"value": 1
+				},
+				{
+					"label": "Medical Services",
 					"value": 2
 				}
 			]

@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -30,13 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum LockCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { LockCommand } from "./_Types";
 
 export function getLockedValueId(endpoint: number): ValueID {
 	return {
@@ -75,6 +70,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	 * Locks or unlocks the lock
 	 * @param locked Whether the lock should be locked
 	 */
+	@validateArgs()
 	public async set(locked: boolean): Promise<void> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 

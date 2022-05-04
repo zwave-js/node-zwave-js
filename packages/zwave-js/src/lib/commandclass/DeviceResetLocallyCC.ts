@@ -5,10 +5,7 @@ import {
 	commandClass,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum DeviceResetLocallyCommand {
-	Notification = 0x01,
-}
+import { DeviceResetLocallyCommand } from "./_Types";
 
 // @noAPI: We can only receive this command
 // @noInterview: We can only receive this command

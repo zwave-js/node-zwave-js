@@ -19,8 +19,6 @@
 			"label": "PowerFailure",
 			"description": "How the Wall Plug will react in the event of power supply failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -86,8 +84,6 @@
 			"label": "SelfConsumption",
 			"description": "Measuring energy consumed by the Wall Plug itself",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -126,8 +122,6 @@
 			"label": "ControlMode",
 			"description": "the way that 3rd association group devices are controlled",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -187,8 +181,6 @@
 			"label": "ActiveAlarm",
 			"description": "Z-Wave network alarms to which the Wall Plug will respond",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 63,
 			"defaultValue": 63,
 			"allowManualEntry": false,
 			"options": [
@@ -270,8 +262,6 @@
 			"label": "LEDwhenOn",
 			"description": "LED frame color when controlled device is on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -322,8 +312,6 @@
 			"label": "LEDwhenOff",
 			"description": "LED frame color when controlled device is off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -370,8 +358,6 @@
 			"label": "LEDwhenAlarm",
 			"description": "LED frame color at the Z-Wave network alarm detection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

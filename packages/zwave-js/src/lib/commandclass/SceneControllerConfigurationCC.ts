@@ -11,6 +11,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -36,13 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum SceneControllerConfigurationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { SceneControllerConfigurationCommand } from "./_Types";
 
 export function getSceneIdValueID(
 	endpoint: number | undefined,
@@ -243,6 +238,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async disable(groupId: number): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -252,10 +248,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		return this.set(groupId, 0, new Duration(0, "seconds"));
 	}
 
+	@validateArgs()
 	public async set(
 		groupId: number,
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -304,6 +301,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async get(
 		groupId: number,
 	): Promise<
@@ -448,7 +446,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	sceneId: number;
-	dimmingDuration?: Duration;
+	dimmingDuration?: Duration | string;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
@@ -472,7 +470,8 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
-				options.dimmingDuration ?? new Duration(0, "default");
+				Duration.from(options.dimmingDuration) ??
+				new Duration(0, "default");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,
@@ -487,9 +486,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 	}
 
 	public groupId: number;
-
 	public sceneId: number;
-
 	public dimmingDuration: Duration;
 
 	public serialize(): Buffer {

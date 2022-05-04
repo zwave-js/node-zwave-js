@@ -4,20 +4,7 @@ import * as crypto from "crypto";
 import MemoryMap from "nrf-intel-hex";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { CRC16_CCITT } from "./crc";
-
-export type FirmwareFileFormat =
-	| "aeotec"
-	| "otz"
-	| "ota"
-	| "hex"
-	| "hec"
-	| "gecko"
-	| "bin";
-
-export interface Firmware {
-	data: Buffer;
-	firmwareTarget?: number;
-}
+import type { Firmware, FirmwareFileFormat } from "./_Types";
 
 const firmwareIndicators = {
 	// All aeotec updater exes contain this text

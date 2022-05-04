@@ -86,8 +86,6 @@
 			"label": "Restart device",
 			"description": "Restart device or metering chip",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

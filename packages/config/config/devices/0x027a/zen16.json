@@ -37,8 +37,6 @@
 			"#": "1",
 			"label": "Status After Power Failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -56,11 +54,11 @@
 					"value": 2
 				},
 				{
-					"label": "Relays 1/2 - Previous state; Relays 3/4 - Off",
+					"label": "Relays 1/2 - Previous state; Relay 3 - Off",
 					"value": 3
 				},
 				{
-					"label": "Relays 1/2 - Previous state, Relays 3/4 - On",
+					"label": "Relays 1/2 - Previous state, Relay 3 - On",
 					"value": 4
 				}
 			]
@@ -68,25 +66,22 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 1.1",
-			"label": "Switch Type for Relay 1 (Sw1)",
-			"description": "Choose the wall switch type you want to connect to the Sw1 terminal.",
+			"label": "Switch 1: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change state on toggle)",
+					"label": "Toggle (change state on toggle)",
 					"value": 2
 				}
 			]
@@ -94,25 +89,22 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Switch Type for Relay 1 (Sw1)",
-			"description": "Choose the wall switch type you want to connect to the Sw1 terminal.",
+			"label": "Switch 1: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change state on toggle)",
+					"label": "Toggle (change state on toggle)",
 					"value": 2
 				},
 				{
@@ -124,25 +116,22 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion <= 1.1",
-			"label": "Switch Type for Relay 2 (Sw2)",
-			"description": "Choose the wall switch type you want to connect to the Sw2 terminal.",
+			"label": "Switch 2: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change state on toggle)",
+					"label": "Toggle (change state on toggle)",
 					"value": 2
 				}
 			]
@@ -150,25 +139,22 @@
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Switch Type for Relay 2 (Sw2)",
-			"description": "Choose the wall switch type you want to connect to the Sw2 terminal.",
+			"label": "Switch 2: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change state on toggle)",
+					"label": "Toggle (change state on toggle)",
 					"value": 2
 				},
 				{
@@ -179,36 +165,58 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch Type for Relay 3 (Sw3)",
-			"description": "Choose the wall switch type you want to connect to the Sw3 terminal.",
+			"$if": "firmwareVersion <= 1.1",
+			"label": "Switch 3: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary Switch",
+					"label": "Momentary",
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (follow switch)",
+					"label": "Toggle (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (change state on toggle)",
+					"label": "Toggle (change state on toggle)",
 					"value": 2
 				}
 			]
 		},
 		{
-			"#": "5",
-			"label": "LED Indicator Control",
-			"description": "Choose the LED indicator behavior",
+			"#": "4",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Switch 3: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle (change state on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode for Z-Wave control)",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "LED Indicator",
+			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -218,7 +226,7 @@
 					"value": 0
 				},
 				{
-					"label": "On when any relays is on",
+					"label": "On when any relay is on",
 					"value": 1
 				},
 				{
@@ -233,8 +241,21 @@
 		},
 		{
 			"#": "6",
-			"label": "Auto Turn-Off Timer for Relay 1",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 1: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 1 turns off once it has been turned on.",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 1: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 1 turns off once it has been turned on. Using the units defined in parameter 15.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -243,8 +264,20 @@
 		},
 		{
 			"#": "7",
-			"label": "Auto Turn-On Timer for Relay 1",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 16.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 1: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 1 turns on once it has been turned off.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 1: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 1 turns on once it has been turned off. Using the units defined in parameter 16.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -253,8 +286,21 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto Turn-Off Timer for Relay 2",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 2: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 2 turns off once it has been turned on.",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 2: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 2 turns off once it has been turned on. Using the units defined in parameter 17.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -263,8 +309,20 @@
 		},
 		{
 			"#": "9",
-			"label": "Auto Turn-On Timer for Relay 2",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 2: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 2 turns on once it has been turned off.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 2: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 2 turns on once it has been turned off. Using the units defined in parameter 18.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -273,8 +331,21 @@
 		},
 		{
 			"#": "10",
-			"label": "Auto Turn-Off Timer for Relay 3",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 3: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 3 turns off once it has been turned on.",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 3: Auto Turn-Off Timer",
+			"description": "Sets the time after which relay 3 turns off once it has been turned on. Using the units defined in parameter 19.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -283,8 +354,20 @@
 		},
 		{
 			"#": "11",
-			"label": "Auto Turn-On Timer for Relay 3",
-			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
+			"$if": "firmwareVersion < 1.1",
+			"label": "Relay 3: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 3 turns on once it has been turned off.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 3: Auto Turn-On Timer",
+			"description": "Sets the time after which relay 3 turns on once it has been turned off. Using the units defined in parameter 20.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -293,75 +376,99 @@
 		},
 		{
 			"#": "12",
-			"label": "Enable/Disable Manual Control for SW1",
-			"description": "Determine whether you can control the indicated switch manually.",
+			"$if": "firmwareVersion < 1.2",
+			"label": "Switch 1: Manual Control",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Switch 1: Manual Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
+				},
+				{
+					"label": "Disable (with switch reports)",
+					"value": 2
 				}
 			]
 		},
 		{
 			"#": "13",
-			"label": "Enable/Disable Manual Control for SW2",
-			"description": "Determine whether you can control the indicated switch manually.",
+			"$if": "firmwareVersion < 1.2",
+			"label": "Switch 2: Manual Control",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Switch 2: Manual Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
+				},
+				{
+					"label": "Disable (with switch reports)",
+					"value": 2
 				}
 			]
 		},
 		{
 			"#": "14",
-			"label": "Enable/Disable Manual Control for SW3",
-			"description": "Determine whether you can control the indicated switch manually.",
+			"$if": "firmwareVersion < 1.2",
+			"label": "Switch 3: Manual Control",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "14",
+			"$if": "firmwareVersion >= 1.2",
+			"label": "Switch 3: Manual Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
+				},
+				{
+					"label": "Disable (with switch reports)",
+					"value": 2
 				}
 			]
 		},
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-Off Timer Unit for Relay 1",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 1.",
+			"label": "Relay 1: Auto Turn-Off Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -383,11 +490,8 @@
 		{
 			"#": "16",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-On Timer Unit for Relay 1",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 1.",
+			"label": "Relay 1: Auto Turn-On Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -409,11 +513,8 @@
 		{
 			"#": "17",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-Off Timer Unit for Relay 2",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 2.  Default: minutes",
+			"label": "Relay 2: Auto Turn-Off Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -435,11 +536,8 @@
 		{
 			"#": "18",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-On Timer Unit for Relay 2",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 2.",
+			"label": "Relay 2: Auto Turn-On Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -461,11 +559,8 @@
 		{
 			"#": "19",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-Off Timer Unit for Relay 3",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 3.",
+			"label": "Relay 3: Auto Turn-Off Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -487,11 +582,8 @@
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 1.1",
-			"label": "Auto Turn-On Timer Unit for Relay 3",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 3.",
+			"label": "Relay 3: Auto Turn-On Timer Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -513,25 +605,22 @@
 		{
 			"#": "21",
 			"$if": "firmwareVersion >= 1.3",
-			"label": "Normally open/close state for Relay 1",
-			"description": "Decide whether you'd like Relay 1 to be normally open (NO) or normally closed (NC).",
+			"label": "Relay 1: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
+					"label": "Normally open (reports off when relay is open / on when relay is closed)",
 					"value": 0
 				},
 				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
+					"label": "Normally closed (reports off when relay is open / on when relay is closed)",
 					"value": 1
 				},
 				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
+					"label": "Normally closed (reports off when relay is closed / on when relay is open)",
 					"value": 2
 				}
 			]
@@ -539,25 +628,22 @@
 		{
 			"#": "22",
 			"$if": "firmwareVersion >= 1.3",
-			"label": "Normally open/close state for Relay 2",
-			"description": "Decide whether you'd like Relay 2 to be normally open (NO) or normally closed (NC).",
+			"label": "Relay 2: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
+					"label": "Normally open (reports off when relay is open / on when relay is closed)",
 					"value": 0
 				},
 				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
+					"label": "Normally closed (reports off when relay is open / on when relay is closed)",
 					"value": 1
 				},
 				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
+					"label": "Normally closed (reports off when relay is closed / on when relay is open)",
 					"value": 2
 				}
 			]
@@ -565,25 +651,22 @@
 		{
 			"#": "23",
 			"$if": "firmwareVersion >= 1.3",
-			"label": "Normally open/close state for Relay 3",
-			"description": "Decide whether you'd like Relay 3 to be normally open (NO) or normally closed (NC).",
+			"label": "Relay 3: Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
+					"label": "Normally open (reports off when relay is open / on when relay is closed)",
 					"value": 0
 				},
 				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
+					"label": "Normally closed (reports off when relay is open / on when relay is closed)",
 					"value": 1
 				},
 				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
+					"label": "Normally closed (reports off when relay is closed / on when relay is open)",
 					"value": 2
 				}
 			]
@@ -593,22 +676,7 @@
 			"$if": "firmwareVersion >= 1.3",
 			"label": "DC Motor Mode",
 			"description": "When enabled only one relay may be on at a time, the other relay is automatically turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		}
 	],
 	"compat": {

@@ -13,9 +13,8 @@ import {
 	MeterCCReset,
 	MeterCCSupportedGet,
 	MeterCCSupportedReport,
-	MeterCommand,
-	RateType,
 } from "./MeterCC";
+import { MeterCommand, RateType } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

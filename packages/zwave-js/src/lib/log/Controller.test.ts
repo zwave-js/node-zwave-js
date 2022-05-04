@@ -4,7 +4,7 @@ import {
 	ZWaveLogContainer,
 } from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
-import { InterviewStage } from "../node/Types";
+import { InterviewStage } from "../node/_Types";
 import { ControllerLogger } from "./Controller";
 
 describe("lib/log/Controller =>", () => {

@@ -10,10 +10,12 @@ import {
 	AssociationGroupInfoCCInfoReport,
 	AssociationGroupInfoCCNameGet,
 	AssociationGroupInfoCCNameReport,
+} from "./AssociationGroupInfoCC";
+import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
-} from "./AssociationGroupInfoCC";
-import { BasicCommand } from "./BasicCC";
+	BasicCommand,
+} from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([

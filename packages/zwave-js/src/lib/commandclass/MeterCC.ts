@@ -21,6 +21,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -47,24 +48,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum MeterCommand {
-	Get = 0x01,
-	Report = 0x02,
-	SupportedGet = 0x03,
-	SupportedReport = 0x04,
-	Reset = 0x05,
-}
-
-/**
- * @publicAPI
- */
-export enum RateType {
-	Unspecified = 0x00,
-	Consumed = 0x01,
-	Produced = 0x02,
-}
+import { MeterCommand, RateType } from "./_Types";
 
 function toPropertyKey(
 	meterType: number,
@@ -85,17 +69,6 @@ function splitPropertyKey(key: number): {
 		meterType: key >>> 16,
 	};
 }
-
-/**
- * @publicAPI
- */
-export type MeterMetadata = ValueMetadata & {
-	ccSpecific: {
-		meterType: number;
-		rateType?: RateType;
-		scale?: number;
-	};
-};
 
 function getMeterTypeName(configManager: ConfigManager, type: number): string {
 	return (
@@ -220,6 +193,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 	};
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options?: MeterCCGetOptions) {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Get);
@@ -302,6 +276,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async reset(options: MeterCCResetOptions): Promise<void> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
 

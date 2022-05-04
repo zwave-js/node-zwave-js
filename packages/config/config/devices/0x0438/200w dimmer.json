@@ -37,8 +37,6 @@
 			"#": "1",
 			"label": "State After Power Restore",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"#": "2",
 			"label": "Send Notification on Status Change.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -88,8 +84,6 @@
 			"#": "5",
 			"label": "External Switch Can Pair Network",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -107,8 +101,6 @@
 			"#": "6",
 			"label": "Dimming Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -38,8 +38,6 @@
 			"#": "1",
 			"label": "LED Indicator Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -65,8 +63,6 @@
 			"#": "2",
 			"label": "LED Color for Upper Paddle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -104,8 +100,6 @@
 			"#": "3",
 			"label": "LED Color for Lower Paddle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

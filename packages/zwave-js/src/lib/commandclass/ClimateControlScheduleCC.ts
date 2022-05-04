@@ -6,6 +6,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import {
@@ -19,7 +20,6 @@ import {
 	Switchpoint,
 } from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import { Weekday } from "./ClockCC";
 import {
 	API,
 	CCCommand,
@@ -33,26 +33,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ClimateControlScheduleCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	ChangedGet = 0x04,
-	ChangedReport = 0x05,
-	OverrideSet = 0x06,
-	OverrideGet = 0x07,
-	OverrideReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export enum ScheduleOverrideType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import {
+	ClimateControlScheduleCommand,
+	ScheduleOverrideType,
+	Weekday,
+} from "./_Types";
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
@@ -69,6 +54,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
@@ -87,6 +73,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async get(
 		weekday: Weekday,
 	): Promise<readonly Switchpoint[] | undefined> {
@@ -150,6 +137,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setOverride(
 		type: ScheduleOverrideType,
 		state: SetbackState,

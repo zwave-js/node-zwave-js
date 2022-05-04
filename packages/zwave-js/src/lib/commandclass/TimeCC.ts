@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -25,17 +26,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TimeCommand {
-	TimeGet = 0x01,
-	TimeReport = 0x02,
-	DateGet = 0x03,
-	DateReport = 0x04,
-	TimeOffsetSet = 0x05,
-	TimeOffsetGet = 0x06,
-	TimeOffsetReport = 0x07,
-}
+import { TimeCommand } from "./_Types";
 
 // @noSetValueAPI
 // Only the timezone information can be set and that accepts a non-primitive value
@@ -89,6 +80,7 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setTimezone(timezone: DSTInfo): Promise<void> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
 

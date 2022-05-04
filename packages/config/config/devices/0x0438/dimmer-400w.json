@@ -22,8 +22,6 @@
 			"#": "3",
 			"label": "Send Basic Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,8 +57,6 @@
 			"#": "6",
 			"label": "MOSFET Driving Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +75,6 @@
 			"label": "Add / Remove From A Network Through External Switch",
 			"description": "When enabling this, triple press the external switch within 1.5 seconds to be added to or removed from a network",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -98,8 +92,6 @@
 			"#": "8",
 			"label": "Dimming Curve",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -16,9 +16,14 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 			{
 				create: () => new net.Socket(),
 				open: (serial: net.Socket) =>
-					new Promise((resolve) => {
-						serial.on("close", () => {
-							if (this.isOpen) {
+					new Promise((resolve, reject) => {
+						// eslint-disable-next-line prefer-const
+						let removeListeners: () => void;
+
+						const onClose = (hadError: boolean) => {
+							// detect socket disconnection errors
+							if (hadError) {
+								removeListeners();
 								this.emit(
 									"error",
 									new ZWaveError(
@@ -27,11 +32,32 @@ export class ZWaveSocket extends ZWaveSerialPortBase {
 									),
 								);
 							}
-						});
-						serial.connect(this.socketOptions, () => {
+						};
+
+						const onError = (err: Error) => {
+							removeListeners();
+							reject(err);
+						};
+						const onConnect = () => {
 							serial.setKeepAlive(true, 2500);
+							removeListeners();
 							resolve();
-						});
+						};
+
+						// We need to remove the listeners again no matter which of the handlers is called
+						// Otherwise this would cause an EventEmitter leak.
+						// Hence this somewhat ugly construct
+						removeListeners = () => {
+							serial.removeListener("close", onClose);
+							serial.removeListener("error", onError);
+							serial.removeListener("connect", onConnect);
+						};
+
+						serial.once("close", onClose);
+						serial.once("error", onError);
+						serial.once("connect", onConnect);
+
+						serial.connect(this.socketOptions);
 					}),
 				close: (serial: net.Socket) =>
 					new Promise((resolve) => {

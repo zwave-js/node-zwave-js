@@ -14,6 +14,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -38,36 +39,22 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { ThermostatMode, ThermostatModeCommand } from "./_Types";
 
-// All the supported commands
-export enum ThermostatModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
+export function getThermostatModeValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Mode"],
+		endpoint: endpointIndex,
+		property: "mode",
+	};
 }
 
-/**
- * @publicAPI
- */
-export enum ThermostatMode {
-	"Off" = 0x00,
-	"Heat" = 0x01,
-	"Cool" = 0x02,
-	"Auto" = 0x03,
-	"Auxiliary" = 0x04,
-	"Resume (on)" = 0x05,
-	"Fan" = 0x06,
-	"Furnace" = 0x07,
-	"Dry" = 0x08,
-	"Moist" = 0x09,
-	"Auto changeover" = 0x0a,
-	"Energy heat" = 0x0b,
-	"Energy cool" = 0x0c,
-	"Away" = 0x0d,
-	"Full power" = 0x0f,
-	"Manufacturer specific" = 0x1f,
+export function getSupportedModesValueId(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Mode"],
+		endpoint: endpointIndex,
+		property: "supportedModes",
+	};
 }
 
 @API(CommandClasses["Thermostat Mode"])
@@ -146,6 +133,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 		manufacturerData: Buffer,
 	): Promise<void>;
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
 		manufacturerData?: Buffer,
@@ -357,6 +345,39 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		this.persistValues();
 	}
 
+	public persistValues(): boolean {
+		// Update the supported modes if a mode is used that wasn't previously
+		// reported to be supported. This shouldn't happen, but well... it does anyways
+		const valueDB = this.getValueDB();
+		const modeValueId = getThermostatModeValueId(this.endpointIndex);
+		const supportedModesValueId = getSupportedModesValueId(
+			this.endpointIndex,
+		);
+		const supportedModes = valueDB.getValue<ThermostatMode[]>(
+			supportedModesValueId,
+		);
+
+		if (
+			supportedModes &&
+			this._mode in ThermostatMode &&
+			!supportedModes.includes(this._mode)
+		) {
+			supportedModes.push(this._mode);
+			supportedModes.sort();
+
+			valueDB.setValue(supportedModesValueId, supportedModes);
+			valueDB.setMetadata(modeValueId, {
+				...ValueMetadata.UInt8,
+				states: enumValuesToMetadataStates(
+					ThermostatMode,
+					supportedModes,
+				),
+			});
+		}
+
+		return super.persistValues();
+	}
+
 	private _mode: ThermostatMode;
 	@ccValue()
 	@ccValueMetadata({
@@ -402,12 +423,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		this._supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
 
 		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "mode",
-		};
-		// Only update the dynamic part
+		const valueId: ValueID = getThermostatModeValueId(this.endpointIndex);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(

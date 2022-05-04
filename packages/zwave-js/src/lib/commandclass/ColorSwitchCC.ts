@@ -12,6 +12,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
@@ -43,57 +44,17 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import { LevelChangeDirection } from "./MultilevelSwitchCC";
-
-// All the supported commands
-export enum ColorSwitchCommand {
-	SupportedGet = 0x01,
-	SupportedReport = 0x02,
-	Get = 0x03,
-	Report = 0x04,
-	Set = 0x05,
-	StartLevelChange = 0x06,
-	StopLevelChange = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum ColorComponent {
-	"Warm White" = 0,
-	"Cold White",
-	Red,
-	Green,
-	Blue,
-	Amber,
-	Cyan,
-	Purple,
-	Index,
-}
-
-const ColorComponentMap = {
-	warmWhite: ColorComponent["Warm White"],
-	coldWhite: ColorComponent["Cold White"],
-	red: ColorComponent.Red,
-	green: ColorComponent.Green,
-	blue: ColorComponent.Blue,
-	amber: ColorComponent.Amber,
-	cyan: ColorComponent.Cyan,
-	purple: ColorComponent.Purple,
-	index: ColorComponent.Index,
-};
-type ColorKey = keyof typeof ColorComponentMap;
+import {
+	ColorComponent,
+	ColorComponentMap,
+	ColorKey,
+	ColorSwitchCommand,
+	ColorTable,
+	LevelChangeDirection,
+} from "./_Types";
 
 const hexColorRegex =
 	/^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
-
-// Accept both the kebabCase names and numeric components as table keys
-/**
- * @publicAPI
- */
-export type ColorTable =
-	| Partial<Record<ColorKey, number>>
-	| Partial<Record<ColorComponent, number>>;
 
 const colorTableKeys = [
 	...keysOf(ColorComponent),
@@ -205,6 +166,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return response?.supportedColorComponents;
 	}
 
+	@validateArgs({ strictEnums: true })
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(component: ColorComponent) {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Get);
@@ -223,6 +185,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(options: ColorSwitchCCSetOptions): Promise<void> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
@@ -325,6 +288,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async startLevelChange(
 		options: ColorSwitchCCStartLevelChangeOptions,
 	): Promise<void> {
@@ -342,6 +306,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async stopLevelChange(
 		colorComponent: ColorComponent,
 	): Promise<void> {
@@ -480,7 +445,9 @@ export class ColorSwitchCC extends CommandClass {
 
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		super(driver, options);
-		this.registerValue(getSupportsHexColorValueID(0).property, true);
+		this.registerValue(getSupportsHexColorValueID(0).property, {
+			internal: true,
+		});
 	}
 
 	public async interview(): Promise<void> {
@@ -568,6 +535,7 @@ export class ColorSwitchCC extends CommandClass {
 				minLength: 6,
 				maxLength: 7, // to allow #rrggbb
 				label: `RGB Color`,
+				valueChangeOptions: ["transitionDuration"],
 			});
 		}
 
@@ -749,7 +717,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
+		...ValueMetadata.ReadOnlyDuration,
 		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
@@ -838,7 +806,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 }
 
 export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
-	duration?: Duration;
+	duration?: Duration | string;
 };
 
 @CCCommand(ColorSwitchCommand.Set)
@@ -874,7 +842,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			} else {
 				this.colorTable = pick(options, colorTableKeys as any[]);
 			}
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -894,8 +862,10 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i + 1] = clamp(value, 0, 0xff);
 			i += 2;
 		}
-		if (this.version >= 2 && this.duration) {
-			this.payload[i] = this.duration.serializeSet();
+		if (this.version >= 2) {
+			this.payload[i] = (
+				this.duration ?? Duration.from("default")
+			).serializeSet();
 		}
 		return super.serialize();
 	}
@@ -933,7 +903,7 @@ type ColorSwitchCCStartLevelChangeOptions = {
 	  }
 ) & {
 		// Version >= 3:
-		duration?: Duration;
+		duration?: Duration | string;
 	};
 
 @CCCommand(ColorSwitchCommand.StartLevelChange)
@@ -952,7 +922,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 			this.ignoreStartLevel = options.ignoreStartLevel;
 			this.startLevel = options.startLevel ?? 0;
 			this.direction = options.direction;

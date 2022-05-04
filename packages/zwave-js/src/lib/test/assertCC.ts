@@ -1,7 +1,7 @@
 import { entries } from "alcalzone-shared/objects";
 import type { CommandClass, Constructable } from "../commandclass/CommandClass";
-import { SendDataBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
+import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 /** Performs assertions on a sendMessage call argument that's supposed to be a CC */
 export function assertCC<

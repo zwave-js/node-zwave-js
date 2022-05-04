@@ -1,5 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
 import {
@@ -12,10 +13,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultiCommandCommand {
-	CommandEncapsulation = 0x01,
-}
+import { MultiCommandCommand } from "./_Types";
 
 // TODO: Handle this command when received
 
@@ -32,6 +30,7 @@ export class MultiCommandCCAPI extends CCAPI {
 		// return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async send(commands: CommandClass[]): Promise<void> {
 		this.assertSupportsCommand(
 			MultiCommandCommand,

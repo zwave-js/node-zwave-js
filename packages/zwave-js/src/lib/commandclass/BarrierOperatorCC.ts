@@ -9,6 +9,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -35,18 +36,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// @publicAPI
-export enum SubsystemType {
-	Audible = 0x01,
-	Visual = 0x02,
-}
-
-// @publicAPI
-export enum SubsystemState {
-	Off = 0x00,
-	On = 0xff,
-}
+import {
+	BarrierOperatorCommand,
+	BarrierState,
+	SubsystemState,
+	SubsystemType,
+} from "./_Types";
 
 function getSignalingStateValueId(
 	endpoint: number | undefined,
@@ -89,29 +84,6 @@ function getTargetStateValueId(endpoint: number | undefined): ValueID {
 	};
 }
 
-// All the supported commands
-export enum BarrierOperatorCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SignalingCapabilitiesGet = 0x04,
-	SignalingCapabilitiesReport = 0x05,
-	EventSignalingSet = 0x06,
-	EventSignalingGet = 0x07,
-	EventSignalingReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export enum BarrierState {
-	Closed = 0x00,
-	Closing = 0xfc,
-	Stopped = 0xfd,
-	Opening = 0xfe,
-	Open = 0xff,
-}
-
 @API(CommandClasses["Barrier Operator"])
 export class BarrierOperatorCCAPI extends CCAPI {
 	public supportsCommand(cmd: BarrierOperatorCommand): Maybe<boolean> {
@@ -146,6 +118,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		targetState: BarrierState.Open | BarrierState.Closed,
 	): Promise<void> {
@@ -162,6 +135,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getSignalingCapabilities(): Promise<
 		readonly SubsystemType[] | undefined
 	> {
@@ -182,6 +156,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.supportedSubsystemTypes;
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
 	): Promise<SubsystemState | undefined> {
@@ -203,6 +178,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response?.subsystemState;
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setEventSignaling(
 		subsystemType: SubsystemType,
 		subsystemState: SubsystemState,

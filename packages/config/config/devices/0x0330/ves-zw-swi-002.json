@@ -1,0 +1,58 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0330",
+	"label": "VES-ZW-SWI-002",
+	"description": "2-Wire Capable Switch",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd00f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"label": "Send Basic Report on State Change",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"label": "Use External Switch for Inclusion/Exclusion",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "5",
+			"label": "Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
+		"reset": "Press and hold the action button for over 10 seconds.",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-SWI-002.pdf"
+	}
+}

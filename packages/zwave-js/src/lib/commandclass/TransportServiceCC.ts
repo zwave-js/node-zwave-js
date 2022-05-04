@@ -20,15 +20,7 @@ import {
 	implementedVersion,
 	SinglecastCC,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TransportServiceCommand {
-	FirstSegment = 0xc0,
-	SegmentComplete = 0xe8,
-	SegmentRequest = 0xc8,
-	SegmentWait = 0xf0,
-	SubsequentSegment = 0xe0,
-}
+import { TransportServiceCommand } from "./_Types";
 
 const MAX_SEGMENT_SIZE = 39;
 
@@ -300,7 +292,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public expectMoreMessages(
 		session: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): boolean {
 		if (!(session[0] instanceof TransportServiceCCFirstSegment)) {
@@ -331,7 +323,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public mergePartialCCs(
 		partials: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): void {
 		// Concat the CC buffers
@@ -473,6 +465,16 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"session ID": this.sessionId,
+				offset: this.datagramOffset,
+			},
+		};
+	}
 }
 
 interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
@@ -502,6 +504,13 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		this.payload = Buffer.from([(this.sessionId & 0b1111) << 4]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "session ID": this.sessionId },
+		};
+	}
 }
 
 interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
@@ -530,5 +539,12 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.pendingSegments]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "pending segments": this.pendingSegments },
+		};
 	}
 }

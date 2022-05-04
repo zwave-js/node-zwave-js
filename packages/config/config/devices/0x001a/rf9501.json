@@ -67,8 +67,6 @@
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -92,8 +90,6 @@
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -107,6 +103,30 @@
 					"value": 2
 				}
 			]
+		},
+		{
+			"#": "10",
+			"label": "Forward Z-Wave Commands",
+			"description": "Keep associated accessory switches in sync",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
-	]
+	],
+	"compat": {
+		"enableBasicSetMapping": true
+	}
 }

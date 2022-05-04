@@ -22,8 +22,6 @@
 			"#": "20",
 			"label": "LED Strip state at Power ON",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "32",
 			"label": "Enable/Disable Report on color change.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -64,8 +60,6 @@
 			"#": "34",
 			"label": "Brightness Level Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +77,6 @@
 			"#": "35",
 			"label": "Display mode of Cold/warm white",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +94,6 @@
 			"#": "40",
 			"label": "Colorful mode configuration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"writeOnly": true,
 			"allowManualEntry": false,
@@ -138,8 +128,6 @@
 			"#": "80",
 			"label": "Notification (Group 1) when state changes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -161,8 +149,6 @@
 			"#": "112",
 			"label": "Dimmer mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -188,8 +174,6 @@
 			"#": "252",
 			"label": "Configuration lock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -220,6 +204,7 @@
 			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Constant Speed",
@@ -232,9 +217,8 @@
 			"label": "Time Base of Color Change Speed",
 			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -258,7 +242,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 254,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "37[0xff0000]",
@@ -274,9 +259,8 @@
 			"label": "Color Display Cycle",
 			"description": "Defines the mode for determining colors used in color transitions",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -306,9 +290,8 @@
 			"label": "Color Change Speed Option",
 			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -330,8 +313,6 @@
 			"label": "Color Transition Style",
 			"description": "Defines how the strip transitions between colors",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

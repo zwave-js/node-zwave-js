@@ -13,5 +13,14 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"comments": [
+			{
+				"$if": "firmwareVersion < 7.17.2",
+				"level": "warning",
+				"text": "Early firmware revisions had a bug that could cause the mesh to be flooded on some networks and the controller to become unresponsive. It appears that this bug is largely, if not completely, resolved as of firmware version 7.17.2.\nDirections for upgrading the firmware can be found at https://zwave-js.github.io/node-zwave-js/#/troubleshooting/otw-upgrade"
+			}
+		]
 	}
 }

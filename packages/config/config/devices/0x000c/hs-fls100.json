@@ -21,7 +21,24 @@
 		},
 		{
 			"#": "2",
-			"$import": "templates/homeseer_template.json#lux_trigger_threshold"
+			"label": "Light Level Threshold",
+			"description": "Activate floodlight and send Basic Set Command when PIR is triggered while light level is below this threshold.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"unit": "lux",
+			"options": [
+				{
+					"label": "Never turn on floodlight",
+					"value": 0
+				},
+				{
+					"label": "Ignore light level",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "3",

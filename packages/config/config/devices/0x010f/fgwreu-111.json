@@ -16,191 +16,337 @@
 	"paramInformation": [
 		{
 			"#": "11",
-			"label": "LED frame colour when moving",
-			"description": "This parameter defines the LED colour when the motor is running.",
+			"label": "LED Indicator: Color When Moving",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "White",
+					"value": 1
+				},
+				{
+					"label": "Red",
+					"value": 2
+				},
+				{
+					"label": "Green",
+					"value": 3
+				},
+				{
+					"label": "Blue",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "Magenta",
+					"value": 7
+				}
+			]
 		},
 		{
 			"#": "12",
-			"label": "LED frame – colour when not moving",
-			"description": "This parameter defines the LED colour when the device motor is not running.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
+			"$import": "#paramInformation/11",
+			"label": "LED Indicator: Standby Color",
 			"defaultValue": 0
 		},
 		{
 			"#": "13",
-			"label": "LED frame – brightness",
-			"description": "This parameter allows to adjust the LED frame brightness.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "LED Indicator: Brightness",
+			"defaultValue": 100,
+			"unit": "%"
 		},
 		{
 			"#": "24",
-			"label": "Buttons orientation",
-			"description": "This parameter allows reversing the operation of the buttons.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "25",
-			"label": "Outputs orientation",
-			"description": "reversing the operation of Q1 and Q2",
+			"label": "Output Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
-		},
-		{
-			"#": "30",
-			"label": "Alarm configuration - 1st slot",
-			"description": "Which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		{
-			"#": "31",
-			"label": "Alarm configuration - 2nd slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0
-		},
-		{
-			"#": "32",
-			"label": "Alarm configuration - 3rd slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
-			"readOnly": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Q1 up, Q2 down",
+					"value": 0
+				},
+				{
+					"label": "Q1 down, Q2 up",
+					"value": 1
+				}
+			]
 		},
 		{
-			"#": "33",
-			"label": "Alarm configuration - 4th slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "30[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 1st Slot: Notification Type",
 			"defaultValue": 0
 		},
 		{
-			"#": "34",
-			"label": "Alarm configuration - 5th slot",
-			"description": "which alarm frames and how the device should react",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 255,
+			"#": "30[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 1st Slot: Notification Event",
 			"defaultValue": 0
+		},
+		{
+			"#": "30[0x03]",
+			"label": "Alarm Configuration: 1st Slot: Blinds Action",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Open",
+					"value": 1
+				},
+				{
+					"label": "Close",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "30[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 1st Slot: LED Indicator"
+		},
+		{
+			"#": "31[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 2nd Slot: Notification Type",
+			"defaultValue": 5
+		},
+		{
+			"#": "31[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 2nd Slot: Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "31[0x03]",
+			"$import": "#paramInformation/30[0x03]",
+			"label": "Alarm Configuration: 2nd Slot: Blinds Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "31[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 2nd Slot: LED Indicator"
+		},
+		{
+			"#": "32[0xff000000]",
+			"label": "Alarm Configuration: 3rd Slot: Notification Type",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"defaultValue": 1
+		},
+		{
+			"#": "32[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 3rd Slot: Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "32[0x03]",
+			"$import": "#paramInformation/30[0x03]",
+			"label": "Alarm Configuration: 3rd Slot: Blinds Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 3rd Slot: LED Indicator"
+		},
+		{
+			"#": "33[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 4th Slot: Notification Type",
+			"defaultValue": 2
+		},
+		{
+			"#": "33[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 4th Slot: Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "33[0x03]",
+			"$import": "#paramInformation/30[0x03]",
+			"label": "Alarm Configuration: 4th Slot: Blinds Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 4th Slot: LED Indicator"
+		},
+		{
+			"#": "34[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration: 5th Slot: Notification Type",
+			"defaultValue": 4
+		},
+		{
+			"#": "34[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration: 5th Slot: Notification Event",
+			"defaultValue": 255
+		},
+		{
+			"#": "34[0x03]",
+			"$import": "#paramInformation/30[0x03]",
+			"label": "Alarm Configuration: 5th Slot: Blinds Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xf0]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_indicator_blink_color",
+			"label": "Alarm Configuration: 5th Slot: LED Indicator"
 		},
 		{
 			"#": "35",
-			"label": "Alarm configuration – duration",
-			"description": "duration of alarm sequence",
-			"unit": "Seconds",
+			"label": "Alarm Duration",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
-			"defaultValue": 600
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Infinite",
+					"value": 0
+				}
+			]
 		},
 		{
-			"#": "40",
-			"label": "First button – scenes sent",
-			"description": "which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0
+			"#": "40[0x01]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
 		},
 		{
-			"#": "41",
-			"label": "Second button – scenes sent",
-			"description": "which actions result in sending scene IDs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0
+			"#": "40[0x02]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+		},
+		{
+			"#": "40[0x04]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
 		},
 		{
 			"#": "60",
-			"label": "Power reports – include self-consumption",
-			"description": "power measurements include device itself",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Power Report: Include Self-consumption"
 		},
 		{
 			"#": "61",
-			"label": "Power reports – on change",
-			"description": "minimal change in measured power to report",
-			"unit": "Percent",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 500,
+			"$import": "templates/fibaro_template.json#power_report_threshold_relative_0-500",
 			"defaultValue": 15
 		},
 		{
 			"#": "62",
-			"label": "Power reports – periodic",
-			"description": "reporting interval for measured power",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Power Reports: Interval",
+			"maxValue": 32400
 		},
 		{
 			"#": "65",
-			"label": "Energy reports – on change",
-			"description": "minimal change in measured energy to report",
-			"valueSize": 2,
-			"minValue": 0,
+			"$import": "templates/fibaro_template.json#energy_report_threshold",
 			"maxValue": 500,
 			"defaultValue": 10
 		},
 		{
 			"#": "66",
-			"label": "Energy reports – periodic",
-			"description": "This reporting interval for measured energy",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 3600
+			"$import": "templates/fibaro_template.json#reports_periodic",
+			"label": "Energy Reports: Interval",
+			"maxValue": 32400
 		},
 		{
-			"#": "150",
-			"label": "Force calibration",
-			"description": "Set 2 to force device into calibration mode",
+			"#": "150[0x01]",
+			"label": "Calibration Status",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0
+			"maxValue": 1,
+			"readOnly": true,
+			"options": [
+				{
+					"label": "Uncalibrated",
+					"value": 0
+				},
+				{
+					"label": "Calibrated",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "150[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Force Calibration"
 		},
 		{
 			"#": "151",
-			"label": "Operating mode",
-			"description": "This parameter allows adjusting operation ac-cording to the connected device.",
+			"label": "Operating Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Roller blind with positioning",
+					"value": 1
+				},
+				{
+					"label": "Venetian blind with positioning",
+					"value": 2
+				},
+				{
+					"label": "Roller blind with built-in driver",
+					"value": 5
+				},
+				{
+					"label": "Roller blind with built-in driver (impulse)",
+					"value": 6
+				}
+			]
 		},
 		{
 			"#": "152",
-			"label": "Venetian blind – time of full turn of the slats",
+			"label": "Venetian Blinds: Full Turn Duration",
+			"unit": "0.01 seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -208,35 +354,55 @@
 		},
 		{
 			"#": "153",
-			"label": "Set slats back to previous position",
-			"description": "slats positioning in various situations",
+			"label": "Venetian Blinds: Reset Slats Position",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controller command only",
+					"value": 0
+				},
+				{
+					"label": "Controller, momentary or limit switch operation",
+					"value": 1
+				},
+				{
+					"label": "Controlled, momentary or limit switch operation, or Multilevel Switch Stop command",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "154",
-			"label": "Delay motor stop after reaching end switch",
-			"description": "time after which the motor will be stopped after contacts closed",
+			"label": "Motor Overrun",
+			"description": "Duration for which motor will continue to run after end switch is hit.",
+			"unit": "0.1 seconds",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 10
 		},
 		{
 			"#": "155",
-			"label": "Motor operation detection",
+			"label": "Limit Switch Power Threshold",
 			"description": "Power threshold interpreted as reaching a limit switch.",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 10
+			"defaultValue": 10,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "156",
-			"label": "Time of up movement",
-			"description": "time needed for roller blinds to reach the top",
+			"label": "Blind Up Duration",
+			"unit": "0.01 seconds",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -244,8 +410,8 @@
 		},
 		{
 			"#": "157",
-			"label": "Time of down movement",
-			"description": "time needed for roller blinds to reach the bottom",
+			"label": "Blind Down Duration",
+			"unit": "0.01 seconds",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,

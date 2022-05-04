@@ -82,8 +82,6 @@
 			"label": "Enable/Disable Audible Alarm",
 			"description": "Enables or disables the audible alarm (“beeping”)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +100,6 @@
 			"label": "Enable/Disable Water Detection",
 			"description": "If disabled, the device will not respond in any way to detected leaks.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -1,0 +1,253 @@
+{
+	"manufacturer": "Vesternet",
+	"manufacturerId": "0x0330",
+	"label": "VES-ZW-DIM-001",
+	"description": "2-Wire Capable Dimmer",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd00c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+		{
+			"#": "3",
+			"label": "Send Basic Report on State Change",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "4",
+			"label": "Dimming Speed",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Minimum Dim Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 15,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-100"
+		},
+		{
+			"#": "7",
+			"$import": "~/templates/master_template.json#dimmer_type_trail_lead"
+		},
+		{
+			"#": "8",
+			"label": "Switch Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Momentary",
+					"value": 0
+				},
+				{
+					"label": "Toggle",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Use External Switch for Inclusion/Exclusion",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "11",
+			"label": "Wiring Type",
+			"readOnly": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Unknown",
+					"value": 0
+				},
+				{
+					"label": "2-wire (no neutral)",
+					"value": 1
+				},
+				{
+					"label": "3-wire (with neutral)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "12",
+			"label": "Load Type",
+			"readOnly": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Unknown",
+					"value": 0
+				},
+				{
+					"label": "Resistive",
+					"value": 1
+				},
+				{
+					"label": "Inductive",
+					"value": 2
+				},
+				{
+					"label": "Capacitive",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Over Current Protection",
+			"description": "Triggered at over 2.1A for 20 seconds continuously.",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"defaultValue": 1
+		},
+		{
+			"#": "14",
+			"label": "Power Report Absolute Threshold",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 400,
+			"unsigned": true,
+			"defaultValue": 10
+		},
+		{
+			"#": "15",
+			"label": "Power Report Percentage Threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"unsigned": true,
+			"defaultValue": 20
+		},
+		{
+			"#": "21",
+			"label": "Power Report Interval",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"unsigned": true,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "22",
+			"label": "Energy Report Interval",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"unsigned": true,
+			"defaultValue": 1800,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Voltage Report Interval",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"unsigned": true,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Current Report Interval",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"unsigned": true,
+			"defaultValue": 3600,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Dimming Curve",
+			"valueSize": 1,
+			"allowManualEntry": false,
+			"unsigned": true,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Linear",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Startup Brightness",
+			"description": "When the light is turned from off to on, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness then fall to the target brightness.",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
+			"defaultValue": 0
+		}
+	],
+	"metadata": {
+		"inclusion": "Step 1. Set primary controller/gateway into inclusion mode.\nStep 2. Either power cycle the product, or triple press the action button.\n Step 3. The connected light will stay on solid for 3 seconds to indicate successfuly inclusion.",
+		"exclusion": "Step 1. Set primary controller/gateway into exclusion mode.\nStep 2. Triple press the action button.",
+		"reset": "Press and hold the action button for over 10 seconds. The connected light will be set to 50% brightness and flash slowly.",
+		"manual": "https://cdn.shopify.com/s/files/1/0066/8149/3559/files/VES-ZW-DIM-001.pdf"
+	}
+}

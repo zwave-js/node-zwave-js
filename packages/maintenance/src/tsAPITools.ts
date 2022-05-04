@@ -96,3 +96,21 @@ export function getCommandClassFromClassDeclaration(
 		}
 	}
 }
+
+export function hasComment(
+	sourceFile: ts.SourceFile,
+	node: ts.Node,
+	predicate: (text: string, commentKind: ts.CommentKind) => boolean,
+): boolean {
+	return (
+		ts
+			.getLeadingCommentRanges(
+				sourceFile.getFullText(),
+				node.getFullStart(),
+			)
+			?.some((r) => {
+				const text = sourceFile.getFullText().slice(r.pos, r.end);
+				return predicate(text, r.kind);
+			}) ?? false
+	);
+}

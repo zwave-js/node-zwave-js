@@ -29,8 +29,6 @@
 			"#": "20",
 			"label": "Switch type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -52,8 +50,6 @@
 			"#": "24",
 			"label": "Inputs orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -71,8 +67,6 @@
 			"#": "25",
 			"label": "Outputs orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -162,8 +156,6 @@
 			"#": "60",
 			"label": "Measuring power consumed by the device itself",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -213,8 +205,6 @@
 			"#": "150",
 			"label": "Force calibration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -236,8 +226,6 @@
 			"#": "151",
 			"label": "Operating mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -280,8 +268,6 @@
 			"#": "153",
 			"label": "Set slats back to previous position",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -313,7 +299,7 @@
 			"#": "155",
 			"label": "Motor operation detection",
 			"description": "Power threshold to be interpreted as reaching a limit switch",
-			"unit": "1/10 sec",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -342,8 +328,6 @@
 			"label": "Alarm #1: Action",
 			"description": "Which action to perform when Alarm #1 is triggered",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -368,7 +352,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "30[0xff0000]",
@@ -378,6 +363,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -392,16 +378,16 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "31[0xff]",
 			"label": "Alarm #2: Action",
 			"description": "Which action to perform when Alarm #2 is triggered",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -425,7 +411,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "31[0xff0000]",
@@ -435,6 +422,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -449,16 +437,16 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 5 // Water
+			"defaultValue": 5, // Water
+			"unsigned": true
 		},
 		{
 			"#": "32[0xff]",
 			"label": "Alarm #3: Action",
 			"description": "Which action to perform when Alarm #3 is triggered",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -482,7 +470,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "32[0xff0000]",
@@ -492,6 +481,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -506,16 +496,16 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1 // Smoke
+			"defaultValue": 1, // Smoke
+			"unsigned": true
 		},
 		{
 			"#": "33[0xff]",
 			"label": "Alarm #4: Action",
 			"description": "Which action to perform when Alarm #4 is triggered",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -539,7 +529,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "33[0xff0000]",
@@ -549,6 +540,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -563,16 +555,16 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 2 // CO
+			"defaultValue": 2, // CO
+			"unsigned": true
 		},
 		{
 			"#": "34[0xff]",
 			"label": "Alarm #5: Action",
 			"description": "Which action to perform when Alarm #5 is triggered",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -596,7 +588,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unsigned": true
 		},
 		{
 			"#": "34[0xff0000]",
@@ -606,6 +599,7 @@
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"options": [
 				{
 					"label": "Any",
@@ -620,7 +614,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 4 // Heat
+			"defaultValue": 4, // Heat
+			"unsigned": true
 		}
 	]
 }

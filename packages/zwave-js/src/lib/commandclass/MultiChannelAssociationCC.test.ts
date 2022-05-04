@@ -8,8 +8,8 @@ import {
 	MultiChannelAssociationCCSet,
 	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiChannelAssociationCCSupportedGroupingsReport,
-	MultiChannelAssociationCommand,
 } from "./MultiChannelAssociationCC";
+import { MultiChannelAssociationCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

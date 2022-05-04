@@ -1,5 +1,5 @@
-import { sum } from "@zwave-js/shared";
-import { ZWaveError, ZWaveErrorCodes } from "..";
+import { sum } from "@zwave-js/shared/safe";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
 

@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Send Battery Report with Notification Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

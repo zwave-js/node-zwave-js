@@ -15,6 +15,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -40,39 +41,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum DoorLockCommand {
-	OperationSet = 0x01,
-	OperationGet = 0x02,
-	OperationReport = 0x03,
-	ConfigurationSet = 0x04,
-	ConfigurationGet = 0x05,
-	ConfigurationReport = 0x06,
-	CapabilitiesGet = 0x07,
-	CapabilitiesReport = 0x08,
-}
-
-// @publicAPI
-export enum DoorLockMode {
-	Unsecured = 0x00,
-	UnsecuredWithTimeout = 0x01,
-	InsideUnsecured = 0x10,
-	InsideUnsecuredWithTimeout = 0x11,
-	OutsideUnsecured = 0x20,
-	OutsideUnsecuredWithTimeout = 0x21,
-	Unknown = 0xfe,
-	Secured = 0xff,
-}
-
-// @publicAPI
-export enum DoorLockOperationType {
-	Constant = 0x01,
-	Timed = 0x02,
-}
-
-// @publicAPI
-export type DoorHandleStatus = [boolean, boolean, boolean, boolean];
+import {
+	DoorHandleStatus,
+	DoorLockCommand,
+	DoorLockMode,
+	DoorLockOperationType,
+} from "./_Types";
 
 export function getTargetModeValueId(endpoint: number): ValueID {
 	return {
@@ -90,11 +64,77 @@ export function getCurrentModeValueId(endpoint: number): ValueID {
 	};
 }
 
-function getOperationTypeValueId(endpoint: number): ValueID {
+export function getOperationTypeValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Door Lock"],
 		endpoint,
 		property: "operationType",
+	};
+}
+
+export function getLatchSupportedValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "latchSupported",
+	};
+}
+
+export function getBoltSupportedValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "boltSupported",
+	};
+}
+
+export function getDoorSupportedValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "doorSupported",
+	};
+}
+
+export function getLatchStatusValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "latchStatus",
+	};
+}
+function getLatchStatusValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the latch",
+	};
+}
+
+export function getBoltStatusValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "boltStatus",
+	};
+}
+function getBoltStatusValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the bolt",
+	};
+}
+
+export function getDoorStatusValueId(endpoint: number): ValueID {
+	return {
+		commandClass: CommandClasses["Door Lock"],
+		endpoint,
+		property: "doorStatus",
+	};
+}
+function getDoorStatusValueMetadata(): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnly,
+		label: "The current status of the door",
 	};
 }
 
@@ -245,8 +285,6 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(
@@ -278,6 +316,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(mode: DoorLockMode): Promise<void> {
 		this.assertSupportsCommand(
 			DoorLockCommand,
@@ -292,6 +331,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async setConfiguration(
 		configuration: DoorLockCCConfigurationSetOptions,
 	): Promise<void> {
@@ -361,6 +401,11 @@ export class DoorLockCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
+		// By default, assume all status sensors to be supported
+		let doorSupported = true;
+		let boltSupported = true;
+		let latchSupported = true;
+
 		if (this.version >= 4) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -381,6 +426,9 @@ supported outside handles: ${resp.supportedOutsideHandles
 					.map(String)
 					.join(", ")}
 supported inside handles:  ${resp.supportedInsideHandles.map(String).join(", ")}
+supports door status:      ${resp.doorSupported}
+supports bolt status:      ${resp.boltSupported}
+supports latch status:     ${resp.latchSupported}
 supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
@@ -390,6 +438,10 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 					message: logMessage,
 					direction: "inbound",
 				});
+
+				doorSupported = resp.doorSupported;
+				boltSupported = resp.boltSupported;
+				latchSupported = resp.latchSupported;
 
 				// Update metadata of settable states
 				const valueDB = this.getValueDB();
@@ -413,6 +465,35 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			} else {
 				hadCriticalTimeout = true;
 			}
+		}
+
+		if (!hadCriticalTimeout) {
+			// Save support information for the status values
+			const valueDB = this.getValueDB();
+			valueDB.setMetadata(
+				getDoorStatusValueId(this.endpointIndex),
+				doorSupported ? getDoorStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getDoorSupportedValueId(this.endpointIndex),
+				doorSupported,
+			);
+			valueDB.setMetadata(
+				getLatchStatusValueId(this.endpointIndex),
+				latchSupported ? getLatchStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getLatchSupportedValueId(this.endpointIndex),
+				latchSupported,
+			);
+			valueDB.setMetadata(
+				getBoltStatusValueId(this.endpointIndex),
+				boltSupported ? getBoltStatusValueMetadata() : undefined,
+			);
+			valueDB.setValue(
+				getBoltSupportedValueId(this.endpointIndex),
+				boltSupported,
+			);
 		}
 
 		await this.refreshValues();
@@ -485,10 +566,18 @@ remaining duration: ${status.duration?.toString() ?? "undefined"}`;
 				logMessage += `
 lock timeout:       ${status.lockTimeout} seconds`;
 			}
-			logMessage += `
-door status:        ${status.doorStatus}
-bolt status:        ${status.boltStatus}
+			if (status.doorStatus != undefined) {
+				logMessage += `
+door status:        ${status.doorStatus}`;
+			}
+			if (status.boltStatus != undefined) {
+				logMessage += `
+bolt status:        ${status.boltStatus}`;
+			}
+			if (status.latchStatus != undefined) {
+				logMessage += `
 latch status:       ${status.latchStatus}`;
+			}
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
@@ -554,6 +643,8 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 5);
 
+		const valueDB = this.getValueDB();
+
 		this.currentMode = this.payload[0];
 		this.outsideHandlesCanOpenDoor = [
 			!!(this.payload[1] & 0b0001_0000),
@@ -567,9 +658,29 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			!!(this.payload[1] & 0b0100),
 			!!(this.payload[1] & 0b1000),
 		];
-		this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
-		this.boltStatus = !!(this.payload[2] & 0b10) ? "unlocked" : "locked";
-		this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
+
+		// Only store the door/bolt/latch status if the lock supports it
+		const supportsDoorStatus = !!valueDB.getValue(
+			getDoorSupportedValueId(this.endpointIndex),
+		);
+		if (supportsDoorStatus) {
+			this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
+		}
+		const supportsBoltStatus = !!valueDB.getValue(
+			getBoltSupportedValueId(this.endpointIndex),
+		);
+		if (supportsBoltStatus) {
+			this.boltStatus = !!(this.payload[2] & 0b10)
+				? "unlocked"
+				: "locked";
+		}
+		const supportsLatchStatus = !!valueDB.getValue(
+			getLatchSupportedValueId(this.endpointIndex),
+		);
+		if (supportsLatchStatus) {
+			this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
+		}
+
 		// Ignore invalid timeout values
 		const lockTimeoutMinutes = this.payload[3];
 		const lockTimeoutSeconds = this.payload[4];
@@ -583,6 +694,26 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		}
 
 		this.persistValues();
+	}
+
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+
+		const valueDB = this.getValueDB();
+		if (this.doorStatus != undefined) {
+			const valueId = getDoorStatusValueId(this.endpointIndex);
+			valueDB.setValue(valueId, this.doorStatus);
+		}
+		if (this.boltStatus != undefined) {
+			const valueId = getBoltStatusValueId(this.endpointIndex);
+			valueDB.setValue(valueId, this.boltStatus);
+		}
+		if (this.latchStatus != undefined) {
+			const valueId = getLatchStatusValueId(this.endpointIndex);
+			valueDB.setValue(valueId, this.latchStatus);
+		}
+
+		return true;
 	}
 
 	@ccValue()
@@ -603,7 +734,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 
 	@ccValue({ minVersion: 3 })
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
+		...ValueMetadata.ReadOnlyDuration,
 		label: "Remaining duration until target lock mode",
 	})
 	public readonly duration?: Duration;
@@ -622,26 +753,9 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	})
 	public readonly insideHandlesCanOpenDoor: DoorHandleStatus;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "The current status of the latch",
-	})
-	public readonly latchStatus: "open" | "closed";
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "The current status of the bolt",
-	})
-	public readonly boltStatus: "locked" | "unlocked";
-
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "The current status of the door",
-	})
-	public readonly doorStatus: "open" | "closed";
+	public readonly latchStatus?: "open" | "closed";
+	public readonly boltStatus?: "locked" | "unlocked";
+	public readonly doorStatus?: "open" | "closed";
 
 	@ccValue()
 	@ccValueMetadata({
@@ -655,10 +769,18 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
 			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
 			"active inside handles": this.insideHandlesCanOpenDoor.join(", "),
-			"latch status": this.latchStatus,
-			"bolt status": this.boltStatus,
-			"door status": this.doorStatus,
 		};
+
+		if (this.latchStatus != undefined) {
+			message["latch status"] = this.latchStatus;
+		}
+		if (this.boltStatus != undefined) {
+			message["bolt status"] = this.boltStatus;
+		}
+		if (this.doorStatus != undefined) {
+			message["door status"] = this.doorStatus;
+		}
+
 		if (this.targetMode != undefined) {
 			message["target mode"] = getEnumMemberName(
 				DoorLockMode,
@@ -1039,10 +1161,7 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		this.persistValues();
 	}
 
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly supportedOperationTypes: readonly DoorLockOperationType[];
-
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly supportedDoorLockModes: readonly DoorLockMode[];
 
 	@ccValue({ internal: true, minVersion: 4 })
@@ -1051,13 +1170,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue({ internal: true, minVersion: 4 })
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly latchSupported: boolean;
-
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly boltSupported: boolean;
-
-	@ccValue({ internal: true, minVersion: 4 })
 	public readonly doorSupported: boolean;
 
 	@ccValue({ internal: true, minVersion: 4 })

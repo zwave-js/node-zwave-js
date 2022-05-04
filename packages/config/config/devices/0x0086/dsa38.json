@@ -26,8 +26,6 @@
 			"#": "250",
 			"label": "Button 1 Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

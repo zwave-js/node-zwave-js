@@ -34,8 +34,6 @@
 			"#": "20",
 			"label": "Input 1 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -65,8 +63,6 @@
 			"#": "21",
 			"label": "Input 2 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -96,8 +92,6 @@
 			"#": "22",
 			"label": "Input 3 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +121,6 @@
 			"#": "23",
 			"label": "Input 4 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -233,8 +225,6 @@
 			"#": "150",
 			"label": "Inputs - LED colour control mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -270,8 +260,6 @@
 			"#": "157",
 			"label": "Start programmed sequence",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -382,7 +370,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "154[0xff00]",
@@ -390,7 +379,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "154[0xff0000]",
@@ -398,7 +388,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "154[0xff000000]",
@@ -406,7 +397,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "155[0xff]",
@@ -414,7 +406,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "155[0xff00]",
@@ -422,7 +415,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "155[0xff0000]",
@@ -430,7 +424,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "155[0xff000000]",
@@ -438,7 +433,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "156[0xff]",
@@ -446,7 +442,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "156[0xff00]",
@@ -454,7 +451,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "156[0xff0000]",
@@ -462,7 +460,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		},
 		{
 			"#": "156[0xff000000]",
@@ -470,7 +469,8 @@
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 255
+			"defaultValue": 255,
+			"unsigned": true
 		}
 	]
 }

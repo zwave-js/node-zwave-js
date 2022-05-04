@@ -29,8 +29,6 @@
 			"#": "7",
 			"label": "Motor speed 1",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -57,8 +55,6 @@
 			"label": "Calibrate",
 			"description": "This parameter on/off callibration function",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"label": "Last saved position",
 			"description": "Set servomotor in previous position",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

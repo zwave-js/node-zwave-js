@@ -323,8 +323,8 @@ interface ConditionalParamInformation {
 	readonly label: string;
 	readonly description?: string | undefined;
 	readonly valueSize: number;
-	readonly minValue: number;
-	readonly maxValue: number;
+	readonly minValue?: number | undefined;
+	readonly maxValue?: number | undefined;
 	readonly unsigned?: boolean | undefined;
 	readonly defaultValue: number;
 	readonly unit?: string | undefined;

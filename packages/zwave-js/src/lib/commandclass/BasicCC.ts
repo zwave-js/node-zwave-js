@@ -11,6 +11,7 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import { AllOrNone, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -35,12 +36,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum BasicCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { BasicCommand } from "./_Types";
 
 export function getTargetValueValueId(endpoint?: number): ValueID {
 	return {
@@ -142,8 +138,6 @@ export class BasicCCAPI extends CCAPI {
 		}
 	};
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
 	}): Promise<unknown> => {
@@ -179,6 +173,7 @@ export class BasicCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
@@ -358,7 +353,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration until target value",
+		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
 

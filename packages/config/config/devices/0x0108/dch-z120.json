@@ -175,8 +175,6 @@
 			"label": "Bit1: Enable sending motion OFF report.",
 			"description": "0:Disable, 1:Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -195,8 +193,6 @@
 			"label": "Bit2: Enable PIR super sensitivity mode.",
 			"description": "0:Disable, 1:Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -215,8 +211,6 @@
 			"label": "Bit4: Notification Type",
 			"description": "0: Notification Report. 1: Sensor Binary Report.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -235,8 +229,6 @@
 			"label": "Bit5: Disable Multi CC in auto report.",
 			"description": "1:Disable, 0:Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -255,8 +247,6 @@
 			"label": "Bit6: Report battery state when device triggered",
 			"description": "1:Disable, 0 Enable",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

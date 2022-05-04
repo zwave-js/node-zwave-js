@@ -27,23 +27,9 @@
 		"unsigned": true
 	},
 	"motion_sensor": {
+		"$import": "~/templates/master_template.json#base_enable_disable_255",
 		"label": "Motion Sensor",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 255,
-		"defaultValue": 255,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 255
-			}
-		]
+		"defaultValue": 255
 	},
 	"light_sensor_threshold": {
 		"label": "Light Sensor Brightness Threshold",
@@ -73,23 +59,9 @@
 		"unsigned": true
 	},
 	"low_brightness_sensor": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Low Brightness Sensor",
-		"description": "When enabled, send Basic Set if brightness falls below threshold.",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 0,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 1
-			}
-		]
+		"description": "Send Basic Set if brightness falls below threshold"
 	},
 	"light_sensor_report_threshold": {
 		"label": "Light Sensor Differential Report Threshold",
@@ -109,40 +81,14 @@
 		"defaultValue": 5
 	},
 	"blink_on_motion": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "LED: Blink on Motion",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 1,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 1
-			}
-		]
+		"defaultValue": 1
 	},
 	"motion_prevent_retrigger": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Motion Sensor: Prevent Re-Trigger While On",
-		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 1,
-		"defaultValue": 1,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Disable",
-				"value": 0
-			},
-			{
-				"label": "Enable",
-				"value": 1
-			}
-		]
+		"defaultValue": 1
 	},
 	"light_calibration": {
 		"label": "Ambient Light Intensity Calibration",

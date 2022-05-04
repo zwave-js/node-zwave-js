@@ -7,6 +7,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -23,6 +24,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { DeviceIdType, ManufacturerSpecificCommand } from "./_Types";
 
 export function getManufacturerIdValueId(): ValueID {
 	return {
@@ -66,22 +68,6 @@ export function getProductIdValueMetadata(): ValueMetadata {
 	};
 }
 
-export enum ManufacturerSpecificCommand {
-	Get = 0x04,
-	Report = 0x05,
-	DeviceSpecificGet = 0x06,
-	DeviceSpecificReport = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum DeviceIdType {
-	FactoryDefault = 0x00,
-	SerialNumber = 0x01,
-	PseudoRandom = 0x02,
-}
-
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Manufacturer Specific"])
@@ -121,6 +107,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
 	): Promise<string | undefined> {
@@ -160,7 +147,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (!node.isControllerNode()) {
+		if (!node.isControllerNode) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,

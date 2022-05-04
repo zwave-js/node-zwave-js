@@ -1,4 +1,8 @@
-import { stripUndefined, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	stripUndefined,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core/safe";
 import { buffer2hex } from "@zwave-js/shared";
 import type { NVM3Object } from "../nvm3/object";
 import {

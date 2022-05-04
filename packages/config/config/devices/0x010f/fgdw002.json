@@ -31,8 +31,6 @@
 			"label": "Door/window state",
 			"description": "What state is door/window when the magnet is close to the sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -50,8 +48,6 @@
 			"#": "3",
 			"label": "Associations in Z-Wave network Security Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -77,8 +73,6 @@
 			"#": "11",
 			"label": "2nd association group triggers",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -140,8 +134,6 @@
 			"#": "31",
 			"label": "Tamper - reporting alarm cancellation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -191,8 +183,6 @@
 			"#": "54",
 			"label": "Temperature alarm reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -234,8 +224,6 @@
 			"#": "2[0x01]",
 			"label": "Visual LED indications - Open/close",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -253,8 +241,6 @@
 			"#": "2[0x02]",
 			"label": "Visual LED indications - wake up",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -272,8 +258,6 @@
 			"#": "2[0x04]",
 			"label": "Visual LED indications - tampering",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

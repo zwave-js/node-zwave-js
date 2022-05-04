@@ -19,8 +19,6 @@
 			"label": "Central Scene notifications",
 			"description": "Enable/disable central scene notifications for 2x-5x button presses.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -71,8 +69,6 @@
 			"label": "Button operation mode",
 			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toogle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -91,8 +87,6 @@
 			"label": "External switch type",
 			"description": "Configuration of switch type connected to extension input S. - External Normal Switch: Use this value if a toggle switch is connected to extension input S. - External Push Button: Use this value if a push button switch is connected to extension input S.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -111,8 +105,6 @@
 			"label": "External switch mapping",
 			"description": "Central Scene mapping of extension input S.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

@@ -1,11 +1,11 @@
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
-import { RemoveFailedNodeRequest } from "../controller/RemoveFailedNodeMessages";
-import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
+import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
+import { RemoveFailedNodeRequest } from "../serialapi/network-mgmt/RemoveFailedNodeMessages";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import type { Driver } from "./Driver";
 import {
 	MessageGenerator,
@@ -21,6 +21,7 @@ function createDummyMessageGenerator(msg: Message): MessageGenerator {
 		},
 		self: undefined,
 		current: undefined,
+		parent: undefined as any,
 	};
 }
 

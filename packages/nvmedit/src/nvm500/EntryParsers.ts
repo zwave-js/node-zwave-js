@@ -2,7 +2,7 @@ import {
 	encodeNodeProtocolInfo,
 	NodeProtocolInfo,
 	parseNodeProtocolInfo,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import { padStart } from "alcalzone-shared/strings";
 import type { NVMModuleType } from "./shared";
 

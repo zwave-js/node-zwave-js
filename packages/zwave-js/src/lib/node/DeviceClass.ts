@@ -4,7 +4,7 @@ import type {
 	GenericDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core/safe";
 import type { JSONObject } from "@zwave-js/shared";
 
 export class DeviceClass {

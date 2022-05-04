@@ -23,8 +23,6 @@
 			"label": "Enable / disable BASIC SET",
 			"description": "Enable basic set reporting to group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "15",
 			"label": "Value of BASIC SET",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

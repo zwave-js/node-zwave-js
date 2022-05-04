@@ -19,8 +19,6 @@
 			"label": "Sensor Operation Mode",
 			"description": "Iinternal magnet sensor or the external terminal",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"label": "Sensor State Polarity",
 			"description": "This parameter deﬁnes the polarity of the magnet sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -86,8 +82,6 @@
 			"label": "Range Test after double click",
 			"description": "Allows to enable the activation of a Z-Wave range test",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -106,8 +100,6 @@
 			"label": "2nd Association Group Trigger",
 			"description": "Status of the magnet switch that causes sending command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -130,8 +122,6 @@
 			"label": "Command Sent to Devices of Association Group 2",
 			"description": "which commands is sent to 2nd Association Group",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -200,8 +190,6 @@
 			"label": "Reporting Tamper Alarm Cancellation",
 			"description": "This parameter deﬁnes if the alarm cancellation event is reported",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -220,8 +208,6 @@
 			"label": "Central Scene Event Functionality",
 			"description": "enables/disables the central scene function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -240,8 +226,6 @@
 			"label": "Tilt Sensor Functionality",
 			"description": "enables/disables the tilt function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

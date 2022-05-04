@@ -8,8 +8,8 @@ import {
 	SceneControllerConfigurationCCGet,
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
-	SceneControllerConfigurationCommand,
 } from "./SceneControllerConfigurationCC";
+import { SceneControllerConfigurationCommand } from "./_Types";
 
 const fakeGroupCount = 5;
 const groupCountValueId = getGroupCountValueId();

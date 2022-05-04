@@ -13,14 +13,13 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import {
-	buffer2hex,
 	getEnumMemberName,
 	isPrintableASCII,
 	isPrintableASCIIWithNewlines,
-	JSONObject,
 	num2hex,
 	pick,
 } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -43,51 +42,13 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum UserCodeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	// V2+
-	UsersNumberGet = 0x04,
-	UsersNumberReport = 0x05,
-	CapabilitiesGet = 0x06,
-	CapabilitiesReport = 0x07,
-	KeypadModeSet = 0x08,
-	KeypadModeGet = 0x09,
-	KeypadModeReport = 0x0a,
-	ExtendedUserCodeSet = 0x0b,
-	ExtendedUserCodeGet = 0x0c,
-	ExtendedUserCodeReport = 0x0d,
-	MasterCodeSet = 0x0e,
-	MasterCodeGet = 0x0f,
-	MasterCodeReport = 0x10,
-	UserCodeChecksumGet = 0x11,
-	UserCodeChecksumReport = 0x12,
-}
-
-// @publicAPI
-export enum UserIDStatus {
-	Available = 0x00,
-	Enabled,
-	Disabled,
-	Messaging,
-	PassageMode,
-	StatusNotAvailable = 0xfe,
-}
-
-// @publicAPI
-export enum KeypadMode {
-	Normal = 0x00,
-	Vacation,
-	Privacy,
-	LockedOut,
-}
+import type { NotificationEventPayload } from "./NotificationEventPayload";
+import { KeypadMode, UserCodeCommand, UserIDStatus } from "./_Types";
 
 export function getSupportedUsersValueID(
 	endpoint: number | undefined,
@@ -311,6 +272,12 @@ function persistUserCode(
 	return true;
 }
 
+/** Formats a user code in a way that's safe to print in public logs */
+export function userCodeToLogString(userCode: string | Buffer): string {
+	if (userCode === "") return "(empty)";
+	return "*".repeat(userCode.length);
+}
+
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
@@ -491,6 +458,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	): Promise<
 		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
 	>;
+
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(userId: number, multiple: boolean = false) {
 		if (userId > 255 || multiple) {
@@ -537,6 +506,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Configures a single user code */
+	@validateArgs()
 	public async set(
 		userId: number,
 		userIdStatus: Exclude<
@@ -563,6 +533,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Configures multiple user codes */
+	@validateArgs()
 	public async setMany(codes: UserCodeCCSetOptions[]): Promise<void> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
@@ -581,6 +552,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	 * Clears one or all user code
 	 * @param userId The user code to clear. If none or 0 is given, all codes are cleared
 	 */
+	@validateArgs()
 	public async clear(userId: number = 0): Promise<void> {
 		if (this.version > 1 || userId > 255) {
 			await this.setMany([
@@ -647,6 +619,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return response?.keypadMode;
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setKeypadMode(keypadMode: KeypadMode): Promise<void> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
@@ -680,6 +653,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		return response?.masterCode;
 	}
 
+	@validateArgs()
 	public async setMasterCode(masterCode: string): Promise<void> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
@@ -718,6 +692,14 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 @implementedVersion(2)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
+
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		// Hide user codes from value logs
+		this.registerValue(getUserCodeValueID(undefined, 0).property, {
+			secret: true,
+		});
+	}
 
 	public async interview(): Promise<void> {
 		const node = this.getNode()!;
@@ -965,27 +947,17 @@ export class UserCodeCCSet extends UserCodeCC {
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code":
-					typeof this.userCode === "string"
-						? this.userCode
-						: buffer2hex(this.userCode),
+				"user code": userCodeToLogString(this.userCode),
 			},
 		};
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			userId: this.userId,
-			userCode:
-				typeof this.userCode === "string"
-					? this.userCode
-					: buffer2hex(this.userCode),
-		});
 	}
 }
 
 @CCCommand(UserCodeCommand.Report)
-export class UserCodeCCReport extends UserCodeCC {
+export class UserCodeCCReport
+	extends UserCodeCC
+	implements NotificationEventPayload
+{
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -1052,12 +1024,14 @@ export class UserCodeCCReport extends UserCodeCC {
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code":
-					typeof this.userCode === "string"
-						? this.userCode
-						: buffer2hex(this.userCode),
+				"user code": userCodeToLogString(this.userCode),
 			},
 		};
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public toNotificationEventParameters() {
+		return { userId: this.userId };
 	}
 }
 
@@ -1419,7 +1393,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "master code": this.masterCode },
+			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
 }
@@ -1440,7 +1414,10 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		this.persistValues();
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue({
+		minVersion: 2,
+		secret: true,
+	})
 	@ccValueMetadata({
 		...ValueMetadata.String,
 		label: "Master Code",
@@ -1452,7 +1429,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "master code": this.masterCode },
+			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
 }
@@ -1628,12 +1605,9 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[
-				`code #${userId}`
-			] = `${userCode} (status: ${getEnumMemberName(
-				UserIDStatus,
-				userIdStatus,
-			)})`;
+			message[`code #${userId}`] = `${userCodeToLogString(
+				userCode,
+			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -1682,12 +1656,9 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			message[
-				`code #${userId}`
-			] = `${userCode} (status: ${getEnumMemberName(
-				UserIDStatus,
-				userIdStatus,
-			)})`;
+			message[`code #${userId}`] = `${userCodeToLogString(
+				userCode,
+			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		message["next user id"] = this.nextUserId;
 		return {

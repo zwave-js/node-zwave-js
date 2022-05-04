@@ -1,0 +1,191 @@
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9540-N",
+	"description": "All Load Dimmer Light Switch",
+	"devices": [
+		{
+			"productType": "0x4449",
+			"productId": "0x0101",
+			"zwaveAllianceId": 797
+		},
+		{
+			"productType": "0x4449",
+			"productId": "0xaa00"
+		},
+		{
+			"productType": "0x4449",
+			"productId": "0xff00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.2",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Delayed OFF time",
+			"description": "time in seconds to delay OFF",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Panic ON time",
+			"description": "Time in seconds for panic mode ON",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Panic OFF time",
+			"description": "time in seconds for OFF in panic mode",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Basic Set Value",
+			"description": "Send value to association group on trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Power Up State",
+			"description": "Power Up State of the switch",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "Last State",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Panic mode enable",
+			"description": "Enables this switch to participate in panic mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Dimmer Ramp Time",
+			"description": "Time in seconds to reach desired level",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Kickstart / Rapid Start",
+			"description": "Turn on or off rapid start feature",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Forward Z-Wave Commands",
+			"description": "Keep associated accessory switches in sync",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Minimum Dimmer Level",
+			"description": "The minimum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 4
+		},
+		{
+			"#": "12",
+			"label": "Maximum Dimmer Level",
+			"description": "The maximum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 99
+		}
+	],
+	"compat": {
+		"enableBasicSetMapping": true
+	}
+}

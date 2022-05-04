@@ -1,0 +1,136 @@
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH3901-Z",
+	"description": "Boiler Thermostat",
+	"devices": [
+		{
+			"productType": "0x3910",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature Reporting",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Difference reporting only",
+					"value": 1
+				},
+				{
+					"label": "Interval reporting only",
+					"value": 2
+				},
+				{
+					"label": "Difference and interval reporting",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Temperature Difference Setting",
+			"unit": "0.1 °C",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 995,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Report Interval Time",
+			"description": "Suggested > 30 seconds.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Retransmission Times",
+			"description": "Association SET 2 Command retransmission times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Heating Cycle Duration",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 120,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Heating Time within Heating Cycle",
+			"description": "Must be less than Heating Cycle Duration (parameter 7)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 120,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "255",
+			"label": "Reset to Factory Default Setting",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Reset configuration parameters to default settings",
+					"value": 17185
+				},
+				{
+					"label": "Factory reset",
+					"value": 39030
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "From the opening menu, long-press S1 and S3 to enter inclusion/exclusion menu. Short press S2 to enter learning mode.",
+		"manual": "http://www.mcohome.com/MH3901-Z-PG3887693"
+	}
+}

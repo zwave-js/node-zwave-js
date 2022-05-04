@@ -35,13 +35,13 @@
 		},
 		{
 			"#": "11",
-			"label": "Ramp Rate (Z-Wave)",
-			"$import": "templates/homeseer_template.json#ramp_rate"
+			"$import": "templates/homeseer_template.json#ramp_rate",
+			"label": "Ramp Rate (Z-Wave)"
 		},
 		{
 			"#": "12",
-			"label": "Ramp Rate (Manual)",
-			"$import": "templates/homeseer_template.json#ramp_rate"
+			"$import": "templates/homeseer_template.json#ramp_rate",
+			"label": "Ramp Rate (Manual)"
 		},
 		{
 			"#": "13",

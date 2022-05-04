@@ -186,9 +186,9 @@ body:
         * select log level DEBUG
         * enable "log to file"
 
-        **Attention:**
-        For encrypted communication we need your network key to decode. You can send that via email to info@zwave-js.io
-        If your logfile contains user codes or a secure inclusion process, you should upload an encrypted archive (zip, rar, 7z, tgz, ...) and send us the password via email.
+        **Note:**
+        For S0-encrypted communication we need your network key to decode. You can send that via email to info@zwave-js.io
+        We cannot easily decrypt S2-encrypted communication currently, unless you have Zniffer logs.
 
       placeholder: |
         Drag and drop logfile (`zwave_<date>.log`) file here.

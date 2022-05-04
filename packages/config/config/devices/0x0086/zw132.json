@@ -169,6 +169,38 @@
 			"$import": "templates/aeotec_template.json#auto_report_group1_amp"
 		},
 		{
+			"#": "101[0x0100]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_channel1"
+		},
+		{
+			"#": "101[0x0200]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_watt_channel2"
+		},
+		{
+			"#": "101[0x0800]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_channel1"
+		},
+		{
+			"#": "101[0x1000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_kwh_channel2"
+		},
+		{
+			"#": "101[0x010000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_channel1"
+		},
+		{
+			"#": "101[0x020000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_v_channel2"
+		},
+		{
+			"#": "101[0x080000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_channel1"
+		},
+		{
+			"#": "101[0x100000]",
+			"$import": "templates/aeotec_template.json#auto_report_group1_amp_channel2"
+		},
+		{
 			"#": "102[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group2_kwh"
 		},
@@ -185,6 +217,38 @@
 			"$import": "templates/aeotec_template.json#auto_report_group2_amp"
 		},
 		{
+			"#": "102[0x0100]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_channel1"
+		},
+		{
+			"#": "102[0x0200]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_watt_channel2"
+		},
+		{
+			"#": "102[0x0800]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_channel1"
+		},
+		{
+			"#": "102[0x1000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_kwh_channel2"
+		},
+		{
+			"#": "102[0x010000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_channel1"
+		},
+		{
+			"#": "102[0x020000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_v_channel2"
+		},
+		{
+			"#": "102[0x080000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_channel1"
+		},
+		{
+			"#": "102[0x100000]",
+			"$import": "templates/aeotec_template.json#auto_report_group2_amp_channel2"
+		},
+		{
 			"#": "103[0x01]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_kwh"
 		},
@@ -199,6 +263,38 @@
 		{
 			"#": "103[0x08]",
 			"$import": "templates/aeotec_template.json#auto_report_group3_amp"
+		},
+		{
+			"#": "103[0x0100]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_channel1"
+		},
+		{
+			"#": "103[0x0200]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_watt_channel2"
+		},
+		{
+			"#": "103[0x0800]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_channel1"
+		},
+		{
+			"#": "103[0x1000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_kwh_channel2"
+		},
+		{
+			"#": "103[0x010000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_channel1"
+		},
+		{
+			"#": "103[0x020000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_v_channel2"
+		},
+		{
+			"#": "103[0x080000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_channel1"
+		},
+		{
+			"#": "103[0x100000]",
+			"$import": "templates/aeotec_template.json#auto_report_group3_amp_channel2"
 		},
 		{
 			"#": "110",

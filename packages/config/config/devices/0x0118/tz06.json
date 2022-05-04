@@ -36,8 +36,6 @@
 			"#": "1",
 			"label": "Selected Relay",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"label": "External Switch Mode",
 			"description": "Change the External Switch (S1 & S2) Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -84,8 +80,6 @@
 			"label": "Restore Switch State",
 			"description": "Restore Switch State after AC power loss",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -116,8 +110,6 @@
 			"#": "5",
 			"label": "RF Command Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -143,8 +135,6 @@
 			"#": "6",
 			"label": "Existence of Endpoint 3",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

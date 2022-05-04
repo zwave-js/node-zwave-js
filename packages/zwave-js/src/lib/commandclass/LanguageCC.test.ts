@@ -6,8 +6,8 @@ import {
 	LanguageCCGet,
 	LanguageCCReport,
 	LanguageCCSet,
-	LanguageCommand,
 } from "./LanguageCC";
+import { LanguageCommand } from "./_Types";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 

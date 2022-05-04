@@ -57,8 +57,6 @@
 			"#": "2",
 			"label": "Celsius / Fahrenheit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -1,3 +1,5 @@
+import { RFRegion } from "@zwave-js/core/safe";
+import { getEnumMemberName } from "@zwave-js/shared/safe";
 import type { NVM3Object } from "../nvm3/object";
 import {
 	getNVMFileIDStatic,
@@ -9,7 +11,7 @@ import {
 } from "./NVMFile";
 
 export interface ApplicationRFConfigFileOptions extends NVMFileCreationOptions {
-	rfRegion: number; // TODO: Should be RF Region
+	rfRegion: RFRegion;
 	txPower: number;
 	measured0dBm: number;
 	enablePTI?: number;
@@ -39,7 +41,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 		}
 	}
 
-	public rfRegion: number; // TODO: Should be RF Region
+	public rfRegion: RFRegion;
 	public txPower: number;
 	public measured0dBm: number;
 	public enablePTI?: number;
@@ -67,7 +69,7 @@ export class ApplicationRFConfigFile extends NVMFile {
 	public toJSON() {
 		const ret: Record<string, any> = {
 			...super.toJSON(),
-			"RF Region": this.rfRegion,
+			"RF Region": getEnumMemberName(RFRegion, this.rfRegion),
 			"TX Power": `${this.txPower.toFixed(1)} dBm`,
 			"Power @ 0dBm": `${this.measured0dBm.toFixed(1)} dBm`,
 		};

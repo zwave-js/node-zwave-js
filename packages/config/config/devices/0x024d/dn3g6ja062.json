@@ -29,8 +29,6 @@
 			"#": "2",
 			"label": "LED Blinking Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

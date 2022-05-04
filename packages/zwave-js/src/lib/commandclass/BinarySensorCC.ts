@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -30,43 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum BinarySensorCommand {
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x01,
-	SupportedReport = 0x04,
-}
-
-/**
- * @publicAPI
- */
-export enum BinarySensorType {
-	"General Purpose" = 0x01,
-	Smoke = 0x02,
-	CO = 0x03,
-	CO2 = 0x04,
-	Heat = 0x05,
-	Water = 0x06,
-	Freeze = 0x07,
-	Tamper = 0x08,
-	Aux = 0x09,
-	"Door/Window" = 0x0a,
-	Tilt = 0x0b,
-	Motion = 0x0c,
-	"Glass Break" = 0x0d,
-	Any = 0xff,
-}
-
-/**
- * @publicAPI
- */
-export type BinarySensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: BinarySensorType;
-	};
-};
+import { BinarySensorCommand, BinarySensorType } from "./_Types";
 
 export function getBinarySensorValueId(
 	endpointIndex: number | undefined,
@@ -117,6 +82,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
+	@validateArgs({ strictEnums: true })
 	public async get(
 		sensorType?: BinarySensorType,
 	): Promise<boolean | undefined> {

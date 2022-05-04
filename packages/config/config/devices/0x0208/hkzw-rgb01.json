@@ -23,8 +23,6 @@
 			"label": "Status after power failure",
 			"description": "Define how the RGB BULB will react after the power supply is back on.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "Notification when Load status change",
 			"description": "RGB BULB can send notifications to associated device",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -70,8 +66,6 @@
 			"#": "51",
 			"label": "Enable/disable the function of using wall switch to turn on/off RGB BULB",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -90,8 +84,6 @@
 			"label": "Advance mode",
 			"description": "RGB BULB can blink or cyclic/random change color automatically at set intervals.",
 			"valueSize": 4,
-			"minValue": 3072,
-			"maxValue": 318816256,
 			"defaultValue": 3072,
 			"allowManualEntry": false,
 			"options": [

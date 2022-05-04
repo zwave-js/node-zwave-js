@@ -19,8 +19,6 @@
 			"label": "Change the state of indicator light",
 			"description": "Default status of socket LED is on as indicator when the load is off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -39,8 +37,6 @@
 			"label": "Memory Function",
 			"description": "Default with memory: the socket staus is same as before when power is on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -59,8 +55,6 @@
 			"label": "Invert switch",
 			"description": "In the edge mode invert switch - no effect if Pulse or Edge-toggle modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -79,8 +73,6 @@
 			"label": "Edge, Pulse, or Edge Toggle Mode",
 			"description": "Set how the switch controls the module",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

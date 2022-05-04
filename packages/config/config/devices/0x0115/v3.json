@@ -20,8 +20,6 @@
 			"label": "Debug Mode",
 			"description": "Debug mode to apply channels, associations and power mode changes on the fly without exclusion-inclusion sequence. Use for debugging only!",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -41,8 +39,6 @@
 			"label": "Service LED Blinking",
 			"description": "Blink with service LED during operation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -62,8 +58,6 @@
 			"label": "Security S0",
 			"description": "Enable or disable Security S0 during inclusion (requires re-inclusion). Same as changing Tools → Security in the Arduino IDE",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -83,8 +77,6 @@
 			"label": "Z-Wave Logging",
 			"description": "Enable or disable logging via Z-Wave. Same as changing Tools → Logging in the Arduino IDE",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -104,8 +96,6 @@
 			"label": "Z-Wave Frequency",
 			"description": "Set Z-Wave frequency and reboot. Same as changing Tools → Frequency in the Arduino IDE. Note that after issuing this command the device will stop change frequency and your controller will loose communications with it!",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2550,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -172,8 +162,6 @@
 			"label": "Legacy Notification Channel Type",
 			"description": "Change channel type from Notification to legacy Sensor Binary to help Fibaro Home Center, Vera and some other controllers having problems with the latest Z-Wave Plus to understand the channel type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -193,8 +181,6 @@
 			"label": "OTA Confirmation",
 			"description": "Confirmation of OTA operations (for bootloader and sketch upgrades). Do it right before or right after initiating the firmware upgrade process",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -204,6 +190,262 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "64",
+			"label": "Custom parameter 64",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "65",
+			"label": "Custom parameter 65",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "66",
+			"label": "Custom parameter 66",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "67",
+			"label": "Custom parameter 67",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "68",
+			"label": "Custom parameter 68",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "69",
+			"label": "Custom parameter 69",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "70",
+			"label": "Custom parameter 70",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "71",
+			"label": "Custom parameter 71",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "72",
+			"label": "Custom parameter 72",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "73",
+			"label": "Custom parameter 73",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "74",
+			"label": "Custom parameter 74",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "75",
+			"label": "Custom parameter 75",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "76",
+			"label": "Custom parameter 76",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "77",
+			"label": "Custom parameter 77",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "78",
+			"label": "Custom parameter 78",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "79",
+			"label": "Custom parameter 79",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "80",
+			"label": "Custom parameter 80",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "81",
+			"label": "Custom parameter 81",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "82",
+			"label": "Custom parameter 82",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "83",
+			"label": "Custom parameter 83",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "84",
+			"label": "Custom parameter 84",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "85",
+			"label": "Custom parameter 85",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "86",
+			"label": "Custom parameter 86",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "87",
+			"label": "Custom parameter 87",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "88",
+			"label": "Custom parameter 88",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "89",
+			"label": "Custom parameter 89",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "90",
+			"label": "Custom parameter 90",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "91",
+			"label": "Custom parameter 91",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "92",
+			"label": "Custom parameter 92",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "93",
+			"label": "Custom parameter 93",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "94",
+			"label": "Custom parameter 94",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
+		},
+		{
+			"#": "95",
+			"label": "Custom parameter 95",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0
 		}
 	],
 	"metadata": {

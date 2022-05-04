@@ -20,8 +20,6 @@
 			"label": "Synchronization Cool And Heat Temperature Set-point",
 			"description": "Synchronization cool and heat temperature set-point while one of it has been change by master controller",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 0,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

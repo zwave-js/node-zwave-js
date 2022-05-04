@@ -9,14 +9,14 @@ import {
 	StateMachine,
 } from "xstate";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SendDataMulticastBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataMulticastRequest } from "../controller/SendDataMessages";
+import type { Message } from "../message/Message";
+import { SendDataMulticastBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataMulticastRequest } from "../serialapi/transport/SendDataMessages";
 import {
 	isSendData,
 	isTransmitReport,
 	SendDataMessage,
-} from "../controller/SendDataShared";
-import type { Message } from "../message/Message";
+} from "../serialapi/transport/SendDataShared";
 import type { CommandQueueEvent } from "./CommandQueueMachine";
 import {
 	createMessageDroppedUnexpectedError,
@@ -48,10 +48,9 @@ export type TransactionMachineEvent =
 	// Immediately stop the transaction
 	| { type: "stop" };
 
-const guards: MachineOptions<
-	TransactionMachineContext,
-	TransactionMachineEvent
->["guards"] = {
+const guards: NonNullable<
+	MachineOptions<TransactionMachineContext, TransactionMachineEvent>["guards"]
+> = {
 	mayRetry: (ctx, evt: any) => {
 		const msg = ctx.transaction.parts.current;
 		if (!isSendData(msg)) return false;
@@ -88,7 +87,11 @@ const every = (...guards: string[]) => ({
 export type TransactionMachine = StateMachine<
 	TransactionMachineContext,
 	any,
-	TransactionMachineEvent
+	TransactionMachineEvent,
+	any,
+	any,
+	any,
+	any
 >;
 
 export type TransactionMachineInterpreter = Interpreter<
@@ -333,7 +336,7 @@ export function createTransactionMachine(
 				every: (ctx, event, { cond }) => {
 					const keys = (cond as any).guards as string[];
 					return keys.every((guardKey: string) =>
-						guards[guardKey](ctx, event, undefined as any),
+						guards[guardKey]?.(ctx, event, undefined as any),
 					);
 				},
 			},
