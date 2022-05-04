@@ -154,7 +154,7 @@ export interface PlannedProvisioningEntry {
 	 * The security classes that were **requested** by the device.
 	 * When this is not set, applications should default to {@link securityClasses} instead.
 	 */
-	requestedSecurityClasses?: SecurityClass[];
+	requestedSecurityClasses?: readonly SecurityClass[];
 
 	/**
 	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code

@@ -88,7 +88,7 @@ export interface ProvisioningInformation_SupportedProtocols {
 export type QRProvisioningInformation = {
 	version: QRCodeVersion;
 	/** The security classes that were **requested** by the device */
-	requestedSecurityClasses: SecurityClass[];
+	readonly requestedSecurityClasses: SecurityClass[];
 	/**
 	 * The security classes that will be **granted** to this device.
 	 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
