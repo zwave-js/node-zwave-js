@@ -30,6 +30,7 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 			isFunctionSupported,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 

@@ -23,6 +23,7 @@ describe("regression tests", () => {
 			isFunctionSupported: () => true,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 

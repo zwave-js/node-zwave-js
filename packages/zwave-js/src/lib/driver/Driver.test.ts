@@ -408,9 +408,11 @@ describe("lib/driver/Driver => ", () => {
 					get: () => node2,
 					forEach: () => {},
 					values: () => [node2],
+					clear: () => {},
 				},
 				isFunctionSupported,
 				incrementStatistics: () => {},
+				removeAllListeners: () => {},
 			} as any;
 		});
 
@@ -484,9 +486,11 @@ describe("lib/driver/Driver => ", () => {
 					get: () => node2,
 					forEach: () => {},
 					values: () => [node2],
+					clear: () => {},
 				},
 				isFunctionSupported,
 				incrementStatistics: () => {},
+				removeAllListeners: () => {},
 			} as any;
 		});
 
@@ -774,8 +778,10 @@ describe("lib/driver/Driver => ", () => {
 					get: () => node2,
 					forEach: () => {},
 					values: () => [node2],
+					clear: () => {},
 				},
 				isFunctionSupported,
+				removeAllListeners: () => {},
 			} as any;
 		});
 

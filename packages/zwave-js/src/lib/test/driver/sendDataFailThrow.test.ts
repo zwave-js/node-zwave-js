@@ -21,6 +21,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -41,8 +42,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node2["_isListening"] = true;
-		node2["_isFrequentListening"] = false;
+		node2["isListening"] = true;
+		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);

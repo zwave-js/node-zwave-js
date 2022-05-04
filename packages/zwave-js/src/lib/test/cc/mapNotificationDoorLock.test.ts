@@ -22,6 +22,7 @@ describe("map Notification CC to Door Lock CC", () => {
 			isFunctionSupported: () => true,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 		await driver.configManager.loadNotifications();
 	});
