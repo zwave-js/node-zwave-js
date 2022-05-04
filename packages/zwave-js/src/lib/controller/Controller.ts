@@ -244,6 +244,7 @@ import {
 	InclusionStrategy,
 	InclusionUserCallbacks,
 	PlannedProvisioningEntry,
+	ProvisioningEntryStatus,
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
@@ -602,19 +603,34 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		}
 	}
 
+	private getProvisioningEntryInternal(
+		dskOrNodeId: string | number,
+	): SmartStartProvisioningEntry | undefined {
+		return this.provisioningList.find(
+			(e) =>
+				e.dsk === dskOrNodeId ||
+				(typeof dskOrNodeId === "number" &&
+					"nodeId" in e &&
+					e.nodeId === dskOrNodeId),
+		);
+	}
+
 	/**
-	 * Returns the entry for the given DSK from the controller's SmartStart provisioning list.
+	 * Returns the entry for the given DSK or node ID from the controller's SmartStart provisioning list.
 	 */
 	public getProvisioningEntry(
-		dsk: string,
+		dskOrNodeId: string | number,
 	): Readonly<SmartStartProvisioningEntry> | undefined {
-		const entry = this.provisioningList.find((e) => e.dsk === dsk);
+		const entry = this.getProvisioningEntryInternal(dskOrNodeId);
 		// Try to look up the node ID for this entry
 		if (entry) {
 			const ret: SmartStartProvisioningEntry = {
 				...entry,
 			};
-			const node = this.getNodeByDSK(dsk);
+			const node =
+				typeof dskOrNodeId === "string"
+					? this.getNodeByDSK(dskOrNodeId)
+					: this.nodes.get(dskOrNodeId);
 			if (node) ret.nodeId = node.id;
 			return ret;
 		}
@@ -1140,7 +1156,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _smartStartEnabled: boolean = false;
 
 	private _includeController: boolean = false;
-	private _unprovisionRemovedNode: boolean = false;
+	private _unprovisionRemovedNode: boolean | "inactive" = false;
 
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
@@ -1532,9 +1548,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
 	 *
 	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
+	 * A value of `"inactive"` will keep the provisioning entry, but disable it.
 	 */
 	public async beginExclusion(
-		unprovision: boolean = false,
+		unprovision: boolean | "inactive" = false,
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -2712,8 +2729,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
 
 				// Avoid automatic re-inclusion using SmartStart if desired
-				if (this._unprovisionRemovedNode)
+				if (this._unprovisionRemovedNode === true) {
 					this.unprovisionSmartStartNode(nodeId);
+				} else if (this._unprovisionRemovedNode === "inactive") {
+					const entry = this.getProvisioningEntryInternal(nodeId);
+					if (entry) {
+						entry.status = ProvisioningEntryStatus.Inactive;
+						this.provisionSmartStartNode(entry);
+					}
+				}
+				this._unprovisionRemovedNode = false;
 
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);

@@ -87,7 +87,14 @@ export interface ProvisioningInformation_SupportedProtocols {
 
 export type QRProvisioningInformation = {
 	version: QRCodeVersion;
-	/** The security classes that are requested by this device */
+	/**
+	 * The security classes that were **requested** by the device.
+	 */
+	readonly requestedSecurityClasses: SecurityClass[];
+	/**
+	 * The security classes that will be **granted** to this device.
+	 * Until this has been changed by a user, this will be identical to {@link requestedSecurityClasses}.
+	 */
 	securityClasses: SecurityClass[];
 	dsk: string;
 } & ProvisioningInformation_ProductType &
@@ -227,11 +234,11 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 	if (checksum !== expectedChecksum) fail("invalid checksum");
 
 	const requestedKeysBitmask = readUInt8(qr, 9);
-	const securityClasses = parseBitMask(
+	const requestedSecurityClasses = parseBitMask(
 		Buffer.from([requestedKeysBitmask]),
 		SecurityClass.S2_Unauthenticated,
 	);
-	if (!securityClasses.every((k) => k in SecurityClass)) {
+	if (!requestedSecurityClasses.every((k) => k in SecurityClass)) {
 		fail("invalid security class requested");
 	}
 
@@ -245,7 +252,9 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 
 	const ret = {
 		version,
-		securityClasses,
+		// This seems like a duplication, but it's more convenient for applications to not have to copy this field over
+		requestedSecurityClasses,
+		securityClasses: [...requestedSecurityClasses],
 		dsk: dskToString(dsk),
 	} as QRProvisioningInformation;
 

@@ -169,12 +169,12 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(unprovision?: boolean): Promise<boolean>
+async beginExclusion(unprovision?: boolean | "inactive"): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
 
-The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well.
+The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well. A value of `"inactive"` will keep the provisioning entry, but disable it, preventing automatic inclusion of the corresponding nodes.
 
 ### `stopExclusion`
 
