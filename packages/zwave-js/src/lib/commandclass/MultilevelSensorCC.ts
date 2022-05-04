@@ -513,36 +513,47 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				scale,
 			);
 
-			// Filter out unknown sensor types and scales
-			validatePayload.withReason(
-				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
-			)(!!sensorType);
-			validatePayload.withReason(
-				`Unknown scale ${num2hex(scale)} or corrupted data`,
-			)(this.scale.label !== getDefaultScale(scale).label);
+			// Filter out unknown sensor types and scales, unless the strict validation is disabled
+			const measurementValidation =
+				!this.getNodeUnsafe()?.deviceConfig?.compat
+					?.disableStrictMeasurementValidation;
 
-			// Filter out unsupported sensor types and scales if possible
-			if (this.version >= 5) {
-				const valueDB = this.getValueDB();
+			if (measurementValidation) {
+				validatePayload.withReason(
+					`Unknown sensor type ${num2hex(
+						this.type,
+					)} or corrupted data`,
+				)(!!sensorType);
+				validatePayload.withReason(
+					`Unknown scale ${num2hex(scale)} or corrupted data`,
+				)(this.scale.label !== getDefaultScale(scale).label);
 
-				const supportedSensorTypes = valueDB.getValue<number[]>(
-					getSupportedSensorTypesValueId(this.endpointIndex),
-				);
-				if (supportedSensorTypes?.length) {
-					validatePayload.withReason(
-						`Unsupported sensor type ${
-							sensorType!.label
-						} or corrupted data`,
-					)(supportedSensorTypes.includes(this.type));
-				}
+				// Filter out unsupported sensor types and scales if possible
+				if (this.version >= 5) {
+					const valueDB = this.getValueDB();
 
-				const supportedScales = valueDB.getValue<number[]>(
-					getSupportedScalesValueId(this.endpointIndex, this.type),
-				);
-				if (supportedScales?.length) {
-					validatePayload.withReason(
-						`Unsupported sensor type ${this.scale.label} or corrupted data`,
-					)(supportedScales.includes(this.scale.key));
+					const supportedSensorTypes = valueDB.getValue<number[]>(
+						getSupportedSensorTypesValueId(this.endpointIndex),
+					);
+					if (supportedSensorTypes?.length) {
+						validatePayload.withReason(
+							`Unsupported sensor type ${
+								sensorType!.label
+							} or corrupted data`,
+						)(supportedSensorTypes.includes(this.type));
+					}
+
+					const supportedScales = valueDB.getValue<number[]>(
+						getSupportedScalesValueId(
+							this.endpointIndex,
+							this.type,
+						),
+					);
+					if (supportedScales?.length) {
+						validatePayload.withReason(
+							`Unsupported sensor type ${this.scale.label} or corrupted data`,
+						)(supportedScales.includes(this.scale.key));
+					}
 				}
 			}
 

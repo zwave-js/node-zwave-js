@@ -356,6 +356,12 @@ By default, received `Basic CC::Report` commands are mapped to a more appropriat
 
 The specifications mandate strict rules for the data and sequence numbers in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
+### `disableStrictMeasurementValidation`
+
+Without the additional integrity checks that encapsulation CCs like `CRC-16`, `Security S0` or `Security S2` provide, multilevel sensors and meters are prone to report and accumulate nonsensical measurements over time due to partially corrupted radio frames. For devices which report their supported meter or sensor types and scales, Z-Wave JS checks that the reported measurements belong to a supported meter or sensor type and/or scale. Invalid measurements are dropped.
+
+Some devices incorrectly encode this support information though, making the checks discard otherwise correct data. To disable the checks, set `disableStrictMeasurementValidation` to `true`.
+
 ### `enableBasicSetMapping`
 
 `Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.

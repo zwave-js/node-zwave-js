@@ -560,6 +560,9 @@
 				"disableStrictEntryControlDataValidation": {
 					"const": true
 				},
+				"disableStrictMeasurementValidation": {
+					"const": true
+				},
 				"enableBasicSetMapping": {
 					"const": true
 				},
