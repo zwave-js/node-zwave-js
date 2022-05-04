@@ -314,6 +314,9 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 			if (timeout) clearTimeout(timeout);
 		}
 
+		// Remove all event handlers
+		this.removeAllListeners();
+
 		// Clear all scheduled polls that would interfere with the interview
 		for (const valueId of this.scheduledPolls.keys()) {
 			this.cancelScheduledPoll(valueId);

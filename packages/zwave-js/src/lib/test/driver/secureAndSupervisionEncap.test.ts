@@ -27,6 +27,7 @@ describe("regression tests", () => {
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 

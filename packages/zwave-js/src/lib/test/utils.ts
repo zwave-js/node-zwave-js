@@ -62,6 +62,7 @@ export async function createAndStartDriver(
 		isFunctionSupported: () => true,
 		nodes: new Map(),
 		incrementStatistics: () => {},
+		removeAllListeners: () => {},
 	} as any;
 
 	return {

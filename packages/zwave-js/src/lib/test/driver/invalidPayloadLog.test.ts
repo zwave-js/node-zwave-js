@@ -52,6 +52,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 		driver["_driverLog"] = driverLogger;
 	});

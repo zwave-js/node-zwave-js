@@ -98,7 +98,7 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
-import { ZWaveController } from "../controller/Controller";
+import { ThrowingMap, ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
 	ProvisioningEntryStatus,
@@ -2161,8 +2161,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			if (timeout) clearTimeout(timeout);
 		}
 
-		// Destroy all nodes
-		this._controller?.nodes.forEach((n) => n.destroy());
+		// Destroy all nodes and the controller
+		if (this._controller) {
+			this._controller.nodes.forEach((n) => n.destroy());
+			(this._controller.nodes as ThrowingMap<any, any>).clear();
+
+			this._controller.removeAllListeners();
+			this._controller = undefined;
+		}
 
 		this.driverLog.print(`driver instance destroyed`);
 
