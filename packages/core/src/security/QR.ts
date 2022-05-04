@@ -87,7 +87,9 @@ export interface ProvisioningInformation_SupportedProtocols {
 
 export type QRProvisioningInformation = {
 	version: QRCodeVersion;
-	/** The security classes that were **requested** by the device */
+	/**
+	 * The security classes that were **requested** by the device.
+	 */
 	readonly requestedSecurityClasses: SecurityClass[];
 	/**
 	 * The security classes that will be **granted** to this device.
@@ -250,6 +252,7 @@ export function parseQRCodeString(qr: string): QRProvisioningInformation {
 
 	const ret = {
 		version,
+		// This seems like a duplication, but it's more convenient for applications to not have to copy this field over
 		requestedSecurityClasses,
 		securityClasses: [...requestedSecurityClasses],
 		dsk: dskToString(dsk),
