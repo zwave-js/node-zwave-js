@@ -45,6 +45,26 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 			this.logMessageHeader(direction, MessageHeaders.CAN);
 	}
 
+	/**
+	 * Logs receipt of unexpected data while waiting for an ACK, NAK, CAN, or data frame
+	 */
+	public discarded(data: Buffer): void {
+		if (this.isVisible()) {
+			const direction: DataDirection = "inbound";
+			this.logger.log({
+				level: "warn",
+				primaryTags: "[DISCARDED]",
+				message: `invalid data ${buffer2hex(data)}`,
+				secondaryTags: `(${data.length} bytes)`,
+				direction: getDirectionPrefix(direction),
+				context: {
+					source: "serial",
+					direction,
+				},
+			});
+		}
+	}
+
 	private logMessageHeader(
 		direction: DataDirection,
 		header: MessageHeaders,

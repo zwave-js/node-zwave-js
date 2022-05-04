@@ -111,17 +111,18 @@ describe("ZWaveSerialPort", () => {
 		});
 	});
 
-	it("skips all useless data", (done) => {
-		const data = Buffer.from([
-			MessageHeaders.ACK,
-			MessageHeaders.CAN,
-			0xff,
-			0xfe,
-			0xfd,
-			0xfa,
-			MessageHeaders.ACK,
-		]);
-		binding.emitData(data);
+	it("skips all invalid/unexpected data", (done) => {
+		binding.emitData(
+			Buffer.from([
+				MessageHeaders.ACK,
+				MessageHeaders.CAN,
+				0xff,
+				0xfe,
+				0xfd,
+				0xfa,
+				MessageHeaders.ACK,
+			]),
+		);
 
 		let count = 0;
 		port.on("data", (data) => {
@@ -134,6 +135,31 @@ describe("ZWaveSerialPort", () => {
 		});
 	});
 
+	it("skips all invalid/unexpected data (test 2)", (done) => {
+		binding.emitData(
+			Buffer.from([
+				MessageHeaders.ACK,
+				MessageHeaders.CAN,
+				0xff,
+				0xfe,
+				0xfd,
+				0xfa,
+			]),
+		);
+		setTimeout(() => {
+			binding.emitData(Buffer.from([MessageHeaders.NAK]));
+		}, 10);
+
+		let count = 0;
+		port.on("data", (data) => {
+			count++;
+			if (count === 1) expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) expect(data).toBe(MessageHeaders.NAK);
+
+			if (count === 3) done();
+		});
+	});
 	it("emits a buffer when a message is received", async () => {
 		const data = Buffer.from([
 			MessageHeaders.SOF,
