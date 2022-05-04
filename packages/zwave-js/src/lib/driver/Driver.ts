@@ -99,7 +99,10 @@ import {
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
 import { ZWaveController } from "../controller/Controller";
-import { InclusionState } from "../controller/Inclusion";
+import {
+	InclusionState,
+	ProvisioningEntryStatus,
+} from "../controller/Inclusion";
 import { TransmitOptions, TXReport } from "../controller/_Types";
 import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
@@ -3166,6 +3169,14 @@ ${handlers.length} left`,
 				if (!provisioningEntry) {
 					this.controllerLog.print(
 						"NWI Home ID not found in provisioning list, ignoring request...",
+					);
+					return;
+				} else if (
+					provisioningEntry.status ===
+					ProvisioningEntryStatus.Inactive
+				) {
+					this.controllerLog.print(
+						"The provisioning entry for this node is inactive, ignoring request...",
 					);
 					return;
 				}
