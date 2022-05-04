@@ -20,5 +20,8 @@
 			"isLifeline": true,
 			"multiChannel": true
 		}
+	},
+	"compat": {
+		"preserveEndpoints": "*"
 	}
 }
