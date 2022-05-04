@@ -95,7 +95,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 		await this.set(value);
 
 		// Verify the current value after a delay
-		this.schedulePoll({ property });
+		this.schedulePoll({ property }, value);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

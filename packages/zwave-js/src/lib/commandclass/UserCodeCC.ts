@@ -400,7 +400,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 
 		// Verify the current value after a (short) delay
-		this.schedulePoll({ property, propertyKey }, { transition: "fast" });
+		this.schedulePoll({ property, propertyKey }, value, {
+			transition: "fast",
+		});
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

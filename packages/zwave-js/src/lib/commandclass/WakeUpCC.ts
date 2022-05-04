@@ -86,7 +86,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a (short) delay
-			this.schedulePoll({ property }, { transition: "fast" });
+			this.schedulePoll({ property }, value, { transition: "fast" });
 		}
 	};
 

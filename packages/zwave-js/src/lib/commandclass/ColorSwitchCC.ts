@@ -351,10 +351,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 				if (this.isSinglecast()) {
 					// Verify the current value after a (short) delay
-					this.schedulePoll(
-						{ property, propertyKey },
-						{ duration, transition: "fast" },
-					);
+					this.schedulePoll({ property, propertyKey }, value, {
+						duration,
+						transition: "fast",
+					});
 				}
 			} else {
 				// Set the compound color object

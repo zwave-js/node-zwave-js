@@ -105,7 +105,7 @@ export class BasicCCAPI extends CCAPI {
 			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
 			// that unsolicited updates cancel the scheduled poll
 			if (property === "targetValue") property = "currentValue";
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		} else if (this.isMulticast()) {
 			// Only update currentValue for valid target values
 			if (
@@ -133,7 +133,7 @@ export class BasicCCAPI extends CCAPI {
 
 				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property });
+				this.schedulePoll({ property }, undefined);
 			}
 		}
 	};

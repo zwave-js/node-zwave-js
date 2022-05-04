@@ -128,7 +128,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a delay
-			this.schedulePoll({ property, propertyKey });
+			this.schedulePoll({ property, propertyKey }, value);
 		}
 	};
 
