@@ -540,46 +540,52 @@ export class MeterCCReport extends MeterCC {
 			scale,
 		);
 
-		// Filter out unknown meter types and scales
-		validatePayload.withReason(
-			`Unknown meter type ${num2hex(this.type)} or corrupted data`,
-		)(!!meterType);
-		validatePayload.withReason(
-			`Unknown meter scale ${num2hex(scale)} or corrupted data`,
-		)(this.scale.label !== getDefaultMeterScale(scale).label);
+		// Filter out unknown meter types and scales, unless the strict validation is disabled
+		const measurementValidation =
+			!this.getNodeUnsafe()?.deviceConfig?.compat
+				?.disableStrictMeasurementValidation;
 
-		// Filter out unsupported meter types, scales and rate types if possible
-		if (this.version >= 2) {
-			const valueDB = this.getValueDB();
+		if (measurementValidation) {
+			validatePayload.withReason(
+				`Unknown meter type ${num2hex(this.type)} or corrupted data`,
+			)(!!meterType);
+			validatePayload.withReason(
+				`Unknown meter scale ${num2hex(scale)} or corrupted data`,
+			)(this.scale.label !== getDefaultMeterScale(scale).label);
 
-			const expectedType = valueDB.getValue<number>(
-				getTypeValueId(this.endpointIndex),
-			);
-			if (expectedType != undefined) {
-				validatePayload.withReason(
-					"Unexpected meter type or corrupted data",
-				)(this._type === expectedType);
-			}
+			// Filter out unsupported meter types, scales and rate types if possible
+			if (this.version >= 2) {
+				const valueDB = this.getValueDB();
 
-			const supportedScales = valueDB.getValue<number[]>(
-				getSupportedScalesValueId(this.endpointIndex),
-			);
-			if (supportedScales?.length) {
-				validatePayload.withReason(
-					`Unsupported meter scale ${this._scale.label} or corrupted data`,
-				)(supportedScales.includes(this._scale.key));
-			}
+				const expectedType = valueDB.getValue<number>(
+					getTypeValueId(this.endpointIndex),
+				);
+				if (expectedType != undefined) {
+					validatePayload.withReason(
+						"Unexpected meter type or corrupted data",
+					)(this._type === expectedType);
+				}
 
-			const supportedRateTypes = valueDB.getValue<RateType[]>(
-				getSupportedRateTypesValueId(this.endpointIndex),
-			);
-			if (supportedRateTypes?.length) {
-				validatePayload.withReason(
-					`Unsupported rate type ${getEnumMemberName(
-						RateType,
-						this._rateType,
-					)} or corrupted data`,
-				)(supportedRateTypes.includes(this._rateType));
+				const supportedScales = valueDB.getValue<number[]>(
+					getSupportedScalesValueId(this.endpointIndex),
+				);
+				if (supportedScales?.length) {
+					validatePayload.withReason(
+						`Unsupported meter scale ${this._scale.label} or corrupted data`,
+					)(supportedScales.includes(this._scale.key));
+				}
+
+				const supportedRateTypes = valueDB.getValue<RateType[]>(
+					getSupportedRateTypesValueId(this.endpointIndex),
+				);
+				if (supportedRateTypes?.length) {
+					validatePayload.withReason(
+						`Unsupported rate type ${getEnumMemberName(
+							RateType,
+							this._rateType,
+						)} or corrupted data`,
+					)(supportedRateTypes.includes(this._rateType));
+				}
 			}
 		}
 
