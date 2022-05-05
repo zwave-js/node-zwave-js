@@ -126,7 +126,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 
 		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey });
+		this.schedulePoll({ property, propertyKey }, value);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

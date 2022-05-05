@@ -56,6 +56,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import { isDeepStrictEqual } from "util";
 import type {
 	CCAPI,
 	PollValueImplementation,
@@ -205,6 +206,21 @@ import type {
 } from "./_Types";
 import { InterviewStage, NodeStatus } from "./_Types";
 
+interface ScheduledPoll {
+	timeout: NodeJS.Timeout;
+	expectedValue?: unknown;
+}
+
+export interface NodeSchedulePollOptions {
+	/** The timeout after which the poll is to be scheduled */
+	timeoutMs?: number;
+	/**
+	 * The expected value that's should be verified with this poll.
+	 * When this value is received in the meantime, the poll will be cancelled.
+	 */
+	expectedValue?: unknown;
+}
+
 export interface ZWaveNode
 	extends TypedEventEmitter<
 			ZWaveNodeEventCallbacks &
@@ -249,10 +265,15 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 					// Value updates caused by the driver should never cancel a scheduled poll
 					if ("source" in args && args.source === "driver") return;
 
-					if (this.cancelScheduledPoll(args)) {
+					if (
+						this.cancelScheduledPoll(
+							args,
+							(args as ValueUpdatedArgs).newValue,
+						)
+					) {
 						this.driver.controllerLog.logNode(
 							this.nodeId,
-							"Scheduled poll canceled because value was updated",
+							"Scheduled poll canceled because expected value was received",
 							"verbose",
 						);
 					}
@@ -1033,7 +1054,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 * @internal
 	 * All polls that are currently scheduled for this node
 	 */
-	public scheduledPolls = new ObjectKeyMap<ValueID, NodeJS.Timeout>();
+	public scheduledPolls = new ObjectKeyMap<ValueID, ScheduledPoll>();
 
 	/**
 	 * @internal
@@ -1042,8 +1063,13 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 	 */
 	public schedulePoll(
 		valueId: ValueID,
-		timeoutMs: number = this.driver.options.timeouts.refreshValue,
+		options: NodeSchedulePollOptions = {},
 	): boolean {
+		const {
+			timeoutMs = this.driver.options.timeouts.refreshValue,
+			expectedValue,
+		} = options;
+
 		// Avoid false positives or false negatives due to a mis-formatted value ID
 		valueId = normalizeValueID(valueId);
 
@@ -1067,34 +1093,49 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 		// make sure there is only one timeout instance per poll
 		this.cancelScheduledPoll(valueId);
-		this.scheduledPolls.set(
-			valueId,
-			setTimeout(async () => {
-				this.cancelScheduledPoll(valueId);
-				try {
-					await api.pollValue!(valueId);
-				} catch {
-					/* ignore */
-				}
-			}, timeoutMs).unref(),
-		);
+		const timeout = setTimeout(async () => {
+			// clean up after the timeout
+			this.cancelScheduledPoll(valueId);
+			try {
+				await api.pollValue!(valueId);
+			} catch {
+				/* ignore */
+			}
+		}, timeoutMs).unref();
+		this.scheduledPolls.set(valueId, { timeout, expectedValue });
+
 		return true;
 	}
 
 	/**
 	 * @internal
-	 * Cancels a poll that has been scheduled with schedulePoll
+	 * Cancels a poll that has been scheduled with schedulePoll.
+	 *
+	 * @param actualValue If given, this indicates the value that was received by a node, which triggered the poll to be canceled.
+	 * If the scheduled poll expects a certain value and this matches the expected value for the scheduled poll, the poll will be canceled.
 	 */
-	public cancelScheduledPoll(valueId: ValueID): boolean {
+	public cancelScheduledPoll(
+		valueId: ValueID,
+		actualValue?: unknown,
+	): boolean {
 		// Avoid false positives or false negatives due to a mis-formatted value ID
 		valueId = normalizeValueID(valueId);
 
-		if (this.scheduledPolls.has(valueId)) {
-			clearTimeout(this.scheduledPolls.get(valueId)!);
-			this.scheduledPolls.delete(valueId);
-			return true;
+		const poll = this.scheduledPolls.get(valueId);
+		if (!poll) return false;
+
+		if (
+			actualValue != undefined &&
+			poll.expectedValue != undefined &&
+			!isDeepStrictEqual(poll.expectedValue, actualValue)
+		) {
+			return false;
 		}
-		return false;
+
+		clearTimeout(poll.timeout);
+		this.scheduledPolls.delete(valueId);
+
+		return true;
 	}
 
 	public get endpointCountIsDynamic(): boolean | undefined {

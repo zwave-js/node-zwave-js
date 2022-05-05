@@ -220,7 +220,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 			// Verify the change after a delay
 			if (this.isSinglecast()) {
-				this.schedulePoll({ property });
+				this.schedulePoll({ property }, targetValue);
 			}
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {

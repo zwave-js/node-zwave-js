@@ -70,7 +70,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		await this.set(value);
 
 		if (this.isSinglecast()) {
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		}
 	};
 

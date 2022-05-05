@@ -180,7 +180,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			await this.set(value);
 
 			// Verify the current value after a delay
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		} else if (
 			typeof property === "string" &&
 			configurationSetParameters.includes(property as any)

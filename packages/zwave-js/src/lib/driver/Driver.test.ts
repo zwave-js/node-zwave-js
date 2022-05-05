@@ -796,7 +796,7 @@ describe("lib/driver/Driver => ", () => {
 				commandClass: CommandClasses.Basic,
 				property: "currentValue",
 			};
-			node2.schedulePoll(valueId, 1000);
+			node2.schedulePoll(valueId, { timeoutMs: 1000 });
 			expect(driver["hasPendingMessages"](node2)).toBeTrue();
 			node2.cancelScheduledPoll(valueId);
 			expect(driver["hasPendingMessages"](node2)).toBeFalse();
