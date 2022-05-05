@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.2.1 (2022-05-05)
 ### Bugfixes
 * The scheduled verification poll for value changes now only gets canceled for unsolicited reports when the expected value is received (#4569)
 * Export missing controller-related types/enums from `"zwave-js/safe"` entrypoint (#4577)
