@@ -2924,13 +2924,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Returns `true` if the process succeeded, `false` otherwise.
 	 */
 	public async healNode(nodeId: number): Promise<boolean> {
-		// Don't try to heal dead nodes
 		const node = this.nodes.getOrThrow(nodeId);
 
 		// Don't start the process twice
-		if (this._healNetworkActive) return false;
+		if (this._healNetworkActive) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Skipping individual node heal because another heal is in progress.`,
+			);
+			return false;
+		}
 		this._healNetworkActive = true;
 
+		// Don't try to heal actually dead nodes
 		if (
 			// The node is known to be dead
 			node.status === NodeStatus.Dead ||
@@ -2939,15 +2945,17 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			(node.status === NodeStatus.Asleep &&
 				node.interviewStage === InterviewStage.ProtocolInfo)
 		) {
-			this.driver.controllerLog.logNode(
-				nodeId,
-				`Skipping heal because the node is not responding.`,
-			);
-			return false;
+			// To avoid skipping the heal when the node has a flaky connection, ping first though
+			if (!(await node.ping())) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`Skipping heal because the node is not responding.`,
+				);
+				return false;
+			}
 		}
 
 		try {
-			this.driver.controllerLog.logNode(nodeId, `Healing node...`);
 			return await this.healNodeInternal(nodeId);
 		} finally {
 			this._healNetworkActive = false;
@@ -2964,7 +2972,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			node.keepAwake = true;
 
 			this.driver.controllerLog.logNode(nodeId, {
-				message: `healing node...`,
+				message: `Healing node...`,
 				direction: "none",
 			});
 
