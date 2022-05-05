@@ -4,6 +4,21 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* When reading a SmartStart QR code, the requested security classes are now remembered. Add support for inactive provisioning entries (#4565)
+* Log discarded bytes when reading invalid/unexpected data from the serial port (#4059)
+
+### Bugfixes
+* When attempting to heal single nodes during an ongoing heal, the logs now mention this as the reason why the heal is skipped (#4567)
+* When attempting to heal a single dead node, the node gets pinged first to check if it is really dead (#4567)
+* During `driver.destroy()`, all event handlers for the controller and nodes now get removed and the `driver.controller` and `driver.controller.nodes` properties get reset/cleared (#4570)
+
+### Config file changes
+* Add compat flag to disable strict meter/sensor/scale validation (#4568)
+* Force multi channel lifeline association and preserve endpoints for PS9EP (#4563)
+* Correct blade/curtain trip time unit for Aeotec Nano Shutter ZW141 (#4562)
+
 ## 9.1.0 (2022-05-03)
 ### Features
 * All CC APIs using durations now allow duration strings (like `1m12s`) as an alternative to `Duration` class instances (#4558)
