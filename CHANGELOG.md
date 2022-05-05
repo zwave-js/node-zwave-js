@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.2.0 (2022-05-05)
 ### Features
 * When reading a SmartStart QR code, the requested security classes are now remembered. Add support for inactive provisioning entries (#4565)
 * Log discarded bytes when reading invalid/unexpected data from the serial port (#4059)
