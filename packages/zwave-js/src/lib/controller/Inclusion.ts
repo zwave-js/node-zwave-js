@@ -1,4 +1,4 @@
-import type { SecurityClass } from "@zwave-js/core";
+import type { SecurityClass } from "@zwave-js/core/safe";
 
 /** Additional information about the outcome of a node inclusion */
 export interface InclusionResult {
