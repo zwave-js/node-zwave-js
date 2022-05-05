@@ -4,6 +4,15 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The scheduled verification poll for value changes now only gets canceled for unsolicited reports when the expected value is received (#4569)
+* Export missing controller-related types/enums from `"zwave-js/safe"` entrypoint (#4577)
+* Correctly convert `SmartStartProvisioningEntry` from/to cache (#4580)
+
+### Config file changes
+* Add Leviton VRPD3 parameters (#4572)
+
 ## 9.2.0 (2022-05-05)
 ### Features
 * When reading a SmartStart QR code, the requested security classes are now remembered. Add support for inactive provisioning entries (#4565)
