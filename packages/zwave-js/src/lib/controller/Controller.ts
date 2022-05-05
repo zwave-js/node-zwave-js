@@ -249,12 +249,7 @@ import {
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
-import type { RSSI } from "./_Types";
-
-export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
-export type SDKVersion =
-	| `${number}.${number}`
-	| `${number}.${number}.${number}`;
+import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
 
 export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
 export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {

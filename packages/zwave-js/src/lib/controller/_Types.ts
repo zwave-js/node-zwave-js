@@ -90,3 +90,8 @@ export interface TXReport {
 	/** Noise floor measured by the destination during the ACK transmission */
 	destinationAckMeasuredNoiseFloor?: RSSI;
 }
+
+export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
+export type SDKVersion =
+	| `${number}.${number}`
+	| `${number}.${number}.${number}`;
