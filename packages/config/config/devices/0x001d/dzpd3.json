@@ -28,7 +28,7 @@
 		{
 			"#": "1",
 			"label": "Fade On Time",
-			"description": "Time it takes to fade on; units are seconds when value is 1-127, and minutes (subtracting 127) when value is 128-253.",
+			"description": "1...127 = seconds, 128...253 = minutes (minus 127)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -43,8 +43,8 @@
 		},
 		{
 			"#": "2",
-			"label": "Fade off time",
-			"description": "Time it takes to fade off; units are seconds when value is 1-127, and minutes (subtracting 127) when value is 128-253.",
+			"label": "Fade Off Time",
+			"description": "1...127 = seconds, 128...253 = minutes (minus 127)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -100,7 +100,6 @@
 		{
 			"#": "8",
 			"label": "Load Type",
-			"description": "Type of lamp",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
