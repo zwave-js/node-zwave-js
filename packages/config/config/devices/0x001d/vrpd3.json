@@ -23,7 +23,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -81,23 +81,22 @@
 		},
 		{
 			"#": "7",
-			"label": "Locator LED Status",
-			"description": "Controls state of on-device LED",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED always off",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "LED on when switch is on",
+					"label": "LED on when switch on",
 					"value": 254
 				},
 				{
-					"label": "LED on when switch is off",
+					"label": "LED on when switch off",
 					"value": 255
 				}
 			]
