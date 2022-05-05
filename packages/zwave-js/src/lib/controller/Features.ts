@@ -1,4 +1,4 @@
-import type { SDKVersion } from "./Controller";
+import type { SDKVersion } from "./_Types";
 
 /** A named list of Z-Wave features */
 export enum ZWaveFeature {
