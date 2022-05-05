@@ -248,6 +248,7 @@ import {
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
+import { assertProvisioningEntry } from "./utils";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
 
@@ -562,6 +563,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public provisionSmartStartNode(entry: PlannedProvisioningEntry): void {
 		// Make sure the controller supports SmartStart
 		this.assertFeature(ZWaveFeature.SmartStart);
+
+		// And that the entry contains valid data
+		assertProvisioningEntry(entry);
 
 		const provisioningList = [...this.provisioningList];
 
