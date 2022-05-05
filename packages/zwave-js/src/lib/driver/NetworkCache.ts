@@ -12,7 +12,10 @@ import {
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
-import type { SmartStartProvisioningEntry } from "../controller/Inclusion";
+import {
+	ProvisioningEntryStatus,
+	SmartStartProvisioningEntry,
+} from "../controller/Inclusion";
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/_Types";
 import type { Driver } from "./Driver";
@@ -143,6 +146,26 @@ function tryParseNodeType(value: unknown): NodeType | undefined {
 	}
 }
 
+function isSerializedSecurityClass(
+	s: unknown,
+): s is keyof typeof SecurityClass {
+	return (
+		typeof s === "string" &&
+		s in SecurityClass &&
+		typeof SecurityClass[s as any] === "number"
+	);
+}
+
+function isSerializedProvisioningEntryStatus(
+	s: unknown,
+): s is keyof typeof ProvisioningEntryStatus {
+	return (
+		typeof s === "string" &&
+		s in ProvisioningEntryStatus &&
+		typeof ProvisioningEntryStatus[s as any] === "number"
+	);
+}
+
 export function deserializeNetworkCacheValue(
 	driver: Driver,
 	key: string,
@@ -241,12 +264,16 @@ export function deserializeNetworkCacheValue(
 					typeof entry.dsk === "string" &&
 					isArray(entry.securityClasses) &&
 					// securityClasses are stored as strings, not the enum values
-					entry.securityClasses.every(
-						(s) =>
-							typeof s === "string" &&
-							s in SecurityClass &&
-							typeof SecurityClass[s as any] === "number",
-					)
+					entry.securityClasses.every((s) =>
+						isSerializedSecurityClass(s),
+					) &&
+					(entry.requestedSecurityClasses == undefined ||
+						(isArray(entry.requestedSecurityClasses) &&
+							entry.requestedSecurityClasses.every((s) =>
+								isSerializedSecurityClass(s),
+							))) &&
+					(entry.status == undefined ||
+						isSerializedProvisioningEntryStatus(entry.status))
 				) {
 					// This is at least a PlannedProvisioningEntry, maybe it is an IncludedProvisioningEntry
 					if ("nodeId" in entry && typeof entry.nodeId !== "number") {
@@ -257,6 +284,16 @@ export function deserializeNetworkCacheValue(
 					parsed.securityClasses = entry.securityClasses.map(
 						(s) => SecurityClass[s as any] as any as SecurityClass,
 					);
+					if (entry.requestedSecurityClasses) {
+						parsed.requestedSecurityClasses = (
+							entry.requestedSecurityClasses as any[]
+						).map((s) => SecurityClass[s] as any as SecurityClass);
+					}
+					if (entry.status != undefined) {
+						parsed.status = ProvisioningEntryStatus[
+							entry.status as any
+						] as any as ProvisioningEntryStatus;
+					}
 					ret.push(parsed);
 				} else {
 					throw fail();
@@ -314,6 +351,18 @@ export function serializeNetworkCacheValue(
 				serialized.securityClasses = entry.securityClasses.map((c) =>
 					getEnumMemberName(SecurityClass, c),
 				);
+				if (entry.requestedSecurityClasses) {
+					serialized.requestedSecurityClasses =
+						entry.requestedSecurityClasses.map((c) =>
+							getEnumMemberName(SecurityClass, c),
+						);
+				}
+				if (entry.status != undefined) {
+					serialized.status = getEnumMemberName(
+						ProvisioningEntryStatus,
+						entry.status,
+					);
+				}
 				ret.push(serialized);
 			}
 			return ret;
