@@ -17,20 +17,9 @@
 	"paramInformation": [
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Overload Protection",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "21",

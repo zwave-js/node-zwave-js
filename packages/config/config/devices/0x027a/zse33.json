@@ -25,31 +25,61 @@
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Siren Alarm Duration",
-			"description": "5 modes to set the duration for siren alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "30 Seconds",
+					"value": 1
+				},
+				{
+					"label": "60 Seconds",
+					"value": 2
+				},
+				{
+					"label": "5 Minutes",
+					"value": 3
+				},
+				{
+					"label": "Until battery drains",
+					"value": 255
+				}
+			]
 		},
 		{
 			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Chime Sound Duration",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 2,
-			"unsigned": true
+			"unit": "cycles"
 		},
 		{
 			"#": "4",
 			"label": "Chime Volume",
-			"description": "3 volume levels for the doorbell sound. Set volume to low, medium, or high.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 3
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "5",
@@ -71,26 +101,33 @@
 		},
 		{
 			"#": "7",
-			"label": "Siren Alarm or Chime Mode",
+			"label": "Operating Mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Siren Alarm",
+					"value": 1
+				},
+				{
+					"label": "Chime",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED Notifications for Siren Alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1
 		},
 		{
 			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "LED Notifications for Chime",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1
 		}
 	]

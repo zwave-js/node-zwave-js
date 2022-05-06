@@ -137,6 +137,13 @@
 		"maxValue": 127,
 		"unsigned": true
 	},
+	"base_0-3600": {
+		"valueSize": 4,
+		"minValue": 0,
+		"maxValue": 3600,
+		"defaultValue": 0,
+		"unsigned": true
+	},
 	"base_0-65535": {
 		"valueSize": 4,
 		"minValue": 0,

@@ -28,31 +28,18 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"$if": "firmwareVersion >= 2.0",
 			"label": "Basic Set Value",
 			"description": "Set the value of Basic Set commands sent to the devices associated in Group 2",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
 			"defaultValue": 99
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 2.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Enable / Disable Motion Reports",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "3",

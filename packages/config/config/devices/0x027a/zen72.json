@@ -72,7 +72,7 @@
 		},
 		{
 			"#": "12",
-			"$import": "templates/zooz_template.json#double_tap_up_behavior"
+			"$import": "templates/zooz_template.json#zen7x_double_tap_up_behavior"
 		},
 		{
 			"#": "25",
@@ -88,45 +88,11 @@
 		},
 		{
 			"#": "19",
-			"label": "3-Way Switch Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Toggle switch",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch (with dimming control)",
-					"value": 1
-				},
-				{
-					"label": "Momentary switch (with dimming control)",
-					"value": 2
-				},
-				{
-					"label": "Momentary switch (with dimming control, but reduce after double click)",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#3way_switch_type_dimmer"
 		},
 		{
 			"#": "20",
-			"label": "Smart Switch Mode: Dim Reporting Behavior",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Physical disabled: Report every brightness level; Physical enabled: Report final brightness level only",
-					"value": 0
-				},
-				{
-					"label": "Report final brightness level only",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
 		},
 		{
 			"#": "21",

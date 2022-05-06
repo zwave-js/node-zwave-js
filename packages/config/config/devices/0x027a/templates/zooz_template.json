@@ -53,6 +53,22 @@
 		],
 		"label": "Auto Timer Time Unit"
 	},
+	"auto_timer_duration_base": {
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 60,
+		"unsigned": true
+	},
+	"auto_off_timer_duration": {
+		"label": "Auto Turn-Off Timer Duration",
+		"$import": "#auto_timer_duration_base"
+	},
+	"auto_on_timer_duration": {
+		"label": "Auto Turn-On Timer Duration",
+		"$import": "#auto_timer_duration_base"
+	},
 	"enable_scene_control": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Enable/Disable Scene Control",
@@ -131,6 +147,24 @@
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
 		"valueSize": 1,
 		"minValue": 0,
+		"maxValue": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Send basic set report for each brightness level to hub when physical / Z-Wave control is disabled for physical dimming when paddles are manually pressed / held; report final brightness level only (basic set report) for physical dimming when paddles are manually pressed / held and physical / Z-Wave control is enabled; always report final brightness level only (via multilevel reports) for Z-Wave control regardless of the physical / Z-Wave control mode.",
+				"value": 0
+			},
+			{
+				"label": "Report final brightness level only for physical dimming, regardless of the physical / Z-Wave control mode.",
+				"value": 1
+			}
+		]
+	},
+	"smart_switch_mode_dimming_reporting_3_options": {
+		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
+		"valueSize": 1,
+		"minValue": 0,
 		"maxValue": 2,
 		"defaultValue": 2,
 		"allowManualEntry": false,
@@ -190,6 +224,29 @@
 		"unit": "%",
 		"defaultValue": 99
 	},
+	"double_tap_enable": {
+		"label": "Enable Double-Tap behavior",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Double-Tap Enabled",
+				"value": 0
+			},
+			{
+				"label": "Double-Tap Disabled, Single-Tap to Last Brightness",
+				"value": 1
+			},
+			{
+				"label": "Double-Tap Disabled, Single-Tap to Full Brightness",
+				"value": 2
+			}
+		]
+	},
 	"single_tap_up_behavior": {
 		"label": "Single-Tap Upper Paddle Behavior",
 		"valueSize": 1,
@@ -217,7 +274,24 @@
 			}
 		]
 	},
-	"double_tap_up_behavior": {
+	"zen2x_double_tap_up_behavior": {
+		"label": "Double-Tap Upper Paddle Behavior",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Full brightness",
+				"value": 0
+			},
+			{
+				"label": "Configured maximum brightness (parameter 11)",
+				"value": 1
+			}
+		]
+	},
+	"zen7x_double_tap_up_behavior": {
 		"label": "Double-Tap Upper Paddle Behavior",
 		"valueSize": 1,
 		"minValue": 0,
@@ -385,6 +459,158 @@
 			},
 			{
 				"label": "Momentary switch",
+				"value": 1
+			}
+		]
+	},
+	"3way_switch_type_dimmer": {
+		"label": "3-Way Switch Type",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Toggle switch",
+				"value": 0
+			},
+			{
+				"label": "Toggle switch (with dimming control)",
+				"value": 1
+			},
+			{
+				"label": "Momentary switch (with dimming control)",
+				"value": 2
+			},
+			{
+				"label": "Momentary switch (with dimming control, but reduce after double click)",
+				"value": 3
+			}
+		]
+	},
+	"basic_set_value": {
+		"label": "Motion Detection: Basic Set Value",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "0xff for Motion; 0x00 for Clear",
+				"value": 0
+			},
+			{
+				"label": "0x00 for Motion; 0xff for Clear",
+				"value": 1
+			}
+		]
+	},
+	"motion_sensitivity_1_8": {
+		"label": "Motion Sensor Sensitivity",
+		"description": "1 = Low sensitivity, 8 = High sensitivity",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 8,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"binary_sensor_report": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Motion Detection: Send Binary Sensor Reports",
+		"description": "If disabled, notification reports will be sent instead",
+		"defaultValue": 1
+	},
+	"trigger_action": {
+		"label": "Trigger Action",
+		"description": "Send command to associated device.",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"unsigned": true
+	},
+	"battery_report_threshold": {
+		"label": "Battery Report Threshold",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 1,
+		"maxValue": 50,
+		"defaultValue": 10,
+		"unsigned": true
+	},
+	"low_battery_alarm_threshold": {
+		"label": "Low Battery Alarm Threshold",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 10,
+		"maxValue": 50,
+		"defaultValue": 20,
+		"unsigned": true
+	},
+	"basic_set_value_disable_on_off": {
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Basic Set on (0xff)",
+				"value": 1
+			},
+			{
+				"label": "Basic Set off (0x00)",
+				"value": 2
+			}
+		]
+	},
+	"zen31_switch_type": {
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Analog sensor with no pullup",
+				"value": 0
+			},
+			{
+				"label": "Analog sensor with pull-up",
+				"value": 1
+			},
+			{
+				"label": "Momentary switch",
+				"value": 2
+			},
+			{
+				"label": "Toggle switch (on when switch is on)",
+				"value": 3
+			},
+			{
+				"label": "Toggle switch (toggles with switch toggle)",
+				"value": 4
+			}
+		]
+	},
+	"zwave_ramp_rate": {
+		"label": "Z-Wave Ramp Rate",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Rate matches configured physical rate (Parameter 9)",
+				"value": 0
+			},
+			{
+				"label": "Rate set independently",
 				"value": 1
 			}
 		]

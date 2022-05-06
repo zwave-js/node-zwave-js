@@ -16,44 +16,29 @@
 	"paramInformation": [
 		{
 			"#": "12",
-			"label": "PIR sensor sensitivity",
-			"description": "1 = low sensitivity and 8 = high sensitivity.",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
+			"$import": "templates/zooz_template.json#motion_sensitivity_1_8",
 			"defaultValue": 4
 		},
 		{
 			"#": "14",
-			"label": "BASIC SET reports",
-			"description": "0 - disabled, 1 - enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Motion Detection: Send Basic Set",
+			"defaultValue": 1
 		},
 		{
 			"#": "15",
-			"label": "reverse BASIC SET",
-			"description": "0: 255 motion, 0 timeout. 1: 0 motion, 255 timeout",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "templates/zooz_template.json#basic_set_value"
 		},
 		{
 			"#": "17",
-			"label": "vibration sensor",
-			"description": "0=disabled, 1=enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Vibration sensor",
 			"defaultValue": 1
 		},
 		{
 			"#": "18",
-			"label": "trigger interval",
-			"description": "3=6 seconds, 65535=65538 seconds (add 3 seconds to value set)",
+			"label": "Motion Detection: Timeout",
+			"description": "3 seconds is added to the value you set (eg. default value of 27 equals 30 seconds)",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 3,
@@ -62,21 +47,18 @@
 			"unsigned": true
 		},
 		{
+			"#": "19",
+			"$import": "templates/zooz_template.json#binary_sensor_report"
+		},
+		{
 			"#": "20",
-			"label": "LED Indicator",
-			"description": "0=disabled, 1=enabled (default)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Flash LED on Motion",
 			"defaultValue": 1
 		},
 		{
 			"#": "32",
-			"label": "Low Battery Alert",
-			"description": "percent battery left",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
+			"$import": "templates/zooz_template.json#low_battery_alarm_threshold",
 			"defaultValue": 10
 		}
 	],

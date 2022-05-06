@@ -17,131 +17,35 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion <= 2.255 || firmwareVersion >= 20.14",
-			"label": "Orientation",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Reverse top/bottom",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.0 && firmwareVersion <= 20.14",
-			"label": "Orientation",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Reverse top/bottom",
-					"value": 1
-				},
-				{
-					"label": "Any paddle turns on/off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 2.255 || firmwareVersion >= 20.15",
-			"label": "LED Indicator Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch off, LED off when switch on",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch on, LED off when switch off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				},
-				{
-					"label": "LED always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.0 || firmwareVersion === 20.14",
-			"label": "LED Indicator Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch off, LED off when switch on",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch on, LED off when switch off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				},
-				{
-					"label": "LED always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 20.15",
-			"label": "LED Indicator Control",
-			"description": "Choose LED Functionality",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch off, LED off when switch on",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch on, LED off when switch off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options",
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
 			"$if": "firmwareVersion >= 20.15",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Enable / Disable LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED indicator is enabled",
-					"value": 0
-				},
-				{
-					"label": "LED indicator is disabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "4",
@@ -165,118 +69,50 @@
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Auto Turn-off Timer",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_off_timer_duration"
 		},
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Enable/Disable Auto Turn-On",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Auto Turn-On"
 		},
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Auto Turn-on Timer",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_on_timer_duration"
 		},
 		{
 			"#": "7[0x01]",
 			"$if": "firmwareVersion >= 3.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x02]",
 			"$if": "firmwareVersion >= 3.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x04]",
 			"$if": "firmwareVersion >= 3.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x08]",
 			"$if": "firmwareVersion >= 3.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -286,221 +122,73 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Dimmer Ramp Rate",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
 		},
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Minimum brightness level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/zooz_template.json#min_brightness"
 		},
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Maximum brightness level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99
+			"$import": "templates/zooz_template.json#max_brightness"
 		},
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Double Tap: Brightness Level",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness (default)",
-					"value": 0
-				},
-				{
-					"label": "Brightness set in parameter 11",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#zen2x_double_tap_up_behavior"
 		},
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Enable/Disable Scene Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Enable/Disable Double Tap",
-			"description": "Allows control of the double tap function and assigning the brightness level to single tap.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Double tap to full brightness",
-					"value": 0
-				},
-				{
-					"label": "Single tap to last brightness level",
-					"value": 1
-				},
-				{
-					"label": "Single tap to full brightness",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#double_tap_enable"
 		},
 		{
 			"#": "15",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Smart Bulb Mode: Enable/Disable Local Control",
-			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Physical paddle control disabled",
-					"value": 0
-				},
-				{
-					"label": "Physical paddle control enabled",
-					"value": 1
-				},
-				{
-					"label": "Physical paddle & Z-Wave control disabled",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		{
 			"#": "16",
 			"$if": "firmwareVersion >= 3.3",
-			"label": "Physical Dimming Speed",
-			"description": "Time to reach 100% brightness",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
+			"$import": "templates/zooz_template.json#local_dimming_speed",
 			"defaultValue": 4
 		},
 		{
 			"#": "17",
 			"$if": "firmwareVersion >= 3.4",
-			"label": "Z-Wave Ramp Rate",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Z-Wave ramp rate matches parameter 9",
-					"value": 0
-				},
-				{
-					"label": "Z-Wave ramp rate set independently",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#zwave_ramp_rate"
 		},
 		{
 			"#": "18",
 			"$if": "firmwareVersion >= 3.5",
-			"label": "Single Tap: Custom Brightness Level",
-			"description": "Custom brightness level to set with single tap; 0 = last brightness level; 1-99% for custom level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0
+			"$import": "templates/zooz_template.json#custom_brightness"
 		},
 		{
 			"#": "19",
 			"$if": "firmwareVersion >= 3.5",
-			"label": "3-Way Switch Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Mechanical (off/on only)",
-					"value": 0
-				},
-				{
-					"label": "Mechanical (with dimming control)",
-					"value": 1
-				},
-				{
-					"label": "Momentary (with dimming control)",
-					"value": 2
-				},
-				{
-					"label": "Momentary (with dimming control, but reduce after double click)",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#3way_switch_type_dimmer"
 		},
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 3.5",
-			"label": "Send Reports When Tapped or Held",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send each brightness level (Z-Wave disabled); Final level (Z-Wave enabled)",
-					"value": 0
-				},
-				{
-					"label": "Send final brightness level regardless of physical/Z-Wave mode",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
 		},
 		{
 			"#": "21",
 			"$if": "firmwareVersion >= 3.7",
-			"label": "Reporting Behavior When Physical Control Is Disabled",
-			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		},
 		{
 			"#": "22",
 			"$if": "firmwareVersion >= 3.7",
-			"label": "Night Light Mode",
-			"description": "Brightness level when bottom paddle held down for one second",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
+			"$import": "templates/zooz_template.json#night_light_mode",
 			"defaultValue": 0
 		}
 	]

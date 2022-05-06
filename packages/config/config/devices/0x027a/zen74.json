@@ -48,7 +48,8 @@
 		},
 		{
 			"#": "9",
-			"$import": "templates/zooz_template.json#dimmer_ramp_rate"
+			"$import": "templates/zooz_template.json#dimmer_ramp_rate",
+			"defaultValue": 0
 		},
 		{
 			"#": "10",
@@ -64,7 +65,7 @@
 		},
 		{
 			"#": "12",
-			"$import": "templates/zooz_template.json#double_tap_up_behavior"
+			"$import": "templates/zooz_template.json#zen7x_double_tap_up_behavior"
 		},
 		{
 			"#": "18",
@@ -84,7 +85,7 @@
 		},
 		{
 			"#": "20",
-			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting_3_options"
 		},
 		{
 			"#": "21",

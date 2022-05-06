@@ -96,7 +96,7 @@
 		},
 		{
 			"#": "12",
-			"$import": "templates/zooz_template.json#double_tap_up_behavior"
+			"$import": "templates/zooz_template.json#zen7x_double_tap_up_behavior"
 		},
 		{
 			"#": "25",
@@ -112,7 +112,7 @@
 		},
 		{
 			"#": "20",
-			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting"
+			"$import": "templates/zooz_template.json#smart_switch_mode_dimming_reporting_3_options"
 		},
 		{
 			"#": "21",

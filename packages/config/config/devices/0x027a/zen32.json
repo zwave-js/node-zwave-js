@@ -68,393 +68,93 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indicator (Relay)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when relay is off",
-					"value": 0
-				},
-				{
-					"label": "On when relay is on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				},
-				{
-					"label": "Always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator (Relay)"
 		},
 		{
 			"#": "2",
-			"label": "LED Indicator (Button 1)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when dimmer is off",
-					"value": 0
-				},
-				{
-					"label": "On when dimmer is on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				},
-				{
-					"label": "Always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator (Button 1)"
 		},
 		{
 			"#": "3",
-			"label": "LED Indicator (Button 2)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when dimmer is off",
-					"value": 0
-				},
-				{
-					"label": "On when dimmer is on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				},
-				{
-					"label": "Always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator (Button 2)"
 		},
 		{
 			"#": "4",
-			"label": "LED Indicator (Button 3)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when dimmer is off",
-					"value": 0
-				},
-				{
-					"label": "On when dimmer is on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				},
-				{
-					"label": "Always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator (Button 3)"
 		},
 		{
 			"#": "5",
-			"label": "LED Indicator (Button 4)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when dimmer is off",
-					"value": 0
-				},
-				{
-					"label": "On when dimmer is on",
-					"value": 1
-				},
-				{
-					"label": "Always off",
-					"value": 2
-				},
-				{
-					"label": "Always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"label": "LED Indicator (Button 4)"
 		},
 		{
 			"#": "6",
+			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Relay)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "7",
+			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 1)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "8",
+			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 2)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "9",
+			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 3)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "10",
+			"$import": "templates/zooz_template.json#led_indicator_color",
 			"label": "LED Indicator Color (Button 4)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "11",
-			"label": "LED Indicator Brightness (Relay)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"label": "LED Indicator Brightness (Relay)"
 		},
 		{
 			"#": "12",
-			"label": "LED Indicator Brightness (Button 1)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"label": "LED Indicator Brightness (Button 1)"
 		},
 		{
 			"#": "13",
-			"label": "LED Indicator Brightness (Button 2)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"label": "LED Indicator Brightness (Button 2)"
 		},
 		{
 			"#": "14",
-			"label": "LED Indicator Brightness (Button 3)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"label": "LED Indicator Brightness (Button 3)"
 		},
 		{
 			"#": "15",
-			"label": "LED Indicator Brightness (Button 4)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High (100%)",
-					"value": 0
-				},
-				{
-					"label": "Medium (60%)",
-					"value": 1
-				},
-				{
-					"label": "Low (30%)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness",
+			"label": "LED Indicator Brightness (Button 4)"
 		},
 		{
 			"#": "16",
-			"label": "Auto-Off Timer (Relay)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#auto_off_timer",
+			"label": "Auto-Off Timer (Relay)"
 		},
 		{
 			"#": "17",
-			"label": "Auto-On Timer (Relay)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#auto_on_timer",
+			"label": "Auto-On Timer (Relay)"
 		},
 		{
 			"#": "18",
@@ -462,44 +162,14 @@
 		},
 		{
 			"#": "19",
-			"label": "Relay Control",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable local control",
-					"value": 0
-				},
-				{
-					"label": "Enable local control",
-					"value": 1
-				},
-				{
-					"label": "Disable relay (local / Z-Wave)",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2",
+			"label": "Relay Control"
 		},
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Send Report when Relay Disabled",
-			"description": "Determines whether an on/off report is sent and LED changes on button press, when the relay is disabled",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 1
-				},
-				{
-					"label": "Enable",
-					"value": 0
-				}
-			]
+			"description": "Determines whether an on/off report is sent and LED changes on button press, when the relay is disabled"
 		},
 		{
 			"#": "21",
@@ -514,22 +184,9 @@
 		{
 			"#": "23",
 			"$if": "firmwareVersion >= 10.20",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "LED Settings Indicator",
-			"description": "When enabled, the relay button LED indicator will flash to confirm the receipt of settings.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
 		}
 	],
 	"compat": {

@@ -28,20 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Temperature Scale",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit"
 		},
 		{
 			"#": "2",
@@ -73,14 +60,11 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion < 17.9",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Trigger Interval",
 			"description": "Set the trigger interval for motion sensor re-activation.",
 			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"defaultValue": 3
 		},
 		{
 			"#": "5",

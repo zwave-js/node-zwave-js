@@ -20,31 +20,24 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Total Alarm Duration",
 			"description": "Total duration of audio and visual alarm when water is detected.",
-			"unit": "Minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 120,
-			"unsigned": true
+			"unit": "minutes",
+			"defaultValue": 120
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_1-255_nounit",
 			"label": "Audio Alarm: Beep Interval",
 			"description": "Interval length between beeps",
-			"unit": "Minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true
+			"unit": "minutes"
 		},
 		{
 			"#": "3",
 			"label": "Audio Alarm: First Beep Duration",
 			"description": "Duration of First Beep",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 255,
@@ -64,30 +57,20 @@
 		},
 		{
 			"#": "5",
-			"label": "Enable/Disable Audio Alarm",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Audible Alarm",
 			"description": "Visual alarm will NOT be disabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1
 		},
 		{
 			"#": "6",
-			"label": "Enable/Disable Water Detection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Water Sensor",
 			"defaultValue": 1
 		},
 		{
 			"#": "7",
-			"label": "Trigger Action",
-			"description": "Send command to associated device.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#trigger_action"
 		}
 	]
 }

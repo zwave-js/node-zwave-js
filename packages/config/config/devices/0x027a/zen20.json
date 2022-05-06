@@ -20,13 +20,10 @@
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Power Wattage Report Value Threshold",
 			"description": "Choose how you want your Power Strip to report power consumption to your hub",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "3",
@@ -60,323 +57,115 @@
 		},
 		{
 			"#": "6",
-			"label": "CH1 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH1 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH1 Auto Turn-Off Timer"
 		},
 		{
 			"#": "7",
-			"label": "CH1 Auto Turn-Off Setting",
-			"description": "Time in minutes to turn off the device connected to CH1 after being turned on",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH1 Auto Turn-Off Setting"
 		},
 		{
 			"#": "8",
-			"label": "CH1 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH1 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH1 Auto Turn-On Timer"
 		},
 		{
 			"#": "9",
-			"label": "CH1 Auto Turn-On Setting",
-			"description": "Time in minutes to turn on the device connected to CH1 after being turned off.",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH1 Auto Turn-On Timer Duration"
 		},
 		{
 			"#": "10",
-			"label": "CH2 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH2 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH2 Auto Turn-Off Timer"
 		},
 		{
 			"#": "11",
-			"label": "CH2 Auto Turn-Off Setting",
-			"description": "Time in minutes to turn off the device connected to CH2 after being turned on",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH2 Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "12",
-			"label": "CH2 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH2 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH2 Auto Turn-On Timer"
 		},
 		{
 			"#": "13",
-			"label": "CH2 Auto Turn-On Setting",
-			"description": "Time in minutes to turn on the device connected to CH2 after being turned off",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH2 Auto Turn-On Timer Duration"
 		},
 		{
 			"#": "14",
-			"label": "CH3 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH3 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH3 Auto Turn-Off Timer"
 		},
 		{
 			"#": "15",
-			"label": "CH3 Auto Turn-Off Setting",
-			"description": "Time in minutes to turn off the device connected to CH3 after being turned on",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH3 Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "16",
-			"label": "CH3 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH3 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH3 Auto Turn-On Timer"
 		},
 		{
 			"#": "17",
-			"label": "CH3 Auto Turn-On Setting",
-			"description": "Time in minutes to turn on the device connected to CH3 after being turned off",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH3 Auto Turn-On Timer Duration"
 		},
 		{
 			"#": "18",
-			"label": "CH4 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH4 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH4 Auto Turn-Off Timer"
 		},
 		{
 			"#": "19",
-			"label": "CH4 Auto Turn-Off Setting",
-			"description": "Time in minutes to turn off the device connected to CH4 after being turned on.",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH4 Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "20",
-			"label": "CH4 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH4 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH4 Auto Turn-On Timer"
 		},
 		{
 			"#": "21",
-			"label": "CH4 Auto Turn-On Setting",
-			"description": "Time in minutes to turn on the device connected to CH4 after being turned off",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH4 Auto Turn-On Timer Duration"
 		},
 		{
 			"#": "22",
-			"label": "CH5 Auto Turn-Off Timer",
-			"description": "Enable or disable the auto turn-off timer for CH5 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH5 Auto Turn-Off Timer"
 		},
 		{
 			"#": "23",
-			"label": "CH5 Auto Turn-Off Setting",
-			"description": "Time in minutes to turn off the device connected to CH5 after being turned on.",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH5 Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "24",
-			"label": "CH5 Auto Turn-On Timer",
-			"description": "Enable or disable the auto turn-on timer for CH5 outlet",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timer Disabled",
-					"value": 0
-				},
-				{
-					"label": "Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "CH5 Auto Turn-On Timer"
 		},
 		{
 			"#": "25",
-			"label": "CH5 Auto Turn-On Setting",
-			"description": "Time in minutes to turn on the device connected to CH5 after being turned off",
-			"unit": "Minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_timer_duration_base",
+			"label": "CH5 Auto Turn-On Timer Duration"
 		},
 		{
 			"#": "26",
-			"label": "Manual Control",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Local Control",
 			"description": "Enable / Disable Physical Button Functionality",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Manual control disabled for all outlets",
-					"value": 0
-				},
-				{
-					"label": "Manual control enabled for all outlets",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "27",
-			"label": "LED Indicator Mode",
-			"description": "LED Outlet Indicator Behavior",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when power is off and off when power is on",
-					"value": 0
-				},
-				{
-					"label": "LED on when power is on and off when power is off",
-					"value": 1
-				},
-				{
-					"label": "LED is always off, regardless of power status",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options",
+			"defaultValue": 1
 		}
 	],
 	"compat": {

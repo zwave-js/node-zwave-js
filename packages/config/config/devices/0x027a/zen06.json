@@ -23,21 +23,10 @@
 	"paramInformation": [
 		{
 			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Overload Protection",
 			"description": "turns relay off once voltage exceeds 16.5A for over 5 secs if enabled",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "21",
@@ -85,7 +74,8 @@
 		{
 			"#": "151",
 			"label": "Power Report Value Threshold",
-			"description": "Minimum change in watts to report",
+			"description": "Minimum change in Watt to report",
+			"unit": "Watt",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -94,18 +84,15 @@
 		},
 		{
 			"#": "152",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Power Report Percentage Threshold",
-			"description": "Minimum percentage change to report",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"unit": "%",
+			"defaultValue": 10
 		},
 		{
 			"#": "171",
-			"label": "Power Report Frequency",
-			"description": "How often to report power consumption (W) in secs",
+			"label": "Power (W) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -113,8 +100,8 @@
 		},
 		{
 			"#": "172",
-			"label": "Energy Report Frequency",
-			"description": "How often to report energy usage (KWH) in secs",
+			"label": "Energy (kWh) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -123,7 +110,7 @@
 		{
 			"#": "173",
 			"label": "Voltage Report Frequency",
-			"description": "How often to report voltage (V) in secs",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -131,8 +118,8 @@
 		},
 		{
 			"#": "174",
-			"label": "Electricity Report Frequency",
-			"description": "How often to report electrical current (A) in secs",
+			"label": "Current (A) Report Frequency",
+			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,

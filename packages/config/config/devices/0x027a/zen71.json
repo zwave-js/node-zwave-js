@@ -56,20 +56,7 @@
 		},
 		{
 			"#": "12",
-			"label": "3-Way Switch Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Toggle switch",
-					"value": 0
-				},
-				{
-					"label": "Momentary switch",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#3way_switch_type"
 		},
 		{
 			"#": "13",
