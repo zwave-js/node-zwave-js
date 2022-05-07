@@ -55,7 +55,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	public async sendAndReceiveData(
 		manufacturerId: number,
 		data?: Buffer,
-	) {
+	): Promise<unknown> {
 		const cc = new ManufacturerProprietaryCCWithResponse(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -66,12 +66,12 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		const response =
 			await this.driver.sendCommand<ManufacturerProprietaryCC>(
 				cc,
-				this.commandOptions
+				this.commandOptions,
 			);
 		if (response) {
 			return {
 				manufacturerId: response.manufacturerId,
-				data: response.payload
+				data: response.payload,
 			};
 		}
 	}
@@ -305,12 +305,15 @@ export class ManufacturerProprietaryCC extends CommandClass {
 function testResponseForManufacturerProprietaryRequest(
 	sent: ManufacturerProprietaryCCWithResponse,
 	received: ManufacturerProprietaryCC,
-) {
+): boolean {
 	// We expect a Manufacturer Proprietary response that has the same manufacturer ID as the request
 	return sent.manufacturerId === received.manufacturerId;
 }
 
-@expectedCCResponse(ManufacturerProprietaryCC, testResponseForManufacturerProprietaryRequest)
+@expectedCCResponse(
+	ManufacturerProprietaryCC,
+	testResponseForManufacturerProprietaryRequest,
+)
 export class ManufacturerProprietaryCCWithResponse extends ManufacturerProprietaryCC {
 	public constructor(
 		driver: Driver,
