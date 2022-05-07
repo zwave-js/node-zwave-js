@@ -305,8 +305,8 @@
 			"valueSize": 1,
 			"defaultValue": 3,
 			"unsigned": true,
-			"minvalue": 0,
-			"maxvalue": 60
+			"minValue": 0,
+			"maxValue": 60
 		}
 	],
 	"compat": {
