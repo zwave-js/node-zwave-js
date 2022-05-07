@@ -26,6 +26,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -48,6 +49,31 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
 		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
+	public async sendAndReceiveData(
+		manufacturerId: number,
+		data?: Buffer,
+	) {
+		const cc = new ManufacturerProprietaryCCWithResponse(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		cc.manufacturerId = manufacturerId;
+		cc.payload = data ?? Buffer.allocUnsafe(0);
+
+		const response =
+			await this.driver.sendCommand<ManufacturerProprietaryCC>(
+				cc,
+				this.commandOptions
+			);
+		if (response) {
+			return {
+				manufacturerId: response.manufacturerId,
+				data: response.payload
+			};
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -273,6 +299,24 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				direction: "none",
 			});
 		}
+	}
+}
+
+function testResponseForManufacturerProprietaryRequest(
+	sent: ManufacturerProprietaryCCWithResponse,
+	received: ManufacturerProprietaryCC,
+) {
+	// We expect a Manufacturer Proprietary response that has the same manufacturer ID as the request
+	return sent.manufacturerId === received.manufacturerId;
+}
+
+@expectedCCResponse(ManufacturerProprietaryCC, testResponseForManufacturerProprietaryRequest)
+export class ManufacturerProprietaryCCWithResponse extends ManufacturerProprietaryCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions | CCCommandOptions,
+	) {
+		super(driver, options);
 	}
 }
 
