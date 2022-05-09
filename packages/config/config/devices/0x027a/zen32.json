@@ -521,6 +521,11 @@
 			]
 		}
 	],
+	"compat": {
+		// The device sends Configuration CC info reports in 4-byte chunks, causing each query to block the network for roughly 1.5 seconds.
+		"skipConfigurationNameQuery": true,
+		"skipConfigurationInfoQuery": true
+	},
 	"metadata": {
 		"inclusion": "INCLUSION\n1. Initiate inclusion (pairing) in the app (or web interface).\n2. TAP THE SWITCH BUTTON 3 TIMES QUICKLY if using traditional Z-Wave inclusion.\n3. The LED indicator will blink blue to signal communication and turn green for 3 seconds if inclusion is successful or turn red for 3 seconds if the pairing attempt fails.",
 		"exclusion": "EXCLUSION\n1. Bring your Z-Wave gateway (hub) close to the switch if possible\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com) \n3. TAP THE SWITCH BUTTON 3 TIMES QUICKLY (the LED indicator will start blinking blue)\n4. Your hub will confirm exclusion, the LED indicator on the switch will turn green for 3 seconds, and the device will disappear from your controller's device list\nreset",
