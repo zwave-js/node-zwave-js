@@ -52,13 +52,12 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async sendAndReceiveData(
-		manufacturerId: number,
-		data?: Buffer,
-	): Promise<unknown> {
-		const cc = new ManufacturerProprietaryCCWithResponse(this.driver, {
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async sendAndReceiveData(manufacturerId: number, data?: Buffer) {
+		const cc = new ManufacturerProprietaryCC(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			expectsResponse: true,
 		});
 		cc.manufacturerId = manufacturerId;
 		cc.payload = data ?? Buffer.allocUnsafe(0);
@@ -176,16 +175,37 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	};
 }
 
+export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+	expectsResponse?: boolean;
+}
+
+function getReponseForManufacturerProprietary(cc: ManufacturerProprietaryCC) {
+	return cc.expectsResponse ? ManufacturerProprietaryCC : undefined;
+}
+
+function testResponseForManufacturerProprietaryRequest(
+	sent: ManufacturerProprietaryCC,
+	received: ManufacturerProprietaryCC,
+): boolean {
+	// We expect a Manufacturer Proprietary response that has the same manufacturer ID as the request
+	return sent.manufacturerId === received.manufacturerId;
+}
+
 @commandClass(CommandClasses["Manufacturer Proprietary"])
 @implementedVersion(1)
-// TODO: Add a way to specify the expected response
+@expectedCCResponse(
+	getReponseForManufacturerProprietary,
+	testResponseForManufacturerProprietaryRequest,
+)
 export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
 	// @noCCValues
 
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| ManufacturerProprietaryCCOptions,
 	) {
 		super(driver, options);
 
@@ -195,6 +215,8 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			this.manufacturerId =
 				((this.ccCommand as unknown as number) << 8) + this.payload[0];
 			this.payload = this.payload.slice(1);
+			// Incoming messages expect no response
+			this.expectsResponse = false;
 
 			// Try to parse the proprietary command
 			const PCConstructor = getProprietaryCCConstructor(
@@ -211,6 +233,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			this.manufacturerId = this.getValueDB().getValue<number>(
 				getManufacturerIdValueId(),
 			)!;
+			this.expectsResponse = !!options.expectsResponse;
 			// To use this CC, a manufacturer ID must exist in the value DB
 			// If it doesn't, the interview procedure will throw.
 		}
@@ -218,6 +241,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 	// This must be set in subclasses
 	public manufacturerId!: number;
+
+	/** @internal */
+	public readonly expectsResponse: boolean;
 
 	private assertManufacturerIdIsSet(): void {
 		if (this.manufacturerId == undefined) {
@@ -299,27 +325,6 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				direction: "none",
 			});
 		}
-	}
-}
-
-function testResponseForManufacturerProprietaryRequest(
-	sent: ManufacturerProprietaryCCWithResponse,
-	received: ManufacturerProprietaryCC,
-): boolean {
-	// We expect a Manufacturer Proprietary response that has the same manufacturer ID as the request
-	return sent.manufacturerId === received.manufacturerId;
-}
-
-@expectedCCResponse(
-	ManufacturerProprietaryCC,
-	testResponseForManufacturerProprietaryRequest,
-)
-export class ManufacturerProprietaryCCWithResponse extends ManufacturerProprietaryCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
 	}
 }
 
