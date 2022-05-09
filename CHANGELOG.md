@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Check that the argument of `provisionSmartStartNode` is valid (#4581)
+* Parse incoming `MultilevelSwitchCC::StartLevelChange` correctly (#4594)
+
+### Config file changes
+* Add Motion Sensor Timeout param to Ring Keypad v2, FW 1.18+ (#4587)
+* Warn about NAS-SC03ZE spontaneously resetting (#4593)
+* Work around Configuration Info reporting bug in ZEN17/ZEN32 (#4595)
+
 ## 9.2.1 (2022-05-05)
 ### Bugfixes
 * The scheduled verification poll for value changes now only gets canceled for unsolicited reports when the expected value is received (#4569)
