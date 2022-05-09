@@ -300,7 +300,6 @@
 			"#": "26",
 			"$if": "firmwareVersion >= 1.18",
 			"label": "Motion Sensor Timeout",
-			"description": "How long after motion stops should the keypad wait before sending a no-motion report",
 			"unit": "seconds",
 			"valueSize": 1,
 			"defaultValue": 3,
