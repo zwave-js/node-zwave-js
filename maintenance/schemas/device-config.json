@@ -631,6 +631,9 @@
 						}
 					}
 				},
+				"skipConfigurationNameQuery": {
+					"const": true
+				},
 				"skipConfigurationInfoQuery": {
 					"const": true
 				},

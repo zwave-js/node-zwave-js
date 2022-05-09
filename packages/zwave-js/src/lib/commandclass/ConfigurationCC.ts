@@ -1007,8 +1007,14 @@ export class ConfigurationCC extends CommandClass {
 				if (properties.valueSize === 0) {
 					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
 				} else {
-					// Query name and info only if the parameter is supported
-					const name = (await api.getName(param)) ?? "(unknown)";
+					// Query name and info only if the parameter is supported, but skip the query for bugged devices
+					let name: string | undefined;
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationNameQuery
+					) {
+						name = await api.getName(param);
+					}
+
 					// Skip the info query for bugged devices
 					if (
 						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
@@ -1016,8 +1022,12 @@ export class ConfigurationCC extends CommandClass {
 						await api.getInfo(param);
 					}
 
-					logMessage = `received information for parameter #${param}:
-parameter name:      ${name}
+					logMessage = `received information for parameter #${param}:`;
+					if (name) {
+						logMessage += `
+parameter name:      ${name}`;
+					}
+					logMessage += `
 value format:        ${getEnumMemberName(
 						ConfigValueFormat,
 						properties.valueFormat,
