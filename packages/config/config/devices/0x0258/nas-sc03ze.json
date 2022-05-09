@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
 	"manufacturerId": "0x0258",
-	"label": "NAS-SC03E",
+	"label": "NAS-SC03ZE",
 	"description": "Curtain Switch",
 	"devices": [
 		{
@@ -42,5 +42,11 @@
 			"label": "Button",
 			"defaultValue": 1
 		}
-	]
+	],
+	"metadata": {
+		"comments": {
+			"level": "warning",
+			"text": "This device randomly factory resets after a while and disappears from the network."
+		}
+	}
 }
