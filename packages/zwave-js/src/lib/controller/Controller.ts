@@ -658,9 +658,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		});
 	}
 
-	/** Returns whether the SmartStart provisioning list contains entries that have not been included yet */
+	/** Returns whether the SmartStart provisioning list contains active entries that have not been included yet */
 	public hasPlannedProvisioningEntries(): boolean {
-		return this.provisioningList.some((e) => !this.getNodeByDSK(e.dsk));
+		return this.provisioningList.some(
+			(e) =>
+				(e.status == undefined ||
+					e.status === ProvisioningEntryStatus.Active) &&
+				!this.getNodeByDSK(e.dsk),
+		);
 	}
 
 	/**
