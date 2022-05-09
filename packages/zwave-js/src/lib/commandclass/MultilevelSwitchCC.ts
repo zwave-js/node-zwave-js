@@ -700,16 +700,17 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 3);
-			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
+			validatePayload(this.payload.length >= 2);
 			const ignoreStartLevel = (this.payload[0] & 0b0_0_1_00000) >>> 5;
-			const startLevel = this.payload[1];
-			const duration = this.payload[2];
-
-			this.duration = Duration.parseReport(duration);
 			this.ignoreStartLevel = !!ignoreStartLevel;
-			this.startLevel = startLevel;
+			const direction = (this.payload[0] & 0b0_1_0_00000) >>> 6;
 			this.direction = direction ? "down" : "up";
+
+			this.startLevel = this.payload[1];
+
+			if (this.payload.length >= 3) {
+				this.duration = Duration.parseSet(this.payload[2]);
+			}
 		} else {
 			this.duration = Duration.from(options.duration);
 			this.ignoreStartLevel = options.ignoreStartLevel;
