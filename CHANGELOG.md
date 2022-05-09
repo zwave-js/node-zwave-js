@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.2.2 (2022-05-09)
 ### Bugfixes
 * Check that the argument of `provisionSmartStartNode` is valid (#4581)
 * Parse incoming `MultilevelSwitchCC::StartLevelChange` correctly (#4594)
