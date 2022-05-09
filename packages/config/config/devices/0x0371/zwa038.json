@@ -2,7 +2,7 @@
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA038",
-	"description": "Illumino Wall Switch",
+	"description": "illumino Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0103",
