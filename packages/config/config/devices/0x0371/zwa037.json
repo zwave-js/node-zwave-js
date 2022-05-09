@@ -149,7 +149,7 @@
 			"#": "252",
 			"$if": "firmwareVersion >= 1.7",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Manual button press and parameter setting lock"
+			"label": "Lock Configuration and Manual Button Press"
 		}
 	],
 	"metadata": {
