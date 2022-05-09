@@ -81,7 +81,7 @@ import type {
 	AssociationGroup,
 	EndpointAddress,
 } from "../commandclass/_Types";
-import type { Driver, RequestHandler } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
@@ -1094,45 +1094,25 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Warning: The driver needs to re-interview the controller, so don't call this directly
 	 * @internal
 	 */
-	public hardReset(): Promise<void> {
-		this.driver.controllerLog.print("performing hard reset...");
+	public async hardReset(): Promise<void> {
+		// begin the reset process
+		try {
+			this.driver.controllerLog.print("performing hard reset...");
+			await this.driver.sendMessage(new HardResetRequest(this.driver), {
+				supportCheck: false,
+			});
 
-		return new Promise(async (resolve, reject) => {
-			// handle the incoming message
-			const handler: RequestHandler = (_msg) => {
-				this.driver.controllerLog.print(`  hard reset succeeded`);
-
-				// Clean up
-				this._nodes.forEach((node) => node.removeAllListeners());
-				this._nodes.clear();
-
-				resolve();
-				return true;
-			};
-			this.driver.registerRequestHandler(
-				FunctionType.HardReset,
-				handler,
-				true,
+			this.driver.controllerLog.print(`hard reset succeeded`);
+			// Clean up
+			this._nodes.forEach((node) => node.removeAllListeners());
+			this._nodes.clear();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`hard reset failed: ${getErrorMessage(e)}`,
+				"error",
 			);
-			// begin the reset process
-			try {
-				await this.driver.sendMessage(
-					new HardResetRequest(this.driver),
-					{ supportCheck: false },
-				);
-			} catch (e) {
-				// in any case unregister the handler
-				this.driver.controllerLog.print(
-					`  hard reset failed: ${getErrorMessage(e)}`,
-					"error",
-				);
-				this.driver.unregisterRequestHandler(
-					FunctionType.HardReset,
-					handler,
-				);
-				reject(e);
-			}
-		});
+			throw e;
+		}
 	}
 
 	private _inclusionState: InclusionState = InclusionState.Idle;
