@@ -513,6 +513,7 @@
 		// This device improperly reports the state of R2 (endpoint 2) through the root endpoint in a way that also changes the state of R1 (endpoint 1)
 		"preserveRootApplicationCCValueIDs": true,
 		// The device sends Configuration CC info reports in 4-byte chunks, causing each query to block the network for roughly 1.5 seconds.
+		"skipConfigurationNameQuery": true,
 		"skipConfigurationInfoQuery": true
 	},
 	"metadata": {

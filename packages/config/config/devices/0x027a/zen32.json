@@ -523,6 +523,7 @@
 	],
 	"compat": {
 		// The device sends Configuration CC info reports in 4-byte chunks, causing each query to block the network for roughly 1.5 seconds.
+		"skipConfigurationNameQuery": true,
 		"skipConfigurationInfoQuery": true
 	},
 	"metadata": {

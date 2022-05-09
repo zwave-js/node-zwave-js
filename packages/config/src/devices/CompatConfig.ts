@@ -183,6 +183,19 @@ compat option preserveEndpoints must be "*" or an array of positive integers`,
 			this.preserveEndpoints = definition.preserveEndpoints;
 		}
 
+		if (definition.skipConfigurationNameQuery != undefined) {
+			if (definition.skipConfigurationNameQuery !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option skipConfigurationNameQuery`,
+				);
+			}
+
+			this.skipConfigurationNameQuery =
+				definition.skipConfigurationNameQuery;
+		}
+
 		if (definition.skipConfigurationInfoQuery != undefined) {
 			if (definition.skipConfigurationInfoQuery !== true) {
 				throwInvalidConfig(
@@ -492,6 +505,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 	};
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly preserveEndpoints?: "*" | readonly number[];
+	public readonly skipConfigurationNameQuery?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly treatMultilevelSwitchSetAsEvent?: boolean;
@@ -526,6 +540,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 			"overrideFloatEncoding",
 			"preserveRootApplicationCCValueIDs",
 			"preserveEndpoints",
+			"skipConfigurationNameQuery",
 			"skipConfigurationInfoQuery",
 			"treatBasicSetAsEvent",
 			"treatMultilevelSwitchSetAsEvent",
