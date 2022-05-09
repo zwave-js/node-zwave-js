@@ -18,4 +18,7 @@ export {
 	ControllerSelfLogContext,
 	ControllerValueLogContext,
 } from "./lib/log/Controller";
-export type { ZWaveLibraryTypes } from "./lib/serialapi/_Types";
+export type {
+	ZWaveApiVersion,
+	ZWaveLibraryTypes,
+} from "./lib/serialapi/_Types";

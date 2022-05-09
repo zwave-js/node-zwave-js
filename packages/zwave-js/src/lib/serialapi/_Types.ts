@@ -17,3 +17,8 @@ export enum NodeIDType {
 	Short = 0x01,
 	Long = 0x02,
 }
+
+export interface ZWaveApiVersion {
+	kind: "official" | "legacy";
+	version: number;
+}

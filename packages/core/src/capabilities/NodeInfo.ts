@@ -146,7 +146,9 @@ export type DataRate = 9600 | 40000 | 100000;
 
 export enum NodeType {
 	Controller,
+	/** @deprecated Use `NodeType["End Node"]` instead */
 	"Routing End Node",
+	"End Node" = 1,
 }
 
 export interface NodeProtocolInfo {
@@ -220,7 +222,7 @@ export function parseNodeProtocolInfo(
 	let nodeType: NodeType;
 	switch (capability & 0b1010) {
 		case 0b1000:
-			nodeType = NodeType["Routing End Node"];
+			nodeType = NodeType["End Node"];
 			break;
 		case 0b0010:
 		default:
@@ -262,7 +264,7 @@ export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
 
 	if (info.supportsBeaming) ret[1] |= 0b0001_0000;
 	if (info.supportsSecurity) ret[1] |= 0b1;
-	if (info.nodeType === NodeType["Routing End Node"]) ret[1] |= 0b1000;
+	if (info.nodeType === NodeType["End Node"]) ret[1] |= 0b1000;
 	else ret[1] |= 0b0010; // Controller
 
 	if (info.hasSpecificDeviceClass) ret[1] |= 0b100;

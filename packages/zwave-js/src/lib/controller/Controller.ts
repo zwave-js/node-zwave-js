@@ -12,6 +12,7 @@ import {
 	isRecoverableZWaveError,
 	isTransmissionError,
 	isZWaveError,
+	NodeType,
 	NODE_ID_BROADCAST,
 	nwiHomeIdFromDSK,
 	ProtocolType,
@@ -230,7 +231,11 @@ import {
 	NVMOperationStatus,
 	NVMOperationsWriteRequest,
 } from "../serialapi/nvm/NVMOperationsMessages";
-import { NodeIDType, ZWaveLibraryTypes } from "../serialapi/_Types";
+import {
+	NodeIDType,
+	ZWaveApiVersion,
+	ZWaveLibraryTypes,
+} from "../serialapi/_Types";
 import {
 	ControllerStatistics,
 	ControllerStatisticsHost,
@@ -249,6 +254,7 @@ import {
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
 import { assertProvisioningEntry } from "./utils";
+import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
 
@@ -328,6 +334,16 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._sdkVersion;
 	}
 
+	private _zwaveApiVersion: ZWaveApiVersion | undefined;
+	public get zwaveApiVersion(): ZWaveApiVersion | undefined {
+		return this._zwaveApiVersion;
+	}
+
+	private _zwaveChipType: string | UnknownZWaveChipType | undefined;
+	public get zwaveChipType(): string | UnknownZWaveChipType | undefined {
+		return this._zwaveChipType;
+	}
+
 	private _homeId: number | undefined;
 	/** A 32bit number identifying the current network */
 	public get homeId(): number | undefined {
@@ -340,9 +356,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._ownNodeId;
 	}
 
-	private _isSecondary: boolean | undefined;
+	private _isPrimary: boolean | undefined;
+	public get isPrimary(): boolean | undefined {
+		return this._isPrimary;
+	}
+
+	/** @deprecated Use {@link isPrimary} instead */
 	public get isSecondary(): boolean | undefined {
-		return this._isSecondary;
+		if (typeof this._isPrimary === "boolean") return !this._isPrimary;
 	}
 
 	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
@@ -360,14 +381,31 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._wasRealPrimary;
 	}
 
-	private _isStaticUpdateController: boolean | undefined;
-	public get isStaticUpdateController(): boolean | undefined {
-		return this._isStaticUpdateController;
+	private _isSIS: boolean | undefined;
+	public get isSIS(): boolean | undefined {
+		return this._isSIS;
 	}
 
-	private _isSlave: boolean | undefined;
+	private _isSUC: boolean | undefined;
+	public get isSUC(): boolean | undefined {
+		return this._isSUC;
+	}
+
+	/** @deprecated Use {@link isSUC} instead */
+	public get isStaticUpdateController(): boolean | undefined {
+		return this._isSUC;
+	}
+
+	private _nodeType: NodeType | undefined;
+	public get nodeType(): NodeType | undefined {
+		return this._nodeType;
+	}
+
+	/** @deprecated Use the {@link nodeType} property to check for Controller vs. End Node instead */
 	public get isSlave(): boolean | undefined {
-		return this._isSlave;
+		if (this._nodeType != undefined) {
+			return this._nodeType !== NodeType.Controller;
+		}
 	}
 
 	/** Checks if the SDK version is greater than the given one */
@@ -802,19 +840,19 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._isSecondary = ctrlCaps.isSecondary;
+		this._isPrimary = !ctrlCaps.isSecondary;
 		this._isUsingHomeIdFromOtherNetwork =
 			ctrlCaps.isUsingHomeIdFromOtherNetwork;
 		this._isSISPresent = ctrlCaps.isSISPresent;
 		this._wasRealPrimary = ctrlCaps.wasRealPrimary;
-		this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
+		this._isSUC = ctrlCaps.isStaticUpdateController;
 		this.driver.controllerLog.print(
 			`received controller capabilities:
-  controller role:     ${this._isSecondary ? "secondary" : "primary"}
-  is in other network: ${this._isUsingHomeIdFromOtherNetwork}
-  is SIS present:      ${this._isSISPresent}
-  was real primary:    ${this._wasRealPrimary}
-  is a SUC:            ${this._isStaticUpdateController}`,
+  controller role:      ${this._isPrimary ? "primary" : "secondary"}
+  is the SUC:           ${this._isSUC}
+  started this network: ${!this._isUsingHomeIdFromOtherNetwork}
+  SIS is present:       ${this._isSISPresent}
+  was real primary:     ${this._wasRealPrimary}`,
 		);
 
 		// Figure out which sub commands of SerialAPISetup are supported
@@ -882,9 +920,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// There needs to be a SUC/SIS in the network. If not, we promote ourselves to one if the following conditions are met:
 		// We are the primary controller, but we are not SUC, there is no SUC and there is no SIS
 		if (
-			!this._isSecondary &&
+			this._isPrimary &&
 			this._sucNodeId === 0 &&
-			!this._isStaticUpdateController &&
+			!this._isSUC &&
 			!this._isSISPresent
 		) {
 			this.driver.controllerLog.print(
@@ -919,24 +957,41 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			// TODO: send FUNC_ID_ZW_GET_VIRTUAL_NODES message
 		}
 
-		// Request information about all nodes with the GetInitData message
-		this.driver.controllerLog.print(`querying node information...`);
+		// Request additional information about the controller/Z-Wave chip
+		this.driver.controllerLog.print(
+			`querying additional controller information...`,
+		);
 		const initData =
 			await this.driver.sendMessage<GetSerialApiInitDataResponse>(
 				new GetSerialApiInitDataRequest(this.driver),
 			);
-		// override the information we might already have
-		this._isSecondary = initData.isSecondary;
-		this._isStaticUpdateController = initData.isStaticUpdateController;
 		// and remember the new info
-		this._isSlave = initData.isSlave;
+		this._zwaveApiVersion = initData.zwaveApiVersion;
+		this._zwaveChipType = initData.zwaveChipType;
+		this._isPrimary = initData.isPrimary;
+		this._isSIS = initData.isSIS;
+		this._nodeType = initData.nodeType;
 		this._supportsTimers = initData.supportsTimers;
 		// ignore the initVersion, no clue what to do with it
 		this.driver.controllerLog.print(
-			`received node information:
-  controller role:            ${this._isSecondary ? "secondary" : "primary"}
-  controller is a SUC:        ${this._isStaticUpdateController}
-  controller is a slave:      ${this._isSlave}
+			`received additional controller information:
+  Z-Wave API version:         ${this._zwaveApiVersion.version} (${
+				this._zwaveApiVersion.kind
+			})${
+				this._zwaveChipType
+					? `
+  Z-Wave chip type:           ${
+		typeof this._zwaveChipType === "string"
+			? this._zwaveChipType
+			: `unknown (type: ${num2hex(
+					this._zwaveChipType.type,
+			  )}, version: ${num2hex(this._zwaveChipType.version)})`
+  }`
+					: ""
+			}
+  node type                   ${getEnumMemberName(NodeType, this._nodeType)}
+  controller role:            ${this._isPrimary ? "primary" : "secondary"}
+  controller is the SIS:      ${this._isSIS}
   controller supports timers: ${this._supportsTimers}
   nodes in the network:       ${initData.nodeIds.join(", ")}`,
 		);

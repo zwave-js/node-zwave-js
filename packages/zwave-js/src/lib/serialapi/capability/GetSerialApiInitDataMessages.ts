@@ -1,6 +1,9 @@
-import { NUM_NODEMASK_BYTES } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import { NodeType, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
+import {
+	getZWaveChipType,
+	UnknownZWaveChipType,
+} from "../../controller/ZWaveChipTypes";
 import type { Driver } from "../../driver/Driver";
 import {
 	FunctionType,
@@ -14,13 +17,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
-
-enum InitCapabilityFlags {
-	Slave = 1 << 0, // Controller is a slave
-	SupportsTimers = 1 << 1, // The controller supports timers
-	Secondary = 1 << 2, // The controller is a secondary
-	SUC = 1 << 3, // The controller is a SUC
-}
+import type { ZWaveApiVersion } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
 @expectedResponse(FunctionType.GetSerialApiInitData)
@@ -32,48 +29,130 @@ export class GetSerialApiInitDataResponse extends Message {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
-		this._initVersion = this.payload[0];
-		this._initCaps = this.payload[1];
-		this._nodeIds = [];
-		if (this.payload.length > 2 && this.payload[2] === NUM_NODEMASK_BYTES) {
-			// the payload contains a bit mask of all existing nodes
-			const nodeBitMask = this.payload.slice(3, 3 + NUM_NODEMASK_BYTES);
-			this._nodeIds = parseNodeBitMask(nodeBitMask);
+		const apiVersion = this.payload[0];
+		if (apiVersion < 10) {
+			this.zwaveApiVersion = {
+				kind: "legacy",
+				version: apiVersion,
+			};
+		} else {
+			// this module uses the officially specified Host API
+			this.zwaveApiVersion = {
+				kind: "official",
+				version: apiVersion - 9,
+			};
+		}
+		this.initVersion = apiVersion;
+
+		const capabilities = this.payload[1];
+		if (this.zwaveApiVersion.kind === "official") {
+			// The new "official" Host API specs sneakily switched the meaning of some flags
+			this.nodeType =
+				capabilities & 0b0001
+					? NodeType.Controller
+					: NodeType["End Node"];
+			this.supportsTimers = !!(capabilities & 0b0010);
+			this.isPrimary = !!(capabilities & 0b0100);
+			this.isSIS = !!(capabilities & 0b1000);
+		} else {
+			this.nodeType =
+				capabilities & 0b0001
+					? NodeType["End Node"]
+					: NodeType.Controller;
+			this.supportsTimers = !!(capabilities & 0b0010);
+			this.isPrimary = !(capabilities & 0b0100);
+			this.isSIS = !!(capabilities & 0b1000);
+		}
+
+		let offset = 2;
+		this.nodeIds = [];
+		if (this.payload.length > offset) {
+			const nodeListLength = this.payload[offset];
+			// Controller Nodes MUST set this field to 29
+			if (
+				nodeListLength === NUM_NODEMASK_BYTES &&
+				this.payload.length >= offset + 1 + nodeListLength
+			) {
+				const nodeBitMask = this.payload.slice(
+					offset + 1,
+					offset + 1 + nodeListLength,
+				);
+				this.nodeIds = parseNodeBitMask(nodeBitMask);
+			}
+			offset += 1 + nodeListLength;
+		}
+
+		// these might not be present:
+		const chipType = this.payload[offset];
+		const chipVersion = this.payload[offset + 1];
+		if (chipType != undefined && chipVersion != undefined) {
+			this.zwaveChipType = getZWaveChipType(chipType, chipVersion);
 		}
 	}
 
-	private _initVersion: number;
-	public get initVersion(): number {
-		return this._initVersion;
-	}
+	/** @deprecated use {@link zwaveApiVersion} instead */
+	public readonly initVersion: number;
+	public readonly zwaveApiVersion: ZWaveApiVersion;
 
-	private _initCaps: number;
-	public get isSlave(): boolean {
-		return !!(this._initCaps & InitCapabilityFlags.Slave);
-	}
-	public get supportsTimers(): boolean {
-		return !!(this._initCaps & InitCapabilityFlags.SupportsTimers);
-	}
-	public get isSecondary(): boolean {
-		return !!(this._initCaps & InitCapabilityFlags.Secondary);
-	}
-	public get isStaticUpdateController(): boolean {
-		return !!(this._initCaps & InitCapabilityFlags.SUC);
-	}
+	public readonly isPrimary: boolean;
+	public readonly nodeType: NodeType;
+	public readonly supportsTimers: boolean;
+	public readonly isSIS: boolean;
 
-	private _nodeIds: number[];
-	public get nodeIds(): number[] {
-		return this._nodeIds;
-	}
+	public readonly nodeIds: readonly number[];
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			initVersion: this.initVersion,
-			isSlave: this.isSlave,
-			supportsTimers: this.supportsTimers,
-			isSecondary: this.isSecondary,
-			isStaticUpdateController: this.isStaticUpdateController,
-			nodeIds: this.nodeIds,
-		});
-	}
+	public readonly zwaveChipType?: string | UnknownZWaveChipType;
+
+	// public toLogEntry(): MessageOrCCLogEntry {
+	// 	const message: MessageRecord = {
+	// 		"Z-Wave API Version": `${this.zwaveApiVersion.version} (${this.zwaveApiVersion.kind})`,
+	// 		"node type": getEnumMemberName(NodeType, this.nodeType),
+	// 		role: this.isPrimary ? "primary" : "secondary",
+	// 		"is SIS": this.isSIS,
+	// 		"supports timers": this.supportsTimers,
+	// 	};
+
+	// 	if (this.zwaveChipType) {
+	// 		message["Z-Wave chip type"] =
+	// 			typeof this.zwaveChipType === "string"
+	// 				? this.zwaveChipType
+	// 				: `unknown (type = ${num2hex(
+	// 						this.zwaveChipType.type,
+	// 				  )}, version = ${num2hex(this.zwaveChipType.version)})`;
+	// 	}
+	// 	return {
+	// 		...super.toLogEntry(),
+	// 		message,
+	// 	};
+	// }
 }
+
+// Z-Stick 7, 7.15
+// 12:15:28.505 DRIVER « [RES] [GetSerialApiInitData]
+//                         Z-Wave API Version: 9 (proprietary)
+//                         node type:          controller
+//                         supports timers:    false
+//                         is secondary:       false
+//                         is SUC:             true
+//                         chip type:          7
+//                         chip version:       0
+
+// ACC-UZB3
+// 12:21:11.141 DRIVER « [RES] [GetSerialApiInitData]
+//                         Z-Wave API Version: 8 (proprietary)
+//                         node type:          controller
+//                         supports timers:    false
+//                         is secondary:       false
+//                         is SUC:             true
+//                         chip type:          5
+//                         chip version:       0
+
+// UZB7, 7.11
+// 12:33:14.211 DRIVER « [RES] [GetSerialApiInitData]
+//                         Z-Wave API Version: 8 (proprietary)
+//                         node type:          controller
+//                         supports timers:    false
+//                         is secondary:       false
+//                         is SUC:             true
+//                         chip type:          7
+//                         chip version:       0
