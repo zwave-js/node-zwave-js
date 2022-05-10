@@ -138,6 +138,7 @@ import {
 	getNodeTypeValueId,
 	getRoleTypeValueId,
 	getZWavePlusVersionValueId,
+	ZWavePlusCCGet,
 } from "../commandclass/ZWavePlusCC";
 import {
 	CentralSceneKeys,
@@ -2367,6 +2368,8 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
 			return this.handlePowerlevelTestNodeReport(command);
+		} else if (command instanceof ZWavePlusCCGet) {
+			return this.handleZWavePlusGet(command);
 		}
 
 		// Ignore all commands that don't need to be handled
@@ -2972,6 +2975,19 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
+	private async handleZWavePlusGet(_command: ZWavePlusCCGet): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		await this.commandClasses["Z-Wave Plus Info"].sendReport({
+			zwavePlusVersion: 2,
+			roleType: ZWavePlusRoleType.CentralStaticController,
+			nodeType: ZWavePlusNodeType.Node,
+			installerIcon: 0x0500, // Generic Gateway
+			userIcon: 0x0500, // Generic Gateway
+		});
+	}
+
 	/**
 	 * Allows automatically resetting notification values to idle if the node does not do it itself
 	 */
@@ -3235,7 +3251,7 @@ protocol version:      ${this.protocolVersion}`;
 			command.minute !== minutes
 		) {
 			const endpoint = command.getEndpoint();
-			if (!endpoint || !endpoint.commandClasses.Clock.isSupported()) {
+			if (!endpoint /*|| !endpoint.commandClasses.Clock.isSupported()*/) {
 				// Make sure the endpoint supports the CC (GH#1704)
 				return;
 			}
