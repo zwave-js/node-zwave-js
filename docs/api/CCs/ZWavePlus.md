@@ -9,3 +9,9 @@
 ```ts
 async get(): Promise<Pick<ZWavePlusCCReport, "zwavePlusVersion" | "nodeType" | "roleType" | "installerIcon" | "userIcon"> | undefined>;
 ```
+
+### `sendReport`
+
+```ts
+async sendReport(options: ZWavePlusCCReportOptions): Promise<void>;
+```
