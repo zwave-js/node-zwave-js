@@ -1837,6 +1837,31 @@
 			}
 		]
 	},
+	"led_function_extended": {
+		"$import": "~/0x0086/templates/aeotec_template.json#led_function",
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Momentary blink",
+				"value": 1
+			},
+			{
+				"label": "LED follows switch state",
+				"value": 2
+			},
+			{
+				"label": "Inverted LED state based on output",
+				"value": 3
+			},
+			{
+				"label": "LED always on, blinks when state changed",
+				"value": 4
+			}
+		]
+	},
 	"blink_duration": {
 		"label": "LED Blink Duration",
 		"valueSize": 2,

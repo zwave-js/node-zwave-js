@@ -76,6 +76,11 @@
 		},
 		{
 			"#": "83",
+			"$if": "firmwareVersion >= 1.7",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_function_extended"
+		},
+		{
+			"#": "83",
 			"$import": "~/0x0086/templates/aeotec_template.json#led_function"
 		},
 		{
@@ -139,6 +144,12 @@
 		{
 			"#": "133",
 			"$import": "~/0x0086/templates/aeotec_template.json#custom_brightness_99"
+		},
+		{
+			"#": "252",
+			"$if": "firmwareVersion >= 1.7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration and Manual Button Press"
 		}
 	],
 	"metadata": {
