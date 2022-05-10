@@ -254,6 +254,47 @@ export const applicationCCs: readonly CommandClasses[] = [
 ];
 
 /**
+ * Defines which CCs are considered Encapsulation CCs
+ */
+export const encapsulationCCs: readonly CommandClasses[] = [
+	CommandClasses["CRC-16 Encapsulation"],
+	CommandClasses["Multi Channel"],
+	CommandClasses["Multi Command"],
+	CommandClasses.Security,
+	CommandClasses["Security 2"],
+	CommandClasses["Transport Service"],
+];
+
+/**
+ * Defines which CCs are considered Management CCs
+ */
+export const managementCCs: readonly CommandClasses[] = [
+	CommandClasses["Application Capability"],
+	CommandClasses["Application Status"],
+	CommandClasses.Association,
+	CommandClasses["Association Command Configuration"],
+	CommandClasses["Association Group Information"],
+	// Battery is in the Management CC specs, but we consider it a Sensor CC
+	CommandClasses["Device Reset Locally"],
+	CommandClasses["Firmware Update Meta Data"],
+	CommandClasses["Grouping Name"],
+	CommandClasses.Hail,
+	CommandClasses.Indicator,
+	CommandClasses["IP Association"],
+	CommandClasses["Manufacturer Specific"],
+	CommandClasses["Multi Channel Association"],
+	CommandClasses["Node Naming and Location"],
+	CommandClasses["Remote Association Activation"],
+	CommandClasses["Remote Association Configuration"],
+	CommandClasses.Time,
+	CommandClasses["Time Parameters"],
+	CommandClasses.Version,
+	CommandClasses["Wake Up"],
+	CommandClasses["Z/IP Naming and Location"],
+	CommandClasses["Z-Wave Plus Info"],
+];
+
+/**
  * An array of all defined CCs that are not application CCs
  */
 export const nonApplicationCCs: readonly CommandClasses[] = Object.freeze(
