@@ -45,8 +45,7 @@ export enum MessageType {
  */
 export enum FunctionType {
 	GetSerialApiInitData = 0x02,
-
-	FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION = 0x03,
+	SetApplicationNodeInformation = 0x03, // Set up the controller NIF prior to starting or joining a Z-Wave network
 
 	ApplicationCommand = 0x04, // A message from another node
 

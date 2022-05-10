@@ -1,5 +1,6 @@
 import {
 	actuatorCCs,
+	allCCs,
 	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
@@ -7,6 +8,7 @@ import {
 	deriveTempKeys,
 	dskFromString,
 	dskToString,
+	encapsulationCCs,
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
 	isRecoverableZWaveError,
@@ -19,6 +21,7 @@ import {
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
+	sensorCCs,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -55,6 +58,7 @@ import {
 } from "../commandclass";
 import type { AssociationCC } from "../commandclass/AssociationCC";
 import type { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
+import { getImplementedVersion } from "../commandclass/CommandClass";
 import {
 	getManufacturerIdValueId,
 	getManufacturerIdValueMetadata,
@@ -81,7 +85,7 @@ import type {
 	AssociationGroup,
 	EndpointAddress,
 } from "../commandclass/_Types";
-import type { Driver, RequestHandler } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { FunctionType } from "../message/Constants";
@@ -134,6 +138,7 @@ import {
 	SerialAPISetup_SetTXStatusReportRequest,
 	SerialAPISetup_SetTXStatusReportResponse,
 } from "../serialapi/capability/SerialAPISetupMessages";
+import { SetApplicationNodeInformationRequest } from "../serialapi/capability/SetApplicationNodeInformationRequest";
 import {
 	GetControllerIdRequest,
 	GetControllerIdResponse,
@@ -1028,55 +1033,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			);
 		}
 
-		// TODO: Tell the Z-Wave stick what kind of application this is
-		//   The Z-Wave Application Layer MUST use the \ref ApplicationNodeInformation
-		//   function to generate the Node Information frame and to save information about
-		//   node capabilities. All Z Wave application related fields of the Node Information
-		//   structure MUST be initialized by this function.
-
-		// Afterwards, a hard reset is required, so we need to move this into another method
-		// if (
-		// 	this.isFunctionSupported(
-		// 		FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
-		// 	)
-		// ) {
-		// 	this.driver.controllerLog.print(`sending application info...`);
-
-		// 	// TODO: Generate this list dynamically
-		// 	// A list of all CCs the controller will respond to
-		// 	const supportedCCs = [CommandClasses.Time];
-		// 	// Turn the CCs into buffers and concat them
-		// 	const supportedCCBuffer = Buffer.concat(
-		// 		supportedCCs.map(cc =>
-		// 			cc >= 0xf1
-		// 				? // extended CC
-		// 				  Buffer.from([cc >>> 8, cc & 0xff])
-		// 				: // normal CC
-		// 				  Buffer.from([cc]),
-		// 		),
-		// 	);
-
-		// 	const appInfoMsg = new Message(this.driver, {
-		// 		type: MessageType.Request,
-		// 		functionType:
-		// 			FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
-		// 		payload: Buffer.concat([
-		// 			Buffer.from([
-		// 				0x01, // APPLICATION_NODEINFO_LISTENING
-		// 				GenericDeviceClasses["Static Controller"],
-		// 				0x01, // specific static PC controller
-		// 				supportedCCBuffer.length, // length of supported CC list
-		// 			]),
-		// 			// List of supported CCs
-		// 			supportedCCBuffer,
-		// 		]),
-		// 	});
-		// 	await this.driver.sendMessage(appInfoMsg, {
-		// 		priority: MessagePriority.Controller,
-		// 		supportCheck: false,
-		// 	});
-		// }
-
 		this.driver.controllerLog.print("Interview completed");
 	}
 
@@ -1090,49 +1046,105 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	}
 
 	/**
+	 * Sets the NIF of the controller to the Gateway device type and to include the CCs supported by Z-Wave JS.
+	 * Warning: This only works when followed up by a hard-reset, so don't call this directly
+	 * @internal
+	 */
+	public async setControllerNIF(): Promise<void> {
+		const deviceClass = new DeviceClass(
+			this.driver.configManager,
+			0x02, // Static Controller
+			0x02, // Static Controller
+			0x07, // Gateway
+		);
+
+		const implementedCCs = allCCs.filter(
+			(cc) => getImplementedVersion(cc) > 0,
+		);
+
+		// Encapsulation CCs are always supported
+		const implementedEncapsulationCCs = encapsulationCCs.filter((cc) =>
+			implementedCCs.includes(cc),
+		);
+
+		const implementedActuatorCCs = actuatorCCs.filter((cc) =>
+			implementedCCs.includes(cc),
+		);
+		const implementedSensorCCs = sensorCCs.filter((cc) =>
+			implementedCCs.includes(cc),
+		);
+
+		const supportedCCs = [
+			// Z-Wave Plus Info must be listed first
+			CommandClasses["Z-Wave Plus Info"],
+			// TODO: Z-Wave Plus v2 Device Type Specification
+			// Gateway device type MUST **support** Inclusion Controller and Time CC
+			...implementedEncapsulationCCs,
+		];
+
+		const controlledCCs = [
+			// Non-actuator CCs that MUST be supported by the gateway DT:
+			CommandClasses.Association,
+			CommandClasses["Association Group Information"],
+			CommandClasses.Basic,
+			CommandClasses["Central Scene"],
+			CommandClasses["CRC-16 Encapsulation"],
+			CommandClasses["Firmware Update Meta Data"],
+			CommandClasses.Indicator,
+			CommandClasses.Meter,
+			CommandClasses["Multi Channel"],
+			CommandClasses["Multi Channel Association"],
+			CommandClasses["Multilevel Sensor"],
+			CommandClasses.Notification,
+			CommandClasses.Security,
+			CommandClasses["Security 2"],
+			CommandClasses.Version,
+			CommandClasses["Wake Up"],
+		];
+		// Add implemented actuator and sensor CCs to fill up the space. These might get cut off
+		controlledCCs.push(
+			...[...implementedActuatorCCs, ...implementedSensorCCs].filter(
+				(cc) => !controlledCCs.includes(cc),
+			),
+		);
+
+		// TODO: Consider if the CCs should follow a certain order
+
+		this.driver.controllerLog.print("Updating the controller NIF...");
+		await this.driver.sendMessage(
+			new SetApplicationNodeInformationRequest(this.driver, {
+				isListening: true,
+				deviceClass,
+				supportedCCs,
+				controlledCCs,
+			}),
+		);
+	}
+
+	/**
 	 * Performs a hard reset on the controller. This wipes out all configuration!
 	 * Warning: The driver needs to re-interview the controller, so don't call this directly
 	 * @internal
 	 */
-	public hardReset(): Promise<void> {
-		this.driver.controllerLog.print("performing hard reset...");
+	public async hardReset(): Promise<void> {
+		// begin the reset process
+		try {
+			this.driver.controllerLog.print("performing hard reset...");
+			await this.driver.sendMessage(new HardResetRequest(this.driver), {
+				supportCheck: false,
+			});
 
-		return new Promise(async (resolve, reject) => {
-			// handle the incoming message
-			const handler: RequestHandler = (_msg) => {
-				this.driver.controllerLog.print(`  hard reset succeeded`);
-
-				// Clean up
-				this._nodes.forEach((node) => node.removeAllListeners());
-				this._nodes.clear();
-
-				resolve();
-				return true;
-			};
-			this.driver.registerRequestHandler(
-				FunctionType.HardReset,
-				handler,
-				true,
+			this.driver.controllerLog.print(`hard reset succeeded`);
+			// Clean up
+			this._nodes.forEach((node) => node.removeAllListeners());
+			this._nodes.clear();
+		} catch (e) {
+			this.driver.controllerLog.print(
+				`hard reset failed: ${getErrorMessage(e)}`,
+				"error",
 			);
-			// begin the reset process
-			try {
-				await this.driver.sendMessage(
-					new HardResetRequest(this.driver),
-					{ supportCheck: false },
-				);
-			} catch (e) {
-				// in any case unregister the handler
-				this.driver.controllerLog.print(
-					`  hard reset failed: ${getErrorMessage(e)}`,
-					"error",
-				);
-				this.driver.unregisterRequestHandler(
-					FunctionType.HardReset,
-					handler,
-				);
-				reject(e);
-			}
-		});
+			throw e;
+		}
 	}
 
 	private _inclusionState: InclusionState = InclusionState.Idle;

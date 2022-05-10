@@ -2054,7 +2054,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
-		// Calling ensureReady with true ensures that _controller is defined
+
+		// Update the controller NIF prior to hard resetting
+		await this._controller!.setControllerNIF();
 		await this._controller!.hardReset();
 
 		// Clean up
