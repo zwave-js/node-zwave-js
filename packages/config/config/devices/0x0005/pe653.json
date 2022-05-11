@@ -80,6 +80,30 @@
 						"version": 1
 					}
 				},
+				// The firmware reports an thermostat setpoint type bitmap with an off-by-one error.
+				// It also reports a scale of 1 in ThermostatSetpointReport but rejects
+				// ThermostatSetpointSet requests with any scale other than 0 instead of 1 as would
+				// be expected according to the spec.
+				"interview": {
+					"0x43": {
+						"values": [
+							{
+								"property": "supportedSetpointTypes",
+								"value": [1, 7]
+							},
+							{
+								"property": "setpointScale",
+								"propertyKey": 1,
+								"value": 0
+							},
+							{
+								"property": "setpointScale",
+								"propertyKey": 7,
+								"value": 0
+							}
+						]
+					}
+				},
 				// The firmware handles requests on some endpoints incorrectly, often reporting garbage
 				// that confuses discovery or inhibits operation. Remove all of these broken CCs.
 				"remove": {
@@ -87,6 +111,10 @@
 					// to reduce clutter and to handle received BASIC_SET events.
 					"0x20": {
 						"endpoints": [1, 2, 3, 4, 5]
+					},
+					// ThermostatSetpointCC: Endpoint 1 is a duplicate of the root.
+					"0x43": {
+						"endpoints": [1]
 					},
 					// ManufacturerSpecificCC: Endpoint 1 erroneously reports an incorrect manufacturer
 					// and product ID, unlike on the root endpoint.
