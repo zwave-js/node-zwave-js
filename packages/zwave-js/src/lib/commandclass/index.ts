@@ -229,10 +229,7 @@ export {
 	FibaroVenetianBlindCCReport,
 	FibaroVenetianBlindCCSet,
 } from "./manufacturerProprietary/Fibaro";
-export {
-	ManufacturerProprietaryCC,
-	ManufacturerProprietaryCCWithResponse,
-} from "./ManufacturerProprietaryCC";
+export { ManufacturerProprietaryCC } from "./ManufacturerProprietaryCC";
 export {
 	ManufacturerSpecificCC,
 	ManufacturerSpecificCCDeviceSpecificGet,
