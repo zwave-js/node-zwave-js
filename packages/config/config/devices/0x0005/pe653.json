@@ -55,5 +55,59 @@
 			"maxValue": 7,
 			"defaultValue": 0
 		}
+	],
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"compat": [
+		{
+			// Fixes #4588: Firmware v3.4 has numerous bugs related to multi-endpoint support.
+			// Firmware v3.3 and v3.1 do not appear to have the same issues.
+			"$if": "firmwareVersion === 3.4",
+			"commandClasses": {
+				// Force use of MultiChannelCC v1.
+				"add": {
+					"0x60": {
+						"isSupported": true,
+						"version": 1
+					}
+				},
+				// The firmware handles requests on some endpoints incorrectly, often reporting garbage
+				// that confuses discovery or inhibits operation. Remove all of these broken CCs.
+				"remove": {
+					// BasicCC: All endpoints control the state of Switch 1 so only keep the root endpoint
+					// to reduce clutter and to handle received BASIC_SET events.
+					"0x20": {
+						"endpoints": [1, 2, 3, 4, 5]
+					},
+					// ManufacturerSpecificCC: Endpoint 1 erroneously reports an incorrect manufacturer
+					// and product ID, unlike on the root endpoint.
+					"0x72": {
+						"endpoints": [1]
+					},
+					// ClockCC: Endpoint 1 erroneously reports a time with an invalid minute field,
+					// unlike on the root endpoint.
+					"0x81": {
+						"endpoints": [1]
+					},
+					// AssociationCC: Endpoint 1 erroneously reports that it supports 133 associated nodes
+					// but association commands don't work at all, unlike on the root endpoint.
+					"0x85": {
+						"endpoints": [1]
+					},
+					// VersionCC: Endpoint 1 reports an unknown version, unlike on the root endpoint.
+					"0x86": {
+						"endpoints": [1]
+					}
+				}
+			},
+			// The device sometimes sends BASIC_SET to the lifeline association when the state of Switch 1
+			// changes but the value is always 0 so treat it as an event.
+			"treatBasicSetAsEvent": true
+		}
 	]
 }
