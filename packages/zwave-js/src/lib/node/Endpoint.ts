@@ -3,6 +3,7 @@ import {
 	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
+	getCCName,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -502,8 +503,32 @@ export class Endpoint {
 		method: TMethod,
 		...args: Parameters<TAPI[TMethod]>
 	): ReturnType<TAPI[TMethod]> {
+		if (typeof cc !== "number" || !(cc in CommandClasses)) {
+			throw new ZWaveError(
+				`Invalid CC ${cc}!`,
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
+		const ccName = getCCName(cc);
 		const CCAPI = (this.commandClasses as any)[cc];
-		return CCAPI[method](...args);
+		if (!CCAPI) {
+			throw new ZWaveError(
+				`The API for the ${ccName} CC does not exist or is not implemented!`,
+				ZWaveErrorCodes.CC_NoAPI,
+			);
+		}
+
+		const apiMethod = CCAPI[method];
+		if (typeof apiMethod !== "function") {
+			throw new ZWaveError(
+				`Method "${
+					method as string
+				}" does not exist on the API for the ${ccName} CC!`,
+				ZWaveErrorCodes.CC_NotImplemented,
+			);
+		}
+		return apiMethod.apply(CCAPI, args);
 	}
 
 	/**
