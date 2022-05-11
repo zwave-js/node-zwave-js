@@ -52,7 +52,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Orientation",
+					"label": "Normal orientation",
 					"value": 0
 				},
 				{
@@ -77,7 +77,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED is on when switch is off",
+					"label": "LED is on when switch is on",
 					"value": 1
 				},
 				{
@@ -292,8 +292,8 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "1. Initiate inclusion mode on the Z-Wave hub.\n2. Tap the upper paddle of the dimmer 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
-		"exclusion": "1. Initiate exclusion mode on the Z-Wave hub.\n2. Tap the lower paddle on the dimmer 3 times quickly\n3. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"inclusion": "1. Initiate inclusion mode on the Z-Wave hub.\n2. Tap the upper paddle of the switch 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
+		"exclusion": "1. Initiate exclusion mode on the Z-Wave hub.\n2. Tap the lower paddle on the switch 3 times quickly\n3. Your hub will confirm exclusion and the device will disappear from your controller's device list",
 		"reset": "1. Tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3147/zooz-z-wave-plus-s2-on-off-switch-zen26-manual.pdf"
 	}
