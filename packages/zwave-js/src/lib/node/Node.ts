@@ -1749,7 +1749,7 @@ protocol version:      ${this.protocolVersion}`;
 			if (instance.interviewComplete) return "continue";
 
 			try {
-				await instance.interview();
+				await this.compatInterviewCC(instance);
 			} catch (e) {
 				if (isTransmissionError(e)) {
 					// We had a CAN or timeout during the interview
@@ -2033,6 +2033,44 @@ protocol version:      ${this.protocolVersion}`;
 	}
 
 	/**
+	 * Interviews a command class unless the device configuration provides compat
+	 * values to use instead of performing the interview.
+	 */
+	private async compatInterviewCC(cc: CommandClass): Promise<void> {
+		const compatValues = this._deviceConfig?.compat?.interviewCCs
+			?.get(cc.ccId)
+			?.endpoints.get(cc.endpointIndex);
+		if (!compatValues) {
+			await cc.interview();
+		} else {
+			for (const compatValue of compatValues) {
+				if (cc.isInternalValue(compatValue.property as any)) {
+					const valueId: ValueID = {
+						commandClass: cc.ccId,
+						endpoint: cc.endpointIndex,
+						property: compatValue.property,
+						propertyKey: compatValue.propertyKey,
+					};
+					this.valueDB.setValue(valueId, compatValue.value);
+				} else {
+					this.driver.controllerLog.logNode(
+						this.id,
+						`failed to set compatibility value from device configuration for ${getCCName(
+							cc.ccId,
+						)}, endpoint ${cc.endpointIndex}: '${
+							compatValue.property
+						}' is not a registered internal value`,
+						"error",
+					);
+				}
+			}
+
+			await cc.refreshValues();
+			cc.interviewComplete = true;
+		}
+	}
+
+	/**
 	 * @internal
 	 * Handles the receipt of a NIF / NodeUpdatePayload
 	 */
@@ -2152,7 +2190,7 @@ protocol version:      ${this.protocolVersion}`;
 			const instance = endpoint.createCCInstanceUnsafe(cc);
 			if (instance) {
 				try {
-					await instance.interview();
+					await this.compatInterviewCC(instance);
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,

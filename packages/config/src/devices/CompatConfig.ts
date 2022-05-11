@@ -414,6 +414,50 @@ All values in compat option commandClasses.add must be objects`,
 				this.addCCs = addCCs;
 			}
 
+			if (definition.commandClasses.interview != undefined) {
+				if (!isObject(definition.commandClasses.interview)) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+	error in compat option commandClasses.interview`,
+					);
+				} else if (
+					!Object.keys(definition.commandClasses.interview).every(
+						(k) => hexKeyRegex2Digits.test(k),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+	All keys in compat option commandClasses.interview must be 2-digit lowercase hex numbers!`,
+					);
+				} else if (
+					!Object.values(definition.commandClasses.interview).every(
+						(v) => isObject(v),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+	All values in compat option commandClasses.interview must be objects`,
+					);
+				}
+
+				const interviewCCs = new Map<
+					CommandClasses,
+					CompatInterviewCC
+				>();
+				for (const [cc, info] of Object.entries(
+					definition.commandClasses.interview,
+				)) {
+					interviewCCs.set(
+						parseInt(cc),
+						new CompatInterviewCC(filename, info as any),
+					);
+				}
+				this.interviewCCs = interviewCCs;
+			}
+
 			if (definition.commandClasses.remove != undefined) {
 				if (!isObject(definition.commandClasses.remove)) {
 					throwInvalidConfig(
@@ -487,6 +531,10 @@ compat option alarmMapping must be an array where all items are objects!`,
 
 	public readonly alarmMapping?: readonly CompatMapAlarm[];
 	public readonly addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
+	public readonly interviewCCs?: ReadonlyMap<
+		CommandClasses,
+		CompatInterviewCC
+	>;
 	public readonly removeCCs?: ReadonlyMap<
 		CommandClasses,
 		"*" | readonly number[]
@@ -528,6 +576,7 @@ compat option alarmMapping must be an array where all items are objects!`,
 		return pick(this, [
 			"alarmMapping",
 			"addCCs",
+			"interviewCCs",
 			"removeCCs",
 			"disableBasicMapping",
 			"disableStrictEntryControlDataValidation",
@@ -636,6 +685,69 @@ invalid endpoint index in compat option commandClasses.add`,
 	}
 
 	public readonly endpoints: ReadonlyMap<number, Partial<CommandClassInfo>>;
+}
+
+export interface CompatInterviewCCValue {
+	property: string | number;
+	propertyKey?: string | number;
+	value: unknown;
+}
+
+export class CompatInterviewCC {
+	public constructor(filename: string, definition: JSONObject) {
+		const endpoints = new Map<number, CompatInterviewCCValue[]>();
+		const parseEndpointInfo = (endpoint: number, info: JSONObject) => {
+			let parsed: CompatInterviewCCValue[] = [];
+			if (info.values != undefined) {
+				if (
+					!isArray(definition.values) ||
+					!definition.values.every(
+						(value: unknown) =>
+							isObject(value) &&
+							value.property != undefined &&
+							(typeof value.property === "string" ||
+								typeof value.property === "number") &&
+							(value.propertyKey == undefined ||
+								typeof value.propertyKey === "string" ||
+								typeof value.propertyKey === "number") &&
+							value.value != undefined,
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+	error in compat option commandClasses.interview, malformed value object`,
+					);
+				}
+				parsed = info.values;
+			}
+			endpoints.set(endpoint, parsed);
+		};
+		// Parse root endpoint info if given
+		if (definition.values != undefined) {
+			// We have info for the root endpoint
+			parseEndpointInfo(0, definition);
+		}
+		// Parse all other endpoints
+		if (isObject(definition.endpoints)) {
+			if (
+				!Object.keys(definition.endpoints).every((k) => /^\d+$/.test(k))
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+invalid endpoint index in compat option commandClasses.interview`,
+				);
+			} else {
+				for (const [ep, info] of Object.entries(definition.endpoints)) {
+					parseEndpointInfo(parseInt(ep), info as any);
+				}
+			}
+		}
+		this.endpoints = endpoints;
+	}
+
+	public readonly endpoints: ReadonlyMap<number, CompatInterviewCCValue[]>;
 }
 
 export interface CompatMapAlarmFrom {
