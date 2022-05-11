@@ -178,7 +178,7 @@ function createEmptyPhysicalNode(): NVMJSONNodeWithInfo {
 		supportedDataRates: [],
 		protocolVersion: 0,
 		optionalFunctionality: false,
-		nodeType: NodeType["Routing End Node"],
+		nodeType: NodeType["End Node"],
 		supportsSecurity: false,
 		supportsBeaming: false,
 		genericDeviceClass: 0,
