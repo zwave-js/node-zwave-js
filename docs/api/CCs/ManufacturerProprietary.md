@@ -13,6 +13,12 @@ async sendData(
 ): Promise<void>;
 ```
 
+### `sendAndReceiveData`
+
+```ts
+async sendAndReceiveData(manufacturerId: number, data?: Buffer): Promise<{ manufacturerId: number; data: Buffer; } | undefined>;
+```
+
 ### `fibaroVenetianBlindsGet`
 
 ```ts
