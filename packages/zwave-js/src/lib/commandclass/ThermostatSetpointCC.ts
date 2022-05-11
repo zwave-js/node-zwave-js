@@ -664,7 +664,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			this.endpointIndex,
 			this._type,
 		);
-		valueDB.setValue(scaleValueId, this._scale.key);
+		if (!valueDB.hasValue(scaleValueId)) {
+			valueDB.setValue(scaleValueId, this._scale.key);
+		}
 		return true;
 	}
 
