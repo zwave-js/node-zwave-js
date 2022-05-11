@@ -56,15 +56,11 @@
 			"defaultValue": 0
 		}
 	],
-	"endpoints": {
-		"0": {
-			"associations": {
-				"1": {
-					"label": "Lifeline",
-					"maxNodes": 5,
-					"isLifeline": true
-				}
-			}
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
 		}
 	},
 	"compat": [
