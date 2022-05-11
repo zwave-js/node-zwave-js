@@ -4,14 +4,12 @@ import {
 } from "alcalzone-shared/deferred-promise";
 
 /** Allows waiting for something for a given amount of time, after which the expectation will automatically be rejected. */
-export class TimedExpectation<
-	TResult = void,
-	TPredicate extends ((input: unknown) => boolean) | undefined = undefined,
-> implements PromiseLike<TResult>
+export class TimedExpectation<TResult = void, TPredicate = never>
+	implements PromiseLike<TResult>
 {
 	public constructor(
 		timeoutMs: number,
-		public readonly predicate?: TPredicate,
+		public readonly predicate?: (input: TPredicate) => boolean,
 		private readonly timeoutErrorMessage: string = "Expectation was not fulfilled within the timeout",
 	) {
 		this.promise = createDeferredPromise<TResult>();

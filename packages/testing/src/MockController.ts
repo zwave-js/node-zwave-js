@@ -21,21 +21,25 @@ export class MockController {
 	public readonly serial: MockSerialPort;
 	private readonly serialParser: SerialAPIParser;
 	private expectedHostACK?: TimedExpectation;
+	private expectedHostMessages: TimedExpectation<Buffer, Buffer>[] = [];
+	private expectedNodeMessages: Map<
+		number,
+		TimedExpectation<Buffer, Buffer>[]
+	> = new Map();
 
 	/** Gets called when parsed/chunked data is received from the serial port */
-	private async serialOnData(
+	private serialOnData(
 		data:
 			| Buffer
 			| MessageHeaders.ACK
 			| MessageHeaders.CAN
 			| MessageHeaders.NAK,
-	): Promise<void> {
+	): void {
 		if (typeof data === "number") {
 			switch (data) {
 				case MessageHeaders.ACK: {
 					// If we were waiting for this ACK, resolve the expectation
 					this.expectedHostACK?.resolve();
-					this.expectedHostACK = undefined;
 					return;
 				}
 				case MessageHeaders.NAK: {
@@ -55,8 +59,15 @@ export class MockController {
 		// all good, respond with ACK
 		this.sendHeaderToHost(MessageHeaders.ACK);
 
-		// TODO: handle message buffer
-		await Promise.resolve();
+		// Handle message buffer. Check for pending expectations first.
+		const handler = this.expectedHostMessages.find(
+			(e) => !e.predicate || e.predicate(data),
+		);
+		if (handler) {
+			handler.resolve(data);
+		} else {
+			// TODO: Then apply generic predefined behavior
+		}
 	}
 
 	/**
@@ -64,24 +75,84 @@ export class MockController {
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
-	private expectHostACK(timeout: number): PromiseLike<void> {
-		this.expectedHostACK = new TimedExpectation(
+	private async expectHostACK(timeout: number): Promise<void> {
+		try {
+			this.expectedHostACK = new TimedExpectation(
+				timeout,
+				undefined,
+				"Host did not respond with an ACK within the provided timeout!",
+			);
+			// eslint-disable-next-line @typescript-eslint/await-thenable
+			return await this.expectedHostACK;
+		} finally {
+			this.expectedHostACK = undefined;
+		}
+	}
+
+	/**
+	 * Waits until the host sends a message matching the given predicate or a timeout has elapsed.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 */
+	public async expectHostMessage(
+		timeout: number,
+		predicate: (data: Buffer) => boolean,
+	): Promise<Buffer> {
+		const expectation = new TimedExpectation<Buffer, Buffer>(
 			timeout,
-			undefined,
+			predicate,
 			"Host did not respond with an ACK within the provided timeout!",
 		);
-		return this.expectedHostACK;
+		try {
+			this.expectedHostMessages.push(expectation);
+			// eslint-disable-next-line @typescript-eslint/await-thenable
+			return await expectation;
+		} finally {
+			const index = this.expectedHostMessages.indexOf(expectation);
+			if (index !== -1) this.expectedHostMessages.splice(index, 1);
+		}
+	}
+
+	/**
+	 * Waits until the node sends a message matching the given predicate or a timeout has elapsed.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 */
+	public async expectNodeMessage(
+		node: MockNode,
+		timeout: number,
+		predicate: (data: Buffer) => boolean,
+	): Promise<Buffer> {
+		const expectation = new TimedExpectation<Buffer, Buffer>(
+			timeout,
+			predicate,
+			"Node did not respond with an ACK within the provided timeout!",
+		);
+		try {
+			if (!this.expectedNodeMessages.has(node.id)) {
+				this.expectedNodeMessages.set(node.id, []);
+			}
+			this.expectedNodeMessages.get(node.id)!.push(expectation);
+			// eslint-disable-next-line @typescript-eslint/await-thenable
+			return await expectation;
+		} finally {
+			const array = this.expectedNodeMessages.get(node.id);
+			if (array) {
+				const index = array.indexOf(expectation);
+				if (index !== -1) array.splice(index, 1);
+			}
+		}
 	}
 
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
-	public sendHeaderToHost(data: MessageHeaders): void {
+	private sendHeaderToHost(data: MessageHeaders): void {
 		// The terms used in the mock serialport consider the host side,
 		// so sending something to the host means the serialport receives data
 		this.serial.receiveData(Buffer.from([data]));
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
-	private async sendToHost(data: Buffer): Promise<void> {
+	public async sendToHost(data: Buffer): Promise<void> {
 		// The terms used in the mock serialport consider the host side,
 		// so sending something to the host means the serialport receives data
 		this.serial.receiveData(data);
@@ -91,7 +162,15 @@ export class MockController {
 
 	/** Gets called when a complete chunk of data is received from a {@link MockNode} */
 	public nodeOnData(node: MockNode, data: Buffer): void {
-		// TODO: handle message buffer
+		// Handle message buffer. Check for pending expectations first.
+		const handler = this.expectedNodeMessages
+			.get(node.id)
+			?.find((e) => !e.predicate || e.predicate(data));
+		if (handler) {
+			handler.resolve(data);
+		} else {
+			// TODO: Then apply generic predefined behavior
+		}
 	}
 
 	/**
@@ -101,4 +180,9 @@ export class MockController {
 	public sendToNode(node: MockNode, data: Buffer): void {
 		node.controllerOnData(data);
 	}
+}
+
+export interface MockControllerBehavior {
+	onHostMessage: (this: MockController, data: Buffer) => void;
+	onNodeMessage: (this: MockController, node: MockNode, data: Buffer) => void;
 }
