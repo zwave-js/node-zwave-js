@@ -29,6 +29,25 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Test network mock",
+			"port": 9229,
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"-r",
+				"./maintenance/esbuild-register.js",
+				"${workspaceFolder}/test/mock.ts"
+			],
+			"env": {},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Generate typed docs",
 			"port": 9229,
 			"runtimeExecutable": "yarn",

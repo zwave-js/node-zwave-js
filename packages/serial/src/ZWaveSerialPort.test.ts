@@ -1,33 +1,9 @@
-import { MockBinding, MockPortBinding } from "@serialport/binding-mock";
-import { ZWaveLogContainer } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
-import { SerialPortMock } from "serialport";
 import { PassThrough } from "stream";
 import { MessageHeaders } from "./MessageHeaders";
-import { ZWaveSerialPort } from "./ZWaveSerialPort";
-
-async function createAndOpenMockedZWaveSerialPort(): Promise<{
-	port: ZWaveSerialPort;
-	binding: MockPortBinding;
-}> {
-	MockBinding.reset();
-	MockBinding.createPort("/dev/ZWaveTest", {
-		record: true,
-		readyData: Buffer.from([]),
-	});
-
-	const port = new ZWaveSerialPort(
-		"/dev/ZWaveTest",
-		new ZWaveLogContainer({
-			enabled: false,
-		}),
-		// @ts-expect-error We're using an internal signature here
-		SerialPortMock,
-	);
-	await port.open();
-	const binding = (port["serial"] as SerialPortMock).port!;
-	return { port, binding };
-}
+import { createAndOpenMockedZWaveSerialPort } from "./MockSerialPort";
+import type { MockPortBinding } from "./SerialPortBindingMock";
+import type { ZWaveSerialPort } from "./ZWaveSerialPort";
 
 async function waitForData(port: {
 	once: (event: "data", callback: (data: any) => void) => any;
@@ -43,7 +19,9 @@ describe("ZWaveSerialPort", () => {
 	let port: ZWaveSerialPort;
 	let binding: MockPortBinding;
 	beforeEach(async () => {
-		({ port, binding } = await createAndOpenMockedZWaveSerialPort());
+		({ port, binding } = await createAndOpenMockedZWaveSerialPort(
+			"/dev/zwavetest",
+		));
 	});
 	afterEach(async () => {
 		port.removeAllListeners();

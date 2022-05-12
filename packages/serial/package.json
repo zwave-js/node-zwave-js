@@ -10,11 +10,15 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
+    "./mock": "./build/index_mock.js",
     "./safe": "./build/index_safe.js"
   },
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
+      "mock": [
+        "build/index_mock.d.ts"
+      ],
       "safe": [
         "build/index_safe.d.ts"
       ]

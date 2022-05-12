@@ -3814,6 +3814,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
     "@zwave-js/shared": "workspace:*"
+    "@zwave-js/testing": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     comment-json: ^4.2.2

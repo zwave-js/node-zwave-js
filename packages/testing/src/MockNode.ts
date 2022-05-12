@@ -11,12 +11,12 @@ export class MockNode {
 	 * Sends a raw buffer to the {@link MockController}
 	 * @param data The data to send. The mock controller expects a complete message/command.
 	 */
-	private sendToController(data: Buffer): void {
+	public sendToController(data: Buffer): void {
 		this.controller.nodeOnData(this, data);
 	}
 
 	/** Gets called when data is received from the {@link MockController} */
-	public controllerOnData(data: Buffer): void {
+	public controllerOnData(_data: Buffer): void {
 		// TODO: handle message buffer
 	}
 }

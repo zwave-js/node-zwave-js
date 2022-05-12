@@ -1,14 +1,11 @@
-import {
-	MessageHeaders,
-	MockSerialPort,
-	SerialAPIParser,
-} from "@zwave-js/serial";
+import { MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
+import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { TimedExpectation } from "@zwave-js/shared/safe";
 import type { MockNode } from "./MockNode";
 
 /** A mock Z-Wave controller which interacts with {@link MockNode}s and can be controlled via a {@link MockSerialPort} */
 export class MockController {
-	public constructor(serial: MockSerialPort) {
+	public constructor(serial: MockPortBinding) {
 		this.serial = serial;
 		// Pipe the serial data through a parser, so we get complete message buffers or headers out the other end
 		this.serialParser = new SerialAPIParser();
@@ -18,7 +15,7 @@ export class MockController {
 		this.serialParser.on("data", (data) => this.serialOnData(data));
 	}
 
-	public readonly serial: MockSerialPort;
+	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
 	private expectedHostACK?: TimedExpectation;
 	private expectedHostMessages: TimedExpectation<Buffer, Buffer>[] = [];
@@ -82,7 +79,6 @@ export class MockController {
 				undefined,
 				"Host did not respond with an ACK within the provided timeout!",
 			);
-			// eslint-disable-next-line @typescript-eslint/await-thenable
 			return await this.expectedHostACK;
 		} finally {
 			this.expectedHostACK = undefined;
@@ -105,7 +101,6 @@ export class MockController {
 		);
 		try {
 			this.expectedHostMessages.push(expectation);
-			// eslint-disable-next-line @typescript-eslint/await-thenable
 			return await expectation;
 		} finally {
 			const index = this.expectedHostMessages.indexOf(expectation);
@@ -133,7 +128,6 @@ export class MockController {
 				this.expectedNodeMessages.set(node.id, []);
 			}
 			this.expectedNodeMessages.get(node.id)!.push(expectation);
-			// eslint-disable-next-line @typescript-eslint/await-thenable
 			return await expectation;
 		} finally {
 			const array = this.expectedNodeMessages.get(node.id);
@@ -146,18 +140,14 @@ export class MockController {
 
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
 	private sendHeaderToHost(data: MessageHeaders): void {
-		// The terms used in the mock serialport consider the host side,
-		// so sending something to the host means the serialport receives data
-		this.serial.receiveData(Buffer.from([data]));
+		this.serial.emitData(Buffer.from([data]));
 	}
 
 	/** Sends a raw buffer to the host/driver and expect an ACK */
 	public async sendToHost(data: Buffer): Promise<void> {
-		// The terms used in the mock serialport consider the host side,
-		// so sending something to the host means the serialport receives data
-		this.serial.receiveData(data);
+		this.serial.emitData(data);
 		// TODO: make the timeout match the configured ACK timeout
-		await this.expectHostACK(500);
+		await this.expectHostACK(1000);
 	}
 
 	/** Gets called when a complete chunk of data is received from a {@link MockNode} */
@@ -183,6 +173,10 @@ export class MockController {
 }
 
 export interface MockControllerBehavior {
-	onHostMessage: (this: MockController, data: Buffer) => void;
-	onNodeMessage: (this: MockController, node: MockNode, data: Buffer) => void;
+	onHostMessage: (controller: MockController, data: Buffer) => void;
+	onNodeMessage: (
+		controller: MockController,
+		node: MockNode,
+		data: Buffer,
+	) => void;
 }

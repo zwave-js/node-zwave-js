@@ -774,8 +774,11 @@ export class Driver
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		// Enforce that an error handler is attached
-		if ((this as unknown as EventEmitter).listenerCount("error") === 0) {
+		// Enforce that an error handler is attached, except for testing with a mocked serialport
+		if (
+			!this.options.testingHooks &&
+			(this as unknown as EventEmitter).listenerCount("error") === 0
+		) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,
@@ -805,7 +808,11 @@ export class Driver
 			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port, this._logContainer);
+			this.serial = new ZWaveSerialPort(
+				this.port,
+				this._logContainer,
+				this.options.testingHooks?.serialPortBinding,
+			);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
@@ -848,6 +855,13 @@ export class Driver
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
+
+			if (
+				typeof this.options.testingHooks?.onSerialPortOpen ===
+				"function"
+			) {
+				await this.options.testingHooks.onSerialPortOpen(this.serial!);
+			}
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
