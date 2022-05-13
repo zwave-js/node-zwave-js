@@ -136,70 +136,51 @@ describe("lib/node/Endpoint", () => {
 	});
 
 	describe("Device Class quirks", () => {
-		it(
-			"A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC",
-			async () => {
-				const cm = new ConfigManager();
-				await cm.loadDeviceClasses();
-				const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
+		it("A non-root endpoint with the `Power Strip Switch` device class does not support the Multi Channel CC", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const powerStripSwitch = new DeviceClass(cm, 0x01, 0x10, 0x04);
 
-				const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
-				const node = new ZWaveNode(1, fakeDriver, powerStripSwitch);
-				expect(
-					node.supportsCC(CommandClasses["Multi Channel"]),
-				).toBeTrue();
-				const ep = new Endpoint(1, fakeDriver, 1, powerStripSwitch);
-				expect(
-					ep.supportsCC(CommandClasses["Multi Channel"]),
-				).toBeFalse();
-			},
-			// Loading configuration may take a while on CI
-			process.env.CI ? 30000 : undefined,
-		);
+			const node = new ZWaveNode(1, fakeDriver, powerStripSwitch);
+			expect(node.supportsCC(CommandClasses["Multi Channel"])).toBeTrue();
+			const ep = new Endpoint(1, fakeDriver, 1, powerStripSwitch);
+			expect(ep.supportsCC(CommandClasses["Multi Channel"])).toBeFalse();
+		}, 30000); // Loading configuration may take a while on CI
 
-		it(
-			"Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory",
-			async () => {
-				const cm = new ConfigManager();
-				await cm.loadDeviceClasses();
-				const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
+		it("Non-root endpoints should not have the Manufacturer Specific CC (among others) added as mandatory", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
 
-				const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-				const node = new ZWaveNode(1, fakeDriver, soundSwitch);
-				(fakeDriver.controller.nodes as any).set(1, node);
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			const node = new ZWaveNode(1, fakeDriver, soundSwitch);
+			(fakeDriver.controller.nodes as any).set(1, node);
 
-				expect(
-					node.supportsCC(CommandClasses["Manufacturer Specific"]),
-				).toBeTrue();
-				const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
-				expect(
-					ep.supportsCC(CommandClasses["Manufacturer Specific"]),
-				).toBeFalse();
-			},
-			// Loading configuration may take a while on CI
-			process.env.CI ? 30000 : undefined,
-		);
+			expect(
+				node.supportsCC(CommandClasses["Manufacturer Specific"]),
+			).toBeTrue();
+			const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
+			expect(
+				ep.supportsCC(CommandClasses["Manufacturer Specific"]),
+			).toBeFalse();
+		}, 30000); // Loading configuration may take a while on CI
 
-		it(
-			"Always-listening nodes should not have the Battery CC added as mandatory",
-			async () => {
-				const cm = new ConfigManager();
-				await cm.loadDeviceClasses();
-				const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
+		it("Always-listening nodes should not have the Battery CC added as mandatory", async () => {
+			const cm = new ConfigManager();
+			await cm.loadDeviceClasses();
+			const soundSwitch = new DeviceClass(cm, 0x01, 0x03, 0x01);
 
-				const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-				const node = new ZWaveNode(1, fakeDriver);
-				(fakeDriver.controller.nodes as any).set(1, node);
-				node["isListening"] = true;
-				node["applyDeviceClass"](soundSwitch);
+			const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+			const node = new ZWaveNode(1, fakeDriver);
+			(fakeDriver.controller.nodes as any).set(1, node);
+			node["isListening"] = true;
+			node["applyDeviceClass"](soundSwitch);
 
-				expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
-				const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
-				expect(ep.supportsCC(CommandClasses.Battery)).toBeFalse();
-			},
-			// Loading configuration may take a while on CI
-			process.env.CI ? 30000 : undefined,
-		);
+			expect(node.supportsCC(CommandClasses.Battery)).toBeFalse();
+			const ep = new Endpoint(1, fakeDriver, 1, soundSwitch);
+			expect(ep.supportsCC(CommandClasses.Battery)).toBeFalse();
+		}, 30000); // Loading configuration may take a while on CI
 	});
 });
