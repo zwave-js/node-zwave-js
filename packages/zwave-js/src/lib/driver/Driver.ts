@@ -4241,27 +4241,4 @@ ${handlers.length} left`,
 
 		return true;
 	}
-
-	// /** @internal */
-	// public getAssociationGroups(
-	// 	source: AssociationAddress,
-	// ): ReadonlyMap<number, AssociationGroup> {
-	// 	return this.controller.getAssociationGroups(source);
-	// }
-
-	// /** @internal */
-	// public addAssociations(
-	// 	source: AssociationAddress,
-	// 	group: number,
-	// 	destinations: AssociationAddress[],
-	// ): Promise<void> {
-	// 	return this.controller.addAssociations(source, group, destinations);
-	// }
-
-	// /** @internal */
-	// public getAssociations(
-	// 	source: AssociationAddress,
-	// ): ReadonlyMap<number, readonly AssociationAddress[]> {
-	// 	return this.controller.getAssociations(source);
-	// }
 }
