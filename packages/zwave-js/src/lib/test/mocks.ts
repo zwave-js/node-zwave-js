@@ -77,6 +77,12 @@ export function createEmptyMockDriver() {
 			nodes: new Map(),
 			ownNodeId: 1,
 		},
+		get nodes() {
+			return ret.controller.nodes;
+		},
+		get ownNodeId() {
+			return ret.controller.ownNodeId;
+		},
 		valueDB: new Map(),
 		metadataDB: new Map(),
 		networkCache: new Map(),

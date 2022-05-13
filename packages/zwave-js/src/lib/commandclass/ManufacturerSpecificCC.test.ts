@@ -44,7 +44,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		let cc: ManufacturerSpecificCC;
 
 		function doInterview() {
-			return cc.interview();
+			return cc.interview(fakeDriver);
 		}
 		function resetSendMessageImplementation() {
 			fakeDriver.sendMessage.mockImplementation(() =>

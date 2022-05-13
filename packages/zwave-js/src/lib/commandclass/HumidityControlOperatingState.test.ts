@@ -88,7 +88,7 @@ describe("lib/commandclass/HumidityControlOperatingStateCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Operating State"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 

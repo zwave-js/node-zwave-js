@@ -126,7 +126,7 @@ describe("lib/commandclass/DoorLockLoggingCC => ", () => {
 				isSupported: true,
 			});
 			const cc = node.createCCInstance(DoorLockLoggingCC)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 

@@ -59,7 +59,7 @@ describe("lib/commandclass/ZWavePlusCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Z-Wave Plus Info"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 

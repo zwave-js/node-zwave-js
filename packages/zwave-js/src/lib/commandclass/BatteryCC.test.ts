@@ -149,7 +149,7 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				isSupported: true,
 			});
 			const cc = node.createCCInstance(CommandClasses.Battery)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 

@@ -237,7 +237,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			const ccInstance = node1.createCCInstance(
 				CommandClasses.Indicator,
 			)!;
-			await ccInstance.interview();
+			await ccInstance.interview(fakeDriver);
 
 			const indicatorIds = [0x30, 0x46, 0x47];
 			expect(node1.getValue(getSupportedIndicatorIDsValueID(0))).toEqual(

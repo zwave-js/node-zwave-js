@@ -130,6 +130,9 @@ describe("lib/driver/Transaction => ", () => {
 					],
 				]),
 			},
+			get nodes() {
+				return driverMock.controller.nodes;
+			},
 			getSafeCCVersionForNode() {},
 			options: {
 				attempts: {},
@@ -245,6 +248,9 @@ describe("lib/driver/Transaction => ", () => {
 					],
 				]),
 			},
+			get nodes() {
+				return driverMock.controller.nodes;
+			},
 			getSafeCCVersionForNode() {},
 			options: {
 				attempts: {},
@@ -335,6 +341,9 @@ describe("lib/driver/Transaction => ", () => {
 						},
 					],
 				]),
+			},
+			get nodes() {
+				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
 			options: {

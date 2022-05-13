@@ -69,7 +69,7 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		it("should not send anything if the node is the controller", async () => {
 			// Temporarily make this node the controller node
 			fakeDriver.controller.ownNodeId = node.id;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 			fakeDriver.controller.ownNodeId = 1;
 		});
@@ -77,14 +77,14 @@ describe("lib/commandclass/WakeUpCC => ", () => {
 		it("should not send anything if the node is frequent listening", async () => {
 			// Temporarily make this node frequent listening
 			(node as any)["isFrequentListening"] = true;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 			expect(fakeDriver.sendMessage).not.toBeCalled();
 			(node as any)["isFrequentListening"] = false;
 		});
 
 		it.skip("if the node is V2+, it should send a WakeUpCCIntervalCapabilitiesGet", async () => {
 			// TODO: Provide a correct response
-			await cc.interview();
+			await cc.interview(fakeDriver);
 			expect(fakeDriver.sendMessage).toBeCalled();
 			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
 				nodeId: node.id,
