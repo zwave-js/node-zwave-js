@@ -13,6 +13,7 @@ import {
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -318,10 +319,10 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
 			direction: "none",
 		});
@@ -336,7 +337,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
-	// public async refreshValues(): Promise<void> {
+	// public async refreshValues(driver: Driver): Promise<void> {
 	// 	const node = this.getNode()!;
 	// 	const endpoint = this.getEndpoint()!;
 	// 	const api = endpoint.commandClasses[
@@ -363,12 +364,12 @@ interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneActuatorConfigurationCommand.Set)
 export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -417,10 +418,10 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 @CCCommand(SceneActuatorConfigurationCommand.Report)
 export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 3);
 		this.sceneId = this.payload[0];
 
@@ -488,12 +489,12 @@ interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
 )
 export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

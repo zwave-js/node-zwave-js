@@ -11,7 +11,7 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import { validateArgs } from "@zwave-js/transformers";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -111,12 +111,12 @@ interface SceneActivationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneActivationCommand.Set)
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActivationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sceneId = this.payload[0];

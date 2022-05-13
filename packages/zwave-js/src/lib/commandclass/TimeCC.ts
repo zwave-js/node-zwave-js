@@ -13,6 +13,7 @@ import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
@@ -122,14 +123,14 @@ export class TimeCCAPI extends CCAPI {
 export class TimeCC extends CommandClass {
 	declare ccCommand: TimeCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Time.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -137,7 +138,7 @@ export class TimeCC extends CommandClass {
 
 		// Synchronize the slave's time
 		if (api.version >= 2) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",
@@ -163,10 +164,10 @@ export class TimeCCTimeReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.hour = this.payload[0] & 0b11111;
@@ -224,10 +225,10 @@ export class TimeCCDateReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.year = this.payload.readUInt16BE(0);
@@ -284,12 +285,12 @@ interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetSet)
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeCCTimeOffsetSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -352,10 +353,10 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 9);
 		// TODO: Refactor this into its own method
 		const hourSign = !!(this.payload[0] & 0b1000_0000);

@@ -17,7 +17,7 @@ import {
 	TransmitStatus,
 	TXReport,
 } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -44,14 +44,14 @@ export const MAX_SEND_ATTEMPTS = 5;
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataRequestTransmitReport
 		) {
-			return new SendDataRequestTransmitReport(driver, options);
+			return new SendDataRequestTransmitReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -69,10 +69,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: SendDataRequestOptions<CCType>,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (!options.command.isSinglecast()) {
 			throw new ZWaveError(
@@ -85,7 +85,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
 		this.maxSendAttempts =
-			options.maxSendAttempts ?? driver.options.attempts.sendData;
+			options.maxSendAttempts ?? host.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -162,12 +162,12 @@ export class SendDataRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -216,8 +216,11 @@ export class SendDataRequestTransmitReport
 
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
 	}
@@ -254,14 +257,14 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataMulticastRequestTransmitReport
 		) {
-			return new SendDataMulticastRequestTransmitReport(driver, options);
+			return new SendDataMulticastRequestTransmitReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -281,10 +284,10 @@ export class SendDataMulticastRequest<
 	implements ICommandClassContainer
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: SendDataMulticastRequestOptions<CCType>,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (!options.command.isMulticast()) {
 			throw new ZWaveError(
@@ -307,7 +310,7 @@ export class SendDataMulticastRequest<
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
 		this.maxSendAttempts =
-			options.maxSendAttempts ?? driver.options.attempts.sendData;
+			options.maxSendAttempts ?? host.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -373,12 +376,12 @@ export class SendDataMulticastRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestTransmitReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -426,8 +429,11 @@ export class SendDataMulticastResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasSent = this.payload[0] !== 0;
 		// if (!this._wasSent) this._errorCode = this.payload[0];
 	}

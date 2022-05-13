@@ -4,7 +4,7 @@ import {
 	getZWaveChipType,
 	UnknownZWaveChipType,
 } from "../../controller/ZWaveChipTypes";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -26,8 +26,11 @@ export class GetSerialApiInitDataRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		const apiVersion = this.payload[0];
 		if (apiVersion < 10) {

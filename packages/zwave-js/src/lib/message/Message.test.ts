@@ -351,6 +351,9 @@ describe("lib/message", () => {
 				const fakeDriver = {
 					getSafeCCVersionForNode() {},
 					controller: { nodes: new Map() },
+					get nodes() {
+						return fakeDriver.controller.nodes;
+					},
 				} as any as Driver;
 				// @ts-ignore We need write access
 				fakeDriver.controller.nodes.set(1, {} as any);

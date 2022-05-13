@@ -1,6 +1,6 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
 import { RSSI, rssiToString } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -22,8 +22,11 @@ export class GetBackgroundRSSIRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.rssiChannel0 = parseRSSI(this.payload, 0);
 		this.rssiChannel1 = parseRSSI(this.payload, 1);
 		this.rssiChannel2 = tryParseRSSI(this.payload, 2);

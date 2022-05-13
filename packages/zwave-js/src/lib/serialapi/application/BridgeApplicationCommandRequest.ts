@@ -7,7 +7,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 import { RSSI, RssiError } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -29,8 +29,11 @@ export class BridgeApplicationCommandRequest
 	extends Message
 	implements ICommandClassContainer
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		// if (gotDeserializationOptions(options)) {
 		// first byte is a status flag
 		const status = this.payload[0];
@@ -59,7 +62,7 @@ export class BridgeApplicationCommandRequest
 		// Parse the CC
 		const commandLength = this.payload[3];
 		let offset = 4;
-		this.command = CommandClass.from(this.driver, {
+		this.command = CommandClass.from(this.host, {
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
 		}) as SinglecastCC;
@@ -98,7 +101,7 @@ export class BridgeApplicationCommandRequest
 		if (this.frameType !== "singlecast") {
 			message.type = this.frameType;
 		}
-		if (this.targetNodeId !== this.driver.controller.ownNodeId) {
+		if (this.targetNodeId !== this.host.ownNodeId) {
 			message["target node"] =
 				typeof this.targetNodeId === "number"
 					? this.targetNodeId

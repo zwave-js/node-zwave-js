@@ -13,6 +13,7 @@ import {
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -358,19 +359,18 @@ export class SceneControllerConfigurationCC extends CommandClass {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(complete: boolean = true): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 
-		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+		driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		const groupCount = this.getGroupCountCached();
 		if (groupCount === 0) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `skipping Scene Controller Configuration interview because Association group count is unknown`,
 				direction: "none",
@@ -389,7 +389,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -400,12 +400,12 @@ export class SceneControllerConfigurationCC extends CommandClass {
 
 		const groupCount = this.getGroupCountCached();
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "querying all scene controller configurations...",
 			direction: "outbound",
 		});
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying scene configuration for group #${groupId}...`,
 				direction: "outbound",
@@ -415,7 +415,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 				const logMessage = `received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -452,12 +452,12 @@ interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneControllerConfigurationCommand.Set)
 export class SceneControllerConfigurationCCSet extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -513,10 +513,10 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 @CCCommand(SceneControllerConfigurationCommand.Report)
 export class SceneControllerConfigurationCCReport extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 3);
 		this.groupId = this.payload[0];
 		this.sceneId = this.payload[1];
@@ -573,12 +573,12 @@ interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
 )
 export class SceneControllerConfigurationCCGet extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

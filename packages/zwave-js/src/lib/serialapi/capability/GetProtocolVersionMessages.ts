@@ -1,5 +1,5 @@
 import type { ProtocolType } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,8 +20,11 @@ export class GetProtocolVersionRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetProtocolVersion)
 export class GetProtocolVersionResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.protocolType = this.payload[0];
 		this.protocolVersion = [
 			this.payload[1],

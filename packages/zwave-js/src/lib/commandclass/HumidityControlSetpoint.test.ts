@@ -413,7 +413,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Setpoint"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 
@@ -478,7 +478,7 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Setpoint"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			let setpointScaleMeta = node.valueDB.getMetadata({
 				commandClass: CommandClasses["Humidity Control Setpoint"],

@@ -1,4 +1,4 @@
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -46,14 +46,14 @@ export enum RemoveFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.RemoveFailedNode)
 @priority(MessagePriority.Controller)
 export class RemoveFailedNodeRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RemoveFailedNodeRequestStatusReport
 		) {
-			return new RemoveFailedNodeRequestStatusReport(driver, options);
+			return new RemoveFailedNodeRequestStatusReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -66,10 +66,10 @@ interface RemoveFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedCallback(FunctionType.RemoveFailedNode)
 export class RemoveFailedNodeRequest extends RemoveFailedNodeRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: RemoveFailedNodeRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.failedNodeId = options.failedNodeId;
 	}
 
@@ -87,8 +87,11 @@ export class RemoveFailedNodeRequestStatusReport
 	extends RemoveFailedNodeRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._removeStatus = this.payload[1];
@@ -109,8 +112,11 @@ export class RemoveFailedNodeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._removeStatus = this.payload[0];
 	}
 

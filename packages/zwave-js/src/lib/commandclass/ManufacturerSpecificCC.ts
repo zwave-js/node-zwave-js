@@ -9,6 +9,7 @@ import {
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -140,7 +141,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 		return [];
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -148,13 +149,13 @@ export class ManufacturerSpecificCC extends CommandClass {
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		if (!node.isControllerNode) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,
 				direction: "none",
 			});
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying manufacturer information...",
 				direction: "outbound",
@@ -163,12 +164,12 @@ export class ManufacturerSpecificCC extends CommandClass {
 			if (mfResp) {
 				const logMessage = `received response for manufacturer information:
   manufacturer: ${
-		this.driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
+		this.host.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -184,10 +185,10 @@ export class ManufacturerSpecificCC extends CommandClass {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 6);
 		this._manufacturerId = this.payload.readUInt16BE(0);
@@ -236,10 +237,10 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {}
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this.type = this.payload[0] & 0b111;
@@ -293,12 +294,12 @@ interface ManufacturerSpecificCCDeviceSpecificGetOptions
 @expectedCCResponse(ManufacturerSpecificCCDeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerSpecificCCDeviceSpecificGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

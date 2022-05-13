@@ -1,6 +1,6 @@
 import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -36,24 +36,24 @@ export interface RequestNodeNeighborUpdateRequestOptions
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RequestNodeNeighborUpdateReport
 		) {
-			return new RequestNodeNeighborUpdateReport(driver, options);
+			return new RequestNodeNeighborUpdateReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
 @expectedCallback(FunctionType.RequestNodeNeighborUpdate)
 export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: RequestNodeNeighborUpdateRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.nodeId = options.nodeId;
 	}
 
@@ -68,7 +68,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 		// During inclusion, the timeout is mainly required for the node to detect all neighbors
 		// We do the same here, so we just reuse the timeout
 		return computeNeighborDiscoveryTimeout(
-			this.driver,
+			this.host,
 			// Controllers take longer, just assume the worst case here
 			NodeType.Controller,
 		);
@@ -86,8 +86,11 @@ export class RequestNodeNeighborUpdateReport
 	extends RequestNodeNeighborUpdateRequestBase
 	implements SuccessIndicator, MultiStageCallback
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._updateStatus = this.payload[1];

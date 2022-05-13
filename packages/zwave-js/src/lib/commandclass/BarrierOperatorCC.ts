@@ -11,6 +11,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -272,14 +273,14 @@ export class BarrierOperatorCCAPI extends CCAPI {
 export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -298,13 +299,13 @@ export class BarrierOperatorCC extends CommandClass {
 			});
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "Querying signaling capabilities...",
 			direction: "outbound",
 		});
 		const resp = await api.getSignalingCapabilities();
 		if (resp) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `Received supported subsystem types: ${resp
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
 					.join("")}`,
@@ -312,13 +313,13 @@ export class BarrierOperatorCC extends CommandClass {
 			});
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
@@ -331,7 +332,7 @@ export class BarrierOperatorCC extends CommandClass {
 			) ?? [];
 
 		for (const subsystemType of supportedSubsystems) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `Querying event signaling state for subsystem ${getEnumMemberName(
 					SubsystemType,
 					subsystemType,
@@ -340,7 +341,7 @@ export class BarrierOperatorCC extends CommandClass {
 			});
 			const state = await api.getEventSignaling(subsystemType);
 			if (state != undefined) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `Subsystem ${getEnumMemberName(
 						SubsystemType,
 						subsystemType,
@@ -350,7 +351,7 @@ export class BarrierOperatorCC extends CommandClass {
 			}
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "querying current barrier state...",
 			direction: "outbound",
 		});
@@ -365,12 +366,12 @@ interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 @CCCommand(BarrierOperatorCommand.Set)
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -399,10 +400,10 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 
@@ -465,10 +466,10 @@ export class BarrierOperatorCCGet extends BarrierOperatorCC {}
 @CCCommand(BarrierOperatorCommand.SignalingCapabilitiesReport)
 export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		this._supportedsubsystemTypes = parseBitMask(
 			this.payload,
@@ -508,12 +509,12 @@ interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
 @CCCommand(BarrierOperatorCommand.EventSignalingSet)
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -553,10 +554,10 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.EventSignalingReport)
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this.subsystemType = this.payload[0];
@@ -615,12 +616,12 @@ interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
 @expectedCCResponse(BarrierOperatorCCEventSignalingReport)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

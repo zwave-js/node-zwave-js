@@ -12,13 +12,13 @@ import type { JSONObject } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
 
 type Constructable<T extends Message> = new (
-	driver: Driver,
+	host: ZWaveHost,
 	options?: MessageOptions,
 ) => T;
 
@@ -55,7 +55,10 @@ export type MessageOptions =
  * Represents a Z-Wave message for communication with the serial interface
  */
 export class Message {
-	public constructor(protected driver: Driver, options: MessageOptions = {}) {
+	public constructor(
+		protected host: ZWaveHost,
+		options: MessageOptions = {},
+	) {
 		// decide which implementation we follow
 		if (gotDeserializationOptions(options)) {
 			// #1: deserialize from payload
@@ -154,7 +157,7 @@ export class Message {
 	 */
 	public get callbackId(): number {
 		if (this._callbackId == undefined) {
-			this._callbackId = this.driver.getNextCallbackId();
+			this._callbackId = this.host.getNextCallbackId();
 		}
 		return this._callbackId;
 	}
@@ -224,9 +227,9 @@ export class Message {
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(driver: Driver, data: Buffer): Message {
+	public static from(host: ZWaveHost, data: Buffer): Message {
 		const Constructor = Message.getConstructor(data);
-		const ret = new Constructor(driver, { data });
+		const ret = new Constructor(host, { data });
 		return ret;
 	}
 
@@ -365,8 +368,7 @@ export class Message {
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined)
-			return this.driver.controller.nodes.get(nodeId);
+		if (nodeId != undefined) return this.host.nodes.get(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;

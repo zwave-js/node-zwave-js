@@ -1,7 +1,7 @@
 import { parseBitMask } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import { num2hex } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -25,8 +25,11 @@ export class GetSerialApiCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		// The first 8 bytes are the api version, manufacturer id, product type and product id
 		this._firmwareVersion = `${this.payload[0]}.${this.payload[1]}`;

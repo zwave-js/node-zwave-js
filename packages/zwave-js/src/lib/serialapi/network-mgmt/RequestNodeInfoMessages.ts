@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -41,8 +41,11 @@ export class RequestNodeInfoResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasSent = this.payload[0] !== 0;
 		if (!this._wasSent) this._errorCode = this.payload[0];
 	}
@@ -74,8 +77,11 @@ export class RequestNodeInfoResponse
 @expectedCallback(testCallbackForRequestNodeInfoRequest)
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, options: RequestNodeInfoRequestOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: RequestNodeInfoRequestOptions,
+	) {
+		super(host, options);
 		this.nodeId = options.nodeId;
 	}
 

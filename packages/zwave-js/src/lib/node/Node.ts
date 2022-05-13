@@ -1749,7 +1749,7 @@ protocol version:      ${this.protocolVersion}`;
 			if (instance.interviewComplete) return "continue";
 
 			try {
-				await instance.interview();
+				await instance.interview(this.driver);
 			} catch (e) {
 				if (isTransmissionError(e)) {
 					// We had a CAN or timeout during the interview
@@ -2152,7 +2152,7 @@ protocol version:      ${this.protocolVersion}`;
 			const instance = endpoint.createCCInstanceUnsafe(cc);
 			if (instance) {
 				try {
-					await instance.interview();
+					await instance.interview(this.driver);
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -2175,7 +2175,7 @@ protocol version:      ${this.protocolVersion}`;
 			const instance = endpoint.createCCInstanceUnsafe(cc);
 			if (instance) {
 				try {
-					await instance.refreshValues();
+					await instance.refreshValues(this.driver);
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,
@@ -2204,7 +2204,7 @@ protocol version:      ${this.protocolVersion}`;
 					continue;
 				}
 				try {
-					await cc.refreshValues();
+					await cc.refreshValues(this.driver);
 				} catch (e) {
 					this.driver.controllerLog.logNode(
 						this.id,

@@ -27,6 +27,7 @@ import {
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -83,8 +84,8 @@ export type CommandClassOptions =
 // @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		this.driver = driver;
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
 			("ccId" in options && options.ccId) || getCommandClass(this);
@@ -113,7 +114,7 @@ export class CommandClass {
 					CommandConstructor &&
 					(new.target as any) !== CommandConstructor
 				) {
-					return new CommandConstructor(driver, options);
+					return new CommandConstructor(host, options);
 				}
 			}
 
@@ -149,7 +150,7 @@ export class CommandClass {
 
 		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
 			// For singlecast CCs, set the CC version as high as possible
-			this.version = this.driver.getSafeCCVersionForNode(
+			this.version = this.host.getSafeCCVersionForNode(
 				this.ccId,
 				this.nodeId,
 				this.endpointIndex,
@@ -166,22 +167,19 @@ export class CommandClass {
 			}
 
 			// If the node or endpoint is included securely, send secure commands if possible
-			const endpoint = this.getNodeUnsafe()?.getEndpoint(
-				this.endpointIndex,
-			);
+			const endpoint = node?.getEndpoint(this.endpointIndex);
 			this.secure =
 				node?.isSecure !== false &&
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!(this.driver.securityManager || this.driver.securityManager2);
+				!!(this.host.securityManager || this.host.securityManager2);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
-			// Security does not support multicast
 		}
 	}
 
-	protected driver: Driver;
+	protected host: ZWaveHost;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -337,7 +335,7 @@ export class CommandClass {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		driver: Driver,
+		driver: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -442,14 +440,14 @@ export class CommandClass {
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
 	 */
-	public async interview(): Promise<void> {
+	public async interview(_driver: Driver): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
 	/**
 	 * Refreshes all dynamic values of this CC
 	 */
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(_driver: Driver): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
@@ -496,7 +494,7 @@ export class CommandClass {
 	 */
 	public getNode(): ZWaveNode | undefined {
 		if (this.isSinglecast()) {
-			return this.driver.controller.nodes.get(this.nodeId);
+			return this.host.nodes.get(this.nodeId);
 		}
 	}
 
@@ -1041,7 +1039,7 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
+	public constructor(driver: ZWaveHost, options: InvalidCCCreationOptions) {
 		super(driver, options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC
@@ -1118,10 +1116,10 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (driver: Driver, options: any): T;
+	new (host: ZWaveHost, options: any): T;
 };
 type APIConstructor = new (
-	driver: Driver,
+	host: ZWaveHost,
 	endpoint: Endpoint | VirtualEndpoint,
 ) => CCAPI;
 

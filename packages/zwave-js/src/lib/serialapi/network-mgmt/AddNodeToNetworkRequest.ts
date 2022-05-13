@@ -6,7 +6,7 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -65,10 +65,10 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	driver: Driver,
+	host: ZWaveHost,
 	nodeType: NodeType,
 ): number {
-	const allNodes = [...driver.controller.nodes.values()];
+	const allNodes = [...host.nodes.values()];
 	const numListeningNodes = allNodes.filter((n) => n.isListening).length;
 	const numFlirsNodes = allNodes.filter((n) => n.isFrequentListening).length;
 	const numNodes = allNodes.length;
@@ -86,14 +86,14 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== AddNodeToNetworkRequestStatusReport
 		) {
-			return new AddNodeToNetworkRequestStatusReport(driver, options);
+			return new AddNodeToNetworkRequestStatusReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -127,10 +127,10 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: AddNodeToNetworkRequestOptions = {},
 	) {
-		super(driver, options);
+		super(host, options);
 
 		this.addNodeType = options.addNodeType;
 		this.highPower = !!options.highPower;
@@ -202,10 +202,10 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: AddNodeDSKToNetworkRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		this.nwiHomeId = options.nwiHomeId;
 		this.authHomeId = options.authHomeId;
@@ -257,8 +257,11 @@ export class AddNodeToNetworkRequestStatusReport
 	extends AddNodeToNetworkRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
 		switch (this.status) {

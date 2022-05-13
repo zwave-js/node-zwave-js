@@ -98,7 +98,11 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
-import { ThrowingMap, ZWaveController } from "../controller/Controller";
+import {
+	ReadonlyThrowingMap,
+	ThrowingMap,
+	ZWaveController,
+} from "../controller/Controller";
 import {
 	InclusionState,
 	ProvisioningEntryStatus,
@@ -151,6 +155,7 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
+import type { ZWaveHost } from "./Host";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -445,7 +450,10 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
+export class Driver
+	extends TypedEventEmitter<DriverEventCallbacks>
+	implements ZWaveHost
+{
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -464,8 +472,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// Initialize the cache
 		this.cacheDir = this.options.storage.cacheDir;
-
-		// TODO: Load provisioning list
 
 		// Initialize config manager
 		this.configManager = new ConfigManager({
@@ -614,6 +620,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// 	}
 		// });
 	}
+
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
@@ -706,6 +713,21 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** @internal */
 	public get securityManager2(): SecurityManager2 | undefined {
 		return this._securityManager2;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public get homeId(): number {
+		return this.controller.homeId!;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public get ownNodeId(): number {
+		return this.controller.ownNodeId!;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
+		return this.controller.nodes;
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */

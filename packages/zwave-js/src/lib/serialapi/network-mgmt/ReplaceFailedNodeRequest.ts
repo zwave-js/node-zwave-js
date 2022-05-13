@@ -1,4 +1,4 @@
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -45,14 +45,14 @@ export enum ReplaceFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
 @priority(MessagePriority.Controller)
 export class ReplaceFailedNodeRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== ReplaceFailedNodeRequestStatusReport
 		) {
-			return new ReplaceFailedNodeRequestStatusReport(driver, options);
+			return new ReplaceFailedNodeRequestStatusReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -64,10 +64,10 @@ interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: ReplaceFailedNodeRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.failedNodeId = options.failedNodeId;
 	}
 
@@ -86,8 +86,11 @@ export class ReplaceFailedNodeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._replaceStatus = this.payload[0];
 	}
 
@@ -105,8 +108,11 @@ export class ReplaceFailedNodeRequestStatusReport
 	extends ReplaceFailedNodeRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._replaceStatus = this.payload[1];

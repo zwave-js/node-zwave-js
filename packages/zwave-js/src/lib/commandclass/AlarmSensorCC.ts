@@ -13,6 +13,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -132,13 +133,13 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.commandClasses.Notification.isSupported()) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
@@ -151,14 +152,14 @@ export class AlarmSensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Find out which sensor types this sensor supports
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported sensor types...",
 			direction: "outbound",
@@ -169,13 +170,13 @@ export class AlarmSensorCC extends CommandClass {
 				.map((type) => getEnumMemberName(AlarmSensorType, type))
 				.map((name) => `\n· ${name}`)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported sensor types timed out, skipping interview...",
@@ -185,13 +186,13 @@ export class AlarmSensorCC extends CommandClass {
 		}
 
 		// Query (all of) the sensor's current value(s)
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
@@ -207,7 +208,7 @@ export class AlarmSensorCC extends CommandClass {
 		for (const type of supportedSensorTypes) {
 			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value for ${sensorName}...`,
 				direction: "outbound",
@@ -224,7 +225,7 @@ severity: ${currentValue.severity}`;
 					message += `
 duration: ${currentValue.duration}`;
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message,
 					direction: "inbound",
@@ -283,10 +284,10 @@ duration: ${currentValue.duration}`;
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 5, this.payload[1] !== 0xff);
 		// Alarm Sensor reports may be forwarded by a different node, in this case
 		// (and only then!) the payload contains the original node ID
@@ -374,10 +375,10 @@ interface AlarmSensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -412,10 +413,10 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		const bitMaskLength = this.payload[0];
 		validatePayload(this.payload.length >= 1 + bitMaskLength);

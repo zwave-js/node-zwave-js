@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/core";
 import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -50,12 +50,12 @@ export class ApplicationCommandRequest
 	implements ICommandClassContainer
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// first byte is a status flag
 			const status = this.payload[0];
@@ -86,7 +86,7 @@ export class ApplicationCommandRequest
 			const nodeId = this.payload[1];
 			// and a command class
 			const commandLength = this.payload[2];
-			this.command = CommandClass.from(this.driver, {
+			this.command = CommandClass.from(this.host, {
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
 			}) as SinglecastCC;
@@ -128,11 +128,7 @@ export class ApplicationCommandRequest
 
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
-			Buffer.from([
-				statusByte,
-				this.driver.controller.ownNodeId!,
-				serializedCC.length,
-			]),
+			Buffer.from([statusByte, this.host.ownNodeId, serializedCC.length]),
 			serializedCC,
 		]);
 

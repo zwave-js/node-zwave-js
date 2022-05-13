@@ -23,6 +23,7 @@ import {
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
@@ -327,21 +328,21 @@ export class MeterCCAPI extends PhysicalCCAPI {
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Meter.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (this.version >= 2) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying meter support...",
 				direction: "outbound",
@@ -351,13 +352,13 @@ export class MeterCC extends CommandClass {
 			if (suppResp) {
 				const logMessage = `received meter support:
 type:                 ${getMeterTypeName(
-					this.driver.configManager,
+					this.host.configManager,
 					suppResp.type,
 				)}
 supported scales:     ${suppResp.supportedScales
 					.map(
 						(s) =>
-							this.driver.configManager.lookupMeterScale(
+							this.host.configManager.lookupMeterScale(
 								suppResp.type,
 								s,
 							).label,
@@ -369,13 +370,13 @@ supported rate types: ${suppResp.supportedRateTypes
 					.map((label) => `\n· ${label}`)
 					.join("")}
 supports reset:       ${suppResp.supportsReset}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying meter support timed out, skipping interview...",
@@ -386,13 +387,13 @@ supports reset:       ${suppResp.supportsReset}`;
 		}
 
 		// Query current meter values
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Meter.withOptions({
@@ -400,7 +401,7 @@ supports reset:       ${suppResp.supportsReset}`;
 		});
 
 		if (this.version === 1) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
 				direction: "outbound",
@@ -422,13 +423,13 @@ supports reset:       ${suppResp.supportsReset}`;
 				: [undefined];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${getMeterTypeName(
-							this.driver.configManager,
+							this.host.configManager,
 							type,
 						)}, scale = ${
-							this.driver.configManager.lookupMeterScale(
+							this.host.configManager.lookupMeterScale(
 								type,
 								scale,
 							).label
@@ -457,8 +458,8 @@ supports reset:       ${suppResp.supportsReset}`;
 				splitPropertyKey(propertyKey);
 			let ret: string;
 			if (meterType !== 0) {
-				ret = `${this.driver.configManager.getMeterName(meterType)}_${
-					this.driver.configManager.lookupMeterScale(meterType, scale)
+				ret = `${this.host.configManager.getMeterName(meterType)}_${
+					this.host.configManager.lookupMeterScale(meterType, scale)
 						.label
 				}`;
 			} else {
@@ -469,7 +470,7 @@ supports reset:       ${suppResp.supportsReset}`;
 			}
 			return ret;
 		} else if (property === "reset" && typeof propertyKey === "number") {
-			return getMeterTypeName(this.driver.configManager, propertyKey);
+			return getMeterTypeName(this.host.configManager, propertyKey);
 		}
 		return super.translatePropertyKey(property, propertyKey);
 	}
@@ -478,14 +479,14 @@ supports reset:       ${suppResp.supportsReset}`;
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
-		const meterType = this.driver.configManager.lookupMeter(this._type);
+		const meterType = this.host.configManager.lookupMeter(this._type);
 
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
 		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
@@ -535,7 +536,7 @@ export class MeterCCReport extends MeterCC {
 			this._deltaTime = 0;
 		}
 		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
-		this._scale = this.driver.configManager.lookupMeterScale(
+		this._scale = this.host.configManager.lookupMeterScale(
 			this._type,
 			scale,
 		);
@@ -610,7 +611,7 @@ export class MeterCCReport extends MeterCC {
 			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyNumber,
 				label: getValueLabel(
-					this.driver.configManager,
+					this.host.configManager,
 					this._type,
 					this._scale,
 					this._rateType,
@@ -660,7 +661,7 @@ export class MeterCCReport extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type:
-				this.driver.configManager.lookupMeter(this.type)?.name ??
+				this.host.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this._type)})`,
 			scale: this._scale.label,
 			"rate type": getEnumMemberName(RateType, this._rateType),
@@ -697,12 +698,12 @@ interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCGetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -763,7 +764,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.scale = this.driver.configManager.lookupMeterScale(
+				message.scale = this.host.configManager.lookupMeterScale(
 					type,
 					this.scale,
 				).label;
@@ -779,10 +780,10 @@ export class MeterCCGet extends MeterCC {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
 		this._supportsReset = !!(this.payload[0] & 0b1_00_00000);
@@ -866,7 +867,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				this.getValueDB().setMetadata(resetSingle, {
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Reset (${getMeterTypeName(
-						this.driver.configManager,
+						this.host.configManager,
 						this._type,
 					)})`,
 					ccSpecific: {
@@ -881,14 +882,14 @@ export class MeterCCSupportedReport extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type: `${
-				this.driver.configManager.lookupMeter(this.type)?.name ??
+				this.host.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
 			"supports reset": this._supportsReset,
 			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
-· ${this.driver.configManager.lookupMeterScale(this.type, scale).label}`,
+· ${this.host.configManager.lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
 			"supported rate types": this._supportedRateTypes
@@ -919,12 +920,12 @@ type MeterCCResetOptions =
 @CCCommand(MeterCommand.Reset)
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCResetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -969,7 +970,7 @@ export class MeterCCReset extends MeterCC {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = `${
-				this.driver.configManager.lookupMeter(this.type)?.name ??
+				this.host.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`;
 		}

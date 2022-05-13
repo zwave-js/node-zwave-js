@@ -23,9 +23,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
-import type { ZWaveController } from "../controller/Controller";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
@@ -89,26 +89,23 @@ function getAuthenticationData(
 function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
 	const peerNodeID = this.nodeId as number;
 	validatePayload.withReason("Duplicate command")(
-		!this.driver.securityManager2!.isDuplicateSinglecast(
+		!this.host.securityManager2!.isDuplicateSinglecast(
 			peerNodeID,
 			sequenceNumber,
 		),
 	);
 	// Not a duplicate, store it
-	this.driver.securityManager2!.storeSequenceNumber(
-		peerNodeID,
-		sequenceNumber,
-	);
+	this.host.securityManager2!.storeSequenceNumber(peerNodeID, sequenceNumber);
 }
 
 function assertSecurity(this: Security2CC, options: CommandClassOptions): void {
 	const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-	if (!this.driver.controller.ownNodeId) {
+	if (!this.host.ownNodeId) {
 		throw new ZWaveError(
 			`Secure commands (S2) can only be ${verb} when the controller's node id is known!`,
 			ZWaveErrorCodes.Driver_NotReady,
 		);
-	} else if (!this.driver.securityManager2) {
+	} else if (!this.host.securityManager2) {
 		throw new ZWaveError(
 			`Secure commands (S2) can only be ${verb} when the network keys for the driver are set!`,
 			ZWaveErrorCodes.Driver_NoSecurity,
@@ -359,7 +356,7 @@ export class Security2CCAPI extends CCAPI {
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Security 2"].withOptions({
@@ -384,7 +381,7 @@ export class Security2CC extends CommandClass {
 			];
 		} else {
 			// For endpoint interviews, the security class MUST be known
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Cannot query securely supported commands for endpoint because the node's security class isn't known...`,
 				level: "error",
@@ -405,9 +402,9 @@ export class Security2CC extends CommandClass {
 
 			// If no key is configured for this security class, skip it
 			if (
-				!this.driver.securityManager2?.hasKeysForSecurityClass(secClass)
+				!this.host.securityManager2?.hasKeysForSecurityClass(secClass)
 			) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: `Cannot query securely supported commands (${getEnumMemberName(
 						SecurityClass,
@@ -418,7 +415,7 @@ export class Security2CC extends CommandClass {
 				continue;
 			}
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: endpoint.index,
 				message: `Querying securely supported commands (${getEnumMemberName(
 					SecurityClass,
@@ -448,7 +445,7 @@ export class Security2CC extends CommandClass {
 					// No supported commands found, mark the security class as not granted
 					node.securityClasses.set(secClass, false);
 
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						message: `The node was NOT granted the security class ${getEnumMemberName(
 							SecurityClass,
 							secClass,
@@ -463,7 +460,7 @@ export class Security2CC extends CommandClass {
 				// Mark the security class as granted
 				node.securityClasses.set(secClass, true);
 
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `The node was granted the security class ${getEnumMemberName(
 						SecurityClass,
 						secClass,
@@ -485,7 +482,7 @@ export class Security2CC extends CommandClass {
 				for (const cc of supportedCCs) {
 					logLines.push(`· ${getCCName(cc)}`);
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: endpoint.index,
 					message: logLines.join("\n"),
 					direction: "inbound",
@@ -542,11 +539,11 @@ export class Security2CC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
 		securityClass?: SecurityClass,
 	): Security2CCMessageEncapsulation {
-		return new Security2CCMessageEncapsulation(driver, {
+		return new Security2CCMessageEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 			securityClass,
@@ -590,22 +587,19 @@ function testCCResponseForMessageEncapsulation(
 	testCCResponseForMessageEncapsulation,
 )
 export class Security2CCMessageEncapsulation extends Security2CC {
-	// Define the securityManager and controller.ownNodeId as existing
+	// Define the securityManager as existing
 	// We check it in the constructor
-	declare driver: Driver & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
-		controller: ZWaveController & {
-			ownNodeId: number;
-		};
 	};
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCMessageEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// Make sure that we can send/receive secure commands
 		assertSecurity.call(this, options);
@@ -664,14 +658,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const authData = getAuthenticationData(
 				this.nodeId as number,
 				this.getDestinationIDRX(),
-				this.driver.controller.homeId!,
+				this.host.homeId,
 				messageLength,
 				unencryptedPayload,
 			);
 
 			// Decrypt payload and verify integrity
 			const spanState =
-				this.driver.securityManager2.getSPANState(peerNodeID);
+				this.host.securityManager2.getSPANState(peerNodeID);
 			const failNoSPAN = () => {
 				return validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
 			};
@@ -691,9 +685,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				decryptionKey?: Buffer;
 			} => {
 				const getNonceAndDecrypt = () => {
-					const iv = this.driver.securityManager2.nextNonce(node.id);
+					const iv = this.host.securityManager2.nextNonce(node.id);
 					const { keyCCM: key } =
-						this.driver.securityManager2.getKeysForNode(node);
+						this.host.securityManager2.getKeysForNode(node);
 					return {
 						decryptionKey: key,
 						...decryptAES128CCM(
@@ -717,9 +711,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					const receiverEI = spanState.receiverEI;
 
 					// How we do this depends on whether we know the security class of the other node
-					if (this.driver.securityManager2.tempKeys.has(peerNodeID)) {
+					if (this.host.securityManager2.tempKeys.has(peerNodeID)) {
 						// We're currently bootstrapping the node, it might be using a temporary key
-						this.driver.securityManager2.initializeTempSPAN(
+						this.host.securityManager2.initializeTempSPAN(
 							node,
 							senderEI,
 							receiverEI,
@@ -729,14 +723,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						if (ret.authOK) return ret;
 
 						// Reset the SPAN state and try with the recently granted security class
-						this.driver.securityManager2.setSPANState(
+						this.host.securityManager2.setSPANState(
 							node.id,
 							spanState,
 						);
 					}
 
 					if (securityClass != undefined) {
-						this.driver.securityManager2.initializeSPAN(
+						this.host.securityManager2.initializeSPAN(
 							node,
 							securityClass,
 							senderEI,
@@ -752,7 +746,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 							.filter((s) => node.hasSecurityClass(s) !== false);
 						for (const secClass of possibleSecurityClasses) {
 							// Initialize an SPAN with that security class
-							this.driver.securityManager2.initializeSPAN(
+							this.host.securityManager2.initializeSPAN(
 								node,
 								secClass,
 								senderEI,
@@ -766,7 +760,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 								return ret;
 							}
 							// Reset the SPAN state and try with the next security class
-							this.driver.securityManager2.setSPANState(
+							this.host.securityManager2.setSPANState(
 								node.id,
 								spanState,
 							);
@@ -806,7 +800,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				// make sure this contains a complete CC command that's worth splitting
 				validatePayload(decryptedCCBytes.length >= 2);
 				// and deserialize the CC
-				this.encapsulated = CommandClass.from(this.driver, {
+				this.encapsulated = CommandClass.from(this.host, {
 					data: decryptedCCBytes,
 					fromEncapsulation: true,
 					encapCC: this,
@@ -844,7 +838,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2.nextSequenceNumber(
+				this.host.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}
@@ -876,7 +870,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			(e): e is MGRPExtension => e instanceof MGRPExtension,
 		);
 		if (mgrpExtension) return mgrpExtension.groupId;
-		return this.driver.controller.ownNodeId;
+		return this.host.ownNodeId;
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
@@ -892,7 +886,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		const node = this.getNode()!;
 
 		// Include Sender EI in the command if we only have the receiver's EI
-		const spanState = this.driver.securityManager2.getSPANState(node.id);
+		const spanState = this.host.securityManager2.getSPANState(node.id);
 		if (
 			spanState.type === SPANState.None ||
 			spanState.type === SPANState.LocalEI
@@ -906,13 +900,13 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// We have the receiver's EI, generate our input and send it over
 			// With both, we can create an SPAN
 			const senderEI =
-				this.driver.securityManager2.generateNonce(undefined);
+				this.host.securityManager2.generateNonce(undefined);
 			const receiverEI = spanState.receiverEI;
 
 			// While bootstrapping a node, the controller only sends commands encrypted
 			// with the temporary key
-			if (this.driver.securityManager2.tempKeys.has(node.id)) {
-				this.driver.securityManager2.initializeTempSPAN(
+			if (this.host.securityManager2.tempKeys.has(node.id)) {
+				this.host.securityManager2.initializeTempSPAN(
 					node,
 					senderEI,
 					receiverEI,
@@ -927,7 +921,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						ZWaveErrorCodes.Security2CC_NoSPAN,
 					);
 				}
-				this.driver.securityManager2.initializeSPAN(
+				this.host.securityManager2.initializeSPAN(
 					node,
 					securityClass,
 					senderEI,
@@ -976,21 +970,21 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		const messageLength =
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(
-			this.driver.controller.ownNodeId,
+			this.host.ownNodeId,
 			this.getDestinationIDTX(),
-			this.driver.controller.homeId!,
+			this.host.homeId,
 			messageLength,
 			unencryptedPayload,
 		);
 
-		const iv = this.driver.securityManager2.nextNonce(node.id);
+		const iv = this.host.securityManager2.nextNonce(node.id);
 		const { keyCCM: key } =
 			// Prefer the overridden security class if it was given
 			this._securityClass != undefined
-				? this.driver.securityManager2.getKeysForSecurityClass(
+				? this.host.securityManager2.getKeysForSecurityClass(
 						this._securityClass,
 				  )
-				: this.driver.securityManager2.getKeysForNode(node);
+				: this.host.securityManager2.getKeysForNode(node);
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,
@@ -1056,22 +1050,19 @@ export type Security2CCNonceReportOptions =
 
 @CCCommand(Security2Command.NonceReport)
 export class Security2CCNonceReport extends Security2CC {
-	// Define the securityManager and controller.ownNodeId as existing
+	// Define the securityManager as existing
 	// We check it in the constructor
-	declare driver: Driver & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
-		controller: ZWaveController & {
-			ownNodeId: number;
-		};
 	};
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCNonceReportOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// Make sure that we can send/receive secure commands
 		assertSecurity.call(this, options);
@@ -1093,7 +1084,7 @@ export class Security2CCNonceReport extends Security2CC {
 
 				// In that case we also need to store it, so the next sent command
 				// can use it for encryption
-				this.driver.securityManager2.storeRemoteEI(
+				this.host.securityManager2.storeRemoteEI(
 					this.nodeId as number,
 					this.receiverEI,
 				);
@@ -1115,7 +1106,7 @@ export class Security2CCNonceReport extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2.nextSequenceNumber(
+				this.host.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}
@@ -1159,17 +1150,14 @@ export class Security2CCNonceGet extends Security2CC {
 	// TODO: A node sending this command MUST accept a delay up to <Previous Round-trip-time to peer node> +
 	// 250 ms before receiving the Security 2 Nonce Report Command.
 
-	// Define the securityManager and controller.ownNodeId as existing
+	// Define the securityManager as existing
 	// We check it in the constructor
-	declare driver: Driver & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
-		controller: ZWaveController & {
-			ownNodeId: number;
-		};
 	};
 
-	public constructor(driver: Driver, options: CCCommandOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CCCommandOptions) {
+		super(host, options);
 
 		// Make sure that we can send/receive secure commands
 		assertSecurity.call(this, options);
@@ -1194,7 +1182,7 @@ export class Security2CCNonceGet extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.driver.securityManager2.nextSequenceNumber(
+				this.host.securityManager2.nextSequenceNumber(
 					this.nodeId as number,
 				);
 		}
@@ -1225,12 +1213,12 @@ interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXReportOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.requestCSA = !!(this.payload[0] & 0b10);
@@ -1317,12 +1305,12 @@ interface Security2CCKEXSetOptions {
 @CCCommand(Security2Command.KEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXSetOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 4);
 			this.permitCSA = !!(this.payload[0] & 0b10);
@@ -1409,10 +1397,10 @@ interface Security2CCKEXFailOptions extends CCCommandOptions {
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | Security2CCKEXFailOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.failType = this.payload[0];
@@ -1444,12 +1432,12 @@ interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCPublicKeyReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 17);
 			this.includingNode = !!(this.payload[0] & 0b1);
@@ -1490,12 +1478,12 @@ interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1542,12 +1530,12 @@ interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 @expectedCCResponse(Security2CCNetworkKeyReport)
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.requestedKey = bitMaskToSecurityClass(this.payload, 0);
@@ -1587,12 +1575,12 @@ interface Security2CCTransferEndOptions extends CCCommandOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCTransferEndOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.keyVerified = !!(this.payload[0] & 0b10);
@@ -1627,10 +1615,10 @@ export class Security2CCTransferEnd extends Security2CC {
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		const CCs = parseCCList(this.payload);
 
 		// SDS13783: A sending node MAY terminate the list of supported command classes with the

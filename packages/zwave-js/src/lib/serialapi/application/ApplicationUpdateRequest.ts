@@ -8,7 +8,7 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import { FunctionType, MessageType } from "../../message/Constants";
 import {
 	Message,
@@ -32,8 +32,11 @@ export enum ApplicationUpdateTypes {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.updateType = this.payload[0];
 		this.payload = this.payload.slice(1);
 
@@ -53,7 +56,7 @@ export class ApplicationUpdateRequest extends Message {
 		}
 
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(driver, options);
+			return new CommandConstructor(host, options);
 		}
 	}
 
@@ -61,8 +64,11 @@ export class ApplicationUpdateRequest extends Message {
 }
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._nodeInformation = parseNodeUpdatePayload(this.payload);
 		this._nodeId = this._nodeInformation.nodeId;
 	}
@@ -96,8 +102,11 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 }
 
 export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.remoteNodeId = this.payload[0];
 		// payload[1] is rxStatus
 		this.nwiHomeId = this.payload.slice(2, 6);

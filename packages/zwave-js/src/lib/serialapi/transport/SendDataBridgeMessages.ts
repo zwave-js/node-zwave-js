@@ -17,7 +17,7 @@ import {
 	TransmitStatus,
 	TXReport,
 } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -43,14 +43,14 @@ import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
 @messageTypes(MessageType.Request, FunctionType.SendDataBridge)
 @priority(MessagePriority.Normal)
 export class SendDataBridgeRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataBridgeRequestTransmitReport
 		) {
-			return new SendDataBridgeRequestTransmitReport(driver, options);
+			return new SendDataBridgeRequestTransmitReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -70,10 +70,10 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: SendDataBridgeRequestOptions<CCType>,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (!options.command.isSinglecast()) {
 			throw new ZWaveError(
@@ -82,14 +82,13 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 			);
 		}
 
-		this.sourceNodeId =
-			options.sourceNodeId ?? driver.controller.ownNodeId!;
+		this.sourceNodeId = options.sourceNodeId ?? host.ownNodeId;
 
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
 		this.maxSendAttempts =
-			options.maxSendAttempts ?? driver.options.attempts.sendData;
+			options.maxSendAttempts ?? host.options.attempts.sendData;
 	}
 
 	/** Which Node ID this command originates from */
@@ -176,12 +175,12 @@ export class SendDataBridgeRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataBridgeRequestTransmitReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -233,8 +232,11 @@ export class SendDataBridgeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasSent = this.payload[0] !== 0;
 	}
 
@@ -264,17 +266,17 @@ export class SendDataBridgeResponse
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticastBridge)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastBridgeRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataMulticastBridgeRequestTransmitReport
 		) {
 			return new SendDataMulticastBridgeRequestTransmitReport(
-				driver,
+				host,
 				options,
 			);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -295,10 +297,10 @@ export class SendDataMulticastBridgeRequest<
 	implements ICommandClassContainer
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: SendDataMulticastBridgeRequestOptions<CCType>,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (!options.command.isMulticast()) {
 			throw new ZWaveError(
@@ -317,13 +319,12 @@ export class SendDataMulticastBridgeRequest<
 			);
 		}
 
-		this.sourceNodeId =
-			options.sourceNodeId ?? driver.controller.ownNodeId!;
+		this.sourceNodeId = options.sourceNodeId ?? host.ownNodeId;
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
 		this.maxSendAttempts =
-			options.maxSendAttempts ?? driver.options.attempts.sendData;
+			options.maxSendAttempts ?? host.options.attempts.sendData;
 	}
 
 	/** Which Node ID this command originates from */
@@ -395,12 +396,12 @@ export class SendDataMulticastBridgeRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastBridgeRequestTransmitReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			this.callbackId = this.payload[0];
@@ -446,8 +447,11 @@ export class SendDataMulticastBridgeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasSent = this.payload[0] !== 0;
 	}
 

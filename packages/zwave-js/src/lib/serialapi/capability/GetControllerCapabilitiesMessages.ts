@@ -1,6 +1,6 @@
 import { ControllerCapabilityFlags } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -21,8 +21,11 @@ export class GetControllerCapabilitiesRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._capabilityFlags = this.payload[0];
 	}
 

@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,8 +20,11 @@ export class GetSUCNodeIdRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetSUCNodeId)
 export class GetSUCNodeIdResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._sucNodeId = this.payload[0];
 	}
 

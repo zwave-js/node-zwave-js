@@ -210,7 +210,7 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Mode"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			expect(fakeDriver.sendMessage).toBeCalled();
 
@@ -235,7 +235,7 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Mode"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			const currentValue = node.valueDB.getValue({
 				commandClass: CommandClasses["Humidity Control Mode"],
@@ -248,7 +248,7 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 			const cc = node.createCCInstance(
 				CommandClasses["Humidity Control Mode"],
 			)!;
-			await cc.interview();
+			await cc.interview(fakeDriver);
 
 			const currentValueMeta = getCCValueMetadata(
 				CommandClasses["Humidity Control Mode"],

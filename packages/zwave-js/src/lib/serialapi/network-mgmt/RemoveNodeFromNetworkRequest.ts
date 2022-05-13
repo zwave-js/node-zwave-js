@@ -1,5 +1,5 @@
 import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -48,17 +48,14 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 // no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
 		) {
-			return new RemoveNodeFromNetworkRequestStatusReport(
-				driver,
-				options,
-			);
+			return new RemoveNodeFromNetworkRequestStatusReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -90,10 +87,10 @@ function testCallbackForRemoveNodeRequest(
 @expectedCallback(testCallbackForRemoveNodeRequest)
 export class RemoveNodeFromNetworkRequest extends RemoveNodeFromNetworkRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: RemoveNodeFromNetworkRequestOptions = {},
 	) {
-		super(driver, options);
+		super(host, options);
 
 		this.removeNodeType = options.removeNodeType;
 		this.highPower = !!options.highPower;
@@ -122,8 +119,11 @@ export class RemoveNodeFromNetworkRequestStatusReport
 	extends RemoveNodeFromNetworkRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.callbackId = this.payload[0];
 		this.status = this.payload[1];
 		switch (this.status) {

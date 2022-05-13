@@ -2381,7 +2381,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					const instance = node.createCCInstance(
 						CommandClasses["Wake Up"],
 					)!;
-					await instance.interview();
+					await instance.interview(this.driver);
 				}
 			} catch (e) {
 				if (isTransmissionError(e) || isRecoverableZWaveError(e)) {

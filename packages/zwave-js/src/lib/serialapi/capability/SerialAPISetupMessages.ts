@@ -8,7 +8,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -80,8 +80,11 @@ export class SerialAPISetupRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.SerialAPISetup)
 export class SerialAPISetupResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.command = this.payload[0];
 		this.payload = this.payload.slice(1);
 
@@ -125,7 +128,7 @@ export class SerialAPISetupResponse extends Message {
 		}
 
 		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(driver, options);
+			return new CommandConstructor(host, options);
 		}
 	}
 
@@ -162,15 +165,18 @@ export class SerialAPISetup_CommandUnsupportedResponse extends SerialAPISetupRes
 // =============================================================================
 
 export class SerialAPISetup_GetSupportedCommandsRequest extends SerialAPISetupRequest {
-	public constructor(driver: Driver, options?: MessageOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
 		this.command = SerialAPISetupCommand.GetSupportedCommands;
 	}
 }
 
 export class SerialAPISetup_GetSupportedCommandsResponse extends SerialAPISetupResponse {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 
 		if (this.payload.length > 1) {
@@ -226,12 +232,12 @@ export interface SerialAPISetup_SetTXStatusReportOptions
 
 export class SerialAPISetup_SetTXStatusReportRequest extends SerialAPISetupRequest {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetTXStatusReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.command = SerialAPISetupCommand.SetTxStatusReport;
 
 		if (gotDeserializationOptions(options)) {
@@ -265,8 +271,11 @@ export class SerialAPISetup_SetTXStatusReportResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -294,12 +303,12 @@ export interface SerialAPISetup_SetNodeIDTypeOptions
 
 export class SerialAPISetup_SetNodeIDTypeRequest extends SerialAPISetupRequest {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetNodeIDTypeOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.command = SerialAPISetupCommand.SetNodeIDType;
 
 		if (gotDeserializationOptions(options)) {
@@ -334,8 +343,11 @@ export class SerialAPISetup_SetNodeIDTypeResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -356,15 +368,18 @@ export class SerialAPISetup_SetNodeIDTypeResponse
 // =============================================================================
 
 export class SerialAPISetup_GetRFRegionRequest extends SerialAPISetupRequest {
-	public constructor(driver: Driver, options?: MessageOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
 		this.command = SerialAPISetupCommand.GetRFRegion;
 	}
 }
 
 export class SerialAPISetup_GetRFRegionResponse extends SerialAPISetupResponse {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.region = this.payload[0];
 	}
 
@@ -387,12 +402,12 @@ export interface SerialAPISetup_SetRFRegionOptions extends MessageBaseOptions {
 
 export class SerialAPISetup_SetRFRegionRequest extends SerialAPISetupRequest {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetRFRegionOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.command = SerialAPISetupCommand.SetRFRegion;
 
 		if (gotDeserializationOptions(options)) {
@@ -425,8 +440,11 @@ export class SerialAPISetup_SetRFRegionResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -448,15 +466,18 @@ export class SerialAPISetup_SetRFRegionResponse
 // =============================================================================
 
 export class SerialAPISetup_GetPowerlevelRequest extends SerialAPISetupRequest {
-	public constructor(driver: Driver, options?: MessageOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
 		this.command = SerialAPISetupCommand.GetPowerlevel;
 	}
 }
 
 export class SerialAPISetup_GetPowerlevelResponse extends SerialAPISetupResponse {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		// The values are in 0.1 dBm
 		this.powerlevel = this.payload[0] / 10;
@@ -491,12 +512,12 @@ export interface SerialAPISetup_SetPowerlevelOptions
 
 export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| SerialAPISetup_SetPowerlevelOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.command = SerialAPISetupCommand.SetPowerlevel;
 
 		if (gotDeserializationOptions(options)) {
@@ -551,8 +572,11 @@ export class SerialAPISetup_SetPowerlevelResponse
 	extends SerialAPISetupResponse
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 
@@ -574,15 +598,18 @@ export class SerialAPISetup_SetPowerlevelResponse
 // =============================================================================
 
 export class SerialAPISetup_GetMaximumPayloadSizeRequest extends SerialAPISetupRequest {
-	public constructor(driver: Driver, options?: MessageOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
 		this.command = SerialAPISetupCommand.GetMaximumPayloadSize;
 	}
 }
 
 export class SerialAPISetup_GetMaximumPayloadSizeResponse extends SerialAPISetupResponse {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.maxPayloadSize = this.payload[0];
 	}
 
@@ -600,15 +627,18 @@ export class SerialAPISetup_GetMaximumPayloadSizeResponse extends SerialAPISetup
 // =============================================================================
 
 export class SerialAPISetup_GetLRMaximumPayloadSizeRequest extends SerialAPISetupRequest {
-	public constructor(driver: Driver, options?: MessageOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, options);
 		this.command = SerialAPISetupCommand.GetLRMaximumPayloadSize;
 	}
 }
 
 export class SerialAPISetup_GetLRMaximumPayloadSizeResponse extends SerialAPISetupResponse {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.maxPayloadSize = this.payload[0];
 	}
 

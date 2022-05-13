@@ -10,7 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -124,7 +124,7 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
@@ -135,7 +135,7 @@ export class SupervisionCC extends CommandClass {
 			);
 		}
 
-		return new SupervisionCCGet(driver, {
+		return new SupervisionCCGet(host, {
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
@@ -188,12 +188,12 @@ export class SupervisionCCReport extends SupervisionCC {
 	// @noCCValues
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SupervisionCCReportOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -272,16 +272,16 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
 			this.sessionId = this.payload[0] & 0b111111;
 
-			this.encapsulated = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.host, {
 				data: this.payload.slice(2),
 				fromEncapsulation: true,
 				encapCC: this,
