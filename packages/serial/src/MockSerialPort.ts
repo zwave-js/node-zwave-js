@@ -8,7 +8,7 @@ import {
 	MockBinding as SerialPortMockBinding,
 	MockPortBinding as SerialPortMockPortBinding,
 } from "./SerialPortBindingMock";
-import type { SerialPortMock } from "./SerialPortMock";
+import { SerialPortMock } from "./SerialPortMock";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";
 import type { ZWaveSerialPortEventCallbacks } from "./ZWaveSerialPortBase";
 
