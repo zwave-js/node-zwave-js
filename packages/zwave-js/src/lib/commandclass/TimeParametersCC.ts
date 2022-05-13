@@ -7,6 +7,7 @@ import {
 } from "@zwave-js/core";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import {
@@ -170,21 +171,21 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Time Parameters"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Synchronize the node's time
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",
 			direction: "outbound",
@@ -199,10 +200,10 @@ export class TimeParametersCC extends CommandClass {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 7);
 		const dateSegments = {
 			year: this.payload.readUInt16BE(0),
@@ -249,12 +250,12 @@ interface TimeParametersCCSetOptions extends CCCommandOptions {
 @CCCommand(TimeParametersCommand.Set)
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
 			const dateSegments = {

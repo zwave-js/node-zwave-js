@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { NodeStatus } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
@@ -157,10 +157,10 @@ type PowerlevelCCSetOptions = CCCommandOptions &
 @CCCommand(PowerlevelCommand.Set)
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | PowerlevelCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -206,10 +206,10 @@ export class PowerlevelCCSet extends PowerlevelCC {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		this.powerlevel = this.payload[0];
 		if (this.powerlevel !== Powerlevel["Normal Power"]) {
@@ -249,12 +249,12 @@ interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 @CCCommand(PowerlevelCommand.TestNodeSet)
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| PowerlevelCCTestNodeSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -268,9 +268,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			const testNode = driver.controller.nodes.getOrThrow(
-				options.testNodeId,
-			);
+			const testNode = host.nodes.getOrThrow(options.testNodeId);
 			if (testNode.isFrequentListening) {
 				throw new ZWaveError(
 					`Node ${options.testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
@@ -315,10 +313,10 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 4);
 		this.testNodeId = this.payload[0];

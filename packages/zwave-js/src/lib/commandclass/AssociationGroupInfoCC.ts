@@ -13,6 +13,7 @@ import {
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
@@ -174,8 +175,8 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		this.registerValue(getGroupNameValueID(0, 0).property, {
 			internal: true,
 		});
@@ -262,14 +263,14 @@ export class AssociationGroupInfoCC extends CommandClass {
 		);
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -279,7 +280,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying name...`,
 				direction: "outbound",
@@ -287,7 +288,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			const name = await api.getGroupName(groupId);
 			if (name) {
 				const logMessage = `Association group #${groupId} has name "${name}"`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -295,7 +296,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			// Then the command list
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying command list...`,
 				direction: "outbound",
@@ -305,13 +306,13 @@ export class AssociationGroupInfoCC extends CommandClass {
 		}
 
 		// Finally query each group for its information
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -326,7 +327,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Then its information
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying info...`,
 				direction: "outbound",
@@ -339,7 +340,7 @@ profile:         ${getEnumMemberName(
 					AssociationGroupInfoProfile,
 					info.profile,
 				)}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -351,10 +352,10 @@ profile:         ${getEnumMemberName(
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this.groupId = this.payload[0];
 		const nameLength = this.payload[1];
@@ -395,12 +396,12 @@ interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -437,10 +438,10 @@ export interface AssociationGroupInfo {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.isListMode = !!(this.payload[0] & 0b1000_0000);
 		this.hasDynamicInfo = !!(this.payload[0] & 0b0100_0000);
@@ -519,12 +520,12 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -573,10 +574,10 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		const groupId = this.payload[0];
 		const listLength = this.payload[1];
@@ -634,12 +635,12 @@ interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCCommandListReport)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

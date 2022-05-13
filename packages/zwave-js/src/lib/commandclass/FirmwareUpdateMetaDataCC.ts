@@ -11,7 +11,7 @@ import {
 } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -191,10 +191,10 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
 export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 6);
 		this.manufacturerId = this.payload.readUInt16BE(0);
 		this.firmwareId = this.payload.readUInt16BE(2);
@@ -277,10 +277,10 @@ export class FirmwareUpdateMetaDataCCMetaDataGet extends FirmwareUpdateMetaDataC
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestReport)
 export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
 	}
@@ -319,12 +319,12 @@ type FirmwareUpdateMetaDataCCRequestGetOptions = {
 // a while to come. We don't want to block communication, so we don't expect a response here
 export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -408,10 +408,10 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 // This is sent to us from the node, so we expect no response
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 3);
 		this.numReports = this.payload[0];
 		this.reportNumber = this.payload.readUInt16BE(1) & 0x7fff;
@@ -441,12 +441,12 @@ interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
 // We send this in reply to the Get command and expect no response
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -505,10 +505,10 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 @CCCommand(FirmwareUpdateMetaDataCommand.StatusReport)
 export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.status = this.payload[0];
 		if (this.payload.length >= 3) {
@@ -537,10 +537,10 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 @CCCommand(FirmwareUpdateMetaDataCommand.ActivationReport)
 export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 8);
 		this.manufacturerId = this.payload.readUInt16BE(0);
 		this.firmwareId = this.payload.readUInt16BE(2);
@@ -593,12 +593,12 @@ interface FirmwareUpdateMetaDataCCActivationSetOptions {
 @expectedCCResponse(FirmwareUpdateMetaDataCCActivationReport)
 export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -653,10 +653,10 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
 @CCCommand(FirmwareUpdateMetaDataCommand.PrepareReport)
 export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 3);
 		this.status = this.payload[0];
 		this.checksum = this.payload.readUInt16BE(1);
@@ -688,12 +688,12 @@ interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
 @expectedCCResponse(FirmwareUpdateMetaDataCCReport)
 export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCPrepareGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

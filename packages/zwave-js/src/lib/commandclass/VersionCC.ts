@@ -15,6 +15,7 @@ import {
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { ZWaveLibraryTypes } from "../serialapi/_Types";
 import { PhysicalCCAPI } from "./API";
@@ -209,7 +210,7 @@ export class VersionCC extends CommandClass {
 		return [CommandClasses["Manufacturer Specific"]];
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
@@ -227,7 +228,7 @@ export class VersionCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -237,7 +238,7 @@ export class VersionCC extends CommandClass {
 			// only query the ones we support a version > 1 for
 			const maxImplemented = getImplementedVersion(cc);
 			if (maxImplemented <= 1) {
-				this.driver.controllerLog.logNode(
+				driver.controllerLog.logNode(
 					node.id,
 					`  skipping query for ${CommandClasses[cc]} (${num2hex(
 						cc,
@@ -246,7 +247,7 @@ export class VersionCC extends CommandClass {
 				return;
 			}
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `  querying the CC version for ${getCCName(cc)}...`,
 				direction: "outbound",
@@ -284,12 +285,12 @@ export class VersionCC extends CommandClass {
 							endpoint.removeCC(cc);
 					}
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `CC version query for ${getCCName(
 						cc,
@@ -307,14 +308,14 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
 			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = this.driver.getSafeCCVersionForNode(
+			this.version = this.host.getSafeCCVersionForNode(
 				CommandClasses.Version,
 				node.id,
 				this.endpointIndex,
 			);
 
 			// Step 2: Query node versions
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying node versions...",
 				direction: "outbound",
@@ -329,7 +330,7 @@ export class VersionCC extends CommandClass {
 				if (versionGetResponse.hardwareVersion != undefined) {
 					logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -338,7 +339,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Step 3: Query all other CC versions
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying CC versions...",
 			direction: "outbound",
@@ -354,7 +355,7 @@ export class VersionCC extends CommandClass {
 		// Step 4: Query VersionCC capabilities (root device only)
 		if (this.endpointIndex === 0 && this.version >= 3) {
 			// Step 4a: Support for SoftwareGet
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying if Z-Wave Software Get is supported...",
 				direction: "outbound",
@@ -362,7 +363,7 @@ export class VersionCC extends CommandClass {
 			const capsResponse = await api.getCapabilities();
 			if (capsResponse) {
 				const { supportsZWaveSoftwareGet } = capsResponse;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `Z-Wave Software Get is${
 						supportsZWaveSoftwareGet ? "" : " not"
@@ -372,13 +373,13 @@ export class VersionCC extends CommandClass {
 
 				if (supportsZWaveSoftwareGet) {
 					// Step 4b: Query Z-Wave Software versions
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying Z-Wave software versions...",
 						direction: "outbound",
 					});
 					await api.getZWaveSoftware();
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "received Z-Wave software versions",
 						direction: "inbound",
@@ -395,10 +396,10 @@ export class VersionCC extends CommandClass {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 5);
 		this._libraryType = this.payload[0];
@@ -483,10 +484,10 @@ export class VersionCCCommandClassReport extends VersionCC {
 	// @noCCValues see constructor comment
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this._requestedCC = this.payload[0];
 		this._ccVersion = this.payload[1];
@@ -533,12 +534,12 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -568,10 +569,10 @@ export class VersionCCCommandClassGet extends VersionCC {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		const capabilities = this.payload[0];
@@ -606,10 +607,10 @@ export class VersionCCCapabilitiesGet extends VersionCC {}
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 23);
 		this._sdkVersion = parseVersion(this.payload);

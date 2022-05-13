@@ -17,6 +17,7 @@ import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import {
@@ -443,14 +444,14 @@ export class ColorSwitchCCAPI extends CCAPI {
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		this.registerValue(getSupportsHexColorValueID(0).property, {
 			internal: true,
 		});
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
@@ -458,20 +459,20 @@ export class ColorSwitchCC extends CommandClass {
 		});
 		const valueDB = this.getValueDB();
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported colors...",
 			direction: "outbound",
 		});
 		const supportedColors = await api.getSupported();
 		if (!supportedColors) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported colors timed out, skipping interview...",
@@ -480,7 +481,7 @@ export class ColorSwitchCC extends CommandClass {
 			return;
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `received supported colors:${supportedColors
 				.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
@@ -540,13 +541,13 @@ export class ColorSwitchCC extends CommandClass {
 		}
 
 		// Query all color components
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
@@ -560,7 +561,7 @@ export class ColorSwitchCC extends CommandClass {
 
 		for (const color of supportedColors) {
 			const colorName = getEnumMemberName(ColorComponent, color);
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current color state (${colorName})`,
 				direction: "outbound",
@@ -587,10 +588,10 @@ export class ColorSwitchCC extends CommandClass {
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// Docs say 'variable length', but the table shows 2 bytes.
 		validatePayload(this.payload.length >= 2);
@@ -625,10 +626,10 @@ export class ColorSwitchCCSupportedGet extends ColorSwitchCC {}
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this.colorComponent = this.payload[0];
@@ -758,10 +759,10 @@ function testResponseForColorSwitchGet(
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -812,12 +813,12 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 @CCCommand(ColorSwitchCommand.Set)
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCSetOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -909,12 +910,12 @@ type ColorSwitchCCStartLevelChangeOptions = {
 @CCCommand(ColorSwitchCommand.StartLevelChange)
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -977,12 +978,12 @@ export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 @CCCommand(ColorSwitchCommand.StopLevelChange)
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ColorSwitchCCStopLevelChangeOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

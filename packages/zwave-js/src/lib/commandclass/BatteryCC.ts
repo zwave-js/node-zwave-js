@@ -13,6 +13,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
@@ -127,30 +128,30 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Query the Battery status
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Battery.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying battery status...",
 			direction: "outbound",
@@ -177,7 +178,7 @@ needs to be replaced or charged: ${
 is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -186,7 +187,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 
 		if (this.version >= 2) {
 			// always query the health
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying battery health...",
 				direction: "outbound",
@@ -197,7 +198,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 				const logMessage = `received response for battery health:
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -210,10 +211,10 @@ temperature:   ${batteryHealth.temperature} °C`;
 @CCCommand(BatteryCommand.Report)
 export class BatteryCCReport extends BatteryCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._level = this.payload[0];
@@ -396,10 +397,10 @@ export class BatteryCCGet extends BatteryCC {}
 @CCCommand(BatteryCommand.HealthReport)
 export class BatteryCCHealthReport extends BatteryCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 

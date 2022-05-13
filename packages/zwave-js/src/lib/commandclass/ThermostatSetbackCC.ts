@@ -9,6 +9,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	decodeSetbackState,
@@ -110,22 +111,22 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Setback"].withOptions({
@@ -133,7 +134,7 @@ export class ThermostatSetbackCC extends CommandClass {
 		});
 
 		// Query the thermostat state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying the current thermostat state...",
 			direction: "outbound",
@@ -143,7 +144,7 @@ export class ThermostatSetbackCC extends CommandClass {
 			const logMessage = `received current state:
 setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
 setback state: ${setbackResp.setbackState}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -160,12 +161,12 @@ interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetbackCommand.Set)
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetbackCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -207,10 +208,10 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._setbackType = this.payload[0] & 0b11;

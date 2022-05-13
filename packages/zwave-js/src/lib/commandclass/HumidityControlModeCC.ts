@@ -13,6 +13,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -147,7 +148,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -156,14 +157,14 @@ export class HumidityControlModeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported humidity control modes...",
 			direction: "outbound",
@@ -177,13 +178,13 @@ export class HumidityControlModeCC extends CommandClass {
 						`\n· ${getEnumMemberName(HumidityControlMode, mode)}`,
 				)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported humidity control modes timed out, skipping interview...",
@@ -192,13 +193,13 @@ export class HumidityControlModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses[
@@ -208,14 +209,14 @@ export class HumidityControlModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current humidity control mode...",
 			direction: "outbound",
 		});
 		const currentMode = await api.get();
 		if (currentMode) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current humidity control mode: " +
@@ -233,12 +234,12 @@ interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 @CCCommand(HumidityControlModeCommand.Set)
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlModeCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -270,10 +271,10 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 @CCCommand(HumidityControlModeCommand.Report)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
@@ -309,10 +310,10 @@ export class HumidityControlModeCCGet extends HumidityControlModeCC {}
 @CCCommand(HumidityControlModeCommand.SupportedReport)
 export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._supportedModes = parseBitMask(

@@ -18,6 +18,7 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
@@ -384,14 +385,14 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -407,7 +408,7 @@ export class DoorLockCC extends CommandClass {
 		let latchSupported = true;
 
 		if (this.version >= 4) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
 				direction: "outbound",
@@ -433,7 +434,7 @@ supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
 supports block to block:   ${resp.blockToBlockSupported}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -496,20 +497,20 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			);
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting lock configuration...",
 			direction: "outbound",
@@ -541,14 +542,14 @@ twist assist                   ${!!config.twistAssist}
 block to block                 ${!!config.blockToBlock}`;
 			}
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting current lock status...",
 			direction: "outbound",
@@ -578,7 +579,7 @@ bolt status:        ${status.boltStatus}`;
 				logMessage += `
 latch status:       ${status.latchStatus}`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -594,12 +595,12 @@ interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 @CCCommand(DoorLockCommand.OperationSet)
 export class DoorLockCCOperationSet extends DoorLockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockCCOperationSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -637,10 +638,10 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.OperationReport)
 export class DoorLockCCOperationReport extends DoorLockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 5);
 
 		const valueDB = this.getValueDB();
@@ -807,10 +808,10 @@ export class DoorLockCCOperationGet extends DoorLockCC {}
 @CCCommand(DoorLockCommand.ConfigurationReport)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 4);
 
 		this.operationType = this.payload[0];
@@ -966,12 +967,12 @@ type DoorLockCCConfigurationSetOptions = (
 @CCCommand(DoorLockCommand.ConfigurationSet)
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & DoorLockCCConfigurationSetOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1112,10 +1113,10 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.CapabilitiesReport)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// parse variable length operation type bit mask
 		validatePayload(this.payload.length >= 1);

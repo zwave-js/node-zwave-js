@@ -19,9 +19,9 @@ import {
 } from "@zwave-js/core";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
-import type { ZWaveController } from "../controller/Controller";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { FunctionType, MessagePriority } from "../message/Constants";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
@@ -279,22 +279,19 @@ export class SecurityCC extends CommandClass {
 	declare ccCommand: SecurityCommand;
 	// Force singlecast for the Security CC (for now)
 	declare nodeId: number;
-	// Define the securityManager and controller.ownNodeId as existing
-	declare driver: Driver & {
+	// Define the securityManager as existing
+	declare host: ZWaveHost & {
 		securityManager: SecurityManager;
-		controller: ZWaveController & {
-			ownNodeId: number;
-		};
 	};
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Security.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "Querying securely supported commands (S0)...",
 			direction: "outbound",
 		});
@@ -302,7 +299,7 @@ export class SecurityCC extends CommandClass {
 		const resp = await api.getSupportedCommands();
 		if (!resp) {
 			if (node.securityClasses.get(SecurityClass.S0_Legacy) === true) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying securely supported commands (S0) timed out",
@@ -312,7 +309,7 @@ export class SecurityCC extends CommandClass {
 			} else {
 				// We didn't know if the node was secure and it didn't respond,
 				// assume that it doesn't have the S0 security class
-				this.driver.controllerLog.logNode(
+				driver.controllerLog.logNode(
 					node.id,
 					`The node was not granted the S0 security class. Continuing interview non-securely.`,
 				);
@@ -332,7 +329,7 @@ export class SecurityCC extends CommandClass {
 		for (const cc of resp.controlledCCs) {
 			logLines.push(`· ${getCCName(cc)}`);
 		}
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: logLines.join("\n"),
 			direction: "inbound",
 		});
@@ -354,7 +351,7 @@ export class SecurityCC extends CommandClass {
 		// We know for sure that the node is included securely
 		if (node.hasSecurityClass(SecurityClass.S0_Legacy) !== true) {
 			node.securityClasses.set(SecurityClass.S0_Legacy, true);
-			this.driver.controllerLog.logNode(
+			driver.controllerLog.logNode(
 				node.id,
 				`The node was granted the S0 security class`,
 			);
@@ -381,11 +378,11 @@ export class SecurityCC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
-		return new SecurityCCCommandEncapsulation(driver, {
+		return new SecurityCCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
@@ -399,12 +396,12 @@ interface SecurityCCNonceReportOptions extends CCCommandOptions {
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
 	constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNonceReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload.withReason("Invalid nonce length")(
 				this.payload.length === HALF_NONCE_SIZE,
@@ -461,20 +458,20 @@ function getCCResponseForCommandEncapsulation(
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCCommandEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		const verb = gotDeserializationOptions(options) ? "decoded" : "sent";
-		if (!(this.driver.controller.ownNodeId as unknown)) {
+		if (!(this.host.ownNodeId as unknown)) {
 			throw new ZWaveError(
 				`Secure commands (S0) can only be ${verb} when the controller's node id is known!`,
 				ZWaveErrorCodes.Driver_NotReady,
 			);
-		} else if (!(this.driver.securityManager as unknown)) {
+		} else if (!(this.host.securityManager as unknown)) {
 			throw new ZWaveError(
 				`Secure commands (S0) can only be ${verb} when the network key for the driver is set`,
 				ZWaveErrorCodes.Driver_NoSecurity,
@@ -492,7 +489,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const authCode = this.payload.slice(-8);
 
 			// Retrieve the used nonce from the nonce store
-			const nonce = this.driver.securityManager.getNonce(nonceId);
+			const nonce = this.host.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload.withReason(
 				`Nonce ${num2hex(
@@ -500,10 +497,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				)} expired, cannot decode security encapsulated command.`,
 			)(!!nonce);
 			// and mark the nonce as used
-			this.driver.securityManager.deleteNonce(nonceId);
+			this.host.securityManager.deleteNonce(nonceId);
 
-			this.authKey = this.driver.securityManager.authKey;
-			this.encryptionKey = this.driver.securityManager.encryptionKey;
+			this.authKey = this.host.securityManager.authKey;
+			this.encryptionKey = this.host.securityManager.encryptionKey;
 
 			// Validate the encrypted data
 			const authData = getAuthenticationData(
@@ -511,7 +508,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				nonce!,
 				this.ccCommand,
 				this.nodeId,
-				this.driver.controller.ownNodeId,
+				this.host.ownNodeId,
 				encryptedPayload,
 			);
 			const expectedAuthCode = computeMAC(authData, this.authKey);
@@ -541,8 +538,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 					options.alternativeNetworkKey,
 				);
 			} else {
-				this.authKey = this.driver.securityManager.authKey;
-				this.encryptionKey = this.driver.securityManager.encryptionKey;
+				this.authKey = this.host.securityManager.authKey;
+				this.encryptionKey = this.host.securityManager.encryptionKey;
 			}
 		}
 	}
@@ -559,7 +556,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 
 	public get nonceId(): number | undefined {
 		if (!this.nonce) return undefined;
-		return this.driver.securityManager.getNonceId(this.nonce);
+		return this.host.securityManager.getNonceId(this.nonce);
 	}
 	public nonce: Buffer | undefined;
 
@@ -590,7 +587,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// make sure this contains a complete CC command that's worth splitting
 		validatePayload(this.decryptedCCBytes.length >= 2);
 		// and deserialize the CC
-		this.encapsulated = CommandClass.from(this.driver, {
+		this.encapsulated = CommandClass.from(this.host, {
 			data: this.decryptedCCBytes,
 			fromEncapsulation: true,
 			encapCC: this,
@@ -616,7 +613,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			senderNonce,
 			this.nonce,
 			this.ccCommand,
-			this.driver.controller.ownNodeId,
+			this.host.ownNodeId,
 			this.nodeId,
 			ciphertext,
 		);
@@ -668,10 +665,10 @@ export class SecurityCCSchemeReport extends SecurityCC {
 	// @noCCValues This CC has no values
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(
 			this.payload.length >= 1,
 			// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
@@ -684,10 +681,10 @@ export class SecurityCCSchemeReport extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeGet extends SecurityCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// Don't care, we won't get sent this and we have no options
 	}
 
@@ -710,10 +707,10 @@ export class SecurityCCSchemeGet extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeInherit extends SecurityCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// Don't care, we won't get sent this and we have no options
 	}
 
@@ -743,12 +740,12 @@ interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
 @expectedCCResponse(SecurityCCNetworkKeyVerify)
 export class SecurityCCNetworkKeySet extends SecurityCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNetworkKeySetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -779,10 +776,10 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.reportsToFollow = this.payload[0];
 		const list = parseCCList(this.payload.slice(1));

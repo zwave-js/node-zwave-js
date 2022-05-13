@@ -9,6 +9,7 @@ import {
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
@@ -203,14 +204,14 @@ export class WakeUpCC extends CommandClass {
 		}
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Wake Up"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -221,19 +222,19 @@ export class WakeUpCC extends CommandClass {
 		let hadCriticalTimeout = false;
 
 		if (node.isControllerNode) {
-			this.driver.controllerLog.logNode(
+			driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
 			);
 		} else if (node.isFrequentListening) {
-			this.driver.controllerLog.logNode(
+			driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for frequent listening device`,
 			);
 		} else {
 			// Retrieve the allowed wake up intervals and wake on demand support if possible
 			if (this.version >= 2) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"retrieving wakeup capabilities from the device...",
@@ -247,7 +248,7 @@ minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds
 wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -261,7 +262,7 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
@@ -271,16 +272,16 @@ wakeup on demand supported: ${wakeupCaps.wakeUpOnDemandSupported}`;
 				const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 
-				const ownNodeId = this.driver.controller.ownNodeId!;
+				const ownNodeId = this.host.ownNodeId;
 				// Only change the destination if necessary
 				if (wakeupResp.controllerNodeId !== ownNodeId) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "configuring wakeup destination node",
 						direction: "outbound",
@@ -290,7 +291,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						getControllerNodeIdValueId(),
 						ownNodeId,
 					);
-					this.driver.controllerLog.logNode(
+					driver.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",
 					);
@@ -315,12 +316,12 @@ interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 @CCCommand(WakeUpCommand.IntervalSet)
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| WakeUpCCIntervalSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			// This error is used to test the driver!
@@ -363,10 +364,10 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 4);
 		this._wakeUpInterval = this.payload.readUIntBE(0, 3);
@@ -420,10 +421,10 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	// @noCCValues The values are stored as part of the metadata
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 12);
 		this._minWakeUpInterval = this.payload.readUIntBE(0, 3);

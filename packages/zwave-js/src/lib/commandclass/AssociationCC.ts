@@ -11,6 +11,7 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
@@ -249,8 +250,8 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		this.registerValue(getHasLifelineValueId(0).property, {
 			internal: true,
 		});
@@ -324,14 +325,14 @@ export class AssociationCC extends CommandClass {
 		return ret;
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -342,20 +343,20 @@ export class AssociationCC extends CommandClass {
 		// multi channel association groups
 
 		// Find out how many groups are supported
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of association groups...",
 			direction: "outbound",
 		});
 		const groupCount = await api.getGroupCount();
 		if (groupCount != undefined) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying association groups timed out, skipping interview...",
@@ -365,13 +366,13 @@ export class AssociationCC extends CommandClass {
 		}
 
 		// Query each association group for its members
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Skip the remaining quer Association CC in favor of Multi Channel Association if possible
 		if (
 			endpoint.commandClasses["Multi Channel Association"].isSupported()
 		) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
@@ -387,7 +388,7 @@ export class AssociationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Association.withOptions({
@@ -398,7 +399,7 @@ export class AssociationCC extends CommandClass {
 
 		// Query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
@@ -408,7 +409,7 @@ export class AssociationCC extends CommandClass {
 				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -426,10 +427,10 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 @CCCommand(AssociationCommand.Set)
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -486,12 +487,12 @@ interface AssociationCCRemoveOptions {
 @CCCommand(AssociationCommand.Remove)
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -552,10 +553,10 @@ export class AssociationCCRemove extends AssociationCC {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._groupId = this.payload[0];
@@ -633,10 +634,10 @@ interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -672,10 +673,10 @@ export class AssociationCCGet extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];

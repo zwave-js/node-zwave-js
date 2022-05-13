@@ -16,6 +16,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -196,21 +197,21 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 export class ThermostatFanModeCC extends CommandClass {
 	declare ccCommand: ThermostatFanModeCommand;
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Fan Mode"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported thermostat fan modes...",
 			direction: "outbound",
@@ -224,13 +225,13 @@ export class ThermostatFanModeCC extends CommandClass {
 						`\n· ${getEnumMemberName(ThermostatFanMode, mode)}`,
 				)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported thermostat fan modes timed out, skipping interview...",
@@ -238,13 +239,13 @@ export class ThermostatFanModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses["Thermostat Fan Mode"].withOptions({
@@ -252,7 +253,7 @@ export class ThermostatFanModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat fan mode...",
 			direction: "outbound",
@@ -266,7 +267,7 @@ export class ThermostatFanModeCC extends CommandClass {
 			if (currentStatus.off != undefined) {
 				logMessage += ` (turned off)`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -283,12 +284,12 @@ type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 @CCCommand(ThermostatFanModeCommand.Set)
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatFanModeCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -326,10 +327,10 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 @CCCommand(ThermostatFanModeCommand.Report)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
@@ -383,10 +384,10 @@ export class ThermostatFanModeCCGet extends ThermostatFanModeCC {}
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this._supportedModes = parseBitMask(
 			this.payload,
 			ThermostatFanMode["Auto low"],

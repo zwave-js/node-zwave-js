@@ -9,6 +9,7 @@ import { pick, staticExtends } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "../driver/Host";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -202,12 +203,12 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	// @noCCValues
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerProprietaryCCOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
@@ -227,7 +228,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				new.target !== PCConstructor &&
 				!staticExtends(new.target, PCConstructor)
 			) {
-				return new PCConstructor(driver, options);
+				return new PCConstructor(host, options);
 			}
 		} else {
 			this.manufacturerId = this.getValueDB().getValue<number>(
@@ -270,7 +271,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		return super.serialize();
 	}
 
-	public async interview(): Promise<void> {
+	public async interview(driver: Driver): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode()!;
@@ -285,12 +286,12 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			const FibaroVenetianBlindCC = (
 				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro")
 			).FibaroVenetianBlindCC;
-			await new FibaroVenetianBlindCC(this.driver, {
+			await new FibaroVenetianBlindCC(this.host, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
-			}).interview();
+			}).interview(driver);
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
 				direction: "none",
 			});
@@ -300,7 +301,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode()!;
@@ -315,12 +316,12 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			const FibaroVenetianBlindCC = (
 				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/Fibaro")
 			).FibaroVenetianBlindCC;
-			await new FibaroVenetianBlindCC(this.driver, {
+			await new FibaroVenetianBlindCC(this.host, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
-			}).refreshValues();
+			}).refreshValues(driver);
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
 				direction: "none",
 			});
