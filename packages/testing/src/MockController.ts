@@ -1,6 +1,7 @@
 import { MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { TimedExpectation } from "@zwave-js/shared/safe";
+import { createDefaultBehaviors } from "./MockControllerBehaviors";
 import type { MockNode } from "./MockNode";
 
 /** A mock Z-Wave controller which interacts with {@link MockNode}s and can be controlled via a {@link MockSerialPort} */
@@ -13,6 +14,9 @@ export class MockController {
 			this.serialParser.write(data);
 		});
 		this.serialParser.on("data", (data) => this.serialOnData(data));
+
+		// Apply default behaviors that are required for interacting with the driver correctly
+		this.defineBehavior(...createDefaultBehaviors());
 	}
 
 	public readonly serial: MockPortBinding;
@@ -23,6 +27,7 @@ export class MockController {
 		number,
 		TimedExpectation<Buffer, Buffer>[]
 	> = new Map();
+	private behaviors: MockControllerBehavior[] = [];
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private serialOnData(
@@ -63,7 +68,9 @@ export class MockController {
 		if (handler) {
 			handler.resolve(data);
 		} else {
-			// TODO: Then apply generic predefined behavior
+			for (const behavior of this.behaviors) {
+				if (behavior.onHostMessage?.(this, data)) return;
+			}
 		}
 	}
 
@@ -159,7 +166,10 @@ export class MockController {
 		if (handler) {
 			handler.resolve(data);
 		} else {
-			// TODO: Then apply generic predefined behavior
+			// Then apply generic predefined behavior
+			for (const behavior of this.behaviors) {
+				if (behavior.onNodeMessage?.(this, node, data)) return;
+			}
 		}
 	}
 
@@ -170,13 +180,19 @@ export class MockController {
 	public sendToNode(node: MockNode, data: Buffer): void {
 		node.controllerOnData(data);
 	}
+
+	public defineBehavior(...behaviors: MockControllerBehavior[]): void {
+		this.behaviors.push(...behaviors);
+	}
 }
 
 export interface MockControllerBehavior {
-	onHostMessage: (controller: MockController, data: Buffer) => void;
-	onNodeMessage: (
+	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
+	onHostMessage?: (controller: MockController, data: Buffer) => boolean;
+	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
+	onNodeMessage?: (
 		controller: MockController,
 		node: MockNode,
 		data: Buffer,
-	) => void;
+	) => boolean;
 }
