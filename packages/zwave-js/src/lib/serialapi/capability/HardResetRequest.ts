@@ -1,5 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -18,14 +18,14 @@ import {
 @messageTypes(MessageType.Request, FunctionType.HardReset)
 @priority(MessagePriority.Controller)
 export class HardResetRequestBase extends Message {
-	public constructor(driver: Driver, options?: MessageOptions) {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== HardResetCallback
 		) {
-			return new HardResetCallback(driver, options);
+			return new HardResetCallback(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -47,8 +47,11 @@ export class HardResetRequest extends HardResetRequestBase {
 }
 
 export class HardResetCallback extends HardResetRequestBase {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.callbackId = this.payload[0];
 	}
 

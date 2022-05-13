@@ -4,7 +4,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { TransmitOptions } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -38,14 +38,14 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.SetSUCNodeId)
 @priority(MessagePriority.Controller)
 export class SetSUCNodeIdRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SetSUCNodeIdRequestStatusReport
 		) {
-			return new SetSUCNodeIdRequestStatusReport(driver, options);
+			return new SetSUCNodeIdRequestStatusReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -53,17 +53,17 @@ export class SetSUCNodeIdRequestBase extends Message {
 @expectedCallback(FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetSUCNodeIdRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.sucNodeId = options.sucNodeId ?? driver.controller.ownNodeId!;
+			this.sucNodeId = options.sucNodeId ?? host.ownNodeId;
 			this.enableSUC = options.enableSUC;
 			this.enableSIS = options.enableSIS;
 			this.transmitOptions =
@@ -89,15 +89,18 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	}
 
 	public expectsCallback(): boolean {
-		if (this.sucNodeId === this.driver.controller.ownNodeId) return false;
+		if (this.sucNodeId === this.host.ownNodeId) return false;
 		return super.expectsCallback();
 	}
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._wasExecuted = this.payload[0] !== 0;
 	}
 
@@ -122,8 +125,11 @@ export class SetSUCNodeIdRequestStatusReport
 	extends SetSUCNodeIdRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._status = this.payload[1];

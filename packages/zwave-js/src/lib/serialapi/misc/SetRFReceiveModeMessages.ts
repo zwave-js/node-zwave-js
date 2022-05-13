@@ -3,7 +3,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -30,10 +30,10 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -67,8 +67,11 @@ export class SetRFReceiveModeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 

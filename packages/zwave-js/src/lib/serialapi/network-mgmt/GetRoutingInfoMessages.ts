@@ -1,7 +1,7 @@
 import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -26,8 +26,8 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(driver: Driver, options: GetRoutingInfoRequestOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: GetRoutingInfoRequestOptions) {
+		super(host, options);
 		this.sourceNodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
 		this.removeBadLinks = !!options.removeBadLinks;
@@ -68,8 +68,11 @@ export class GetRoutingInfoRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		if (this.payload.length === NUM_NODEMASK_BYTES) {
 			// the payload contains a bit mask of all neighbor nodes

@@ -5,7 +5,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import { TransmitStatus } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -28,17 +28,14 @@ import type { INodeQuery } from "../../node/INodeQuery";
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== DeleteSUCReturnRouteRequestTransmitReport
 		) {
-			return new DeleteSUCReturnRouteRequestTransmitReport(
-				driver,
-				options,
-			);
+			return new DeleteSUCReturnRouteRequestTransmitReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -53,12 +50,12 @@ export class DeleteSUCReturnRouteRequest
 	implements INodeQuery
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteSUCReturnRouteRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -83,8 +80,11 @@ export class DeleteSUCReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.wasExecuted = this.payload[0] !== 0;
 	}
 
@@ -112,8 +112,11 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 	extends DeleteSUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._transmitStatus = this.payload[1];

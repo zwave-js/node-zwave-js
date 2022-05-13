@@ -5,7 +5,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import { TransmitStatus } from "../../controller/_Types";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -28,14 +28,14 @@ import type { INodeQuery } from "../../node/INodeQuery";
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteReturnRouteRequestBase extends Message {
-	public constructor(driver: Driver, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== DeleteReturnRouteRequestTransmitReport
 		) {
-			return new DeleteReturnRouteRequestTransmitReport(driver, options);
+			return new DeleteReturnRouteRequestTransmitReport(host, options);
 		}
-		super(driver, options);
+		super(host, options);
 	}
 }
 
@@ -50,12 +50,12 @@ export class DeleteReturnRouteRequest
 	implements INodeQuery
 {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| DeleteReturnRouteRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -80,8 +80,11 @@ export class DeleteReturnRouteResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.hasStarted = this.payload[0] !== 0;
 	}
 
@@ -109,8 +112,11 @@ export class DeleteReturnRouteRequestTransmitReport
 	extends DeleteReturnRouteRequestBase
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.callbackId = this.payload[0];
 		this._transmitStatus = this.payload[1];

@@ -6,7 +6,7 @@ import {
 	ProtocolVersion,
 } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -31,10 +31,10 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.requestedNodeId = options.requestedNodeId;
 	}
 
@@ -56,8 +56,11 @@ export class GetNodeProtocolInfoRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		const { hasSpecificDeviceClass, ...rest } = parseNodeProtocolInfo(
 			this.payload,
@@ -70,7 +73,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 		const generic = this.payload[4];
 		const specific = hasSpecificDeviceClass ? this.payload[5] : 0x00;
 		this.deviceClass = new DeviceClass(
-			this.driver.configManager,
+			this.host.configManager,
 			basic,
 			generic,
 			specific,

@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -24,10 +24,10 @@ interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class SetSerialApiTimeoutsRequest extends Message {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: SetSerialApiTimeoutsRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this.ackTimeout = options.ackTimeout;
 		this.byteTimeout = options.byteTimeout;
 	}
@@ -53,8 +53,11 @@ export class SetSerialApiTimeoutsRequest extends Message {
 
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
 export class SetSerialApiTimeoutsResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this._oldAckTimeout = this.payload[0] * 10;
 		this._oldByteTimeout = this.payload[1] * 10;
 	}

@@ -4,7 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	parseCCList,
 } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
+import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -47,8 +47,11 @@ export enum SerialAPIWakeUpReason {
 // This does not expect a response. The controller sends us this when the Serial API is started
 @priority(MessagePriority.Normal)
 export class SerialAPIStartedRequest extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 
 		this.wakeUpReason = this.payload[0];
 		this.watchdogEnabled = this.payload[1] === 0x01;
@@ -61,7 +64,7 @@ export class SerialAPIStartedRequest extends Message {
 		const generic = this.payload[3];
 		const specific = this.payload[4];
 		this.deviceClass = new DeviceClass(
-			this.driver.configManager,
+			this.host.configManager,
 			basic,
 			generic,
 			specific,
