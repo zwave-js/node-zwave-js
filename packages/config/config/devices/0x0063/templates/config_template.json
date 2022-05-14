@@ -1,70 +1,75 @@
 {
-  "Dimmer steps": {
-			"description": "number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
-		},
-		"Time between dimmer steps": {
-			"description": "Timing of the steps",
-			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
-		},
-		"Load sensing": {
-			"description": "Turn load sensing on or off",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable (default)",
-					"value": 0
-				},
-				{
-					"label": "enable load sensing",
-					"value": 1
-				}
-			]
-		},
-		"Night Light": {
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is ON",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
-		},
-		"Invert Switch": {
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+	"dimmer_steps": {
+		"label": "Dimmer Steps",
+		"description": "Number of dimming steps or levels",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1
+	},
+	"dimmer_times": {
+		"label": "Dimmer Step Time",
+		"description": "Timing of dimming steps or levels",
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true
+	},
+	"load_sensing": {
+		"label": "Load Sensing",
+		"description": "Sense if the load is on or off",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"led_light_3": {
+		"label": "LED Indicator Light",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "LED on when switch is OFF",
+				"value": 0
+			},
+			{
+				"label": "LED on when switch is ON",
+				"value": 1
+			},
+			{
+				"label": "LED always off",
+				"value": 2
+			}
+		]
+	},
+	"invert_switch": {
+		"label": "Invert Switch",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
     }
 }
