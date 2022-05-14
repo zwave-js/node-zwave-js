@@ -33,43 +33,15 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		},
 		{
 			"#": "7",
-			"label": "Dim Rate Steps (Z-Wave Command)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_steps"
 		},
 		{
 			"#": "8",
-			"label": "Dim Rate Timing (Z-Wave)",
-			"description": "Timing of steps or levels",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times"
 		},
 		{
 			"#": "9",
