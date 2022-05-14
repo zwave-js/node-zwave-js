@@ -17,24 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is on",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_light_3"
 		}
 	],
 	"metadata": {
