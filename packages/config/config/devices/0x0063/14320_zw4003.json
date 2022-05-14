@@ -34,20 +34,7 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Inverted switch",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		}
 	],
 	"metadata": {
