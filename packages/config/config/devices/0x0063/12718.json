@@ -17,41 +17,15 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Dimmer steps",
-			"description": "number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#dimmer_steps"
 		},
 		{
 			"#": "8",
-			"label": "Time between dimmer steps",
-			"description": "Timing of the steps",
-			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times"
 		},
 		{
 			"#": "29",
-			"label": "Load sensing",
-			"description": "Turn load sensing on or off",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable (default)",
-					"value": 0
-				},
-				{
-					"label": "enable load sensing",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#load_sensing"
 		}
 	]
 }
