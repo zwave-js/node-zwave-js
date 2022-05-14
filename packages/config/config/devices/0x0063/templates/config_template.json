@@ -37,6 +37,31 @@
 			}
 		]
 	},
+	"led_light_4": {
+		"label": "LED Indicator Light",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "LED on when switch is OFF",
+				"value": 0
+			},
+			{
+				"label": "LED on when switch is ON",
+				"value": 1
+			},
+			{
+				"label": "LED always off",
+				"value": 2
+			},
+			{
+				"label": "LED always on",
+				"value": 3
+			}
+		]
+	},
 	"invert_switch": {
 		"label": "Invert Switch",
 		"valueSize": 1,
@@ -54,6 +79,24 @@
 			}
 		]
     },
+	"alternate_exclusion": {
+		"label": "Alternate Exclusion",
+		"description": "Enables alternate method for excluding the device to prevent accidental removal",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Press any button on the switch",
+				"value": 0
+			},
+			{
+				"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
+				"value": 1
+			}
+		]
+	},
 	"dimmer_steps": {
 		"label": "Dimmer Steps",
 		"description": "Number of dimming steps or levels",
