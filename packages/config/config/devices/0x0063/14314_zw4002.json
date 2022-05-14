@@ -33,22 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert the default On/Off rocker settings.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Invert",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		}
 	],
 	"compat": {
