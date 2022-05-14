@@ -1,22 +1,4 @@
 {
-	"dimmer_steps": {
-		"label": "Dimmer Steps",
-		"description": "Number of dimming steps or levels",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 99,
-		"defaultValue": 1
-	},
-	"dimmer_times": {
-		"label": "Dimmer Step Time",
-		"description": "Timing of dimming steps or levels",
-		"valueSize": 1,
-		"unit": "10ms",
-		"minValue": 1,
-		"maxValue": 255,
-		"defaultValue": 3,
-		"unsigned": true
-	},
 	"load_sensing": {
 		"label": "Load Sensing",
 		"description": "Sense if the load is on or off",
@@ -71,5 +53,59 @@
 				"value": 1
 			}
 		]
-    }
+    },
+	"dimmer_steps": {
+		"label": "Dimmer Steps",
+		"description": "Number of dimming steps or levels",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1
+	},
+	"dimmer_times": {
+		"label": "Dimmer Step Time",
+		"description": "Timing of dimming steps or levels",
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true
+	},
+	"dimmer_steps_z": {
+		"label": "Dimmer Steps (Remote Command)",
+		"description": "Number of dimming steps or levels when sent from a zwave command",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1
+	},
+	"dimmer_times_z": {
+		"label": "Dimmer Step Time (Remote Command)",
+		"description": "Timing of dimming steps or levels when sent from a zwave command",
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true
+	},
+	"dimmer_steps_a": {
+		"label": "Dimmer Steps (Group Command)",
+		"description": "Number of dimming steps or levels when sent from a group command",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1
+	},
+	"dimmer_times_a": {
+		"label": "Dimmer Step Time (Group Command)",
+		"description": "Timing of dimming steps or levels when sent from a group command",
+		"valueSize": 1,
+		"unit": "10ms",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 3,
+		"unsigned": true
+	},
 }
