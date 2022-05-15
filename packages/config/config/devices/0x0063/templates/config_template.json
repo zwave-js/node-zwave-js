@@ -1,7 +1,6 @@
 {
 	"load_sensing": {
 		"label": "Load Sensing",
-		"description": "Sense if the load is on or off",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"allowManualEntry": false,
@@ -81,36 +80,35 @@
 	},
 	"switch_mode": {
 		"label": "Switch Mode",
-		"description": "Turn your dimmer into an On/Off switch with switch mode",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Normal Operation",
+				"label": "Disable",
 				"value": 0
 			},
 			{
-				"label": "Switch Mode",
+				"label": "Enable",
 				"value": 1
 			}
 		]
 	},
 	"alternate_exclusion": {
 		"label": "Alternate Exclusion",
-		"description": "Enables alternate method for excluding the device to prevent accidental removal",
+		"description": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Press any button on the switch",
+				"label": "Disable",
 				"value": 0
 			},
 			{
-				"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
+				"label": "Enable",
 				"value": 1
 			}
 		]
