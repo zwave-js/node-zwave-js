@@ -195,5 +195,23 @@
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true
+	},
+	"dim_rate": {
+		"label": "Dim up/down rate",
+		"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Dim up/down quickly",
+				"value": 0
+			},
+			{
+				"label": "Dim up/down slowly",
+				"value": 1
+			}
+		]
 	}
 }
