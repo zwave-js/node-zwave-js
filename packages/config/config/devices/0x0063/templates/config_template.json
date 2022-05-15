@@ -79,6 +79,24 @@
 			}
 		]
     },
+	"switch_mode": {
+		"label": "Switch Mode",
+		"description": "Turn your dimmer into an On/Off switch with switch mode",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal Operation",
+				"value": 0
+			},
+			{
+				"label": "Switch Mode",
+				"value": 1
+			}
+		]
+	},
 	"alternate_exclusion": {
 		"label": "Alternate Exclusion",
 		"description": "Enables alternate method for excluding the device to prevent accidental removal",
@@ -151,4 +169,31 @@
 		"defaultValue": 3,
 		"unsigned": true
 	},
+	"dim_threshold_min": {
+		"label": "Minimum Dim Threshold",
+		"description": "Set the minimum dimmer threshold when manually or remotely controlled",
+		"valueSize": 1,
+		"minValue": 1,
+		"maxValue": 99,
+		"defaultValue": 1,
+		"unsigned": true
+	},
+	"dim_threshold_max": {
+		"label": "Maximum Brightness Threshold",
+		"description": "Set the maximum brightness threshold when manually or remotely controlled",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 99,
+		"unsigned": true
+	},
+	"default_brightness_level": {
+		"label": "Default Brightness Level",
+		"description": "Set the default brightness level that the dimmer will turn on when being controlled manually",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0,
+		"unsigned": true
+	}
 }
