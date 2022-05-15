@@ -133,6 +133,23 @@
 			}
 		]
 	},
+	"smooth_level_changes": {
+		"label": "Smooth Level Changes",
+		"valueSize": 1,
+		"unsigned": true,
+		"defaultValue": 0,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
 	"dimmer_steps": {
 		"label": "Dimmer Steps",
 		"description": "Number of dimming steps or levels",
