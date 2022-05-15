@@ -78,7 +78,7 @@
 				"value": 1
 			}
 		]
-    },
+	},
 	"switch_mode": {
 		"label": "Switch Mode",
 		"description": "Turn your dimmer into an On/Off switch with switch mode",
