@@ -95,6 +95,27 @@
 			}
 		]
 	},
+	"report_method": {
+		"label": "Change Open/Close Report Method",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Notification",
+				"value": 1
+			},
+			{
+				"label": "Basic Set",
+				"value": 2
+			},
+			{
+				"label": "Basic report",
+				"value": 3
+			}
+		]
+	},
 	"alternate_exclusion": {
 		"label": "Alternate Exclusion",
 		"description": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
