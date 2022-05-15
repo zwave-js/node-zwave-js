@@ -115,6 +115,24 @@
 			}
 		]
 	},
+	"alternate_exclusion_h": {
+		"label": "Alternate Exclusion",
+		"description": "When enabled, press 3 times and hold on the last press to remove the device during exclusion",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disabled",
+				"value": 0
+			},
+			{
+				"label": "Enabled",
+				"value": 1
+			}
+		]
+	},
 	"dimmer_steps": {
 		"label": "Dimmer Steps",
 		"description": "Number of dimming steps or levels",
