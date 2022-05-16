@@ -9,11 +9,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -238,7 +239,7 @@ export class BinarySensorCC extends CommandClass {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -307,7 +308,7 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
 		super(host, options);
@@ -346,7 +347,7 @@ export class BinarySensorCCGet extends BinarySensorCC {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

@@ -7,18 +7,18 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { MessageHeaders } from "@zwave-js/serial/safe";
 import type { JSONObject } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { ZWaveHost } from "../driver/Host";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
 
 type Constructable<T extends Message> = new (
-	host: ZWaveHost,
+	host: ZWaveHost<ZWaveNode>,
 	options?: MessageOptions,
 ) => T;
 
@@ -56,7 +56,7 @@ export type MessageOptions =
  */
 export class Message {
 	public constructor(
-		protected host: ZWaveHost,
+		protected host: ZWaveHost<ZWaveNode>,
 		options: MessageOptions = {},
 	) {
 		// decide which implementation we follow
@@ -227,7 +227,7 @@ export class Message {
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(host: ZWaveHost, data: Buffer): Message {
+	public static from(host: ZWaveHost<ZWaveNode>, data: Buffer): Message {
 		const Constructor = Message.getConstructor(data);
 		const ret = new Constructor(host, { data });
 		return ret;

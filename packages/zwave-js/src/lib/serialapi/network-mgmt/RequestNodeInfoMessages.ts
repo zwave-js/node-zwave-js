@@ -1,5 +1,5 @@
+import type { ZWaveHost } from "@zwave-js/host";
 import type { JSONObject } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -16,6 +16,7 @@ import {
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 import type { INodeQuery } from "../../node/INodeQuery";
+import type { ZWaveNode } from "../../node/Node";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
@@ -42,7 +43,7 @@ export class RequestNodeInfoResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -78,7 +79,7 @@ export class RequestNodeInfoResponse
 @priority(MessagePriority.NodeQuery)
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: RequestNodeInfoRequestOptions,
 	) {
 		super(host, options);

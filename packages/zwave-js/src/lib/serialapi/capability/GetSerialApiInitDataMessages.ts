@@ -1,10 +1,10 @@
 import { NodeType, NUM_NODEMASK_BYTES } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
 import {
 	getZWaveChipType,
 	UnknownZWaveChipType,
 } from "../../controller/ZWaveChipTypes";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -17,6 +17,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveNode } from "../../node/Node";
 import type { ZWaveApiVersion } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
@@ -27,7 +28,7 @@ export class GetSerialApiInitDataRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

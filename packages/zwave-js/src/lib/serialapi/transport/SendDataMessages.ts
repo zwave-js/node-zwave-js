@@ -4,6 +4,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import type {
@@ -17,7 +18,6 @@ import {
 	TransmitStatus,
 	TXReport,
 } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -35,6 +35,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
@@ -44,7 +45,7 @@ export const MAX_SEND_ATTEMPTS = 5;
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataRequestTransmitReport
@@ -69,7 +70,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: SendDataRequestOptions<CCType>,
 	) {
 		super(host, options);
@@ -162,7 +163,7 @@ export class SendDataRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| MessageDeserializationOptions
 			| SendDataRequestTransmitReportOptions,
@@ -217,7 +218,7 @@ export class SendDataRequestTransmitReport
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -257,7 +258,7 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 @messageTypes(MessageType.Request, FunctionType.SendDataMulticast)
 @priority(MessagePriority.Normal)
 export class SendDataMulticastRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SendDataMulticastRequestTransmitReport
@@ -284,7 +285,7 @@ export class SendDataMulticastRequest<
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: SendDataMulticastRequestOptions<CCType>,
 	) {
 		super(host, options);
@@ -376,7 +377,7 @@ export class SendDataMulticastRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| MessageDeserializationOptions
 			| SendDataMulticastRequestTransmitReportOptions,
@@ -430,7 +431,7 @@ export class SendDataMulticastResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

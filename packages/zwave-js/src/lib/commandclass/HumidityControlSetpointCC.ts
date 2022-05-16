@@ -12,11 +12,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -461,7 +462,7 @@ interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(HumidityControlSetpointCommand.Set)
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCSetOptions,
@@ -510,7 +511,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 @CCCommand(HumidityControlSetpointCommand.Report)
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -614,7 +615,7 @@ interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
 )
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCGetOptions,
@@ -654,7 +655,7 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 @CCCommand(HumidityControlSetpointCommand.SupportedReport)
 export class HumidityControlSetpointCCSupportedReport extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -699,7 +700,7 @@ export class HumidityControlSetpointCCSupportedGet extends HumidityControlSetpoi
 @CCCommand(HumidityControlSetpointCommand.ScaleSupportedReport)
 export class HumidityControlSetpointCCScaleSupportedReport extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -743,7 +744,7 @@ interface HumidityControlSetpointCCScaleSupportedGetOptions
 @expectedCCResponse(HumidityControlSetpointCCScaleSupportedReport)
 export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCScaleSupportedGetOptions,
@@ -783,7 +784,7 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
 @CCCommand(HumidityControlSetpointCommand.CapabilitiesReport)
 export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -874,7 +875,7 @@ interface HumidityControlSetpointCCCapabilitiesGetOptions
 @expectedCCResponse(HumidityControlSetpointCCCapabilitiesReport)
 export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSetpointCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCCapabilitiesGetOptions,

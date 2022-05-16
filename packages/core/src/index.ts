@@ -5,6 +5,7 @@ export * from "./capabilities/Protocols";
 export * from "./capabilities/RFRegion";
 export * from "./consts";
 export * from "./error/ZWaveError";
+export * from "./log/Controller";
 export * from "./log/shared";
 export * from "./log/shared_safe";
 export * from "./security/crypto";

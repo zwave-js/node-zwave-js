@@ -1,16 +1,43 @@
 import type { ConfigManager } from "@zwave-js/config";
 import type {
 	CommandClasses,
+	ControllerLogger,
 	SecurityManager,
 	SecurityManager2,
 } from "@zwave-js/core";
-import type { ReadonlyThrowingMap } from "../controller/Controller";
-import type { ControllerLogger } from "../log/Controller";
-import type { ZWaveNode } from "../node/Node";
-import type { ZWaveOptions } from "./ZWaveOptions";
+import type { ReadonlyThrowingMap } from "@zwave-js/shared/safe";
+
+export interface ZWaveHostOptions {
+	/**
+	 * Some Command Classes support reporting that a value is unknown.
+	 * When this flag is `false`, unknown values are exposed as `undefined`.
+	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
+	 * Default: `false`
+	 */
+	preserveUnknownValues?: boolean;
+
+	attempts: {
+		/**
+		 * @internal
+		 * How often to attempt opening the serial port
+		 */
+		openSerialPort: number;
+
+		/** How often the driver should try communication with the controller before giving up */
+		controller: number; // [1...3], default: 3
+
+		/** How often the driver should try sending SendData commands before giving up */
+		sendData: number; // [1...5], default: 3
+
+		/**
+		 * How many attempts should be made for each node interview before giving up
+		 */
+		nodeInterview: number; // [1...10], default: 5
+	};
+}
 
 /** Host application abstractions to be used in Serial API and CC implemenations */
-export interface ZWaveHost {
+export interface ZWaveHost<TNode> {
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
 
@@ -28,9 +55,9 @@ export interface ZWaveHost {
 	homeId: number;
 
 	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, ZWaveNode>;
+	nodes: ReadonlyThrowingMap<number, TNode>;
 
-	options: Pick<ZWaveOptions, "preserveUnknownValues" | "attempts">;
+	options: ZWaveHostOptions;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.

@@ -6,10 +6,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
@@ -316,7 +316,7 @@ interface WakeUpCCIntervalSetOptions extends CCCommandOptions {
 @CCCommand(WakeUpCommand.IntervalSet)
 export class WakeUpCCIntervalSet extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| WakeUpCCIntervalSetOptions,
@@ -364,7 +364,7 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 @CCCommand(WakeUpCommand.IntervalReport)
 export class WakeUpCCIntervalReport extends WakeUpCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -421,7 +421,7 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	// @noCCValues The values are stored as part of the metadata
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

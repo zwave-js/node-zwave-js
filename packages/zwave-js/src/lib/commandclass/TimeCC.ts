@@ -9,12 +9,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -164,7 +165,7 @@ export class TimeCCTimeReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
 	) {
 		super(host, options);
@@ -225,7 +226,7 @@ export class TimeCCDateReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
 	) {
 		super(host, options);
@@ -285,7 +286,7 @@ interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 @CCCommand(TimeCommand.TimeOffsetSet)
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeCCTimeOffsetSetOptions,
@@ -353,7 +354,7 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	// @noCCValues Time is temporary :), we don't want to store that in a DB
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

@@ -6,11 +6,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -125,7 +126,7 @@ interface LanguageCCSetOptions extends CCCommandOptions {
 @CCCommand(LanguageCommand.Set)
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
 	) {
 		super(host, options);
@@ -195,7 +196,7 @@ export class LanguageCCSet extends LanguageCC {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

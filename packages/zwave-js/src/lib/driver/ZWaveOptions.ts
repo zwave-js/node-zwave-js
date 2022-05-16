@@ -1,7 +1,7 @@
 import type { LogConfig } from "@zwave-js/core";
+import type { FileSystem } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import type { SerialPort } from "serialport";
-import type { FileSystem } from "./FileSystem";
 
 export interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */

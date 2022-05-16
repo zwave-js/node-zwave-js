@@ -1,7 +1,8 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveHost } from "../driver/Host";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -62,7 +63,7 @@ export class MultiCommandCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
 		return new MultiCommandCCCommandEncapsulation(host, {
@@ -82,7 +83,7 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 // TODO: This probably expects multiple commands in return
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,

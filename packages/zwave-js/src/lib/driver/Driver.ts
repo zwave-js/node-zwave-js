@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
+	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
@@ -22,6 +23,7 @@ import {
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	MessageHeaders,
 	ZWaveSerialPort,
@@ -35,6 +37,8 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
+	ReadonlyThrowingMap,
+	ThrowingMap,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -98,17 +102,12 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
-import {
-	ReadonlyThrowingMap,
-	ThrowingMap,
-	ZWaveController,
-} from "../controller/Controller";
+import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
 	ProvisioningEntryStatus,
 } from "../controller/Inclusion";
 import { TransmitOptions, TXReport } from "../controller/_Types";
-import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
 import {
 	FunctionType,
@@ -155,7 +154,6 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
-import type { ZWaveHost } from "./Host";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -452,7 +450,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  */
 export class Driver
 	extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveHost
+	implements ZWaveHost<ZWaveNode>
 {
 	public constructor(
 		private port: string,

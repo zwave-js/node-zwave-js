@@ -21,12 +21,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -325,7 +326,10 @@ export class NotificationCC extends CommandClass {
 
 	// former AlarmCC (v1..v2)
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		// mark some value IDs as internal
 		this.registerValue(getNotificationModeValueId().property, {
@@ -644,7 +648,7 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.Set)
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
 		super(host, options);
@@ -699,7 +703,7 @@ export type NotificationCCReportOptions =
 @CCCommand(NotificationCommand.Report)
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (NotificationCCReportOptions & CCCommandOptions),
@@ -1142,7 +1146,7 @@ type NotificationCCGetOptions = CCCommandOptions &
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
 		super(host, options);
@@ -1211,7 +1215,7 @@ export class NotificationCCGet extends NotificationCC {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1269,7 +1273,7 @@ export class NotificationCCSupportedGet extends NotificationCC {}
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1361,7 +1365,7 @@ interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedGetOptions,

@@ -9,6 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { FileSystem } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pickDeep } from "@zwave-js/shared";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import path from "path";
@@ -19,7 +20,6 @@ import {
 import { DeviceClass } from "../node/DeviceClass";
 import { InterviewStage } from "../node/_Types";
 import type { Driver } from "./Driver";
-import type { FileSystem } from "./FileSystem";
 
 /**
  * Defines the keys that are used to store certain properties in the network cache.

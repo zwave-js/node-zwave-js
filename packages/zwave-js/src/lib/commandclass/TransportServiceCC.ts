@@ -6,8 +6,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../driver/Host";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -65,7 +66,7 @@ export class TransportServiceCC
 
 	/** Encapsulates a command that should be sent in multiple segments */
 	public static encapsulate(
-		_host: ZWaveHost,
+		_host: ZWaveHost<ZWaveNode>,
 		_cc: CommandClass,
 	): TransportServiceCC {
 		throw new Error("not implemented");
@@ -95,7 +96,7 @@ export function isTransportServiceEncapsulation(
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCFirstSegmentOptions,
@@ -225,7 +226,7 @@ interface TransportServiceCCSubsequentSegmentOptions
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSubsequentSegmentOptions,
@@ -437,7 +438,7 @@ function testResponseForSegmentRequest(
 @expectedCCResponse(TransportServiceCC, testResponseForSegmentRequest)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentRequestOptions,
@@ -484,7 +485,7 @@ interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
 @CCCommand(TransportServiceCommand.SegmentComplete)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentCompleteOptions,
@@ -520,7 +521,7 @@ interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
 @CCCommand(TransportServiceCommand.SegmentWait)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentWaitOptions,

@@ -23,15 +23,16 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import { Endpoint } from "../node/Endpoint";
+import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
@@ -927,7 +928,10 @@ export class ConfigurationCCAPI extends CCAPI {
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue("isParamInformationFromConfig" as any, {
 			internal: true,
@@ -1383,7 +1387,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1515,7 +1519,7 @@ interface ConfigurationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(host, options);
@@ -1567,7 +1571,7 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ConfigurationCCSetOptions,
 	) {
 		super(host, options);
@@ -1695,7 +1699,7 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 @expectedCCResponse(getResponseForBulkSet)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkSetOptions,
@@ -1836,7 +1840,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1940,7 +1944,7 @@ interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkGetOptions,
@@ -1986,7 +1990,7 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -2051,7 +2055,7 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(host, options);
@@ -2085,7 +2089,7 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -2150,7 +2154,7 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(host, options);
@@ -2184,7 +2188,7 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -2363,7 +2367,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
 		super(host, options);

@@ -11,13 +11,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import {
@@ -444,7 +444,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue(getSupportsHexColorValueID(0).property, {
 			internal: true,
@@ -588,7 +591,7 @@ export class ColorSwitchCC extends CommandClass {
 @CCCommand(ColorSwitchCommand.SupportedReport)
 export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -626,7 +629,7 @@ export class ColorSwitchCCSupportedGet extends ColorSwitchCC {}
 @CCCommand(ColorSwitchCommand.Report)
 export class ColorSwitchCCReport extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -759,7 +762,7 @@ function testResponseForColorSwitchGet(
 @expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | ColorSwitchCCGetOptions,
 	) {
 		super(host, options);
@@ -813,7 +816,7 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 @CCCommand(ColorSwitchCommand.Set)
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCSetOptions),
@@ -910,7 +913,7 @@ type ColorSwitchCCStartLevelChangeOptions = {
 @CCCommand(ColorSwitchCommand.StartLevelChange)
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & ColorSwitchCCStartLevelChangeOptions),
@@ -978,7 +981,7 @@ export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 @CCCommand(ColorSwitchCommand.StopLevelChange)
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ColorSwitchCCStopLevelChangeOptions,

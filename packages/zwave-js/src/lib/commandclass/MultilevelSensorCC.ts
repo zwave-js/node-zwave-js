@@ -15,11 +15,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -492,7 +493,7 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 @CCCommand(MultilevelSensorCommand.Report)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCReportOptions,
@@ -639,7 +640,7 @@ type MultilevelSensorCCGetOptions =
 )
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
@@ -703,7 +704,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -743,7 +744,7 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {}
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -800,7 +801,7 @@ interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,

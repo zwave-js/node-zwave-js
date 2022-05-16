@@ -3,7 +3,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -19,6 +19,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 
 export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 	/** Whether the stick should receive (true) or not (false) */
@@ -30,7 +31,7 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
 	) {
 		super(host, options);
@@ -68,7 +69,7 @@ export class SetRFReceiveModeResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

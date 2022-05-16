@@ -7,10 +7,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -231,7 +232,7 @@ interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.NameSet)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
@@ -282,7 +283,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -319,7 +320,7 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
@@ -370,7 +371,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
 export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);

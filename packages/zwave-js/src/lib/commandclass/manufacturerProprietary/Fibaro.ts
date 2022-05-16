@@ -10,9 +10,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { staticExtends } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveNode } from "../../node/Node";
 import {
 	CCCommandOptions,
 	CommandClassDeserializationOptions,
@@ -66,7 +67,7 @@ export enum FibaroCCIDs {
 
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -109,7 +110,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -181,7 +182,7 @@ export type FibaroVenetianBlindCCSetOptions = CCCommandOptions &
 
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| FibaroVenetianBlindCCSetOptions,
@@ -233,7 +234,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -295,7 +296,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 @expectedCCResponse(FibaroVenetianBlindCCReport)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);

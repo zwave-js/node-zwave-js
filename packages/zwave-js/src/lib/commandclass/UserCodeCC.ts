@@ -12,6 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -32,8 +33,8 @@ import {
 	throwWrongValueType,
 } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	API,
 	CCCommand,
@@ -696,7 +697,10 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		// Hide user codes from value logs
 		this.registerValue(getUserCodeValueID(undefined, 0).property, {
@@ -875,7 +879,7 @@ type UserCodeCCSetOptions =
 @CCCommand(UserCodeCommand.Set)
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & UserCodeCCSetOptions),
@@ -962,7 +966,7 @@ export class UserCodeCCReport
 	implements NotificationEventPayload
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1046,7 +1050,7 @@ interface UserCodeCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCReport)
 export class UserCodeCCGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | UserCodeCCGetOptions,
 	) {
 		super(host, options);
@@ -1079,7 +1083,7 @@ export class UserCodeCCGet extends UserCodeCC {
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1112,7 +1116,7 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1223,7 +1227,7 @@ interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.KeypadModeSet)
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCKeypadModeSetOptions,
@@ -1281,7 +1285,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1334,7 +1338,7 @@ interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.MasterCodeSet)
 export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCMasterCodeSetOptions,
@@ -1404,7 +1408,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.MasterCodeReport)
 export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1444,7 +1448,7 @@ export class UserCodeCCMasterCodeGet extends UserCodeCC {}
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1485,7 +1489,7 @@ export type SettableUserCode = UserCode & {
 @CCCommand(UserCodeCommand.ExtendedUserCodeSet)
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeSetOptions,
@@ -1622,7 +1626,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1680,7 +1684,7 @@ interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeGetOptions,

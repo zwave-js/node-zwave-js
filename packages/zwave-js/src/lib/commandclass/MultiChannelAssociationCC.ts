@@ -10,11 +10,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import { getGroupCountValueId as getAssociationGroupCountValueId } from "./AssociationCC";
 import {
@@ -305,7 +306,10 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		// Make valueIDs internal
 		this.registerValue(getMaxNodesValueId(0, 0).property, {
@@ -549,7 +553,7 @@ type MultiChannelAssociationCCSetOptions = {
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
@@ -620,7 +624,7 @@ interface MultiChannelAssociationCCRemoveOptions {
 @CCCommand(MultiChannelAssociationCommand.Remove)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
@@ -691,7 +695,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -786,7 +790,7 @@ interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCGetOptions,
@@ -827,7 +831,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

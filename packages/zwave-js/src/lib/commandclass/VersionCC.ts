@@ -12,11 +12,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { ZWaveLibraryTypes } from "../serialapi/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -308,7 +309,7 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
 			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = this.host.getSafeCCVersionForNode(
+			this.version = driver.getSafeCCVersionForNode(
 				CommandClasses.Version,
 				node.id,
 				this.endpointIndex,
@@ -396,7 +397,7 @@ export class VersionCC extends CommandClass {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -484,7 +485,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 	// @noCCValues see constructor comment
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -534,7 +535,7 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
@@ -569,7 +570,7 @@ export class VersionCCCommandClassGet extends VersionCC {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -607,7 +608,7 @@ export class VersionCCCapabilitiesGet extends VersionCC {}
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

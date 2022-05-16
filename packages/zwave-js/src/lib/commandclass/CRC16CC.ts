@@ -1,6 +1,7 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
-import type { ZWaveHost } from "../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -52,7 +53,7 @@ export class CRC16CC extends CommandClass {
 
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
 		return new CRC16CCCommandEncapsulation(host, {
@@ -75,7 +76,7 @@ function getResponseForCommandEncapsulation() {
 @expectedCCResponse(getResponseForCommandEncapsulation)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| CRC16CCCommandEncapsulationOptions,

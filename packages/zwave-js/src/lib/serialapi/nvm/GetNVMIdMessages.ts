@@ -1,6 +1,6 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -13,6 +13,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum NVMType {
 	Flash = 0x80,
@@ -77,7 +78,7 @@ export class GetNVMIdRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetNVMId)
 export class GetNVMIdResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

@@ -8,10 +8,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
@@ -250,7 +250,10 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue(getHasLifelineValueId(0).property, {
 			internal: true,
@@ -427,7 +430,7 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 @CCCommand(AssociationCommand.Set)
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
 		super(host, options);
@@ -487,7 +490,7 @@ interface AssociationCCRemoveOptions {
 @CCCommand(AssociationCommand.Remove)
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
@@ -553,7 +556,7 @@ export class AssociationCCRemove extends AssociationCC {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -634,7 +637,7 @@ interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
 		super(host, options);
@@ -673,7 +676,7 @@ export class AssociationCCGet extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

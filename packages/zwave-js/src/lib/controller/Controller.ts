@@ -38,6 +38,8 @@ import {
 	padVersion,
 	pick,
 	ReadonlyObjectKeyMap,
+	ReadonlyThrowingMap,
+	ThrowingMap,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
@@ -262,11 +264,6 @@ import { assertProvisioningEntry } from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
-
-export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
-export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
-	getOrThrow(key: K): V;
-};
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks

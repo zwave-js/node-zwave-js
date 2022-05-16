@@ -7,8 +7,8 @@ import {
 	parseCCList,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import { FunctionType, MessageType } from "../../message/Constants";
 import {
 	Message,
@@ -16,6 +16,7 @@ import {
 	messageTypes,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up
@@ -33,7 +34,7 @@ export enum ApplicationUpdateTypes {
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -65,7 +66,7 @@ export class ApplicationUpdateRequest extends Message {
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -103,7 +104,7 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 
 export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

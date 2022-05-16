@@ -10,11 +10,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
 import {
@@ -175,7 +176,10 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue(getGroupNameValueID(0, 0).property, {
 			internal: true,
@@ -352,7 +356,7 @@ profile:         ${getEnumMemberName(
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -396,7 +400,7 @@ interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
@@ -438,7 +442,7 @@ export interface AssociationGroupInfo {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -520,7 +524,7 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
@@ -574,7 +578,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -635,7 +639,7 @@ interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCCommandListReport)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,

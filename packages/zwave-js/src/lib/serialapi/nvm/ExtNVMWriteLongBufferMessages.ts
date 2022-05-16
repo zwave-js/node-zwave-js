@@ -3,8 +3,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -19,6 +19,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveNode } from "../../node/Node";
 
 export interface ExtNVMWriteLongBufferRequestOptions
 	extends MessageBaseOptions {
@@ -31,7 +32,7 @@ export interface ExtNVMWriteLongBufferRequestOptions
 @expectedResponse(FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| MessageDeserializationOptions
 			| ExtNVMWriteLongBufferRequestOptions,
@@ -87,7 +88,7 @@ export class ExtNVMWriteLongBufferRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.ExtNVMWriteLongBuffer)
 export class ExtNVMWriteLongBufferResponse extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

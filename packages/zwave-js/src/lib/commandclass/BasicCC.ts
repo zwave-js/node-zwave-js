@@ -10,11 +10,12 @@ import {
 	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { AllOrNone, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -272,7 +273,7 @@ interface BasicCCSetOptions extends CCCommandOptions {
 @CCCommand(BasicCommand.Set)
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | BasicCCSetOptions,
 	) {
 		super(host, options);
@@ -310,7 +311,7 @@ type BasicCCReportOptions = CCCommandOptions & {
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
 		super(host, options);

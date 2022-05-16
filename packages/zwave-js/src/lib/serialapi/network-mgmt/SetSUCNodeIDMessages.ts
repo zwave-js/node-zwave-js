@@ -3,8 +3,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { TransmitOptions } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -22,6 +22,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum SetSUCNodeIdStatus {
 	Succeeded = 0x05,
@@ -38,7 +39,7 @@ export interface SetSUCNodeIdRequestOptions extends MessageBaseOptions {
 @messageTypes(MessageType.Request, FunctionType.SetSUCNodeId)
 @priority(MessagePriority.Controller)
 export class SetSUCNodeIdRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== SetSUCNodeIdRequestStatusReport
@@ -53,7 +54,7 @@ export class SetSUCNodeIdRequestBase extends Message {
 @expectedCallback(FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions | SetSUCNodeIdRequestOptions,
 	) {
 		super(host, options);
@@ -97,7 +98,7 @@ export class SetSUCNodeIdRequest extends SetSUCNodeIdRequestBase {
 @messageTypes(MessageType.Response, FunctionType.SetSUCNodeId)
 export class SetSUCNodeIdResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -126,7 +127,7 @@ export class SetSUCNodeIdRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

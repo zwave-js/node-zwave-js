@@ -1,33 +1,37 @@
+import { isObject } from "alcalzone-shared/typeguards";
+import { CommandClasses } from "../capabilities/CommandClasses";
+import { InterviewStage } from "../consts/InterviewStage";
+import type {
+	ValueAddedArgs,
+	ValueID,
+	ValueNotificationArgs,
+	ValueRemovedArgs,
+	ValueUpdatedArgs,
+} from "../values/_Types";
+import { tagify, ZWaveLogContainer, ZWaveLoggerBase } from "./shared";
 import {
-	CommandClasses,
 	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
 	LogContext,
 	NodeLogContext,
-	tagify,
-	ValueAddedArgs,
-	ValueID,
 	ValueLogContext,
-	ValueNotificationArgs,
-	ValueRemovedArgs,
-	ValueUpdatedArgs,
-	ZWaveLogContainer,
-	ZWaveLoggerBase,
-} from "@zwave-js/core";
-import { isObject } from "alcalzone-shared/typeguards";
-import type { ZWaveNode } from "../node/Node";
-import { InterviewStage } from "../node/_Types";
+} from "./shared_safe";
 
 export const CONTROLLER_LABEL = "CNTRLR";
 const CONTROLLER_LOGLEVEL = "info";
 const VALUE_LOGLEVEL = "debug";
 
-interface LogNodeOptions {
+export interface LogNodeOptions {
 	message: string;
 	level?: "debug" | "verbose" | "warn" | "error";
 	direction?: DataDirection;
 	endpoint?: number;
+}
+
+export interface Interviewable {
+	id: number;
+	interviewStage: InterviewStage;
 }
 
 export type ControllerNodeLogContext = LogContext<"controller"> &
@@ -263,7 +267,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	}
 
 	/** Logs the interview progress of a node */
-	public interviewStage(node: ZWaveNode): void {
+	public interviewStage(node: Interviewable): void {
 		if (!this.isControllerLogVisible()) return;
 		if (!this.container.shouldLogNode(node.id)) return;
 
@@ -287,7 +291,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
 	}
 
 	/** Logs the interview progress of a node */
-	public interviewStart(node: ZWaveNode): void {
+	public interviewStart(node: Interviewable): void {
 		if (!this.isControllerLogVisible()) return;
 		if (!this.container.shouldLogNode(node.id)) return;
 

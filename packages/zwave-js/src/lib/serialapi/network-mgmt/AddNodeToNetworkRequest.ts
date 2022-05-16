@@ -5,8 +5,8 @@ import {
 	NodeType,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -23,6 +23,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum AddNodeType {
 	Any = 1,
@@ -65,7 +66,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	host: ZWaveHost,
+	host: ZWaveHost<ZWaveNode>,
 	nodeType: NodeType,
 ): number {
 	const allNodes = [...host.nodes.values()];
@@ -86,7 +87,7 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== AddNodeToNetworkRequestStatusReport
@@ -127,7 +128,7 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: AddNodeToNetworkRequestOptions = {},
 	) {
 		super(host, options);
@@ -202,7 +203,7 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: AddNodeDSKToNetworkRequestOptions,
 	) {
 		super(host, options);
@@ -258,7 +259,7 @@ export class AddNodeToNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

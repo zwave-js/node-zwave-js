@@ -4,9 +4,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,6 +20,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application
@@ -50,7 +51,7 @@ export class ApplicationCommandRequest
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| MessageDeserializationOptions
 			| ApplicationCommandRequestOptions,

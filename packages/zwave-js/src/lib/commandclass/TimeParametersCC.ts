@@ -5,11 +5,12 @@ import {
 	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -200,7 +201,7 @@ export class TimeParametersCC extends CommandClass {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -250,7 +251,7 @@ interface TimeParametersCCSetOptions extends CCCommandOptions {
 @CCCommand(TimeParametersCommand.Set)
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,

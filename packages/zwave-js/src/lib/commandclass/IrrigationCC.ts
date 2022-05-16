@@ -12,12 +12,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -1209,7 +1210,7 @@ moisture sensor polarity: ${getEnumMemberName(
 @CCCommand(IrrigationCommand.SystemInfoReport)
 export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1254,7 +1255,7 @@ export class IrrigationCCSystemInfoGet extends IrrigationCC {}
 @CCCommand(IrrigationCommand.SystemStatusReport)
 export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1470,7 +1471,7 @@ export type IrrigationCCSystemConfigSetOptions = {
 @CCCommand(IrrigationCommand.SystemConfigSet)
 export class IrrigationCCSystemConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (IrrigationCCSystemConfigSetOptions & CCCommandOptions),
@@ -1545,7 +1546,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.SystemConfigReport)
 export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1656,7 +1657,7 @@ export class IrrigationCCSystemConfigGet extends IrrigationCC {}
 @CCCommand(IrrigationCommand.ValveInfoReport)
 export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1842,7 +1843,7 @@ export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
 )
 export class IrrigationCCValveInfoGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveInfoGetOptions,
@@ -1894,7 +1895,7 @@ export type IrrigationCCValveConfigSetOptions = {
 @CCCommand(IrrigationCommand.ValveConfigSet)
 export class IrrigationCCValveConfigSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (IrrigationCCValveConfigSetOptions & CCCommandOptions),
@@ -1968,7 +1969,7 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.ValveConfigReport)
 export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -2134,7 +2135,7 @@ interface IrrigationCCValveConfigGetOptions extends CCCommandOptions {
 )
 export class IrrigationCCValveConfigGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveConfigGetOptions,
@@ -2179,7 +2180,7 @@ interface IrrigationCCValveRunOptions extends CCCommandOptions {
 @CCCommand(IrrigationCommand.ValveRun)
 export class IrrigationCCValveRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveRunOptions,
@@ -2235,7 +2236,7 @@ interface IrrigationCCValveTableSetOptions extends CCCommandOptions {
 @CCCommand(IrrigationCommand.ValveTableSet)
 export class IrrigationCCValveTableSet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableSetOptions,
@@ -2299,7 +2300,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 @CCCommand(IrrigationCommand.ValveTableReport)
 export class IrrigationCCValveTableReport extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -2356,7 +2357,7 @@ function testResponseForIrrigationValveTableGet(
 )
 export class IrrigationCCValveTableGet extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableGetOptions,
@@ -2397,7 +2398,7 @@ interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 @CCCommand(IrrigationCommand.ValveTableRun)
 export class IrrigationCCValveTableRun extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCValveTableRunOptions,
@@ -2450,7 +2451,7 @@ interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
 @CCCommand(IrrigationCommand.SystemShutoff)
 export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IrrigationCCSystemShutoffOptions,

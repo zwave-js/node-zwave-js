@@ -22,11 +22,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { FunctionType, MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { CCAPI } from "./API";
@@ -539,7 +540,7 @@ export class Security2CC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		cc: CommandClass,
 		securityClass?: SecurityClass,
 	): Security2CCMessageEncapsulation {
@@ -589,12 +590,12 @@ function testCCResponseForMessageEncapsulation(
 export class Security2CCMessageEncapsulation extends Security2CC {
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost & {
+	declare host: ZWaveHost<ZWaveNode> & {
 		securityManager2: SecurityManager2;
 	};
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCMessageEncapsulationOptions,
@@ -1052,12 +1053,12 @@ export type Security2CCNonceReportOptions =
 export class Security2CCNonceReport extends Security2CC {
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost & {
+	declare host: ZWaveHost<ZWaveNode> & {
 		securityManager2: SecurityManager2;
 	};
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCNonceReportOptions),
@@ -1152,11 +1153,11 @@ export class Security2CCNonceGet extends Security2CC {
 
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost & {
+	declare host: ZWaveHost<ZWaveNode> & {
 		securityManager2: SecurityManager2;
 	};
 
-	public constructor(host: ZWaveHost, options: CCCommandOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: CCCommandOptions) {
 		super(host, options);
 
 		// Make sure that we can send/receive secure commands
@@ -1213,7 +1214,7 @@ interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXReportOptions),
@@ -1305,7 +1306,7 @@ interface Security2CCKEXSetOptions {
 @CCCommand(Security2Command.KEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXSetOptions),
@@ -1397,7 +1398,7 @@ interface Security2CCKEXFailOptions extends CCCommandOptions {
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | Security2CCKEXFailOptions,
 	) {
 		super(host, options);
@@ -1432,7 +1433,7 @@ interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCPublicKeyReportOptions,
@@ -1478,7 +1479,7 @@ interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyReportOptions,
@@ -1530,7 +1531,7 @@ interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 @expectedCCResponse(Security2CCNetworkKeyReport)
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyGetOptions,
@@ -1575,7 +1576,7 @@ interface Security2CCTransferEndOptions extends CCCommandOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCTransferEndOptions,
@@ -1615,7 +1616,7 @@ export class Security2CCTransferEnd extends Security2CC {
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

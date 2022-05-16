@@ -3,11 +3,11 @@ import {
 	MessageRecord,
 	NODE_ID_BROADCAST,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 import { RSSI, RssiError } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -19,6 +19,7 @@ import {
 	messageTypes,
 	priority,
 } from "../../message/Message";
+import type { ZWaveNode } from "../../node/Node";
 import { tryParseRSSI } from "../transport/SendDataShared";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 
@@ -30,7 +31,7 @@ export class BridgeApplicationCommandRequest
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

@@ -4,7 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	parseCCList,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -17,6 +17,7 @@ import {
 	priority,
 } from "../../message/Message";
 import { DeviceClass } from "../../node/DeviceClass";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum SerialAPIWakeUpReason {
 	/** The Z-Wave API Module has been woken up by reset or external interrupt. */
@@ -48,7 +49,7 @@ export enum SerialAPIWakeUpReason {
 @priority(MessagePriority.Normal)
 export class SerialAPIStartedRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

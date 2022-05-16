@@ -13,11 +13,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
+import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -334,7 +335,10 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
@@ -506,7 +510,7 @@ type IndicatorCCSetOptions =
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
@@ -604,7 +608,7 @@ export class IndicatorCCReport extends IndicatorCC {
 	// @noCCValues This CC stores its values diffently
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -742,7 +746,7 @@ interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
 		super(host, options);
@@ -782,7 +786,7 @@ export class IndicatorCCGet extends IndicatorCC {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -855,7 +859,7 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,

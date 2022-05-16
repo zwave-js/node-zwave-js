@@ -3,9 +3,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
 import { TransmitStatus } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -24,11 +24,12 @@ import {
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
 import type { INodeQuery } from "../../node/INodeQuery";
+import type { ZWaveNode } from "../../node/Node";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class DeleteSUCReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== DeleteSUCReturnRouteRequestTransmitReport
@@ -50,7 +51,7 @@ export class DeleteSUCReturnRouteRequest
 	implements INodeQuery
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| MessageDeserializationOptions
 			| DeleteSUCReturnRouteRequestOptions,
@@ -81,7 +82,7 @@ export class DeleteSUCReturnRouteResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -113,7 +114,7 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

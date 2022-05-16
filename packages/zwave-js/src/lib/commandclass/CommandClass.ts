@@ -17,6 +17,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	buffer2hex,
 	getEnumMemberName,
@@ -27,7 +28,6 @@ import {
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -84,7 +84,10 @@ export type CommandClassOptions =
 // @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
@@ -179,7 +182,7 @@ export class CommandClass {
 		}
 	}
 
-	protected host: ZWaveHost;
+	protected host: ZWaveHost<ZWaveNode>;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -335,7 +338,7 @@ export class CommandClass {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		driver: ZWaveHost,
+		driver: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -1039,7 +1042,10 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(driver: ZWaveHost, options: InvalidCCCreationOptions) {
+	public constructor(
+		driver: ZWaveHost<ZWaveNode>,
+		options: InvalidCCCreationOptions,
+	) {
 		super(driver, options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC
@@ -1116,10 +1122,10 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (host: ZWaveHost, options: any): T;
+	new (host: ZWaveHost<ZWaveNode>, options: any): T;
 };
 type APIConstructor = new (
-	host: ZWaveHost,
+	host: ZWaveHost<ZWaveNode>,
 	endpoint: Endpoint | VirtualEndpoint,
 ) => CCAPI;
 

@@ -1,5 +1,5 @@
 import { CommandClasses, getCCName, MessageOrCCLogEntry } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -12,6 +12,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { DeviceClass } from "../../node/DeviceClass";
+import type { ZWaveNode } from "../../node/Node";
 
 export interface SetApplicationNodeInformationRequestOptions
 	extends MessageBaseOptions {
@@ -25,7 +26,7 @@ export interface SetApplicationNodeInformationRequestOptions
 @priority(MessagePriority.Controller)
 export class SetApplicationNodeInformationRequest extends Message {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: SetApplicationNodeInformationRequestOptions,
 	) {
 		super(host, options);

@@ -1,6 +1,6 @@
 import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -20,6 +20,7 @@ import type {
 	MultiStageCallback,
 	SuccessIndicator,
 } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {
@@ -36,7 +37,7 @@ export interface RequestNodeNeighborUpdateRequestOptions
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
 @priority(MessagePriority.Controller)
 export class RequestNodeNeighborUpdateRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RequestNodeNeighborUpdateReport
@@ -50,7 +51,7 @@ export class RequestNodeNeighborUpdateRequestBase extends Message {
 @expectedCallback(FunctionType.RequestNodeNeighborUpdate)
 export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateRequestBase {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: RequestNodeNeighborUpdateRequestOptions,
 	) {
 		super(host, options);
@@ -87,7 +88,7 @@ export class RequestNodeNeighborUpdateReport
 	implements SuccessIndicator, MultiStageCallback
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

@@ -1,5 +1,5 @@
 import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	MessagePriority,
@@ -16,6 +16,7 @@ import {
 	priority,
 } from "../../message/Message";
 import type { SuccessIndicator } from "../../message/SuccessIndicator";
+import type { ZWaveNode } from "../../node/Node";
 
 export enum RemoveNodeType {
 	Any = 1,
@@ -48,7 +49,7 @@ interface RemoveNodeFromNetworkRequestOptions extends MessageBaseOptions {
 // no expected response, the controller will respond with multiple RemoveNodeFromNetworkRequests
 @priority(MessagePriority.Controller)
 export class RemoveNodeFromNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost, options: MessageOptions) {
+	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== RemoveNodeFromNetworkRequestStatusReport
@@ -87,7 +88,7 @@ function testCallbackForRemoveNodeRequest(
 @expectedCallback(testCallbackForRemoveNodeRequest)
 export class RemoveNodeFromNetworkRequest extends RemoveNodeFromNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: RemoveNodeFromNetworkRequestOptions = {},
 	) {
 		super(host, options);
@@ -120,7 +121,7 @@ export class RemoveNodeFromNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

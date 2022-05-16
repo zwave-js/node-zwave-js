@@ -13,10 +13,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
@@ -299,7 +299,10 @@ export interface EndpointCapability {
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+	public constructor(
+		host: ZWaveHost<ZWaveNode>,
+		options: CommandClassOptions,
+	) {
 		super(host, options);
 		this.registerValue(getEndpointIndizesValueId().property, {
 			internal: true,
@@ -323,7 +326,7 @@ export class MultiChannelCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		cc: CommandClass,
 	):
 		| MultiChannelCCCommandEncapsulation
@@ -626,7 +629,7 @@ supported CCs:`;
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -689,7 +692,7 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -771,7 +774,7 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCCapabilityReport)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityGetOptions,
@@ -806,7 +809,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -890,7 +893,7 @@ interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindOptions,
@@ -937,7 +940,7 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -982,7 +985,7 @@ interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCAggregatedMembersGetOptions,
@@ -1065,7 +1068,7 @@ function testResponseForCommandEncapsulation(
 )
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCommandEncapsulationOptions,
@@ -1158,7 +1161,7 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	// @noCCValues This information is stored during the interview
 
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1197,7 +1200,7 @@ interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1GetOptions,
@@ -1258,7 +1261,7 @@ interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 )
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1CommandEncapsulationOptions,

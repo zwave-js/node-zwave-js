@@ -5,10 +5,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
-import type { ZWaveHost } from "../driver/Host";
+import type { ZWaveNode } from "../node/Node";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -171,7 +172,7 @@ interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.Set)
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCSetOptions,
@@ -231,7 +232,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -291,7 +292,7 @@ interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCGetOptions,
@@ -325,7 +326,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
 export class ClimateControlScheduleCCChangedReport extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -355,7 +356,7 @@ export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
 export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -403,7 +404,7 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.OverrideSet)
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
 	public constructor(
-		host: ZWaveHost,
+		host: ZWaveHost<ZWaveNode>,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCOverrideSetOptions,
