@@ -2675,9 +2675,16 @@ export class Driver
 				// This CC belongs to a partial session
 				if (command.expectMoreMessages(session)) {
 					// this is not the final one, store it
-					session.push(command);
+					// and don't handle the command now
+					const sessionValid = command.addToPartialCCSession(session);
+					if (!sessionValid) {
+						// This command is not part of the existing session,
+						// Start a new session with this command
+						this.partialCCSessions.set(partialSessionKey!, [
+							command,
+						]);
+					}
 					if (!isTransportServiceEncapsulation(msg.command)) {
-						// and don't handle the command now
 						this.driverLog.logMessage(msg, {
 							secondaryTags: ["partial"],
 							direction: "inbound",

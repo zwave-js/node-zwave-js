@@ -740,6 +740,27 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return this._reportsToFollow > 0;
 	}
 
+	public addToPartialCCSession(
+		session: MultiChannelAssociationCCReport[],
+	): boolean {
+		if (
+			session.length === 0 ||
+			this.reportsToFollow ===
+				session[session.length - 1].reportsToFollow - 1
+		) {
+			session.push(this);
+			return true;
+		}
+		if (
+			this.reportsToFollow === session[session.length - 1].reportsToFollow
+		) {
+			// Assume this report is a duplicate. Keep the session and discard this cc.
+			return true;
+		}
+		// This cc doesn't fit into the session. A new session must be created.
+		return false;
+	}
+
 	public mergePartialCCs(partials: MultiChannelAssociationCCReport[]): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]

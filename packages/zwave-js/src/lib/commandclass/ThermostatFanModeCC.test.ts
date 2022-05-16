@@ -40,6 +40,7 @@ describe("lib/commandclass/ThermostatFanModeCC => ", () => {
 	});
 
 	afterAll(() => {
+		fakeDriver.destroy();
 		node1.destroy();
 		node5.destroy();
 	});
