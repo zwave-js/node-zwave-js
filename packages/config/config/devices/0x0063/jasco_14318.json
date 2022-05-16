@@ -16,34 +16,11 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED light on when Z-Wave turned on",
-					"value": 1
-				},
-				{
-					"label": "LED light always off",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_light_3"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Invert Switch",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		}
 	],
 	"compat": {

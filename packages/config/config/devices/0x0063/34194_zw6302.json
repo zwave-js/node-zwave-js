@@ -17,26 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"label": "Pir Sensitiivity Setting",
-			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Medium sensitivity",
-					"value": 2
-				},
-				{
-					"label": "High sensitivity",
-					"value": 3
-				},
-				{
-					"label": "Low sensitivity",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#pir_sensitivity"
 		},
 		{
 			"#": "18",

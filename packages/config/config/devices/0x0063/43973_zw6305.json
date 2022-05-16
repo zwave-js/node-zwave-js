@@ -36,22 +36,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "This parameter allows you to enable the alternate exclusion method that is available for this device",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "(default) disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion"
 		},
 		{
 			"#": "20",

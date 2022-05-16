@@ -36,22 +36,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "Alternate exclusion mode press button one time or three time",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion_h"
 		},
 		{
 			"#": "20",

@@ -16,127 +16,39 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is ON",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_light_3"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		},
 		{
 			"#": "5",
-			"label": "Ignore Start-Level (Receiving)",
-			"description": "This dimmer will start dimming from its current level.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#ignore_start_level"
 		},
 		{
 			"#": "7",
-			"label": "Dim Rate Steps (Z-Wave Command)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_steps_z"
 		},
 		{
 			"#": "8",
-			"label": "Dim Rate Timing (Z-Wave)",
-			"description": "Timing of steps or levels",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times_z"
 		},
 		{
 			"#": "9",
-			"label": "Dim Rate Steps (Manual)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"label": "Dim Rate Timing (Manual)",
-			"description": "Timing of steps",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times"
 		},
 		{
 			"#": "11",
-			"label": "Dim Rate Steps (All-On/All-Off)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_steps_a"
 		},
 		{
 			"#": "12",
-			"label": "Dim Rate Timing (All-On/All-Off)",
-			"description": "Timing of steps or levels",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times_a"
 		}
 	]
 }

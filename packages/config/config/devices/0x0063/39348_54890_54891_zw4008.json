@@ -33,49 +33,11 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indication",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON when load is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED On when light is turned On",
-					"value": 1
-				},
-				{
-					"label": "LED always OFF",
-					"value": 2
-				},
-				{
-					"label": "LED always ON",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#led_light_4"
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "Enables alternate method for excluding the device to prevent accidental removal",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Press any button on switc",
-					"value": 0
-				},
-				{
-					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if device is successfully excluded",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion"
 		}
 	],
 	"compat": {

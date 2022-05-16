@@ -16,25 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED light",
-			"description": "control LED light behavior. Default is on when connected device is off",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "reset to factory default",
-					"value": 0
-				},
-				{
-					"label": "LED is on when connected device is on",
-					"value": 1
-				},
-				{
-					"label": "LED is off at all times",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_light_3"
 		}
 	]
 }

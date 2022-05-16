@@ -45,7 +45,6 @@
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
 			"$import": "templates/config_template.json#alternate_exclusion"
 		},
 		{

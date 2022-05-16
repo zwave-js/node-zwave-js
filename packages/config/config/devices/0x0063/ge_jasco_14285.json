@@ -70,20 +70,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Default",
-					"value": 0
-				},
-				{
-					"label": "Alternate Exclusion (3 button presses)",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion_h"
 		}
 	]
 }

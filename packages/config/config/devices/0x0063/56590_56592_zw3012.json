@@ -33,147 +33,39 @@
 	"paramInformation": [
 		{
 			"#": "16",
-			"label": "Switch mode",
-			"description": "Disables dimmer functionality",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#switch_mode"
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation",
-					"value": 0
-				},
-				{
-					"label": "Alternate exclusion",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion"
 		},
 		{
 			"#": "3",
-			"label": "LED Light",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when load is on",
-					"value": 0
-				},
-				{
-					"label": "On when load is off",
-					"value": 1
-				},
-				{
-					"label": "Always on",
-					"value": 2
-				},
-				{
-					"label": "Always off",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#led_light_4"
 		},
 		{
 			"#": "30",
-			"label": "Minimum Dim Level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_threshold_min"
 		},
 		{
 			"#": "31",
-			"label": "Maximum Dim Level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_threshold_max"
 		},
 		{
 			"#": "32",
-			"label": "Brightness Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/config_template.json#default_brightness_level"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		},
 		{
 			"#": "6",
-			"label": "Dim Rate",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#dim_rate"
 		},
 		{
 			"#": "84",
-			"label": "Reset to Factory Default",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation",
-					"value": 0
-				},
-				{
-					"label": "Reset",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#factory_default"
 		}
 	],
 	"compat": {

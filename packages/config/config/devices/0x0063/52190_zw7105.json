@@ -46,22 +46,11 @@
 		},
 		{
 			"#": "9",
-			"label": "Dim Rate Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"label": "Dim Rate Timing",
-			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 0,
-			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dimmer_times"
 		}
 	],
 	"metadata": {

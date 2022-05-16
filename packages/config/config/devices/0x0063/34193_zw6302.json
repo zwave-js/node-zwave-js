@@ -17,25 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"label": "PIR Sensitivity Setting",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Low sensitivity",
-					"value": 1
-				},
-				{
-					"label": "Medium sensitivity",
-					"value": 2
-				},
-				{
-					"label": "High sensitivity",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#pir_sensitivity"
 		},
 		{
 			"#": "18",

@@ -33,154 +33,39 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON when load is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED On when light is turned On",
-					"value": 1
-				},
-				{
-					"label": "LED always OFF",
-					"value": 2
-				},
-				{
-					"label": "LED always ON",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#led_light_4"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Reverse the default On/Off rocker setting",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled- Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Enabled- Invert Switch",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#invert_switch"
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
-			"description": "Enable/Disable slow dim rate",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Dim up/down quickly",
-					"value": 0
-				},
-				{
-					"label": "Dim up/down slowly",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#dim_rate"
 		},
 		{
 			"#": "16",
-			"label": "Switch Mode",
-			"description": "Turn your dimmer into an On/Off switch with switch mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Switch Mode",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#switch_mode"
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "Enables alternate method for excluding the device to prevent accidental removal",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Press any button on the switch",
-					"value": 0
-				},
-				{
-					"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#alternate_exclusion"
 		},
 		{
 			"#": "30",
-			"label": "Minimum Dim Threshold",
-			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_threshold_min"
 		},
 		{
 			"#": "31",
-			"label": "Maximum Dim Threshold",
-			"description": "Set the maximum dim threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_threshold_max"
 		},
 		{
 			"#": "32",
-			"label": "Brightness Level",
-			"description": "Dimmer will turn ON to this level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/config_template.json#default_brightness_level"
 		},
 		{
 			"#": "84",
-			"label": "Reset factory default",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Enabled Reset",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#factory_default"
 		}
 	],
 	"compat": {
