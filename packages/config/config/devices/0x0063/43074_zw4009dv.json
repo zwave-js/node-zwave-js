@@ -33,7 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"$import": "templates/config_template.json#led_light_4"
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "19",
