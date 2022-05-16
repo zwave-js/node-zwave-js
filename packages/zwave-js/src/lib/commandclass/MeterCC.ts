@@ -278,7 +278,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs()
-	public async reset(options: MeterCCResetOptions): Promise<void> {
+	public async reset(options?: MeterCCResetOptions): Promise<void> {
 		this.assertSupportsCommand(MeterCommand, MeterCommand.Reset);
 
 		const cc = new MeterCCReset(this.driver, {
