@@ -116,6 +116,26 @@
 			}
 		]
 	},
+	"adjust_refresh": {
+		"label": "Adjust Refresh",
+		"description": "Adjusts refresh time from 1-55 seconds",
+		"valueSize": 1,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 55,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Default - 10 seconds",
+				"value": 0
+			},
+			{
+				"label": "Seconds",
+				"value": 55
+			}
+		]
+	},
 	"alternate_exclusion": {
 		"label": "Alternate Exclusion",
 		"description": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
