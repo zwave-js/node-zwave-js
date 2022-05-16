@@ -8,10 +8,9 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -81,7 +80,7 @@ export class ThermostatFanStateCC extends CommandClass {
 	declare ccCommand: ThermostatFanStateCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -96,8 +95,8 @@ export class ThermostatFanStateCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Fan State"].withOptions(
 			{
 				priority: MessagePriority.NodeQuery,
@@ -126,7 +125,7 @@ export class ThermostatFanStateCC extends CommandClass {
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

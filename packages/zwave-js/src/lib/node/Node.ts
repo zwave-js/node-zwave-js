@@ -39,6 +39,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveNodeBase } from "@zwave-js/host";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import {
 	discreteLinearSearch,
 	formatId,
@@ -158,8 +161,6 @@ import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
 import type { Transaction } from "../driver/Transaction";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -234,7 +235,10 @@ export interface ZWaveNode
  * of its root endpoint (index 0)
  */
 @Mixin([EventEmitter, NodeStatisticsHost])
-export class ZWaveNode extends Endpoint implements SecurityClassOwner {
+export class ZWaveNode
+	extends Endpoint
+	implements SecurityClassOwner, ZWaveNodeBase
+{
 	public constructor(
 		public readonly id: number,
 		driver: Driver,
@@ -637,6 +641,13 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner {
 
 	public hasSecurityClass(securityClass: SecurityClass): Maybe<boolean> {
 		return this.securityClasses.get(securityClass) ?? unknownBoolean;
+	}
+
+	public setSecurityClass(
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void {
+		this.securityClasses.set(securityClass, granted);
 	}
 
 	/** Returns the highest security class this node was granted or `undefined` if that information isn't known yet */
@@ -3250,7 +3261,7 @@ protocol version:      ${this.protocolVersion}`;
 			command.hour !== hours ||
 			command.minute !== minutes
 		) {
-			const endpoint = command.getEndpoint();
+			const endpoint = command.getEndpoint(this.driver);
 			if (!endpoint /*|| !endpoint.commandClasses.Clock.isSupported()*/) {
 				// Make sure the endpoint supports the CC (GH#1704)
 				return;

@@ -14,11 +14,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -199,8 +198,8 @@ export class ThermostatFanModeCC extends CommandClass {
 	declare ccCommand: ThermostatFanModeCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Fan Mode"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -247,8 +246,8 @@ export class ThermostatFanModeCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Fan Mode"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -285,7 +284,7 @@ type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 @CCCommand(ThermostatFanModeCommand.Set)
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatFanModeCCSetOptions,
@@ -328,7 +327,7 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 @CCCommand(ThermostatFanModeCommand.Report)
 export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -385,7 +384,7 @@ export class ThermostatFanModeCCGet extends ThermostatFanModeCC {}
 @CCCommand(ThermostatFanModeCommand.SupportedReport)
 export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

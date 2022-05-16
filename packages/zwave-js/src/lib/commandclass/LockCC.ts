@@ -7,10 +7,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -114,7 +113,7 @@ export class LockCC extends CommandClass {
 	declare ccCommand: LockCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -129,8 +128,8 @@ export class LockCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Lock.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -155,7 +154,7 @@ interface LockCCSetOptions extends CCCommandOptions {
 @CCCommand(LockCommand.Set)
 export class LockCCSet extends LockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LockCCSetOptions,
 	) {
 		super(host, options);
@@ -188,7 +187,7 @@ export class LockCCSet extends LockCC {
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

@@ -6,24 +6,21 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
 export enum AddNodeType {
 	Any = 1,
@@ -66,7 +63,7 @@ interface AddNodeDSKToNetworkRequestOptions extends MessageBaseOptions {
 }
 
 export function computeNeighborDiscoveryTimeout(
-	host: ZWaveHost<ZWaveNode>,
+	host: ZWaveHost,
 	nodeType: NodeType,
 ): number {
 	const allNodes = [...host.nodes.values()];
@@ -87,7 +84,7 @@ export function computeNeighborDiscoveryTimeout(
 // no expected response, the controller will respond with multiple AddNodeToNetworkRequests
 @priority(MessagePriority.Controller)
 export class AddNodeToNetworkRequestBase extends Message {
-	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== AddNodeToNetworkRequestStatusReport
@@ -128,7 +125,7 @@ function testCallbackForAddNodeRequest(
 @expectedCallback(testCallbackForAddNodeRequest)
 export class AddNodeToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: AddNodeToNetworkRequestOptions = {},
 	) {
 		super(host, options);
@@ -203,7 +200,7 @@ export class EnableSmartStartListenRequest extends AddNodeToNetworkRequestBase {
 
 export class AddNodeDSKToNetworkRequest extends AddNodeToNetworkRequestBase {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: AddNodeDSKToNetworkRequestOptions,
 	) {
 		super(host, options);
@@ -259,7 +256,7 @@ export class AddNodeToNetworkRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

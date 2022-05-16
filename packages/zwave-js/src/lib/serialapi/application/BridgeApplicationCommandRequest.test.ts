@@ -1,7 +1,7 @@
 import { ConfigManager } from "@zwave-js/config";
+import { Message } from "@zwave-js/serial";
 import "../../commandclass/index";
 import type { Driver } from "../../driver/Driver";
-import { Message } from "../../message/Message";
 import { createEmptyMockDriver } from "../../test/mocks";
 
 const fakeDriver = createEmptyMockDriver() as unknown as Driver;

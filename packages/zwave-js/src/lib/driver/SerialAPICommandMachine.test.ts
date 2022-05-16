@@ -1,10 +1,10 @@
 import { createModel } from "@xstate/test";
+import type { Message } from "@zwave-js/serial";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
-import type { Message } from "../message/Message";
 import {
 	dummyCallbackNOK,
 	dummyCallbackOK,

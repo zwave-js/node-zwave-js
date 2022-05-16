@@ -14,11 +14,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -335,10 +334,7 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		super(host, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
@@ -351,8 +347,8 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -413,8 +409,8 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -510,7 +506,7 @@ type IndicatorCCSetOptions =
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
@@ -608,7 +604,7 @@ export class IndicatorCCReport extends IndicatorCC {
 	// @noCCValues This CC stores its values diffently
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -746,7 +742,7 @@ interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
 		super(host, options);
@@ -786,7 +782,7 @@ export class IndicatorCCGet extends IndicatorCC {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -859,7 +855,7 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,

@@ -6,22 +6,19 @@ import {
 	ProtocolVersion,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { JSONObject } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
 import { DeviceClass } from "../../node/DeviceClass";
-import type { ZWaveNode } from "../../node/Node";
 
 interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 	requestedNodeId: number;
@@ -32,7 +29,7 @@ interface GetNodeProtocolInfoRequestOptions extends MessageBaseOptions {
 @priority(MessagePriority.Controller)
 export class GetNodeProtocolInfoRequest extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: GetNodeProtocolInfoRequestOptions,
 	) {
 		super(host, options);
@@ -58,7 +55,7 @@ export class GetNodeProtocolInfoRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

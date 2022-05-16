@@ -4,22 +4,19 @@ import {
 	NODE_ID_BROADCAST,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import {
+	FunctionType,
+	Message,
+	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
+	messageTypes,
+	priority,
+} from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 import { RSSI, RssiError } from "../../controller/_Types";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
-import {
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
 import { tryParseRSSI } from "../transport/SendDataShared";
 import { ApplicationCommandStatusFlags } from "./ApplicationCommandRequest";
 
@@ -31,7 +28,7 @@ export class BridgeApplicationCommandRequest
 	implements ICommandClassContainer
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -95,7 +92,14 @@ export class BridgeApplicationCommandRequest
 	public readonly rssi?: RSSI;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: SinglecastCC;
+	public command: SinglecastCC; // TODO: why is this a SinglecastCC?
+
+	public override getNodeId(): number | undefined {
+		if (this.command.isSinglecast()) {
+			return this.command.nodeId;
+		}
+		return super.getNodeId();
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};

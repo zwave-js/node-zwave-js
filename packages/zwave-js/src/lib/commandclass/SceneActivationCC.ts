@@ -12,7 +12,6 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -112,7 +111,7 @@ interface SceneActivationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneActivationCommand.Set)
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActivationCCSetOptions,

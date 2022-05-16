@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { MessageType } from "../message/Constants";
-import type { Message } from "../message/Message";
+import type { Message } from "@zwave-js/serial";
+import { MessageType } from "@zwave-js/serial";
 
 export const createSendDataResolvesNever = () =>
 	jest.fn().mockImplementation(() => new Promise<unknown>(() => {}));

@@ -11,11 +11,10 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { AllOrNone, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -194,8 +193,8 @@ export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -235,8 +234,8 @@ export class BasicCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Basic.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -273,7 +272,7 @@ interface BasicCCSetOptions extends CCCommandOptions {
 @CCCommand(BasicCommand.Set)
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCSetOptions,
 	) {
 		super(host, options);
@@ -311,7 +310,7 @@ type BasicCCReportOptions = CCCommandOptions & {
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
 		super(host, options);

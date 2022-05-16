@@ -1,5 +1,6 @@
 import type {
 	MetadataUpdatedArgs,
+	NodeStatus,
 	ValueAddedArgs,
 	ValueID,
 	ValueNotificationArgs,
@@ -117,15 +118,7 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
-export { InterviewStage } from "@zwave-js/core/safe";
-
-export enum NodeStatus {
-	Unknown,
-	Asleep,
-	Awake,
-	Dead,
-	Alive,
-}
+export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {

@@ -6,7 +6,14 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import {
+	FunctionType,
+	Message,
+	MessageHeaders,
+	MessageType,
+	messageTypes,
+	MockSerialPort,
+} from "@zwave-js/serial";
 import { AssociationCCReport } from "../commandclass/AssociationCC";
 import { BasicCCSet } from "../commandclass/BasicCC";
 import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
@@ -16,8 +23,6 @@ import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { AssociationCommand } from "../commandclass/_Types";
 import { TransmitOptions } from "../controller/_Types";
-import { FunctionType, MessageType } from "../message/Constants";
-import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";

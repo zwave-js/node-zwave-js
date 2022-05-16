@@ -7,11 +7,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -143,8 +142,8 @@ export class ManufacturerSpecificCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
@@ -186,7 +185,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 @CCCommand(ManufacturerSpecificCommand.Report)
 export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -238,7 +237,7 @@ export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {}
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -295,7 +294,7 @@ interface ManufacturerSpecificCCDeviceSpecificGetOptions
 @expectedCCResponse(ManufacturerSpecificCCDeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecificCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerSpecificCCDeviceSpecificGetOptions,

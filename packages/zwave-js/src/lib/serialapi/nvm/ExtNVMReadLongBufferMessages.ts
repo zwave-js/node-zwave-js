@@ -4,22 +4,19 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { num2hex } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import { num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMReadLongBufferRequestOptions extends MessageBaseOptions {
 	offset: number;
@@ -31,7 +28,7 @@ export interface ExtNVMReadLongBufferRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ExtNVMReadLongBuffer)
 export class ExtNVMReadLongBufferRequest extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| ExtNVMReadLongBufferRequestOptions,
@@ -85,7 +82,7 @@ export class ExtNVMReadLongBufferRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.ExtNVMReadLongBuffer)
 export class ExtNVMReadLongBufferResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

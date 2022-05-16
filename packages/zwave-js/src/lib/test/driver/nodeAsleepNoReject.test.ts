@@ -1,8 +1,11 @@
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import {
+	MessageHeaders,
+	MessagePriority,
+	MockSerialPort,
+} from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import { BasicCCSet } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
-import { MessagePriority } from "../../message/Constants";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/_Types";
 import type { SendDataRequest } from "../../serialapi/transport/SendDataMessages";

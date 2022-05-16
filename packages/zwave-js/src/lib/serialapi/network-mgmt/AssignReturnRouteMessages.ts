@@ -4,32 +4,28 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import { TransmitStatus } from "../../controller/_Types";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { INodeQuery } from "../../node/INodeQuery";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
+import { TransmitStatus } from "../../controller/_Types";
 
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignReturnRouteRequestBase extends Message {
-	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== AssignReturnRouteRequestTransmitReport
@@ -52,7 +48,7 @@ export class AssignReturnRouteRequest
 	implements INodeQuery
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| AssignReturnRouteRequestOptions,
@@ -95,7 +91,7 @@ export class AssignReturnRouteResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -127,7 +123,7 @@ export class AssignReturnRouteRequestTransmitReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

@@ -13,10 +13,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -184,7 +183,7 @@ export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -199,8 +198,8 @@ export class BinarySwitchCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Binary Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -250,7 +249,7 @@ interface BinarySwitchCCSetOptions extends CCCommandOptions {
 @CCCommand(BinarySwitchCommand.Set)
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
 	) {
 		super(host, options);
@@ -294,7 +293,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

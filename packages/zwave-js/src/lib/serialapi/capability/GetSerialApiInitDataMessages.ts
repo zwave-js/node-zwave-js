@@ -1,23 +1,20 @@
 import { NodeType, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import {
+	expectedResponse,
+	FunctionType,
+	Message,
+	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
+	messageTypes,
+	priority,
+} from "@zwave-js/serial";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
 import {
 	getZWaveChipType,
 	UnknownZWaveChipType,
 } from "../../controller/ZWaveChipTypes";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
-import {
-	expectedResponse,
-	Message,
-	MessageDeserializationOptions,
-	messageTypes,
-	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
 import type { ZWaveApiVersion } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetSerialApiInitData)
@@ -28,7 +25,7 @@ export class GetSerialApiInitDataRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiInitData)
 export class GetSerialApiInitDataResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

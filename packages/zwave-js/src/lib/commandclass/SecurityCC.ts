@@ -18,12 +18,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { PhysicalCCAPI } from "./API";
@@ -281,13 +280,13 @@ export class SecurityCC extends CommandClass {
 	// Force singlecast for the Security CC (for now)
 	declare nodeId: number;
 	// Define the securityManager as existing
-	declare host: ZWaveHost<ZWaveNode> & {
+	declare host: ZWaveHost & {
 		securityManager: SecurityManager;
 	};
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Security.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -379,7 +378,7 @@ export class SecurityCC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
@@ -397,7 +396,7 @@ interface SecurityCCNonceReportOptions extends CCCommandOptions {
 @CCCommand(SecurityCommand.NonceReport)
 export class SecurityCCNonceReport extends SecurityCC {
 	constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNonceReportOptions,
@@ -459,7 +458,7 @@ function getCCResponseForCommandEncapsulation(
 )
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCCommandEncapsulationOptions,
@@ -666,7 +665,7 @@ export class SecurityCCSchemeReport extends SecurityCC {
 	// @noCCValues This CC has no values
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -682,7 +681,7 @@ export class SecurityCCSchemeReport extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeGet extends SecurityCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -708,7 +707,7 @@ export class SecurityCCSchemeGet extends SecurityCC {
 @expectedCCResponse(SecurityCCSchemeReport)
 export class SecurityCCSchemeInherit extends SecurityCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -741,7 +740,7 @@ interface SecurityCCNetworkKeySetOptions extends CCCommandOptions {
 @expectedCCResponse(SecurityCCNetworkKeyVerify)
 export class SecurityCCNetworkKeySet extends SecurityCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SecurityCCNetworkKeySetOptions,
@@ -777,7 +776,7 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 @CCCommand(SecurityCommand.CommandsSupportedReport)
 export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

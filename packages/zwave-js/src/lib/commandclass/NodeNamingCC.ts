@@ -8,10 +8,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -176,7 +175,7 @@ export class NodeNamingAndLocationCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -191,8 +190,8 @@ export class NodeNamingAndLocationCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Node Naming and Location"
 		].withOptions({
@@ -232,7 +231,7 @@ interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.NameSet)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
@@ -283,7 +282,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);
@@ -320,7 +319,7 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
@@ -371,7 +370,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
 export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
 		super(host, options);

@@ -13,11 +13,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
 	CCAPI,
@@ -434,10 +433,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 export class MultilevelSwitchCC extends CommandClass {
 	declare ccCommand: MultilevelSwitchCommand;
 
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		super(host, options);
 		this.registerValue(getSuperviseStartStopLevelChangeValueId().property, {
 			internal: true,
@@ -445,8 +441,8 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Multilevel Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -499,8 +495,8 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Multilevel Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -573,7 +569,7 @@ interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 @CCCommand(MultilevelSwitchCommand.Set)
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSwitchCCSetOptions,
@@ -621,7 +617,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 @CCCommand(MultilevelSwitchCommand.Report)
 export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -698,7 +694,7 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & MultilevelSwitchCCStartLevelChangeOptions),
@@ -764,7 +760,7 @@ export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {}
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

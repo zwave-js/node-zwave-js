@@ -21,11 +21,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -330,8 +329,8 @@ export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Meter.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -395,8 +394,8 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Meter.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -480,7 +479,7 @@ supports reset:       ${suppResp.supportsReset}`;
 @CCCommand(MeterCommand.Report)
 export class MeterCCReport extends MeterCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -699,7 +698,7 @@ interface MeterCCGetOptions {
 @expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCGetOptions & CCCommandOptions),
@@ -781,7 +780,7 @@ export class MeterCCGet extends MeterCC {
 @CCCommand(MeterCommand.SupportedReport)
 export class MeterCCSupportedReport extends MeterCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -921,7 +920,7 @@ type MeterCCResetOptions =
 @CCCommand(MeterCommand.Reset)
 export class MeterCCReset extends MeterCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MeterCCResetOptions & CCCommandOptions),

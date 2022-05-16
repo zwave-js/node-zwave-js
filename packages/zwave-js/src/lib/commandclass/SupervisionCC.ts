@@ -10,9 +10,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -125,7 +124,7 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		cc: CommandClass,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
@@ -189,7 +188,7 @@ export class SupervisionCCReport extends SupervisionCC {
 	// @noCCValues
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SupervisionCCReportOptions),
@@ -273,7 +272,7 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
 	) {
 		super(host, options);

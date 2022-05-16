@@ -14,7 +14,6 @@ import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -321,7 +320,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
@@ -339,8 +338,8 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
 	// public async refreshValues(driver: Driver): Promise<void> {
-	// 	const node = this.getNode()!;
-	// 	const endpoint = this.getEndpoint()!;
+	// 	const node = this.getNode(driver)!;
+	// 	const endpoint = this.getEndpoint(driver)!;
 	// 	const api = endpoint.commandClasses[
 	// 		"Scene Actuator Configuration"
 	// 	].withOptions({
@@ -365,7 +364,7 @@ interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
 @CCCommand(SceneActuatorConfigurationCommand.Set)
 export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCSetOptions,
@@ -419,7 +418,7 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 @CCCommand(SceneActuatorConfigurationCommand.Report)
 export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -490,7 +489,7 @@ interface SceneActuatorConfigurationCCGetOptions extends CCCommandOptions {
 )
 export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActuatorConfigurationCCGetOptions,

@@ -17,3 +17,4 @@ export const HOMEID_BYTES = 4;
 export const MAX_REPEATERS = 4;
 
 export { InterviewStage } from "./InterviewStage";
+export { NodeStatus } from "./NodeStatus";

@@ -1,20 +1,17 @@
 import { parseBitMask } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { JSONObject } from "@zwave-js/shared";
-import { num2hex } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
+import { num2hex } from "@zwave-js/shared";
 
 const NUM_FUNCTIONS = 256;
 const NUM_FUNCTION_BYTES = NUM_FUNCTIONS / 8;
@@ -27,7 +24,7 @@ export class GetSerialApiCapabilitiesRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetSerialApiCapabilities)
 export class GetSerialApiCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

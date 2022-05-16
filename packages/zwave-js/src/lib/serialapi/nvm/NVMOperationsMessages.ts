@@ -6,24 +6,21 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum NVMOperationsCommand {
 	Open = 0x00,
@@ -70,7 +67,7 @@ export class NVMOperationsRequest extends Message {
 // =============================================================================
 
 export class NVMOperationsOpenRequest extends NVMOperationsRequest {
-	public constructor(host: ZWaveHost<ZWaveNode>, options?: MessageOptions) {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
 		this.command = NVMOperationsCommand.Open;
 	}
@@ -79,7 +76,7 @@ export class NVMOperationsOpenRequest extends NVMOperationsRequest {
 // =============================================================================
 
 export class NVMOperationsCloseRequest extends NVMOperationsRequest {
-	public constructor(host: ZWaveHost<ZWaveNode>, options?: MessageOptions) {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
 		this.command = NVMOperationsCommand.Close;
 	}
@@ -94,7 +91,7 @@ export interface NVMOperationsReadRequestOptions extends MessageBaseOptions {
 
 export class NVMOperationsReadRequest extends NVMOperationsRequest {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| NVMOperationsReadRequestOptions,
@@ -159,7 +156,7 @@ export interface NVMOperationsWriteRequestOptions extends MessageBaseOptions {
 
 export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| MessageDeserializationOptions
 			| NVMOperationsWriteRequestOptions,
@@ -222,7 +219,7 @@ export class NVMOperationsWriteRequest extends NVMOperationsRequest {
 @messageTypes(MessageType.Response, FunctionType.NVMOperations)
 export class NVMOperationsResponse extends Message implements SuccessIndicator {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

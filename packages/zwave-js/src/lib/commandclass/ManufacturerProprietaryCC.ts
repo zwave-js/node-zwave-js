@@ -10,7 +10,6 @@ import { pick, staticExtends } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -204,7 +203,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	// @noCCValues
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ManufacturerProprietaryCCOptions,
@@ -275,7 +274,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	public async interview(driver: Driver): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 		// TODO: Can this be refactored?
 		const proprietaryConfig = node.deviceConfig?.proprietary;
 		if (
@@ -305,7 +304,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	public async refreshValues(driver: Driver): Promise<void> {
 		this.assertManufacturerIdIsSet();
 
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 		// TODO: Can this be refactored?
 		const proprietaryConfig = node.deviceConfig?.proprietary;
 		if (

@@ -36,6 +36,10 @@
 			"path": "../transformers/tsconfig.build.json"
 		}
 	],
-	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
+	"include": [
+		"maintenance/**/*.ts",
+		"src/**/*.ts",
+		"../serial/src/message/INodeQuery.ts"
+	],
 	"exclude": ["build/**", "node_modules/**"]
 }

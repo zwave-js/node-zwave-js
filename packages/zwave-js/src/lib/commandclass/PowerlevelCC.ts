@@ -10,7 +10,6 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
@@ -158,7 +157,7 @@ type PowerlevelCCSetOptions = CCCommandOptions &
 @CCCommand(PowerlevelCommand.Set)
 export class PowerlevelCCSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | PowerlevelCCSetOptions,
 	) {
 		super(host, options);
@@ -207,7 +206,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 @CCCommand(PowerlevelCommand.Report)
 export class PowerlevelCCReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -250,7 +249,7 @@ interface PowerlevelCCTestNodeSetOptions extends CCCommandOptions {
 @CCCommand(PowerlevelCommand.TestNodeSet)
 export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| PowerlevelCCTestNodeSetOptions,
@@ -314,7 +313,7 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 @CCCommand(PowerlevelCommand.TestNodeReport)
 export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

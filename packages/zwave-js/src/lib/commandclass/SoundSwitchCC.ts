@@ -10,12 +10,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -292,8 +291,8 @@ export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Sound Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -377,7 +376,7 @@ duration: ${info.duration} seconds`;
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -404,7 +403,7 @@ export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {}
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -452,7 +451,7 @@ interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 )
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoGetOptions,
@@ -492,7 +491,7 @@ interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.ConfigurationSet)
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCConfigurationSetOptions,
@@ -532,7 +531,7 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -586,7 +585,7 @@ interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.TonePlaySet)
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCTonePlaySetOptions,
@@ -635,7 +634,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

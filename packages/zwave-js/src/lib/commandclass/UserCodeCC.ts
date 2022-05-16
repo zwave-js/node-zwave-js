@@ -13,6 +13,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -33,8 +34,6 @@ import {
 	throwWrongValueType,
 } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	API,
 	CCCommand,
@@ -697,10 +696,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		super(host, options);
 		// Hide user codes from value logs
 		this.registerValue(getUserCodeValueID(undefined, 0).property, {
@@ -709,8 +705,8 @@ export class UserCodeCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["User Code"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -768,8 +764,8 @@ export class UserCodeCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["User Code"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -879,7 +875,7 @@ type UserCodeCCSetOptions =
 @CCCommand(UserCodeCommand.Set)
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & UserCodeCCSetOptions),
@@ -893,7 +889,7 @@ export class UserCodeCCSet extends UserCodeCC {
 			);
 		} else {
 			const numUsers =
-				this.getNode()?.getValue<number>(
+				this.getValueDB()?.getValue<number>(
 					getSupportedUsersValueID(this.endpointIndex),
 				) ?? 0;
 			this.userId = options.userId;
@@ -966,7 +962,7 @@ export class UserCodeCCReport
 	implements NotificationEventPayload
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1050,7 +1046,7 @@ interface UserCodeCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCReport)
 export class UserCodeCCGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | UserCodeCCGetOptions,
 	) {
 		super(host, options);
@@ -1083,7 +1079,7 @@ export class UserCodeCCGet extends UserCodeCC {
 @CCCommand(UserCodeCommand.UsersNumberReport)
 export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1116,7 +1112,7 @@ export class UserCodeCCUsersNumberGet extends UserCodeCC {}
 @CCCommand(UserCodeCommand.CapabilitiesReport)
 export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1227,7 +1223,7 @@ interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.KeypadModeSet)
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCKeypadModeSetOptions,
@@ -1249,7 +1245,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 			this.keypadMode = options.keypadMode;
 
 			const supportedModes =
-				this.getNode()?.getValue<KeypadMode[]>(
+				this.getValueDB()?.getValue<KeypadMode[]>(
 					getSupportedKeypadModesValueID(this.endpointIndex),
 				) ?? [];
 
@@ -1285,7 +1281,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.KeypadModeReport)
 export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1338,7 +1334,7 @@ interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 @CCCommand(UserCodeCommand.MasterCodeSet)
 export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCMasterCodeSetOptions,
@@ -1358,7 +1354,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 				);
 			}
 			const supportedAsciiChars =
-				this.getNode()?.getValue<string>(
+				this.getValueDB()?.getValue<string>(
 					getSupportedASCIICharsValueID(this.endpointIndex),
 				) ?? "";
 
@@ -1367,7 +1363,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 			// Validate the code
 			if (!this.masterCode) {
 				const supportsDeactivation =
-					this.getNode()?.getValue<boolean>(
+					this.getValueDB()?.getValue<boolean>(
 						getSupportsMasterCodeDeactivationValueID(
 							this.endpointIndex,
 						),
@@ -1408,7 +1404,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.MasterCodeReport)
 export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1448,7 +1444,7 @@ export class UserCodeCCMasterCodeGet extends UserCodeCC {}
 @CCCommand(UserCodeCommand.UserCodeChecksumReport)
 export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1489,7 +1485,7 @@ export type SettableUserCode = UserCode & {
 @CCCommand(UserCodeCommand.ExtendedUserCodeSet)
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeSetOptions,
@@ -1511,19 +1507,19 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			this.userCodes = options.userCodes as any;
 
 			const numUsers =
-				this.getNode()?.getValue<number>(
+				this.getValueDB()?.getValue<number>(
 					getSupportedUsersValueID(this.endpointIndex),
 				) ?? 0;
 			const supportedStatuses =
-				this.getNode()?.getValue<number[]>(
+				this.getValueDB()?.getValue<number[]>(
 					getSupportedUserIDStatusesValueID(this.endpointIndex),
 				) ?? [];
 			const supportedAsciiChars =
-				this.getNode()?.getValue<string>(
+				this.getValueDB()?.getValue<string>(
 					getSupportedASCIICharsValueID(this.endpointIndex),
 				) ?? "";
 			const supportsMultipleUserCodeSet =
-				this.getNode()?.getValue<boolean>(
+				this.getValueDB()?.getValue<boolean>(
 					getSupportsMultipleUserCodeSetValueID(this.endpointIndex),
 				) ?? false;
 
@@ -1626,7 +1622,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1684,7 +1680,7 @@ interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
 @expectedCCResponse(UserCodeCCExtendedUserCodeReport)
 export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| UserCodeCCExtendedUserCodeGetOptions,

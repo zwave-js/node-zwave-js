@@ -7,10 +7,9 @@ import {
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -84,7 +83,7 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -99,8 +98,8 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Operating State"
 		].withOptions({
@@ -132,7 +131,7 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 @CCCommand(HumidityControlOperatingStateCommand.Report)
 export class HumidityControlOperatingStateCCReport extends HumidityControlOperatingStateCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

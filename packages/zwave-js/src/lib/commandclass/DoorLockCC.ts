@@ -15,12 +15,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -387,8 +386,8 @@ export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -505,8 +504,8 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -596,7 +595,7 @@ interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 @CCCommand(DoorLockCommand.OperationSet)
 export class DoorLockCCOperationSet extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockCCOperationSetOptions,
@@ -639,7 +638,7 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.OperationReport)
 export class DoorLockCCOperationReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -809,7 +808,7 @@ export class DoorLockCCOperationGet extends DoorLockCC {}
 @CCCommand(DoorLockCommand.ConfigurationReport)
 export class DoorLockCCConfigurationReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -968,7 +967,7 @@ type DoorLockCCConfigurationSetOptions = (
 @CCCommand(DoorLockCommand.ConfigurationSet)
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & DoorLockCCConfigurationSetOptions),
@@ -1114,7 +1113,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 @CCCommand(DoorLockCommand.CapabilitiesReport)
 export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

@@ -16,11 +16,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -276,10 +275,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		super(host, options);
 		this.registerValue(getSetpointTypesInterpretationValueID(0).property, {
 			internal: true,
@@ -305,8 +301,8 @@ export class ThermostatSetpointCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -519,8 +515,8 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -566,7 +562,7 @@ interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Set)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSetOptions,
@@ -618,7 +614,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -721,7 +717,7 @@ interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 )
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCGetOptions,
@@ -761,7 +757,7 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -851,7 +847,7 @@ interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesGetOptions,
@@ -891,7 +887,7 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

@@ -9,11 +9,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -275,8 +274,8 @@ export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -321,8 +320,8 @@ export class BarrierOperatorCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -367,7 +366,7 @@ interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 @CCCommand(BarrierOperatorCommand.Set)
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCSetOptions,
@@ -401,7 +400,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -467,7 +466,7 @@ export class BarrierOperatorCCGet extends BarrierOperatorCC {}
 @CCCommand(BarrierOperatorCommand.SignalingCapabilitiesReport)
 export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -510,7 +509,7 @@ interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
 @CCCommand(BarrierOperatorCommand.EventSignalingSet)
 export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingSetOptions,
@@ -555,7 +554,7 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 @CCCommand(BarrierOperatorCommand.EventSignalingReport)
 export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -617,7 +616,7 @@ interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
 @expectedCCResponse(BarrierOperatorCCEventSignalingReport)
 export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| BarrierOperatorCCEventSignalingGetOptions,

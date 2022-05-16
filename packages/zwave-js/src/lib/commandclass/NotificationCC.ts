@@ -22,12 +22,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -326,10 +325,7 @@ export class NotificationCC extends CommandClass {
 
 	// former AlarmCC (v1..v2)
 
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		super(host, options);
 		// mark some value IDs as internal
 		this.registerValue(getNotificationModeValueId().property, {
@@ -357,7 +353,7 @@ export class NotificationCC extends CommandClass {
 		api: NotificationCCAPI,
 		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
 	): Promise<"push" | "pull"> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		// SDS14223: If the supporting node does not support the Association Command Class,
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
@@ -430,8 +426,8 @@ export class NotificationCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -597,8 +593,8 @@ export class NotificationCC extends CommandClass {
 	public async refreshValues(driver: Driver): Promise<void> {
 		// Refreshing values only works on pull nodes
 		if (this.notificationMode === "pull") {
-			const node = this.getNode()!;
-			const endpoint = this.getEndpoint()!;
+			const node = this.getNode(driver)!;
+			const endpoint = this.getEndpoint(driver)!;
 			const api = endpoint.commandClasses.Notification.withOptions({
 				priority: MessagePriority.NodeQuery,
 			});
@@ -648,7 +644,7 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.Set)
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
 		super(host, options);
@@ -703,7 +699,7 @@ export type NotificationCCReportOptions =
 @CCCommand(NotificationCommand.Report)
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (NotificationCCReportOptions & CCCommandOptions),
@@ -1146,7 +1142,7 @@ type NotificationCCGetOptions = CCCommandOptions &
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
 		super(host, options);
@@ -1215,7 +1211,7 @@ export class NotificationCCGet extends NotificationCC {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1273,7 +1269,7 @@ export class NotificationCCSupportedGet extends NotificationCC {}
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -1365,7 +1361,7 @@ interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedGetOptions,

@@ -1,19 +1,16 @@
 import { ControllerCapabilityFlags } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { JSONObject } from "@zwave-js/shared";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)
@@ -23,7 +20,7 @@ export class GetControllerCapabilitiesRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetControllerCapabilities)
 export class GetControllerCapabilitiesResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

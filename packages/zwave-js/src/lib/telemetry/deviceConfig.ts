@@ -65,14 +65,18 @@ export async function reportMissingDeviceConfig(
 		}
 		if (deviceInfo.supportsAGI) {
 			// Try to collect all info about association groups we can get
-			const instance = node.createCCInstanceUnsafe(
-				AssociationGroupInfoCC,
-			)!;
-			const associationGroupCount =
-				instance["getAssociationGroupCountCached"]();
+			const associationGroupCount = AssociationGroupInfoCC[
+				"getAssociationGroupCountCached"
+			](node["driver"], node);
 			const names: string[] = [];
 			for (let group = 1; group <= associationGroupCount; group++) {
-				names.push(instance.getGroupNameCached(group) ?? "");
+				names.push(
+					AssociationGroupInfoCC.getGroupNameCached(
+						node["driver"],
+						node,
+						group,
+					) ?? "",
+				);
 			}
 			deviceInfo.associationGroups = names;
 		}

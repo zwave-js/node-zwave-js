@@ -13,11 +13,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { ZWaveLibraryTypes } from "../serialapi/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -212,7 +211,7 @@ export class VersionCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
 		// the Version Command Class SHOULD NOT be supported by individual End Points.
@@ -222,7 +221,7 @@ export class VersionCC extends CommandClass {
 		// implemented by the Multi Channel device; also in cases where the actual Command Class is only
 		// provided by an End Point.
 
-		const endpoint = this.getEndpoint()!;
+		const endpoint = this.getEndpoint(driver)!;
 
 		// Use the CC API of the root device for all queries
 		const api = node.commandClasses.Version.withOptions({
@@ -397,7 +396,7 @@ export class VersionCC extends CommandClass {
 @CCCommand(VersionCommand.Report)
 export class VersionCCReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -485,7 +484,7 @@ export class VersionCCCommandClassReport extends VersionCC {
 	// @noCCValues see constructor comment
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -535,7 +534,7 @@ function testResponseForVersionCommandClassGet(
 )
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| VersionCCCommandClassGetOptions,
@@ -570,7 +569,7 @@ export class VersionCCCommandClassGet extends VersionCC {
 @CCCommand(VersionCommand.CapabilitiesReport)
 export class VersionCCCapabilitiesReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -608,7 +607,7 @@ export class VersionCCCapabilitiesGet extends VersionCC {}
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

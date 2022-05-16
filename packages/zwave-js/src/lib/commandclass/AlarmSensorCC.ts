@@ -11,11 +11,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -135,8 +134,8 @@ export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.commandClasses.Notification.isSupported()) {
@@ -194,8 +193,8 @@ export class AlarmSensorCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -285,7 +284,7 @@ duration: ${currentValue.duration}`;
 @CCCommand(AlarmSensorCommand.Report)
 export class AlarmSensorCCReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -376,7 +375,7 @@ interface AlarmSensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AlarmSensorCCReport, testResponseForAlarmSensorGet)
 export class AlarmSensorCCGet extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AlarmSensorCCGetOptions,
 	) {
 		super(host, options);
@@ -414,7 +413,7 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 @CCCommand(AlarmSensorCommand.SupportedReport)
 export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

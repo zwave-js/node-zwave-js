@@ -4,8 +4,10 @@ import type {
 	ControllerLogger,
 	SecurityManager,
 	SecurityManager2,
+	ValueDB,
 } from "@zwave-js/core";
-import type { ReadonlyThrowingMap } from "@zwave-js/shared/safe";
+import type { ReadonlyThrowingMap } from "@zwave-js/shared";
+import type { ZWaveNodeBase } from "./ZWaveNodeBase";
 
 export interface ZWaveHostOptions {
 	/**
@@ -37,7 +39,7 @@ export interface ZWaveHostOptions {
 }
 
 /** Host application abstractions to be used in Serial API and CC implemenations */
-export interface ZWaveHost<TNode> {
+export interface ZWaveHost {
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
 
@@ -55,7 +57,7 @@ export interface ZWaveHost<TNode> {
 	homeId: number;
 
 	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, TNode>;
+	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
 
 	options: ZWaveHostOptions;
 
@@ -75,4 +77,7 @@ export interface ZWaveHost<TNode> {
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;
+
+	/** Returns the value DB which belongs to the node with the given ID */
+	getValueDB(nodeId: number): ValueDB;
 }

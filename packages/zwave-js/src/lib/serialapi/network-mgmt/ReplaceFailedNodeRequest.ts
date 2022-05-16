@@ -1,21 +1,18 @@
 import type { ZWaveHost } from "@zwave-js/host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
 
 export enum ReplaceFailedNodeStartFlags {
 	OK = 0,
@@ -46,7 +43,7 @@ export enum ReplaceFailedNodeStatus {
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
 @priority(MessagePriority.Controller)
 export class ReplaceFailedNodeRequestBase extends Message {
-	public constructor(host: ZWaveHost<ZWaveNode>, options: MessageOptions) {
+	public constructor(host: ZWaveHost, options: MessageOptions) {
 		if (
 			gotDeserializationOptions(options) &&
 			(new.target as any) !== ReplaceFailedNodeRequestStatusReport
@@ -65,7 +62,7 @@ interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.ReplaceFailedNode)
 export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: ReplaceFailedNodeRequestOptions,
 	) {
 		super(host, options);
@@ -88,7 +85,7 @@ export class ReplaceFailedNodeResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
@@ -110,7 +107,7 @@ export class ReplaceFailedNodeRequestStatusReport
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

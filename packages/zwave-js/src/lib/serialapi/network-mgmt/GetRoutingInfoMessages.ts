@@ -1,21 +1,18 @@
 import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { JSONObject } from "@zwave-js/shared";
-import { parseNodeBitMask } from "../../controller/NodeBitMask";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
+import { parseNodeBitMask } from "../../controller/NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
@@ -27,10 +24,7 @@ interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.GetRoutingInfo)
 @priority(MessagePriority.Controller)
 export class GetRoutingInfoRequest extends Message {
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: GetRoutingInfoRequestOptions,
-	) {
+	public constructor(host: ZWaveHost, options: GetRoutingInfoRequestOptions) {
 		super(host, options);
 		this.sourceNodeId = options.nodeId;
 		this.removeNonRepeaters = !!options.removeNonRepeaters;
@@ -73,7 +67,7 @@ export class GetRoutingInfoRequest extends Message {
 @messageTypes(MessageType.Response, FunctionType.GetRoutingInfo)
 export class GetRoutingInfoResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

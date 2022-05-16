@@ -23,11 +23,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
-import { FunctionType, MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { CCAPI } from "./API";
@@ -358,8 +357,8 @@ export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Security 2"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -540,7 +539,7 @@ export class Security2CC extends CommandClass {
 
 	/** Encapsulates a command that should be sent encrypted */
 	public static encapsulate(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		cc: CommandClass,
 		securityClass?: SecurityClass,
 	): Security2CCMessageEncapsulation {
@@ -590,12 +589,12 @@ function testCCResponseForMessageEncapsulation(
 export class Security2CCMessageEncapsulation extends Security2CC {
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost<ZWaveNode> & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
 	};
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCMessageEncapsulationOptions,
@@ -757,7 +756,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 							// It worked, return the result and remember the security class
 							if (ret.authOK) {
-								node.securityClasses.set(secClass, true);
+								node.setSecurityClass(secClass, true);
 								return ret;
 							}
 							// Reset the SPAN state and try with the next security class
@@ -1053,12 +1052,12 @@ export type Security2CCNonceReportOptions =
 export class Security2CCNonceReport extends Security2CC {
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost<ZWaveNode> & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
 	};
 
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCNonceReportOptions),
@@ -1153,11 +1152,11 @@ export class Security2CCNonceGet extends Security2CC {
 
 	// Define the securityManager as existing
 	// We check it in the constructor
-	declare host: ZWaveHost<ZWaveNode> & {
+	declare host: ZWaveHost & {
 		securityManager2: SecurityManager2;
 	};
 
-	public constructor(host: ZWaveHost<ZWaveNode>, options: CCCommandOptions) {
+	public constructor(host: ZWaveHost, options: CCCommandOptions) {
 		super(host, options);
 
 		// Make sure that we can send/receive secure commands
@@ -1214,7 +1213,7 @@ interface Security2CCKEXReportOptions {
 @CCCommand(Security2Command.KEXReport)
 export class Security2CCKEXReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXReportOptions),
@@ -1306,7 +1305,7 @@ interface Security2CCKEXSetOptions {
 @CCCommand(Security2Command.KEXSet)
 export class Security2CCKEXSet extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & Security2CCKEXSetOptions),
@@ -1398,7 +1397,7 @@ interface Security2CCKEXFailOptions extends CCCommandOptions {
 @CCCommand(Security2Command.KEXFail)
 export class Security2CCKEXFail extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | Security2CCKEXFailOptions,
 	) {
 		super(host, options);
@@ -1433,7 +1432,7 @@ interface Security2CCPublicKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.PublicKeyReport)
 export class Security2CCPublicKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCPublicKeyReportOptions,
@@ -1479,7 +1478,7 @@ interface Security2CCNetworkKeyReportOptions extends CCCommandOptions {
 @CCCommand(Security2Command.NetworkKeyReport)
 export class Security2CCNetworkKeyReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyReportOptions,
@@ -1531,7 +1530,7 @@ interface Security2CCNetworkKeyGetOptions extends CCCommandOptions {
 @expectedCCResponse(Security2CCNetworkKeyReport)
 export class Security2CCNetworkKeyGet extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCNetworkKeyGetOptions,
@@ -1576,7 +1575,7 @@ interface Security2CCTransferEndOptions extends CCCommandOptions {
 @CCCommand(Security2Command.TransferEnd)
 export class Security2CCTransferEnd extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| Security2CCTransferEndOptions,
@@ -1616,7 +1615,7 @@ export class Security2CCTransferEnd extends Security2CC {
 @CCCommand(Security2Command.CommandsSupportedReport)
 export class Security2CCCommandsSupportedReport extends Security2CC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);

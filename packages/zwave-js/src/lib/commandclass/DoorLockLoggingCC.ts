@@ -8,11 +8,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { isPrintableASCII, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -154,7 +153,7 @@ export class DoorLockLoggingCC extends CommandClass {
 	declare ccCommand: DoorLockLoggingCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -169,8 +168,8 @@ export class DoorLockLoggingCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Door Lock Logging"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -206,7 +205,7 @@ export class DoorLockLoggingCC extends CommandClass {
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -243,7 +242,7 @@ export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -344,7 +343,7 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockLoggingCCRecordGetOptions,

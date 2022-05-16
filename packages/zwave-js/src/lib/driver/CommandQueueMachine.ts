@@ -1,3 +1,4 @@
+import type { Message } from "@zwave-js/serial";
 import { getErrorMessage } from "@zwave-js/shared";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
@@ -11,7 +12,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { forwardTo, pure, raise, sendParent, stop } from "xstate/lib/actions";
-import type { Message } from "../message/Message";
 import { isSendData } from "../serialapi/transport/SendDataShared";
 import {
 	createSerialAPICommandMachine,

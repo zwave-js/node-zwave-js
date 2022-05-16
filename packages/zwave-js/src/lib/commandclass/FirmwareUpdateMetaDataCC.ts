@@ -12,7 +12,6 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -192,7 +191,7 @@ export class FirmwareUpdateMetaDataCC extends CommandClass {
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
 export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -278,7 +277,7 @@ export class FirmwareUpdateMetaDataCCMetaDataGet extends FirmwareUpdateMetaDataC
 @CCCommand(FirmwareUpdateMetaDataCommand.RequestReport)
 export class FirmwareUpdateMetaDataCCRequestReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -320,7 +319,7 @@ type FirmwareUpdateMetaDataCCRequestGetOptions = {
 // a while to come. We don't want to block communication, so we don't expect a response here
 export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCRequestGetOptions & CCCommandOptions),
@@ -409,7 +408,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 // This is sent to us from the node, so we expect no response
 export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -442,7 +441,7 @@ interface FirmwareUpdateMetaDataCCReportOptions extends CCCommandOptions {
 // We send this in reply to the Get command and expect no response
 export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCReportOptions,
@@ -506,7 +505,7 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 @CCCommand(FirmwareUpdateMetaDataCommand.StatusReport)
 export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -538,7 +537,7 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 @CCCommand(FirmwareUpdateMetaDataCommand.ActivationReport)
 export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -594,7 +593,7 @@ interface FirmwareUpdateMetaDataCCActivationSetOptions {
 @expectedCCResponse(FirmwareUpdateMetaDataCCActivationReport)
 export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (FirmwareUpdateMetaDataCCActivationSetOptions & CCCommandOptions),
@@ -654,7 +653,7 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
 @CCCommand(FirmwareUpdateMetaDataCommand.PrepareReport)
 export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -689,7 +688,7 @@ interface FirmwareUpdateMetaDataCCPrepareGetOptions extends CCCommandOptions {
 @expectedCCResponse(FirmwareUpdateMetaDataCCReport)
 export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| FirmwareUpdateMetaDataCCPrepareGetOptions,

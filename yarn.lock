@@ -3865,6 +3865,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^14.18.16
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
     alcalzone-shared: ^4.0.1

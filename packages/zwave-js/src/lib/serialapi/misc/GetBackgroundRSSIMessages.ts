@@ -1,19 +1,16 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { RSSI, rssiToString } from "../../controller/_Types";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
+import { RSSI, rssiToString } from "../../controller/_Types";
 import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.GetBackgroundRSSI)
@@ -24,7 +21,7 @@ export class GetBackgroundRSSIRequest extends Message {}
 @messageTypes(MessageType.Response, FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIResponse extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);

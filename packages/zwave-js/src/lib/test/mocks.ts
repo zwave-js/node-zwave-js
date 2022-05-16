@@ -1,18 +1,16 @@
 import { ConfigManager } from "@zwave-js/config";
 import type { CommandClasses } from "@zwave-js/core";
-import { getImplementedVersion } from "../commandclass/CommandClass";
-import type { Driver } from "../driver/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../message/Message";
+} from "@zwave-js/serial";
+import { getImplementedVersion } from "../commandclass/CommandClass";
+import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 

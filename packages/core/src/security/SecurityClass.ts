@@ -44,6 +44,7 @@ export interface SecurityClassOwner {
 	readonly id: number;
 	getHighestSecurityClass(): SecurityClass | undefined;
 	hasSecurityClass(securityClass: SecurityClass): Maybe<boolean>;
+	setSecurityClass(securityClass: SecurityClass, granted: boolean): void;
 }
 
 export function getHighestSecurityClass(

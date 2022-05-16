@@ -14,12 +14,11 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -183,8 +182,8 @@ export class CentralSceneCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Central Scene"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -202,9 +201,10 @@ export class CentralSceneCC extends CommandClass {
 			(node.supportsCC(CommandClasses.Association) ||
 				node.supportsCC(CommandClasses["Multi Channel Association"]))
 		) {
-			const groupsIssueingNotifications = node
-				.createCCInstance(AssociationGroupInfoCC)!
-				.findGroupsForIssuedCommand(
+			const groupsIssueingNotifications =
+				AssociationGroupInfoCC.findGroupsForIssuedCommand(
+					driver,
+					node,
 					this.ccId,
 					CentralSceneCommand.Notification,
 				);
@@ -279,7 +279,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -353,7 +353,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -470,7 +470,7 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
@@ -512,7 +512,7 @@ interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 @CCCommand(CentralSceneCommand.ConfigurationSet)
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CentralSceneCCConfigurationSetOptions,

@@ -17,7 +17,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveEndpointBase,
+	ZWaveHost,
+	ZWaveNodeBase,
+} from "@zwave-js/host";
 import {
 	buffer2hex,
 	getEnumMemberName,
@@ -84,10 +88,7 @@ export type CommandClassOptions =
 // @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(
-		host: ZWaveHost<ZWaveNode>,
-		options: CommandClassOptions,
-	) {
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
@@ -160,7 +161,7 @@ export class CommandClass {
 			);
 			// If we received a CC from a node, it must support at least version 1
 			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			const node = this.getNodeUnsafe();
+			const node = host.nodes.get(this.nodeId);
 			if (
 				node?.interviewStage === InterviewStage.Complete &&
 				this.version === 0 &&
@@ -182,7 +183,7 @@ export class CommandClass {
 		}
 	}
 
-	protected host: ZWaveHost<ZWaveNode>;
+	protected host: ZWaveHost;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -338,7 +339,7 @@ export class CommandClass {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		driver: ZWaveHost<ZWaveNode>,
+		driver: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -495,9 +496,17 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(): ZWaveNode | undefined {
+	public getNode(driver: Driver): ZWaveNode | undefined;
+	/**
+	 * Returns the node this CC is linked to.
+	 */
+	public getNode(): ZWaveNodeBase | undefined;
+	/**
+	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
+	 */
+	public getNode(driver?: Driver): ZWaveNode | ZWaveNodeBase | undefined {
 		if (this.isSinglecast()) {
-			return this.host.nodes.get(this.nodeId);
+			return (driver?.controller ?? this.host).nodes.get(this.nodeId);
 		}
 	}
 
@@ -505,9 +514,18 @@ export class CommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined;
+	public getNodeUnsafe(): ZWaveNodeBase | undefined;
+
+	public getNodeUnsafe(
+		driver?: Driver,
+	): ZWaveNode | ZWaveNodeBase | undefined {
 		try {
-			return this.getNode();
+			if (driver) {
+				return this.getNode(driver);
+			} else {
+				return this.getNode();
+			}
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -518,20 +536,35 @@ export class CommandClass {
 		}
 	}
 
-	public getEndpoint(): Endpoint | undefined {
-		return this.getNode()?.getEndpoint(this.endpointIndex);
+	public getEndpoint(driver: Driver): Endpoint | undefined;
+	public getEndpoint(): ZWaveEndpointBase | undefined;
+
+	public getEndpoint(
+		driver?: Driver,
+	): Endpoint | ZWaveEndpointBase | undefined {
+		if (driver) {
+			return this.getNode(driver)?.getEndpoint(this.endpointIndex);
+		} else {
+			return this.getNode()?.getEndpoint(this.endpointIndex);
+		}
 	}
 
 	/** Returns the value DB for this CC's node */
 	protected getValueDB(): ValueDB {
-		const node = this.getNode();
-		if (node == undefined) {
-			throw new ZWaveError(
-				"The node for this CC does not exist or the driver is not ready yet",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
+		if (this.isSinglecast()) {
+			try {
+				return this.host.getValueDB(this.nodeId);
+			} catch {
+				throw new ZWaveError(
+					"The node for this CC does not exist or the driver is not ready yet",
+					ZWaveErrorCodes.Driver_NotReady,
+				);
+			}
 		}
-		return node.valueDB;
+		throw new ZWaveError(
+			"Cannot retrieve the value ID for non-singlecast CCs",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
 	}
 
 	/** Which variables should be persisted when requested */
@@ -1042,10 +1075,7 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(
-		driver: ZWaveHost<ZWaveNode>,
-		options: InvalidCCCreationOptions,
-	) {
+	public constructor(driver: ZWaveHost, options: InvalidCCCreationOptions) {
 		super(driver, options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC
@@ -1122,10 +1152,10 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (host: ZWaveHost<ZWaveNode>, options: any): T;
+	new (host: ZWaveHost, options: any): T;
 };
 type APIConstructor = new (
-	host: ZWaveHost<ZWaveNode>,
+	host: ZWaveHost,
 	endpoint: Endpoint | VirtualEndpoint,
 ) => CCAPI;
 

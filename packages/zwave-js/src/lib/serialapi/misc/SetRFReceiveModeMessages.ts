@@ -4,22 +4,19 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { ZWaveNode } from "../../node/Node";
+} from "@zwave-js/serial";
 
 export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 	/** Whether the stick should receive (true) or not (false) */
@@ -31,7 +28,7 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
 	) {
 		super(host, options);
@@ -69,7 +66,7 @@ export class SetRFReceiveModeResponse
 	implements SuccessIndicator
 {
 	public constructor(
-		host: ZWaveHost<ZWaveNode>,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions,
 	) {
 		super(host, options);
