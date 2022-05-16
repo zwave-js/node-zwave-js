@@ -86,7 +86,7 @@
 	"alternate_exclusion_h": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Alternate Exclusion",
-		"description": "When enabled, press 3 times and hold on the last press to remove the device during exclusion"
+		"description": "Press 3 times and hold on the last press to remove the device during exclusion"
 	},
 	"smooth_level_changes": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -95,71 +95,43 @@
 	"dimmer_steps": {
 		"label": "Dimmer Steps",
 		"description": "Number of dimming steps or levels",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 99,
-		"defaultValue": 1
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
 	},
 	"dimmer_times": {
 		"label": "Dimmer Step Time",
 		"description": "Timing of dimming steps or levels",
-		"valueSize": 1,
-		"unit": "10ms",
-		"minValue": 1,
-		"maxValue": 255,
-		"defaultValue": 3,
-		"unsigned": true
+		"$import": "~/templates/master_template.json#dimming_timing"
 	},
 	"dimmer_steps_z": {
 		"label": "Dimmer Steps (Remote Command)",
 		"description": "Number of dimming steps or levels when sent from a zwave command",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 99,
-		"defaultValue": 1
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
 	},
 	"dimmer_times_z": {
 		"label": "Dimmer Step Time (Remote Command)",
 		"description": "Timing of dimming steps or levels when sent from a zwave command",
-		"valueSize": 1,
-		"unit": "10ms",
-		"minValue": 1,
-		"maxValue": 255,
-		"defaultValue": 3,
-		"unsigned": true
+		"$import": "~/templates/master_template.json#dimming_timing"
 	},
 	"dimmer_steps_a": {
 		"label": "Dimmer Steps (Group Command)",
 		"description": "Number of dimming steps or levels when sent from a group command",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 99,
-		"defaultValue": 1
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
 	},
 	"dimmer_times_a": {
 		"label": "Dimmer Step Time (Group Command)",
 		"description": "Timing of dimming steps or levels when sent from a group command",
-		"valueSize": 1,
-		"unit": "10ms",
-		"minValue": 1,
-		"maxValue": 255,
-		"defaultValue": 3,
-		"unsigned": true
+		"$import": "~/templates/master_template.json#dimming_timing"
 	},
 	"dim_threshold_min": {
 		"label": "Minimum Dim Threshold",
 		"description": "Set the minimum dimmer threshold when manually or remotely controlled",
-		"valueSize": 1,
-		"minValue": 1,
-		"maxValue": 99,
-		"defaultValue": 1,
-		"unsigned": true
+		"$import": "~/templates/master_template.json#base_1-99_nounit"
 	},
 	"dim_threshold_max": {
 		"label": "Maximum Brightness Threshold",
 		"description": "Set the maximum brightness threshold when manually or remotely controlled",
 		"valueSize": 1,
-		"minValue": 0,
+		"minValue": 1,
 		"maxValue": 99,
 		"defaultValue": 99,
 		"unsigned": true
@@ -174,7 +146,7 @@
 		"unsigned": true
 	},
 	"dim_rate": {
-		"label": "Dim up/down rate",
+		"label": "Dim Rate",
 		"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
 		"valueSize": 1,
 		"defaultValue": 0,
@@ -182,11 +154,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Dim up/down quickly",
+				"label": "Dim Quickly",
 				"value": 0
 			},
 			{
-				"label": "Dim up/down slowly",
+				"label": "Dim Slowly",
 				"value": 1
 			}
 		]
