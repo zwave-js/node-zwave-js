@@ -17,7 +17,6 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Adjust Refresh",
 			"$import": "templates/config_template.json#adjust_refresh"
 		}
 	],
