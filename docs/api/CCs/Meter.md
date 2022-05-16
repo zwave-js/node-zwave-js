@@ -25,5 +25,5 @@ async getSupported(): Promise<Pick<MeterCCSupportedReport, "type" | "supportsRes
 ### `reset`
 
 ```ts
-async reset(options: MeterCCResetOptions): Promise<void>;
+async reset(options?: MeterCCResetOptions): Promise<void>;
 ```
