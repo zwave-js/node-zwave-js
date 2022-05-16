@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"$import": "templates/config_template.json#invert_switch"
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	],
 	"metadata": {

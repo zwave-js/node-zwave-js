@@ -33,56 +33,6 @@
 			}
 		]
 	},
-	"led_light_3": {
-		"label": "LED Indicator Light",
-		"valueSize": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "LED on when switch is OFF",
-				"value": 0
-			},
-			{
-				"label": "LED on when switch is ON",
-				"value": 1
-			},
-			{
-				"label": "LED always off",
-				"value": 2
-			}
-		]
-	},
-	"led_light_4": {
-		"label": "LED Indicator Light",
-		"valueSize": 1,
-		"defaultValue": 0,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "LED on when switch is OFF",
-				"value": 0
-			},
-			{
-				"label": "LED on when switch is ON",
-				"value": 1
-			},
-			{
-				"label": "LED always off",
-				"value": 2
-			},
-			{
-				"label": "LED always on",
-				"value": 3
-			}
-		]
-	},
-	"invert_switch": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Invert Switch"
-	},
 	"switch_mode": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Switch Mode"
