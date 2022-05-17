@@ -16,7 +16,6 @@
 			}
 		]
 	},
-	{
 	"load_sensing": {
 		"label": "Load Sensing",
 		"valueSize": 1,
