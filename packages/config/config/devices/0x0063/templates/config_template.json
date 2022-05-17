@@ -156,7 +156,6 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"allowManualEntry": true,
 		"unsigned": true,
 		"options": [
 			{
