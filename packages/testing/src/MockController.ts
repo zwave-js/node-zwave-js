@@ -1,19 +1,65 @@
-import { MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
+import { ValueDB } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { Message, MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { TimedExpectation } from "@zwave-js/shared/safe";
 import { createDefaultBehaviors } from "./MockControllerBehaviors";
 import type { MockNode } from "./MockNode";
 
+export interface MockControllerOptions {
+	serial: MockPortBinding;
+	ownNodeId: number;
+	homeId: number;
+}
+
 /** A mock Z-Wave controller which interacts with {@link MockNode}s and can be controlled via a {@link MockSerialPort} */
 export class MockController {
-	public constructor(serial: MockPortBinding) {
-		this.serial = serial;
+	public constructor(options: MockControllerOptions) {
+		this.serial = options.serial;
 		// Pipe the serial data through a parser, so we get complete message buffers or headers out the other end
 		this.serialParser = new SerialAPIParser();
-		serial.on("write", (data) => {
+		this.serial.on("write", (data) => {
 			this.serialParser.write(data);
 		});
 		this.serialParser.on("data", (data) => this.serialOnData(data));
+
+		// Set up the fake host
+		const valuesStorage = new Map();
+		const metadataStorage = new Map();
+		const valueDBCache = new Map<number, ValueDB>();
+
+		this.host = {
+			ownNodeId: options.ownNodeId,
+			homeId: options.homeId,
+			configManager: undefined as any,
+			controllerLog: new Proxy({} as any, {
+				get(_target, _prop) {
+					return () => {
+						// log nothing
+					};
+				},
+			}),
+			securityManager: undefined,
+			securityManager2: undefined,
+			options: {} as any,
+			nodes: this.nodes as any,
+			getNextCallbackId: () => 1,
+			getSafeCCVersionForNode: () => 100,
+
+			getValueDB: (nodeId) => {
+				if (!valueDBCache.has(nodeId)) {
+					valueDBCache.set(
+						nodeId,
+						new ValueDB(
+							nodeId,
+							valuesStorage as any,
+							metadataStorage as any,
+						),
+					);
+				}
+				return valueDBCache.get(nodeId)!;
+			},
+		};
 
 		// Apply default behaviors that are required for interacting with the driver correctly
 		this.defineBehavior(...createDefaultBehaviors());
@@ -22,12 +68,15 @@ export class MockController {
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
 	private expectedHostACK?: TimedExpectation;
-	private expectedHostMessages: TimedExpectation<Buffer, Buffer>[] = [];
+	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeMessages: Map<
 		number,
 		TimedExpectation<Buffer, Buffer>[]
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
+
+	public readonly nodes = new Map<number, MockNode>();
+	private host: ZWaveHost;
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private serialOnData(
@@ -58,18 +107,28 @@ export class MockController {
 			}
 		}
 
-		// all good, respond with ACK
-		this.sendHeaderToHost(MessageHeaders.ACK);
+		let msg: Message;
+		try {
+			// Parse the message while remembering potential decoding errors in embedded CCs
+			// This way we can log the invalid CC contents
+			msg = Message.from(this.host, data);
+			// all good, respond with ACK
+			this.sendHeaderToHost(MessageHeaders.ACK);
+		} catch (e: any) {
+			throw new Error(
+				"Mock controller received an invalid message from the host!",
+			);
+		}
 
 		// Handle message buffer. Check for pending expectations first.
 		const handler = this.expectedHostMessages.find(
-			(e) => !e.predicate || e.predicate(data),
+			(e) => !e.predicate || e.predicate(msg),
 		);
 		if (handler) {
-			handler.resolve(data);
+			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (behavior.onHostMessage?.(this, data)) return;
+				if (behavior.onHostMessage?.(this, msg)) return;
 			}
 		}
 	}
@@ -99,9 +158,9 @@ export class MockController {
 	 */
 	public async expectHostMessage(
 		timeout: number,
-		predicate: (data: Buffer) => boolean,
-	): Promise<Buffer> {
-		const expectation = new TimedExpectation<Buffer, Buffer>(
+		predicate: (msg: Message) => boolean,
+	): Promise<Message> {
+		const expectation = new TimedExpectation<Message, Message>(
 			timeout,
 			predicate,
 			"Host did not respond with an ACK within the provided timeout!",
@@ -188,7 +247,7 @@ export class MockController {
 
 export interface MockControllerBehavior {
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
-	onHostMessage?: (controller: MockController, data: Buffer) => boolean;
+	onHostMessage?: (controller: MockController, msg: Message) => boolean;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeMessage?: (
 		controller: MockController,

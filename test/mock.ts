@@ -45,7 +45,11 @@ void (async () => {
 		console.log("driver ready!!!");
 	});
 
-	const controller = new MockController(mockPort);
+	const controller = new MockController({
+		homeId: 0x7e370001,
+		ownNodeId: 1,
+		serial: mockPort,
+	});
 
 	continueStartup();
 })();
