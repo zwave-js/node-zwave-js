@@ -36,19 +36,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Dim level",
-			"description": "Change brightness of associated light bulb(s)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Default",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#dim_level"
 		},
 		{
 			"#": "3",

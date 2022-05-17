@@ -35,13 +35,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Associated Dim Level",
-			"description": "Brightness of associated light(s)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_level"
 		},
 		{
 			"#": "3",
@@ -101,12 +95,7 @@
 		},
 		{
 			"#": "17",
-			"label": "Switch Level",
-			"description": "Set power level for plain switch functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0
+			"$import": "templates/config_template.json#switch_level"
 		},
 		{
 			"#": "18",

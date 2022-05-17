@@ -80,12 +80,17 @@
 	"alternate_exclusion": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Alternate Exclusion",
-		"description": "Press two times ON button and two time OFF button, LED will flash 5 times if successful"
+		"description": "Press two times ON and two times OFF, LED will flash 5 times if successful"
 	},
 	"alternate_exclusion_h": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Alternate Exclusion",
-		"description": "Press 3 times and hold on the last press to remove the device during exclusion"
+		"description": "Press 3 times and hold on the last press"
+	},
+	"alternate_exclusion_m": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Alternate Exclusion",
+		"description": "Press and release OFF, then ON"
 	},
 	"smooth_level_changes": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -143,6 +148,30 @@
 		"maxValue": 99,
 		"defaultValue": 0,
 		"unsigned": true
+	},
+	"dim_level": {
+		"label": "Dim level",
+		"description": "Change brightness of associated light bulb(s)",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"allowManualEntry": true,"allowManualEntry": 
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Default",
+				"value": 255
+			}
+		]
+	},
+	"switch_level": {
+		"label": "Switch Level",
+		"description": "Set power level for plain switch functionality",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 99,
+		"defaultValue": 0
 	},
 	"dim_rate": {
 		"label": "Dim Rate",
