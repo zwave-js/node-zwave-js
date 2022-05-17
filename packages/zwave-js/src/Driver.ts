@@ -1,10 +1,10 @@
 export type { FileSystem } from "@zwave-js/host/safe";
 export {
 	FunctionType,
+	Message,
 	MessagePriority,
 	MessageType,
 } from "@zwave-js/serial";
-export { Message } from "@zwave-js/serial";
 export type {
 	MessageOptions,
 	ResponsePredicate,

@@ -286,7 +286,7 @@ export interface CreateTestNodeOptions {
 }
 
 export interface TestNode extends ZWaveNodeBase {
-	setEndpoint(endpoint: ZWaveEndpointBase): void;
+	setEndpoint(endpoint: CreateTestEndpointOptions): void;
 }
 
 export function createTestNode(
@@ -322,14 +322,17 @@ export function createTestNode(
 		deviceConfig: options.deviceConfig,
 
 		setEndpoint: (endpoint) => {
-			endpointCache.set(endpoint.index, {
-				nodeId: options.id,
-				index: endpoint.index,
-				supportsCC: endpoint.supportsCC ?? options.supportsCC,
-				controlsCC: endpoint.controlsCC ?? options.controlsCC,
-				isCCSecure: endpoint.isCCSecure ?? options.isCCSecure,
-				getCCVersion: endpoint.getCCVersion ?? options.getCCVersion,
-			});
+			endpointCache.set(
+				endpoint.index,
+				createTestEndpoint(host, {
+					nodeId: options.id,
+					index: endpoint.index,
+					supportsCC: endpoint.supportsCC ?? options.supportsCC,
+					controlsCC: endpoint.controlsCC ?? options.controlsCC,
+					isCCSecure: endpoint.isCCSecure ?? options.isCCSecure,
+					getCCVersion: endpoint.getCCVersion ?? options.getCCVersion,
+				}),
+			);
 		},
 
 		getEndpoint: ((index: number) => {
