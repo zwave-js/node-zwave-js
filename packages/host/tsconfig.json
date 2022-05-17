@@ -1,0 +1,20 @@
+// tsconfig for IntelliSense - active in all files in the current package
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../testing/tsconfig.build.json"
+		}
+	],
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**"
+	]
+}

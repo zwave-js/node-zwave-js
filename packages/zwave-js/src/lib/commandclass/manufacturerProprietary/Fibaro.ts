@@ -10,9 +10,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { staticExtends } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
-import type { ZWaveHost } from "../../driver/Host";
 import {
 	CCCommandOptions,
 	CommandClassDeserializationOptions,

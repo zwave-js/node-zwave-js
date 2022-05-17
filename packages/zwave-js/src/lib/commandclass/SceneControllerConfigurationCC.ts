@@ -10,11 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -26,7 +26,7 @@ import {
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
-import type { AssociationCC } from "./AssociationCC";
+import { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -360,7 +360,8 @@ export class SceneControllerConfigurationCC extends CommandClass {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -368,7 +369,10 @@ export class SceneControllerConfigurationCC extends CommandClass {
 			direction: "none",
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
+			driver,
+			endpoint,
+		);
 		if (groupCount === 0) {
 			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -390,15 +394,18 @@ export class SceneControllerConfigurationCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Scene Controller Configuration"
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
+			driver,
+			endpoint,
+		);
 
 		driver.controllerLog.logNode(node.id, {
 			message: "querying all scene controller configurations...",
@@ -429,15 +436,14 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * This only works AFTER the node has been interviewed by this CC
 	 * or the AssociationCC.
 	 */
-	protected getGroupCountCached(): number {
+	protected static getGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		return (
-			this.getNodeUnsafe()?.deviceConfig?.compat
+			host.nodes.get(endpoint.nodeId)?.deviceConfig?.compat
 				?.forceSceneControllerGroupCount ??
-			this.getEndpoint()
-				?.createCCInstanceUnsafe<AssociationCC>(
-					CommandClasses.Association,
-				)
-				?.getGroupCountCached() ??
+			AssociationCC.getGroupCountCached(host, endpoint) ??
 			0
 		);
 	}
@@ -465,7 +471,11 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount = this.getGroupCountCached();
+			const groupCount =
+				SceneControllerConfigurationCC.getGroupCountCached(
+					host,
+					this.getEndpoint()!,
+				);
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
@@ -586,7 +596,11 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount = this.getGroupCountCached();
+			const groupCount =
+				SceneControllerConfigurationCC.getGroupCountCached(
+					host,
+					this.getEndpoint()!,
+				);
 			if (options.groupId < 0 || options.groupId > groupCount) {
 				throw new ZWaveError(
 					`${this.constructor.name}: The group ID must be between 0 and the number of supported groups ${groupCount}.`,

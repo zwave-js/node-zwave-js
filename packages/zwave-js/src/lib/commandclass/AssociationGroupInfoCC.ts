@@ -10,13 +10,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
-import type { AssociationCC } from "./AssociationCC";
+import { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -31,7 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
@@ -195,39 +195,56 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	/** Returns the name of an association group */
-	public getGroupNameCached(groupId: number): string | undefined {
-		return this.getValueDB().getValue(
-			getGroupNameValueID(this.endpointIndex, groupId),
-		);
+	public static getGroupNameCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		groupId: number,
+	): string | undefined {
+		return host
+			.getValueDB(endpoint.nodeId)
+			.getValue(getGroupNameValueID(endpoint.index, groupId));
 	}
 
 	/** Returns the association profile for an association group */
-	public getGroupProfileCached(
+	public static getGroupProfileCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): AssociationGroupInfoProfile | undefined {
-		return this.getValueDB().getValue<{
+		return host.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
-		}>(getGroupInfoValueID(this.endpointIndex, groupId))?.profile;
+		}>(getGroupInfoValueID(endpoint.index, groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
-	public getIssuedCommandsCached(
+	public static getIssuedCommandsCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
-		return this.getValueDB().getValue(
-			getIssuedCommandsValueID(this.endpointIndex, groupId),
-		);
+		return host
+			.getValueDB(endpoint.nodeId)
+			.getValue(getIssuedCommandsValueID(endpoint.index, groupId));
 	}
 
-	public findGroupsForIssuedCommand(
+	public static findGroupsForIssuedCommand(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
 		const ret: number[] = [];
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount = this.getAssociationGroupCountCached(
+			host,
+			endpoint,
+		);
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Scan the issued commands of all groups if there's a match
-			const issuedCommands = this.getIssuedCommandsCached(groupId);
+			const issuedCommands = this.getIssuedCommandsCached(
+				host,
+				endpoint,
+				groupId,
+			);
 			if (!issuedCommands) continue;
 			if (
 				issuedCommands.has(ccId) &&
@@ -240,32 +257,31 @@ export class AssociationGroupInfoCC extends CommandClass {
 		return ret;
 	}
 
-	private getAssociationGroupCountCached(): number {
-		const endpoint = this.getEndpoint()!;
+	private static getAssociationGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
 
-		// First query the Multi Channel Association CC
 		return (
-			endpoint
-				.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-					CommandClasses["Multi Channel Association"],
-				)
-				?.getGroupCountCached() ||
+			// First query the Multi Channel Association CC
+			(endpoint.supportsCC(CommandClasses["Multi Channel Association"]) &&
+				MultiChannelAssociationCC.getGroupCountCached(
+					host,
+					endpoint,
+				)) ||
 			// Then the Association CC
-			endpoint
-				.createCCInstanceUnsafe<AssociationCC>(
-					CommandClasses.Association,
-				)
-				?.getGroupCountCached() ||
+			(endpoint.supportsCC(CommandClasses.Association) &&
+				AssociationCC.getGroupCountCached(host, endpoint)) ||
 			// And fall back to 0
 			0
 		);
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
@@ -276,7 +292,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 			direction: "none",
 		});
 
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount =
+			AssociationGroupInfoCC.getAssociationGroupCountCached(
+				driver,
+				endpoint,
+			);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
@@ -313,14 +333,18 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		// Query the information for each group (this is the only thing that could be dynamic)
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount =
+			AssociationGroupInfoCC.getAssociationGroupCountCached(
+				driver,
+				endpoint,
+			);
 		const hasDynamicInfo = this.getValueDB().getValue(
 			getHasDynamicInfoValueID(this.endpointIndex),
 		);

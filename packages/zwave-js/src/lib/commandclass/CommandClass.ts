@@ -17,6 +17,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type {
+	ZWaveEndpointBase,
+	ZWaveHost,
+	ZWaveNodeBase,
+} from "@zwave-js/host";
 import {
 	buffer2hex,
 	getEnumMemberName,
@@ -27,7 +32,6 @@ import {
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -157,7 +161,7 @@ export class CommandClass {
 			);
 			// If we received a CC from a node, it must support at least version 1
 			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			const node = this.getNodeUnsafe();
+			const node = host.nodes.get(this.nodeId);
 			if (
 				node?.interviewStage === InterviewStage.Complete &&
 				this.version === 0 &&
@@ -389,6 +393,27 @@ export class CommandClass {
 		}
 	}
 
+	/**
+	 * @internal
+	 * Create an instance of the given CC without checking whether it is supported.
+	 * If the CC is implemented, this returns an instance of the given CC which is linked to the given endpoint.
+	 *
+	 * **WARNING:** Applications should not use this directly.
+	 */
+	public static createInstanceUnchecked<T extends CommandClass>(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		cc: CommandClasses | Constructable<T>,
+	): T | undefined {
+		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
+		if (Constructor) {
+			return new Constructor(host, {
+				nodeId: endpoint.nodeId,
+				endpoint: endpoint.index,
+			}) as T;
+		}
+	}
+
 	/** Generates a representation of this CC for the log */
 	public toLogEntry(): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
@@ -492,9 +517,17 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(): ZWaveNode | undefined {
+	public getNode(driver: Driver): ZWaveNode | undefined;
+	/**
+	 * Returns the node this CC is linked to.
+	 */
+	public getNode(): ZWaveNodeBase | undefined;
+	/**
+	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
+	 */
+	public getNode(driver?: Driver): ZWaveNode | ZWaveNodeBase | undefined {
 		if (this.isSinglecast()) {
-			return this.host.nodes.get(this.nodeId);
+			return (driver?.controller ?? this.host).nodes.get(this.nodeId);
 		}
 	}
 
@@ -502,9 +535,18 @@ export class CommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined;
+	public getNodeUnsafe(): ZWaveNodeBase | undefined;
+
+	public getNodeUnsafe(
+		driver?: Driver,
+	): ZWaveNode | ZWaveNodeBase | undefined {
 		try {
-			return this.getNode();
+			if (driver) {
+				return this.getNode(driver);
+			} else {
+				return this.getNode();
+			}
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -515,20 +557,35 @@ export class CommandClass {
 		}
 	}
 
-	public getEndpoint(): Endpoint | undefined {
-		return this.getNode()?.getEndpoint(this.endpointIndex);
+	public getEndpoint(driver: Driver): Endpoint | undefined;
+	public getEndpoint(): ZWaveEndpointBase | undefined;
+
+	public getEndpoint(
+		driver?: Driver,
+	): Endpoint | ZWaveEndpointBase | undefined {
+		if (driver) {
+			return this.getNode(driver)?.getEndpoint(this.endpointIndex);
+		} else {
+			return this.getNode()?.getEndpoint(this.endpointIndex);
+		}
 	}
 
 	/** Returns the value DB for this CC's node */
 	protected getValueDB(): ValueDB {
-		const node = this.getNode();
-		if (node == undefined) {
-			throw new ZWaveError(
-				"The node for this CC does not exist or the driver is not ready yet",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
+		if (this.isSinglecast()) {
+			try {
+				return this.host.getValueDB(this.nodeId);
+			} catch {
+				throw new ZWaveError(
+					"The node for this CC does not exist or the driver is not ready yet",
+					ZWaveErrorCodes.Driver_NotReady,
+				);
+			}
 		}
-		return node.valueDB;
+		throw new ZWaveError(
+			"Cannot retrieve the value ID for non-singlecast CCs",
+			ZWaveErrorCodes.CC_NoNodeID,
+		);
 	}
 
 	/** Which variables should be persisted when requested */

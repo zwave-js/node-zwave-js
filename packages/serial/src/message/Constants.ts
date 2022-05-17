@@ -26,6 +26,7 @@ export enum MessagePriority {
 	// nothing else needs to be done
 	Poll,
 }
+
 export function isMessagePriority(val: unknown): val is MessagePriority {
 	return typeof val === "number" && val in MessagePriority;
 }

@@ -12,6 +12,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -32,8 +34,6 @@ import {
 	throwWrongValueType,
 } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import {
 	API,
 	CCCommand,
@@ -705,8 +705,8 @@ export class UserCodeCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["User Code"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -764,8 +764,8 @@ export class UserCodeCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["User Code"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -889,7 +889,7 @@ export class UserCodeCCSet extends UserCodeCC {
 			);
 		} else {
 			const numUsers =
-				this.getNode()?.getValue<number>(
+				this.getValueDB()?.getValue<number>(
 					getSupportedUsersValueID(this.endpointIndex),
 				) ?? 0;
 			this.userId = options.userId;
@@ -1245,7 +1245,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 			this.keypadMode = options.keypadMode;
 
 			const supportedModes =
-				this.getNode()?.getValue<KeypadMode[]>(
+				this.getValueDB()?.getValue<KeypadMode[]>(
 					getSupportedKeypadModesValueID(this.endpointIndex),
 				) ?? [];
 
@@ -1354,7 +1354,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 				);
 			}
 			const supportedAsciiChars =
-				this.getNode()?.getValue<string>(
+				this.getValueDB()?.getValue<string>(
 					getSupportedASCIICharsValueID(this.endpointIndex),
 				) ?? "";
 
@@ -1363,7 +1363,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 			// Validate the code
 			if (!this.masterCode) {
 				const supportsDeactivation =
-					this.getNode()?.getValue<boolean>(
+					this.getValueDB()?.getValue<boolean>(
 						getSupportsMasterCodeDeactivationValueID(
 							this.endpointIndex,
 						),
@@ -1507,19 +1507,19 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			this.userCodes = options.userCodes as any;
 
 			const numUsers =
-				this.getNode()?.getValue<number>(
+				this.getValueDB()?.getValue<number>(
 					getSupportedUsersValueID(this.endpointIndex),
 				) ?? 0;
 			const supportedStatuses =
-				this.getNode()?.getValue<number[]>(
+				this.getValueDB()?.getValue<number[]>(
 					getSupportedUserIDStatusesValueID(this.endpointIndex),
 				) ?? [];
 			const supportedAsciiChars =
-				this.getNode()?.getValue<string>(
+				this.getValueDB()?.getValue<string>(
 					getSupportedASCIICharsValueID(this.endpointIndex),
 				) ?? "";
 			const supportsMultipleUserCodeSet =
-				this.getNode()?.getValue<boolean>(
+				this.getValueDB()?.getValue<boolean>(
 					getSupportsMultipleUserCodeSetValueID(this.endpointIndex),
 				) ?? false;
 

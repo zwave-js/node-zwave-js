@@ -6,11 +6,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -78,7 +78,7 @@ export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -93,8 +93,8 @@ export class LanguageCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Language.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});

@@ -15,6 +15,9 @@
 			"path": "../core/tsconfig.build.json"
 		},
 		{
+			"path": "../host/tsconfig.build.json"
+		},
+		{
 			"path": "../maintenance/tsconfig.build.json"
 		},
 		{

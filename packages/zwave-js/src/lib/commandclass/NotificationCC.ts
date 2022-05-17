@@ -21,12 +21,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -353,7 +353,7 @@ export class NotificationCC extends CommandClass {
 		api: NotificationCCAPI,
 		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
 	): Promise<"push" | "pull"> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		// SDS14223: If the supporting node does not support the Association Command Class,
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
@@ -426,8 +426,8 @@ export class NotificationCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -593,8 +593,8 @@ export class NotificationCC extends CommandClass {
 	public async refreshValues(driver: Driver): Promise<void> {
 		// Refreshing values only works on pull nodes
 		if (this.notificationMode === "pull") {
-			const node = this.getNode()!;
-			const endpoint = this.getEndpoint()!;
+			const node = this.getNode(driver)!;
+			const endpoint = this.getEndpoint(driver)!;
 			const api = endpoint.commandClasses.Notification.withOptions({
 				priority: MessagePriority.NodeQuery,
 			});

@@ -82,12 +82,14 @@ describe("lib/node/Node", () => {
 		let fakeDriver: Driver;
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
+		beforeAll(
+			async () => {
+				configManager = new ConfigManager();
+				await configManager.loadDeviceClasses();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-			configManager = new ConfigManager();
-			await configManager.loadDeviceClasses();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			fakeDriver = createEmptyMockDriver() as unknown as Driver;
@@ -195,15 +197,17 @@ describe("lib/node/Node", () => {
 		let fakeDriver: ReturnType<typeof createEmptyMockDriver>;
 		let node: ZWaveNode;
 
-		beforeAll(async () => {
-			fakeDriver = createEmptyMockDriver();
-			node = new ZWaveNode(2, fakeDriver as any);
-			(fakeDriver.controller.nodes as any).set(node.id, node);
+		beforeAll(
+			async () => {
+				fakeDriver = createEmptyMockDriver();
+				node = new ZWaveNode(2, fakeDriver as any);
+				fakeDriver.controller.nodes.set(node.id, node);
 
+				await fakeDriver.configManager.loadDeviceClasses();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-			await fakeDriver.configManager.loadDeviceClasses();
-		});
+			30000,
+		);
 
 		afterAll(() => {
 			node.destroy();
@@ -917,22 +921,27 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getEndpoint()", () => {
+		let fakeDriver: ReturnType<typeof createEmptyMockDriver>;
 		let node: ZWaveNode;
-		beforeEach(async () => {
-			const fakeDriver = createEmptyMockDriver();
 
+		beforeEach(
+			async () => {
+				fakeDriver = createEmptyMockDriver();
+				await fakeDriver.configManager.loadDeviceClasses();
+
+				node = new ZWaveNode(
+					2,
+					fakeDriver as any,
+					new DeviceClass(fakeDriver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+				);
+				fakeDriver.controller.nodes.set(node.id, node);
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-			await fakeDriver.configManager.loadDeviceClasses();
-
-			node = new ZWaveNode(
-				2,
-				fakeDriver as any,
-				new DeviceClass(fakeDriver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
-			);
-		});
+			30000,
+		);
 
 		afterEach(() => {
+			fakeDriver.controller.nodes.delete(node.id);
 			node.destroy();
 		});
 
@@ -1368,6 +1377,7 @@ describe("lib/node/Node", () => {
 				.on("value added", onValueAdded)
 				.on("value updated", onValueUpdated)
 				.on("value removed", onValueRemoved);
+			fakeDriver.controller.nodes.set(node.id, node);
 		}
 
 		beforeEach(() => {
@@ -1378,6 +1388,7 @@ describe("lib/node/Node", () => {
 		});
 
 		afterEach(() => {
+			fakeDriver.controller.nodes.delete(node.id);
 			node.destroy();
 		});
 

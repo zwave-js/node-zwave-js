@@ -1,3 +1,9 @@
+export {
+	ControllerLogContext,
+	ControllerNodeLogContext,
+	ControllerSelfLogContext,
+	ControllerValueLogContext,
+} from "@zwave-js/core";
 export { ProtocolDataRate, RFRegion } from "@zwave-js/core/safe";
 export { ZWaveController } from "./lib/controller/Controller";
 export type { ControllerEvents } from "./lib/controller/Controller";
@@ -12,12 +18,6 @@ export {
 	SDKVersion,
 	TXReport,
 } from "./lib/controller/_Types";
-export {
-	ControllerLogContext,
-	ControllerNodeLogContext,
-	ControllerSelfLogContext,
-	ControllerValueLogContext,
-} from "./lib/log/Controller";
 export type {
 	ZWaveApiVersion,
 	ZWaveLibraryTypes,

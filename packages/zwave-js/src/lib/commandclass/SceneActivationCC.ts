@@ -10,8 +10,8 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveHost } from "../driver/Host";
 import {
 	CCAPI,
 	SetValueImplementation,

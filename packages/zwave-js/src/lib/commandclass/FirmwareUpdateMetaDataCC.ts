@@ -9,9 +9,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveHost } from "../driver/Host";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,

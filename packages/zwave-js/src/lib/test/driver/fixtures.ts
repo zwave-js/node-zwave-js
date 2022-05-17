@@ -1,4 +1,4 @@
-import { FunctionType } from "../../message/Constants";
+import { FunctionType } from "@zwave-js/serial";
 
 // Test mock for isFunctionSupported to control which commands are getting used
 export function isFunctionSupported_NoBridge(fn: FunctionType): boolean {

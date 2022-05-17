@@ -43,18 +43,22 @@ describe("lib/config/SensorTypes", () => {
 	describe("lookupSensorType (with missing file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(false);
-			readFileMock.mockRejectedValue(new Error("File does not exist"));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(false);
+				readFileMock.mockRejectedValue(
+					new Error("File does not exist"),
+				);
 
+				configManager = new ConfigManager();
+				await configManager.loadSensorTypes();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
+			30000,
+		);
 
-			configManager = new ConfigManager();
-			await configManager.loadSensorTypes();
-		});
 		it("does not throw", async () => {
 			expect(() => configManager.lookupSensorType(0)).not.toThrow();
 		});
@@ -68,18 +72,19 @@ describe("lib/config/SensorTypes", () => {
 	describe("lookupSensorType (with invalid file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(`{"0x01": `);
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(`{"0x01": `);
 
+				configManager = new ConfigManager();
+				await configManager.loadSensorTypes();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadSensorTypes();
-		});
+			30000,
+		);
 
 		it("does not throw", async () => {
 			expect(() => configManager.lookupSensorType(0x0e)).not.toThrow();
@@ -93,22 +98,25 @@ describe("lib/config/SensorTypes", () => {
 	describe("lookupSensorType()", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockImplementation((path: string) => {
-				if (path.endsWith("sensorTypes.json"))
-					return Promise.resolve(JSON.stringify(dummySensorTypes));
-				if (path.endsWith("scales.json"))
-					return Promise.resolve(JSON.stringify(dummyScales));
-			});
+		beforeAll(
+			async () => {
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockImplementation((path: string) => {
+					if (path.endsWith("sensorTypes.json"))
+						return Promise.resolve(
+							JSON.stringify(dummySensorTypes),
+						);
+					if (path.endsWith("scales.json"))
+						return Promise.resolve(JSON.stringify(dummyScales));
+				});
 
+				configManager = new ConfigManager();
+				await configManager.loadNamedScales();
+				await configManager.loadSensorTypes();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNamedScales();
-			await configManager.loadSensorTypes();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			readFileMock.mockClear();
@@ -127,22 +135,25 @@ describe("lib/config/SensorTypes", () => {
 	describe("lookupSensorScale()", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockImplementation((path: string) => {
-				if (path.endsWith("sensorTypes.json"))
-					return Promise.resolve(JSON.stringify(dummySensorTypes));
-				if (path.endsWith("scales.json"))
-					return Promise.resolve(JSON.stringify(dummyScales));
-			});
+		beforeAll(
+			async () => {
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockImplementation((path: string) => {
+					if (path.endsWith("sensorTypes.json"))
+						return Promise.resolve(
+							JSON.stringify(dummySensorTypes),
+						);
+					if (path.endsWith("scales.json"))
+						return Promise.resolve(JSON.stringify(dummyScales));
+				});
 
+				configManager = new ConfigManager();
+				await configManager.loadNamedScales();
+				await configManager.loadSensorTypes();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNamedScales();
-			await configManager.loadSensorTypes();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			readFileMock.mockClear();

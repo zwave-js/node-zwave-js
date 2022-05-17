@@ -1,5 +1,7 @@
 import type { LogConfig } from "@zwave-js/core";
-import type { FileSystem } from "./FileSystem";
+import type { FileSystem } from "@zwave-js/host";
+import type { ZWaveSerialPortBase } from "@zwave-js/serial";
+import type { SerialPort } from "serialport";
 
 export interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
@@ -191,5 +193,15 @@ export interface ZWaveOptions {
 		 * ```
 		 */
 		scales: Partial<Record<string | number, string | number>>;
+	};
+
+	/** @internal Used for testing internally */
+	testingHooks?: {
+		serialPortBinding?: typeof SerialPort;
+		/**
+		 * A hook that allows accessing the serial port instance after opening
+		 * and before interacting with it.
+		 */
+		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
 	};
 }

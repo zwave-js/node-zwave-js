@@ -82,6 +82,7 @@
     "@sentry/node": "^6.19.7",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/host": "workspace:*",
     "@zwave-js/nvmedit": "workspace:*",
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",

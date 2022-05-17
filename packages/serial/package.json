@@ -10,11 +10,15 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
+    "./mock": "./build/index_mock.js",
     "./safe": "./build/index_safe.js"
   },
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
+      "mock": [
+        "build/index_mock.d.ts"
+      ],
       "safe": [
         "build/index_safe.d.ts"
       ]
@@ -50,6 +54,7 @@
   "dependencies": {
     "@sentry/node": "^6.19.7",
     "@zwave-js/core": "workspace:*",
+    "@zwave-js/host": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1",
     "serialport": "^10.4.0",

@@ -8,12 +8,6 @@ interface DisconnectError extends Error {
 
 /** The default version of the Z-Wave serial binding that works using node-serialport */
 export class ZWaveSerialPort extends ZWaveSerialPortBase {
-	constructor(port: string, loggers: ZWaveLogContainer);
-	/** @internal */ constructor(
-		port: string,
-		loggers: ZWaveLogContainer,
-		Binding: typeof SerialPort,
-	);
 	constructor(
 		port: string,
 		loggers: ZWaveLogContainer,

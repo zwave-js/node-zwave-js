@@ -1,4 +1,5 @@
 import { CommandClasses, ValueID } from "@zwave-js/core";
+import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import {
 	BinarySwitchCC,
 	BinarySwitchCCReport,
@@ -21,7 +22,7 @@ describe("regression tests", () => {
 		driver["_controller"] = {
 			ownNodeId: 1,
 			isFunctionSupported: () => true,
-			nodes: new Map(),
+			nodes: createThrowingMap(),
 			incrementStatistics: () => {},
 			removeAllListeners: () => {},
 		} as any;
@@ -38,7 +39,10 @@ describe("regression tests", () => {
 			isSupported: true,
 			version: 2,
 		});
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 
 		const targetValueValueID: ValueID = {
 			commandClass: CommandClasses["Binary Switch"],

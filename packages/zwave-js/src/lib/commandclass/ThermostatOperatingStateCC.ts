@@ -5,10 +5,10 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -81,7 +81,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -96,8 +96,8 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Thermostat Operating State"
 		].withOptions({

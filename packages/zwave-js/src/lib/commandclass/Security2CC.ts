@@ -22,11 +22,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { FunctionType, MessagePriority } from "../message/Constants";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { CCAPI } from "./API";
@@ -357,8 +357,8 @@ export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Security 2"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -756,7 +756,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 							// It worked, return the result and remember the security class
 							if (ret.authOK) {
-								node.securityClasses.set(secClass, true);
+								node.setSecurityClass(secClass, true);
 								return ret;
 							}
 							// Reset the SPAN state and try with the next security class

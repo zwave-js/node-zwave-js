@@ -7,15 +7,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders } from "@zwave-js/serial/safe";
+import type { ZWaveHost, ZWaveNodeBase } from "@zwave-js/host";
 import type { JSONObject } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import type { ZWaveHost } from "../driver/Host";
-import { isNodeQuery } from "../node/INodeQuery";
-import type { ZWaveNode } from "../node/Node";
+import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessagePriority, MessageType } from "./Constants";
+import { isNodeQuery } from "./INodeQuery";
 
 type Constructable<T extends Message> = new (
 	host: ZWaveHost,
@@ -358,15 +356,13 @@ export class Message {
 	/** Finds the ID of the target or source node in a message, if it contains that information */
 	public getNodeId(): number | undefined {
 		if (isNodeQuery(this)) return this.nodeId;
-		if (isCommandClassContainer(this) && this.command.isSinglecast()) {
-			return this.command.nodeId;
-		}
+		// Override this in subclasses if a different behavior is desired
 	}
 
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public getNodeUnsafe(): ZWaveNodeBase | undefined {
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined) return this.host.nodes.get(nodeId);
 	}

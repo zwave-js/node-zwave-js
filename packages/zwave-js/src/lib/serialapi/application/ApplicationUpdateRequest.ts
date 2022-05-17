@@ -7,15 +7,16 @@ import {
 	parseCCList,
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
-import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import { FunctionType, MessageType } from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessageType,
 	messageTypes,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
+} from "@zwave-js/serial";
+import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
 
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up

@@ -4,12 +4,12 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { MockSerialPort } from "@zwave-js/serial";
+import { FunctionType } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
 import { BinarySwitchCCAPI } from "../commandclass/BinarySwitchCC";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
-import { FunctionType } from "../message/Constants";
 import { createAndStartDriver } from "../test/utils";
 import { ZWaveNode } from "./Node";
 

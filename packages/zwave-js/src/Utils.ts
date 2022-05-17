@@ -22,6 +22,7 @@ export {
 	num2hex,
 } from "@zwave-js/shared/safe";
 export { rssiToString } from "./lib/controller/_Types";
+export { createAndStartDriverWithMockPort } from "./lib/driver/DriverMock";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,

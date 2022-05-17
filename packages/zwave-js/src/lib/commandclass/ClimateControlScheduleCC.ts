@@ -5,10 +5,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
-import type { ZWaveHost } from "../driver/Host";
 import {
 	decodeSetbackState,
 	encodeSetbackState,

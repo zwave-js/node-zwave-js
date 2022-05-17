@@ -1,7 +1,7 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveHost } from "../driver/Host";
 import { CCAPI } from "./API";
 import {
 	API,

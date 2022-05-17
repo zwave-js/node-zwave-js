@@ -3,22 +3,20 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import { num2hex } from "@zwave-js/shared";
 
 export interface ExtNVMReadLongByteRequestOptions extends MessageBaseOptions {
 	offset: number;

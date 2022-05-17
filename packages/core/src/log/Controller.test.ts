@@ -1,11 +1,8 @@
-import {
-	CommandClasses,
-	createDefaultTransportFormat,
-	ZWaveLogContainer,
-} from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
-import { InterviewStage } from "../node/_Types";
+import { CommandClasses } from "../capabilities/CommandClasses";
+import { InterviewStage } from "../consts/InterviewStage";
 import { ControllerLogger } from "./Controller";
+import { createDefaultTransportFormat, ZWaveLogContainer } from "./shared";
 
 describe("lib/log/Controller =>", () => {
 	let controllerLogger: ControllerLogger;

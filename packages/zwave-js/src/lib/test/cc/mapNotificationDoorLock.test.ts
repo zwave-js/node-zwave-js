@@ -1,8 +1,8 @@
 import { CommandClasses } from "@zwave-js/core";
+import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import { getCurrentModeValueId as getCurrentLockModeValueId } from "../../commandclass/DoorLockCC";
 import { NotificationCCReport } from "../../commandclass/NotificationCC";
 import { DoorLockMode } from "../../commandclass/_Types";
-import type { ThrowingMap } from "../../controller/Controller";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -11,21 +11,22 @@ describe("map Notification CC to Door Lock CC", () => {
 	let driver: Driver;
 	process.env.LOGLEVEL = "debug";
 
-	beforeEach(async () => {
+	beforeEach(
+		async () => {
+			({ driver } = await createAndStartDriver());
+
+			driver["_controller"] = {
+				ownNodeId: 1,
+				isFunctionSupported: () => true,
+				nodes: createThrowingMap(),
+				incrementStatistics: () => {},
+				removeAllListeners: () => {},
+			} as any;
+			await driver.configManager.loadNotifications();
+		},
 		// Loading configuration may take a while on CI
-		if (process.env.CI) jest.setTimeout(30000);
-
-		({ driver } = await createAndStartDriver());
-
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: () => true,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-		await driver.configManager.loadNotifications();
-	});
+		30000,
+	);
 
 	afterEach(async () => {
 		await driver.destroy();

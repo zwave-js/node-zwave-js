@@ -4,22 +4,20 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
-import {
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
+import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application
@@ -115,7 +113,14 @@ export class ApplicationCommandRequest
 	public readonly fromForeignHomeId: boolean;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: SinglecastCC;
+	public command: SinglecastCC; // TODO: why is this a SinglecastCC?
+
+	public override getNodeId(): number | undefined {
+		if (this.command.isSinglecast()) {
+			return this.command.nodeId;
+		}
+		return super.getNodeId();
+	}
 
 	public serialize(): Buffer {
 		const statusByte =

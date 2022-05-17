@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
+	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
@@ -17,13 +18,23 @@ import {
 	serializeCacheValue,
 	SPANState,
 	timespan,
+	ValueDB,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
+	FunctionType,
+	getDefaultPriority,
+	INodeQuery,
+	isNodeQuery,
+	isSuccessIndicator,
+	Message,
 	MessageHeaders,
+	MessagePriority,
+	MessageType,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
 	ZWaveSocket,
@@ -35,6 +46,8 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
+	ReadonlyThrowingMap,
+	ThrowingMap,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -98,26 +111,13 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
 import { SupervisionStatus } from "../commandclass/_Types";
-import {
-	ReadonlyThrowingMap,
-	ThrowingMap,
-	ZWaveController,
-} from "../controller/Controller";
+import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,
 	ProvisioningEntryStatus,
 } from "../controller/Inclusion";
 import { TransmitOptions, TXReport } from "../controller/_Types";
-import { ControllerLogger } from "../log/Controller";
 import { DriverLogger } from "../log/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import { getDefaultPriority, Message } from "../message/Message";
-import { isSuccessIndicator } from "../message/SuccessIndicator";
-import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
@@ -155,7 +155,6 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
-import type { ZWaveHost } from "./Host";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -730,6 +729,16 @@ export class Driver
 		return this.controller.nodes;
 	}
 
+	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
+		const nodeId = msg.getNodeId();
+		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
+	}
+
+	public getValueDB(nodeId: number): ValueDB {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.valueDB;
+	}
+
 	/** Updates the logging configuration without having to restart the driver. */
 	public updateLogConfig(config: DeepPartial<LogConfig>): void {
 		this._logContainer.updateConfiguration(config);
@@ -774,8 +783,11 @@ export class Driver
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		// Enforce that an error handler is attached
-		if ((this as unknown as EventEmitter).listenerCount("error") === 0) {
+		// Enforce that an error handler is attached, except for testing with a mocked serialport
+		if (
+			!this.options.testingHooks &&
+			(this as unknown as EventEmitter).listenerCount("error") === 0
+		) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,
@@ -805,7 +817,11 @@ export class Driver
 			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port, this._logContainer);
+			this.serial = new ZWaveSerialPort(
+				this.port,
+				this._logContainer,
+				this.options.testingHooks?.serialPortBinding,
+			);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
@@ -848,6 +864,13 @@ export class Driver
 			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
+
+			if (
+				typeof this.options.testingHooks?.onSerialPortOpen ===
+				"function"
+			) {
+				await this.options.testingHooks.onSerialPortOpen(this.serial!);
+			}
 
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
@@ -2243,7 +2266,7 @@ export class Driver
 			}
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
-					msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
+					this.getNodeUnsafe(msg)?.incrementStatistics("commandsRX");
 				} else {
 					this._controller.incrementStatistics("messagesRX");
 				}
@@ -2259,7 +2282,7 @@ export class Driver
 					if (response) await this.writeHeader(response);
 					if (!!this._controller) {
 						if (isCommandClassContainer(msg)) {
-							msg.getNodeUnsafe()?.incrementStatistics(
+							this.getNodeUnsafe(msg)?.incrementStatistics(
 								"commandsDroppedRX",
 							);
 
@@ -2271,8 +2294,7 @@ export class Driver
 								msg.command instanceof InvalidCC
 							) {
 								// If it was, we need to notify the sender that we couldn't decode the command
-								await msg
-									.getNodeUnsafe()
+								await this.getNodeUnsafe(msg)
 									?.createAPI(
 										CommandClasses.Supervision,
 										false,
@@ -2318,7 +2340,7 @@ export class Driver
 					msg.command instanceof
 					SecurityCCCommandEncapsulationNonceGet
 				) {
-					void msg.getNodeUnsafe()?.handleSecurityNonceGet();
+					void this.getNodeUnsafe(msg)?.handleSecurityNonceGet();
 				}
 
 				// Transport Service commands must be handled before assembling partial CCs
@@ -2592,7 +2614,7 @@ export class Driver
 			message: INodeQuery;
 		},
 	): boolean {
-		const node = transaction.message.getNodeUnsafe();
+		const node = this.getNodeUnsafe(transaction.message);
 		if (!node) return false; // This should never happen, but whatever
 
 		const messagePart1 = isSendData(transaction.message)
@@ -2981,7 +3003,7 @@ ${handlers.length} left`,
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = msg.getNodeUnsafe();
+			const node = this.getNodeUnsafe(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
 				if (node.status === NodeStatus.Dead) {
@@ -3003,7 +3025,7 @@ ${handlers.length} left`,
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
 
-			const node = msg.getNodeUnsafe();
+			const node = this.getNodeUnsafe(msg);
 			// If we receive an encrypted message but assume the node is insecure, change our assumption
 			if (
 				node?.isSecure === false &&
@@ -3150,7 +3172,7 @@ ${handlers.length} left`,
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
-				const node = msg.getNodeUnsafe();
+				const node = this.getNodeUnsafe(msg);
 				if (node) {
 					this.controllerLog.logNode(node.id, {
 						message: "Received updated node info",
@@ -3316,7 +3338,7 @@ ${handlers.length} left`,
 
 		// When a node supports S2 and has a valid security class, the command
 		// must be S2-encapsulated
-		const node = msg.command.getNode();
+		const node = msg.command.getNode(this);
 		if (node?.supportsCC(CommandClasses["Security 2"])) {
 			const securityClass = node.getHighestSecurityClass();
 			if (
@@ -3361,7 +3383,7 @@ ${handlers.length} left`,
 		result: Message | undefined,
 	): void {
 		// Update statistics
-		const node = msg.getNodeUnsafe();
+		const node = this.getNodeUnsafe(msg);
 		let success = true;
 		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
@@ -3426,7 +3448,7 @@ ${handlers.length} left`,
 
 		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			node = msg.getNodeUnsafe();
+			node = this.getNodeUnsafe(msg);
 			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
 				// Instead of throwing immediately, try to ping the node first - if it responds, continue
 				if (!(await node.ping())) {
@@ -3721,7 +3743,7 @@ ${handlers.length} left`,
 		}
 
 		// Check if the target supports this command
-		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+		if (!command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support the Supervision CC!`,
 				ZWaveErrorCodes.CC_NotSupported,
@@ -3766,7 +3788,7 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options?: SendSupervisedCommandOptions,
 	): Promise<SupervisionResult | undefined> {
-		if (command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+		if (command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
 			return this.sendSupervisedCommand(command, options);
 		} else {
 			await this.sendCommand(command, options);

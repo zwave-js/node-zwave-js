@@ -16,7 +16,7 @@ function getMessageLength(data: Buffer): number {
 }
 
 export class SerialAPIParser extends Transform {
-	constructor(private logger: SerialLogger) {
+	constructor(private logger?: SerialLogger) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
@@ -37,17 +37,17 @@ export class SerialAPIParser extends Transform {
 				switch (this.receiveBuffer[0]) {
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
-						this.logger.ACK("inbound");
+						this.logger?.ACK("inbound");
 						this.push(MessageHeaders.ACK);
 						break;
 					}
 					case MessageHeaders.NAK: {
-						this.logger.NAK("inbound");
+						this.logger?.NAK("inbound");
 						this.push(MessageHeaders.NAK);
 						break;
 					}
 					case MessageHeaders.CAN: {
-						this.logger.CAN("inbound");
+						this.logger?.CAN("inbound");
 						this.push(MessageHeaders.CAN);
 						break;
 					}
@@ -70,7 +70,7 @@ export class SerialAPIParser extends Transform {
 							skip++;
 						}
 						const discarded = this.receiveBuffer.slice(0, skip);
-						this.logger.discarded(discarded);
+						this.logger?.discarded(discarded);
 					}
 				}
 				// Continue with the next valid byte
@@ -88,7 +88,7 @@ export class SerialAPIParser extends Transform {
 				const msg = this.receiveBuffer.slice(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
 
-				this.logger.data("inbound", msg);
+				this.logger?.data("inbound", msg);
 				this.push(msg);
 			}
 		}

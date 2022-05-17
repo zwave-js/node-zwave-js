@@ -1,20 +1,18 @@
 import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
-import { parseNodeBitMask } from "../../controller/NodeBitMask";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
+import { parseNodeBitMask } from "../../controller/NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;

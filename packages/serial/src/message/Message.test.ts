@@ -1,11 +1,22 @@
 import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import type { INodeQuery } from "../node/INodeQuery";
-import { createEmptyMockDriver } from "../test/mocks";
+import type { ZWaveHost } from "@zwave-js/host";
 import { FunctionType, MessageType } from "./Constants";
+import type { INodeQuery } from "./INodeQuery";
 import { Message, messageTypes } from "./Message";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+// const fakeDriver = createEmptyMockDriver() as unknown as ZWaveHost<any>;
+const fakeHost: ZWaveHost<any> = {
+	configManager: undefined as any,
+	controllerLog: undefined as any,
+	homeId: 0x01234567,
+	ownNodeId: 1,
+	options: undefined as any,
+	securityManager: undefined,
+	securityManager2: undefined,
+	nodes: new Map() as any,
+	getNextCallbackId: () => 1,
+	getSafeCCVersionForNode: () => 1,
+};
 
 describe("lib/message", () => {
 	describe("Message", () => {
@@ -24,7 +35,7 @@ describe("lib/message", () => {
 				]),
 			];
 			for (const original of okayMessages) {
-				const parsed = new Message(fakeDriver, { data: original });
+				const parsed = new Message(fakeHost, { data: original });
 				expect(parsed.serialize()).toEqual(original);
 			}
 		});
@@ -32,7 +43,7 @@ describe("lib/message", () => {
 		it("should serialize correctly when the payload is null", () => {
 			// synthetic message
 			const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-			const message = new Message(fakeDriver, {
+			const message = new Message(fakeHost, {
 				type: MessageType.Request,
 				functionType: 0xff,
 			});
@@ -75,7 +86,7 @@ describe("lib/message", () => {
 			];
 			for (const [message, msg, code] of brokenMessages) {
 				assertZWaveError(
-					() => new Message(fakeDriver, { data: message }),
+					() => new Message(fakeHost, { data: message }),
 					{
 						messageMatches: msg,
 						errorCode: code,
@@ -158,7 +169,7 @@ describe("lib/message", () => {
 		});
 
 		it("toJSON() should return a semi-readable JSON representation", () => {
-			const msg1 = new Message(fakeDriver, {
+			const msg1 = new Message(fakeHost, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 			});
@@ -168,7 +179,7 @@ describe("lib/message", () => {
 				functionType: "GetControllerVersion",
 				payload: "",
 			};
-			const msg2 = new Message(fakeDriver, {
+			const msg2 = new Message(fakeHost, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 				payload: Buffer.from("aabbcc", "hex"),
@@ -179,7 +190,7 @@ describe("lib/message", () => {
 				functionType: "GetControllerVersion",
 				payload: "aabbcc",
 			};
-			const msg3 = new Message(fakeDriver, {
+			const msg3 = new Message(fakeHost, {
 				type: MessageType.Response,
 				functionType: FunctionType.GetControllerVersion,
 				expectedResponse: FunctionType.GetControllerVersion,
@@ -191,7 +202,7 @@ describe("lib/message", () => {
 				expectedResponse: "GetControllerVersion",
 				payload: "",
 			};
-			const msg4 = new Message(fakeDriver, {
+			const msg4 = new Message(fakeHost, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 				expectedResponse: FunctionType.GetControllerVersion,
@@ -283,7 +294,7 @@ describe("lib/message", () => {
 
 		it(`the constructor should throw when no message type is specified`, () => {
 			assertZWaveError(
-				() => new Message(fakeDriver, { functionType: 0xff }),
+				() => new Message(fakeHost, { functionType: 0xff }),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: /message type/i,
@@ -294,7 +305,7 @@ describe("lib/message", () => {
 			class FakeMessageWithoutMessageType extends Message {}
 
 			assertZWaveError(
-				() => new FakeMessageWithoutMessageType(fakeDriver),
+				() => new FakeMessageWithoutMessageType(fakeHost),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: /message type/i,
@@ -304,7 +315,7 @@ describe("lib/message", () => {
 
 		it(`the constructor should throw when no function type is specified`, () => {
 			assertZWaveError(
-				() => new Message(fakeDriver, { type: MessageType.Request }),
+				() => new Message(fakeHost, { type: MessageType.Request }),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: /function type/i,
@@ -315,7 +326,7 @@ describe("lib/message", () => {
 			class FakeMessageWithoutFunctionType extends Message {}
 
 			assertZWaveError(
-				() => new FakeMessageWithoutFunctionType(fakeDriver),
+				() => new FakeMessageWithoutFunctionType(fakeHost),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: /function type/i,
@@ -325,10 +336,7 @@ describe("lib/message", () => {
 
 		describe("getNodeUnsafe()", () => {
 			it("returns undefined when the controller is not initialized yet", () => {
-				const fakeDriver = {
-					getSafeCCVersionForNode() {},
-				} as any as Driver;
-				const msg = new Message(fakeDriver, {
+				const msg = new Message(fakeHost, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
@@ -336,11 +344,7 @@ describe("lib/message", () => {
 			});
 
 			it("returns undefined when the message is no node query", () => {
-				const fakeDriver = {
-					getSafeCCVersionForNode() {},
-					controller: { nodes: new Map() },
-				} as any as Driver;
-				const msg = new Message(fakeDriver, {
+				const msg = new Message(fakeHost, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
@@ -348,26 +352,21 @@ describe("lib/message", () => {
 			});
 
 			it("returns the associated node otherwise", () => {
-				const fakeDriver = {
-					getSafeCCVersionForNode() {},
-					controller: { nodes: new Map() },
-					get nodes() {
-						return fakeDriver.controller.nodes;
-					},
-				} as any as Driver;
-				// @ts-ignore We need write access
-				fakeDriver.controller.nodes.set(1, {} as any);
+				const testHost: ZWaveHost<any> = {
+					...fakeHost,
+					nodes: new Map() as any,
+				};
+				// @ts-expect-error We need write access
+				testHost.nodes.set(1, {} as any);
 
-				const msg = new Message(fakeDriver, {
+				const msg = new Message(testHost, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
 
 				// This node exists
 				(msg as any as INodeQuery).nodeId = 1;
-				expect(msg.getNodeUnsafe()).toBe(
-					fakeDriver.controller.nodes.get(1),
-				);
+				expect(msg.getNodeUnsafe()).toBe(testHost.nodes.get(1));
 
 				// This one does
 				(msg as any as INodeQuery).nodeId = 2;

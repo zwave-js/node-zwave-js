@@ -8,11 +8,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
@@ -271,11 +271,14 @@ export class AssociationCC extends CommandClass {
 	 * Returns the number of association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getGroupCountCached(): number {
+	public static getGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getGroupCountValueId(this.endpointIndex),
-			) || 0
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getGroupCountValueId(endpoint.index)) || 0
 		);
 	}
 
@@ -283,17 +286,23 @@ export class AssociationCC extends CommandClass {
 	 * Returns the number of nodes an association group supports.
 	 * This only works AFTER the interview process
 	 */
-	public getMaxNodesCached(groupId: number): number {
+	public static getMaxNodesCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		groupId: number,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ??
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ??
 			// If the information is not available, fall back to the configuration file if possible
 			// This can happen on some legacy devices which have "hidden" association groups
-			this.getNodeUnsafe()?.deviceConfig?.getAssociationConfigForEndpoint(
-				this.endpointIndex,
-				groupId,
-			)?.maxNodes ??
+			host.nodes
+				.get(endpoint.nodeId)
+				?.deviceConfig?.getAssociationConfigForEndpoint(
+					endpoint.index,
+					groupId,
+				)?.maxNodes ??
 			0
 		);
 	}
@@ -302,18 +311,18 @@ export class AssociationCC extends CommandClass {
 	 * Returns all the destinations of all association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getAllDestinationsCached(): ReadonlyMap<
-		number,
-		readonly AssociationAddress[]
-	> {
+	public static getAllDestinationsCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached();
-		const valueDB = this.getValueDB();
+		const groupCount = this.getGroupCountCached(host, endpoint);
+		const valueDB = host.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes =
 				valueDB.getValue<number[]>(
-					getNodeIdsValueId(this.endpointIndex, i),
+					getNodeIdsValueId(endpoint.index, i),
 				) ?? [];
 
 			ret.set(
@@ -326,8 +335,8 @@ export class AssociationCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -389,13 +398,13 @@ export class AssociationCC extends CommandClass {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = AssociationCC.getGroupCountCached(driver, endpoint);
 
 		// Query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {

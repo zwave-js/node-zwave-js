@@ -1,5 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import type { MockSerialPort } from "@zwave-js/serial";
+import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -11,34 +12,38 @@ describe("regression tests", () => {
 	let serialport: MockSerialPort;
 	process.env.LOGLEVEL = "debug";
 
-	beforeEach(async () => {
+	beforeEach(
+		async () => {
+			({ driver, serialport } = await createAndStartDriver());
+
+			driver["_controller"] = {
+				ownNodeId: 1,
+				isFunctionSupported: () => true,
+				nodes: createThrowingMap(),
+				incrementStatistics: () => {},
+				removeAllListeners: () => {},
+			} as any;
+			await driver.configManager.loadMeters();
+		},
 		// Loading configuration may take a while on CI
-		if (process.env.CI) jest.setTimeout(30000);
-
-		({ driver, serialport } = await createAndStartDriver());
-
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: () => true,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-			removeAllListeners: () => {},
-		} as any;
-		await driver.configManager.loadMeters();
-	});
+		30000,
+	);
 
 	afterEach(async () => {
 		await driver.destroy();
 		driver.removeAllListeners();
 	});
 
-	it("When receiving a MeterCC::Report, the value event should contain", (done) => {
+	it("When receiving a MeterCC::Report, the value event should contain the meter name in propertyKeyName", (done) => {
 		const node = new ZWaveNode(84, driver);
 		node.addCC(CommandClasses.Configuration, {
 			isSupported: true,
 			version: 1,
 		});
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(node.id, node);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			node.id,
+			node,
+		);
 
 		node.on("value added", (_node, args) => {
 			expect(args.propertyKeyName).toBe("Electric_kWh_Consumed");

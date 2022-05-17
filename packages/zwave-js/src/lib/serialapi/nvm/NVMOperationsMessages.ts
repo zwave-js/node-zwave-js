@@ -5,24 +5,22 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
+} from "@zwave-js/serial";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum NVMOperationsCommand {
 	Open = 0x00,

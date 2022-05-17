@@ -1,5 +1,5 @@
+import { Message } from "@zwave-js/serial";
 import type { Driver } from "../../driver/Driver";
-import { Message } from "../../message/Message";
 import { createEmptyMockDriver } from "../../test/mocks";
 import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages";
 

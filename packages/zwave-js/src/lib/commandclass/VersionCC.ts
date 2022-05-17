@@ -12,11 +12,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import { ZWaveLibraryTypes } from "../serialapi/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -211,7 +211,7 @@ export class VersionCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		// SDS13782: In a Multi Channel device, the Version Command Class MUST be supported by the Root Device, while
 		// the Version Command Class SHOULD NOT be supported by individual End Points.
@@ -221,7 +221,7 @@ export class VersionCC extends CommandClass {
 		// implemented by the Multi Channel device; also in cases where the actual Command Class is only
 		// provided by an End Point.
 
-		const endpoint = this.getEndpoint()!;
+		const endpoint = this.getEndpoint(driver)!;
 
 		// Use the CC API of the root device for all queries
 		const api = node.commandClasses.Version.withOptions({
@@ -308,7 +308,7 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query Version CC version
 			await queryCCVersion(CommandClasses.Version);
 			// The CC instance was created before the versions were determined, so `this.version` contains a wrong value
-			this.version = this.host.getSafeCCVersionForNode(
+			this.version = driver.getSafeCCVersionForNode(
 				CommandClasses.Version,
 				node.id,
 				this.endpointIndex,

@@ -10,10 +10,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -320,7 +320,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 
 	// eslint-disable-next-line @typescript-eslint/require-await
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: setting metadata`,
@@ -338,8 +338,8 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 	// Therefore, I think we should not implement it. Here is how it would be implemented
 	//
 	// public async refreshValues(driver: Driver): Promise<void> {
-	// 	const node = this.getNode()!;
-	// 	const endpoint = this.getEndpoint()!;
+	// 	const node = this.getNode(driver)!;
+	// 	const endpoint = this.getEndpoint(driver)!;
 	// 	const api = endpoint.commandClasses[
 	// 		"Scene Actuator Configuration"
 	// 	].withOptions({

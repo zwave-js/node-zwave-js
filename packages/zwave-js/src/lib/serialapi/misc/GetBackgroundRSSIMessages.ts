@@ -1,18 +1,16 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
-import { RSSI, rssiToString } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import { RSSI, rssiToString } from "../../controller/_Types";
 import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.GetBackgroundRSSI)

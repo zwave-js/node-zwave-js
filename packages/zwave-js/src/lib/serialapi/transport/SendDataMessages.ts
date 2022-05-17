@@ -4,6 +4,22 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { SuccessIndicator } from "@zwave-js/serial";
+import {
+	expectedCallback,
+	expectedResponse,
+	FunctionType,
+	gotDeserializationOptions,
+	Message,
+	MessageBaseOptions,
+	MessageDeserializationOptions,
+	MessageOptions,
+	MessagePriority,
+	MessageType,
+	messageTypes,
+	priority,
+} from "@zwave-js/serial";
 import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import type {
@@ -17,24 +33,6 @@ import {
 	TransmitStatus,
 	TXReport,
 } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
-import {
-	expectedCallback,
-	expectedResponse,
-	gotDeserializationOptions,
-	Message,
-	MessageBaseOptions,
-	MessageDeserializationOptions,
-	MessageOptions,
-	messageTypes,
-	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
@@ -100,6 +98,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	}
 	public set maxSendAttempts(value: number) {
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
+
+	public override getNodeId(): number | undefined {
+		return this.command.nodeId;
 	}
 
 	public serialize(): Buffer {
@@ -325,6 +327,11 @@ export class SendDataMulticastRequest<
 	}
 	public set maxSendAttempts(value: number) {
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
+	}
+
+	public override getNodeId(): number | undefined {
+		// This is multicast, getNodeId must return undefined here
+		return undefined;
 	}
 
 	public serialize(): Buffer {

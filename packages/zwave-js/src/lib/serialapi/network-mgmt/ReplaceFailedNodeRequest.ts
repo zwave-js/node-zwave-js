@@ -1,20 +1,18 @@
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
+} from "@zwave-js/serial";
 
 export enum ReplaceFailedNodeStartFlags {
 	OK = 0,

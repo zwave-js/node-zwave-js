@@ -1,21 +1,18 @@
-import type { JSONObject } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { INodeQuery } from "../../node/INodeQuery";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,

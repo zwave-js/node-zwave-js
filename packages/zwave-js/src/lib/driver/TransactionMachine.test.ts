@@ -1,12 +1,12 @@
 import { createModel } from "@xstate/test";
 import { assertZWaveError } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import { assign, StateValue } from "xstate";
 import { interpret, Interpreter } from "xstate/lib/interpreter";
 import { createMachine } from "xstate/lib/Machine";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass";
 import { TransmitStatus } from "../controller/_Types";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	GetControllerIdRequest,

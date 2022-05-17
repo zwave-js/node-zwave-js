@@ -7,9 +7,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { ZWaveHost } from "../driver/Host";
 import { NodeStatus } from "../node/_Types";
 import { CCAPI } from "./API";
 import {

@@ -1,7 +1,14 @@
-import type { ZWaveLogContainer } from "@zwave-js/core";
+// TODO: Get rid of this entire thing and use the serialport-based mocking instead.
+
+import { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
+import {
+	MockBinding as SerialPortMockBinding,
+	MockPortBinding as SerialPortMockPortBinding,
+} from "./SerialPortBindingMock";
+import { SerialPortMock } from "./SerialPortMock";
 import { ZWaveSerialPort } from "./ZWaveSerialPort";
 import type { ZWaveSerialPortEventCallbacks } from "./ZWaveSerialPortBase";
 
@@ -93,4 +100,29 @@ export class MockSerialPort extends ZWaveSerialPort {
 	public get lastWrite(): string | number[] | Buffer | undefined {
 		return this._lastWrite;
 	}
+}
+
+export async function createAndOpenMockedZWaveSerialPort(
+	path: string,
+): Promise<{
+	port: ZWaveSerialPort;
+	binding: SerialPortMockPortBinding;
+}> {
+	SerialPortMockBinding.reset();
+	SerialPortMockBinding.createPort(path, {
+		record: true,
+		readyData: Buffer.from([]),
+	});
+
+	const port = new ZWaveSerialPort(
+		path,
+		new ZWaveLogContainer({
+			enabled: false,
+		}),
+		// @ts-expect-error We're using an internal signature here
+		SerialPortMock,
+	);
+	await port.open();
+	const binding = (port["serial"] as SerialPortMock).port!;
+	return { port, binding };
 }

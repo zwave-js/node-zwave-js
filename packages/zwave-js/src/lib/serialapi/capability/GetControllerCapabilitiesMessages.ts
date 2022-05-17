@@ -1,18 +1,16 @@
 import { ControllerCapabilityFlags } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import type { JSONObject } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerCapabilities)
 @expectedResponse(FunctionType.GetControllerCapabilities)

@@ -6,8 +6,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../driver/Host";
 import {
 	CCCommand,
 	CCCommandOptions,

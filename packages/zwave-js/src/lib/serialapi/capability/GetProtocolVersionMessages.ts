@@ -1,17 +1,15 @@
 import type { ProtocolType } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
 
 @messageTypes(MessageType.Request, FunctionType.GetProtocolVersion)
 @priority(MessagePriority.Controller)

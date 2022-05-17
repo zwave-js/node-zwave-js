@@ -3,9 +3,9 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import type { ZWaveNodeBase } from "@zwave-js/host";
+import * as nodeUtils from "../node/utils";
+import { createTestingHost, createTestNode, TestingHost } from "../test/mocks";
 import {
 	MeterCC,
 	MeterCCGet,
@@ -26,24 +26,21 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/MeterCC => ", () => {
-	let fakeDriver: Driver;
-	let node1: ZWaveNode;
-	beforeAll(async () => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-		node1 = new ZWaveNode(1, fakeDriver);
-		(fakeDriver.controller.nodes as any).set(1, node1);
+	let host: TestingHost;
+	let node2: ZWaveNodeBase;
 
+	beforeAll(
+		async () => {
+			host = createTestingHost();
+			node2 = createTestNode(host, { id: 2 });
+			await host.configManager.loadMeters();
+		},
 		// Loading configuration may take a while on CI
-		if (process.env.CI) jest.setTimeout(30000);
-		await fakeDriver.configManager.loadMeters();
-	});
-
-	afterAll(() => {
-		node1.destroy();
-	});
+		30000,
+	);
 
 	it("the Get command (V1) should serialize correctly", () => {
-		const cc = new MeterCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new MeterCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Get, // CC Command
@@ -53,7 +50,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the Get command (V2) should serialize correctly", () => {
-		const cc = new MeterCCGet(fakeDriver, { nodeId: 1, scale: 0x03 });
+		const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x03 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Get, // CC Command
@@ -64,7 +61,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the Get command (V3) should serialize correctly", () => {
-		const cc = new MeterCCGet(fakeDriver, { nodeId: 1, scale: 0x06 });
+		const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x06 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Get, // CC Command
@@ -75,7 +72,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the Get command (V4) should serialize correctly", () => {
-		const cc = new MeterCCGet(fakeDriver, { nodeId: 1, scale: 0x0f });
+		const cc = new MeterCCGet(host, { nodeId: 1, scale: 0x0f });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Get, // CC Command
@@ -87,7 +84,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the SupportedGet command should serialize correctly", () => {
-		const cc = new MeterCCSupportedGet(fakeDriver, { nodeId: 1 });
+		const cc = new MeterCCSupportedGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.SupportedGet, // CC Command
@@ -97,7 +94,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the Reset command (V2) should serialize correctly", () => {
-		const cc = new MeterCCReset(fakeDriver, { nodeId: 1 });
+		const cc = new MeterCCReset(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MeterCommand.Reset, // CC Command
@@ -107,7 +104,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	});
 
 	it("the Reset command (V6) should serialize correctly", () => {
-		const cc = new MeterCCReset(fakeDriver, {
+		const cc = new MeterCCReset(host, {
 			nodeId: 1,
 			type: 7,
 			targetValue: 0x010203,
@@ -134,7 +131,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				55, // value
 			]),
 		);
-		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
+		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
@@ -155,7 +152,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				0,
 			]),
 		);
-		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
+		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
@@ -177,7 +174,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				54, // previous value
 			]),
 		);
-		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
+		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
 		expect(cc.scale.key).toBe(2);
@@ -199,7 +196,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				54, // previous value
 			]),
 		);
-		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
+		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.scale.key).toBe(6);
 	});
@@ -217,7 +214,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				0b01, // Scale2
 			]),
 		);
-		const cc = new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData });
+		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.scale.key).toBe(8);
 	});
@@ -238,7 +235,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 
 		// Meter type 31 (does not exist)
 		assertZWaveError(
-			() => new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData }),
+			() => new MeterCCReport(host, { nodeId: 1, data: ccData }),
 			{
 				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 			},
@@ -261,7 +258,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 
 		// Meter type 4, Scale 8 (does not exist)
 		assertZWaveError(
-			() => new MeterCCReport(fakeDriver, { nodeId: 1, data: ccData }),
+			() => new MeterCCReport(host, { nodeId: 1, data: ccData }),
 			{
 				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
 			},
@@ -270,7 +267,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 
 	it("the value IDs should be translated correctly", () => {
 		expect(
-			node1["translateValueID"]({
+			nodeUtils.translateValueID(host, node2, {
 				commandClass: CommandClasses.Meter,
 				property: "value",
 				propertyKey: 329986,
@@ -288,7 +285,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				0b01101110, // supported scales
 			]),
 		);
-		const cc = new MeterCCSupportedReport(fakeDriver, {
+		const cc = new MeterCCSupportedReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -310,7 +307,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 				1,
 			]),
 		);
-		const cc = new MeterCCSupportedReport(fakeDriver, {
+		const cc = new MeterCCSupportedReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -332,7 +329,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 	// 			1,
 	// 		]),
 	// 	);
-	// 	const cc = new MeterCCSupportedReport(fakeDriver, {
+	// 	const cc = new MeterCCSupportedReport(host, {
 	// 		nodeId: 1,
 	// 		data: ccData,
 	// 	});
@@ -347,7 +344,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new MeterCC(fakeDriver, {
+		const cc: any = new MeterCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

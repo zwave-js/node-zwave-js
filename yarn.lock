@@ -3730,6 +3730,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@zwave-js/host@workspace:*, @zwave-js/host@workspace:packages/host":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/host@workspace:packages/host"
+  dependencies:
+    "@types/jest": ^27.4.1
+    "@types/node": ^14.18.16
+    "@zwave-js/core": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
+    jest-extended: ^2.0.0
+    typescript: 4.6.4
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/maintenance@workspace:*, @zwave-js/maintenance@workspace:packages/maintenance":
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
@@ -3814,6 +3827,7 @@ __metadata:
     "@zwave-js/core": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
     "@zwave-js/shared": "workspace:*"
+    "@zwave-js/testing": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.1
     comment-json: ^4.2.2
@@ -3851,6 +3865,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^14.18.16
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     "@zwave-js/testing": "workspace:*"
     alcalzone-shared: ^4.0.1
@@ -3888,6 +3903,9 @@ __metadata:
     "@types/node": ^14.18.16
     "@types/triple-beam": ^1.3.2
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/host": "workspace:*"
+    "@zwave-js/serial": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
     ansi-colors: ^4.1.1
     esbuild: 0.14.38
     esbuild-register: ^3.3.2
@@ -10301,6 +10319,7 @@ typescript@^4.4.3:
     "@xstate/test": ^0.5.1
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
+    "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
     "@zwave-js/nvmedit": "workspace:*"
     "@zwave-js/serial": "workspace:*"

@@ -1,4 +1,5 @@
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	assign,
@@ -15,7 +16,6 @@ import {
 import { respond, sendParent } from "xstate/lib/actions";
 import { TransmitStatus } from "../controller/_Types";
 import type { DriverLogger } from "../log/Driver";
-import type { Message } from "../message/Message";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,

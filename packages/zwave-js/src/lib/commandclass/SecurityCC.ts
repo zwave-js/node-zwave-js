@@ -17,12 +17,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import { TransmitOptions } from "../controller/_Types";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { FunctionType, MessagePriority } from "../message/Constants";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { PhysicalCCAPI } from "./API";
@@ -285,8 +285,8 @@ export class SecurityCC extends CommandClass {
 	};
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Security.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});

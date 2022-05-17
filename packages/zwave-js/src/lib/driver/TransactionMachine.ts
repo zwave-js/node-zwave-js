@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { ZWaveError } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
 import {
 	assign,
 	createMachine,
@@ -9,7 +10,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import type { Message } from "../message/Message";
 import { SendDataMulticastBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataMulticastRequest } from "../serialapi/transport/SendDataMessages";
 import {

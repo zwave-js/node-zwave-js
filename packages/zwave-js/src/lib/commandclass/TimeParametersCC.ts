@@ -5,11 +5,10 @@ import {
 	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
-import type { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -36,7 +35,7 @@ import { TimeParametersCommand } from "./_Types";
 /**
  * Determines if the node expects local time instead of UTC.
  */
-function shouldUseLocalTime(endpoint: Endpoint): boolean {
+function shouldUseLocalTime(endpoint: ZWaveEndpointBase): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
 	//
@@ -172,8 +171,8 @@ export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Time Parameters"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});

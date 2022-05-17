@@ -1,3 +1,9 @@
+import type { Message } from "@zwave-js/serial";
+import {
+	isMultiStageCallback,
+	isSuccessIndicator,
+	MessageType,
+} from "@zwave-js/serial";
 import {
 	assign,
 	createMachine,
@@ -7,12 +13,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import { MessageType } from "../message/Constants";
-import type { Message } from "../message/Message";
-import {
-	isMultiStageCallback,
-	isSuccessIndicator,
-} from "../message/SuccessIndicator";
 import {
 	respondUnsolicited,
 	ServiceImplementations,

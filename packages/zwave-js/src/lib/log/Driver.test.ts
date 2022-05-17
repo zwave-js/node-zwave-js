@@ -3,6 +3,12 @@ import {
 	getDirectionPrefix,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import {
+	FunctionType,
+	Message,
+	MessagePriority,
+	MessageType,
+} from "@zwave-js/serial";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
@@ -10,12 +16,6 @@ import colors from "ansi-colors";
 import MockDate from "mockdate";
 import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import { DriverLogger } from "./Driver";
 

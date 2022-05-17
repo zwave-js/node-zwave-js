@@ -1,25 +1,20 @@
 import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type {
-	MultiStageCallback,
-	SuccessIndicator,
-} from "../../message/SuccessIndicator";
+} from "@zwave-js/serial";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {

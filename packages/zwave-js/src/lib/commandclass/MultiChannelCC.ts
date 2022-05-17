@@ -13,11 +13,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import type { ZWaveHost } from "../driver/Host";
-import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
@@ -351,7 +351,7 @@ export class MultiChannelCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
@@ -564,7 +564,7 @@ supported CCs:`;
 	}
 
 	private async interviewV1(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
 			"Multi Channel"
 		];

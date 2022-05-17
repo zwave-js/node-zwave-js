@@ -1,18 +1,16 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 
 export enum NVMType {
 	Flash = 0x80,

@@ -4,18 +4,16 @@ import {
 	MessageOrCCLogEntry,
 	parseCCList,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "../../driver/Host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
-import {
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
 import { DeviceClass } from "../../node/DeviceClass";
 
 export enum SerialAPIWakeUpReason {

@@ -6,7 +6,14 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import {
+	FunctionType,
+	Message,
+	MessageHeaders,
+	MessageType,
+	messageTypes,
+	MockSerialPort,
+} from "@zwave-js/serial";
 import { AssociationCCReport } from "../commandclass/AssociationCC";
 import { BasicCCSet } from "../commandclass/BasicCC";
 import { FirmwareUpdateMetaDataCC } from "../commandclass/FirmwareUpdateMetaDataCC";
@@ -16,8 +23,6 @@ import { SecurityCCCommandEncapsulation } from "../commandclass/SecurityCC";
 import { WakeUpCCIntervalSet } from "../commandclass/WakeUpCC";
 import { AssociationCommand } from "../commandclass/_Types";
 import { TransmitOptions } from "../controller/_Types";
-import { FunctionType, MessageType } from "../message/Constants";
-import { Message, messageTypes } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
@@ -36,7 +41,7 @@ function isFunctionSupported(fn: FunctionType): boolean {
 @messageTypes(MessageType.Request, 0xff)
 class TestMessage extends Message {}
 
-describe("lib/driver/Driver => ", () => {
+describe("lib/driver/Driver", () => {
 	beforeEach(() => {
 		// @ts-expect-error This is added in jest v28
 		jest.useFakeTimers({ legacyFakeTimers: true });
@@ -47,7 +52,7 @@ describe("lib/driver/Driver => ", () => {
 		jest.useRealTimers();
 	});
 
-	describe("starting it => ", () => {
+	describe("starting it", () => {
 		it("should open a new serialport", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				interview: { skipInterview: true },
@@ -155,7 +160,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 	});
 
-	describe.skip("sending messages => ", () => {
+	describe.skip("sending messages", () => {
 		it("should not be possible if the driver wasn't started", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				interview: { skipInterview: true },
@@ -245,7 +250,7 @@ describe("lib/driver/Driver => ", () => {
 		// });
 	});
 
-	// describe("resetting the driver => ", () => {
+	// describe("resetting the driver", () => {
 	// 	let driver: Driver;
 	// 	let serialport: MockSerialPort;
 
@@ -313,7 +318,7 @@ describe("lib/driver/Driver => ", () => {
 	// 	});
 	// });
 
-	describe("receiving messages => ", () => {
+	describe("receiving messages", () => {
 		let driver: Driver;
 		let serialport: MockSerialPort;
 
@@ -361,7 +366,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 	});
 
-	describe("getNextCallbackId() => ", () => {
+	describe("getNextCallbackId()", () => {
 		let driver: Driver;
 
 		beforeEach(async () => {
@@ -393,7 +398,7 @@ describe("lib/driver/Driver => ", () => {
 		});
 	});
 
-	describe("computeNetCCPayloadSize() => ", () => {
+	describe("computeNetCCPayloadSize()", () => {
 		let driver: Driver;
 		let node2: ZWaveNode;
 
@@ -483,6 +488,7 @@ describe("lib/driver/Driver => ", () => {
 				ownNodeId: 1,
 				nodes: {
 					has: () => true,
+					getOrThrow: () => node2,
 					get: () => node2,
 					forEach: () => {},
 					values: () => [node2],

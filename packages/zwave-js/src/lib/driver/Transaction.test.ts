@@ -1,6 +1,5 @@
+import { getDefaultPriority, Message, MessagePriority } from "@zwave-js/serial";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { MessagePriority } from "../message/Constants";
-import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";

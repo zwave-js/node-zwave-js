@@ -3,27 +3,24 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import { TransmitStatus } from "../../controller/_Types";
-import type { ZWaveHost } from "../../driver/Host";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
-import type { INodeQuery } from "../../node/INodeQuery";
+} from "@zwave-js/serial";
+import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
+import { TransmitStatus } from "../../controller/_Types";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
