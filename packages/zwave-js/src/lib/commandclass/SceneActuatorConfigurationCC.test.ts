@@ -1,7 +1,5 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "../test/mocks";
 import {
 	SceneActuatorConfigurationCC,
 	SceneActuatorConfigurationCCGet,
@@ -9,6 +7,8 @@ import {
 	SceneActuatorConfigurationCCSet,
 } from "./SceneActuatorConfigurationCC";
 import { SceneActuatorConfigurationCommand } from "./_Types";
+
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -20,25 +20,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
-	let fakeDriver: Driver;
-	let node2: ZWaveNode;
-
-	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-
-		node2 = new ZWaveNode(2, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(2, node2);
-		node2.addCC(CommandClasses["Scene Actuator Configuration"], {
-			isSupported: true,
-			version: 1,
-		});
-	});
-
-	afterAll(() => {
-		node2.destroy();
-	});
 	it("the Get command should serialize correctly", () => {
-		const cc = new SceneActuatorConfigurationCCGet(fakeDriver, {
+		const cc = new SceneActuatorConfigurationCCGet(host, {
 			nodeId: 2,
 			sceneId: 1,
 		});
@@ -52,7 +35,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly with level", () => {
-		const cc = new SceneActuatorConfigurationCCSet(fakeDriver, {
+		const cc = new SceneActuatorConfigurationCCSet(host, {
 			nodeId: 2,
 			sceneId: 2,
 			level: 0x00,
@@ -71,7 +54,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly with undefined level", () => {
-		const cc = new SceneActuatorConfigurationCCSet(fakeDriver, {
+		const cc = new SceneActuatorConfigurationCCSet(host, {
 			nodeId: 2,
 			sceneId: 2,
 			//level: undefined,
@@ -98,7 +81,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 				0x05, // dimmingDuration
 			]),
 		);
-		const cc = new SceneActuatorConfigurationCCReport(fakeDriver, {
+		const cc = new SceneActuatorConfigurationCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -112,7 +95,7 @@ describe("lib/commandclass/SceneActuatorConfigurationCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new SceneActuatorConfigurationCC(fakeDriver, {
+		const cc: any = new SceneActuatorConfigurationCC(host, {
 			nodeId: 2,
 			data: serializedCC,
 		});

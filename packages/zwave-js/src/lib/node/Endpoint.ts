@@ -21,7 +21,6 @@ import {
 	CommandClass,
 	Constructable,
 	getAPI,
-	getCCConstructor,
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
 import {
@@ -284,36 +283,19 @@ export class Endpoint implements ZWaveEndpointBase {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		return this.createCCInstanceInternal(cc);
+		return CommandClass.createInstanceUnchecked(this.driver, this, cc);
 	}
 
 	/**
 	 * Creates an instance of the given CC and links it to this endpoint.
-	 * Returns undefined if the CC is neither supported nor controlled by the endpoint.
+	 * Returns `undefined` if the CC is neither supported nor controlled by the endpoint.
 	 */
 	public createCCInstanceUnsafe<T extends CommandClass>(
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
-			return this.createCCInstanceInternal(cc);
-		}
-	}
-
-	/**
-	 * @internal
-	 * Create an instance of the given CC without checking whether it is supported.
-	 * Applications should not use this directly.
-	 */
-	public createCCInstanceInternal<T extends CommandClass>(
-		cc: CommandClasses | Constructable<T>,
-	): T | undefined {
-		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
-		if (Constructor) {
-			return new Constructor(this.driver, {
-				nodeId: this.nodeId,
-				endpoint: this.index,
-			}) as T;
+			return CommandClass.createInstanceUnchecked(this.driver, this, cc);
 		}
 	}
 

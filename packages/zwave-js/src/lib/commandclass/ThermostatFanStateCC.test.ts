@@ -1,6 +1,5 @@
 import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
 import {
 	ThermostatFanStateCC,
@@ -9,7 +8,7 @@ import {
 } from "./ThermostatFanStateCC";
 import { ThermostatFanState, ThermostatFanStateCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/ThermostatFanStateCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const cc = new ThermostatFanStateCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new ThermostatFanStateCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				ThermostatFanStateCommand.Get, // CC Command
@@ -38,7 +37,7 @@ describe("lib/commandclass/ThermostatFanStateCC => ", () => {
 				ThermostatFanState["Idle / off"], // state
 			]),
 		);
-		const cc = new ThermostatFanStateCCReport(fakeDriver, {
+		const cc = new ThermostatFanStateCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -50,7 +49,7 @@ describe("lib/commandclass/ThermostatFanStateCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new ThermostatFanStateCC(fakeDriver, {
+		const cc: any = new ThermostatFanStateCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

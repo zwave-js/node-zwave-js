@@ -1,10 +1,9 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "../test/mocks";
 import { SceneActivationCC, SceneActivationCCSet } from "./SceneActivationCC";
 import { SceneActivationCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -17,7 +16,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/SceneActivationCC => ", () => {
 	it("the Set command (without Duration) should serialize correctly", () => {
-		const cc = new SceneActivationCCSet(fakeDriver, {
+		const cc = new SceneActivationCCSet(host, {
 			nodeId: 2,
 			sceneId: 55,
 		});
@@ -32,7 +31,7 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 	});
 
 	it("the Set command (with Duration) should serialize correctly", () => {
-		const cc = new SceneActivationCCSet(fakeDriver, {
+		const cc = new SceneActivationCCSet(host, {
 			nodeId: 2,
 			sceneId: 56,
 			dimmingDuration: new Duration(1, "minutes"),
@@ -55,7 +54,7 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 				0x00, // 0 seconds
 			]),
 		);
-		const cc = new SceneActivationCCSet(fakeDriver, {
+		const cc = new SceneActivationCCSet(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -68,7 +67,7 @@ describe("lib/commandclass/SceneActivationCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new SceneActivationCC(fakeDriver, {
+		const cc: any = new SceneActivationCC(host, {
 			nodeId: 2,
 			data: serializedCC,
 		});

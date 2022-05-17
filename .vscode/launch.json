@@ -12,6 +12,7 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
+				"--preserve-symlinks",
 				"--async-stack-traces",
 				"-r",
 				"./maintenance/esbuild-register.js",
@@ -34,6 +35,7 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
+				"--preserve-symlinks",
 				"--async-stack-traces",
 				"-r",
 				"./maintenance/esbuild-register.js",
@@ -53,6 +55,7 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
+				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
@@ -71,6 +74,7 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
+				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"${workspaceFolder}/test/debug.js"
@@ -88,6 +92,7 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
+				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
@@ -107,6 +112,9 @@
 			"disableOptimisticBPs": true,
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "yarn",
+			"env": {
+				"NODE_PRESERVE_SYMLINKS": "1"
+			},
 			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
 		}
 	]

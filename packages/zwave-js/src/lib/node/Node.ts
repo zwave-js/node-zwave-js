@@ -99,7 +99,6 @@ import {
 import {
 	getEndpointCCsValueId,
 	getEndpointDeviceClassValueId,
-	getEndpointIndizesValueId,
 } from "../commandclass/MultiChannelCC";
 import {
 	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
@@ -196,6 +195,7 @@ import {
 	NodeStatusInterpreter,
 	nodeStatusMachineStateToNodeStatus,
 } from "./NodeStatusMachine";
+import * as nodeUtils from "./utils";
 import type {
 	LifelineHealthCheckResult,
 	LifelineHealthCheckSummary,
@@ -350,44 +350,6 @@ export class ZWaveNode
 	}
 
 	/**
-	 * Enhances a value id so it can be consumed better by applications
-	 */
-	private translateValueID<T extends ValueID>(
-		valueId: T,
-	): T & TranslatedValueID {
-		// Try to retrieve the speaking CC name
-		const commandClassName = getCCName(valueId.commandClass);
-		const ret: T & TranslatedValueID = {
-			commandClassName,
-			...valueId,
-		};
-		const ccInstance = this.createCCInstanceInternal(valueId.commandClass);
-		if (!ccInstance) {
-			throw new ZWaveError(
-				`Cannot translate a value ID for the non-implemented CC ${getCCName(
-					valueId.commandClass,
-				)}`,
-				ZWaveErrorCodes.CC_NotImplemented,
-			);
-		}
-
-		// Retrieve the speaking property name
-		ret.propertyName = ccInstance.translateProperty(
-			valueId.property,
-			valueId.propertyKey,
-		);
-		// Try to retrieve the speaking property key
-		if (valueId.propertyKey != undefined) {
-			const propertyKey = ccInstance.translatePropertyKey(
-				valueId.property,
-				valueId.propertyKey,
-			);
-			ret.propertyKeyName = propertyKey;
-		}
-		return ret;
-	}
-
-	/**
 	 * Enhances the raw event args of the ValueDB so it can be consumed better by applications
 	 */
 	private translateValueEvent<T extends ValueID>(
@@ -395,7 +357,7 @@ export class ZWaveNode
 		arg: T,
 	): void {
 		// Try to retrieve the speaking CC name
-		const outArg = this.translateValueID(arg);
+		const outArg = nodeUtils.translateValueID(this.driver, this, arg);
 		// @ts-expect-error This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
@@ -405,7 +367,11 @@ export class ZWaveNode
 				this.getValueMetadata(arg);
 		}
 
-		const ccInstance = this.createCCInstanceInternal(arg.commandClass);
+		const ccInstance = CommandClass.createInstanceUnchecked(
+			this.driver,
+			this,
+			arg.commandClass,
+		);
 		const isInternalValue = ccInstance?.isInternalValue(
 			arg.property as any,
 		);
@@ -442,7 +408,7 @@ export class ZWaveNode
 			// Only application CCs need to be filtered
 			applicationCCs.includes(arg.commandClass) &&
 			// and only if the endpoints are not unnecessary and the root values mirror them
-			this.shouldHideRootApplicationCCValues()
+			nodeUtils.shouldHideRootApplicationCCValues(this.driver, this)
 		) {
 			// Iterate through all possible non-root endpoints of this node and
 			// check if there is a value ID that mirrors root endpoint functionality
@@ -862,93 +828,7 @@ export class ZWaveNode
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		let ret: ValueID[] = [];
-		const allowControlled: CommandClasses[] = [
-			CommandClasses["Scene Activation"],
-		];
-		for (const endpoint of this.getAllEndpoints()) {
-			for (const [cc, info] of endpoint.implementedCommandClasses) {
-				// Only expose value IDs for CCs that are supported
-				// with some exceptions that are controlled
-				if (
-					info.isSupported ||
-					(info.isControlled && allowControlled.includes(cc))
-				) {
-					const ccInstance = endpoint.createCCInstanceUnsafe(cc);
-					if (ccInstance) {
-						ret.push(...ccInstance.getDefinedValueIDs());
-					}
-				}
-			}
-		}
-
-		// Application command classes of the Root Device capabilities that are also advertised by at
-		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
-		// via service discovery mechanisms like mDNS or to users in a GUI.
-
-		// We do this when there are endpoints that were explicitly preserved
-		if (this.shouldHideRootApplicationCCValues()) {
-			ret = this.filterRootApplicationCCValueIDs(ret);
-		}
-
-		// Translate the remaining value IDs before exposing them to applications
-		return ret.map((id) => this.translateValueID(id));
-	}
-
-	/** Determines whether the root application CC values should be hidden in favor of endpoint values */
-	private shouldHideRootApplicationCCValues(): boolean {
-		// This is not the case when the root values should explicitly be preserved
-		if (this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs)
-			return false;
-
-		// This is not the case when there are no endpoints
-		const endpointIndizes = this.getEndpointIndizes();
-		if (endpointIndizes.length === 0) return false;
-
-		// This is not the case when only individual endpoints should be preserved in addition to the root
-		const preserveEndpoints = this._deviceConfig?.compat?.preserveEndpoints;
-		if (
-			preserveEndpoints != undefined &&
-			preserveEndpoints !== "*" &&
-			preserveEndpoints.length !== endpointIndizes.length
-		) {
-			return false;
-		}
-
-		// Otherwise they should be hidden
-		return true;
-	}
-
-	private shouldHideRootValueID(
-		valueId: ValueID,
-		allValueIds: ValueID[],
-	): boolean {
-		// Non-root endpoint values don't need to be filtered
-		if (!!valueId.endpoint) return false;
-		// Non-application CCs don't need to be filtered
-		if (!applicationCCs.includes(valueId.commandClass)) return false;
-		// Filter out root values if an identical value ID exists for another endpoint
-		const valueExistsOnAnotherEndpoint = allValueIds.some(
-			(other) =>
-				// same CC
-				other.commandClass === valueId.commandClass &&
-				// non-root endpoint
-				!!other.endpoint &&
-				// same property and key
-				other.property === valueId.property &&
-				other.propertyKey === valueId.propertyKey,
-		);
-		return valueExistsOnAnotherEndpoint;
-	}
-
-	/**
-	 * Removes all Value IDs from an array that belong to a root endpoint and have a corresponding
-	 * Value ID on a non-root endpoint
-	 */
-	private filterRootApplicationCCValueIDs(allValueIds: ValueID[]): ValueID[] {
-		return allValueIds.filter(
-			(vid) => !this.shouldHideRootValueID(vid, allValueIds),
-		);
+		return nodeUtils.getDefinedValueIDs(this.driver, this);
 	}
 
 	/**
@@ -1151,31 +1031,19 @@ export class ZWaveNode
 	}
 
 	public get endpointCountIsDynamic(): boolean | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			property: "countIsDynamic",
-		});
+		return nodeUtils.endpointCountIsDynamic(this.driver, this);
 	}
 
 	public get endpointsHaveIdenticalCapabilities(): boolean | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			property: "identicalCapabilities",
-		});
+		return nodeUtils.endpointsHaveIdenticalCapabilities(this.driver, this);
 	}
 
 	public get individualEndpointCount(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			property: "individualCount",
-		});
+		return nodeUtils.getIndividualEndpointCount(this.driver, this);
 	}
 
 	public get aggregatedEndpointCount(): number | undefined {
-		return this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			property: "aggregatedCount",
-		});
+		return nodeUtils.getAggregatedEndpointCount(this.driver, this);
 	}
 
 	/** Returns the device class of an endpoint. Falls back to the node's device class if the information is not known. */
@@ -1222,34 +1090,19 @@ export class ZWaveNode
 	 * Some devices are known to contradict themselves.
 	 */
 	public getEndpointCount(): number {
-		return (
-			(this.individualEndpointCount || 0) +
-			(this.aggregatedEndpointCount || 0)
-		);
+		return nodeUtils.getEndpointCount(this.driver, this);
 	}
 
 	/**
 	 * Returns indizes of all endpoints on the node.
 	 */
 	public getEndpointIndizes(): number[] {
-		let ret = this.getValue<number[]>(getEndpointIndizesValueId());
-		if (!ret) {
-			// Endpoint indizes not stored, assume sequential endpoints
-			ret = [];
-			for (let i = 1; i <= this.getEndpointCount(); i++) {
-				ret.push(i);
-			}
-		}
-		return ret;
+		return nodeUtils.getEndpointIndizes(this.driver, this);
 	}
 
 	/** Whether the Multi Channel CC has been interviewed and all endpoint information is known */
 	private get isMultiChannelInterviewComplete(): boolean {
-		return !!this.getValue({
-			commandClass: CommandClasses["Multi Channel"],
-			endpoint: 0,
-			property: "interviewComplete",
-		});
+		return nodeUtils.isMultiChannelInterviewComplete(this.driver, this);
 	}
 
 	/** Cache for this node's endpoint instances */
@@ -1308,16 +1161,7 @@ export class ZWaveNode
 
 	/** Returns a list of all endpoints of this node, including the root endpoint (index 0) */
 	public getAllEndpoints(): Endpoint[] {
-		const ret: Endpoint[] = [this];
-		// Check if the Multi Channel CC interview for this node is completed,
-		// because we don't have all the endpoint information before that
-		if (this.isMultiChannelInterviewComplete) {
-			for (const i of this.getEndpointIndizes()) {
-				const endpoint = this.getEndpoint(i);
-				if (endpoint) ret.push(endpoint);
-			}
-		}
-		return ret;
+		return nodeUtils.getAllEndpoints(this.driver, this) as Endpoint[];
 	}
 
 	/**

@@ -1,4 +1,5 @@
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
@@ -17,7 +18,7 @@ describe("regression tests", () => {
 		driver["_controller"] = {
 			ownNodeId: 1,
 			isFunctionSupported: isFunctionSupported_NoBridge,
-			nodes: new Map(),
+			nodes: createThrowingMap(),
 			incrementStatistics: () => {},
 			removeAllListeners: () => {},
 		} as any;
@@ -32,7 +33,10 @@ describe("regression tests", () => {
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -59,7 +63,10 @@ describe("regression tests", () => {
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -104,7 +111,10 @@ describe("regression tests", () => {
 		// Repro from #4467
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);

@@ -21,18 +21,21 @@ describe("lib/config/Indicators", () => {
 	describe("lookupIndicator (with missing file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(false);
-			readFileMock.mockRejectedValue(new Error("File does not exist"));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(false);
+				readFileMock.mockRejectedValue(
+					new Error("File does not exist"),
+				);
 
+				configManager = new ConfigManager();
+				await configManager.loadIndicators();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadIndicators();
-		});
+			30000,
+		);
 
 		it("does not throw", () => {
 			expect(() => configManager.lookupIndicator(1)).not.toThrow();
@@ -47,18 +50,19 @@ describe("lib/config/Indicators", () => {
 	describe("lookupIndicator (with invalid file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(`{"0x01": `);
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(`{"0x01": `);
 
+				configManager = new ConfigManager();
+				await configManager.loadIndicators();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadIndicators();
-		});
+			30000,
+		);
 
 		it("does not throw", () => {
 			expect(() => configManager.lookupIndicator(0x1)).not.toThrow();
@@ -72,16 +76,17 @@ describe("lib/config/Indicators", () => {
 	describe("lookupIndicator()", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
 
+				configManager = new ConfigManager();
+				await configManager.loadIndicators();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadIndicators();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			readFileMock.mockClear();
@@ -99,16 +104,17 @@ describe("lib/config/Indicators", () => {
 	describe("lookupIndicatorProperty()", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(JSON.stringify(dummyIndicators));
 
+				configManager = new ConfigManager();
+				await configManager.loadIndicators();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadIndicators();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			readFileMock.mockClear();

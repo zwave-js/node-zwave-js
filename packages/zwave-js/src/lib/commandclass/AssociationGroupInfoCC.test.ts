@@ -1,7 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "../test/mocks";
 import {
 	AssociationGroupInfoCC,
 	AssociationGroupInfoCCCommandListGet,
@@ -17,6 +15,8 @@ import {
 	BasicCommand,
 } from "./_Types";
 
+const host = createTestingHost();
+
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
 		Buffer.from([
@@ -27,21 +27,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
-	let fakeDriver: Driver;
-	let node1: ZWaveNode;
-
-	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-		node1 = new ZWaveNode(1, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(node1.id, node1);
-	});
-
-	afterAll(() => {
-		node1.destroy();
-	});
-
 	it("the NameGet command should serialize correctly", () => {
-		const cc = new AssociationGroupInfoCCNameGet(fakeDriver, {
+		const cc = new AssociationGroupInfoCCNameGet(host, {
 			nodeId: 1,
 			groupId: 7,
 		});
@@ -69,7 +56,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 				0x72,
 			]),
 		);
-		const cc = new AssociationGroupInfoCCNameReport(fakeDriver, {
+		const cc = new AssociationGroupInfoCCNameReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -79,7 +66,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 	});
 
 	it("the InfoGet command should serialize correctly (no flag set)", () => {
-		const cc = new AssociationGroupInfoCCInfoGet(fakeDriver, {
+		const cc = new AssociationGroupInfoCCInfoGet(host, {
 			nodeId: 1,
 			groupId: 7,
 			listMode: false,
@@ -96,7 +83,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 	});
 
 	it("the InfoGet command should serialize correctly (refresh cache flag set)", () => {
-		const cc = new AssociationGroupInfoCCInfoGet(fakeDriver, {
+		const cc = new AssociationGroupInfoCCInfoGet(host, {
 			nodeId: 1,
 			groupId: 7,
 			listMode: false,
@@ -113,7 +100,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 	});
 
 	it("the InfoGet command should serialize correctly (list mode flag set)", () => {
-		const cc = new AssociationGroupInfoCCInfoGet(fakeDriver, {
+		const cc = new AssociationGroupInfoCCInfoGet(host, {
 			nodeId: 1,
 			groupId: 7,
 			listMode: true,
@@ -155,7 +142,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 				0,
 			]),
 		);
-		const cc = new AssociationGroupInfoCCInfoReport(fakeDriver, {
+		const cc = new AssociationGroupInfoCCInfoReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -172,7 +159,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 	});
 
 	it("the CommandListGet command should serialize correctly", () => {
-		const cc = new AssociationGroupInfoCCCommandListGet(fakeDriver, {
+		const cc = new AssociationGroupInfoCCCommandListGet(host, {
 			nodeId: 1,
 			groupId: 6,
 			allowCache: true,
@@ -201,7 +188,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 				0x05,
 			]),
 		);
-		const cc = new AssociationGroupInfoCCCommandListReport(fakeDriver, {
+		const cc = new AssociationGroupInfoCCCommandListReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -219,7 +206,7 @@ describe("lib/commandclass/AssociationGroupInfoCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new AssociationGroupInfoCC(fakeDriver, {
+		const cc: any = new AssociationGroupInfoCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

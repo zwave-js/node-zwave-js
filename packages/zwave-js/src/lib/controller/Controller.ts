@@ -31,6 +31,7 @@ import { migrateNVM } from "@zwave-js/nvmedit";
 import type { Message, SuccessIndicator } from "@zwave-js/serial";
 import { FunctionType } from "@zwave-js/serial";
 import {
+	createThrowingMap,
 	flatMap,
 	getEnumMemberName,
 	getErrorMessage,
@@ -292,23 +293,12 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public constructor(private readonly driver: Driver) {
 		super();
 
-		this._nodes = new Map<number, ZWaveNode>() as ThrowingMap<
-			number,
-			ZWaveNode
-		>;
-		this._nodes.getOrThrow = function (
-			this: Map<number, ZWaveNode>,
-			nodeId: number,
-		) {
-			const node = this.get(nodeId);
-			if (!node) {
-				throw new ZWaveError(
-					`Node ${nodeId} was not found!`,
-					ZWaveErrorCodes.Controller_NodeNotFound,
-				);
-			}
-			return node;
-		}.bind(this._nodes);
+		this._nodes = createThrowingMap((nodeId) => {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		});
 
 		// register message handlers
 		driver.registerRequestHandler(

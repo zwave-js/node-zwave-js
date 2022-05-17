@@ -1,10 +1,9 @@
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "../test/mocks";
 import { BasicCCSet } from "./BasicCC";
 import { SupervisionCC, SupervisionCCReport } from "./SupervisionCC";
 import { SupervisionStatus } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 // function buildCCBuffer(payload: Buffer): Buffer {
 // 	return Buffer.concat([
@@ -111,8 +110,8 @@ describe("lib/commandclass/SupervisionCC => ", () => {
 	describe("responses should be detected correctly", () => {
 		it("SupervisionCCGet should expect a response", () => {
 			const ccRequest = SupervisionCC.encapsulate(
-				fakeDriver,
-				new BasicCCSet(fakeDriver, {
+				host,
+				new BasicCCSet(host, {
 					nodeId: 2,
 					targetValue: 5,
 				}),
@@ -122,13 +121,13 @@ describe("lib/commandclass/SupervisionCC => ", () => {
 
 		it("SupervisionCC/BasicCCSet => SupervisionCCReport (correct session ID) = expected", () => {
 			const ccRequest = SupervisionCC.encapsulate(
-				fakeDriver,
-				new BasicCCSet(fakeDriver, {
+				host,
+				new BasicCCSet(host, {
 					nodeId: 2,
 					targetValue: 5,
 				}),
 			);
-			const ccResponse = new SupervisionCCReport(fakeDriver, {
+			const ccResponse = new SupervisionCCReport(host, {
 				nodeId: 2,
 				moreUpdatesFollow: false,
 				sessionId: ccRequest.sessionId,
@@ -140,13 +139,13 @@ describe("lib/commandclass/SupervisionCC => ", () => {
 
 		it("SupervisionCC/BasicCCSet => SupervisionCCReport (wrong session ID) = unexpected", () => {
 			const ccRequest = SupervisionCC.encapsulate(
-				fakeDriver,
-				new BasicCCSet(fakeDriver, {
+				host,
+				new BasicCCSet(host, {
 					nodeId: 2,
 					targetValue: 5,
 				}),
 			);
-			const ccResponse = new SupervisionCCReport(fakeDriver, {
+			const ccResponse = new SupervisionCCReport(host, {
 				nodeId: 2,
 				moreUpdatesFollow: false,
 				sessionId: ccRequest.sessionId + 1,

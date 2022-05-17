@@ -393,6 +393,27 @@ export class CommandClass {
 		}
 	}
 
+	/**
+	 * @internal
+	 * Create an instance of the given CC without checking whether it is supported.
+	 * If the CC is implemented, this returns an instance of the given CC which is linked to the given endpoint.
+	 *
+	 * **WARNING:** Applications should not use this directly.
+	 */
+	public static createInstanceUnchecked<T extends CommandClass>(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		cc: CommandClasses | Constructable<T>,
+	): T | undefined {
+		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
+		if (Constructor) {
+			return new Constructor(host, {
+				nodeId: endpoint.nodeId,
+				endpoint: endpoint.index,
+			}) as T;
+		}
+	}
+
 	/** Generates a representation of this CC for the log */
 	public toLogEntry(): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
@@ -563,7 +584,7 @@ export class CommandClass {
 		}
 		throw new ZWaveError(
 			"Cannot retrieve the value ID for non-singlecast CCs",
-			ZWaveErrorCodes.Driver_NotReady,
+			ZWaveErrorCodes.CC_NoNodeID,
 		);
 	}
 

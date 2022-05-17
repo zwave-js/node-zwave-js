@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { ThrowingMap } from "../../controller/Controller";
+import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -13,7 +13,7 @@ describe("regression tests", () => {
 		driver["_controller"] = {
 			ownNodeId: 1,
 			isFunctionSupported: () => true,
-			nodes: new Map(),
+			nodes: createThrowingMap(),
 			incrementStatistics: () => {},
 			removeAllListeners: () => {},
 		} as any;
