@@ -2,6 +2,7 @@ import {
 	DataRate,
 	encodeNodeProtocolInfo,
 	FLiRS,
+	NodeProtocolInfoAndDeviceClass,
 	NodeType,
 	parseNodeProtocolInfo,
 	ProtocolVersion,
@@ -52,20 +53,9 @@ export class GetNodeProtocolInfoRequest extends Message {
 	}
 }
 
-interface GetNodeProtocolInfoResponseOptions extends MessageBaseOptions {
-	isListening: boolean;
-	isFrequentListening: FLiRS;
-	isRouting: boolean;
-	supportedDataRates: DataRate[];
-	protocolVersion: ProtocolVersion;
-	optionalFunctionality: boolean;
-	nodeType: NodeType;
-	supportsSecurity: boolean;
-	supportsBeaming: boolean;
-	basicDeviceClass: number;
-	genericDeviceClass: number;
-	specificDeviceClass: number;
-}
+interface GetNodeProtocolInfoResponseOptions
+	extends MessageBaseOptions,
+		NodeProtocolInfoAndDeviceClass {}
 
 @messageTypes(MessageType.Response, FunctionType.GetNodeProtocolInfo)
 export class GetNodeProtocolInfoResponse extends Message {
@@ -85,7 +75,7 @@ export class GetNodeProtocolInfoResponse extends Message {
 			this.isListening = rest.isListening;
 			this.isFrequentListening = rest.isFrequentListening;
 			this.isRouting = rest.isRouting;
-			this.supportedDataRates = [...rest.supportedDataRates];
+			this.supportedDataRates = rest.supportedDataRates;
 			this.protocolVersion = rest.protocolVersion;
 			this.optionalFunctionality = rest.optionalFunctionality;
 			this.nodeType = rest.nodeType;

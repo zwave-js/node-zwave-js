@@ -148,22 +148,31 @@ const respondToSoftReset: MockControllerBehavior = {
 const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
 		if (msg instanceof GetNodeProtocolInfoRequest) {
-			if (msg.requestedNodeId !== host.ownNodeId) return false;
-
-			const ret = new GetNodeProtocolInfoResponse(host, {
-				...determineNIF(),
-				nodeType: NodeType.Controller,
-				isListening: true,
-				isFrequentListening: false,
-				isRouting: true,
-				supportsSecurity: false,
-				supportsBeaming: true,
-				supportedDataRates: [9600, 40000, 100000],
-				optionalFunctionality: true,
-				protocolVersion: 3,
-			});
-			await controller.sendToHost(ret.serialize());
-			return true;
+			if (msg.requestedNodeId === host.ownNodeId) {
+				const ret = new GetNodeProtocolInfoResponse(host, {
+					...determineNIF(),
+					nodeType: NodeType.Controller,
+					isListening: true,
+					isFrequentListening: false,
+					isRouting: true,
+					supportsSecurity: false,
+					supportsBeaming: true,
+					supportedDataRates: [9600, 40000, 100000],
+					optionalFunctionality: true,
+					protocolVersion: 3,
+				});
+				await controller.sendToHost(ret.serialize());
+				return true;
+			} else if (controller.nodes.has(msg.requestedNodeId)) {
+				const nodeCaps = controller.nodes.get(
+					msg.requestedNodeId,
+				)!.capabilities;
+				const ret = new GetNodeProtocolInfoResponse(host, {
+					...nodeCaps,
+				});
+				await controller.sendToHost(ret.serialize());
+				return true;
+			}
 		}
 		return false;
 	},

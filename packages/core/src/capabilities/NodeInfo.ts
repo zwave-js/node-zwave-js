@@ -158,7 +158,7 @@ export interface NodeProtocolInfo {
 	isFrequentListening: FLiRS;
 	/** Whether the node supports routing/forwarding messages. */
 	isRouting: boolean;
-	supportedDataRates: readonly DataRate[];
+	supportedDataRates: DataRate[];
 	protocolVersion: ProtocolVersion;
 	/** Whether this node supports additional CCs besides the mandatory minimum */
 	optionalFunctionality: boolean;
@@ -170,6 +170,13 @@ export interface NodeProtocolInfo {
 	supportsBeaming: boolean;
 	/** Whether this node's device class has the specific part */
 	hasSpecificDeviceClass: boolean;
+}
+
+export interface NodeProtocolInfoAndDeviceClass
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	basicDeviceClass: number;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
 }
 
 export function parseNodeProtocolInfo(

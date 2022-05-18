@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { MockController } from "@zwave-js/testing";
+import { MockController, MockNode } from "@zwave-js/testing";
 import path from "path";
 import "reflect-metadata";
 import {
@@ -53,6 +53,15 @@ void (async () => {
 		ownNodeId: 1,
 		serial: mockPort,
 	});
+
+	const node2 = new MockNode({
+		id: 2,
+		controller,
+		capabilities: {
+			isListening: false,
+		},
+	});
+	controller.nodes.set(2, node2);
 
 	// Apply default behaviors that are required for interacting with the driver correctly
 	controller.defineBehavior(...createDefaultMockControllerBehaviors());
