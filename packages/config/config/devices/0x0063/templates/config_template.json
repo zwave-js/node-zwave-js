@@ -39,7 +39,7 @@
 		"minValue": 0,
 		"maxValue": 55,
 		"defaultValue": 0,
-		"unsigned": true,
+		"unsigned": true
 	},
 	"alternate_exclusion": {
 		"$import": "~/templates/master_template.json#base_enable_disable",
@@ -110,7 +110,7 @@
 		"minValue": 0,
 		"maxValue": 255,
 		"defaultValue": 255,
-		"unsigned": true,
+		"unsigned": true
 	},
 	"switch_level": {
 		"label": "Switch Level",
@@ -397,4 +397,3 @@
 		]
 	}
 }
-
