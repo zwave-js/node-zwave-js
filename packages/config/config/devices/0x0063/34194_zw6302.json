@@ -25,11 +25,11 @@
 		},
 		{
 			"#": "20",
-			"$import": "templates/config_template.json#motion_report_type"
+			"$import": "templates/config_template.json#report_method"
 		},
 		{
 			"#": "28",
-			"$import": "templates/config_template.json#pir_trigger_led"
+			"$import": "templates/config_template.json#led_indication"
 		}		
 	],
 	"metadata": {

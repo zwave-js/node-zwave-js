@@ -59,22 +59,7 @@
 		},
 		{
 			"#": "21",
-			"label": "Enable LED Blink",
-			"description": "Enable LED blink open or close door or window",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 1
-				},
-				{
-					"label": "Disabled",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_indication"
 		},
 		{
 			"#": "23",

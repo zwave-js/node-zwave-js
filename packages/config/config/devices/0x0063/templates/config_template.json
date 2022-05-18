@@ -426,29 +426,8 @@
 			}
 		]
 	},
-	"motion_report_type": {
-		"label": "Motion Sensor Report Type",
-		"valueSize": 1,
-		"defaultValue": 1,
-		"unsigned": true,
-		"allowManualEntry": false,
-		"options": [
-			{
-				"label": "Notification CC",
-				"value": 1
-			},
-			{
-				"label": "Basic CC Set",
-				"value": 2
-			},
-			{
-				"label": "Basic CC Report",
-				"value": 3
-			}
-		]
-	},
-	"pir_trigger_led": {
-		"label": "LED Indication When PIR is Triggered",
+	"led_indication": {
+		"label": "LED Indication",
 		"valueSize": 1,
 		"defaultValue": 1,
 		"unsigned": true,
@@ -463,5 +442,27 @@
 				"value": 1
 			}
 		]
+	},
+	"default_dim_level": {
+		"label": "State With Manual Switch or Power Failure",
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Full brightness",
+				"value": 0
+			},
+			{
+				"label": "Last dim level",
+				"value": 1
+			},
+			{
+				"label": "Last state",
+				"value": 2
+			}
+		]
 	}
 }
+

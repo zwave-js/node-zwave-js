@@ -29,11 +29,11 @@
 		},
 		{
 			"#": "20",
-			"$import": "templates/config_template.json#motion_report_type"
+			"$import": "templates/config_template.json#report_method"
 		},
 		{
 			"#": "24",
-			"label": "Temperature And Light Sensor Sensing Frequency Setting",
+			"label": "Temperature And Light Sensor Sensing Frequency",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "28",
-			"$import": "templates/config_template.json#pir_trigger_led"
+			"$import": "templates/config_template.json#led_indication"
 		}
 	],
 	"metadata": {

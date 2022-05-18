@@ -45,13 +45,7 @@
 		},
 		{
 			"#": "20",
-			"label": "Notification",
-			"description": "Sensor will send out notification",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/config_template.json#report_method"
 		},
 		{
 			"#": "23",
@@ -65,22 +59,7 @@
 		},
 		{
 			"#": "28",
-			"label": "Motion Action Blink Led",
-			"description": "Disable or enable motion action blink led",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable led",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#led_indication"
 		}
 	],
 	"metadata": {

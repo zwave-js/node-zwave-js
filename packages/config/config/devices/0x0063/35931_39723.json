@@ -16,24 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Dim level when light is turned ON",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Last non-zero brightness",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#default_dim_level"
 		},
 		{
 			"#": "9",
