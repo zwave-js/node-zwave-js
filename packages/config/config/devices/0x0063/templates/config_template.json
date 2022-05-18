@@ -407,5 +407,61 @@
 				"value": 110
 			}
 		]
+	},
+	"pir_timeout_duration": {
+		"label": "PIR Timeout Duration",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 4,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "1 min to 60 min",
+				"value": 60
+			},
+			{
+				"label": "5 seconds",
+				"value": 255
+			}
+		]
+	},
+	"motion_report_type": {
+		"label": "Motion Sensor Report Type",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Notification CC",
+				"value": 1
+			},
+			{
+				"label": "Basic CC Set",
+				"value": 2
+			},
+			{
+				"label": "Basic CC Report",
+				"value": 3
+			}
+		]
+	},
+	"pir_trigger_led": {
+		"label": "LED Indication When PIR is Triggered",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
 	}
 }
