@@ -21,11 +21,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Local Load",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap",
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
