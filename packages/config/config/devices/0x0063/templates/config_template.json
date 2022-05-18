@@ -68,7 +68,7 @@
 		"unsigned": true,
 		"options": [
 			{
-				"label": "Default - 10 seconds",
+				"label": "10 seconds",
 				"value": 0
 			},
 			{
