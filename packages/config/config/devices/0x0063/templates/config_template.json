@@ -322,8 +322,8 @@
 		]
 	},
 	"ignore_start_level": {
-		"label": "Ignore Start-Level (Receiving)",
-		"description": "This dimmer will start dimming from its current level.",
+		"label": "Start Dimming From Current Level",
+		"description": "The start level in Z-Wave commands will be ignored, if enabled",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"unsigned": true,
