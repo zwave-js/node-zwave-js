@@ -25,43 +25,11 @@
 		},
 		{
 			"#": "18",
-			"label": "PIR Timeout Duration",
-			"valueSize": 1,
-			"defaultValue": 4,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "1 min to 60 min",
-					"value": 60
-				},
-				{
-					"label": "5 seconds",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#pir_timeout_duration"
 		},
 		{
 			"#": "20",
-			"label": "Motion Sensor Report Type",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Notification CC",
-					"value": 1
-				},
-				{
-					"label": "Basic CC Set",
-					"value": 2
-				},
-				{
-					"label": "Basic CC Report",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#motion_report_type"
 		},
 		{
 			"#": "24",
@@ -75,21 +43,7 @@
 		},
 		{
 			"#": "28",
-			"label": "Enable And Disable The LED Indication When PIR Triggered And After Timeout",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#pir_trigger_led"
 		}
 	],
 	"metadata": {
