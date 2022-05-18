@@ -442,7 +442,7 @@ interface SendMessageOptions {
 
 The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
-<!-- #import MessagePriority from "zwave-js" with comments -->
+<!-- #import MessagePriority from "@zwave-js/serial" with comments -->
 
 ```ts
 enum MessagePriority {
