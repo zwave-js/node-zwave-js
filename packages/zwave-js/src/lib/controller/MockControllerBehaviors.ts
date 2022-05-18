@@ -26,19 +26,14 @@ import {
 } from "../serialapi/memory/GetControllerIdMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
+	GetNodeProtocolInfoRequest,
+	GetNodeProtocolInfoResponse,
+} from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
+import {
 	GetSUCNodeIdRequest,
 	GetSUCNodeIdResponse,
 } from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
 import { determineNIF } from "./NodeInformationFrame";
-
-// const logHostMessages: MockControllerBehavior = {
-// 	onHostMessage(controller, msg) {
-// 		console.log(
-// 			`H > C:  ${getEnumMemberName(FunctionType, msg.functionType)}`,
-// 		);
-// 		return false;
-// 	},
-// };
 
 const respondToGetControllerId: MockControllerBehavior = {
 	async onHostMessage(host, controller, msg) {
@@ -150,6 +145,30 @@ const respondToSoftReset: MockControllerBehavior = {
 	},
 };
 
+const respondToGetNodeProtocolInfo: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof GetNodeProtocolInfoRequest) {
+			if (msg.requestedNodeId !== host.ownNodeId) return false;
+
+			const ret = new GetNodeProtocolInfoResponse(host, {
+				...determineNIF(),
+				nodeType: NodeType.Controller,
+				isListening: true,
+				isFrequentListening: false,
+				isRouting: true,
+				supportsSecurity: false,
+				supportsBeaming: true,
+				supportedDataRates: [9600, 40000, 100000],
+				optionalFunctionality: true,
+				protocolVersion: 3,
+			});
+			await controller.sendToHost(ret.serialize());
+			return true;
+		}
+		return false;
+	},
+};
+
 /** Predefined default behaviors that are required for interacting with the driver correctly */
 export function createDefaultBehaviors(): MockControllerBehavior[] {
 	return [
@@ -160,5 +179,6 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		respondToGetSUCNodeId,
 		respondToGetSerialApiInitData,
 		respondToSoftReset,
+		respondToGetNodeProtocolInfo,
 	];
 }
