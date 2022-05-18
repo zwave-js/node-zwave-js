@@ -9,7 +9,7 @@ export interface NodeInformationFrame {
 	supportedCCs: CommandClasses[];
 }
 
-interface ExtendedNodeInformationFrame extends NodeInformationFrame {
+export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
 	controlledCCs: CommandClasses[];
 }
@@ -105,8 +105,8 @@ export function parseCCList(payload: Buffer): {
 }
 
 export function encodeCCList(
-	supportedCCs: CommandClasses[],
-	controlledCCs: CommandClasses[],
+	supportedCCs: readonly CommandClasses[],
+	controlledCCs: readonly CommandClasses[],
 ): Buffer {
 	const bufferLength =
 		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1))) +

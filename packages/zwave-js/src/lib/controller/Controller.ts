@@ -1,6 +1,5 @@
 import {
 	actuatorCCs,
-	allCCs,
 	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
@@ -8,7 +7,6 @@ import {
 	deriveTempKeys,
 	dskFromString,
 	dskToString,
-	encapsulationCCs,
 	encodeX25519KeyDERSPKI,
 	indexDBsByNode,
 	isRecoverableZWaveError,
@@ -22,7 +20,6 @@ import {
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
-	sensorCCs,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -64,7 +61,6 @@ import {
 } from "../commandclass";
 import { AssociationCC } from "../commandclass/AssociationCC";
 import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
-import { getImplementedVersion } from "../commandclass/CommandClass";
 import {
 	getManufacturerIdValueId,
 	getManufacturerIdValueMetadata,
@@ -260,6 +256,7 @@ import {
 	ReplaceNodeOptions,
 	SmartStartProvisioningEntry,
 } from "./Inclusion";
+import { determineNIF } from "./NodeInformationFrame";
 import { assertProvisioningEntry } from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
@@ -778,7 +775,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					supportCheck: false,
 				},
 			);
-		this._sdkVersion = version.sdkVersion;
+		this._sdkVersion = version.libraryVersion;
 		this._type = version.controllerType;
 		this.driver.controllerLog.print(
 			`received version info:
@@ -1092,72 +1089,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * @internal
 	 */
 	public async setControllerNIF(): Promise<void> {
-		const deviceClass = new DeviceClass(
-			this.driver.configManager,
-			0x02, // Static Controller
-			0x02, // Static Controller
-			0x07, // Gateway
-		);
-
-		const implementedCCs = allCCs.filter(
-			(cc) => getImplementedVersion(cc) > 0,
-		);
-
-		// Encapsulation CCs are always supported
-		const implementedEncapsulationCCs = encapsulationCCs.filter((cc) =>
-			implementedCCs.includes(cc),
-		);
-
-		const implementedActuatorCCs = actuatorCCs.filter((cc) =>
-			implementedCCs.includes(cc),
-		);
-		const implementedSensorCCs = sensorCCs.filter((cc) =>
-			implementedCCs.includes(cc),
-		);
-
-		const supportedCCs = [
-			// Z-Wave Plus Info must be listed first
-			CommandClasses["Z-Wave Plus Info"],
-			// TODO: Z-Wave Plus v2 Device Type Specification
-			// Gateway device type MUST **support** Inclusion Controller and Time CC
-			...implementedEncapsulationCCs,
-		];
-
-		const controlledCCs = [
-			// Non-actuator CCs that MUST be supported by the gateway DT:
-			CommandClasses.Association,
-			CommandClasses["Association Group Information"],
-			CommandClasses.Basic,
-			CommandClasses["Central Scene"],
-			CommandClasses["CRC-16 Encapsulation"],
-			CommandClasses["Firmware Update Meta Data"],
-			CommandClasses.Indicator,
-			CommandClasses.Meter,
-			CommandClasses["Multi Channel"],
-			CommandClasses["Multi Channel Association"],
-			CommandClasses["Multilevel Sensor"],
-			CommandClasses.Notification,
-			CommandClasses.Security,
-			CommandClasses["Security 2"],
-			CommandClasses.Version,
-			CommandClasses["Wake Up"],
-		];
-		// Add implemented actuator and sensor CCs to fill up the space. These might get cut off
-		controlledCCs.push(
-			...[...implementedActuatorCCs, ...implementedSensorCCs].filter(
-				(cc) => !controlledCCs.includes(cc),
-			),
-		);
-
-		// TODO: Consider if the CCs should follow a certain order
-
 		this.driver.controllerLog.print("Updating the controller NIF...");
 		await this.driver.sendMessage(
 			new SetApplicationNodeInformationRequest(this.driver, {
 				isListening: true,
-				deviceClass,
-				supportedCCs,
-				controlledCCs,
+				...determineNIF(),
 			}),
 		);
 	}

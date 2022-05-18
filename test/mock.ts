@@ -2,7 +2,10 @@
 import { MockController } from "@zwave-js/testing";
 import path from "path";
 import "reflect-metadata";
-import { createAndStartDriverWithMockPort } from "zwave-js";
+import {
+	createAndStartDriverWithMockPort,
+	createDefaultMockControllerBehaviors,
+} from "zwave-js";
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
@@ -50,6 +53,9 @@ void (async () => {
 		ownNodeId: 1,
 		serial: mockPort,
 	});
+
+	// Apply default behaviors that are required for interacting with the driver correctly
+	controller.defineBehavior(...createDefaultMockControllerBehaviors());
 
 	continueStartup();
 })();

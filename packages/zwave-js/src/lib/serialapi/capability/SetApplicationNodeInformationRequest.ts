@@ -9,12 +9,13 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import type { DeviceClass } from "../../node/DeviceClass";
+import { num2hex } from "@zwave-js/shared";
 
 export interface SetApplicationNodeInformationRequestOptions
 	extends MessageBaseOptions {
 	isListening: boolean;
-	deviceClass: DeviceClass;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
 	supportedCCs: CommandClasses[];
 	controlledCCs: CommandClasses[];
 }
@@ -28,13 +29,15 @@ export class SetApplicationNodeInformationRequest extends Message {
 	) {
 		super(host, options);
 		this.isListening = options.isListening;
-		this.deviceClass = options.deviceClass;
+		this.genericDeviceClass = options.genericDeviceClass;
+		this.specificDeviceClass = options.specificDeviceClass;
 		this.supportedCCs = options.supportedCCs;
 		this.controlledCCs = options.controlledCCs;
 	}
 
 	public isListening: boolean;
-	public deviceClass: DeviceClass;
+	public genericDeviceClass: number;
+	public specificDeviceClass: number;
 	public supportedCCs: CommandClasses[];
 	public controlledCCs: CommandClasses[];
 
@@ -47,8 +50,8 @@ export class SetApplicationNodeInformationRequest extends Message {
 		const ccListLength = Math.min(ccList.length, 35);
 		this.payload = Buffer.from([
 			this.isListening ? 0x01 : 0, // APPLICATION_NODEINFO_LISTENING
-			this.deviceClass.generic.key,
-			this.deviceClass.specific.key,
+			this.genericDeviceClass,
+			this.specificDeviceClass,
 			ccListLength,
 			...ccList.slice(0, ccListLength),
 		]);
@@ -61,8 +64,8 @@ export class SetApplicationNodeInformationRequest extends Message {
 			...super.toLogEntry(),
 			message: {
 				"is listening": this.isListening,
-				"generic device class": this.deviceClass.generic.label,
-				"specific device class": this.deviceClass.specific.label,
+				"generic device class": num2hex(this.genericDeviceClass),
+				"specific device class": num2hex(this.specificDeviceClass),
 				"supported CCs": this.supportedCCs
 					.map((cc) => `\n· ${getCCName(cc)}`)
 					.join(""),

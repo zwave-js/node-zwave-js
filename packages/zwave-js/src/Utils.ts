@@ -21,6 +21,7 @@ export {
 	getEnumMemberName,
 	num2hex,
 } from "@zwave-js/shared/safe";
+export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors";
 export { rssiToString } from "./lib/controller/_Types";
 export { createAndStartDriverWithMockPort } from "./lib/driver/DriverMock";
 export {

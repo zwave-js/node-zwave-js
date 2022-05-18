@@ -3,13 +3,17 @@ import type { ZWaveHost } from "@zwave-js/host";
 import { Message, MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { TimedExpectation } from "@zwave-js/shared/safe";
-import { createDefaultBehaviors } from "./MockControllerBehaviors";
+import {
+	getDefaultMockControllerCapabilities,
+	MockControllerCapabilities,
+} from "./MockControllerCapabilities";
 import type { MockNode } from "./MockNode";
 
 export interface MockControllerOptions {
 	serial: MockPortBinding;
 	ownNodeId: number;
 	homeId: number;
+	capabilities?: Partial<MockControllerCapabilities>;
 }
 
 /** A mock Z-Wave controller which interacts with {@link MockNode}s and can be controlled via a {@link MockSerialPort} */
@@ -61,8 +65,10 @@ export class MockController {
 			},
 		};
 
-		// Apply default behaviors that are required for interacting with the driver correctly
-		this.defineBehavior(...createDefaultBehaviors());
+		this.capabilities = {
+			...getDefaultMockControllerCapabilities(),
+			...options.capabilities,
+		};
 	}
 
 	public readonly serial: MockPortBinding;
@@ -76,16 +82,18 @@ export class MockController {
 	private behaviors: MockControllerBehavior[] = [];
 
 	public readonly nodes = new Map<number, MockNode>();
-	private host: ZWaveHost;
+	public readonly host: ZWaveHost;
+
+	public readonly capabilities: MockControllerCapabilities;
 
 	/** Gets called when parsed/chunked data is received from the serial port */
-	private serialOnData(
+	private async serialOnData(
 		data:
 			| Buffer
 			| MessageHeaders.ACK
 			| MessageHeaders.CAN
 			| MessageHeaders.NAK,
-	): void {
+	): Promise<void> {
 		if (typeof data === "number") {
 			switch (data) {
 				case MessageHeaders.ACK: {
@@ -128,7 +136,8 @@ export class MockController {
 			handler.resolve(msg);
 		} else {
 			for (const behavior of this.behaviors) {
-				if (behavior.onHostMessage?.(this, msg)) return;
+				if (await behavior.onHostMessage?.(this.host, this, msg))
+					return;
 			}
 		}
 	}
@@ -227,7 +236,8 @@ export class MockController {
 		} else {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
-				if (behavior.onNodeMessage?.(this, node, data)) return;
+				if (behavior.onNodeMessage?.(this.host, this, node, data))
+					return;
 			}
 		}
 	}
@@ -247,11 +257,16 @@ export class MockController {
 
 export interface MockControllerBehavior {
 	/** Gets called when a message from the host is received. Return `true` to indicate that the message has been handled. */
-	onHostMessage?: (controller: MockController, msg: Message) => boolean;
+	onHostMessage?: (
+		host: ZWaveHost,
+		controller: MockController,
+		msg: Message,
+	) => Promise<boolean> | boolean;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeMessage?: (
+		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
 		data: Buffer,
-	) => boolean;
+	) => Promise<boolean> | boolean;
 }
