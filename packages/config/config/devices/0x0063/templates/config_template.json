@@ -150,8 +150,7 @@
 		"unsigned": true
 	},
 	"dim_level": {
-		"label": "Dim level",
-		"description": "Change brightness of associated light bulb(s)",
+		"label": "Associated Light Brightness",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
