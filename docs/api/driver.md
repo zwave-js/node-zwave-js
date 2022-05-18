@@ -445,32 +445,16 @@ The message priority must one of the following enum values, which are sorted fro
 <!-- #import MessagePriority from "zwave-js" with comments -->
 
 ```ts
-enum MessagePriority {
-	// Outgoing nonces have the highest priority because they are part of other transactions
-	// which may already be in progress.
-	// Some nodes don't respond to our requests if they are waiting for a nonce, so those need to be handled first.
+declare enum MessagePriority {
 	Nonce = 0,
-	// Controller commands usually finish quickly and should be preferred over node queries
-	Controller,
-	// Multistep controller commands typically require user interaction but still
-	// should happen at a higher priority than any node data exchange
-	MultistepController,
-	// Supervision responses must be prioritized over other messages because the nodes requesting them
-	// will get impatient otherwise.
-	Supervision,
-	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping,
-	// Whenever sleeping devices wake up, their queued messages must be handled quickly
-	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
-	WakeUp,
-	// Normal operation and node data exchange
-	Normal,
-	// Node querying is expensive and happens whenever a new node is discovered.
-	// In order to keep the system responsive, give them a lower priority
-	NodeQuery,
-	// Some devices need their state to be polled at regular intervals. Only do that when
-	// nothing else needs to be done
-	Poll,
+	Controller = 1,
+	MultistepController = 2,
+	Supervision = 3,
+	Ping = 4,
+	WakeUp = 5,
+	Normal = 6,
+	NodeQuery = 7,
+	Poll = 8,
 }
 ```
 
