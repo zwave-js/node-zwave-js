@@ -330,11 +330,11 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "No",
+				"label": "Disable",
 				"value": 0
 			},
 			{
-				"label": "Yes",
+				"label": "Enable",
 				"value": 1
 			}
 		]
