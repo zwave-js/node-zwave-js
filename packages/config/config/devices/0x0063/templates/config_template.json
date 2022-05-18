@@ -444,7 +444,7 @@
 		]
 	},
 	"default_dim_level": {
-		"label": "State With Manual Switch or Power Failure",
+		"label": "State After Power Failure",
 		"valueSize": 1,
 		"defaultValue": 2,
 		"unsigned": true,
@@ -455,11 +455,11 @@
 				"value": 0
 			},
 			{
-				"label": "Last dim level",
+				"label": "Previous dim level",
 				"value": 1
 			},
 			{
-				"label": "Last state",
+				"label": "Previous state",
 				"value": 2
 			}
 		]

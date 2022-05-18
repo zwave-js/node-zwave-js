@@ -20,24 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Product State after Power Reset",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Return to last state",
-					"value": 0
-				},
-				{
-					"label": "Return to off",
-					"value": 1
-				},
-				{
-					"label": "Return to on",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
 		},
 		{
 			"#": "2",
