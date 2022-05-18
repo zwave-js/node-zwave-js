@@ -12,7 +12,6 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
-				"--preserve-symlinks",
 				"--async-stack-traces",
 				"-r",
 				"./maintenance/esbuild-register.js",
@@ -30,12 +29,30 @@
 		{
 			"type": "node",
 			"request": "launch",
+			"name": "Test network mock",
+			"port": 9229,
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"-r",
+				"./maintenance/esbuild-register.js",
+				"${workspaceFolder}/test/mock.ts"
+			],
+			"env": {},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
+		},
+		{
+			"type": "node",
+			"request": "launch",
 			"name": "Generate typed docs",
 			"port": 9229,
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
-				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
@@ -54,7 +71,6 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
-				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"${workspaceFolder}/test/debug.js"
@@ -72,7 +88,6 @@
 			"runtimeExecutable": "yarn",
 			"runtimeArgs": [
 				"node",
-				"--preserve-symlinks",
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
@@ -92,9 +107,6 @@
 			"disableOptimisticBPs": true,
 			"cwd": "${workspaceFolder}",
 			"runtimeExecutable": "yarn",
-			"env": {
-				"NODE_PRESERVE_SYMLINKS": "1"
-			},
 			"args": ["run", "test:ts", "--runInBand", "--watchAll=false"]
 		}
 	]

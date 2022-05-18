@@ -9,7 +9,7 @@ export interface NodeInformationFrame {
 	supportedCCs: CommandClasses[];
 }
 
-interface ExtendedNodeInformationFrame extends NodeInformationFrame {
+export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
 	controlledCCs: CommandClasses[];
 }
@@ -105,8 +105,8 @@ export function parseCCList(payload: Buffer): {
 }
 
 export function encodeCCList(
-	supportedCCs: CommandClasses[],
-	controlledCCs: CommandClasses[],
+	supportedCCs: readonly CommandClasses[],
+	controlledCCs: readonly CommandClasses[],
 ): Buffer {
 	const bufferLength =
 		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1))) +
@@ -158,7 +158,7 @@ export interface NodeProtocolInfo {
 	isFrequentListening: FLiRS;
 	/** Whether the node supports routing/forwarding messages. */
 	isRouting: boolean;
-	supportedDataRates: readonly DataRate[];
+	supportedDataRates: DataRate[];
 	protocolVersion: ProtocolVersion;
 	/** Whether this node supports additional CCs besides the mandatory minimum */
 	optionalFunctionality: boolean;
@@ -170,6 +170,13 @@ export interface NodeProtocolInfo {
 	supportsBeaming: boolean;
 	/** Whether this node's device class has the specific part */
 	hasSpecificDeviceClass: boolean;
+}
+
+export interface NodeProtocolInfoAndDeviceClass
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	basicDeviceClass: number;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
 }
 
 export function parseNodeProtocolInfo(

@@ -2,14 +2,16 @@ import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
 	FunctionType,
+	gotDeserializationOptions,
 	Message,
+	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { cpp2js, JSONObject } from "@zwave-js/shared";
+import { cpp2js } from "@zwave-js/shared";
 import type { ZWaveLibraryTypes } from "../_Types";
 
 @messageTypes(MessageType.Request, FunctionType.GetControllerVersion)
@@ -17,33 +19,41 @@ import type { ZWaveLibraryTypes } from "../_Types";
 @priority(MessagePriority.Controller)
 export class GetControllerVersionRequest extends Message {}
 
+export interface GetControllerVersionResponseOptions
+	extends MessageBaseOptions {
+	controllerType: ZWaveLibraryTypes;
+	libraryVersion: string;
+}
+
 @messageTypes(MessageType.Response, FunctionType.GetControllerVersion)
 export class GetControllerVersionResponse extends Message {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| GetControllerVersionResponseOptions,
 	) {
 		super(host, options);
 
-		// The payload consists of a zero-terminated string and a uint8 for the controller type
-		this._sdkVersion = cpp2js(this.payload.toString("ascii"));
-		this._controllerType = this.payload[this.sdkVersion.length + 1];
+		if (gotDeserializationOptions(options)) {
+			// The payload consists of a zero-terminated string and a uint8 for the controller type
+			this.libraryVersion = cpp2js(this.payload.toString("ascii"));
+			this.controllerType = this.payload[this.libraryVersion.length + 1];
+		} else {
+			this.controllerType = options.controllerType;
+			this.libraryVersion = options.libraryVersion;
+		}
 	}
 
-	private _controllerType: ZWaveLibraryTypes;
-	public get controllerType(): ZWaveLibraryTypes {
-		return this._controllerType;
-	}
+	public controllerType: ZWaveLibraryTypes;
+	public libraryVersion: string;
 
-	private _sdkVersion: string;
-	public get sdkVersion(): string {
-		return this._sdkVersion;
-	}
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from(`${this.libraryVersion}\0`, "ascii"),
+			Buffer.from([this.controllerType]),
+		]);
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			controllerType: this.controllerType,
-			sdkVersion: this.sdkVersion,
-		});
+		return super.serialize();
 	}
 }

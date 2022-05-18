@@ -23,3 +23,17 @@ export function getZWaveChipType(
 		}
 	);
 }
+
+export function getChipTypeAndVersion(
+	zWaveChipType: string,
+): { type: number; version: number } | undefined {
+	for (const [id, name] of Object.entries(chipTypes)) {
+		if (name === zWaveChipType) {
+			const idNum = parseInt(id);
+			return {
+				type: idNum >>> 8,
+				version: idNum & 0xff,
+			};
+		}
+	}
+}

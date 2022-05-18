@@ -10,9 +10,9 @@ process.on("unhandledRejection", (_r) => {
 const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 
 const driver = new Driver(port, {
-	// logConfig: {
-	// 	logToFile: true,
-	// },
+	logConfig: {
+		logToFile: true,
+	},
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(

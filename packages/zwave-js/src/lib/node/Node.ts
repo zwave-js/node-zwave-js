@@ -1387,7 +1387,13 @@ export class ZWaveNode
 		this.supportsSecurity = resp.supportsSecurity;
 		this.supportsBeaming = resp.supportsBeaming;
 
-		this.applyDeviceClass(resp.deviceClass);
+		const deviceClass = new DeviceClass(
+			this.driver.configManager,
+			resp.basicDeviceClass,
+			resp.genericDeviceClass,
+			resp.specificDeviceClass,
+		);
+		this.applyDeviceClass(deviceClass);
 
 		const logMessage = `received response for protocol info:
 basic device class:    ${this.deviceClass!.basic.label}
