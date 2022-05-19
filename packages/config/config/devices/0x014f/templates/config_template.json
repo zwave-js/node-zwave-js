@@ -2,7 +2,7 @@
 	"dim_speed": {
 		"label": "Dimming Speed",
 		"$import": "~/templates/master_template.json#base_1-10_nounit",
-		"defaultValue": 3,
+		"defaultValue": 3
 	},
 	"init_brightness": {
 		"label": "Initial Bulb Brightness",
@@ -46,25 +46,25 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-					"label": "Off when load is on",
-					"value": 0
-				},
-				{
-					"label": "On when load is on",
-					"value": 1
-				},
-				{
-					"label": "Always on",
-					"value": 2
-				},
-				{
-					"label": "Always off",
-					"value": 3
-				},
-				{
-					"label": "Blink during transmission",
-					"value": 4
-				}
+				"label": "Off when load is on",
+				"value": 0
+			},
+			{
+				"label": "On when load is on",
+				"value": 1
+			},
+			{
+				"label": "Always on",
+				"value": 2
+			},
+			{
+				"label": "Always off",
+				"value": 3
+			},
+			{
+				"label": "Blink during transmission",
+				"value": 4
+			}
 		]
 	},
 	"night_light_4": {
@@ -180,10 +180,4 @@
 		"maxValue": 100,
 		"defaultValue": 100
 	}
-	
-	
-	
-	
-	
-	
 }
