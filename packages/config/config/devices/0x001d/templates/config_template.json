@@ -63,17 +63,17 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-					"label": "LED always off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is on",
-					"value": 254
-				},
-				{
-					"label": "LED on when switch is off",
-					"value": 255
-				}
+				"label": "LED always off",
+				"value": 0
+			},
+			{
+				"label": "LED on when switch is on",
+				"value": 254
+			},
+			{
+				"label": "LED on when switch is off",
+				"value": 255
+			}
 		]
 	},
 	"load_type": {
