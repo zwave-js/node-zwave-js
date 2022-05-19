@@ -1,7 +1,7 @@
 {
 	"dim_speed": {
 		"label": "Dimming Speed",
-		"$import": "~/templates/master_template.json#base_1-10_nounit"
+		"$import": "~/templates/master_template.json#base_1-10_nounit",
 		"defaultValue": 3,
 	},
 	"init_brightness": {
