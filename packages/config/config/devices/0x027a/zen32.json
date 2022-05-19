@@ -519,6 +519,46 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "22",
+			"$if": "firmwareVersion >= 10.0",
+			"label": "Enable / disable programming on the relay button",
+			"description": "Enable or disable programming functionality on the relay button. If this setting is disabled, then inclusion, exclusion, manual LED indicator change mode no longer work when the relay button is activated (factory reset and scene control will still work) - that means you can now use triple-tap triggers on the relay button for scenes and remote control of other devices.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Programming Enabled",
+					"value": 0
+				},
+				{
+					"label": "Programming Disabled",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "23",
+			"$if": "firmwareVersion >= 10.20",
+			"label": "Enable / disable LED indicator for settings",
+			"description": " Choose if you want the LED indicators to flash whenever a parameter (setting) is adjusted on the device to confirm the change. Disable this feature if you're using the LED indicators in automations.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 1
+				},
+				{
+					"label": "Enable",
+					"value": 0
+				}
+			]
 		}
 	],
 	"compat": {
