@@ -6,21 +6,30 @@ import {
 } from "@zwave-js/serial/mock";
 import type { DeepPartial } from "@zwave-js/shared";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import fs from "fs-extra";
+import { tmpdir } from "os";
+import path from "path";
 import type { SerialPort } from "serialport";
 import { Driver } from "./Driver";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
-interface Result {
+interface CreateAndStartDriverWithMockPortResult {
 	driver: Driver;
 	continueStartup: () => void;
 	mockPort: MockPortBinding;
 }
 
+export interface CreateAndStartDriverWithMockPortOptions {
+	portAddress: string;
+}
+
 /** Creates a real driver instance with a mocked serial port to enable end to end tests */
 export function createAndStartDriverWithMockPort(
-	portAddress: string,
-	options: DeepPartial<ZWaveOptions> = {},
-): Promise<Result> {
+	options: DeepPartial<
+		CreateAndStartDriverWithMockPortOptions & ZWaveOptions
+	> = {},
+): Promise<CreateAndStartDriverWithMockPortResult> {
+	const { portAddress = "/tty/FAKE", ...driverOptions } = options;
 	return new Promise(async (resolve, reject) => {
 		// eslint-disable-next-line prefer-const
 		let driver: Driver;
@@ -53,8 +62,8 @@ export function createAndStartDriverWithMockPort(
 		};
 
 		// Usually we don't want logs in these tests
-		if (!options.logConfig) {
-			options.logConfig = {
+		if (!driverOptions.logConfig) {
+			driverOptions.logConfig = {
 				enabled: false,
 			};
 		}
@@ -66,9 +75,83 @@ export function createAndStartDriverWithMockPort(
 		};
 
 		driver = new Driver(portAddress, {
-			...options,
+			...driverOptions,
 			testingHooks,
 		});
 		await driver.start();
+	});
+}
+
+export type CreateAndStartTestingDriverResult = Omit<
+	CreateAndStartDriverWithMockPortResult,
+	"continueStartup"
+>;
+
+export interface CreateAndStartTestingDriverOptions {
+	beforeStartup: (mockPort: MockPortBinding) => void | Promise<void>;
+	/**
+	 * Whether the controller identification should be skipped (default: false).
+	 * If not, a Mock controller must be available on the serial port.
+	 */
+	skipControllerIdentification?: boolean;
+	/**
+	 * Whether the node interview should be skipped (default: false).
+	 * If not, a Mock controller and/or mock nodes must be available on the serial port.
+	 */
+	skipNodeInterview?: boolean;
+	portAddress: string;
+}
+
+export async function createAndStartTestingDriver(
+	options: Partial<CreateAndStartTestingDriverOptions> &
+		DeepPartial<ZWaveOptions> = {},
+): Promise<CreateAndStartTestingDriverResult> {
+	const {
+		beforeStartup,
+		skipControllerIdentification = false,
+		skipNodeInterview = false,
+		...internalOptions
+	} = options;
+
+	// Use a new fake serial port for each test
+	const testId = Math.round(Math.random() * 0xffffffff)
+		.toString(16)
+		.padStart(8, "0");
+	internalOptions.portAddress ??= `/tty/FAKE${testId}`;
+
+	if (skipControllerIdentification) {
+		internalOptions.interview ??= {};
+		internalOptions.interview.skipControllerIdentification = true;
+	}
+	if (skipNodeInterview) {
+		internalOptions.interview ??= {};
+		internalOptions.interview.skipNodeInterview = true;
+	}
+
+	// TODO: Ideally, this would be using mock-fs, but jest does not play nice with it
+	const cacheDir = path.join(tmpdir(), "zwave-js-test-cache", testId);
+
+	internalOptions.storage ??= {};
+	internalOptions.storage.cacheDir = cacheDir;
+
+	const { driver, continueStartup, mockPort } =
+		await createAndStartDriverWithMockPort(internalOptions);
+
+	if (typeof beforeStartup === "function") {
+		await beforeStartup(mockPort);
+	}
+
+	// Make sure the mock FS gets restored when the driver is destroyed
+	const originalDestroy = driver.destroy.bind(driver);
+	driver.destroy = async () => {
+		await originalDestroy();
+		await fs.remove(cacheDir);
+	};
+
+	return new Promise((resolve) => {
+		driver.once("driver ready", () => {
+			resolve({ driver, mockPort });
+		});
+		continueStartup();
 	});
 }

@@ -11,8 +11,8 @@ import type { MockNode } from "./MockNode";
 
 export interface MockControllerOptions {
 	serial: MockPortBinding;
-	ownNodeId: number;
-	homeId: number;
+	ownNodeId?: number;
+	homeId?: number;
 	capabilities?: Partial<MockControllerCapabilities>;
 }
 
@@ -33,8 +33,8 @@ export class MockController {
 		const valueDBCache = new Map<number, ValueDB>();
 
 		this.host = {
-			ownNodeId: options.ownNodeId,
-			homeId: options.homeId,
+			ownNodeId: options.ownNodeId ?? 1,
+			homeId: options.homeId ?? 0x7e571000,
 			configManager: undefined as any,
 			controllerLog: new Proxy({} as any, {
 				get(_target, _prop) {
@@ -147,7 +147,7 @@ export class MockController {
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
-	private async expectHostACK(timeout: number): Promise<void> {
+	public async expectHostACK(timeout: number): Promise<void> {
 		try {
 			this.expectedHostACK = new TimedExpectation(
 				timeout,
