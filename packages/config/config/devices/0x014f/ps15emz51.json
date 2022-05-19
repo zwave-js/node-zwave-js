@@ -16,85 +16,23 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "LED Indicator: Brightness",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "templates/config_template.json#led_brightness"
 		},
 		{
 			"#": "3",
-			"label": "LED Indicator: Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when the load is on",
-					"value": 0
-				},
-				{
-					"label": "On when the load is off",
-					"value": 1
-				},
-				{
-					"label": "Always On",
-					"value": 2
-				},
-				{
-					"label": "Always off",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#night_light_4"
 		},
 		{
 			"#": "11",
-			"label": "LED Indicator: Power Monitoring Display",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#power_monitor"
 		},
 		{
 			"#": "12",
-			"label": "LED Indicator: Power Monitoring Display Duration",
-			"description": "Sets the length of time for which the LED will reflect the current power usage",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 60,
-			"options": [
-				{
-					"label": "Continuous",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#energy_display_duration"
 		},
 		{
 			"#": "13",
-			"label": "Energy Usage Reporting Interval",
-			"valueSize": 2,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 6,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"$import": "templates/config_template.json#report_interval"
 		}
 	],
 	"metadata": {

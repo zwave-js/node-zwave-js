@@ -54,231 +54,75 @@
 		},
 		{
 			"#": "2",
-			"label": "Suspend Group 4",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable Group 4",
-					"value": 0
-				},
-				{
-					"label": "Disable Group 4",
-					"value": 1
-				}
-			]
+			"label": "Group 4 Reporting",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"defaultValue": 0
 		},
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "Relationship between LED and status of devices in Group 1",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when load is on",
-					"value": 0
-				},
-				{
-					"label": "On when load is off",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted",
+			"defaultValue": 0
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Setting the relationship between the top of the transmitter to ON or OFF",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Top-ON, Bottom-OFF",
-					"value": 0
-				},
-				{
-					"label": "Bottom-ON, Top-OFF",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",
-			"label": "Ignore start level when recieving dim commands",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Use start level",
-					"value": 0
-				},
-				{
-					"label": "Ignore start level",
-					"value": 1
-				}
-			]
+			"label": "Start Level in Dim Command",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted"
 		},
 		{
 			"#": "7",
-			"label": "dim step parameter",
-			"description": "dim step parameter valid values: 1-99",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "8",
-			"label": "dim timer parameter",
-			"description": "dim timer parameter valid values: 1-255",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_zwave"
 		},
 		{
 			"#": "9",
-			"label": "Local control dim step",
-			"description": "dim step parameter valid values: 1-99",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_manual"
 		},
 		{
 			"#": "10",
-			"label": "Local control dim timer",
-			"description": "dim timer parameter valid values: 1-255",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_manual"
 		},
 		{
 			"#": "11",
-			"label": "ALL ON/ ALL OFF dim step",
-			"description": "dim step parameter valid values: 1-99",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_all"
 		},
 		{
 			"#": "12",
-			"label": "ALL ON/ ALL OFF dim timer",
-			"description": "dim timer parameter valid values: 1-255",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_all"
 		},
 		{
 			"#": "13",
-			"label": "Disable group 4 during a dim command",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"label": "Group 4 during a dim command",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
+			"defaultValue": 0
 		},
 		{
 			"#": "14",
-			"label": "Enable Shade Control Group 2",
-			"description": "The switch can control shade control devices if this parameter is set to 1.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Shade Control Group 2",
+			"description": "Allow the switch to control shade devices",
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "15",
-			"label": "Enable Shade Control Group 3",
-			"description": "The switch can control shade control devices if this parameter is set to 1.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Shade Control Group 3",
+			"description": "Allow the switch to control shade devices",
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "16",
-			"label": "Enable Shade Control Group 1",
-			"description": "The switch can control shade control devices if this parameter is set to 1.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"label": "Shade Control Group 1",
+			"description": "Allow the switch to control shade devices",
+			"$import": "~/templates/master_template.json#base_enable_disable"
 		},
 		{
 			"#": "19",
-			"label": "LED Transmission Indication",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable Flicker",
-					"value": 0
-				},
-				{
-					"label": "Flicker while transmitting",
-					"value": 1
-				},
-				{
-					"label": "Flicker for 1 second",
-					"value": 2
-				}
-			]
+			"$import": "templates/config_template.json#led_indicator"
 		},
 		{
 			"#": "20",

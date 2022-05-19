@@ -16,21 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when load is on",
-					"value": 0
-				},
-				{
-					"label": "Off when load is on",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		}
 	],
 	"compat": {

@@ -16,22 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "Nightlight: LED turns ON when the switch is turned OFF",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options_inverted"
 		}
 	]
 }

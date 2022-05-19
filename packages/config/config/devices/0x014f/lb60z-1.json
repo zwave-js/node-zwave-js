@@ -23,39 +23,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Initial Bulb Brightness",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full Brightness",
-					"value": 0
-				},
-				{
-					"label": "Prior Brightness Level",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#init_brightness"
 		},
 		{
 			"#": "9",
-			"label": "Dim Step Level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#dim_rate"
 		},
 		{
 			"#": "10",
-			"label": "Dim Speed",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_speed"
 		}
 	],
 	"metadata": {

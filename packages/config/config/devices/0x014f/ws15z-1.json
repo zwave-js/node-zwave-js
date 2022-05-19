@@ -20,51 +20,11 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off when load is on",
-					"value": 0
-				},
-				{
-					"label": "On when load is on",
-					"value": 1
-				},
-				{
-					"label": "Always on",
-					"value": 2
-				},
-				{
-					"label": "Always off",
-					"value": 3
-				},
-				{
-					"label": "Blink during transmission",
-					"value": 4
-				}
-			]
+			"$import": "templates/config_template.json#night_light_5"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Orientation",
-					"value": 0
-				},
-				{
-					"label": "Inverted Orientation",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	],
 	"metadata": {
