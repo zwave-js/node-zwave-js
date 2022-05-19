@@ -221,7 +221,8 @@ const defaultOptions: ZWaveOptions = {
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
 	interview: {
-		skipInterview: false,
+		skipControllerIdentification: false,
+		skipNodeInterview: false,
 		queryAllUserCodes: false,
 	},
 	storage: {
@@ -1104,7 +1105,7 @@ export class Driver
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.interview.skipControllerIdentification) {
 			// Determine controller IDs to open the Value DBs
 			// We need to do this first because some older controllers, especially the UZB1 and
 			// some 500-series sticks in virtualized environments don't respond after a soft reset
@@ -1253,7 +1254,7 @@ export class Driver
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.interview.skipNodeInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
@@ -1700,7 +1701,7 @@ export class Driver
 	/** This is called when a new node has been added to the network */
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.interview.skipNodeInterview) {
 			// Interview the node
 			// don't await the interview, because it may take a very long time
 			// if a node is asleep

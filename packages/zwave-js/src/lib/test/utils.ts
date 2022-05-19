@@ -2,8 +2,8 @@
 
 import { MockSerialPort } from "@zwave-js/serial";
 import type { DeepPartial } from "@zwave-js/shared";
-import type { ZWaveOptions } from "../../../../core/src/system/ZWaveOptions";
 import { Driver } from "../driver/Driver";
+import type { ZWaveOptions } from "../driver/ZWaveOptions";
 
 // load the driver with stubbed out Serialport
 jest.mock("@zwave-js/serial", () => {
@@ -31,7 +31,10 @@ export async function createAndStartDriver(
 
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
-		interview: { skipInterview: true },
+		interview: {
+			skipControllerIdentification: true,
+			skipNodeInterview: true,
+		},
 	});
 	driver.on("error", () => {
 		/* swallow error events during testing */

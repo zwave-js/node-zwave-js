@@ -73,9 +73,15 @@ export interface ZWaveOptions {
 	interview: {
 		/**
 		 * @internal
-		 * Set this to true to skip the controller interview. Useful for testing purposes
+		 * Set this to true to skip the controller identification sequence. Useful for testing purposes
 		 */
-		skipInterview?: boolean;
+		skipControllerIdentification?: boolean;
+
+		/**
+		 * @internal
+		 * Set this to true to skip the interview of all nodes. Useful for testing purposes
+		 */
+		skipNodeInterview?: boolean;
 
 		/**
 		 * Whether all user code should be queried during the interview of the UserCode CC.
