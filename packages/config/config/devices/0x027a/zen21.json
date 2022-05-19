@@ -86,17 +86,17 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable/Disable LED Indicator",
+			"label": "Enable/Disable Auto Off",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Disable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
