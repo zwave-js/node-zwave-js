@@ -1659,6 +1659,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		node: ZWaveNode,
 		assumeSupported: boolean = false,
 	): Promise<void> {
+		// When bootstrapping with S0, no other keys are granted
+		for (const secClass of securityClassOrder) {
+			if (secClass !== SecurityClass.S0_Legacy) {
+				node.securityClasses.set(secClass, false);
+			}
+		}
+
 		if (!this.driver.securityManager) {
 			// Remember that the node was NOT granted the S0 security class
 			node.securityClasses.set(SecurityClass.S0_Legacy, false);
@@ -2496,6 +2503,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					) {
 						lowSecurity = true;
 					}
+				} else {
+					// Remember that no security classes were granted
+					for (const secClass of securityClassOrder) {
+						newNode.securityClasses.set(secClass, false);
+					}
 				}
 				this._includeController = false;
 
@@ -2634,6 +2646,11 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 							actualSecurityClass < SecurityClass.S0_Legacy
 						) {
 							lowSecurity = true;
+						}
+					} else {
+						// Remember that no security classes were granted
+						for (const secClass of securityClassOrder) {
+							newNode.securityClasses.set(secClass, false);
 						}
 					}
 
