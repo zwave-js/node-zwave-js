@@ -17,73 +17,24 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Min Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
+			"defaultValue": 10
 		},
 		{
 			"#": "4",
-			"label": "Max Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-100"
 		},
 		{
 			"#": "5",
-			"label": "Preset Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/config_template.json#preset_level"
 		},
 		{
 			"#": "6",
-			"label": "LED Dim Level Indicator Timeout",
-			"description": "How long the level indicators should stay illuminated after the dimming level is changed",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Always Off",
-					"value": 0
-				},
-				{
-					"label": "Always On",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#locator_led"
 		},
 		{
 			"#": "7",
-			"label": "Locator LED Status",
-			"valueSize": 1,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Always off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is on",
-					"value": 254
-				},
-				{
-					"label": "LED on when switch is off",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#locator_led"
 		}
 	],
 	"metadata": {

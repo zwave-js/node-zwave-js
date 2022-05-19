@@ -19,8 +19,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
-			"description": "Lifeline",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
