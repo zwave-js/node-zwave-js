@@ -1276,6 +1276,8 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			...json500To700(source.json, true),
 			meta: target.json.meta,
 		};
+		// The target is a different series, try to preserve the RF config of the target stick
+		json.controller.rfConfig = target.json.controller.rfConfig;
 		return jsonToNVM(json, target.json.controller.protocolVersion);
 	} else if (source.type === 700 && target.type === 500) {
 		// We need to downgrade the source to 500 series
@@ -1283,7 +1285,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			...json700To500(source.json),
 			meta: target.json.meta,
 		};
-		// If the target is a 500 series stick, preserve the RF config
+		// The target is a different series, try to preserve the RF config of the target stick
 		json.controller.rfConfig = target.json.controller.rfConfig;
 		return jsonToNVM500(json, target.json.controller.protocolVersion);
 	} else {
