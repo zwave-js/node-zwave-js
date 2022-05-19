@@ -15,6 +15,7 @@
 * Throw meaningful errors when `invokeCCAPI` gets called with invalid args (#4613)
 * Only enable Smart Start listening mode when there are active provisioning entries (#4598)
 * In the `Meter CC` `reset` API call, the `options` parameter is now optional (#4624)
+* Fixed an issue where Smart Start Provisioning entries would get corrupted during JSONL migration of the network cache. A [manual workaround](https://github.com/zwave-js/node-zwave-js/pull/4635#issue-1241388714) to restore lost entries from the old `.json` cache file is available (#4635)
 
 ### Config file changes
 * Add a warning about broken firmware to August Smart Lock Pro 3rd Gen (#4597)
