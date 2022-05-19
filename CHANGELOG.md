@@ -5,8 +5,6 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes -->
-
 ### Features
 * Align `GetSerialApiInitData` with new Host API specs, parse chip info (#4591)
 * Add `sendAndReceiveData` method to `ManufacturerProprietaryCCAPI` (#4586)
@@ -16,6 +14,7 @@
 ### Bugfixes
 * Throw meaningful errors when `invokeCCAPI` gets called with invalid args (#4613)
 * Only enable Smart Start listening mode when there are active provisioning entries (#4598)
+* In the `Meter CC` `reset` API call, the `options` parameter is now optional (#4624)
 
 ### Config file changes
 * Add a warning about broken firmware to August Smart Lock Pro 3rd Gen (#4597)
@@ -23,7 +22,9 @@
 * Work around broken firmware of Intermatic PE653 (#4607)
 * Updates for Illumino Dimmer Switch firmware 1.07 and Illumino Switch firmware 1.05 (#4574)
 
-<!-- ### Changes under the hood -->
+### Changes under the hood
+* Parsing and serializing Serial API messages and Command Classes was decoupled from the driver instance to make it easier to use these implementations independently (#4614, #4618)
+* Implement `MockController` and `MockNode` for end-to-end testing of the driver with simulated networks (#4628)
 
 ## 9.2.2 (2022-05-09)
 ### Bugfixes
