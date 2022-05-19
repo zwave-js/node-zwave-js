@@ -146,14 +146,97 @@ function tryParseNodeType(value: unknown): NodeType | undefined {
 	}
 }
 
-function isSerializedSecurityClass(
-	s: unknown,
-): s is keyof typeof SecurityClass {
-	return (
-		typeof s === "string" &&
-		s in SecurityClass &&
-		typeof SecurityClass[s as any] === "number"
-	);
+function tryParseProvisioningList(
+	value: unknown,
+): SmartStartProvisioningEntry[] | undefined {
+	const ret: SmartStartProvisioningEntry[] = [];
+	if (!isArray(value)) return;
+	for (const entry of value) {
+		if (
+			isObject(entry) &&
+			typeof entry.dsk === "string" &&
+			isArray(entry.securityClasses) &&
+			// securityClasses are stored as strings, not the enum values
+			entry.securityClasses.every((s) => isSerializedSecurityClass(s)) &&
+			(entry.requestedSecurityClasses == undefined ||
+				(isArray(entry.requestedSecurityClasses) &&
+					entry.requestedSecurityClasses.every((s) =>
+						isSerializedSecurityClass(s),
+					))) &&
+			(entry.status == undefined ||
+				isSerializedProvisioningEntryStatus(entry.status))
+		) {
+			// This is at least a PlannedProvisioningEntry, maybe it is an IncludedProvisioningEntry
+			if ("nodeId" in entry && typeof entry.nodeId !== "number") {
+				return;
+			}
+
+			const parsed = { ...entry } as SmartStartProvisioningEntry;
+			parsed.securityClasses = entry.securityClasses
+				.map((s) => tryParseSerializedSecurityClass(s))
+				.filter((s): s is SecurityClass => s !== undefined);
+			if (entry.requestedSecurityClasses) {
+				parsed.requestedSecurityClasses = (
+					entry.requestedSecurityClasses as any[]
+				)
+					.map((s) => tryParseSerializedSecurityClass(s))
+					.filter((s): s is SecurityClass => s !== undefined);
+			}
+			if (entry.status != undefined) {
+				parsed.status = ProvisioningEntryStatus[
+					entry.status as any
+				] as any as ProvisioningEntryStatus;
+			}
+			ret.push(parsed);
+		} else {
+			return;
+		}
+	}
+	return ret;
+}
+
+function isSerializedSecurityClass(value: unknown): boolean {
+	// There was an error in previous iterations of the migration code, so we
+	// now have to deal with the following variants:
+	// 1. plain numbers representing a valid Security Class: 1
+	// 2. strings representing a valid Security Class: "S2_Unauthenticated"
+	// 3. strings represending a mis-formatted Security Class: "unknown (0xS2_Unauthenticated)"
+	if (typeof value === "number" && value in SecurityClass) return true;
+	if (typeof value === "string") {
+		if (value.startsWith("unknown (0x") && value.endsWith(")")) {
+			value = value.slice(11, -1);
+		}
+		if (
+			(value as any) in SecurityClass &&
+			typeof SecurityClass[value as any] === "number"
+		) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function tryParseSerializedSecurityClass(
+	value: unknown,
+): SecurityClass | undefined {
+	// There was an error in previous iterations of the migration code, so we
+	// now have to deal with the following variants:
+	// 1. plain numbers representing a valid Security Class: 1
+	// 2. strings representing a valid Security Class: "S2_Unauthenticated"
+	// 3. strings represending a mis-formatted Security Class: "unknown (0xS2_Unauthenticated)"
+
+	if (typeof value === "number" && value in SecurityClass) return value;
+	if (typeof value === "string") {
+		if (value.startsWith("unknown (0x") && value.endsWith(")")) {
+			value = value.slice(11, -1);
+		}
+		if (
+			(value as any) in SecurityClass &&
+			typeof SecurityClass[value as any] === "number"
+		) {
+			return (SecurityClass as any)[value as any];
+		}
+	}
 }
 
 function isSerializedProvisioningEntryStatus(
@@ -256,50 +339,9 @@ export function deserializeNetworkCacheValue(
 	// Other properties
 	switch (key) {
 		case cacheKeys.controller.provisioningList: {
-			const ret: SmartStartProvisioningEntry[] = [];
-			if (!isArray(value)) throw fail();
-			for (const entry of value) {
-				if (
-					isObject(entry) &&
-					typeof entry.dsk === "string" &&
-					isArray(entry.securityClasses) &&
-					// securityClasses are stored as strings, not the enum values
-					entry.securityClasses.every((s) =>
-						isSerializedSecurityClass(s),
-					) &&
-					(entry.requestedSecurityClasses == undefined ||
-						(isArray(entry.requestedSecurityClasses) &&
-							entry.requestedSecurityClasses.every((s) =>
-								isSerializedSecurityClass(s),
-							))) &&
-					(entry.status == undefined ||
-						isSerializedProvisioningEntryStatus(entry.status))
-				) {
-					// This is at least a PlannedProvisioningEntry, maybe it is an IncludedProvisioningEntry
-					if ("nodeId" in entry && typeof entry.nodeId !== "number") {
-						throw fail();
-					}
-
-					const parsed = { ...entry } as SmartStartProvisioningEntry;
-					parsed.securityClasses = entry.securityClasses.map(
-						(s) => SecurityClass[s as any] as any as SecurityClass,
-					);
-					if (entry.requestedSecurityClasses) {
-						parsed.requestedSecurityClasses = (
-							entry.requestedSecurityClasses as any[]
-						).map((s) => SecurityClass[s] as any as SecurityClass);
-					}
-					if (entry.status != undefined) {
-						parsed.status = ProvisioningEntryStatus[
-							entry.status as any
-						] as any as ProvisioningEntryStatus;
-					}
-					ret.push(parsed);
-				} else {
-					throw fail();
-				}
-			}
-			return ret;
+			value = tryParseProvisioningList(value);
+			if (value) return value;
+			throw fail();
 		}
 	}
 
@@ -433,6 +475,7 @@ export async function migrateLegacyNetworkCache(
 		cacheKeys.controller.provisioningList,
 		legacy,
 		legacyPaths.controller.provisioningList,
+		tryParseProvisioningList,
 	);
 	tryMigrate(
 		cacheKeys.controller.supportsSoftReset,
