@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.3.0 (2022-05-19)
 ### Features
 * Align `GetSerialApiInitData` with new Host API specs, parse chip info (#4591)
 * Add `sendAndReceiveData` method to `ManufacturerProprietaryCCAPI` (#4586)
