@@ -1,6 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import * as nodeUtils from "../node/utils";
-import { createTestingHost, createTestNode } from "../test/mocks";
+import { createTestNode } from "../test/mocks";
 import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 import { getCCValueMetadata } from "./CommandClass";
 import { BasicCommand } from "./_Types";

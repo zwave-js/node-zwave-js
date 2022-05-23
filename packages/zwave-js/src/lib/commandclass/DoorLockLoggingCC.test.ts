@@ -1,8 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";
-import { createEmptyMockDriver, createTestingHost } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import {
 	DoorLockLoggingCC,
 	DoorLockLoggingCCRecordGet,

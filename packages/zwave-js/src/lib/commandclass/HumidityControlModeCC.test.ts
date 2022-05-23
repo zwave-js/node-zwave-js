@@ -1,6 +1,6 @@
 import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import { assertCC } from "../test/assertCC";
-import { createTestingHost } from "../test/mocks";
 import { getCCValueMetadata } from "./CommandClass";
 import {
 	HumidityControlModeCC,

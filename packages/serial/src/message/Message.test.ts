@@ -1,24 +1,16 @@
 import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { FunctionType, MessageType } from "./Constants";
 import type { INodeQuery } from "./INodeQuery";
 import { Message, messageTypes } from "./Message";
 
-// const fakeDriver = createEmptyMockDriver() as unknown as ZWaveHost<any>;
-const fakeHost: ZWaveHost<any> = {
-	configManager: undefined as any,
-	controllerLog: undefined as any,
-	homeId: 0x01234567,
-	ownNodeId: 1,
-	options: undefined as any,
-	securityManager: undefined,
-	securityManager2: undefined,
-	nodes: new Map() as any,
-	getNextCallbackId: () => 1,
-	getSafeCCVersionForNode: () => 1,
-};
-
 describe("lib/message", () => {
+	let host: TestingHost;
+
+	beforeEach(() => {
+		host = createTestingHost();
+	});
+
 	describe("Message", () => {
 		it("should deserialize and serialize correctly", () => {
 			// actual messages from OZW
@@ -35,7 +27,7 @@ describe("lib/message", () => {
 				]),
 			];
 			for (const original of okayMessages) {
-				const parsed = new Message(fakeHost, { data: original });
+				const parsed = new Message(host, { data: original });
 				expect(parsed.serialize()).toEqual(original);
 			}
 		});
@@ -43,7 +35,7 @@ describe("lib/message", () => {
 		it("should serialize correctly when the payload is null", () => {
 			// synthetic message
 			const expected = Buffer.from([0x01, 0x03, 0x00, 0xff, 0x03]);
-			const message = new Message(fakeHost, {
+			const message = new Message(host, {
 				type: MessageType.Request,
 				functionType: 0xff,
 			});
@@ -85,13 +77,10 @@ describe("lib/message", () => {
 				],
 			];
 			for (const [message, msg, code] of brokenMessages) {
-				assertZWaveError(
-					() => new Message(fakeHost, { data: message }),
-					{
-						messageMatches: msg,
-						errorCode: code,
-					},
-				);
+				assertZWaveError(() => new Message(host, { data: message }), {
+					messageMatches: msg,
+					errorCode: code,
+				});
 			}
 		});
 
@@ -169,7 +158,7 @@ describe("lib/message", () => {
 		});
 
 		it("toJSON() should return a semi-readable JSON representation", () => {
-			const msg1 = new Message(fakeHost, {
+			const msg1 = new Message(host, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 			});
@@ -179,7 +168,7 @@ describe("lib/message", () => {
 				functionType: "GetControllerVersion",
 				payload: "",
 			};
-			const msg2 = new Message(fakeHost, {
+			const msg2 = new Message(host, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 				payload: Buffer.from("aabbcc", "hex"),
@@ -190,7 +179,7 @@ describe("lib/message", () => {
 				functionType: "GetControllerVersion",
 				payload: "aabbcc",
 			};
-			const msg3 = new Message(fakeHost, {
+			const msg3 = new Message(host, {
 				type: MessageType.Response,
 				functionType: FunctionType.GetControllerVersion,
 				expectedResponse: FunctionType.GetControllerVersion,
@@ -202,7 +191,7 @@ describe("lib/message", () => {
 				expectedResponse: "GetControllerVersion",
 				payload: "",
 			};
-			const msg4 = new Message(fakeHost, {
+			const msg4 = new Message(host, {
 				type: MessageType.Request,
 				functionType: FunctionType.GetControllerVersion,
 				expectedResponse: FunctionType.GetControllerVersion,
@@ -293,29 +282,23 @@ describe("lib/message", () => {
 		// });
 
 		it(`the constructor should throw when no message type is specified`, () => {
-			assertZWaveError(
-				() => new Message(fakeHost, { functionType: 0xff }),
-				{
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-					messageMatches: /message type/i,
-				},
-			);
+			assertZWaveError(() => new Message(host, { functionType: 0xff }), {
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: /message type/i,
+			});
 
 			@messageTypes(undefined as any, 0xff)
 			class FakeMessageWithoutMessageType extends Message {}
 
-			assertZWaveError(
-				() => new FakeMessageWithoutMessageType(fakeHost),
-				{
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-					messageMatches: /message type/i,
-				},
-			);
+			assertZWaveError(() => new FakeMessageWithoutMessageType(host), {
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: /message type/i,
+			});
 		});
 
 		it(`the constructor should throw when no function type is specified`, () => {
 			assertZWaveError(
-				() => new Message(fakeHost, { type: MessageType.Request }),
+				() => new Message(host, { type: MessageType.Request }),
 				{
 					errorCode: ZWaveErrorCodes.Argument_Invalid,
 					messageMatches: /function type/i,
@@ -325,18 +308,15 @@ describe("lib/message", () => {
 			@messageTypes(MessageType.Request, undefined as any)
 			class FakeMessageWithoutFunctionType extends Message {}
 
-			assertZWaveError(
-				() => new FakeMessageWithoutFunctionType(fakeHost),
-				{
-					errorCode: ZWaveErrorCodes.Argument_Invalid,
-					messageMatches: /function type/i,
-				},
-			);
+			assertZWaveError(() => new FakeMessageWithoutFunctionType(host), {
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: /function type/i,
+			});
 		});
 
 		describe("getNodeUnsafe()", () => {
 			it("returns undefined when the controller is not initialized yet", () => {
-				const msg = new Message(fakeHost, {
+				const msg = new Message(host, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
@@ -344,7 +324,7 @@ describe("lib/message", () => {
 			});
 
 			it("returns undefined when the message is no node query", () => {
-				const msg = new Message(fakeHost, {
+				const msg = new Message(host, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
@@ -352,21 +332,16 @@ describe("lib/message", () => {
 			});
 
 			it("returns the associated node otherwise", () => {
-				const testHost: ZWaveHost<any> = {
-					...fakeHost,
-					nodes: new Map() as any,
-				};
-				// @ts-expect-error We need write access
-				testHost.nodes.set(1, {} as any);
+				host.nodes.set(1, {} as any);
 
-				const msg = new Message(testHost, {
+				const msg = new Message(host, {
 					type: MessageType.Request,
 					functionType: 0xff,
 				});
 
 				// This node exists
 				(msg as any as INodeQuery).nodeId = 1;
-				expect(msg.getNodeUnsafe()).toBe(testHost.nodes.get(1));
+				expect(msg.getNodeUnsafe()).toBe(host.nodes.get(1));
 
 				// This one does
 				(msg as any as INodeQuery).nodeId = 2;

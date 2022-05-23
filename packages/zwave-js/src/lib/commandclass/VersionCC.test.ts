@@ -1,5 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { VersionCC } from "./VersionCC";
 

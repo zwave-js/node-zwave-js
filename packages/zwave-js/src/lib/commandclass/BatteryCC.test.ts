@@ -1,8 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { assertCC } from "../test/assertCC";
-import { createEmptyMockDriver, createTestingHost } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import { BatteryCC, BatteryCCGet, BatteryCCReport } from "./BatteryCC";
 import {
 	BatteryChargingStatus,
@@ -125,22 +126,22 @@ describe("lib/commandclass/BatteryCC => ", () => {
 	});
 
 	describe.skip(`interview()`, () => {
-		const host = createEmptyMockDriver();
-		const node = new ZWaveNode(2, host as unknown as Driver);
+		const fakeDriver = createEmptyMockDriver();
+		const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
 
 		beforeAll(() => {
-			host.sendMessage.mockImplementation(() =>
+			fakeDriver.sendMessage.mockImplementation(() =>
 				Promise.resolve({ command: {} }),
 			);
-			host.controller.nodes.set(node.id, node);
+			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses.Battery, {
 				version: 2,
 				isSupported: true,
 			});
 		});
-		beforeEach(() => host.sendMessage.mockClear());
+		beforeEach(() => fakeDriver.sendMessage.mockClear());
 		afterAll(() => {
-			host.sendMessage.mockImplementation(() => Promise.resolve());
+			fakeDriver.sendMessage.mockImplementation(() => Promise.resolve());
 			node.destroy();
 		});
 
@@ -149,11 +150,11 @@ describe("lib/commandclass/BatteryCC => ", () => {
 				isSupported: true,
 			});
 			const cc = node.createCCInstance(CommandClasses.Battery)!;
-			await cc.interview(host);
+			await cc.interview(fakeDriver);
 
-			expect(host.sendMessage).toBeCalled();
+			expect(fakeDriver.sendMessage).toBeCalled();
 
-			assertCC(host.sendMessage.mock.calls[0][0], {
+			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
 				cc: BatteryCCGet,
 				nodeId: node.id,
 			});

@@ -1,5 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost, createTestNode, TestingHost } from "../test/mocks";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
+import { createTestNode } from "../test/mocks";
 import { getGroupCountValueId } from "./AssociationCC";
 import {
 	SceneControllerConfigurationCC,

@@ -1,5 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost, createTestNode, TestingHost } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
+import { createTestNode, TestingHost } from "../test/mocks";
 import { CommandClass } from "./CommandClass";
 import {
 	getIndicatorValueValueID,

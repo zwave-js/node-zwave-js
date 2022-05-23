@@ -1,7 +1,8 @@
 import { Scale } from "@zwave-js/config";
 import { CommandClasses, encodeFloatWithScale } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import { assertCC } from "../test/assertCC";
-import { createTestingHost, TestingHost } from "../test/mocks";
+import { TestingHost } from "../test/mocks";
 import {
 	HumidityControlSetpointCC,
 	HumidityControlSetpointCCCapabilitiesGet,
