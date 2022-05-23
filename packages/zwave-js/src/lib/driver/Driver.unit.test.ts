@@ -15,7 +15,7 @@ describe("lib/driver/Driver", () => {
 	describe("starting it", () => {
 		it("should open a new serialport", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -33,7 +33,7 @@ describe("lib/driver/Driver", () => {
 
 		it("should only work once", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -52,7 +52,7 @@ describe("lib/driver/Driver", () => {
 
 		it("the start promise should only be fulfilled after the port was opened", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -73,7 +73,7 @@ describe("lib/driver/Driver", () => {
 		it("the start promise should be rejected if the port opening fails", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				attempts: { openSerialPort: 1 },
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -98,7 +98,7 @@ describe("lib/driver/Driver", () => {
 		it("after a failed start, starting again should not be possible", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
 				attempts: { openSerialPort: 1 },
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -125,10 +125,7 @@ describe("lib/driver/Driver", () => {
 
 		it(`should throw if no "error" handler is attached`, async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
-					skipControllerIdentification: true,
-					skipNodeInterview: true,
-				},
+				// Setting testingHooks disables the check, so don't set it
 				logConfig: { enabled: false },
 			});
 			// start the driver
@@ -141,7 +138,7 @@ describe("lib/driver/Driver", () => {
 	describe.skip("sending messages", () => {
 		it("should not be possible if the driver wasn't started", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -160,7 +157,7 @@ describe("lib/driver/Driver", () => {
 
 		it("should not be possible if the driver hasn't completed starting", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},
@@ -182,7 +179,7 @@ describe("lib/driver/Driver", () => {
 
 		it("should not be possible if the driver failed to start", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
-				interview: {
+				testingHooks: {
 					skipControllerIdentification: true,
 					skipNodeInterview: true,
 				},

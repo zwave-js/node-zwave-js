@@ -199,17 +199,17 @@ export interface ZWaveOptions {
 		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
 
 		/**
-		 * Set this to true to skip the controller identification sequence. Useful for testing purposes
+		 * Set this to true to skip the controller identification sequence.
 		 */
 		skipControllerIdentification?: boolean;
 
 		/**
-		 * Set this to true to skip the interview of all nodes. Useful for testing purposes
+		 * Set this to true to skip the interview of all nodes.
 		 */
 		skipNodeInterview?: boolean;
 
 		/**
-		 * Set this to false to skip loading the configuration files. Default: `true`. Useful for testing purposes.
+		 * Set this to false to skip loading the configuration files. Default: `true`..
 		 */
 		loadConfiguration?: boolean;
 	};
