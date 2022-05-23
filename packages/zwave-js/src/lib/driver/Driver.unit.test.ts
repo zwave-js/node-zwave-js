@@ -12,16 +12,6 @@ import { Driver } from "./Driver";
 class TestMessage extends Message {}
 
 describe("lib/driver/Driver", () => {
-	beforeEach(() => {
-		// @ts-expect-error This is added in jest v28
-		jest.useFakeTimers({ legacyFakeTimers: true });
-	});
-
-	afterEach(() => {
-		jest.clearAllTimers();
-		jest.useRealTimers();
-	});
-
 	describe("starting it", () => {
 		it("should open a new serialport", async () => {
 			const driver = new Driver(PORT_ADDRESS, {
