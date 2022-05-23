@@ -72,18 +72,6 @@ export interface ZWaveOptions {
 
 	interview: {
 		/**
-		 * @internal
-		 * Set this to true to skip the controller identification sequence. Useful for testing purposes
-		 */
-		skipControllerIdentification?: boolean;
-
-		/**
-		 * @internal
-		 * Set this to true to skip the interview of all nodes. Useful for testing purposes
-		 */
-		skipNodeInterview?: boolean;
-
-		/**
 		 * Whether all user code should be queried during the interview of the UserCode CC.
 		 * Note that enabling this can cause a lot of traffic during the interview.
 		 */
@@ -209,5 +197,20 @@ export interface ZWaveOptions {
 		 * and before interacting with it.
 		 */
 		onSerialPortOpen?: (port: ZWaveSerialPortBase) => Promise<void>;
+
+		/**
+		 * Set this to true to skip the controller identification sequence. Useful for testing purposes
+		 */
+		skipControllerIdentification?: boolean;
+
+		/**
+		 * Set this to true to skip the interview of all nodes. Useful for testing purposes
+		 */
+		skipNodeInterview?: boolean;
+
+		/**
+		 * Set this to false to skip loading the configuration files. Default: `true`. Useful for testing purposes.
+		 */
+		loadConfiguration?: boolean;
 	};
 }
