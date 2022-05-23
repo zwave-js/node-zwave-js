@@ -1,9 +1,8 @@
+import { createTestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
-import type { Driver } from "../../driver/Driver";
-import { createEmptyMockDriver } from "../../test/mocks";
 import { SerialAPISetup_GetSupportedCommandsResponse } from "./SerialAPISetupMessages";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 describe("SerialAPISetupMessages", () => {
 	it("GetSupportedCommandsResponse with extended bitmask parses correctly", () => {
@@ -12,7 +11,7 @@ describe("SerialAPISetupMessages", () => {
 			"hex",
 		);
 
-		const msg = Message.from(fakeDriver, data);
+		const msg = Message.from(host, data);
 		expect(msg).toBeInstanceOf(SerialAPISetup_GetSupportedCommandsResponse);
 		const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 			.supportedCommands;
