@@ -72,7 +72,6 @@ describe("lib/log/Driver =>", () => {
 
 	afterAll(async () => {
 		await driver.destroy();
-		driver.removeAllListeners();
 	});
 
 	// Replace all defined transports with a spy transport

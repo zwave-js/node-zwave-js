@@ -31,6 +31,10 @@ describe("lib/controller/Controller", () => {
 			}));
 		}, 30000);
 
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
 		it("should return a node if it was found", () => {
 			const node2 = new ZWaveNode(2, driver);
 			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(

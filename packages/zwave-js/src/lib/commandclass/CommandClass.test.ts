@@ -172,7 +172,6 @@ describe("lib/commandclass/CommandClass => ", () => {
 
 		afterAll(async () => {
 			await driver.destroy();
-			driver.removeAllListeners();
 		});
 
 		beforeEach(() => {

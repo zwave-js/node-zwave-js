@@ -14,7 +14,7 @@ describe("lib/commandclass/CommandClass", () => {
 	let node2: ZWaveNode;
 	let controller: MockController;
 
-	beforeEach(async () => {
+	afterAll(async () => {
 		({ driver } = await createAndStartTestingDriver({
 			skipNodeInterview: true,
 			loadConfiguration: false,
