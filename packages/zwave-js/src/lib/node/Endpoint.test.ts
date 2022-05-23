@@ -19,19 +19,23 @@ describe("lib/node/Endpoint", () => {
 	let driver: Driver;
 	let controller: MockController;
 
-	beforeAll(async () => {
-		({ driver } = await createAndStartTestingDriver({
-			skipNodeInterview: true,
-			loadConfiguration: false,
-			beforeStartup(mockPort) {
-				controller = new MockController({ serial: mockPort });
-				controller.defineBehavior(
-					...createDefaultMockControllerBehaviors(),
-				);
-			},
-		}));
-		await driver.configManager.loadDeviceClasses();
-	});
+	beforeAll(
+		async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+			await driver.configManager.loadDeviceClasses();
+		},
+		// Loading configuration may take a while on CI
+		30000,
+	);
 
 	afterAll(async () => {
 		await driver.destroy();

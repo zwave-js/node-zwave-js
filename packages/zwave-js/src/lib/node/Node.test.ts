@@ -86,19 +86,23 @@ describe("lib/node/Node", () => {
 		// let node2: ZWaveNode;
 		let controller: MockController;
 
-		beforeAll(async () => {
-			({ driver } = await createAndStartTestingDriver({
-				skipNodeInterview: true,
-				loadConfiguration: false,
-				beforeStartup(mockPort) {
-					controller = new MockController({ serial: mockPort });
-					controller.defineBehavior(
-						...createDefaultMockControllerBehaviors(),
-					);
-				},
-			}));
-			await driver.configManager.loadDeviceClasses();
-		});
+		beforeAll(
+			async () => {
+				({ driver } = await createAndStartTestingDriver({
+					skipNodeInterview: true,
+					loadConfiguration: false,
+					beforeStartup(mockPort) {
+						controller = new MockController({ serial: mockPort });
+						controller.defineBehavior(
+							...createDefaultMockControllerBehaviors(),
+						);
+					},
+				}));
+				await driver.configManager.loadDeviceClasses();
+			},
+			// Loading configuration may take a while on CI
+			30000,
+		);
 
 		afterAll(async () => {
 			await driver.destroy();
@@ -1014,39 +1018,39 @@ describe("lib/node/Node", () => {
 		let node: ZWaveNode;
 		let controller: MockController;
 
-		beforeAll(async () => {
-			({ driver } = await createAndStartTestingDriver({
-				skipNodeInterview: true,
-				loadConfiguration: false,
-				beforeStartup(mockPort) {
-					controller = new MockController({ serial: mockPort });
-					controller.defineBehavior(
-						...createDefaultMockControllerBehaviors(),
-					);
-				},
-			}));
-			await driver.configManager.loadDeviceClasses();
-		});
+		beforeAll(
+			async () => {
+				({ driver } = await createAndStartTestingDriver({
+					skipNodeInterview: true,
+					loadConfiguration: false,
+					beforeStartup(mockPort) {
+						controller = new MockController({ serial: mockPort });
+						controller.defineBehavior(
+							...createDefaultMockControllerBehaviors(),
+						);
+					},
+				}));
+				await driver.configManager.loadDeviceClasses();
+			},
+			// Loading configuration may take a while on CI
+			30000,
+		);
 
 		afterAll(async () => {
 			await driver.destroy();
 		});
 
-		beforeEach(
-			async () => {
-				node = new ZWaveNode(
-					2,
-					driver,
-					new DeviceClass(driver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
-				);
-				(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
-					node.id,
-					node,
-				);
-			},
-			// Loading configuration may take a while on CI
-			30000,
-		);
+		beforeEach(async () => {
+			node = new ZWaveNode(
+				2,
+				driver,
+				new DeviceClass(driver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+			);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
+		});
 
 		afterEach(() => {
 			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
