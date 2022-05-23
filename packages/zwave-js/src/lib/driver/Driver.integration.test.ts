@@ -477,11 +477,6 @@ describe("lib/driver/Driver", () => {
 					controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),
 					);
-					const node2 = new MockNode({
-						id: 2,
-						controller,
-					});
-					controller.nodes.set(node2.id, node2);
 				},
 			}));
 			node2 = new ZWaveNode(2, driver);
