@@ -3,29 +3,45 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../Utils";
 import { getGroupCountValueId } from "../commandclass/AssociationCC";
 import type { Driver } from "../driver/Driver";
+import { createAndStartTestingDriver } from "../driver/DriverMock";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import { ZWaveController } from "./Controller";
 
 describe("lib/controller/Controller", () => {
 	describe("nodes.getOrThrow()", () => {
-		let fakeDriver: Driver;
-		beforeAll(() => {
-			fakeDriver = createEmptyMockDriver() as unknown as Driver;
-			fakeDriver.registerRequestHandler = () => {};
-		});
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				skipNodeInterview: true,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		}, 30000);
 
 		it("should return a node if it was found", () => {
-			const ctrl = new ZWaveController(fakeDriver);
-			ctrl["_nodes"].set(1, new ZWaveNode(1, fakeDriver));
-			expect(() => ctrl.nodes.getOrThrow(1)).not.toThrow();
+			const node2 = new ZWaveNode(2, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node2.id,
+				node2,
+			);
+			expect(() => driver.controller.nodes.getOrThrow(2)).not.toThrow();
 		});
 
 		it("should throw if the node was not found", () => {
-			const ctrl = new ZWaveController(fakeDriver);
-			assertZWaveError(() => ctrl.nodes.getOrThrow(1), {
+			assertZWaveError(() => driver.controller.nodes.getOrThrow(3), {
 				errorCode: ZWaveErrorCodes.Controller_NodeNotFound,
 			});
 		});
