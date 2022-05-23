@@ -11,6 +11,10 @@
 		{
 			"productType": "0x0404",
 			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0404",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
