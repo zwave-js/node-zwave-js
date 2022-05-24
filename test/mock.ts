@@ -13,7 +13,8 @@ process.on("unhandledRejection", (_r) => {
 
 void (async () => {
 	const { driver, continueStartup, mockPort } =
-		await createAndStartDriverWithMockPort("/tty/FAKE", {
+		await createAndStartDriverWithMockPort({
+			portAddress: "/tty/FAKE",
 			logConfig: {
 				// 	logToFile: true,
 				enabled: true,
@@ -46,6 +47,8 @@ void (async () => {
 	driver.once("driver ready", async () => {
 		// Test code
 		console.log("driver ready!!!");
+
+		await driver.controller.nodes.getOrThrow(2).ping();
 	});
 
 	const controller = new MockController({
@@ -58,10 +61,12 @@ void (async () => {
 		id: 2,
 		controller,
 		capabilities: {
-			isListening: false,
+			isListening: true,
 		},
 	});
 	controller.nodes.set(2, node2);
+
+	// node2.autoAckControllerFrames = false;
 
 	// Apply default behaviors that are required for interacting with the driver correctly
 	controller.defineBehavior(...createDefaultMockControllerBehaviors());

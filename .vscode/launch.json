@@ -39,7 +39,9 @@
 				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/test/mock.ts"
 			],
-			"env": {},
+			"env": {
+				"NO_CACHE": "true"
+			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
 			"sourceMaps": true,

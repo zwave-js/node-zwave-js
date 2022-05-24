@@ -102,6 +102,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 				data: ccBuffer,
 				fromEncapsulation: true,
 				encapCC: this,
+				origin: options.origin,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;

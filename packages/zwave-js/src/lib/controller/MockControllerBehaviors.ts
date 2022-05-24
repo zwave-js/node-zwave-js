@@ -1,5 +1,8 @@
-import { NodeType } from "@zwave-js/core";
-import type { MockControllerBehavior } from "@zwave-js/testing";
+import { NodeType, TransmitOptions, TransmitStatus } from "@zwave-js/core";
+import {
+	createMockZWaveRequestFrame,
+	MockControllerBehavior,
+} from "@zwave-js/testing";
 import {
 	SerialAPIStartedRequest,
 	SerialAPIWakeUpReason,
@@ -33,6 +36,15 @@ import {
 	GetSUCNodeIdRequest,
 	GetSUCNodeIdResponse,
 } from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
+import {
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	SendDataResponse,
+} from "../serialapi/transport/SendDataMessages";
+import {
+	MockControllerSendDataState,
+	MockControllerStateKeys,
+} from "./MockControllerState";
 import { determineNIF } from "./NodeInformationFrame";
 
 const respondToGetControllerId: MockControllerBehavior = {
@@ -178,6 +190,69 @@ const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 	},
 };
 
+const handleSendData: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof SendDataRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.SendDataState,
+			) as MockControllerSendDataState | undefined;
+			if (
+				state != undefined &&
+				state !== MockControllerSendDataState.Idle
+			) {
+				throw new Error("Received SendDataRequest while not idle");
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.SendDataState,
+				MockControllerSendDataState.Sending,
+			);
+
+			// Send the data to the node
+			const frame = createMockZWaveRequestFrame(msg.payload, {
+				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+			});
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			const ackPromise = controller.sendToNode(node, frame);
+
+			// Notify the host that the message was sent
+			const res = new SendDataResponse(host, {
+				wasSent: true,
+			});
+			await controller.sendToHost(res.serialize());
+			// Put the controller into waiting state
+			controller.state.set(
+				MockControllerStateKeys.SendDataState,
+				MockControllerSendDataState.WaitingForAck,
+			);
+
+			// Wait for the ACK and notify the host
+			let ack = false;
+			try {
+				// eslint-disable-next-line @typescript-eslint/await-thenable
+				const ackResult = await ackPromise;
+				ack = !!ackResult?.ack;
+			} catch {
+				// No response
+			}
+			controller.state.set(
+				MockControllerStateKeys.SendDataState,
+				MockControllerSendDataState.Idle,
+			);
+
+			const cb = new SendDataRequestTransmitReport(host, {
+				callbackId: msg.callbackId,
+				transmitStatus: ack ? TransmitStatus.OK : TransmitStatus.NoAck,
+			});
+
+			await controller.sendToHost(cb.serialize());
+		}
+		return false;
+	},
+};
+
 /** Predefined default behaviors that are required for interacting with the driver correctly */
 export function createDefaultBehaviors(): MockControllerBehavior[] {
 	return [
@@ -189,5 +264,6 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		respondToGetSerialApiInitData,
 		respondToSoftReset,
 		respondToGetNodeProtocolInfo,
+		handleSendData,
 	];
 }

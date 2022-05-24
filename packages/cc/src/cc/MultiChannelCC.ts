@@ -1137,6 +1137,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				data: this.payload.slice(2),
 				fromEncapsulation: true,
 				encapCC: this,
+				origin: options.origin,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
@@ -1315,6 +1316,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 				data: this.payload.slice(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,
+				origin: options.origin,
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
