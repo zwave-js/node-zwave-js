@@ -351,14 +351,11 @@ export class MeterCC extends CommandClass {
 			const suppResp = await api.getSupported();
 			if (suppResp) {
 				const logMessage = `received meter support:
-type:                 ${getMeterTypeName(
-					this.host.configManager,
-					suppResp.type,
-				)}
+type:                 ${getMeterTypeName(driver.configManager, suppResp.type)}
 supported scales:     ${suppResp.supportedScales
 					.map(
 						(s) =>
-							this.host.configManager.lookupMeterScale(
+							driver.configManager.lookupMeterScale(
 								suppResp.type,
 								s,
 							).label,
@@ -426,13 +423,11 @@ supports reset:       ${suppResp.supportsReset}`;
 					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying meter value (type = ${getMeterTypeName(
-							this.host.configManager,
+							driver.configManager,
 							type,
 						)}, scale = ${
-							this.host.configManager.lookupMeterScale(
-								type,
-								scale,
-							).label
+							driver.configManager.lookupMeterScale(type, scale)
+								.label
 						}${
 							rateType != undefined
 								? `, rate type = ${getEnumMemberName(

@@ -525,7 +525,7 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 					const notificationConfig =
-						this.host.configManager.lookupNotification(type);
+						driver.configManager.lookupNotification(type);
 
 					// Enable reports for each notification type
 					driver.controllerLog.logNode(node.id, {

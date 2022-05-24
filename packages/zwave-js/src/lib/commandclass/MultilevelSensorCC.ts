@@ -338,9 +338,7 @@ export class MultilevelSensorCC extends CommandClass {
 				const logMessage =
 					"received supported sensor types:\n" +
 					sensorTypes
-						.map((t) =>
-							this.host.configManager.getSensorTypeName(t),
-						)
+						.map((t) => driver.configManager.getSensorTypeName(t))
 						.map((name) => `· ${name}`)
 						.join("\n");
 				driver.controllerLog.logNode(node.id, {
@@ -363,7 +361,7 @@ export class MultilevelSensorCC extends CommandClass {
 			for (const type of sensorTypes) {
 				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying supported scales for ${this.host.configManager.getSensorTypeName(
+					message: `querying supported scales for ${driver.configManager.getSensorTypeName(
 						type,
 					)} sensor`,
 					direction: "outbound",
@@ -375,7 +373,7 @@ export class MultilevelSensorCC extends CommandClass {
 						sensorScales
 							.map(
 								(s) =>
-									this.host.configManager.lookupSensorScale(
+									driver.configManager.lookupSensorScale(
 										type,
 										s,
 									).label,
@@ -421,12 +419,12 @@ export class MultilevelSensorCC extends CommandClass {
 			});
 			const mlsResponse = await api.get();
 			if (mlsResponse) {
-				const sensorScale = this.host.configManager.lookupSensorScale(
+				const sensorScale = driver.configManager.lookupSensorScale(
 					mlsResponse.type,
 					mlsResponse.scale.key,
 				);
 				const logMessage = `received current sensor reading:
-sensor type: ${this.host.configManager.getSensorTypeName(mlsResponse.type)}
+sensor type: ${driver.configManager.getSensorTypeName(mlsResponse.type)}
 value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -446,7 +444,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 			for (const type of sensorTypes) {
 				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying ${this.host.configManager.getSensorTypeName(
+					message: `querying ${driver.configManager.getSensorTypeName(
 						type,
 					)} sensor reading...`,
 					direction: "outbound",
@@ -454,7 +452,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				const value = await api.get(type);
 				if (value) {
-					const logMessage = `received current ${this.host.configManager.getSensorTypeName(
+					const logMessage = `received current ${driver.configManager.getSensorTypeName(
 						type,
 					)} sensor reading: ${value.value} ${
 						value.scale.unit || ""

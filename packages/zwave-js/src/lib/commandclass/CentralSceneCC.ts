@@ -218,7 +218,7 @@ export class CentralSceneCC extends CommandClass {
 
 				if (
 					!existingAssociations.some(
-						(a) => a.nodeId === this.host.ownNodeId,
+						(a) => a.nodeId === driver.ownNodeId,
 					)
 				) {
 					driver.controllerLog.logNode(node.id, {
@@ -230,7 +230,7 @@ export class CentralSceneCC extends CommandClass {
 					await driver.controller.addAssociations(
 						{ nodeId: node.id },
 						groupId,
-						[{ nodeId: this.host.ownNodeId }],
+						[{ nodeId: driver.ownNodeId }],
 					);
 				}
 			}

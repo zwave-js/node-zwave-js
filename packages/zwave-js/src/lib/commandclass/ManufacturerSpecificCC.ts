@@ -164,7 +164,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			if (mfResp) {
 				const logMessage = `received response for manufacturer information:
   manufacturer: ${
-		this.host.configManager.lookupManufacturer(mfResp.manufacturerId) ||
+		driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}

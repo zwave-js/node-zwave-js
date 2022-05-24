@@ -488,11 +488,11 @@ export class ThermostatSetpointCC extends CommandClass {
 				const setpointCaps = await api.getCapabilities(type);
 				if (setpointCaps) {
 					const minValueUnit = getSetpointUnit(
-						this.host.configManager,
+						driver.configManager,
 						setpointCaps.minValueScale,
 					);
 					const maxValueUnit = getSetpointUnit(
-						this.host.configManager,
+						driver.configManager,
 						setpointCaps.maxValueScale,
 					);
 					const logMessage = `received capabilities for setpoint ${setpointName}:

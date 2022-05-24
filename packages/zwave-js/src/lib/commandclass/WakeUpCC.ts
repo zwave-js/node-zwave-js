@@ -274,7 +274,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					direction: "inbound",
 				});
 
-				const ownNodeId = this.host.ownNodeId;
+				const ownNodeId = driver.ownNodeId;
 				// Only change the destination if necessary
 				if (wakeupResp.controllerNodeId !== ownNodeId) {
 					driver.controllerLog.logNode(node.id, {

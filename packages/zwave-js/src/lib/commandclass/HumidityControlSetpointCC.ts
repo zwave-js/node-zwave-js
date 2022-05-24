@@ -384,11 +384,11 @@ ${setpointScaleSupported
 			const setpointCaps = await api.getCapabilities(type);
 			if (setpointCaps) {
 				const minValueUnit = getSetpointUnit(
-					this.host.configManager,
+					driver.configManager,
 					setpointCaps.minValueScale,
 				);
 				const maxValueUnit = getSetpointUnit(
-					this.host.configManager,
+					driver.configManager,
 					setpointCaps.maxValueScale,
 				);
 				const logMessage = `received capabilities for setpoint ${setpointName}:
@@ -439,9 +439,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 			if (setpoint) {
 				const logMessage = `received current value of setpoint ${setpointName}: ${
 					setpoint.value
-				} ${
-					getScale(this.host.configManager, setpoint.scale).unit ?? ""
-				}`;
+				} ${getScale(driver.configManager, setpoint.scale).unit ?? ""}`;
 				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
