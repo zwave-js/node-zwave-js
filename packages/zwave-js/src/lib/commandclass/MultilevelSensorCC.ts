@@ -682,10 +682,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			this.scale != undefined
 		) {
 			message = {
-				"sensor type": this.host.configManager.getSensorTypeName(
+				"sensor type": driver.configManager.getSensorTypeName(
 					this.sensorType,
 				),
-				scale: this.host.configManager.lookupSensorScale(
+				scale: driver.configManager.lookupSensorScale(
 					this.sensorType,
 					this.scale,
 				).label,
@@ -769,14 +769,14 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return {
 			...super.toLogEntry(driver),
 			message: {
-				"sensor type": this.host.configManager.getSensorTypeName(
+				"sensor type": driver.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 				"supported scales": this.sensorSupportedScales
 					.map(
 						(s) =>
 							`\n· ${
-								this.host.configManager.lookupSensorScale(
+								driver.configManager.lookupSensorScale(
 									this.sensorType,
 									s,
 								).label

@@ -905,7 +905,7 @@ export class NotificationCCReport extends NotificationCC {
 			if (valueConfig) {
 				message = {
 					"notification type":
-						this.host.configManager.getNotificationName(
+						driver.configManager.getNotificationName(
 							this.notificationType!,
 						),
 					"notification status": this.notificationStatus,
@@ -1182,6 +1182,7 @@ export class NotificationCCGet extends NotificationCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
@@ -1192,7 +1193,7 @@ export class NotificationCCGet extends NotificationCC {
 				driver.configManager.getNotificationName(this.notificationType);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
-					this.host.configManager
+					driver.configManager
 						.lookupNotification(this.notificationType)
 						?.events.get(this.notificationEvent)?.label ??
 					`Unknown (${num2hex(this.notificationEvent)})`;

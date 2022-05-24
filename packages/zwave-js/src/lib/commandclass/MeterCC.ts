@@ -759,7 +759,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.scale = this.host.configManager.lookupMeterScale(
+				message.scale = driver.configManager.lookupMeterScale(
 					type,
 					this.scale,
 				).label;

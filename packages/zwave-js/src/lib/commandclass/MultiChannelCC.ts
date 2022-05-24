@@ -866,11 +866,11 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			...super.toLogEntry(driver),
 			message: {
 				"generic device class":
-					this.host.configManager.lookupGenericDeviceClass(
+					driver.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.host.configManager.lookupSpecificDeviceClass(
+					driver.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,

@@ -771,7 +771,7 @@ export class IndicatorCCGet extends IndicatorCC {
 			...super.toLogEntry(driver),
 			message: {
 				indicator: getIndicatorName(
-					this.host.configManager,
+					driver.configManager,
 					this.indicatorId,
 				),
 			},
