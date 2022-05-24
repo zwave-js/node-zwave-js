@@ -4,6 +4,22 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+<!-- ### Breaking changes
+
+### Features
+ -->
+### Bugfixes
+* During NVM migration, try to preserve the RF config of the target stick (#4636)
+* During bootstrapping, remember which security classes were not granted (#4637)
+
+### Config file changes
+* Add fingerprints to Fibaro FGS-2x4 series (#4648)
+* Preserve endpoints for RTC CT101 (#4647)
+
+### Changes under the hood
+* Migrated a lot of tests to the new testing setup (#4638, #4649)
+
 ## 9.3.0 (2022-05-19)
 ### Features
 * Align `GetSerialApiInitData` with new Host API specs, parse chip info (#4591)
