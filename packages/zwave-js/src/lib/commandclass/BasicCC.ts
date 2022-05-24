@@ -291,9 +291,9 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "target value": this.targetValue },
 		};
 	}
@@ -369,7 +369,7 @@ export class BasicCCReport extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": this.currentValue,
 		};
@@ -380,7 +380,7 @@ export class BasicCCReport extends BasicCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

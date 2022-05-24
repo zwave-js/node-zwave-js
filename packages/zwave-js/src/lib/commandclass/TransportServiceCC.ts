@@ -8,6 +8,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
+import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -203,9 +204,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -398,9 +399,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -466,9 +467,9 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"session ID": this.sessionId,
 				offset: this.datagramOffset,
@@ -505,9 +506,9 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "session ID": this.sessionId },
 		};
 	}
@@ -541,9 +542,9 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "pending segments": this.pendingSegments },
 		};
 	}

@@ -149,9 +149,9 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 		return this._state;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				state: getEnumMemberName(ThermostatOperatingState, this.state),
 			},

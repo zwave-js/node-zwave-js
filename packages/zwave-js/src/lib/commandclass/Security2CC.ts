@@ -1020,7 +1020,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 		};
@@ -1030,7 +1030,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1128,7 +1128,7 @@ export class Security2CCNonceReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			SOS: this.SOS,
@@ -1138,7 +1138,7 @@ export class Security2CCNonceReport extends Security2CC {
 			message["receiver entropy"] = buffer2hex(this.receiverEI);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1194,9 +1194,9 @@ export class Security2CCNonceGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "sequence number": this.sequenceNumber },
 		};
 	}
@@ -1270,9 +1270,9 @@ export class Security2CCKEXReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				echo: this.echo,
 				"supported schemes": this.supportedKEXSchemes
@@ -1368,9 +1368,9 @@ export class Security2CCKEXSet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				echo: this.echo,
 				"selected scheme": getEnumMemberName(
@@ -1416,9 +1416,9 @@ export class Security2CCKEXFail extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { reason: getEnumMemberName(KEXFailType, this.failType) },
 		};
 	}
@@ -1459,9 +1459,9 @@ export class Security2CCPublicKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"is including node": this.includingNode,
 				"public key": buffer2hex(this.publicKey),
@@ -1507,9 +1507,9 @@ export class Security2CCNetworkKeyReport extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -1551,9 +1551,9 @@ export class Security2CCNetworkKeyGet extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"security class": getEnumMemberName(
 					SecurityClass,
@@ -1601,9 +1601,9 @@ export class Security2CCTransferEnd extends Security2CC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"key verified": this.keyVerified,
 				"request complete": this.keyRequestComplete,
@@ -1630,9 +1630,9 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 
 	public readonly supportedCCs: CommandClasses[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				supportedCCs: this.supportedCCs
 					.map((cc) => getCCName(cc))

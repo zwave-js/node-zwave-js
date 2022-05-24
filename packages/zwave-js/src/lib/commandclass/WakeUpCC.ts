@@ -346,9 +346,9 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -391,9 +391,9 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		return this._controllerNodeId;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this._controllerNodeId,
@@ -485,9 +485,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		return this._wakeUpOnDemandSupported;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"default interval": `${this._defaultWakeUpInterval} seconds`,
 				"minimum interval": `${this._minWakeUpInterval} seconds`,

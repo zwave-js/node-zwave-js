@@ -600,7 +600,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -608,7 +608,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -656,7 +656,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	})
 	public readonly currentValue: Maybe<number> | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": this.currentValue,
 		};
@@ -665,7 +665,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -737,7 +737,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
@@ -748,7 +748,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -783,9 +783,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"switch type": getEnumMemberName(SwitchType, this.switchType),
 			},

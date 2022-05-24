@@ -944,9 +944,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1021,9 +1021,9 @@ export class UserCodeCCReport
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1068,9 +1068,9 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "user id": this.userId },
 		};
 	}
@@ -1097,9 +1097,9 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	@ccValue({ internal: true })
 	public readonly supportedUsers: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "supported users": this.supportedUsers },
 		};
 	}
@@ -1185,9 +1185,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue({ internal: true })
 	public readonly supportedASCIIChars: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supports master code": this.supportsMasterCode,
 				"supports master code deactivation":
@@ -1270,9 +1270,9 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
@@ -1313,9 +1313,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	@ccValue({ minVersion: 2 })
 	public readonly keypadMode: KeypadMode;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
 			},
@@ -1393,9 +1393,9 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1429,9 +1429,9 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	})
 	public readonly masterCode: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1456,9 +1456,9 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	@ccValue({ internal: true })
 	public readonly userCodeChecksum: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
@@ -1605,7 +1605,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${userCodeToLogString(
@@ -1613,7 +1613,7 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1656,7 +1656,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${userCodeToLogString(
@@ -1665,7 +1665,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		}
 		message["next user id"] = this.nextUserId;
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1707,9 +1707,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"user id": this.userId,
 				"report more": this.reportMore,

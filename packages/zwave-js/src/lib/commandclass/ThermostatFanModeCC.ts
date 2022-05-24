@@ -313,12 +313,12 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -363,7 +363,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		return this._off;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
@@ -371,7 +371,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 			message.off = this.off;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -417,9 +417,9 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		return this._supportedModes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

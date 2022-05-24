@@ -147,12 +147,12 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 		return this._state;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			state: getEnumMemberName(ThermostatFanState, this.state),
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

@@ -196,9 +196,9 @@ export class TimeCCTimeReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				time: `${padStart(this.hour.toString(), 2, "0")}:${padStart(
 					this.minute.toString(),
@@ -257,9 +257,9 @@ export class TimeCCDateReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				date: `${padStart(this.year.toString(), 4, "0")}-${padStart(
 					this.month.toString(),
@@ -335,9 +335,9 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -404,9 +404,9 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 		return this._dstEndDate;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"standard time offset": `${this._standardOffset} minutes`,
 				"DST offset": `${this._dstOffset} minutes`,

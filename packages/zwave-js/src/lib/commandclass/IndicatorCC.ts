@@ -577,7 +577,7 @@ export class IndicatorCCSet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -593,7 +593,7 @@ export class IndicatorCCSet extends IndicatorCC {
 				.join("")}`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -712,7 +712,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		valueDB.setValue(valueId, value.value);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.value != undefined) {
 			message["indicator 0 value"] = this.value;
@@ -728,7 +728,7 @@ export class IndicatorCCReport extends IndicatorCC {
 				.join("")}`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -766,9 +766,9 @@ export class IndicatorCCGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				indicator: getIndicatorName(
 					this.host.configManager,
@@ -823,23 +823,23 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				indicator: getIndicatorName(
-					this.host.configManager,
+					driver.configManager,
 					this.indicatorId,
 				),
 				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
-							this.host.configManager.lookupProperty(id)?.label ??
+							driver.configManager.lookupProperty(id)?.label ??
 							`Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
 				"next indicator": getIndicatorName(
-					this.host.configManager,
+					driver.configManager,
 					this.nextIndicatorId,
 				),
 			},
@@ -879,12 +879,12 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				indicator: getIndicatorName(
-					this.host.configManager,
+					driver.configManager,
 					this.indicatorId,
 				),
 			},

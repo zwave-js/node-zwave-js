@@ -218,9 +218,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return this._productId;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"manufacturer id": num2hex(this._manufacturerId),
 				"product type": num2hex(this._productType),
@@ -274,9 +274,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 	public readonly type: DeviceIdType;
 	public readonly deviceId: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"device id type": getEnumMemberName(DeviceIdType, this.type),
 				"device id": this.deviceId,
@@ -317,9 +317,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"device id type": getEnumMemberName(
 					DeviceIdType,

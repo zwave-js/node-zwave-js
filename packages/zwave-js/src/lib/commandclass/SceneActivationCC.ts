@@ -12,6 +12,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
+import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -154,13 +155,13 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
 			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

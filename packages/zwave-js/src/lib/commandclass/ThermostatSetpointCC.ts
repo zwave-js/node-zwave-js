@@ -596,10 +596,10 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.host.configManager, this.scale);
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+		const scale = getScale(driver.configManager, this.scale);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -684,9 +684,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -741,9 +741,9 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -816,17 +816,17 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			this.host.configManager,
+			driver.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			this.host.configManager,
+			driver.configManager,
 			this.maxValueScale,
 		);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -871,9 +871,9 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -925,9 +925,9 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		return this._supportedSetpointTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(

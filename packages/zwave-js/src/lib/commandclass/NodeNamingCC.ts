@@ -271,9 +271,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { name: this.name },
 		};
 	}
@@ -300,9 +300,9 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	@ccValue({ internal: true })
 	public readonly name: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { name: this.name },
 		};
 	}
@@ -359,9 +359,9 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { location: this.location },
 		};
 	}
@@ -388,9 +388,9 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 	@ccValue({ internal: true })
 	public readonly location: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { location: this.location },
 		};
 	}

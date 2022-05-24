@@ -9,6 +9,7 @@ import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
+import type { Driver } from "../driver/Driver";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -208,9 +209,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
@@ -263,9 +264,9 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		return this.schedule[0];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
@@ -314,9 +315,9 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
 		};
 	}
@@ -340,9 +341,9 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 		return this._changeCounter;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "change counter": this.changeCounter },
 		};
 	}
@@ -377,9 +378,9 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		return this._overrideState;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,
@@ -431,9 +432,9 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,

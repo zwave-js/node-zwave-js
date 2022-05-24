@@ -472,7 +472,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -480,7 +480,7 @@ export class AssociationCCSet extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -544,7 +544,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids":
@@ -553,7 +553,7 @@ export class AssociationCCRemove extends AssociationCC {
 					: "all nodes",
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -622,9 +622,9 @@ export class AssociationCCReport extends AssociationCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"max # of nodes": this.maxNodes,
@@ -671,9 +671,9 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -699,9 +699,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return this._groupCount;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group count": this.groupCount },
 		};
 	}

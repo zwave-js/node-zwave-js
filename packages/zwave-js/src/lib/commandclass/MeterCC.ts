@@ -653,10 +653,10 @@ export class MeterCCReport extends MeterCC {
 		return this._deltaTime;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type:
-				this.host.configManager.lookupMeter(this.type)?.name ??
+				driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this._type)})`,
 			scale: this._scale.label,
 			"rate type": getEnumMemberName(RateType, this._rateType),
@@ -669,7 +669,7 @@ export class MeterCCReport extends MeterCC {
 			message["prev. value"] = this._previousValue;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -748,7 +748,7 @@ export class MeterCCGet extends MeterCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
 			message["rate type"] = getEnumMemberName(RateType, this.rateType);
@@ -766,7 +766,7 @@ export class MeterCCGet extends MeterCC {
 			}
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -874,17 +874,17 @@ export class MeterCCSupportedReport extends MeterCC {
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type: `${
-				this.host.configManager.lookupMeter(this.type)?.name ??
+				driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
 			"supports reset": this._supportsReset,
 			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
-· ${this.host.configManager.lookupMeterScale(this.type, scale).label}`,
+· ${driver.configManager.lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
 			"supported rate types": this._supportedRateTypes
@@ -892,7 +892,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				.join(", "),
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -961,11 +961,11 @@ export class MeterCCReset extends MeterCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = `${
-				this.host.configManager.lookupMeter(this.type)?.name ??
+				driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`;
 		}
@@ -973,7 +973,7 @@ export class MeterCCReset extends MeterCC {
 			message["target value"] = this.targetValue;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

@@ -191,9 +191,9 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,
@@ -245,9 +245,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		return this._setbackState;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,

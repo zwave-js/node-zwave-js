@@ -665,7 +665,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		return this._aggregatedCount;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"endpoint count (individual)": this.individualCount,
 			"count is dynamic": this.countIsDynamic,
@@ -675,7 +675,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			message["endpoint count (aggregated)"] = this.aggregatedCount;
 		}
 		const ret = {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 		return ret;
@@ -747,9 +747,9 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public readonly endpointIndex: number;
 	public readonly capability: EndpointCapability;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"endpoint index": this.endpointIndex,
 				"generic device class": this.capability.generic.label,
@@ -795,9 +795,9 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -861,9 +861,9 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"generic device class":
 					this.host.configManager.lookupGenericDeviceClass(
@@ -916,16 +916,16 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"generic device class":
-					this.host.configManager.lookupGenericDeviceClass(
+					driver.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.host.configManager.lookupSpecificDeviceClass(
+					driver.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -963,9 +963,9 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		return this.aggregatedEndpointMembers[1];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				endpoint: this.endpointIndex,
 				members: this.members.join(", "),
@@ -1006,9 +1006,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -1134,9 +1134,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				source: this.endpointIndex,
 				destination:
@@ -1171,9 +1171,9 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly requestedCC: CommandClasses;
 	public readonly endpointCount: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				CC: getCCName(this.requestedCC),
 				"# of endpoints": this.endpointCount,
@@ -1221,9 +1221,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -1301,9 +1301,9 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		return super.computeEncapsulationOverhead() + 1;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { source: this.endpointIndex },
 		};
 	}

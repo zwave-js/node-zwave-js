@@ -176,9 +176,9 @@ export class LockCCSet extends LockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { locked: this.locked },
 		};
 	}
@@ -204,9 +204,9 @@ export class LockCCReport extends LockCC {
 	})
 	public readonly locked: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { locked: this.locked },
 		};
 	}

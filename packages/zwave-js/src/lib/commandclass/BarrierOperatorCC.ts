@@ -389,9 +389,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "target state": this.targetState },
 		};
 	}
@@ -445,9 +445,9 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	})
 	public readonly position: number | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"barrier position": this.position,
 				"barrier state":
@@ -485,9 +485,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 		return this._supportedsubsystemTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported types": this.supportedSubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
@@ -534,9 +534,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -591,9 +591,9 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public readonly subsystemType: SubsystemType;
 	public readonly subsystemState: SubsystemState;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -640,9 +640,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,

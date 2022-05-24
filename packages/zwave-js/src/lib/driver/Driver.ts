@@ -465,7 +465,7 @@ export class Driver
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
-		this._driverLog = new DriverLogger(this._logContainer);
+		this._driverLog = new DriverLogger(this, this._logContainer);
 		this._controllerLog = new ControllerLogger(this._logContainer);
 
 		// Initialize the cache
@@ -2372,7 +2372,9 @@ export class Driver
 
 			try {
 				if (!wasMessageLogged) {
-					this.driverLog.logMessage(msg, { direction: "inbound" });
+					this.driverLog.logMessage(msg, {
+						direction: "inbound",
+					});
 				}
 
 				if (process.env.NODE_ENV !== "test") {

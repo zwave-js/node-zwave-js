@@ -398,9 +398,9 @@
 		"scope": "typescript",
 		"prefix": "zwcclog",
 		"body": [
-			"public toLogEntry(): MessageOrCCLogEntry {",
+			"public toLogEntry(driver: Driver): MessageOrCCLogEntry {",
 			"\treturn {",
-			"\t\t...super.toLogEntry(),",
+			"\t\t...super.toLogEntry(driver),",
 			"\t\tmessage: { ${1:someProp}: this.${1} },",
 			"\t};",
 			"}"
@@ -410,9 +410,9 @@
 		"scope": "typescript",
 		"prefix": "zwcclogempty",
 		"body": [
-			"public toLogEntry(): MessageOrCCLogEntry {",
+			"public toLogEntry(driver: Driver): MessageOrCCLogEntry {",
 			"\treturn {",
-			"\t\t...super.toLogEntry(),",
+			"\t\t...super.toLogEntry(driver),",
 			"\t\t// Hide the default payload line",
 			"\t\tmessage: undefined,",
 			"\t};",

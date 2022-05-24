@@ -2,6 +2,7 @@ import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
+import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -131,9 +132,9 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			// Hide the default payload line
 			message: undefined,
 		};

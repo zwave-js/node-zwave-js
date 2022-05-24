@@ -276,9 +276,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		return this._value;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				type: getEnumMemberName(BinarySensorType, this._type),
 				value: this._value,
@@ -330,9 +330,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				type: getEnumMemberName(
 					BinarySensorType,
@@ -366,9 +366,9 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported types": this._supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))

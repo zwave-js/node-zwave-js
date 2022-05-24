@@ -348,7 +348,7 @@ export class BatteryCCReport extends BatteryCC {
 		return this._lowTemperatureStatus;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this._level,
 			"is low": this._isLow,
@@ -384,7 +384,7 @@ export class BatteryCCReport extends BatteryCC {
 			message.disconnected = this.disconnected;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -450,9 +450,9 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return this._temperature;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				temperature:
 					this.temperature != undefined

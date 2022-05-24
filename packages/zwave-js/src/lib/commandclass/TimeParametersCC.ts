@@ -225,9 +225,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	@ccValue()
 	public readonly dateAndTime: Date;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,
@@ -306,9 +306,9 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,

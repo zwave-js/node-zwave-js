@@ -508,9 +508,9 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -551,9 +551,9 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -618,9 +618,9 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group id": this.groupId },
 		};
 	}

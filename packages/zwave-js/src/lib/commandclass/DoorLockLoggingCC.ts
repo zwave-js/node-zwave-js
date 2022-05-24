@@ -218,9 +218,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	@ccValue({ internal: true })
 	public readonly recordsCount: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported no. of records": this.recordsCount,
 			},
@@ -293,7 +293,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		let message: MessageRecord;
 
 		if (!this.record) {
@@ -316,7 +316,7 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			}
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -366,9 +366,9 @@ export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "record number": this.recordNumber },
 		};
 	}

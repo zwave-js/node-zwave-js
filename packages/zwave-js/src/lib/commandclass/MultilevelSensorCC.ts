@@ -601,11 +601,11 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
-				type: this.host.configManager.getSensorTypeName(this.type),
+				type: driver.configManager.getSensorTypeName(this.type),
 				scale: this.scale.label,
 				value: this.value,
 			},
@@ -674,7 +674,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
 			this.version >= 5 &&
@@ -692,7 +692,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			};
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -717,16 +717,14 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 		return this._supportedSensorTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported sensor types": this.supportedSensorTypes
 					.map(
 						(t) =>
-							`\n· ${this.host.configManager.getSensorTypeName(
-								t,
-							)}`,
+							`\n· ${driver.configManager.getSensorTypeName(t)}`,
 					)
 					.join(""),
 			},
@@ -767,9 +765,9 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return this.supportedScales[1];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"sensor type": this.host.configManager.getSensorTypeName(
 					this.sensorType,
@@ -822,11 +820,11 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
-				"sensor type": this.host.configManager.getSensorTypeName(
+				"sensor type": driver.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 			},

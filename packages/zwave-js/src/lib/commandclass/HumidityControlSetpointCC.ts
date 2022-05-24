@@ -490,10 +490,10 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.host.configManager, this.scale);
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+		const scale = getScale(driver.configManager, this.scale);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -579,9 +579,9 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -636,9 +636,9 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -672,9 +672,9 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 		return this._supportedSetpointTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(
@@ -720,9 +720,9 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
 		return this._supportedScales;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"scale supported": this.supportedScales
 					.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
@@ -765,9 +765,9 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -840,17 +840,17 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			this.host.configManager,
+			driver.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			this.host.configManager,
+			driver.configManager,
 			this.maxValueScale,
 		);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,
@@ -896,9 +896,9 @@ export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSet
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"setpoint type": getEnumMemberName(
 					HumidityControlSetpointType,

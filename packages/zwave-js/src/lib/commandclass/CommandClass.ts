@@ -415,7 +415,7 @@ export class CommandClass {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(_driver: Driver): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
@@ -498,10 +498,9 @@ export class CommandClass {
 
 	/**
 	 * Maps a BasicCC value to a more specific CC implementation. Returns true if the value was mapped, false otherwise.
-	 * @param value The value of the received BasicCC
+	 * @param _value The value of the received BasicCC
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public setMappedBasicValue(value: number): boolean {
+	public setMappedBasicValue(_value: number): boolean {
 		// By default, don't map
 		return false;
 	}
@@ -919,17 +918,15 @@ export class CommandClass {
 
 	/**
 	 * When a CC supports to be split into multiple partial CCs, this indicates that the last report hasn't been received yet.
-	 * @param session The previously received set of messages received in this partial CC session
+	 * @param _session The previously received set of messages received in this partial CC session
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public expectMoreMessages(session: CommandClass[]): boolean {
+	public expectMoreMessages(_session: CommandClass[]): boolean {
 		return false; // By default, all CCs are monolithic
 	}
 
 	/** Include previously received partial responses into a final CC */
 	/* istanbul ignore next */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public mergePartialCCs(partials: CommandClass[]): void {
+	public mergePartialCCs(_partials: CommandClass[]): void {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing
 	}
@@ -1023,11 +1020,11 @@ export class CommandClass {
 
 	/**
 	 * Translates a property key into a speaking name for use in an external API
-	 * @param property The property the key in question belongs to
+	 * @param _property The property the key in question belongs to
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public translatePropertyKey(
-		property: string | number,
+		_property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
 		// Overwrite this in derived classes, by default just return the property key

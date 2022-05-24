@@ -401,9 +401,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public readonly groupId: number;
 	public readonly name: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				name: this.name,
@@ -444,9 +444,9 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -509,9 +509,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly groups: readonly AssociationGroupInfo[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"is list mode": this.isListMode,
 				"has dynamic info": this.hasDynamicInfo,
@@ -579,7 +579,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -589,7 +589,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		}
 		message["refresh cache"] = this.refreshCache;
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -633,9 +633,9 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 		return this.issuedCommands[1];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				commands: `${[...this.commands]
@@ -688,9 +688,9 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"allow cache": this.allowCache,

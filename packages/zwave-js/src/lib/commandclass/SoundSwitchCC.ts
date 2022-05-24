@@ -388,9 +388,9 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 
 	public readonly toneCount: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "# of tones": this.toneCount },
 		};
 	}
@@ -421,9 +421,9 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly duration: number;
 	public readonly name: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"tone id": this.toneId,
 				duration: `${this.duration} seconds`,
@@ -475,9 +475,9 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "tone id": this.toneId },
 		};
 	}
@@ -517,9 +517,9 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -561,9 +561,9 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	})
 	public readonly defaultToneId: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"default volume": `${this.defaultVolume} %`,
 				"default tone id": this.defaultToneId,
@@ -617,7 +617,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -625,7 +625,7 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -668,7 +668,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	})
 	public volume?: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"tone id": this.toneId,
 		};
@@ -676,7 +676,7 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

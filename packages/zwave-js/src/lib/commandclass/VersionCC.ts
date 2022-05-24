@@ -456,7 +456,7 @@ export class VersionCCReport extends VersionCC {
 		return this._hardwareVersion;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -469,7 +469,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this._hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -504,9 +504,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return this._requestedCC;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this._ccVersion,
@@ -558,9 +558,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -589,9 +589,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return this._supportsZWaveSoftwareGet;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supports Z-Wave Software Get command":
 					this._supportsZWaveSoftwareGet,
@@ -731,7 +731,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		return this._applicationBuildNumber;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this._sdkVersion,
 		};
@@ -756,7 +756,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this._applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

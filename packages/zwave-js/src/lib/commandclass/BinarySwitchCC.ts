@@ -276,7 +276,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -284,7 +284,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -340,7 +340,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		return this._duration;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": this.currentValue,
 		};
@@ -351,7 +351,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

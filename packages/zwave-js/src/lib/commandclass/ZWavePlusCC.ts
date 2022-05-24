@@ -219,9 +219,9 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				version: this.zwavePlusVersion,
 				"node type": getEnumMemberName(

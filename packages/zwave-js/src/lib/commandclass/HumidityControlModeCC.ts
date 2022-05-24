@@ -258,9 +258,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -293,9 +293,9 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		return this._mode;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -349,9 +349,9 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		return this._supportedModes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

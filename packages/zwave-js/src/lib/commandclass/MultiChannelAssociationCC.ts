@@ -605,9 +605,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"node ids": this.nodeIds.join(", "),
@@ -682,7 +682,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = { "group id": this.groupId };
 		if (this.nodeIds) {
 			message["node ids"] = this.nodeIds.join(", ");
@@ -691,7 +691,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 			message.endpoints = endpointAddressesToString(this.endpoints);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -774,9 +774,9 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"group id": this.groupId,
 				"maximum # of nodes": this.maxNodes,
@@ -825,9 +825,9 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -853,9 +853,9 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 		return this._groupCount;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: { "group count": this.groupCount },
 		};
 	}

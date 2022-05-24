@@ -1234,9 +1234,9 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 	@ccValue({ internal: true })
 	public readonly maxValveTableSize: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"supports master valve": this.supportsMasterValve,
 				"no. of valves": this.numValves,
@@ -1407,7 +1407,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	})
 	public firstOpenZoneId?: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"system voltage": `${this.systemVoltage} V`,
 			"active sensors": [
@@ -1448,7 +1448,7 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		}
 
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1517,7 +1517,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1536,7 +1536,7 @@ export class IrrigationCCSystemConfigSet extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1624,7 +1624,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	})
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"master valve delay": `${this.masterValveDelay} s`,
 			"high pressure threshold": `${this.highPressureThreshold} kPa`,
@@ -1643,7 +1643,7 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 			);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1807,7 +1807,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 			connected: this.connected,
@@ -1825,7 +1825,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			message.errors = errors.map((e) => `\n· ${e}`).join("");
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -1869,9 +1869,9 @@ export class IrrigationCCValveInfoGet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -1948,9 +1948,9 @@ export class IrrigationCCValveConfigSet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold": `${this.nominalCurrentHighThreshold} mA`,
@@ -2106,9 +2106,9 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public useRainSensor: boolean;
 	public useMoistureSensor: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"valve ID": this.valveId,
 				"nominal current high threshold": `${this.nominalCurrentHighThreshold} mA`,
@@ -2161,9 +2161,9 @@ export class IrrigationCCValveConfigGet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"valve ID": this.valveId,
 			},
@@ -2211,7 +2211,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"valve ID": this.valveId,
 		};
@@ -2221,7 +2221,7 @@ export class IrrigationCCValveRun extends IrrigationCC {
 			message.action = "turn off";
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -2276,7 +2276,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2290,7 +2290,7 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -2318,7 +2318,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 	public readonly tableId: number;
 	public readonly entries: ValveTableEntry[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"table ID": this.tableId,
 		};
@@ -2332,7 +2332,7 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -2380,9 +2380,9 @@ export class IrrigationCCValveTableGet extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"table ID": this.tableId,
 			},
@@ -2427,9 +2427,9 @@ export class IrrigationCCValveTableRun extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				"table IDs": this.tableIDs
 					.map((id) => padStart(id.toString(), 3, "0"))
@@ -2474,9 +2474,9 @@ export class IrrigationCCSystemShutoff extends IrrigationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message: {
 				duration:
 					this.duration === 0
