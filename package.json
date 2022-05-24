@@ -94,7 +94,7 @@
     "watch": "yarn prebuild && yarn workspace zwave-js run watch",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
-    "test:ci": "yarn run test:ts --runInBand",
+    "test:ci": "yarn run test:ts --runInBand --forceExit",
     "test:watch": "yarn run test:ts --watch",
     "test": "yarn run test:watch",
     "coverage": "yarn run test:ts --collect-coverage",

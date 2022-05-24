@@ -69,6 +69,7 @@ export function createAndStartDriverWithMockPort(
 		}
 
 		const testingHooks: ZWaveOptions["testingHooks"] = {
+			...driverOptions.testingHooks,
 			// instruct the driver to use SerialPortMock as the serialport implementation
 			serialPortBinding: SerialPortMock as unknown as typeof SerialPort,
 			onSerialPortOpen,
@@ -99,6 +100,12 @@ export interface CreateAndStartTestingDriverOptions {
 	 * If not, a Mock controller and/or mock nodes must be available on the serial port.
 	 */
 	skipNodeInterview?: boolean;
+
+	/**
+	 * Whether configuration files should be loaded (default: true)
+	 */
+	loadConfiguration?: boolean;
+
 	portAddress: string;
 }
 
@@ -110,6 +117,7 @@ export async function createAndStartTestingDriver(
 		beforeStartup,
 		skipControllerIdentification = false,
 		skipNodeInterview = false,
+		loadConfiguration = true,
 		...internalOptions
 	} = options;
 
@@ -120,12 +128,16 @@ export async function createAndStartTestingDriver(
 	internalOptions.portAddress ??= `/tty/FAKE${testId}`;
 
 	if (skipControllerIdentification) {
-		internalOptions.interview ??= {};
-		internalOptions.interview.skipControllerIdentification = true;
+		internalOptions.testingHooks ??= {};
+		internalOptions.testingHooks.skipControllerIdentification = true;
 	}
 	if (skipNodeInterview) {
-		internalOptions.interview ??= {};
-		internalOptions.interview.skipNodeInterview = true;
+		internalOptions.testingHooks ??= {};
+		internalOptions.testingHooks.skipNodeInterview = true;
+	}
+	if (!loadConfiguration) {
+		internalOptions.testingHooks ??= {};
+		internalOptions.testingHooks.loadConfiguration = false;
 	}
 
 	// TODO: Ideally, this would be using mock-fs, but jest does not play nice with it

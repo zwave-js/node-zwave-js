@@ -1,4 +1,4 @@
-import { createTestingHost } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import { BasicCCGet, BasicCCSet } from "./BasicCC";
 import { CommandClass, InvalidCC } from "./CommandClass";
 import { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";

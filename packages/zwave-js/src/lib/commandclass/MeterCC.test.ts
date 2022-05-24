@@ -4,8 +4,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveNodeBase } from "@zwave-js/host";
+import { createTestingHost } from "@zwave-js/host";
 import * as nodeUtils from "../node/utils";
-import { createTestingHost, createTestNode, TestingHost } from "../test/mocks";
+import { createTestNode, TestingHost } from "../test/mocks";
 import {
 	MeterCC,
 	MeterCCGet,

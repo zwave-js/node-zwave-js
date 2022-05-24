@@ -221,8 +221,6 @@ const defaultOptions: ZWaveOptions = {
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
 	interview: {
-		skipControllerIdentification: false,
-		skipNodeInterview: false,
 		queryAllUserCodes: false,
 	},
 	storage: {
@@ -903,20 +901,22 @@ export class Driver
 			}
 
 			// Load the necessary configuration
-			this.driverLog.print("loading configuration...");
-			try {
-				await this.configManager.loadAll();
-			} catch (e) {
-				const message = `Failed to load the configuration: ${getErrorMessage(
-					e,
-				)}`;
-				this.driverLog.print(message, "error");
-				this.emit(
-					"error",
-					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-				);
-				void this.destroy();
-				return;
+			if (this.options.testingHooks?.loadConfiguration !== false) {
+				this.driverLog.print("loading configuration...");
+				try {
+					await this.configManager.loadAll();
+				} catch (e) {
+					const message = `Failed to load the configuration: ${getErrorMessage(
+						e,
+					)}`;
+					this.driverLog.print(message, "error");
+					this.emit(
+						"error",
+						new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+					);
+					void this.destroy();
+					return;
+				}
 			}
 
 			this.driverLog.print("beginning interview...");
@@ -1105,7 +1105,7 @@ export class Driver
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		if (!this.options.interview.skipControllerIdentification) {
+		if (!this.options.testingHooks?.skipControllerIdentification) {
 			// Determine controller IDs to open the Value DBs
 			// We need to do this first because some older controllers, especially the UZB1 and
 			// some 500-series sticks in virtualized environments don't respond after a soft reset
@@ -1254,7 +1254,7 @@ export class Driver
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		if (!this.options.interview.skipNodeInterview) {
+		if (!this.options.testingHooks?.skipNodeInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
@@ -1701,7 +1701,7 @@ export class Driver
 	/** This is called when a new node has been added to the network */
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
-		if (!this.options.interview.skipNodeInterview) {
+		if (!this.options.testingHooks?.skipNodeInterview) {
 			// Interview the node
 			// don't await the interview, because it may take a very long time
 			// if a node is asleep

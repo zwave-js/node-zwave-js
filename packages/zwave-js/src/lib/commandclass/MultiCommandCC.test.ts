@@ -1,4 +1,4 @@
-import { createTestingHost } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import { BasicCCSet } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
 import { isMultiEncapsulatingCommandClass } from "./EncapsulatingCommandClass";

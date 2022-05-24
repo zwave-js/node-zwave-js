@@ -1,6 +1,7 @@
+import { createTestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
 import "../../commandclass/index";
-import { createTestingHost, type TestingHost } from "../../test/mocks";
+import { type TestingHost } from "../../test/mocks";
 
 describe("BridgeApplicationCommandRequest", () => {
 	let host: TestingHost;

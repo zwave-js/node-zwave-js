@@ -1,5 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost, TestingHost } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
+import { TestingHost } from "../test/mocks";
 import {
 	DoorLockCCCapabilitiesGet,
 	DoorLockCCCapabilitiesReport,

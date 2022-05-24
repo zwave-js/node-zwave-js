@@ -1,8 +1,9 @@
 import { CommandClasses } from "@zwave-js/core";
+import { createTestingHost } from "@zwave-js/host";
 import { ZWaveNode } from "../../lib/node/Node";
 import type { Driver } from "../driver/Driver";
 import { assertCC } from "../test/assertCC";
-import { createEmptyMockDriver, createTestingHost } from "../test/mocks";
+import { createEmptyMockDriver } from "../test/mocks";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import {
 	ManufacturerSpecificCC,
@@ -39,25 +40,25 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 	});
 
 	describe.skip(`interview()`, () => {
-		const host = createEmptyMockDriver();
-		const node = new ZWaveNode(2, host as unknown as Driver);
+		const driver = createEmptyMockDriver();
+		const node = new ZWaveNode(2, driver as unknown as Driver);
 		let cc: ManufacturerSpecificCC;
 
 		function doInterview() {
-			return cc.interview(host);
+			return cc.interview(driver);
 		}
 		function resetSendMessageImplementation() {
-			host.sendMessage.mockImplementation(() =>
+			driver.sendMessage.mockImplementation(() =>
 				Promise.resolve({ command: {} }),
 			);
 		}
 
 		beforeAll(
 			async () => {
-				await host.configManager.loadManufacturers();
+				await driver.configManager.loadManufacturers();
 
 				resetSendMessageImplementation();
-				host.controller.nodes.set(node.id, node);
+				driver.controller.nodes.set(node.id, node);
 				node.addCC(CommandClasses["Manufacturer Specific"], {
 					isSupported: true,
 				});
@@ -67,22 +68,22 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 			30000,
 		);
 
-		beforeEach(() => host.sendMessage.mockClear());
+		beforeEach(() => driver.sendMessage.mockClear());
 		afterAll(() => {
-			host.sendMessage.mockImplementation(() => Promise.resolve());
+			driver.sendMessage.mockImplementation(() => Promise.resolve());
 			node.destroy();
 		});
 
 		it("should not send anything if the node is the controller", async () => {
 			// Temporarily make this node the controller node
-			host.controller.ownNodeId = node.id;
+			driver.controller.ownNodeId = node.id;
 			await doInterview();
-			expect(host.sendMessage).not.toBeCalled();
-			host.controller.ownNodeId = 1;
+			expect(driver.sendMessage).not.toBeCalled();
+			driver.controller.ownNodeId = 1;
 		});
 
 		it("should send a ManufacturerSpecificCC.Get", async () => {
-			host.sendMessage.mockImplementation(() =>
+			driver.sendMessage.mockImplementation(() =>
 				Promise.resolve({
 					command: {
 						manufacturerId: 0xffff,
@@ -93,9 +94,9 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 			);
 			await doInterview();
 
-			expect(host.sendMessage).toBeCalled();
+			expect(driver.sendMessage).toBeCalled();
 
-			assertCC(host.sendMessage.mock.calls[0][0], {
+			assertCC(driver.sendMessage.mock.calls[0][0], {
 				cc: ManufacturerSpecificCCGet,
 				nodeId: node.id,
 			});

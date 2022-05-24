@@ -1,4 +1,3 @@
-import { ConfigManager } from "@zwave-js/config";
 import {
 	applicationCCs,
 	assertZWaveError,
@@ -14,7 +13,10 @@ import {
 	ValueMetadata,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
+import { createDefaultMockControllerBehaviors } from "../../Utils";
 import { BasicCC } from "../commandclass/BasicCC";
 import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
 import { getCCConstructor } from "../commandclass/CommandClass";
@@ -30,6 +32,7 @@ import {
 	WakeUpCommand,
 } from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
+import { createAndStartTestingDriver } from "../driver/DriverMock";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
@@ -79,27 +82,40 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("constructor", () => {
-		let fakeDriver: Driver;
-		let configManager: ConfigManager;
+		let driver: Driver;
+		// let node2: ZWaveNode;
+		let controller: MockController;
 
 		beforeAll(
 			async () => {
-				configManager = new ConfigManager();
-				await configManager.loadDeviceClasses();
+				({ driver } = await createAndStartTestingDriver({
+					skipNodeInterview: true,
+					loadConfiguration: false,
+					beforeStartup(mockPort) {
+						controller = new MockController({ serial: mockPort });
+						controller.defineBehavior(
+							...createDefaultMockControllerBehaviors(),
+						);
+					},
+				}));
+				await driver.configManager.loadDeviceClasses();
 			},
 			// Loading configuration may take a while on CI
 			30000,
 		);
 
-		beforeEach(() => {
-			fakeDriver = createEmptyMockDriver() as unknown as Driver;
-			(fakeDriver as any).configManager = configManager;
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
+		afterEach(() => {
+			driver.networkCache.clear();
 		});
 
 		it("stores the given Node ID", () => {
-			const node1 = new ZWaveNode(1, fakeDriver);
+			const node1 = new ZWaveNode(1, driver);
 			expect(node1.id).toBe(1);
-			const node3 = new ZWaveNode(3, fakeDriver);
+			const node3 = new ZWaveNode(3, driver);
 			expect(node3.id).toBe(3);
 
 			node1.destroy();
@@ -108,14 +124,14 @@ describe("lib/node/Node", () => {
 
 		it("stores the given device class", () => {
 			function makeNode(cls: DeviceClass): ZWaveNode {
-				return new ZWaveNode(1, fakeDriver, cls);
+				return new ZWaveNode(1, driver, cls);
 			}
 
 			const nodeUndef = makeNode(undefined as any);
 			expect(nodeUndef.deviceClass).toBeUndefined();
 
 			const devCls = new DeviceClass(
-				fakeDriver.configManager,
+				driver.configManager,
 				0x02,
 				0x01,
 				0x03,
@@ -134,7 +150,7 @@ describe("lib/node/Node", () => {
 			): ZWaveNode {
 				return new ZWaveNode(
 					1,
-					fakeDriver,
+					driver,
 					undefined,
 					supportedCCs,
 					controlledCCs,
@@ -165,7 +181,7 @@ describe("lib/node/Node", () => {
 		});
 
 		it("initializes the node's value DB", () => {
-			const node = new ZWaveNode(1, fakeDriver);
+			const node = new ZWaveNode(1, driver);
 			expect(node.valueDB).toBeInstanceOf(ValueDB);
 			node.destroy();
 		});
@@ -173,12 +189,12 @@ describe("lib/node/Node", () => {
 		it("marks the mandatory CCs as supported/controlled", () => {
 			// Portable Scene Controller
 			const deviceClass = new DeviceClass(
-				fakeDriver.configManager,
+				driver.configManager,
 				0x01,
 				0x01,
 				0x02,
 			);
-			const node = new ZWaveNode(1, fakeDriver, deviceClass);
+			const node = new ZWaveNode(1, driver, deviceClass);
 			expect(node.supportsCC(CommandClasses.Association)).toBeTrue();
 			expect(
 				node.supportsCC(
@@ -721,10 +737,29 @@ describe("lib/node/Node", () => {
 	// });
 
 	describe("updateNodeInfo()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		// let node2: ZWaveNode;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		function makeNode(canSleep: boolean = false): ZWaveNode {
-			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+			const node = new ZWaveNode(2, driver);
 			node["isListening"] = !canSleep;
 			node["isFrequentListening"] = false;
 			// If the node doesn't support Z-Wave+ Info CC, the node instance
@@ -733,7 +768,10 @@ describe("lib/node/Node", () => {
 				isSupported: true,
 			});
 			// node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-			fakeDriver.controller.nodes.set(node.id, node);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
 			return node;
 		}
 
@@ -743,7 +781,7 @@ describe("lib/node/Node", () => {
 		};
 
 		beforeEach(() => {
-			fakeDriver.networkCache.clear();
+			driver.networkCache.clear();
 		});
 
 		it("marks a sleeping node as awake", () => {
@@ -855,16 +893,34 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getCCVersion()", () => {
-		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		it("should return 0 if a command class is not supported", () => {
-			const node = new ZWaveNode(2, fakeDriver);
+			const node = new ZWaveNode(2, driver);
 			expect(node.getCCVersion(CommandClasses["Anti-Theft"])).toBe(0);
 			node.destroy();
 		});
 
 		it("should return the supported version otherwise", () => {
-			const node = new ZWaveNode(2, fakeDriver);
+			const node = new ZWaveNode(2, driver);
 			node.addCC(CommandClasses["Anti-Theft"], {
 				isSupported: true,
 				version: 5,
@@ -875,10 +931,28 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("removeCC()", () => {
-		const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		it("should mark a CC as not supported", () => {
-			const node = new ZWaveNode(2, fakeDriver);
+			const node = new ZWaveNode(2, driver);
 			node.addCC(CommandClasses["Anti-Theft"], {
 				isSupported: true,
 				version: 7,
@@ -892,10 +966,28 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("createCCInstance()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		it("should throw if the CC is not supported", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
+			const node = new ZWaveNode(2, driver);
 			assertZWaveError(
 				() => node.createCCInstance(CommandClasses.Basic),
 				{
@@ -907,8 +999,11 @@ describe("lib/node/Node", () => {
 		});
 
 		it("should return a linked instance of the correct CC", () => {
-			const node = new ZWaveNode(2, fakeDriver as any);
-			fakeDriver.controller.nodes.set(node.id, node);
+			const node = new ZWaveNode(2, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
 
 			const cc = node.createCCInstance(BasicCC)!;
@@ -919,28 +1014,51 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getEndpoint()", () => {
-		let fakeDriver: ReturnType<typeof createEmptyMockDriver>;
+		let driver: Driver;
 		let node: ZWaveNode;
+		let controller: MockController;
 
-		beforeEach(
+		beforeAll(
 			async () => {
-				fakeDriver = createEmptyMockDriver();
-				await fakeDriver.configManager.loadDeviceClasses();
-
-				node = new ZWaveNode(
-					2,
-					fakeDriver as any,
-					new DeviceClass(fakeDriver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
-				);
-				fakeDriver.controller.nodes.set(node.id, node);
+				({ driver } = await createAndStartTestingDriver({
+					skipNodeInterview: true,
+					loadConfiguration: false,
+					beforeStartup(mockPort) {
+						controller = new MockController({ serial: mockPort });
+						controller.defineBehavior(
+							...createDefaultMockControllerBehaviors(),
+						);
+					},
+				}));
+				await driver.configManager.loadDeviceClasses();
 			},
 			// Loading configuration may take a while on CI
 			30000,
 		);
 
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
+		beforeEach(async () => {
+			node = new ZWaveNode(
+				2,
+				driver,
+				new DeviceClass(driver.configManager, 0x04, 0x01, 0x01), // Portable Remote Controller
+			);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
+		});
+
 		afterEach(() => {
-			fakeDriver.controller.nodes.delete(node.id);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
+				node.id,
+			);
+			node.valueDB.clear();
 			node.destroy();
+			driver.networkCache.clear();
 		});
 
 		it("throws when a negative endpoint index is requested", () => {
@@ -1364,18 +1482,39 @@ describe("lib/node/Node", () => {
 
 	describe("the emitted events", () => {
 		let node: ZWaveNode;
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		const onValueAdded = jest.fn();
 		const onValueUpdated = jest.fn();
 		const onValueRemoved = jest.fn();
 
 		function createNode(): void {
-			node = new ZWaveNode(1, fakeDriver as unknown as Driver)
+			node = new ZWaveNode(1, driver)
 				.on("value added", onValueAdded)
 				.on("value updated", onValueUpdated)
 				.on("value removed", onValueRemoved);
-			fakeDriver.controller.nodes.set(node.id, node);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
 		}
 
 		beforeEach(() => {
@@ -1386,8 +1525,10 @@ describe("lib/node/Node", () => {
 		});
 
 		afterEach(() => {
-			fakeDriver.controller.nodes.delete(node.id);
 			node.destroy();
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
+				node.id,
+			);
 		});
 
 		it("should contain a speaking name for the CC", () => {
@@ -1441,7 +1582,25 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("changing the node status", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		interface TestOptions {
 			targetStatus: NodeStatus;
@@ -1450,7 +1609,7 @@ describe("lib/node/Node", () => {
 		}
 
 		function performTest(options: TestOptions): void {
-			const node = new ZWaveNode(1, fakeDriver as unknown as Driver);
+			const node = new ZWaveNode(1, driver);
 			node["_status"] = undefined as any;
 			const spy = jest.fn();
 			node.on(options.expectedEvent, spy);
@@ -1493,9 +1652,28 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getValue()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
 		it("returns the values stored in the value DB", () => {
-			const node = new ZWaveNode(1, fakeDriver as any);
+			const node = new ZWaveNode(1, driver);
 			const valueId: ValueID = {
 				commandClass: CommandClasses.Version,
 				endpoint: 2,
@@ -1511,14 +1689,34 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("setValue()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
 		it("issues the correct xyzCCSet command", async () => {
 			// We test with a BasicCC
-			const node = new ZWaveNode(1, fakeDriver as any);
+			const node = new ZWaveNode(1, driver);
 			node.addCC(CommandClasses.Basic, { isSupported: true });
 
 			// Since setValue also issues a get, we need to mock a response
-			fakeDriver.sendMessage
+			driver.sendMessage = jest
+				.fn()
 				.mockResolvedValueOnce(undefined)
 				// For some reason this is called twice?!
 				.mockResolvedValue({ command: {} });
@@ -1532,9 +1730,9 @@ describe("lib/node/Node", () => {
 			);
 
 			expect(result).toBeTrue();
-			expect(fakeDriver.sendMessage).toBeCalled();
+			expect(driver.sendMessage).toBeCalled();
 
-			assertCC(fakeDriver.sendMessage.mock.calls[0][0], {
+			assertCC((driver.sendMessage as jest.Mock).mock.calls[0][0], {
 				cc: BasicCC,
 				nodeId: node.id,
 				ccValues: {
@@ -1545,7 +1743,7 @@ describe("lib/node/Node", () => {
 		});
 
 		it("returns false if the CC is not implemented", async () => {
-			const node = new ZWaveNode(1, fakeDriver as any);
+			const node = new ZWaveNode(1, driver);
 			const result = await node.setValue(
 				{
 					commandClass: 0xbada55, // this is guaranteed to not be implemented
@@ -1559,7 +1757,26 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("getValueMetadata()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
 		let node: ZWaveNode;
 		const valueId: ValueID = {
 			commandClass: CommandClasses.Basic,
@@ -1567,8 +1784,11 @@ describe("lib/node/Node", () => {
 		};
 
 		beforeEach(() => {
-			node = new ZWaveNode(1, fakeDriver as unknown as Driver);
-			fakeDriver.controller.nodes.set(1, node);
+			node = new ZWaveNode(1, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
 		});
 
 		afterEach(() => {
@@ -1740,15 +1960,36 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("waitForWakeup()", () => {
-		const fakeDriver = createEmptyMockDriver();
+		let driver: Driver;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		});
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
 
 		function makeNode(canSleep: boolean = false): ZWaveNode {
-			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
+			const node = new ZWaveNode(2, driver);
 			node["isListening"] = !canSleep;
 			node["isFrequentListening"] = false;
 			if (canSleep)
 				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-			fakeDriver.controller.nodes.set(node.id, node);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node.id,
+				node,
+			);
 			return node;
 		}
 

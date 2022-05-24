@@ -31,7 +31,7 @@ export async function createAndStartDriver(
 
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
-		interview: {
+		testingHooks: {
 			skipControllerIdentification: true,
 			skipNodeInterview: true,
 		},

@@ -28,6 +28,7 @@ describe("lib/driver/Driver", () => {
 
 		beforeEach(async () => {
 			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
 				// We don't need a real interview for this
 				skipControllerIdentification: true,
 				skipNodeInterview: true,
@@ -73,6 +74,7 @@ describe("lib/driver/Driver", () => {
 
 		beforeEach(async () => {
 			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
 				skipControllerIdentification: true,
 				skipNodeInterview: true,
 			}));
@@ -109,6 +111,7 @@ describe("lib/driver/Driver", () => {
 
 		beforeEach(async () => {
 			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
 				skipNodeInterview: true,
 				securityKeys: {
 					S0_Legacy: Buffer.alloc(16, 0xff),
@@ -170,6 +173,7 @@ describe("lib/driver/Driver", () => {
 
 		beforeEach(async () => {
 			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
 				skipNodeInterview: true,
 				securityKeys: {
 					S0_Legacy: Buffer.alloc(16, 0xff),
@@ -466,17 +470,13 @@ describe("lib/driver/Driver", () => {
 
 		beforeEach(async () => {
 			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
 				skipNodeInterview: true,
 				beforeStartup(mockPort) {
 					controller = new MockController({ serial: mockPort });
 					controller.defineBehavior(
 						...createDefaultMockControllerBehaviors(),
 					);
-					const node2 = new MockNode({
-						id: 2,
-						controller,
-					});
-					controller.nodes.set(node2.id, node2);
 				},
 			}));
 			node2 = new ZWaveNode(2, driver);
