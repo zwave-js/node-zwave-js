@@ -35,7 +35,6 @@ import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
-import { InterviewStage } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,
@@ -159,18 +158,9 @@ export class CommandClass {
 				this.nodeId,
 				this.endpointIndex,
 			);
-			// If we received a CC from a node, it must support at least version 1
-			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			const node = host.nodes.get(this.nodeId);
-			if (
-				node?.interviewStage === InterviewStage.Complete &&
-				this.version === 0 &&
-				gotDeserializationOptions(options)
-			) {
-				this.version = 1;
-			}
 
 			// If the node or endpoint is included securely, send secure commands if possible
+			const node = host.nodes.get(this.nodeId);
 			const endpoint = node?.getEndpoint(this.endpointIndex);
 			this.secure =
 				node?.isSecure !== false &&
