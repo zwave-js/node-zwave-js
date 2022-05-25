@@ -11,7 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -571,6 +571,7 @@ export class ColorSwitchCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -581,7 +582,7 @@ export class ColorSwitchCC extends CommandClass {
 			const translated = ColorComponent[propertyKey];
 			if (translated) return translated;
 		}
-		return super.translatePropertyKey(property, propertyKey);
+		return super.translatePropertyKey(applHost, property, propertyKey);
 	}
 }
 

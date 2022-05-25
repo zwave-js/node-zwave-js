@@ -23,7 +23,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -1344,6 +1344,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string | undefined {
@@ -1355,10 +1356,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			// so no name for the property key is required
 			return undefined;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 
 	public translateProperty(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1376,7 +1378,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			}
 			return ret;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 }
 

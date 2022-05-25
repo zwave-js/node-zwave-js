@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -1194,6 +1194,7 @@ moisture sensor polarity: ${getEnumMemberName(
 	}
 
 	public translateProperty(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1202,7 +1203,7 @@ moisture sensor polarity: ${getEnumMemberName(
 		} else if (typeof property === "number") {
 			return `Valve ${padStart(property.toString(), 3, "0")}`;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 }
 

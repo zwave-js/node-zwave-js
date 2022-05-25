@@ -20,7 +20,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -445,6 +445,7 @@ supports reset:       ${suppResp.supportsReset}`;
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -453,8 +454,8 @@ supports reset:       ${suppResp.supportsReset}`;
 				splitPropertyKey(propertyKey);
 			let ret: string;
 			if (meterType !== 0) {
-				ret = `${this.host.configManager.getMeterName(meterType)}_${
-					this.host.configManager.lookupMeterScale(meterType, scale)
+				ret = `${applHost.configManager.getMeterName(meterType)}_${
+					applHost.configManager.lookupMeterScale(meterType, scale)
 						.label
 				}`;
 			} else {
@@ -465,9 +466,9 @@ supports reset:       ${suppResp.supportsReset}`;
 			}
 			return ret;
 		} else if (property === "reset" && typeof propertyKey === "number") {
-			return getMeterTypeName(this.host.configManager, propertyKey);
+			return getMeterTypeName(applHost.configManager, propertyKey);
 		}
-		return super.translatePropertyKey(property, propertyKey);
+		return super.translatePropertyKey(applHost, property, propertyKey);
 	}
 }
 

@@ -1,4 +1,3 @@
-import { ConfigManager } from "@zwave-js/config";
 import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
@@ -51,7 +50,6 @@ export function createTestingHost(
 				};
 			},
 		}),
-		configManager: new ConfigManager(),
 		nodes: createThrowingMap((nodeId) => {
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,

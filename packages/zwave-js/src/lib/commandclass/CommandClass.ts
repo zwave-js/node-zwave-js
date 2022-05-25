@@ -18,6 +18,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type {
+	ZWaveApplicationHost,
 	ZWaveEndpointBase,
 	ZWaveHost,
 	ZWaveNodeBase,
@@ -1000,6 +1001,7 @@ export class CommandClass {
 	 * @param _propertyKey The (optional) property key the translated name may depend on
 	 */
 	public translateProperty(
+		_applHost: ZWaveApplicationHost,
 		property: string | number,
 		_propertyKey?: string | number,
 	): string {
@@ -1013,6 +1015,7 @@ export class CommandClass {
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public translatePropertyKey(
+		_applHost: ZWaveApplicationHost,
 		_property: string | number,
 		propertyKey: string | number,
 	): string | undefined {

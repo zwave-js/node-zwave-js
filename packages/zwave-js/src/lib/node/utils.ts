@@ -10,6 +10,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type {
+	ZWaveApplicationHost,
 	ZWaveEndpointBase,
 	ZWaveHost,
 	ZWaveNodeBase,
@@ -190,7 +191,7 @@ export function shouldHideRootApplicationCCValues(
  * Enhances a value id so it can be consumed better by applications
  */
 export function translateValueID<T extends ValueID>(
-	host: ZWaveHost,
+	host: ZWaveApplicationHost,
 	node: ZWaveNodeBase,
 	valueId: T,
 ): T & TranslatedValueID {
@@ -216,12 +217,14 @@ export function translateValueID<T extends ValueID>(
 
 	// Retrieve the speaking property name
 	ret.propertyName = ccInstance.translateProperty(
+		host,
 		valueId.property,
 		valueId.propertyKey,
 	);
 	// Try to retrieve the speaking property key
 	if (valueId.propertyKey != undefined) {
 		const propertyKey = ccInstance.translatePropertyKey(
+			host,
 			valueId.property,
 			valueId.propertyKey,
 		);
@@ -266,7 +269,7 @@ export function filterRootApplicationCCValueIDs(
 
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
-	host: ZWaveHost,
+	host: ZWaveApplicationHost,
 	node: ZWaveNodeBase,
 ): TranslatedValueID[] {
 	let ret: ValueID[] = [];

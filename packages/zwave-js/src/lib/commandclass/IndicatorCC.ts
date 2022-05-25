@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -441,6 +441,7 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -452,22 +453,23 @@ export class IndicatorCC extends CommandClass {
 			typeof propertyKey === "number"
 		) {
 			// The indicator property is our property key
-			const prop = this.host.configManager.lookupProperty(propertyKey);
+			const prop = applHost.configManager.lookupProperty(propertyKey);
 			if (prop) return prop.label;
 		}
-		return super.translatePropertyKey(property, propertyKey);
+		return super.translatePropertyKey(applHost, property, propertyKey);
 	}
 
 	public translateProperty(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
 		if (typeof property === "number" && typeof propertyKey === "number") {
 			// The indicator corresponds to our property
-			const label = this.host.configManager.lookupIndicator(property);
+			const label = applHost.configManager.lookupIndicator(property);
 			if (label) return label;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 
 	protected supportsV2Indicators(): boolean {
