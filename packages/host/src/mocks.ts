@@ -73,6 +73,15 @@ export function createTestingHost(
 			}
 			return valueDBCache.get(nodeId)!;
 		},
+		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
+			const node = ret.nodes.get(nodeId);
+			const endpoint = node?.getEndpoint(endpointIndex);
+			return (
+				node?.isSecure !== false &&
+				!!(endpoint ?? node)?.isCCSecure(ccId) &&
+				!!(ret.securityManager || ret.securityManager2)
+			);
+		},
 	};
 	return ret;
 }

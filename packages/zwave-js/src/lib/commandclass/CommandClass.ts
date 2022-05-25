@@ -159,13 +159,12 @@ export class CommandClass {
 				this.endpointIndex,
 			);
 
-			// If the node or endpoint is included securely, send secure commands if possible
-			const node = host.nodes.get(this.nodeId);
-			const endpoint = node?.getEndpoint(this.endpointIndex);
-			this.secure =
-				node?.isSecure !== false &&
-				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!(this.host.securityManager || this.host.securityManager2);
+			// Send secure commands if necessary
+			this.secure = this.host.isCCSecure(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields

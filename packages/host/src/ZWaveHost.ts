@@ -73,6 +73,15 @@ export interface ZWaveHost {
 	): number;
 
 	/**
+	 * Determines whether a CC must be secure for a given node and endpoint.
+	 */
+	isCCSecure(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): boolean;
+
+	/**
 	 * Returns the next callback ID. Callback IDs are used to correllate requests
 	 * to the controller/nodes with its response
 	 */

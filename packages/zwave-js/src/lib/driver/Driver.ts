@@ -1875,6 +1875,27 @@ export class Driver
 		}
 	}
 
+	/**
+	 * Determines whether a CC must be secure for a given node and endpoint.
+	 *
+	 * @param ccId The command class in question
+	 * @param nodeId The node for which the CC security should be determined
+	 * @param endpointIndex The endpoint for which the CC security should be determined
+	 */
+	isCCSecure(
+		ccId: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
+	): boolean {
+		const node = this.controller.nodes.get(nodeId);
+		const endpoint = node?.getEndpoint(endpointIndex);
+		return (
+			node?.isSecure !== false &&
+			!!(endpoint ?? node)?.isCCSecure(ccId) &&
+			!!(this.securityManager || this.securityManager2)
+		);
+	}
+
 	private isSoftResetting: boolean = false;
 
 	private maySoftReset(): boolean {

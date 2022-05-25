@@ -49,6 +49,7 @@ export class MockController {
 			nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
 			getSafeCCVersionForNode: () => 100,
+			isCCSecure: () => false,
 
 			getValueDB: (nodeId) => {
 				if (!valueDBCache.has(nodeId)) {
