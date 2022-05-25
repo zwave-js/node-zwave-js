@@ -8,7 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -424,8 +424,6 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			this.position = 100;
 			this.currentState = payloadValue;
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -475,8 +473,6 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 			this.payload,
 			SubsystemType.Audible,
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedsubsystemTypes: SubsystemType[];
@@ -562,12 +558,10 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		validatePayload(this.payload.length >= 2);
 		this.subsystemType = this.payload[0];
 		this.subsystemState = this.payload[1];
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueId = getSignalingStateValueId(
 			this.endpointIndex,

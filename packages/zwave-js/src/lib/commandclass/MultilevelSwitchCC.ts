@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -631,7 +631,6 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			this.targetValue = parseNumber(this.payload[1]);
 			this.duration = Duration.parseReport(this.payload[2]);
 		}
-		this.persistValues();
 	}
 
 	@ccValue({ forceCreation: true })
@@ -767,7 +766,6 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._switchType = this.payload[0] & 0b11111;
-		this.persistValues();
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
@@ -777,8 +775,8 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return this._switchType;
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		this.createMetadataForLevelChangeActions(this._switchType);
 		return true;
 	}

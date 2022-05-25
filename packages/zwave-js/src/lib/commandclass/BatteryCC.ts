@@ -240,8 +240,6 @@ export class BatteryCCReport extends BatteryCC {
 			this._lowTemperatureStatus = !!(this.payload[2] & 0b10);
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
-
-		this.persistValues();
 	}
 
 	private _level: number;
@@ -424,8 +422,6 @@ export class BatteryCCHealthReport extends BatteryCC {
 			label: "Temperature",
 			unit: scale === 0x00 ? "°C" : undefined,
 		});
-
-		this.persistValues();
 	}
 
 	private _maximumCapacity: number | undefined;

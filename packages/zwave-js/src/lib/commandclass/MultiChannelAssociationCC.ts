@@ -843,8 +843,6 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];
-
-		this.persistValues();
 	}
 
 	private _groupCount: number;

@@ -14,7 +14,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -693,12 +693,10 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			this.targetMode = this.payload[5];
 			this.duration = Duration.parseReport(this.payload[6]);
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
 		if (this.doorStatus != undefined) {
@@ -843,8 +841,6 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			this.twistAssist = !!(flags & 0b1);
 			this.blockToBlock = !!(flags & 0b10);
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -1158,8 +1154,6 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		this.twistAssistSupported = !!(this.payload[offset + 2] & 0b10);
 		this.holdAndReleaseSupported = !!(this.payload[offset + 2] & 0b100);
 		this.autoRelockSupported = !!(this.payload[offset + 2] & 0b1000);
-
-		this.persistValues();
 	}
 
 	public readonly supportedOperationTypes: readonly DoorLockOperationType[];

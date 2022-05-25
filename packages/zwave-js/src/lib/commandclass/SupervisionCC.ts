@@ -186,8 +186,6 @@ export type SupervisionCCReportOptions = {
 
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
-	// @noCCValues
-
 	public constructor(
 		host: ZWaveHost,
 		options:

@@ -193,7 +193,6 @@ export class LockCCReport extends LockCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.locked = this.payload[0] === 1;
-		this.persistValues();
 	}
 
 	@ccValue()

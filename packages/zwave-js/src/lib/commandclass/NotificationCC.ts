@@ -21,7 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -824,7 +824,6 @@ export class NotificationCCReport extends NotificationCC {
 			}
 
 			// Store the V1 alarm values if they exist
-			this.persistValues();
 		} else {
 			// Create a notification to send
 			if ("alarmType" in options) {
@@ -842,8 +841,8 @@ export class NotificationCCReport extends NotificationCC {
 		}
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
 		if (this.alarmType != undefined) {
@@ -1227,7 +1226,6 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
 			0,
 		);
-		this.persistValues();
 	}
 
 	private _supportsV1Alarm: boolean;
@@ -1288,12 +1286,10 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 			// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
 			0,
 		);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB();
 
 		// Store which events this notification supports
@@ -1304,7 +1300,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		// For each event, predefine the value metadata
 		const metadataMap = defineMetadataForNotificationEvents(
-			this.host.configManager,
+			applHost.configManager,
 			this.endpointIndex,
 			this._notificationType,
 			this._supportedEvents,

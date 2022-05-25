@@ -601,8 +601,6 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 			this.payload.slice(0, 2),
 			ColorComponent["Warm White"],
 		);
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -640,13 +638,11 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this.targetValue = this.payload[2];
 			this.duration = Duration.parseReport(this.payload[3]);
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Duration is stored globally instead of per component
-		if (!super.persistValues()) return false;
+		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
 

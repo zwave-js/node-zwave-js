@@ -233,8 +233,6 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 				}
 			}
 		}
-
-		this.persistValues();
 	}
 
 	public readonly manufacturerId: number;

@@ -216,8 +216,6 @@ export class PowerlevelCCReport extends PowerlevelCC {
 		if (this.powerlevel !== Powerlevel["Normal Power"]) {
 			this.timeout = this.payload[1];
 		}
-
-		this.persistValues();
 	}
 
 	public readonly powerlevel: Powerlevel;

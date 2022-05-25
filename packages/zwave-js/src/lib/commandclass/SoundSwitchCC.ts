@@ -384,8 +384,6 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 		this.toneCount = this.payload[0];
 	}
 
-	// @noCCValues We persist this as metadata during the interview
-
 	public readonly toneCount: number;
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
@@ -414,8 +412,6 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 		validatePayload(this.payload.length >= 4 + nameLength);
 		this.name = this.payload.slice(4, 4 + nameLength).toString("utf8");
 	}
-
-	// @noCCValues These values are manually persisted during the interview
 
 	public readonly toneId: number;
 	public readonly duration: number;
@@ -538,8 +534,6 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		validatePayload(this.payload.length >= 2);
 		this.defaultVolume = clamp(this.payload[0], 0, 100);
 		this.defaultToneId = this.payload[1];
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -643,8 +637,6 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		if (this.toneId !== 0 && this.payload.length >= 2) {
 			this.volume = this.payload[1];
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()

@@ -218,8 +218,6 @@ export class TimeParametersCCReport extends TimeParametersCC {
 				this.getNode()!.getEndpoint(this.endpointIndex)!,
 			),
 		);
-
-		this.persistValues();
 	}
 
 	@ccValue()

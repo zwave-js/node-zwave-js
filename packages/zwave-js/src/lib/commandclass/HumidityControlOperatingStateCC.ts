@@ -138,8 +138,6 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 
 		validatePayload(this.payload.length >= 1);
 		this._state = this.payload[0] & 0b1111;
-
-		this.persistValues();
 	}
 
 	private _state: HumidityControlOperatingState;

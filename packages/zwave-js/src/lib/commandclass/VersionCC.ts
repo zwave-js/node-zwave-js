@@ -415,7 +415,6 @@ export class VersionCCReport extends VersionCC {
 				);
 			}
 		}
-		this.persistValues();
 	}
 
 	private _libraryType: ZWaveLibraryTypes;
@@ -481,8 +480,6 @@ export class VersionCCGet extends VersionCC {}
 
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
-	// @noCCValues see constructor comment
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -577,7 +574,6 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		validatePayload(this.payload.length >= 1);
 		const capabilities = this.payload[0];
 		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
-		this.persistValues();
 	}
 
 	private _supportsZWaveSoftwareGet: boolean;
@@ -641,7 +637,6 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		} else {
 			this._applicationBuildNumber = 0;
 		}
-		this.persistValues();
 	}
 
 	private _sdkVersion: string;

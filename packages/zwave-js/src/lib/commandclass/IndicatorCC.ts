@@ -603,8 +603,6 @@ export class IndicatorCCSet extends IndicatorCC {
 
 @CCCommand(IndicatorCommand.Report)
 export class IndicatorCCReport extends IndicatorCC {
-	// @noCCValues This CC stores its values diffently
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -803,11 +801,9 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 				0,
 			).filter((v) => v !== 0);
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
 			this.getValueDB().setValue(

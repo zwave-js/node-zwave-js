@@ -724,7 +724,10 @@ export class CommandClass {
 	}
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
-	public persistValues(valueNames?: (keyof this)[]): boolean {
+	public persistValues(
+		applHost: ZWaveApplicationHost,
+		valueNames?: (keyof this)[],
+	): boolean {
 		// In order to avoid cluttering applications with heaps of unsupported properties,
 		// we filter out those that are only available in future versions of this CC
 		// or have no version constraint

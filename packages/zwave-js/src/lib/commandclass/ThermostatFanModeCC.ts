@@ -338,8 +338,6 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		if (this.version >= 3) {
 			this._off = !!(this.payload[0] & 0b1000_0000);
 		}
-
-		this.persistValues();
 	}
 
 	private _mode: ThermostatFanMode;
@@ -407,8 +405,6 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 				this._supportedModes,
 			),
 		});
-
-		this.persistValues();
 	}
 
 	private _supportedModes: ThermostatFanMode[];

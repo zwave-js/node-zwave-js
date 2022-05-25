@@ -399,8 +399,6 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				),
 			});
 		}
-
-		this.persistValues();
 	}
 
 	private _sceneCount: number;
@@ -477,7 +475,6 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
-		this.persistValues();
 	}
 
 	private _slowRefresh: boolean;

@@ -250,7 +250,6 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		);
 
 		this.schedule = [weekday, switchPoints];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair()
@@ -333,7 +332,6 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 
 		validatePayload(this.payload.length >= 1);
 		this._changeCounter = this.payload[0];
-		this.persistValues();
 	}
 
 	private _changeCounter: number;
@@ -365,7 +363,6 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		this._overrideType = this.payload[0] & 0b11;
 		this._overrideState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
-		this.persistValues();
 	}
 
 	private _overrideType: ScheduleOverrideType;

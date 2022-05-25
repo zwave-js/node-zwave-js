@@ -124,7 +124,6 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			this.dimmingDuration = Duration.parseSet(this.payload[1]);
 
 			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
-			this.persistValues();
 		} else {
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = Duration.from(options.dimmingDuration);

@@ -585,11 +585,9 @@ export class MeterCCReport extends MeterCC {
 				}
 			}
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueDB = this.getValueDB();
 
 		const valueId = {
@@ -607,7 +605,7 @@ export class MeterCCReport extends MeterCC {
 			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyNumber,
 				label: getValueLabel(
-					this.host.configManager,
+					applHost.configManager,
 					this._type,
 					this._scale,
 					this._rateType,
@@ -810,8 +808,6 @@ export class MeterCCSupportedReport extends MeterCC {
 			Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
 			1,
 		);
-
-		this.persistValues();
 	}
 
 	private _type: number;
@@ -838,8 +834,8 @@ export class MeterCCSupportedReport extends MeterCC {
 		return this._supportedRateTypes;
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		if (!this._supportsReset) return true;
 
 		const valueDb = this.getValueDB();
@@ -863,7 +859,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				this.getValueDB().setMetadata(resetSingle, {
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Reset (${getMeterTypeName(
-						this.host.configManager,
+						applHost.configManager,
 						this._type,
 					)})`,
 					ccSpecific: {

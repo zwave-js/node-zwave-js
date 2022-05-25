@@ -2282,9 +2282,11 @@ export class Driver
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
-			// Then ensure there are no errors
+			// Ensure there are no errors
 			if (isCommandClassContainer(msg)) {
 				assertValidCCs(msg);
+				// And persist the CC values if there weren't any
+				this.persistCCValues(msg.command);
 			}
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
@@ -3395,6 +3397,18 @@ ${handlers.length} left`,
 				return;
 			}
 			msg.command = unwrapped;
+		}
+	}
+
+	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
+	private persistCCValues(cc: CommandClass) {
+		cc.persistValues(this);
+		if (isEncapsulatingCommandClass(cc)) {
+			this.persistCCValues(cc.encapsulated);
+		} else if (isMultiEncapsulatingCommandClass(cc)) {
+			for (const encapsulated of cc.encapsulated) {
+				this.persistCCValues(encapsulated);
+			}
 		}
 	}
 

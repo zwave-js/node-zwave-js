@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
@@ -431,15 +431,13 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 				Duration.parseReport(this.payload[2]) ??
 				new Duration(0, "unknown");
 		}
-
-		this.persistValues();
 	}
 
 	public readonly sceneId: number;
 	public readonly level?: number;
 	public readonly dimmingDuration?: Duration;
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Do not persist values for an inactive scene
 		if (
 			this.sceneId === 0 ||

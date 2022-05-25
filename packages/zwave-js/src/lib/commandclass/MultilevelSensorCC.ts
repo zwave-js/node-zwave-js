@@ -555,8 +555,6 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 					}
 				}
 			}
-
-			this.persistValues();
 		} else {
 			this.type = options.type;
 			this.value = options.value;
@@ -570,8 +568,8 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		}
 	}
 
-	public persistValues(): boolean {
-		const typeName = this.host.configManager.getSensorTypeName(this.type);
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		const typeName = applHost.configManager.getSensorTypeName(this.type);
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -708,7 +706,6 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this._supportedSensorTypes = parseBitMask(this.payload);
-		this.persistValues();
 	}
 
 	private _supportedSensorTypes: number[];
@@ -752,7 +749,6 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 			0,
 		);
 		this.supportedScales = [sensorType, supportedScales];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })

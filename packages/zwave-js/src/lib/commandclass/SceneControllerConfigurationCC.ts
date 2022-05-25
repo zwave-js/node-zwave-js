@@ -10,7 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -532,15 +536,13 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 		this.sceneId = this.payload[1];
 		this.dimmingDuration =
 			Duration.parseReport(this.payload[2]) ?? new Duration(0, "unknown");
-
-		this.persistValues();
 	}
 
 	public readonly groupId: number;
 	public readonly sceneId: number;
 	public readonly dimmingDuration: Duration;
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// If groupId = 0, values are meaningless
 		if (this.groupId === 0) return false;
 		return persistSceneConfig.call(

@@ -1219,8 +1219,6 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 		this.numValves = this.payload[1];
 		this.numValveTables = this.payload[2];
 		this.maxValveTableSize = this.payload[3] & 0b1111;
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -1295,8 +1293,6 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		if (this.payload[offset + 3]) {
 			this.firstOpenZoneId = this.payload[offset + 3];
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -1576,7 +1572,6 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 			this.rainSensorPolarity = polarity & 0b1;
 			this.moistureSensorPolarity = (polarity & 0b10) >>> 1;
 		}
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -1678,8 +1673,6 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 			this.errorHighFlow = !!(this.payload[3] & 0b1_0000);
 			this.errorLowFlow = !!(this.payload[3] & 0b10_0000);
 		}
-
-		this.persistValues();
 	}
 
 	public readonly valveId: ValveId;
@@ -1693,8 +1686,8 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public readonly errorHighFlow?: boolean;
 	public readonly errorLowFlow?: boolean;
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
 
@@ -2010,12 +2003,10 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 		validatePayload(this.payload.length >= offset + 1);
 		this.useRainSensor = !!(this.payload[offset] & 0b1);
 		this.useMoistureSensor = !!(this.payload[offset] & 0b10);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
 
@@ -2313,7 +2304,6 @@ export class IrrigationCCValveTableReport extends IrrigationCC {
 				duration: this.payload.readUInt16BE(offset + 1),
 			});
 		}
-		this.persistValues();
 	}
 
 	public readonly tableId: number;

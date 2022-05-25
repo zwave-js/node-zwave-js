@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -194,7 +194,6 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		this._manufacturerId = this.payload.readUInt16BE(0);
 		this._productType = this.payload.readUInt16BE(2);
 		this._productId = this.payload.readUInt16BE(4);
-		this.persistValues();
 	}
 
 	private _manufacturerId: number;
@@ -253,10 +252,9 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 			dataFormat === 0
 				? deviceIdData.toString("utf8")
 				: "0x" + deviceIdData.toString("hex");
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,

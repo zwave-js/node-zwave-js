@@ -306,7 +306,6 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			this._targetValue = parseBoolean(this.payload[1]);
 			this._duration = Duration.parseReport(this.payload[2]);
 		}
-		this.persistValues();
 	}
 
 	private _currentValue: Maybe<boolean> | undefined;

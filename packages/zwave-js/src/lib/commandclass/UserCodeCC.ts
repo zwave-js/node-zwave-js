@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
@@ -1003,15 +1003,13 @@ export class UserCodeCCReport
 				this.userCode = userCodeBuffer;
 			}
 		}
-
-		this.persistValues();
 	}
 
 	public readonly userId: number;
 	public readonly userIdStatus: UserIDStatus;
 	public readonly userCode: string | Buffer;
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		persistUserCode.call(
 			this,
 			this.userId,
@@ -1091,7 +1089,6 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 			// V1
 			this.supportedUsers = this.payload[0];
 		}
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -1164,8 +1161,6 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 				0,
 			),
 		).toString("ascii");
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -1287,11 +1282,10 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.keypadMode = this.payload[0];
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		// Update the keypad modes metadata
 		const supportedKeypadModes = this.getValueDB().getValue<KeypadMode[]>(
 			getSupportedKeypadModesValueID(this.endpointIndex),
@@ -1414,7 +1408,6 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		this.masterCode = this.payload
 			.slice(1, 1 + codeLength)
 			.toString("ascii");
-		this.persistValues();
 	}
 
 	@ccValue({
@@ -1450,7 +1443,6 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this.userCodeChecksum = this.payload.readUInt16BE(0);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -1642,11 +1634,9 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 
 		validatePayload(this.payload.length >= offset + 2);
 		this.nextUserId = this.payload.readUInt16BE(offset);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			persistUserCode.call(this, userId, userIdStatus, userCode);
 		}

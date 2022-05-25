@@ -200,7 +200,6 @@ function testResponseForManufacturerProprietaryRequest(
 )
 export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
-	// @noCCValues
 
 	public constructor(
 		host: ZWaveHost,

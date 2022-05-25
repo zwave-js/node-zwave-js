@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -510,8 +510,6 @@ export class ProtectionCCReport extends ProtectionCC {
 		if (this.payload.length >= 2) {
 			this.rf = this.payload[1] & 0b1111;
 		}
-
-		this.persistValues();
 	}
 
 	// TODO: determine possible states during interview
@@ -567,12 +565,10 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 			this.payload.slice(3, 5),
 			RFProtectionState.Unprotected,
 		);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		const valueDb = this.getValueDB();
 		// update metadata (partially) for the local and rf values
 		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
@@ -639,7 +635,6 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.exclusiveControlNodeId = this.payload[0];
-		this.persistValues();
 	}
 
 	@ccValue({ minVersion: 2 })
@@ -710,7 +705,6 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.timeout = Timeout.parse(this.payload[0]);
-		this.persistValues();
 	}
 
 	@ccValue({ minVersion: 2 })

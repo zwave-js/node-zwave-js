@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -343,10 +343,9 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				);
 			}
 		}
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Update the supported modes if a mode is used that wasn't previously
 		// reported to be supported. This shouldn't happen, but well... it does anyways
 		const valueDB = this.getValueDB();
@@ -376,7 +375,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			});
 		}
 
-		return super.persistValues();
+		return super.persistValues(applHost);
 	}
 
 	private _mode: ThermostatMode;
@@ -432,8 +431,6 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 				this._supportedModes,
 			),
 		});
-
-		this.persistValues();
 	}
 
 	private _supportedModes: ThermostatMode[];

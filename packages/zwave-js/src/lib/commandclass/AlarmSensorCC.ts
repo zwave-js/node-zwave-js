@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -304,8 +304,6 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		}
 		// ignore zero durations
 		this.duration = this.payload.readUInt16BE(3) || undefined;
-
-		this.persistValues();
 	}
 
 	public readonly sensorType: AlarmSensorType;
@@ -330,8 +328,8 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		};
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		// Create metadata if it does not exist
 		this.createMetadataForSensorType(this.sensorType);
 
@@ -424,8 +422,6 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 			this.payload.slice(1, 1 + bitMaskLength),
 			AlarmSensorType["General Purpose"],
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedSensorTypes: AlarmSensorType[];
@@ -434,8 +430,8 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {
 			this.createMetadataForSensorType(type);

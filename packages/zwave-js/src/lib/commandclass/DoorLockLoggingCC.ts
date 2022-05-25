@@ -212,7 +212,6 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		validatePayload(this.payload.length >= 1);
 
 		this.recordsCount = this.payload[0];
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -287,8 +286,6 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 			};
 		}
 	}
-
-	// @noCCValues This CC does not save any values
 
 	public readonly recordNumber: number;
 	public readonly record?: DoorLockLoggingRecord;

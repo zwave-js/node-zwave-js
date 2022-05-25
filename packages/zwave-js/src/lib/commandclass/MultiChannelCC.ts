@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -638,7 +638,6 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		if (this.version >= 4 && this.payload.length >= 3) {
 			this._aggregatedCount = this.payload[2] & 0b01111111;
 		}
-		this.persistValues();
 	}
 
 	private _countIsDynamic: boolean;
@@ -721,10 +720,9 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		this.capability = capability;
 
 		// Remember the supported CCs
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const deviceClassValueId = getEndpointDeviceClassValueId(
 			this.endpointIndex,
 		);
@@ -949,7 +947,6 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 		this.aggregatedEndpointMembers = [endpoint, members];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })
@@ -1155,8 +1152,6 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
-	// @noCCValues This information is stored during the interview
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,

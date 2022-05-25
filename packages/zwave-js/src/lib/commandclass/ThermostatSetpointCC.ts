@@ -633,11 +633,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
 		this._scale = getScale(this.host.configManager, scale);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueDB = this.getValueDB();
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
@@ -788,8 +786,6 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 				setpointType: this._type,
 			},
 		});
-
-		this.persistValues();
 	}
 
 	private _type: ThermostatSetpointType;
@@ -906,8 +902,6 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			// This must be tested during the interview
 			this._supportedSetpointTypes = supported;
 		}
-
-		this.persistValues();
 		// TODO:
 		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
 		// Devices with V3+ must comply with Interpretation A

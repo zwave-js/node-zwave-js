@@ -528,11 +528,9 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
 		this._scale = getScale(this.host.configManager, scale);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueDB = this.getValueDB();
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
@@ -663,8 +661,6 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 			this.payload,
 			HumidityControlSetpointType["N/A"],
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedSetpointTypes: HumidityControlSetpointType[];
@@ -712,8 +708,6 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
 		this._supportedScales = supportedScaleIndices.map((scale) =>
 			getScale(this.host.configManager, scale),
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedScales: Scale[];
@@ -812,8 +806,6 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 				setpointType: this._type,
 			},
 		});
-
-		this.persistValues();
 	}
 
 	private _type: HumidityControlSetpointType;

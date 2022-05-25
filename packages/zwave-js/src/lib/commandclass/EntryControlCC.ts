@@ -409,7 +409,6 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		const length = this.payload[0];
 		validatePayload(this.payload.length >= 1 + length);
 		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -487,8 +486,6 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,
 		});
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -538,7 +535,6 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheSize = this.payload[0];
 		validatePayload(this.keyCacheSize >= 1 && this.keyCacheSize <= 32);
 		this.keyCacheTimeout = this.payload[1];
-		this.persistValues();
 	}
 
 	@ccValue()

@@ -218,7 +218,6 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		// If we receive an unknown setback state, return the raw value
 		this._setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
-		this.persistValues();
 	}
 
 	private _setbackType: SetbackType;

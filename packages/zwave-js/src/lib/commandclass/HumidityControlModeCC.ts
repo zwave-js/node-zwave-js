@@ -278,8 +278,6 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
-
-		this.persistValues();
 	}
 
 	private _mode: HumidityControlMode;
@@ -339,8 +337,6 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 				this._supportedModes,
 			),
 		});
-
-		this.persistValues();
 	}
 
 	private _supportedModes: HumidityControlMode[];

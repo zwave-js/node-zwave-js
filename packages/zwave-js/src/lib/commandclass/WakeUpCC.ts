@@ -368,7 +368,6 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		validatePayload(this.payload.length >= 4);
 		this._wakeUpInterval = this.payload.readUIntBE(0, 3);
 		this._controllerNodeId = this.payload[3];
-		this.persistValues();
 	}
 
 	private _wakeUpInterval: number;
@@ -414,8 +413,6 @@ export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
-	// @noCCValues The values are stored as part of the metadata
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -452,7 +449,6 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		);
 
 		// Store wakeUpOnDemandSupported in valueDB
-		this.persistValues();
 	}
 
 	private _minWakeUpInterval: number;

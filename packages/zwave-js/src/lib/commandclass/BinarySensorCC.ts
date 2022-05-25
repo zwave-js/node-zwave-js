@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -249,10 +249,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		if (this.version >= 2 && this.payload.length >= 2) {
 			this._type = this.payload[1];
 		}
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueId: ValueID = getBinarySensorValueId(
 			this.endpointIndex,
 			this._type,
@@ -357,7 +356,6 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		this._supportedSensorTypes = parseBitMask(this.payload, 0).filter(
 			(t) => t !== 0,
 		);
-		this.persistValues();
 	}
 
 	private _supportedSensorTypes: BinarySensorType[];

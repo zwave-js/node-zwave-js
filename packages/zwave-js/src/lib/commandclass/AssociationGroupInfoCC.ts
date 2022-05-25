@@ -10,7 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -389,10 +393,9 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		this.name = cpp2js(
 			this.payload.slice(2, 2 + nameLength).toString("utf8"),
 		);
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
 		this.getValueDB().setValue(valueId, this.name);
 		return true;
@@ -485,11 +488,10 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			_groups.push({ groupId, mode, profile, eventCode });
 		}
 		this.groups = _groups;
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
 			const valueId = getGroupInfoValueID(this.endpointIndex, groupId);
@@ -619,7 +621,6 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 		}
 
 		this.issuedCommands = [groupId, commands];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })

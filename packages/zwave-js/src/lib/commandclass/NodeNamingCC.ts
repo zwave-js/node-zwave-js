@@ -294,7 +294,6 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 			nameBuffer = nameBuffer.swap16();
 		}
 		this.name = nameBuffer.toString(encoding);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -382,7 +381,6 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			locationBuffer = locationBuffer.swap16();
 		}
 		this.location = locationBuffer.toString(encoding);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })

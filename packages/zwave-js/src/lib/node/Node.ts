@@ -2195,7 +2195,7 @@ protocol version:      ${this.protocolVersion}`;
 					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
-				command.persistValues();
+				command.persistValues(this.driver);
 			}
 		}
 
@@ -2734,7 +2734,7 @@ protocol version:      ${this.protocolVersion}`;
 			// Otherwise fall back to setting it ourselves
 			if (!didSetMappedValue) {
 				// Store the value in the value DB now
-				command.persistValues();
+				command.persistValues(this.driver);
 
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,

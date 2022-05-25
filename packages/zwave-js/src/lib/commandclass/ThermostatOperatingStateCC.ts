@@ -135,7 +135,6 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 
 		validatePayload(this.payload.length >= 1);
 		this._state = this.payload[0];
-		this.persistValues();
 	}
 
 	private _state: ThermostatOperatingState;

@@ -161,8 +161,6 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
@@ -222,8 +220,6 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
@@ -350,8 +346,6 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,

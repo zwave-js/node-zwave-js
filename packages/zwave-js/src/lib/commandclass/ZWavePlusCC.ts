@@ -182,7 +182,6 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 			this.nodeType = this.payload[2];
 			this.installerIcon = this.payload.readUInt16BE(3);
 			this.userIcon = this.payload.readUInt16BE(5);
-			this.persistValues();
 		} else {
 			this.zwavePlusVersion = options.zwavePlusVersion;
 			this.roleType = options.roleType;

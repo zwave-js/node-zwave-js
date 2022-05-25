@@ -689,8 +689,6 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];
-
-		this.persistValues();
 	}
 
 	private _groupCount: number;
