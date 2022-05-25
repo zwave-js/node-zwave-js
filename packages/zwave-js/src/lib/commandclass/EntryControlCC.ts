@@ -14,7 +14,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
-import { buffer2hex, pick } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import {
@@ -377,6 +377,14 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly dataType: EntryControlDataTypes;
 	public readonly eventType: EntryControlEventTypes;
 	public readonly eventData?: Buffer | string;
+
+	public get eventTypeLabel(): string {
+		return getEnumMemberName(EntryControlEventTypes, this.eventType);
+	}
+
+	public get dataTypeLabel(): string {
+		return getEnumMemberName(EntryControlDataTypes, this.dataType);
+	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {

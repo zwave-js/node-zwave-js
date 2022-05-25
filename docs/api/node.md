@@ -1073,7 +1073,9 @@ where the argument object has the type
 ```ts
 interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	eventType: EntryControlEventTypes;
+	eventTypeLabel: string;
 	dataType: EntryControlDataTypes;
+	dataTypeLabel: string;
 	eventData?: Buffer | string;
 }
 ```
@@ -1102,6 +1104,8 @@ interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
 	eventType:
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
+	/** The label for the event type */
+	eventTypeLabel: "Start level change" | "Stop level change";
 	/** The direction of the level change */
 	direction?: string;
 }

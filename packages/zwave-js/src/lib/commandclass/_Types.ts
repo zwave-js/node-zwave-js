@@ -677,7 +677,9 @@ export enum EntryControlDataTypes {
 /** @publicAPI */
 export interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	eventType: EntryControlEventTypes;
+	eventTypeLabel: string;
 	dataType: EntryControlDataTypes;
+	dataTypeLabel: string;
 	eventData?: Buffer | string;
 }
 
@@ -1071,6 +1073,8 @@ export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
 	eventType:
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
+	/** The label for the event type */
+	eventTypeLabel: "Start level change" | "Stop level change";
 	/** The direction of the level change */
 	direction?: string;
 }

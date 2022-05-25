@@ -2818,6 +2818,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{
 					eventType: MultilevelSwitchCommand.StartLevelChange,
+					eventTypeLabel: "Start level change",
 					direction: command.direction,
 				},
 			);
@@ -2831,7 +2832,10 @@ protocol version:      ${this.protocolVersion}`;
 				"notification",
 				this,
 				CommandClasses["Multilevel Switch"],
-				{ eventType: MultilevelSwitchCommand.StopLevelChange },
+				{
+					eventType: MultilevelSwitchCommand.StopLevelChange,
+					eventTypeLabel: "Stop level change",
+				},
 			);
 		}
 	}
@@ -3666,7 +3670,13 @@ protocol version:      ${this.protocolVersion}`;
 			"notification",
 			this,
 			CommandClasses["Entry Control"],
-			pick(command, ["eventType", "dataType", "eventData"]),
+			pick(command, [
+				"eventType",
+				"eventTypeLabel",
+				"dataType",
+				"dataTypeLabel",
+				"eventData",
+			]),
 		);
 	}
 
