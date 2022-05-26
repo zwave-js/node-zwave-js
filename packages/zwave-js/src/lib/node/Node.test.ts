@@ -1731,7 +1731,9 @@ describe("lib/node/Node", () => {
 			expect(call[1]).toBe(CommandClasses["Entry Control"]);
 			expect(call[2]).toEqual({
 				dataType: EntryControlDataTypes.ASCII,
+				dataTypeLabel: "ASCII",
 				eventType: EntryControlEventTypes.DisarmAll,
+				eventTypeLabel: "DisarmAll",
 				eventData: "1234",
 			});
 
