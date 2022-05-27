@@ -94,6 +94,20 @@ export function getAlarmLevelValueId(endpoint?: number): ValueID {
 	};
 }
 
+function lookupNotificationNames(
+	applHost: ZWaveApplicationHost,
+	notificationTypes: readonly number[],
+): string[] {
+	return notificationTypes
+		.map((n) => {
+			const ret = applHost.configManager.lookupNotification(n);
+			return [n, ret] as const;
+		})
+		.map(([type, ntfcn]) =>
+			ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
+		);
+}
+
 @API(CommandClasses.Notification)
 export class NotificationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
@@ -412,19 +426,6 @@ export class NotificationCC extends CommandClass {
 		return "pull";
 	}
 
-	private lookupNotificationNames(
-		notificationTypes: readonly number[],
-	): string[] {
-		return notificationTypes
-			.map((n) => {
-				const ret = this.host.configManager.lookupNotification(n);
-				return [n, ret] as const;
-			})
-			.map(([type, ntfcn]) =>
-				ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
-			);
-	}
-
 	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode(driver)!;
 		const endpoint = this.getEndpoint(driver)!;
@@ -460,7 +461,8 @@ export class NotificationCC extends CommandClass {
 			supportsV1Alarm = suppResponse.supportsV1Alarm;
 			const supportedNotificationTypes =
 				suppResponse.supportedNotificationTypes;
-			const supportedNotificationNames = this.lookupNotificationNames(
+			const supportedNotificationNames = lookupNotificationNames(
+				driver,
 				supportedNotificationTypes,
 			);
 			const supportedNotificationEvents = new Map<
@@ -605,7 +607,8 @@ export class NotificationCC extends CommandClass {
 				valueDB.getValue<readonly number[]>(
 					getSupportedNotificationTypesValueId(),
 				) ?? [];
-			const supportedNotificationNames = this.lookupNotificationNames(
+			const supportedNotificationNames = lookupNotificationNames(
+				driver,
 				supportedNotificationTypes,
 			);
 
@@ -748,79 +751,6 @@ export class NotificationCCReport extends NotificationCC {
 					);
 					this.sequenceNumber = this.payload[7 + numEventParams];
 				}
-
-				// Turn the event parameters into something useful
-				this.parseEventParameters();
-			} else if (this.alarmType !== 0) {
-				if (this.version >= 2) {
-					// Check if the device actually supports Notification CC, but chooses
-					// to send Alarm frames instead (GH#1034)
-					const valueDB = this.getValueDB();
-					const supportedNotificationTypes = valueDB.getValue<
-						number[]
-					>(getSupportedNotificationTypesValueId());
-					if (
-						isArray(supportedNotificationTypes) &&
-						supportedNotificationTypes.includes(this.alarmType)
-					) {
-						const supportedNotificationEvents = valueDB.getValue<
-							number[]
-						>(
-							getSupportedNotificationEventsValueId(
-								this.alarmType,
-							),
-						);
-						if (
-							isArray(supportedNotificationEvents) &&
-							supportedNotificationEvents.includes(
-								this.alarmLevel,
-							)
-						) {
-							// This alarm frame corresponds to a valid notification event
-							this.host.controllerLog.logNode(
-								this.nodeId as number,
-								`treating V1 Alarm frame as Notification Report`,
-							);
-							this.notificationType = this.alarmType;
-							this.notificationEvent = this.alarmLevel;
-							this.alarmType = undefined;
-							this.alarmLevel = undefined;
-						}
-					}
-				} else {
-					// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-					const mapping =
-						this.getNodeUnsafe()?.deviceConfig?.compat
-							?.alarmMapping;
-					const match = mapping?.find(
-						(m) =>
-							m.from.alarmType === this.alarmType &&
-							(m.from.alarmLevel == undefined ||
-								m.from.alarmLevel === this.alarmLevel),
-					);
-					if (match) {
-						this.host.controllerLog.logNode(
-							this.nodeId as number,
-							`compat mapping found, treating V1 Alarm frame as Notification Report`,
-						);
-						this.notificationType = match.to.notificationType;
-						this.notificationEvent = match.to.notificationEvent;
-						if (match.to.eventParameters) {
-							this.eventParameters = {};
-							for (const [key, val] of Object.entries(
-								match.to.eventParameters,
-							)) {
-								if (typeof val === "number") {
-									this.eventParameters[key] = val;
-								} else if (val === "alarmLevel") {
-									this.eventParameters[key] = this.alarmLevel;
-								}
-							}
-						}
-						// After mapping we do not set the legacy V1 values to undefined
-						// Otherwise, adding a new mapping will be a breaking change
-					}
-				}
 			}
 
 			// Store the V1 alarm values if they exist
@@ -843,6 +773,79 @@ export class NotificationCCReport extends NotificationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+
+		// Check if we need to re-interpret the alarm values somehow
+		if (
+			this.alarmType != undefined &&
+			this.alarmLevel != undefined &&
+			this.alarmType !== 0
+		) {
+			if (this.version >= 2) {
+				// Check if the device actually supports Notification CC, but chooses
+				// to send Alarm frames instead (GH#1034)
+				const valueDB = this.getValueDB();
+				const supportedNotificationTypes = valueDB.getValue<number[]>(
+					getSupportedNotificationTypesValueId(),
+				);
+				if (
+					isArray(supportedNotificationTypes) &&
+					supportedNotificationTypes.includes(this.alarmType)
+				) {
+					const supportedNotificationEvents = valueDB.getValue<
+						number[]
+					>(getSupportedNotificationEventsValueId(this.alarmType));
+					if (
+						isArray(supportedNotificationEvents) &&
+						supportedNotificationEvents.includes(this.alarmLevel)
+					) {
+						// This alarm frame corresponds to a valid notification event
+						applHost.controllerLog.logNode(
+							this.nodeId as number,
+							`treating V1 Alarm frame as Notification Report`,
+						);
+						this.notificationType = this.alarmType;
+						this.notificationEvent = this.alarmLevel;
+						this.alarmType = undefined;
+						this.alarmLevel = undefined;
+					}
+				}
+			} else {
+				// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
+				const mapping =
+					this.getNodeUnsafe()?.deviceConfig?.compat?.alarmMapping;
+				const match = mapping?.find(
+					(m) =>
+						m.from.alarmType === this.alarmType &&
+						(m.from.alarmLevel == undefined ||
+							m.from.alarmLevel === this.alarmLevel),
+				);
+				if (match) {
+					applHost.controllerLog.logNode(
+						this.nodeId as number,
+						`compat mapping found, treating V1 Alarm frame as Notification Report`,
+					);
+					this.notificationType = match.to.notificationType;
+					this.notificationEvent = match.to.notificationEvent;
+					if (match.to.eventParameters) {
+						this.eventParameters = {};
+						for (const [key, val] of Object.entries(
+							match.to.eventParameters,
+						)) {
+							if (typeof val === "number") {
+								this.eventParameters[key] = val;
+							} else if (val === "alarmLevel") {
+								this.eventParameters[key] = this.alarmLevel;
+							}
+						}
+					}
+					// After mapping we do not set the legacy V1 values to undefined
+					// Otherwise, adding a new mapping will be a breaking change
+				}
+			}
+		}
+
+		// Now we can interpret the event parameters and turn them into something useful
+		this.parseEventParameters(applHost);
 
 		const valueDB = this.getValueDB();
 		if (this.alarmType != undefined) {
@@ -951,7 +954,8 @@ export class NotificationCCReport extends NotificationCC {
 		};
 	}
 
-	private parseEventParameters(): void {
+	private parseEventParameters(applHost: ZWaveApplicationHost): void {
+		// This only makes sense for V2+ notifications with a non-empty event parameters buffer
 		if (
 			this.notificationType == undefined ||
 			this.notificationEvent == undefined ||
@@ -959,8 +963,9 @@ export class NotificationCCReport extends NotificationCC {
 		) {
 			return;
 		}
+
 		// Look up the received notification and value in the config
-		const notificationConfig = this.host.configManager.lookupNotification(
+		const notificationConfig = applHost.configManager.lookupNotification(
 			this.notificationType,
 		);
 		if (!notificationConfig) return;
@@ -1043,7 +1048,7 @@ export class NotificationCCReport extends NotificationCC {
 								userId: this.eventParameters[2],
 							};
 						} else {
-							this.host.controllerLog.logNode(
+							applHost.controllerLog.logNode(
 								this.nodeId as number,
 								`Failed to parse Notification CC event parameters, ignoring them...`,
 								"error",

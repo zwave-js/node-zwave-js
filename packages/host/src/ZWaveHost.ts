@@ -40,9 +40,6 @@ export interface ZWaveHostOptions {
 
 /** Host application abstractions to be used in Serial API and CC implementations */
 export interface ZWaveHost {
-	// TODO: There's probably a better fitting name for this now
-	controllerLog: ControllerLogger;
-
 	/** Management of Security S0 keys and nonces */
 	securityManager: SecurityManager | undefined;
 	/** Management of Security S2 keys and nonces */
@@ -92,4 +89,7 @@ export interface ZWaveHost {
 export interface ZWaveApplicationHost extends ZWaveHost {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;
+
+	// TODO: There's probably a better fitting name for this now
+	controllerLog: ControllerLogger;
 }

@@ -43,13 +43,6 @@ export function createTestingHost(
 				controller: 3,
 			},
 		},
-		controllerLog: new Proxy({} as any, {
-			get() {
-				return () => {
-					/* intentionally empty */
-				};
-			},
-		}),
 		nodes: createThrowingMap((nodeId) => {
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,

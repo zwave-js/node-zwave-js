@@ -35,13 +35,6 @@ export class MockController {
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
 			homeId: options.homeId ?? 0x7e571000,
-			controllerLog: new Proxy({} as any, {
-				get(_target, _prop) {
-					return () => {
-						// log nothing
-					};
-				},
-			}),
 			securityManager: undefined,
 			securityManager2: undefined,
 			options: {} as any,

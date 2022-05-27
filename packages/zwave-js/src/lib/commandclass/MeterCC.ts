@@ -209,14 +209,19 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			return pick(response, [
-				"type",
-				"scale",
-				"value",
-				"previousValue",
-				"rateType",
-				"deltaTime",
-			]);
+			return {
+				type: response.type,
+				scale: this.driver.configManager.lookupMeterScale(
+					response.type,
+					response.scale,
+				),
+				...pick(response, [
+					"value",
+					"previousValue",
+					"rateType",
+					"deltaTime",
+				]),
+			};
 		}
 	}
 
@@ -482,7 +487,6 @@ export class MeterCCReport extends MeterCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._type = this.payload[0] & 0b0_00_11111;
-		const meterType = this.host.configManager.lookupMeter(this._type);
 
 		this._rateType = (this.payload[0] & 0b0_11_00000) >>> 5;
 		const scale1Bit2 = (this.payload[0] & 0b1_00_00000) >>> 7;
@@ -531,10 +535,16 @@ export class MeterCCReport extends MeterCC {
 			// 0 means that no previous value is included
 			this._deltaTime = 0;
 		}
-		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
-		this._scale = this.host.configManager.lookupMeterScale(
+		this.scale = scale1 === 7 ? scale1 + scale2 : scale1;
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const meterType = applHost.configManager.lookupMeter(this._type);
+		const scale = applHost.configManager.lookupMeterScale(
 			this._type,
-			scale,
+			this.scale,
 		);
 
 		// Filter out unknown meter types and scales, unless the strict validation is disabled
@@ -547,8 +557,8 @@ export class MeterCCReport extends MeterCC {
 				`Unknown meter type ${num2hex(this.type)} or corrupted data`,
 			)(!!meterType);
 			validatePayload.withReason(
-				`Unknown meter scale ${num2hex(scale)} or corrupted data`,
-			)(this.scale.label !== getDefaultMeterScale(scale).label);
+				`Unknown meter scale ${num2hex(this.scale)} or corrupted data`,
+			)(scale.label !== getDefaultMeterScale(this.scale).label);
 
 			// Filter out unsupported meter types, scales and rate types if possible
 			if (this.version >= 2) {
@@ -568,8 +578,8 @@ export class MeterCCReport extends MeterCC {
 				);
 				if (supportedScales?.length) {
 					validatePayload.withReason(
-						`Unsupported meter scale ${this._scale.label} or corrupted data`,
-					)(supportedScales.includes(this._scale.key));
+						`Unsupported meter scale ${scale.label} or corrupted data`,
+					)(supportedScales.includes(this.scale));
 				}
 
 				const supportedRateTypes = valueDB.getValue<RateType[]>(
@@ -585,20 +595,12 @@ export class MeterCCReport extends MeterCC {
 				}
 			}
 		}
-	}
-
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		const valueDB = this.getValueDB();
-
 		const valueId = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "value",
-			propertyKey: toPropertyKey(
-				this._type,
-				this._rateType,
-				this._scale.key,
-			),
+			propertyKey: toPropertyKey(this._type, this._rateType, this.scale),
 		};
 		// Always create metadata if it does not exist
 		if (!valueDB.hasMetadata(valueId)) {
@@ -607,14 +609,14 @@ export class MeterCCReport extends MeterCC {
 				label: getValueLabel(
 					applHost.configManager,
 					this._type,
-					this._scale,
+					scale,
 					this._rateType,
 				),
-				unit: this._scale.label,
+				unit: scale.label,
 				ccSpecific: {
 					meterType: this._type,
 					rateType: this._rateType,
-					scale: this._scale.key,
+					scale: this.scale,
 				},
 			});
 		}
@@ -627,10 +629,7 @@ export class MeterCCReport extends MeterCC {
 		return this._type;
 	}
 
-	private _scale: MeterScale;
-	public get scale(): MeterScale {
-		return this._scale;
-	}
+	public readonly scale: number;
 
 	private _value: number;
 	public get value(): number {
@@ -653,11 +652,15 @@ export class MeterCCReport extends MeterCC {
 	}
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+		const meterType = driver.configManager.lookupMeter(this._type);
+		const scale = driver.configManager.lookupMeterScale(
+			this._type,
+			this.scale,
+		);
+
 		const message: MessageRecord = {
-			type:
-				driver.configManager.lookupMeter(this.type)?.name ??
-				`Unknown (${num2hex(this._type)})`,
-			scale: this._scale.label,
+			type: meterType?.name ?? `Unknown (${num2hex(this._type)})`,
+			scale: scale.label,
 			"rate type": getEnumMemberName(RateType, this._rateType),
 			value: this.value,
 		};
@@ -678,7 +681,7 @@ function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
 	// We expect a Meter Report that matches the requested scale and rate type
 	// (if they were requested)
 	return (
-		(sent.scale == undefined || sent.scale === received.scale.key) &&
+		(sent.scale == undefined || sent.scale === received.scale) &&
 		(sent.rateType == undefined || sent.rateType == received.rateType)
 	);
 }

@@ -69,8 +69,8 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
 		if (gotDeserializationOptions(options)) {
+			super(host, options);
 			validatePayload(this.payload.length >= 2);
 			this.fibaroCCId = this.payload[0];
 			this.fibaroCCCommand = this.payload[1];
@@ -83,7 +83,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				return new FibaroVenetianBlindCC(host, options);
 			}
 		} else {
-			this.manufacturerId = MANUFACTURERID_FIBARO;
+			super(host, { ...options, manufacturerId: MANUFACTURERID_FIBARO });
 		}
 	}
 

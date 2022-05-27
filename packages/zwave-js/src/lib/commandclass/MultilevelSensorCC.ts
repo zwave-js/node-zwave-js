@@ -17,7 +17,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
-import { num2hex, pick } from "@zwave-js/shared";
+import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import {
@@ -228,16 +228,24 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			);
 		if (!response) return;
 
+		const responseScale = this.driver.configManager.lookupSensorScale(
+			response.type,
+			response.scale,
+		);
+
 		if (sensorType == undefined) {
 			// Overload #1: return the full response
 			return {
 				type: response.type,
 				value: response.value,
-				scale: response.scale,
+				scale: responseScale,
 			};
 		} else if (scale == undefined) {
 			// Overload #2: return value and scale
-			return pick(response, ["value", "scale"]);
+			return {
+				value: response.value,
+				scale: responseScale,
+			};
 		} else {
 			// Overload #3: return only the value
 			return response.value;
@@ -501,74 +509,68 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.type = this.payload[0];
-			const sensorType = this.host.configManager.lookupSensorType(
-				this.type,
-			);
 			// parseFloatWithScale does its own validation
 			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 			this.value = value;
-			this.scale = this.host.configManager.lookupSensorScale(
-				this.type,
-				scale,
-			);
-
-			// Filter out unknown sensor types and scales, unless the strict validation is disabled
-			const measurementValidation =
-				!this.getNodeUnsafe()?.deviceConfig?.compat
-					?.disableStrictMeasurementValidation;
-
-			if (measurementValidation) {
-				validatePayload.withReason(
-					`Unknown sensor type ${num2hex(
-						this.type,
-					)} or corrupted data`,
-				)(!!sensorType);
-				validatePayload.withReason(
-					`Unknown scale ${num2hex(scale)} or corrupted data`,
-				)(this.scale.label !== getDefaultScale(scale).label);
-
-				// Filter out unsupported sensor types and scales if possible
-				if (this.version >= 5) {
-					const valueDB = this.getValueDB();
-
-					const supportedSensorTypes = valueDB.getValue<number[]>(
-						getSupportedSensorTypesValueId(this.endpointIndex),
-					);
-					if (supportedSensorTypes?.length) {
-						validatePayload.withReason(
-							`Unsupported sensor type ${
-								sensorType!.label
-							} or corrupted data`,
-						)(supportedSensorTypes.includes(this.type));
-					}
-
-					const supportedScales = valueDB.getValue<number[]>(
-						getSupportedScalesValueId(
-							this.endpointIndex,
-							this.type,
-						),
-					);
-					if (supportedScales?.length) {
-						validatePayload.withReason(
-							`Unsupported sensor type ${this.scale.label} or corrupted data`,
-						)(supportedScales.includes(this.scale.key));
-					}
-				}
-			}
+			this.scale = scale;
 		} else {
 			this.type = options.type;
 			this.value = options.value;
 			this.scale =
 				options.scale instanceof Scale
-					? options.scale
-					: this.host.configManager.lookupSensorScale(
-							this.type,
-							options.scale,
-					  );
+					? options.scale.key
+					: options.scale;
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const sensorType = applHost.configManager.lookupSensorType(this.type);
+		const scale = applHost.configManager.lookupSensorScale(
+			this.type,
+			this.scale,
+		);
+
+		// Filter out unknown sensor types and scales, unless the strict validation is disabled
+		const measurementValidation =
+			!this.getNodeUnsafe()?.deviceConfig?.compat
+				?.disableStrictMeasurementValidation;
+
+		if (measurementValidation) {
+			validatePayload.withReason(
+				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
+			)(!!sensorType);
+			validatePayload.withReason(
+				`Unknown scale ${num2hex(this.scale)} or corrupted data`,
+			)(scale.label !== getDefaultScale(this.scale).label);
+
+			// Filter out unsupported sensor types and scales if possible
+			if (this.version >= 5) {
+				const valueDB = this.getValueDB();
+
+				const supportedSensorTypes = valueDB.getValue<number[]>(
+					getSupportedSensorTypesValueId(this.endpointIndex),
+				);
+				if (supportedSensorTypes?.length) {
+					validatePayload.withReason(
+						`Unsupported sensor type ${
+							sensorType!.label
+						} or corrupted data`,
+					)(supportedSensorTypes.includes(this.type));
+				}
+
+				const supportedScales = valueDB.getValue<number[]>(
+					getSupportedScalesValueId(this.endpointIndex, this.type),
+				);
+				if (supportedScales?.length) {
+					validatePayload.withReason(
+						`Unsupported sensor type ${scale.label} or corrupted data`,
+					)(supportedScales.includes(scale.key));
+				}
+			}
+		}
+
 		const typeName = applHost.configManager.getSensorTypeName(this.type);
 		const valueId: ValueID = {
 			commandClass: this.ccId,
@@ -577,11 +579,11 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		};
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
-			unit: this.scale.unit,
+			unit: scale.unit,
 			label: typeName,
 			ccSpecific: {
 				sensorType: this.type,
-				scale: this.scale.key,
+				scale: scale.key,
 			},
 		});
 		this.getValueDB().setValue(valueId, this.value);
@@ -589,13 +591,13 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 
 	public type: number;
-	public scale: Scale;
+	public scale: number;
 	public value: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.type]),
-			encodeFloatWithScale(this.value, this.scale.key),
+			encodeFloatWithScale(this.value, this.scale),
 		]);
 		return super.serialize();
 	}
@@ -605,7 +607,10 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			...super.toLogEntry(driver),
 			message: {
 				type: driver.configManager.getSensorTypeName(this.type),
-				scale: this.scale.label,
+				scale: driver.configManager.lookupSensorScale(
+					this.type,
+					this.scale,
+				).label,
 				value: this.value,
 			},
 		};

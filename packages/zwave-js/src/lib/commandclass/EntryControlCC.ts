@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -468,7 +468,12 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		);
 		this.minKeyCacheTimeout = this.payload[offset + 2];
 		this.maxKeyCacheTimeout = this.payload[offset + 3];
+	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Store min/max cache size and timeout as metadata
 		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
 			this.endpointIndex,
 		);
@@ -486,6 +491,8 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,
 		});
+
+		return true;
 	}
 
 	@ccValue({ internal: true })

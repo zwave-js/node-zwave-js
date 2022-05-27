@@ -419,6 +419,19 @@
 			"}"
 		]
 	},
+	"Z-Wave Command Class persistValues override": {
+		"scope": "typescript",
+		"prefix": "zwccpv",
+		"body": [
+			"public persistValues(applHost: ZWaveApplicationHost): boolean {",
+			"\tif (!super.persistValues(applHost)) return false;",
+			"",
+			"\t${0://TODO: Implementation}",
+			"",
+			"\treturn true;",
+			"}"
+		]
+	},
 	"Z-Wave Command Class implementation": {
 		"scope": "typescript",
 		"prefix": "zwcc",

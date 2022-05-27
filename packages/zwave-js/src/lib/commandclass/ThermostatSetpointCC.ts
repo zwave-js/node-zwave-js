@@ -167,8 +167,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	};
 
 	@validateArgs()
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(setpointType: ThermostatSetpointType) {
+	public async get(
+		setpointType: ThermostatSetpointType,
+	): Promise<{ value: number; scale: Scale } | undefined> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Get,
@@ -185,14 +186,14 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				this.commandOptions,
 			);
 		if (!response) return;
-		return response.type === ThermostatSetpointType["N/A"]
-			? // not supported
-			  undefined
-			: // supported
-			  {
-					value: response.value,
-					scale: response.scale,
-			  };
+		if (response.type !== ThermostatSetpointType["N/A"]) {
+			// This is a supported setpoint
+			const scale = getScale(this.driver.configManager, response.scale);
+			return {
+				value: response.value,
+				scale,
+			};
+		}
 	}
 
 	@validateArgs()
@@ -625,17 +626,21 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = getScale(this.host.configManager, 0);
+			this.scale = 0;
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(this.host.configManager, scale);
+		this.scale = scale;
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const scale = getScale(applHost.configManager, this.scale);
+
 		const valueDB = this.getValueDB();
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
@@ -647,11 +652,11 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				valueDB.getMetadata(setpointValueId) as
 					| ValueMetadataNumeric
 					| undefined
-			)?.unit !== this._scale.unit
+			)?.unit !== scale.unit
 		) {
 			valueDB.setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
-				unit: this._scale.unit,
+				unit: scale.unit,
 				ccSpecific: {
 					setpointType: this._type,
 				},
@@ -664,7 +669,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			this.endpointIndex,
 			this._type,
 		);
-		valueDB.setValue(scaleValueId, this._scale.key);
+		valueDB.setValue(scaleValueId, scale.key);
 		return true;
 	}
 
@@ -673,10 +678,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._type;
 	}
 
-	private _scale: Scale;
-	public get scale(): Scale {
-		return this._scale;
-	}
+	public readonly scale: number;
 
 	private _value: number;
 	public get value(): number {
@@ -684,6 +686,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+		const scale = getScale(driver.configManager, this.scale);
 		return {
 			...super.toLogEntry(driver),
 			message: {
@@ -691,7 +694,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 					ThermostatSetpointType,
 					this.type,
 				),
-				value: `${this.value} ${this.scale.unit}`,
+				value: `${this.value} ${scale.unit}`,
 			},
 		};
 	}
@@ -772,6 +775,10 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		} = parseFloatWithScale(this.payload.slice(1)));
 		({ value: this._maxValue, scale: this._maxValueScale } =
 			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this._type);
@@ -780,12 +787,14 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
-				getSetpointUnit(this.host.configManager, this._minValueScale) ||
-				getSetpointUnit(this.host.configManager, this._maxValueScale),
+				getSetpointUnit(applHost.configManager, this._minValueScale) ||
+				getSetpointUnit(applHost.configManager, this._maxValueScale),
 			ccSpecific: {
 				setpointType: this._type,
 			},
 		});
+
+		return true;
 	}
 
 	private _type: ThermostatSetpointType;

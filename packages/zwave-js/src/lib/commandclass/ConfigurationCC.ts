@@ -1399,16 +1399,40 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this._valueSize <= 4,
 			this.payload.length >= 2 + this._valueSize,
 		);
-
-		const oldParamInformation = this.getParamInformation(this._parameter);
+		// Default to parsing the value as SignedInteger, like the specs say.
+		// We try to re-interpret the value in persistValues()
 		this._value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
-			// In Config CC v1/v2, this must be SignedInteger
-			// As those nodes don't communicate any parameter information
-			// we fall back to that default value anyways
-			oldParamInformation.format ?? ConfigValueFormat.SignedInteger,
+			ConfigValueFormat.SignedInteger,
 		);
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Check if the initial assumption of SignedInteger holds true
+		const oldParamInformation = this.getParamInformation(this._parameter);
+		if (
+			oldParamInformation.format != undefined &&
+			oldParamInformation.format !== ConfigValueFormat.SignedInteger
+		) {
+			// Re-interpret the value with the new format
+			const raw = Buffer.allocUnsafe(this._valueSize);
+			serializeValue(
+				raw,
+				0,
+				this._valueSize,
+				ConfigValueFormat.SignedInteger,
+				this._value,
+			);
+			this._value = parseValue(
+				raw,
+				this._valueSize,
+				oldParamInformation.format,
+			);
+		}
+
 		// Store the parameter size and value
 		this.extendParamInformation(this._parameter, undefined, {
 			valueSize: this._valueSize,
@@ -1465,6 +1489,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				this._value,
 			);
 		}
+		return true;
 	}
 
 	private _parameter: number;
@@ -1866,6 +1891,11 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				),
 			);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		// Store every received parameter
 		for (const [parameter, value] of this._values.entries()) {
 			this.getValueDB().setValue(
@@ -1876,6 +1906,8 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				value,
 			);
 		}
+
+		return true;
 	}
 
 	private _reportsToFollow: number;

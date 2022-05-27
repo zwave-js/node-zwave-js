@@ -438,6 +438,8 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 	public readonly dimmingDuration?: Duration;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		// Do not persist values for an inactive scene
 		if (
 			this.sceneId === 0 ||

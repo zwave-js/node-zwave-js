@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -322,6 +322,10 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		if (!this._supportedModes.includes(HumidityControlMode.Off)) {
 			this._supportedModes.unshift(HumidityControlMode.Off);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
@@ -337,6 +341,8 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 				this._supportedModes,
 			),
 		});
+
+		return true;
 	}
 
 	private _supportedModes: HumidityControlMode[];

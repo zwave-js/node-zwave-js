@@ -252,6 +252,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		const valueId: ValueID = getBinarySensorValueId(
 			this.endpointIndex,
 			this._type,

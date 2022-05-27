@@ -396,8 +396,11 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
 		this.getValueDB().setValue(valueId, this.name);
+
 		return true;
 	}
 

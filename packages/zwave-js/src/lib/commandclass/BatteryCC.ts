@@ -11,7 +11,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
@@ -411,7 +411,13 @@ export class BatteryCCHealthReport extends BatteryCC {
 			true, // The temperature field may be omitted
 		);
 		this._temperature = temperature;
+		this.temperatureScale = scale;
+	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		// Update the temperature unit in the value DB
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -420,8 +426,10 @@ export class BatteryCCHealthReport extends BatteryCC {
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			label: "Temperature",
-			unit: scale === 0x00 ? "°C" : undefined,
+			unit: this.temperatureScale === 0x00 ? "°C" : undefined,
 		});
+
+		return true;
 	}
 
 	private _maximumCapacity: number | undefined;
@@ -445,6 +453,8 @@ export class BatteryCCHealthReport extends BatteryCC {
 	public get temperature(): number | undefined {
 		return this._temperature;
 	}
+
+	private readonly temperatureScale: number | undefined;
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {

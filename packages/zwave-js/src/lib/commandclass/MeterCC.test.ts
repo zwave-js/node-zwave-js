@@ -135,7 +135,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
-		expect(cc.scale.key).toBe(2);
+		expect(cc.scale).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Unspecified);
 		expect(cc.deltaTime).toBe(0);
@@ -156,7 +156,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
-		expect(cc.scale.key).toBe(2);
+		expect(cc.scale).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Produced);
 		expect(cc.deltaTime).toBe(0);
@@ -178,7 +178,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
 		expect(cc.type).toBe(3);
-		expect(cc.scale.key).toBe(2);
+		expect(cc.scale).toBe(2);
 		expect(cc.value).toBe(5.5);
 		expect(cc.rateType).toBe(RateType.Produced);
 		expect(cc.deltaTime).toBe(5);
@@ -199,7 +199,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		);
 		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
-		expect(cc.scale.key).toBe(6);
+		expect(cc.scale).toBe(6);
 	});
 
 	it("the Report command (V4) should be deserialized correctly", () => {
@@ -217,7 +217,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		);
 		const cc = new MeterCCReport(host, { nodeId: 1, data: ccData });
 
-		expect(cc.scale.key).toBe(8);
+		expect(cc.scale).toBe(8);
 	});
 
 	it("the Report command should validate that a known meter type is given", () => {

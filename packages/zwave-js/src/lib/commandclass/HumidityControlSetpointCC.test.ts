@@ -91,11 +91,12 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 		});
 
 		expect(cc.type).toEqual(HumidityControlSetpointType.Humidifier);
-		expect(cc.scale).toMatchObject({
-			key: 1,
-			label: "Absolute humidity",
-			unit: "g/m³",
-		});
+		expect(cc.scale).toBe(1);
+		// expect(cc.scale).toMatchObject({
+		// 	key: 1,
+		// 	label: "Absolute humidity",
+		// 	unit: "g/m³",
+		// });
 		expect(cc.value).toBe(12);
 	});
 
@@ -237,16 +238,16 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 			data: ccData,
 		});
 
-		expect(cc.supportedScales).toEqual([
-			new Scale(0, {
-				label: "Percentage value",
-				unit: "%",
-			}),
-			new Scale(1, {
-				label: "Absolute humidity",
-				unit: "g/m³",
-			}),
-		]);
+		expect(cc.supportedScales).toEqual([0, 1]);
+		// 	new Scale(0, {
+		// 		label: "Percentage value",
+		// 		unit: "%",
+		// 	}),
+		// 	new Scale(1, {
+		// 		label: "Absolute humidity",
+		// 		unit: "g/m³",
+		// 	}),
+		// ]);
 	});
 
 	it("the CapabilitiesGet command should serialize correctly", () => {

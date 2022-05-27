@@ -611,38 +611,10 @@ export class IndicatorCCReport extends IndicatorCC {
 
 		validatePayload(this.payload.length >= 1);
 
-		const valueDB = this.getValueDB();
-
 		const objCount =
 			this.payload.length >= 2 ? this.payload[1] & 0b11111 : 0;
 		if (objCount === 0) {
 			this.value = this.payload[0];
-
-			if (!this.supportsV2Indicators()) {
-				// Publish the value
-				const valueId = getIndicatorValueValueID(
-					this.endpointIndex,
-					0,
-					1,
-				);
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.UInt8,
-					label: "Indicator value",
-					ccSpecific: {
-						indicatorId: 0,
-					},
-				});
-				valueDB.setValue(valueId, this.value);
-			} else {
-				if (this.isSinglecast()) {
-					// Don't!
-					this.host.controllerLog.logNode(this.nodeId, {
-						message: `ignoring V1 indicator report because the node supports V2 indicators`,
-						direction: "none",
-						endpoint: this.endpointIndex,
-					});
-				}
-			}
 		} else {
 			validatePayload(this.payload.length >= 2 + 3 * objCount);
 			this.values = [];
@@ -653,8 +625,7 @@ export class IndicatorCCReport extends IndicatorCC {
 					propertyId: this.payload[offset + 1],
 					value: this.payload[offset + 2],
 				};
-
-				this.setIndicatorValue(value);
+				this.values.push(value);
 			}
 
 			// TODO: Think if we want this:
@@ -685,14 +656,57 @@ export class IndicatorCCReport extends IndicatorCC {
 		}
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const valueDB = this.getValueDB();
+
+		if (this.value != undefined) {
+			if (!this.supportsV2Indicators()) {
+				// Publish the value
+				const valueId = getIndicatorValueValueID(
+					this.endpointIndex,
+					0,
+					1,
+				);
+				valueDB.setMetadata(valueId, {
+					...ValueMetadata.UInt8,
+					label: "Indicator value",
+					ccSpecific: {
+						indicatorId: 0,
+					},
+				});
+				valueDB.setValue(valueId, this.value);
+			} else {
+				if (this.isSinglecast()) {
+					// Don't!
+					applHost.controllerLog.logNode(this.nodeId, {
+						message: `ignoring V1 indicator report because the node supports V2 indicators`,
+						direction: "none",
+						endpoint: this.endpointIndex,
+					});
+				}
+			}
+		} else if (this.values) {
+			for (const value of this.values) {
+				this.setIndicatorValue(applHost, value);
+			}
+		}
+
+		return true;
+	}
+
 	public readonly value: number | undefined;
 	public readonly values: IndicatorObject[] | undefined;
 
-	private setIndicatorValue(value: IndicatorObject): void {
+	private setIndicatorValue(
+		applHost: ZWaveApplicationHost,
+		value: IndicatorObject,
+	): void {
 		const valueDB = this.getValueDB();
 
 		const metadata = getIndicatorMetadata(
-			this.host.configManager,
+			applHost.configManager,
 			value.indicatorId,
 			value.propertyId,
 		);
@@ -700,7 +714,6 @@ export class IndicatorCCReport extends IndicatorCC {
 		if (metadata.type === "boolean") {
 			value.value = !!value.value;
 		}
-		this.values!.push(value);
 
 		// Publish the value
 		const valueId = getIndicatorValueValueID(
@@ -804,6 +817,8 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
 			this.getValueDB().setValue(

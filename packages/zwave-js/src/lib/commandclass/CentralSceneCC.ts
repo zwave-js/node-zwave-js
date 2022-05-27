@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -296,9 +296,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			// carrying the Key Held Down key attribute.
 			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
 		}
-		// The described behavior is pretty complicated, so we cannot just store
-		// the value and call it a day. Handling of these notifications will
-		// happen in the receiving node class
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const valueId = getSceneValueId(this._sceneNumber);
@@ -309,6 +310,12 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 				label: getSceneLabel(this._sceneNumber),
 			});
 		}
+
+		// The spec behavior is pretty complicated, so we cannot just store
+		// the value and call it a day. Handling of these notifications will
+		// happen in the receiving node class
+
+		return true;
 	}
 
 	private _sequenceNumber: number;
@@ -386,11 +393,16 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				);
 			}
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// Create metadata for all scenes
+		const valueDB = this.getValueDB();
 		for (let i = 1; i <= this._sceneCount; i++) {
 			const valueId = getSceneValueId(i);
-			this.getValueDB().setMetadata(valueId, {
+			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: getSceneLabel(i),
 				states: enumValuesToMetadataStates(
@@ -399,6 +411,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				),
 			});
 		}
+
+		return true;
 	}
 
 	private _sceneCount: number;

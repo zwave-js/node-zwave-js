@@ -644,8 +644,6 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 5);
 
-		const valueDB = this.getValueDB();
-
 		this.currentMode = this.payload[0];
 		this.outsideHandlesCanOpenDoor = [
 			!!(this.payload[1] & 0b0001_0000),
@@ -660,27 +658,9 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			!!(this.payload[1] & 0b1000),
 		];
 
-		// Only store the door/bolt/latch status if the lock supports it
-		const supportsDoorStatus = !!valueDB.getValue(
-			getDoorSupportedValueId(this.endpointIndex),
-		);
-		if (supportsDoorStatus) {
-			this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
-		}
-		const supportsBoltStatus = !!valueDB.getValue(
-			getBoltSupportedValueId(this.endpointIndex),
-		);
-		if (supportsBoltStatus) {
-			this.boltStatus = !!(this.payload[2] & 0b10)
-				? "unlocked"
-				: "locked";
-		}
-		const supportsLatchStatus = !!valueDB.getValue(
-			getLatchSupportedValueId(this.endpointIndex),
-		);
-		if (supportsLatchStatus) {
-			this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
-		}
+		this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
+		this.boltStatus = !!(this.payload[2] & 0b10) ? "unlocked" : "locked";
+		this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
 
 		// Ignore invalid timeout values
 		const lockTimeoutMinutes = this.payload[3];
@@ -699,15 +679,26 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		if (!super.persistValues(applHost)) return false;
 
 		const valueDB = this.getValueDB();
-		if (this.doorStatus != undefined) {
+
+		// Only store the door/bolt/latch status if the lock supports it
+		const supportsDoorStatus = !!valueDB.getValue(
+			getDoorSupportedValueId(this.endpointIndex),
+		);
+		if (supportsDoorStatus) {
 			const valueId = getDoorStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.doorStatus);
 		}
-		if (this.boltStatus != undefined) {
+		const supportsBoltStatus = !!valueDB.getValue(
+			getBoltSupportedValueId(this.endpointIndex),
+		);
+		if (supportsBoltStatus) {
 			const valueId = getBoltStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.boltStatus);
 		}
-		if (this.latchStatus != undefined) {
+		const supportsLatchStatus = !!valueDB.getValue(
+			getLatchSupportedValueId(this.endpointIndex),
+		);
+		if (supportsLatchStatus) {
 			const valueId = getLatchStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.latchStatus);
 		}

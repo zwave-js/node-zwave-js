@@ -181,7 +181,23 @@ export class MultiChannelCCAPI extends CCAPI {
 				cc,
 				this.commandOptions,
 			);
-		return response?.capability;
+		if (response) {
+			const generic = this.driver.configManager.lookupGenericDeviceClass(
+				response.genericDeviceClass,
+			);
+			const specific =
+				this.driver.configManager.lookupSpecificDeviceClass(
+					response.genericDeviceClass,
+					response.specificDeviceClass,
+				);
+			return {
+				isDynamic: response.isDynamic,
+				wasRemoved: response.wasRemoved,
+				supportedCCs: response.supportedCCs,
+				generic,
+				specific,
+			};
+		}
 	}
 
 	@validateArgs()
@@ -698,62 +714,64 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		validatePayload(this.payload.length >= 1);
 		this.endpointIndex = this.payload[0] & 0b01111111;
 		const NIF = parseNodeInformationFrame(this.payload.slice(1));
-		const capability: EndpointCapability = {
-			isDynamic: !!(this.payload[0] & 0b10000000),
-			wasRemoved: false,
-			generic: this.host.configManager.lookupGenericDeviceClass(
-				NIF.generic,
-			),
-			specific: this.host.configManager.lookupSpecificDeviceClass(
-				NIF.generic,
-				NIF.specific,
-			),
-			supportedCCs: NIF.supportedCCs,
-			// TODO: does this include controlledCCs aswell?
-		};
+		this.isDynamic = !!(this.payload[0] & 0b10000000);
+		this.genericDeviceClass = NIF.generic;
+		this.specificDeviceClass = NIF.specific;
+		this.supportedCCs = NIF.supportedCCs;
+		// TODO: does this include controlledCCs aswell?
+
 		// Removal reports have very specific information
-		capability.wasRemoved =
-			capability.isDynamic &&
-			capability.generic.key === 0xff && // "Non-Interoperable"
-			capability.specific.key === 0x00;
-
-		this.capability = capability;
-
-		// Remember the supported CCs
+		this.wasRemoved =
+			this.isDynamic &&
+			this.genericDeviceClass === 0xff && // "Non-Interoperable"
+			this.specificDeviceClass === 0x00;
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		const deviceClassValueId = getEndpointDeviceClassValueId(
 			this.endpointIndex,
 		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
 
 		const valueDB = this.getValueDB();
-		if (this.capability.wasRemoved) {
+		if (this.wasRemoved) {
 			valueDB.removeValue(deviceClassValueId);
 			valueDB.removeValue(ccsValueId);
 		} else {
 			valueDB.setValue(deviceClassValueId, {
-				generic: this.capability.generic.key,
-				specific: this.capability.specific.key,
+				generic: this.genericDeviceClass,
+				specific: this.specificDeviceClass,
 			});
-			valueDB.setValue(ccsValueId, this.capability.supportedCCs);
+			valueDB.setValue(ccsValueId, this.supportedCCs);
 		}
 		return true;
 	}
 
 	public readonly endpointIndex: number;
-	public readonly capability: EndpointCapability;
+	public readonly genericDeviceClass: number;
+	public readonly specificDeviceClass: number;
+	public readonly supportedCCs: CommandClasses[];
+	public readonly isDynamic: boolean;
+	public readonly wasRemoved: boolean;
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+		const generic = driver.configManager.lookupGenericDeviceClass(
+			this.genericDeviceClass,
+		);
+		const specific = driver.configManager.lookupSpecificDeviceClass(
+			this.genericDeviceClass,
+			this.specificDeviceClass,
+		);
 		return {
 			...super.toLogEntry(driver),
 			message: {
 				"endpoint index": this.endpointIndex,
-				"generic device class": this.capability.generic.label,
-				"specific device class": this.capability.specific.label,
-				"is dynamic end point": this.capability.isDynamic,
-				"supported CCs": this.capability.supportedCCs
+				"generic device class": generic.label,
+				"specific device class": specific.label,
+				"is dynamic end point": this.isDynamic,
+				"supported CCs": this.supportedCCs
 					.map((cc) => `\n· ${getCCName(cc)}`)
 					.join(""),
 			},

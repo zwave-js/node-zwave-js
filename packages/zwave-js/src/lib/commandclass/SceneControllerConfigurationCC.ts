@@ -543,6 +543,8 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 	public readonly dimmingDuration: Duration;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		// If groupId = 0, values are meaningless
 		if (this.groupId === 0) return false;
 		return persistSceneConfig.call(

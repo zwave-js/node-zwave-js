@@ -255,6 +255,8 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -266,6 +268,7 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 			label: `Device ID (${valueId.propertyKey})`,
 		});
 		this.getValueDB().setValue(valueId, this.deviceId);
+
 		return true;
 	}
 
