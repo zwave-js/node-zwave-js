@@ -62,6 +62,9 @@ describe("compat flags", () => {
 			nodeId: 2,
 		}) as NotificationCCReport;
 
+		// Call persistValues to trigger the mapping
+		deserialized.persistValues(driver);
+
 		// Keypad lock
 		expect(deserialized.notificationType).toBe(0x06);
 		expect(deserialized.notificationEvent).toBe(0x05);

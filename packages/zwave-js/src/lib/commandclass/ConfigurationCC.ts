@@ -1,7 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
 import {
-	CacheMetadata,
-	CacheValue,
 	CommandClasses,
 	ConfigurationMetadata,
 	ConfigValueFormat,
@@ -23,7 +21,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -123,6 +121,7 @@ type NormalizedConfigurationCCAPISetOptions = {
 );
 
 function normalizeConfigurationCCAPISetOptions(
+	applHost: ZWaveApplicationHost,
 	endpoint: Endpoint | VirtualEndpoint,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
@@ -136,6 +135,7 @@ function normalizeConfigurationCCAPISetOptions(
 						ConfigurationCC,
 				  )!;
 		const paramInfo = ccc.getParamInformation(
+			applHost,
 			options.parameter,
 			options.bitMask,
 		);
@@ -170,6 +170,7 @@ function normalizeConfigurationCCAPISetOptions(
 						ConfigurationCC,
 				  )!;
 		const paramInfo = ccc.getParamInformation(
+			applHost,
 			options.parameter,
 			options.bitMask,
 		);
@@ -189,6 +190,7 @@ function normalizeConfigurationCCAPISetOptions(
 }
 
 function bulkMergePartialParamValues(
+	applHost: ZWaveApplicationHost,
 	endpoint: Endpoint | VirtualEndpoint,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
@@ -218,6 +220,7 @@ function bulkMergePartialParamValues(
 			allParams.push({
 				parameter,
 				value: ccc.composePartialParamValues(
+					applHost,
 					parameter,
 					partials.map((p) => ({
 						bitMask: p.bitMask!,
@@ -244,6 +247,17 @@ function isSignedPartial(
 		(format ?? ConfigValueFormat.SignedInteger) ===
 			ConfigValueFormat.SignedInteger
 	);
+}
+
+function reInterpretSignedValue(
+	value: ConfigValue,
+	valueSize: number,
+	targetFormat: ConfigValueFormat,
+): ConfigValue {
+	// Re-interpret the value with the new format
+	const raw = Buffer.allocUnsafe(valueSize);
+	serializeValue(raw, 0, valueSize, ConfigValueFormat.SignedInteger, value);
+	return parseValue(raw, valueSize, targetFormat);
 }
 
 @API(CommandClasses.Configuration)
@@ -285,6 +299,8 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 
 		let ccInstance: ConfigurationCC;
+		const driver = this.driver;
+
 		if (this.isSinglecast()) {
 			ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
 		} else if (this.isMulticast()) {
@@ -307,7 +323,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				node
 					.getEndpoint(this.endpoint.index)!
 					.createCCInstance(ConfigurationCC)!
-					.getParamInformation(property, propertyKey),
+					.getParamInformation(this.driver, property, propertyKey),
 			);
 			if (
 				!paramInfos.length ||
@@ -335,10 +351,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		let valueSize = ccInstance.getParamInformation(property).valueSize;
-		let valueFormat =
-			ccInstance.getParamInformation(property).format ??
-			ConfigValueFormat.SignedInteger;
+		let {
+			valueSize,
+			format: valueFormat = ConfigValueFormat.SignedInteger,
+		} = ccInstance.getParamInformation(driver, property);
 
 		let targetValue: number;
 		if (propertyKey) {
@@ -346,12 +362,14 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Find out the correct value size
 			if (!valueSize) {
 				valueSize = ccInstance.getParamInformation(
+					driver,
 					property,
 					propertyKey,
 				).valueSize;
 			}
 			// Add the target value to the remaining partial values
 			targetValue = ccInstance.composePartialParamValue(
+				driver,
 				property,
 				propertyKey,
 				value,
@@ -462,6 +480,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			if (!valueBitMask) return response.value;
 			// If a partial parameter was requested, extract that value
 			const paramInfo = cc.getParamInformation(
+				this.driver,
 				response.parameter,
 				valueBitMask,
 			);
@@ -555,6 +574,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			let value = values.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
 				const paramInfo = cc.getParamInformation(
+					this.driver,
 					o.parameter,
 					o.bitMask,
 				);
@@ -606,6 +626,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		let cc: ConfigurationCCSet;
 		if (args.length === 1) {
 			const options = normalizeConfigurationCCAPISetOptions(
+				this.driver,
 				this.endpoint,
 				args[0],
 			);
@@ -618,6 +639,7 @@ export class ConfigurationCCAPI extends CCAPI {
 								ConfigurationCC,
 						  )!;
 				value = ccc.composePartialParamValue(
+					this.driver,
 					options.parameter,
 					options.bitMask,
 					options.value,
@@ -656,10 +678,15 @@ export class ConfigurationCCAPI extends CCAPI {
 	): Promise<void> {
 		// Normalize the values so we can better work with them
 		const normalized = values.map((v) =>
-			normalizeConfigurationCCAPISetOptions(this.endpoint, v),
+			normalizeConfigurationCCAPISetOptions(
+				this.driver,
+				this.endpoint,
+				v,
+			),
 		);
 		// And merge multiple partials that belong the same "full" value
 		const allParams = bulkMergePartialParamValues(
+			this.driver,
 			this.endpoint,
 			normalized,
 		);
@@ -899,7 +926,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				if (originalValue != undefined) {
 					const logMessage = `  Param ${param}:
     readable  = true
-    valueSize = ${ccInstance.getParamInformation(param).valueSize}
+    valueSize = ${ccInstance.getParamInformation(this.driver, param).valueSize}
     value     = ${originalValue.toString()}`;
 					this.driver.controllerLog.logNode(this.endpoint.nodeId, {
 						message: logMessage,
@@ -954,7 +981,7 @@ export class ConfigurationCC extends CommandClass {
 				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
 			});
-			this.deserializeParamInformationFromConfig(config);
+			this.deserializeParamInformationFromConfig(driver, config);
 		}
 
 		if (this.version >= 3) {
@@ -1062,7 +1089,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -1119,12 +1146,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		} else {
 			// V3+: Query the values of discovered parameters
 			const parameters = distinct(
-				this.getDefinedValueIDs()
+				this.getDefinedValueIDs(driver)
 					.map((v) => v.property)
 					.filter((p): p is number => typeof p === "number"),
 			);
 			for (const param of parameters) {
-				if (this.getParamInformation(param).readable !== false) {
+				if (
+					this.getParamInformation(driver, param).readable !== false
+				) {
 					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param} value...`,
@@ -1146,9 +1175,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Whether this node's param information was loaded from a config file.
 	 * If this is true, we don't trust what the node reports
 	 */
-	protected get isParamInformationFromConfig(): boolean {
+	protected isParamInformationFromConfig(
+		applHost: ZWaveApplicationHost,
+	): boolean {
 		return (
-			this.getValueDB().getValue(isParamInfoFromConfigValueId) === true
+			this.getValueDB(applHost).getValue(isParamInfoFromConfigValueId) ===
+			true
 		);
 	}
 
@@ -1157,17 +1189,22 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Stores config parameter metadata for this CC's node
 	 */
 	public extendParamInformation(
+		applHost: ZWaveApplicationHost,
 		parameter: number,
 		valueBitMask: number | undefined,
 		info: Partial<ConfigurationMetadata>,
 	): void {
 		// Don't trust param information that a node reports if we have already loaded it from a config file
-		if (this.isParamInformationFromConfig) return;
+		if (this.isParamInformationFromConfig(applHost)) return;
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
 		// Retrieve the base metadata
-		const metadata = this.getParamInformation(parameter, valueBitMask);
+		const metadata = this.getParamInformation(
+			applHost,
+			parameter,
+			valueBitMask,
+		);
 		// Override it with new data
 		Object.assign(metadata, info);
 		// And store it back
@@ -1179,10 +1216,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Returns stored config parameter metadata for this CC's node
 	 */
 	public getParamInformation(
+		applHost: ZWaveApplicationHost,
 		parameter: number,
 		valueBitMask?: number,
 	): ConfigurationMetadata {
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const valueId = getParamInformationValueID(parameter, valueBitMask);
 		return (valueDB.getMetadata(valueId) ?? {
 			...ValueMetadata.Any,
@@ -1194,14 +1232,19 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Returns the param info that was queried for this node. This returns the information that was returned by the node
 	 * and does not include partial parameters.
 	 */
-	public getQueriedParamInfos(): Record<number, ConfigurationMetadata> {
+	public getQueriedParamInfos(
+		applHost: ZWaveApplicationHost,
+	): Record<number, ConfigurationMetadata> {
 		const parameters = distinct(
-			this.getDefinedValueIDs()
+			this.getDefinedValueIDs(applHost)
 				.map((v) => v.property)
 				.filter((p): p is number => typeof p === "number"),
 		);
 		return composeObject(
-			parameters.map((p) => [p as any, this.getParamInformation(p)]),
+			parameters.map((p) => [
+				p as any,
+				this.getParamInformation(applHost, p),
+			]),
 		);
 	}
 
@@ -1209,9 +1252,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Returns stored config parameter metadata for all partial config params addressed with the given parameter number
 	 */
 	public getPartialParamInfos(
+		applHost: ZWaveApplicationHost,
 		parameter: number,
 	): (ValueID & { metadata: ConfigurationMetadata })[] {
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		return valueDB.findMetadata(
 			(id) =>
 				id.commandClass === this.ccId &&
@@ -1224,11 +1268,12 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Computes the full value of a parameter after applying a partial param value
 	 */
 	public composePartialParamValue(
+		applHost: ZWaveApplicationHost,
 		parameter: number,
 		bitMask: number,
 		partialValue: number,
 	): number {
-		return this.composePartialParamValues(parameter, [
+		return this.composePartialParamValues(applHost, parameter, [
 			{ bitMask, partialValue },
 		]);
 	}
@@ -1237,13 +1282,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	 * Computes the full value of a parameter after applying multiple partial param values
 	 */
 	public composePartialParamValues(
+		applHost: ZWaveApplicationHost,
 		parameter: number,
 		partials: {
 			bitMask: number;
 			partialValue: number;
 		}[],
 	): number {
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		// Add the other values together
 		const otherValues = valueDB.findValues(
 			(id) =>
@@ -1264,27 +1310,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 		return ret;
 	}
-	public serializeValuesForCache(): CacheValue[] {
-		// Leave out the paramInformation if we have loaded it from a config file
-		let values = super.serializeValuesForCache();
-		values = values.filter(
-			(v) => v.property !== "isParamInformationFromConfig",
-		);
-		return values;
-	}
-
-	public serializeMetadataForCache(): CacheMetadata[] {
-		// Leave out the param metadata if we have loaded it from a config file
-		let metadata = super.serializeMetadataForCache();
-		if (this.isParamInformationFromConfig) {
-			metadata = metadata.filter((m) => typeof m.property === "number");
-		}
-		return metadata;
-	}
 
 	/** Deserializes the config parameter info from a config file */
-	public deserializeParamInformationFromConfig(config: ParamInfoMap): void {
-		const valueDB = this.getValueDB();
+	public deserializeParamInformationFromConfig(
+		applHost: ZWaveApplicationHost,
+		config: ParamInfoMap,
+	): void {
+		const valueDB = this.getValueDB(applHost);
 
 		// Clear old param information
 		for (const meta of valueDB.getAllMetadata(this.ccId)) {
@@ -1333,6 +1365,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 				isFromConfig: true,
 			});
 			this.extendParamInformation(
+				applHost,
 				param.parameter,
 				param.valueBitMask,
 				paramInfo,
@@ -1344,6 +1377,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string | undefined {
@@ -1355,10 +1389,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			// so no name for the property key is required
 			return undefined;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 
 	public translateProperty(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey?: string | number,
 	): string {
@@ -1367,7 +1402,11 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			typeof property === "number" &&
 			(propertyKey == undefined || typeof propertyKey === "number")
 		) {
-			const paramInfo = this.getParamInformation(property, propertyKey);
+			const paramInfo = this.getParamInformation(
+				applHost,
+				property,
+				propertyKey,
+			);
 			if (paramInfo.label) return paramInfo.label;
 			// fall back to paramXYZ[_key] if none is defined
 			let ret = `param${padStart(property.toString(), 3, "0")}`;
@@ -1376,7 +1415,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			}
 			return ret;
 		}
-		return super.translateProperty(property, propertyKey);
+		return super.translateProperty(applHost, property, propertyKey);
 	}
 }
 
@@ -1397,18 +1436,38 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			this._valueSize <= 4,
 			this.payload.length >= 2 + this._valueSize,
 		);
-
-		const oldParamInformation = this.getParamInformation(this._parameter);
+		// Default to parsing the value as SignedInteger, like the specs say.
+		// We try to re-interpret the value in persistValues()
 		this._value = parseValue(
 			this.payload.slice(2),
 			this._valueSize,
-			// In Config CC v1/v2, this must be SignedInteger
-			// As those nodes don't communicate any parameter information
-			// we fall back to that default value anyways
-			oldParamInformation.format ?? ConfigValueFormat.SignedInteger,
+			ConfigValueFormat.SignedInteger,
 		);
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
+		// Check if the initial assumption of SignedInteger holds true
+		const oldParamInformation = this.getParamInformation(
+			applHost,
+			this._parameter,
+		);
+		if (
+			oldParamInformation.format != undefined &&
+			oldParamInformation.format !== ConfigValueFormat.SignedInteger
+		) {
+			// Re-interpret the value with the new format
+			this._value = reInterpretSignedValue(
+				this._value,
+				this._valueSize,
+				oldParamInformation.format,
+			);
+		}
+
 		// Store the parameter size and value
-		this.extendParamInformation(this._parameter, undefined, {
+		this.extendParamInformation(applHost, this._parameter, undefined, {
 			valueSize: this._valueSize,
 			type:
 				oldParamInformation.format === ConfigValueFormat.BitField
@@ -1425,6 +1484,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				oldParamInformation.format == undefined ||
 				oldParamInformation.format === ConfigValueFormat.SignedInteger;
 			this.extendParamInformation(
+				applHost,
 				this._parameter,
 				undefined,
 				getIntegerLimits(this._valueSize as any, isSigned),
@@ -1432,11 +1492,14 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		}
 		// And store the value itself
 		// If we have partial config params defined, we need to split the value
-		const partialParams = this.getPartialParamInfos(this._parameter);
+		const partialParams = this.getPartialParamInfos(
+			applHost,
+			this._parameter,
+		);
 		if (partialParams.length > 0) {
 			for (const param of partialParams) {
 				if (typeof param.propertyKey === "number") {
-					this.getValueDB().setValue(
+					valueDB.setValue(
 						{
 							commandClass: this.ccId,
 							property: this._parameter,
@@ -1455,7 +1518,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 			}
 		} else {
 			// This is a single param
-			this.getValueDB().setValue(
+			valueDB.setValue(
 				{
 					commandClass: this.ccId,
 					property: this._parameter,
@@ -1463,6 +1526,7 @@ export class ConfigurationCCReport extends ConfigurationCC {
 				this._value,
 			);
 		}
+		return true;
 	}
 
 	private _parameter: number;
@@ -1480,9 +1544,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return this._valueSize;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				"value size": this.valueSize,
@@ -1540,9 +1604,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -1648,7 +1712,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"reset to default": this.resetToDefault,
@@ -1666,7 +1730,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			message.value = configValueToString(this.value);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1729,9 +1793,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			} else {
 				this._valueSize = options.valueSize;
 				this._valueFormat =
-					options.valueFormat ??
-					this.getParamInformation(this._parameters[0]).format ??
-					ConfigValueFormat.SignedInteger;
+					options.valueFormat ?? ConfigValueFormat.SignedInteger;
 				this._values = options.values;
 			}
 		}
@@ -1810,7 +1872,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			handshake: this.handshake,
 			"reset to default": this.resetToDefault,
@@ -1827,7 +1889,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1856,17 +1918,43 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 			const param = firstParameter + i;
 			this._values.set(
 				param,
+				// Default to parsing the value as SignedInteger, like the specs say.
+				// We try to re-interpret the value in persistValues()
 				parseValue(
 					this.payload.slice(5 + i * this.valueSize),
 					this.valueSize,
-					this.getParamInformation(param).format ??
-						ConfigValueFormat.SignedInteger,
+					ConfigValueFormat.SignedInteger,
 				),
 			);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		// Store every received parameter
-		for (const [parameter, value] of this._values.entries()) {
-			this.getValueDB().setValue(
+		// eslint-disable-next-line prefer-const
+		for (let [parameter, value] of this._values.entries()) {
+			// Check if the initial assumption of SignedInteger holds true
+			const oldParamInformation = this.getParamInformation(
+				applHost,
+				parameter,
+			);
+			if (
+				oldParamInformation.format != undefined &&
+				oldParamInformation.format !== ConfigValueFormat.SignedInteger
+			) {
+				// Re-interpret the value with the new format
+				value = reInterpretSignedValue(
+					value,
+					this._valueSize,
+					oldParamInformation.format,
+				);
+				this._values.set(parameter, value);
+			}
+
+			valueDB.setValue(
 				{
 					commandClass: this.ccId,
 					property: parameter,
@@ -1874,6 +1962,8 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				value,
 			);
 		}
+
+		return true;
 	}
 
 	private _reportsToFollow: number;
@@ -1910,7 +2000,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._values;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"handshake response": this._isHandshakeResponse,
 			"default values": this._defaultValues,
@@ -1926,7 +2016,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1975,9 +2065,9 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { parameters: this.parameters.join(", ") },
 		};
 	}
@@ -2025,19 +2115,22 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: ConfigurationCCNameReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: ConfigurationCCNameReport[],
+	): void {
 		// Concat the name
 		this._name = [...partials, this]
 			.map((report) => report._name)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(this.parameter, undefined, {
+		this.extendParamInformation(applHost, this.parameter, undefined, {
 			name: this.name,
 		});
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				name: this.name,
@@ -2074,9 +2167,9 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2124,19 +2217,22 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: ConfigurationCCInfoReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: ConfigurationCCInfoReport[],
+	): void {
 		// Concat the info
 		this._info = [...partials, this]
 			.map((report) => report._info)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(this._parameter, undefined, {
+		this.extendParamInformation(applHost, this._parameter, undefined, {
 			info: this._info,
 		});
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				info: this.info,
@@ -2173,9 +2269,9 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2242,6 +2338,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			this._isAdvanced = !!(options2 & 0b1);
 			this._noBulkSupport = !!(options2 & 0b10);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// If we actually received parameter info, store it
 		if (this._valueSize > 0) {
@@ -2262,8 +2362,15 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 				isAdvanced: this._isAdvanced,
 				noBulkSupport: this._noBulkSupport,
 			});
-			this.extendParamInformation(this._parameter, undefined, paramInfo);
+			this.extendParamInformation(
+				applHost,
+				this._parameter,
+				undefined,
+				paramInfo,
+			);
 		}
+
+		return true;
 	}
 
 	private _parameter: number;
@@ -2321,7 +2428,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return this._noBulkSupport;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this._parameter,
 			"next param #": this._nextParameter,
@@ -2353,7 +2460,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			message["bulk support"] = !this._noBulkSupport;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -2386,9 +2493,9 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}

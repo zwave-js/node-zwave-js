@@ -79,6 +79,7 @@ describe("lib/log/Driver =>", () => {
 		spyTransport = new SpyTransport();
 		spyTransport.format = createDefaultTransportFormat(true, true);
 		driverLogger = new DriverLogger(
+			driver,
 			new ZWaveLogContainer({
 				transports: [spyTransport],
 			}),

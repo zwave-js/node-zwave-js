@@ -83,6 +83,7 @@ export function createEmptyMockDriver() {
 					return getImplementedVersion(ccId);
 				},
 			),
+		isCCSecure: jest.fn().mockImplementation(() => false),
 		getNextCallbackId: jest
 			.fn()
 			.mockImplementation(() => mockDriverDummyCallbackId),

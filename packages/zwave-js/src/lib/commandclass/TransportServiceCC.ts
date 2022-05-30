@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
 import {
 	CCCommand,
@@ -203,9 +203,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -321,6 +321,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	}
 
 	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
 		partials: [
 			TransportServiceCCFirstSegment,
 			...TransportServiceCCSubsequentSegment[],
@@ -398,9 +399,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -466,9 +467,9 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				offset: this.datagramOffset,
@@ -505,9 +506,9 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "session ID": this.sessionId },
 		};
 	}
@@ -541,9 +542,9 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "pending segments": this.pendingSegments },
 		};
 	}

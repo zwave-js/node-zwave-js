@@ -2,7 +2,7 @@ import { ConfigManager } from "@zwave-js/config";
 import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
-import type { ZWaveHost } from "./ZWaveHost";
+import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 import type { ZWaveNodeBase } from "./ZWaveNodeBase";
 
 export interface CreateTestingHostOptions {
@@ -12,11 +12,11 @@ export interface CreateTestingHostOptions {
 }
 
 export type TestingHost = Overwrite<
-	ZWaveHost,
+	ZWaveApplicationHost,
 	{ nodes: ThrowingMap<number, ZWaveNodeBase> }
 >;
 
-/** Creates a {@link ZWaveHost} that can be used for testing */
+/** Creates a {@link ZWaveApplicationHost} that can be used for testing */
 export function createTestingHost(
 	options: Partial<CreateTestingHostOptions> = {},
 ): TestingHost {
@@ -36,14 +36,7 @@ export function createTestingHost(
 		ownNodeId: options.ownNodeId ?? 1,
 		securityManager: undefined,
 		securityManager2: undefined,
-		options: {
-			attempts: {
-				nodeInterview: 1,
-				openSerialPort: 1,
-				sendData: 3,
-				controller: 3,
-			},
-		},
+		getCompatConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {
 				return () => {
@@ -52,6 +45,14 @@ export function createTestingHost(
 			},
 		}),
 		configManager: new ConfigManager(),
+		options: {
+			attempts: {
+				nodeInterview: 1,
+				openSerialPort: 1,
+				sendData: 3,
+				controller: 3,
+			},
+		},
 		nodes: createThrowingMap((nodeId) => {
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,
@@ -72,6 +73,27 @@ export function createTestingHost(
 				);
 			}
 			return valueDBCache.get(nodeId)!;
+		},
+		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
+			const node = ret.nodes.get(nodeId);
+			const endpoint = node?.getEndpoint(endpointIndex);
+			return (
+				node?.isSecure !== false &&
+				!!(endpoint ?? node)?.isCCSecure(ccId) &&
+				!!(ret.securityManager || ret.securityManager2)
+			);
+		},
+		getHighestSecurityClass: (nodeId) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.getHighestSecurityClass();
+		},
+		hasSecurityClass: (nodeId, securityClass) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.hasSecurityClass(securityClass);
+		},
+		setSecurityClass: (nodeId, securityClass, granted) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			node.setSecurityClass(securityClass, granted);
 		},
 	};
 	return ret;

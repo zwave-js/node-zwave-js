@@ -17,7 +17,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
@@ -358,7 +358,7 @@ export class SecurityCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
@@ -418,7 +418,6 @@ export class SecurityCCNonceReport extends SecurityCC {
 		}
 	}
 
-	// @noCCValues The nonce is only used temporary
 	public nonce: Buffer;
 
 	public serialize(): Buffer {
@@ -426,9 +425,9 @@ export class SecurityCCNonceReport extends SecurityCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { nonce: buffer2hex(this.nonce) },
 		};
 	}
@@ -579,7 +578,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return !!this.sequenced && !this.secondFrame;
 	}
 
-	public mergePartialCCs(partials: SecurityCCCommandEncapsulation[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: SecurityCCCommandEncapsulation[],
+	): void {
 		// Concat the CC buffers
 		this.decryptedCCBytes = Buffer.concat(
 			[...partials, this].map((cc) => cc.decryptedCCBytes!),
@@ -633,7 +635,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return super.computeEncapsulationOverhead() + 18;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.nonceId != undefined) {
 			message["nonce id"] = this.nonceId;
@@ -650,7 +652,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			}
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -662,8 +664,6 @@ export class SecurityCCCommandEncapsulationNonceGet extends SecurityCCCommandEnc
 
 @CCCommand(SecurityCommand.SchemeReport)
 export class SecurityCCSchemeReport extends SecurityCC {
-	// @noCCValues This CC has no values
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -694,9 +694,9 @@ export class SecurityCCSchemeGet extends SecurityCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			// Hide the default payload line
 			message: undefined,
 		};
@@ -720,9 +720,9 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			// Hide the default payload line
 			message: undefined,
 		};
@@ -809,6 +809,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	}
 
 	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandsSupportedReport[],
 	): void {
 		// Concat the lists of CCs
@@ -820,9 +821,9 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				reportsToFollow: this.reportsToFollow,
 				supportedCCs: this._supportedCCs

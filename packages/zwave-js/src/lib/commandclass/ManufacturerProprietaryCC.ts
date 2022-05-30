@@ -45,8 +45,8 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		const cc = new ManufacturerProprietaryCC(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			manufacturerId,
 		});
-		cc.manufacturerId = manufacturerId;
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
 		await this.driver.sendCommand(cc, this.commandOptions);
@@ -58,9 +58,9 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		const cc = new ManufacturerProprietaryCC(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
+			manufacturerId,
 			expectsResponse: true,
 		});
-		cc.manufacturerId = manufacturerId;
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
 		const response =
@@ -177,6 +177,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 }
 
 export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
+	manufacturerId: number;
 	expectsResponse?: boolean;
 }
 
@@ -200,7 +201,6 @@ function testResponseForManufacturerProprietaryRequest(
 )
 export class ManufacturerProprietaryCC extends CommandClass {
 	declare ccCommand: undefined;
-	// @noCCValues
 
 	public constructor(
 		host: ZWaveHost,
@@ -231,17 +231,14 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				return new PCConstructor(host, options);
 			}
 		} else {
-			this.manufacturerId = this.getValueDB().getValue<number>(
-				getManufacturerIdValueId(),
-			)!;
+			this.manufacturerId = options.manufacturerId;
 			this.expectsResponse = !!options.expectsResponse;
 			// To use this CC, a manufacturer ID must exist in the value DB
 			// If it doesn't, the interview procedure will throw.
 		}
 	}
 
-	// This must be set in subclasses
-	public manufacturerId!: number;
+	public manufacturerId: number;
 
 	/** @internal */
 	public readonly expectsResponse: boolean;
@@ -272,6 +269,10 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
+		// Read the manufacturer ID from Manufacturer Specific CC
+		this.manufacturerId = this.getValueDB(driver).getValue<number>(
+			getManufacturerIdValueId(),
+		)!;
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode(driver)!;
@@ -298,10 +299,14 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
+		// Read the manufacturer ID from Manufacturer Specific CC
+		this.manufacturerId = this.getValueDB(driver).getValue<number>(
+			getManufacturerIdValueId(),
+		)!;
 		this.assertManufacturerIdIsSet();
 
 		const node = this.getNode(driver)!;

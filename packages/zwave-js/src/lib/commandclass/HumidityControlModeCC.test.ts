@@ -74,10 +74,11 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 				HumidityControlMode.Auto, // current value
 			]),
 		);
-		new HumidityControlModeCCReport(host, {
+		const report = new HumidityControlModeCCReport(host, {
 			nodeId,
 			data: ccData,
 		});
+		report.persistValues(host);
 
 		const currentValue = host.getValueDB(nodeId).getValue({
 			commandClass: CommandClasses["Humidity Control Mode"],

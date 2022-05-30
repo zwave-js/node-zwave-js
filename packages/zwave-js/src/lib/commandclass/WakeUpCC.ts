@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -206,6 +206,7 @@ export class WakeUpCC extends CommandClass {
 		const api = endpoint.commandClasses["Wake Up"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -274,7 +275,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 					direction: "inbound",
 				});
 
-				const ownNodeId = this.host.ownNodeId;
+				const ownNodeId = driver.ownNodeId;
 				// Only change the destination if necessary
 				if (wakeupResp.controllerNodeId !== ownNodeId) {
 					driver.controllerLog.logNode(node.id, {
@@ -283,10 +284,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						direction: "outbound",
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-					this.getValueDB().setValue(
-						getControllerNodeIdValueId(),
-						ownNodeId,
-					);
+					valueDB.setValue(getControllerNodeIdValueId(), ownNodeId);
 					driver.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",
@@ -300,7 +298,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		}
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -346,9 +344,9 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this.controllerNodeId,
@@ -368,7 +366,6 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		validatePayload(this.payload.length >= 4);
 		this._wakeUpInterval = this.payload.readUIntBE(0, 3);
 		this._controllerNodeId = this.payload[3];
-		this.persistValues();
 	}
 
 	private _wakeUpInterval: number;
@@ -391,9 +388,9 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		return this._controllerNodeId;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
 				"controller node id": this._controllerNodeId,
@@ -414,8 +411,6 @@ export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
-	// @noCCValues The values are stored as part of the metadata
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -434,9 +429,14 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		} else {
 			this._wakeUpOnDemandSupported = false;
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Store the received information as metadata for the wake up interval
-		this.getValueDB().setMetadata(
+		valueDB.setMetadata(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
@@ -452,7 +452,8 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		);
 
 		// Store wakeUpOnDemandSupported in valueDB
-		this.persistValues();
+
+		return true;
 	}
 
 	private _minWakeUpInterval: number;
@@ -485,9 +486,9 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		return this._wakeUpOnDemandSupported;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"default interval": `${this._defaultWakeUpInterval} seconds`,
 				"minimum interval": `${this._minWakeUpInterval} seconds`,

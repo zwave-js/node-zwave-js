@@ -25,6 +25,7 @@ describe("regression tests", () => {
 		spyTransport = new SpyTransport();
 		spyTransport.format = createDefaultTransportFormat(true, true);
 		driverLogger = new DriverLogger(
+			undefined as any,
 			new ZWaveLogContainer({
 				transports: [spyTransport],
 			}),
@@ -55,6 +56,7 @@ describe("regression tests", () => {
 			removeAllListeners: () => {},
 		} as any;
 		driver["_driverLog"] = driverLogger;
+		(driverLogger as any).driver = driver;
 	});
 
 	afterEach(async () => {
