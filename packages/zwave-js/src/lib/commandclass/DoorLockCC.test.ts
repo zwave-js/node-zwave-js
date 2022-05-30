@@ -1,6 +1,5 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
-import { TestingHost } from "../test/mocks";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
 import {
 	DoorLockCCCapabilitiesGet,
 	DoorLockCCCapabilitiesReport,
@@ -11,6 +10,7 @@ import {
 	DoorLockCCOperationReport,
 	DoorLockCCOperationSet,
 	getBoltSupportedValueId,
+	getDoorStatusValueId,
 	getDoorSupportedValueId,
 	getLatchSupportedValueId,
 } from "./DoorLockCC";
@@ -122,6 +122,7 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 			nodeId: 2,
 			data: ccData,
 		});
+		cc.persistValues(host);
 
 		expect(cc.currentMode).toBe(DoorLockMode.OutsideUnsecured);
 		expect(cc.outsideHandlesCanOpenDoor).toEqual([
@@ -134,7 +135,13 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 		expect(cc.lockTimeout).toBeUndefined();
 		expect(cc.latchStatus).toBe("closed");
 		expect(cc.boltStatus).toBe("locked");
-		expect(cc.doorStatus).toBe(undefined);
+		// The CC itself contains the door status, but it does not get persisted (unsupported)
+		expect(cc.doorStatus).toBe("closed");
+		expect(
+			host
+				.getValueDB(cc.nodeId as number)
+				.getValue(getDoorStatusValueId(cc.endpointIndex)),
+		).toBe(undefined);
 		expect(cc.targetMode).toBe(DoorLockMode.Secured);
 		expect(cc.duration).toEqual(new Duration(1, "seconds"));
 	});

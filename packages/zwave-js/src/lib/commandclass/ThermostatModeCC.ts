@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -222,7 +222,7 @@ export class ThermostatModeCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -307,7 +307,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -315,7 +315,7 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -343,13 +343,14 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 				);
 			}
 		}
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		// Update the supported modes if a mode is used that wasn't previously
 		// reported to be supported. This shouldn't happen, but well... it does anyways
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const modeValueId = getThermostatModeValueId(this.endpointIndex);
 		const supportedModesValueId = getSupportedModesValueId(
 			this.endpointIndex,
@@ -376,7 +377,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			});
 		}
 
-		return super.persistValues();
+		return super.persistValues(applHost);
 	}
 
 	private _mode: ThermostatMode;
@@ -396,7 +397,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 		return this._manufacturerData;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatMode, this.mode),
 		};
@@ -404,7 +405,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			message["manufacturer data"] = buffer2hex(this.manufacturerData);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -422,10 +423,15 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	) {
 		super(host, options);
 		this._supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = getThermostatModeValueId(this.endpointIndex);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				ThermostatMode,
@@ -433,7 +439,7 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 			),
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	private _supportedModes: ThermostatMode[];
@@ -442,9 +448,9 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 		return this._supportedModes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

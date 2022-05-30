@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -181,7 +181,23 @@ export class MultiChannelCCAPI extends CCAPI {
 				cc,
 				this.commandOptions,
 			);
-		return response?.capability;
+		if (response) {
+			const generic = this.driver.configManager.lookupGenericDeviceClass(
+				response.genericDeviceClass,
+			);
+			const specific =
+				this.driver.configManager.lookupSpecificDeviceClass(
+					response.genericDeviceClass,
+					response.specificDeviceClass,
+				);
+			return {
+				isDynamic: response.isDynamic,
+				wasRemoved: response.wasRemoved,
+				supportedCCs: response.supportedCCs,
+				generic,
+				specific,
+			};
+		}
 	}
 
 	@validateArgs()
@@ -328,9 +344,10 @@ export class MultiChannelCC extends CommandClass {
 	):
 		| MultiChannelCCCommandEncapsulation
 		| MultiChannelCCV1CommandEncapsulation {
-		const ccVersion = cc
-			.getNode()
-			?.getCCVersion(CommandClasses["Multi Channel"]);
+		const ccVersion = host.getSafeCCVersionForNode(
+			CommandClasses["Multi Channel"],
+			cc.nodeId as number,
+		);
 		if (ccVersion === 1) {
 			return new MultiChannelCCV1CommandEncapsulation(host, {
 				nodeId: cc.nodeId,
@@ -365,6 +382,7 @@ export class MultiChannelCC extends CommandClass {
 		const api = endpoint.commandClasses["Multi Channel"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		// Step 1: Retrieve general information about end points
 		driver.controllerLog.logNode(node.id, {
@@ -480,19 +498,17 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 
 				// copy the capabilities from the first endpoint
-				const devClass = this.getValueDB().getValue(
+				const devClass = valueDB.getValue(
 					getEndpointDeviceClassValueId(allEndpoints[0]),
 				);
-				this.getValueDB().setValue(
+				valueDB.setValue(
 					getEndpointDeviceClassValueId(endpoint),
 					devClass,
 				);
-				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
+				const ep1Caps = valueDB.getValue<CommandClasses[]>(
 					getEndpointCCsValueId(allEndpoints[0]),
 				)!;
-				this.getValueDB().setValue(getEndpointCCsValueId(endpoint), [
-					...ep1Caps,
-				]);
+				valueDB.setValue(getEndpointCCsValueId(endpoint), [...ep1Caps]);
 
 				continue;
 			}
@@ -557,10 +573,10 @@ supported CCs:`;
 				});
 			}
 		}
-		this.getValueDB().setValue(getEndpointIndizesValueId(), allEndpoints);
+		valueDB.setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	private async interviewV1(driver: Driver): Promise<void> {
@@ -619,7 +635,7 @@ supported CCs:`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -638,7 +654,6 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		if (this.version >= 4 && this.payload.length >= 3) {
 			this._aggregatedCount = this.payload[2] & 0b01111111;
 		}
-		this.persistValues();
 	}
 
 	private _countIsDynamic: boolean;
@@ -665,7 +680,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		return this._aggregatedCount;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"endpoint count (individual)": this.individualCount,
 			"count is dynamic": this.countIsDynamic,
@@ -675,7 +690,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			message["endpoint count (aggregated)"] = this.aggregatedCount;
 		}
 		const ret = {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 		return ret;
@@ -699,63 +714,64 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		validatePayload(this.payload.length >= 1);
 		this.endpointIndex = this.payload[0] & 0b01111111;
 		const NIF = parseNodeInformationFrame(this.payload.slice(1));
-		const capability: EndpointCapability = {
-			isDynamic: !!(this.payload[0] & 0b10000000),
-			wasRemoved: false,
-			generic: this.host.configManager.lookupGenericDeviceClass(
-				NIF.generic,
-			),
-			specific: this.host.configManager.lookupSpecificDeviceClass(
-				NIF.generic,
-				NIF.specific,
-			),
-			supportedCCs: NIF.supportedCCs,
-			// TODO: does this include controlledCCs aswell?
-		};
+		this.isDynamic = !!(this.payload[0] & 0b10000000);
+		this.genericDeviceClass = NIF.generic;
+		this.specificDeviceClass = NIF.specific;
+		this.supportedCCs = NIF.supportedCCs;
+		// TODO: does this include controlledCCs aswell?
+
 		// Removal reports have very specific information
-		capability.wasRemoved =
-			capability.isDynamic &&
-			capability.generic.key === 0xff && // "Non-Interoperable"
-			capability.specific.key === 0x00;
-
-		this.capability = capability;
-
-		// Remember the supported CCs
-		this.persistValues();
+		this.wasRemoved =
+			this.isDynamic &&
+			this.genericDeviceClass === 0xff && // "Non-Interoperable"
+			this.specificDeviceClass === 0x00;
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		const deviceClassValueId = getEndpointDeviceClassValueId(
 			this.endpointIndex,
 		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
 
-		const valueDB = this.getValueDB();
-		if (this.capability.wasRemoved) {
+		if (this.wasRemoved) {
 			valueDB.removeValue(deviceClassValueId);
 			valueDB.removeValue(ccsValueId);
 		} else {
 			valueDB.setValue(deviceClassValueId, {
-				generic: this.capability.generic.key,
-				specific: this.capability.specific.key,
+				generic: this.genericDeviceClass,
+				specific: this.specificDeviceClass,
 			});
-			valueDB.setValue(ccsValueId, this.capability.supportedCCs);
+			valueDB.setValue(ccsValueId, this.supportedCCs);
 		}
 		return true;
 	}
 
 	public readonly endpointIndex: number;
-	public readonly capability: EndpointCapability;
+	public readonly genericDeviceClass: number;
+	public readonly specificDeviceClass: number;
+	public readonly supportedCCs: CommandClasses[];
+	public readonly isDynamic: boolean;
+	public readonly wasRemoved: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const generic = applHost.configManager.lookupGenericDeviceClass(
+			this.genericDeviceClass,
+		);
+		const specific = applHost.configManager.lookupSpecificDeviceClass(
+			this.genericDeviceClass,
+			this.specificDeviceClass,
+		);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"endpoint index": this.endpointIndex,
-				"generic device class": this.capability.generic.label,
-				"specific device class": this.capability.specific.label,
-				"is dynamic end point": this.capability.isDynamic,
-				"supported CCs": this.capability.supportedCCs
+				"generic device class": generic.label,
+				"specific device class": specific.label,
+				"is dynamic end point": this.isDynamic,
+				"supported CCs": this.supportedCCs
 					.map((cc) => `\n· ${getCCName(cc)}`)
 					.join(""),
 			},
@@ -795,9 +811,9 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -854,23 +870,26 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: MultiChannelCCEndPointFindReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: MultiChannelCCEndPointFindReport[],
+	): void {
 		// Concat the list of end points
 		this._foundEndpoints = [...partials, this]
 			.map((report) => report._foundEndpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"generic device class":
-					this.host.configManager.lookupGenericDeviceClass(
+					applHost.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.host.configManager.lookupSpecificDeviceClass(
+					applHost.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -916,16 +935,16 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"generic device class":
-					this.host.configManager.lookupGenericDeviceClass(
+					applHost.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.host.configManager.lookupSpecificDeviceClass(
+					applHost.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -949,7 +968,6 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
 		const members = parseBitMask(bitMask);
 		this.aggregatedEndpointMembers = [endpoint, members];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })
@@ -963,9 +981,9 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		return this.aggregatedEndpointMembers[1];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				endpoint: this.endpointIndex,
 				members: this.members.join(", "),
@@ -1006,9 +1024,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -1074,7 +1092,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
-				this.getNodeUnsafe()?.deviceConfig?.compat
+				this.host.getCompatConfig?.(this.nodeId as number)
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly uses the destination field to indicate the source endpoint
@@ -1106,7 +1124,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			// If the encapsulated command requires security, so does this one
 			if (this.encapsulated.secure) this.secure = true;
 			if (
-				this.getNodeUnsafe()?.deviceConfig?.compat
+				this.host.getCompatConfig?.(this.nodeId as number)
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly responds from the endpoint we've passed as our source endpoint
@@ -1134,9 +1152,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				source: this.endpointIndex,
 				destination:
@@ -1155,8 +1173,6 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 
 @CCCommand(MultiChannelCommand.ReportV1)
 export class MultiChannelCCV1Report extends MultiChannelCC {
-	// @noCCValues This information is stored during the interview
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -1171,9 +1187,9 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly requestedCC: CommandClasses;
 	public readonly endpointCount: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				CC: getCCName(this.requestedCC),
 				"# of endpoints": this.endpointCount,
@@ -1221,9 +1237,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -1301,9 +1317,9 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		return super.computeEncapsulationOverhead() + 1;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { source: this.endpointIndex },
 		};
 	}

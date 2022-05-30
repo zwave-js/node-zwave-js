@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -196,7 +196,7 @@ export class HumidityControlModeCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -258,9 +258,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -278,8 +278,6 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
-
-		this.persistValues();
 	}
 
 	private _mode: HumidityControlMode;
@@ -293,9 +291,9 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		return this._mode;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -324,6 +322,11 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		if (!this._supportedModes.includes(HumidityControlMode.Off)) {
 			this._supportedModes.unshift(HumidityControlMode.Off);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
@@ -332,7 +335,7 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 			property: "mode",
 		};
 		// Only update the dynamic part
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,
@@ -340,7 +343,7 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 			),
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	private _supportedModes: HumidityControlMode[];
@@ -349,9 +352,9 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		return this._supportedModes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

@@ -14,7 +14,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -391,6 +391,7 @@ export class DoorLockCC extends CommandClass {
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -445,7 +446,6 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				latchSupported = resp.latchSupported;
 
 				// Update metadata of settable states
-				const valueDB = this.getValueDB();
 				valueDB.setMetadata(getTargetModeValueId(this.endpointIndex), {
 					...ValueMetadata.UInt8,
 					states: enumValuesToMetadataStates(
@@ -470,7 +470,6 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
-			const valueDB = this.getValueDB();
 			valueDB.setMetadata(
 				getDoorStatusValueId(this.endpointIndex),
 				doorSupported ? getDoorStatusValueMetadata() : undefined,
@@ -500,7 +499,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -625,9 +624,9 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"target mode": getEnumMemberName(DoorLockMode, this.mode),
 			},
@@ -644,8 +643,6 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 5);
 
-		const valueDB = this.getValueDB();
-
 		this.currentMode = this.payload[0];
 		this.outsideHandlesCanOpenDoor = [
 			!!(this.payload[1] & 0b0001_0000),
@@ -660,27 +657,9 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			!!(this.payload[1] & 0b1000),
 		];
 
-		// Only store the door/bolt/latch status if the lock supports it
-		const supportsDoorStatus = !!valueDB.getValue(
-			getDoorSupportedValueId(this.endpointIndex),
-		);
-		if (supportsDoorStatus) {
-			this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
-		}
-		const supportsBoltStatus = !!valueDB.getValue(
-			getBoltSupportedValueId(this.endpointIndex),
-		);
-		if (supportsBoltStatus) {
-			this.boltStatus = !!(this.payload[2] & 0b10)
-				? "unlocked"
-				: "locked";
-		}
-		const supportsLatchStatus = !!valueDB.getValue(
-			getLatchSupportedValueId(this.endpointIndex),
-		);
-		if (supportsLatchStatus) {
-			this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
-		}
+		this.doorStatus = !!(this.payload[2] & 0b1) ? "closed" : "open";
+		this.boltStatus = !!(this.payload[2] & 0b10) ? "unlocked" : "locked";
+		this.latchStatus = !!(this.payload[2] & 0b100) ? "closed" : "open";
 
 		// Ignore invalid timeout values
 		const lockTimeoutMinutes = this.payload[3];
@@ -693,23 +672,31 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			this.targetMode = this.payload[5];
 			this.duration = Duration.parseReport(this.payload[6]);
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
-		const valueDB = this.getValueDB();
-		if (this.doorStatus != undefined) {
+		// Only store the door/bolt/latch status if the lock supports it
+		const supportsDoorStatus = !!valueDB.getValue(
+			getDoorSupportedValueId(this.endpointIndex),
+		);
+		if (supportsDoorStatus) {
 			const valueId = getDoorStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.doorStatus);
 		}
-		if (this.boltStatus != undefined) {
+		const supportsBoltStatus = !!valueDB.getValue(
+			getBoltSupportedValueId(this.endpointIndex),
+		);
+		if (supportsBoltStatus) {
 			const valueId = getBoltStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.boltStatus);
 		}
-		if (this.latchStatus != undefined) {
+		const supportsLatchStatus = !!valueDB.getValue(
+			getLatchSupportedValueId(this.endpointIndex),
+		);
+		if (supportsLatchStatus) {
 			const valueId = getLatchStatusValueId(this.endpointIndex);
 			valueDB.setValue(valueId, this.latchStatus);
 		}
@@ -765,7 +752,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 	})
 	public readonly lockTimeout?: number; // in seconds
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
 			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
@@ -795,7 +782,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 			message["lock timeout"] = `${this.lockTimeout} seconds`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -843,8 +830,6 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			this.twistAssist = !!(flags & 0b1);
 			this.blockToBlock = !!(flags & 0b10);
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -904,7 +889,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 	})
 	public readonly blockToBlock?: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"operation type": getEnumMemberName(
 				DoorLockOperationType,
@@ -935,7 +920,7 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 			message["block-to-block enabled"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1065,7 +1050,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const insideHandles = isArray(
 			this.insideHandlesCanOpenDoorConfiguration,
 		)
@@ -1104,7 +1089,7 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 			message["enable block-to-block"] = this.blockToBlock;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1158,8 +1143,6 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		this.twistAssistSupported = !!(this.payload[offset + 2] & 0b10);
 		this.holdAndReleaseSupported = !!(this.payload[offset + 2] & 0b100);
 		this.autoRelockSupported = !!(this.payload[offset + 2] & 0b1000);
-
-		this.persistValues();
 	}
 
 	public readonly supportedOperationTypes: readonly DoorLockOperationType[];
@@ -1187,9 +1170,9 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	@ccValue({ internal: true, minVersion: 4 })
 	public readonly blockToBlockSupported: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				door: this.doorSupported,
 				bolt: this.boltSupported,

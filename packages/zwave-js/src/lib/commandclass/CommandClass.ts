@@ -1,15 +1,11 @@
 import {
-	CacheMetadata,
-	CacheValue,
 	CommandClasses,
-	deserializeCacheValue,
 	getCCName,
 	isZWaveError,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	NODE_ID_BROADCAST,
 	parseCCId,
-	serializeCacheValue,
 	ValueDB,
 	ValueID,
 	valueIdToString,
@@ -18,9 +14,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type {
+	ZWaveApplicationHost,
 	ZWaveEndpointBase,
 	ZWaveHost,
-	ZWaveNodeBase,
 } from "@zwave-js/host";
 import {
 	buffer2hex,
@@ -35,7 +31,6 @@ import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
-import { InterviewStage } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,
@@ -159,23 +154,13 @@ export class CommandClass {
 				this.nodeId,
 				this.endpointIndex,
 			);
-			// If we received a CC from a node, it must support at least version 1
-			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			const node = host.nodes.get(this.nodeId);
-			if (
-				node?.interviewStage === InterviewStage.Complete &&
-				this.version === 0 &&
-				gotDeserializationOptions(options)
-			) {
-				this.version = 1;
-			}
 
-			// If the node or endpoint is included securely, send secure commands if possible
-			const endpoint = node?.getEndpoint(this.endpointIndex);
-			this.secure =
-				node?.isSecure !== false &&
-				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!(this.host.securityManager || this.host.securityManager2);
+			// Send secure commands if necessary
+			this.secure = this.host.isCCSecure(
+				this.ccId,
+				this.nodeId,
+				this.endpointIndex,
+			);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
@@ -230,31 +215,27 @@ export class CommandClass {
 	}
 
 	/** Whether the interview for this CC was previously completed */
-	public get interviewComplete(): boolean {
-		return !!this.getValueDB().getValue<boolean>({
+	public isInterviewComplete(applHost: ZWaveApplicationHost): boolean {
+		return !!this.getValueDB(applHost).getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "interviewComplete",
 		});
 	}
-	public set interviewComplete(value: boolean) {
-		this.getValueDB().setValue(
+
+	/** Marks the interview for this CC as complete or not */
+	public setInterviewComplete(
+		applHost: ZWaveApplicationHost,
+		complete: boolean,
+	): void {
+		this.getValueDB(applHost).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
 				property: "interviewComplete",
 			},
-			value,
+			complete,
 		);
-	}
-
-	/** Can be used by endpoints to test if the root device was already interviewed */
-	public get rootDeviceInterviewComplete(): boolean {
-		return !!this.getValueDB().getValue<boolean>({
-			commandClass: this.ccId,
-			endpoint: 0,
-			property: "interviewComplete",
-		});
 	}
 
 	/**
@@ -415,7 +396,7 @@ export class CommandClass {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(_applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {
@@ -498,10 +479,12 @@ export class CommandClass {
 
 	/**
 	 * Maps a BasicCC value to a more specific CC implementation. Returns true if the value was mapped, false otherwise.
-	 * @param value The value of the received BasicCC
+	 * @param _value The value of the received BasicCC
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public setMappedBasicValue(value: number): boolean {
+	public setMappedBasicValue(
+		_applHost: ZWaveApplicationHost,
+		_value: number,
+	): boolean {
 		// By default, don't map
 		return false;
 	}
@@ -517,17 +500,9 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(driver: Driver): ZWaveNode | undefined;
-	/**
-	 * Returns the node this CC is linked to.
-	 */
-	public getNode(): ZWaveNodeBase | undefined;
-	/**
-	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
-	 */
-	public getNode(driver?: Driver): ZWaveNode | ZWaveNodeBase | undefined {
+	public getNode(driver: Driver): ZWaveNode | undefined {
 		if (this.isSinglecast()) {
-			return (driver?.controller ?? this.host).nodes.get(this.nodeId);
+			return driver.controller.nodes.get(this.nodeId);
 		}
 	}
 
@@ -535,18 +510,9 @@ export class CommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined;
-	public getNodeUnsafe(): ZWaveNodeBase | undefined;
-
-	public getNodeUnsafe(
-		driver?: Driver,
-	): ZWaveNode | ZWaveNodeBase | undefined {
+	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined {
 		try {
-			if (driver) {
-				return this.getNode(driver);
-			} else {
-				return this.getNode();
-			}
+			return this.getNode(driver);
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -557,24 +523,15 @@ export class CommandClass {
 		}
 	}
 
-	public getEndpoint(driver: Driver): Endpoint | undefined;
-	public getEndpoint(): ZWaveEndpointBase | undefined;
-
-	public getEndpoint(
-		driver?: Driver,
-	): Endpoint | ZWaveEndpointBase | undefined {
-		if (driver) {
-			return this.getNode(driver)?.getEndpoint(this.endpointIndex);
-		} else {
-			return this.getNode()?.getEndpoint(this.endpointIndex);
-		}
+	public getEndpoint(driver: Driver): Endpoint | undefined {
+		return this.getNode(driver)?.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB(): ValueDB {
+	protected getValueDB(applHost: ZWaveApplicationHost): ValueDB {
 		if (this.isSinglecast()) {
 			try {
-				return this.host.getValueDB(this.nodeId);
+				return applHost.getValueDB(this.nodeId);
 			} catch {
 				throw new ZWaveError(
 					"The node for this CC does not exist or the driver is not ready yet",
@@ -608,7 +565,7 @@ export class CommandClass {
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
-	public getDefinedValueIDs(): ValueID[] {
+	public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[] {
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, ValueID>();
 
@@ -647,9 +604,10 @@ export class CommandClass {
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
 		// Also return all existing value ids that are not internal (values AND metadata without values!)
+		const valueDB = this.getValueDB(applHost);
 		const existingValueIds = [
-			...this.getValueDB().getValues(this.ccId),
-			...this.getValueDB().getAllMetadata(this.ccId),
+			...valueDB.getValues(this.ccId),
+			...valueDB.getAllMetadata(this.ccId),
 		]
 			.filter((valueId) => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
@@ -735,7 +693,10 @@ export class CommandClass {
 	}
 
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
-	public persistValues(valueNames?: (keyof this)[]): boolean {
+	public persistValues(
+		applHost: ZWaveApplicationHost,
+		valueNames?: (keyof this)[],
+	): boolean {
 		// In order to avoid cluttering applications with heaps of unsupported properties,
 		// we filter out those that are only available in future versions of this CC
 		// or have no version constraint
@@ -761,7 +722,7 @@ export class CommandClass {
 		}
 		let db: ValueDB;
 		try {
-			db = this.getValueDB();
+			db = this.getValueDB(applHost);
 		} catch {
 			return false;
 		}
@@ -836,78 +797,6 @@ export class CommandClass {
 		return true;
 	}
 
-	/** Serializes all values to be stored in the cache */
-	public serializeValuesForCache(): CacheValue[] {
-		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		return (
-			ccValues
-				// only serialize non-undefined values
-				.filter(({ value }) => value != undefined)
-				.map(({ value, commandClass, ...props }) => {
-					return {
-						...props,
-						value: serializeCacheValue(value),
-					};
-				})
-		);
-	}
-
-	/** Serializes metadata to be stored in the cache */
-	public serializeMetadataForCache(): CacheMetadata[] {
-		const allMetadata = this.getValueDB().getAllMetadata(
-			getCommandClass(this),
-		);
-		return (
-			allMetadata
-				// Strip out the command class
-				.map(({ commandClass, ...props }) => props)
-		);
-	}
-
-	/** Deserializes values from the cache */
-	public deserializeValuesFromCache(values: CacheValue[]): void {
-		const cc = getCommandClass(this);
-		for (const val of values) {
-			this.getValueDB().setValue(
-				{
-					commandClass: cc,
-					endpoint: val.endpoint,
-					property: val.property,
-					propertyKey: val.propertyKey,
-				},
-				deserializeCacheValue(val.value),
-				{
-					// Don't emit the added/updated events, as this will spam applications with untranslated events
-					noEvent: true,
-					// Don't throw when there is an invalid Value ID in the cache
-					noThrow: true,
-				},
-			);
-		}
-	}
-
-	/** Deserializes value metadata from the cache */
-	public deserializeMetadataFromCache(allMetadata: CacheMetadata[]): void {
-		const cc = getCommandClass(this);
-		for (const meta of allMetadata) {
-			this.getValueDB().setMetadata(
-				{
-					commandClass: cc,
-					endpoint: meta.endpoint,
-					property: meta.property,
-					propertyKey: meta.propertyKey,
-				},
-				meta.metadata,
-				{
-					// Don't emit the added/updated events, as this will spam applications with untranslated events
-					noEvent: true,
-					// Don't throw when there is an invalid Value ID in the cache
-					noThrow: true,
-				},
-			);
-		}
-	}
-
 	/**
 	 * When a CC supports to be split into multiple partial CCs, this can be used to identify the
 	 * session the partial CCs belong to.
@@ -919,17 +808,18 @@ export class CommandClass {
 
 	/**
 	 * When a CC supports to be split into multiple partial CCs, this indicates that the last report hasn't been received yet.
-	 * @param session The previously received set of messages received in this partial CC session
+	 * @param _session The previously received set of messages received in this partial CC session
 	 */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public expectMoreMessages(session: CommandClass[]): boolean {
+	public expectMoreMessages(_session: CommandClass[]): boolean {
 		return false; // By default, all CCs are monolithic
 	}
 
 	/** Include previously received partial responses into a final CC */
 	/* istanbul ignore next */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public mergePartialCCs(partials: CommandClass[]): void {
+	public mergePartialCCs(
+		_applHost: ZWaveApplicationHost,
+		_partials: CommandClass[],
+	): void {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing
 	}
@@ -1014,6 +904,7 @@ export class CommandClass {
 	 * @param _propertyKey The (optional) property key the translated name may depend on
 	 */
 	public translateProperty(
+		_applHost: ZWaveApplicationHost,
 		property: string | number,
 		_propertyKey?: string | number,
 	): string {
@@ -1023,11 +914,12 @@ export class CommandClass {
 
 	/**
 	 * Translates a property key into a speaking name for use in an external API
-	 * @param property The property the key in question belongs to
+	 * @param _property The property the key in question belongs to
 	 * @param propertyKey The property key for which the speaking name should be retrieved
 	 */
 	public translatePropertyKey(
-		property: string | number,
+		_applHost: ZWaveApplicationHost,
+		_property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
 		// Overwrite this in derived classes, by default just return the property key

@@ -340,6 +340,7 @@ describe("lib/driver/TransactionMachine", () => {
 						command: new BasicCCGet(fakeDriver, {
 							nodeId: 2,
 						}),
+						maxSendAttempts: 3,
 					});
 
 					const sendDataBasicReport = new ApplicationCommandRequest(
@@ -357,6 +358,7 @@ describe("lib/driver/TransactionMachine", () => {
 							nodeId: 2,
 							targetValue: 22,
 						}),
+						maxSendAttempts: 3,
 					});
 					const testMessages = {
 						GetControllerIdRequest: ctrlrIdRequest,

@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -242,7 +242,7 @@ export class ThermostatFanModeCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -313,12 +313,12 @@ export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -338,8 +338,6 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		if (this.version >= 3) {
 			this._off = !!(this.payload[0] & 0b1000_0000);
 		}
-
-		this.persistValues();
 	}
 
 	private _mode: ThermostatFanMode;
@@ -363,7 +361,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		return this._off;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			mode: getEnumMemberName(ThermostatFanMode, this.mode),
 		};
@@ -371,7 +369,7 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 			message.off = this.off;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -392,6 +390,11 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 			this.payload,
 			ThermostatFanMode["Auto low"],
 		);
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
@@ -400,7 +403,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 			property: "mode",
 		};
 		// Only update the dynamic part
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				ThermostatFanMode,
@@ -408,7 +411,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 			),
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	private _supportedModes: ThermostatFanMode[];
@@ -417,9 +420,9 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		return this._supportedModes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

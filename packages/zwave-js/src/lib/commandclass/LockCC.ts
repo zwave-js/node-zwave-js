@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
@@ -124,7 +124,7 @@ export class LockCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -176,9 +176,9 @@ export class LockCCSet extends LockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { locked: this.locked },
 		};
 	}
@@ -193,7 +193,6 @@ export class LockCCReport extends LockCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.locked = this.payload[0] === 1;
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -204,9 +203,9 @@ export class LockCCReport extends LockCC {
 	})
 	public readonly locked: boolean;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { locked: this.locked },
 		};
 	}
