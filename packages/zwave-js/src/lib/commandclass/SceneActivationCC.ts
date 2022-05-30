@@ -10,7 +10,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -128,7 +128,6 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			}
 
 			validatePayload(this.sceneId >= 1, this.sceneId <= 255);
-			this.persistValues();
 		} else {
 			this.sceneId = options.sceneId;
 			this.dimmingDuration = Duration.from(options.dimmingDuration);
@@ -159,13 +158,13 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
 			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

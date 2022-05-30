@@ -1609,7 +1609,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Skip this step if the CC was already interviewed
-			if (instance.interviewComplete) return "continue";
+			if (instance.isInterviewComplete(this.driver)) return "continue";
 
 			try {
 				await instance.interview(this.driver);
@@ -1966,7 +1966,7 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (
 			this.supportsCC(CommandClasses.Notification) &&
-			this.createCCInstance(NotificationCC)?.notificationMode === "pull"
+			NotificationCC.getNotificationMode(this.driver, this) === "pull"
 		) {
 			this.scheduleManualValueRefresh(
 				CommandClasses.Notification,
@@ -2197,7 +2197,7 @@ protocol version:      ${this.protocolVersion}`;
 					`Mapping unsolicited report from root device to endpoint #${endpoint.index}`,
 				);
 				command.endpointIndex = endpoint.index;
-				command.persistValues();
+				command.persistValues(this.driver);
 			}
 		}
 
@@ -2731,12 +2731,15 @@ protocol version:      ${this.protocolVersion}`;
 			// Try to set the mapped value on the target CC
 			const didSetMappedValue =
 				typeof command.currentValue === "number" &&
-				mappedTargetCC?.setMappedBasicValue(command.currentValue);
+				mappedTargetCC?.setMappedBasicValue(
+					this.driver,
+					command.currentValue,
+				);
 
 			// Otherwise fall back to setting it ourselves
 			if (!didSetMappedValue) {
 				// Store the value in the value DB now
-				command.persistValues();
+				command.persistValues(this.driver);
 
 				// Since the node sent us a Basic report, we are sure that it is at least supported
 				// If this is the only supported actuator CC, add it to the support list,
@@ -2773,7 +2776,10 @@ protocol version:      ${this.protocolVersion}`;
 				// If enabled in a config file, try to set the mapped value on the target CC first
 				const didSetMappedValue =
 					!!this._deviceConfig?.compat?.enableBasicSetMapping &&
-					!!mappedTargetCC?.setMappedBasicValue(command.targetValue);
+					!!mappedTargetCC?.setMappedBasicValue(
+						this.driver,
+						command.targetValue,
+					);
 
 				// Otherwise handle the command ourselves
 				if (!didSetMappedValue) {

@@ -6,11 +6,12 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	unknownNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { AllOrNone, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -195,6 +196,7 @@ export class BasicCC extends CommandClass {
 	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode(driver)!;
 		const endpoint = this.getEndpoint(driver)!;
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -215,9 +217,8 @@ export class BasicCC extends CommandClass {
 				});
 			}
 		} else if (
-			this.getValueDB().getValue(
-				getCurrentValueValueId(this.endpointIndex),
-			) == undefined
+			valueDB.getValue(getCurrentValueValueId(this.endpointIndex)) ==
+			undefined
 		) {
 			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -230,7 +231,7 @@ export class BasicCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -291,9 +292,9 @@ export class BasicCCSet extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "target value": this.targetValue },
 		};
 	}
@@ -317,10 +318,7 @@ export class BasicCCReport extends BasicCC {
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.currentValue = parseMaybeNumber(
-				this.payload[0],
-				host.options.preserveUnknownValues,
-			);
+			this._currentValue = parseMaybeNumber(this.payload[0]);
 
 			if (this.version >= 2 && this.payload.length >= 3) {
 				this.targetValue = parseNumber(this.payload[1]);
@@ -329,7 +327,7 @@ export class BasicCCReport extends BasicCC {
 			// Do not persist values here. We want to control when this is happening,
 			// in case the report is mapped to another CC
 		} else {
-			this.currentValue = options.currentValue;
+			this._currentValue = options.currentValue;
 			if ("targetValue" in options) {
 				this.targetValue = options.targetValue;
 				this.duration = options.duration;
@@ -337,12 +335,26 @@ export class BasicCCReport extends BasicCC {
 		}
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (
+			this.currentValue === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._currentValue = undefined;
+		}
+
+		return super.persistValues(applHost);
+	}
+
+	private _currentValue: Maybe<number> | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
 		label: "Current value",
 	})
-	public readonly currentValue: Maybe<number> | undefined;
+	public get currentValue(): Maybe<number> | undefined {
+		return this._currentValue;
+	}
 
 	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
@@ -369,7 +381,7 @@ export class BasicCCReport extends BasicCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": this.currentValue,
 		};
@@ -380,7 +392,7 @@ export class BasicCCReport extends BasicCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

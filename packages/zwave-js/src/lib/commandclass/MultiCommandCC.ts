@@ -1,6 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "./API";
 import {
@@ -131,9 +131,9 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			// Hide the default payload line
 			message: undefined,
 		};

@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -89,7 +89,7 @@ export class LanguageCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -180,13 +180,13 @@ export class LanguageCCSet extends LanguageCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this._country != undefined) {
 			message.country = this._country;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -206,8 +206,6 @@ export class LanguageCCReport extends LanguageCC {
 			this.country = this.payload.toString("ascii", 3, 5);
 		}
 		// }
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -224,13 +222,13 @@ export class LanguageCCReport extends LanguageCC {
 	})
 	public readonly country: string | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: this.language };
 		if (this.country != undefined) {
 			message.country = this.country;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

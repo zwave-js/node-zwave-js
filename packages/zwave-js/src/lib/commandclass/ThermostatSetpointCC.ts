@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -167,8 +167,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	};
 
 	@validateArgs()
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(setpointType: ThermostatSetpointType) {
+	public async get(
+		setpointType: ThermostatSetpointType,
+	): Promise<{ value: number; scale: Scale } | undefined> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Get,
@@ -185,14 +186,14 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				this.commandOptions,
 			);
 		if (!response) return;
-		return response.type === ThermostatSetpointType["N/A"]
-			? // not supported
-			  undefined
-			: // supported
-			  {
-					value: response.value,
-					scale: response.scale,
-			  };
+		if (response.type !== ThermostatSetpointType["N/A"]) {
+			// This is a supported setpoint
+			const scale = getScale(this.driver.configManager, response.scale);
+			return {
+				value: response.value,
+				scale,
+			};
+		}
 	}
 
 	@validateArgs()
@@ -287,6 +288,7 @@ export class ThermostatSetpointCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -296,7 +298,7 @@ export class ThermostatSetpointCC extends CommandClass {
 				propertyKey as any,
 			);
 		} else {
-			return super.translatePropertyKey(property, propertyKey);
+			return super.translatePropertyKey(applHost, property, propertyKey);
 		}
 	}
 
@@ -306,6 +308,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -426,14 +429,14 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Remember which setpoint types are actually supported, so we don't
 			// need to do this guesswork again
-			this.getValueDB().setValue(
+			valueDB.setValue(
 				supportedSetpointTypesValueId,
 				supportedSetpointTypes,
 			);
 
 			// Also save the bitmap interpretation if we know it now
 			if (interpretationChanged) {
-				this.getValueDB().setValue(
+				valueDB.setValue(
 					getSetpointTypesInterpretationValueID(this.endpointIndex),
 					interpretation,
 				);
@@ -488,11 +491,11 @@ export class ThermostatSetpointCC extends CommandClass {
 				const setpointCaps = await api.getCapabilities(type);
 				if (setpointCaps) {
 					const minValueUnit = getSetpointUnit(
-						this.host.configManager,
+						driver.configManager,
 						setpointCaps.minValueScale,
 					);
 					const maxValueUnit = getSetpointUnit(
-						this.host.configManager,
+						driver.configManager,
 						setpointCaps.maxValueScale,
 					);
 					const logMessage = `received capabilities for setpoint ${setpointName}:
@@ -511,7 +514,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -520,9 +523,10 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const setpointTypes: ThermostatSetpointType[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedSetpointTypesValueID(this.endpointIndex),
 			) ?? [];
 
@@ -587,8 +591,9 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public serialize(): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
-		const override =
-			this.getNodeUnsafe()?.deviceConfig?.compat?.overrideFloatEncoding;
+		const override = this.host.getCompatConfig?.(
+			this.nodeId as number,
+		)?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),
@@ -596,10 +601,10 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.host.configManager, this.scale);
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const scale = getScale(applHost.configManager, this.scale);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -624,20 +629,22 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = getScale(this.host.configManager, 0);
+			this.scale = 0;
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(this.host.configManager, scale);
-
-		this.persistValues();
+		this.scale = scale;
 	}
 
-	public persistValues(): boolean {
-		const valueDB = this.getValueDB();
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		const scale = getScale(applHost.configManager, this.scale);
+
+		const valueDB = this.getValueDB(applHost);
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
 			this._type,
@@ -648,11 +655,11 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 				valueDB.getMetadata(setpointValueId) as
 					| ValueMetadataNumeric
 					| undefined
-			)?.unit !== this._scale.unit
+			)?.unit !== scale.unit
 		) {
 			valueDB.setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
-				unit: this._scale.unit,
+				unit: scale.unit,
 				ccSpecific: {
 					setpointType: this._type,
 				},
@@ -665,7 +672,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			this.endpointIndex,
 			this._type,
 		);
-		valueDB.setValue(scaleValueId, this._scale.key);
+		valueDB.setValue(scaleValueId, scale.key);
 		return true;
 	}
 
@@ -674,25 +681,23 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._type;
 	}
 
-	private _scale: Scale;
-	public get scale(): Scale {
-		return this._scale;
-	}
+	public readonly scale: number;
 
 	private _value: number;
 	public get value(): number {
 		return this._value;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const scale = getScale(applHost.configManager, this.scale);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
 					this.type,
 				),
-				value: `${this.value} ${this.scale.unit}`,
+				value: `${this.value} ${scale.unit}`,
 			},
 		};
 	}
@@ -741,9 +746,9 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -773,22 +778,26 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		} = parseFloatWithScale(this.payload.slice(1)));
 		({ value: this._maxValue, scale: this._maxValueScale } =
 			parseFloatWithScale(this.payload.slice(1 + bytesRead)));
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this._type);
-		this.getValueDB().setMetadata(valueId, {
+		this.getValueDB(applHost).setMetadata(valueId, {
 			...ValueMetadata.Number,
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
-				getSetpointUnit(this.host.configManager, this._minValueScale) ||
-				getSetpointUnit(this.host.configManager, this._maxValueScale),
+				getSetpointUnit(applHost.configManager, this._minValueScale) ||
+				getSetpointUnit(applHost.configManager, this._maxValueScale),
 			ccSpecific: {
 				setpointType: this._type,
 			},
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	private _type: ThermostatSetpointType;
@@ -816,17 +825,17 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			this.host.configManager,
+			applHost.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			this.host.configManager,
+			applHost.configManager,
 			this.maxValueScale,
 		);
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -871,9 +880,9 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -905,8 +914,6 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 			// This must be tested during the interview
 			this._supportedSetpointTypes = supported;
 		}
-
-		this.persistValues();
 		// TODO:
 		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
 		// Devices with V3+ must comply with Interpretation A
@@ -925,9 +932,9 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		return this._supportedSetpointTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(

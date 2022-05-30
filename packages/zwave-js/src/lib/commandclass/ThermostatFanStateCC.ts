@@ -7,7 +7,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
@@ -91,7 +91,7 @@ export class ThermostatFanStateCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -132,8 +132,6 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 
 		validatePayload(this.payload.length == 1);
 		this._state = this.payload[0] & 0b1111;
-
-		this.persistValues();
 	}
 
 	private _state: ThermostatFanState;
@@ -147,12 +145,12 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 		return this._state;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			state: getEnumMemberName(ThermostatFanState, this.state),
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { PhysicalCCAPI } from "./API";
@@ -185,8 +185,6 @@ export type SupervisionCCReportOptions = {
 
 @CCCommand(SupervisionCommand.Report)
 export class SupervisionCCReport extends SupervisionCC {
-	// @noCCValues
-
 	public constructor(
 		host: ZWaveHost,
 		options:
@@ -240,7 +238,7 @@ export class SupervisionCCReport extends SupervisionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"session id": this.sessionId,
 			"more updates follow": this.moreUpdatesFollow,
@@ -250,7 +248,7 @@ export class SupervisionCCReport extends SupervisionCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -318,9 +316,9 @@ export class SupervisionCCGet extends SupervisionCC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"session id": this.sessionId,
 				"request updates": this.requestStatusUpdates,

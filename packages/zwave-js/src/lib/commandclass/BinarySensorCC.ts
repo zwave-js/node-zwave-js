@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -176,7 +176,7 @@ export class BinarySensorCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -185,6 +185,7 @@ export class BinarySensorCC extends CommandClass {
 		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
@@ -203,7 +204,7 @@ export class BinarySensorCC extends CommandClass {
 			}
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
-				this.getValueDB().getValue(
+				valueDB.getValue(
 					getSupportedSensorTypesValueId(this.endpointIndex),
 				) ?? [];
 
@@ -226,8 +227,11 @@ export class BinarySensorCC extends CommandClass {
 		}
 	}
 
-	public setMappedBasicValue(value: number): boolean {
-		this.getValueDB().setValue(
+	public setMappedBasicValue(
+		applHost: ZWaveApplicationHost,
+		value: number,
+	): boolean {
+		this.getValueDB(applHost).setValue(
 			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
 			value > 0,
 		);
@@ -249,20 +253,22 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		if (this.version >= 2 && this.payload.length >= 2) {
 			this._type = this.payload[1];
 		}
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		const valueId: ValueID = getBinarySensorValueId(
 			this.endpointIndex,
 			this._type,
 		);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyBoolean,
 			label: getEnumMemberName(BinarySensorType, this._type),
 			ccSpecific: { sensorType: this._type },
 		});
-		this.getValueDB().setValue(valueId, this._value);
+		valueDB.setValue(valueId, this._value);
 		return true;
 	}
 
@@ -276,9 +282,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		return this._value;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				type: getEnumMemberName(BinarySensorType, this._type),
 				value: this._value,
@@ -330,9 +336,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				type: getEnumMemberName(
 					BinarySensorType,
@@ -357,7 +363,6 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		this._supportedSensorTypes = parseBitMask(this.payload, 0).filter(
 			(t) => t !== 0,
 		);
-		this.persistValues();
 	}
 
 	private _supportedSensorTypes: BinarySensorType[];
@@ -366,9 +371,9 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported types": this._supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))

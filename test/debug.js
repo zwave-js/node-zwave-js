@@ -68,7 +68,7 @@ const {
 	const msg = Message.from(/** @type {any} */ (host), data);
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs([]);
+		msg.command.mergePartialCCs(msg.host, []);
 	}
 	msg;
 	debugger;

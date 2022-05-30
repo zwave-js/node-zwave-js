@@ -125,7 +125,8 @@
     "ts": "node -r esbuild-register",
     "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
-    "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)"
+    "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
+    "codefind": "yarn ts packages/maintenance/src/codefind.ts"
   },
   "readme": "README.md",
   "config": {

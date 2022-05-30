@@ -185,7 +185,7 @@ const guards: NonNullable<
 		if (!nextTransaction) return false;
 
 		const message = nextTransaction.message;
-		const targetNode = message.getNodeUnsafe();
+		const targetNode = message.getNodeUnsafe(nextTransaction.driver);
 
 		// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
 		// There are a few exceptions:

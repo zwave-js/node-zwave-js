@@ -12,7 +12,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
@@ -200,10 +204,11 @@ function validateCode(code: string, supportedChars: string): boolean {
 
 function setUserCodeMetadata(
 	this: UserCodeCC,
+	applHost: ZWaveApplicationHost,
 	userId: number,
 	userCode?: string | Buffer,
 ) {
-	const valueDB = this.getValueDB();
+	const valueDB = this.getValueDB(applHost);
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
 	const supportedUserIDStatuses =
@@ -248,13 +253,14 @@ function setUserCodeMetadata(
 
 function persistUserCode(
 	this: UserCodeCC,
+	applHost: ZWaveApplicationHost,
 	userId: number,
 	userIdStatus: UserIDStatus,
 	userCode: string | Buffer,
 ) {
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	const valueDB = this.getValueDB();
+	const valueDB = this.getValueDB(applHost);
 
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
@@ -265,7 +271,7 @@ function persistUserCode(
 		valueDB.setMetadata(codeValueId, undefined);
 	} else {
 		// Always create metadata in case it does not exist
-		setUserCodeMetadata.call(this, userId, userCode);
+		setUserCodeMetadata.call(this, applHost, userId, userCode);
 		valueDB.setValue(statusValueId, userIdStatus);
 		valueDB.setValue(codeValueId, userCode);
 	}
@@ -524,6 +530,17 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
 
+		const numUsers = UserCodeCC.getSupportedUsersCached(
+			this.driver,
+			this.endpoint,
+		);
+		if (numUsers != undefined && userId > numUsers) {
+			throw new ZWaveError(
+				`The user ID must be between 0 and the number of supported users ${numUsers}.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new UserCodeCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -543,6 +560,94 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.ExtendedUserCodeSet,
 		);
 
+		const numUsers = UserCodeCC.getSupportedUsersCached(
+			this.driver,
+			this.endpoint,
+		);
+		const supportedStatuses = UserCodeCC.getSupportedUserIDStatusesCached(
+			this.driver,
+			this.endpoint,
+		);
+		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
+			this.driver,
+			this.endpoint,
+		);
+		const supportsMultipleUserCodeSet =
+			UserCodeCC.supportsMultipleUserCodeSetCached(
+				this.driver,
+				this.endpoint,
+			) ?? false;
+
+		// Validate options
+		if (numUsers != undefined) {
+			if (
+				codes.some((code) => code.userId < 0 || code.userId > numUsers)
+			) {
+				throw new ZWaveError(
+					`All User IDs must be between 0 and the number of supported users ${numUsers}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		} else {
+			if (codes.some((code) => code.userId < 0)) {
+				throw new ZWaveError(
+					`All User IDs must be greater than 0.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
+		if (codes.some((code) => code.userId === 0) && codes.length > 1) {
+			throw new ZWaveError(
+				`If user ID 0 is used, only one code may be set`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (
+			codes.some(
+				(code) =>
+					code.userId === 0 &&
+					code.userIdStatus !== UserIDStatus.Available,
+			)
+		) {
+			throw new ZWaveError(
+				`User ID 0 may only be used to clear all user codes`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (codes.length > 1 && !supportsMultipleUserCodeSet) {
+			throw new ZWaveError(
+				`The node does not support setting multiple user codes at once`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		for (const code of codes) {
+			if (
+				supportedStatuses != undefined &&
+				!supportedStatuses.includes(code.userIdStatus)
+			) {
+				throw new ZWaveError(
+					`The user ID status ${getEnumMemberName(
+						UserIDStatus,
+						code.userIdStatus,
+					)} is not supported by the node`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (code.userIdStatus === UserIDStatus.Available) {
+				code.userCode = undefined;
+			} else if (supportedASCIIChars) {
+				if (
+					!validateCode(
+						code.userCode.toString("ascii"),
+						supportedASCIIChars,
+					)
+				) {
+					throw new ZWaveError(
+						`The user code must consist of 4 to 10 of the following characters: ${supportedASCIIChars}`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+			}
+		}
 		const cc = new UserCodeCCExtendedUserCodeSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -563,6 +668,17 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			]);
 		} else {
 			this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
+
+			const numUsers = UserCodeCC.getSupportedUsersCached(
+				this.driver,
+				this.endpoint,
+			);
+			if (numUsers != undefined && userId > numUsers) {
+				throw new ZWaveError(
+					`The user ID must be between 0 and the number of supported users ${numUsers}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 
 			const cc = new UserCodeCCSet(this.driver, {
 				nodeId: this.endpoint.nodeId,
@@ -629,6 +745,26 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand.KeypadModeSet,
 		);
 
+		const supportedModes = UserCodeCC.getSupportedKeypadModesCached(
+			this.driver,
+			this.endpoint,
+		);
+
+		if (!supportedModes) {
+			throw new ZWaveError(
+				`The keypad mode can only be set after the interview is complete!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (!supportedModes.includes(keypadMode)) {
+			throw new ZWaveError(
+				`The keypad mode ${getEnumMemberName(
+					KeypadMode,
+					keypadMode,
+				)} is not supported by the node!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new UserCodeCCKeypadModeSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -662,6 +798,37 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeSet,
 		);
+
+		const supportedASCIIChars = UserCodeCC.getSupportedASCIICharsCached(
+			this.driver,
+			this.endpoint,
+		);
+		if (!supportedASCIIChars) {
+			throw new ZWaveError(
+				`The master code can only be set after the interview is complete!`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		// Validate the code
+		if (!masterCode) {
+			const supportsDeactivation =
+				UserCodeCC.supportsMasterCodeDeactivationCached(
+					this.driver,
+					this.endpoint,
+				);
+			if (!supportsDeactivation) {
+				throw new ZWaveError(
+					`The node does not support deactivating the master code!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		} else if (!validateCode(masterCode, supportedASCIIChars)) {
+			throw new ZWaveError(
+				`The master code must consist of 4 to 10 of the following characters: ${supportedASCIIChars}`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
 
 		const cc = new UserCodeCCMasterCodeSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -751,7 +918,7 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		for (let userId = 1; userId <= supportedUsers; userId++) {
-			setUserCodeMetadata.call(this, userId);
+			setUserCodeMetadata.call(this, driver, userId);
 		}
 
 		// Synchronize user codes and settings
@@ -760,7 +927,7 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -850,6 +1017,88 @@ export class UserCodeCC extends CommandClass {
 			}
 		}
 	}
+
+	/**
+	 * Returns the number of supported users.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedUsersCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): number | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getSupportedUsersValueID(endpoint.index));
+	}
+
+	/**
+	 * Returns the supported keypad modes.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedKeypadModesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): KeypadMode[] | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getSupportedKeypadModesValueID(endpoint.index));
+	}
+
+	/**
+	 * Returns the supported user ID statuses.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedUserIDStatusesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): UserIDStatus[] | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getSupportedUserIDStatusesValueID(endpoint.index));
+	}
+
+	/**
+	 * Returns the supported ASCII characters.
+	 * This only works AFTER the interview process
+	 */
+	public static getSupportedASCIICharsCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): string | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getSupportedASCIICharsValueID(endpoint.index));
+	}
+
+	/**
+	 * Returns whether deactivating the master code is supported.
+	 * This only works AFTER the interview process
+	 */
+	public static supportsMasterCodeDeactivationCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): boolean {
+		return !!applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<boolean>(
+				getSupportsMasterCodeDeactivationValueID(endpoint.index),
+			);
+	}
+
+	/**
+	 * Returns whether setting multiple user codes at once is supported.
+	 * This only works AFTER the interview process
+	 */
+	public static supportsMultipleUserCodeSetCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): boolean {
+		return !!applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue<boolean>(
+				getSupportsMultipleUserCodeSetValueID(endpoint.index),
+			);
+	}
 }
 
 type UserCodeCCSetOptions =
@@ -888,17 +1137,13 @@ export class UserCodeCCSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const numUsers =
-				this.getValueDB()?.getValue<number>(
-					getSupportedUsersValueID(this.endpointIndex),
-				) ?? 0;
 			this.userId = options.userId;
 			this.userIdStatus = options.userIdStatus;
 
 			// Validate options
-			if (this.userId < 0 || this.userId > numUsers) {
+			if (this.userId < 0) {
 				throw new ZWaveError(
-					`${this.constructor.name}: The user ID must be between 0 and the number of supported users ${numUsers}.`,
+					`${this.constructor.name}: The user ID must be between greater than 0.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (
@@ -944,9 +1189,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1003,17 +1248,18 @@ export class UserCodeCCReport
 				this.userCode = userCodeBuffer;
 			}
 		}
-
-		this.persistValues();
 	}
 
 	public readonly userId: number;
 	public readonly userIdStatus: UserIDStatus;
 	public readonly userCode: string | Buffer;
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		persistUserCode.call(
 			this,
+			applHost,
 			this.userId,
 			this.userIdStatus,
 			this.userCode,
@@ -1021,9 +1267,9 @@ export class UserCodeCCReport
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
@@ -1068,9 +1314,9 @@ export class UserCodeCCGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "user id": this.userId },
 		};
 	}
@@ -1091,15 +1337,14 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 			// V1
 			this.supportedUsers = this.payload[0];
 		}
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly supportedUsers: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "supported users": this.supportedUsers },
 		};
 	}
@@ -1164,8 +1409,6 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 				0,
 			),
 		).toString("ascii");
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
@@ -1185,9 +1428,9 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue({ internal: true })
 	public readonly supportedASCIIChars: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports master code": this.supportsMasterCode,
 				"supports master code deactivation":
@@ -1236,30 +1479,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (!this.interviewComplete) {
-				throw new ZWaveError(
-					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 			this.keypadMode = options.keypadMode;
-
-			const supportedModes =
-				this.getValueDB()?.getValue<KeypadMode[]>(
-					getSupportedKeypadModesValueID(this.endpointIndex),
-				) ?? [];
-
-			if (!supportedModes.includes(this.keypadMode)) {
-				throw new ZWaveError(
-					`${
-						this.constructor.name
-					}: The keypad mode ${getEnumMemberName(
-						KeypadMode,
-						this.keypadMode,
-					)} is not supported by the node!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
 	}
 
@@ -1270,9 +1490,9 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
@@ -1287,18 +1507,19 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.keypadMode = this.payload[0];
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		// Update the keypad modes metadata
-		const supportedKeypadModes = this.getValueDB().getValue<KeypadMode[]>(
+		const supportedKeypadModes = valueDB.getValue<KeypadMode[]>(
 			getSupportedKeypadModesValueID(this.endpointIndex),
 		) ?? [this.keypadMode];
 
 		const valueId = getKeypadModeValueID(this.endpointIndex);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			label: "Keypad Mode",
 			states: enumValuesToMetadataStates(
@@ -1313,9 +1534,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	@ccValue({ minVersion: 2 })
 	public readonly keypadMode: KeypadMode;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
 			},
@@ -1347,39 +1568,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (!this.interviewComplete) {
-				throw new ZWaveError(
-					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			const supportedAsciiChars =
-				this.getValueDB()?.getValue<string>(
-					getSupportedASCIICharsValueID(this.endpointIndex),
-				) ?? "";
-
 			this.masterCode = options.masterCode;
-
-			// Validate the code
-			if (!this.masterCode) {
-				const supportsDeactivation =
-					this.getValueDB()?.getValue<boolean>(
-						getSupportsMasterCodeDeactivationValueID(
-							this.endpointIndex,
-						),
-					) ?? false;
-				if (!supportsDeactivation) {
-					throw new ZWaveError(
-						`${this.constructor.name}: The node does not support deactivating the master code!`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-			} else if (!validateCode(this.masterCode, supportedAsciiChars)) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The master code must consist of 4 to 10 of the following characters: ${supportedAsciiChars}`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
 	}
 
@@ -1393,9 +1582,9 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1414,7 +1603,6 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		this.masterCode = this.payload
 			.slice(1, 1 + codeLength)
 			.toString("ascii");
-		this.persistValues();
 	}
 
 	@ccValue({
@@ -1429,9 +1617,9 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	})
 	public readonly masterCode: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "master code": userCodeToLogString(this.masterCode) },
 		};
 	}
@@ -1450,15 +1638,14 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this.userCodeChecksum = this.payload.readUInt16BE(0);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly userCodeChecksum: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
@@ -1478,10 +1665,6 @@ export interface UserCode {
 	userCode: string;
 }
 
-export type SettableUserCode = UserCode & {
-	userIdStatus: Exclude<UserIDStatus, UserIDStatus.StatusNotAvailable>;
-};
-
 @CCCommand(UserCodeCommand.ExtendedUserCodeSet)
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
@@ -1498,102 +1681,24 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (!this.interviewComplete) {
-				throw new ZWaveError(
-					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			this.userCodes = options.userCodes as any;
-
-			const numUsers =
-				this.getValueDB()?.getValue<number>(
-					getSupportedUsersValueID(this.endpointIndex),
-				) ?? 0;
-			const supportedStatuses =
-				this.getValueDB()?.getValue<number[]>(
-					getSupportedUserIDStatusesValueID(this.endpointIndex),
-				) ?? [];
-			const supportedAsciiChars =
-				this.getValueDB()?.getValue<string>(
-					getSupportedASCIICharsValueID(this.endpointIndex),
-				) ?? "";
-			const supportsMultipleUserCodeSet =
-				this.getValueDB()?.getValue<boolean>(
-					getSupportsMultipleUserCodeSetValueID(this.endpointIndex),
-				) ?? false;
-
-			// Validate options
-			if (
-				this.userCodes.some(
-					(code) => code.userId < 0 || code.userId > numUsers,
-				)
-			) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The user ID must be between 0 and the number of supported users ${numUsers}.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (
-				this.userCodes.some((code) => code.userId === 0) &&
-				this.userCodes.length > 1
-			) {
-				throw new ZWaveError(
-					`${this.constructor.name}: If user ID 0 is used, only one code may be set`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (
-				this.userCodes.some(
-					(code) =>
-						code.userId === 0 &&
-						code.userIdStatus !== UserIDStatus.Available,
-				)
-			) {
-				throw new ZWaveError(
-					`${this.constructor.name}: User ID 0 may only be used to clear all user codes`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			} else if (
-				this.userCodes.length > 1 &&
-				!supportsMultipleUserCodeSet
-			) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The node does not support setting multiple user codes at once`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-
-			for (const code of this.userCodes) {
-				if (!supportedStatuses.includes(code.userIdStatus)) {
-					throw new ZWaveError(
-						`${
-							this.constructor.name
-						}: The user ID status ${getEnumMemberName(
-							UserIDStatus,
-							code.userIdStatus,
-						)} is not supported by the node`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				} else if (code.userIdStatus === UserIDStatus.Available) {
-					code.userCode = "";
-				} else {
-					if (!validateCode(code.userCode, supportedAsciiChars)) {
-						throw new ZWaveError(
-							`${this.constructor.name}: The user code must consist of 4 to 10 of the following characters: ${supportedAsciiChars}`,
-							ZWaveErrorCodes.Argument_Invalid,
-						);
-					}
-				}
-			}
+			this.userCodes = options.userCodes;
 		}
 	}
 
-	public userCodes: SettableUserCode[];
+	public userCodes: UserCodeCCSetOptions[];
 
 	public serialize(): Buffer {
 		const userCodeBuffers = this.userCodes.map((code) => {
 			const ret = Buffer.concat([
-				Buffer.from([0, 0, code.userIdStatus, code.userCode.length]),
-				Buffer.from(code.userCode, "ascii"),
+				Buffer.from([
+					0,
+					0,
+					code.userIdStatus,
+					code.userCode?.length ?? 0,
+				]),
+				Buffer.isBuffer(code.userCode)
+					? code.userCode
+					: Buffer.from(code.userCode ?? "", "ascii"),
 			]);
 			ret.writeUInt16BE(code.userId, 0);
 			return ret;
@@ -1605,15 +1710,15 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${userCodeToLogString(
-				userCode,
+				userCode ?? "",
 			)} (status: ${getEnumMemberName(UserIDStatus, userIdStatus)})`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1642,13 +1747,19 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 
 		validatePayload(this.payload.length >= offset + 2);
 		this.nextUserId = this.payload.readUInt16BE(offset);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			persistUserCode.call(this, userId, userIdStatus, userCode);
+			persistUserCode.call(
+				this,
+				applHost,
+				userId,
+				userIdStatus,
+				userCode,
+			);
 		}
 		return true;
 	}
@@ -1656,7 +1767,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
 			message[`code #${userId}`] = `${userCodeToLogString(
@@ -1665,7 +1776,7 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		}
 		message["next user id"] = this.nextUserId;
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1707,9 +1818,9 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"user id": this.userId,
 				"report more": this.reportMore,
