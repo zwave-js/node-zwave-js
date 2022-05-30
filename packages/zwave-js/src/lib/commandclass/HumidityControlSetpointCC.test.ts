@@ -1,8 +1,7 @@
 import { Scale } from "@zwave-js/config";
 import { CommandClasses, encodeFloatWithScale } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { assertCC } from "../test/assertCC";
-import { TestingHost } from "../test/mocks";
 import {
 	HumidityControlSetpointCC,
 	HumidityControlSetpointCCCapabilitiesGet,
@@ -110,10 +109,11 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 				encodeFloatWithScale(12, 1),
 			]),
 		);
-		new HumidityControlSetpointCCReport(host, {
+		const report = new HumidityControlSetpointCCReport(host, {
 			nodeId: nodeId,
 			data: ccData,
 		});
+		report.persistValues(host);
 
 		const currentValue = host.getValueDB(nodeId).getValue({
 			commandClass: CommandClasses["Humidity Control Setpoint"],
@@ -140,10 +140,11 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 				encodeFloatWithScale(12, 1),
 			]),
 		);
-		new HumidityControlSetpointCCReport(host, {
+		const report = new HumidityControlSetpointCCReport(host, {
 			nodeId: nodeId,
 			data: ccData,
 		});
+		report.persistValues(host);
 
 		const setpointMeta = host.getValueDB(nodeId).getMetadata({
 			commandClass: CommandClasses["Humidity Control Setpoint"],
@@ -197,10 +198,11 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 					(1 << HumidityControlSetpointType.Auto),
 			]),
 		);
-		new HumidityControlSetpointCCSupportedReport(host, {
+		const report = new HumidityControlSetpointCCSupportedReport(host, {
 			nodeId: nodeId,
 			data: ccData,
 		});
+		report.persistValues(host);
 
 		const currentValue = host.getValueDB(nodeId).getValue({
 			commandClass: CommandClasses["Humidity Control Setpoint"],
@@ -291,17 +293,18 @@ describe("lib/commandclass/HumidityControlSetpointCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.concat([
 				Buffer.from([
-					HumidityControlSetpointCommand.Report, // CC Command
+					HumidityControlSetpointCommand.CapabilitiesReport, // CC Command
 					HumidityControlSetpointType.Humidifier, // type
 				]),
 				encodeFloatWithScale(10, 1),
 				encodeFloatWithScale(90, 1),
 			]),
 		);
-		new HumidityControlSetpointCCCapabilitiesReport(host, {
+		const report = new HumidityControlSetpointCCCapabilitiesReport(host, {
 			nodeId: nodeId,
 			data: ccData,
 		});
+		report.persistValues(host);
 
 		const setpointMeta = host.getValueDB(nodeId).getMetadata({
 			commandClass: CommandClasses["Humidity Control Setpoint"],

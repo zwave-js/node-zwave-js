@@ -3,10 +3,10 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveNodeBase } from "@zwave-js/host";
+import type { TestingHost, ZWaveNodeBase } from "@zwave-js/host";
 import { createTestingHost } from "@zwave-js/host";
 import * as nodeUtils from "../node/utils";
-import { createTestNode, TestingHost } from "../test/mocks";
+import { createTestNode } from "../test/mocks";
 import {
 	MeterCC,
 	MeterCCGet,
@@ -234,13 +234,12 @@ describe("lib/commandclass/MeterCC => ", () => {
 			]),
 		);
 
+		const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
+
 		// Meter type 31 (does not exist)
-		assertZWaveError(
-			() => new MeterCCReport(host, { nodeId: 1, data: ccData }),
-			{
-				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-			},
-		);
+		assertZWaveError(() => report.persistValues(host), {
+			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+		});
 	});
 
 	it("the Report command should validate that a known meter scale is given", () => {
@@ -257,13 +256,12 @@ describe("lib/commandclass/MeterCC => ", () => {
 			]),
 		);
 
+		const report = new MeterCCReport(host, { nodeId: 1, data: ccData });
+
 		// Meter type 4, Scale 8 (does not exist)
-		assertZWaveError(
-			() => new MeterCCReport(host, { nodeId: 1, data: ccData }),
-			{
-				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
-			},
-		);
+		assertZWaveError(() => report.persistValues(host), {
+			errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+		});
 	});
 
 	it("the value IDs should be translated correctly", () => {
