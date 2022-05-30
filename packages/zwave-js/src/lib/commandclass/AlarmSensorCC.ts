@@ -315,7 +315,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
 			"alarm state": this.state,
@@ -327,7 +327,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			message.duration = `${this.duration} seconds`;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -399,9 +399,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"sensor type": getEnumMemberName(
 					AlarmSensorType,
@@ -443,9 +443,9 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return true;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported sensor types": this._supportedSensorTypes
 					.map((t) => getEnumMemberName(AlarmSensorType, t))

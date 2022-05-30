@@ -649,9 +649,9 @@ export class MeterCCReport extends MeterCC {
 		return this._deltaTime;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
-		const meterType = driver.configManager.lookupMeter(this._type);
-		const scale = driver.configManager.lookupMeterScale(
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const meterType = applHost.configManager.lookupMeter(this._type);
+		const scale = applHost.configManager.lookupMeterScale(
 			this._type,
 			this.scale,
 		);
@@ -669,7 +669,7 @@ export class MeterCCReport extends MeterCC {
 			message["prev. value"] = this._previousValue;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -748,25 +748,25 @@ export class MeterCCGet extends MeterCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
 			message["rate type"] = getEnumMemberName(RateType, this.rateType);
 		}
 		if (this.scale != undefined) {
 			// Try to lookup the meter type to translate the scale
-			const type = this.getValueDB(driver).getValue<number>(
+			const type = this.getValueDB(applHost).getValue<number>(
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.scale = driver.configManager.lookupMeterScale(
+				message.scale = applHost.configManager.lookupMeterScale(
 					type,
 					this.scale,
 				).label;
 			}
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -872,17 +872,17 @@ export class MeterCCSupportedReport extends MeterCC {
 		return true;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type: `${
-				driver.configManager.lookupMeter(this.type)?.name ??
+				applHost.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
 			"supports reset": this._supportsReset,
 			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
-· ${driver.configManager.lookupMeterScale(this.type, scale).label}`,
+· ${applHost.configManager.lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
 			"supported rate types": this._supportedRateTypes
@@ -890,7 +890,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				.join(", "),
 		};
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -959,11 +959,11 @@ export class MeterCCReset extends MeterCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = `${
-				driver.configManager.lookupMeter(this.type)?.name ??
+				applHost.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`;
 		}
@@ -971,7 +971,7 @@ export class MeterCCReset extends MeterCC {
 			message["target value"] = this.targetValue;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

@@ -256,9 +256,9 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		return this._dateAndTime;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,
@@ -354,9 +354,9 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"date and time": formatDate(
 					this.dateAndTime,

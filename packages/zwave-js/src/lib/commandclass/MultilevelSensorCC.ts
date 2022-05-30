@@ -602,12 +602,12 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				type: driver.configManager.getSensorTypeName(this.type),
-				scale: driver.configManager.lookupSensorScale(
+				type: applHost.configManager.getSensorTypeName(this.type),
+				scale: applHost.configManager.lookupSensorScale(
 					this.type,
 					this.scale,
 				).label,
@@ -678,7 +678,7 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		let message: MessageRecord = {};
 		if (
 			this.version >= 5 &&
@@ -686,17 +686,17 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			this.scale != undefined
 		) {
 			message = {
-				"sensor type": driver.configManager.getSensorTypeName(
+				"sensor type": applHost.configManager.getSensorTypeName(
 					this.sensorType,
 				),
-				scale: driver.configManager.lookupSensorScale(
+				scale: applHost.configManager.lookupSensorScale(
 					this.sensorType,
 					this.scale,
 				).label,
 			};
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -720,14 +720,16 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 		return this._supportedSensorTypes;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported sensor types": this.supportedSensorTypes
 					.map(
 						(t) =>
-							`\n· ${driver.configManager.getSensorTypeName(t)}`,
+							`\n· ${applHost.configManager.getSensorTypeName(
+								t,
+							)}`,
 					)
 					.join(""),
 			},
@@ -767,18 +769,18 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return this.supportedScales[1];
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				"sensor type": driver.configManager.getSensorTypeName(
+				"sensor type": applHost.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 				"supported scales": this.sensorSupportedScales
 					.map(
 						(s) =>
 							`\n· ${
-								driver.configManager.lookupSensorScale(
+								applHost.configManager.lookupSensorScale(
 									this.sensorType,
 									s,
 								).label
@@ -822,11 +824,11 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				"sensor type": driver.configManager.getSensorTypeName(
+				"sensor type": applHost.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 			},

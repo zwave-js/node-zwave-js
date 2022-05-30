@@ -378,7 +378,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly eventType: EntryControlEventTypes;
 	public readonly eventData?: Buffer | string;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"data type": this.dataType,
@@ -391,7 +391,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 					: buffer2hex(this.eventData);
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -414,9 +414,9 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	@ccValue({ internal: true })
 	public readonly supportedKeys: readonly number[];
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "supported keys": this.supportedKeys.toString() },
 		};
 	}
@@ -507,9 +507,9 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public readonly minKeyCacheTimeout: number;
 	public readonly maxKeyCacheTimeout: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported data types": this.supportedDataTypes
 					.map((dt) => EntryControlDataTypes[dt])
@@ -567,9 +567,9 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	})
 	public readonly keyCacheTimeout: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,
@@ -617,9 +617,9 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,

@@ -601,10 +601,10 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
-		const scale = getScale(driver.configManager, this.scale);
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const scale = getScale(applHost.configManager, this.scale);
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -688,10 +688,10 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		return this._value;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
-		const scale = getScale(driver.configManager, this.scale);
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const scale = getScale(applHost.configManager, this.scale);
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -746,9 +746,9 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -825,17 +825,17 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		return this._maxValueScale;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			driver.configManager,
+			applHost.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			driver.configManager,
+			applHost.configManager,
 			this.maxValueScale,
 		);
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -880,9 +880,9 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"setpoint type": getEnumMemberName(
 					ThermostatSetpointType,
@@ -932,9 +932,9 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		return this._supportedSetpointTypes;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported setpoint types": this.supportedSetpointTypes
 					.map(

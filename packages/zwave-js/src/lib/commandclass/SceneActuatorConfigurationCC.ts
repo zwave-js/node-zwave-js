@@ -405,9 +405,9 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				sceneId: this.sceneId,
 				level: this.level,
@@ -460,9 +460,9 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 		);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				sceneId: this.sceneId,
 				level: this.level,
@@ -516,9 +516,9 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "scene id": this.sceneId },
 		};
 	}

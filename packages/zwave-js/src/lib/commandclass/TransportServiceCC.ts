@@ -8,7 +8,6 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -204,9 +203,9 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -400,9 +399,9 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				"datagram size": this.datagramSize,
@@ -468,9 +467,9 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"session ID": this.sessionId,
 				offset: this.datagramOffset,
@@ -507,9 +506,9 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "session ID": this.sessionId },
 		};
 	}
@@ -543,9 +542,9 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "pending segments": this.pendingSegments },
 		};
 	}

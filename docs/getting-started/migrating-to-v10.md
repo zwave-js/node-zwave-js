@@ -39,7 +39,7 @@ New signatures:
 public async interview(driver: Driver): Promise<void>;
 public async refreshValues(driver: Driver): Promise<void>;
 public persistValues(applHost: ZWaveApplicationHost): boolean;
-public toLogEntry(driver: Driver): MessageOrCCLogEntry;
+public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 
 public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[];
 public translateProperty(

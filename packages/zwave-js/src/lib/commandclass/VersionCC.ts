@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -455,7 +455,7 @@ export class VersionCCReport extends VersionCC {
 		return this._hardwareVersion;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -468,7 +468,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this._hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -501,9 +501,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return this._requestedCC;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this._ccVersion,
@@ -555,9 +555,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -585,9 +585,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return this._supportsZWaveSoftwareGet;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports Z-Wave Software Get command":
 					this._supportsZWaveSoftwareGet,
@@ -726,7 +726,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		return this._applicationBuildNumber;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this._sdkVersion,
 		};
@@ -751,7 +751,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this._applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

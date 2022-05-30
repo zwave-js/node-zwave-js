@@ -528,9 +528,9 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -572,9 +572,9 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 		);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				"scene id": this.sceneId,
@@ -628,9 +628,9 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "group id": this.groupId },
 		};
 	}

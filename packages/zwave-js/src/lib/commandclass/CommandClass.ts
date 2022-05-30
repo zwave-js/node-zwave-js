@@ -396,7 +396,7 @@ export class CommandClass {
 	}
 
 	/** Generates a representation of this CC for the log */
-	public toLogEntry(_driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(_applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
 		const message: MessageRecord = {};
 		if (this.constructor === CommandClass) {

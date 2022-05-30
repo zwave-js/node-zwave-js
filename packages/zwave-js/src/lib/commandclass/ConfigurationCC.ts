@@ -1544,9 +1544,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return this._valueSize;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				"value size": this.valueSize,
@@ -1604,9 +1604,9 @@ export class ConfigurationCCGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -1712,7 +1712,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this.parameter,
 			"reset to default": this.resetToDefault,
@@ -1730,7 +1730,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			message.value = configValueToString(this.value);
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1872,7 +1872,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			handshake: this.handshake,
 			"reset to default": this.resetToDefault,
@@ -1889,7 +1889,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -2000,7 +2000,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 		return this._values;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"handshake response": this._isHandshakeResponse,
 			"default values": this._defaultValues,
@@ -2016,7 +2016,7 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -2065,9 +2065,9 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { parameters: this.parameters.join(", ") },
 		};
 	}
@@ -2128,9 +2128,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		});
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				name: this.name,
@@ -2167,9 +2167,9 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2230,9 +2230,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		});
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"parameter #": this.parameter,
 				info: this.info,
@@ -2269,9 +2269,9 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}
@@ -2428,7 +2428,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		return this._noBulkSupport;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this._parameter,
 			"next param #": this._nextParameter,
@@ -2460,7 +2460,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			message["bulk support"] = !this._noBulkSupport;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -2493,9 +2493,9 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { "parameter #": this.parameter },
 		};
 	}

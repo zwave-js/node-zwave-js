@@ -680,7 +680,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		return this._aggregatedCount;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"endpoint count (individual)": this.individualCount,
 			"count is dynamic": this.countIsDynamic,
@@ -690,7 +690,7 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 			message["endpoint count (aggregated)"] = this.aggregatedCount;
 		}
 		const ret = {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 		return ret;
@@ -756,16 +756,16 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public readonly isDynamic: boolean;
 	public readonly wasRemoved: boolean;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
-		const generic = driver.configManager.lookupGenericDeviceClass(
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const generic = applHost.configManager.lookupGenericDeviceClass(
 			this.genericDeviceClass,
 		);
-		const specific = driver.configManager.lookupSpecificDeviceClass(
+		const specific = applHost.configManager.lookupSpecificDeviceClass(
 			this.genericDeviceClass,
 			this.specificDeviceClass,
 		);
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"endpoint index": this.endpointIndex,
 				"generic device class": generic.label,
@@ -811,9 +811,9 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -880,16 +880,16 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"generic device class":
-					driver.configManager.lookupGenericDeviceClass(
+					applHost.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					driver.configManager.lookupSpecificDeviceClass(
+					applHost.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -935,16 +935,16 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"generic device class":
-					driver.configManager.lookupGenericDeviceClass(
+					applHost.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					driver.configManager.lookupSpecificDeviceClass(
+					applHost.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -981,9 +981,9 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		return this.aggregatedEndpointMembers[1];
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				endpoint: this.endpointIndex,
 				members: this.members.join(", "),
@@ -1024,9 +1024,9 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { endpoint: this.requestedEndpoint },
 		};
 	}
@@ -1152,9 +1152,9 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				source: this.endpointIndex,
 				destination:
@@ -1187,9 +1187,9 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly requestedCC: CommandClasses;
 	public readonly endpointCount: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				CC: getCCName(this.requestedCC),
 				"# of endpoints": this.endpointCount,
@@ -1237,9 +1237,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -1317,9 +1317,9 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 		return super.computeEncapsulationOverhead() + 1;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { source: this.endpointIndex },
 		};
 	}

@@ -398,9 +398,9 @@
 		"scope": "typescript",
 		"prefix": "zwcclog",
 		"body": [
-			"public toLogEntry(driver: Driver): MessageOrCCLogEntry {",
+			"public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {",
 			"\treturn {",
-			"\t\t...super.toLogEntry(driver),",
+			"\t\t...super.toLogEntry(applHost),",
 			"\t\tmessage: { ${1:someProp}: this.${1} },",
 			"\t};",
 			"}"
@@ -410,9 +410,9 @@
 		"scope": "typescript",
 		"prefix": "zwcclogempty",
 		"body": [
-			"public toLogEntry(driver: Driver): MessageOrCCLogEntry {",
+			"public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {",
 			"\treturn {",
-			"\t\t...super.toLogEntry(driver),",
+			"\t\t...super.toLogEntry(applHost),",
 			"\t\t// Hide the default payload line",
 			"\t\tmessage: undefined,",
 			"\t};",
@@ -449,7 +449,7 @@
 			"} from \"./CommandClass\";",
 			"import { CommandClasses } from \"@zwave-js/core\";",
 			"import type { Driver } from \"../driver/Driver\";",
-			"import type { ZWaveHost } from \"@zwave-js/host\";",
+			"import type { ZWaveApplicationHost, ZWaveHost } from \"@zwave-js/host\";",
 			"",
 			"// TODO: Move this enumeration into the _Types.ts file",
 			"// All additional type definitions (except CC constructor options) must be defined there too",

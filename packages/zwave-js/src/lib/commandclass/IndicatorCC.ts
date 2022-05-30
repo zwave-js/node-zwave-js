@@ -582,7 +582,7 @@ export class IndicatorCCSet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
 			message["indicator 0 value"] = this.indicator0Value;
@@ -598,7 +598,7 @@ export class IndicatorCCSet extends IndicatorCC {
 				.join("")}`;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -728,7 +728,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		valueDB.setValue(valueId, value.value);
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.value != undefined) {
 			message["indicator 0 value"] = this.value;
@@ -744,7 +744,7 @@ export class IndicatorCCReport extends IndicatorCC {
 				.join("")}`;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -782,12 +782,12 @@ export class IndicatorCCGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				indicator: getIndicatorName(
-					driver.configManager,
+					applHost.configManager,
 					this.indicatorId,
 				),
 			},
@@ -839,23 +839,23 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				indicator: getIndicatorName(
-					driver.configManager,
+					applHost.configManager,
 					this.indicatorId,
 				),
 				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
-							driver.configManager.lookupProperty(id)?.label ??
+							applHost.configManager.lookupProperty(id)?.label ??
 							`Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
 				"next indicator": getIndicatorName(
-					driver.configManager,
+					applHost.configManager,
 					this.nextIndicatorId,
 				),
 			},
@@ -895,12 +895,12 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				indicator: getIndicatorName(
-					driver.configManager,
+					applHost.configManager,
 					this.indicatorId,
 				),
 			},

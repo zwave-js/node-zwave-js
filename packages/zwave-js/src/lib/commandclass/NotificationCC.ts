@@ -682,11 +682,11 @@ export class NotificationCCSet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				"notification type": driver.configManager.getNotificationName(
+				"notification type": applHost.configManager.getNotificationName(
 					this.notificationType,
 				),
 				status: this.notificationStatus,
@@ -897,7 +897,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public sequenceNumber: number | undefined;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		let message: MessageRecord;
 		if (this.alarmType) {
 			message = {
@@ -907,7 +907,7 @@ export class NotificationCCReport extends NotificationCC {
 		} else {
 			let valueConfig: NotificationValueDefinition | undefined;
 			try {
-				valueConfig = driver.configManager
+				valueConfig = applHost.configManager
 					.lookupNotification(this.notificationType!)
 					?.lookupValue(this.notificationEvent!);
 			} catch {
@@ -916,7 +916,7 @@ export class NotificationCCReport extends NotificationCC {
 			if (valueConfig) {
 				message = {
 					"notification type":
-						driver.configManager.getNotificationName(
+						applHost.configManager.getNotificationName(
 							this.notificationType!,
 						),
 					"notification status": this.notificationStatus,
@@ -958,7 +958,7 @@ export class NotificationCCReport extends NotificationCC {
 			}
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1196,24 +1196,26 @@ export class NotificationCCGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.alarmType != undefined) {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
 			message["notification type"] =
-				driver.configManager.getNotificationName(this.notificationType);
+				applHost.configManager.getNotificationName(
+					this.notificationType,
+				);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
-					driver.configManager
+					applHost.configManager
 						.lookupNotification(this.notificationType)
 						?.events.get(this.notificationEvent)?.label ??
 					`Unknown (${num2hex(this.notificationEvent)})`;
 			}
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1254,15 +1256,15 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		return this._supportedNotificationTypes;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
 					.map(
 						(t) =>
-							`\n· ${driver.configManager.getNotificationName(
+							`\n· ${applHost.configManager.getNotificationName(
 								t,
 							)}`,
 					)
@@ -1336,14 +1338,14 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 		return this._supportedEvents;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
-		const notification = driver.configManager.lookupNotification(
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
+		const notification = applHost.configManager.lookupNotification(
 			this.notificationType,
 		);
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				"notification type": driver.configManager.getNotificationName(
+				"notification type": applHost.configManager.getNotificationName(
 					this.notificationType,
 				),
 				"supported events": this.supportedEvents
@@ -1392,11 +1394,11 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
-				"notification type": driver.configManager.getNotificationName(
+				"notification type": applHost.configManager.getNotificationName(
 					this.notificationType,
 				),
 			},

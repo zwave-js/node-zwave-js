@@ -258,9 +258,9 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -291,9 +291,9 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		return this._mode;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				mode: getEnumMemberName(HumidityControlMode, this.mode),
 			},
@@ -352,9 +352,9 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		return this._supportedModes;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported modes": this.supportedModes
 					.map(

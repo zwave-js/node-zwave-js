@@ -7,10 +7,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import type { Driver } from "../driver/Driver";
 import { NodeStatus } from "../node/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -210,7 +209,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -218,7 +217,7 @@ export class PowerlevelCCSet extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -241,7 +240,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 	public readonly powerlevel: Powerlevel;
 	public readonly timeout?: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"power level": getEnumMemberName(Powerlevel, this.powerlevel),
 		};
@@ -249,7 +248,7 @@ export class PowerlevelCCReport extends PowerlevelCC {
 			message.timeout = `${this.timeout} s`;
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -297,9 +296,9 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"test node id": this.testNodeId,
 				"power level": getEnumMemberName(Powerlevel, this.powerlevel),
@@ -327,9 +326,9 @@ export class PowerlevelCCTestNodeReport extends PowerlevelCC {
 	public readonly status: PowerlevelTestStatus;
 	public readonly acknowledgedFrames: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"test node id": this.testNodeId,
 				status: getEnumMemberName(PowerlevelTestStatus, this.status),

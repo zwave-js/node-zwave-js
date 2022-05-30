@@ -282,9 +282,9 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		return this._value;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				type: getEnumMemberName(BinarySensorType, this._type),
 				value: this._value,
@@ -336,9 +336,9 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				type: getEnumMemberName(
 					BinarySensorType,
@@ -371,9 +371,9 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported types": this._supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))

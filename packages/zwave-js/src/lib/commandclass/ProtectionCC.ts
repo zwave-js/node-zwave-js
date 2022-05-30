@@ -484,7 +484,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -492,7 +492,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -529,7 +529,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	})
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -537,7 +537,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -601,9 +601,9 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue({ internal: true })
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
@@ -640,9 +640,9 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	@ccValue({ minVersion: 2 })
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -686,9 +686,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -710,9 +710,9 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 	@ccValue({ minVersion: 2 })
 	public readonly timeout: Timeout;
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -754,9 +754,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

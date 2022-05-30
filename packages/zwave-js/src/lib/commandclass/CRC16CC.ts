@@ -1,7 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -128,9 +127,9 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 		return super.computeEncapsulationOverhead() + 2;
 	}
 
-	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(driver),
+			...super.toLogEntry(applHost),
 			// Hide the default payload line
 			message: undefined,
 		};
