@@ -154,7 +154,7 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 

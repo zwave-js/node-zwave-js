@@ -1607,7 +1607,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Skip this step if the CC was already interviewed
-			if (instance.interviewComplete) return "continue";
+			if (instance.isInterviewComplete(this.driver)) return "continue";
 
 			try {
 				await instance.interview(this.driver);
@@ -1964,7 +1964,7 @@ protocol version:      ${this.protocolVersion}`;
 		);
 		if (
 			this.supportsCC(CommandClasses.Notification) &&
-			this.createCCInstance(NotificationCC)?.notificationMode === "pull"
+			NotificationCC.getNotificationMode(this.driver, this) === "pull"
 		) {
 			this.scheduleManualValueRefresh(
 				CommandClasses.Notification,

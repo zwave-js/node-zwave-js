@@ -369,7 +369,7 @@ duration: ${info.duration} seconds`;
 		});
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 

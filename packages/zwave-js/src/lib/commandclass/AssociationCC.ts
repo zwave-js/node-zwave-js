@@ -390,7 +390,7 @@ export class AssociationCC extends CommandClass {
 				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
 			});
-			this.interviewComplete = true;
+			this.setInterviewComplete(driver, true);
 			return;
 		}
 
@@ -398,7 +398,7 @@ export class AssociationCC extends CommandClass {
 		await endpoint.configureLifelineAssociations();
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {

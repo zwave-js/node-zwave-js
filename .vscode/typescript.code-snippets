@@ -649,7 +649,7 @@
 			"\t});",
 			"",
 			"\t// Remember that the interview is complete",
-			"\tthis.interviewComplete = true;",
+			"\tthis.setInterviewComplete(driver, true);",
 			"}"
 		]
 	},

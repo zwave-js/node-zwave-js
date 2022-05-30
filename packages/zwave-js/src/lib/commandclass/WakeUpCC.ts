@@ -298,7 +298,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 		}
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.setInterviewComplete(driver, true);
 	}
 }
 

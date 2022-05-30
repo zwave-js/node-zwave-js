@@ -465,7 +465,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		await endpoint.configureLifelineAssociations();
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {

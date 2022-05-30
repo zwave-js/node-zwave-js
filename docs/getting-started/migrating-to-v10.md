@@ -87,3 +87,35 @@ The same is true for several other similar methods on several other CCs. To use 
 # The `valueFormat` property in `ConfigurationCCBulkSetOptions` no longer defaults to the last stored format
 
 Instead, if no `valueFormat` is passed, the default will be `SignedInteger` according to the specification. This change does not affect `setBulk` calls through the `commandClasses` API.
+
+# `CommandClass.interviewComplete` is no longer a property
+
+Instead, two methods are used in its place:
+
+Old:
+
+```ts
+if (!instance.interviewComplete) {
+	instance.interviewComplete = true;
+}
+```
+
+New signature:
+
+```ts
+if (!instance.isInterviewComplete(applHost)) {
+	instance.setInterviewComplete(applHost, true);
+}
+```
+
+# `NotificationCC.notificationMode` is no longer a property
+
+Instead, a static method on the `Notification CC` is used in its place:
+
+```ts
+// On NotificationCC
+public static getNotificationMode(
+	applHost: ZWaveApplicationHost,
+	node: ZWaveNodeBase,
+): "push" | "pull" | undefined;
+```

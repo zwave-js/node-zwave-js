@@ -358,7 +358,7 @@ export class SecurityCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */

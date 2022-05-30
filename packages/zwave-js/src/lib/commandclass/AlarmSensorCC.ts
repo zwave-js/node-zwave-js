@@ -144,7 +144,7 @@ export class AlarmSensorCC extends CommandClass {
 				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
 			});
-			this.interviewComplete = true;
+			this.setInterviewComplete(driver, true);
 			return;
 		}
 
@@ -189,7 +189,7 @@ export class AlarmSensorCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {

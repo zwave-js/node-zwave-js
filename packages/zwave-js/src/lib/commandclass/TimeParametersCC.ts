@@ -192,7 +192,7 @@ export class TimeParametersCC extends CommandClass {
 		await api.set(new Date());
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 

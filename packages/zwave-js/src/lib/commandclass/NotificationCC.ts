@@ -21,7 +21,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveNodeBase,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -426,6 +430,16 @@ export class NotificationCC extends CommandClass {
 		return "pull";
 	}
 
+	/** Whether the node implements push or pull notifications */
+	public static getNotificationMode(
+		applHost: ZWaveApplicationHost,
+		node: ZWaveNodeBase,
+	): "push" | "pull" | undefined {
+		return applHost
+			.getValueDB(node.id)
+			.getValue(getNotificationModeValueId());
+	}
+
 	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode(driver)!;
 		const endpoint = this.getEndpoint(driver)!;
@@ -589,13 +603,13 @@ export class NotificationCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 		// Refreshing values only works on pull nodes
-		if (this.notificationMode === "pull") {
-			const node = this.getNode(driver)!;
+		if (NotificationCC.getNotificationMode(driver, node) === "pull") {
 			const endpoint = this.getEndpoint(driver)!;
 			const api = endpoint.commandClasses.Notification.withOptions({
 				priority: MessagePriority.NodeQuery,
@@ -631,11 +645,6 @@ export class NotificationCC extends CommandClass {
 				if (response) await node.handleCommand(response);
 			}
 		}
-	}
-
-	/** Whether the node implements push or pull notifications */
-	public get notificationMode(): "push" | "pull" | undefined {
-		return this.getValueDB().getValue(getNotificationModeValueId());
 	}
 }
 

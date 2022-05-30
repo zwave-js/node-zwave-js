@@ -216,31 +216,27 @@ export class CommandClass {
 	}
 
 	/** Whether the interview for this CC was previously completed */
-	public get interviewComplete(): boolean {
-		return !!this.getValueDB().getValue<boolean>({
+	public isInterviewComplete(applHost: ZWaveApplicationHost): boolean {
+		return !!this.getValueDB(applHost).getValue<boolean>({
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "interviewComplete",
 		});
 	}
-	public set interviewComplete(value: boolean) {
-		this.getValueDB().setValue(
+
+	/** Marks the interview for this CC as complete or not */
+	public setInterviewComplete(
+		applHost: ZWaveApplicationHost,
+		complete: boolean,
+	): void {
+		this.getValueDB(applHost).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
 				property: "interviewComplete",
 			},
-			value,
+			complete,
 		);
-	}
-
-	/** Can be used by endpoints to test if the root device was already interviewed */
-	public get rootDeviceInterviewComplete(): boolean {
-		return !!this.getValueDB().getValue<boolean>({
-			commandClass: this.ccId,
-			endpoint: 0,
-			property: "interviewComplete",
-		});
 	}
 
 	/**

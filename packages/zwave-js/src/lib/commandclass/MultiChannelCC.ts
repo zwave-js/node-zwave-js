@@ -575,7 +575,7 @@ supported CCs:`;
 		valueDB.setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	private async interviewV1(driver: Driver): Promise<void> {
@@ -634,7 +634,7 @@ supported CCs:`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 

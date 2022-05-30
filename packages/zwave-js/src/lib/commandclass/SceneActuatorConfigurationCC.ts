@@ -333,7 +333,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 			setSceneActuatorConfigMetaData.call(this, driver, sceneId);
 		}
 
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node

@@ -272,7 +272,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
