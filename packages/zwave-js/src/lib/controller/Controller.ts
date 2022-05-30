@@ -160,6 +160,7 @@ import {
 	AddNodeToNetworkRequest,
 	AddNodeToNetworkRequestStatusReport,
 	AddNodeType,
+	computeNeighborDiscoveryTimeout,
 	EnableSmartStartListenRequest,
 } from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
@@ -2999,11 +3000,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					message: `refreshing neighbor list (attempt ${attempt})...`,
 					direction: "outbound",
 				});
+				// During inclusion, the timeout is mainly required for the node to detect all neighbors
+				// We do the same here, so we just reuse the timeout
+				const discoveryTimeout = computeNeighborDiscoveryTimeout(
+					this.driver,
+					// Controllers take longer, just assume the worst case here
+					NodeType.Controller,
+				);
+
 				try {
 					const resp =
 						await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
 							new RequestNodeNeighborUpdateRequest(this.driver, {
 								nodeId,
+								discoveryTimeout,
 							}),
 						);
 					if (

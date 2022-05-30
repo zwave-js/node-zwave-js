@@ -12,7 +12,7 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
 import { NodeStatus } from "../node/_Types";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -27,7 +27,7 @@ import {
 import { Powerlevel, PowerlevelCommand, PowerlevelTestStatus } from "./_Types";
 
 @API(CommandClasses.Powerlevel)
-export class PowerlevelCCAPI extends CCAPI {
+export class PowerlevelCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: PowerlevelCommand): Maybe<boolean> {
 		switch (cmd) {
 			case PowerlevelCommand.Get:
@@ -95,6 +95,26 @@ export class PowerlevelCCAPI extends CCAPI {
 			PowerlevelCommand,
 			PowerlevelCommand.TestNodeSet,
 		);
+
+		if (testNodeId === this.endpoint.nodeId) {
+			throw new ZWaveError(
+				`For a powerlevel test, the test node ID must different from the source node ID.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+		const testNode = this.driver.nodes.getOrThrow(testNodeId);
+		if (testNode.isFrequentListening) {
+			throw new ZWaveError(
+				`Node ${testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
+				ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
+			);
+		}
+		if (testNode.canSleep && testNode.status !== NodeStatus.Awake) {
+			throw new ZWaveError(
+				`Node ${testNodeId} is not awake and therefore cannot be used for a powerlevel test.`,
+				ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
+			);
+		}
 
 		const cc = new PowerlevelCCTestNodeSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -261,26 +281,6 @@ export class PowerlevelCCTestNodeSet extends PowerlevelCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			if (options.testNodeId === this.nodeId) {
-				throw new ZWaveError(
-					`For a powerlevel test, the test node ID must different from the source node ID.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
-			const testNode = host.nodes.getOrThrow(options.testNodeId);
-			if (testNode.isFrequentListening) {
-				throw new ZWaveError(
-					`Node ${options.testNodeId} is FLiRS and therefore cannot be used for a powerlevel test.`,
-					ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
-				);
-			}
-			if (testNode.canSleep && testNode.status !== NodeStatus.Awake) {
-				throw new ZWaveError(
-					`Node ${options.testNodeId} is not awake and therefore cannot be used for a powerlevel test.`,
-					ZWaveErrorCodes.PowerlevelCC_UnsupportedTestNode,
-				);
-			}
-
 			this.testNodeId = options.testNodeId;
 			this.powerlevel = options.powerlevel;
 			this.testFrameCount = options.testFrameCount;

@@ -36,11 +36,16 @@ export class MockController {
 			homeId: options.homeId ?? 0x7e571000,
 			securityManager: undefined,
 			securityManager2: undefined,
-			options: {} as any,
-			nodes: this.nodes as any,
+			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
+
+			// TODO: We don't care about security classes yet
+			getHighestSecurityClass: () => undefined,
+			hasSecurityClass: () => false,
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			setSecurityClass: () => {},
 
 			// getValueDB: (nodeId) => {
 			// 	if (!valueDBCache.has(nodeId)) {

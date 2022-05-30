@@ -4,6 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	parseMaybeNumber,
+	unknownNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -126,7 +127,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -141,7 +142,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
@@ -244,20 +245,27 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		// When the node sends a report, payload[0] === 0b11. This is probably a
 		// bit mask for position and tilt
 		if (!!(this.payload[0] & 0b10)) {
-			this.position = parseMaybeNumber(
-				this.payload[1],
-				host.options.preserveUnknownValues,
-			);
+			this._position = parseMaybeNumber(this.payload[1]);
 		}
 		if (!!(this.payload[0] & 0b01)) {
-			this.tilt = parseMaybeNumber(
-				this.payload[2],
-				host.options.preserveUnknownValues,
-			);
+			this._tilt = parseMaybeNumber(this.payload[2]);
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (
+			this._position === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._position = undefined;
+		}
+		if (
+			this._tilt === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._tilt = undefined;
+		}
+
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
@@ -285,8 +293,15 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 		return true;
 	}
 
-	public readonly position?: Maybe<number>;
-	public readonly tilt?: Maybe<number>;
+	private _position: Maybe<number> | undefined;
+	public get position(): Maybe<number> | undefined {
+		return this._position;
+	}
+
+	private _tilt: Maybe<number> | undefined;
+	public get tilt(): Maybe<number> | undefined {
+		return this._tilt;
+	}
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};

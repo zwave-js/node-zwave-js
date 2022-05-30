@@ -614,9 +614,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// Ensure the node has a security class
 			const peerNodeID = this.nodeId as number;
-			const node = this.getNode()!;
-			validatePayload.withReason("The node is not included")(!!node);
-			const securityClass = node.getHighestSecurityClass();
+			// const node = this.getNode()!;
+			// validatePayload.withReason("The node is not included")(!!node);
+			const securityClass = this.host.getHighestSecurityClass(peerNodeID);
 			validatePayload.withReason("No security class granted")(
 				securityClass !== SecurityClass.None,
 			);
@@ -685,9 +685,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				decryptionKey?: Buffer;
 			} => {
 				const getNonceAndDecrypt = () => {
-					const iv = this.host.securityManager2.nextNonce(node.id);
+					const iv = this.host.securityManager2.nextNonce(peerNodeID);
 					const { keyCCM: key } =
-						this.host.securityManager2.getKeysForNode(node);
+						this.host.securityManager2.getKeysForNode(peerNodeID);
 					return {
 						decryptionKey: key,
 						...decryptAES128CCM(
@@ -714,7 +714,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					if (this.host.securityManager2.tempKeys.has(peerNodeID)) {
 						// We're currently bootstrapping the node, it might be using a temporary key
 						this.host.securityManager2.initializeTempSPAN(
-							node,
+							peerNodeID,
 							senderEI,
 							receiverEI,
 						);
@@ -724,14 +724,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 						// Reset the SPAN state and try with the recently granted security class
 						this.host.securityManager2.setSPANState(
-							node.id,
+							peerNodeID,
 							spanState,
 						);
 					}
 
 					if (securityClass != undefined) {
 						this.host.securityManager2.initializeSPAN(
-							node,
+							peerNodeID,
 							securityClass,
 							senderEI,
 							receiverEI,
@@ -743,11 +743,17 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						// Try multiple security classes
 						const possibleSecurityClasses = securityClassOrder
 							.filter((s) => securityClassIsS2(s))
-							.filter((s) => node.hasSecurityClass(s) !== false);
+							.filter(
+								(s) =>
+									this.host.hasSecurityClass(
+										peerNodeID,
+										s,
+									) !== false,
+							);
 						for (const secClass of possibleSecurityClasses) {
 							// Initialize an SPAN with that security class
 							this.host.securityManager2.initializeSPAN(
-								node,
+								peerNodeID,
 								secClass,
 								senderEI,
 								receiverEI,
@@ -756,12 +762,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 							// It worked, return the result and remember the security class
 							if (ret.authOK) {
-								node.setSecurityClass(secClass, true);
+								this.host.setSecurityClass(
+									peerNodeID,
+									secClass,
+									true,
+								);
 								return ret;
 							}
 							// Reset the SPAN state and try with the next security class
 							this.host.securityManager2.setSPANState(
-								node.id,
+								peerNodeID,
 								spanState,
 							);
 						}
@@ -883,10 +893,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 	public serialize(): Buffer {
 		// TODO: Support Multicast
-		const node = this.getNode()!;
+		const nodeId = this.nodeId as number;
 
 		// Include Sender EI in the command if we only have the receiver's EI
-		const spanState = this.host.securityManager2.getSPANState(node.id);
+		const spanState = this.host.securityManager2.getSPANState(nodeId);
 		if (
 			spanState.type === SPANState.None ||
 			spanState.type === SPANState.LocalEI
@@ -905,15 +915,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// While bootstrapping a node, the controller only sends commands encrypted
 			// with the temporary key
-			if (this.host.securityManager2.tempKeys.has(node.id)) {
+			if (this.host.securityManager2.tempKeys.has(nodeId)) {
 				this.host.securityManager2.initializeTempSPAN(
-					node,
+					nodeId,
 					senderEI,
 					receiverEI,
 				);
 			} else {
 				const securityClass =
-					this._securityClass ?? node.getHighestSecurityClass();
+					this._securityClass ??
+					this.host.getHighestSecurityClass(nodeId);
 
 				if (securityClass == undefined) {
 					throw new ZWaveError(
@@ -922,7 +933,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					);
 				}
 				this.host.securityManager2.initializeSPAN(
-					node,
+					nodeId,
 					securityClass,
 					senderEI,
 					receiverEI,
@@ -977,14 +988,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			unencryptedPayload,
 		);
 
-		const iv = this.host.securityManager2.nextNonce(node.id);
+		const iv = this.host.securityManager2.nextNonce(nodeId);
 		const { keyCCM: key } =
 			// Prefer the overridden security class if it was given
 			this._securityClass != undefined
 				? this.host.securityManager2.getKeysForSecurityClass(
 						this._securityClass,
 				  )
-				: this.host.securityManager2.getKeysForNode(node);
+				: this.host.securityManager2.getKeysForNode(nodeId);
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,

@@ -119,3 +119,8 @@ public static getNotificationMode(
 	node: ZWaveNodeBase,
 ): "push" | "pull" | undefined;
 ```
+
+# The max. send attempts in SendData messages now defaults to 1 instead of the driver option
+
+If you're constructing `SendData[Bridge][Multicast]Request`s manually, the `maxSendAttempts` property now needs to be set if more than 1 attempts are desired.
+The driver does this automatically when using the `sendCommand` method, so most use cases should not be affected.

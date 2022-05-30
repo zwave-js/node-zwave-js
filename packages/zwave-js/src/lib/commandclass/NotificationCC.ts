@@ -820,8 +820,9 @@ export class NotificationCCReport extends NotificationCC {
 				}
 			} else {
 				// V1 Alarm, check if there is a compat option to map this V1 report to a V2+ report
-				const mapping =
-					this.getNodeUnsafe()?.deviceConfig?.compat?.alarmMapping;
+				const mapping = this.host.getCompatConfig?.(
+					this.nodeId as number,
+				)?.alarmMapping;
 				const match = mapping?.find(
 					(m) =>
 						m.from.alarmType === this.alarmType &&

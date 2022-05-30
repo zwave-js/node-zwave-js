@@ -6,6 +6,7 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	unknownNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -627,14 +628,22 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this.currentValue = parseMaybeNumber(
-			this.payload[0],
-			host.options.preserveUnknownValues,
-		);
+		this._currentValue = parseMaybeNumber(this.payload[0]);
 		if (this.version >= 4 && this.payload.length >= 3) {
 			this.targetValue = parseNumber(this.payload[1]);
 			this.duration = Duration.parseReport(this.payload[2]);
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (
+			this.currentValue === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._currentValue = undefined;
+		}
+
+		return super.persistValues(applHost);
 	}
 
 	@ccValue({ forceCreation: true })
@@ -652,12 +661,15 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	})
 	public readonly duration: Duration | undefined;
 
+	private _currentValue: Maybe<number> | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
 		label: "Current value",
 	})
-	public readonly currentValue: Maybe<number> | undefined;
+	public get currentValue(): Maybe<number> | undefined {
+		return this._currentValue;
+	}
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {

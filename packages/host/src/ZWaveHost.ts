@@ -1,7 +1,9 @@
-import type { ConfigManager } from "@zwave-js/config";
+import type { CompatConfig, ConfigManager } from "@zwave-js/config";
 import type {
 	CommandClasses,
 	ControllerLogger,
+	Maybe,
+	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
 	ValueDB,
@@ -40,20 +42,15 @@ export interface ZWaveHostOptions {
 
 /** Host application abstractions to be used in Serial API and CC implementations */
 export interface ZWaveHost {
-	/** Management of Security S0 keys and nonces */
-	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces */
-	securityManager2: SecurityManager2 | undefined;
-
 	/** The ID of this node in the current network */
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
 
-	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
-
-	options: ZWaveHostOptions;
+	/** Management of Security S0 keys and nonces */
+	securityManager: SecurityManager | undefined;
+	/** Management of Security S2 keys and nonces */
+	securityManager2: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
@@ -75,11 +72,26 @@ export interface ZWaveHost {
 		endpointIndex?: number,
 	): boolean;
 
+	getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): Maybe<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+
 	/**
 	 * Returns the next callback ID. Callback IDs are used to correllate requests
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;
+
+	getCompatConfig?: (nodeId: number) => CompatConfig | undefined;
 }
 
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
@@ -87,9 +99,14 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 	/** Gives access to the configuration files */
 	configManager: ConfigManager;
 
+	options: ZWaveHostOptions;
+
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
 
 	/** Returns the value DB which belongs to the node with the given ID */
 	getValueDB(nodeId: number): ValueDB;
+
+	/** Readonly access to all node instances known to the host */
+	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
 }

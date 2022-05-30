@@ -5,10 +5,15 @@ import {
 	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -156,10 +161,20 @@ export class TimeParametersCCAPI extends CCAPI {
 			TimeParametersCommand.Set,
 		);
 
+		const useLocalTime =
+			this.endpoint instanceof Endpoint
+				? shouldUseLocalTime(this.endpoint)
+				: shouldUseLocalTime(
+						this.endpoint.node.physicalNodes[0].getEndpoint(
+							this.endpoint.index,
+						)!,
+				  );
+
 		const cc = new TimeParametersCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			dateAndTime,
+			useLocalTime,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -212,16 +227,34 @@ export class TimeParametersCCReport extends TimeParametersCC {
 			minute: this.payload[5],
 			second: this.payload[6],
 		};
-		this.dateAndTime = segmentsToDate(
+		this._dateAndTime = segmentsToDate(
 			dateSegments,
-			shouldUseLocalTime(
-				this.getNode()!.getEndpoint(this.endpointIndex)!,
-			),
+			// Assume we can use UTC and correct this assumption in persistValues
+			false,
 		);
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		// If necessary, fix the date and time before persisting it
+		const local = shouldUseLocalTime(
+			applHost.nodes
+				.get(this.nodeId as number)!
+				.getEndpoint(this.endpointIndex)!,
+		);
+		if (local) {
+			// The initial assumption was incorrect, re-interpret the time
+			const segments = dateToSegments(this._dateAndTime, false);
+			this._dateAndTime = segmentsToDate(segments, local);
+		}
+
+		return super.persistValues(applHost);
+	}
+
+	private _dateAndTime: Date;
 	@ccValue()
-	public readonly dateAndTime: Date;
+	public get dateAndTime(): Date {
+		return this._dateAndTime;
+	}
 
 	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		return {
@@ -242,6 +275,7 @@ export class TimeParametersCCGet extends TimeParametersCC {}
 
 interface TimeParametersCCSetOptions extends CCCommandOptions {
 	dateAndTime: Date;
+	useLocalTime?: boolean;
 }
 
 @CCCommand(TimeParametersCommand.Set)
@@ -272,23 +306,39 @@ export class TimeParametersCCSet extends TimeParametersCC {
 			);
 			this.dateAndTime = segmentsToDate(
 				dateSegments,
-				shouldUseLocalTime(
-					this.getNode()!.getEndpoint(this.endpointIndex)!,
-				),
+				// Assume we can use UTC and correct this assumption in persistValues
+				false,
 			);
 		} else {
 			this.dateAndTime = options.dateAndTime;
 		}
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		// We do not actually persist anything here, but we need access to the node
+		// in order to interpret the date segments correctly
+
+		const local = shouldUseLocalTime(
+			applHost.nodes
+				.get(this.nodeId as number)!
+				.getEndpoint(this.endpointIndex)!,
+		);
+		if (local) {
+			// The initial assumption was incorrect, re-interpret the time
+			const segments = dateToSegments(this.dateAndTime, false);
+			this.dateAndTime = segmentsToDate(segments, local);
+		}
+
+		return super.persistValues(applHost);
+	}
+
 	public dateAndTime: Date;
+	private useLocalTime?: boolean;
 
 	public serialize(): Buffer {
 		const dateSegments = dateToSegments(
 			this.dateAndTime,
-			shouldUseLocalTime(
-				this.getNode()!.getEndpoint(this.endpointIndex)!,
-			),
+			!!this.useLocalTime,
 		);
 		this.payload = Buffer.from([
 			// 2 bytes placeholder for year

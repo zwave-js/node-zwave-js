@@ -344,9 +344,10 @@ export class MultiChannelCC extends CommandClass {
 	):
 		| MultiChannelCCCommandEncapsulation
 		| MultiChannelCCV1CommandEncapsulation {
-		const ccVersion = cc
-			.getNode()
-			?.getCCVersion(CommandClasses["Multi Channel"]);
+		const ccVersion = host.getSafeCCVersionForNode(
+			CommandClasses["Multi Channel"],
+			cc.nodeId as number,
+		);
 		if (ccVersion === 1) {
 			return new MultiChannelCCV1CommandEncapsulation(host, {
 				nodeId: cc.nodeId,
@@ -1091,7 +1092,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
-				this.getNodeUnsafe()?.deviceConfig?.compat
+				this.host.getCompatConfig?.(this.nodeId as number)
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly uses the destination field to indicate the source endpoint
@@ -1123,7 +1124,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			// If the encapsulated command requires security, so does this one
 			if (this.encapsulated.secure) this.secure = true;
 			if (
-				this.getNodeUnsafe()?.deviceConfig?.compat
+				this.host.getCompatConfig?.(this.nodeId as number)
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly responds from the endpoint we've passed as our source endpoint

@@ -17,7 +17,6 @@ import type {
 	ZWaveApplicationHost,
 	ZWaveEndpointBase,
 	ZWaveHost,
-	ZWaveNodeBase,
 } from "@zwave-js/host";
 import {
 	buffer2hex,
@@ -501,17 +500,9 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(driver: Driver): ZWaveNode | undefined;
-	/**
-	 * Returns the node this CC is linked to.
-	 */
-	public getNode(): ZWaveNodeBase | undefined;
-	/**
-	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
-	 */
-	public getNode(driver?: Driver): ZWaveNode | ZWaveNodeBase | undefined {
+	public getNode(driver: Driver): ZWaveNode | undefined {
 		if (this.isSinglecast()) {
-			return (driver?.controller ?? this.host).nodes.get(this.nodeId);
+			return driver.controller.nodes.get(this.nodeId);
 		}
 	}
 
@@ -519,18 +510,9 @@ export class CommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined;
-	public getNodeUnsafe(): ZWaveNodeBase | undefined;
-
-	public getNodeUnsafe(
-		driver?: Driver,
-	): ZWaveNode | ZWaveNodeBase | undefined {
+	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined {
 		try {
-			if (driver) {
-				return this.getNode(driver);
-			} else {
-				return this.getNode();
-			}
+			return this.getNode(driver);
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -541,17 +523,8 @@ export class CommandClass {
 		}
 	}
 
-	public getEndpoint(driver: Driver): Endpoint | undefined;
-	public getEndpoint(): ZWaveEndpointBase | undefined;
-
-	public getEndpoint(
-		driver?: Driver,
-	): Endpoint | ZWaveEndpointBase | undefined {
-		if (driver) {
-			return this.getNode(driver)?.getEndpoint(this.endpointIndex);
-		} else {
-			return this.getNode()?.getEndpoint(this.endpointIndex);
-		}
+	public getEndpoint(driver: Driver): Endpoint | undefined {
+		return this.getNode(driver)?.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */

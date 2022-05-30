@@ -36,6 +36,7 @@ export function createTestingHost(
 		ownNodeId: options.ownNodeId ?? 1,
 		securityManager: undefined,
 		securityManager2: undefined,
+		getCompatConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {
 				return () => {
@@ -81,6 +82,18 @@ export function createTestingHost(
 				!!(endpoint ?? node)?.isCCSecure(ccId) &&
 				!!(ret.securityManager || ret.securityManager2)
 			);
+		},
+		getHighestSecurityClass: (nodeId) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.getHighestSecurityClass();
+		},
+		hasSecurityClass: (nodeId, securityClass) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.hasSecurityClass(securityClass);
+		},
+		setSecurityClass: (nodeId, securityClass, granted) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			node.setSecurityClass(securityClass, granted);
 		},
 	};
 	return ret;

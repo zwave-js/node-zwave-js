@@ -1,6 +1,10 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
-import { ConfigManager, externalConfigDir } from "@zwave-js/config";
+import {
+	CompatConfig,
+	ConfigManager,
+	externalConfigDir,
+} from "@zwave-js/config";
 import {
 	CommandClasses,
 	ControllerLogger,
@@ -10,6 +14,7 @@ import {
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
+	Maybe,
 	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
@@ -736,6 +741,36 @@ export class Driver
 	public getValueDB(nodeId: number): ValueDB {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.valueDB;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public getCompatConfig(nodeId: number): CompatConfig | undefined {
+		return this.controller.nodes.get(nodeId)?.deviceConfig?.compat;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.getHighestSecurityClass();
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): Maybe<boolean> {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.hasSecurityClass(securityClass);
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		node.setSecurityClass(securityClass, granted);
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */
@@ -3683,9 +3718,15 @@ ${handlers.length} left`,
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataBridgeRequest(this, { command });
+				msg = new SendDataBridgeRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			} else {
-				msg = new SendDataRequest(this, { command });
+				msg = new SendDataRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			}
 		} else if (command.isMulticast()) {
 			if (
@@ -3694,9 +3735,15 @@ ${handlers.length} left`,
 				)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataMulticastBridgeRequest(this, { command });
+				msg = new SendDataMulticastBridgeRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			} else {
-				msg = new SendDataMulticastRequest(this, { command });
+				msg = new SendDataMulticastRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			}
 		} else {
 			throw new ZWaveError(

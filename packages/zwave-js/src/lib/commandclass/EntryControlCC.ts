@@ -325,9 +325,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation =
-				!!this.getNodeUnsafe()?.deviceConfig?.compat
-					?.disableStrictEntryControlDataValidation;
+			const noStrictValidation = !!this.host.getCompatConfig?.(
+				this.nodeId as number,
+			)?.disableStrictEntryControlDataValidation;
 
 			const eventData = Buffer.from(
 				this.payload.slice(offset, offset + eventDataLength),

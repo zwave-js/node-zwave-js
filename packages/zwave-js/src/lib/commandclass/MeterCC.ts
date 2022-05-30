@@ -549,9 +549,9 @@ export class MeterCCReport extends MeterCC {
 		);
 
 		// Filter out unknown meter types and scales, unless the strict validation is disabled
-		const measurementValidation =
-			!this.getNodeUnsafe()?.deviceConfig?.compat
-				?.disableStrictMeasurementValidation;
+		const measurementValidation = !this.host.getCompatConfig?.(
+			this.nodeId as number,
+		)?.disableStrictMeasurementValidation;
 
 		if (measurementValidation) {
 			validatePayload.withReason(
