@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -389,7 +389,7 @@ export class VersionCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -415,7 +415,6 @@ export class VersionCCReport extends VersionCC {
 				);
 			}
 		}
-		this.persistValues();
 	}
 
 	private _libraryType: ZWaveLibraryTypes;
@@ -456,7 +455,7 @@ export class VersionCCReport extends VersionCC {
 		return this._hardwareVersion;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
@@ -469,7 +468,7 @@ export class VersionCCReport extends VersionCC {
 			message["hardware version"] = this._hardwareVersion;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -481,8 +480,6 @@ export class VersionCCGet extends VersionCC {}
 
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
-	// @noCCValues see constructor comment
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -504,9 +501,9 @@ export class VersionCCCommandClassReport extends VersionCC {
 		return this._requestedCC;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				CC: getCCName(this.requestedCC),
 				version: this._ccVersion,
@@ -558,9 +555,9 @@ export class VersionCCCommandClassGet extends VersionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
@@ -577,7 +574,6 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		validatePayload(this.payload.length >= 1);
 		const capabilities = this.payload[0];
 		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
-		this.persistValues();
 	}
 
 	private _supportsZWaveSoftwareGet: boolean;
@@ -589,9 +585,9 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 		return this._supportsZWaveSoftwareGet;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports Z-Wave Software Get command":
 					this._supportsZWaveSoftwareGet,
@@ -641,7 +637,6 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		} else {
 			this._applicationBuildNumber = 0;
 		}
-		this.persistValues();
 	}
 
 	private _sdkVersion: string;
@@ -731,7 +726,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		return this._applicationBuildNumber;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"SDK version": this._sdkVersion,
 		};
@@ -756,7 +751,7 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 			message["application build number"] = this._applicationBuildNumber;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}

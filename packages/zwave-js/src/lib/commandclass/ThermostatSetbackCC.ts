@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -123,7 +123,7 @@ export class ThermostatSetbackCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -191,9 +191,9 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,
@@ -218,7 +218,6 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		// If we receive an unknown setback state, return the raw value
 		this._setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
-		this.persistValues();
 	}
 
 	private _setbackType: SetbackType;
@@ -245,9 +244,9 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		return this._setbackState;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"setback type": getEnumMemberName(
 					SetbackType,

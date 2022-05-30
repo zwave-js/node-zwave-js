@@ -8,7 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -316,7 +316,7 @@ export class BarrierOperatorCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -325,9 +325,10 @@ export class BarrierOperatorCC extends CommandClass {
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedSubsystems =
-			this.getValueDB().getValue<SubsystemType[]>(
+			valueDB.getValue<SubsystemType[]>(
 				getSupportedSubsystemTypesValueId(this.endpointIndex),
 			) ?? [];
 
@@ -389,9 +390,9 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "target state": this.targetState },
 		};
 	}
@@ -424,8 +425,6 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			this.position = 100;
 			this.currentState = payloadValue;
 		}
-
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -445,9 +444,9 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	})
 	public readonly position: number | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"barrier position": this.position,
 				"barrier state":
@@ -475,8 +474,6 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 			this.payload,
 			SubsystemType.Audible,
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedsubsystemTypes: SubsystemType[];
@@ -485,9 +482,9 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 		return this._supportedsubsystemTypes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported types": this.supportedSubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
@@ -534,9 +531,9 @@ export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -562,18 +559,16 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 		validatePayload(this.payload.length >= 2);
 		this.subsystemType = this.payload[0];
 		this.subsystemState = this.payload[1];
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		const valueId = getSignalingStateValueId(
 			this.endpointIndex,
 			this.subsystemType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Create metadata if it does not exist
 		if (!valueDB.hasMetadata(valueId)) {
@@ -591,9 +586,9 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public readonly subsystemType: SubsystemType;
 	public readonly subsystemState: SubsystemState;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,
@@ -640,9 +635,9 @@ export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"subsystem type": getEnumMemberName(
 					SubsystemType,

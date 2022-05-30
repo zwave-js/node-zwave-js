@@ -6,13 +6,14 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	unknownNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -474,7 +475,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		} else {
 			// requesting the switch type automatically creates the up/down actions
 			// We need to do this manually for V1 and V2
-			this.createMetadataForLevelChangeActions();
+			this.createMetadataForLevelChangeActions(driver);
 		}
 
 		await this.refreshValues(driver);
@@ -491,7 +492,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -509,8 +510,11 @@ export class MultilevelSwitchCC extends CommandClass {
 		await api.get();
 	}
 
-	public setMappedBasicValue(value: number): boolean {
-		this.getValueDB().setValue(
+	public setMappedBasicValue(
+		applHost: ZWaveApplicationHost,
+		value: number,
+	): boolean {
+		this.getValueDB(applHost).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
@@ -522,10 +526,11 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 
 	protected createMetadataForLevelChangeActions(
+		applHost: ZWaveApplicationHost,
 		// SDS13781: The Primary Switch Type SHOULD be 0x02 (Up/Down)
 		switchType: SwitchType = SwitchType["Down/Up"],
 	): void {
-		const valueDb = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Create metadata for the control values if necessary
 		const switchTypeName = getEnumMemberName(SwitchType, switchType);
@@ -541,16 +546,16 @@ export class MultilevelSwitchCC extends CommandClass {
 			property: down,
 		};
 
-		if (!valueDb.hasMetadata(upValueId)) {
-			this.getValueDB().setMetadata(upValueId, {
+		if (!valueDB.hasMetadata(upValueId)) {
+			valueDB.setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
 				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}
-		if (!valueDb.hasMetadata(downValueId)) {
-			this.getValueDB().setMetadata(downValueId, {
+		if (!valueDB.hasMetadata(downValueId)) {
+			valueDB.setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
 				valueChangeOptions: ["transitionDuration"],
@@ -600,7 +605,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"target value": this.targetValue,
 		};
@@ -608,7 +613,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -623,15 +628,22 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this.currentValue = parseMaybeNumber(
-			this.payload[0],
-			host.options.preserveUnknownValues,
-		);
+		this._currentValue = parseMaybeNumber(this.payload[0]);
 		if (this.version >= 4 && this.payload.length >= 3) {
 			this.targetValue = parseNumber(this.payload[1]);
 			this.duration = Duration.parseReport(this.payload[2]);
 		}
-		this.persistValues();
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (
+			this.currentValue === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._currentValue = undefined;
+		}
+
+		return super.persistValues(applHost);
 	}
 
 	@ccValue({ forceCreation: true })
@@ -649,14 +661,17 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	})
 	public readonly duration: Duration | undefined;
 
+	private _currentValue: Maybe<number> | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyLevel,
 		label: "Current value",
 	})
-	public readonly currentValue: Maybe<number> | undefined;
+	public get currentValue(): Maybe<number> | undefined {
+		return this._currentValue;
+	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"current value": this.currentValue,
 		};
@@ -665,7 +680,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -737,7 +752,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
@@ -748,7 +763,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -767,7 +782,6 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 		validatePayload(this.payload.length >= 2);
 		this._switchType = this.payload[0] & 0b11111;
-		this.persistValues();
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
@@ -777,15 +791,15 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		return this._switchType;
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
-		this.createMetadataForLevelChangeActions(this._switchType);
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		this.createMetadataForLevelChangeActions(applHost, this._switchType);
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"switch type": getEnumMemberName(SwitchType, this.switchType),
 			},

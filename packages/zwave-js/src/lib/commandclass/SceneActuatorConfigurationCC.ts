@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
@@ -64,14 +64,15 @@ export function getDimmingDurationValueID(
 
 function setSceneActuatorConfigMetaData(
 	this: SceneActuatorConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	sceneId: number,
 ) {
+	const valueDB = this.getValueDB(applHost);
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		sceneId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (!valueDB.hasMetadata(levelValueId)) {
 		valueDB.setMetadata(levelValueId, {
@@ -90,22 +91,23 @@ function setSceneActuatorConfigMetaData(
 
 function persistSceneActuatorConfig(
 	this: SceneActuatorConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	sceneId: number,
 	level: number,
 	dimmingDuration: Duration,
 ): boolean {
+	const valueDB = this.getValueDB(applHost);
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		sceneId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (
 		!valueDB.hasMetadata(levelValueId) ||
 		!valueDB.hasMetadata(dimmingDurationValueId)
 	) {
-		setSceneActuatorConfigMetaData.call(this, sceneId);
+		setSceneActuatorConfigMetaData.call(this, applHost, sceneId);
 	}
 
 	valueDB.setValue(levelValueId, level);
@@ -328,10 +330,10 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 		});
 
 		for (let sceneId = 1; sceneId <= 255; sceneId++) {
-			setSceneActuatorConfigMetaData.call(this, sceneId);
+			setSceneActuatorConfigMetaData.call(this, driver, sceneId);
 		}
 
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	// `refreshValues()` would create 255 `Get` commands to be issued to the node
@@ -403,9 +405,9 @@ export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				sceneId: this.sceneId,
 				level: this.level,
@@ -431,15 +433,15 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 				Duration.parseReport(this.payload[2]) ??
 				new Duration(0, "unknown");
 		}
-
-		this.persistValues();
 	}
 
 	public readonly sceneId: number;
 	public readonly level?: number;
 	public readonly dimmingDuration?: Duration;
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
 		// Do not persist values for an inactive scene
 		if (
 			this.sceneId === 0 ||
@@ -451,15 +453,16 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 
 		return persistSceneActuatorConfig.call(
 			this,
+			applHost,
 			this.sceneId,
 			this.level,
 			this.dimmingDuration,
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				sceneId: this.sceneId,
 				level: this.level,
@@ -513,9 +516,9 @@ export class SceneActuatorConfigurationCCGet extends SceneActuatorConfigurationC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "scene id": this.sceneId },
 		};
 	}

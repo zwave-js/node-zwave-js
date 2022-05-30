@@ -10,7 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -196,52 +200,52 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): string | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getGroupNameValueID(endpoint.index, groupId));
 	}
 
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): AssociationGroupInfoProfile | undefined {
-		return host.getValueDB(endpoint.nodeId).getValue<{
+		return applHost.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
 		}>(getGroupInfoValueID(endpoint.index, groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getIssuedCommandsValueID(endpoint.index, groupId));
 	}
 
 	public static findGroupsForIssuedCommand(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
 		const ret: number[] = [];
 		const associationGroupCount = this.getAssociationGroupCountCached(
-			host,
+			applHost,
 			endpoint,
 		);
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Scan the issued commands of all groups if there's a match
 			const issuedCommands = this.getIssuedCommandsCached(
-				host,
+				applHost,
 				endpoint,
 				groupId,
 			);
@@ -258,7 +262,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	private static getAssociationGroupCountCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): number {
 		// The association group count is either determined by the
@@ -268,12 +272,12 @@ export class AssociationGroupInfoCC extends CommandClass {
 			// First query the Multi Channel Association CC
 			(endpoint.supportsCC(CommandClasses["Multi Channel Association"]) &&
 				MultiChannelAssociationCC.getGroupCountCached(
-					host,
+					applHost,
 					endpoint,
 				)) ||
 			// Then the Association CC
 			(endpoint.supportsCC(CommandClasses.Association) &&
-				AssociationCC.getGroupCountCached(host, endpoint)) ||
+				AssociationCC.getGroupCountCached(applHost, endpoint)) ||
 			// And fall back to 0
 			0
 		);
@@ -329,7 +333,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -338,6 +342,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
+		const valueDB = this.getValueDB(driver);
 
 		// Query the information for each group (this is the only thing that could be dynamic)
 		const associationGroupCount =
@@ -345,7 +350,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 				driver,
 				endpoint,
 			);
-		const hasDynamicInfo = this.getValueDB().getValue(
+		const hasDynamicInfo = valueDB.getValue(
 			getHasDynamicInfoValueID(this.endpointIndex),
 		);
 
@@ -389,21 +394,24 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		this.name = cpp2js(
 			this.payload.slice(2, 2 + nameLength).toString("utf8"),
 		);
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
-		this.getValueDB().setValue(valueId, this.name);
+		valueDB.setValue(valueId, this.name);
+
 		return true;
 	}
 
 	public readonly groupId: number;
 	public readonly name: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				name: this.name,
@@ -444,9 +452,9 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -485,15 +493,16 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 			_groups.push({ groupId, mode, profile, eventCode });
 		}
 		this.groups = _groups;
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
 			const valueId = getGroupInfoValueID(this.endpointIndex, groupId);
-			this.getValueDB().setValue(valueId, {
+			valueDB.setValue(valueId, {
 				mode,
 				profile,
 				eventCode,
@@ -509,9 +518,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly groups: readonly AssociationGroupInfo[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"is list mode": this.isListMode,
 				"has dynamic info": this.hasDynamicInfo,
@@ -579,7 +588,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
 			message["group id"] = this.groupId;
@@ -589,7 +598,7 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		}
 		message["refresh cache"] = this.refreshCache;
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -619,7 +628,6 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 		}
 
 		this.issuedCommands = [groupId, commands];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair({ internal: true })
@@ -633,9 +641,9 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 		return this.issuedCommands[1];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				commands: `${[...this.commands]
@@ -688,9 +696,9 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				"allow cache": this.allowCache,

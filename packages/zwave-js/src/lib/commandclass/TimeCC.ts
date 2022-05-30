@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -149,7 +149,7 @@ export class TimeCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -161,8 +161,6 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 
 @CCCommand(TimeCommand.TimeReport)
 export class TimeCCTimeReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCTimeReportOptions,
@@ -196,9 +194,9 @@ export class TimeCCTimeReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				time: `${padStart(this.hour.toString(), 2, "0")}:${padStart(
 					this.minute.toString(),
@@ -222,8 +220,6 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 
 @CCCommand(TimeCommand.DateReport)
 export class TimeCCDateReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | TimeCCDateReportOptions,
@@ -257,9 +253,9 @@ export class TimeCCDateReport extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				date: `${padStart(this.year.toString(), 4, "0")}-${padStart(
 					this.month.toString(),
@@ -335,9 +331,9 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"standard time offset": `${this.standardOffset} minutes`,
 				"DST offset": `${this.dstOffset} minutes`,
@@ -350,8 +346,6 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
-	// @noCCValues Time is temporary :), we don't want to store that in a DB
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -404,9 +398,9 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 		return this._dstEndDate;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"standard time offset": `${this._standardOffset} minutes`,
 				"DST offset": `${this._dstOffset} minutes`,

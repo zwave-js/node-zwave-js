@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -164,7 +164,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			if (mfResp) {
 				const logMessage = `received response for manufacturer information:
   manufacturer: ${
-		this.host.configManager.lookupManufacturer(mfResp.manufacturerId) ||
+		driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
@@ -178,7 +178,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -194,7 +194,6 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		this._manufacturerId = this.payload.readUInt16BE(0);
 		this._productType = this.payload.readUInt16BE(2);
 		this._productId = this.payload.readUInt16BE(4);
-		this.persistValues();
 	}
 
 	private _manufacturerId: number;
@@ -218,9 +217,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return this._productId;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"manufacturer id": num2hex(this._manufacturerId),
 				"product type": num2hex(this._productType),
@@ -253,30 +252,33 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 			dataFormat === 0
 				? deviceIdData.toString("utf8")
 				: "0x" + deviceIdData.toString("hex");
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "deviceId",
 			propertyKey: DeviceIdType[this.type],
 		};
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnly,
 			label: `Device ID (${valueId.propertyKey})`,
 		});
-		this.getValueDB().setValue(valueId, this.deviceId);
+		valueDB.setValue(valueId, this.deviceId);
+
 		return true;
 	}
 
 	public readonly type: DeviceIdType;
 	public readonly deviceId: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"device id type": getEnumMemberName(DeviceIdType, this.type),
 				"device id": this.deviceId,
@@ -317,9 +319,9 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"device id type": getEnumMemberName(
 					DeviceIdType,

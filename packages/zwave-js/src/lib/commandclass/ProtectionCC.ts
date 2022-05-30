@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -376,7 +376,7 @@ RF protection states:    ${resp.supportedRFStates
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		if (!hadCriticalTimeout) this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -385,7 +385,7 @@ RF protection states:    ${resp.supportedRFStates
 		const api = endpoint.commandClasses.Protection.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 
 		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
 			getSupportsExclusiveControlValueID(this.endpointIndex),
@@ -484,7 +484,7 @@ export class ProtectionCCSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -492,7 +492,7 @@ export class ProtectionCCSet extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -510,8 +510,6 @@ export class ProtectionCCReport extends ProtectionCC {
 		if (this.payload.length >= 2) {
 			this.rf = this.payload[1] & 0b1111;
 		}
-
-		this.persistValues();
 	}
 
 	// TODO: determine possible states during interview
@@ -531,7 +529,7 @@ export class ProtectionCCReport extends ProtectionCC {
 	})
 	public readonly rf?: RFProtectionState;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			local: getEnumMemberName(LocalProtectionState, this.local),
 		};
@@ -539,7 +537,7 @@ export class ProtectionCCReport extends ProtectionCC {
 			message.rf = getEnumMemberName(RFProtectionState, this.rf);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -567,13 +565,11 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 			this.payload.slice(3, 5),
 			RFProtectionState.Unprotected,
 		);
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
-		const valueDb = this.getValueDB();
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDb = this.getValueDB(applHost);
 		// update metadata (partially) for the local and rf values
 		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
 			...ValueMetadata.Number,
@@ -605,9 +601,9 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 	@ccValue({ internal: true })
 	public readonly supportedRFStates: RFProtectionState[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supports exclusive control": this.supportsExclusiveControl,
 				"supports timeout": this.supportsTimeout,
@@ -639,15 +635,14 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.exclusiveControlNodeId = this.payload[0];
-		this.persistValues();
 	}
 
 	@ccValue({ minVersion: 2 })
 	public readonly exclusiveControlNodeId: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -691,9 +686,9 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"exclusive control node id": this.exclusiveControlNodeId,
 			},
@@ -710,15 +705,14 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.timeout = Timeout.parse(this.payload[0]);
-		this.persistValues();
 	}
 
 	@ccValue({ minVersion: 2 })
 	public readonly timeout: Timeout;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { timeout: this.timeout.toString() },
 		};
 	}
@@ -760,9 +754,9 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { timeout: this.timeout.toString() },
 		};
 	}

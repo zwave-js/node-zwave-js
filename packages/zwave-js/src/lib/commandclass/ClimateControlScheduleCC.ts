@@ -5,7 +5,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
@@ -208,9 +208,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
@@ -249,7 +249,6 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		);
 
 		this.schedule = [weekday, switchPoints];
-		this.persistValues();
 	}
 
 	@ccKeyValuePair()
@@ -263,9 +262,9 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		return this.schedule[0];
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
@@ -314,9 +313,9 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
 		};
 	}
@@ -332,7 +331,6 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 
 		validatePayload(this.payload.length >= 1);
 		this._changeCounter = this.payload[0];
-		this.persistValues();
 	}
 
 	private _changeCounter: number;
@@ -340,9 +338,9 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 		return this._changeCounter;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "change counter": this.changeCounter },
 		};
 	}
@@ -364,7 +362,6 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		this._overrideType = this.payload[0] & 0b11;
 		this._overrideState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
-		this.persistValues();
 	}
 
 	private _overrideType: ScheduleOverrideType;
@@ -377,9 +374,9 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		return this._overrideState;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,
@@ -431,9 +428,9 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"override type": getEnumMemberName(
 					ScheduleOverrideType,
