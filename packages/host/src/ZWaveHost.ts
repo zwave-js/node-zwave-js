@@ -80,9 +80,6 @@ export interface ZWaveHost {
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;
-
-	/** Returns the value DB which belongs to the node with the given ID */
-	getValueDB(nodeId: number): ValueDB;
 }
 
 /** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
@@ -92,4 +89,7 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 
 	// TODO: There's probably a better fitting name for this now
 	controllerLog: ControllerLogger;
+
+	/** Returns the value DB which belongs to the node with the given ID */
+	getValueDB(nodeId: number): ValueDB;
 }

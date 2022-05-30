@@ -457,7 +457,7 @@ export class ColorSwitchCC extends CommandClass {
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -553,9 +553,10 @@ export class ColorSwitchCC extends CommandClass {
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedColors: readonly ColorComponent[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedColorComponentsValueID(this.endpointIndex),
 			) ?? [];
 
@@ -643,8 +644,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Duration is stored globally instead of per component
 		if (!super.persistValues(applHost)) return false;
-
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		const valueId = getCurrentColorValueID(
 			this.endpointIndex,

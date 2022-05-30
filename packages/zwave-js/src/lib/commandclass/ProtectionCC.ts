@@ -385,7 +385,7 @@ RF protection states:    ${resp.supportedRFStates
 		const api = endpoint.commandClasses.Protection.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 
 		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
 			getSupportsExclusiveControlValueID(this.endpointIndex),
@@ -569,7 +569,7 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDb = this.getValueDB();
+		const valueDb = this.getValueDB(applHost);
 		// update metadata (partially) for the local and rf values
 		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
 			...ValueMetadata.Number,

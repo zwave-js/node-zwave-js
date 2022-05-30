@@ -309,6 +309,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -380,7 +381,7 @@ ${setpointScaleSupported
 				for (const scale of setpointScaleSupported) {
 					if (scale.unit) states[scale.key] = scale.unit;
 				}
-				this.getValueDB().setMetadata(scaleValueId, {
+				valueDB.setMetadata(scaleValueId, {
 					...ValueMetadata.ReadOnlyUInt8,
 					states: states,
 				});
@@ -421,9 +422,10 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const setpointTypes: HumidityControlSetpointType[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedSetpointTypesValueID(this.endpointIndex),
 			) ?? [];
 
@@ -538,7 +540,7 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 
 		const scale = getScale(applHost.configManager, this.scale);
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
 			this._type,
@@ -798,10 +800,11 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this.type);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.Number,
 			min: this._minValue,
 			max: this._maxValue,

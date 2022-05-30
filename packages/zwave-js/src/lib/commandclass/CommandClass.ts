@@ -1,15 +1,11 @@
 import {
-	CacheMetadata,
-	CacheValue,
 	CommandClasses,
-	deserializeCacheValue,
 	getCCName,
 	isZWaveError,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	NODE_ID_BROADCAST,
 	parseCCId,
-	serializeCacheValue,
 	ValueDB,
 	ValueID,
 	valueIdToString,
@@ -490,7 +486,10 @@ export class CommandClass {
 	 * Maps a BasicCC value to a more specific CC implementation. Returns true if the value was mapped, false otherwise.
 	 * @param _value The value of the received BasicCC
 	 */
-	public setMappedBasicValue(_value: number): boolean {
+	public setMappedBasicValue(
+		_applHost: ZWaveApplicationHost,
+		_value: number,
+	): boolean {
 		// By default, don't map
 		return false;
 	}
@@ -560,10 +559,10 @@ export class CommandClass {
 	}
 
 	/** Returns the value DB for this CC's node */
-	protected getValueDB(): ValueDB {
+	protected getValueDB(applHost: ZWaveApplicationHost): ValueDB {
 		if (this.isSinglecast()) {
 			try {
-				return this.host.getValueDB(this.nodeId);
+				return applHost.getValueDB(this.nodeId);
 			} catch {
 				throw new ZWaveError(
 					"The node for this CC does not exist or the driver is not ready yet",
@@ -597,7 +596,7 @@ export class CommandClass {
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
-	public getDefinedValueIDs(): ValueID[] {
+	public getDefinedValueIDs(applHost: ZWaveApplicationHost): ValueID[] {
 		// In order to compare value ids, we need them to be strings
 		const ret = new Map<string, ValueID>();
 
@@ -636,9 +635,10 @@ export class CommandClass {
 		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
 
 		// Also return all existing value ids that are not internal (values AND metadata without values!)
+		const valueDB = this.getValueDB(applHost);
 		const existingValueIds = [
-			...this.getValueDB().getValues(this.ccId),
-			...this.getValueDB().getAllMetadata(this.ccId),
+			...valueDB.getValues(this.ccId),
+			...valueDB.getAllMetadata(this.ccId),
 		]
 			.filter((valueId) => valueId.endpoint === this.endpointIndex)
 			// allow the value id if it is NOT registered or it is registered as non-internal
@@ -753,7 +753,7 @@ export class CommandClass {
 		}
 		let db: ValueDB;
 		try {
-			db = this.getValueDB();
+			db = this.getValueDB(applHost);
 		} catch {
 			return false;
 		}
@@ -828,78 +828,6 @@ export class CommandClass {
 		return true;
 	}
 
-	/** Serializes all values to be stored in the cache */
-	public serializeValuesForCache(): CacheValue[] {
-		const ccValues = this.getValueDB().getValues(getCommandClass(this));
-		return (
-			ccValues
-				// only serialize non-undefined values
-				.filter(({ value }) => value != undefined)
-				.map(({ value, commandClass, ...props }) => {
-					return {
-						...props,
-						value: serializeCacheValue(value),
-					};
-				})
-		);
-	}
-
-	/** Serializes metadata to be stored in the cache */
-	public serializeMetadataForCache(): CacheMetadata[] {
-		const allMetadata = this.getValueDB().getAllMetadata(
-			getCommandClass(this),
-		);
-		return (
-			allMetadata
-				// Strip out the command class
-				.map(({ commandClass, ...props }) => props)
-		);
-	}
-
-	/** Deserializes values from the cache */
-	public deserializeValuesFromCache(values: CacheValue[]): void {
-		const cc = getCommandClass(this);
-		for (const val of values) {
-			this.getValueDB().setValue(
-				{
-					commandClass: cc,
-					endpoint: val.endpoint,
-					property: val.property,
-					propertyKey: val.propertyKey,
-				},
-				deserializeCacheValue(val.value),
-				{
-					// Don't emit the added/updated events, as this will spam applications with untranslated events
-					noEvent: true,
-					// Don't throw when there is an invalid Value ID in the cache
-					noThrow: true,
-				},
-			);
-		}
-	}
-
-	/** Deserializes value metadata from the cache */
-	public deserializeMetadataFromCache(allMetadata: CacheMetadata[]): void {
-		const cc = getCommandClass(this);
-		for (const meta of allMetadata) {
-			this.getValueDB().setMetadata(
-				{
-					commandClass: cc,
-					endpoint: meta.endpoint,
-					property: meta.property,
-					propertyKey: meta.propertyKey,
-				},
-				meta.metadata,
-				{
-					// Don't emit the added/updated events, as this will spam applications with untranslated events
-					noEvent: true,
-					// Don't throw when there is an invalid Value ID in the cache
-					noThrow: true,
-				},
-			);
-		}
-	}
-
 	/**
 	 * When a CC supports to be split into multiple partial CCs, this can be used to identify the
 	 * session the partial CCs belong to.
@@ -919,7 +847,10 @@ export class CommandClass {
 
 	/** Include previously received partial responses into a final CC */
 	/* istanbul ignore next */
-	public mergePartialCCs(_partials: CommandClass[]): void {
+	public mergePartialCCs(
+		_applHost: ZWaveApplicationHost,
+		_partials: CommandClass[],
+	): void {
 		// This is highly CC dependent
 		// Overwrite this in derived classes, by default do nothing
 	}

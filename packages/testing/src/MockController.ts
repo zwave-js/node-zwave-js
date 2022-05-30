@@ -1,4 +1,3 @@
-import { ValueDB } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { Message, MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
@@ -28,9 +27,9 @@ export class MockController {
 		this.serialParser.on("data", (data) => this.serialOnData(data));
 
 		// Set up the fake host
-		const valuesStorage = new Map();
-		const metadataStorage = new Map();
-		const valueDBCache = new Map<number, ValueDB>();
+		// const valuesStorage = new Map();
+		// const metadataStorage = new Map();
+		// const valueDBCache = new Map<number, ValueDB>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
@@ -43,19 +42,19 @@ export class MockController {
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
 
-			getValueDB: (nodeId) => {
-				if (!valueDBCache.has(nodeId)) {
-					valueDBCache.set(
-						nodeId,
-						new ValueDB(
-							nodeId,
-							valuesStorage as any,
-							metadataStorage as any,
-						),
-					);
-				}
-				return valueDBCache.get(nodeId)!;
-			},
+			// getValueDB: (nodeId) => {
+			// 	if (!valueDBCache.has(nodeId)) {
+			// 		valueDBCache.set(
+			// 			nodeId,
+			// 			new ValueDB(
+			// 				nodeId,
+			// 				valuesStorage as any,
+			// 				metadataStorage as any,
+			// 			),
+			// 		);
+			// 	}
+			// 	return valueDBCache.get(nodeId)!;
+			// },
 		};
 
 		this.capabilities = {

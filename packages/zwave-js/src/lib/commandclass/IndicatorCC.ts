@@ -352,6 +352,7 @@ export class IndicatorCC extends CommandClass {
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -387,7 +388,7 @@ export class IndicatorCC extends CommandClass {
 			} while (curId !== 0x00);
 
 			// The IDs are not stored by the report CCs so store them here once we have all of them
-			this.getValueDB().setValue(
+			valueDB.setValue(
 				getSupportedIndicatorIDsValueID(this.endpointIndex),
 				supportedIndicatorIds,
 			);
@@ -414,6 +415,7 @@ export class IndicatorCC extends CommandClass {
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		if (this.version === 1) {
 			driver.controllerLog.logNode(node.id, {
@@ -424,7 +426,7 @@ export class IndicatorCC extends CommandClass {
 			await api.get();
 		} else {
 			const supportedIndicatorIds: number[] =
-				this.getValueDB().getValue(
+				valueDB.getValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
 				) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
@@ -472,16 +474,17 @@ export class IndicatorCC extends CommandClass {
 		return super.translateProperty(applHost, property, propertyKey);
 	}
 
-	protected supportsV2Indicators(): boolean {
+	protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean {
+		const valueDB = this.getValueDB(applHost);
 		// First test if there are any indicator ids defined
-		const supportedIndicatorIds = this.getValueDB().getValue<number[]>(
+		const supportedIndicatorIds = valueDB.getValue<number[]>(
 			getSupportedIndicatorIDsValueID(this.endpointIndex),
 		);
 		if (!supportedIndicatorIds?.length) return false;
 		// Then test if there are any property ids defined
 		return supportedIndicatorIds.some(
 			(indicatorId) =>
-				!!this.getValueDB().getValue<number[]>(
+				!!valueDB.getValue<number[]>(
 					getSupportedPropertyIDsValueID(
 						this.endpointIndex,
 						indicatorId,
@@ -659,10 +662,10 @@ export class IndicatorCCReport extends IndicatorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		if (this.value != undefined) {
-			if (!this.supportsV2Indicators()) {
+			if (!this.supportsV2Indicators(applHost)) {
 				// Publish the value
 				const valueId = getIndicatorValueValueID(
 					this.endpointIndex,
@@ -703,7 +706,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		applHost: ZWaveApplicationHost,
 		value: IndicatorObject,
 	): void {
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		const metadata = getIndicatorMetadata(
 			applHost.configManager,
@@ -821,7 +824,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
-			this.getValueDB().setValue(
+			this.getValueDB(applHost).setValue(
 				getSupportedPropertyIDsValueID(
 					this.endpointIndex,
 					this.indicatorId,

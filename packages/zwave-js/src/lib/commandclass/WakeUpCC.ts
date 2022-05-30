@@ -206,6 +206,7 @@ export class WakeUpCC extends CommandClass {
 		const api = endpoint.commandClasses["Wake Up"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -283,10 +284,7 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						direction: "outbound",
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-					this.getValueDB().setValue(
-						getControllerNodeIdValueId(),
-						ownNodeId,
-					);
+					valueDB.setValue(getControllerNodeIdValueId(), ownNodeId);
 					driver.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",
@@ -435,9 +433,10 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Store the received information as metadata for the wake up interval
-		this.getValueDB().setMetadata(
+		valueDB.setMetadata(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,

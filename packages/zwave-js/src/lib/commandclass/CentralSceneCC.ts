@@ -300,12 +300,12 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const valueId = getSceneValueId(this._sceneNumber);
-		const valueDB = this.getValueDB();
 		if (!valueDB.hasMetadata(valueId)) {
-			this.getValueDB().setMetadata(valueId, {
+			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: getSceneLabel(this._sceneNumber),
 			});
@@ -399,7 +399,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		if (!super.persistValues(applHost)) return false;
 
 		// Create metadata for all scenes
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		for (let i = 1; i <= this._sceneCount; i++) {
 			const valueId = getSceneValueId(i);
 			valueDB.setMetadata(valueId, {

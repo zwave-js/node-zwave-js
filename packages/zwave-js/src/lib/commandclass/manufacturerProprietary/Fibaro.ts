@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { staticExtends } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
 import {
@@ -241,7 +241,6 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 
 		validatePayload(this.payload.length >= 3);
 
-		const valueDB = this.getValueDB();
 		// When the node sends a report, payload[0] === 0b11. This is probably a
 		// bit mask for position and tilt
 		if (!!(this.payload[0] & 0b10)) {
@@ -249,6 +248,20 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 				this.payload[1],
 				host.options.preserveUnknownValues,
 			);
+		}
+		if (!!(this.payload[0] & 0b01)) {
+			this.tilt = parseMaybeNumber(
+				this.payload[2],
+				host.options.preserveUnknownValues,
+			);
+		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
+		if (this.position != undefined) {
 			const positionValueId = getFibaroVenetianBlindPositionValueId(
 				this.endpointIndex,
 			);
@@ -258,11 +271,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			});
 			valueDB.setValue(positionValueId, this.position);
 		}
-		if (!!(this.payload[0] & 0b01)) {
-			this.tilt = parseMaybeNumber(
-				this.payload[2],
-				host.options.preserveUnknownValues,
-			);
+		if (this.tilt != undefined) {
 			const tiltValueId = getFibaroVenetianBlindTiltValueId(
 				this.endpointIndex,
 			);
@@ -272,6 +281,8 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			});
 			valueDB.setValue(tiltValueId, this.tilt);
 		}
+
+		return true;
 	}
 
 	public readonly position?: Maybe<number>;

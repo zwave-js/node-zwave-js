@@ -64,14 +64,15 @@ export function getDimmingDurationValueID(
 
 function setSceneActuatorConfigMetaData(
 	this: SceneActuatorConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	sceneId: number,
 ) {
+	const valueDB = this.getValueDB(applHost);
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		sceneId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (!valueDB.hasMetadata(levelValueId)) {
 		valueDB.setMetadata(levelValueId, {
@@ -90,22 +91,23 @@ function setSceneActuatorConfigMetaData(
 
 function persistSceneActuatorConfig(
 	this: SceneActuatorConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	sceneId: number,
 	level: number,
 	dimmingDuration: Duration,
 ): boolean {
+	const valueDB = this.getValueDB(applHost);
 	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		sceneId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (
 		!valueDB.hasMetadata(levelValueId) ||
 		!valueDB.hasMetadata(dimmingDurationValueId)
 	) {
-		setSceneActuatorConfigMetaData.call(this, sceneId);
+		setSceneActuatorConfigMetaData.call(this, applHost, sceneId);
 	}
 
 	valueDB.setValue(levelValueId, level);
@@ -328,7 +330,7 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 		});
 
 		for (let sceneId = 1; sceneId <= 255; sceneId++) {
-			setSceneActuatorConfigMetaData.call(this, sceneId);
+			setSceneActuatorConfigMetaData.call(this, driver, sceneId);
 		}
 
 		this.interviewComplete = true;
@@ -451,6 +453,7 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 
 		return persistSceneActuatorConfig.call(
 			this,
+			applHost,
 			this.sceneId,
 			this.level,
 			this.dimmingDuration,

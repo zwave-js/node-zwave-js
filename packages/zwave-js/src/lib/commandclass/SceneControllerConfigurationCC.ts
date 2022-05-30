@@ -19,6 +19,7 @@ import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
+import { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -70,9 +71,10 @@ export function getDimmingDurationValueID(
 
 function setSceneConfigurationMetadata(
 	this: SceneControllerConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	groupId: number,
 ) {
-	const valueDB = this.getValueDB();
+	const valueDB = this.getValueDB(applHost);
 	const sceneIdValueId = getSceneIdValueID(this.endpointIndex, groupId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
@@ -96,22 +98,23 @@ function setSceneConfigurationMetadata(
 
 function persistSceneConfig(
 	this: SceneControllerConfigurationCC,
+	applHost: ZWaveApplicationHost,
 	groupId: number,
 	sceneId: number,
 	dimmingDuration: Duration,
 ) {
+	const valueDB = this.getValueDB(applHost);
 	const sceneIdValueId = getSceneIdValueID(this.endpointIndex, groupId);
 	const dimmingDurationValueId = getDimmingDurationValueID(
 		this.endpointIndex,
 		groupId,
 	);
-	const valueDB = this.getValueDB();
 
 	if (
 		!valueDB.hasMetadata(sceneIdValueId) ||
 		!valueDB.hasMetadata(dimmingDurationValueId)
 	) {
-		setSceneConfigurationMetadata.call(this, groupId);
+		setSceneConfigurationMetadata.call(this, applHost, groupId);
 	}
 
 	valueDB.setValue(sceneIdValueId, sceneId);
@@ -264,6 +267,29 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 			SceneControllerConfigurationCommand.Set,
 		);
 
+		if (this.endpoint instanceof Endpoint) {
+			const groupCount =
+				SceneControllerConfigurationCC.getGroupCountCached(
+					this.driver,
+					this.endpoint,
+				);
+
+			// The client SHOULD NOT specify group 1 (the life-line group).
+			// We don't block it here, because the specs don't forbid it,
+			// and it may be needed for some devices.
+			if (groupId < 1 || groupId > groupCount) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The group ID must be between 1 and the number of supported groups ${groupCount}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		} else if (groupId < 1) {
+			throw new ZWaveError(
+				`The group ID must be greater than 0.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
 		const cc = new SceneControllerConfigurationCCSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -324,6 +350,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		if (groupId === 0) {
 			throw new ZWaveError(
 				`Invalid group ID 0. To get the last activated group / scene, use getLastActivated() instead.`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		} else if (groupId < 0) {
+			throw new ZWaveError(
+				`The group ID must be greater than 0.`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
@@ -390,7 +421,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		// Create metadata for each scene, but don't query their actual configuration
 		// since some devices only support setting scenes
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			setSceneConfigurationMetadata.call(this, groupId);
+			setSceneConfigurationMetadata.call(this, driver, groupId);
 		}
 
 		// Remember that the interview is complete
@@ -440,14 +471,14 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * This only works AFTER the node has been interviewed by this CC
 	 * or the AssociationCC.
 	 */
-	protected static getGroupCountCached(
-		host: ZWaveHost,
+	public static getGroupCountCached(
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): number {
 		return (
-			host.nodes.get(endpoint.nodeId)?.deviceConfig?.compat
+			applHost.nodes.get(endpoint.nodeId)?.deviceConfig?.compat
 				?.forceSceneControllerGroupCount ??
-			AssociationCC.getGroupCountCached(host, endpoint) ??
+			AssociationCC.getGroupCountCached(applHost, endpoint) ??
 			0
 		);
 	}
@@ -475,27 +506,12 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount =
-				SceneControllerConfigurationCC.getGroupCountCached(
-					host,
-					this.getEndpoint()!,
-				);
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
 				Duration.from(options.dimmingDuration) ??
 				new Duration(0, "default");
-
-			// The client SHOULD NOT specify group 1 (the life-line group).
-			// We don't block it here, because the specs don't forbid it,
-			// and it may be needed for some devices.
-			if (this.groupId < 1 || this.groupId > groupCount) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The group ID must be between 1 and the number of supported groups ${groupCount}.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
 	}
 
@@ -549,6 +565,7 @@ export class SceneControllerConfigurationCCReport extends SceneControllerConfigu
 		if (this.groupId === 0) return false;
 		return persistSceneConfig.call(
 			this,
+			applHost,
 			this.groupId,
 			this.sceneId,
 			this.dimmingDuration,
@@ -600,17 +617,6 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount =
-				SceneControllerConfigurationCC.getGroupCountCached(
-					host,
-					this.getEndpoint()!,
-				);
-			if (options.groupId < 0 || options.groupId > groupCount) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The group ID must be between 0 and the number of supported groups ${groupCount}.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 			this.groupId = options.groupId;
 		}
 	}

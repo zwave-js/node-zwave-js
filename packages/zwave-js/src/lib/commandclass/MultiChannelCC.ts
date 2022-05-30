@@ -381,6 +381,7 @@ export class MultiChannelCC extends CommandClass {
 		const api = endpoint.commandClasses["Multi Channel"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		// Step 1: Retrieve general information about end points
 		driver.controllerLog.logNode(node.id, {
@@ -496,19 +497,17 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				});
 
 				// copy the capabilities from the first endpoint
-				const devClass = this.getValueDB().getValue(
+				const devClass = valueDB.getValue(
 					getEndpointDeviceClassValueId(allEndpoints[0]),
 				);
-				this.getValueDB().setValue(
+				valueDB.setValue(
 					getEndpointDeviceClassValueId(endpoint),
 					devClass,
 				);
-				const ep1Caps = this.getValueDB().getValue<CommandClasses[]>(
+				const ep1Caps = valueDB.getValue<CommandClasses[]>(
 					getEndpointCCsValueId(allEndpoints[0]),
 				)!;
-				this.getValueDB().setValue(getEndpointCCsValueId(endpoint), [
-					...ep1Caps,
-				]);
+				valueDB.setValue(getEndpointCCsValueId(endpoint), [...ep1Caps]);
 
 				continue;
 			}
@@ -573,7 +572,7 @@ supported CCs:`;
 				});
 			}
 		}
-		this.getValueDB().setValue(getEndpointIndizesValueId(), allEndpoints);
+		valueDB.setValue(getEndpointIndizesValueId(), allEndpoints);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
@@ -729,13 +728,13 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		const deviceClassValueId = getEndpointDeviceClassValueId(
 			this.endpointIndex,
 		);
 		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
 
-		const valueDB = this.getValueDB();
 		if (this.wasRemoved) {
 			valueDB.removeValue(deviceClassValueId);
 			valueDB.removeValue(ccsValueId);
@@ -870,7 +869,10 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: MultiChannelCCEndPointFindReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: MultiChannelCCEndPointFindReport[],
+	): void {
 		// Concat the list of end points
 		this._foundEndpoints = [...partials, this]
 			.map((report) => report._foundEndpoints)

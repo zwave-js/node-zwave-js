@@ -2729,7 +2729,10 @@ protocol version:      ${this.protocolVersion}`;
 			// Try to set the mapped value on the target CC
 			const didSetMappedValue =
 				typeof command.currentValue === "number" &&
-				mappedTargetCC?.setMappedBasicValue(command.currentValue);
+				mappedTargetCC?.setMappedBasicValue(
+					this.driver,
+					command.currentValue,
+				);
 
 			// Otherwise fall back to setting it ourselves
 			if (!didSetMappedValue) {
@@ -2771,7 +2774,10 @@ protocol version:      ${this.protocolVersion}`;
 				// If enabled in a config file, try to set the mapped value on the target CC first
 				const didSetMappedValue =
 					!!this._deviceConfig?.compat?.enableBasicSetMapping &&
-					!!mappedTargetCC?.setMappedBasicValue(command.targetValue);
+					!!mappedTargetCC?.setMappedBasicValue(
+						this.driver,
+						command.targetValue,
+					);
 
 				// Otherwise handle the command ourselves
 				if (!didSetMappedValue) {

@@ -540,6 +540,7 @@ export class MeterCCReport extends MeterCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		const meterType = applHost.configManager.lookupMeter(this._type);
 		const scale = applHost.configManager.lookupMeterScale(
@@ -562,8 +563,6 @@ export class MeterCCReport extends MeterCC {
 
 			// Filter out unsupported meter types, scales and rate types if possible
 			if (this.version >= 2) {
-				const valueDB = this.getValueDB();
-
 				const expectedType = valueDB.getValue<number>(
 					getTypeValueId(this.endpointIndex),
 				);
@@ -595,7 +594,6 @@ export class MeterCCReport extends MeterCC {
 				}
 			}
 		}
-		const valueDB = this.getValueDB();
 		const valueId = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -757,7 +755,7 @@ export class MeterCCGet extends MeterCC {
 		}
 		if (this.scale != undefined) {
 			// Try to lookup the meter type to translate the scale
-			const type = this.getValueDB().getValue<number>(
+			const type = this.getValueDB(driver).getValue<number>(
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
@@ -841,14 +839,14 @@ export class MeterCCSupportedReport extends MeterCC {
 		if (!super.persistValues(applHost)) return false;
 		if (!this._supportsReset) return true;
 
-		const valueDb = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		// Create reset values
 		if (this.version < 6) {
 			const resetAllValueId: ValueID = getResetValueId(
 				this.endpointIndex,
 			);
-			if (!valueDb.hasMetadata(resetAllValueId)) {
-				this.getValueDB().setMetadata(resetAllValueId, {
+			if (!valueDB.hasMetadata(resetAllValueId)) {
+				valueDB.setMetadata(resetAllValueId, {
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Reset accumulated values`,
 				});
@@ -858,8 +856,8 @@ export class MeterCCSupportedReport extends MeterCC {
 				this.endpointIndex,
 				this._type,
 			);
-			if (!valueDb.hasMetadata(resetSingle)) {
-				this.getValueDB().setMetadata(resetSingle, {
+			if (!valueDB.hasMetadata(resetSingle)) {
+				valueDB.setMetadata(resetSingle, {
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Reset (${getMeterTypeName(
 						applHost.configManager,

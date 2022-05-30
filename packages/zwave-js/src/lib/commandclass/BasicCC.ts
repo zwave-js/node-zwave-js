@@ -195,6 +195,7 @@ export class BasicCC extends CommandClass {
 	public async interview(driver: Driver): Promise<void> {
 		const node = this.getNode(driver)!;
 		const endpoint = this.getEndpoint(driver)!;
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -215,9 +216,8 @@ export class BasicCC extends CommandClass {
 				});
 			}
 		} else if (
-			this.getValueDB().getValue(
-				getCurrentValueValueId(this.endpointIndex),
-			) == undefined
+			valueDB.getValue(getCurrentValueValueId(this.endpointIndex)) ==
+			undefined
 		) {
 			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

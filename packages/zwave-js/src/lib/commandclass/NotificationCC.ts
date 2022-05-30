@@ -432,7 +432,7 @@ export class NotificationCC extends CommandClass {
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -600,7 +600,7 @@ export class NotificationCC extends CommandClass {
 			const api = endpoint.commandClasses.Notification.withOptions({
 				priority: MessagePriority.NodeQuery,
 			});
-			const valueDB = this.getValueDB();
+			const valueDB = this.getValueDB(driver);
 
 			// Load supported notification types and events from cache
 			const supportedNotificationTypes =
@@ -773,6 +773,7 @@ export class NotificationCCReport extends NotificationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Check if we need to re-interpret the alarm values somehow
 		if (
@@ -783,7 +784,6 @@ export class NotificationCCReport extends NotificationCC {
 			if (this.version >= 2) {
 				// Check if the device actually supports Notification CC, but chooses
 				// to send Alarm frames instead (GH#1034)
-				const valueDB = this.getValueDB();
 				const supportedNotificationTypes = valueDB.getValue<number[]>(
 					getSupportedNotificationTypesValueId(),
 				);
@@ -847,7 +847,6 @@ export class NotificationCCReport extends NotificationCC {
 		// Now we can interpret the event parameters and turn them into something useful
 		this.parseEventParameters(applHost);
 
-		const valueDB = this.getValueDB();
 		if (this.alarmType != undefined) {
 			const valueId = getAlarmTypeValueId(this.endpointIndex);
 			if (!valueDB.hasMetadata(valueId)) {
@@ -1295,7 +1294,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Store which events this notification supports
 		valueDB.setValue(

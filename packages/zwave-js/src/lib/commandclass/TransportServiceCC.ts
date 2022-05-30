@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
@@ -322,6 +322,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	}
 
 	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
 		partials: [
 			TransportServiceCCFirstSegment,
 			...TransportServiceCCSubsequentSegment[],

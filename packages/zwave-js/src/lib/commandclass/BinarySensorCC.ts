@@ -185,6 +185,7 @@ export class BinarySensorCC extends CommandClass {
 		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
@@ -203,7 +204,7 @@ export class BinarySensorCC extends CommandClass {
 			}
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
-				this.getValueDB().getValue(
+				valueDB.getValue(
 					getSupportedSensorTypesValueId(this.endpointIndex),
 				) ?? [];
 
@@ -226,8 +227,11 @@ export class BinarySensorCC extends CommandClass {
 		}
 	}
 
-	public setMappedBasicValue(value: number): boolean {
-		this.getValueDB().setValue(
+	public setMappedBasicValue(
+		applHost: ZWaveApplicationHost,
+		value: number,
+	): boolean {
+		this.getValueDB(applHost).setValue(
 			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
 			value > 0,
 		);
@@ -253,17 +257,18 @@ export class BinarySensorCCReport extends BinarySensorCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		const valueId: ValueID = getBinarySensorValueId(
 			this.endpointIndex,
 			this._type,
 		);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyBoolean,
 			label: getEnumMemberName(BinarySensorType, this._type),
 			ccSpecific: { sensorType: this._type },
 		});
-		this.getValueDB().setValue(valueId, this._value);
+		valueDB.setValue(valueId, this._value);
 		return true;
 	}
 

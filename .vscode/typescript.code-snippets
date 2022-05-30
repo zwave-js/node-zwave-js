@@ -425,6 +425,7 @@
 		"body": [
 			"public persistValues(applHost: ZWaveApplicationHost): boolean {",
 			"\tif (!super.persistValues(applHost)) return false;",
+			"\tconst valueDB = this.getValueDB(applHost);",
 			"",
 			"\t${0://TODO: Implementation}",
 			"",
@@ -626,6 +627,7 @@
 			"\tconst api = endpoint.commandClasses.${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}.withOptions({",
 			"\t\tpriority: MessagePriority.NodeQuery,",
 			"\t});",
+			"\tconst valueDB = this.getValueDB(driver);",
 			"",
 			"\tdriver.controllerLog.logNode(node.id, {",
 			"\t\tendpoint: this.endpointIndex,",
@@ -673,6 +675,7 @@
 			"\tconst api = endpoint.commandClasses[\"${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}\"].withOptions({",
 			"\t\tpriority: MessagePriority.NodeQuery,",
 			"\t});",
+			"\tconst valueDB = this.getValueDB(driver);",
 			"",
 			"\t${0:// TODO: Implementation}",
 			"}"

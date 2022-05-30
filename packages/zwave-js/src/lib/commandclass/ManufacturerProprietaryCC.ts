@@ -270,7 +270,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 	public async interview(driver: Driver): Promise<void> {
 		// Read the manufacturer ID from Manufacturer Specific CC
-		this.manufacturerId = this.getValueDB().getValue<number>(
+		this.manufacturerId = this.getValueDB(driver).getValue<number>(
 			getManufacturerIdValueId(),
 		)!;
 		this.assertManufacturerIdIsSet();
@@ -304,7 +304,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 	public async refreshValues(driver: Driver): Promise<void> {
 		// Read the manufacturer ID from Manufacturer Specific CC
-		this.manufacturerId = this.getValueDB().getValue<number>(
+		this.manufacturerId = this.getValueDB(driver).getValue<number>(
 			getManufacturerIdValueId(),
 		)!;
 		this.assertManufacturerIdIsSet();

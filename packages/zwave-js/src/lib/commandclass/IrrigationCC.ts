@@ -12,12 +12,17 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
+import { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -751,6 +756,22 @@ export class IrrigationCCAPI extends CCAPI {
 			IrrigationCommand.ValveTableSet,
 		);
 
+		if (this.endpoint instanceof Endpoint) {
+			const maxValveTableSize = IrrigationCC.getMaxValveTableSizeCached(
+				this.driver,
+				this.endpoint,
+			);
+			if (
+				maxValveTableSize != undefined &&
+				entries.length > maxValveTableSize
+			) {
+				throw new ZWaveError(
+					`The number of valve table entries must not exceed ${maxValveTableSize}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+		}
+
 		const cc = new IrrigationCCValveTableSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -1008,34 +1029,39 @@ export class IrrigationCC extends CommandClass {
 	 * Returns the maximum number of valve table entries reported by the node.
 	 * This only works AFTER the node has been interviewed.
 	 */
-	protected getMaxValveTableSizeCached(): number {
-		return (
-			this.getValueDB().getValue(
-				getMaxValveTableSizeValueId(this.endpointIndex),
-			) || 0
-		);
+	public static getMaxValveTableSizeCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): number | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getMaxValveTableSizeValueId(endpoint.index));
 	}
 
 	/**
 	 * Returns the number of zone valves reported by the node.
 	 * This only works AFTER the node has been interviewed.
 	 */
-	protected getNumValvesCached(): number {
-		return (
-			this.getValueDB().getValue(
-				getNumValvesValueId(this.endpointIndex),
-			) || 0
-		);
+	public static getNumValvesCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): number | undefined {
+		return applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getNumValvesValueId(endpoint.index));
 	}
 
 	/**
 	 * Returns whether the node supports a master valve
 	 * This only works AFTER the node has been interviewed.
 	 */
-	protected supportsMasterValveCached(): boolean {
-		return !!this.getValueDB().getValue(
-			getSupportsMasterValveValueId(this.endpointIndex),
-		);
+	public static supportsMasterValveCached(
+		applHost: ZWaveApplicationHost,
+		endpoint: ZWaveEndpointBase,
+	): boolean {
+		return !!applHost
+			.getValueDB(endpoint.nodeId)
+			.getValue(getSupportsMasterValveValueId(endpoint.index));
 	}
 
 	public async interview(driver: Driver): Promise<void> {
@@ -1078,7 +1104,7 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		});
 
 		// For each valve, create the values to start/stop a run
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 		for (let i = 1; i <= systemInfo.numValves; i++) {
 			valueDB.setMetadata(
 				getValveRunDurationValueId(i, this.endpointIndex),
@@ -1152,7 +1178,7 @@ moisture sensor polarity: ${getEnumMemberName(
 		await api.getSystemStatus();
 
 		// for each valve, query the current status and configuration
-		if (this.supportsMasterValveCached()) {
+		if (IrrigationCC.supportsMasterValveCached(driver, endpoint)) {
 			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying master valve configuration...",
@@ -1168,7 +1194,11 @@ moisture sensor polarity: ${getEnumMemberName(
 			await api.getValveInfo("master");
 		}
 
-		for (let i = 1; i <= this.getNumValvesCached(); i++) {
+		for (
+			let i = 1;
+			i <= (IrrigationCC.getNumValvesCached(driver, endpoint) ?? 0);
+			i++
+		) {
 			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Querying configuration for valve ${padStart(
@@ -1689,7 +1719,7 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// connected
 		let valueId = getValveConnectedValueId(
@@ -2008,7 +2038,7 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// nominalCurrentHighThreshold
 		let valueId = getNominalCurrentHighThresholdValueId(
@@ -2242,14 +2272,6 @@ export class IrrigationCCValveTableSet extends IrrigationCC {
 		} else {
 			this.tableId = options.tableId;
 			this.entries = options.entries;
-
-			const maxValveTableSize = this.getMaxValveTableSizeCached();
-			if (this.entries.length > maxValveTableSize) {
-				throw new ZWaveError(
-					`${this.constructor.name}: The number of valve table entries must not exceed ${maxValveTableSize}.`,
-					ZWaveErrorCodes.Argument_Invalid,
-				);
-			}
 		}
 	}
 

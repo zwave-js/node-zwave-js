@@ -474,7 +474,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		} else {
 			// requesting the switch type automatically creates the up/down actions
 			// We need to do this manually for V1 and V2
-			this.createMetadataForLevelChangeActions();
+			this.createMetadataForLevelChangeActions(driver);
 		}
 
 		await this.refreshValues(driver);
@@ -509,8 +509,11 @@ export class MultilevelSwitchCC extends CommandClass {
 		await api.get();
 	}
 
-	public setMappedBasicValue(value: number): boolean {
-		this.getValueDB().setValue(
+	public setMappedBasicValue(
+		applHost: ZWaveApplicationHost,
+		value: number,
+	): boolean {
+		this.getValueDB(applHost).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,
@@ -522,10 +525,11 @@ export class MultilevelSwitchCC extends CommandClass {
 	}
 
 	protected createMetadataForLevelChangeActions(
+		applHost: ZWaveApplicationHost,
 		// SDS13781: The Primary Switch Type SHOULD be 0x02 (Up/Down)
 		switchType: SwitchType = SwitchType["Down/Up"],
 	): void {
-		const valueDb = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Create metadata for the control values if necessary
 		const switchTypeName = getEnumMemberName(SwitchType, switchType);
@@ -541,16 +545,16 @@ export class MultilevelSwitchCC extends CommandClass {
 			property: down,
 		};
 
-		if (!valueDb.hasMetadata(upValueId)) {
-			this.getValueDB().setMetadata(upValueId, {
+		if (!valueDB.hasMetadata(upValueId)) {
+			valueDB.setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
 				valueChangeOptions: ["transitionDuration"],
 				ccSpecific: { switchType },
 			});
 		}
-		if (!valueDb.hasMetadata(downValueId)) {
-			this.getValueDB().setMetadata(downValueId, {
+		if (!valueDB.hasMetadata(downValueId)) {
+			valueDB.setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
 				valueChangeOptions: ["transitionDuration"],
@@ -777,7 +781,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		this.createMetadataForLevelChangeActions(this._switchType);
+		this.createMetadataForLevelChangeActions(applHost, this._switchType);
 		return true;
 	}
 

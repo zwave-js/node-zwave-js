@@ -308,6 +308,7 @@ export class ThermostatSetpointCC extends CommandClass {
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -428,14 +429,14 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Remember which setpoint types are actually supported, so we don't
 			// need to do this guesswork again
-			this.getValueDB().setValue(
+			valueDB.setValue(
 				supportedSetpointTypesValueId,
 				supportedSetpointTypes,
 			);
 
 			// Also save the bitmap interpretation if we know it now
 			if (interpretationChanged) {
-				this.getValueDB().setValue(
+				valueDB.setValue(
 					getSetpointTypesInterpretationValueID(this.endpointIndex),
 					interpretation,
 				);
@@ -522,9 +523,10 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const setpointTypes: ThermostatSetpointType[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedSetpointTypesValueID(this.endpointIndex),
 			) ?? [];
 
@@ -641,7 +643,7 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 
 		const scale = getScale(applHost.configManager, this.scale);
 
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const setpointValueId = getSetpointValueID(
 			this.endpointIndex,
 			this._type,
@@ -782,7 +784,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 
 		// Predefine the metadata
 		const valueId = getSetpointValueID(this.endpointIndex, this._type);
-		this.getValueDB().setMetadata(valueId, {
+		this.getValueDB(applHost).setMetadata(valueId, {
 			...ValueMetadata.Number,
 			min: this._minValue,
 			max: this._maxValue,

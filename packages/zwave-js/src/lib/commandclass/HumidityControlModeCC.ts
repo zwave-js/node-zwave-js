@@ -326,6 +326,7 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
 		const valueId: ValueID = {
@@ -334,7 +335,7 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 			property: "mode",
 		};
 		// Only update the dynamic part
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.UInt8,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,

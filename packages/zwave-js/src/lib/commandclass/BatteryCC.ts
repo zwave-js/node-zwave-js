@@ -416,6 +416,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Update the temperature unit in the value DB
 		const valueId: ValueID = {
@@ -423,7 +424,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 			endpoint: this.endpointIndex,
 			property: "temperature",
 		};
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			label: "Temperature",
 			unit: this.temperatureScale === 0x00 ? "°C" : undefined,

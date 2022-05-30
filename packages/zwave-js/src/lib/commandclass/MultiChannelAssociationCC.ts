@@ -10,7 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -338,11 +342,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getGroupCountCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): number {
 		return (
-			host
+			applHost
 				.getValueDB(endpoint.nodeId)
 				.getValue(getGroupCountValueId(endpoint.index)) || 0
 		);
@@ -353,12 +357,12 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getMaxNodesCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): number {
 		return (
-			host
+			applHost
 				.getValueDB(endpoint.nodeId)
 				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ?? 0
 		);
@@ -369,12 +373,12 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getAllDestinationsCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached(host, endpoint);
-		const valueDB = host.getValueDB(endpoint.nodeId)!;
+		const groupCount = this.getGroupCountCached(applHost, endpoint);
+		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			const groupDestinations: AssociationAddress[] = [];
 			// Add all node destinations
@@ -475,15 +479,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 		const assocAPI = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const mcGroupCount: number =
-			this.getValueDB().getValue(
-				getGroupCountValueId(this.endpointIndex),
-			) ?? 0;
+			valueDB.getValue(getGroupCountValueId(this.endpointIndex)) ?? 0;
 
 		// Some devices report more association groups than multi channel association groups, so we need this info here
 		const assocGroupCount =
-			this.getValueDB().getValue<number>(
+			valueDB.getValue<number>(
 				getAssociationGroupCountValueId(this.endpointIndex),
 			) || mcGroupCount;
 
@@ -749,7 +752,10 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: MultiChannelAssociationCCReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: MultiChannelAssociationCCReport[],
+	): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
 			.map((report) => report._nodeIds)
@@ -760,15 +766,16 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
-		this.getValueDB().setValue(
+		const valueDB = this.getValueDB(applHost);
+		valueDB.setValue(
 			getMaxNodesValueId(this.endpointIndex, this._groupId),
 			this._maxNodes,
 		);
-		this.getValueDB().setValue(
+		valueDB.setValue(
 			getNodeIdsValueId(this.endpointIndex, this._groupId),
 			this._nodeIds,
 		);
-		this.getValueDB().setValue(
+		valueDB.setValue(
 			getEndpointsValueId(this.endpointIndex, this._groupId),
 			this._endpoints,
 		);

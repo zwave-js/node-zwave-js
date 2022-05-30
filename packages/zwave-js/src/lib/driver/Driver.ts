@@ -1393,8 +1393,10 @@ export class Driver
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				void reportMissingDeviceConfig(node as any).catch(() => {});
+				void reportMissingDeviceConfig(this, node as any).catch(
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					() => {},
+				);
 			}
 		} catch (e) {
 			if (isZWaveError(e)) {
@@ -2736,7 +2738,7 @@ export class Driver
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(session);
+						command.mergePartialCCs(this, session);
 					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {

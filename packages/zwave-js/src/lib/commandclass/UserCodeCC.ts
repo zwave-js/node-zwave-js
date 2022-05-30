@@ -204,10 +204,11 @@ function validateCode(code: string, supportedChars: string): boolean {
 
 function setUserCodeMetadata(
 	this: UserCodeCC,
+	applHost: ZWaveApplicationHost,
 	userId: number,
 	userCode?: string | Buffer,
 ) {
-	const valueDB = this.getValueDB();
+	const valueDB = this.getValueDB(applHost);
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
 	const supportedUserIDStatuses =
@@ -252,13 +253,14 @@ function setUserCodeMetadata(
 
 function persistUserCode(
 	this: UserCodeCC,
+	applHost: ZWaveApplicationHost,
 	userId: number,
 	userIdStatus: UserIDStatus,
 	userCode: string | Buffer,
 ) {
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	const valueDB = this.getValueDB();
+	const valueDB = this.getValueDB(applHost);
 
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
@@ -269,7 +271,7 @@ function persistUserCode(
 		valueDB.setMetadata(codeValueId, undefined);
 	} else {
 		// Always create metadata in case it does not exist
-		setUserCodeMetadata.call(this, userId, userCode);
+		setUserCodeMetadata.call(this, applHost, userId, userCode);
 		valueDB.setValue(statusValueId, userIdStatus);
 		valueDB.setValue(codeValueId, userCode);
 	}
@@ -916,7 +918,7 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		for (let userId = 1; userId <= supportedUsers; userId++) {
-			setUserCodeMetadata.call(this, userId);
+			setUserCodeMetadata.call(this, driver, userId);
 		}
 
 		// Synchronize user codes and settings
@@ -1021,10 +1023,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedUsersCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): number | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getSupportedUsersValueID(endpoint.index));
 	}
@@ -1034,10 +1036,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedKeypadModesCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): KeypadMode[] | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getSupportedKeypadModesValueID(endpoint.index));
 	}
@@ -1047,10 +1049,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedUserIDStatusesCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): UserIDStatus[] | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getSupportedUserIDStatusesValueID(endpoint.index));
 	}
@@ -1060,10 +1062,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getSupportedASCIICharsCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): string | undefined {
-		return host
+		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(getSupportedASCIICharsValueID(endpoint.index));
 	}
@@ -1073,10 +1075,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static supportsMasterCodeDeactivationCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): boolean {
-		return !!host
+		return !!applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<boolean>(
 				getSupportsMasterCodeDeactivationValueID(endpoint.index),
@@ -1088,10 +1090,10 @@ export class UserCodeCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static supportsMultipleUserCodeSetCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): boolean {
-		return !!host
+		return !!applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<boolean>(
 				getSupportsMultipleUserCodeSetValueID(endpoint.index),
@@ -1257,6 +1259,7 @@ export class UserCodeCCReport
 
 		persistUserCode.call(
 			this,
+			applHost,
 			this.userId,
 			this.userIdStatus,
 			this.userCode,
@@ -1508,13 +1511,15 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
 		// Update the keypad modes metadata
-		const supportedKeypadModes = this.getValueDB().getValue<KeypadMode[]>(
+		const supportedKeypadModes = valueDB.getValue<KeypadMode[]>(
 			getSupportedKeypadModesValueID(this.endpointIndex),
 		) ?? [this.keypadMode];
 
 		const valueId = getKeypadModeValueID(this.endpointIndex);
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			label: "Keypad Mode",
 			states: enumValuesToMetadataStates(
@@ -1748,7 +1753,13 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 		if (!super.persistValues(applHost)) return false;
 
 		for (const { userId, userIdStatus, userCode } of this.userCodes) {
-			persistUserCode.call(this, userId, userIdStatus, userCode);
+			persistUserCode.call(
+				this,
+				applHost,
+				userId,
+				userIdStatus,
+				userCode,
+			);
 		}
 		return true;
 	}

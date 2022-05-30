@@ -472,12 +472,13 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// Store min/max cache size and timeout as metadata
 		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
 			this.endpointIndex,
 		);
-		this.getValueDB().setMetadata(keyCacheSizeValueId, {
+		valueDB.setMetadata(keyCacheSizeValueId, {
 			...ValueMetadata.UInt8,
 			min: this.minKeyCacheSize,
 			max: this.maxKeyCacheSize,
@@ -486,7 +487,7 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		const keyCacheTimeoutValueId = getKeyCacheTimeoutStateValueID(
 			this.endpointIndex,
 		);
-		this.getValueDB().setMetadata(keyCacheTimeoutValueId, {
+		valueDB.setMetadata(keyCacheTimeoutValueId, {
 			...ValueMetadata.UInt8,
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,

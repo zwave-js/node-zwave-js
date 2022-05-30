@@ -198,9 +198,10 @@ export class AlarmSensorCC extends CommandClass {
 		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedSensorTypesValueId(this.endpointIndex),
 			) ?? [];
 
@@ -234,7 +235,10 @@ duration: ${currentValue.duration}`;
 		}
 	}
 
-	protected createMetadataForSensorType(sensorType: AlarmSensorType): void {
+	protected createMetadataForSensorType(
+		applHost: ZWaveApplicationHost,
+		sensorType: AlarmSensorType,
+	): void {
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
 			sensorType,
@@ -247,7 +251,7 @@ duration: ${currentValue.duration}`;
 			this.endpointIndex,
 			sensorType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
 
 		// Always create metadata if it does not exist
@@ -331,7 +335,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 		// Create metadata if it does not exist
-		this.createMetadataForSensorType(this.sensorType);
+		this.createMetadataForSensorType(applHost, this.sensorType);
 
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
@@ -345,7 +349,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			this.endpointIndex,
 			this.sensorType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		valueDB.setValue(stateValueId, this.state);
 		valueDB.setValue(severityValueId, this.severity);
 		valueDB.setValue(durationValueId, this.duration);
@@ -434,7 +438,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		if (!super.persistValues(applHost)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {
-			this.createMetadataForSensorType(type);
+			this.createMetadataForSensorType(applHost, type);
 		}
 		return true;
 	}

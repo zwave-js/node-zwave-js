@@ -391,6 +391,7 @@ export class DoorLockCC extends CommandClass {
 		const api = endpoint.commandClasses["Door Lock"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -445,7 +446,6 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 				latchSupported = resp.latchSupported;
 
 				// Update metadata of settable states
-				const valueDB = this.getValueDB();
 				valueDB.setMetadata(getTargetModeValueId(this.endpointIndex), {
 					...ValueMetadata.UInt8,
 					states: enumValuesToMetadataStates(
@@ -470,7 +470,6 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
-			const valueDB = this.getValueDB();
 			valueDB.setMetadata(
 				getDoorStatusValueId(this.endpointIndex),
 				doorSupported ? getDoorStatusValueMetadata() : undefined,
@@ -677,8 +676,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Only store the door/bolt/latch status if the lock supports it
 		const supportsDoorStatus = !!valueDB.getValue(

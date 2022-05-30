@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
@@ -228,8 +228,11 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 		}
 	}
 
-	public setMappedBasicValue(value: number): boolean {
-		this.getValueDB().setValue(
+	public setMappedBasicValue(
+		applHost: ZWaveApplicationHost,
+		value: number,
+	): boolean {
+		this.getValueDB(applHost).setValue(
 			{
 				commandClass: this.ccId,
 				endpoint: this.endpointIndex,

@@ -17,7 +17,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { FunctionType, MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
@@ -578,7 +578,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		return !!this.sequenced && !this.secondFrame;
 	}
 
-	public mergePartialCCs(partials: SecurityCCCommandEncapsulation[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: SecurityCCCommandEncapsulation[],
+	): void {
 		// Concat the CC buffers
 		this.decryptedCCBytes = Buffer.concat(
 			[...partials, this].map((cc) => cc.decryptedCCBytes!),
@@ -806,6 +809,7 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	}
 
 	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
 		partials: SecurityCCCommandsSupportedReport[],
 	): void {
 		// Concat the lists of CCs

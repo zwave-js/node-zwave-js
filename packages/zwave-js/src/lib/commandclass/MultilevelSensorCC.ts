@@ -417,6 +417,7 @@ export class MultilevelSensorCC extends CommandClass {
 		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		if (this.version <= 4) {
 			// Sensors up to V4 only support a single value
@@ -443,7 +444,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 		} else {
 			// Query all sensor values
 			const sensorTypes: readonly number[] =
-				this.getValueDB().getValue({
+				valueDB.getValue({
 					commandClass: this.ccId,
 					property: "supportedSensorTypes",
 					endpoint: this.endpointIndex,
@@ -525,6 +526,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		const sensorType = applHost.configManager.lookupSensorType(this.type);
 		const scale = applHost.configManager.lookupSensorScale(
@@ -547,8 +549,6 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 			// Filter out unsupported sensor types and scales if possible
 			if (this.version >= 5) {
-				const valueDB = this.getValueDB();
-
 				const supportedSensorTypes = valueDB.getValue<number[]>(
 					getSupportedSensorTypesValueId(this.endpointIndex),
 				);
@@ -577,7 +577,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			endpoint: this.endpointIndex,
 			property: typeName,
 		};
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			unit: scale.unit,
 			label: typeName,
@@ -586,7 +586,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				scale: scale.key,
 			},
 		});
-		this.getValueDB().setValue(valueId, this.value);
+		valueDB.setValue(valueId, this.value);
 		return true;
 	}
 

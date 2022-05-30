@@ -325,9 +325,10 @@ export class BarrierOperatorCC extends CommandClass {
 		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedSubsystems =
-			this.getValueDB().getValue<SubsystemType[]>(
+			valueDB.getValue<SubsystemType[]>(
 				getSupportedSubsystemTypesValueId(this.endpointIndex),
 			) ?? [];
 
@@ -567,7 +568,7 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 			this.endpointIndex,
 			this.subsystemType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 
 		// Create metadata if it does not exist
 		if (!valueDB.hasMetadata(valueId)) {
