@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -218,7 +218,7 @@ export class CentralSceneCC extends CommandClass {
 
 				if (
 					!existingAssociations.some(
-						(a) => a.nodeId === this.host.ownNodeId,
+						(a) => a.nodeId === driver.ownNodeId,
 					)
 				) {
 					driver.controllerLog.logNode(node.id, {
@@ -230,7 +230,7 @@ export class CentralSceneCC extends CommandClass {
 					await driver.controller.addAssociations(
 						{ nodeId: node.id },
 						groupId,
-						[{ nodeId: this.host.ownNodeId }],
+						[{ nodeId: driver.ownNodeId }],
 					);
 				}
 			}
@@ -272,7 +272,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 }
 
@@ -296,19 +296,26 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			// carrying the Key Held Down key attribute.
 			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
 		}
-		// The described behavior is pretty complicated, so we cannot just store
-		// the value and call it a day. Handling of these notifications will
-		// happen in the receiving node class
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const valueId = getSceneValueId(this._sceneNumber);
-		const valueDB = this.getValueDB();
 		if (!valueDB.hasMetadata(valueId)) {
-			this.getValueDB().setMetadata(valueId, {
+			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: getSceneLabel(this._sceneNumber),
 			});
 		}
+
+		// The spec behavior is pretty complicated, so we cannot just store
+		// the value and call it a day. Handling of these notifications will
+		// happen in the receiving node class
+
+		return true;
 	}
 
 	private _sequenceNumber: number;
@@ -331,7 +338,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		return this._slowRefresh;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"key attribute": getEnumMemberName(
@@ -344,7 +351,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 			message["slow refresh"] = this.slowRefresh;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -386,11 +393,16 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				);
 			}
 		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 
 		// Create metadata for all scenes
+		const valueDB = this.getValueDB(applHost);
 		for (let i = 1; i <= this._sceneCount; i++) {
 			const valueId = getSceneValueId(i);
-			this.getValueDB().setMetadata(valueId, {
+			valueDB.setMetadata(valueId, {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: getSceneLabel(i),
 				states: enumValuesToMetadataStates(
@@ -400,7 +412,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			});
 		}
 
-		this.persistValues();
+		return true;
 	}
 
 	private _sceneCount: number;
@@ -428,7 +440,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"scene count": this.sceneCount,
 			"supports slow refresh": this.supportsSlowRefresh,
@@ -439,7 +451,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 				.join("");
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -477,7 +489,6 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
-		this.persistValues();
 	}
 
 	private _slowRefresh: boolean;
@@ -493,9 +504,9 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		return this._slowRefresh;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "slow refresh": this._slowRefresh },
 		};
 	}
@@ -535,9 +546,9 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "slow refresh": this.slowRefresh },
 		};
 	}

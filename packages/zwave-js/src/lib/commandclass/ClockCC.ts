@@ -5,7 +5,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -92,7 +92,7 @@ export class ClockCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -161,9 +161,9 @@ export class ClockCCSet extends ClockCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"clock setting": `${getEnumMemberName(
 					Weekday,
@@ -180,8 +180,6 @@ export class ClockCCSet extends ClockCC {
 
 @CCCommand(ClockCommand.Report)
 export class ClockCCReport extends ClockCC {
-	// @noCCValues Setting the clock is done automatically and needs no values to be stored
-
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -203,9 +201,9 @@ export class ClockCCReport extends ClockCC {
 	public readonly hour: number;
 	public readonly minute: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"clock setting": `${getEnumMemberName(
 					Weekday,

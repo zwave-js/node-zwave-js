@@ -4,13 +4,14 @@ import {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	parseMaybeNumber,
+	unknownNumber,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { staticExtends } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
 import {
@@ -69,8 +70,8 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(host, options);
 		if (gotDeserializationOptions(options)) {
+			super(host, options);
 			validatePayload(this.payload.length >= 2);
 			this.fibaroCCId = this.payload[0];
 			this.fibaroCCCommand = this.payload[1];
@@ -83,7 +84,7 @@ export class FibaroCC extends ManufacturerProprietaryCC {
 				return new FibaroVenetianBlindCC(host, options);
 			}
 		} else {
-			this.manufacturerId = MANUFACTURERID_FIBARO;
+			super(host, { ...options, manufacturerId: MANUFACTURERID_FIBARO });
 		}
 	}
 
@@ -126,7 +127,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	}
 
 	public async interview(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -137,11 +138,11 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		driver.controllerLog.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
@@ -216,7 +217,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -225,7 +226,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}
@@ -241,14 +242,34 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 
 		validatePayload(this.payload.length >= 3);
 
-		const valueDB = this.getValueDB();
 		// When the node sends a report, payload[0] === 0b11. This is probably a
 		// bit mask for position and tilt
 		if (!!(this.payload[0] & 0b10)) {
-			this.position = parseMaybeNumber(
-				this.payload[1],
-				host.options.preserveUnknownValues,
-			);
+			this._position = parseMaybeNumber(this.payload[1]);
+		}
+		if (!!(this.payload[0] & 0b01)) {
+			this._tilt = parseMaybeNumber(this.payload[2]);
+		}
+	}
+
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (
+			this._position === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._position = undefined;
+		}
+		if (
+			this._tilt === unknownNumber &&
+			!applHost.options.preserveUnknownValues
+		) {
+			this._tilt = undefined;
+		}
+
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
+		if (this.position != undefined) {
 			const positionValueId = getFibaroVenetianBlindPositionValueId(
 				this.endpointIndex,
 			);
@@ -258,11 +279,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			});
 			valueDB.setValue(positionValueId, this.position);
 		}
-		if (!!(this.payload[0] & 0b01)) {
-			this.tilt = parseMaybeNumber(
-				this.payload[2],
-				host.options.preserveUnknownValues,
-			);
+		if (this.tilt != undefined) {
 			const tiltValueId = getFibaroVenetianBlindTiltValueId(
 				this.endpointIndex,
 			);
@@ -272,12 +289,21 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			});
 			valueDB.setValue(tiltValueId, this.tilt);
 		}
+
+		return true;
 	}
 
-	public readonly position?: Maybe<number>;
-	public readonly tilt?: Maybe<number>;
+	private _position: Maybe<number> | undefined;
+	public get position(): Maybe<number> | undefined {
+		return this._position;
+	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	private _tilt: Maybe<number> | undefined;
+	public get tilt(): Maybe<number> | undefined {
+		return this._tilt;
+	}
+
+	public toLogEntry(driver: Driver): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.position != undefined) {
 			message.position = this.position;
@@ -286,7 +312,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 			message.tilt = this.tilt;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(driver),
 			message,
 		};
 	}

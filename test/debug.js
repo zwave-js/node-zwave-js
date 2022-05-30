@@ -64,7 +64,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	);
 
 	if (isCommandClassContainer(msg)) {
-		msg.command.mergePartialCCs([]);
+		msg.command.mergePartialCCs(msg.host, []);
 	}
 	msg;
 	debugger;

@@ -12,7 +12,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -274,7 +274,7 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -325,9 +325,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation =
-				!!this.getNodeUnsafe()?.deviceConfig?.compat
-					?.disableStrictEntryControlDataValidation;
+			const noStrictValidation = !!this.host.getCompatConfig?.(
+				this.nodeId as number,
+			)?.disableStrictEntryControlDataValidation;
 
 			const eventData = Buffer.from(
 				this.payload.slice(offset, offset + eventDataLength),
@@ -378,7 +378,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 	public readonly eventType: EntryControlEventTypes;
 	public readonly eventData?: Buffer | string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sequence number": this.sequenceNumber,
 			"data type": this.dataType,
@@ -391,7 +391,7 @@ export class EntryControlCCNotification extends EntryControlCC {
 					: buffer2hex(this.eventData);
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -409,15 +409,14 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		const length = this.payload[0];
 		validatePayload(this.payload.length >= 1 + length);
 		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly supportedKeys: readonly number[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "supported keys": this.supportedKeys.toString() },
 		};
 	}
@@ -469,11 +468,17 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		);
 		this.minKeyCacheTimeout = this.payload[offset + 2];
 		this.maxKeyCacheTimeout = this.payload[offset + 3];
+	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
+		// Store min/max cache size and timeout as metadata
 		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
 			this.endpointIndex,
 		);
-		this.getValueDB().setMetadata(keyCacheSizeValueId, {
+		valueDB.setMetadata(keyCacheSizeValueId, {
 			...ValueMetadata.UInt8,
 			min: this.minKeyCacheSize,
 			max: this.maxKeyCacheSize,
@@ -482,13 +487,13 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		const keyCacheTimeoutValueId = getKeyCacheTimeoutStateValueID(
 			this.endpointIndex,
 		);
-		this.getValueDB().setMetadata(keyCacheTimeoutValueId, {
+		valueDB.setMetadata(keyCacheTimeoutValueId, {
 			...ValueMetadata.UInt8,
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	@ccValue({ internal: true })
@@ -502,9 +507,9 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public readonly minKeyCacheTimeout: number;
 	public readonly maxKeyCacheTimeout: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported data types": this.supportedDataTypes
 					.map((dt) => EntryControlDataTypes[dt])
@@ -538,7 +543,6 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheSize = this.payload[0];
 		validatePayload(this.keyCacheSize >= 1 && this.keyCacheSize <= 32);
 		this.keyCacheTimeout = this.payload[1];
-		this.persistValues();
 	}
 
 	@ccValue()
@@ -563,9 +567,9 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	})
 	public readonly keyCacheTimeout: number;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,
@@ -613,9 +617,9 @@ export class EntryControlCCConfigurationSet extends EntryControlCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"key cache size": this.keyCacheSize,
 				"key cache timeout": this.keyCacheTimeout,
