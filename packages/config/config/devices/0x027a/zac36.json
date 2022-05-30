@@ -465,7 +465,7 @@
 			]
 		},
 		{
-			"#": "61",
+			"#": "97",
 			"label": "Auto Test Mode",
 			"description": "Causes the valve to periodically make a 1/8 turn to ensure it is operational",
 			"valueSize": 1,
@@ -488,7 +488,7 @@
 			]
 		},
 		{
-			"#": "62",
+			"#": "98",
 			"label": "Auto Test Mode: Frequency",
 			"valueSize": 1,
 			"unit": "days",
