@@ -7,7 +7,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost, ZWaveNodeBase } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveHost,
+	ZWaveNodeBase,
+} from "@zwave-js/host";
 import type { JSONObject } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
@@ -362,9 +366,11 @@ export class Message {
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe(): ZWaveNodeBase | undefined {
+	public getNodeUnsafe(
+		applHost: ZWaveApplicationHost,
+	): ZWaveNodeBase | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return this.host.nodes.get(nodeId);
+		if (nodeId != undefined) return applHost.nodes.get(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;

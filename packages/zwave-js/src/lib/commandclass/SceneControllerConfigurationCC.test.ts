@@ -45,7 +45,8 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 		expect(cc.serialize()).toEqual(expected);
 	});
 
-	it("the Get command should throw if GroupId > groupCount", () => {
+	it.skip("the Get command should throw if GroupId > groupCount", () => {
+		// TODO: This check now lives on the CC API
 		expect(() => {
 			new SceneControllerConfigurationCCGet(host, {
 				nodeId: 2,
@@ -90,7 +91,8 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 		expect(cc.serialize()).toEqual(expected);
 	});
 
-	it("the Set command should throw if GroupId > groupCount", () => {
+	it.skip("the Set command should throw if GroupId > groupCount", () => {
+		// TODO: This check now lives on the CC API
 		expect(
 			() =>
 				new SceneControllerConfigurationCCSet(host, {

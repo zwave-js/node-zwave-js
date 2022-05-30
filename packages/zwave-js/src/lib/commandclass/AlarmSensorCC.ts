@@ -10,7 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -146,7 +146,7 @@ export class AlarmSensorCC extends CommandClass {
 				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
 			});
-			this.interviewComplete = true;
+			this.setInterviewComplete(driver, true);
 			return;
 		}
 
@@ -191,7 +191,7 @@ export class AlarmSensorCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -200,9 +200,10 @@ export class AlarmSensorCC extends CommandClass {
 		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedSensorTypesValueId(this.endpointIndex),
 			) ?? [];
 
@@ -236,7 +237,10 @@ duration: ${currentValue.duration}`;
 		}
 	}
 
-	protected createMetadataForSensorType(sensorType: AlarmSensorType): void {
+	protected createMetadataForSensorType(
+		applHost: ZWaveApplicationHost,
+		sensorType: AlarmSensorType,
+	): void {
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
 			sensorType,
@@ -249,7 +253,7 @@ duration: ${currentValue.duration}`;
 			this.endpointIndex,
 			sensorType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
 
 		// Always create metadata if it does not exist
@@ -306,8 +310,6 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		}
 		// ignore zero durations
 		this.duration = this.payload.readUInt16BE(3) || undefined;
-
-		this.persistValues();
 	}
 
 	public readonly sensorType: AlarmSensorType;
@@ -315,7 +317,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
 			"alarm state": this.state,
@@ -327,15 +329,15 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			message.duration = `${this.duration} seconds`;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		// Create metadata if it does not exist
-		this.createMetadataForSensorType(this.sensorType);
+		this.createMetadataForSensorType(applHost, this.sensorType);
 
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
@@ -349,7 +351,7 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			this.endpointIndex,
 			this.sensorType,
 		);
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(applHost);
 		valueDB.setValue(stateValueId, this.state);
 		valueDB.setValue(severityValueId, this.severity);
 		valueDB.setValue(durationValueId, this.duration);
@@ -399,9 +401,9 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"sensor type": getEnumMemberName(
 					AlarmSensorType,
@@ -426,8 +428,6 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 			this.payload.slice(1, 1 + bitMaskLength),
 			AlarmSensorType["General Purpose"],
 		);
-
-		this.persistValues();
 	}
 
 	private _supportedSensorTypes: AlarmSensorType[];
@@ -436,18 +436,18 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 		return this._supportedSensorTypes;
 	}
 
-	public persistValues(): boolean {
-		if (!super.persistValues()) return false;
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
 		// Create metadata for each sensor type
 		for (const type of this._supportedSensorTypes) {
-			this.createMetadataForSensorType(type);
+			this.createMetadataForSensorType(applHost, type);
 		}
 		return true;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported sensor types": this._supportedSensorTypes
 					.map((t) => getEnumMemberName(AlarmSensorType, t))

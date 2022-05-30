@@ -82,8 +82,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** The command this message contains */
@@ -311,8 +312,9 @@ export class SendDataMulticastRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** The command this message contains */

@@ -31,15 +31,8 @@ export function parseBoolean(val: number): boolean | undefined {
 }
 
 /** Parses a single-byte number from 0 to 99, which might also be "unknown" */
-export function parseMaybeNumber(
-	val: number,
-	preserveUnknown: boolean = true,
-): Maybe<number> | undefined {
-	return val === 0xfe
-		? preserveUnknown
-			? unknownNumber
-			: undefined
-		: parseNumber(val);
+export function parseMaybeNumber(val: number): Maybe<number> | undefined {
+	return val === 0xfe ? unknownNumber : parseNumber(val);
 }
 
 /** Parses a single-byte number from 0 to 99 */
