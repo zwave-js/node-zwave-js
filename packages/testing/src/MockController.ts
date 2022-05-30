@@ -1,4 +1,3 @@
-import { ValueDB } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import { Message, MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
@@ -28,41 +27,39 @@ export class MockController {
 		this.serialParser.on("data", (data) => this.serialOnData(data));
 
 		// Set up the fake host
-		const valuesStorage = new Map();
-		const metadataStorage = new Map();
-		const valueDBCache = new Map<number, ValueDB>();
+		// const valuesStorage = new Map();
+		// const metadataStorage = new Map();
+		// const valueDBCache = new Map<number, ValueDB>();
 
 		this.host = {
 			ownNodeId: options.ownNodeId ?? 1,
 			homeId: options.homeId ?? 0x7e571000,
-			configManager: undefined as any,
-			controllerLog: new Proxy({} as any, {
-				get(_target, _prop) {
-					return () => {
-						// log nothing
-					};
-				},
-			}),
 			securityManager: undefined,
 			securityManager2: undefined,
-			options: {} as any,
-			nodes: this.nodes as any,
+			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
 			getSafeCCVersionForNode: () => 100,
+			isCCSecure: () => false,
 
-			getValueDB: (nodeId) => {
-				if (!valueDBCache.has(nodeId)) {
-					valueDBCache.set(
-						nodeId,
-						new ValueDB(
-							nodeId,
-							valuesStorage as any,
-							metadataStorage as any,
-						),
-					);
-				}
-				return valueDBCache.get(nodeId)!;
-			},
+			// TODO: We don't care about security classes yet
+			getHighestSecurityClass: () => undefined,
+			hasSecurityClass: () => false,
+			// eslint-disable-next-line @typescript-eslint/no-empty-function
+			setSecurityClass: () => {},
+
+			// getValueDB: (nodeId) => {
+			// 	if (!valueDBCache.has(nodeId)) {
+			// 		valueDBCache.set(
+			// 			nodeId,
+			// 			new ValueDB(
+			// 				nodeId,
+			// 				valuesStorage as any,
+			// 				metadataStorage as any,
+			// 			),
+			// 		);
+			// 	}
+			// 	return valueDBCache.get(nodeId)!;
+			// },
 		};
 
 		this.capabilities = {

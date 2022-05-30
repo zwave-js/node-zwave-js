@@ -85,8 +85,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */
@@ -325,8 +326,9 @@ export class SendDataMulticastBridgeRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */

@@ -1,6 +1,10 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
-import { ConfigManager, externalConfigDir } from "@zwave-js/config";
+import {
+	CompatConfig,
+	ConfigManager,
+	externalConfigDir,
+} from "@zwave-js/config";
 import {
 	CommandClasses,
 	ControllerLogger,
@@ -10,6 +14,7 @@ import {
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
+	Maybe,
 	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
@@ -465,7 +470,7 @@ export class Driver
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
-		this._driverLog = new DriverLogger(this._logContainer);
+		this._driverLog = new DriverLogger(this, this._logContainer);
 		this._controllerLog = new ControllerLogger(this._logContainer);
 
 		// Initialize the cache
@@ -736,6 +741,36 @@ export class Driver
 	public getValueDB(nodeId: number): ValueDB {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.valueDB;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public getCompatConfig(nodeId: number): CompatConfig | undefined {
+		return this.controller.nodes.get(nodeId)?.deviceConfig?.compat;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public getHighestSecurityClass(nodeId: number): SecurityClass | undefined {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.getHighestSecurityClass();
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): Maybe<boolean> {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.hasSecurityClass(securityClass);
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		node.setSecurityClass(securityClass, granted);
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */
@@ -1393,8 +1428,10 @@ export class Driver
 				// The interview succeeded, but we don't have a device config for this node.
 				// Report it, so we can add a config file
 
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				void reportMissingDeviceConfig(node as any).catch(() => {});
+				void reportMissingDeviceConfig(this, node as any).catch(
+					// eslint-disable-next-line @typescript-eslint/no-empty-function
+					() => {},
+				);
 			}
 		} catch (e) {
 			if (isZWaveError(e)) {
@@ -1875,6 +1912,27 @@ export class Driver
 		}
 	}
 
+	/**
+	 * Determines whether a CC must be secure for a given node and endpoint.
+	 *
+	 * @param ccId The command class in question
+	 * @param nodeId The node for which the CC security should be determined
+	 * @param endpointIndex The endpoint for which the CC security should be determined
+	 */
+	isCCSecure(
+		ccId: CommandClasses,
+		nodeId: number,
+		endpointIndex: number = 0,
+	): boolean {
+		const node = this.controller.nodes.get(nodeId);
+		const endpoint = node?.getEndpoint(endpointIndex);
+		return (
+			node?.isSecure !== false &&
+			!!(endpoint ?? node)?.isCCSecure(ccId) &&
+			!!(this.securityManager || this.securityManager2)
+		);
+	}
+
 	private isSoftResetting: boolean = false;
 
 	private maySoftReset(): boolean {
@@ -2261,9 +2319,11 @@ export class Driver
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
-			// Then ensure there are no errors
+			// Ensure there are no errors
 			if (isCommandClassContainer(msg)) {
 				assertValidCCs(msg);
+				// And persist the CC values if there weren't any
+				this.persistCCValues(msg.command);
 			}
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
@@ -2372,7 +2432,9 @@ export class Driver
 
 			try {
 				if (!wasMessageLogged) {
-					this.driverLog.logMessage(msg, { direction: "inbound" });
+					this.driverLog.logMessage(msg, {
+						direction: "inbound",
+					});
 				}
 
 				if (process.env.NODE_ENV !== "test") {
@@ -2711,7 +2773,7 @@ export class Driver
 					// this is the final one, merge the previous responses
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
-						command.mergePartialCCs(session);
+						command.mergePartialCCs(this, session);
 					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {
@@ -3375,6 +3437,18 @@ ${handlers.length} left`,
 		}
 	}
 
+	/** Persists the values contained in a Command Class in the corresponding nodes's value DB */
+	private persistCCValues(cc: CommandClass) {
+		cc.persistValues(this);
+		if (isEncapsulatingCommandClass(cc)) {
+			this.persistCCValues(cc.encapsulated);
+		} else if (isMultiEncapsulatingCommandClass(cc)) {
+			for (const encapsulated of cc.encapsulated) {
+				this.persistCCValues(encapsulated);
+			}
+		}
+	}
+
 	/**
 	 * Gets called whenever any Serial API command succeeded or a SendData command had a negative callback.
 	 */
@@ -3644,9 +3718,15 @@ ${handlers.length} left`,
 				this.controller.isFunctionSupported(FunctionType.SendDataBridge)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataBridgeRequest(this, { command });
+				msg = new SendDataBridgeRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			} else {
-				msg = new SendDataRequest(this, { command });
+				msg = new SendDataRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			}
 		} else if (command.isMulticast()) {
 			if (
@@ -3655,9 +3735,15 @@ ${handlers.length} left`,
 				)
 			) {
 				// Prioritize Bridge commands when they are supported
-				msg = new SendDataMulticastBridgeRequest(this, { command });
+				msg = new SendDataMulticastBridgeRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			} else {
-				msg = new SendDataMulticastRequest(this, { command });
+				msg = new SendDataMulticastRequest(this, {
+					command,
+					maxSendAttempts: this.options.attempts.sendData,
+				});
 			}
 		} else {
 			throw new ZWaveError(

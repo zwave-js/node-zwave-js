@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
-import { createTestingHost } from "@zwave-js/host";
-import { createTestNode, TestingHost } from "../test/mocks";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
+import { createTestNode } from "../test/mocks";
 import { CommandClass } from "./CommandClass";
 import {
 	getIndicatorValueValueID,
@@ -143,6 +143,8 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			nodeId: 1,
 			data: ccData,
 		});
+		// Boolean indicators are only interpreted during persistValues
+		cc.persistValues(host);
 
 		expect(cc.value).toBe(undefined);
 		expect(cc.values).toEqual([
@@ -179,10 +181,12 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			CommandClasses.Indicator,
 		)!;
 		const translatedProperty = ccInstance.translateProperty(
+			host,
 			valueId.property,
 			valueId.propertyKey,
 		);
 		const translatedPropertyKey = ccInstance.translatePropertyKey(
+			host,
 			valueId.property,
 			valueId.propertyKey!,
 		);
