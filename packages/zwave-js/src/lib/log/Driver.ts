@@ -15,6 +15,7 @@ import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
+import type { Driver } from "../driver/Driver";
 import type { Transaction } from "../driver/Transaction";
 import { NodeStatus } from "../node/_Types";
 
@@ -27,7 +28,7 @@ export interface DriverLogContext extends LogContext<"driver"> {
 }
 
 export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
-	constructor(loggers: ZWaveLogContainer) {
+	constructor(private readonly driver: Driver, loggers: ZWaveLogContainer) {
 		super(loggers, DRIVER_LABEL);
 	}
 
@@ -140,7 +141,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 				let cc: CommandClass = message.command;
 				while (true) {
 					const isEncapCC = isEncapsulatingCommandClass(cc);
-					const loggedCC = cc.toLogEntry();
+					const loggedCC = cc.toLogEntry(this.driver);
 					msg.push(
 						" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags),
 					);
@@ -193,7 +194,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 		if (queue.length > 0) {
 			for (const trns of queue) {
 				// TODO: This formatting should be shared with the other logging methods
-				const node = trns.message.getNodeUnsafe();
+				const node = trns.message.getNodeUnsafe(this.driver);
 				const prefix =
 					trns.message.type === MessageType.Request
 						? "[REQ]"

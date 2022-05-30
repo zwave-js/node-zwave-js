@@ -11,7 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
@@ -457,7 +457,7 @@ export class ColorSwitchCC extends CommandClass {
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB();
+		const valueDB = this.getValueDB(driver);
 
 		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -544,7 +544,7 @@ export class ColorSwitchCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -553,9 +553,10 @@ export class ColorSwitchCC extends CommandClass {
 		const api = endpoint.commandClasses["Color Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(driver);
 
 		const supportedColors: readonly ColorComponent[] =
-			this.getValueDB().getValue(
+			valueDB.getValue(
 				getSupportedColorComponentsValueID(this.endpointIndex),
 			) ?? [];
 
@@ -571,6 +572,7 @@ export class ColorSwitchCC extends CommandClass {
 	}
 
 	public translatePropertyKey(
+		applHost: ZWaveApplicationHost,
 		property: string | number,
 		propertyKey: string | number,
 	): string | undefined {
@@ -581,7 +583,7 @@ export class ColorSwitchCC extends CommandClass {
 			const translated = ColorComponent[propertyKey];
 			if (translated) return translated;
 		}
-		return super.translatePropertyKey(property, propertyKey);
+		return super.translatePropertyKey(applHost, property, propertyKey);
 	}
 }
 
@@ -600,16 +602,14 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 			this.payload.slice(0, 2),
 			ColorComponent["Warm White"],
 		);
-
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"supported color components": this.supportedColorComponents
 					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
@@ -639,15 +639,12 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			this.targetValue = this.payload[2];
 			this.duration = Duration.parseReport(this.payload[3]);
 		}
-
-		this.persistValues();
 	}
 
-	public persistValues(): boolean {
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Duration is stored globally instead of per component
-		if (!super.persistValues()) return false;
-
-		const valueDB = this.getValueDB();
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
 
 		const valueId = getCurrentColorValueID(
 			this.endpointIndex,
@@ -723,7 +720,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	})
 	public readonly duration: Duration | undefined;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -738,7 +735,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -793,9 +790,9 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,
@@ -871,7 +868,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		for (const [key, value] of Object.entries(this.colorTable)) {
 			const realKey: string =
@@ -884,7 +881,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -950,7 +947,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"color component": getEnumMemberName(
 				ColorComponent,
@@ -965,7 +962,7 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 			message.duration = this.duration.toString();
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -1002,9 +999,9 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"color component": getEnumMemberName(
 					ColorComponent,

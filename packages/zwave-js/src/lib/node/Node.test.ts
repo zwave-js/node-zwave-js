@@ -1008,7 +1008,7 @@ describe("lib/node/Node", () => {
 
 			const cc = node.createCCInstance(BasicCC)!;
 			expect(cc).toBeInstanceOf(BasicCC);
-			expect(cc.getNode()).toBe(node);
+			expect(cc.getNode(driver)).toBe(node);
 			node.destroy();
 		});
 	});

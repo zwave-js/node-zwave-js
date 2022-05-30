@@ -8,7 +8,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import type {
+	ZWaveApplicationHost,
+	ZWaveEndpointBase,
+	ZWaveHost,
+} from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
@@ -272,11 +276,11 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getGroupCountCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): number {
 		return (
-			host
+			applHost
 				.getValueDB(endpoint.nodeId)
 				.getValue(getGroupCountValueId(endpoint.index)) || 0
 		);
@@ -287,17 +291,17 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getMaxNodesCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): number {
 		return (
-			host
+			applHost
 				.getValueDB(endpoint.nodeId)
 				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ??
 			// If the information is not available, fall back to the configuration file if possible
 			// This can happen on some legacy devices which have "hidden" association groups
-			host.nodes
+			applHost.nodes
 				.get(endpoint.nodeId)
 				?.deviceConfig?.getAssociationConfigForEndpoint(
 					endpoint.index,
@@ -312,12 +316,12 @@ export class AssociationCC extends CommandClass {
 	 * This only works AFTER the interview process
 	 */
 	public static getAllDestinationsCached(
-		host: ZWaveHost,
+		applHost: ZWaveApplicationHost,
 		endpoint: ZWaveEndpointBase,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached(host, endpoint);
-		const valueDB = host.getValueDB(endpoint.nodeId)!;
+		const groupCount = this.getGroupCountCached(applHost, endpoint);
+		const valueDB = applHost.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes =
@@ -386,7 +390,7 @@ export class AssociationCC extends CommandClass {
 				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
 			});
-			this.interviewComplete = true;
+			this.setInterviewComplete(driver, true);
 			return;
 		}
 
@@ -394,7 +398,7 @@ export class AssociationCC extends CommandClass {
 		await endpoint.configureLifelineAssociations();
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -472,7 +476,7 @@ export class AssociationCCSet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids": this.nodeIds.length
@@ -480,7 +484,7 @@ export class AssociationCCSet extends AssociationCC {
 				: "all nodes",
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -544,7 +548,7 @@ export class AssociationCCRemove extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"group id": this.groupId || "all groups",
 			"node ids":
@@ -553,7 +557,7 @@ export class AssociationCCRemove extends AssociationCC {
 					: "all nodes",
 		};
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -605,26 +609,30 @@ export class AssociationCCReport extends AssociationCC {
 		return this._reportsToFollow > 0;
 	}
 
-	public mergePartialCCs(partials: AssociationCCReport[]): void {
+	public mergePartialCCs(
+		applHost: ZWaveApplicationHost,
+		partials: AssociationCCReport[],
+	): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
 			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 
 		// Persist values
-		this.getValueDB().setValue(
+		const valueDB = this.getValueDB(applHost);
+		valueDB.setValue(
 			getMaxNodesValueId(this.endpointIndex, this._groupId),
 			this._maxNodes,
 		);
-		this.getValueDB().setValue(
+		valueDB.setValue(
 			getNodeIdsValueId(this.endpointIndex, this._groupId),
 			this._nodeIds,
 		);
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				"group id": this.groupId,
 				"max # of nodes": this.maxNodes,
@@ -671,9 +679,9 @@ export class AssociationCCGet extends AssociationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "group id": this.groupId },
 		};
 	}
@@ -689,8 +697,6 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];
-
-		this.persistValues();
 	}
 
 	private _groupCount: number;
@@ -699,9 +705,9 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 		return this._groupCount;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { "group count": this.groupCount },
 		};
 	}

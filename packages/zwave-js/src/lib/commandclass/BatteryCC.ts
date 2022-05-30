@@ -11,7 +11,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
@@ -141,7 +141,7 @@ export class BatteryCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -240,8 +240,6 @@ export class BatteryCCReport extends BatteryCC {
 			this._lowTemperatureStatus = !!(this.payload[2] & 0b10);
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
-
-		this.persistValues();
 	}
 
 	private _level: number;
@@ -348,7 +346,7 @@ export class BatteryCCReport extends BatteryCC {
 		return this._lowTemperatureStatus;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this._level,
 			"is low": this._isLow,
@@ -384,7 +382,7 @@ export class BatteryCCReport extends BatteryCC {
 			message.disconnected = this.disconnected;
 		}
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message,
 		};
 	}
@@ -413,19 +411,26 @@ export class BatteryCCHealthReport extends BatteryCC {
 			true, // The temperature field may be omitted
 		);
 		this._temperature = temperature;
+		this.temperatureScale = scale;
+	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+		const valueDB = this.getValueDB(applHost);
+
+		// Update the temperature unit in the value DB
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
 			property: "temperature",
 		};
-		this.getValueDB().setMetadata(valueId, {
+		valueDB.setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyNumber,
 			label: "Temperature",
-			unit: scale === 0x00 ? "°C" : undefined,
+			unit: this.temperatureScale === 0x00 ? "°C" : undefined,
 		});
 
-		this.persistValues();
+		return true;
 	}
 
 	private _maximumCapacity: number | undefined;
@@ -450,9 +455,11 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return this._temperature;
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	private readonly temperatureScale: number | undefined;
+
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: {
 				temperature:
 					this.temperature != undefined

@@ -144,7 +144,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			host.nodes.set(node2.id, node2);
 
 			const valueIDs = nodeUtils
-				.getDefinedValueIDs(host, node2)
+				.getDefinedValueIDs(host as any, node2)
 				.filter(
 					({ commandClass, property }) =>
 						commandClass === CommandClasses.Basic &&

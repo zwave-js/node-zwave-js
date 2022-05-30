@@ -7,7 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
@@ -186,7 +186,7 @@ export class NodeNamingAndLocationCC extends CommandClass {
 		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		this.setInterviewComplete(driver, true);
 	}
 
 	public async refreshValues(driver: Driver): Promise<void> {
@@ -271,9 +271,9 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { name: this.name },
 		};
 	}
@@ -294,15 +294,14 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 			nameBuffer = nameBuffer.swap16();
 		}
 		this.name = nameBuffer.toString(encoding);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly name: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { name: this.name },
 		};
 	}
@@ -359,9 +358,9 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 		return super.serialize();
 	}
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { location: this.location },
 		};
 	}
@@ -382,15 +381,14 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			locationBuffer = locationBuffer.swap16();
 		}
 		this.location = locationBuffer.toString(encoding);
-		this.persistValues();
 	}
 
 	@ccValue({ internal: true })
 	public readonly location: string;
 
-	public toLogEntry(): MessageOrCCLogEntry {
+	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
-			...super.toLogEntry(),
+			...super.toLogEntry(applHost),
 			message: { location: this.location },
 		};
 	}

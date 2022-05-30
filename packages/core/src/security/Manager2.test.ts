@@ -48,7 +48,7 @@ describe("lib/security/Manager2", () => {
 		const node = makeNode(options.nodeId, options.secClass);
 		if (options.nodeId) {
 			man.initializeSPAN(
-				node,
+				node.id,
 				options.secClass ?? SecurityClass.S2_Authenticated,
 				crypto.randomBytes(16),
 				crypto.randomBytes(16),
