@@ -2067,11 +2067,12 @@ export class Driver
 		this.isSoftResetting = false;
 
 		this.controllerLog.print(restartLogMessage);
+
+		await this.destroy();
 		this.emit(
 			"error",
 			new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
 		);
-		await this.destroy();
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
