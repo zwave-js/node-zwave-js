@@ -1,3 +1,4 @@
+import { CommandClass, getCommandClassStatic } from "@zwave-js/cc";
 import { CommandClasses, ValueID } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
@@ -6,10 +7,6 @@ import {
 	BinarySwitchCC,
 	BinarySwitchCCReport,
 } from "../../commandclass/BinarySwitchCC";
-import {
-	CommandClass,
-	getCommandClassStatic,
-} from "../../commandclass/CommandClass";
 import { BinarySwitchCommand } from "../../commandclass/_Types";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";

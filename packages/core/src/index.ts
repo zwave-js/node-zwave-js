@@ -1,3 +1,6 @@
+export * from "./abstractions/ICommandClass";
+export * from "./abstractions/ZWaveEndpointBase";
+export * from "./abstractions/ZWaveNodeBase";
 export * from "./capabilities/CommandClasses";
 export * from "./capabilities/ControllerCapabilities";
 export * from "./capabilities/LibraryTypes";

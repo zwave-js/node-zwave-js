@@ -10,8 +10,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { VirtualNodeBase } from "@zwave-js/host";
 import { distinct } from "alcalzone-shared/arrays";
-import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
+import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
@@ -23,7 +24,7 @@ export interface VirtualValueID extends TranslatedValueID {
 	ccVersion: number;
 }
 
-export class VirtualNode extends VirtualEndpoint {
+export class VirtualNode extends VirtualEndpoint implements VirtualNodeBase {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,

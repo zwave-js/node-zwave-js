@@ -1,20 +1,17 @@
+import { getAPI } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	MulticastDestination,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
-import {
-	APIMethodsOf,
-	CCAPI,
-	CCAPIs,
-	PhysicalCCAPI,
-} from "../commandclass/API";
-import { getAPI, MulticastDestination } from "../commandclass/CommandClass";
+import { APIMethodsOf, CCAPI, CCAPIs, PhysicalCCAPI } from "@zwave-js/cc";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
 import type { VirtualNode } from "./VirtualNode";
+import type { VirtualEndpointBase } from "@zwave-js/host";
 
 /**
  * Represents an endpoint of a virtual (broadcast, multicast) Z-Wave node.
@@ -22,7 +19,7 @@ import type { VirtualNode } from "./VirtualNode";
  *
  * The endpoint's capabilities are determined by the capabilities of the individual nodes' endpoints.
  */
-export class VirtualEndpoint {
+export class VirtualEndpoint implements VirtualEndpointBase {
 	public constructor(
 		/** The virtual node this endpoint belongs to (or undefined if it set later) */
 		node: VirtualNode | undefined,
@@ -33,6 +30,9 @@ export class VirtualEndpoint {
 	) {
 		if (node) this._node = node;
 	}
+
+	/** Required by {@link ZWaveEndpointBase} */
+	public readonly virtual = true;
 
 	/** The virtual node this endpoint belongs to */
 	private _node!: VirtualNode;

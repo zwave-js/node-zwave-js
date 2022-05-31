@@ -1,6 +1,16 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import {
+	assertValidCCs,
+	CommandClass,
+	getImplementedVersion,
+	ICommandClassContainer,
+	InvalidCC,
+	isCommandClassContainer,
+	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
+} from "@zwave-js/cc";
+import {
 	CompatConfig,
 	ConfigManager,
 	externalConfigDir,
@@ -15,21 +25,30 @@ import {
 	isZWaveError,
 	LogConfig,
 	Maybe,
+	MessagePriority,
 	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
 	SecurityManager2,
+	SendCommandOptions,
+	SendMessageOptions,
 	serializeCacheValue,
 	SPANState,
 	timespan,
+	TransmitOptions,
 	ValueDB,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import type { ZWaveHost } from "@zwave-js/host";
+import type {
+	NodeSchedulePollOptions,
+	ZWaveApplicationHost,
+	ZWaveHost,
+} from "@zwave-js/host";
 import {
 	FunctionType,
 	getDefaultPriority,
@@ -38,7 +57,6 @@ import {
 	isSuccessIndicator,
 	Message,
 	MessageHeaders,
-	MessagePriority,
 	MessageType,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
@@ -75,21 +93,7 @@ import {
 	Security2CCNonceReport,
 	SupervisionResult,
 } from "../commandclass";
-import {
-	assertValidCCs,
-	CommandClass,
-	getImplementedVersion,
-	InvalidCC,
-} from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
-import {
-	isEncapsulatingCommandClass,
-	isMultiEncapsulatingCommandClass,
-} from "../commandclass/EncapsulatingCommandClass";
-import {
-	ICommandClassContainer,
-	isCommandClassContainer,
-} from "../commandclass/ICommandClassContainer";
 import { MultiChannelCC } from "../commandclass/MultiChannelCC";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { KEXFailType } from "../commandclass/Security2/shared";
@@ -121,7 +125,6 @@ import {
 	InclusionState,
 	ProvisioningEntryStatus,
 } from "../controller/Inclusion";
-import { TransmitOptions, TXReport } from "../controller/_Types";
 import { DriverLogger } from "../log/Driver";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/_Types";
@@ -369,47 +372,6 @@ interface AwaitedCommandEntry {
 	predicate: (cc: CommandClass) => boolean;
 }
 
-export interface SendMessageOptions {
-	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
-	priority?: MessagePriority;
-	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
-	supportCheck?: boolean;
-	/**
-	 * Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly).
-	 * Setting this to false will cause the simply transaction to be rejected on failure.
-	 * Default: true
-	 */
-	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
-	expire?: number;
-	/**
-	 * Internal information used to identify or mark this transaction
-	 * @internal
-	 */
-	tag?: any;
-	/**
-	 * Whether the send thread MUST be paused after this message was handled
-	 * @internal
-	 */
-	pauseSendThread?: boolean;
-	/** If a Wake Up On Demand should be requested for the target node. */
-	requestWakeUpOnDemand?: boolean;
-	/**
-	 * When a message sent to a node results in a TX report to be received, this callback will be called.
-	 * For multi-stage messages, the callback may be called multiple times.
-	 */
-	onTXReport?: (report: TXReport) => void;
-}
-
-export interface SendCommandOptions extends SendMessageOptions {
-	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
-	maxSendAttempts?: number;
-	/** Whether the driver should automatically handle the encapsulation. Default: true */
-	autoEncapsulate?: boolean;
-	/** Overwrite the default transmit options */
-	transmitOptions?: TransmitOptions;
-}
-
 export type SupervisionUpdateHandler = (
 	status: SupervisionStatus,
 	remainingDuration?: Duration,
@@ -455,7 +417,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  */
 export class Driver
 	extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveHost
+	implements ZWaveHost, ZWaveApplicationHost
 {
 	public constructor(
 		private port: string,
@@ -1931,6 +1893,16 @@ export class Driver
 			!!(endpoint ?? node)?.isCCSecure(ccId) &&
 			!!(this.securityManager || this.securityManager2)
 		);
+	}
+
+	/** @internal Required for ZWaveApplicationHost */
+	public schedulePoll(
+		nodeId: number,
+		valueId: ValueID,
+		options: NodeSchedulePollOptions,
+	): boolean {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.schedulePoll(valueId, options);
 	}
 
 	private isSoftResetting: boolean = false;

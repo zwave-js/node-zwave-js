@@ -1,3 +1,4 @@
+import { getCCConstructor } from "@zwave-js/cc";
 import {
 	applicationCCs,
 	assertZWaveError,
@@ -19,7 +20,6 @@ import { wait } from "alcalzone-shared/async";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
 import { BasicCC } from "../commandclass/BasicCC";
 import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
-import { getCCConstructor } from "../commandclass/CommandClass";
 import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC } from "../commandclass/WakeUpCC";

@@ -1,3 +1,4 @@
+import { getImplementedVersion } from "@zwave-js/cc";
 import { ConfigManager, DeviceConfig } from "@zwave-js/config";
 import {
 	CommandClasses,
@@ -23,7 +24,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getImplementedVersion } from "../commandclass/CommandClass";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";

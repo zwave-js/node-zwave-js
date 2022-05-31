@@ -1,3 +1,4 @@
+import { CommandClass, getCCValueMetadata } from "@zwave-js/cc";
 import type {
 	DeviceConfig,
 	Notification,
@@ -12,22 +13,28 @@ import {
 	DataRate,
 	FLiRS,
 	getCCName,
+	isRssiError,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
+	MessagePriority,
 	MetadataUpdatedArgs,
 	NodeType,
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
 	ProtocolVersion,
+	RSSI,
+	RssiError,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
 	SecurityClassOwner,
+	SendCommandOptions,
 	sensorCCs,
 	timespan,
 	topologicalSort,
+	TXReport,
 	unknownBoolean,
 	ValueDB,
 	ValueID,
@@ -39,9 +46,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveNodeBase } from "@zwave-js/host";
+import type { NodeSchedulePollOptions, ZWaveNodeBase } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import {
 	discreteLinearSearch,
 	formatId,
@@ -64,7 +70,7 @@ import type {
 	CCAPI,
 	PollValueImplementation,
 	SetValueAPIOptions,
-} from "../commandclass/API";
+} from "@zwave-js/cc";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -79,7 +85,6 @@ import {
 	getSlowRefreshValueId,
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
-import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import { getCurrentModeValueId as getCurrentLockModeValueId } from "../commandclass/DoorLockCC";
 import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
 import {
@@ -154,8 +159,7 @@ import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "../commandclass/_Types";
-import { isRssiError, RSSI, RssiError, TXReport } from "../controller/_Types";
-import type { Driver, SendCommandOptions } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
@@ -210,16 +214,6 @@ import { InterviewStage, NodeStatus } from "./_Types";
 
 interface ScheduledPoll {
 	timeout: NodeJS.Timeout;
-	expectedValue?: unknown;
-}
-
-export interface NodeSchedulePollOptions {
-	/** The timeout after which the poll is to be scheduled */
-	timeoutMs?: number;
-	/**
-	 * The expected value that's should be verified with this poll.
-	 * When this value is received in the meantime, the poll will be cancelled.
-	 */
 	expectedValue?: unknown;
 }
 

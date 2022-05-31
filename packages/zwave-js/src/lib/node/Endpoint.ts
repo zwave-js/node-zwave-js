@@ -1,4 +1,10 @@
 import {
+	CommandClass,
+	Constructable,
+	getAPI,
+	getCommandClassStatic,
+} from "@zwave-js/cc";
+import {
 	actuatorCCs,
 	CacheBackedMap,
 	CommandClasses,
@@ -8,21 +14,15 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase } from "@zwave-js/host";
+import type { ZWaveEndpointBase } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
-import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
+import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "@zwave-js/cc";
 import {
 	AssociationCC,
 	getHasLifelineValueId,
 	getLifelineGroupIds,
 } from "../commandclass/AssociationCC";
-import {
-	CommandClass,
-	Constructable,
-	getAPI,
-	getCommandClassStatic,
-} from "../commandclass/CommandClass";
 import {
 	getEndpointsValueId,
 	getNodeIdsValueId,
@@ -67,6 +67,9 @@ export class Endpoint implements ZWaveEndpointBase {
 			}
 		}
 	}
+
+	/** Required by {@link ZWaveEndpointBase} */
+	public readonly virtual = false;
 
 	/**
 	 * Only used for endpoints which store their device class differently than nodes.

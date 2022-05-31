@@ -1,3 +1,4 @@
+import { CommandClass } from "@zwave-js/cc";
 import {
 	allCCs,
 	applicationCCs,
@@ -14,7 +15,6 @@ import type {
 	ZWaveEndpointBase,
 	ZWaveNodeBase,
 } from "@zwave-js/host";
-import { CommandClass } from "../commandclass/CommandClass";
 import {
 	getAggregatedCountValueId,
 	getCountIsDynamicValueId,

@@ -1,3 +1,4 @@
+import { CommandClass, SinglecastCC } from "@zwave-js/cc";
 import {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -14,7 +15,6 @@ import {
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 import { RSSI, RssiError } from "../../controller/_Types";
 import { tryParseRSSI } from "../transport/SendDataShared";

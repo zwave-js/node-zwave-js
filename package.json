@@ -52,6 +52,7 @@
     "@types/ts-nameof": "^4.2.1",
     "@typescript-eslint/eslint-plugin": "^5.21.0",
     "@typescript-eslint/parser": "^5.21.0",
+    "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
@@ -81,7 +82,7 @@
     "source-map-support": "^0.5.21",
     "ts-nameof": "^5.0.0",
     "ts-patch": "^2.0.1",
-    "typescript": "4.6.4",
+    "typescript": "4.7.2",
     "zwave-js": "workspace:*"
   },
   "resolutions": {

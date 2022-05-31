@@ -1,3 +1,4 @@
+import { CommandClass, SinglecastCC } from "@zwave-js/cc";
 import {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -16,7 +17,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 
 export enum ApplicationCommandStatusFlags {

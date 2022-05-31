@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
+import type { ZWaveNodeBase } from "@zwave-js/core";
 import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
-import type { ZWaveNodeBase } from "./ZWaveNodeBase";
 
 export interface CreateTestingHostOptions {
 	homeId: ZWaveHost["homeId"];
@@ -52,6 +53,10 @@ export function createTestingHost(
 				sendData: 3,
 				controller: 3,
 			},
+			timeouts: {
+				refreshValue: 5000,
+				refreshValueAfterTransition: 1000,
+			},
 		},
 		nodes: createThrowingMap((nodeId) => {
 			throw new ZWaveError(
@@ -94,6 +99,12 @@ export function createTestingHost(
 		setSecurityClass: (nodeId, securityClass, granted) => {
 			const node = ret.nodes.getOrThrow(nodeId);
 			node.setSecurityClass(securityClass, granted);
+		},
+		sendCommand: async (_command, _options) => {
+			return undefined;
+		},
+		schedulePoll: (_nodeId, _valueId, _options) => {
+			return false;
 		},
 	};
 	return ret;

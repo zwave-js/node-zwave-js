@@ -2,14 +2,17 @@ import type { CompatConfig, ConfigManager } from "@zwave-js/config";
 import type {
 	CommandClasses,
 	ControllerLogger,
+	ICommandClass,
 	Maybe,
 	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
+	SendCommandOptions,
 	ValueDB,
+	ValueID,
+	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ReadonlyThrowingMap } from "@zwave-js/shared";
-import type { ZWaveNodeBase } from "./ZWaveNodeBase";
 
 export interface ZWaveHostOptions {
 	/**
@@ -37,6 +40,21 @@ export interface ZWaveHostOptions {
 		 * How many attempts should be made for each node interview before giving up
 		 */
 		nodeInterview: number; // [1...10], default: 5
+	};
+
+	/** Specify timeouts in milliseconds */
+	timeouts: {
+		/**
+		 * @internal
+		 * How long to wait for a poll after setting a value without transition duration
+		 */
+		refreshValue: number;
+
+		/**
+		 * @internal
+		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
+		 */
+		refreshValueAfterTransition: number;
 	};
 }
 
@@ -109,4 +127,25 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 
 	/** Readonly access to all node instances known to the host */
 	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
+
+	sendCommand<TResponse extends ICommandClass = ICommandClass>(
+		command: ICommandClass,
+		options?: SendCommandOptions,
+	): Promise<TResponse | undefined>;
+
+	schedulePoll(
+		nodeId: number,
+		valueId: ValueID,
+		options: NodeSchedulePollOptions,
+	): boolean;
+}
+
+export interface NodeSchedulePollOptions {
+	/** The timeout after which the poll is to be scheduled */
+	timeoutMs?: number;
+	/**
+	 * The expected value that's should be verified with this poll.
+	 * When this value is received in the meantime, the poll will be cancelled.
+	 */
+	expectedValue?: unknown;
 }
