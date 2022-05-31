@@ -65,26 +65,22 @@
 		{
 			"#": "20",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN1",
-			"description": "Switch / Input Type for IN1. Choose the input/switch type you want to connect to the IN1 terminal. Default: momentary switch"
+			"label": "Switch / Input Type for IN1"
 		},
 		{
 			"#": "21",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN2",
-			"description": "Switch / Input Type for IN2. Choose the input/switch type you want to connect to the IN2 terminal. Default: momentary switch"
+			"label": "Switch / Input Type for IN2"
 		},
 		{
 			"#": "22",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN3",
-			"description": "Switch / Input Type for IN3. Choose the input/switch type you want to connect to the IN3 terminal. Default: momentary switch"
+			"label": "Switch / Input Type for IN3"
 		},
 		{
 			"#": "23",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN4",
-			"description": "Switch / Input Type for IN4. Choose the input/switch type you want to connect to the IN4 terminal. Default: momentary switch"
+			"label": "Switch / Input Type for IN4"
 		},
 		{
 			"#": "62",

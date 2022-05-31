@@ -25,7 +25,6 @@
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
 			"label": "Trigger Value",
-			"description": "The value that will be set when the sensor is triggered",
 			"defaultValue": 255
 		}
 	]
