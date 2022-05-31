@@ -20,7 +20,7 @@
 		},
 		{
 			"#": "9",
-			"$import": "~/templates/master_template.json#dim_rate"
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "10",
