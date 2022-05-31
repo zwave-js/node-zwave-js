@@ -168,8 +168,7 @@
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
-			"label": "Send Report when Relay Disabled",
-			"description": "Determines whether an on/off report is sent and LED changes on button press, when the relay is disabled"
+			"label": "Send Report and Toggle LED on Button Press if Relay Disabled"
 		},
 		{
 			"#": "21",
