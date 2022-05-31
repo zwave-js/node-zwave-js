@@ -14,7 +14,7 @@ import * as path from "path";
 import ts from "typescript";
 
 // Define where the CC index file is located
-const ccIndexFile = path.join(projectRoot, "src/lib/commandclass/index.ts");
+const ccIndexFile = path.join(projectRoot, "src/lib/index.ts");
 
 function hasPublicAPIComment(
 	node: ts.Node,
@@ -65,7 +65,7 @@ function findExports() {
 		if (relativePath.startsWith("..")) continue;
 
 		// Only look at the lib dir
-		if (!relativePath.includes("/src/lib/")) {
+		if (!relativePath.includes("src/lib/")) {
 			continue;
 		}
 		// Ignore test files and the index

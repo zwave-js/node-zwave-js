@@ -1,8 +1,10 @@
-import type { CommandClass, MulticastCC, SinglecastCC } from "@zwave-js/cc";
+import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	MulticastCC,
+	SinglecastCC,
 	TransmitOptions,
 	TransmitStatus,
 	TXReport,
@@ -26,7 +28,6 @@ import {
 } from "@zwave-js/serial";
 import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";

@@ -1,4 +1,10 @@
+import "@zwave-js/cc";
 import {
+	BasicCC,
+	BasicCCSet,
+	CentralSceneCCNotification,
+	CentralSceneCommand,
+	CentralSceneKeys,
 	CommandClass,
 	commandClass,
 	expectedCCResponse,
@@ -15,15 +21,11 @@ import {
 import { createTestingHost } from "@zwave-js/host";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
-import { createDefaultMockControllerBehaviors } from "../../Utils";
-import type { Driver } from "../driver/Driver";
-import { createAndStartTestingDriver } from "../driver/DriverMock";
-import { ZWaveNode } from "../node/Node";
-import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
-import { BasicCC, BasicCCSet } from "./BasicCC";
-import { CentralSceneCCNotification } from "./CentralSceneCC";
-import "./index";
-import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
+import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { ZWaveNode } from "../../node/Node";
+import { SendDataRequest } from "../../serialapi/transport/SendDataMessages";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)

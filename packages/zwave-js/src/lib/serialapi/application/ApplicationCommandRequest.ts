@@ -1,7 +1,8 @@
-import { CommandClass, SinglecastCC } from "@zwave-js/cc";
+import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -17,7 +18,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application

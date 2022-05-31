@@ -1,10 +1,9 @@
-import { API } from "@zwave-js/cc";
+import { API, CCAPI } from "@zwave-js/cc";
 import { MockController, MockNode } from "@zwave-js/testing";
-import { CCAPI } from "../../../../cc/src/lib/API";
-import { createDefaultMockControllerBehaviors } from "../../Utils";
-import type { Driver } from "../driver/Driver";
-import { createAndStartTestingDriver } from "../driver/DriverMock";
-import { ZWaveNode } from "../node/Node";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
+import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { ZWaveNode } from "../../node/Node";
 
 @API(0xff)
 export class DummyCCAPI extends CCAPI {}

@@ -1,5 +1,5 @@
-import type { CommandClass } from "@zwave-js/cc";
 import type { Duration } from "@zwave-js/core";
+import type { CommandClass } from "./CommandClass";
 
 export interface NotificationEventPayload {
 	toNotificationEventParameters(): Buffer | Duration | Record<string, number>;

@@ -20,5 +20,5 @@
 		}
 	],
 	"include": ["src/**/*.ts"],
-	"exclude": ["src/**/*.test.ts"]
+	"exclude": ["build/**", "src/**/*.test.ts"]
 }

@@ -10,7 +10,7 @@ import * as path from "path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
-const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
+const ccDir = path.join(__dirname, "..", "src/lib");
 const apiFile = path.join(ccDir, "API.ts");
 const startTokenType = "export type CCToName<CC extends CommandClasses> =";
 const endTokenType = "never;";
