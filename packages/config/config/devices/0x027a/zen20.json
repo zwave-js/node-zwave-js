@@ -57,102 +57,102 @@
 		{
 			"#": "6",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH1 Auto Turn-Off Timer"
+			"label": "Auto Turn-Off Timer (Relay 1)"
 		},
 		{
 			"#": "7",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH1 Auto Turn-Off Setting"
+			"label": "Auto Turn-Off Timer Duration (Relay 1)"
 		},
 		{
 			"#": "8",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH1 Auto Turn-On Timer"
+			"label": "Auto Turn-On Timer (Relay 1)"
 		},
 		{
 			"#": "9",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH1 Auto Turn-On Timer Duration"
+			"label": "Auto Turn-On Timer Duration (Relay 1)"
 		},
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH2 Auto Turn-Off Timer"
+			"label": "Auto Turn-Off Timer (Relay 2)"
 		},
 		{
 			"#": "11",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH2 Auto Turn-Off Timer Duration"
+			"label": "Auto Turn-Off Timer Duration (Relay 2)"
 		},
 		{
 			"#": "12",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH2 Auto Turn-On Timer"
+			"label": "Auto Turn-On Timer (Relay 2)"
 		},
 		{
 			"#": "13",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH2 Auto Turn-On Timer Duration"
+			"label": "Auto Turn-On Timer Duration (Relay 2)"
 		},
 		{
 			"#": "14",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH3 Auto Turn-Off Timer"
+			"label": "Auto Turn-Off Timer (Relay 3)"
 		},
 		{
 			"#": "15",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH3 Auto Turn-Off Timer Duration"
+			"label": "Auto Turn-Off Timer Duration (Relay 3)"
 		},
 		{
 			"#": "16",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH3 Auto Turn-On Timer"
+			"label": "Auto Turn-On Timer (Relay 3)"
 		},
 		{
 			"#": "17",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH3 Auto Turn-On Timer Duration"
+			"label": "Auto Turn-On Timer Duration (Relay 3)"
 		},
 		{
 			"#": "18",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH4 Auto Turn-Off Timer"
+			"label": "Auto Turn-Off Timer (Relay 4)"
 		},
 		{
 			"#": "19",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH4 Auto Turn-Off Timer Duration"
+			"label": "Auto Turn-Off Timer Duration (Relay 4)"
 		},
 		{
 			"#": "20",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH4 Auto Turn-On Timer"
+			"label": "Auto Turn-On Timer (Relay 4)"
 		},
 		{
 			"#": "21",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH4 Auto Turn-On Timer Duration"
+			"label": "Auto Turn-On Timer Duration (Relay 4)"
 		},
 		{
 			"#": "22",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH5 Auto Turn-Off Timer"
+			"label": "Auto Turn-Off Timer (Relay 5)"
 		},
 		{
 			"#": "23",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH5 Auto Turn-Off Timer Duration"
+			"label": "Auto Turn-Off Timer Duration (Relay 5)"
 		},
 		{
 			"#": "24",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "CH5 Auto Turn-On Timer"
+			"label": "Auto Turn-On Timer (Relay 5)"
 		},
 		{
 			"#": "25",
 			"$import": "templates/zooz_template.json#auto_timer_duration_base",
-			"label": "CH5 Auto Turn-On Timer Duration"
+			"label": "Auto Turn-On Timer Duration (Relay 5)"
 		},
 		{
 			"#": "26",
