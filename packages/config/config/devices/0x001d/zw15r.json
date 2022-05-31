@@ -17,25 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Status LED configuration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Locater mode",
-					"value": 255
-				},
-				{
-					"label": "Status mode",
-					"value": 254
-				},
-				{
-					"label": "LED off",
-					"value": 0
-				}
-			]
+			"$import": "templates/config_template.json#locator_led"
 		}
 	],
 	"metadata": {

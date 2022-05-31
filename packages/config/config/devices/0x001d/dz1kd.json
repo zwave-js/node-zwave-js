@@ -16,71 +16,36 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Fade On Time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 253,
-			"defaultValue": 2,
-			"unsigned": true
+			"$import": "templates/config_template.json#fade_on_time"
 		},
 		{
 			"#": "2",
-			"label": "Fade Off Time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 253,
-			"defaultValue": 2,
-			"unsigned": true
+			"$import": "templates/config_template.json#fade_off_time"
 		},
 		{
 			"#": "3",
-			"label": "Minimum Light Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
 			"defaultValue": 10
 		},
 		{
 			"#": "4",
-			"label": "Maximum Light Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-100"
 		},
 		{
 			"#": "5",
-			"label": "Preset Light Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0
+			"$import": "templates/config_template.json#preset_level"
 		},
 		{
 			"#": "6",
-			"label": "LED Dim Level Indicator Timeout",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#led_timeout"
 		},
 		{
 			"#": "7",
-			"label": "Locator LED Status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"$import": "templates/config_template.json#locator_led"
 		},
 		{
 			"#": "8",
-			"label": "Load Type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0
+			"$import": "templates/config_template.json#load_type"
 		}
 	]
 }
