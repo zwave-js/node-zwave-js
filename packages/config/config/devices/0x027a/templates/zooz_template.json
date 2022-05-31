@@ -442,10 +442,16 @@
 			}
 		]
 	},
+	"local_control": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Local Control",
+		"description": "Enables control through the physical inputs on the device",
+		"defaultValue": 1
+	},
 	"local_programming": {
 		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 		"label": "Local Programming",
-		"description": "Controls programming (eg. including/excluding) device through local inputs, allowing the according input sequence to be used for scene control instead. Factory reset remains available."
+		"description": "Controls programming (eg. including/excluding) device through physical inputs, allowing the according input sequence to be used for scene control instead. Factory reset remains available."
 	},
 	"3way_switch_type": {
 		"label": "3-Way Switch Type",
