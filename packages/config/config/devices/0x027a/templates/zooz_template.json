@@ -145,6 +145,7 @@
 	},
 	"smart_switch_mode_dimming_reporting": {
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
+		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a multilevel report, regardless of setting.",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -152,17 +153,18 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send basic set report for each brightness level to hub when physical / Z-Wave control is disabled for physical dimming when paddles are manually pressed / held; report final brightness level only (basic set report) for physical dimming when paddles are manually pressed / held and physical / Z-Wave control is enabled; always report final brightness level only (via multilevel reports) for Z-Wave control regardless of the physical / Z-Wave control mode.",
+				"label": "Each brightness level / Final level",
 				"value": 0
 			},
 			{
-				"label": "Report final brightness level only for physical dimming, regardless of the physical / Z-Wave control mode.",
+				"label": "Final brightness level only for local dimming, regardless of control setting",
 				"value": 1
 			}
 		]
 	},
 	"smart_switch_mode_dimming_reporting_3_options": {
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
+		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a multilevel report, regardless of setting.",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -170,15 +172,15 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Send basic set report for each brightness level to hub when physical / Z-Wave control is disabled for physical dimming when paddles are manually pressed / held; report final brightness level only (basic set report) for physical dimming when paddles are manually pressed / held and physical / Z-Wave control is enabled; always report final brightness level only (via multilevel reports) for Z-Wave control regardless of the physical / Z-Wave control mode.",
+				"label": "Each brightness level / Final level (basic set)",
 				"value": 0
 			},
 			{
-				"label": "Report final brightness level only for physical dimming, regardless of the physical / Z-Wave control mode.",
+				"label": "Final brightness level only for local dimming, regardless of control setting",
 				"value": 1
 			},
 			{
-				"label": "Send multilevel report for each brightness level to hub when physical / Z-Wave control is disabled for physical dimming when paddles are manually pressed / held; report final brightness level only (multilevel report) for physical dimming when paddles are manually pressed / held and physical / Z-Wave control is enabled; always report final brightness level only (via multilevel reports) for Z-Wave control regardless of the physical / Z-Wave control mode.",
+				"label": "Each brightness level / Final level (multilevel)",
 				"value": 2
 			}
 		]
