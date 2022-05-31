@@ -117,7 +117,7 @@
 		]
 	},
 	"preset_level": {
-		"label": "Preset Light Level",
+		"label": "Initial Dim Level",
 		"valueSize": 1,
 		"unit": "%",
 		"minValue": 0,
