@@ -234,15 +234,15 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Double-Tap Enabled",
+				"label": "Enable Double-Tap",
 				"value": 0
 			},
 			{
-				"label": "Double-Tap Disabled, Single-Tap to Last Brightness",
+				"label": "Disable Double-Tap, Single-Tap to Last Brightness",
 				"value": 1
 			},
 			{
-				"label": "Double-Tap Disabled, Single-Tap to Full Brightness",
+				"label": "Disable Double-Tap, Single-Tap to Full Brightness",
 				"value": 2
 			}
 		]
