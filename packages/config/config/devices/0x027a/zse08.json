@@ -18,7 +18,7 @@
 			"#": "1",
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Close Delay",
-			"description": "Delay (in seconds) before close signal will be sent",
+			"unit": "seconds",
 			"valueSize": 2
 		},
 		{

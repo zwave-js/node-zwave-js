@@ -140,9 +140,8 @@
 		{
 			"#": "151",
 			"label": "Ramp Rate (Switch)",
-			"description": "1-127 = seconds, 128-254 = 1-127 minutes",
+			"description": "1...127 = seconds, 128...254 = minutes (minus 127)",
 			"valueSize": 2,
-			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 3,
@@ -157,9 +156,8 @@
 		{
 			"#": "152",
 			"label": "Ramp Rate (Z-Wave)",
-			"description": "1-127 = seconds, 128-254 = 1-127 minutes",
+			"description": "1...127 = seconds, 128...254 = minutes (minus 127)",
 			"valueSize": 2,
-			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 254,
 			"defaultValue": 3,

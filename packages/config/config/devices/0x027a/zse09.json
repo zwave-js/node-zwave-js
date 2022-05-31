@@ -101,8 +101,7 @@
 		{
 			"#": "9",
 			"$import": "~/templates/master_template.json#base_0-255_nounit",
-			"label": "Light Report",
-			"description": "Light level change to be reported.",
+			"label": "Light Reporting Threshold",
 			"defaultValue": 255,
 			"unit": "lux",
 			"unsigned": true

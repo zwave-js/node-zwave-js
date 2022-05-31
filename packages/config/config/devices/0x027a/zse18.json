@@ -38,7 +38,7 @@
 		{
 			"#": "18",
 			"label": "Motion Detection: Timeout",
-			"description": "3 seconds is added to the value you set (eg. default value of 27 equals 30 seconds)",
+			"description": "3 seconds are added to the configured value (e.g. 27 equals 30 seconds)",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 3,

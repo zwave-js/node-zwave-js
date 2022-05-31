@@ -210,7 +210,7 @@
 			"unit": "%",
 			"options": [
 				{
-					"label": "Last brightness level",
+					"label": "Last non-zero brightness",
 					"value": 0
 				}
 			]

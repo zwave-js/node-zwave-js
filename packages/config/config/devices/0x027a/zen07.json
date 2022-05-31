@@ -72,7 +72,6 @@
 		{
 			"#": "9",
 			"label": "Auto Turn-Off Timer Interval",
-			"description": "Set the time to automatically turn off",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,

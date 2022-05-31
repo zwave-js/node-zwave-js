@@ -38,7 +38,7 @@
 			"#": "2",
 			"$if": "firmwareVersion >= 2.0",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Enable / Disable Motion Reports",
+			"label": "Send Motion Reports",
 			"defaultValue": 1
 		},
 		{

@@ -22,7 +22,6 @@
 			"#": "2",
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Power Wattage Report Value Threshold",
-			"description": "Choose how you want your Power Strip to report power consumption to your hub",
 			"defaultValue": 5
 		},
 		{
