@@ -54,7 +54,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Group 4 Reporting",
+			"label": "Group 4: Send Reports",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"defaultValue": 0
 		},
