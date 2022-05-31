@@ -26,8 +26,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Trigger ON Duration",
-			"description": "delay after motion before turning OFF",
+			"label": "Re-trigger Interval",
 			"valueSize": 2,
 			"minValue": 5,
 			"maxValue": 600,

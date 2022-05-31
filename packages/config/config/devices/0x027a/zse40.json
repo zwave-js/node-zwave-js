@@ -61,16 +61,14 @@
 			"#": "5",
 			"$if": "firmwareVersion < 17.9",
 			"$import": "~/templates/master_template.json#base_1-255_nounit",
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
+			"label": "Re-trigger Interval",
 			"unit": "minutes",
 			"defaultValue": 3
 		},
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 17.9 && firmwareVersion < 24.2",
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
+			"label": "Re-trigger Interval",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 15,
@@ -81,8 +79,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 24.2",
-			"label": "Trigger Interval",
-			"description": "Set the trigger interval for motion sensor re-activation.",
+			"label": "Re-trigger Interval",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 15,

@@ -75,7 +75,7 @@
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 2.0",
-			"label": "Motion Re-trigger Time",
+			"label": "Re-trigger Interval",
 			"description": "Delay before the sensor reports no motion after detecting the last motion activity (add 5 seconds to entered value).",
 			"unit": "+5 seconds",
 			"valueSize": 2,
