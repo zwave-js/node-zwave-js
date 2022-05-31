@@ -41,9 +41,21 @@
 		},
 		{
 			"#": "5",
-			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Invert Sensor State",
-			"description": "When enabled, the device will report open when the magnet is near"
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"label": "Sensor Behavior",
+			"options": [
+				{
+					"label": "Normally Closed (Report open when magnet is away)",
+					"value": 0
+				},
+				{
+					"label": "Normally Open (Report open when magnet is near)",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "6",
