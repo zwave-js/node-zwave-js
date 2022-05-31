@@ -2069,10 +2069,14 @@ export class Driver
 		this.controllerLog.print(restartLogMessage);
 
 		await this.destroy();
-		this.emit(
-			"error",
-			new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
-		);
+
+		// Let the async calling context finish before emitting the error
+		process.nextTick(() => {
+			this.emit(
+				"error",
+				new ZWaveError(restartReason, ZWaveErrorCodes.Driver_Failed),
+			);
+		});
 	}
 
 	private async ensureSerialAPI(): Promise<boolean> {
