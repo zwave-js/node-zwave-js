@@ -445,7 +445,7 @@
 	"local_programming": {
 		"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 		"label": "Local Programming",
-		"description": "Disables inclusion/exclusion commands on paddle for use with scene controls."
+		"description": "Controls programming (eg. including/excluding) device through local inputs, allowing the according input sequence to be used for scene control instead. Factory reset remains available."
 	},
 	"3way_switch_type": {
 		"label": "3-Way Switch Type",
