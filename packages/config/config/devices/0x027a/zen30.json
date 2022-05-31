@@ -204,8 +204,7 @@
 		{
 			"#": "23",
 			"$import": "~/templates/master_template.json#base_0-99_nounit",
-			"label": "Default Brightness Level On for Dimmer",
-			"description": "Brightness level for the dimmer to come on to at single tap.",
+			"label": "Dimmer Brightness After Single Tap",
 			"defaultValue": 0,
 			"unit": "%",
 			"options": [
