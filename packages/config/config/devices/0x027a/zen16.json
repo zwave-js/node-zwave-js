@@ -66,61 +66,37 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 1.1",
-			"label": "Switch 1: Type",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary",
-					"value": 0
-				},
-				{
-					"label": "Toggle (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle (change state on toggle)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#zen16_switch_type",
+			"label": "Switch 1: Type"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 1.2",
-			"label": "Switch 1: Type",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary",
-					"value": 0
-				},
-				{
-					"label": "Toggle (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle (change state on toggle)",
-					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode for Z-Wave control)",
-					"value": 3
-				}
-			]
+			"$import": "templates/zooz_template.json#zen16_switch_type_v2",
+			"label": "Switch 1: Type"
 		},
 		{
 			"#": "3",
-			"$import": "#paramInformation/2",
+			"$if": "firmwareVersion <= 1.1",
+			"$import": "templates/zooz_template.json#zen16_switch_type",
+			"label": "Switch 2: Type"
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "templates/zooz_template.json#zen16_switch_type_v2",
 			"label": "Switch 2: Type"
 		},
 		{
 			"#": "4",
-			"$import": "#paramInformation/2",
+			"$if": "firmwareVersion <= 1.1",
+			"$import": "templates/zooz_template.json#zen16_switch_type",
+			"label": "Switch 3: Type"
+		},
+		{
+			"#": "4",
+			"$if": "firmwareVersion >= 1.2",
+			"$import": "templates/zooz_template.json#zen16_switch_type_v2",
 			"label": "Switch 3: Type"
 		},
 		{
@@ -165,6 +141,29 @@
 			"description": "Sets the time after which relay 1 turns off once it has been turned on. Using the units defined in parameter 15."
 		},
 		{
+			"#": "15",
+			"$if": "firmwareVersion >= 1.1",
+			"label": "Relay 1: Auto Turn-Off Timer Unit",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		{
 			"#": "7",
 			"$if": "firmwareVersion < 1.1",
 			"$import": "~/templates/master_template.json#base_0-65535",
@@ -178,6 +177,12 @@
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Relay 1: Auto Turn-On Timer",
 			"description": "Sets the time after which relay 1 turns on once it has been turned off. Using the units defined in parameter 16."
+		},
+		{
+			"#": "16",
+			"$if": "firmwareVersion >= 1.1",
+			"$import": "#paramInformation/15",
+			"label": "Relay 1: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "8",
@@ -195,6 +200,12 @@
 			"description": "Sets the time after which relay 2 turns off once it has been turned on. Using the units defined in parameter 17."
 		},
 		{
+			"#": "17",
+			"$if": "firmwareVersion >= 1.1",
+			"$import": "#paramInformation/15",
+			"label": "Relay 2: Auto Turn-Off Timer Unit"
+		},
+		{
 			"#": "9",
 			"$if": "firmwareVersion < 1.1",
 			"$import": "~/templates/master_template.json#base_0-65535",
@@ -208,6 +219,12 @@
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Relay 2: Auto Turn-On Timer",
 			"description": "Sets the time after which relay 2 turns on once it has been turned off. Using the units defined in parameter 18."
+		},
+		{
+			"#": "18",
+			"$if": "firmwareVersion >= 1.1",
+			"$import": "#paramInformation/15",
+			"label": "Relay 2: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "10",
@@ -225,6 +242,12 @@
 			"description": "Sets the time after which relay 3 turns off once it has been turned on. Using the units defined in parameter 19."
 		},
 		{
+			"#": "19",
+			"$if": "firmwareVersion >= 1.1",
+			"$import": "#paramInformation/15",
+			"label": "Relay 3: Auto Turn-Off Timer Unit"
+		},
+		{
 			"#": "11",
 			"$if": "firmwareVersion < 1.1",
 			"$import": "~/templates/master_template.json#base_0-65535",
@@ -238,6 +261,12 @@
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Relay 3: Auto Turn-On Timer",
 			"description": "Sets the time after which relay 3 turns on once it has been turned off. Using the units defined in parameter 20."
+		},
+		{
+			"#": "20",
+			"$if": "firmwareVersion >= 1.1",
+			"$import": "#paramInformation/15",
+			"label": "Relay 3: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "12",
@@ -279,7 +308,7 @@
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 1.2",
-			"$import": "#paramInformation/12",
+			"$import": "templates/zooz_template.json#zen16_manual_control",
 			"label": "Switch 2: Manual Control"
 		},
 		{
@@ -292,61 +321,8 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 1.2",
-			"$import": "#paramInformation/12",
+			"$import": "templates/zooz_template.json#zen16_manual_control",
 			"label": "Switch 3: Manual Control"
-		},
-		{
-			"#": "15",
-			"$if": "firmwareVersion >= 1.1",
-			"label": "Relay 1: Auto Turn-Off Timer Unit",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Minutes",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 1
-				},
-				{
-					"label": "Hours",
-					"value": 2
-				}
-			]
-		},
-		{
-			"#": "16",
-			"$if": "firmwareVersion >= 1.1",
-			"$import": "#paramInformation/15",
-			"label": "Relay 1: Auto Turn-On Timer Unit"
-		},
-		{
-			"#": "17",
-			"$if": "firmwareVersion >= 1.1",
-			"$import": "#paramInformation/15",
-			"label": "Relay 2: Auto Turn-Off Timer Unit"
-		},
-		{
-			"#": "18",
-			"$if": "firmwareVersion >= 1.1",
-			"$import": "#paramInformation/15",
-			"label": "Relay 2: Auto Turn-On Timer Unit"
-		},
-		{
-			"#": "19",
-			"$if": "firmwareVersion >= 1.1",
-			"$import": "#paramInformation/15",
-			"label": "Relay 3: Auto Turn-Off Timer Unit"
-		},
-		{
-			"#": "20",
-			"$if": "firmwareVersion >= 1.1",
-			"$import": "#paramInformation/15",
-			"label": "Relay 3: Auto Turn-On Timer Unit"
 		},
 		{
 			"#": "21",
