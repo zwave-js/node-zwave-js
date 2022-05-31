@@ -528,7 +528,7 @@
 	},
 	"trigger_action": {
 		"label": "Trigger Action",
-		"description": "Send command to associated device.",
+		"description": "0 = Off (basic set), 255 = On (basic set), 1...99 = dimming level (multilevel)",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
