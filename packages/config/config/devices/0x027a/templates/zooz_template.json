@@ -225,7 +225,7 @@
 		"defaultValue": 99
 	},
 	"double_tap_enable": {
-		"label": "Enable Double-Tap behavior",
+		"label": "Double-Tap Behavior",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
