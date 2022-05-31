@@ -24,35 +24,35 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "IN1 on/off sync",
+			"label": "Input 1 on/off sync",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "IN1 Brightness sync",
+			"label": "Input 1 Brightness sync",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "IN2 on/off sync",
+			"label": "Input 2 on/off sync",
 			"maxNodes": 5
 		},
 		"6": {
-			"label": "IN2 Brightness sync",
+			"label": "Input 2 Brightness sync",
 			"maxNodes": 5
 		},
 		"7": {
-			"label": "IN3 on/off sync",
+			"label": "Input 3 on/off sync",
 			"maxNodes": 5
 		},
 		"8": {
-			"label": "IN3 Brightness sync",
+			"label": "Input 3 Brightness sync",
 			"maxNodes": 5
 		},
 		"9": {
-			"label": "IN4 on/off sync",
+			"label": "Input 4 on/off sync",
 			"maxNodes": 5
 		},
 		"10": {
-			"label": "IN4 Brightness sync",
+			"label": "Input 4 Brightness sync",
 			"maxNodes": 5
 		}
 	},
@@ -65,22 +65,22 @@
 		{
 			"#": "20",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN1"
+			"label": "Switch / Input Type for Input 1"
 		},
 		{
 			"#": "21",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN2"
+			"label": "Switch / Input Type for Input 2"
 		},
 		{
 			"#": "22",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN3"
+			"label": "Switch / Input Type for Input 3"
 		},
 		{
 			"#": "23",
 			"$import": "templates/zooz_template.json#zen31_switch_type",
-			"label": "Switch / Input Type for IN4"
+			"label": "Switch / Input Type for Input 4"
 		},
 		{
 			"#": "62",
@@ -203,113 +203,97 @@
 		{
 			"#": "40[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN1. click/toggle 1 time to trigger",
-			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"label": "Input 1: Send Scenes (Key Pressed 1x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "40[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN1. click/toggle 2 times to trigger",
-			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"label": "Input 1: Send Scenes (Key Pressed 2x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "40[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN1. click/toggle 3 times to trigger",
-			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"label": "Input 1: Send Scenes (Key Pressed 3x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "40[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN1. click/toggle 4 times to trigger",
-			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"label": "Input 1: Send Scenes (Key Pressed 4x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "41[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN2. click/toggle 1 time to trigger",
-			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"label": "Input 2: Send Scenes (Key Pressed 1x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "41[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN2. click/toggle 2 times to trigger",
-			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"label": "Input 2: Send Scenes (Key Pressed 2x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "41[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN2. click/toggle 3 times to trigger",
-			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"label": "Input 2: Send Scenes (Key Pressed 3x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "41[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN2. click/toggle 4 times to trigger",
-			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"label": "Input 2: Send Scenes (Key Pressed 4x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "42[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN3. click/toggle 1 time to trigger",
-			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"label": "Input 3: Send Scenes (Key Pressed 1x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "42[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN3. click/toggle 2 times to trigger",
-			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"label": "Input 3: Send Scenes (Key Pressed 2x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "42[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN3. click/toggle 3 times to trigger",
-			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"label": "Input 3: Send Scenes (Key Pressed 3x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "42[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN3. click/toggle 4 times to trigger",
-			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"label": "Input 3: Send Scenes (Key Pressed 4x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "43[0x01]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN4. click/toggle 1 time to trigger",
-			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"label": "Input 4: Send Scenes (Key Pressed 1x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "43[0x02]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN4. click/toggle 2 times to trigger",
-			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"label": "Input 4: Send Scenes (Key Pressed 2x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "43[0x04]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN4. click/toggle 3 times to trigger",
-			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"label": "Input 4: Send Scenes (Key Pressed 3x)",
 			"defaultValue": 1
 		},
 		{
 			"#": "43[0x08]",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Scene Control for IN4. click/toggle 4 times to trigger",
-			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"label": "Input 4: Send Scenes (Key Pressed 4x)",
 			"defaultValue": 1
 		}
 	]
