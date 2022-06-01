@@ -20,6 +20,7 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -323,7 +324,11 @@ export class MultilevelSensorCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Multilevel Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -413,7 +418,11 @@ export class MultilevelSensorCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Multilevel Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

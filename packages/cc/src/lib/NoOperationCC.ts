@@ -38,7 +38,10 @@ export class NoOperationCC extends CommandClass {
 	declare ccCommand: undefined;
 }
 
-/** Tests if a given message is a ping */
+/**
+ * @publicAPI
+ * Tests if a given message is a ping
+ */
 export function messageIsPing<T extends Message>(
 	msg: T,
 ): msg is T & { command: NoOperationCC } {

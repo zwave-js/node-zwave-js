@@ -12,7 +12,9 @@ const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
 const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
 const ccDir = path.join(__dirname, "..", "src/lib");
 const apiFile = path.join(ccDir, "API.ts");
-const startTokenType = "export type CCToName<CC extends CommandClasses> =";
+const startTokenType1 = "export type CCToName<CC extends CommandClasses> =";
+// const startTokenType2 =
+// 	"export type CCInstanceToAPI<CC extends CommandClass> =";
 const endTokenType = "never;";
 
 const startTokenInterface = "\t// AUTO GENERATION BELOW";
@@ -58,28 +60,45 @@ export async function generateCCAPIInterface(): Promise<void> {
 		startTokenEnd,
 	);
 	apiFileContent =
-		apiFileContent.substr(0, startTokenEnd) +
+		apiFileContent.slice(0, startTokenEnd) +
 		"\n" +
 		CCsWithAPI.map(
 			({ name, className, file }) =>
 				`\t${name}: import("./${file}").${className};`,
 		).join("\n") +
 		"\n" +
-		apiFileContent.substr(endTokenStart);
+		apiFileContent.slice(endTokenStart);
 
-	// Generate lookup type
+	// Generate lookup types (part 1: CCToName)
 	startTokenEnd =
-		apiFileContent.indexOf(startTokenType) + startTokenType.length;
+		apiFileContent.indexOf(startTokenType1) + startTokenType1.length;
 	endTokenStart = apiFileContent.indexOf(endTokenType, startTokenEnd);
 	apiFileContent =
-		apiFileContent.substr(0, startTokenEnd) +
+		apiFileContent.slice(0, startTokenEnd) +
 		"\n" +
 		CCsWithAPI.map(({ name }) => {
 			if (!name.startsWith(`"`)) name = `"${name}"`;
 			return `\t[CC] extends [(typeof CommandClasses[${name}])] ? ${name} : `;
 		}).join("\n") +
 		"\n" +
-		apiFileContent.substr(endTokenStart);
+		apiFileContent.slice(endTokenStart);
+
+	// // Generate lookup types (part 2: CCInstanceToName)
+	// startTokenEnd =
+	// 	apiFileContent.indexOf(startTokenType2) + startTokenType2.length;
+	// endTokenStart = apiFileContent.indexOf(endTokenType, startTokenEnd);
+	// apiFileContent =
+	// 	apiFileContent.slice(0, startTokenEnd) +
+	// 	"\n" +
+	// 	CCsWithAPI.map(({ name, className, file }) => {
+	// 		if (!name.startsWith(`"`)) name = `"${name}"`;
+	// 		return `\t[CC] extends [import("./${file}").${className.replace(
+	// 			/API$/,
+	// 			"",
+	// 		)}] ? import("./${file}").${className} : `;
+	// 	}).join("\n") +
+	// 	"\n" +
+	// 	apiFileContent.slice(endTokenStart);
 
 	apiFileContent = formatWithPrettier(apiFile, apiFileContent);
 	// Only update file if necessary - this reduces build time

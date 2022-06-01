@@ -14,6 +14,7 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -133,7 +134,11 @@ export class BinarySensorCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Binary Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -181,7 +186,11 @@ export class BinarySensorCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Binary Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

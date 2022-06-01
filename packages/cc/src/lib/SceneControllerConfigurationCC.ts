@@ -426,9 +426,11 @@ export class SceneControllerConfigurationCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Scene Controller Configuration"
-		].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Scene Controller Configuration"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

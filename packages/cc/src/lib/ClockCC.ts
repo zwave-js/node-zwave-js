@@ -97,7 +97,11 @@ export class ClockCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Clock.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Clock,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

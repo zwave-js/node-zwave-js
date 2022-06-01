@@ -183,7 +183,11 @@ export class CentralSceneCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Central Scene"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Central Scene"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

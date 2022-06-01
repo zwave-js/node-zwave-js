@@ -17,7 +17,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -223,7 +223,11 @@ export class VersionCC extends CommandClass {
 		const endpoint = this.getEndpoint(applHost)!;
 
 		// Use the CC API of the root device for all queries
-		const api = node.commandClasses.Version.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Version,
+			applHost,
+			node,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

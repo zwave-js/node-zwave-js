@@ -94,7 +94,11 @@ export class LanguageCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Language.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Language,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

@@ -15,7 +15,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import { AssociationCC } from "./AssociationCC";
 import {
 	API,
@@ -282,9 +282,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Association Group Information"
-		].withOptions({ priority: MessagePriority.NodeQuery });
+		const api = CCAPI.create(
+			CommandClasses["Association Group Information"],
+			applHost,
+			endpoint,
+		).withOptions({ priority: MessagePriority.NodeQuery });
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -335,9 +337,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Association Group Information"
-		].withOptions({ priority: MessagePriority.NodeQuery });
+		const api = CCAPI.create(
+			CommandClasses["Association Group Information"],
+			applHost,
+			endpoint,
+		).withOptions({ priority: MessagePriority.NodeQuery });
 		const valueDB = this.getValueDB(applHost);
 
 		// Query the information for each group (this is the only thing that could be dynamic)

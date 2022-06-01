@@ -10,7 +10,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -143,9 +143,11 @@ export class ManufacturerSpecificCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Manufacturer Specific"
-		].withOptions({ priority: MessagePriority.NodeQuery });
+		const api = CCAPI.create(
+			CommandClasses["Manufacturer Specific"],
+			applHost,
+			endpoint,
+		).withOptions({ priority: MessagePriority.NodeQuery });
 
 		if (!node.isControllerNode) {
 			applHost.controllerLog.logNode(node.id, {

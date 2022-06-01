@@ -304,7 +304,11 @@ export class ThermostatSetpointCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Setpoint"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);
@@ -519,7 +523,11 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Setpoint"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

@@ -220,7 +220,11 @@ export class EntryControlCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Entry Control"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Entry Control"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -279,7 +283,11 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Entry Control"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Entry Control"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

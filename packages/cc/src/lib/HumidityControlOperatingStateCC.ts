@@ -99,9 +99,11 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Humidity Control Operating State"
-		].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Humidity Control Operating State"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

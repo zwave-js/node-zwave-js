@@ -96,11 +96,13 @@ export class ThermostatFanStateCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Thermostat Fan State"].withOptions(
-			{
-				priority: MessagePriority.NodeQuery,
-			},
-		);
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Fan State"],
+			applHost,
+			endpoint,
+		).withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
 
 		// Query the current status
 		applHost.controllerLog.logNode(node.id, {

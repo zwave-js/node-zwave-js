@@ -17,7 +17,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -339,7 +339,11 @@ export class AssociationCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Association.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Association,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -379,10 +383,8 @@ export class AssociationCC extends CommandClass {
 		// Query each association group for its members
 		await this.refreshValues(applHost);
 
-		// Skip the remaining quer Association CC in favor of Multi Channel Association if possible
-		if (
-			endpoint.commandClasses["Multi Channel Association"].isSupported()
-		) {
+		// Skip the remaining Association CC interview in favor of Multi Channel Association if possible
+		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
@@ -402,7 +404,11 @@ export class AssociationCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Association.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Association,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

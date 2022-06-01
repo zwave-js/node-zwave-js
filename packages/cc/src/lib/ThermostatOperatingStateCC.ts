@@ -9,6 +9,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -97,9 +98,11 @@ export class ThermostatOperatingStateCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Thermostat Operating State"
-		].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Operating State"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

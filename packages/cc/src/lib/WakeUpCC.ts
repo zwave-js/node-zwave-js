@@ -3,7 +3,6 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
-	NodeStatus,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -44,6 +43,7 @@ export function getControllerNodeIdValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getWakeUpIntervalValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Wake Up"],
@@ -188,23 +188,14 @@ export class WakeUpCCAPI extends CCAPI {
 export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 
-	public static isAwake(node: ZWaveNode): boolean {
-		switch (node.status) {
-			case NodeStatus.Asleep:
-			case NodeStatus.Dead:
-				return false;
-			case NodeStatus.Unknown:
-			// We assume all nodes to be awake - we'll find out soon enough if they are
-			case NodeStatus.Alive:
-			case NodeStatus.Awake:
-				return true;
-		}
-	}
-
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Wake Up"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Wake Up"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

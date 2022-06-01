@@ -25,6 +25,7 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -336,7 +337,11 @@ export class MeterCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Meter.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Meter,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -398,7 +403,11 @@ supports reset:       ${suppResp.supportsReset}`;
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Meter.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Meter,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

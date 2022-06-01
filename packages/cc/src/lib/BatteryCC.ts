@@ -15,6 +15,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -146,7 +147,11 @@ export class BatteryCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Battery.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Battery,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

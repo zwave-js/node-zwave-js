@@ -14,7 +14,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -137,7 +137,7 @@ export class AlarmSensorCC extends CommandClass {
 		const endpoint = this.getEndpoint(applHost)!;
 
 		// Skip the interview in favor of Notification CC if possible
-		if (endpoint.commandClasses.Notification.isSupported()) {
+		if (endpoint.supportsCC(CommandClasses.Notification)) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
@@ -147,7 +147,11 @@ export class AlarmSensorCC extends CommandClass {
 			return;
 		}
 
-		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Alarm Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -194,7 +198,11 @@ export class AlarmSensorCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Alarm Sensor"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Alarm Sensor"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

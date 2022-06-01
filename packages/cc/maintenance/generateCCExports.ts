@@ -75,7 +75,6 @@ function findExports() {
 		) {
 			continue;
 		}
-		const fileFullText = sourceFile.getFullText();
 
 		// Visit each root node to see if it has a `@publicAPI` comment
 		ts.forEachChild(sourceFile, (node) => {
@@ -135,6 +134,22 @@ function findExports() {
 						exportSpecifier.name.text,
 						node.isTypeOnly || exportSpecifier.isTypeOnly,
 					);
+				}
+			} else if (
+				ts.isVariableStatement(node) &&
+				node.modifiers?.some(
+					(m) => m.kind === ts.SyntaxKind.ExportKeyword,
+				) &&
+				hasPublicAPIComment(node, sourceFile)
+			) {
+				for (const variable of node.declarationList.declarations) {
+					if (ts.isIdentifier(variable.name)) {
+						addExport(
+							sourceFile.fileName,
+							variable.name.text,
+							false,
+						);
+					}
 				}
 			}
 		});

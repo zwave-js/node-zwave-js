@@ -1,11 +1,14 @@
+/** @publicAPI */
 export enum KEXSchemes {
 	KEXScheme1 = 1,
 }
 
+/** @publicAPI */
 export enum ECDHProfiles {
 	Curve25519 = 0,
 }
 
+/** @publicAPI */
 export enum KEXFailType {
 	NoKeyMatch = 0x01, // KEX_KEY
 	NoSupportedScheme = 0x02, // KEX_SCHEME
@@ -18,6 +21,7 @@ export enum KEXFailType {
 	DifferentKey = 0x0a, // REPORT
 }
 
+/** @publicAPI */
 export const inclusionTimeouts = Object.freeze({
 	TA1: 10000,
 	TA2: 10000,

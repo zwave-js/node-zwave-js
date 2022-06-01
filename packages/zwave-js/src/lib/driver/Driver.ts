@@ -3,12 +3,35 @@ import * as Sentry from "@sentry/node";
 import {
 	assertValidCCs,
 	CommandClass,
+	DeviceResetLocallyCCNotification,
+	FirmwareUpdateStatus,
 	getImplementedVersion,
+	getWakeUpIntervalValueId,
 	ICommandClassContainer,
 	InvalidCC,
 	isCommandClassContainer,
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
+	isTransportServiceEncapsulation,
+	KEXFailType,
+	messageIsPing,
+	MultiChannelCC,
+	Security2CC,
+	Security2CCNonceReport,
+	SecurityCC,
+	SecurityCCCommandEncapsulationNonceGet,
+	SupervisionCC,
+	SupervisionCCGet,
+	SupervisionCCReport,
+	SupervisionResult,
+	SupervisionStatus,
+	TransportServiceCCFirstSegment,
+	TransportServiceCCSegmentComplete,
+	TransportServiceCCSegmentRequest,
+	TransportServiceCCSegmentWait,
+	TransportServiceCCSubsequentSegment,
+	TransportServiceTimeouts,
+	WakeUpCCNoMoreInformation,
 } from "@zwave-js/cc";
 import {
 	CompatConfig,
@@ -87,39 +110,7 @@ import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
-import {
-	FirmwareUpdateStatus,
-	Security2CC,
-	Security2CCNonceReport,
-	SupervisionResult,
-} from "../commandclass";
-import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
-import { MultiChannelCC } from "../commandclass/MultiChannelCC";
-import { messageIsPing } from "../commandclass/NoOperationCC";
-import { KEXFailType } from "../commandclass/Security2/shared";
-import {
-	SecurityCC,
-	SecurityCCCommandEncapsulationNonceGet,
-} from "../commandclass/SecurityCC";
-import {
-	SupervisionCC,
-	SupervisionCCGet,
-	SupervisionCCReport,
-} from "../commandclass/SupervisionCC";
-import {
-	isTransportServiceEncapsulation,
-	TransportServiceCCFirstSegment,
-	TransportServiceCCSegmentComplete,
-	TransportServiceCCSegmentRequest,
-	TransportServiceCCSegmentWait,
-	TransportServiceCCSubsequentSegment,
-	TransportServiceTimeouts,
-} from "../commandclass/TransportServiceCC";
-import {
-	getWakeUpIntervalValueId,
-	WakeUpCCNoMoreInformation,
-} from "../commandclass/WakeUpCC";
-import { SupervisionStatus } from "../commandclass/_Types";
+
 import { ZWaveController } from "../controller/Controller";
 import {
 	InclusionState,

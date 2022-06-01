@@ -439,7 +439,11 @@ export class NotificationCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Notification.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Notification,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);
@@ -607,7 +611,11 @@ export class NotificationCC extends CommandClass {
 		// Refreshing values only works on pull nodes
 		if (NotificationCC.getNotificationMode(applHost, node) === "pull") {
 			const endpoint = this.getEndpoint(applHost)!;
-			const api = endpoint.commandClasses.Notification.withOptions({
+			const api = CCAPI.create(
+				CommandClasses.Notification,
+				applHost,
+				endpoint,
+			).withOptions({
 				priority: MessagePriority.NodeQuery,
 			});
 			const valueDB = this.getValueDB(applHost);

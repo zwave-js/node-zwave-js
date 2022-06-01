@@ -1022,6 +1022,7 @@ export class InvalidCC extends CommandClass {
 	}
 }
 
+/** @publicAPI */
 export function assertValidCCs(container: ICommandClassContainer): void {
 	if (container.command instanceof InvalidCC) {
 		if (typeof container.command.reason === "number") {
@@ -1074,6 +1075,7 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 }
 
 /**
+ * @publicAPI
  * May be used to define different expected CC responses depending on the sent CC
  */
 export type DynamicCCResponse<
@@ -1083,11 +1085,13 @@ export type DynamicCCResponse<
 	sentCC: TSent,
 ) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
 
+/** @publicAPI */
 export type CCResponseRole =
 	| boolean // The response was either expected or unexpected
 	| "checkEncapsulated"; // The response role depends on the encapsulated CC
 
 /**
+ * @publicAPI
  * A predicate function to test if a received CC matches the sent CC
  */
 export type CCResponsePredicate<
@@ -1096,11 +1100,12 @@ export type CCResponsePredicate<
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
 /**
+ * @publicAPI
  * Defines the command class associated with a Z-Wave message
  */
-export function commandClass(
+export function commandClass<T extends CommandClass>(
 	cc: CommandClasses,
-): TypedClassDecorator<CommandClass> {
+): TypedClassDecorator<T> {
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
@@ -1114,6 +1119,7 @@ export function commandClass(
 }
 
 /**
+ * @publicAPI
  * Retrieves the command class defined for a Z-Wave message class
  */
 export function getCommandClass<T extends CommandClass | CCAPI>(
@@ -1138,6 +1144,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 }
 
 /**
+ * @publicAPI
  * Retrieves the function type defined for a Z-Wave message class
  */
 export function getCommandClassStatic<T extends Constructable<CommandClass>>(
@@ -1157,6 +1164,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 }
 
 /**
+ * @publicAPI
  * Looks up the command class constructor for a given command class type and function type
  */
 export function getCCConstructor(
@@ -1170,6 +1178,7 @@ export function getCCConstructor(
 }
 
 /**
+ * @publicAPI
  * Defines the implemented version of a Z-Wave command class
  */
 export function implementedVersion(
@@ -1181,6 +1190,7 @@ export function implementedVersion(
 }
 
 /**
+ * @publicAPI
  * Retrieves the implemented version defined for a Z-Wave command class
  */
 export function getImplementedVersion<T extends CommandClass>(
@@ -1203,6 +1213,7 @@ export function getImplementedVersion<T extends CommandClass>(
 }
 
 /**
+ * @publicAPI
  * Retrieves the implemented version defined for a Z-Wave command class
  */
 export function getImplementedVersionStatic<
@@ -1217,6 +1228,7 @@ export function getImplementedVersionStatic<
 }
 
 /**
+ * @publicAPI
  * Defines the CC command a subclass of a CC implements
  */
 export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
@@ -1239,9 +1251,12 @@ export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
 }
 
 /**
+ * @publicAPI
  * Retrieves the CC command a subclass of a CC implements
  */
-function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
+export function getCCCommand<T extends CommandClass>(
+	cc: T,
+): number | undefined {
 	// get the class constructor
 	const constr = cc.constructor as Constructable<CommandClass>;
 
@@ -1254,9 +1269,10 @@ function getCCCommand<T extends CommandClass>(cc: T): number | undefined {
 }
 
 /**
+ * @publicAPI
  * Looks up the command class constructor for a given command class type and function type
  */
-function getCCCommandConstructor<TBase extends CommandClass>(
+export function getCCCommandConstructor<TBase extends CommandClass>(
 	ccId: CommandClasses,
 	ccCommand: number,
 ): Constructable<TBase> | undefined {
@@ -1271,6 +1287,7 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 }
 
 /**
+ * @publicAPI
  * Defines the expected response associated with a Z-Wave message
  */
 export function expectedCCResponse<
@@ -1286,6 +1303,7 @@ export function expectedCCResponse<
 }
 
 /**
+ * @publicAPI
  * Retrieves the expected response (static or dynamic) defined for a Z-Wave message class
  */
 export function getExpectedCCResponse<T extends CommandClass>(
@@ -1301,6 +1319,7 @@ export function getExpectedCCResponse<T extends CommandClass>(
 }
 
 /**
+ * @publicAPI
  * Retrieves the CC response predicate defined for a Z-Wave message class
  */
 export function getCCResponsePredicate<T extends CommandClass>(
@@ -1315,6 +1334,7 @@ export function getCCResponsePredicate<T extends CommandClass>(
 	return ret?.predicate;
 }
 
+/** @publicAPI */
 export interface CCValueOptions {
 	/**
 	 * Whether the decorated CC value is internal. Internal values are not exposed to the user.
@@ -1339,6 +1359,7 @@ export interface CCValueOptions {
 }
 
 /**
+ * @publicAPI
  * Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues()
  * @param internal Whether the value should be exposed to library users
  */
@@ -1381,6 +1402,7 @@ function getCCValueDefinitions(
 }
 
 /**
+ * @publicAPI
  * Marks the decorated property as the key of a Command Class's key value pair,
  * which can later be saved with persistValues()
  * @param internal Whether the key value pair should be exposed to library users
@@ -1429,6 +1451,7 @@ function getCCKeyValuePairDefinitions(
 }
 
 /**
+ * @publicAPI
  * Defines additional metadata for the given CC value
  */
 export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
@@ -1450,6 +1473,7 @@ export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
 }
 
 /**
+ * @publicAPI
  * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
  */
 export function getCCValueMetadata(
@@ -1466,6 +1490,7 @@ export function getCCValueMetadata(
 }
 
 /**
+ * @publicAPI
  * Defines the simplified API associated with a Z-Wave command class
  */
 export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {

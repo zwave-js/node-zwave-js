@@ -14,7 +14,7 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import { getGroupCountValueId as getAssociationGroupCountValueId } from "./AssociationCC";
 import {
 	API,
@@ -422,7 +422,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const mcAPI = endpoint.commandClasses["Multi Channel Association"];
+		const mcAPI = CCAPI.create(
+			CommandClasses["Multi Channel Association"],
+			applHost,
+			endpoint,
+		);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -466,12 +470,18 @@ export class MultiChannelAssociationCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const mcAPI = endpoint.commandClasses[
-			"Multi Channel Association"
-		].withOptions({
+		const mcAPI = CCAPI.create(
+			CommandClasses["Multi Channel Association"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const assocAPI = endpoint.commandClasses.Association.withOptions({
+		const assocAPI = CCAPI.create(
+			CommandClasses.Association,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

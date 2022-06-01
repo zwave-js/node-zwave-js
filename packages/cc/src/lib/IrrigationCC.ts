@@ -1062,7 +1062,11 @@ export class IrrigationCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Irrigation.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Irrigation,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -1126,7 +1130,11 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses.Irrigation.withOptions({
+		const api = CCAPI.create(
+			CommandClasses.Irrigation,
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

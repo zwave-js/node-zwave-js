@@ -199,7 +199,11 @@ export class BinarySwitchCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Binary Switch"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Binary Switch"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

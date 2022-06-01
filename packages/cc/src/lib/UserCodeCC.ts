@@ -24,6 +24,7 @@ import {
 } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
+	CCAPI,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -870,7 +871,11 @@ export class UserCodeCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["User Code"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["User Code"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -929,24 +934,29 @@ export class UserCodeCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["User Code"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["User Code"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(applHost);
 
 		const supportsMasterCode =
-			node.getValue<boolean>(
+			valueDB.getValue<boolean>(
 				getSupportsMasterCodeValueID(this.endpointIndex),
 			) ?? false;
 		const supportsUserCodeChecksum =
-			node.getValue<boolean>(
+			valueDB.getValue<boolean>(
 				getSupportsUserCodeChecksumValueID(this.endpointIndex),
 			) ?? false;
 		const supportedKeypadModes =
-			node.getValue<readonly KeypadMode[]>(
+			valueDB.getValue<readonly KeypadMode[]>(
 				getSupportedKeypadModesValueID(this.endpointIndex),
 			) ?? [];
 		const supportedUsers =
-			node.getValue<number>(
+			valueDB.getValue<number>(
 				getSupportedUsersValueID(this.endpointIndex),
 			) ?? 0;
 
@@ -967,7 +977,7 @@ export class UserCodeCC extends CommandClass {
 				await api.getKeypadMode();
 			}
 			const storedUserCodeChecksum =
-				node.getValue<number>(
+				valueDB.getValue<number>(
 					getUserCodeChecksumValueID(this.endpointIndex),
 				) ?? 0;
 			let currentUserCodeChecksum: number | undefined = 0;

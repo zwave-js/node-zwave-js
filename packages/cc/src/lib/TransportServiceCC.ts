@@ -25,6 +25,7 @@ import { TransportServiceCommand } from "./_Types";
 const MAX_SEGMENT_SIZE = 39;
 
 // TODO: Figure out how we know if communicating with R2 or R3
+/** @publicAPI */
 export const TransportServiceTimeouts = {
 	/** Waiting time before requesting a missing segment at data rate R2 */
 	requestMissingSegmentR2: 800,
@@ -79,6 +80,7 @@ interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
 	partialDatagram: Buffer;
 }
 
+/** @publicAPI */
 export function isTransportServiceEncapsulation(
 	command: CommandClass,
 ): command is

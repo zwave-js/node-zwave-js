@@ -306,9 +306,11 @@ export class HumidityControlSetpointCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Humidity Control Setpoint"
-		].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Humidity Control Setpoint"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);
@@ -419,9 +421,11 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses[
-			"Humidity Control Setpoint"
-		].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Humidity Control Setpoint"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);

@@ -91,7 +91,36 @@ export {
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 } from "./ColorSwitchCC";
-export { CommandClass, getAPI, InvalidCC } from "./CommandClass";
+export {
+	API,
+	assertValidCCs,
+	CCCommand,
+	ccKeyValuePair,
+	ccValue,
+	ccValueMetadata,
+	CommandClass,
+	commandClass,
+	expectedCCResponse,
+	getAPI,
+	getCCCommand,
+	getCCCommandConstructor,
+	getCCConstructor,
+	getCCResponsePredicate,
+	getCCValueMetadata,
+	getCommandClass,
+	getCommandClassStatic,
+	getExpectedCCResponse,
+	getImplementedVersion,
+	getImplementedVersionStatic,
+	implementedVersion,
+	InvalidCC,
+} from "./CommandClass";
+export type {
+	CCResponsePredicate,
+	CCResponseRole,
+	CCValueOptions,
+	DynamicCCResponse,
+} from "./CommandClass";
 export {
 	ConfigurationCC,
 	ConfigurationCCBulkGet,
@@ -302,7 +331,7 @@ export {
 	NodeNamingAndLocationCCNameReport,
 	NodeNamingAndLocationCCNameSet,
 } from "./NodeNamingCC";
-export { NoOperationCC } from "./NoOperationCC";
+export { messageIsPing, NoOperationCC } from "./NoOperationCC";
 export {
 	NotificationCC,
 	NotificationCCEventSupportedGet,
@@ -349,6 +378,12 @@ export {
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
 } from "./SceneControllerConfigurationCC";
+export {
+	ECDHProfiles,
+	inclusionTimeouts,
+	KEXFailType,
+	KEXSchemes,
+} from "./Security2/shared";
 export {
 	Security2CC,
 	Security2CCCommandsSupportedGet,
@@ -457,12 +492,14 @@ export {
 	TimeParametersCCSet,
 } from "./TimeParametersCC";
 export {
+	isTransportServiceEncapsulation,
 	TransportServiceCC,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
+	TransportServiceTimeouts,
 } from "./TransportServiceCC";
 export {
 	UserCodeCC,
@@ -497,6 +534,7 @@ export {
 	VersionCCZWaveSoftwareReport,
 } from "./VersionCC";
 export {
+	getWakeUpIntervalValueId,
 	WakeUpCC,
 	WakeUpCCIntervalCapabilitiesGet,
 	WakeUpCCIntervalCapabilitiesReport,

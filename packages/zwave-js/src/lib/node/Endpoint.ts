@@ -1,9 +1,13 @@
 import {
+	APIMethodsOf,
+	CCAPI,
+	CCAPIs,
+	CCToAPI,
 	CommandClass,
 	Constructable,
-	getAPI,
 	getCommandClassStatic,
 } from "@zwave-js/cc";
+import type { ZWaveEndpointBase } from "@zwave-js/core";
 import {
 	actuatorCCs,
 	CacheBackedMap,
@@ -14,10 +18,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveEndpointBase } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
-import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "@zwave-js/cc";
 import {
 	AssociationCC,
 	getHasLifelineValueId,
@@ -352,46 +354,8 @@ export class Endpoint implements ZWaveEndpointBase {
 		ccId: T,
 		requireSupport: boolean = true,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
-		const APIConstructor = getAPI(ccId);
-		const ccName = CommandClasses[ccId];
-		if (APIConstructor == undefined) {
-			throw new ZWaveError(
-				`Command Class ${ccName} (${num2hex(
-					ccId,
-				)}) has no associated API!`,
-				ZWaveErrorCodes.CC_NoAPI,
-			);
-		}
-		const apiInstance = new APIConstructor(this.driver, this);
-		if (requireSupport) {
-			// @ts-expect-error TS doesn't like assigning to conditional types
-			return new Proxy(apiInstance, {
-				get: (target, property) => {
-					// Forbid access to the API if it is not supported by the node
-					if (
-						property !== "ccId" &&
-						property !== "endpoint" &&
-						property !== "isSupported" &&
-						property !== "withOptions" &&
-						property !== "commandOptions" &&
-						!target.isSupported()
-					) {
-						throw new ZWaveError(
-							`Node ${this.nodeId}${
-								this.index === 0
-									? ""
-									: ` (endpoint ${this.index})`
-							} does not support the Command Class ${ccName}!`,
-							ZWaveErrorCodes.CC_NotSupported,
-						);
-					}
-					return target[property as keyof CCAPI];
-				},
-			});
-		} else {
-			// @ts-expect-error TS doesn't like assigning to conditional types
-			return apiInstance;
-		}
+		// Trust me on this, TypeScript :)
+		return CCAPI.from(ccId, this.driver, this, requireSupport) as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -440,7 +404,7 @@ export class Endpoint implements ZWaveEndpointBase {
 
 				// When accessing a CC API for the first time, we need to create it
 				if (!target.has(ccId)) {
-					const api = this.createAPI(ccId);
+					const api = CCAPI.from(ccId, this.driver, this);
 					target.set(ccId, api);
 				}
 				return target.get(ccId);

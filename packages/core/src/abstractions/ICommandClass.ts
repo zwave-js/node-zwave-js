@@ -1,6 +1,10 @@
+import type { CommandClasses } from "../capabilities/CommandClasses";
 import type { MulticastDestination } from "../consts";
 
 export interface ICommandClass {
+	ccId: CommandClasses;
+	ccCommand?: number;
+
 	serialize(): Buffer;
 	nodeId: number | MulticastDestination;
 	expectsCCResponse(): boolean;

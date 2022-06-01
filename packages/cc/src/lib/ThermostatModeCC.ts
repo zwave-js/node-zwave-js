@@ -182,7 +182,11 @@ export class ThermostatModeCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Mode"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
@@ -228,7 +232,11 @@ export class ThermostatModeCC extends CommandClass {
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Thermostat Mode"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 

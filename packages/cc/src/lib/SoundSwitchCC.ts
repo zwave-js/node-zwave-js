@@ -292,9 +292,14 @@ export class SoundSwitchCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const api = endpoint.commandClasses["Sound Switch"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Sound Switch"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -359,7 +364,7 @@ duration: ${info.duration} seconds`;
 		metadataStates[0xff] = "default";
 
 		// Store tone count and info as a single metadata
-		node.valueDB.setMetadata(getToneIdValueId(this.endpointIndex), {
+		valueDB.setMetadata(getToneIdValueId(this.endpointIndex), {
 			...ValueMetadata.Number,
 			min: 0,
 			max: toneCount,

@@ -45,13 +45,11 @@ export interface ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/**
-		 * @internal
 		 * How long to wait for a poll after setting a value without transition duration
 		 */
 		refreshValue: number;
 
 		/**
-		 * @internal
 		 * How long to wait for a poll after setting a value with transition duration. This doubles as the "fast" delay.
 		 */
 		refreshValueAfterTransition: number;

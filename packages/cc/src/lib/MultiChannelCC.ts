@@ -379,7 +379,11 @@ export class MultiChannelCC extends CommandClass {
 		if (this.version === 1) return this.interviewV1(applHost);
 
 		const endpoint = node.getEndpoint(this.endpointIndex)!;
-		const api = endpoint.commandClasses["Multi Channel"].withOptions({
+		const api = CCAPI.create(
+			CommandClasses["Multi Channel"],
+			applHost,
+			endpoint,
+		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB(applHost);
