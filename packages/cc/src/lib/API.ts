@@ -172,7 +172,6 @@ export class CCAPI {
 	}
 
 	/**
-	 * @internal
 	 * The identifier of the Command Class this API is for
 	 */
 	public readonly ccId: CommandClasses;

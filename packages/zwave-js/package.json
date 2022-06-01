@@ -7,7 +7,6 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./CommandClass": "./build/CommandClass.js",
     "./Controller": "./build/Controller.js",
     "./Driver": "./build/Driver.js",
     "./Error": "./build/Error.js",
@@ -19,9 +18,6 @@
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
-      "CommandClass": [
-        "./build/CommandClass.d.ts"
-      ],
       "Controller": [
         "./build/Controller.d.ts"
       ],

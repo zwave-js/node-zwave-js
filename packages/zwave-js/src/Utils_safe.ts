@@ -1,3 +1,4 @@
+export { rssiToString } from "@zwave-js/core";
 export {
 	Firmware,
 	FirmwareFileFormat,
@@ -14,7 +15,6 @@ export {
 	getEnumMemberName,
 	num2hex,
 } from "@zwave-js/shared/safe";
-export { rssiToString } from "./lib/controller/_Types";
 export {
 	formatLifelineHealthCheckRound,
 	formatLifelineHealthCheckSummary,

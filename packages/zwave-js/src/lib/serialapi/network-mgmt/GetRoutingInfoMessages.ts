@@ -1,4 +1,8 @@
-import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
+import {
+	MessageOrCCLogEntry,
+	MessagePriority,
+	NUM_NODEMASK_BYTES,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
@@ -6,7 +10,6 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

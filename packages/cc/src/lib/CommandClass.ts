@@ -188,7 +188,6 @@ export class CommandClass implements ICommandClass {
 	public endpointIndex: number;
 
 	/**
-	 * @internal
 	 * Whether the command progress should be supervised.
 	 * This only has an effect if the target endpoint supports the Supervision CC.
 	 *
@@ -200,7 +199,6 @@ export class CommandClass implements ICommandClass {
 	public encapsulatingCC?: EncapsulatingCommandClass;
 
 	/**
-	 * @internal
 	 * Whether the command should be sent encrypted
 	 * This only has an effect if the target node supports Security.
 	 */

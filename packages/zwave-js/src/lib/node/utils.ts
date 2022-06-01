@@ -5,7 +5,7 @@ import {
 	getEndpointIndizesValueId,
 	getIdenticalCapabilitiesValueId,
 	getIndividualCountValueId,
-} from "@zwave-js/cc/src/lib/MultiChannelCC";
+} from "@zwave-js/cc/MultiChannelCC";
 import {
 	allCCs,
 	applicationCCs,

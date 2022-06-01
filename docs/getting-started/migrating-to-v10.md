@@ -124,3 +124,7 @@ public static getNotificationMode(
 
 If you're constructing `SendData[Bridge][Multicast]Request`s manually, the `maxSendAttempts` property now needs to be set if more than 1 attempts are desired.
 The driver does this automatically when using the `sendCommand` method, so most use cases should not be affected.
+
+# Removed the `"zwave-js/CommandClass"` sub-package export
+
+The CC implementations have been moved to their own package, `@zwave-js/cc`. Simply replace the imports with the new package name.

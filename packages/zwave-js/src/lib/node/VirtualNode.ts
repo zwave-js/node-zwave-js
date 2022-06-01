@@ -1,3 +1,4 @@
+import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc/src";
 import {
 	actuatorCCs,
 	CommandClasses,
@@ -7,12 +8,11 @@ import {
 	valueIdToString,
 	ValueMetadata,
 	ValueMetadataNumeric,
+	VirtualNodeBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { VirtualNodeBase } from "@zwave-js/host";
 import { distinct } from "alcalzone-shared/arrays";
-import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
