@@ -11,8 +11,6 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
@@ -43,7 +41,6 @@ import {
 import {
 	LevelChangeDirection,
 	MultilevelSwitchCommand,
-	SupervisionStatus,
 	SwitchType,
 } from "./_Types";
 
@@ -142,30 +139,32 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+		return true;
 
-		// Multilevel Switch commands may take some time to be executed.
-		// Therefore we try to supervise the command execution
-		const supervisionResult = await this.applHost.trySendCommandSupervised(
-			cc,
-			{
-				requestStatusUpdates: true,
-				onUpdate: (status) => {
-					if (
-						status === SupervisionStatus.Working ||
-						status === SupervisionStatus.Success
-					) {
-						void this.get().catch(() => {
-							/* ignore */
-						});
-					}
-				},
-			},
-		);
+		// // Multilevel Switch commands may take some time to be executed.
+		// // Therefore we try to supervise the command execution
+		// const supervisionResult = await this.applHost.trySendCommandSupervised(
+		// 	cc,
+		// 	{
+		// 		requestStatusUpdates: true,
+		// 		onUpdate: (status) => {
+		// 			if (
+		// 				status === SupervisionStatus.Working ||
+		// 				status === SupervisionStatus.Success
+		// 			) {
+		// 				void this.get().catch(() => {
+		// 					/* ignore */
+		// 				});
+		// 			}
+		// 		},
+		// 	},
+		// );
 
-		return (
-			!supervisionResult ||
-			supervisionResult.status === SupervisionStatus.Success
-		);
+		// return (
+		// 	!supervisionResult ||
+		// 	supervisionResult.status === SupervisionStatus.Success
+		// );
 	}
 
 	@validateArgs()
@@ -183,38 +182,38 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		let mayUseSupervision: boolean;
-		if (this.endpoint.virtual) {
-			// We cannot use supervision when communicating with multiple nodes
-			mayUseSupervision = false;
-		} else {
-			// For singlecast, try to use supervision unless we know it is not supported
-			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-			const valueDB = this.getValueDB();
-			mayUseSupervision = valueDB.getValue(superviseValueId) !== false;
+		// let mayUseSupervision: boolean;
+		// if (this.endpoint.virtual) {
+		// 	// We cannot use supervision when communicating with multiple nodes
+		// 	mayUseSupervision = false;
+		// } else {
+		// 	// For singlecast, try to use supervision unless we know it is not supported
+		// 	const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+		// 	const valueDB = this.getValueDB();
+		// 	mayUseSupervision = valueDB.getValue(superviseValueId) !== false;
 
-			if (mayUseSupervision) {
-				// Try to supervise the command execution
-				const supervisionResult =
-					await this.applHost.trySendCommandSupervised(cc);
+		// 	if (mayUseSupervision) {
+		// 		// Try to supervise the command execution
+		// 		const supervisionResult =
+		// 			await this.applHost.trySendCommandSupervised(cc);
 
-				if (supervisionResult?.status === SupervisionStatus.Fail) {
-					throw new ZWaveError(
-						"startLevelChange failed",
-						ZWaveErrorCodes.SupervisionCC_CommandFailed,
-					);
-				} else if (
-					supervisionResult?.status === SupervisionStatus.NoSupport
-				) {
-					// Remember that we shouldn't use supervision for that
-					valueDB.setValue(superviseValueId, false);
-					mayUseSupervision = false;
-				}
-			}
-		}
-		if (!mayUseSupervision) {
-			await this.applHost.sendCommand(cc);
-		}
+		// 		if (supervisionResult?.status === SupervisionStatus.Fail) {
+		// 			throw new ZWaveError(
+		// 				"startLevelChange failed",
+		// 				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+		// 			);
+		// 		} else if (
+		// 			supervisionResult?.status === SupervisionStatus.NoSupport
+		// 		) {
+		// 			// Remember that we shouldn't use supervision for that
+		// 			valueDB.setValue(superviseValueId, false);
+		// 			mayUseSupervision = false;
+		// 		}
+		// 	}
+		// }
+		// if (!mayUseSupervision) {
+		await this.applHost.sendCommand(cc);
+		// }
 	}
 
 	public async stopLevelChange(): Promise<void> {
@@ -228,40 +227,40 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		let mayUseSupervision: boolean;
-		if (this.endpoint.virtual) {
-			// We cannot use supervision when communicating with multiple nodes
-			mayUseSupervision = false;
-		} else {
-			// For singlecast, try to use supervision unless we know it is not supported
-			const valueDB = this.getValueDB();
-			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-			mayUseSupervision =
-				valueDB.getValue<boolean>(superviseValueId) !== false;
+		// let mayUseSupervision: boolean;
+		// if (this.endpoint.virtual) {
+		// 	// We cannot use supervision when communicating with multiple nodes
+		// 	mayUseSupervision = false;
+		// } else {
+		// 	// For singlecast, try to use supervision unless we know it is not supported
+		// 	const valueDB = this.getValueDB();
+		// 	const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+		// 	mayUseSupervision =
+		// 		valueDB.getValue<boolean>(superviseValueId) !== false;
 
-			if (mayUseSupervision) {
-				// Try to supervise the command execution
-				const supervisionResult =
-					await this.applHost.trySendCommandSupervised(cc);
+		// 	if (mayUseSupervision) {
+		// 		// Try to supervise the command execution
+		// 		const supervisionResult =
+		// 			await this.applHost.trySendCommandSupervised(cc);
 
-				if (supervisionResult?.status === SupervisionStatus.Fail) {
-					throw new ZWaveError(
-						"stopLevelChange failed",
-						ZWaveErrorCodes.SupervisionCC_CommandFailed,
-					);
-				} else if (
-					supervisionResult?.status === SupervisionStatus.NoSupport
-				) {
-					// Remember that we shouldn't use supervision for that
-					valueDB.setValue(superviseValueId, false);
-					mayUseSupervision = false;
-				}
-			}
-		}
+		// 		if (supervisionResult?.status === SupervisionStatus.Fail) {
+		// 			throw new ZWaveError(
+		// 				"stopLevelChange failed",
+		// 				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+		// 			);
+		// 		} else if (
+		// 			supervisionResult?.status === SupervisionStatus.NoSupport
+		// 		) {
+		// 			// Remember that we shouldn't use supervision for that
+		// 			valueDB.setValue(superviseValueId, false);
+		// 			mayUseSupervision = false;
+		// 		}
+		// 	}
+		// }
 
-		if (!mayUseSupervision) {
-			await this.applHost.sendCommand(cc);
-		}
+		// if (!mayUseSupervision) {
+		await this.applHost.sendCommand(cc);
+		// }
 	}
 
 	public async getSupported(): Promise<SwitchType | undefined> {
