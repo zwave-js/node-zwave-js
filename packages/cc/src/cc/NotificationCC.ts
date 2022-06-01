@@ -648,6 +648,8 @@ export class NotificationCC extends CommandClass {
 				// NotificationReports don't store their values themselves,
 				// because the behaviour is too complex and spans the lifetime
 				// of several reports. Thus we handle it in the Node instance
+
+				// @ts-expect-error
 				if (response) await node.handleCommand(response);
 			}
 		}
