@@ -35,9 +35,10 @@ export function createTestingHost(
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
+		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
-		getCompatConfig: undefined,
+		getDeviceConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {
 				return () => {
@@ -49,7 +50,7 @@ export function createTestingHost(
 		options: {
 			attempts: {
 				nodeInterview: 1,
-				openSerialPort: 1,
+				// openSerialPort: 1,
 				sendData: 3,
 				controller: 3,
 			},
@@ -79,6 +80,9 @@ export function createTestingHost(
 			}
 			return valueDBCache.get(nodeId)!;
 		},
+		tryGetValueDB: (nodeId) => {
+			return ret.getValueDB(nodeId);
+		},
 		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
 			const node = ret.nodes.get(nodeId);
 			const endpoint = node?.getEndpoint(endpointIndex);
@@ -102,6 +106,9 @@ export function createTestingHost(
 		},
 		sendCommand: async (_command, _options) => {
 			return undefined;
+		},
+		waitForCommand: async (_predicate, _timeout) => {
+			return undefined as any;
 		},
 		schedulePoll: (_nodeId, _valueId, _options) => {
 			return false;

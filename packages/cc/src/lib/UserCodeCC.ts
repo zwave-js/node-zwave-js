@@ -919,7 +919,7 @@ export class UserCodeCC extends CommandClass {
 		}
 
 		// Synchronize user codes and settings
-		if (applHost.options.interview.queryAllUserCodes) {
+		if (applHost.options.interview?.queryAllUserCodes) {
 			await this.refreshValues(applHost);
 		}
 

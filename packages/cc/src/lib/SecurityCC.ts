@@ -20,10 +20,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { FunctionType, gotDeserializationOptions } from "@zwave-js/serial";
+import { gotDeserializationOptions } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
-import { PhysicalCCAPI } from "./API";
+import { CCAPI, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -169,22 +169,15 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			nonce,
 		});
-		const SendDataConstructor =
-			this.applHost.controller.isFunctionSupported(
-				FunctionType.SendDataBridge,
-			)
-				? SendDataBridgeRequest
-				: SendDataRequest;
-		const msg = new SendDataConstructor(this.applHost, {
-			command: cc,
-			// Seems we need these options or some nodes won't accept the nonce
-			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
-			// Only try sending a nonce once
-			maxSendAttempts: 1,
-		});
+
 		try {
-			await this.applHost.sendMessage(msg, {
+			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
 				priority: MessagePriority.Nonce,
 				// We don't want failures causing us to treat the node as asleep or dead
@@ -300,7 +293,7 @@ export class SecurityCC extends CommandClass {
 
 		const resp = await api.getSupportedCommands();
 		if (!resp) {
-			if (node.securityClasses.get(SecurityClass.S0_Legacy) === true) {
+			if (node.hasSecurityClass(SecurityClass.S0_Legacy) === true) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
@@ -315,7 +308,7 @@ export class SecurityCC extends CommandClass {
 					node.id,
 					`The node was not granted the S0 security class. Continuing interview non-securely.`,
 				);
-				node.securityClasses.set(SecurityClass.S0_Legacy, false);
+				node.setSecurityClass(SecurityClass.S0_Legacy, false);
 			}
 			return;
 		}
@@ -352,7 +345,7 @@ export class SecurityCC extends CommandClass {
 
 		// We know for sure that the node is included securely
 		if (node.hasSecurityClass(SecurityClass.S0_Legacy) !== true) {
-			node.securityClasses.set(SecurityClass.S0_Legacy, true);
+			node.setSecurityClass(SecurityClass.S0_Legacy, true);
 			applHost.controllerLog.logNode(
 				node.id,
 				`The node was granted the S0 security class`,

@@ -35,6 +35,7 @@ import {
 } from "./CommandClass";
 import { VersionCommand } from "./_Types";
 
+/** @publicAPI */
 export function getFirmwareVersionsValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Version,
@@ -42,6 +43,7 @@ export function getFirmwareVersionsValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getFirmwareVersionsMetadata(): ValueMetadata {
 	return {
 		...ValueMetadata.ReadOnly,
@@ -50,6 +52,7 @@ export function getFirmwareVersionsMetadata(): ValueMetadata {
 	};
 }
 
+/** @publicAPI */
 export function getSDKVersionValueId(): ValueID {
 	return {
 		commandClass: CommandClasses.Version,
@@ -57,6 +60,7 @@ export function getSDKVersionValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getSDKVersionMetadata(): ValueMetadata {
 	return {
 		...ValueMetadata.ReadOnlyString,

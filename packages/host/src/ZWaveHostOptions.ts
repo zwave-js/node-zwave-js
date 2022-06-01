@@ -25,7 +25,7 @@ export interface ZWaveHostOptions {
 		nodeInterview: number; // [1...10], default: 5
 	};
 
-	interview: {
+	interview?: {
 		/**
 		 * Whether all user code should be queried during the interview of the UserCode CC.
 		 * Note that enabling this can cause a lot of traffic during the interview.
@@ -53,7 +53,7 @@ export interface ZWaveHostOptions {
 	 */
 	disableOptimisticValueUpdate?: boolean;
 
-	preferences: {
+	preferences?: {
 		/**
 		 * The preferred scales to use when querying sensors. The key is either:
 		 * - the name of a named scale group, e.g. "temperature", which applies to every sensor type that uses this scale group.

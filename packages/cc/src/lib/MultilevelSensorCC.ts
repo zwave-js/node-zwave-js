@@ -57,7 +57,7 @@ function getPreferredSensorScale(
 		applHost.configManager.lookupSensorType(sensorType)?.scales;
 	// If the sensor type is unknown, we have no default. Use the user-provided scale or 0
 	if (!scaleGroup) {
-		const preferred = applHost.options.preferences.scales[sensorType];
+		const preferred = applHost.options.preferences?.scales[sensorType];
 		// We cannot look up strings for unknown sensor types, so this must be a number or we use the fallback
 		if (typeof preferred !== "number") return 0;
 		return preferred;
@@ -67,10 +67,10 @@ function getPreferredSensorScale(
 	let preferred: number | string | undefined;
 	// Named scales apply to multiple sensor types. To be able to override the scale for single types
 	// we need to look at the preferences by sensor type first
-	preferred = applHost.options.preferences.scales[sensorType];
+	preferred = applHost.options.preferences?.scales[sensorType];
 	// If the scale is named, we can then try to use the named preference
 	if (preferred == undefined && scaleGroup.name) {
-		preferred = applHost.options.preferences.scales[scaleGroup.name];
+		preferred = applHost.options.preferences?.scales[scaleGroup.name];
 	}
 	// Then fall back to the first supported scale
 	if (preferred == undefined) {

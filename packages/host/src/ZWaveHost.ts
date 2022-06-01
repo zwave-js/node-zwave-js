@@ -10,10 +10,10 @@ import type {
 	SendCommandOptions,
 	ValueDB,
 	ValueID,
-	ZWaveHostOptions,
 	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ReadonlyThrowingMap } from "@zwave-js/shared";
+import type { ZWaveHostOptions } from "./ZWaveHostOptions";
 
 /** Host application abstractions to be used in Serial API and CC implementations */
 export interface ZWaveHost {

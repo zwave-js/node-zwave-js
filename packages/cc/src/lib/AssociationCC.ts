@@ -32,6 +32,7 @@ import {
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "./CommandClass";
+import * as ccUtils from "./utils";
 import { AssociationCommand, type AssociationAddress } from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
@@ -397,7 +398,7 @@ export class AssociationCC extends CommandClass {
 		}
 
 		// And set up lifeline associations
-		await endpoint.configureLifelineAssociations();
+		await ccUtils.configureLifelineAssociations(applHost, endpoint);
 
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);

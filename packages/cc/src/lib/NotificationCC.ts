@@ -43,6 +43,7 @@ import {
 	type CommandClassOptions,
 } from "./CommandClass";
 import { isNotificationEventPayload } from "./NotificationEventPayload";
+import * as ccUtils from "./utils";
 import { NotificationCommand, UserCodeCommand } from "./_Types";
 
 /** Returns the ValueID used to store whether a node supports V1 Alarms */
@@ -377,9 +378,10 @@ export class NotificationCC extends CommandClass {
 			if (
 				node.supportsCC(CommandClasses["Association Group Information"])
 			) {
-				const assocGroups = applHost.controller.getAssociationGroups({
-					nodeId: node.id,
-				});
+				const assocGroups = ccUtils.getAssociationGroups(
+					applHost,
+					node,
+				);
 				for (const group of assocGroups.values()) {
 					// Check if this group sends Notification Reports
 					if (

@@ -25,7 +25,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { FunctionType, gotDeserializationOptions } from "@zwave-js/serial";
+import { gotDeserializationOptions } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import { CCAPI } from "./API";
 import {
@@ -152,27 +152,19 @@ export class Security2CCAPI extends CCAPI {
 			receiverEI,
 		});
 
-		const SendDataConstructor =
-			this.applHost.controller.isFunctionSupported(
-				FunctionType.SendDataBridge,
-			)
-				? SendDataBridgeRequest
-				: SendDataRequest;
-		const msg = new SendDataConstructor(this.applHost, {
-			command: cc,
-			// Seems we need these options or some nodes won't accept the nonce
-			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
-			// Only try sending a nonce once
-			maxSendAttempts: 1,
-		});
-
 		try {
-			await this.applHost.sendMessage(msg, {
+			await this.applHost.sendCommand(cc, {
 				...this.commandOptions,
+				// Seems we need these options or some nodes won't accept the nonce
+				transmitOptions:
+					TransmitOptions.ACK | TransmitOptions.AutoRoute,
+				// Only try sending a nonce once
+				maxSendAttempts: 1,
 				// Nonce requests must be handled immediately
 				priority: MessagePriority.Nonce,
 				// We don't want failures causing us to treat the node as asleep or dead
 				changeNodeStatusOnMissingACK: false,
+				// And we need to react to
 			});
 		} catch (e) {
 			if (isTransmissionError(e)) {
@@ -447,7 +439,7 @@ export class Security2CC extends CommandClass {
 			if (supportedCCs == undefined) {
 				if (endpoint.index === 0) {
 					// No supported commands found, mark the security class as not granted
-					node.securityClasses.set(secClass, false);
+					node.setSecurityClass(secClass, false);
 
 					applHost.controllerLog.logNode(node.id, {
 						message: `The node was NOT granted the security class ${getEnumMemberName(
@@ -462,7 +454,7 @@ export class Security2CC extends CommandClass {
 
 			if (endpoint.index === 0) {
 				// Mark the security class as granted
-				node.securityClasses.set(secClass, true);
+				node.setSecurityClass(secClass, true);
 
 				applHost.controllerLog.logNode(node.id, {
 					message: `The node was granted the security class ${getEnumMemberName(

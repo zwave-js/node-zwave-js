@@ -26,6 +26,7 @@ import {
 } from "./CommandClass";
 import { DeviceIdType, ManufacturerSpecificCommand } from "./_Types";
 
+/** @publicAPI */
 export function getManufacturerIdValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Manufacturer Specific"],
@@ -33,6 +34,7 @@ export function getManufacturerIdValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getProductTypeValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Manufacturer Specific"],
@@ -40,6 +42,7 @@ export function getProductTypeValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getProductIdValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Manufacturer Specific"],
@@ -47,6 +50,7 @@ export function getProductIdValueId(): ValueID {
 	};
 }
 
+/** @publicAPI */
 export function getManufacturerIdValueMetadata(): ValueMetadata {
 	return {
 		...ValueMetadata.ReadOnlyUInt16,
@@ -54,6 +58,7 @@ export function getManufacturerIdValueMetadata(): ValueMetadata {
 	};
 }
 
+/** @publicAPI */
 export function getProductTypeValueMetadata(): ValueMetadata {
 	return {
 		...ValueMetadata.ReadOnlyUInt16,
@@ -61,6 +66,7 @@ export function getProductTypeValueMetadata(): ValueMetadata {
 	};
 }
 
+/** @publicAPI */
 export function getProductIdValueMetadata(): ValueMetadata {
 	return {
 		...ValueMetadata.ReadOnlyUInt16,

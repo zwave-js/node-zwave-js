@@ -17,6 +17,8 @@ export interface ZWaveNodeBase extends ZWaveEndpointBase, SecurityClassOwner {
 
 	getEndpoint(index: 0): ZWaveEndpointBase;
 	getEndpoint(index: number): ZWaveEndpointBase | undefined;
+	getEndpointOrThrow(index: number): ZWaveEndpointBase;
+	getAllEndpoints(): [ZWaveEndpointBase];
 	readonly isSecure: Maybe<boolean>;
 }
 
@@ -26,4 +28,5 @@ export interface VirtualNodeBase extends VirtualEndpointBase {
 
 	getEndpoint(index: 0): VirtualEndpointBase;
 	getEndpoint(index: number): VirtualEndpointBase | undefined;
+	getEndpointOrThrow(index: number): VirtualEndpointBase;
 }

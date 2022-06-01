@@ -29,7 +29,7 @@ import {
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "./CommandClass";
-import { decodeSetbackState, encodeSetbackState } from "./utils";
+import { decodeSetbackState, encodeSetbackState } from "./serializers";
 import { SetbackState, SetbackType, ThermostatSetbackCommand } from "./_Types";
 
 // @noSetValueAPI

@@ -29,6 +29,7 @@ import {
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "./CommandClass";
+import * as ccUtils from "./utils";
 import {
 	AssociationAddress,
 	EndpointAddress,
@@ -461,7 +462,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		await this.refreshValues(applHost);
 
 		// And set up lifeline associations
-		await endpoint.configureLifelineAssociations();
+		await ccUtils.configureLifelineAssociations(applHost, endpoint);
 
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);

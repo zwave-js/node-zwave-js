@@ -28,7 +28,7 @@ import {
 	decodeSwitchpoint,
 	encodeSetbackState,
 	encodeSwitchpoint,
-} from "./utils";
+} from "./serializers";
 import {
 	ClimateControlScheduleCommand,
 	ScheduleOverrideType,

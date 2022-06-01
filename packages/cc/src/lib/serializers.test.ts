@@ -5,7 +5,7 @@ import {
 	encodeSetbackState,
 	encodeSwitchpoint,
 	setbackSpecialStateValues,
-} from "./utils";
+} from "./serializers";
 
 describe("encodeSetbackState()", () => {
 	it("should return the defined values for the special states", () => {

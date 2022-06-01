@@ -41,6 +41,7 @@ import {
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "./CommandClass";
+import * as ccUtils from "./utils";
 import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 /** Returns the ValueID used to store the current value of a Central Scene */
@@ -215,9 +216,7 @@ export class CentralSceneCC extends CommandClass {
 				// We always grab the first group - usually it should be the lifeline
 				const groupId = groupsIssueingNotifications[0];
 				const existingAssociations =
-					applHost.controller
-						.getAssociations({ nodeId: node.id })
-						.get(groupId) ?? [];
+					ccUtils.getAssociations(applHost, node).get(groupId) ?? [];
 
 				if (
 					!existingAssociations.some(
@@ -230,11 +229,9 @@ export class CentralSceneCC extends CommandClass {
 							"Configuring associations to receive Central Scene notifications...",
 						direction: "outbound",
 					});
-					await applHost.controller.addAssociations(
-						{ nodeId: node.id },
-						groupId,
-						[{ nodeId: applHost.ownNodeId }],
-					);
+					await ccUtils.addAssociations(applHost, node, groupId, [
+						{ nodeId: applHost.ownNodeId },
+					]);
 				}
 			}
 		}

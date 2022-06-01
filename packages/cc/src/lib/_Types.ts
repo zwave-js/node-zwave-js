@@ -8,6 +8,7 @@ import type {
 } from "@zwave-js/core/safe";
 import type { NotificationCCReport } from "./NotificationCC";
 
+/** @publicAPI */
 export enum AlarmSensorCommand {
 	Get = 0x01,
 	Report = 0x02,
@@ -33,6 +34,7 @@ export type AlarmSensorValueMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum AssociationCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -55,6 +57,7 @@ export enum AssociationCommand {
 	//   association group that represents the most recently detected button
 }
 
+/** @publicAPI */
 export enum AssociationGroupInfoCommand {
 	NameGet = 0x01,
 	NameReport = 0x02,
@@ -263,6 +266,7 @@ export interface AssociationGroup {
 	issuedCommands?: ReadonlyMap<CommandClasses, readonly number[]>;
 }
 
+/** @publicAPI */
 export enum BarrierOperatorCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -295,6 +299,7 @@ export enum SubsystemState {
 	On = 0xff,
 }
 
+/** @publicAPI */
 export enum BasicCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -315,6 +320,7 @@ export enum BatteryReplacementStatus {
 	Now = 0x02,
 }
 
+/** @publicAPI */
 export enum BatteryCommand {
 	Get = 0x02,
 	Report = 0x03,
@@ -322,6 +328,7 @@ export enum BatteryCommand {
 	HealthReport = 0x05,
 }
 
+/** @publicAPI */
 export enum BinarySensorCommand {
 	Get = 0x02,
 	Report = 0x03,
@@ -354,12 +361,14 @@ export type BinarySensorValueMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum BinarySwitchCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum CentralSceneCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
@@ -380,6 +389,7 @@ export enum CentralSceneKeys {
 	KeyPressed5x = 0x06,
 }
 
+/** @publicAPI */
 export enum ClimateControlScheduleCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -398,6 +408,7 @@ export enum ScheduleOverrideType {
 	Permanent = 0x02,
 }
 
+/** @publicAPI */
 export enum ClockCommand {
 	Set = 0x04,
 	Get = 0x05,
@@ -416,6 +427,7 @@ export enum Weekday {
 	Sunday = 0x07,
 }
 
+/** @publicAPI */
 export enum ColorSwitchCommand {
 	SupportedGet = 0x01,
 	SupportedReport = 0x02,
@@ -439,6 +451,7 @@ export enum ColorComponent {
 	Index,
 }
 
+/** @publicAPI */
 export const ColorComponentMap = {
 	warmWhite: ColorComponent["Warm White"],
 	coldWhite: ColorComponent["Cold White"],
@@ -460,6 +473,7 @@ export type ColorTable =
 	| Partial<Record<ColorKey, number>>
 	| Partial<Record<ColorComponent, number>>;
 
+/** @publicAPI */
 export enum ConfigurationCommand {
 	Set = 0x04,
 	Get = 0x05,
@@ -479,14 +493,17 @@ export enum ConfigurationCommand {
 /** @publicAPI */
 export type { ConfigValue } from "@zwave-js/core/safe";
 
+/** @publicAPI */
 export enum CRC16Command {
 	CommandEncapsulation = 0x01,
 }
 
+/** @publicAPI */
 export enum DeviceResetLocallyCommand {
 	Notification = 0x01,
 }
 
+/** @publicAPI */
 export enum DoorLockCommand {
 	OperationSet = 0x01,
 	OperationGet = 0x02,
@@ -549,6 +566,7 @@ export enum EntryControlEventTypes {
 	Cancel = 0x19,
 }
 
+/** @publicAPI */
 export enum DoorLockLoggingCommand {
 	RecordsSupportedGet = 0x01,
 	RecordsSupportedReport = 0x02,
@@ -655,6 +673,7 @@ export enum RecordStatus {
 	HoldsLegalData = 0x01,
 }
 
+/** @publicAPI */
 export enum EntryControlCommand {
 	Notification = 0x01,
 	KeySupportedGet = 0x02,
@@ -691,6 +710,7 @@ export type ZWaveNotificationCallbackParams_EntryControlCC = [
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
 
+/** @publicAPI */
 export enum FirmwareUpdateMetaDataCommand {
 	MetaDataGet = 0x01,
 	MetaDataReport = 0x02,
@@ -773,10 +793,12 @@ export type FirmwareUpdateCapabilities =
 			readonly supportsActivation: Maybe<boolean>;
 	  };
 
+/** @publicAPI */
 export enum HailCommand {
 	Hail = 0x01,
 }
 
+/** @publicAPI */
 export enum HumidityControlModeCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -793,6 +815,7 @@ export enum HumidityControlMode {
 	"Auto" = 0x03,
 }
 
+/** @publicAPI */
 export enum HumidityControlOperatingStateCommand {
 	Get = 0x01,
 	Report = 0x02,
@@ -805,6 +828,7 @@ export enum HumidityControlOperatingState {
 	"De-humidifying" = 0x02,
 }
 
+/** @publicAPI */
 export enum HumidityControlSetpointCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -846,6 +870,7 @@ export type HumidityControlSetpointMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum IndicatorCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -862,6 +887,7 @@ export type IndicatorMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum IrrigationCommand {
 	SystemInfoGet = 0x01,
 	SystemInfoReport = 0x02,
@@ -904,18 +930,21 @@ export interface ValveTableEntry {
 	duration: number;
 }
 
+/** @publicAPI */
 export enum LanguageCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum LockCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum ManufacturerSpecificCommand {
 	Get = 0x04,
 	Report = 0x05,
@@ -930,6 +959,7 @@ export enum DeviceIdType {
 	PseudoRandom = 0x02,
 }
 
+/** @publicAPI */
 export enum MeterCommand {
 	Get = 0x01,
 	Report = 0x02,
@@ -954,6 +984,7 @@ export type MeterMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum MultiChannelAssociationCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -975,11 +1006,13 @@ export interface AssociationAddress {
  */
 export type Association = AssociationAddress;
 
+/** @publicAPI */
 export interface EndpointAddress {
 	nodeId: number;
 	endpoint: number | number[];
 }
 
+/** @publicAPI */
 export enum MultiChannelCommand {
 	// Legacy commands for V1 (Multi Instance)
 	GetV1 = 0x04,
@@ -998,10 +1031,12 @@ export enum MultiChannelCommand {
 	AggregatedMembersReport = 0x0f,
 }
 
+/** @publicAPI */
 export enum MultiCommandCommand {
 	CommandEncapsulation = 0x01,
 }
 
+/** @publicAPI */
 export enum MultilevelSensorCommand {
 	GetSupportedSensor = 0x01,
 	SupportedSensorReport = 0x02,
@@ -1085,6 +1120,7 @@ export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
 
+/** @publicAPI */
 export enum NodeNamingAndLocationCommand {
 	NameSet = 0x01,
 	NameGet = 0x02,
@@ -1094,6 +1130,7 @@ export enum NodeNamingAndLocationCommand {
 	LocationReport = 0x06,
 }
 
+/** @publicAPI */
 export enum NotificationCommand {
 	EventSupportedGet = 0x01,
 	EventSupportedReport = 0x02,
@@ -1135,6 +1172,7 @@ export type ZWaveNotificationCallbackParams_NotificationCC = [
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
 
+/** @publicAPI */
 export enum PowerlevelCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1185,6 +1223,7 @@ export type ZWaveNotificationCallbackParams_PowerlevelCC = [
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
 
+/** @publicAPI */
 export enum ProtectionCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1213,22 +1252,26 @@ export enum RFProtectionState {
 	NoResponse = 2,
 }
 
+/** @publicAPI */
 export enum SceneActivationCommand {
 	Set = 0x01,
 }
 
+/** @publicAPI */
 export enum SceneActuatorConfigurationCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum SceneControllerConfigurationCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum Security2Command {
 	NonceGet = 0x01,
 	NonceReport = 0x02,
@@ -1246,6 +1289,7 @@ export enum Security2Command {
 	CommandsSupportedReport = 0x0e,
 }
 
+/** @publicAPI */
 export enum SecurityCommand {
 	CommandsSupportedGet = 0x02,
 	CommandsSupportedReport = 0x03,
@@ -1260,6 +1304,7 @@ export enum SecurityCommand {
 	CommandEncapsulationNonceGet = 0xc1,
 }
 
+/** @publicAPI */
 export enum SoundSwitchCommand {
 	TonesNumberGet = 0x01,
 	TonesNumberReport = 0x02,
@@ -1279,6 +1324,7 @@ export enum ToneId {
 	Default = 0xff,
 }
 
+/** @publicAPI */
 export enum SupervisionCommand {
 	Get = 0x01,
 	Report = 0x02,
@@ -1298,6 +1344,7 @@ export interface SupervisionResult {
 	remainingDuration?: Duration;
 }
 
+/** @publicAPI */
 export enum ThermostatFanModeCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1322,6 +1369,7 @@ export enum ThermostatFanMode {
 	"External circulation" = 0x0b,
 }
 
+/** @publicAPI */
 export enum ThermostatFanStateCommand {
 	Get = 0x02,
 	Report = 0x03,
@@ -1340,6 +1388,7 @@ export enum ThermostatFanState {
 	"Quiet circulation mode" = 0x08,
 }
 
+/** @publicAPI */
 export enum ThermostatModeCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1368,6 +1417,7 @@ export enum ThermostatMode {
 	"Manufacturer specific" = 0x1f,
 }
 
+/** @publicAPI */
 export enum ThermostatOperatingStateCommand {
 	Get = 0x02,
 	Report = 0x03,
@@ -1394,6 +1444,7 @@ export enum ThermostatOperatingState {
 	"3rd Stage Aux Heat" = 0x0b,
 }
 
+/** @publicAPI */
 export enum ThermostatSetbackCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1416,12 +1467,14 @@ export type SetbackSpecialState =
 /** @publicAPI */
 export type SetbackState = number | SetbackSpecialState;
 
+/** @publicAPI */
 export interface Switchpoint {
 	hour: number;
 	minute: number;
 	state: SetbackState | undefined;
 }
 
+/** @publicAPI */
 export enum ThermostatSetpointCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1469,6 +1522,7 @@ export type ThermostatSetpointMetadata = ValueMetadata & {
 	};
 };
 
+/** @publicAPI */
 export enum TimeCommand {
 	TimeGet = 0x01,
 	TimeReport = 0x02,
@@ -1479,12 +1533,14 @@ export enum TimeCommand {
 	TimeOffsetReport = 0x07,
 }
 
+/** @publicAPI */
 export enum TimeParametersCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
 }
 
+/** @publicAPI */
 export enum TransportServiceCommand {
 	FirstSegment = 0xc0,
 	SegmentComplete = 0xe8,
@@ -1493,6 +1549,7 @@ export enum TransportServiceCommand {
 	SubsequentSegment = 0xe0,
 }
 
+/** @publicAPI */
 export enum UserCodeCommand {
 	Set = 0x01,
 	Get = 0x02,
@@ -1533,6 +1590,7 @@ export enum KeypadMode {
 	LockedOut,
 }
 
+/** @publicAPI */
 export enum VersionCommand {
 	Get = 0x11,
 	Report = 0x12,
@@ -1544,6 +1602,7 @@ export enum VersionCommand {
 	ZWaveSoftwareReport = 0x18,
 }
 
+/** @publicAPI */
 export enum WakeUpCommand {
 	IntervalSet = 0x04,
 	IntervalGet = 0x05,
@@ -1554,6 +1613,7 @@ export enum WakeUpCommand {
 	IntervalCapabilitiesReport = 0x0a,
 }
 
+/** @publicAPI */
 export enum ZWavePlusCommand {
 	Get = 0x01,
 	Report = 0x02,
