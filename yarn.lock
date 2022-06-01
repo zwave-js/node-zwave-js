@@ -5,12 +5,12 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@actions/core@npm:^1.7.0":
-  version: 1.7.0
-  resolution: "@actions/core@npm:1.7.0"
+"@actions/core@npm:^1.8.2":
+  version: 1.8.2
+  resolution: "@actions/core@npm:1.8.2"
   dependencies:
-    "@actions/http-client": ^1.0.11
-  checksum: 91ea8a5dd88e779bc1140f205e7b2bd5d1395aaa3634e72515f8a6a2c87cb7d241fb6bf2f0e2b2a3550e6404a8f9502dada56527618e4a3823abf040dff83f92
+    "@actions/http-client": ^2.0.1
+  checksum: 1cd1a47f751501900a579e641565bbe13a09d626507a4fa46b51e6a959a74a89134490ae7311570ed8ec1735ada83bcfde81a456ea4d2e24e323c16e94e39fd1
   languageName: node
   linkType: hard
 
@@ -32,15 +32,6 @@ __metadata:
     "@octokit/plugin-paginate-rest": ^2.17.0
     "@octokit/plugin-rest-endpoint-methods": ^5.13.0
   checksum: 1d8e8c5c351dd069a96b1ec39c8f609a2bbcb135d69bb8d9bb5c00752bdff81ec6d67ca90eb77dedc657cd630af484538f881c16eb5b008fd3ee5f430d0c38d2
-  languageName: node
-  linkType: hard
-
-"@actions/http-client@npm:^1.0.11":
-  version: 1.0.11
-  resolution: "@actions/http-client@npm:1.0.11"
-  dependencies:
-    tunnel: 0.0.6
-  checksum: 2c72834ec36a121ae95d2cb61fd28234eae2ab265a2aefe857a9eeb788ea77b284ad727ecd3c67fefd1920d5f2800b6c1ba6916b39d44f81f293b4b0020d367c
   languageName: node
   linkType: hard
 
@@ -3809,7 +3800,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/repo@workspace:."
   dependencies:
-    "@actions/core": ^1.7.0
+    "@actions/core": ^1.8.2
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
     "@alcalzone/jsonl-db": ^2.5.2
@@ -9841,7 +9832,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tunnel@npm:0.0.6, tunnel@npm:^0.0.6":
+"tunnel@npm:^0.0.6":
   version: 0.0.6
   resolution: "tunnel@npm:0.0.6"
   checksum: c362948df9ad34b649b5585e54ce2838fa583aa3037091aaed66793c65b423a264e5229f0d7e9a95513a795ac2bd4cb72cda7e89a74313f182c1e9ae0b0994fa
