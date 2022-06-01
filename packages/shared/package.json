@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^27.5.1",
     "@types/node": "^14.18.16",
     "esbuild": "0.14.42",
     "esbuild-register": "^3.3.2",
