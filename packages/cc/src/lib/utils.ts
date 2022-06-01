@@ -9,18 +9,18 @@ import {
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { CCAPI } from "./API";
 import {
 	AssociationCC,
 	getHasLifelineValueId,
 	getLifelineGroupIds,
-} from "./AssociationCC";
-import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
+} from "../cc/AssociationCC";
+import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
 import {
 	getEndpointsValueId,
 	getNodeIdsValueId,
 	MultiChannelAssociationCC,
-} from "./MultiChannelAssociationCC";
+} from "../cc/MultiChannelAssociationCC";
+import { CCAPI } from "./API";
 import type {
 	AssociationAddress,
 	AssociationGroup,

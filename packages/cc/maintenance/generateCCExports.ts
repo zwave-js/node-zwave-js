@@ -14,7 +14,7 @@ import * as path from "path";
 import ts from "typescript";
 
 // Define where the CC index file is located
-const ccIndexFile = path.join(projectRoot, "src/lib/index.ts");
+const ccIndexFile = path.join(projectRoot, "src/cc/index.ts");
 
 function hasPublicAPIComment(
 	node: ts.Node,
@@ -64,8 +64,8 @@ function findExports() {
 		// Only look at files in this package
 		if (relativePath.startsWith("..")) continue;
 
-		// Only look at the lib dir
-		if (!relativePath.includes("src/lib/")) {
+		// Only look at the cc dir
+		if (!relativePath.includes("src/cc/")) {
 			continue;
 		}
 		// Ignore test files and the index
@@ -191,7 +191,9 @@ export async function generateCCExports(): Promise<void> {
 	}
 
 	// And write the file if it changed
-	const originalFileContent = await fs.readFile(ccIndexFile, "utf8");
+	const originalFileContent = (await fs.pathExists(ccIndexFile))
+		? await fs.readFile(ccIndexFile, "utf8")
+		: "";
 	fileContent = formatWithPrettier(ccIndexFile, fileContent);
 	if (fileContent !== originalFileContent) {
 		console.log("CC index file changed");

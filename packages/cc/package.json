@@ -10,13 +10,17 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
+    "./safe": "./build/index_safe.js",
+    "./cc/*": "./build/cc/*.js"
   },
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
       "safe": [
         "build/index_safe.d.ts"
+      ],
+      "cc/*": [
+        "build/cc/*.d.ts"
       ]
     }
   },

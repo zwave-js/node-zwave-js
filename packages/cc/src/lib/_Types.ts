@@ -6,7 +6,7 @@ import type {
 	ValueMetadata,
 	ZWaveNodeBase,
 } from "@zwave-js/core/safe";
-import type { NotificationCCReport } from "./NotificationCC";
+import type { NotificationCCReport } from "../cc/NotificationCC";
 
 /** @publicAPI */
 export enum AlarmSensorCommand {
