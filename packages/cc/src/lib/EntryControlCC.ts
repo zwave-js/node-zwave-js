@@ -179,14 +179,13 @@ export class EntryControlCCAPI extends CCAPI {
 		if (typeof value !== "number") {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
 
 		let keyCacheSize = value;
 		let keyCacheTimeout = 2;
 		if (property === "keyCacheTimeout") {
 			keyCacheTimeout = value;
 
-			const oldKeyCacheSize = valueDB.getValue<number>(
+			const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
 				getKeyCacheSizeStateValueID(this.endpoint.index),
 			);
 			if (oldKeyCacheSize == undefined) {
@@ -332,9 +331,9 @@ export class EntryControlCCNotification extends EntryControlCC {
 			// But as always - manufacturers don't care and send ASCII data with 0 bytes...
 
 			// We also need to disable the strict validation for some devices to make them work
-			const noStrictValidation = !!this.host.getCompatConfig?.(
+			const noStrictValidation = !!this.host.getDeviceConfig?.(
 				this.nodeId as number,
-			)?.disableStrictEntryControlDataValidation;
+			)?.compat?.disableStrictEntryControlDataValidation;
 
 			const eventData = Buffer.from(
 				this.payload.slice(offset, offset + eventDataLength),

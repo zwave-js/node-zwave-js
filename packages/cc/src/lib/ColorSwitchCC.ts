@@ -7,6 +7,7 @@ import {
 	MessageRecord,
 	parseBitMask,
 	validatePayload,
+	ValueDB,
 	ValueID,
 	ValueMetadata,
 	ZWaveError,
@@ -200,11 +201,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 		// TODO: The API methods should not modify the value DB directly, but to do so
 		// this requires a nicer way of synchronizing hexColor with the others
 		if (this.isSinglecast()) {
-			const node = this.endpoint.getNodeUnsafe();
-			if (node) {
-				// Update each color component separately and record the changes to the compound value
-				this.updateCurrentColor(node, cc.colorTable);
-			}
+			// Update each color component separately and record the changes to the compound value
+			this.updateCurrentColor(this.getValueDB(), cc.colorTable);
 		} else if (this.isMulticast()) {
 			// Figure out which nodes were affected by this command
 			const affectedNodes = this.endpoint.node.physicalNodes.filter(
@@ -215,14 +213,16 @@ export class ColorSwitchCCAPI extends CCAPI {
 			);
 			// and optimistically update the currentColor
 			for (const node of affectedNodes) {
-				this.updateCurrentColor(node, cc.colorTable);
+				const valueDB = this.applHost.tryGetValueDB(node.id);
+				if (valueDB) {
+					this.updateCurrentColor(valueDB, cc.colorTable);
+				}
 			}
 		}
 	}
 
 	/** Updates the current color for a given node by merging in the given changes */
-	private updateCurrentColor(node: ZWaveNode, colorTable: ColorTable) {
-		const valueDB = node.valueDB;
+	private updateCurrentColor(valueDB: ValueDB, colorTable: ColorTable) {
 		let updatedRGB = false;
 		const currentCompoundValue =
 			valueDB.getValue<Partial<Record<ColorKey, number>>>(
@@ -371,8 +371,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 				// GH#2527: strip unsupported color components, because some devices don't react otherwise
 				if (this.isSinglecast()) {
-					const node = this.endpoint.getNodeUnsafe();
-					const supportedColors = node?.getValue<
+					const supportedColors = this.tryGetValueDB()?.getValue<
 						readonly ColorComponent[]
 					>(getSupportedColorComponentsValueID(this.endpoint.index));
 					if (supportedColors) {

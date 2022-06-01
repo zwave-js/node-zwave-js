@@ -194,13 +194,11 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			} as DoorLockCCConfigurationSetOptions;
 			for (const param of configurationSetParameters) {
 				if (param !== property) {
-					(config as any)[param] = this.endpoint
-						.getNodeUnsafe()
-						?.valueDB.getValue({
-							commandClass: this.ccId,
-							endpoint: this.endpoint.index,
-							property: param,
-						});
+					(config as any)[param] = this.tryGetValueDB()?.getValue({
+						commandClass: this.ccId,
+						endpoint: this.endpoint.index,
+						property: param,
+					});
 				}
 			}
 

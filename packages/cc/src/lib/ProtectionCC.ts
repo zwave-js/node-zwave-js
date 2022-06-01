@@ -108,10 +108,9 @@ export class ProtectionCCAPI extends CCAPI {
 				return this.version >= 2 && this.isSinglecast();
 			case ProtectionCommand.TimeoutGet:
 			case ProtectionCommand.TimeoutSet: {
-				const node = this.endpoint.getNodeUnsafe()!;
 				return (
 					this.isSinglecast() &&
-					(node.getValue<Maybe<boolean>>(
+					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
 						getSupportsTimeoutValueID(this.endpoint.index),
 					) ??
 						unknownBoolean)
@@ -119,10 +118,9 @@ export class ProtectionCCAPI extends CCAPI {
 			}
 			case ProtectionCommand.ExclusiveControlGet:
 			case ProtectionCommand.ExclusiveControlSet: {
-				const node = this.endpoint.getNodeUnsafe()!;
 				return (
 					this.isSinglecast() &&
-					(node.getValue<Maybe<boolean>>(
+					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
 						getSupportsExclusiveControlValueID(this.endpoint.index),
 					) ??
 						unknownBoolean)
@@ -136,7 +134,7 @@ export class ProtectionCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+		const valueDB = this.tryGetValueDB();
 		if (property === "local") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -147,7 +145,7 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
-			const rf = valueDB.getValue<RFProtectionState>(
+			const rf = valueDB?.getValue<RFProtectionState>(
 				getRFStateValueID(this.endpoint.index),
 			);
 			await this.set(value, rf);
@@ -161,7 +159,7 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
-			const local = valueDB.getValue<LocalProtectionState>(
+			const local = valueDB?.getValue<LocalProtectionState>(
 				getLocalStateValueID(this.endpoint.index),
 			);
 			await this.set(local ?? LocalProtectionState.Unprotected, value);

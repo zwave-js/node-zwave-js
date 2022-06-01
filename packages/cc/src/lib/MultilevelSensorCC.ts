@@ -162,9 +162,8 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			property,
 		};
-		const ccSpecific = this.endpoint
-			.getNodeUnsafe()
-			?.valueDB.getMetadata(valueId)?.ccSpecific;
+		const ccSpecific =
+			this.tryGetValueDB()?.getMetadata(valueId)?.ccSpecific;
 		if (!ccSpecific) {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -199,7 +198,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		let preferredScale: number | undefined;
 		if (sensorType != undefined && scale == undefined) {
 			const supportedScales: readonly number[] =
-				this.endpoint.getNodeUnsafe()?.getValue({
+				this.tryGetValueDB()?.getValue({
 					commandClass: this.ccId,
 					endpoint: this.endpoint.index,
 					property: "supportedScales",
@@ -543,9 +542,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		);
 
 		// Filter out unknown sensor types and scales, unless the strict validation is disabled
-		const measurementValidation = !this.host.getCompatConfig?.(
+		const measurementValidation = !this.host.getDeviceConfig?.(
 			this.nodeId as number,
-		)?.disableStrictMeasurementValidation;
+		)?.compat?.disableStrictMeasurementValidation;
 
 		if (measurementValidation) {
 			validatePayload.withReason(

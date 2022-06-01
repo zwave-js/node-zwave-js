@@ -163,14 +163,12 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				// 3. default value
 				const dimmingDuration =
 					Duration.from(options?.transitionDuration) ??
-					this.endpoint
-						.getNodeUnsafe()!
-						.getValue<Duration>(
-							getDimmingDurationValueID(
-								this.endpoint.index,
-								propertyKey,
-							),
-						) ??
+					this.tryGetValueDB()?.getValue<Duration>(
+						getDimmingDurationValueID(
+							this.endpoint.index,
+							propertyKey,
+						),
+					) ??
 					new Duration(0, "default");
 				await this.set(propertyKey, value, dimmingDuration);
 			}
@@ -196,19 +194,20 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 				);
 			}
 
-			const node = this.endpoint.getNodeUnsafe()!;
-			const sceneId = node.getValue<number>(
+			const valueDB = this.tryGetValueDB();
+			const sceneId = valueDB?.getValue<number>(
 				getSceneIdValueID(this.endpoint.index, propertyKey),
 			);
 			if (sceneId == undefined || sceneId === 0) {
-				// Can't actually send dimmingDuration without valid sceneId
-				// So we save it in the valueDB without sending it to the node
-				const dimmingDurationValueId = getDimmingDurationValueID(
-					this.endpoint.index,
-					propertyKey,
-				);
-				const valueDB = node.valueDB;
-				valueDB.setValue(dimmingDurationValueId, dimmingDuration);
+				if (valueDB) {
+					// Can't actually send dimmingDuration without valid sceneId
+					// So we save it in the valueDB without sending it to the node
+					const dimmingDurationValueId = getDimmingDurationValueID(
+						this.endpoint.index,
+						propertyKey,
+					);
+					valueDB.setValue(dimmingDurationValueId, dimmingDuration);
+				}
 				return;
 			}
 
@@ -473,7 +472,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 		endpoint: ZWaveEndpointBase,
 	): number {
 		return (
-			applHost.getCompatConfig?.(endpoint.nodeId)
+			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
 				?.forceSceneControllerGroupCount ??
 			AssociationCC.getGroupCountCached(applHost, endpoint) ??
 			0

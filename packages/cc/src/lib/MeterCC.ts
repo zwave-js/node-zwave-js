@@ -151,8 +151,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			case MeterCommand.SupportedGet:
 				return this.version >= 2;
 			case MeterCommand.Reset: {
-				const node = this.endpoint.getNodeUnsafe()!;
-				const ret = node.getValue<boolean>({
+				const ret = this.tryGetValueDB()?.getValue<boolean>({
 					commandClass: getCommandClass(this),
 					endpoint: this.endpoint.index,
 					property: "supportsReset",
@@ -227,15 +226,15 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getAll() {
-		const node = this.endpoint.getNodeUnsafe()!;
+		const valueDB = this.tryGetValueDB();
 
 		if (this.version >= 2) {
 			const supportedScales =
-				node.getValue<number[]>(
+				valueDB?.getValue<number[]>(
 					getSupportedScalesValueId(this.endpoint.index),
 				) ?? [];
 			const supportedRateTypes =
-				node.getValue<RateType[]>(
+				valueDB?.getValue<RateType[]>(
 					getSupportedRateTypesValueId(this.endpoint.index),
 				) ?? [];
 
@@ -410,6 +409,7 @@ supports reset:       ${suppResp.supportsReset}`;
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB(applHost);
 
 		if (this.version === 1) {
 			applHost.controllerLog.logNode(node.id, {
@@ -420,12 +420,13 @@ supports reset:       ${suppResp.supportsReset}`;
 			await api.get();
 		} else {
 			const type: number =
-				node.getValue(getTypeValueId(this.endpointIndex)) ?? 0;
+				valueDB.getValue(getTypeValueId(this.endpointIndex)) ?? 0;
 			const supportedScales: readonly number[] =
-				node.getValue(getSupportedScalesValueId(this.endpointIndex)) ??
-				[];
+				valueDB.getValue(
+					getSupportedScalesValueId(this.endpointIndex),
+				) ?? [];
 			const supportedRateTypes: readonly RateType[] =
-				node.getValue(
+				valueDB.getValue(
 					getSupportedRateTypesValueId(this.endpointIndex),
 				) ?? [];
 
@@ -558,9 +559,9 @@ export class MeterCCReport extends MeterCC {
 		);
 
 		// Filter out unknown meter types and scales, unless the strict validation is disabled
-		const measurementValidation = !this.host.getCompatConfig?.(
+		const measurementValidation = !this.host.getDeviceConfig?.(
 			this.nodeId as number,
-		)?.disableStrictMeasurementValidation;
+		)?.compat?.disableStrictMeasurementValidation;
 
 		if (measurementValidation) {
 			validatePayload.withReason(

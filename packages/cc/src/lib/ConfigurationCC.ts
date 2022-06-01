@@ -19,6 +19,8 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
+	VirtualEndpointBase,
+	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -117,20 +119,25 @@ type NormalizedConfigurationCCAPISetOptions = {
 	| { bitMask: number; value: number }
 );
 
+function createConfigurationCCInstance(
+	applHost: ZWaveApplicationHost,
+	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
+): ConfigurationCC {
+	return CommandClass.createInstanceUnchecked(
+		applHost,
+		endpoint.virtual ? endpoint.node.physicalNodes[0] : endpoint,
+		ConfigurationCC,
+	)!;
+}
+
 function normalizeConfigurationCCAPISetOptions(
 	applHost: ZWaveApplicationHost,
-	endpoint: Endpoint | VirtualEndpoint,
+	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
 	if ("bitMask" in options && options.bitMask) {
 		// Variant 3: Partial param, look it up in the device config
-		// TODO: This is fucking ugly
-		const ccc =
-			endpoint instanceof Endpoint
-				? endpoint.createCCInstance(ConfigurationCC)!
-				: endpoint.node.physicalNodes[0].createCCInstance(
-						ConfigurationCC,
-				  )!;
+		const ccc = createConfigurationCCInstance(applHost, endpoint);
 		const paramInfo = ccc.getParamInformation(
 			applHost,
 			options.parameter,
@@ -159,13 +166,7 @@ function normalizeConfigurationCCAPISetOptions(
 		]);
 	} else {
 		// Variant 1: Normal parameter, defined in a config file
-		// TODO: This is fucking ugly
-		const ccc =
-			endpoint instanceof Endpoint
-				? endpoint.createCCInstance(ConfigurationCC)!
-				: endpoint.node.physicalNodes[0].createCCInstance(
-						ConfigurationCC,
-				  )!;
+		const ccc = createConfigurationCCInstance(applHost, endpoint);
 		const paramInfo = ccc.getParamInformation(
 			applHost,
 			options.parameter,
@@ -188,7 +189,7 @@ function normalizeConfigurationCCAPISetOptions(
 
 function bulkMergePartialParamValues(
 	applHost: ZWaveApplicationHost,
-	endpoint: Endpoint | VirtualEndpoint,
+	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
 	// Merge partial parameters before doing anything else. Therefore, take the non-partials, ...
@@ -206,13 +207,7 @@ function bulkMergePartialParamValues(
 	}
 	// and push the merged result into the array we'll be working with
 	if (unmergedPartials.size) {
-		const ccc =
-			endpoint instanceof Endpoint
-				? endpoint.createCCInstance(ConfigurationCC)!
-				: endpoint.node.physicalNodes[0].createCCInstance(
-						ConfigurationCC,
-				  )!;
-
+		const ccc = createConfigurationCCInstance(applHost, endpoint);
 		for (const [parameter, partials] of unmergedPartials) {
 			allParams.push({
 				parameter,
@@ -299,7 +294,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		const applHost = this.applHost;
 
 		if (this.isSinglecast()) {
-			ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+			ccInstance = createConfigurationCCInstance(
+				this.applHost,
+				this.endpoint,
+			);
 		} else if (this.isMulticast()) {
 			// Multicast is only possible if the parameter definition is the same on all target nodes
 			const nodes = this.endpoint.node.physicalNodes;
@@ -317,10 +315,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			}
 			// Figure out if all the relevant info is the same
 			const paramInfos = this.endpoint.node.physicalNodes.map((node) =>
-				node
-					.getEndpoint(this.endpoint.index)!
-					.createCCInstance(ConfigurationCC)!
-					.getParamInformation(this.applHost, property, propertyKey),
+				createConfigurationCCInstance(
+					this.applHost,
+					node.getEndpoint(this.endpoint.index)!,
+				).getParamInformation(this.applHost, property, propertyKey),
 			);
 			if (
 				!paramInfos.length ||
@@ -338,9 +336,10 @@ export class ConfigurationCCAPI extends CCAPI {
 				);
 			}
 			// If it is, just use the first node to create the CC instance
-			ccInstance = this.endpoint.node.physicalNodes[0]
-				.getEndpoint(this.endpoint.index)!
-				.createCCInstance(ConfigurationCC)!;
+			ccInstance = createConfigurationCCInstance(
+				this.applHost,
+				this.endpoint,
+			);
 		} else {
 			throw new ZWaveError(
 				`The setValue API for Configuration CC is not supported via broadcast!`,
@@ -566,7 +565,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		}
 
 		// Combine the returned values with the requested ones
-		const cc = this.endpoint.createCCInstance(ConfigurationCC)!;
+		const cc = createConfigurationCCInstance(this.applHost, this.endpoint);
 		return options.map((o) => {
 			let value = values.get(o.parameter);
 			if (typeof value === "number" && o.bitMask) {
@@ -629,12 +628,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 			let value = options.value;
 			if (options.bitMask) {
-				const ccc =
-					this.endpoint instanceof Endpoint
-						? this.endpoint.createCCInstance(ConfigurationCC)!
-						: this.endpoint.node.physicalNodes[0].createCCInstance(
-								ConfigurationCC,
-						  )!;
+				const ccc = createConfigurationCCInstance(
+					this.applHost,
+					this.endpoint,
+				);
 				value = ccc.composePartialParamValue(
 					this.applHost,
 					options.parameter,
@@ -905,7 +902,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			this.endpoint.nodeId,
 			`Scanning available parameters...`,
 		);
-		const ccInstance = this.endpoint.createCCInstance(ConfigurationCC)!;
+		const ccInstance = createConfigurationCCInstance(
+			this.applHost,
+			this.endpoint,
+		);
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
@@ -977,14 +977,15 @@ export class ConfigurationCC extends CommandClass {
 			direction: "none",
 		});
 
-		const config = node.deviceConfig?.paramInformation;
-		if (config) {
+		const deviceConfig = applHost.getDeviceConfig?.(node.id);
+		const paramInfo = deviceConfig?.paramInformation;
+		if (paramInfo) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
 			});
-			this.deserializeParamInformationFromConfig(applHost, config);
+			this.deserializeParamInformationFromConfig(applHost, paramInfo);
 		}
 
 		if (this.version >= 3) {
@@ -1040,16 +1041,12 @@ export class ConfigurationCC extends CommandClass {
 				} else {
 					// Query name and info only if the parameter is supported, but skip the query for bugged devices
 					let name: string | undefined;
-					if (
-						!node.deviceConfig?.compat?.skipConfigurationNameQuery
-					) {
+					if (!deviceConfig?.compat?.skipConfigurationNameQuery) {
 						name = await api.getName(param);
 					}
 
 					// Skip the info query for bugged devices
-					if (
-						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
-					) {
+					if (!deviceConfig?.compat?.skipConfigurationInfoQuery) {
 						await api.getInfo(param);
 					}
 
@@ -1108,7 +1105,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 
 		if (this.version < 3) {
 			// V1/V2: Query all values defined in the config file
-			const paramInfo = node.deviceConfig?.paramInformation;
+			const paramInfo = applHost.getDeviceConfig?.(
+				node.id,
+			)?.paramInformation;
 			if (paramInfo?.size) {
 				// Because partial params share the same parameter number,
 				// we need to remember which ones we have already queried.

@@ -149,7 +149,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
 
-		if (!node.isControllerNode) {
+		if (!applHost.isControllerNode(node.id)) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Interviewing ${this.ccName}...`,

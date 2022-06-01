@@ -210,7 +210,7 @@ export class WakeUpCC extends CommandClass {
 		// In this case, do now mark this CC as interviewed completely
 		let hadCriticalTimeout = false;
 
-		if (node.isControllerNode) {
+		if (applHost.isControllerNode(node.id)) {
 			applHost.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,

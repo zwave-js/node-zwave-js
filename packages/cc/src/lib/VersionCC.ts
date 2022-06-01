@@ -89,8 +89,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 					) >= 3
 				);
 			case VersionCommand.ZWaveSoftwareGet: {
-				const node = this.endpoint.getNodeUnsafe()!;
-				let ret = node.getValue<Maybe<boolean>>({
+				let ret = this.getValueDB().getValue<Maybe<boolean>>({
 					commandClass: getCommandClass(this),
 					endpoint: this.endpoint.index,
 					property: "supportsZWaveSoftwareGet",
@@ -347,7 +346,7 @@ export class VersionCC extends CommandClass {
 			message: "querying CC versions...",
 			direction: "outbound",
 		});
-		for (const [cc] of endpoint.implementedCommandClasses.entries()) {
+		for (const [cc] of endpoint.getCCs()) {
 			// We already queried the Version CC version at the start of this interview
 			if (cc === CommandClasses.Version) continue;
 			// Skip the query of endpoint CCs that are also supported by the root device

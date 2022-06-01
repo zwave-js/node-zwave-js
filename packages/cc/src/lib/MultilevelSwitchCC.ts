@@ -184,14 +184,14 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		});
 
 		let mayUseSupervision: boolean;
-		if (this.endpoint instanceof VirtualEndpoint) {
+		if (this.endpoint.virtual) {
 			// We cannot use supervision when communicating with multiple nodes
 			mayUseSupervision = false;
 		} else {
 			// For singlecast, try to use supervision unless we know it is not supported
 			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-			const node = this.endpoint.getNodeUnsafe()!;
-			mayUseSupervision = node.getValue(superviseValueId) !== false;
+			const valueDB = this.getValueDB();
+			mayUseSupervision = valueDB.getValue(superviseValueId) !== false;
 
 			if (mayUseSupervision) {
 				// Try to supervise the command execution
@@ -207,7 +207,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					supervisionResult?.status === SupervisionStatus.NoSupport
 				) {
 					// Remember that we shouldn't use supervision for that
-					node.valueDB.setValue(superviseValueId, false);
+					valueDB.setValue(superviseValueId, false);
 					mayUseSupervision = false;
 				}
 			}
@@ -229,14 +229,15 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		});
 
 		let mayUseSupervision: boolean;
-		if (this.endpoint instanceof VirtualEndpoint) {
+		if (this.endpoint.virtual) {
 			// We cannot use supervision when communicating with multiple nodes
 			mayUseSupervision = false;
 		} else {
 			// For singlecast, try to use supervision unless we know it is not supported
+			const valueDB = this.getValueDB();
 			const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-			const node = this.endpoint.getNodeUnsafe()!;
-			mayUseSupervision = node.getValue(superviseValueId) !== false;
+			mayUseSupervision =
+				valueDB.getValue<boolean>(superviseValueId) !== false;
 
 			if (mayUseSupervision) {
 				// Try to supervise the command execution
@@ -252,7 +253,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					supervisionResult?.status === SupervisionStatus.NoSupport
 				) {
 					// Remember that we shouldn't use supervision for that
-					node.valueDB.setValue(superviseValueId, false);
+					valueDB.setValue(superviseValueId, false);
 					mayUseSupervision = false;
 				}
 			}
@@ -308,8 +309,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						value >= 0 &&
 						value <= 99
 					) {
-						const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-						valueDB?.setValue(
+						this.tryGetValueDB()?.setValue(
 							getCurrentValueValueId(this.endpoint.index),
 							value,
 						);
@@ -348,10 +348,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 							);
 						// and optimistically update the currentValue
 						for (const node of affectedNodes) {
-							node.valueDB?.setValue(
-								getCurrentValueValueId(this.endpoint.index),
-								value,
-							);
+							this.applHost
+								.tryGetValueDB(node.id)
+								?.setValue(
+									getCurrentValueValueId(this.endpoint.index),
+									value,
+								);
 						}
 					} else if (value === 255) {
 						// We generally don't want to poll for multicasts because of how much traffic it can cause
@@ -385,18 +387,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					switchTypeProperties.indexOf(property as string) % 2 === 0
 						? "down"
 						: "up";
-				// Try to retrieve the current value to use as the start level,
+				// Singlecast only: Try to retrieve the current value to use as the start level,
 				// even if the target node is going to ignore it. There might
 				// be some bugged devices that ignore the ignore start level flag.
-				const startLevel =
-					// except for multicast, where we can't access the current value
-					this.endpoint instanceof VirtualEndpoint
-						? undefined
-						: this.endpoint
-								.getNodeUnsafe()
-								?.getValue<number>(
-									getCurrentValueValueId(this.endpoint.index),
-								);
+				const startLevel = this.tryGetValueDB()?.getValue<number>(
+					getCurrentValueValueId(this.endpoint.index),
+				);
 				// And perform the level change
 				const duration = Duration.from(options?.transitionDuration);
 				await this.startLevelChange({
@@ -483,10 +479,14 @@ export class MultilevelSwitchCC extends CommandClass {
 		await this.refreshValues(applHost);
 
 		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatMultilevelSwitchSetAsEvent) {
+		if (
+			applHost.getDeviceConfig?.(node.id)?.compat
+				?.treatMultilevelSwitchSetAsEvent
+		) {
 			const valueId = getCompatEventValueId(this.endpointIndex);
-			if (!node.valueDB.hasMetadata(valueId)) {
-				node.valueDB.setMetadata(valueId, {
+			const valueDB = this.getValueDB(applHost);
+			if (!valueDB.hasMetadata(valueId)) {
+				valueDB.setMetadata(valueId, {
 					...ValueMetadata.ReadOnlyUInt8,
 					label: "Event value",
 				});

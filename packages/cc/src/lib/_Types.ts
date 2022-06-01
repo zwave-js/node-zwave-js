@@ -1407,6 +1407,21 @@ export enum SetbackType {
 	Permanent = 0x02,
 }
 
+/** @publicAPI */
+export type SetbackSpecialState =
+	| "Frost Protection"
+	| "Energy Saving"
+	| "Unused";
+
+/** @publicAPI */
+export type SetbackState = number | SetbackSpecialState;
+
+export interface Switchpoint {
+	hour: number;
+	minute: number;
+	state: SetbackState | undefined;
+}
+
 export enum ThermostatSetpointCommand {
 	Set = 0x01,
 	Get = 0x02,

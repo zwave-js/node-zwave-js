@@ -1,5 +1,9 @@
 import * as Sentry from "@sentry/node";
-import { CommandClass, isCommandClassContainer } from "@zwave-js/cc";
+import {
+	CommandClass,
+	isCommandClassContainer,
+	isEncapsulatingCommandClass,
+} from "@zwave-js/cc";
 import {
 	DataDirection,
 	getDirectionPrefix,
@@ -14,7 +18,6 @@ import type { Message, ResponseRole } from "@zwave-js/serial";
 import { FunctionType, MessageType } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { SortedList } from "alcalzone-shared/sorted-list";
-import { isEncapsulatingCommandClass } from "@zwave-js/cc";
 import type { Driver } from "../driver/Driver";
 import type { Transaction } from "../driver/Transaction";
 import { NodeStatus } from "../node/_Types";

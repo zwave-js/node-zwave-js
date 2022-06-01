@@ -1,5 +1,12 @@
 import { CommandClass } from "@zwave-js/cc";
 import {
+	getAggregatedCountValueId,
+	getCountIsDynamicValueId,
+	getEndpointIndizesValueId,
+	getIdenticalCapabilitiesValueId,
+	getIndividualCountValueId,
+} from "@zwave-js/cc/src/lib/MultiChannelCC";
+import {
 	allCCs,
 	applicationCCs,
 	CommandClasses,
@@ -7,21 +14,12 @@ import {
 	SetValueOptions,
 	TranslatedValueID,
 	ValueID,
+	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type {
-	ZWaveApplicationHost,
-	ZWaveEndpointBase,
 	ZWaveNodeBase,
-} from "@zwave-js/host";
-import {
-	getAggregatedCountValueId,
-	getCountIsDynamicValueId,
-	getEndpointIndizesValueId,
-	getIdenticalCapabilitiesValueId,
-	getIndividualCountValueId,
-} from "../commandclass/MultiChannelCC";
+} from "@zwave-js/core";
+import type { ZWaveApplicationHost } from "@zwave-js/host";
 
 function getValue<T>(
 	applHost: ZWaveApplicationHost,
@@ -168,15 +166,15 @@ export function shouldHideRootApplicationCCValues(
 	node: ZWaveNodeBase,
 ): boolean {
 	// This is not the case when the root values should explicitly be preserved
-	if (node.deviceConfig?.compat?.preserveRootApplicationCCValueIDs)
-		return false;
+	const compatConfig = applHost.getDeviceConfig?.(node.id)?.compat;
+	if (compatConfig?.preserveRootApplicationCCValueIDs) return false;
 
 	// This is not the case when there are no endpoints
 	const endpointIndizes = getEndpointIndizes(applHost, node);
 	if (endpointIndizes.length === 0) return false;
 
 	// This is not the case when only individual endpoints should be preserved in addition to the root
-	const preserveEndpoints = node.deviceConfig?.compat?.preserveEndpoints;
+	const preserveEndpoints = compatConfig?.preserveEndpoints;
 	if (
 		preserveEndpoints != undefined &&
 		preserveEndpoints !== "*" &&

@@ -57,9 +57,9 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 				return (
 					this.version >= 4 &&
 					(this.version < 7 ||
-						this.endpoint
-							.getNodeUnsafe()
-							?.getValue(getSupportsActivationValueId()) === true)
+						this.tryGetValueDB()?.getValue(
+							getSupportsActivationValueId(),
+						) === true)
 				);
 
 			case FirmwareUpdateMetaDataCommand.PrepareGet:

@@ -74,7 +74,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+		const valueDB = this.getValueDB();
 		if (property === "mode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(

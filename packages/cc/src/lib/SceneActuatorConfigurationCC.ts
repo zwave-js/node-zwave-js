@@ -156,14 +156,9 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			// 3. default
 			const dimmingDuration =
 				Duration.from(options?.transitionDuration) ??
-				this.endpoint
-					.getNodeUnsafe()!
-					.getValue<Duration>(
-						getDimmingDurationValueID(
-							this.endpoint.index,
-							propertyKey,
-						),
-					);
+				this.tryGetValueDB()?.getValue<Duration>(
+					getDimmingDurationValueID(this.endpoint.index, propertyKey),
+				);
 			await this.set(propertyKey, dimmingDuration, value);
 		} else if (property === "dimmingDuration") {
 			if (typeof value !== "string" && !(value instanceof Duration)) {
@@ -190,8 +185,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			// Must set the level along with the dimmingDuration,
 			// Use saved value, if it's defined. Otherwise the default
 			// will be used.
-			const node = this.endpoint.getNodeUnsafe()!;
-			const level = node.getValue<number>(
+			const level = this.tryGetValueDB()?.getValue<number>(
 				getLevelValueID(this.endpoint.index, propertyKey),
 			);
 

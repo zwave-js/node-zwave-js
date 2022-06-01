@@ -24,8 +24,16 @@ import {
 	type CommandClassDeserializationOptions,
 } from "./CommandClass";
 import {
+	decodeSetbackState,
+	decodeSwitchpoint,
+	encodeSetbackState,
+	encodeSwitchpoint,
+} from "./utils";
+import {
 	ClimateControlScheduleCommand,
 	ScheduleOverrideType,
+	SetbackState,
+	Switchpoint,
 	Weekday,
 } from "./_Types";
 

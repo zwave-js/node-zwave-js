@@ -127,6 +127,10 @@ export class Endpoint implements ZWaveEndpointBase {
 		return this._implementedCommandClasses;
 	}
 
+	public getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]> {
+		return this._implementedCommandClasses.entries();
+	}
+
 	/**
 	 * Sets the device class of this endpoint and configures the mandatory CCs.
 	 * **Note:** This does nothing if the device class was already configured
@@ -355,7 +359,7 @@ export class Endpoint implements ZWaveEndpointBase {
 		requireSupport: boolean = true,
 	): CommandClasses extends T ? CCAPI : CCToAPI<T> {
 		// Trust me on this, TypeScript :)
-		return CCAPI.from(ccId, this.driver, this, requireSupport) as any;
+		return CCAPI.create(ccId, this.driver, this, requireSupport) as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -404,7 +408,7 @@ export class Endpoint implements ZWaveEndpointBase {
 
 				// When accessing a CC API for the first time, we need to create it
 				if (!target.has(ccId)) {
-					const api = CCAPI.from(ccId, this.driver, this);
+					const api = CCAPI.create(ccId, this.driver, this);
 					target.set(ccId, api);
 				}
 				return target.get(ccId);

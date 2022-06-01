@@ -1,4 +1,7 @@
-import type { CommandClasses } from "../capabilities/CommandClasses";
+import type {
+	CommandClasses,
+	CommandClassInfo,
+} from "../capabilities/CommandClasses";
 import type { MulticastDestination } from "../consts";
 import type { VirtualNodeBase, ZWaveNodeBase } from "./ZWaveNodeBase";
 
@@ -7,6 +10,9 @@ export interface ZWaveEndpointBase {
 	readonly index: number;
 	readonly virtual: false;
 	getCCVersion(cc: CommandClasses): number;
+	addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void;
+	removeCC(cc: CommandClasses): void;
+	getCCs(): Iterable<[ccId: CommandClasses, info: CommandClassInfo]>;
 	supportsCC(cc: CommandClasses): boolean;
 	controlsCC(cc: CommandClasses): boolean;
 	isCCSecure(cc: CommandClasses): boolean;

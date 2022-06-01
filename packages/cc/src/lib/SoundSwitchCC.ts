@@ -248,11 +248,9 @@ export class SoundSwitchCCAPI extends CCAPI {
 				const volume =
 					options?.volume !== undefined
 						? options.volume
-						: this.endpoint
-								.getNodeUnsafe()
-								?.getValue<number>(
-									getVolumeValueId(this.endpoint.index),
-								);
+						: this.tryGetValueDB()?.getValue<number>(
+								getVolumeValueId(this.endpoint.index),
+						  );
 				await this.play(value, volume);
 			} else {
 				await this.stopPlaying();

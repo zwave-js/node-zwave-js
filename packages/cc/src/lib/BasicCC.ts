@@ -96,8 +96,7 @@ export class BasicCCAPI extends CCAPI {
 				value >= 0 &&
 				value <= 99
 			) {
-				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-				valueDB?.setValue(
+				this.getValueDB().setValue(
 					getCurrentValueValueId(this.endpoint.index),
 					value,
 				);
@@ -123,10 +122,12 @@ export class BasicCCAPI extends CCAPI {
 				);
 				// and optimistically update the currentValue
 				for (const node of affectedNodes) {
-					node.valueDB?.setValue(
-						getCurrentValueValueId(this.endpoint.index),
-						value,
-					);
+					this.applHost
+						.tryGetValueDB(node.id)
+						?.setValue(
+							getCurrentValueValueId(this.endpoint.index),
+							value,
+						);
 				}
 			} else if (value === 255) {
 				// We generally don't want to poll for multicasts because of how much traffic it can cause
@@ -165,8 +166,7 @@ export class BasicCCAPI extends CCAPI {
 			this.commandOptions,
 		);
 		if (response) {
-			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-			valueDB?.setValue(
+			this.tryGetValueDB()?.setValue(
 				getCurrentValueValueId(this.endpoint.index),
 				response.currentValue,
 			);
@@ -207,7 +207,7 @@ export class BasicCC extends CommandClass {
 		await this.refreshValues(applHost);
 
 		// create compat event value if necessary
-		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
 			const valueId = getCompatEventValueId(this.endpointIndex);
 			if (!valueDB.hasMetadata(valueId)) {
 				valueDB.setMetadata(valueId, {

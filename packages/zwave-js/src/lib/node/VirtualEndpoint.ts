@@ -87,7 +87,7 @@ export class VirtualEndpoint implements VirtualEndpointBase {
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
 		// Trust me on this, TypeScript :)
-		return CCAPI.from(ccId, this.driver, this) as any;
+		return CCAPI.create(ccId, this.driver, this) as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();

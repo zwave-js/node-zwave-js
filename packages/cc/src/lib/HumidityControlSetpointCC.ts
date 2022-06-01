@@ -119,11 +119,9 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		const preferredScale = this.endpoint
-			.getNodeUnsafe()!
-			.getValue<number>(
-				getSetpointScaleValueID(this.endpoint.index, propertyKey),
-			);
+		const preferredScale = this.tryGetValueDB()?.getValue<number>(
+			getSetpointScaleValueID(this.endpoint.index, propertyKey),
+		);
 		await this.set(propertyKey, value, preferredScale ?? 0);
 
 		if (this.isSinglecast()) {

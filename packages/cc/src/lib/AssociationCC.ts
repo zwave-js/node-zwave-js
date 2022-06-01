@@ -4,6 +4,7 @@ import type {
 	MessageRecord,
 	ValueID,
 	ZWaveEndpointBase,
+	ZWaveNodeBase,
 } from "@zwave-js/core";
 import {
 	CommandClasses,
@@ -77,10 +78,13 @@ export function getHasLifelineValueId(endpointIndex?: number): ValueID {
 	};
 }
 
-export function getLifelineGroupIds(endpoint: Endpoint): number[] {
+export function getLifelineGroupIds(
+	applHost: ZWaveApplicationHost,
+	endpoint: ZWaveEndpointBase,
+): number[] {
 	// For now only support this for the root endpoint - i.e. node
 	if (endpoint.index > 0) return [];
-	const node = endpoint as ZWaveNode;
+	const node = endpoint as ZWaveNodeBase;
 
 	// Some nodes define multiple lifeline groups, so we need to assign us to
 	// all of them
@@ -93,14 +97,15 @@ export function getLifelineGroupIds(endpoint: Endpoint): number[] {
 
 	// We have a device config file that tells us which (additional) association to assign
 	let associations: ReadonlyMap<number, AssociationConfig> | undefined;
+	const deviceConfig = applHost.getDeviceConfig?.(node.id);
 	if (endpoint.index === 0) {
 		// The root endpoint's associations may be configured separately or as part of "endpoints"
 		associations =
-			node.deviceConfig?.associations ??
-			node.deviceConfig?.endpoints?.get(0)?.associations;
+			deviceConfig?.associations ??
+			deviceConfig?.endpoints?.get(0)?.associations;
 	} else {
 		// The other endpoints can only have a configuration as part of "endpoints"
-		associations = node.deviceConfig?.endpoints?.get(
+		associations = deviceConfig?.endpoints?.get(
 			endpoint.index,
 		)?.associations;
 	}
@@ -235,9 +240,8 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			return this.removeNodeIds({ nodeIds, groupId: 0 });
 		} else {
 			// We have to remove the node manually from all groups
-			const node = this.endpoint.getNodeUnsafe()!;
 			const groupCount =
-				node.valueDB.getValue<number>(
+				this.tryGetValueDB()?.getValue<number>(
 					getGroupCountValueId(this.endpoint.index),
 				) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
@@ -299,12 +303,10 @@ export class AssociationCC extends CommandClass {
 				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ??
 			// If the information is not available, fall back to the configuration file if possible
 			// This can happen on some legacy devices which have "hidden" association groups
-			applHost.nodes
-				.get(endpoint.nodeId)
-				?.deviceConfig?.getAssociationConfigForEndpoint(
-					endpoint.index,
-					groupId,
-				)?.maxNodes ??
+			applHost
+				.getDeviceConfig?.(endpoint.nodeId)
+				?.getAssociationConfigForEndpoint(endpoint.index, groupId)
+				?.maxNodes ??
 			0
 		);
 	}

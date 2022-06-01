@@ -13,6 +13,7 @@ import {
 	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
@@ -91,14 +92,15 @@ export function getAggregatedCountValueId(): ValueID {
  * This function gives an estimate if this is the case (i.e. all endpoints have a different device class)
  */
 function areAllEndpointsDifferent(
-	node: ZWaveNode,
+	applHost: ZWaveApplicationHost,
+	node: ZWaveNodeBase,
 	endpointIndizes: number[],
 ): boolean {
 	// Endpoints are useless if all of them have different device classes
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
-		const deviceClass = node.getValue<{
+		const deviceClass = applHost.getValueDB(node.id).getValue<{
 			generic: number;
 			specific: number;
 		}>(devClassValueId);
@@ -553,9 +555,10 @@ supported CCs:`;
 		// But first figure out if they seem unnecessary and if they do, which ones should be preserved
 		if (
 			!multiResponse.identicalCapabilities &&
-			areAllEndpointsDifferent(node, allEndpoints)
+			areAllEndpointsDifferent(applHost, node, allEndpoints)
 		) {
-			const preserve = node.deviceConfig?.compat?.preserveEndpoints;
+			const preserve = applHost.getDeviceConfig?.(node.id)?.compat
+				?.preserveEndpoints;
 			if (!preserve) {
 				allEndpoints = [];
 				applHost.controllerLog.logNode(node.id, {
@@ -585,19 +588,28 @@ supported CCs:`;
 
 	private async interviewV1(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
-		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
-			"Multi Channel"
-		];
+		const endpoint = this.getEndpoint(applHost)!;
+		const api = CCAPI.create(
+			CommandClasses["Multi Channel"],
+			applHost,
+			endpoint,
+		);
 		const valueDB = this.getValueDB(applHost);
 
 		// V1 works the opposite way - we scan all CCs and remember how many
 		// endpoints they have
-		const supportedCCs = [...node.implementedCommandClasses.keys()]
+		const supportedCCs = [...node.getCCs()]
 			// Don't query CCs the node only controls
-			.filter((cc) => node.supportsCC(cc))
+			.filter(([, info]) => info.isSupported)
+			.map(([cc]) => cc)
 			// Don't query CCs that want to skip the endpoint interview
 			.filter(
-				(cc) => !node.createCCInstance(cc)?.skipEndpointInterview(),
+				(cc) =>
+					!CommandClass.createInstanceUnchecked(
+						applHost,
+						node,
+						cc,
+					)?.skipEndpointInterview(),
 			);
 		const endpointCounts = new Map<CommandClasses, number>();
 		for (const ccId of supportedCCs) {
@@ -1097,7 +1109,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
-				this.host.getCompatConfig?.(this.nodeId as number)
+				this.host.getDeviceConfig?.(this.nodeId as number)?.compat
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly uses the destination field to indicate the source endpoint
@@ -1129,7 +1141,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			// If the encapsulated command requires security, so does this one
 			if (this.encapsulated.secure) this.secure = true;
 			if (
-				this.host.getCompatConfig?.(this.nodeId as number)
+				this.host.getDeviceConfig?.(this.nodeId as number)?.compat
 					?.treatDestinationEndpointAsSource
 			) {
 				// This device incorrectly responds from the endpoint we've passed as our source endpoint

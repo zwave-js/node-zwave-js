@@ -846,7 +846,7 @@ export class IrrigationCCAPI extends CCAPI {
 		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		const valueDB = this.endpoint.getNodeUnsafe()!.valueDB;
+		const valueDB = this.getValueDB();
 
 		if (systemConfigProperties.includes(property as any)) {
 			const options = {} as IrrigationCCSystemConfigSetOptions;

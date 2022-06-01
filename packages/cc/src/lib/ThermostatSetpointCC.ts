@@ -129,11 +129,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
 		// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
-		const preferredScale = this.endpoint
-			.getNodeUnsafe()!
-			.getValue<number>(
-				getSetpointScaleValueID(this.endpoint.index, propertyKey),
-			);
+		const preferredScale = this.tryGetValueDB()?.getValue<number>(
+			getSetpointScaleValueID(this.endpoint.index, propertyKey),
+		);
 		await this.set(propertyKey, value, preferredScale ?? 0);
 
 		if (this.isSinglecast()) {
@@ -598,9 +596,8 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 
 	public serialize(): Buffer {
 		// If a config file overwrites how the float should be encoded, use that information
-		const override = this.host.getCompatConfig?.(
-			this.nodeId as number,
-		)?.overrideFloatEncoding;
+		const override = this.host.getDeviceConfig?.(this.nodeId as number)
+			?.compat?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
 			encodeFloatWithScale(this.value, this.scale, override),

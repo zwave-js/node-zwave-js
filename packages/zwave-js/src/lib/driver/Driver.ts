@@ -34,8 +34,8 @@ import {
 	WakeUpCCNoMoreInformation,
 } from "@zwave-js/cc";
 import {
-	CompatConfig,
 	ConfigManager,
+	DeviceConfig,
 	externalConfigDir,
 } from "@zwave-js/config";
 import {
@@ -691,14 +691,21 @@ export class Driver
 		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
 	}
 
+	/** @internal This is needed for the ZWaveHost interface */
 	public getValueDB(nodeId: number): ValueDB {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		return node.valueDB;
 	}
 
 	/** @internal This is needed for the ZWaveHost interface */
-	public getCompatConfig(nodeId: number): CompatConfig | undefined {
-		return this.controller.nodes.get(nodeId)?.deviceConfig?.compat;
+	public tryGetValueDB(nodeId: number): ValueDB | undefined {
+		const node = this.controller.nodes.get(nodeId);
+		return node?.valueDB;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public getDeviceConfig(nodeId: number): DeviceConfig | undefined {
+		return this.controller.nodes.get(nodeId)?.deviceConfig;
 	}
 
 	/** @internal This is needed for the ZWaveHost interface */
@@ -724,6 +731,11 @@ export class Driver
 	): void {
 		const node = this.controller.nodes.getOrThrow(nodeId);
 		node.setSecurityClass(securityClass, granted);
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public isControllerNode(nodeId: number): boolean {
+		return nodeId === this.ownNodeId;
 	}
 
 	/** Updates the logging configuration without having to restart the driver. */

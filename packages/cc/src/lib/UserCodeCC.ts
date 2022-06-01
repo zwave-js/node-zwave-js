@@ -301,22 +301,20 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			case UserCodeCommand.MasterCodeSet:
 			case UserCodeCommand.MasterCodeGet: {
 				if (this.version < 2) return false;
-				const node = this.endpoint.getNodeUnsafe()!;
-				const ret =
-					node.getValue<Maybe<boolean>>(
+				return (
+					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
 						getSupportsMasterCodeValueID(this.endpoint.index),
-					) ?? unknownBoolean;
-				return ret;
+					) ?? unknownBoolean
+				);
 			}
 
 			case UserCodeCommand.UserCodeChecksumGet: {
 				if (this.version < 2) return false;
-				const node = this.endpoint.getNodeUnsafe()!;
-				const ret =
-					node.getValue<Maybe<boolean>>(
+				return (
+					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
 						getSupportsUserCodeChecksumValueID(this.endpoint.index),
-					) ?? unknownBoolean;
-				return ret;
+					) ?? unknownBoolean
+				);
 			}
 		}
 		return super.supportsCommand(cmd);
@@ -366,8 +364,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				await this.clear(propertyKey);
 			} else {
 				// We need to set the user code along with the status
-				const node = this.endpoint.getNodeUnsafe()!;
-				const userCode = node.getValue<string>(
+				const userCode = this.getValueDB().getValue<string>(
 					getUserCodeValueID(this.endpoint.index, propertyKey),
 				);
 				await this.set(propertyKey, value, userCode!);
@@ -388,8 +385,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			}
 
 			// We need to set the user id status along with the code
-			const node = this.endpoint.getNodeUnsafe()!;
-			let userIdStatus = node.getValue<UserIDStatus>(
+			let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
 				getUserIdStatusValueID(this.endpoint.index, propertyKey),
 			);
 			if (

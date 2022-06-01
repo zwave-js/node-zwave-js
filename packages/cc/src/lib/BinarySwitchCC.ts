@@ -126,8 +126,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			if (!this.applHost.options.disableOptimisticValueUpdate) {
-				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-				valueDB?.setValue(
+				this.getValueDB().setValue(
 					getCurrentValueValueId(this.endpoint.index),
 					value,
 				);
@@ -152,10 +151,12 @@ export class BinarySwitchCCAPI extends CCAPI {
 				);
 				// and optimistically update the currentValue
 				for (const node of affectedNodes) {
-					node.valueDB?.setValue(
-						getCurrentValueValueId(this.endpoint.index),
-						value,
-					);
+					this.applHost
+						.tryGetValueDB(node.id)
+						?.setValue(
+							getCurrentValueValueId(this.endpoint.index),
+							value,
+						);
 				}
 			}
 			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic

@@ -1,9 +1,9 @@
-import type { LogConfig } from "@zwave-js/core";
+import type { LogConfig, ZWaveHostOptions } from "@zwave-js/core";
 import type { FileSystem } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import type { SerialPort } from "serialport";
 
-export interface ZWaveOptions {
+export interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */

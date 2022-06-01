@@ -29,7 +29,8 @@ import {
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "./CommandClass";
-import { SetbackType, ThermostatSetbackCommand } from "./_Types";
+import { decodeSetbackState, encodeSetbackState } from "./utils";
+import { SetbackState, SetbackType, ThermostatSetbackCommand } from "./_Types";
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together

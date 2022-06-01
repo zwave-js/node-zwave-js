@@ -541,7 +541,7 @@ export class CommandClass implements ICommandClass {
 			}
 		}
 		throw new ZWaveError(
-			"Cannot retrieve the value ID for non-singlecast CCs",
+			"Cannot retrieve the value DB for non-singlecast CCs",
 			ZWaveErrorCodes.CC_NoNodeID,
 		);
 	}

@@ -1,17 +1,21 @@
-import type { SendCommandOptions, TXReport } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
+	isZWaveError,
 	Maybe,
 	NODE_ID_BROADCAST,
+	SendCommandOptions,
 	stripUndefined,
+	TXReport,
 	unknownBoolean,
 	ValueChangeOptions,
+	ValueDB,
 	ValueID,
 	VirtualEndpointBase,
 	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { getEnumMemberName, num2hex, OnlyMethods } from "@zwave-js/shared";
@@ -368,7 +372,7 @@ export class CCAPI {
 			get: (target, prop) => {
 				if (prop === "withTXReport") return undefined;
 
-				let original = (target as any)[prop];
+				let original: any = (target as any)[prop];
 				if (
 					ownProps.has(prop as string) &&
 					typeof original === "function"
@@ -427,6 +431,60 @@ export class CCAPI {
 	} {
 		return (
 			this.endpoint.virtual && this.endpoint.nodeId === NODE_ID_BROADCAST
+		);
+	}
+
+	/**
+	 * Returns the node this CC API is linked to. Throws if the controller is not yet ready.
+	 */
+	public getNode(): ZWaveNodeBase | undefined {
+		if (this.isSinglecast()) {
+			return this.applHost.nodes.get(this.endpoint.nodeId);
+		}
+	}
+
+	/**
+	 * @internal
+	 * Returns the node this CC API is linked to (or undefined if the node doesn't exist)
+	 */
+	public getNodeUnsafe(): ZWaveNodeBase | undefined {
+		try {
+			return this.getNode();
+		} catch (e) {
+			// This was expected
+			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
+				return undefined;
+			}
+			// Something else happened
+			throw e;
+		}
+	}
+
+	/** Returns the value DB for this CC API's node (if it can be safely accessed) */
+	protected tryGetValueDB(): ValueDB | undefined {
+		if (!this.isSinglecast()) return;
+		try {
+			return this.applHost.getValueDB(this.endpoint.nodeId);
+		} catch {
+			return;
+		}
+	}
+
+	/** Returns the value DB for this CC's node (or throws if it cannot be accessed) */
+	protected getValueDB(): ValueDB {
+		if (this.isSinglecast()) {
+			try {
+				return this.applHost.getValueDB(this.endpoint.nodeId);
+			} catch {
+				throw new ZWaveError(
+					"The node for this CC does not exist or the driver is not ready yet",
+					ZWaveErrorCodes.Driver_NotReady,
+				);
+			}
+		}
+		throw new ZWaveError(
+			"Cannot retrieve the value DB for non-singlecast CCs",
+			ZWaveErrorCodes.CC_NoNodeID,
 		);
 	}
 }

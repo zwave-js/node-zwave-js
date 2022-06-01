@@ -276,7 +276,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 		const node = this.getNode(applHost)!;
 		// TODO: Can this be refactored?
-		const proprietaryConfig = node.deviceConfig?.proprietary;
+		const proprietaryConfig = applHost.getDeviceConfig?.(
+			node.id,
+		)?.proprietary;
 		if (
 			this.manufacturerId === 0x010f /* Fibaro */ &&
 			proprietaryConfig &&
@@ -310,7 +312,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 		const node = this.getNode(applHost)!;
 		// TODO: Can this be refactored?
-		const proprietaryConfig = node.deviceConfig?.proprietary;
+		const proprietaryConfig = applHost.getDeviceConfig?.(
+			node.id,
+		)?.proprietary;
 		if (
 			this.manufacturerId === 0x010f /* Fibaro */ &&
 			proprietaryConfig &&
