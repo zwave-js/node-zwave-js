@@ -3861,7 +3861,7 @@ __metadata:
     triple-beam: "*"
     typescript: 4.6.4
     winston: ^3.7.2
-    winston-daily-rotate-file: ^4.6.1
+    winston-daily-rotate-file: ^4.7.1
     winston-transport: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -10286,9 +10286,9 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"winston-daily-rotate-file@npm:^4.6.1":
-  version: 4.6.1
-  resolution: "winston-daily-rotate-file@npm:4.6.1"
+"winston-daily-rotate-file@npm:^4.7.1":
+  version: 4.7.1
+  resolution: "winston-daily-rotate-file@npm:4.7.1"
   dependencies:
     file-stream-rotator: ^0.6.1
     object-hash: ^2.0.1
@@ -10296,7 +10296,7 @@ typescript@^4.4.3:
     winston-transport: ^4.4.0
   peerDependencies:
     winston: ^3
-  checksum: b58f41d98794524f2046b08fd5e7dd4acce01ee7ca6e3a5ef03d329edd1c7a392e979d3b61bf03466977f9366fb92a08028278b45fcb044169cc78a395f5d616
+  checksum: 227daea41f722caa017fc7d6f1f80d0e6c428491e57693e6bebc8312b85bcf3aace53cb3a925bda72fab59a6898fa127411d29348ec4b295e2263a7544cda611
   languageName: node
   linkType: hard
 
