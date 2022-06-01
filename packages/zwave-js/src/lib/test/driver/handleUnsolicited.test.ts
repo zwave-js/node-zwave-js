@@ -1,7 +1,7 @@
+import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "@zwave-js/cc";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";

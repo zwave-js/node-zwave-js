@@ -1,3 +1,8 @@
+import type {
+	CCAPI,
+	PollValueImplementation,
+	SetValueAPIOptions,
+} from "@zwave-js/cc";
 import { CommandClass, getCCValueMetadata } from "@zwave-js/cc";
 import type {
 	DeviceConfig,
@@ -66,11 +71,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { isDeepStrictEqual } from "util";
-import type {
-	CCAPI,
-	PollValueImplementation,
-	SetValueAPIOptions,
-} from "@zwave-js/cc";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -705,18 +705,6 @@ export class ZWaveNode
 
 	public get supportsWakeUpOnDemand(): boolean | undefined {
 		return this.getValue(getWakeUpOnDemandSupportedValueId());
-	}
-
-	public get shouldRequestWakeUpOnDemand(): boolean {
-		return (
-			!!this.supportsWakeUpOnDemand &&
-			this.status === NodeStatus.Asleep &&
-			this.driver.hasPendingTransactions(
-				(t) =>
-					t.requestWakeUpOnDemand &&
-					t.message.getNodeId() === this.id,
-			)
-		);
 	}
 
 	/**

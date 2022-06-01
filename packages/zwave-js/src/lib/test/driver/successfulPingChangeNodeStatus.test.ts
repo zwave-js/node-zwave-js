@@ -1,5 +1,5 @@
 import { FunctionType, MessageHeaders, MockSerialPort } from "@zwave-js/serial";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -63,7 +63,7 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 				// https://github.com/zwave-js/node-zwave-js/issues/1364#issuecomment-760006591
 
 				const node4 = new ZWaveNode(4, driver);
-				(driver.controller.nodes as Map<number, ZWaveNode>).set(
+				(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
 					node4.id,
 					node4,
 				);

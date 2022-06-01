@@ -72,17 +72,10 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		// Here we don't assert support - some devices only half-support Supervision, so we treat them
 		// as if they don't support it. We still need to be able to respond to the Get command though.
 
-		// Ask the node if it needs Wake Up On Demand,
-		// unless it's overridden in `options`
-		const requestWakeUpOnDemand =
-			options.requestWakeUpOnDemand ??
-			this.endpoint.getNodeUnsafe()?.shouldRequestWakeUpOnDemand;
-
 		const { secure = false, ...cmdOptions } = options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			...cmdOptions,
-			requestWakeUpOnDemand,
 		});
 
 		// The report should be sent back with security if the received command was secure

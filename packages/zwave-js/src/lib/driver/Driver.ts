@@ -45,6 +45,7 @@ import {
 	dskFromString,
 	Duration,
 	highResTimestamp,
+	ICommandClass,
 	isZWaveError,
 	LogConfig,
 	Maybe,
@@ -70,7 +71,6 @@ import {
 import type {
 	NodeSchedulePollOptions,
 	ZWaveApplicationHost,
-	ZWaveHost,
 } from "@zwave-js/host";
 import {
 	FunctionType,
@@ -358,9 +358,9 @@ interface AwaitedMessageEntry {
 }
 
 interface AwaitedCommandEntry {
-	promise: DeferredPromise<CommandClass>;
+	promise: DeferredPromise<ICommandClass>;
 	timeout?: NodeJS.Timeout;
-	predicate: (cc: CommandClass) => boolean;
+	predicate: (cc: ICommandClass) => boolean;
 }
 
 export type SupervisionUpdateHandler = (
@@ -408,7 +408,7 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  */
 export class Driver
 	extends TypedEventEmitter<DriverEventCallbacks>
-	implements ZWaveHost, ZWaveApplicationHost
+	implements ZWaveApplicationHost
 {
 	public constructor(
 		private port: string,
@@ -2335,17 +2335,22 @@ export class Driver
 								msg.command instanceof InvalidCC
 							) {
 								// If it was, we need to notify the sender that we couldn't decode the command
-								await this.getNodeUnsafe(msg)
-									?.createAPI(
+								const node = this.getNodeUnsafe(msg);
+								if (node) {
+									node.createAPI(
 										CommandClasses.Supervision,
 										false,
-									)
-									.sendReport({
+									).sendReport({
 										sessionId: supervisionSessionId,
 										moreUpdatesFollow: false,
 										status: SupervisionStatus.NoSupport,
 										secure: msg.command.secure,
+										requestWakeUpOnDemand:
+											this.shouldRequestWakeupOnDemand(
+												node,
+											),
 									});
+								}
 								return;
 							}
 						} else {
@@ -2687,6 +2692,18 @@ export class Driver
 			// The above call will reject the transaction, no need to do it again
 			return false;
 		}
+	}
+
+	private shouldRequestWakeupOnDemand(node: ZWaveNode): boolean {
+		return (
+			!!node.supportsWakeUpOnDemand &&
+			node.status === NodeStatus.Asleep &&
+			this.hasPendingTransactions(
+				(t) =>
+					t.requestWakeUpOnDemand &&
+					t.message.getNodeId() === node.id,
+			)
+		);
 	}
 
 	private partialCCSessions = new Map<string, CommandClass[]>();
@@ -3174,6 +3191,8 @@ ${handlers.length} left`,
 									moreUpdatesFollow: false,
 									status: SupervisionStatus.Success,
 									secure,
+									requestWakeUpOnDemand:
+										this.shouldRequestWakeupOnDemand(node),
 								});
 						}
 						return;
@@ -3193,6 +3212,8 @@ ${handlers.length} left`,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
 								secure,
+								requestWakeUpOnDemand:
+									this.shouldRequestWakeupOnDemand(node),
 							});
 					} catch (e) {
 						await node
@@ -3202,6 +3223,8 @@ ${handlers.length} left`,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Fail,
 								secure,
+								requestWakeUpOnDemand:
+									this.shouldRequestWakeupOnDemand(node),
 							});
 
 						// In any case we don't want to swallow the error
@@ -3757,7 +3780,7 @@ ${handlers.length} left`,
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	public async sendCommand<TResponse extends CommandClass = CommandClass>(
+	public async sendCommand<TResponse extends ICommandClass = ICommandClass>(
 		command: CommandClass,
 		options: SendCommandOptions = {},
 	): Promise<TResponse | undefined> {
@@ -3768,7 +3791,7 @@ ${handlers.length} left`,
 			// And unwrap the response if there was any
 			if (isCommandClassContainer(resp)) {
 				this.unwrapCommands(resp);
-				return resp.command as TResponse;
+				return resp.command as unknown as TResponse;
 			}
 		} catch (e) {
 			// A timeout always has to be expected. In this case return nothing.
@@ -3922,14 +3945,14 @@ ${handlers.length} left`,
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 * @param predicate A predicate function to test all incoming command classes
 	 */
-	public waitForCommand<T extends CommandClass>(
-		predicate: (cc: CommandClass) => boolean,
+	public waitForCommand<T extends ICommandClass>(
+		predicate: (cc: ICommandClass) => boolean,
 		timeout: number,
 	): Promise<T> {
 		return new Promise<T>((resolve, reject) => {
 			const entry: AwaitedCommandEntry = {
 				predicate,
-				promise: createDeferredPromise<CommandClass>(),
+				promise: createDeferredPromise(),
 				timeout: undefined,
 			};
 			this.awaitedCommands.push(entry);
