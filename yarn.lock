@@ -3725,7 +3725,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.3
-    dayjs: ^1.11.1
+    dayjs: ^1.11.2
     esbuild: 0.14.42
     esbuild-register: ^3.3.2
     jest-extended: ^2.0.0
@@ -5084,10 +5084,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dayjs@npm:^1.11.1":
-  version: 1.11.1
-  resolution: "dayjs@npm:1.11.1"
-  checksum: d5fefd79935f64a3c262e67af7ebeca180bc402b3e99be4e12d20b6d438af3f86d507ba1cbaff95dc0b4e67f1067cea3eaf37b6b74f5494fdd4a6a2909514cd1
+"dayjs@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "dayjs@npm:1.11.2"
+  checksum: 78f8bd04a9e5f5554aa06eacda65a7d59e162d39f621a46fd34fb3b51367c3662426d86b4e2f4ac535f81e0c4d5af3e8a83b37e672412eb556267d726c61f8f3
   languageName: node
   linkType: hard
 
