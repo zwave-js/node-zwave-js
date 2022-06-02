@@ -627,17 +627,6 @@ export class AssociationCCReport extends AssociationCC {
 		this._nodeIds = [...partials, this]
 			.map((report) => report._nodeIds)
 			.reduce((prev, cur) => prev.concat(...cur), []);
-
-		// Persist values
-		const valueDB = this.getValueDB(applHost);
-		valueDB.setValue(
-			getMaxNodesValueId(this.endpointIndex, this._groupId),
-			this._maxNodes,
-		);
-		valueDB.setValue(
-			getNodeIdsValueId(this.endpointIndex, this._groupId),
-			this._nodeIds,
-		);
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

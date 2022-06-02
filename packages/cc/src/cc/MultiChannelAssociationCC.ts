@@ -734,16 +734,19 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	}
 
 	private _maxNodes: number;
+	@ccValue({ internal: true })
 	public get maxNodes(): number {
 		return this._maxNodes;
 	}
 
 	private _nodeIds: number[];
+	@ccValue({ internal: true })
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
 
 	private _endpoints: EndpointAddress[];
+	@ccValue({ internal: true })
 	public get endpoints(): readonly EndpointAddress[] {
 		return this._endpoints;
 	}
@@ -774,21 +777,6 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		this._endpoints = [...partials, this]
 			.map((report) => report._endpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
-
-		// Persist values
-		const valueDB = this.getValueDB(applHost);
-		valueDB.setValue(
-			getMaxNodesValueId(this.endpointIndex, this._groupId),
-			this._maxNodes,
-		);
-		valueDB.setValue(
-			getNodeIdsValueId(this.endpointIndex, this._groupId),
-			this._nodeIds,
-		);
-		valueDB.setValue(
-			getEndpointsValueId(this.endpointIndex, this._groupId),
-			this._endpoints,
-		);
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

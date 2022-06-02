@@ -729,8 +729,9 @@ export class CommandClass implements ICommandClass {
 		for (const variable of valueNames as string[]) {
 			// interviewComplete automatically updates the value DB, so no need to persist again
 			if (variable === "interviewComplete") continue;
-			// Only persist non-undefined values
+			// Only persist non-undefined values and things that are not functions
 			const sourceValue = this[variable as keyof this];
+			if (typeof sourceValue === "function") continue;
 			if (
 				sourceValue == undefined &&
 				!this.shouldValueAlwaysBeCreated(variable as keyof this)

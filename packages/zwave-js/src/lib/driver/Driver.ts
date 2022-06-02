@@ -2309,11 +2309,8 @@ export class Driver
 			// This way we can log the invalid CC contents
 			msg = Message.from(this, data);
 			// Ensure there are no errors
-			if (isCommandClassContainer(msg)) {
-				assertValidCCs(msg);
-				// And persist the CC values if there weren't any
-				this.persistCCValues(msg.command);
-			}
+			if (isCommandClassContainer(msg)) assertValidCCs(msg);
+			// And update statistics
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
 					this.getNodeUnsafe(msg)?.incrementStatistics("commandsRX");
@@ -2418,6 +2415,9 @@ export class Driver
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
+				// When we have a complete CC, save its values
+				this.persistCCValues(msg.command);
+
 				// Transport Service CC can be eliminated from the encapsulation stack, since it is always the outermost CC
 				if (isTransportServiceEncapsulation(msg.command)) {
 					msg.command = msg.command.encapsulated;
@@ -2782,6 +2782,8 @@ export class Driver
 					this.partialCCSessions.delete(partialSessionKey!);
 					try {
 						command.mergePartialCCs(this, session);
+						// Ensure there are no errors
+						assertValidCCs(msg);
 					} catch (e) {
 						if (isZWaveError(e)) {
 							switch (e.code) {

@@ -2096,6 +2096,15 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		this._name = this.payload.slice(3).toString("utf8");
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		this.extendParamInformation(applHost, this.parameter, undefined, {
+			name: this.name,
+		});
+		return true;
+	}
+
 	private _parameter: number;
 	public get parameter(): number {
 		return this._parameter;
@@ -2128,9 +2137,6 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		this._name = [...partials, this]
 			.map((report) => report._name)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(applHost, this.parameter, undefined, {
-			name: this.name,
-		});
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -2198,6 +2204,15 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		this._info = this.payload.slice(3).toString("utf8");
 	}
 
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		if (!super.persistValues(applHost)) return false;
+
+		this.extendParamInformation(applHost, this._parameter, undefined, {
+			info: this._info,
+		});
+		return true;
+	}
+
 	private _parameter: number;
 	public get parameter(): number {
 		return this._parameter;
@@ -2230,9 +2245,6 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		this._info = [...partials, this]
 			.map((report) => report._info)
 			.reduce((prev, cur) => prev + cur, "");
-		this.extendParamInformation(applHost, this._parameter, undefined, {
-			info: this._info,
-		});
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
