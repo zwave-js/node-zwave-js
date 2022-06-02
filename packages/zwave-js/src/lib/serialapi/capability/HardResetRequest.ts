@@ -1,4 +1,5 @@
 import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedCallback,
@@ -7,7 +8,6 @@ import {
 	Message,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

@@ -1,5 +1,7 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
+	TransmitOptions,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -14,12 +16,10 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { TransmitOptions } from "../../controller/_Types";
 
 export enum SetSUCNodeIdStatus {
 	Succeeded = 0x05,

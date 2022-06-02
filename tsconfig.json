@@ -18,9 +18,6 @@
 		"inlineSourceMap": false,
 		"stripInternal": true,
 
-		// Required for pnpm
-		"preserveSymlinks": true,
-
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
 		"types": ["node", "jest", "jest-extended", "ts-nameof"],

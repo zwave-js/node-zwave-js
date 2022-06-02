@@ -1,3 +1,4 @@
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
@@ -6,7 +7,6 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

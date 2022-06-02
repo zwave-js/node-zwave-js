@@ -1,4 +1,12 @@
 import type {
+	FirmwareUpdateStatus,
+	Powerlevel,
+	ZWaveNotificationCallbackParams_EntryControlCC,
+	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
+	ZWaveNotificationCallbackParams_NotificationCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "@zwave-js/cc";
+import type {
 	MetadataUpdatedArgs,
 	NodeStatus,
 	ValueAddedArgs,
@@ -7,14 +15,6 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
-import type {
-	FirmwareUpdateStatus,
-	Powerlevel,
-	ZWaveNotificationCallbackParams_EntryControlCC,
-	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
-	ZWaveNotificationCallbackParams_NotificationCC,
-	ZWaveNotificationCallbackParams_PowerlevelCC,
-} from "../commandclass/_Types";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
 

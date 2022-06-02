@@ -1,5 +1,6 @@
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
-import { MockSerialPort } from "@zwave-js/serial";
+import type { MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -41,7 +42,10 @@ describe("regression tests", () => {
 
 		// A command is sent to a node which supports Multilevel Switch only secure and Supervision is allowed non-securely
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);

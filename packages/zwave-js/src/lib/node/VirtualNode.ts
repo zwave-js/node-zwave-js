@@ -1,7 +1,9 @@
+import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
 	actuatorCCs,
 	CommandClasses,
 	isZWaveError,
+	IVirtualNode,
 	TranslatedValueID,
 	ValueID,
 	valueIdToString,
@@ -11,7 +13,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
-import type { CCAPI, SetValueAPIOptions } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
@@ -23,7 +24,7 @@ export interface VirtualValueID extends TranslatedValueID {
 	ccVersion: number;
 }
 
-export class VirtualNode extends VirtualEndpoint {
+export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,
@@ -221,6 +222,19 @@ export class VirtualNode extends VirtualEndpoint {
 			);
 		}
 		return this._endpointInstances.get(index)!;
+	}
+
+	public getEndpointOrThrow(index: number): VirtualEndpoint {
+		const ret = this.getEndpoint(index);
+		if (!ret) {
+			throw new ZWaveError(
+				`Endpoint ${index} does not exist on virtual node ${
+					this.id ?? "??"
+				}`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+		return ret;
 	}
 
 	/** Returns the current endpoint count of this virtual node (the maximum in the list of physical nodes) */

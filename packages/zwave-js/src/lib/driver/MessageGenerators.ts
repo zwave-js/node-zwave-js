@@ -1,26 +1,31 @@
-import { SPANState, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	CommandClass,
+	isCommandClassContainer,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "@zwave-js/cc";
+import {
+	SecurityCCCommandEncapsulation,
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "@zwave-js/cc/SecurityCC";
+import {
+	SendCommandOptions,
+	SPANState,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
-	CommandClass,
-	Security2CCMessageEncapsulation,
-	Security2CCNonceGet,
-	Security2CCNonceReport,
-} from "../commandclass";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import {
-	SecurityCCCommandEncapsulation,
-	SecurityCCNonceGet,
-	SecurityCCNonceReport,
-} from "../commandclass/SecurityCC";
-import {
 	isSendData,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
-import type { Driver, SendCommandOptions } from "./Driver";
+import type { Driver } from "./Driver";
 import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 

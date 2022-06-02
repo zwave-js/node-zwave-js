@@ -1,3 +1,4 @@
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
@@ -7,7 +8,6 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
