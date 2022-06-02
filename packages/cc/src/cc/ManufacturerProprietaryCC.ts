@@ -80,7 +80,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async fibaroVenetianBlindsGet() {
 		const { FibaroVenetianBlindCCGet } =
-			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/FibaroCC");
+			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
 		const cc = new FibaroVenetianBlindCCGet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -98,7 +98,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	@validateArgs()
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
 		const { FibaroVenetianBlindCCSet } =
-			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/FibaroCC");
+			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
 		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -110,7 +110,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 	@validateArgs()
 	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
 		const { FibaroVenetianBlindCCSet } =
-			require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/FibaroCC");
+			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
 		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
@@ -124,7 +124,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		value,
 	): Promise<void> => {
 		// TODO: This is pretty hardcoded, can we make this more flexible?
-		if (property !== "fibaro") {
+		if (property !== "FibaroCC") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (propertyKey === "venetianBlindsPosition") {
@@ -160,7 +160,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		property,
 		propertyKey,
 	}): Promise<unknown> => {
-		if (property !== "fibaro") {
+		if (property !== "FibaroCC") {
 			throwUnsupportedProperty(this.ccId, property);
 		} else if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
@@ -288,7 +288,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
 			const FibaroVenetianBlindCC = (
-				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/FibaroCC")
+				require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC")
 			).FibaroVenetianBlindCC;
 			await new FibaroVenetianBlindCC(this.host, {
 				nodeId: this.nodeId,
@@ -324,7 +324,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
 		) {
 			const FibaroVenetianBlindCC = (
-				require("./manufacturerProprietary/Fibaro") as typeof import("./manufacturerProprietary/FibaroCC")
+				require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC")
 			).FibaroVenetianBlindCC;
 			await new FibaroVenetianBlindCC(this.host, {
 				nodeId: this.nodeId,
@@ -344,6 +344,6 @@ function getProprietaryCCConstructor(
 ): typeof ManufacturerProprietaryCC | undefined {
 	switch (manufacturerId) {
 		case MANUFACTURERID_FIBARO:
-			return require("./manufacturerProprietary/Fibaro").FibaroCC;
+			return require("./manufacturerProprietary/FibaroCC").FibaroCC;
 	}
 }

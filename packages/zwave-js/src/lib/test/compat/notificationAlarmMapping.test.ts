@@ -1,14 +1,14 @@
-import { CommandClasses } from "@zwave-js/core";
-import type { ThrowingMap } from "@zwave-js/shared";
-import { MockController } from "@zwave-js/testing";
-import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import { CommandClass } from "../../commandclass";
+import { CommandClass } from "@zwave-js/cc";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
 	getProductTypeValueId,
-} from "../../commandclass/ManufacturerSpecificCC";
-import { NotificationCCReport } from "../../commandclass/NotificationCC";
+} from "@zwave-js/cc/ManufacturerSpecificCC";
+import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
+import { CommandClasses } from "@zwave-js/core";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";

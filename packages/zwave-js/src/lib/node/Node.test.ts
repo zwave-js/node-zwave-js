@@ -1,4 +1,17 @@
-import { getCCConstructor } from "@zwave-js/cc";
+import {
+	BasicCommand,
+	BinarySwitchCommand,
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	getCCConstructor,
+	WakeUpCommand,
+} from "@zwave-js/cc";
+import { BasicCC } from "@zwave-js/cc/BasicCC";
+import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
+import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
+import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
+import { WakeUpCC } from "@zwave-js/cc/WakeUpCC";
 import {
 	applicationCCs,
 	assertZWaveError,
@@ -18,19 +31,6 @@ import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
-import { BasicCC } from "../commandclass/BasicCC";
-import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
-import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
-import {
-	BasicCommand,
-	BinarySwitchCommand,
-	EntryControlCommand,
-	EntryControlDataTypes,
-	EntryControlEventTypes,
-	WakeUpCommand,
-} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
 import {
@@ -76,9 +76,9 @@ class TestNode extends ZWaveNode {
 describe("lib/node/Node", () => {
 	beforeAll(async () => {
 		// Load all CCs manually to populate the metadata
-		await import("../commandclass/BatteryCC");
-		await import("../commandclass/ThermostatSetpointCC");
-		await import("../commandclass/VersionCC");
+		await import("@zwave-js/cc/BatteryCC");
+		await import("@zwave-js/cc/ThermostatSetpointCC");
+		await import("@zwave-js/cc/VersionCC");
 	});
 
 	describe("constructor", () => {
@@ -425,7 +425,7 @@ describe("lib/node/Node", () => {
 			it.todo("test that the CC interview methods are called");
 
 			it("the CC interviews happen in the correct order", () => {
-				require("../commandclass/index");
+				require("@zwave-js/cc/index");
 				expect(getCCConstructor(49)).not.toBeUndefined();
 
 				const node = new ZWaveNode(2, fakeDriver as any);

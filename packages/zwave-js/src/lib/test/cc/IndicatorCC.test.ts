@@ -1,13 +1,15 @@
 import {
 	CommandClass,
-	getIndicatorValueValueID,
-	getSupportedIndicatorIDsValueID,
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,
 	IndicatorCCSet,
 	IndicatorCommand,
 } from "@zwave-js/cc";
+import {
+	getIndicatorValueValueID,
+	getSupportedIndicatorIDsValueID,
+} from "@zwave-js/cc/IndicatorCC";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { createTestNode } from "../mocks";

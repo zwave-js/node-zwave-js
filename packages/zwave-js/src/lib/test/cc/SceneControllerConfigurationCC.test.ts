@@ -1,11 +1,11 @@
 import {
-	getGroupCountValueId,
 	SceneControllerConfigurationCC,
 	SceneControllerConfigurationCCGet,
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
 	SceneControllerConfigurationCommand,
 } from "@zwave-js/cc";
+import { getGroupCountValueId } from "@zwave-js/cc/AssociationCC";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { createTestNode } from "../mocks";

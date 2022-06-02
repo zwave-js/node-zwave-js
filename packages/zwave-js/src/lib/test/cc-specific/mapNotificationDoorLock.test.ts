@@ -1,10 +1,10 @@
+import { DoorLockMode } from "@zwave-js/cc";
+import { getCurrentModeValueId as getCurrentLockModeValueId } from "@zwave-js/cc/DoorLockCC";
+import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
-import { getCurrentModeValueId as getCurrentLockModeValueId } from "../../commandclass/DoorLockCC";
-import { NotificationCCReport } from "../../commandclass/NotificationCC";
-import { DoorLockMode } from "../../commandclass/_Types";
 import type { Driver } from "../../driver/Driver";
 import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";

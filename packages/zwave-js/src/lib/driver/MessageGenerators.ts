@@ -1,10 +1,10 @@
 import {
 	CommandClass,
+	isCommandClassContainer,
 	Security2CCMessageEncapsulation,
 	Security2CCNonceGet,
 	Security2CCNonceReport,
 } from "@zwave-js/cc";
-import { isCommandClassContainer } from "@zwave-js/cc/ICommandClassContainer";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,

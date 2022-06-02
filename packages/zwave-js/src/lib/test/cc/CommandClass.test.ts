@@ -197,11 +197,11 @@ describe("lib/commandclass/CommandClass => ", () => {
 				nodeId: node2.id,
 				targetValue: 55,
 			});
-			cc.interviewComplete = true;
+			cc.setInterviewComplete(driver, true);
 
 			const mockSetValue = jest.fn();
 			node2.valueDB.setValue = mockSetValue;
-			cc.persistValues();
+			cc.persistValues(driver);
 
 			const properties = mockSetValue.mock.calls
 				.map(([arg0]) => arg0)

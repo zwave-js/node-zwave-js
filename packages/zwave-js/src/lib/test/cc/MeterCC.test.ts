@@ -13,10 +13,10 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { TestingHost, ZWaveNodeBase } from "@zwave-js/host";
+import type { TestingHost } from "@zwave-js/host";
 import { createTestingHost } from "@zwave-js/host";
 import * as nodeUtils from "../../node/utils";
-import { createTestNode } from "../mocks";
+import { createTestNode, TestNode } from "../mocks";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -29,7 +29,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/MeterCC => ", () => {
 	let host: TestingHost;
-	let node2: ZWaveNodeBase;
+	let node2: TestNode;
 
 	beforeAll(
 		async () => {

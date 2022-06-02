@@ -10,11 +10,13 @@ import {
 	DoorLockCommand,
 	DoorLockMode,
 	DoorLockOperationType,
+} from "@zwave-js/cc";
+import {
 	getBoltSupportedValueId,
 	getDoorStatusValueId,
 	getDoorSupportedValueId,
 	getLatchSupportedValueId,
-} from "@zwave-js/cc";
+} from "@zwave-js/cc/DoorLockCC";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 

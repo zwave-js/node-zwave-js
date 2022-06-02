@@ -1,4 +1,4 @@
-import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "@zwave-js/cc";
+import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "@zwave-js/cc/BasicCC";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";

@@ -1,25 +1,23 @@
 import { getImplementedVersion } from "@zwave-js/cc";
-import { ConfigManager, DeviceConfig } from "@zwave-js/config";
+import { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
 	FLiRS,
 	InterviewStage,
 	Maybe,
+	MessagePriority,
 	NodeStatus,
 	SecurityClass,
 	securityClassOrder,
 	unknownBoolean,
-} from "@zwave-js/core";
-import type {
 	ZWaveEndpointBase,
-	ZWaveHost,
 	ZWaveNodeBase,
-} from "@zwave-js/host";
+} from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
 	FunctionType,
 	Message,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
@@ -198,7 +196,6 @@ export interface CreateTestNodeOptions {
 	isFrequentListening?: FLiRS | undefined;
 	status?: NodeStatus;
 	interviewStage?: InterviewStage;
-	deviceConfig?: DeviceConfig;
 	isSecure?: Maybe<boolean>;
 
 	numEndpoints?: number;
@@ -243,7 +240,6 @@ export function createTestNode(
 			options.status ??
 			(options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
 		interviewStage: options.interviewStage ?? InterviewStage.Complete,
-		deviceConfig: options.deviceConfig,
 
 		setEndpoint: (endpoint) => {
 			endpointCache.set(

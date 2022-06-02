@@ -1,4 +1,4 @@
-import { isMessagePriority, MessagePriority } from "./Constants";
+import { isMessagePriority, MessagePriority } from "./Transmission";
 
 describe("lib/message/Constants => isMessagePriority() => ", () => {
 	it("should detect numbers in the enum range as a message priority", () => {
