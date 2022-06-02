@@ -6,9 +6,9 @@ import {
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { buffer2hex } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { buffer2hex } from "@zwave-js/shared/safe";
 import {
 	CCCommand,
 	commandClass,

@@ -1,4 +1,4 @@
-import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc/src";
+import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
 	actuatorCCs,
 	CommandClasses,

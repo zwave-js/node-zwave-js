@@ -1,4 +1,4 @@
-import type { MessageRecord, ValueID } from "@zwave-js/core";
+import type { MessageRecord, ValueID } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	CRC16_CCITT,
@@ -8,9 +8,14 @@ import {
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import {
+	AllOrNone,
+	getEnumMemberName,
+	num2hex,
+	pick,
+} from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
 import {

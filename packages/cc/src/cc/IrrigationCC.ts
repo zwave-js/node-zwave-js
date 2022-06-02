@@ -13,9 +13,9 @@ import {
 	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import {

@@ -1,4 +1,4 @@
-import { CommandClasses } from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core/safe";
 import {
 	CCCommand,
 	commandClass,

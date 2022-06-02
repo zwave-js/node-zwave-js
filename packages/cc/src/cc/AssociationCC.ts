@@ -5,7 +5,7 @@ import type {
 	ValueID,
 	ZWaveEndpointBase,
 	ZWaveNodeBase,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MAX_NODES,
@@ -14,8 +14,8 @@ import {
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";

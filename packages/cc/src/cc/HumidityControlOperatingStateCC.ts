@@ -6,9 +6,9 @@ import {
 	MessagePriority,
 	validatePayload,
 	ValueMetadata,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { getEnumMemberName } from "@zwave-js/shared/safe";
 import {
 	CCAPI,
 	PollValueImplementation,

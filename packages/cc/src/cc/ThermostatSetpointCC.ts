@@ -3,7 +3,7 @@ import type {
 	MessageOrCCLogEntry,
 	ValueID,
 	ValueMetadataNumeric,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -15,9 +15,9 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,

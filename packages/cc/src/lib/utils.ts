@@ -5,9 +5,9 @@ import {
 	ZWaveErrorCodes,
 	ZWaveNodeBase,
 	type ZWaveEndpointBase,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost } from "@zwave-js/host";
-import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
+import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	AssociationCC,

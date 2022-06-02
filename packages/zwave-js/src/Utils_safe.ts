@@ -1,4 +1,3 @@
-export { rssiToString } from "@zwave-js/core";
 export {
 	Firmware,
 	FirmwareFileFormat,
@@ -8,6 +7,7 @@ export {
 	ProtocolType,
 	ProtocolVersion,
 	RouteProtocolDataRate,
+	rssiToString,
 } from "@zwave-js/core/safe";
 export {
 	buffer2hex,

@@ -13,8 +13,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";

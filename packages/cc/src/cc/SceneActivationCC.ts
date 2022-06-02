@@ -3,14 +3,14 @@ import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
 	ValueID,
-} from "@zwave-js/core";
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	Duration,
 	validatePayload,
 	ValueMetadata,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,

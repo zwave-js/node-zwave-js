@@ -1,5 +1,9 @@
-import { validatePayload, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared";
+import {
+	validatePayload,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core/safe";
+import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared/safe";
 
 enum S2ExtensionType {
 	SPAN = 0x01,

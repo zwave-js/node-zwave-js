@@ -22,9 +22,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveNodeBase,
-} from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
-import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";

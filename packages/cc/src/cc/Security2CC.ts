@@ -24,9 +24,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { gotDeserializationOptions } from "@zwave-js/serial";
-import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { CCAPI } from "../lib/API";
 import {
 	API,
