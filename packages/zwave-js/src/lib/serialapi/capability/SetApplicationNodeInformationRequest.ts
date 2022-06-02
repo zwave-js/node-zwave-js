@@ -1,10 +1,14 @@
-import { CommandClasses, getCCName, MessageOrCCLogEntry } from "@zwave-js/core";
+import {
+	CommandClasses,
+	getCCName,
+	MessageOrCCLogEntry,
+	MessagePriority,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	FunctionType,
 	Message,
 	MessageBaseOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

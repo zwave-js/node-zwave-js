@@ -1,7 +1,7 @@
+import { MessagePriority } from "@zwave-js/core";
 import {
 	FunctionType,
 	Message,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

@@ -1,1 +1,0 @@
-export const MANUFACTURERID_FIBARO = 0x10f;

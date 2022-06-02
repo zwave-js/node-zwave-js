@@ -3,6 +3,7 @@ export {
 	guessFirmwareFileFormat,
 	parseQRCodeString,
 	QRCodeVersion,
+	rssiToString,
 } from "@zwave-js/core";
 export type {
 	Firmware,
@@ -22,7 +23,6 @@ export {
 	num2hex,
 } from "@zwave-js/shared/safe";
 export { createDefaultBehaviors as createDefaultMockControllerBehaviors } from "./lib/controller/MockControllerBehaviors";
-export { rssiToString } from "./lib/controller/_Types";
 export { createAndStartDriverWithMockPort } from "./lib/driver/DriverMock";
 export {
 	formatLifelineHealthCheckRound,

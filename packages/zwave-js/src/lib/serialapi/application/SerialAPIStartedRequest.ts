@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	encodeCCList,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	parseCCList,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
@@ -11,7 +12,6 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

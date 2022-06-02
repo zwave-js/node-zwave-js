@@ -1,6 +1,5 @@
 /* @noExternalImports */
 
-export * from "./CommandClass_safe";
 export * from "./Controller_safe";
 // export * from "./Driver";
 export * from "./Error";

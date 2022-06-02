@@ -1,5 +1,4 @@
-import type { ProtocolDataRate } from "@zwave-js/core";
-import type { RSSI } from "../controller/_Types";
+import type { ProtocolDataRate, RSSI } from "@zwave-js/core";
 import { StatisticsHost } from "../driver/Statistics";
 
 export class NodeStatisticsHost extends StatisticsHost<NodeStatistics> {

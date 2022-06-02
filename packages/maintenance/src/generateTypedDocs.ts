@@ -432,7 +432,7 @@ async function generateCCDocs(
 	await fs.ensureDir(ccDocsDir);
 
 	// Find CC APIs
-	const ccFiles = program.getSourceFiles("packages/zwave-js/**/*CC.ts");
+	const ccFiles = program.getSourceFiles("packages/cc/src/cc/**/*CC.ts");
 	let generatedIndex = "";
 	let generatedSidebar = "";
 
