@@ -1,4 +1,5 @@
 import "reflect-metadata";
+
 export * from "./cc/index";
 export * from "./lib/API";
 export * from "./lib/CommandClass";
