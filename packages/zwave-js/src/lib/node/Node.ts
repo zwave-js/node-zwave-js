@@ -1256,7 +1256,7 @@ export class ZWaveNode
 
 		// Don't keep the node awake after the interview
 		this.keepAwake = false;
-		void this.driver.interviewNode(this);
+		void this.driver.interviewNodeInternal(this);
 	}
 
 	/**

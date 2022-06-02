@@ -76,6 +76,13 @@ export interface ZWaveOptions {
 		 * Note that enabling this can cause a lot of traffic during the interview.
 		 */
 		queryAllUserCodes?: boolean;
+
+		/**
+		 * Whether a node should be interviewed after successful inclusion
+		 * Note: When enabled, the interview must be triggered manually using
+		 *		 `driver.interviewNode(node: ZWaveNode)`
+		 */
+		disableOnNodeAdded?: boolean;
 	};
 
 	storage: {

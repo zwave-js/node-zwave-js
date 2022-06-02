@@ -858,6 +858,14 @@ A node could not be included into or excluded from the network for some reason.
 
 The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
 
+### `"node found"`
+
+A node has successfully been registered with the controller
+
+```ts
+(node: ZWaveNode) => void
+```
+
 ### `"node added"`
 
 A node has successfully been added to the network

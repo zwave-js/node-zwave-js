@@ -32,6 +32,16 @@ The following table gives you an overview of what happens during the startup pro
 |  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                                                                                |
 |  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed for the first time. This only gets emitted once, unless the node gets re-interviewed. |
 
+### `interviewNode`
+
+```ts
+interviewNode(node: ZWaveNode): <Promise>void
+```
+
+Starts or resumes the interview of a Z-Wave node only when the initial interview was bypassed.
+
+> [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
+
 ### `enableErrorReporting`
 
 ```ts
@@ -656,6 +666,13 @@ interface ZWaveOptions {
 		 * Note that enabling this can cause a lot of traffic during the interview.
 		 */
 		queryAllUserCodes?: boolean;
+
+		/**
+		 * Whether a node should be interviewed after successful inclusion
+		 * Note: When enabled, the interview must be triggered manually using
+		 *		 `driver.interviewNode(nodeid)`
+		 */
+		disableOnNodeAdded?: boolean;
 	};
 
 	storage: {
