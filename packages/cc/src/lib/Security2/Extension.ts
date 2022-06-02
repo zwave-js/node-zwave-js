@@ -4,6 +4,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import { getEnumMemberName, TypedClassDecorator } from "@zwave-js/shared/safe";
+import "reflect-metadata";
 
 enum S2ExtensionType {
 	SPAN = 0x01,
