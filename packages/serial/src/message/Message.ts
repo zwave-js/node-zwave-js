@@ -3,20 +3,18 @@
 import {
 	getNodeTag,
 	highResTimestamp,
+	IZWaveNode,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type {
-	ZWaveApplicationHost,
-	ZWaveHost,
-	ZWaveNodeBase,
-} from "@zwave-js/host";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { MessageHeaders } from "../MessageHeaders";
-import { FunctionType, MessagePriority, MessageType } from "./Constants";
+import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
 type Constructable<T extends Message> = new (
@@ -368,7 +366,7 @@ export class Message {
 	 */
 	public getNodeUnsafe(
 		applHost: ZWaveApplicationHost,
-	): ZWaveNodeBase | undefined {
+	): IZWaveNode | undefined {
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined) return applHost.nodes.get(nodeId);
 	}

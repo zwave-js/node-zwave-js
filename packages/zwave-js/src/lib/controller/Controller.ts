@@ -1,5 +1,29 @@
 import {
-	actuatorCCs,
+	ECDHProfiles,
+	getFirmwareVersionsMetadata,
+	getFirmwareVersionsValueId,
+	getManufacturerIdValueId,
+	getManufacturerIdValueMetadata,
+	getProductIdValueId,
+	getProductIdValueMetadata,
+	getProductTypeValueId,
+	getProductTypeValueMetadata,
+	getSDKVersionMetadata,
+	getSDKVersionValueId,
+	inclusionTimeouts,
+	KEXFailType,
+	KEXSchemes,
+	Security2CCKEXFail,
+	Security2CCKEXSet,
+	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyVerify,
+	Security2CCPublicKeyReport,
+	Security2CCTransferEnd,
+	utils as ccUtils,
+	type AssociationAddress,
+	type AssociationGroup,
+} from "@zwave-js/cc";
+import {
 	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
@@ -17,6 +41,7 @@ import {
 	nwiHomeIdFromDSK,
 	ProtocolType,
 	RFRegion,
+	RSSI,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -34,7 +59,6 @@ import {
 	getErrorMessage,
 	Mixin,
 	num2hex,
-	ObjectKeyMap,
 	padVersion,
 	pick,
 	ReadonlyObjectKeyMap,
@@ -51,42 +75,6 @@ import {
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
-import {
-	Security2CCKEXFail,
-	Security2CCKEXSet,
-	Security2CCNetworkKeyGet,
-	Security2CCNetworkKeyVerify,
-	Security2CCPublicKeyReport,
-	Security2CCTransferEnd,
-} from "../commandclass";
-import { AssociationCC } from "../commandclass/AssociationCC";
-import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
-import {
-	getManufacturerIdValueId,
-	getManufacturerIdValueMetadata,
-	getProductIdValueId,
-	getProductIdValueMetadata,
-	getProductTypeValueId,
-	getProductTypeValueMetadata,
-} from "../commandclass/ManufacturerSpecificCC";
-import { MultiChannelAssociationCC } from "../commandclass/MultiChannelAssociationCC";
-import {
-	ECDHProfiles,
-	inclusionTimeouts,
-	KEXFailType,
-	KEXSchemes,
-} from "../commandclass/Security2/shared";
-import {
-	getFirmwareVersionsMetadata,
-	getFirmwareVersionsValueId,
-	getSDKVersionMetadata,
-	getSDKVersionValueId,
-} from "../commandclass/VersionCC";
-import type {
-	AssociationAddress,
-	AssociationGroup,
-	EndpointAddress,
-} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -261,7 +249,7 @@ import { determineNIF } from "./NodeInformationFrame";
 import { assertProvisioningEntry } from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
-import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
+import type { HealNodeStatus, SDKVersion } from "./_Types";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks
@@ -3328,99 +3316,7 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(nodeId);
 		const endpoint = node.getEndpointOrThrow(endpointIndex);
 
-		// Check whether we have multi channel support or not
-		let assocInstance: typeof AssociationCC;
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-		} else {
-			throw new ZWaveError(
-				`Node ${nodeId}${
-					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-		}
-
-		const assocGroupCount =
-			assocInstance.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const mcGroupCount =
-			mcInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const groupCount = Math.max(assocGroupCount, mcGroupCount);
-
-		const ret = new Map<number, AssociationGroup>();
-
-		if (
-			endpoint.supportsCC(CommandClasses["Association Group Information"])
-		) {
-			// We can read all information we need from the AGI CC
-			const agiInstance = AssociationGroupInfoCC;
-			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig =
-					node.deviceConfig?.getAssociationConfigForEndpoint(
-						endpointIndex,
-						group,
-					);
-				const multiChannel = !!mcInstance && group <= mcGroupCount;
-				ret.set(group, {
-					maxNodes:
-						(multiChannel
-							? mcInstance!
-							: assocInstance
-						).getMaxNodesCached(this.driver, endpoint, group) || 1,
-					// AGI implies Z-Wave+ where group 1 is the lifeline
-					isLifeline: group === 1,
-					label:
-						// prefer the configured label if we have one
-						assocConfig?.label ??
-						// the ones reported by AGI are sometimes pretty bad
-						agiInstance.getGroupNameCached(
-							this.driver,
-							endpoint,
-							group,
-						) ??
-						// but still better than "unnamed"
-						`Unnamed group ${group}`,
-					multiChannel,
-					profile: agiInstance.getGroupProfileCached(
-						this.driver,
-						endpoint,
-						group,
-					),
-					issuedCommands: agiInstance.getIssuedCommandsCached(
-						this.driver,
-						endpoint,
-						group,
-					),
-				});
-			}
-		} else {
-			// we need to consult the device config
-			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig =
-					node.deviceConfig?.getAssociationConfigForEndpoint(
-						endpointIndex,
-						group,
-					);
-				const multiChannel = !!mcInstance && group <= mcGroupCount;
-				ret.set(group, {
-					maxNodes:
-						(multiChannel
-							? mcInstance!
-							: assocInstance
-						).getMaxNodesCached(this.driver, endpoint, group) ||
-						assocConfig?.maxNodes ||
-						1,
-					isLifeline: assocConfig?.isLifeline ?? group === 1,
-					label: assocConfig?.label ?? `Unnamed group ${group}`,
-					multiChannel,
-				});
-			}
-		}
-		return ret;
+		return ccUtils.getAssociationGroups(this.driver, endpoint);
 	}
 
 	/**
@@ -3431,20 +3327,7 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 	): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 		const node = this.nodes.getOrThrow(nodeId);
-
-		const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
-		for (const endpoint of node.getAllEndpoints()) {
-			if (endpoint.supportsCC(CommandClasses.Association)) {
-				ret.set(
-					endpoint.index,
-					this.getAssociationGroups({
-						nodeId,
-						endpoint: endpoint.index,
-					}),
-				);
-			}
-		}
-		return ret;
+		return ccUtils.getAllAssociationGroups(this.driver, node);
 	}
 
 	/**
@@ -3473,54 +3356,7 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(nodeId);
 		const endpoint = node.getEndpointOrThrow(endpointIndex);
 
-		const ret = new Map<number, readonly AssociationAddress[]>();
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			const destinations = AssociationCC.getAllDestinationsCached(
-				this.driver,
-				endpoint,
-			);
-			for (const [groupId, assocs] of destinations) {
-				ret.set(groupId, assocs);
-			}
-		} else {
-			throw new ZWaveError(
-				`Node ${nodeId}${
-					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// Merge the "normal" destinations with multi channel destinations
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			const destinations =
-				MultiChannelAssociationCC.getAllDestinationsCached(
-					this.driver,
-					endpoint,
-				);
-			for (const [groupId, assocs] of destinations) {
-				if (ret.has(groupId)) {
-					const normalAssociations = ret.get(groupId)!;
-					ret.set(groupId, [
-						...normalAssociations,
-						// Eliminate potential duplicates
-						...assocs.filter(
-							(a1) =>
-								normalAssociations.findIndex(
-									(a2) =>
-										a1.nodeId === a2.nodeId &&
-										a1.endpoint === a2.endpoint,
-								) === -1,
-						),
-					]);
-				} else {
-					ret.set(groupId, assocs);
-				}
-			}
-		}
-
-		return ret;
+		return ccUtils.getAssociations(this.driver, endpoint);
 	}
 
 	/**
@@ -3534,21 +3370,7 @@ ${associatedNodes.join(", ")}`,
 		ReadonlyMap<number, readonly AssociationAddress[]>
 	> {
 		const node = this.nodes.getOrThrow(nodeId);
-
-		const ret = new ObjectKeyMap<
-			AssociationAddress,
-			ReadonlyMap<number, readonly AssociationAddress[]>
-		>();
-		for (const endpoint of node.getAllEndpoints()) {
-			const address: AssociationAddress = {
-				nodeId,
-				endpoint: endpoint.index,
-			};
-			if (endpoint.supportsCC(CommandClasses.Association)) {
-				ret.set(address, this.getAssociations(address));
-			}
-		}
-		return ret;
+		return ccUtils.getAllAssociations(this.driver, node);
 	}
 
 	/**
@@ -3581,62 +3403,12 @@ ${associatedNodes.join(", ")}`,
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		// Check that the target endpoint exists except when adding an association to the controller
-		const targetNode = this.nodes.getOrThrow(destination.nodeId);
-		const targetEndpoint =
-			destination.nodeId === this._ownNodeId
-				? targetNode
-				: targetNode.getEndpointOrThrow(destination.endpoint ?? 0);
-
-		// SDS14223:
-		// A controlling node MUST NOT associate Node A to a Node B destination that does not support
-		// the Command Class that the Node A will be controlling
-		//
-		// To determine this, the node must support the AGI CC or we have no way of knowing which
-		// CCs the node will control
-		if (
-			!endpoint.supportsCC(CommandClasses.Association) &&
-			!endpoint.supportsCC(CommandClasses["Multi Channel Association"])
-		) {
-			throw new ZWaveError(
-				`Node ${node.id}${
-					endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		} else if (
-			!endpoint.supportsCC(
-				CommandClasses["Association Group Information"],
-			)
-		) {
-			return true;
-		}
-
-		// The following checks don't apply to Lifeline associations
-		if (destination.nodeId === this._ownNodeId) return true;
-
-		const groupCommandList = AssociationGroupInfoCC.getIssuedCommandsCached(
+		return ccUtils.isAssociationAllowed(
 			this.driver,
 			endpoint,
 			group,
+			destination,
 		);
-		if (!groupCommandList || !groupCommandList.size) {
-			// We don't know which CCs this group controls, just allow it
-			return true;
-		}
-		const groupCCs = [...groupCommandList.keys()];
-
-		// A controlling node MAY create an association to a destination supporting an
-		// actuator Command Class if the actual association group sends Basic Control Command Class.
-		if (
-			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
-		) {
-			return true;
-		}
-
-		// Enforce that at least one issued CC is supported
-		return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
 	}
 
 	/**
@@ -3661,7 +3433,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Adds associations to a node or endpoint
 	 */
-	public async addAssociations(
+	public addAssociations(
 		source: number | AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
@@ -3671,129 +3443,12 @@ ${associatedNodes.join(", ")}`,
 		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
-		const nodeAndEndpointString = `${node.id}${
-			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-		}`;
-
-		// Check whether we should add any associations the device does not have support for
-		let assocInstance: typeof AssociationCC | undefined;
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		// Split associations into conventional and endpoint associations
-		const nodeAssociations = distinct(
-			destinations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId),
+		return ccUtils.addAssociations(
+			this.driver,
+			endpoint,
+			group,
+			destinations,
 		);
-		const endpointAssociations = destinations.filter(
-			(a) => a.endpoint != undefined,
-		) as EndpointAddress[];
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-		} else if (nodeAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		const assocGroupCount =
-			assocInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const mcGroupCount =
-			mcInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const groupCount = Math.max(assocGroupCount, mcGroupCount);
-		if (group > groupCount) {
-			throw new ZWaveError(
-				`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-
-		const groupIsMultiChannel =
-			!!mcInstance &&
-			group <= mcGroupCount &&
-			node.deviceConfig?.associations?.get(group)?.multiChannel !== false;
-
-		if (groupIsMultiChannel) {
-			// Check that all associations are allowed
-			const disallowedAssociations = destinations.filter(
-				(a) =>
-					!this.isAssociationAllowed(
-						source as AssociationAddress,
-						group,
-						a,
-					),
-			);
-			if (disallowedAssociations.length) {
-				let message = `The following associations are not allowed:`;
-				message += disallowedAssociations
-					.map(
-						(a) =>
-							`\n· Node ${a.nodeId}${
-								a.endpoint ? `, endpoint ${a.endpoint}` : ""
-							}`,
-					)
-					.join("");
-				throw new ZWaveError(
-					message,
-					ZWaveErrorCodes.AssociationCC_NotAllowed,
-				);
-			}
-
-			// And add them
-			await endpoint.commandClasses[
-				"Multi Channel Association"
-			].addDestinations({
-				groupId: group,
-				nodeIds: nodeAssociations,
-				endpoints: endpointAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses["Multi Channel Association"].getGroup(
-				group,
-			);
-		} else {
-			// Although the node supports multi channel associations, this group only supports "normal" associations
-			if (destinations.some((a) => a.endpoint != undefined)) {
-				throw new ZWaveError(
-					`Node ${nodeAndEndpointString}, group ${group} does not support multi channel associations!`,
-					ZWaveErrorCodes.CC_NotSupported,
-				);
-			}
-
-			// Check that all associations are allowed
-			const disallowedAssociations = destinations.filter(
-				(a) =>
-					!this.isAssociationAllowed(
-						source as AssociationAddress,
-						group,
-						a,
-					),
-			);
-			if (disallowedAssociations.length) {
-				throw new ZWaveError(
-					`The associations to the following nodes are not allowed: ${disallowedAssociations
-						.map((a) => a.nodeId)
-						.join(", ")}`,
-					ZWaveErrorCodes.AssociationCC_NotAllowed,
-				);
-			}
-
-			await endpoint.commandClasses.Association.addNodeIds(
-				group,
-				...destinations.map((a) => a.nodeId),
-			);
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		}
 	}
 
 	/**
@@ -3818,7 +3473,7 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Removes the given associations from a node or endpoint
 	 */
-	public async removeAssociations(
+	public removeAssociations(
 		source: number | AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
@@ -3828,107 +3483,12 @@ ${associatedNodes.join(", ")}`,
 		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
-		const nodeAndEndpointString = `${node.id}${
-			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-		}`;
-
-		// Split associations into conventional and endpoint associations
-		const nodeAssociations = distinct(
-			destinations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId),
+		return ccUtils.removeAssociations(
+			this.driver,
+			endpoint,
+			group,
+			destinations,
 		);
-		const endpointAssociations = destinations.filter(
-			(a) => a.endpoint != undefined,
-		) as EndpointAddress[];
-
-		// Removing associations is not either/or - we could have a device with duplicated associations between
-		// Association CC and Multi Channel Association CC
-		// Figure out what we need to use to remove the associations
-
-		let groupExistsAsMultiChannel = false;
-		let groupExistsAsNodeAssociation = false;
-
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		let assocInstance: typeof AssociationCC | undefined;
-
-		// To remove a multi channel association, we need to make sure that the group exists
-		// and the node supports multi channel associations
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-			if (
-				group <= mcInstance.getGroupCountCached(this.driver, endpoint)
-			) {
-				groupExistsAsMultiChannel = true;
-			}
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// To remove a normal association, we need to make sure that the group exists either as a normal association
-		// or as a multi channel association
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-			if (
-				group <=
-				assocInstance.getGroupCountCached(this.driver, endpoint)
-			) {
-				groupExistsAsNodeAssociation = true;
-			}
-		}
-
-		if (!mcInstance && !assocInstance) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// Ensure the group exists and can be used
-		if (!groupExistsAsMultiChannel && !groupExistsAsNodeAssociation) {
-			throw new ZWaveError(
-				` Association group ${group} does not exist for node ${nodeAndEndpointString}`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-		if (endpointAssociations.length > 0 && !groupExistsAsMultiChannel) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString}, association group ${group} does not support multi channel associations!`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-
-		// Even if we only remove node associations, we use both CCs since it has been found that some
-		// devices do not correctly share the node list between the two commands
-		if (
-			assocInstance &&
-			nodeAssociations.length > 0 &&
-			groupExistsAsNodeAssociation
-		) {
-			await endpoint.commandClasses.Association.removeNodeIds({
-				groupId: group,
-				nodeIds: nodeAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		}
-
-		if (mcInstance && groupExistsAsMultiChannel) {
-			await endpoint.commandClasses[
-				"Multi Channel Association"
-			].removeDestinations({
-				groupId: group,
-				nodeIds: nodeAssociations,
-				endpoints: endpointAssociations,
-			});
-			// Refresh the multi channel association list
-			await endpoint.commandClasses["Multi Channel Association"].getGroup(
-				group,
-			);
-		}
 	}
 
 	/**

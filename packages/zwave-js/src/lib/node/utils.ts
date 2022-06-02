@@ -1,31 +1,29 @@
-import {
-	allCCs,
-	applicationCCs,
-	CommandClasses,
-	getCCName,
-	SetValueOptions,
-	TranslatedValueID,
-	ValueID,
-	ZWaveError,
-	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import type {
-	ZWaveApplicationHost,
-	ZWaveEndpointBase,
-	ZWaveNodeBase,
-} from "@zwave-js/host";
-import { CommandClass } from "../commandclass/CommandClass";
+import { CommandClass } from "@zwave-js/cc";
 import {
 	getAggregatedCountValueId,
 	getCountIsDynamicValueId,
 	getEndpointIndizesValueId,
 	getIdenticalCapabilitiesValueId,
 	getIndividualCountValueId,
-} from "../commandclass/MultiChannelCC";
+} from "@zwave-js/cc/MultiChannelCC";
+import {
+	allCCs,
+	applicationCCs,
+	CommandClasses,
+	getCCName,
+	IZWaveEndpoint,
+	IZWaveNode,
+	SetValueOptions,
+	TranslatedValueID,
+	ValueID,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import type { ZWaveApplicationHost } from "@zwave-js/host";
 
 function getValue<T>(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	valueId: ValueID,
 ): T | undefined {
 	return applHost.getValueDB(node.id).getValue(valueId);
@@ -33,7 +31,7 @@ function getValue<T>(
 
 function setValue(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	valueId: ValueID,
 	value: unknown,
 	options?: SetValueOptions,
@@ -43,35 +41,35 @@ function setValue(
 
 export function endpointCountIsDynamic(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): boolean | undefined {
 	return getValue(applHost, node, getCountIsDynamicValueId());
 }
 
 export function endpointsHaveIdenticalCapabilities(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): boolean | undefined {
 	return getValue(applHost, node, getIdenticalCapabilitiesValueId());
 }
 
 export function getIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): number | undefined {
 	return getValue(applHost, node, getIndividualCountValueId());
 }
 
 export function getAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): number | undefined {
 	return getValue(applHost, node, getAggregatedCountValueId());
 }
 
 export function getEndpointCount(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): number {
 	return (
 		(getIndividualEndpointCount(applHost, node) || 0) +
@@ -81,7 +79,7 @@ export function getEndpointCount(
 
 export function setIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	count: number,
 ): void {
 	setValue(applHost, node, getIndividualCountValueId(), count);
@@ -89,7 +87,7 @@ export function setIndividualEndpointCount(
 
 export function setAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	count: number,
 ): void {
 	setValue(applHost, node, getAggregatedCountValueId(), count);
@@ -97,7 +95,7 @@ export function setAggregatedEndpointCount(
 
 export function getEndpointIndizes(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): number[] {
 	let ret = getValue<number[]>(applHost, node, getEndpointIndizesValueId());
 	if (!ret) {
@@ -112,7 +110,7 @@ export function getEndpointIndizes(
 
 export function setEndpointIndizes(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	indizes: number[],
 ): void {
 	setValue(applHost, node, getEndpointIndizesValueId(), indizes);
@@ -120,7 +118,7 @@ export function setEndpointIndizes(
 
 export function isMultiChannelInterviewComplete(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): boolean {
 	return !!getValue(applHost, node, {
 		commandClass: CommandClasses["Multi Channel"],
@@ -131,7 +129,7 @@ export function isMultiChannelInterviewComplete(
 
 export function setMultiChannelInterviewComplete(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	complete: boolean,
 ): void {
 	setValue(
@@ -148,9 +146,9 @@ export function setMultiChannelInterviewComplete(
 
 export function getAllEndpoints(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
-): ZWaveEndpointBase[] {
-	const ret: ZWaveEndpointBase[] = [node];
+	node: IZWaveNode,
+): IZWaveEndpoint[] {
+	const ret: IZWaveEndpoint[] = [node];
 	// Check if the Multi Channel CC interview for this node is completed,
 	// because we don't have all the endpoint information before that
 	if (isMultiChannelInterviewComplete(applHost, node)) {
@@ -165,18 +163,18 @@ export function getAllEndpoints(
 /** Determines whether the root application CC values should be hidden in favor of endpoint values */
 export function shouldHideRootApplicationCCValues(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): boolean {
 	// This is not the case when the root values should explicitly be preserved
-	if (node.deviceConfig?.compat?.preserveRootApplicationCCValueIDs)
-		return false;
+	const compatConfig = applHost.getDeviceConfig?.(node.id)?.compat;
+	if (compatConfig?.preserveRootApplicationCCValueIDs) return false;
 
 	// This is not the case when there are no endpoints
 	const endpointIndizes = getEndpointIndizes(applHost, node);
 	if (endpointIndizes.length === 0) return false;
 
 	// This is not the case when only individual endpoints should be preserved in addition to the root
-	const preserveEndpoints = node.deviceConfig?.compat?.preserveEndpoints;
+	const preserveEndpoints = compatConfig?.preserveEndpoints;
 	if (
 		preserveEndpoints != undefined &&
 		preserveEndpoints !== "*" &&
@@ -194,7 +192,7 @@ export function shouldHideRootApplicationCCValues(
  */
 export function translateValueID<T extends ValueID>(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	valueId: T,
 ): T & TranslatedValueID {
 	// Try to retrieve the speaking CC name
@@ -272,7 +270,7 @@ export function filterRootApplicationCCValueIDs(
 /** Returns a list of all value names that are defined on all endpoints of this node */
 export function getDefinedValueIDs(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): TranslatedValueID[] {
 	let ret: ValueID[] = [];
 	const allowControlled: CommandClasses[] = [
