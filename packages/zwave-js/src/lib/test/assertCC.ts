@@ -1,5 +1,5 @@
+import type { CommandClass, Constructable } from "@zwave-js/cc";
 import { entries } from "alcalzone-shared/objects";
-import type { CommandClass, Constructable } from "../commandclass/CommandClass";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 

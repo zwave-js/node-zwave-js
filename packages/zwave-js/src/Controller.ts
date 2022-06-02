@@ -4,7 +4,14 @@ export {
 	ControllerSelfLogContext,
 	ControllerValueLogContext,
 } from "@zwave-js/core";
-export { ProtocolDataRate, RFRegion } from "@zwave-js/core/safe";
+export {
+	isRssiError,
+	ProtocolDataRate,
+	RFRegion,
+	RSSI,
+	RssiError,
+	TXReport,
+} from "@zwave-js/core/safe";
 export { ZWaveController } from "./lib/controller/Controller";
 export type { ControllerEvents } from "./lib/controller/Controller";
 export type { ControllerStatistics } from "./lib/controller/ControllerStatistics";
@@ -14,11 +21,7 @@ export {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	HealNodeStatus,
-	isRssiError,
-	RSSI,
-	RssiError,
 	SDKVersion,
-	TXReport,
 } from "./lib/controller/_Types";
 export { SerialAPISetupCommand } from "./lib/serialapi/capability/SerialAPISetupMessages";
 export type {

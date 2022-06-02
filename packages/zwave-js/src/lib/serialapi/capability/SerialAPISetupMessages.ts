@@ -1,5 +1,6 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
 	parseBitMask,
 	RFRegion,
@@ -17,7 +18,6 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

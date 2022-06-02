@@ -4,17 +4,15 @@
 	"compilerOptions": {},
 	"references": [
 		{
+			"path": "../config/tsconfig.build.json"
+		},
+		{
 			"path": "../core/tsconfig.build.json"
 		},
 		{
 			"path": "../testing/tsconfig.build.json"
 		}
 	],
-	"include": [
-		"src/**/*.ts"
-	],
-	"exclude": [
-		"build/**",
-		"node_modules/**"
-	]
+	"include": ["src/**/*.ts"],
+	"exclude": ["build/**", "node_modules/**"]
 }
