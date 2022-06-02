@@ -34,25 +34,6 @@
 	},
 	"paramInformation": [
 		{
-			"#": "1",
-			"label": "Dim Start Level",
-			"description": "Set Ignore Start Level Bit When Transmitting Dim Commands",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Use Start Level",
-					"value": 0
-				},
-				{
-					"label": "Ignore Start Level",
-					"value": 1
-				}
-			]
-		},
-		{
 			"#": "2",
 			"label": "Group 4: Send Reports",
 			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
@@ -69,8 +50,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Start Level in Dim Command",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted"
+			"$import": "templates/config_template.json#ignore_dim_start"
 		},
 		{
 			"#": "7",

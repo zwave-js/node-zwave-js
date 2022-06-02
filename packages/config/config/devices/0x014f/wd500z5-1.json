@@ -24,8 +24,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Start Level in Dim Command",
-			"$import": "~/templates/master_template.json#base_enable_disable_inverted"
+			"$import": "templates/config_template.json#ignore_dim_start"
 		},
 		{
 			"#": "7",

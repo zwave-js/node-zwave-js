@@ -178,4 +178,21 @@
 		"maxValue": 100,
 		"defaultValue": 100
 	}
+	"ignore_dim_start": {
+		"label": "Start Dimming From Current Level",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	}
 }

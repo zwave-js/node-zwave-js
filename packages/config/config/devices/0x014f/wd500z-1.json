@@ -31,21 +31,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Ignore Start Level",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#ignore_dim_start"
 		},
 		{
 			"#": "3",
