@@ -1234,8 +1234,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 	}
 
 	/**
-	 * @internal
-	 * Returns the param info that was queried for this node. This returns the information that was returned by the node
+	 * **INTERNAL:** Returns the param info that was queried for this node. This returns the information that was returned by the node
 	 * and does not include partial parameters.
 	 */
 	public getQueriedParamInfos(

@@ -370,11 +370,10 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/**
-	 * @internal
 	 * Create an instance of the given CC without checking whether it is supported.
 	 * If the CC is implemented, this returns an instance of the given CC which is linked to the given endpoint.
 	 *
-	 * **WARNING:** Applications should not use this directly.
+	 * **INTERNAL:** Applications should not use this directly.
 	 */
 	public static createInstanceUnchecked<T extends CommandClass>(
 		host: ZWaveHost,

@@ -136,7 +136,7 @@ export class VirtualEndpoint implements VirtualEndpointBase {
 
 				// When accessing a CC API for the first time, we need to create it
 				if (!target.has(ccId)) {
-					const api = CCAPI.from(ccId, this.driver, this);
+					const api = CCAPI.create(ccId, this.driver, this);
 					target.set(ccId, api);
 				}
 				return target.get(ccId);

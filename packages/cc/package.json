@@ -58,6 +58,7 @@
   "dependencies": {
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
+    "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "alcalzone-shared": "^4.0.1"
   },

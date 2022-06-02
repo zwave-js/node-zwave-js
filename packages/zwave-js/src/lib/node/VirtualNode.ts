@@ -224,6 +224,19 @@ export class VirtualNode extends VirtualEndpoint implements VirtualNodeBase {
 		return this._endpointInstances.get(index)!;
 	}
 
+	public getEndpointOrThrow(index: number): VirtualEndpoint {
+		const ret = this.getEndpoint(index);
+		if (!ret) {
+			throw new ZWaveError(
+				`Endpoint ${index} does not exist on virtual node ${
+					this.id ?? "??"
+				}`,
+				ZWaveErrorCodes.Controller_EndpointNotFound,
+			);
+		}
+		return ret;
+	}
+
 	/** Returns the current endpoint count of this virtual node (the maximum in the list of physical nodes) */
 	public getEndpointCount(): number {
 		let ret = 0;

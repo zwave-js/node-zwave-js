@@ -1,5 +1,5 @@
-import type { LogConfig, ZWaveHostOptions } from "@zwave-js/core";
-import type { FileSystem } from "@zwave-js/host";
+import type { LogConfig } from "@zwave-js/core";
+import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import type { SerialPort } from "serialport";
 

@@ -13,6 +13,9 @@
 			"path": "../host/tsconfig.build.json"
 		},
 		{
+			"path": "../serial/tsconfig.build.json"
+		},
+		{
 			"path": "../shared/tsconfig.build.json"
 		},
 		{
@@ -20,5 +23,5 @@
 		}
 	],
 	"include": ["src/**/*.ts"],
-	"exclude": ["build/**", "src/**/*.test.ts"]
+	"exclude": ["src/**/*.test.ts"]
 }

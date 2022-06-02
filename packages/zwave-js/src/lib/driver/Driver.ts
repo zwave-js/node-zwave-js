@@ -117,6 +117,7 @@ import {
 	ProvisioningEntryStatus,
 } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
+import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
@@ -689,6 +690,14 @@ export class Driver
 	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
 		const nodeId = msg.getNodeId();
 		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
+	}
+
+	public tryGetEndpoint(cc: CommandClass): Endpoint | undefined {
+		if (typeof cc.nodeId === "number") {
+			return this.controller.nodes
+				.get(cc.nodeId)
+				?.getEndpoint(cc.endpointIndex);
+		}
 	}
 
 	/** @internal This is needed for the ZWaveHost interface */
@@ -2337,19 +2346,21 @@ export class Driver
 								// If it was, we need to notify the sender that we couldn't decode the command
 								const node = this.getNodeUnsafe(msg);
 								if (node) {
-									node.createAPI(
-										CommandClasses.Supervision,
-										false,
-									).sendReport({
-										sessionId: supervisionSessionId,
-										moreUpdatesFollow: false,
-										status: SupervisionStatus.NoSupport,
-										secure: msg.command.secure,
-										requestWakeUpOnDemand:
-											this.shouldRequestWakeupOnDemand(
-												node,
-											),
-									});
+									await node
+										.createAPI(
+											CommandClasses.Supervision,
+											false,
+										)
+										.sendReport({
+											sessionId: supervisionSessionId,
+											moreUpdatesFollow: false,
+											status: SupervisionStatus.NoSupport,
+											secure: msg.command.secure,
+											requestWakeUpOnDemand:
+												this.shouldRequestWakeupOnDemand(
+													node,
+												),
+										});
 								}
 								return;
 							}

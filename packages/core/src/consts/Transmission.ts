@@ -139,15 +139,9 @@ export interface SendMessageOptions {
 	changeNodeStatusOnMissingACK?: boolean;
 	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
-	/**
-	 * Internal information used to identify or mark this transaction
-	 * @internal
-	 */
+	/** **INTERNAL**: Information used to identify or mark this transaction */
 	tag?: any;
-	/**
-	 * Whether the send thread MUST be paused after this message was handled
-	 * @internal
-	 */
+	/** **INTERNAL**: Whether the send thread MUST be paused after this message was handled */
 	pauseSendThread?: boolean;
 	/** If a Wake Up On Demand should be requested for the target node. */
 	requestWakeUpOnDemand?: boolean;

@@ -23,38 +23,6 @@
 		"types": ["node", "jest", "jest-extended", "ts-nameof"],
 		"noErrorTruncation": true
 	},
-	"references": [
-		{
-			"path": "packages/cc/tsconfig.build.json"
-		},
-		{
-			"path": "packages/config/tsconfig.build.json"
-		},
-		{
-			"path": "packages/core/tsconfig.build.json"
-		},
-		{
-			"path": "packages/host/tsconfig.build.json"
-		},
-		{
-			"path": "packages/maintenance/tsconfig.build.json"
-		},
-		{
-			"path": "packages/nvmedit/tsconfig.build.json"
-		},
-		{
-			"path": "packages/serial/tsconfig.build.json"
-		},
-		{
-			"path": "packages/shared/tsconfig.build.json"
-		},
-		{
-			"path": "packages/testing/tsconfig.build.json"
-		},
-		{
-			"path": "packages/transformers/tsconfig.build.json"
-		}
-	],
 	"include": [
 		"packages/**/src/**/*.ts",
 		"packages/**/maintenance/**/*.ts",

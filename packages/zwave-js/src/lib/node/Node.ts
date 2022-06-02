@@ -3101,7 +3101,7 @@ protocol version:      ${this.protocolVersion}`;
 			command.hour !== hours ||
 			command.minute !== minutes
 		) {
-			const endpoint = command.getEndpoint(this.driver);
+			const endpoint = this.driver.tryGetEndpoint(command);
 			if (!endpoint /*|| !endpoint.commandClasses.Clock.isSupported()*/) {
 				// Make sure the endpoint supports the CC (GH#1704)
 				return;
