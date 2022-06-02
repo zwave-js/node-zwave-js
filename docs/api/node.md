@@ -80,7 +80,7 @@ The `options` bag contains options that influence the resulting commands, for ex
 <!-- #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-type SetValueAPIOptions = Partial<ValueChangeOptions>;
+declare type SetValueAPIOptions = Partial<ValueChangeOptions>;
 ```
 
 ### `pollValue`
@@ -225,7 +225,7 @@ Retrieves the firmware update capabilities of a node to decide which options (e.
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateCapabilities =
+declare type FirmwareUpdateCapabilities =
 	| {
 			/** Indicates whether the node's firmware can be upgraded */
 			readonly firmwareUpgradable: false;
@@ -696,9 +696,9 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 <!-- #import ZWavePlusNodeType from "zwave-js" -->
 
 ```ts
-enum ZWavePlusNodeType {
-	Node = 0x00, // ZWave+ Node
-	IPGateway = 0x02, // ZWave+ for IP Gateway
+declare enum ZWavePlusNodeType {
+	Node = 0,
+	IPGateway = 2,
 }
 ```
 
@@ -721,15 +721,15 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role typ
 <!-- #import ZWavePlusRoleType from "zwave-js" -->
 
 ```ts
-enum ZWavePlusRoleType {
-	CentralStaticController = 0x00,
-	SubStaticController = 0x01,
-	PortableController = 0x02,
-	PortableReportingController = 0x03,
-	PortableSlave = 0x04,
-	AlwaysOnSlave = 0x05,
-	SleepingReportingSlave = 0x06,
-	SleepingListeningSlave = 0x07,
+declare enum ZWavePlusRoleType {
+	CentralStaticController = 0,
+	SubStaticController = 1,
+	PortableController = 2,
+	PortableReportingController = 3,
+	PortableSlave = 4,
+	AlwaysOnSlave = 5,
+	SleepingReportingSlave = 6,
+	SleepingListeningSlave = 7,
 }
 ```
 
@@ -1059,8 +1059,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_EntryControlCC from "zwave-js" -->
 
 ```ts
-type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNode,
+declare type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNodeBase,
 	ccId: typeof CommandClasses["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1085,8 +1085,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_MultilevelSwitchCC from "zwave-js" -->
 
 ```ts
-type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNode,
+declare type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNodeBase,
 	ccId: typeof CommandClasses["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1114,8 +1114,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_NotificationCC from "zwave-js" -->
 
 ```ts
-type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNode,
+declare type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNodeBase,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1148,8 +1148,8 @@ It uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_PowerlevelCC from "zwave-js" -->
 
 ```ts
-type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNode,
+declare type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNodeBase,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
@@ -1172,10 +1172,10 @@ with
 <!-- #import PowerlevelTestStatus from "zwave-js" -->
 
 ```ts
-enum PowerlevelTestStatus {
-	Failed = 0x00,
-	Success = 0x01,
-	"In Progress" = 0x02,
+declare enum PowerlevelTestStatus {
+	Failed = 0,
+	Success = 1,
+	"In Progress" = 2,
 }
 ```
 

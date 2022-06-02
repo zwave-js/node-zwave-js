@@ -883,7 +883,8 @@ export enum IndicatorCommand {
 export type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		propertyId?: number; // only present on V2+ indicators
+		// only present on V2+ indicators:
+		propertyId?: number;
 	};
 };
 

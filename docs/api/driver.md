@@ -442,7 +442,7 @@ interface SendMessageOptions {
 
 The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
-<!-- #import MessagePriority from "@zwave-js/serial" with comments -->
+<!-- #import MessagePriority from "@zwave-js/core" with comments -->
 
 ```ts
 enum MessagePriority {
@@ -530,13 +530,13 @@ The RSSI is either a number indicating the value in dBm or one of the special va
 <!-- #import RSSI from "zwave-js" -->
 
 ```ts
-type RSSI = number | RssiError;
+declare type RSSI = number | RssiError;
 ```
 
 <!-- #import RssiError from "zwave-js" -->
 
 ```ts
-enum RssiError {
+declare enum RssiError {
 	NotAvailable = 127,
 	ReceiverSaturated = 126,
 	NoSignalDetected = 125,
@@ -574,11 +574,11 @@ The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?
 <!-- #import SupervisionStatus from "zwave-js" -->
 
 ```ts
-enum SupervisionStatus {
-	NoSupport = 0x00,
-	Working = 0x01,
-	Fail = 0x02,
-	Success = 0xff,
+declare enum SupervisionStatus {
+	NoSupport = 0,
+	Working = 1,
+	Fail = 2,
+	Success = 255,
 }
 ```
 
@@ -602,7 +602,7 @@ This interface specifies the optional options object that is passed to the `Driv
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
 ````ts
-interface ZWaveOptions {
+interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
