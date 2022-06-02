@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	encodeFloatWithScale,
 	enumValuesToMetadataStates,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -10,7 +11,6 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -1026,7 +1026,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getMaxValveTableSizeCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1039,7 +1039,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static getNumValvesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1052,7 +1052,7 @@ export class IrrigationCC extends CommandClass {
 	 */
 	public static supportsMasterValveCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)

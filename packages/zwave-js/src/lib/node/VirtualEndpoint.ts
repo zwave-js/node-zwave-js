@@ -7,8 +7,8 @@ import {
 } from "@zwave-js/cc";
 import {
 	CommandClasses,
+	IVirtualEndpoint,
 	MulticastDestination,
-	VirtualEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -24,7 +24,7 @@ import type { VirtualNode } from "./VirtualNode";
  *
  * The endpoint's capabilities are determined by the capabilities of the individual nodes' endpoints.
  */
-export class VirtualEndpoint implements VirtualEndpointBase {
+export class VirtualEndpoint implements IVirtualEndpoint {
 	public constructor(
 		/** The virtual node this endpoint belongs to (or undefined if it set later) */
 		node: VirtualNode | undefined,
@@ -36,7 +36,7 @@ export class VirtualEndpoint implements VirtualEndpointBase {
 		if (node) this._node = node;
 	}
 
-	/** Required by {@link ZWaveEndpointBase} */
+	/** Required by {@link IZWaveEndpoint} */
 	public readonly virtual = true;
 
 	/** The virtual node this endpoint belongs to */

@@ -3,11 +3,11 @@
 import {
 	getNodeTag,
 	highResTimestamp,
+	IZWaveNode,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject } from "@zwave-js/shared/safe";
@@ -366,7 +366,7 @@ export class Message {
 	 */
 	public getNodeUnsafe(
 		applHost: ZWaveApplicationHost,
-	): ZWaveNodeBase | undefined {
+	): IZWaveNode | undefined {
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined) return applHost.nodes.get(nodeId);
 	}

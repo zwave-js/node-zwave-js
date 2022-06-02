@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -10,7 +11,6 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -1026,7 +1026,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUsersCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1039,7 +1039,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedKeypadModesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): KeypadMode[] | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1052,7 +1052,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedUserIDStatusesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): UserIDStatus[] | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1065,7 +1065,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static getSupportedASCIICharsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): string | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
@@ -1078,7 +1078,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsMasterCodeDeactivationCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
@@ -1093,7 +1093,7 @@ export class UserCodeCC extends CommandClass {
 	 */
 	public static supportsMultipleUserCodeSetCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)

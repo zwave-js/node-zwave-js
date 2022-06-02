@@ -3,12 +3,12 @@ import {
 	actuatorCCs,
 	CommandClasses,
 	isZWaveError,
+	IVirtualNode,
 	TranslatedValueID,
 	ValueID,
 	valueIdToString,
 	ValueMetadata,
 	ValueMetadataNumeric,
-	VirtualNodeBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -24,7 +24,7 @@ export interface VirtualValueID extends TranslatedValueID {
 	ccVersion: number;
 }
 
-export class VirtualNode extends VirtualEndpoint implements VirtualNodeBase {
+export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 	public constructor(
 		public readonly id: number | undefined,
 		driver: Driver,

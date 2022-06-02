@@ -3,6 +3,7 @@ import type {
 	CommandClasses,
 	ControllerLogger,
 	ICommandClass,
+	IZWaveNode,
 	Maybe,
 	SecurityClass,
 	SecurityManager,
@@ -10,7 +11,6 @@ import type {
 	SendCommandOptions,
 	ValueDB,
 	ValueID,
-	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ReadonlyThrowingMap } from "@zwave-js/shared";
 import type { ZWaveHostOptions } from "./ZWaveHostOptions";
@@ -86,7 +86,7 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 	tryGetValueDB(nodeId: number): ValueDB | undefined;
 
 	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
+	nodes: ReadonlyThrowingMap<number, IZWaveNode>;
 
 	/** Whether the node with the given ID is the controller */
 	isControllerNode(nodeId: number): boolean;

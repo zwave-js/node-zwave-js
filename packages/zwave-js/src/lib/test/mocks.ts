@@ -4,14 +4,14 @@ import {
 	CommandClasses,
 	FLiRS,
 	InterviewStage,
+	IZWaveEndpoint,
+	IZWaveNode,
 	Maybe,
 	MessagePriority,
 	NodeStatus,
 	SecurityClass,
 	securityClassOrder,
 	unknownBoolean,
-	ZWaveEndpointBase,
-	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
@@ -206,7 +206,7 @@ export interface CreateTestNodeOptions {
 	getCCVersion?: (cc: CommandClasses) => number;
 }
 
-export interface TestNode extends ZWaveNodeBase {
+export interface TestNode extends IZWaveNode {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
 }
 
@@ -214,7 +214,7 @@ export function createTestNode(
 	host: ZWaveHost,
 	options: CreateTestNodeOptions,
 ): TestNode {
-	const endpointCache = new Map<number, ZWaveEndpointBase>();
+	const endpointCache = new Map<number, IZWaveEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
 	const ret: TestNode = {
@@ -277,7 +277,7 @@ export function createTestNode(
 				);
 			}
 			return endpointCache.get(index);
-		}) as ZWaveNodeBase["getEndpoint"],
+		}) as IZWaveNode["getEndpoint"],
 
 		// These are copied from Node.ts
 		getHighestSecurityClass(): SecurityClass | undefined {
@@ -330,8 +330,8 @@ export interface CreateTestEndpointOptions {
 export function createTestEndpoint(
 	host: ZWaveHost,
 	options: CreateTestEndpointOptions,
-): ZWaveEndpointBase {
-	const ret: ZWaveEndpointBase = {
+): IZWaveEndpoint {
+	const ret: IZWaveEndpoint = {
 		nodeId: options.nodeId,
 		index: options.index,
 		supportsCC: options.supportsCC ?? (() => true),

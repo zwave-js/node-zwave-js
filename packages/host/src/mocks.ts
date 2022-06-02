@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
-import type { ZWaveNodeBase } from "@zwave-js/core";
+import type { IZWaveNode } from "@zwave-js/core";
 import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
@@ -14,7 +14,7 @@ export interface CreateTestingHostOptions {
 
 export type TestingHost = Overwrite<
 	ZWaveApplicationHost,
-	{ nodes: ThrowingMap<number, ZWaveNodeBase> }
+	{ nodes: ThrowingMap<number, IZWaveNode> }
 >;
 
 /** Creates a {@link ZWaveApplicationHost} that can be used for testing */

@@ -110,6 +110,7 @@ import {
 	isRssiError,
 	isTransmissionError,
 	isZWaveError,
+	IZWaveNode,
 	Maybe,
 	MessagePriority,
 	MetadataUpdatedArgs,
@@ -139,7 +140,6 @@ import {
 	ValueUpdatedArgs,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { NodeSchedulePollOptions } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
@@ -233,7 +233,7 @@ export interface ZWaveNode
 @Mixin([EventEmitter, NodeStatisticsHost])
 export class ZWaveNode
 	extends Endpoint
-	implements SecurityClassOwner, ZWaveNodeBase
+	implements SecurityClassOwner, IZWaveNode
 {
 	public constructor(
 		public readonly id: number,

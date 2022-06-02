@@ -3,6 +3,9 @@ import {
 	getCCName,
 	ICommandClass,
 	isZWaveError,
+	IVirtualEndpoint,
+	IZWaveEndpoint,
+	IZWaveNode,
 	MessageOrCCLogEntry,
 	MessageRecord,
 	MulticastCC,
@@ -14,11 +17,8 @@ import {
 	ValueID,
 	valueIdToString,
 	ValueMetadata,
-	VirtualEndpointBase,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import {
@@ -377,7 +377,7 @@ export class CommandClass implements ICommandClass {
 	 */
 	public static createInstanceUnchecked<T extends CommandClass>(
 		host: ZWaveHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
 		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
@@ -494,7 +494,7 @@ export class CommandClass implements ICommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(applHost: ZWaveApplicationHost): ZWaveNodeBase | undefined {
+	public getNode(applHost: ZWaveApplicationHost): IZWaveNode | undefined {
 		if (this.isSinglecast()) {
 			return applHost.nodes.get(this.nodeId);
 		}
@@ -506,7 +506,7 @@ export class CommandClass implements ICommandClass {
 	 */
 	public getNodeUnsafe(
 		applHost: ZWaveApplicationHost,
-	): ZWaveNodeBase | undefined {
+	): IZWaveNode | undefined {
 		try {
 			return this.getNode(applHost);
 		} catch (e) {
@@ -521,7 +521,7 @@ export class CommandClass implements ICommandClass {
 
 	public getEndpoint(
 		applHost: ZWaveApplicationHost,
-	): ZWaveEndpointBase | undefined {
+	): IZWaveEndpoint | undefined {
 		return this.getNode(applHost)?.getEndpoint(this.endpointIndex);
 	}
 
@@ -1060,7 +1060,7 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 };
 type APIConstructor = new (
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
+	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ) => CCAPI;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;

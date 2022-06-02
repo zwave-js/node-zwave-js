@@ -6,13 +6,16 @@ The implementations of serial messages and Command Classes have been decoupled f
 
 -   `ZWaveHost` - A barebones abstraction of the environment, e.g. for simple test cases
 -   `ZWaveApplicationHost` - A feature abstraction of the host environment with access to value DBs, other nodes, configuration, etc. `Driver` is an implementation of this abstraction.
--   `ZWaveEndpointBase` - A barebones abstraction of a Z-Wave endpoint
--   `ZWaveNodeBase` - A barebones abstraction of a Z-Wave node. Similar to how `ZWaveNode` is an `Endpoint`, `ZWaveNodeBase` is an `ZWaveEndpointBase`
+-   `IZWaveEndpoint` - A barebones abstraction of a Z-Wave endpoint
+-   `IZWaveNode` - A barebones abstraction of a Z-Wave node. Similar to how `ZWaveNode` is an `Endpoint`, an `IZWaveNode` is an `IZWaveEndpoint`
+-   `IVirtualEndpoint` - A barebones abstraction of an endpoint on a virtual (multicast, broadcast) node
+-   `IVirtualNode` - A barebones abstraction of a virtual (multicast, broadcast) node. Similar to how `VirtualNode` is a `VirtualEndpoint`, an `IVirtualNode` is an `IVirtualEndpoint`
 
-The methods that do require access to the driver now accept a `ZWaveApplicationHost` as the first argument, which is a more featureful abstraction than the `ZWaveHost` class.
+These abstractions are mainly used internally. Object instances exposed to applications throught the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
+
 For many use cases, these changes should not affect applications, unless they are using some CC methods directly. The `commandClasses` APIs are unchanged.
 
-## CC implementations: several methods take a `ZWaveApplicationHost` as the first argument
+## CC implementations: methods with driver access take a `ZWaveApplicationHost` as the first argument
 
 Old signature:
 
@@ -36,8 +39,8 @@ public translatePropertyKey(
 New signatures:
 
 ```ts
-public async interview(driver: Driver): Promise<void>;
-public async refreshValues(driver: Driver): Promise<void>;
+public async interview(applHost: ZWaveApplicationHost): Promise<void>;
+public async refreshValues(applHost: ZWaveApplicationHost): Promise<void>;
 public persistValues(applHost: ZWaveApplicationHost): boolean;
 public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 
@@ -54,7 +57,7 @@ public translatePropertyKey(
 ): string | undefined;
 ```
 
-Simply pass the driver instance as the first argument whereever you call these methods.
+Simply pass the driver instance as the first argument whenever you call these methods.
 
 **Note:** `getDefinedValueIDs` on the `ZWaveNode` class is **not** affected.
 

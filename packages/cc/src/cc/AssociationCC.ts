@@ -1,10 +1,10 @@
 import type { AssociationConfig } from "@zwave-js/config";
 import type {
+	IZWaveEndpoint,
+	IZWaveNode,
 	Maybe,
 	MessageRecord,
 	ValueID,
-	ZWaveEndpointBase,
-	ZWaveNodeBase,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -81,11 +81,11 @@ export function getHasLifelineValueId(endpointIndex?: number): ValueID {
 
 export function getLifelineGroupIds(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 ): number[] {
 	// For now only support this for the root endpoint - i.e. node
 	if (endpoint.index > 0) return [];
-	const node = endpoint as ZWaveNodeBase;
+	const node = endpoint as IZWaveNode;
 
 	// Some nodes define multiple lifeline groups, so we need to assign us to
 	// all of them
@@ -280,7 +280,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number {
 		return (
 			applHost
@@ -295,7 +295,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getMaxNodesCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		groupId: number,
 	): number {
 		return (
@@ -318,7 +318,7 @@ export class AssociationCC extends CommandClass {
 	 */
 	public static getAllDestinationsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
 		const groupCount = this.getGroupCountCached(applHost, endpoint);

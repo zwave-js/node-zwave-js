@@ -2,9 +2,9 @@ import type { Scale } from "@zwave-js/config/safe";
 import type {
 	CommandClasses,
 	Duration,
+	IZWaveNode,
 	Maybe,
 	ValueMetadata,
-	ZWaveNodeBase,
 } from "@zwave-js/core/safe";
 import type { NotificationCCReport } from "../cc/NotificationCC";
 
@@ -705,7 +705,7 @@ export interface ZWaveNotificationCallbackArgs_EntryControlCC {
  * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
  */
 export type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: typeof CommandClasses["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1116,7 +1116,7 @@ export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
  * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
  */
 export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: typeof CommandClasses["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1168,7 +1168,7 @@ export interface ZWaveNotificationCallbackArgs_NotificationCC {
  * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
  */
 export type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1219,7 +1219,7 @@ export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
  * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
  */
 export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];

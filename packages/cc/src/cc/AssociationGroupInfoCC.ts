@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	getCCName,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -8,7 +9,6 @@ import {
 	parseCCId,
 	validatePayload,
 	ValueID,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -197,7 +197,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the name of an association group */
 	public static getGroupNameCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		groupId: number,
 	): string | undefined {
 		return applHost
@@ -208,7 +208,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the association profile for an association group */
 	public static getGroupProfileCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		groupId: number,
 	): AssociationGroupInfoProfile | undefined {
 		return applHost.getValueDB(endpoint.nodeId).getValue<{
@@ -219,7 +219,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 	/** Returns the dictionary of all commands issued by the given association group */
 	public static getIssuedCommandsCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
 		return applHost
@@ -229,7 +229,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	public static findGroupsForIssuedCommand(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
@@ -259,7 +259,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 	private static getAssociationGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC

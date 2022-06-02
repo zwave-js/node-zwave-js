@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	encodeBitMask,
 	getCCName,
+	IZWaveNode,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -13,7 +14,6 @@ import {
 	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { num2hex } from "@zwave-js/shared/safe";
@@ -93,7 +93,7 @@ export function getAggregatedCountValueId(): ValueID {
  */
 function areAllEndpointsDifferent(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	endpointIndizes: number[],
 ): boolean {
 	// Endpoints are useless if all of them have different device classes

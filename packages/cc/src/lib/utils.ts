@@ -1,10 +1,10 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	IZWaveNode,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
-	type ZWaveEndpointBase,
+	type IZWaveEndpoint,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost } from "@zwave-js/host/safe";
 import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
@@ -29,7 +29,7 @@ import type {
 
 export function getAssociations(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 ): ReadonlyMap<number, readonly AssociationAddress[]> {
 	const ret = new Map<number, readonly AssociationAddress[]>();
 
@@ -82,7 +82,7 @@ export function getAssociations(
 
 export function getAllAssociations(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): ReadonlyObjectKeyMap<
 	AssociationAddress,
 	ReadonlyMap<number, readonly AssociationAddress[]>
@@ -105,7 +105,7 @@ export function getAllAssociations(
 
 export function isAssociationAllowed(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 	group: number,
 	destination: AssociationAddress,
 ): boolean {
@@ -167,7 +167,7 @@ export function isAssociationAllowed(
 
 export function getAssociationGroups(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 ): ReadonlyMap<number, AssociationGroup> {
 	// Check whether we have multi channel support or not
 	let assocInstance: typeof AssociationCC;
@@ -260,7 +260,7 @@ export function getAssociationGroups(
 
 export function getAllAssociationGroups(
 	applHost: ZWaveApplicationHost,
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 ): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 	const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
 	for (const endpoint of node.getAllEndpoints()) {
@@ -273,7 +273,7 @@ export function getAllAssociationGroups(
 
 export async function addAssociations(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 	group: number,
 	destinations: AssociationAddress[],
 ): Promise<void> {
@@ -399,7 +399,7 @@ export async function addAssociations(
 
 export async function removeAssociations(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 	group: number,
 	destinations: AssociationAddress[],
 ): Promise<void> {
@@ -509,7 +509,7 @@ export async function removeAssociations(
 
 export async function configureLifelineAssociations(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase,
+	endpoint: IZWaveEndpoint,
 ): Promise<void> {
 	// Assign the controller to all lifeline groups
 	const ownNodeId = applHost.ownNodeId;

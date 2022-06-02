@@ -1,11 +1,11 @@
 import {
 	CommandClasses,
 	formatDate,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
-	ZWaveEndpointBase,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -35,7 +35,7 @@ import { TimeParametersCommand } from "../lib/_Types";
 /**
  * Determines if the node expects local time instead of UTC.
  */
-function shouldUseLocalTime(endpoint: ZWaveEndpointBase): boolean {
+function shouldUseLocalTime(endpoint: IZWaveEndpoint): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
 	//

@@ -11,7 +11,7 @@ import {
 	getInstallerIconValueId,
 	getUserIconValueId,
 } from "@zwave-js/cc/ZWavePlusCC";
-import type { ZWaveEndpointBase } from "@zwave-js/core";
+import type { IZWaveEndpoint } from "@zwave-js/core";
 import {
 	actuatorCCs,
 	CacheBackedMap,
@@ -35,7 +35,7 @@ import type { ZWaveNode } from "./Node";
  *
  * Each endpoint may have different capabilities (device class/supported CCs)
  */
-export class Endpoint implements ZWaveEndpointBase {
+export class Endpoint implements IZWaveEndpoint {
 	public constructor(
 		/** The id of the node this endpoint belongs to */
 		public readonly nodeId: number,
@@ -56,7 +56,7 @@ export class Endpoint implements ZWaveEndpointBase {
 		}
 	}
 
-	/** Required by {@link ZWaveEndpointBase} */
+	/** Required by {@link IZWaveEndpoint} */
 	public readonly virtual = false;
 
 	/**

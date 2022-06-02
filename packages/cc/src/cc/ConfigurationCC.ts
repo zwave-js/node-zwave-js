@@ -9,6 +9,8 @@ import {
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
+	IVirtualEndpoint,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -19,8 +21,6 @@ import {
 	validatePayload,
 	ValueID,
 	ValueMetadata,
-	VirtualEndpointBase,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -121,7 +121,7 @@ type NormalizedConfigurationCCAPISetOptions = {
 
 function createConfigurationCCInstance(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
+	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ): ConfigurationCC {
 	return CommandClass.createInstanceUnchecked(
 		applHost,
@@ -132,7 +132,7 @@ function createConfigurationCCInstance(
 
 function normalizeConfigurationCCAPISetOptions(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
+	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 	options: ConfigurationCCAPISetOptions,
 ): NormalizedConfigurationCCAPISetOptions {
 	if ("bitMask" in options && options.bitMask) {
@@ -189,7 +189,7 @@ function normalizeConfigurationCCAPISetOptions(
 
 function bulkMergePartialParamValues(
 	applHost: ZWaveApplicationHost,
-	endpoint: ZWaveEndpointBase | VirtualEndpointBase,
+	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 	options: NormalizedConfigurationCCAPISetOptions[],
 ): (NormalizedConfigurationCCAPISetOptions & { bitMask?: undefined })[] {
 	// Merge partial parameters before doing anything else. Therefore, take the non-partials, ...

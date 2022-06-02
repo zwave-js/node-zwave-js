@@ -2,13 +2,13 @@ import {
 	CommandClasses,
 	Duration,
 	getCCName,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
-	ZWaveEndpointBase,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -469,7 +469,7 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 */
 	public static getGroupCountCached(
 		applHost: ZWaveApplicationHost,
-		endpoint: ZWaveEndpointBase,
+		endpoint: IZWaveEndpoint,
 	): number {
 		return (
 			applHost.getDeviceConfig?.(endpoint.nodeId)?.compat

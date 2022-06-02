@@ -10,6 +10,7 @@ import {
 	CommandClasses,
 	Duration,
 	isZWaveError,
+	IZWaveNode,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -21,7 +22,6 @@ import {
 	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZWaveNodeBase,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
@@ -431,7 +431,7 @@ export class NotificationCC extends CommandClass {
 	/** Whether the node implements push or pull notifications */
 	public static getNotificationMode(
 		applHost: ZWaveApplicationHost,
-		node: ZWaveNodeBase,
+		node: IZWaveNode,
 	): "push" | "pull" | undefined {
 		return applHost
 			.getValueDB(node.id)

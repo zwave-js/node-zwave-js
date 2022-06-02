@@ -1060,7 +1060,7 @@ uses the following signature
 
 ```ts
 declare type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: typeof CommandClasses["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1086,7 +1086,7 @@ uses the following signature
 
 ```ts
 declare type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: typeof CommandClasses["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1115,7 +1115,7 @@ uses the following signature
 
 ```ts
 declare type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1149,7 +1149,7 @@ It uses the following signature
 
 ```ts
 declare type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: ZWaveNodeBase,
+	node: IZWaveNode,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
