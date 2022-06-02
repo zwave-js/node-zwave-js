@@ -1,3 +1,6 @@
+import "@zwave-js/cc";
+import { BatteryCCAPI } from "@zwave-js/cc/BatteryCC";
+import { VersionCCAPI } from "@zwave-js/cc/VersionCC";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -6,9 +9,6 @@ import {
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
-import { BatteryCCAPI } from "../commandclass/BatteryCC";
-import "../commandclass/index";
-import { VersionCCAPI } from "../commandclass/VersionCC";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
 import { DeviceClass } from "./DeviceClass";

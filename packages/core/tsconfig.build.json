@@ -3,7 +3,9 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"rootDir": "src",
-		"outDir": "build"
+		"outDir": "build",
+		// Some @internal members need to be accessed from other modules in this monorepo
+		"stripInternal": false
 	},
 	"references": [
 		{

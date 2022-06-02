@@ -1,4 +1,8 @@
-import { CommandClasses, parseNodeUpdatePayload } from "@zwave-js/core";
+import {
+	CommandClasses,
+	MessagePriority,
+	parseNodeUpdatePayload,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { SuccessIndicator } from "@zwave-js/serial";
 import {
@@ -9,7 +13,6 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

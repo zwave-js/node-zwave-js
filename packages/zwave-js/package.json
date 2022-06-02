@@ -7,7 +7,6 @@
   "exports": {
     ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./CommandClass": "./build/CommandClass.js",
     "./Controller": "./build/Controller.js",
     "./Driver": "./build/Driver.js",
     "./Error": "./build/Error.js",
@@ -19,9 +18,6 @@
   "types": "build/index.d.ts",
   "typesVersions": {
     "*": {
-      "CommandClass": [
-        "./build/CommandClass.d.ts"
-      ],
       "Controller": [
         "./build/Controller.d.ts"
       ],
@@ -68,18 +64,16 @@
     "node": ">=12.22.2 <13 || >=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "b": "yarn ts maintenance/_build.ts",
-    "build": "yarn b prebuild && tsc -b tsconfig.build.json --verbose",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn b prebuild && tsc -b tsconfig.build.json --watch --pretty",
-    "lint_zwave": "yarn b lint",
-    "ts": "node -r esbuild-register"
+    "build": "tsc -b tsconfig.build.json --verbose",
+    "clean": "yarn run build --clean",
+    "watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.2",
     "@alcalzone/pak": "^0.8.1",
     "@sentry/integrations": "^6.19.7",
     "@sentry/node": "^6.19.7",
+    "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
@@ -114,6 +108,6 @@
     "esbuild-register": "^3.3.2",
     "jest-extended": "^2.0.0",
     "mockdate": "^3.0.5",
-    "typescript": "4.6.4"
+    "typescript": "4.7.2"
   }
 }

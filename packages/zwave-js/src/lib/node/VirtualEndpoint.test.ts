@@ -1,3 +1,5 @@
+import type { BinarySensorCCAPI } from "@zwave-js/cc/BinarySensorCC";
+import { BinarySwitchCCAPI } from "@zwave-js/cc/BinarySwitchCC";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -5,9 +7,8 @@ import {
 } from "@zwave-js/core";
 import type { MockSerialPort } from "@zwave-js/serial";
 import { FunctionType } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
-import { BinarySwitchCCAPI } from "../commandclass/BinarySwitchCC";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { createAndStartDriver } from "../test/utils";
@@ -35,7 +36,10 @@ describe("lib/node/VirtualEndpoint", () => {
 
 	function makePhysicalNode(nodeId: number): ZWaveNode {
 		const node = new ZWaveNode(nodeId, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(nodeId, node);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			nodeId,
+			node,
+		);
 		return node;
 	}
 

@@ -3,10 +3,10 @@ import {
 	ZWaveLogContainer,
 } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import MockDate from "mockdate";
-import type { ThrowingMap } from "../../controller/Controller";
 import type { Driver } from "../../driver/Driver";
 import { DriverLogger } from "../../log/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -79,8 +79,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node33["_isListening"] = true;
-		node33["_isFrequentListening"] = false;
+		node33["isListening"] = true;
+		node33["isFrequentListening"] = false;
 		node33.markAsAlive();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);

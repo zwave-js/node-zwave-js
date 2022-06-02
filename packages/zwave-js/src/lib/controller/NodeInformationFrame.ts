@@ -1,3 +1,4 @@
+import { getImplementedVersion } from "@zwave-js/cc";
 import {
 	actuatorCCs,
 	allCCs,
@@ -5,7 +6,6 @@ import {
 	encapsulationCCs,
 	sensorCCs,
 } from "@zwave-js/core/safe";
-import { getImplementedVersion } from "../commandclass/CommandClass";
 
 export function determineNIF(): {
 	basicDeviceClass: number;

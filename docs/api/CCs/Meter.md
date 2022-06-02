@@ -7,13 +7,13 @@
 ### `get`
 
 ```ts
-async get(options?: MeterCCGetOptions): Promise<Pick<MeterCCReport, "type" | "scale" | "value" | "previousValue" | "rateType" | "deltaTime"> | undefined>;
+async get(options?: MeterCCGetOptions): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; } | undefined>;
 ```
 
 ### `getAll`
 
 ```ts
-async getAll(): Promise<Pick<MeterCCReport, "type" | "scale" | "value" | "previousValue" | "rateType" | "deltaTime">[]>;
+async getAll(): Promise<{ rateType: RateType; value: number; previousValue: number | undefined; deltaTime: Maybe<number>; type: number; scale: MeterScale; }[]>;
 ```
 
 ### `getSupported`

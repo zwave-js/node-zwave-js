@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
 	NodeType,
 	parseNodeUpdatePayload,
@@ -15,7 +16,6 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

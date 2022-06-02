@@ -1,4 +1,99 @@
 import type {
+	CCAPI,
+	PollValueImplementation,
+	SetValueAPIOptions,
+} from "@zwave-js/cc";
+import {
+	CentralSceneKeys,
+	CommandClass,
+	DoorLockMode,
+	FirmwareUpdateCapabilities,
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+	getCCValueMetadata,
+	isCommandClassContainer,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "@zwave-js/cc";
+import { getHasLifelineValueId } from "@zwave-js/cc/AssociationCC";
+import {
+	BasicCC,
+	BasicCCReport,
+	BasicCCSet,
+	getCompatEventValueId as getBasicCCCompatEventValueId,
+	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+} from "@zwave-js/cc/BasicCC";
+import {
+	CentralSceneCCNotification,
+	getSceneValueId,
+	getSlowRefreshValueId,
+} from "@zwave-js/cc/CentralSceneCC";
+import { ClockCCReport } from "@zwave-js/cc/ClockCC";
+import { getCurrentModeValueId as getCurrentLockModeValueId } from "@zwave-js/cc/DoorLockCC";
+import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
+import {
+	FirmwareUpdateMetaDataCC,
+	FirmwareUpdateMetaDataCCGet,
+	FirmwareUpdateMetaDataCCReport,
+	FirmwareUpdateMetaDataCCStatusReport,
+} from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
+import { HailCC } from "@zwave-js/cc/HailCC";
+import { getLockedValueId } from "@zwave-js/cc/LockCC";
+import {
+	getManufacturerIdValueId,
+	getProductIdValueId,
+	getProductTypeValueId,
+} from "@zwave-js/cc/ManufacturerSpecificCC";
+import {
+	getEndpointCCsValueId,
+	getEndpointDeviceClassValueId,
+} from "@zwave-js/cc/MultiChannelCC";
+import {
+	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
+	MultilevelSwitchCC,
+	MultilevelSwitchCCSet,
+	MultilevelSwitchCCStartLevelChange,
+	MultilevelSwitchCCStopLevelChange,
+} from "@zwave-js/cc/MultilevelSwitchCC";
+import {
+	getNodeLocationValueId,
+	getNodeNameValueId,
+} from "@zwave-js/cc/NodeNamingCC";
+import {
+	getNotificationValueMetadata,
+	getNotificationValueMetadataUnknownType,
+	NotificationCC,
+	NotificationCCReport,
+} from "@zwave-js/cc/NotificationCC";
+import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
+import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
+import {
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "@zwave-js/cc/Security2CC";
+import {
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "@zwave-js/cc/SecurityCC";
+import {
+	getFirmwareVersionsValueId,
+	getSDKVersionValueId,
+} from "@zwave-js/cc/VersionCC";
+import {
+	getWakeUpIntervalValueId,
+	getWakeUpOnDemandSupportedValueId,
+	WakeUpCCWakeUpNotification,
+} from "@zwave-js/cc/WakeUpCC";
+import {
+	getNodeTypeValueId,
+	getRoleTypeValueId,
+	getZWavePlusVersionValueId,
+	ZWavePlusCCGet,
+} from "@zwave-js/cc/ZWavePlusCC";
+import type {
 	DeviceConfig,
 	Notification,
 	NotificationValueDefinition,
@@ -12,22 +107,29 @@ import {
 	DataRate,
 	FLiRS,
 	getCCName,
+	isRssiError,
 	isTransmissionError,
 	isZWaveError,
+	IZWaveNode,
 	Maybe,
+	MessagePriority,
 	MetadataUpdatedArgs,
 	NodeType,
 	NodeUpdatePayload,
 	nonApplicationCCs,
 	normalizeValueID,
 	ProtocolVersion,
+	RSSI,
+	RssiError,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
 	SecurityClassOwner,
+	SendCommandOptions,
 	sensorCCs,
 	timespan,
 	topologicalSort,
+	TXReport,
 	unknownBoolean,
 	ValueDB,
 	ValueID,
@@ -39,9 +141,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveNodeBase } from "@zwave-js/host";
+import type { NodeSchedulePollOptions } from "@zwave-js/host";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import {
 	discreteLinearSearch,
 	formatId,
@@ -60,102 +161,7 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { isDeepStrictEqual } from "util";
-import type {
-	CCAPI,
-	PollValueImplementation,
-	SetValueAPIOptions,
-} from "../commandclass/API";
-import { getHasLifelineValueId } from "../commandclass/AssociationCC";
-import {
-	BasicCC,
-	BasicCCReport,
-	BasicCCSet,
-	getCompatEventValueId as getBasicCCCompatEventValueId,
-	getCurrentValueValueId as getBasicCCCurrentValueValueId,
-} from "../commandclass/BasicCC";
-import {
-	CentralSceneCCNotification,
-	getSceneValueId,
-	getSlowRefreshValueId,
-} from "../commandclass/CentralSceneCC";
-import { ClockCCReport } from "../commandclass/ClockCC";
-import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
-import { getCurrentModeValueId as getCurrentLockModeValueId } from "../commandclass/DoorLockCC";
-import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
-import {
-	FirmwareUpdateMetaDataCC,
-	FirmwareUpdateMetaDataCCGet,
-	FirmwareUpdateMetaDataCCReport,
-	FirmwareUpdateMetaDataCCStatusReport,
-} from "../commandclass/FirmwareUpdateMetaDataCC";
-import { HailCC } from "../commandclass/HailCC";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import { getLockedValueId } from "../commandclass/LockCC";
-import {
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
-} from "../commandclass/ManufacturerSpecificCC";
-import {
-	getEndpointCCsValueId,
-	getEndpointDeviceClassValueId,
-} from "../commandclass/MultiChannelCC";
-import {
-	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
-	MultilevelSwitchCC,
-	MultilevelSwitchCCSet,
-	MultilevelSwitchCCStartLevelChange,
-	MultilevelSwitchCCStopLevelChange,
-} from "../commandclass/MultilevelSwitchCC";
-import {
-	getNodeLocationValueId,
-	getNodeNameValueId,
-} from "../commandclass/NodeNamingCC";
-import {
-	getNotificationValueMetadata,
-	getNotificationValueMetadataUnknownType,
-	NotificationCC,
-	NotificationCCReport,
-} from "../commandclass/NotificationCC";
-import { PowerlevelCCTestNodeReport } from "../commandclass/PowerlevelCC";
-import { SceneActivationCCSet } from "../commandclass/SceneActivationCC";
-import {
-	Security2CCNonceGet,
-	Security2CCNonceReport,
-} from "../commandclass/Security2CC";
-import {
-	SecurityCCNonceGet,
-	SecurityCCNonceReport,
-} from "../commandclass/SecurityCC";
-import {
-	getFirmwareVersionsValueId,
-	getSDKVersionValueId,
-} from "../commandclass/VersionCC";
-import {
-	getWakeUpIntervalValueId,
-	getWakeUpOnDemandSupportedValueId,
-	WakeUpCCWakeUpNotification,
-} from "../commandclass/WakeUpCC";
-import {
-	getNodeTypeValueId,
-	getRoleTypeValueId,
-	getZWavePlusVersionValueId,
-	ZWavePlusCCGet,
-} from "../commandclass/ZWavePlusCC";
-import {
-	CentralSceneKeys,
-	DoorLockMode,
-	FirmwareUpdateCapabilities,
-	FirmwareUpdateRequestStatus,
-	FirmwareUpdateStatus,
-	MultilevelSwitchCommand,
-	Powerlevel,
-	PowerlevelTestStatus,
-	ZWavePlusNodeType,
-	ZWavePlusRoleType,
-} from "../commandclass/_Types";
-import { isRssiError, RSSI, RssiError, TXReport } from "../controller/_Types";
-import type { Driver, SendCommandOptions } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { cacheKeys } from "../driver/NetworkCache";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import type { StatisticsEventCallbacksWithSelf } from "../driver/Statistics";
@@ -213,16 +219,6 @@ interface ScheduledPoll {
 	expectedValue?: unknown;
 }
 
-export interface NodeSchedulePollOptions {
-	/** The timeout after which the poll is to be scheduled */
-	timeoutMs?: number;
-	/**
-	 * The expected value that's should be verified with this poll.
-	 * When this value is received in the meantime, the poll will be cancelled.
-	 */
-	expectedValue?: unknown;
-}
-
 export interface ZWaveNode
 	extends TypedEventEmitter<
 			ZWaveNodeEventCallbacks &
@@ -237,7 +233,7 @@ export interface ZWaveNode
 @Mixin([EventEmitter, NodeStatisticsHost])
 export class ZWaveNode
 	extends Endpoint
-	implements SecurityClassOwner, ZWaveNodeBase
+	implements SecurityClassOwner, IZWaveNode
 {
 	public constructor(
 		public readonly id: number,
@@ -711,18 +707,6 @@ export class ZWaveNode
 
 	public get supportsWakeUpOnDemand(): boolean | undefined {
 		return this.getValue(getWakeUpOnDemandSupportedValueId());
-	}
-
-	public get shouldRequestWakeUpOnDemand(): boolean {
-		return (
-			!!this.supportsWakeUpOnDemand &&
-			this.status === NodeStatus.Asleep &&
-			this.driver.hasPendingTransactions(
-				(t) =>
-					t.requestWakeUpOnDemand &&
-					t.message.getNodeId() === this.id,
-			)
-		);
 	}
 
 	/**
@@ -3117,7 +3101,7 @@ protocol version:      ${this.protocolVersion}`;
 			command.hour !== hours ||
 			command.minute !== minutes
 		) {
-			const endpoint = command.getEndpoint(this.driver);
+			const endpoint = this.driver.tryGetEndpoint(command);
 			if (!endpoint /*|| !endpoint.commandClasses.Clock.isSupported()*/) {
 				// Make sure the endpoint supports the CC (GH#1704)
 				return;

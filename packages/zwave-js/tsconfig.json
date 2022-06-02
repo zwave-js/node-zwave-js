@@ -9,6 +9,9 @@
 	},
 	"references": [
 		{
+			"path": "../cc/tsconfig.build.json"
+		},
+		{
 			"path": "../config/tsconfig.build.json"
 		},
 		{
@@ -36,6 +39,6 @@
 			"path": "../transformers/tsconfig.build.json"
 		}
 	],
-	"include": ["maintenance/**/*.ts", "src/**/*.ts"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["build/**", "node_modules/**"]
 }
