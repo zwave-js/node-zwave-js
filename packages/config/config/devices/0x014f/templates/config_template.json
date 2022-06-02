@@ -177,7 +177,7 @@
 		"minValue": 0,
 		"maxValue": 100,
 		"defaultValue": 100
-	}
+	},
 	"ignore_dim_start": {
 		"label": "Start Dimming From Current Level",
 		"valueSize": 1,
