@@ -10,9 +10,10 @@ process.on("unhandledRejection", (_r) => {
 const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 
 const driver = new Driver(port, {
-	// logConfig: {
-	// 	logToFile: true,
-	// },
+	logConfig: {
+		logToFile: true,
+		forceConsole: true,
+	},
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
 		S2_Unauthenticated: Buffer.from(
@@ -35,6 +36,7 @@ const driver = new Driver(port, {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		await driver.controller.nodes.getOrThrow(20).refreshInfo();
 		// Test code
 		// const updates = await driver.controller.getAvailableFirmwareUpdates(2);
 		// console.log("Found updates:");

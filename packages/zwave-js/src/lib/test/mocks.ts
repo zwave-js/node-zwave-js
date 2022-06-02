@@ -1,29 +1,27 @@
-import { ConfigManager, DeviceConfig } from "@zwave-js/config";
+import { getImplementedVersion } from "@zwave-js/cc";
+import { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
 	FLiRS,
 	InterviewStage,
+	IZWaveEndpoint,
+	IZWaveNode,
 	Maybe,
+	MessagePriority,
 	NodeStatus,
 	SecurityClass,
 	securityClassOrder,
 	unknownBoolean,
 } from "@zwave-js/core";
-import type {
-	ZWaveEndpointBase,
-	ZWaveHost,
-	ZWaveNodeBase,
-} from "@zwave-js/host";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
 	FunctionType,
 	Message,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getImplementedVersion } from "../commandclass/CommandClass";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "../node/Node";
 import * as nodeUtils from "../node/utils";
@@ -198,7 +196,6 @@ export interface CreateTestNodeOptions {
 	isFrequentListening?: FLiRS | undefined;
 	status?: NodeStatus;
 	interviewStage?: InterviewStage;
-	deviceConfig?: DeviceConfig;
 	isSecure?: Maybe<boolean>;
 
 	numEndpoints?: number;
@@ -209,7 +206,7 @@ export interface CreateTestNodeOptions {
 	getCCVersion?: (cc: CommandClasses) => number;
 }
 
-export interface TestNode extends ZWaveNodeBase {
+export interface TestNode extends IZWaveNode {
 	setEndpoint(endpoint: CreateTestEndpointOptions): void;
 }
 
@@ -217,7 +214,7 @@ export function createTestNode(
 	host: ZWaveHost,
 	options: CreateTestNodeOptions,
 ): TestNode {
-	const endpointCache = new Map<number, ZWaveEndpointBase>();
+	const endpointCache = new Map<number, IZWaveEndpoint>();
 	const securityClasses = new Map<SecurityClass, boolean>();
 
 	const ret: TestNode = {
@@ -243,7 +240,6 @@ export function createTestNode(
 			options.status ??
 			(options.isListening ? NodeStatus.Alive : NodeStatus.Asleep),
 		interviewStage: options.interviewStage ?? InterviewStage.Complete,
-		deviceConfig: options.deviceConfig,
 
 		setEndpoint: (endpoint) => {
 			endpointCache.set(
@@ -281,7 +277,7 @@ export function createTestNode(
 				);
 			}
 			return endpointCache.get(index);
-		}) as ZWaveNodeBase["getEndpoint"],
+		}) as IZWaveNode["getEndpoint"],
 
 		// These are copied from Node.ts
 		getHighestSecurityClass(): SecurityClass | undefined {
@@ -334,8 +330,8 @@ export interface CreateTestEndpointOptions {
 export function createTestEndpoint(
 	host: ZWaveHost,
 	options: CreateTestEndpointOptions,
-): ZWaveEndpointBase {
-	const ret: ZWaveEndpointBase = {
+): IZWaveEndpoint {
+	const ret: IZWaveEndpoint = {
 		nodeId: options.nodeId,
 		index: options.index,
 		supportsCC: options.supportsCC ?? (() => true),

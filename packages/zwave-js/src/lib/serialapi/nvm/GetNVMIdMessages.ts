@@ -1,11 +1,10 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessageOrCCLogEntry, MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
 	FunctionType,
 	Message,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

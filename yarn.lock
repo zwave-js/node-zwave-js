@@ -3329,15 +3329,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ts-morph/common@npm:~0.13.0":
-  version: 0.13.0
-  resolution: "@ts-morph/common@npm:0.13.0"
+"@ts-morph/common@npm:~0.15.0":
+  version: 0.15.0
+  resolution: "@ts-morph/common@npm:0.15.0"
   dependencies:
     fast-glob: ^3.2.11
     minimatch: ^5.0.1
     mkdirp: ^1.0.4
     path-browserify: ^1.0.1
-  checksum: 88b3d4b82dc6aca12741e55c6bf037f2243d14f4b9c42bbe28ed4a773ae9cd8d3ca6a6f9f827b5830c188037b0781d881a002ddb73e094fa5d5ff2a3352dc842
+  checksum: 31476b677df02aebe3ca7985e393f02929002ef6094d1d803d0026fdda7947fa3276d6594feeef862f719c3e92dd9b6336ea3c0929782a36cdf003813508270e
   languageName: node
   linkType: hard
 
@@ -3502,7 +3502,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^27.5.2":
+"@types/jest@npm:^27.4.1, @types/jest@npm:^27.5.2":
   version: 27.5.2
   resolution: "@types/jest@npm:27.5.2"
   dependencies:
@@ -3551,6 +3551,13 @@ __metadata:
   version: 17.0.21
   resolution: "@types/node@npm:17.0.21"
   checksum: 89dcd2fe82f21d3634266f8384e9c865cf8af49685639fbdbd799bdd1040480fb1e8eeda2d3b9fce41edbe704d2a4be9f427118c4ae872e8d9bb7cbeb3c41a94
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^14.18.16":
+  version: 14.18.20
+  resolution: "@types/node@npm:14.18.20"
+  checksum: 999d8ef25c983c9ca7c3365d6878a7f9387a90e10fdec9b6fc26764ae0b52768b8ca4f7e3fcab6056326dcc613b730f2a58b59acacdc5d5863fa4b7a09c1f85f
   languageName: node
   linkType: hard
 
@@ -3812,6 +3819,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@zwave-js/cc@workspace:*, @zwave-js/cc@workspace:packages/cc":
+  version: 0.0.0-use.local
+  resolution: "@zwave-js/cc@workspace:packages/cc"
+  dependencies:
+    "@types/fs-extra": ^9.0.13
+    "@types/jest": ^27.4.1
+    "@types/node": ^14.18.16
+    "@zwave-js/core": "workspace:*"
+    "@zwave-js/host": "workspace:*"
+    "@zwave-js/maintenance": "workspace:*"
+    "@zwave-js/serial": "workspace:*"
+    "@zwave-js/shared": "workspace:*"
+    "@zwave-js/testing": "workspace:*"
+    "@zwave-js/transformers": "workspace:*"
+    alcalzone-shared: ^4.0.1
+    fs-extra: ^10.1.0
+    jest-extended: ^2.0.0
+    typescript: 4.7.2
+  languageName: unknown
+  linkType: soft
+
 "@zwave-js/config@workspace:*, @zwave-js/config@workspace:packages/config":
   version: 0.0.0-use.local
   resolution: "@zwave-js/config@workspace:packages/config"
@@ -3842,7 +3870,7 @@ __metadata:
     pegjs: ^0.10.0
     semver: ^7.3.7
     ts-pegjs: ^0.3.1
-    typescript: 4.6.4
+    typescript: 4.7.2
     winston: ^3.7.2
     xml2js: ^0.4.23
     yargs: ^17.5.1
@@ -3867,7 +3895,7 @@ __metadata:
     logform: ^2.4.1
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
-    typescript: 4.6.4
+    typescript: 4.7.2
     winston: ^3.7.2
     winston-daily-rotate-file: ^4.7.1
     winston-transport: ^4.5.0
@@ -3880,11 +3908,12 @@ __metadata:
   dependencies:
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.21
+    "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     jest-extended: ^2.0.0
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -3912,8 +3941,8 @@ __metadata:
     piscina: ^3.2.0
     prettier: ^2.6.2
     reflect-metadata: ^0.1.13
-    ts-morph: ^14.0.0
-    typescript: 4.6.4
+    ts-morph: ^15.0.0
+    typescript: 4.7.2
     yargs: ^17.5.1
   languageName: unknown
   linkType: soft
@@ -3936,7 +3965,7 @@ __metadata:
     jest-extended: ^2.0.0
     reflect-metadata: ^0.1.13
     semver: ^7.3.7
-    typescript: 4.6.4
+    typescript: 4.7.2
     yargs: ^17.5.1
   bin:
     nvmedit: bin/nvmedit.js
@@ -3971,6 +4000,7 @@ __metadata:
     "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0
+    "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -4000,7 +4030,7 @@ __metadata:
     source-map-support: ^0.5.21
     ts-nameof: ^5.0.0
     ts-patch: ^2.0.1
-    typescript: 4.6.4
+    typescript: 4.7.2
     zwave-js: "workspace:*"
   languageName: unknown
   linkType: soft
@@ -4025,7 +4055,7 @@ __metadata:
     esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
     serialport: ^10.4.0
-    typescript: 4.6.4
+    typescript: 4.7.2
     winston: ^3.7.2
   languageName: unknown
   linkType: soft
@@ -4042,7 +4072,7 @@ __metadata:
     esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -4062,7 +4092,7 @@ __metadata:
     esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
     triple-beam: "*"
-    typescript: 4.6.4
+    typescript: 4.7.2
     winston-transport: ^4.5.0
   languageName: unknown
   linkType: soft
@@ -4075,7 +4105,7 @@ __metadata:
     execa: ^5.1.1
     fs-extra: ^10.1.0
     tsutils: ^3.21.0
-    typescript: 4.6.4
+    typescript: 4.7.2
   languageName: unknown
   linkType: soft
 
@@ -9959,13 +9989,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-morph@npm:^14.0.0":
-  version: 14.0.0
-  resolution: "ts-morph@npm:14.0.0"
+"ts-morph@npm:^15.0.0":
+  version: 15.0.0
+  resolution: "ts-morph@npm:15.0.0"
   dependencies:
-    "@ts-morph/common": ~0.13.0
+    "@ts-morph/common": ~0.15.0
     code-block-writer: ^11.0.0
-  checksum: e975fb245ae558c638e94014dcbbad828b904dee5a7309bfb4ef2b2922d0d7ad902ec00874a959be58991043ce655f78ae78df0d0e0d6fb3800b991b95be08ce
+  checksum: a2de1f0d7fd80c1eb21cbdbc8e1eca828100288f102560f7f17915813b504f445a432fac18fec43ce84ecdbdb80e375ca7beab6ec9f8598550195c63aca9e5e6
   languageName: node
   linkType: hard
 
@@ -10145,23 +10175,23 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"typescript@npm:4.6.4":
-  version: 4.6.4
-  resolution: "typescript@npm:4.6.4"
+"typescript@npm:4.7.2":
+  version: 4.7.2
+  resolution: "typescript@npm:4.7.2"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: e7bfcc39cd4571a63a54e5ea21f16b8445268b9900bf55aee0e02ad981be576acc140eba24f1af5e3c1457767c96cea6d12861768fb386cf3ffb34013718631a
+  checksum: 5163585e6b56410f77d5483b698d9489bbee8902c99029eb70cf6d21525a186530ce19a00951af84eefd4a131cc51d0959f5118e25e70ab61f45ac4057dbd1ef
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@4.6.4#~builtin<compat/typescript>":
-  version: 4.6.4
-  resolution: "typescript@patch:typescript@npm%3A4.6.4#~builtin<compat/typescript>::version=4.6.4&hash=7ad353"
+"typescript@patch:typescript@4.7.2#~builtin<compat/typescript>":
+  version: 4.7.2
+  resolution: "typescript@patch:typescript@npm%3A4.7.2#~builtin<compat/typescript>::version=4.7.2&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 1cb434fbc637d347be90e3a0c6cd05e33c38f941713c8786d3031faf1842c2c148ba91d2fac01e7276b0ae3249b8633f1660e32686cc7a8c6a8fd5361dc52c66
+  checksum: 7e2b9a9f4a70fb7616f1b0d986977f8e34a74f046202fa7f24fdee79589598277810fa216b3776c20c0683a9235872c73be34fdb93f67f98c1efaca40999422f
   languageName: node
   linkType: hard
 
@@ -10624,6 +10654,7 @@ typescript@^4.4.3:
     "@types/semver": ^7.3.10
     "@types/source-map-support": ^0
     "@xstate/test": ^0.5.1
+    "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -10647,7 +10678,7 @@ typescript@^4.4.3:
     semver: ^7.3.7
     serialport: ^10.4.0
     source-map-support: ^0.5.21
-    typescript: 4.6.4
+    typescript: 4.7.2
     winston: ^3.7.2
     xstate: ^4.29.0
   languageName: unknown

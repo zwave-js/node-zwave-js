@@ -1,11 +1,11 @@
 import type { ProtocolType } from "@zwave-js/core";
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
 	FunctionType,
 	Message,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
