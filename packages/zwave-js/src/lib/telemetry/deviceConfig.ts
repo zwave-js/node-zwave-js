@@ -1,10 +1,10 @@
 import * as Sentry from "@sentry/node";
+import { AssociationGroupInfoCC, ConfigurationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { formatId } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
-import { AssociationGroupInfoCC, ConfigurationCC } from "../commandclass";
 import type { ZWaveNode } from "../node/Node";
 
 const missingDeviceConfigCache = new Set<string>();

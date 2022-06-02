@@ -52,6 +52,7 @@
     "@types/ts-nameof": "^4.2.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
+    "@zwave-js/cc": "workspace:*",
     "@zwave-js/config": "workspace:*",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
@@ -81,7 +82,7 @@
     "source-map-support": "^0.5.21",
     "ts-nameof": "^5.0.0",
     "ts-patch": "^2.0.1",
-    "typescript": "4.6.4",
+    "typescript": "4.7.2",
     "zwave-js": "workspace:*"
   },
   "resolutions": {
@@ -89,7 +90,7 @@
   },
   "scripts": {
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
-    "clean": "yarn foreach run clean",
+    "clean": "rm -rf packages/*/{build,*.tsbuildinfo}",
     "prebuild": "yarn workspace @zwave-js/maintenance run build",
     "build": "yarn prebuild && yarn workspace zwave-js run build",
     "watch": "yarn prebuild && yarn workspace zwave-js run watch",

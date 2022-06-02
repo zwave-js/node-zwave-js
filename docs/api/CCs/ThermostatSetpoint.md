@@ -7,7 +7,9 @@
 ### `get`
 
 ```ts
-async get(setpointType: ThermostatSetpointType): Promise<{ value: number; scale: Scale; } | undefined>;
+async get(
+	setpointType: ThermostatSetpointType,
+): Promise<{ value: number; scale: Scale } | undefined>;
 ```
 
 ### `set`

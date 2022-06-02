@@ -1,6 +1,5 @@
-import { highResTimestamp } from "@zwave-js/core";
+import { highResTimestamp, MessagePriority } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import {
 	Comparable,
 	compareNumberOrString,

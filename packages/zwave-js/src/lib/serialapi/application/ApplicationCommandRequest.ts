@@ -1,6 +1,9 @@
+import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
+	SinglecastCC,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -11,13 +14,10 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { CommandClass, SinglecastCC } from "../../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
 
 export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application
@@ -87,7 +87,7 @@ export class ApplicationCommandRequest
 			this.command = CommandClass.from(this.host, {
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
-			}) as SinglecastCC;
+			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound
 			if (!options.command.isSinglecast()) {
@@ -113,7 +113,7 @@ export class ApplicationCommandRequest
 	public readonly fromForeignHomeId: boolean;
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
-	public command: SinglecastCC; // TODO: why is this a SinglecastCC?
+	public command: SinglecastCC<CommandClass>; // TODO: why is this a SinglecastCC?
 
 	public override getNodeId(): number | undefined {
 		if (this.command.isSinglecast()) {

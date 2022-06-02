@@ -18,3 +18,4 @@ export const MAX_REPEATERS = 4;
 
 export { InterviewStage } from "./InterviewStage";
 export { NodeStatus } from "./NodeStatus";
+export * from "./Transmission";

@@ -1,6 +1,7 @@
 import {
 	encodeBitMask,
 	MAX_NODES,
+	MessagePriority,
 	NodeType,
 	NUM_NODEMASK_BYTES,
 } from "@zwave-js/core";
@@ -12,7 +13,6 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
