@@ -449,7 +449,7 @@
 			"import type { ZWaveApplicationHost, ZWaveHost } from \"@zwave-js/host\";",
 			"import { CCAPI } from \"../lib/API\";",
 			"",
-			"// TODO: Move this enumeration into the _Types.ts file",
+			"// TODO: Move this enumeration into the src/lib/_Types.ts file",
 			"// All additional type definitions (except CC constructor options) must be defined there too",
 			"export enum ${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}Command {",
 			"\t${3:// Get = 0x01}",

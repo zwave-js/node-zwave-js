@@ -1,5 +1,6 @@
 import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
+	ApplicationNodeInformation,
 	CommandClasses,
 	encodeBitMask,
 	getCCName,
@@ -8,8 +9,8 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	parseApplicationNodeInformation,
 	parseBitMask,
-	parseNodeInformationFrame,
 	validatePayload,
 	ValueID,
 	ZWaveError,
@@ -719,7 +720,10 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 
 @CCCommand(MultiChannelCommand.CapabilityReport)
-export class MultiChannelCCCapabilityReport extends MultiChannelCC {
+export class MultiChannelCCCapabilityReport
+	extends MultiChannelCC
+	implements ApplicationNodeInformation
+{
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
@@ -727,15 +731,15 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		super(host, options);
 
 		// Only validate the bytes we expect to see here
-		// parseNodeInformationFrame does its own validation
+		// parseApplicationNodeInformation does its own validation
 		validatePayload(this.payload.length >= 1);
 		this.endpointIndex = this.payload[0] & 0b01111111;
-		const NIF = parseNodeInformationFrame(this.payload.slice(1));
 		this.isDynamic = !!(this.payload[0] & 0b10000000);
-		this.genericDeviceClass = NIF.generic;
-		this.specificDeviceClass = NIF.specific;
+
+		const NIF = parseApplicationNodeInformation(this.payload.slice(1));
+		this.genericDeviceClass = NIF.genericDeviceClass;
+		this.specificDeviceClass = NIF.specificDeviceClass;
 		this.supportedCCs = NIF.supportedCCs;
-		// TODO: does this include controlledCCs aswell?
 
 		// Removal reports have very specific information
 		this.wasRemoved =
