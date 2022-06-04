@@ -64,7 +64,7 @@
 				}
 			]
 		},
-        {
+		{
 			"#": "4",
 			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
 		},
