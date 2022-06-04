@@ -52,6 +52,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 		driver["_driverLog"] = driverLogger;
 	});
@@ -62,7 +63,6 @@ describe("regression tests", () => {
 	});
 
 	it("when an invalid CC is received, this is printed in the logs", async () => {
-		jest.setTimeout(5000);
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported =
 			isFunctionSupported_NoBridge;
@@ -95,5 +95,5 @@ describe("regression tests", () => {
   └─[BinarySensorCCReport] [INVALID]`,
 		});
 		expect(serialport.lastWrite).toEqual(ACK);
-	});
+	}, 5000);
 });

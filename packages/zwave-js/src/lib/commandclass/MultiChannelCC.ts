@@ -13,9 +13,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { CCAPI } from "./API";
 import {
@@ -32,24 +34,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultiChannelCommand {
-	// Legacy commands for V1 (Multi Instance)
-	GetV1 = 0x04,
-	ReportV1 = 0x05,
-	CommandEncapsulationV1 = 0x06,
-
-	// V2+
-	EndPointGet = 0x07,
-	EndPointReport = 0x08,
-	CapabilityGet = 0x09,
-	CapabilityReport = 0x0a,
-	EndPointFind = 0x0b,
-	EndPointFindReport = 0x0c,
-	CommandEncapsulation = 0x0d,
-	AggregatedMembersGet = 0x0e,
-	AggregatedMembersReport = 0x0f,
-}
+import { MultiChannelCommand } from "./_Types";
 
 // TODO: Handle removal reports of dynamic endpoints
 
@@ -115,10 +100,10 @@ function areAllEndpointsDifferent(
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
 		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
-		const deviceClass =
-			node.getValue<{ generic: number; specific: number }>(
-				devClassValueId,
-			);
+		const deviceClass = node.getValue<{
+			generic: number;
+			specific: number;
+		}>(devClassValueId);
 		if (deviceClass) {
 			deviceClasses.add(deviceClass.generic * 256 + deviceClass.specific);
 		}
@@ -177,6 +162,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getEndpointCapabilities(
 		endpoint: number,
 	): Promise<EndpointCapability | undefined> {
@@ -198,6 +184,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.capability;
 	}
 
+	@validateArgs()
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
@@ -221,6 +208,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.foundEndpoints;
 	}
 
+	@validateArgs()
 	public async getAggregatedMembers(
 		endpoint: number,
 	): Promise<readonly number[] | undefined> {
@@ -242,6 +230,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.members;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulated(
 		options: Omit<
 			MultiChannelCCCommandEncapsulationOptions,
@@ -260,6 +250,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getEndpointCountV1(
 		ccId: CommandClasses,
 	): Promise<number | undefined> {
@@ -279,6 +270,8 @@ export class MultiChannelCCAPI extends CCAPI {
 		return response?.endpointCount;
 	}
 
+	// @noValidateArgs - Encapsulation is used internally and too frequently that we
+	// want to pay the cost of validating each call
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
@@ -306,31 +299,50 @@ export interface EndpointCapability {
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		this.registerValue(getEndpointIndizesValueId().property, true);
-		this.registerValue(getEndpointCCsValueId(0).property, true);
-		this.registerValue(getEndpointDeviceClassValueId(0).property, true);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+		this.registerValue(getEndpointIndizesValueId().property, {
+			internal: true,
+		});
+		this.registerValue(getEndpointCCsValueId(0).property, {
+			internal: true,
+		});
+		this.registerValue(getEndpointDeviceClassValueId(0).property, {
+			internal: true,
+		});
 	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			cc.endpointIndex !== 0 &&
-			!(cc instanceof MultiChannelCCCommandEncapsulation)
+			!(cc instanceof MultiChannelCCCommandEncapsulation) &&
+			!(cc instanceof MultiChannelCCV1CommandEncapsulation)
 		);
 	}
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
-	): MultiChannelCCCommandEncapsulation {
-		return new MultiChannelCCCommandEncapsulation(driver, {
-			nodeId: cc.nodeId,
-			encapsulated: cc,
-			destination: cc.endpointIndex,
-		});
+	):
+		| MultiChannelCCCommandEncapsulation
+		| MultiChannelCCV1CommandEncapsulation {
+		const ccVersion = cc
+			.getNode()
+			?.getCCVersion(CommandClasses["Multi Channel"]);
+		if (ccVersion === 1) {
+			return new MultiChannelCCV1CommandEncapsulation(host, {
+				nodeId: cc.nodeId,
+				encapsulated: cc,
+			});
+		} else {
+			return new MultiChannelCCCommandEncapsulation(host, {
+				nodeId: cc.nodeId,
+				encapsulated: cc,
+				destination: cc.endpointIndex,
+			});
+		}
 	}
 
 	public skipEndpointInterview(): boolean {
@@ -338,16 +350,16 @@ export class MultiChannelCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		this.driver.controllerLog.logNode(node.id, {
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Special interview procedure for legacy nodes
-		if (this.version === 1) return this.interviewV1();
+		if (this.version === 1) return this.interviewV1(driver);
 
 		const endpoint = node.getEndpoint(this.endpointIndex)!;
 		const api = endpoint.commandClasses["Multi Channel"].withOptions({
@@ -355,14 +367,14 @@ export class MultiChannelCC extends CommandClass {
 		});
 
 		// Step 1: Retrieve general information about end points
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying device endpoint information...",
 			direction: "outbound",
 		});
 		const multiResponse = await api.getEndpoints();
 		if (!multiResponse) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying device endpoint information timed out, aborting interview...",
@@ -378,7 +390,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (multiResponse.aggregatedEndpointCount != undefined) {
 			logMessage += `\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 		}
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -398,7 +410,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		};
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying all endpoints...",
 				direction: "outbound",
@@ -408,14 +420,14 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			if (foundEndpoints) allEndpoints.push(...foundEndpoints);
 			if (!allEndpoints.length) {
 				// Create a sequential list of endpoints
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `Endpoint query returned no results, assuming that endpoints are sequential`,
 					direction: "inbound",
 				});
 				addSequentialEndpoints();
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `received endpoints: ${allEndpoints
 						.map(String)
@@ -425,7 +437,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			}
 		} else {
 			// Step 2b: Assume that the endpoints are in sequential order
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `does not support EndPointFind, assuming that endpoints are sequential`,
 				direction: "none",
@@ -441,14 +453,14 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				this.version >= 4
 			) {
 				// Find members of aggregated end point
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
 				const members = await api.getAggregatedMembers(endpoint);
 				if (members) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `aggregated endpoint #${endpoint} has members ${members
 							.map(String)
@@ -461,7 +473,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			// When the device reports identical capabilities for all endpoints,
 			// we don't need to query them all
 			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `all endpoints identical, skipping capability query for endpoint #${endpoint}...`,
 					direction: "none",
@@ -485,7 +497,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				continue;
 			}
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
@@ -502,13 +514,13 @@ supported CCs:`;
 					const ccName = CommandClasses[cc];
 					logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `Querying endpoint #${endpoint} capabilities timed out, aborting interview...`,
 					level: "warn",
@@ -526,19 +538,19 @@ supported CCs:`;
 			const preserve = node.deviceConfig?.compat?.preserveEndpoints;
 			if (!preserve) {
 				allEndpoints = [];
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `Endpoints seem unnecessary b/c they have different device classes, ignoring all...`,
 				});
 			} else if (preserve === "*") {
 				// preserve all endpoints, do nothing
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `Endpoints seem unnecessary, but are configured to be preserved.`,
 				});
 			} else {
 				allEndpoints = allEndpoints.filter((ep) =>
 					preserve.includes(ep),
 				);
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `Endpoints seem unnecessary, but endpoints ${allEndpoints.join(
 						", ",
 					)} are configured to be preserved.`,
@@ -551,8 +563,8 @@ supported CCs:`;
 		this.interviewComplete = true;
 	}
 
-	private async interviewV1(): Promise<void> {
-		const node = this.getNode()!;
+	private async interviewV1(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 		const api = node.getEndpoint(this.endpointIndex)!.commandClasses[
 			"Multi Channel"
 		];
@@ -568,7 +580,7 @@ supported CCs:`;
 			);
 		const endpointCounts = new Map<CommandClasses, number>();
 		for (const ccId of supportedCCs) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `Querying endpoint count for CommandClass ${getCCName(
 					ccId,
 				)}...`,
@@ -578,7 +590,7 @@ supported CCs:`;
 			if (endpointCount != undefined) {
 				endpointCounts.set(ccId, endpointCount);
 
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `CommandClass ${getCCName(
 						ccId,
 					)} has ${endpointCount} endpoints`,
@@ -614,10 +626,10 @@ supported CCs:`;
 @CCCommand(MultiChannelCommand.EndPointReport)
 export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._countIsDynamic = !!(this.payload[0] & 0b10000000);
@@ -677,10 +689,10 @@ export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// Only validate the bytes we expect to see here
 		// parseNodeInformationFrame does its own validation
@@ -690,10 +702,10 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		const capability: EndpointCapability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
 			wasRemoved: false,
-			generic: this.driver.configManager.lookupGenericDeviceClass(
+			generic: this.host.configManager.lookupGenericDeviceClass(
 				NIF.generic,
 			),
-			specific: this.driver.configManager.lookupSpecificDeviceClass(
+			specific: this.host.configManager.lookupSpecificDeviceClass(
 				NIF.generic,
 				NIF.specific,
 			),
@@ -759,12 +771,12 @@ interface MultiChannelCCCapabilityGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCCapabilityReport)
 export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCapabilityGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -794,10 +806,10 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.EndPointFindReport)
 export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._reportsToFollow = this.payload[0];
@@ -854,11 +866,11 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			...super.toLogEntry(),
 			message: {
 				"generic device class":
-					this.driver.configManager.lookupGenericDeviceClass(
+					this.host.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.driver.configManager.lookupSpecificDeviceClass(
+					this.host.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -878,12 +890,12 @@ interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCEndPointFindReport)
 export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCEndPointFindOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -909,11 +921,11 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 			...super.toLogEntry(),
 			message: {
 				"generic device class":
-					this.driver.configManager.lookupGenericDeviceClass(
+					this.host.configManager.lookupGenericDeviceClass(
 						this.genericClass,
 					).label,
 				"specific device class":
-					this.driver.configManager.lookupSpecificDeviceClass(
+					this.host.configManager.lookupSpecificDeviceClass(
 						this.genericClass,
 						this.specificClass,
 					).label,
@@ -925,10 +937,10 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 @CCCommand(MultiChannelCommand.AggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		const endpoint = this.payload[0] & 0b0111_1111;
@@ -970,12 +982,12 @@ interface MultiChannelCCAggregatedMembersGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCAggregatedMembersReport)
 export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCAggregatedMembersGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1053,12 +1065,12 @@ function testResponseForCommandEncapsulation(
 )
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCCommandEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			if (
@@ -1082,7 +1094,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 				}
 			}
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.host, {
 				data: this.payload.slice(2),
 				fromEncapsulation: true,
 				encapCC: this,
@@ -1146,10 +1158,10 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	// @noCCValues This information is stored during the interview
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// V1 won't be extended in the future, so do an exact check
 		validatePayload(this.payload.length === 2);
 		this.requestedCC = this.payload[0];
@@ -1185,12 +1197,12 @@ interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1GetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1217,9 +1229,22 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	}
 }
 
-// This indirection is necessary to be able to define the same CC as the response
-function getResponseForV1CommandEncapsulation() {
-	return MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation(
+	sent: MultiChannelCCV1CommandEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return MultiChannelCCV1CommandEncapsulation;
+	}
+}
+
+function testResponseForV1CommandEncapsulation(
+	sent: MultiChannelCCV1CommandEncapsulation,
+	received: MultiChannelCCV1CommandEncapsulation,
+) {
+	if (sent.endpointIndex === received.endpointIndex) {
+		return "checkEncapsulated";
+	}
+	return false;
 }
 
 interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
@@ -1227,15 +1252,18 @@ interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultiChannelCommand.CommandEncapsulationV1)
-@expectedCCResponse(getResponseForV1CommandEncapsulation)
+@expectedCCResponse(
+	getResponseForV1CommandEncapsulation,
+	testResponseForV1CommandEncapsulation,
+)
 export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelCCV1CommandEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.endpointIndex = this.payload[0];
@@ -1246,7 +1274,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 				this.payload.length >= 2 && this.payload[1] === 0x00;
 
 			// No need to validate further, each CC does it for itself
-			this.encapsulated = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.host, {
 				data: this.payload.slice(isV2withV1Header ? 2 : 1),
 				fromEncapsulation: true,
 				encapCC: this,

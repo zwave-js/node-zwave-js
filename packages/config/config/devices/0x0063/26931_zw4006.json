@@ -35,8 +35,6 @@
 			"label": "Timeout Duration",
 			"description": "Amount of time the light stays on after motion stops",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 5,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -87,8 +85,6 @@
 			"#": "3",
 			"label": "Operation Mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +106,6 @@
 			"#": "4",
 			"label": "Association Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -130,8 +124,6 @@
 			"label": "Invert Switch",
 			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -150,8 +142,6 @@
 			"label": "Motion Sensor",
 			"description": "Enable/Disable Motion Sensor",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -170,8 +160,6 @@
 			"label": "Motion Sensor Sensitivity",
 			"description": "Amount of motion required to turn on the light",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -194,8 +182,6 @@
 			"label": "Light Sensing",
 			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -212,34 +198,34 @@
 		{
 			"#": "15",
 			"label": "Reset Cycle",
-			"valueSize": 1,
+			"description": "15 second intervals, starting from 60 seconds: Duration = (value-1) · 15s.",
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 110,
 			"defaultValue": 2,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "10 secs",
+					"label": "10 seconds",
 					"value": 1
 				},
 				{
-					"label": "20 secs",
+					"label": "20 seconds",
 					"value": 2
 				},
 				{
-					"label": "30 secs",
+					"label": "30 seconds",
 					"value": 3
 				},
 				{
-					"label": "45 secs",
+					"label": "45 seconds",
 					"value": 4
 				},
 				{
-					"label": "27 mins",
+					"label": "27 minutes, 15 seconds",
 					"value": 110
 				}
 			]
@@ -248,8 +234,6 @@
 			"#": "19",
 			"label": "Exclusion Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

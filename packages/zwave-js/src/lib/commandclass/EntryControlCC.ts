@@ -12,10 +12,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -38,73 +39,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum EntryControlCommand {
-	Notification = 0x01,
-	KeySupportedGet = 0x02,
-	KeySupportedReport = 0x03,
-	EventSupportedGet = 0x04,
-	EventSupportedReport = 0x05,
-	ConfigurationSet = 0x06,
-	ConfigurationGet = 0x07,
-	ConfigurationReport = 0x08,
-}
-
-export enum EntryControlEventTypes {
-	Caching = 0x00,
-	CachedKeys = 0x01,
-	Enter = 0x02,
-	DisarmAll = 0x03,
-	ArmAll = 0x04,
-	ArmAway = 0x05,
-	ArmHome = 0x06,
-	ExitDelay = 0x07,
-	Arm1 = 0x08,
-	Arm2 = 0x09,
-	Arm3 = 0x0a,
-	Arm4 = 0x0b,
-	Arm5 = 0x0c,
-	Arm6 = 0x0d,
-	Rfid = 0x0e,
-	Bell = 0x0f,
-	Fire = 0x10,
-	Police = 0x11,
-	AlertPanic = 0x12,
-	AlertMedical = 0x13,
-	GateOpen = 0x14,
-	GateClose = 0x15,
-	Lock = 0x16,
-	Unlock = 0x17,
-	Test = 0x18,
-	Cancel = 0x19,
-}
-
-export enum EntryControlDataTypes {
-	None = 0x00,
-	Raw = 0x01,
-	ASCII = 0x02,
-	MD5 = 0x03,
-}
-
-/**
- * @publicAPI
- */
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	eventType: EntryControlEventTypes;
-	dataType: EntryControlDataTypes;
-	eventData?: Buffer | string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: ZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
-	args: ZWaveNotificationCallbackArgs_EntryControlCC,
-];
+import {
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+} from "./_Types";
 
 function getValueID(property: string, endpoint: number): ValueID {
 	return {
@@ -204,6 +143,7 @@ export class EntryControlCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async setConfiguration(
 		keyCacheSize: number,
@@ -278,20 +218,20 @@ export class EntryControlCCAPI extends CCAPI {
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Entry Control"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported keys...",
 			direction: "outbound",
@@ -299,14 +239,14 @@ export class EntryControlCC extends CommandClass {
 
 		const supportedKeys = await api.getSupportedKeys();
 		if (supportedKeys) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control supported keys: ${supportedKeys.toString()}`,
 				direction: "inbound",
 			});
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control supported events...",
 			direction: "outbound",
@@ -314,7 +254,7 @@ export class EntryControlCC extends CommandClass {
 
 		const eventCapabilities = await api.getEventCapabilities();
 		if (eventCapabilities) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control supported keys:
 data types:            ${eventCapabilities.supportedDataTypes
@@ -331,20 +271,20 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 			});
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Entry Control"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting entry control configuration...",
 			direction: "outbound",
@@ -352,7 +292,7 @@ max key cache timeout: ${eventCapabilities.maxKeyCacheTimeout} seconds`,
 
 		const conf = await api.getConfiguration();
 		if (conf) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received entry control configuration:
 key cache size:    ${conf.keyCacheSize}
@@ -366,10 +306,10 @@ key cache timeout: ${conf.keyCacheTimeout} seconds`,
 @CCCommand(EntryControlCommand.Notification)
 export class EntryControlCCNotification extends EntryControlCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 4);
 		this.sequenceNumber = this.payload[0];
@@ -460,10 +400,10 @@ export class EntryControlCCNotification extends EntryControlCC {
 @CCCommand(EntryControlCommand.KeySupportedReport)
 export class EntryControlCCKeySupportedReport extends EntryControlCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		const length = this.payload[0];
@@ -490,10 +430,10 @@ export class EntryControlCCKeySupportedGet extends EntryControlCC {}
 @CCCommand(EntryControlCommand.EventSupportedReport)
 export class EntryControlCCEventSupportedReport extends EntryControlCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		const dataTypeLength = this.payload[0] & 0b11;
@@ -588,10 +528,10 @@ export class EntryControlCCEventSupportedGet extends EntryControlCC {}
 @CCCommand(EntryControlCommand.ConfigurationReport)
 export class EntryControlCCConfigurationReport extends EntryControlCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 
@@ -647,12 +587,12 @@ interface EntryControlCCConfigurationSetOptions extends CCCommandOptions {
 @expectedCCResponse(EntryControlCCConfigurationReport)
 export class EntryControlCCConfigurationSet extends EntryControlCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| EntryControlCCConfigurationSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

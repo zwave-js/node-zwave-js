@@ -1,0 +1,449 @@
+{
+	"manufacturer": "Nexia Home Intelligence",
+	"manufacturerId": "0x0178",
+	"label": "NX1000",
+	"description": "Nexia One Touch",
+	"devices": [
+		{
+			"productType": "0x5343",
+			"productId": "0x4735",
+			"zwaveAllianceId": 1344
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 2
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 2
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 2
+		},
+		"5": {
+			"label": "Group 5",
+			"maxNodes": 2
+		},
+		"6": {
+			"label": "Group 6",
+			"maxNodes": 2
+		},
+		"7": {
+			"label": "Group 7",
+			"maxNodes": 2
+		},
+		"8": {
+			"label": "Group 8",
+			"maxNodes": 2
+		},
+		"9": {
+			"label": "Group 9",
+			"maxNodes": 2
+		},
+		"10": {
+			"label": "Group 10",
+			"maxNodes": 2
+		},
+		"11": {
+			"label": "Group 11",
+			"maxNodes": 2
+		},
+		"12": {
+			"label": "Group 12",
+			"maxNodes": 2
+		},
+		"13": {
+			"label": "Group 13",
+			"maxNodes": 2
+		},
+		"14": {
+			"label": "Group 14",
+			"maxNodes": 2
+		},
+		"15": {
+			"label": "Group 15",
+			"maxNodes": 2
+		},
+		"16": {
+			"label": "Group 16",
+			"maxNodes": 2
+		},
+		"17": {
+			"label": "Group 17",
+			"maxNodes": 2
+		},
+		"18": {
+			"label": "Group 18",
+			"maxNodes": 2
+		},
+		"19": {
+			"label": "Group 19",
+			"maxNodes": 2
+		},
+		"20": {
+			"label": "Group 20",
+			"maxNodes": 2
+		},
+		"21": {
+			"label": "Group 21",
+			"maxNodes": 2
+		},
+		"22": {
+			"label": "Group 22",
+			"maxNodes": 2
+		},
+		"23": {
+			"label": "Group 23",
+			"maxNodes": 2
+		},
+		"24": {
+			"label": "Group 24",
+			"maxNodes": 2
+		},
+		"25": {
+			"label": "Group 25",
+			"maxNodes": 2
+		},
+		"26": {
+			"label": "Group 26",
+			"maxNodes": 2
+		},
+		"27": {
+			"label": "Group 27",
+			"maxNodes": 2
+		},
+		"28": {
+			"label": "Group 28",
+			"maxNodes": 2
+		},
+		"29": {
+			"label": "Group 29",
+			"maxNodes": 2
+		},
+		"30": {
+			"label": "Group 30",
+			"maxNodes": 2
+		},
+		"31": {
+			"label": "Group 31",
+			"maxNodes": 2
+		},
+		"32": {
+			"label": "Group 32",
+			"maxNodes": 2
+		},
+		"33": {
+			"label": "Group 33",
+			"maxNodes": 2
+		},
+		"34": {
+			"label": "Group 34",
+			"maxNodes": 2
+		},
+		"35": {
+			"label": "Group 35",
+			"maxNodes": 2
+		},
+		"36": {
+			"label": "Group 36",
+			"maxNodes": 2
+		},
+		"37": {
+			"label": "Group 37",
+			"maxNodes": 2
+		},
+		"38": {
+			"label": "Group 38",
+			"maxNodes": 2
+		},
+		"39": {
+			"label": "Group 39",
+			"maxNodes": 2
+		},
+		"40": {
+			"label": "Group 40",
+			"maxNodes": 2
+		},
+		"41": {
+			"label": "Group 41",
+			"maxNodes": 2
+		},
+		"42": {
+			"label": "Group 42",
+			"maxNodes": 2
+		},
+		"43": {
+			"label": "Group 43",
+			"maxNodes": 2
+		},
+		"44": {
+			"label": "Group 44",
+			"maxNodes": 2
+		},
+		"45": {
+			"label": "Group 45",
+			"maxNodes": 2
+		},
+		"46": {
+			"label": "Group 46",
+			"maxNodes": 2
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Button 1 Type",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Momentary Scene Control",
+					"value": 1
+				},
+				{
+					"label": "Basic Set: Toggle",
+					"value": 2
+				},
+				{
+					"label": "Basic Set: Scene Control",
+					"value": 3
+				},
+				{
+					"label": "Thermostat",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$import": "#paramInformation/2",
+			"label": "Button 2 Type"
+		},
+		{
+			"#": "4",
+			"$import": "#paramInformation/2",
+			"label": "Button 3 Type"
+		},
+		{
+			"#": "5",
+			"$import": "#paramInformation/2",
+			"label": "Button 4 Type"
+		},
+		{
+			"#": "6",
+			"$import": "#paramInformation/2",
+			"label": "Button 5 Type"
+		},
+		{
+			"#": "7",
+			"$import": "#paramInformation/2",
+			"label": "Button 6 Type"
+		},
+		{
+			"#": "9",
+			"$import": "#paramInformation/2",
+			"label": "Button 8 Type"
+		},
+		{
+			"#": "10",
+			"$import": "#paramInformation/2",
+			"label": "Button 9 Type"
+		},
+		{
+			"#": "11",
+			"$import": "#paramInformation/2",
+			"label": "Button 10 Type"
+		},
+		{
+			"#": "12",
+			"$import": "#paramInformation/2",
+			"label": "Button 11 Type"
+		},
+		{
+			"#": "13",
+			"$import": "#paramInformation/2",
+			"label": "Button 12 Type"
+		},
+		{
+			"#": "14",
+			"$import": "#paramInformation/2",
+			"label": "Button 13 Type"
+		},
+		{
+			"#": "15",
+			"$import": "#paramInformation/2",
+			"label": "Button 14 Type"
+		},
+		{
+			"#": "16",
+			"$import": "#paramInformation/2",
+			"label": "Button 15 Type"
+		},
+		{
+			"#": "20",
+			"label": "Touch Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "21",
+			"label": "Screen Contrast",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 7,
+			"unsigned": true
+		},
+		{
+			"#": "23",
+			"label": "Button LED Level",
+			"valueSize": 1,
+			"unit": "10%",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "24",
+			"label": "Backlight Level",
+			"valueSize": 1,
+			"unit": "10%",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "25",
+			"label": "Backlight Timeout: Scene Button",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "26",
+			"label": "Backlight Timeout: Page Button",
+			"valueSize": 1,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "28",
+			"label": "Screen Timeout: Delay",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 60,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "29",
+			"label": "Screen Timeout: Primary Page",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Page 1",
+					"value": 1
+				},
+				{
+					"label": "Page 2",
+					"value": 2
+				},
+				{
+					"label": "Page 3",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Battery Level: Shutdown Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "31",
+			"label": "Battery Level: Radio Disable Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "32",
+			"label": "Battery Level: Indicator Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 20,
+			"unsigned": true
+		},
+		{
+			"#": "33",
+			"label": "Battery Level: Midpoint Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 50,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Put primary controller into inclusion mode\n2. Press any button to wake the One Touch\n3. Press and hold the middle page button (round button) until the Installer Setup menu appears\n4. Select the 'Z-Wave' button\n5. Select the 'Include' button\n6. Include will fast flash and then SUCCESS will display briefly",
+		"exclusion": "1. Put primary controller into exclusion mode\n2. Press any button to wake the One Touch\n3. Press and hold the middle page button (round button) until the Installer Setup menu appears\n4. Select the 'Z-Wave' button\n5. Select the 'Exclude' button\n6. Exclude will fast flash and then SUCCESS will display briefly",
+		"reset": "Please use Factory Reset as a last resort option only as all network settings and associations will be cleared. \n\n1. Press any button to wake the One Touch\n2. Press and hold the middle page button (round button) until the Installer Setup menu appears\n3. Select the 'System' button\n4. Select the 'Factory Reset' button\n5. Select 'Yes' to proceed with the factory reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1344/18-HD79D1-1-EN%20NX1000%20One%20Touch%20Controller.pdf"
+	}
+}

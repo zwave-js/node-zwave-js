@@ -21,23 +21,42 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Siren status",
-			"description": "is assigned to the siren status - ON/OFF. Allows for sending a controlled command to the associated device whenever the Indoor siren is turned ON (or OFF).",
+			"label": "Siren Status",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": [
 		{
+			"#": "7",
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm",
+					"value": 1
+				},
+				{
+					"label": "Doorbell",
+					"value": 2
+				}
+			]
+		},
+		{
 			"#": "1",
 			"label": "Alarm Volume",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
 				{
 					"label": "Low",
 					"value": 1
@@ -56,12 +75,14 @@
 			"#": "2",
 			"label": "Alarm Duration",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
 				{
 					"label": "30 Seconds",
 					"value": 1
@@ -77,9 +98,23 @@
 			]
 		},
 		{
+			"#": "5",
+			"label": "Alarm Sound",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Alarm LED",
+			"defaultValue": 1
+		},
+		{
 			"#": "3",
-			"label": "Configuring doorbell music duration time",
-			"description": "Duration",
+			"label": "Doorbell Duration",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -88,18 +123,15 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 255
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Configure doorbell music volume",
-			"description": "Low, Medium, High",
+			"label": "Doorbell Volume",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -119,24 +151,18 @@
 			]
 		},
 		{
-			"#": "5",
-			"label": "Configure alarm sound index",
-			"description": "Sound types",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 9,
-			"unsigned": true
-		},
-		{
 			"#": "6",
-			"label": "Configure doorbell music index",
-			"description": "Sound types",
+			"label": "Doorbell Sound",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
 			"defaultValue": 10,
 			"unsigned": true
+		},
+		{
+			"#": "9",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Doorbell LED"
 		}
 	],
 	"metadata": {

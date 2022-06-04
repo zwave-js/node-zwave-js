@@ -21,11 +21,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, JSONObject, num2hex, pick } from "@zwave-js/shared";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -41,53 +42,8 @@ import {
 	implementedVersion,
 	InvalidCC,
 } from "./CommandClass";
-import { UserCodeCommand } from "./UserCodeCC";
-
-export enum NotificationCommand {
-	// All the supported commands
-	EventSupportedGet = 0x01,
-	EventSupportedReport = 0x02,
-	Get = 0x04,
-	Report = 0x05,
-	Set = 0x06,
-	SupportedGet = 0x07,
-	SupportedReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export type NotificationMetadata = ValueMetadata & {
-	ccSpecific: {
-		notificationType: number;
-	};
-};
-
-/**
- * @publicAPI
- */
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-	/** The numeric identifier for the notification type */
-	type: number;
-	/** The human-readable label for the notification type */
-	label: string;
-	/** The numeric identifier for the notification event */
-	event: number;
-	/** The human-readable label for the notification event */
-	eventLabel: string;
-	/** Additional information related to the event */
-	parameters?: NotificationCCReport["eventParameters"];
-}
-
-/**
- * @publicAPI
- * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: ZWaveNode,
-	ccId: CommandClasses.Notification,
-	args: ZWaveNotificationCallbackArgs_NotificationCC,
-];
+import { isNotificationEventPayload } from "./NotificationEventPayload";
+import { NotificationCommand, UserCodeCommand } from "./_Types";
 
 /** Returns the ValueID used to store whether a node supports V1 Alarms */
 export function getSupportsV1AlarmValueId(): ValueID {
@@ -178,6 +134,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		);
 	}
 
+	@validateArgs()
 	public async sendReport(
 		options: NotificationCCReportOptions,
 	): Promise<void> {
@@ -194,6 +151,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const response = await this.getInternal(options);
@@ -209,6 +167,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		notificationType: number,
 		notificationStatus: boolean,
@@ -251,6 +210,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getSupportedEvents(
 		notificationType: number,
 	): Promise<readonly number[] | undefined> {
@@ -365,18 +325,18 @@ export class NotificationCC extends CommandClass {
 
 	// former AlarmCC (v1..v2)
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		// mark some value IDs as internal
-		this.registerValue(getNotificationModeValueId().property, true);
-		this.registerValue(
-			getSupportedNotificationTypesValueId().property,
-			true,
-		);
-		this.registerValue(
-			getSupportedNotificationEventsValueId(0).property,
-			true,
-		);
+		this.registerValue(getNotificationModeValueId().property, {
+			internal: true,
+		});
+		this.registerValue(getSupportedNotificationTypesValueId().property, {
+			internal: true,
+		});
+		this.registerValue(getSupportedNotificationEventsValueId(0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -389,10 +349,11 @@ export class NotificationCC extends CommandClass {
 	}
 
 	private async determineNotificationMode(
+		driver: Driver,
 		api: NotificationCCAPI,
 		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
 	): Promise<"push" | "pull"> {
-		const node = this.getNode()!;
+		const node = this.getNode(driver)!;
 
 		// SDS14223: If the supporting node does not support the Association Command Class,
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
@@ -402,11 +363,9 @@ export class NotificationCC extends CommandClass {
 			if (
 				node.supportsCC(CommandClasses["Association Group Information"])
 			) {
-				const assocGroups = this.driver.controller.getAssociationGroups(
-					{
-						nodeId: node.id,
-					},
-				);
+				const assocGroups = driver.controller.getAssociationGroups({
+					nodeId: node.id,
+				});
 				for (const group of assocGroups.values()) {
 					// Check if this group sends Notification Reports
 					if (
@@ -423,7 +382,7 @@ export class NotificationCC extends CommandClass {
 			// We might be dealing with an older cache file, fall back to testing
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `determining whether this node is pull or push...`,
 			direction: "outbound",
@@ -458,7 +417,7 @@ export class NotificationCC extends CommandClass {
 	): string[] {
 		return notificationTypes
 			.map((n) => {
-				const ret = this.driver.configManager.lookupNotification(n);
+				const ret = this.host.configManager.lookupNotification(n);
 				return [n, ret] as const;
 			})
 			.map(([type, ntfcn]) =>
@@ -466,15 +425,15 @@ export class NotificationCC extends CommandClass {
 			);
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 		const valueDB = this.getValueDB();
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -482,7 +441,7 @@ export class NotificationCC extends CommandClass {
 
 		let supportsV1Alarm = false;
 		if (this.version >= 2) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported notification types...",
 				direction: "outbound",
@@ -490,7 +449,7 @@ export class NotificationCC extends CommandClass {
 
 			const suppResponse = await api.getSupported();
 			if (!suppResponse) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported notification types timed out, skipping interview...",
@@ -512,7 +471,7 @@ export class NotificationCC extends CommandClass {
 			const logMessage = `received supported notification types:${supportedNotificationNames
 				.map((name) => `\n· ${name}`)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -524,7 +483,7 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying supported notification events for ${name}...`,
 						direction: "outbound",
@@ -532,7 +491,7 @@ export class NotificationCC extends CommandClass {
 					const supportedEvents = await api.getSupportedEvents(type);
 					if (supportedEvents) {
 						supportedNotificationEvents.set(type, supportedEvents);
-						this.driver.controllerLog.logNode(node.id, {
+						driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received supported notification events for ${name}: ${supportedEvents
 								.map(String)
@@ -549,6 +508,7 @@ export class NotificationCC extends CommandClass {
 			);
 			if (notificationMode !== "push" && notificationMode !== "pull") {
 				notificationMode = await this.determineNotificationMode(
+					driver,
 					api,
 					supportedNotificationEvents,
 				);
@@ -559,16 +519,16 @@ export class NotificationCC extends CommandClass {
 			}
 
 			if (notificationMode === "pull") {
-				await this.refreshValues();
+				await this.refreshValues(driver);
 			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 					const notificationConfig =
-						this.driver.configManager.lookupNotification(type);
+						this.host.configManager.lookupNotification(type);
 
 					// Enable reports for each notification type
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `enabling notifications for ${name}...`,
 						direction: "outbound",
@@ -630,11 +590,11 @@ export class NotificationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(driver: Driver): Promise<void> {
 		// Refreshing values only works on pull nodes
 		if (this.notificationMode === "pull") {
-			const node = this.getNode()!;
-			const endpoint = this.getEndpoint()!;
+			const node = this.getNode(driver)!;
+			const endpoint = this.getEndpoint(driver)!;
 			const api = endpoint.commandClasses.Notification.withOptions({
 				priority: MessagePriority.NodeQuery,
 			});
@@ -654,7 +614,7 @@ export class NotificationCC extends CommandClass {
 				const name = supportedNotificationNames[i];
 
 				// Always query each notification for its current status
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying notification status for ${name}...`,
 					direction: "outbound",
@@ -684,10 +644,10 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 @CCCommand(NotificationCommand.Set)
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -715,7 +675,7 @@ export class NotificationCCSet extends NotificationCC {
 			...super.toLogEntry(),
 			message: {
 				"notification type":
-					this.driver.configManager.getNotificationName(
+					this.host.configManager.getNotificationName(
 						this.notificationType,
 					),
 				status: this.notificationStatus,
@@ -739,12 +699,12 @@ export type NotificationCCReportOptions =
 @CCCommand(NotificationCommand.Report)
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (NotificationCCReportOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
@@ -818,7 +778,7 @@ export class NotificationCCReport extends NotificationCC {
 							)
 						) {
 							// This alarm frame corresponds to a valid notification event
-							this.driver.controllerLog.logNode(
+							this.host.controllerLog.logNode(
 								this.nodeId as number,
 								`treating V1 Alarm frame as Notification Report`,
 							);
@@ -840,7 +800,7 @@ export class NotificationCCReport extends NotificationCC {
 								m.from.alarmLevel === this.alarmLevel),
 					);
 					if (match) {
-						this.driver.controllerLog.logNode(
+						this.host.controllerLog.logNode(
 							this.nodeId as number,
 							`compat mapping found, treating V1 Alarm frame as Notification Report`,
 						);
@@ -937,7 +897,7 @@ export class NotificationCCReport extends NotificationCC {
 		} else {
 			let valueConfig: NotificationValueDefinition | undefined;
 			try {
-				valueConfig = this.driver.configManager
+				valueConfig = this.host.configManager
 					.lookupNotification(this.notificationType!)
 					?.lookupValue(this.notificationEvent!);
 			} catch {
@@ -946,7 +906,7 @@ export class NotificationCCReport extends NotificationCC {
 			if (valueConfig) {
 				message = {
 					"notification type":
-						this.driver.configManager.getNotificationName(
+						this.host.configManager.getNotificationName(
 							this.notificationType!,
 						),
 					"notification status": this.notificationStatus,
@@ -993,24 +953,6 @@ export class NotificationCCReport extends NotificationCC {
 		};
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			alarmType: this.alarmType,
-			notificationType:
-				this.notificationType != undefined
-					? this.driver.configManager.lookupNotification(
-							this.notificationType,
-					  )?.name
-					: this.notificationType,
-			notificationStatus: this.notificationStatus,
-			notificationEvent: this.notificationEvent,
-			alarmLevel: this.alarmLevel,
-			zensorNetSourceNodeId: this.zensorNetSourceNodeId,
-			eventParameters: this.eventParameters,
-			sequenceNumber: this.sequenceNumber,
-		});
-	}
-
 	private parseEventParameters(): void {
 		if (
 			this.notificationType == undefined ||
@@ -1020,7 +962,7 @@ export class NotificationCCReport extends NotificationCC {
 			return;
 		}
 		// Look up the received notification and value in the config
-		const notificationConfig = this.driver.configManager.lookupNotification(
+		const notificationConfig = this.host.configManager.lookupNotification(
 			this.notificationType,
 		);
 		if (!notificationConfig) return;
@@ -1057,23 +999,28 @@ export class NotificationCCReport extends NotificationCC {
 				// Try to parse the event parameters - if this fails, we should still handle the notification report
 				try {
 					// Convert CommandClass instances to a standardized object representation
-					const cc = CommandClass.from(this.driver, {
+					const cc = CommandClass.from(this.host, {
 						data: this.eventParameters,
 						fromEncapsulation: true,
 						encapCC: this,
 					});
 					validatePayload(!(cc instanceof InvalidCC));
 
-					let json = cc.toJSON();
-					// If a CC has no good toJSON() representation, we're only interested in the payload
-					if (
-						"nodeId" in json &&
-						"ccId" in json &&
-						"payload" in json
-					) {
-						json = pick(json, ["payload"]);
+					if (isNotificationEventPayload(cc)) {
+						this.eventParameters =
+							cc.toNotificationEventParameters();
+					} else {
+						// If a CC has no good toJSON() representation, we're only interested in the payload
+						let json = cc.toJSON();
+						if (
+							"nodeId" in json &&
+							"ccId" in json &&
+							"payload" in json
+						) {
+							json = pick(json, ["payload"]);
+						}
+						this.eventParameters = json;
 					}
-					this.eventParameters = json;
 				} catch (e) {
 					if (
 						isZWaveError(e) &&
@@ -1098,7 +1045,7 @@ export class NotificationCCReport extends NotificationCC {
 								userId: this.eventParameters[2],
 							};
 						} else {
-							this.driver.controllerLog.logNode(
+							this.host.controllerLog.logNode(
 								this.nodeId as number,
 								`Failed to parse Notification CC event parameters, ignoring them...`,
 								"error",
@@ -1195,10 +1142,10 @@ type NotificationCCGetOptions = CCCommandOptions &
 @expectedCCResponse(NotificationCCReport)
 export class NotificationCCGet extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | NotificationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1243,12 +1190,12 @@ export class NotificationCCGet extends NotificationCC {
 		}
 		if (this.notificationType != undefined) {
 			message["notification type"] =
-				this.driver.configManager.getNotificationName(
+				this.host.configManager.getNotificationName(
 					this.notificationType,
 				);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
-					this.driver.configManager
+					this.host.configManager
 						.lookupNotification(this.notificationType)
 						?.events.get(this.notificationEvent)?.label ??
 					`Unknown (${num2hex(this.notificationEvent)})`;
@@ -1264,10 +1211,10 @@ export class NotificationCCGet extends NotificationCC {
 @CCCommand(NotificationCommand.SupportedReport)
 export class NotificationCCSupportedReport extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
@@ -1305,7 +1252,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 				"supported notification types": this.supportedNotificationTypes
 					.map(
 						(t) =>
-							`\n· ${this.driver.configManager.getNotificationName(
+							`\n· ${this.host.configManager.getNotificationName(
 								t,
 							)}`,
 					)
@@ -1322,10 +1269,10 @@ export class NotificationCCSupportedGet extends NotificationCC {}
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._notificationType = this.payload[0];
@@ -1359,7 +1306,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		// For each event, predefine the value metadata
 		const metadataMap = defineMetadataForNotificationEvents(
-			this.driver.configManager,
+			this.host.configManager,
 			this.endpointIndex,
 			this._notificationType,
 			this._supportedEvents,
@@ -1382,14 +1329,14 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const notification = this.driver.configManager.lookupNotification(
+		const notification = this.host.configManager.lookupNotification(
 			this.notificationType,
 		);
 		return {
 			...super.toLogEntry(),
 			message: {
 				"notification type":
-					this.driver.configManager.getNotificationName(
+					this.host.configManager.getNotificationName(
 						this.notificationType,
 					),
 				"supported events": this.supportedEvents
@@ -1414,12 +1361,12 @@ interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(NotificationCCEventSupportedReport)
 export class NotificationCCEventSupportedGet extends NotificationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NotificationCCEventSupportedGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1443,7 +1390,7 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 			...super.toLogEntry(),
 			message: {
 				"notification type":
-					this.driver.configManager.getNotificationName(
+					this.host.configManager.getNotificationName(
 						this.notificationType,
 					),
 			},

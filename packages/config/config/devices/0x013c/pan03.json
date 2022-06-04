@@ -53,8 +53,6 @@
 			"#": "5",
 			"label": "Restore switch state mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -76,8 +74,6 @@
 			"#": "6",
 			"label": "Manual On/Off mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -95,8 +91,6 @@
 			"#": "7",
 			"label": "LED indication mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -126,8 +120,6 @@
 			"#": "9",
 			"label": "RF off command mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -154,8 +146,6 @@
 			"label": "Switch mode",
 			"description": "Edge or Pulse mode or Edge-Toggle mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -177,8 +167,6 @@
 			"#": "11",
 			"label": "Manual Switch Report mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

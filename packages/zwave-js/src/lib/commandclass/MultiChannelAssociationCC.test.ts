@@ -1,6 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	MultiChannelAssociationCCGet,
 	MultiChannelAssociationCCRemove,
@@ -8,10 +7,10 @@ import {
 	MultiChannelAssociationCCSet,
 	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiChannelAssociationCCSupportedGroupingsReport,
-	MultiChannelAssociationCommand,
 } from "./MultiChannelAssociationCC";
+import { MultiChannelAssociationCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,10 +23,9 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	it("the SupportedGroupingsGet command should serialize correctly", () => {
-		const cc = new MultiChannelAssociationCCSupportedGroupingsGet(
-			fakeDriver,
-			{ nodeId: 1 },
-		);
+		const cc = new MultiChannelAssociationCCSupportedGroupingsGet(host, {
+			nodeId: 1,
+		});
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MultiChannelAssociationCommand.SupportedGroupingsGet, // CC Command
@@ -43,19 +41,16 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 				7, // # of groups
 			]),
 		);
-		const cc = new MultiChannelAssociationCCSupportedGroupingsReport(
-			fakeDriver,
-			{
-				nodeId: 4,
-				data: ccData,
-			},
-		);
+		const cc = new MultiChannelAssociationCCSupportedGroupingsReport(host, {
+			nodeId: 4,
+			data: ccData,
+		});
 
 		expect(cc.groupCount).toBe(7);
 	});
 
 	it("the Set command should serialize correctly (node IDs only)", () => {
-		const cc = new MultiChannelAssociationCCSet(fakeDriver, {
+		const cc = new MultiChannelAssociationCCSet(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 5],
@@ -74,7 +69,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (endpoint addresses only)", () => {
-		const cc = new MultiChannelAssociationCCSet(fakeDriver, {
+		const cc = new MultiChannelAssociationCCSet(host, {
 			nodeId: 2,
 			groupId: 5,
 			endpoints: [
@@ -105,7 +100,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (both options)", () => {
-		const cc = new MultiChannelAssociationCCSet(fakeDriver, {
+		const cc = new MultiChannelAssociationCCSet(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 3],
@@ -141,7 +136,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Get command should serialize correctly", () => {
-		const cc = new MultiChannelAssociationCCGet(fakeDriver, {
+		const cc = new MultiChannelAssociationCCGet(host, {
 			nodeId: 1,
 			groupId: 9,
 		});
@@ -167,7 +162,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 				5,
 			]),
 		);
-		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+		const cc = new MultiChannelAssociationCCReport(host, {
 			nodeId: 4,
 			data: ccData,
 		});
@@ -195,7 +190,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 				0b11010111,
 			]),
 		);
-		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+		const cc = new MultiChannelAssociationCCReport(host, {
 			nodeId: 4,
 			data: ccData,
 		});
@@ -232,7 +227,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 				0b11010111,
 			]),
 		);
-		const cc = new MultiChannelAssociationCCReport(fakeDriver, {
+		const cc = new MultiChannelAssociationCCReport(host, {
 			nodeId: 4,
 			data: ccData,
 		});
@@ -251,7 +246,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly (node IDs only)", () => {
-		const cc = new MultiChannelAssociationCCRemove(fakeDriver, {
+		const cc = new MultiChannelAssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 5],
@@ -270,7 +265,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly (endpoint addresses only)", () => {
-		const cc = new MultiChannelAssociationCCRemove(fakeDriver, {
+		const cc = new MultiChannelAssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 			endpoints: [
@@ -301,7 +296,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly (both options)", () => {
-		const cc = new MultiChannelAssociationCCRemove(fakeDriver, {
+		const cc = new MultiChannelAssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 3],
@@ -337,7 +332,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly (both empty)", () => {
-		const cc = new MultiChannelAssociationCCRemove(fakeDriver, {
+		const cc = new MultiChannelAssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 		});
@@ -355,7 +350,7 @@ describe("lib/commandclass/MultiChannelAssociationCC => ", () => {
 	// 		1,
 	// 		Buffer.from([255]), // not a valid command
 	// 	);
-	// 	const cc: any = new MultiChannelAssociationCC(fakeDriver, {
+	// 	const cc: any = new MultiChannelAssociationCC(host, {
 	// 		data: serializedCC,
 	// 	});
 	// 	expect(cc.constructor).toBe(MultiChannelAssociationCC);

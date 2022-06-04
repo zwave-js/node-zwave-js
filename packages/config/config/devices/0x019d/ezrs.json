@@ -23,8 +23,6 @@
 			"label": "Motor state mode",
 			"description": "Allows to change motor state (normal/calibration/discalibration mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "BASIC SET Respone",
 			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

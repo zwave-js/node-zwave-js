@@ -10,7 +10,6 @@ import {
 	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
-	stripUndefined,
 	ValueDB,
 	ValueID,
 	valueIdToString,
@@ -18,6 +17,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type {
+	ZWaveEndpointBase,
+	ZWaveHost,
+	ZWaveNodeBase,
+} from "@zwave-js/host";
 import {
 	buffer2hex,
 	getEnumMemberName,
@@ -30,8 +34,8 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage } from "../node/Types";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
+import { InterviewStage } from "../node/_Types";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,
@@ -84,8 +88,8 @@ export type CommandClassOptions =
 // @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		this.driver = driver;
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		this.host = host;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
 			("ccId" in options && options.ccId) || getCommandClass(this);
@@ -97,7 +101,7 @@ export class CommandClass {
 			("supervised" in options ? options.supervised : undefined) ?? false;
 
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
-		this.registerValue("interviewComplete", true);
+		this.registerValue("interviewComplete", { internal: true });
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -114,7 +118,7 @@ export class CommandClass {
 					CommandConstructor &&
 					(new.target as any) !== CommandConstructor
 				) {
-					return new CommandConstructor(driver, options);
+					return new CommandConstructor(host, options);
 				}
 			}
 
@@ -150,14 +154,14 @@ export class CommandClass {
 
 		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
 			// For singlecast CCs, set the CC version as high as possible
-			this.version = this.driver.getSafeCCVersionForNode(
+			this.version = this.host.getSafeCCVersionForNode(
 				this.ccId,
 				this.nodeId,
 				this.endpointIndex,
 			);
 			// If we received a CC from a node, it must support at least version 1
 			// Make sure that the interview is complete or we cannot be sure that the assumption is correct
-			const node = this.getNodeUnsafe();
+			const node = host.nodes.get(this.nodeId);
 			if (
 				node?.interviewStage === InterviewStage.Complete &&
 				this.version === 0 &&
@@ -167,22 +171,19 @@ export class CommandClass {
 			}
 
 			// If the node or endpoint is included securely, send secure commands if possible
-			const endpoint = this.getNodeUnsafe()?.getEndpoint(
-				this.endpointIndex,
-			);
+			const endpoint = node?.getEndpoint(this.endpointIndex);
 			this.secure =
 				node?.isSecure !== false &&
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
-				!!(this.driver.securityManager || this.driver.securityManager2);
+				!!(this.host.securityManager || this.host.securityManager2);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
-			// Security does not support multicast
 		}
 	}
 
-	protected driver: Driver;
+	protected host: ZWaveHost;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
@@ -338,7 +339,7 @@ export class CommandClass {
 	 * Creates an instance of the CC that is serialized in the given buffer
 	 */
 	public static from(
-		driver: Driver,
+		driver: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	): CommandClass {
 		// Fall back to unspecified command class in case we receive one that is not implemented
@@ -392,6 +393,27 @@ export class CommandClass {
 		}
 	}
 
+	/**
+	 * @internal
+	 * Create an instance of the given CC without checking whether it is supported.
+	 * If the CC is implemented, this returns an instance of the given CC which is linked to the given endpoint.
+	 *
+	 * **WARNING:** Applications should not use this directly.
+	 */
+	public static createInstanceUnchecked<T extends CommandClass>(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		cc: CommandClasses | Constructable<T>,
+	): T | undefined {
+		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
+		if (Constructor) {
+			return new Constructor(host, {
+				nodeId: endpoint.nodeId,
+				endpoint: endpoint.index,
+			}) as T;
+		}
+	}
+
 	/** Generates a representation of this CC for the log */
 	public toLogEntry(): MessageOrCCLogEntry {
 		let tag = this.constructor.name;
@@ -433,11 +455,6 @@ export class CommandClass {
 		return ret;
 	}
 
-	protected toJSONInherited(props: JSONObject): JSONObject {
-		const { payload, ...ret } = this.toJSONInternal();
-		return stripUndefined({ ...ret, ...props });
-	}
-
 	protected throwMissingCriticalInterviewResponse(): never {
 		throw new ZWaveError(
 			`The node did not respond to a critical interview query in time.`,
@@ -448,14 +465,14 @@ export class CommandClass {
 	/**
 	 * Performs the interview procedure for this CC according to SDS14223
 	 */
-	public async interview(): Promise<void> {
+	public async interview(_driver: Driver): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
 	/**
 	 * Refreshes all dynamic values of this CC
 	 */
-	public async refreshValues(): Promise<void> {
+	public async refreshValues(_driver: Driver): Promise<void> {
 		// This needs to be overwritten per command class. In the default implementation, don't do anything
 	}
 
@@ -500,9 +517,17 @@ export class CommandClass {
 	/**
 	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
 	 */
-	public getNode(): ZWaveNode | undefined {
+	public getNode(driver: Driver): ZWaveNode | undefined;
+	/**
+	 * Returns the node this CC is linked to.
+	 */
+	public getNode(): ZWaveNodeBase | undefined;
+	/**
+	 * Returns the node this CC is linked to. Throws if the controller is not yet ready.
+	 */
+	public getNode(driver?: Driver): ZWaveNode | ZWaveNodeBase | undefined {
 		if (this.isSinglecast()) {
-			return this.driver.controller.nodes.get(this.nodeId);
+			return (driver?.controller ?? this.host).nodes.get(this.nodeId);
 		}
 	}
 
@@ -510,9 +535,18 @@ export class CommandClass {
 	 * @internal
 	 * Returns the node this CC is linked to (or undefined if the node doesn't exist)
 	 */
-	public getNodeUnsafe(): ZWaveNode | undefined {
+	public getNodeUnsafe(driver: Driver): ZWaveNode | undefined;
+	public getNodeUnsafe(): ZWaveNodeBase | undefined;
+
+	public getNodeUnsafe(
+		driver?: Driver,
+	): ZWaveNode | ZWaveNodeBase | undefined {
 		try {
-			return this.getNode();
+			if (driver) {
+				return this.getNode(driver);
+			} else {
+				return this.getNode();
+			}
 		} catch (e) {
 			// This was expected
 			if (isZWaveError(e) && e.code === ZWaveErrorCodes.Driver_NotReady) {
@@ -523,24 +557,42 @@ export class CommandClass {
 		}
 	}
 
-	public getEndpoint(): Endpoint | undefined {
-		return this.getNode()?.getEndpoint(this.endpointIndex);
+	public getEndpoint(driver: Driver): Endpoint | undefined;
+	public getEndpoint(): ZWaveEndpointBase | undefined;
+
+	public getEndpoint(
+		driver?: Driver,
+	): Endpoint | ZWaveEndpointBase | undefined {
+		if (driver) {
+			return this.getNode(driver)?.getEndpoint(this.endpointIndex);
+		} else {
+			return this.getNode()?.getEndpoint(this.endpointIndex);
+		}
 	}
 
 	/** Returns the value DB for this CC's node */
 	protected getValueDB(): ValueDB {
-		const node = this.getNode();
-		if (node == undefined) {
-			throw new ZWaveError(
-				"The node for this CC does not exist or the driver is not ready yet",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
+		if (this.isSinglecast()) {
+			try {
+				return this.host.getValueDB(this.nodeId);
+			} catch {
+				throw new ZWaveError(
+					"The node for this CC does not exist or the driver is not ready yet",
+					ZWaveErrorCodes.Driver_NotReady,
+				);
+			}
 		}
-		return node.valueDB;
+		throw new ZWaveError(
+			"Cannot retrieve the value ID for non-singlecast CCs",
+			ZWaveErrorCodes.CC_NoNodeID,
+		);
 	}
 
 	/** Which variables should be persisted when requested */
-	private _registeredCCValues = new Map<string | number, boolean>();
+	private _registeredCCValues = new Map<
+		string | number,
+		Pick<CCValueOptions, "internal" | "secret">
+	>();
 	/**
 	 * Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()`
 	 * @param property The property the value belongs to
@@ -548,9 +600,11 @@ export class CommandClass {
 	 */
 	public registerValue(
 		property: string | number,
-		internal: boolean = false,
+		options: Pick<CCValueOptions, "internal" | "secret"> = {},
 	): void {
-		this._registeredCCValues.set(property, internal);
+		options.internal ??= false;
+		options.secret ??= false;
+		this._registeredCCValues.set(property, options);
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
@@ -601,19 +655,17 @@ export class CommandClass {
 			// allow the value id if it is NOT registered or it is registered as non-internal
 			.filter(
 				(valueId) =>
-					!this._registeredCCValues.has(valueId.property) ||
-					this._registeredCCValues.get(valueId.property)! === false,
+					this._registeredCCValues.get(valueId.property)?.internal !==
+					true,
 			)
-			// allow the value id if it is NOT defined or it is defined as non-internal
+			// allow the value ID if it is NOT defined or it is defined as non-internal
 			.filter(
 				(valueId) =>
-					!valueDefinitions.has(valueId.property) ||
-					valueDefinitions.get(valueId.property)! === false,
+					valueDefinitions.get(valueId.property)?.internal !== true,
 			)
 			.filter(
 				(valueId) =>
-					!kvpDefinitions.has(valueId.property) ||
-					kvpDefinitions.get(valueId.property)! === false,
+					kvpDefinitions.get(valueId.property)?.internal !== true,
 			);
 		existingValueIds.forEach(({ property, propertyKey }) =>
 			addValueId(property, propertyKey),
@@ -625,8 +677,9 @@ export class CommandClass {
 	/** Determines if the given value is an internal value */
 	public isInternalValue(property: keyof this): boolean {
 		// A value is internal if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(property as string) === true)
+		if (this._registeredCCValues.get(property as string)?.internal) {
 			return true;
+		}
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			property as string,
 		);
@@ -635,6 +688,23 @@ export class CommandClass {
 			property as string,
 		);
 		if (ccKeyValuePairDefinition?.internal === true) return true;
+		return false;
+	}
+
+	/** Determines if the given value is an secret value */
+	public isSecretValue(property: keyof this): boolean {
+		// A value is secret if any of the possible definitions say so (true)
+		if (this._registeredCCValues.get(property as string)?.secret) {
+			return true;
+		}
+		const ccValueDefinition = getCCValueDefinitions(this).get(
+			property as string,
+		);
+		if (ccValueDefinition?.secret === true) return true;
+		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
+			property as string,
+		);
+		if (ccKeyValuePairDefinition?.secret === true) return true;
 		return false;
 	}
 
@@ -1026,7 +1096,7 @@ export interface InvalidCCCreationOptions extends CommandClassCreationOptions {
 }
 
 export class InvalidCC extends CommandClass {
-	public constructor(driver: Driver, options: InvalidCCCreationOptions) {
+	public constructor(driver: ZWaveHost, options: InvalidCCCreationOptions) {
 		super(driver, options);
 		this._ccName = options.ccName;
 		// Numeric reasons are used internally to communicate problems with a CC
@@ -1103,10 +1173,10 @@ const METADATA_APIMap = Symbol("APIMap");
 
 export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
-	new (driver: Driver, options: any): T;
+	new (host: ZWaveHost, options: any): T;
 };
 type APIConstructor = new (
-	driver: Driver,
+	host: ZWaveHost,
 	endpoint: Endpoint | VirtualEndpoint,
 ) => CCAPI;
 
@@ -1362,8 +1432,7 @@ export function getCCResponsePredicate<T extends CommandClass>(
 
 export interface CCValueOptions {
 	/**
-	 * Whether the decorated CC value is internal. Internal values are not
-	 * exposed to the user.
+	 * Whether the decorated CC value is internal. Internal values are not exposed to the user.
 	 */
 	internal?: boolean;
 	/**
@@ -1378,6 +1447,10 @@ export interface CCValueOptions {
 	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
 	 */
 	stateful?: boolean;
+	/**
+	 * Omit this value from value logs. Default: `false`
+	 */
+	secret?: boolean;
 }
 
 /**

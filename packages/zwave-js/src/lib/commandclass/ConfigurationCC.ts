@@ -23,12 +23,14 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { Endpoint } from "../node/Endpoint";
 import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import {
@@ -53,25 +55,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ConfigurationCommand {
-	Set = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-	BulkSet = 0x07,
-	BulkGet = 0x08,
-	BulkReport = 0x09,
-	NameGet = 0x0a,
-	NameReport = 0x0b,
-	InfoGet = 0x0c,
-	InfoReport = 0x0d,
-	PropertiesGet = 0x0e,
-	PropertiesReport = 0x0f,
-	DefaultReset = 0x01,
-}
-
-/** @publicAPI */
-export type ConfigValue = import("@zwave-js/core").ConfigValue;
+import { ConfigurationCommand, ConfigValue } from "./_Types";
 
 function configValueToString(value: ConfigValue): string {
 	if (typeof value === "number") return value.toString();
@@ -415,6 +399,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			(this as ConfigurationCCAPI).schedulePoll(
 				{ property, propertyKey },
+				targetValue,
 				// Configuration changes are instant
 				{ transition: "fast" },
 			);
@@ -442,6 +427,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * If the node replied with a different parameter number, a `ConfigurationCCError`
 	 * is thrown with the `argument` property set to the reported parameter number.
 	 */
+	@validateArgs()
 	public async get(
 		parameter: number,
 		options?: {
@@ -503,6 +489,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * Requests the current value of the config parameters from the device.
 	 * When the node does not respond due to a timeout, the `value` in the returned array will be `undefined`.
 	 */
+	@validateArgs()
 	public async getBulk(
 		options: {
 			parameter: number;
@@ -600,6 +587,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets a new value for a given config parameter of the device.
 	 */
+	@validateArgs({ strictEnums: true })
 	public async set(
 		...args:
 			| [
@@ -662,6 +650,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	/**
 	 * Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
 	 */
+	@validateArgs({ strictEnums: true })
 	public async setBulk(
 		values: ConfigurationCCAPISetOptions[],
 	): Promise<void> {
@@ -724,6 +713,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
+	@validateArgs()
 	public async reset(parameter: number): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
@@ -744,6 +734,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
+	@validateArgs()
 	public async resetBulk(parameters: number[]): Promise<void> {
 		if (
 			isConsecutiveArray(parameters) &&
@@ -793,6 +784,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getProperties(parameter: number) {
 		// Get-type commands are only possible in singlecast
@@ -825,6 +817,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/** Requests the name of a configuration parameter from the node */
+	@validateArgs()
 	public async getName(parameter: number): Promise<string | undefined> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
@@ -843,6 +836,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	}
 
 	/** Requests usage info for a configuration parameter from the node */
+	@validateArgs()
 	public async getInfo(parameter: number): Promise<string | undefined> {
 		// Get-type commands are only possible in singlecast
 		this.assertPhysicalEndpoint(this.endpoint);
@@ -933,19 +927,21 @@ export class ConfigurationCCAPI extends CCAPI {
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		this.registerValue("isParamInformationFromConfig" as any, true);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+		this.registerValue("isParamInformationFromConfig" as any, {
+			internal: true,
+		});
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Configuration.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -953,7 +949,7 @@ export class ConfigurationCC extends CommandClass {
 
 		const config = node.deviceConfig?.paramInformation;
 		if (config) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
@@ -962,7 +958,7 @@ export class ConfigurationCC extends CommandClass {
 		}
 
 		if (this.version >= 3) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
 				direction: "outbound",
@@ -972,7 +968,7 @@ export class ConfigurationCC extends CommandClass {
 			if (param0props) {
 				param = param0props.nextParameter;
 				if (param === 0) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `didn't report any config params, trying #1 just to be sure...`,
 						direction: "inbound",
@@ -980,7 +976,7 @@ export class ConfigurationCC extends CommandClass {
 					param = 1;
 				}
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Finding first configuration parameter timed out, skipping interview...",
@@ -990,7 +986,7 @@ export class ConfigurationCC extends CommandClass {
 			}
 
 			while (param > 0) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
@@ -999,7 +995,7 @@ export class ConfigurationCC extends CommandClass {
 				// Query properties and the next param
 				const props = await api.getProperties(param);
 				if (!props) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Querying parameter #${param} information timed out, skipping interview...`,
 						level: "warn",
@@ -1012,8 +1008,14 @@ export class ConfigurationCC extends CommandClass {
 				if (properties.valueSize === 0) {
 					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
 				} else {
-					// Query name and info only if the parameter is supported
-					const name = (await api.getName(param)) ?? "(unknown)";
+					// Query name and info only if the parameter is supported, but skip the query for bugged devices
+					let name: string | undefined;
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationNameQuery
+					) {
+						name = await api.getName(param);
+					}
+
 					// Skip the info query for bugged devices
 					if (
 						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
@@ -1021,8 +1023,12 @@ export class ConfigurationCC extends CommandClass {
 						await api.getInfo(param);
 					}
 
-					logMessage = `received information for parameter #${param}:
-parameter name:      ${name}
+					logMessage = `received information for parameter #${param}:`;
+					if (name) {
+						logMessage += `
+parameter name:      ${name}`;
+					}
+					logMessage += `
 value format:        ${getEnumMemberName(
 						ConfigValueFormat,
 						properties.valueFormat,
@@ -1036,7 +1042,7 @@ is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -1053,15 +1059,15 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			}
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Configuration.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -1081,7 +1087,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					alreadyQueried.add(param.parameter);
 
 					// Query the current value
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
@@ -1089,13 +1095,13 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					// ... at least try to
 					const paramValue = await api.get(param.parameter);
 					if (typeof paramValue === "number") {
-						this.driver.controllerLog.logNode(node.id, {
+						driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `parameter #${param.parameter} has value: ${paramValue}`,
 							direction: "inbound",
 						});
 					} else if (!paramValue) {
-						this.driver.controllerLog.logNode(node.id, {
+						driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received no value for parameter #${param.parameter}`,
 							direction: "inbound",
@@ -1104,7 +1110,7 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					}
 				}
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
 					direction: "none",
@@ -1119,14 +1125,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 			);
 			for (const param of parameters) {
 				if (this.getParamInformation(param).readable !== false) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param} value...`,
 						direction: "outbound",
 					});
 					await api.get(param);
 				} else {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `not querying parameter #${param} value, because it is writeonly`,
 						direction: "none",
@@ -1377,10 +1383,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 @CCCommand(ConfigurationCommand.Report)
 export class ConfigurationCCReport extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// All fields must be present
 		validatePayload(this.payload.length > 2);
 		this._parameter = this.payload[0];
@@ -1509,10 +1515,10 @@ interface ConfigurationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1561,10 +1567,10 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 @CCCommand(ConfigurationCommand.Set)
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1689,12 +1695,12 @@ function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 @expectedCCResponse(getResponseForBulkSet)
 export class ConfigurationCCBulkSet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1830,10 +1836,10 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.BulkReport)
 export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		// Ensure we received enough bytes for the preamble
 		validatePayload(this.payload.length >= 5);
@@ -1934,12 +1940,12 @@ interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
 @expectedCCResponse(ConfigurationCCBulkReport)
 export class ConfigurationCCBulkGet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ConfigurationCCBulkGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -1980,10 +1986,10 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.NameReport)
 export class ConfigurationCCNameReport extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// Parameter and # of reports must be present
 		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
@@ -2045,10 +2051,10 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCNameReport)
 export class ConfigurationCCNameGet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2079,10 +2085,10 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.InfoReport)
 export class ConfigurationCCInfoReport extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// Parameter and # of reports must be present
 		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
@@ -2144,10 +2150,10 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCInfoReport)
 export class ConfigurationCCInfoGet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -2178,10 +2184,10 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 @CCCommand(ConfigurationCommand.PropertiesReport)
 export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
@@ -2357,10 +2363,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 @expectedCCResponse(ConfigurationCCPropertiesReport)
 export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

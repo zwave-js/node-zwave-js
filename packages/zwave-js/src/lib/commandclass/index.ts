@@ -7,9 +7,7 @@ export {
 	AlarmSensorCCReport,
 	AlarmSensorCCSupportedGet,
 	AlarmSensorCCSupportedReport,
-	AlarmSensorType,
 } from "./AlarmSensorCC";
-export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export { CCAPI } from "./API";
 export type { SetValueAPIOptions } from "./API";
 export {
@@ -29,9 +27,7 @@ export {
 	AssociationGroupInfoCCInfoReport,
 	AssociationGroupInfoCCNameGet,
 	AssociationGroupInfoCCNameReport,
-	AssociationGroupInfoProfile,
 } from "./AssociationGroupInfoCC";
-export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export {
 	BarrierOperatorCC,
 	BarrierOperatorCCEventSignalingGet,
@@ -42,9 +38,6 @@ export {
 	BarrierOperatorCCSet,
 	BarrierOperatorCCSignalingCapabilitiesGet,
 	BarrierOperatorCCSignalingCapabilitiesReport,
-	BarrierState,
-	SubsystemState,
-	SubsystemType,
 } from "./BarrierOperatorCC";
 export { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 export {
@@ -53,8 +46,6 @@ export {
 	BatteryCCHealthGet,
 	BatteryCCHealthReport,
 	BatteryCCReport,
-	BatteryChargingStatus,
-	BatteryReplacementStatus,
 } from "./BatteryCC";
 export {
 	BinarySensorCC,
@@ -62,9 +53,7 @@ export {
 	BinarySensorCCReport,
 	BinarySensorCCSupportedGet,
 	BinarySensorCCSupportedReport,
-	BinarySensorType,
 } from "./BinarySensorCC";
-export type { BinarySensorValueMetadata } from "./BinarySensorCC";
 export {
 	BinarySwitchCC,
 	BinarySwitchCCGet,
@@ -79,7 +68,6 @@ export {
 	CentralSceneCCNotification,
 	CentralSceneCCSupportedGet,
 	CentralSceneCCSupportedReport,
-	CentralSceneKeys,
 } from "./CentralSceneCC";
 export {
 	ClimateControlScheduleCC,
@@ -91,17 +79,9 @@ export {
 	ClimateControlScheduleCCOverrideSet,
 	ClimateControlScheduleCCReport,
 	ClimateControlScheduleCCSet,
-	ScheduleOverrideType,
 } from "./ClimateControlScheduleCC";
+export { ClockCC, ClockCCGet, ClockCCReport, ClockCCSet } from "./ClockCC";
 export {
-	ClockCC,
-	ClockCCGet,
-	ClockCCReport,
-	ClockCCSet,
-	Weekday,
-} from "./ClockCC";
-export {
-	ColorComponent,
 	ColorSwitchCC,
 	ColorSwitchCCGet,
 	ColorSwitchCCReport,
@@ -111,7 +91,6 @@ export {
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
 } from "./ColorSwitchCC";
-export type { ColorTable } from "./ColorSwitchCC";
 export { CommandClass, getAPI, InvalidCC } from "./CommandClass";
 export {
 	ConfigurationCC,
@@ -129,7 +108,6 @@ export {
 	ConfigurationCCReport,
 	ConfigurationCCSet,
 } from "./ConfigurationCC";
-export type { ConfigValue } from "./ConfigurationCC";
 export { CRC16CC, CRC16CCCommandEncapsulation } from "./CRC16CC";
 export {
 	DeviceResetLocallyCC,
@@ -145,18 +123,13 @@ export {
 	DoorLockCCOperationGet,
 	DoorLockCCOperationReport,
 	DoorLockCCOperationSet,
-	DoorLockMode,
-	DoorLockOperationType,
 } from "./DoorLockCC";
-export type { DoorHandleStatus } from "./DoorLockCC";
 export {
 	DoorLockLoggingCC,
 	DoorLockLoggingCCRecordGet,
 	DoorLockLoggingCCRecordReport,
 	DoorLockLoggingCCRecordsSupportedGet,
 	DoorLockLoggingCCRecordsSupportedReport,
-	EventType,
-	RecordStatus,
 } from "./DoorLockLoggingCC";
 export {
 	EntryControlCC,
@@ -169,13 +142,7 @@ export {
 	EntryControlCCKeySupportedReport,
 	EntryControlCCNotification,
 } from "./EntryControlCC";
-export type {
-	ZWaveNotificationCallbackArgs_EntryControlCC,
-	ZWaveNotificationCallbackParams_EntryControlCC,
-} from "./EntryControlCC";
 export {
-	FirmwareDownloadStatus,
-	FirmwareUpdateActivationStatus,
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCActivationReport,
 	FirmwareUpdateMetaDataCCActivationSet,
@@ -188,10 +155,7 @@ export {
 	FirmwareUpdateMetaDataCCRequestGet,
 	FirmwareUpdateMetaDataCCRequestReport,
 	FirmwareUpdateMetaDataCCStatusReport,
-	FirmwareUpdateRequestStatus,
-	FirmwareUpdateStatus,
 } from "./FirmwareUpdateMetaDataCC";
-export type { FirmwareUpdateCapabilities } from "./FirmwareUpdateMetaDataCC";
 export { HailCC } from "./HailCC";
 export {
 	HumidityControlModeCC,
@@ -218,7 +182,6 @@ export {
 	HumidityControlSetpointCCSupportedGet,
 	HumidityControlSetpointCCSupportedReport,
 } from "./HumidityControlSetpointCC";
-export type { HumidityControlSetpointMetadata } from "./HumidityControlSetpointCC";
 export {
 	IndicatorCC,
 	IndicatorCCGet,
@@ -227,7 +190,31 @@ export {
 	IndicatorCCSupportedGet,
 	IndicatorCCSupportedReport,
 } from "./IndicatorCC";
-export type { IndicatorMetadata } from "./IndicatorCC";
+export {
+	IrrigationCC,
+	IrrigationCCSystemConfigGet,
+	IrrigationCCSystemConfigReport,
+	IrrigationCCSystemConfigSet,
+	IrrigationCCSystemInfoGet,
+	IrrigationCCSystemInfoReport,
+	IrrigationCCSystemShutoff,
+	IrrigationCCSystemStatusGet,
+	IrrigationCCSystemStatusReport,
+	IrrigationCCValveConfigGet,
+	IrrigationCCValveConfigReport,
+	IrrigationCCValveConfigSet,
+	IrrigationCCValveInfoGet,
+	IrrigationCCValveInfoReport,
+	IrrigationCCValveRun,
+	IrrigationCCValveTableGet,
+	IrrigationCCValveTableReport,
+	IrrigationCCValveTableRun,
+	IrrigationCCValveTableSet,
+} from "./IrrigationCC";
+export type {
+	IrrigationCCSystemConfigSetOptions,
+	IrrigationCCValveConfigSetOptions,
+} from "./IrrigationCC";
 export {
 	LanguageCC,
 	LanguageCCGet,
@@ -244,7 +231,6 @@ export {
 } from "./manufacturerProprietary/Fibaro";
 export { ManufacturerProprietaryCC } from "./ManufacturerProprietaryCC";
 export {
-	DeviceIdType,
 	ManufacturerSpecificCC,
 	ManufacturerSpecificCCDeviceSpecificGet,
 	ManufacturerSpecificCCDeviceSpecificReport,
@@ -258,9 +244,7 @@ export {
 	MeterCCReset,
 	MeterCCSupportedGet,
 	MeterCCSupportedReport,
-	RateType,
 } from "./MeterCC";
-export type { MeterMetadata } from "./MeterCC";
 export {
 	MultiChannelAssociationCC,
 	MultiChannelAssociationCCGet,
@@ -269,10 +253,6 @@ export {
 	MultiChannelAssociationCCSet,
 	MultiChannelAssociationCCSupportedGroupingsGet,
 	MultiChannelAssociationCCSupportedGroupingsReport,
-} from "./MultiChannelAssociationCC";
-export type {
-	Association,
-	AssociationAddress,
 } from "./MultiChannelAssociationCC";
 export {
 	MultiChannelCC,
@@ -302,13 +282,8 @@ export {
 	MultilevelSensorCCSupportedScaleReport,
 	MultilevelSensorCCSupportedSensorReport,
 } from "./MultilevelSensorCC";
-export type {
-	MultilevelSensorCCReportOptions,
-	MultilevelSensorValue,
-	MultilevelSensorValueMetadata,
-} from "./MultilevelSensorCC";
+export type { MultilevelSensorCCReportOptions } from "./MultilevelSensorCC";
 export {
-	LevelChangeDirection,
 	MultilevelSwitchCC,
 	MultilevelSwitchCCGet,
 	MultilevelSwitchCCReport,
@@ -317,9 +292,7 @@ export {
 	MultilevelSwitchCCStopLevelChange,
 	MultilevelSwitchCCSupportedGet,
 	MultilevelSwitchCCSupportedReport,
-	SwitchType,
 } from "./MultilevelSwitchCC";
-export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
 export {
 	NodeNamingAndLocationCC,
 	NodeNamingAndLocationCCLocationGet,
@@ -340,13 +313,7 @@ export {
 	NotificationCCSupportedGet,
 	NotificationCCSupportedReport,
 } from "./NotificationCC";
-export type {
-	NotificationMetadata,
-	ZWaveNotificationCallbackArgs_NotificationCC,
-	ZWaveNotificationCallbackParams_NotificationCC,
-} from "./NotificationCC";
 export {
-	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
 	PowerlevelCCReport,
@@ -354,14 +321,8 @@ export {
 	PowerlevelCCTestNodeGet,
 	PowerlevelCCTestNodeReport,
 	PowerlevelCCTestNodeSet,
-	PowerlevelTestStatus,
-} from "./PowerlevelCC";
-export type {
-	ZWaveNotificationCallbackArgs_PowerlevelCC,
-	ZWaveNotificationCallbackParams_PowerlevelCC,
 } from "./PowerlevelCC";
 export {
-	LocalProtectionState,
 	ProtectionCC,
 	ProtectionCCExclusiveControlGet,
 	ProtectionCCExclusiveControlReport,
@@ -374,7 +335,6 @@ export {
 	ProtectionCCTimeoutGet,
 	ProtectionCCTimeoutReport,
 	ProtectionCCTimeoutSet,
-	RFProtectionState,
 } from "./ProtectionCC";
 export { SceneActivationCC, SceneActivationCCSet } from "./SceneActivationCC";
 export {
@@ -432,17 +392,13 @@ export {
 	SoundSwitchCCTonePlaySet,
 	SoundSwitchCCTonesNumberGet,
 	SoundSwitchCCTonesNumberReport,
-	ToneId,
 } from "./SoundSwitchCC";
 export {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	SupervisionStatus,
 } from "./SupervisionCC";
-export type { SupervisionResult } from "./SupervisionCC";
 export {
-	ThermostatFanMode,
 	ThermostatFanModeCC,
 	ThermostatFanModeCCGet,
 	ThermostatFanModeCCReport,
@@ -456,7 +412,6 @@ export {
 	ThermostatFanStateCCReport,
 } from "./ThermostatFanStateCC";
 export {
-	ThermostatMode,
 	ThermostatModeCC,
 	ThermostatModeCCGet,
 	ThermostatModeCCReport,
@@ -465,13 +420,11 @@ export {
 	ThermostatModeCCSupportedReport,
 } from "./ThermostatModeCC";
 export {
-	ThermostatOperatingState,
 	ThermostatOperatingStateCC,
 	ThermostatOperatingStateCCGet,
 	ThermostatOperatingStateCCReport,
 } from "./ThermostatOperatingStateCC";
 export {
-	SetbackType,
 	ThermostatSetbackCC,
 	ThermostatSetbackCCGet,
 	ThermostatSetbackCCReport,
@@ -486,9 +439,7 @@ export {
 	ThermostatSetpointCCSet,
 	ThermostatSetpointCCSupportedGet,
 	ThermostatSetpointCCSupportedReport,
-	ThermostatSetpointType,
 } from "./ThermostatSetpointCC";
-export type { ThermostatSetpointMetadata } from "./ThermostatSetpointCC";
 export {
 	TimeCC,
 	TimeCCDateGet,
@@ -514,7 +465,6 @@ export {
 	TransportServiceCCSubsequentSegment,
 } from "./TransportServiceCC";
 export {
-	KeypadMode,
 	UserCodeCC,
 	UserCodeCCCapabilitiesGet,
 	UserCodeCCCapabilitiesReport,
@@ -534,7 +484,6 @@ export {
 	UserCodeCCUserCodeChecksumReport,
 	UserCodeCCUsersNumberGet,
 	UserCodeCCUsersNumberReport,
-	UserIDStatus,
 } from "./UserCodeCC";
 export {
 	VersionCC,
@@ -557,10 +506,91 @@ export {
 	WakeUpCCNoMoreInformation,
 	WakeUpCCWakeUpNotification,
 } from "./WakeUpCC";
+export { ZWavePlusCC, ZWavePlusCCGet, ZWavePlusCCReport } from "./ZWavePlusCC";
 export {
-	ZWavePlusCC,
-	ZWavePlusCCGet,
-	ZWavePlusCCReport,
+	AlarmSensorType,
+	AssociationGroupInfoProfile,
+	BarrierState,
+	BatteryChargingStatus,
+	BatteryReplacementStatus,
+	BinarySensorType,
+	CentralSceneKeys,
+	ColorComponent,
+	DeviceIdType,
+	DoorLockLoggingEventType,
+	DoorLockLoggingRecordStatus,
+	DoorLockMode,
+	DoorLockOperationType,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	EventType,
+	FirmwareDownloadStatus,
+	FirmwareUpdateActivationStatus,
+	FirmwareUpdateRequestStatus,
+	FirmwareUpdateStatus,
+	HumidityControlMode,
+	HumidityControlOperatingState,
+	HumidityControlSetpointType,
+	IrrigationSensorPolarity,
+	KeypadMode,
+	LevelChangeDirection,
+	LocalProtectionState,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+	RateType,
+	RecordStatus,
+	RFProtectionState,
+	ScheduleOverrideType,
+	SetbackType,
+	SubsystemState,
+	SubsystemType,
+	SupervisionStatus,
+	SwitchType,
+	ThermostatFanMode,
+	ThermostatFanState,
+	ThermostatMode,
+	ThermostatOperatingState,
+	ThermostatSetpointType,
+	ToneId,
+	UserIDStatus,
+	ValveType,
+	Weekday,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
-} from "./ZWavePlusCC";
+} from "./_Types";
+export type {
+	AlarmSensorValueMetadata,
+	Association,
+	AssociationAddress,
+	AssociationGroup,
+	BinarySensorValueMetadata,
+	ColorTable,
+	ConfigValue,
+	DoorHandleStatus,
+	DoorLockLoggingRecord,
+	FirmwareUpdateCapabilities,
+	HumidityControlSetpointCapabilities,
+	HumidityControlSetpointMetadata,
+	HumidityControlSetpointValue,
+	IndicatorMetadata,
+	MeterMetadata,
+	MultilevelSensorValue,
+	MultilevelSensorValueMetadata,
+	MultilevelSwitchLevelChangeMetadata,
+	NotificationMetadata,
+	SupervisionResult,
+	ThermostatSetpointCapabilities,
+	ThermostatSetpointMetadata,
+	ThermostatSetpointValue,
+	ValveId,
+	ValveTableEntry,
+	ZWaveNotificationCallbackArgs_EntryControlCC,
+	ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+	ZWaveNotificationCallbackArgs_NotificationCC,
+	ZWaveNotificationCallbackArgs_PowerlevelCC,
+	ZWaveNotificationCallbackParams_EntryControlCC,
+	ZWaveNotificationCallbackParams_MultilevelSwitchCC,
+	ZWaveNotificationCallbackParams_NotificationCC,
+	ZWaveNotificationCallbackParams_PowerlevelCC,
+} from "./_Types";

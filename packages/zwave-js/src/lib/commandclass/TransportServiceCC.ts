@@ -6,8 +6,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { buffer2hex } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -20,15 +20,7 @@ import {
 	implementedVersion,
 	SinglecastCC,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TransportServiceCommand {
-	FirstSegment = 0xc0,
-	SegmentComplete = 0xe8,
-	SegmentRequest = 0xc8,
-	SegmentWait = 0xf0,
-	SubsequentSegment = 0xe0,
-}
+import { TransportServiceCommand } from "./_Types";
 
 const MAX_SEGMENT_SIZE = 39;
 
@@ -73,7 +65,7 @@ export class TransportServiceCC
 
 	/** Encapsulates a command that should be sent in multiple segments */
 	public static encapsulate(
-		_driver: Driver,
+		_host: ZWaveHost,
 		_cc: CommandClass,
 	): TransportServiceCC {
 		throw new Error("not implemented");
@@ -103,12 +95,12 @@ export function isTransportServiceEncapsulation(
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCFirstSegment extends TransportServiceCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCFirstSegmentOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// Deserialization has already split the datagram size from the ccCommand.
 			// Therefore we have one more payload byte
@@ -233,12 +225,12 @@ interface TransportServiceCCSubsequentSegmentOptions
 // @expectedCCResponse(TransportServiceCCReport)
 export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSubsequentSegmentOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// Deserialization has already split the datagram size from the ccCommand.
 			// Therefore we have one more payload byte
@@ -300,7 +292,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public expectMoreMessages(
 		session: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): boolean {
 		if (!(session[0] instanceof TransportServiceCCFirstSegment)) {
@@ -331,7 +323,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public mergePartialCCs(
 		partials: [
 			TransportServiceCCFirstSegment,
-			...TransportServiceCCSubsequentSegment[]
+			...TransportServiceCCSubsequentSegment[],
 		],
 	): void {
 		// Concat the CC buffers
@@ -352,7 +344,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		}
 
 		// and deserialize the CC
-		this._encapsulated = CommandClass.from(this.driver, {
+		this._encapsulated = CommandClass.from(this.host, {
 			data: datagram,
 			fromEncapsulation: true,
 			encapCC: this,
@@ -445,12 +437,12 @@ function testResponseForSegmentRequest(
 @expectedCCResponse(TransportServiceCC, testResponseForSegmentRequest)
 export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.sessionId = this.payload[1] >>> 4;
@@ -473,6 +465,16 @@ export class TransportServiceCCSegmentRequest extends TransportServiceCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"session ID": this.sessionId,
+				offset: this.datagramOffset,
+			},
+		};
+	}
 }
 
 interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
@@ -482,12 +484,12 @@ interface TransportServiceCCSegmentCompleteOptions extends CCCommandOptions {
 @CCCommand(TransportServiceCommand.SegmentComplete)
 export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentCompleteOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sessionId = this.payload[1] >>> 4;
@@ -502,6 +504,13 @@ export class TransportServiceCCSegmentComplete extends TransportServiceCC {
 		this.payload = Buffer.from([(this.sessionId & 0b1111) << 4]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "session ID": this.sessionId },
+		};
+	}
 }
 
 interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
@@ -511,12 +520,12 @@ interface TransportServiceCCSegmentWaitOptions extends CCCommandOptions {
 @CCCommand(TransportServiceCommand.SegmentWait)
 export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TransportServiceCCSegmentWaitOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.pendingSegments = this.payload[1];
@@ -530,5 +539,12 @@ export class TransportServiceCCSegmentWait extends TransportServiceCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.pendingSegments]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "pending segments": this.pendingSegments },
+		};
 	}
 }

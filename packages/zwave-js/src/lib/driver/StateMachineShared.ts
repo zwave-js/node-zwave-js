@@ -1,4 +1,5 @@
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import {
 	assign,
@@ -7,29 +8,28 @@ import {
 	Interpreter,
 	InterpreterOptions,
 	Machine,
-	SendAction,
 	spawn,
 	StateMachine,
 	StateSchema,
 	Typestate,
 } from "xstate";
-import { respond } from "xstate/lib/actions";
+import { respond, sendParent } from "xstate/lib/actions";
+import { TransmitStatus } from "../controller/_Types";
+import type { DriverLogger } from "../log/Driver";
 import {
 	SendDataBridgeRequest,
 	SendDataBridgeRequestTransmitReport,
 	SendDataMulticastBridgeRequest,
 	SendDataMulticastBridgeRequestTransmitReport,
-} from "../controller/SendDataBridgeMessages";
+} from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataMulticastRequestTransmitReport,
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-} from "../controller/SendDataMessages";
-import { isSendData, TransmitStatus } from "../controller/SendDataShared";
-import type { DriverLogger } from "../log/Driver";
-import type { Message } from "../message/Message";
+} from "../serialapi/transport/SendDataMessages";
+import { isSendData } from "../serialapi/transport/SendDataShared";
 import type { SendDataErrorData } from "./SendThreadMachine";
 import type {
 	SerialAPICommandError,
@@ -198,8 +198,20 @@ export function isSerialCommandError(error: unknown): boolean {
 	return false;
 }
 
-export const respondUnsolicited: SendAction<any, any, any> = respond(
+// respondUnsolicited and notifyUnsolicited are extremely similar, but we need both.
+// Ideally we'd only use notifyUnsolicited, but then the state machine tests are failing.
+export const respondUnsolicited = respond(
 	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
+
+export const notifyUnsolicited = sendParent(
+	(
+		_ctx: any,
+		evt: SerialAPICommandEvent & { type: "message" | "unsolicited" },
+	) => ({
 		type: "unsolicited",
 		message: evt.message,
 	}),

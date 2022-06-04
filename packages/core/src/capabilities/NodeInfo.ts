@@ -1,5 +1,5 @@
-import { sum } from "@zwave-js/shared";
-import { ZWaveError, ZWaveErrorCodes } from "..";
+import { sum } from "@zwave-js/shared/safe";
+import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
 
@@ -9,7 +9,7 @@ export interface NodeInformationFrame {
 	supportedCCs: CommandClasses[];
 }
 
-interface ExtendedNodeInformationFrame extends NodeInformationFrame {
+export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
 	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
 	controlledCCs: CommandClasses[];
 }
@@ -105,8 +105,8 @@ export function parseCCList(payload: Buffer): {
 }
 
 export function encodeCCList(
-	supportedCCs: CommandClasses[],
-	controlledCCs: CommandClasses[],
+	supportedCCs: readonly CommandClasses[],
+	controlledCCs: readonly CommandClasses[],
 ): Buffer {
 	const bufferLength =
 		sum(supportedCCs.map((cc) => (isExtendedCCId(cc) ? 2 : 1))) +
@@ -146,7 +146,9 @@ export type DataRate = 9600 | 40000 | 100000;
 
 export enum NodeType {
 	Controller,
+	/** @deprecated Use `NodeType["End Node"]` instead */
 	"Routing End Node",
+	"End Node" = 1,
 }
 
 export interface NodeProtocolInfo {
@@ -156,7 +158,7 @@ export interface NodeProtocolInfo {
 	isFrequentListening: FLiRS;
 	/** Whether the node supports routing/forwarding messages. */
 	isRouting: boolean;
-	supportedDataRates: readonly DataRate[];
+	supportedDataRates: DataRate[];
 	protocolVersion: ProtocolVersion;
 	/** Whether this node supports additional CCs besides the mandatory minimum */
 	optionalFunctionality: boolean;
@@ -168,6 +170,13 @@ export interface NodeProtocolInfo {
 	supportsBeaming: boolean;
 	/** Whether this node's device class has the specific part */
 	hasSpecificDeviceClass: boolean;
+}
+
+export interface NodeProtocolInfoAndDeviceClass
+	extends Omit<NodeProtocolInfo, "hasSpecificDeviceClass"> {
+	basicDeviceClass: number;
+	genericDeviceClass: number;
+	specificDeviceClass: number;
 }
 
 export function parseNodeProtocolInfo(
@@ -220,7 +229,7 @@ export function parseNodeProtocolInfo(
 	let nodeType: NodeType;
 	switch (capability & 0b1010) {
 		case 0b1000:
-			nodeType = NodeType["Routing End Node"];
+			nodeType = NodeType["End Node"];
 			break;
 		case 0b0010:
 		default:
@@ -262,7 +271,7 @@ export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
 
 	if (info.supportsBeaming) ret[1] |= 0b0001_0000;
 	if (info.supportsSecurity) ret[1] |= 0b1;
-	if (info.nodeType === NodeType["Routing End Node"]) ret[1] |= 0b1000;
+	if (info.nodeType === NodeType["End Node"]) ret[1] |= 0b1000;
 	else ret[1] |= 0b0010; // Controller
 
 	if (info.hasSpecificDeviceClass) ret[1] |= 0b100;

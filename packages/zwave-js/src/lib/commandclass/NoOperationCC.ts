@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,

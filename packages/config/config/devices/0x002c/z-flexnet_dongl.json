@@ -31,8 +31,6 @@
 			"description": "Configure panel hour and minute",
 			"valueSize": 2,
 			"unit": "hours",
-			"minValue": 23,
-			"maxValue": 59,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -171,14 +169,18 @@
 			"#": "15",
 			"label": "Reset to Factory Default",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
-				{ "label": "idle", "value": 0 },
-				{ "label": "Factory reset", "value": 255 }
+				{
+					"label": "idle",
+					"value": 0
+				},
+				{
+					"label": "Factory reset",
+					"value": 255
+				}
 			]
 		}
 	],

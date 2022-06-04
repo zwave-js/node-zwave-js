@@ -1,6 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "@zwave-js/host";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -13,15 +13,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { CRC16Command } from "./_Types";
 
 // @noSetValueAPI
 // @noInterview This CC only has a single encapsulation command
 
-// All the supported commands
-export enum CRC16Command {
-	CommandEncapsulation = 0x01,
-}
-
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses["CRC-16 Encapsulation"])
 export class CRC16CCAPI extends CCAPI {
 	public supportsCommand(_cmd: CRC16Command): Maybe<boolean> {
@@ -54,10 +52,10 @@ export class CRC16CC extends CommandClass {
 
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
-		return new CRC16CCCommandEncapsulation(driver, {
+		return new CRC16CCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
@@ -77,12 +75,12 @@ function getResponseForCommandEncapsulation() {
 @expectedCCResponse(getResponseForCommandEncapsulation)
 export class CRC16CCCommandEncapsulation extends CRC16CC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CRC16CCCommandEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 
@@ -96,7 +94,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			);
 			validatePayload(expectedCRC === actualCRC);
 
-			this.encapsulated = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.host, {
 				data: ccBuffer,
 				fromEncapsulation: true,
 				encapCC: this,

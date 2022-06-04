@@ -4,7 +4,7 @@
 	"properties": {
 		"$import": { "$ref": "#/definitions/import" },
 		"manufacturer": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "The full name of the manufacturer"
 		},
 		"manufacturerId": {
@@ -13,11 +13,11 @@
 			"pattern": "^0x[0-9a-f]{4}$"
 		},
 		"label": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "The device label that will be displayed by applications. Should usually be short."
 		},
 		"description": {
-			"type": "string",
+			"$ref": "#/definitions/conditionalString2",
 			"description": "A slightly more detailed description of this device, explaining what kind of device this is"
 		},
 		"devices": {
@@ -88,227 +88,37 @@
 			"description": "A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation."
 		},
 		"compat": {
-			"type": "object",
-			"properties": {
-				"$import": { "$ref": "#/definitions/import" },
-				"alarmMapping": {
-					"description": "Is used to map legacy V1 alarm values to V2+ Notification events",
+			"anyOf": [
+				{ "$ref": "#/definitions/compatFlags" },
+				{
 					"type": "array",
-					"items": {
-						"type": "object",
-						"properties": {
-							"$import": { "$ref": "#/definitions/import" },
-							"from": {
-								"type": "object",
-								"properties": {
-									"alarmType": {
-										"type": "integer",
-										"minimum": 0,
-										"maximum": 255
-									},
-									"alarmLevel": {
-										"type": "integer",
-										"minimum": 0,
-										"maximum": 255
-									}
-								},
-								"additionalProperties": false,
-								"required": ["alarmType"]
-							},
-							"to": {
-								"type": "object",
-								"properties": {
-									"notificationType": {
-										"type": "integer",
-										"minimum": 0,
-										"maximum": 255
-									},
-									"notificationEvent": {
-										"type": "integer",
-										"minimum": 0,
-										"maximum": 255
-									},
-									"eventParameters": {
-										"type": "object",
-										"additionalProperties": {
-											"anyOf": [
-												{
-													"type": "integer"
-												},
-												{
-													"enum": ["alarmLevel"]
-												}
-											]
-										}
-									}
-								},
-								"additionalProperties": false,
-								"required": [
-									"notificationType",
-									"notificationEvent"
-								]
-							}
-						},
-						"additionalProperties": false,
-						"anyOf": [
-							{
-								"required": ["from", "to"]
-							},
-							{
-								"required": ["$import"]
-							}
-						]
-					},
+					"items": { "$ref": "#/definitions/compatFlags" },
 					"minItems": 1,
 					"additionalItems": false
-				},
-				"commandClasses": {
-					"type": "object",
-					"properties": {
-						"add": {
-							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"$ref": "#/definitions/ccInfoAndEndpoints"
-								}
-							},
-							"additionalProperties": false
-						},
-						"remove": {
-							"type": "object",
-							"patternProperties": {
-								"^(0x)?[0-9a-f]+$": {
-									"type": "object",
-									"properties": {
-										"endpoints": {
-											"anyOf": [
-												{ "const": "*" },
-												{
-													"type": "array",
-													"items": {
-														"type": "integer",
-														"minimum": 0
-													},
-													"minItems": 1
-												}
-											]
-										}
-									},
-									"additionalProperties": false
-								}
-							},
-							"additionalProperties": false
-						}
-					},
-					"additionalProperties": false
-				},
-				"disableBasicMapping": {
-					"const": true
-				},
-				"disableStrictEntryControlDataValidation": {
-					"const": true
-				},
-				"enableBasicSetMapping": {
-					"const": true
-				},
-				"forceNotificationIdleReset": {
-					"const": true
-				},
-				"forceSceneControllerGroupCount": {
-					"type": "number",
-					"minimum": 0,
-					"maximum": 255
-				},
-				"manualValueRefreshDelayMs": {
-					"type": "number",
-					"minimum": 0
-				},
-				"mapRootReportsToEndpoint": {
-					"type": "number",
-					"minimum": 1
-				},
-				"overrideFloatEncoding": {
-					"type": "object",
-					"properties": {
-						"size": {
-							"type": "integer",
-							"minimum": 1,
-							"maximum": 4
-						},
-						"precision": {
-							"type": "integer",
-							"minimum": 0
-						}
-					},
-					"minProperties": 1,
-					"additionalProperties": false
-				},
-				"preserveEndpoints": {
-					"oneOf": [
-						{
-							"const": "*"
-						},
-						{
-							"type": "array",
-							"minItems": 1,
-							"items": {
-								"type": "integer",
-								"minimum": 1
-							}
-						}
-					]
-				},
-				"preserveRootApplicationCCValueIDs": {
-					"const": true
-				},
-				"queryOnWakeup": {
-					"type": "array",
-					"minItems": 1,
-					"items": {
-						"type": "array",
-						"items": [{ "type": "string" }, { "type": "string" }],
-						"additionalItems": {
-							"anyOf": [
-								{ "type": "string" },
-								{ "type": "number" },
-								{ "type": "boolean" }
-							]
-						}
-					}
-				},
-				"skipConfigurationInfoQuery": {
-					"const": true
-				},
-				"treatBasicSetAsEvent": {
-					"const": true
-				},
-				"treatDestinationEndpointAsSource": {
-					"const": true
 				}
-			},
-			"additionalProperties": false
+			]
 		},
 		"metadata": {
 			"type": "object",
 			"properties": {
 				"wakeup": {
-					"type": "string",
+					"$ref": "#/definitions/conditionalString",
 					"description": "How to wake up the device manually"
 				},
 				"inclusion": {
-					"type": "string",
+					"$ref": "#/definitions/conditionalString",
 					"description": "Inclusion instructions for this device"
 				},
 				"exclusion": {
-					"type": "string",
+					"$ref": "#/definitions/conditionalString",
 					"description": "Exclusion instructions for this device"
 				},
 				"reset": {
-					"type": "string",
+					"$ref": "#/definitions/conditionalString",
 					"description": "Instructions for resetting the device to factory defaults"
 				},
 				"manual": {
-					"type": "string",
+					"$ref": "#/definitions/conditionalString",
 					"description": "A link to the device manual"
 				},
 				"comments": {
@@ -355,6 +165,60 @@
 		"condition": {
 			"type": "string",
 			"description": "A condition that must be fulfilled for this entry to exit."
+		},
+		"conditionalString": {
+			"anyOf": [
+				{ "type": "string" },
+				{
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"anyOf": [
+							{ "type": "string" },
+							{
+								"type": "object",
+								"properties": {
+									"$if": {
+										"$ref": "#/definitions/condition"
+									},
+									"value": {
+										"type": "string"
+									}
+								},
+								"required": ["value"],
+								"additionalProperties": false
+							}
+						]
+					}
+				}
+			]
+		},
+		"conditionalString2": {
+			"anyOf": [
+				{ "type": "string" },
+				{
+					"type": "array",
+					"minItems": 2,
+					"items": {
+						"anyOf": [
+							{ "type": "string" },
+							{
+								"type": "object",
+								"properties": {
+									"$if": {
+										"$ref": "#/definitions/condition"
+									},
+									"value": {
+										"type": "string"
+									}
+								},
+								"required": ["value"],
+								"additionalProperties": false
+							}
+						]
+					}
+				}
+			]
 		},
 		"endpoints": {
 			"type": "object",
@@ -517,7 +381,7 @@
 				},
 				"allowManualEntry": {
 					"const": false,
-					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
+					"description": "Whether this parameter accepts any value between minValue and maxValue. If false, minValue and maxValue are optional, but options must be used to specify the allowed values."
 				},
 				"options": {
 					"type": "array",
@@ -563,23 +427,10 @@
 						}
 					},
 					"then": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue"
-						]
+						"required": ["#", "label", "valueSize"]
 					},
 					"else": {
-						"required": [
-							"#",
-							"label",
-							"valueSize",
-							"minValue",
-							"maxValue",
-							"defaultValue"
-						]
+						"required": ["#", "label", "valueSize", "defaultValue"]
 					}
 				},
 				{
@@ -587,9 +438,223 @@
 				}
 			]
 		},
+		"compatFlags": {
+			"type": "object",
+			"properties": {
+				"$if": { "$ref": "#/definitions/condition" },
+				"$import": { "$ref": "#/definitions/import" },
+				"alarmMapping": {
+					"description": "Is used to map legacy V1 alarm values to V2+ Notification events",
+					"type": "array",
+					"items": {
+						"type": "object",
+						"properties": {
+							"$import": { "$ref": "#/definitions/import" },
+							"from": {
+								"type": "object",
+								"properties": {
+									"alarmType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"alarmLevel": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									}
+								},
+								"additionalProperties": false,
+								"required": ["alarmType"]
+							},
+							"to": {
+								"type": "object",
+								"properties": {
+									"notificationType": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"notificationEvent": {
+										"type": "integer",
+										"minimum": 0,
+										"maximum": 255
+									},
+									"eventParameters": {
+										"type": "object",
+										"additionalProperties": {
+											"anyOf": [
+												{
+													"type": "integer"
+												},
+												{
+													"enum": ["alarmLevel"]
+												}
+											]
+										}
+									}
+								},
+								"additionalProperties": false,
+								"required": [
+									"notificationType",
+									"notificationEvent"
+								]
+							}
+						},
+						"additionalProperties": false,
+						"anyOf": [
+							{
+								"required": ["from", "to"]
+							},
+							{
+								"required": ["$import"]
+							}
+						]
+					},
+					"minItems": 1,
+					"additionalItems": false
+				},
+				"commandClasses": {
+					"type": "object",
+					"properties": {
+						"add": {
+							"type": "object",
+							"patternProperties": {
+								"^(0x)?[0-9a-f]+$": {
+									"$ref": "#/definitions/ccInfoAndEndpoints"
+								}
+							},
+							"additionalProperties": false
+						},
+						"remove": {
+							"type": "object",
+							"patternProperties": {
+								"^(0x)?[0-9a-f]+$": {
+									"type": "object",
+									"properties": {
+										"endpoints": {
+											"anyOf": [
+												{ "const": "*" },
+												{
+													"type": "array",
+													"items": {
+														"type": "integer",
+														"minimum": 0
+													},
+													"minItems": 1
+												}
+											]
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"disableBasicMapping": {
+					"const": true
+				},
+				"disableStrictEntryControlDataValidation": {
+					"const": true
+				},
+				"disableStrictMeasurementValidation": {
+					"const": true
+				},
+				"enableBasicSetMapping": {
+					"const": true
+				},
+				"forceNotificationIdleReset": {
+					"const": true
+				},
+				"forceSceneControllerGroupCount": {
+					"type": "number",
+					"minimum": 0,
+					"maximum": 255
+				},
+				"manualValueRefreshDelayMs": {
+					"type": "number",
+					"minimum": 0
+				},
+				"mapRootReportsToEndpoint": {
+					"type": "number",
+					"minimum": 1
+				},
+				"overrideFloatEncoding": {
+					"type": "object",
+					"properties": {
+						"size": {
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 4
+						},
+						"precision": {
+							"type": "integer",
+							"minimum": 0
+						}
+					},
+					"minProperties": 1,
+					"additionalProperties": false
+				},
+				"preserveEndpoints": {
+					"oneOf": [
+						{
+							"const": "*"
+						},
+						{
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "integer",
+								"minimum": 1
+							}
+						}
+					]
+				},
+				"preserveRootApplicationCCValueIDs": {
+					"const": true
+				},
+				"queryOnWakeup": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "array",
+						"items": [{ "type": "string" }, { "type": "string" }],
+						"additionalItems": {
+							"anyOf": [
+								{ "type": "string" },
+								{ "type": "number" },
+								{ "type": "boolean" }
+							]
+						}
+					}
+				},
+				"skipConfigurationNameQuery": {
+					"const": true
+				},
+				"skipConfigurationInfoQuery": {
+					"const": true
+				},
+				"treatBasicSetAsEvent": {
+					"const": true
+				},
+				"treatMultilevelSwitchSetAsEvent": {
+					"const": true
+				},
+				"treatDestinationEndpointAsSource": {
+					"const": true
+				}
+			},
+			"additionalProperties": false
+		},
 		"comment": {
 			"type": "object",
 			"properties": {
+				"$if": {
+					"$ref": "#/definitions/condition"
+				},
 				"level": {
 					"type": "string",
 					"enum": ["info", "warning", "error"]

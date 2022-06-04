@@ -50,8 +50,6 @@
 			"#": "14",
 			"label": "BASIC SET Command after PIR triggering",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -69,8 +67,6 @@
 			"#": "15",
 			"label": "Exchange of BASIC SET value and PIR status",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -152,8 +148,6 @@
 			"#": "110",
 			"label": "Enable/Disable Report 111-114",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

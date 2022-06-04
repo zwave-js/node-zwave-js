@@ -418,8 +418,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED Indicator When Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -1,21 +1,21 @@
 import { createModel } from "@xstate/test";
 import { assertZWaveError } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import { assign, StateValue } from "xstate";
 import { interpret, Interpreter } from "xstate/lib/interpreter";
 import { createMachine } from "xstate/lib/Machine";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import { TransmitStatus } from "../controller/_Types";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	GetControllerIdRequest,
 	GetControllerIdResponse,
-} from "../controller/GetControllerIdMessages";
+} from "../serialapi/memory/GetControllerIdMessages";
 import {
 	SendDataRequest,
 	SendDataRequestTransmitReport,
-} from "../controller/SendDataMessages";
-import { TransmitStatus } from "../controller/SendDataShared";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
+} from "../serialapi/transport/SendDataMessages";
 import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import { createMessageGenerator } from "./MessageGenerators";

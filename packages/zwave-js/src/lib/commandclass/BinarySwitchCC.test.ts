@@ -1,15 +1,14 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	BinarySwitchCC,
 	BinarySwitchCCGet,
 	BinarySwitchCCReport,
 	BinarySwitchCCSet,
-	BinarySwitchCommand,
 } from "./BinarySwitchCC";
+import { BinarySwitchCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/BinarySwitchCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const cc = new BinarySwitchCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new BinarySwitchCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				BinarySwitchCommand.Get, // CC Command
@@ -32,7 +31,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 	});
 
 	it("the Set command (v1) should serialize correctly", () => {
-		const cc = new BinarySwitchCCSet(fakeDriver, {
+		const cc = new BinarySwitchCCSet(host, {
 			nodeId: 2,
 			targetValue: false,
 		});
@@ -47,7 +46,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 
 	it("the Set command (v2) should serialize correctly", () => {
 		const duration = new Duration(2, "minutes");
-		const cc = new BinarySwitchCCSet(fakeDriver, {
+		const cc = new BinarySwitchCCSet(host, {
 			nodeId: 2,
 			targetValue: true,
 			duration,
@@ -69,7 +68,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 				0xff, // current value
 			]),
 		);
-		const cc = new BinarySwitchCCReport(fakeDriver, {
+		const cc = new BinarySwitchCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -88,7 +87,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 				1, // duration
 			]),
 		);
-		const cc = new BinarySwitchCCReport(fakeDriver, {
+		const cc = new BinarySwitchCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -103,7 +102,7 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new BinarySwitchCC(fakeDriver, {
+		const cc: any = new BinarySwitchCC(host, {
 			nodeId: 2,
 			data: serializedCC,
 		});

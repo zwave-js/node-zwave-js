@@ -28,8 +28,6 @@
 			"#": "6",
 			"label": "Motion Sensor Sensitivity",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [

@@ -26,8 +26,6 @@
 			"#": "3",
 			"label": "Current Overload Protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "4",
 			"label": "Overheat protection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -64,8 +60,6 @@
 			"#": "20",
 			"label": "Configure the output status after re-power on it",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -88,8 +82,6 @@
 			"label": "Group 1 notification",
 			"description": "Set notification sent to associated nodes (group 1)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -120,8 +112,6 @@
 			"label": "Group 3 notificaiton",
 			"description": "Set notification sent to associated nodes (group 3)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -140,8 +130,6 @@
 			"label": "Group 4 notificaiton",
 			"description": "Set notification sent to associated nodes (group 4)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -176,8 +164,6 @@
 			"label": "(En/dis)able 91 and 92",
 			"description": "Enables/disables parameter 91 and 92",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -299,8 +285,6 @@
 			"#": "120",
 			"label": "Configure the external switch mode for S1",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"writeOnly": true,
 			"allowManualEntry": false,
@@ -331,8 +315,6 @@
 			"#": "121",
 			"label": "Configure the external switch mode for S2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -362,8 +344,6 @@
 			"#": "122",
 			"label": "Get the state of touch panel port",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -382,8 +362,6 @@
 			"label": "Destination for switch S1",
 			"description": "Set the control destination for external switch S1",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -405,8 +383,6 @@
 			"#": "124",
 			"label": "Set the control destination for external switch S2",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -438,8 +414,6 @@
 			"#": "128",
 			"label": "Get the current working mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -461,8 +435,6 @@
 			"#": "129",
 			"label": "Set the dimming principle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -481,8 +453,6 @@
 			"label": "Type of load",
 			"description": "To get what type of load the Dimmer is connected to.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -526,8 +496,6 @@
 			"#": "249",
 			"label": "Set the recognition way of load",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -549,8 +517,6 @@
 			"#": "252",
 			"label": "Lock/unlock configuration parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -568,8 +534,6 @@
 			"#": "255",
 			"label": "Reset the Nano Dimmer",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

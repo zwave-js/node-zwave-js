@@ -30,10 +30,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -42,7 +42,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: lerna run build
+      run: yarn build
 
     - name: Run linters
       run: yarn run lint
@@ -89,10 +89,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -101,7 +101,7 @@ jobs:
       run: yarn install --immutable
 
     - name: Compile TypeScript code
-      run: lerna run build
+      run: yarn build
 
     - name: Lint config files
       run: yarn run lint:config
@@ -122,10 +122,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -148,45 +148,45 @@ jobs:
 
   # ===================
 
-  # Generate coverage reports when the unit tests have succeeded
-  coverage:
-    # Trigger this step only on pushes, because the job often fails for pull requests
-    if: |
-      contains(github.event.head_commit.message, '[skip ci]') == false &&
-      github.event_name == 'push'
+  # # Generate coverage reports when the unit tests have succeeded
+  # coverage:
+  #   # Trigger this step only on pushes, because the job often fails for pull requests
+  #   if: |
+  #     contains(github.event.head_commit.message, '[skip ci]') == false &&
+  #     github.event_name == 'push'
 
-    needs: [unit-tests]
+  #   needs: [unit-tests]
 
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x] # This should be LTS
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [14.x] # This should be LTS
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #       cache: 'yarn'
 
-    - name: Install dependencies
-      run: yarn install --immutable
+  #   - name: Install dependencies
+  #     run: yarn install --immutable
 
-    # Compilation is necessary, or the tests won't run
-    - name: Compile TypeScript code
-      run: yarn run build
+  #   # Compilation is necessary, or the tests won't run
+  #   - name: Compile TypeScript code
+  #     run: yarn run build
 
-    - name: Generate coverage
-      run: yarn run coverage:ci
-      env:
-        CI: true
-    - name: Upload to Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+  #   - name: Generate coverage
+  #     run: yarn run coverage:ci
+  #     env:
+  #       CI: true
+  #   - name: Upload to Coveralls
+  #     uses: coverallsapp/github-action@master
+  #     with:
+  #       github-token: ${{ secrets.GITHUB_TOKEN }}
 
   # ===================
 
@@ -208,10 +208,10 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'yarn'
@@ -229,7 +229,7 @@ jobs:
         BODY="${BODY//$'\r'/'%0D'}"
         echo "::set-output name=BODY::$BODY"
         if [[ $VERSION == *"-"* ]] ; then
-          echo "::set-output name=TAG::--dist-tag next"
+          echo "::set-output name=TAG::--tag next"
         fi
 
     - name: Install dependencies
@@ -242,9 +242,9 @@ jobs:
       env:
         TAG: ${{ steps.extract_release.outputs.TAG }}
       run: |
-        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
-        npm whoami
-        lerna publish from-package --yes $TAG
+        yarn config set npmAuthToken "${{ secrets.NPM_TOKEN }}"
+        yarn npm whoami
+        yarn workspaces foreach -vti --no-private npm publish --tolerate-republish $TAG
 
     - name: Create Github Release
       uses: actions/create-release@v1

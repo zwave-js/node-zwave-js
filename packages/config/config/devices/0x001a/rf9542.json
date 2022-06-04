@@ -74,8 +74,6 @@
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -99,8 +97,6 @@
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -126,5 +122,8 @@
 			"defaultValue": 0,
 			"unsigned": true
 		}
-	]
+	],
+	"compat": {
+		"enableBasicSetMapping": true
+	}
 }

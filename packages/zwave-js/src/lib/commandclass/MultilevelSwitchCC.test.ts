@@ -1,6 +1,5 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	MultilevelSwitchCC,
 	MultilevelSwitchCCGet,
@@ -9,10 +8,10 @@ import {
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
 	MultilevelSwitchCCSupportedGet,
-	MultilevelSwitchCommand,
 } from "./MultilevelSwitchCC";
+import { MultilevelSwitchCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -25,7 +24,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const cc = new MultilevelSwitchCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new MultilevelSwitchCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MultilevelSwitchCommand.Get, // CC Command
@@ -35,7 +34,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the Set command (V1) should serialize correctly", () => {
-		const cc = new MultilevelSwitchCCSet(fakeDriver, {
+		const cc = new MultilevelSwitchCCSet(host, {
 			nodeId: 2,
 			targetValue: 55,
 		});
@@ -49,7 +48,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the Set command (V2) should serialize correctly", () => {
-		const cc = new MultilevelSwitchCCSet(fakeDriver, {
+		const cc = new MultilevelSwitchCCSet(host, {
 			nodeId: 2,
 			targetValue: 55,
 			duration: new Duration(2, "minutes"),
@@ -71,7 +70,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 				55, // current value
 			]),
 		);
-		const cc = new MultilevelSwitchCCReport(fakeDriver, {
+		const cc = new MultilevelSwitchCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -90,7 +89,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 				1, // duration
 			]),
 		);
-		const cc = new MultilevelSwitchCCReport(fakeDriver, {
+		const cc = new MultilevelSwitchCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -102,7 +101,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command (V1) should serialize correctly (up, ignore start level)", () => {
-		const cc = new MultilevelSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new MultilevelSwitchCCStartLevelChange(host, {
 			nodeId: 2,
 			direction: "up",
 			ignoreStartLevel: true,
@@ -118,7 +117,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command (V1) should serialize correctly (down)", () => {
-		const cc = new MultilevelSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new MultilevelSwitchCCStartLevelChange(host, {
 			nodeId: 2,
 			direction: "down",
 			ignoreStartLevel: false,
@@ -135,7 +134,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the StopLevelChange command should serialize correctly", () => {
-		const cc = new MultilevelSwitchCCStopLevelChange(fakeDriver, {
+		const cc = new MultilevelSwitchCCStopLevelChange(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -147,7 +146,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command (V2) should serialize correctly (down, with duration)", () => {
-		const cc = new MultilevelSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new MultilevelSwitchCCStartLevelChange(host, {
 			nodeId: 2,
 			direction: "down",
 			ignoreStartLevel: false,
@@ -166,7 +165,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 	});
 
 	it("the SupportedGet command should serialize correctly", () => {
-		const cc = new MultilevelSwitchCCSupportedGet(fakeDriver, {
+		const cc = new MultilevelSwitchCCSupportedGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -181,7 +180,7 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new MultilevelSwitchCC(fakeDriver, {
+		const cc: any = new MultilevelSwitchCC(host, {
 			nodeId: 2,
 			data: serializedCC,
 		});

@@ -19,8 +19,6 @@
 			"label": "LED light",
 			"description": "control LED light behavior. Default is on when connected device is off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

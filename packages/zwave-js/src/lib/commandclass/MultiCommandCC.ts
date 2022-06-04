@@ -1,6 +1,7 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "@zwave-js/host";
+import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -12,10 +13,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultiCommandCommand {
-	CommandEncapsulation = 0x01,
-}
+import { MultiCommandCommand } from "./_Types";
 
 // TODO: Handle this command when received
 
@@ -32,6 +30,7 @@ export class MultiCommandCCAPI extends CCAPI {
 		// return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async send(commands: CommandClass[]): Promise<void> {
 		this.assertSupportsCommand(
 			MultiCommandCommand,
@@ -63,10 +62,10 @@ export class MultiCommandCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
-		return new MultiCommandCCCommandEncapsulation(driver, {
+		return new MultiCommandCCCommandEncapsulation(host, {
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
 			// MultiCommand CC is wrapped inside Supervision CC, so the supervision status must be preserved
@@ -83,12 +82,12 @@ interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
 // TODO: This probably expects multiple commands in return
 export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiCommandCCCommandEncapsulationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			const numCommands = this.payload[0];
@@ -99,7 +98,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 				const cmdLength = this.payload[offset];
 				validatePayload(this.payload.length >= offset + 1 + cmdLength);
 				this.encapsulated.push(
-					CommandClass.from(this.driver, {
+					CommandClass.from(this.host, {
 						data: this.payload.slice(
 							offset + 1,
 							offset + 1 + cmdLength,

@@ -31,7 +31,10 @@ export async function createAndStartDriver(
 
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
-		interview: { skipInterview: true },
+		testingHooks: {
+			skipControllerIdentification: true,
+			skipNodeInterview: true,
+		},
 	});
 	driver.on("error", () => {
 		/* swallow error events during testing */
@@ -53,6 +56,8 @@ export async function createAndStartDriver(
 	driver["_valueDB"]!.close = () => Promise.resolve();
 	driver["_metadataDB"] = new Map() as any;
 	driver["_metadataDB"]!.close = () => Promise.resolve();
+	driver["_networkCache"] = new Map() as any;
+	driver["_networkCache"]!.close = () => Promise.resolve();
 
 	// Mock the controller as it will not be initialized with skipInterview: true
 	driver["_controller"] = {
@@ -60,6 +65,7 @@ export async function createAndStartDriver(
 		isFunctionSupported: () => true,
 		nodes: new Map(),
 		incrementStatistics: () => {},
+		removeAllListeners: () => {},
 	} as any;
 
 	return {

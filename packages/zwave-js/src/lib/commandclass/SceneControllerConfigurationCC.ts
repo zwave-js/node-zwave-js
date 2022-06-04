@@ -10,9 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -24,7 +26,7 @@ import {
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
-import type { AssociationCC } from "./AssociationCC";
+import { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -36,13 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum SceneControllerConfigurationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { SceneControllerConfigurationCommand } from "./_Types";
 
 export function getSceneIdValueID(
 	endpoint: number | undefined,
@@ -243,6 +239,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async disable(groupId: number): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -252,10 +249,11 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		return this.set(groupId, 0, new Duration(0, "seconds"));
 	}
 
+	@validateArgs()
 	public async set(
 		groupId: number,
 		sceneId: number,
-		dimmingDuration?: Duration,
+		dimmingDuration?: Duration | string,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			SceneControllerConfigurationCommand,
@@ -304,6 +302,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async get(
 		groupId: number,
 	): Promise<
@@ -360,19 +359,22 @@ export class SceneControllerConfigurationCC extends CommandClass {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/require-await
-	public async interview(complete: boolean = true): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
-			message: `${this.constructor.name}: doing a ${
-				complete ? "complete" : "partial"
-			} interview...`,
+		driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
+			driver,
+			endpoint,
+		);
 		if (groupCount === 0) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `skipping Scene Controller Configuration interview because Association group count is unknown`,
 				direction: "none",
@@ -391,23 +393,26 @@ export class SceneControllerConfigurationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Scene Controller Configuration"
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = SceneControllerConfigurationCC.getGroupCountCached(
+			driver,
+			endpoint,
+		);
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "querying all scene controller configurations...",
 			direction: "outbound",
 		});
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying scene configuration for group #${groupId}...`,
 				direction: "outbound",
@@ -417,7 +422,7 @@ export class SceneControllerConfigurationCC extends CommandClass {
 				const logMessage = `received scene configuration for group #${groupId}:
 scene ID:         ${group.sceneId}
 dimming duration: ${group.dimmingDuration.toString()}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -431,15 +436,14 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 	 * This only works AFTER the node has been interviewed by this CC
 	 * or the AssociationCC.
 	 */
-	protected getGroupCountCached(): number {
+	protected static getGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		return (
-			this.getNodeUnsafe()?.deviceConfig?.compat
+			host.nodes.get(endpoint.nodeId)?.deviceConfig?.compat
 				?.forceSceneControllerGroupCount ??
-			this.getEndpoint()
-				?.createCCInstanceUnsafe<AssociationCC>(
-					CommandClasses.Association,
-				)
-				?.getGroupCountCached() ??
+			AssociationCC.getGroupCountCached(host, endpoint) ??
 			0
 		);
 	}
@@ -448,18 +452,18 @@ dimming duration: ${group.dimmingDuration.toString()}`;
 interface SceneControllerConfigurationCCSetOptions extends CCCommandOptions {
 	groupId: number;
 	sceneId: number;
-	dimmingDuration?: Duration;
+	dimmingDuration?: Duration | string;
 }
 
 @CCCommand(SceneControllerConfigurationCommand.Set)
 export class SceneControllerConfigurationCCSet extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -467,12 +471,17 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount = this.getGroupCountCached();
+			const groupCount =
+				SceneControllerConfigurationCC.getGroupCountCached(
+					host,
+					this.getEndpoint()!,
+				);
 			this.groupId = options.groupId;
 			this.sceneId = options.sceneId;
 			// if dimmingDuration was missing, use default duration.
 			this.dimmingDuration =
-				options.dimmingDuration ?? new Duration(0, "default");
+				Duration.from(options.dimmingDuration) ??
+				new Duration(0, "default");
 
 			// The client SHOULD NOT specify group 1 (the life-line group).
 			// We don't block it here, because the specs don't forbid it,
@@ -487,9 +496,7 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 	}
 
 	public groupId: number;
-
 	public sceneId: number;
-
 	public dimmingDuration: Duration;
 
 	public serialize(): Buffer {
@@ -516,10 +523,10 @@ export class SceneControllerConfigurationCCSet extends SceneControllerConfigurat
 @CCCommand(SceneControllerConfigurationCommand.Report)
 export class SceneControllerConfigurationCCReport extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 3);
 		this.groupId = this.payload[0];
 		this.sceneId = this.payload[1];
@@ -576,12 +583,12 @@ interface SceneControllerConfigurationCCGetOptions extends CCCommandOptions {
 )
 export class SceneControllerConfigurationCCGet extends SceneControllerConfigurationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneControllerConfigurationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -589,7 +596,11 @@ export class SceneControllerConfigurationCCGet extends SceneControllerConfigurat
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			const groupCount = this.getGroupCountCached();
+			const groupCount =
+				SceneControllerConfigurationCC.getGroupCountCached(
+					host,
+					this.getEndpoint()!,
+				);
 			if (options.groupId < 0 || options.groupId > groupCount) {
 				throw new ZWaveError(
 					`${this.constructor.name}: The group ID must be between 0 and the number of supported groups ${groupCount}.`,

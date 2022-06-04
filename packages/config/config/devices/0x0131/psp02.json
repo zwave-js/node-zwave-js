@@ -141,8 +141,6 @@
 			"label": "Operation mode",
 			"description": "set test mode if DIP switch in customer mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -161,8 +159,6 @@
 			"label": "Disable the door/window function",
 			"description": "Disable/Enable the function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -180,8 +176,6 @@
 			"#": "5[0x08]",
 			"label": "Temperature Unit",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -199,8 +193,6 @@
 			"#": "5[0x10]",
 			"label": "Disable illumination reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -218,8 +210,6 @@
 			"#": "5[0x20]",
 			"label": "Disable temperature reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -238,8 +228,6 @@
 			"label": "Back key release action",
 			"description": "Disable/enable the back key release into test mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -258,8 +246,6 @@
 			"label": "Magnetic integration for lighting control",
 			"description": "Switch control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -278,8 +264,6 @@
 			"label": "PIR integration to control lighting",
 			"description": "PIR integration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -298,8 +282,6 @@
 			"label": "Magetic/pir integration",
 			"description": "control lighting in association group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -317,8 +299,6 @@
 			"#": "6[0x08]",
 			"label": "Device and lighting in same room",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -337,8 +317,6 @@
 			"label": "Disable delay to turn off the light",
 			"description": "disable/enable delay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -357,8 +335,6 @@
 			"label": "Light off control",
 			"description": "disable/enable auto turn off the light",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -376,8 +352,6 @@
 			"#": "7[0x02]",
 			"label": "Motion Off Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -395,8 +369,6 @@
 			"#": "7[0x04]",
 			"label": "PIR Super-Sensitivity",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -415,8 +387,6 @@
 			"label": "BASIC OFF report",
 			"description": "Disable/enable report after door closed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -435,8 +405,6 @@
 			"label": "Door closed report type",
 			"description": "notification or sensor binary report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -455,8 +423,6 @@
 			"label": "Multi CC in auto report",
 			"description": "disable/enable multi CC in report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -474,8 +440,6 @@
 			"#": "7[0x40]",
 			"label": "Battery state reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

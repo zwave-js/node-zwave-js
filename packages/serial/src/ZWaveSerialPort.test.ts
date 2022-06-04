@@ -1,34 +1,9 @@
-import MockBinding from "@serialport/binding-mock";
-import { ZWaveLogContainer } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
-import SerialPort from "serialport";
 import { PassThrough } from "stream";
 import { MessageHeaders } from "./MessageHeaders";
-import { ZWaveSerialPort } from "./ZWaveSerialPort";
-
-SerialPort.Binding = MockBinding as any;
-
-async function createAndOpenMockedZWaveSerialPort(
-	open: boolean = true,
-): Promise<{
-	port: ZWaveSerialPort;
-	binding: MockBinding;
-}> {
-	MockBinding.reset();
-	MockBinding.createPort("/dev/ZWaveTest", {
-		record: true,
-		readyData: Buffer.from([]),
-	});
-	const port = new ZWaveSerialPort(
-		"/dev/ZWaveTest",
-		new ZWaveLogContainer({
-			enabled: false,
-		}),
-	);
-	const binding = (port["serial"] as SerialPort).binding as MockBinding;
-	if (open) await port.open();
-	return { port, binding };
-}
+import { createAndOpenMockedZWaveSerialPort } from "./MockSerialPort";
+import type { MockPortBinding } from "./SerialPortBindingMock";
+import type { ZWaveSerialPort } from "./ZWaveSerialPort";
 
 async function waitForData(port: {
 	once: (event: "data", callback: (data: any) => void) => any;
@@ -42,9 +17,11 @@ async function waitForData(port: {
 
 describe("ZWaveSerialPort", () => {
 	let port: ZWaveSerialPort;
-	let binding: MockBinding;
+	let binding: MockPortBinding;
 	beforeEach(async () => {
-		({ port, binding } = await createAndOpenMockedZWaveSerialPort());
+		({ port, binding } = await createAndOpenMockedZWaveSerialPort(
+			"/dev/zwavetest",
+		));
 	});
 	afterEach(async () => {
 		port.removeAllListeners();
@@ -112,17 +89,18 @@ describe("ZWaveSerialPort", () => {
 		});
 	});
 
-	it("skips all useless data", (done) => {
-		const data = Buffer.from([
-			MessageHeaders.ACK,
-			MessageHeaders.CAN,
-			0xff,
-			0xfe,
-			0xfd,
-			0xfa,
-			MessageHeaders.ACK,
-		]);
-		binding.emitData(data);
+	it("skips all invalid/unexpected data", (done) => {
+		binding.emitData(
+			Buffer.from([
+				MessageHeaders.ACK,
+				MessageHeaders.CAN,
+				0xff,
+				0xfe,
+				0xfd,
+				0xfa,
+				MessageHeaders.ACK,
+			]),
+		);
 
 		let count = 0;
 		port.on("data", (data) => {
@@ -135,6 +113,31 @@ describe("ZWaveSerialPort", () => {
 		});
 	});
 
+	it("skips all invalid/unexpected data (test 2)", (done) => {
+		binding.emitData(
+			Buffer.from([
+				MessageHeaders.ACK,
+				MessageHeaders.CAN,
+				0xff,
+				0xfe,
+				0xfd,
+				0xfa,
+			]),
+		);
+		setTimeout(() => {
+			binding.emitData(Buffer.from([MessageHeaders.NAK]));
+		}, 10);
+
+		let count = 0;
+		port.on("data", (data) => {
+			count++;
+			if (count === 1) expect(data).toBe(MessageHeaders.ACK);
+			if (count === 2) expect(data).toBe(MessageHeaders.CAN);
+			if (count === 3) expect(data).toBe(MessageHeaders.NAK);
+
+			if (count === 3) done();
+		});
+	});
 	it("emits a buffer when a message is received", async () => {
 		const data = Buffer.from([
 			MessageHeaders.SOF,

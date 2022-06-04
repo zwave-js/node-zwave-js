@@ -1,5 +1,9 @@
 # Quick Start
 
+For the following explanations it is assumed that you are familiar with `async/await` and `import` syntax. This library may still be used with `Promise` syntax and `require`, but the syntax changes slightly. For method and interface signatures, the [type annotation syntax](https://www.typescriptlang.org/docs/handbook/basic-types.html) from TypeScript is used.
+
+It is recommended to either use TypeScript when consuming the library or work in an IDE that understands TypeScript definitions (like VSCode or WebStorm).
+
 1.  Install this library as a dependency in your project
     ```bash
     npm i zwave-js

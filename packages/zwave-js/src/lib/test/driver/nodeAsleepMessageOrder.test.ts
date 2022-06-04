@@ -2,7 +2,7 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
-import { NodeStatus } from "../../node/Types";
+import { NodeStatus } from "../../node/_Types";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 
@@ -19,6 +19,7 @@ describe("regression tests", () => {
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -28,7 +29,6 @@ describe("regression tests", () => {
 	});
 
 	it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
-		jest.setTimeout(5000);
 		// Repro from #1107
 
 		// Node 10's awake timer elapses before its ping is rejected,
@@ -43,8 +43,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node10["_isListening"] = false;
-		node10["_isFrequentListening"] = false;
+		node10["isListening"] = false;
+		node10["isFrequentListening"] = false;
 		node10.markAsAwake();
 		expect(node10.status).toBe(NodeStatus.Awake);
 
@@ -145,5 +145,5 @@ describe("regression tests", () => {
 		await expect(pingPromise17).resolves.toBeFalse();
 
 		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	});
+	}, 5000);
 });

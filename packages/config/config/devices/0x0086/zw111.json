@@ -431,8 +431,6 @@
 			"$if": "firmwareVersion >= 2.0",
 			"label": "LED Indicator When Off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -491,7 +489,8 @@
 		}
 	],
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"treatMultilevelSwitchSetAsEvent": true
 	},
 	"metadata": {
 		"inclusion": "Turn the primary controller of Z-Wave network into inclusion mode, short press the product’s Action button that you can find on the product's housing",

@@ -10,9 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -35,22 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
-export enum HumidityControlMode {
-	"Off" = 0x00,
-	"Humidify" = 0x01,
-	"De-humidify" = 0x02,
-	"Auto" = 0x03,
-}
+import { HumidityControlMode, HumidityControlModeCommand } from "./_Types";
 
 @API(CommandClasses["Humidity Control Mode"])
 export class HumidityControlModeCCAPI extends CCAPI {
@@ -84,7 +71,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		await this.set(value);
 
 		if (this.isSinglecast()) {
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		}
 	};
 
@@ -120,6 +107,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(mode: HumidityControlMode): Promise<void> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
@@ -160,23 +148,23 @@ export class HumidityControlModeCCAPI extends CCAPI {
 export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Mode"
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported humidity control modes...",
 			direction: "outbound",
@@ -190,13 +178,13 @@ export class HumidityControlModeCC extends CommandClass {
 						`\n· ${getEnumMemberName(HumidityControlMode, mode)}`,
 				)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported humidity control modes timed out, skipping interview...",
@@ -205,15 +193,15 @@ export class HumidityControlModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Mode"
 		].withOptions({
@@ -221,14 +209,14 @@ export class HumidityControlModeCC extends CommandClass {
 		});
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current humidity control mode...",
 			direction: "outbound",
 		});
 		const currentMode = await api.get();
 		if (currentMode) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current humidity control mode: " +
@@ -246,12 +234,12 @@ interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 @CCCommand(HumidityControlModeCommand.Set)
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlModeCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -283,10 +271,10 @@ export class HumidityControlModeCCSet extends HumidityControlModeCC {
 @CCCommand(HumidityControlModeCommand.Report)
 export class HumidityControlModeCCReport extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b1111;
@@ -322,10 +310,10 @@ export class HumidityControlModeCCGet extends HumidityControlModeCC {}
 @CCCommand(HumidityControlModeCommand.SupportedReport)
 export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._supportedModes = parseBitMask(

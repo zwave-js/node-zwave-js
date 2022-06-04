@@ -22,8 +22,6 @@
 			"#": "2",
 			"label": "External input mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -45,8 +43,6 @@
 			"#": "3",
 			"label": "Mode number",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -80,8 +76,6 @@
 			"#": "4",
 			"label": "Source sensor",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -156,8 +150,6 @@
 			"#": "9",
 			"label": "Time format",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -336,8 +328,6 @@
 			"#": "28",
 			"label": "Basic set action",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 6,
 			"allowManualEntry": false,
 			"options": [

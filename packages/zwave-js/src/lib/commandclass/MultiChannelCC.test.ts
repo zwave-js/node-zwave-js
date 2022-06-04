@@ -1,7 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
-import { BasicCCGet, BasicCCReport, BasicCCSet, BasicCommand } from "./BasicCC";
+import { createTestingHost } from "@zwave-js/host";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 import type { CommandClass } from "./CommandClass";
 import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
 import {
@@ -12,11 +11,11 @@ import {
 	MultiChannelCCEndPointFind,
 	MultiChannelCCEndPointGet,
 	MultiChannelCCV1CommandEncapsulation,
-	MultiChannelCommand,
 } from "./MultiChannelCC";
 import { MultiCommandCC } from "./MultiCommandCC";
+import { BasicCommand, MultiChannelCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -30,17 +29,17 @@ function buildCCBuffer(payload: Buffer): Buffer {
 describe("lib/commandclass/MultiChannelCC", () => {
 	describe("class MultiChannelCC", () => {
 		it("is an encapsulating CommandClass", () => {
-			let cc: CommandClass = new BasicCCSet(fakeDriver, {
+			let cc: CommandClass = new BasicCCSet(host, {
 				nodeId: 1,
 				targetValue: 50,
 			});
-			cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+			cc = MultiChannelCC.encapsulate(host, cc);
 			expect(isEncapsulatingCommandClass(cc)).toBeTrue();
 		});
 	});
 
 	it("the EndPointGet command should serialize correctly", () => {
-		const cc = new MultiChannelCCEndPointGet(fakeDriver, { nodeId: 1 });
+		const cc = new MultiChannelCCEndPointGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MultiChannelCommand.EndPointGet, // CC Command
@@ -50,7 +49,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	});
 
 	it("the CapabilityGet command should serialize correctly", () => {
-		const cc = new MultiChannelCCCapabilityGet(fakeDriver, {
+		const cc = new MultiChannelCCCapabilityGet(host, {
 			nodeId: 2,
 			requestedEndpoint: 7,
 		});
@@ -64,7 +63,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	});
 
 	it("the EndPointFind command should serialize correctly", () => {
-		const cc = new MultiChannelCCEndPointFind(fakeDriver, {
+		const cc = new MultiChannelCCEndPointFind(host, {
 			nodeId: 2,
 			genericClass: 0x01,
 			specificClass: 0x02,
@@ -80,12 +79,12 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	});
 
 	it("the CommandEncapsulation command should serialize correctly", () => {
-		let cc: CommandClass = new BasicCCSet(fakeDriver, {
+		let cc: CommandClass = new BasicCCSet(host, {
 			nodeId: 2,
 			targetValue: 5,
 			endpoint: 7,
 		});
-		cc = MultiChannelCC.encapsulate(fakeDriver, cc);
+		cc = MultiChannelCC.encapsulate(host, cc);
 		const expected = buildCCBuffer(
 			Buffer.from([
 				MultiChannelCommand.CommandEncapsulation, // CC Command
@@ -100,7 +99,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	});
 
 	it("the AggregatedMembersGet command should serialize correctly", () => {
-		const cc = new MultiChannelCCAggregatedMembersGet(fakeDriver, {
+		const cc = new MultiChannelCCAggregatedMembersGet(host, {
 			nodeId: 2,
 			requestedEndpoint: 6,
 		});
@@ -115,14 +114,14 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 	it("the CommandEncapsulation command should also accept V1CommandEncapsulation as a response", () => {
 		// GH#938
-		const sent = new MultiChannelCCCommandEncapsulation(fakeDriver, {
+		const sent = new MultiChannelCCCommandEncapsulation(host, {
 			nodeId: 2,
 			destination: 2,
-			encapsulated: new BasicCCGet(fakeDriver, { nodeId: 2 }),
+			encapsulated: new BasicCCGet(host, { nodeId: 2 }),
 		});
-		const received = new MultiChannelCCV1CommandEncapsulation(fakeDriver, {
+		const received = new MultiChannelCCV1CommandEncapsulation(host, {
 			nodeId: 2,
-			encapsulated: new BasicCCReport(fakeDriver, {
+			encapsulated: new BasicCCReport(host, {
 				nodeId: 2,
 				currentValue: 50,
 			}),
@@ -141,7 +140,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	// 			1, // duration
 	// 		]),
 	// 	);
-	// 	const cc = new MultiChannelCCReport(fakeDriver, { data: ccData });
+	// 	const cc = new MultiChannelCCReport(host, { data: ccData });
 
 	// 	expect(cc.currentValue).toBe(55);
 	// 	expect(cc.targetValue).toBe(66);
@@ -153,7 +152,7 @@ describe("lib/commandclass/MultiChannelCC", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new MultiChannelCC(fakeDriver, {
+		const cc: any = new MultiChannelCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});
@@ -189,8 +188,8 @@ describe("lib/commandclass/MultiChannelCC", () => {
 	describe("responses should be detected correctly", () => {
 		it("MultiChannelCC/BasicCCGet should expect a response", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: 2,
 					endpoint: 2,
 				}),
@@ -200,12 +199,12 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 		it("MultiChannelCC/BasicCCGet (multicast) should expect NO response", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: 2,
 					endpoint: 2,
 				}),
-			);
+			) as MultiChannelCCCommandEncapsulation;
 			// A multicast request never expects a response
 			ccRequest.destination = [1, 2, 3];
 			expect(ccRequest.expectsCCResponse()).toBeFalse();
@@ -213,8 +212,8 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 		it("MultiChannelCC/BasicCCSet should expect NO response", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCSet(fakeDriver, {
+				host,
+				new BasicCCSet(host, {
 					nodeId: 2,
 					endpoint: 2,
 					targetValue: 7,
@@ -225,15 +224,15 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 		it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCReport = expected", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: 2,
 					endpoint: 2,
 				}),
 			);
 			const ccResponse = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCReport(fakeDriver, {
+				host,
+				new BasicCCReport(host, {
 					nodeId: ccRequest.nodeId,
 					currentValue: 7,
 				}),
@@ -245,15 +244,15 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 		it("MultiChannelCC/BasicCCGet => MultiChannelCC/BasicCCGet = unexpected", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: 2,
 					endpoint: 2,
 				}),
 			);
 			const ccResponse = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: ccRequest.nodeId,
 					endpoint: 2,
 				}),
@@ -265,14 +264,14 @@ describe("lib/commandclass/MultiChannelCC", () => {
 
 		it("MultiChannelCC/BasicCCGet => MultiCommandCC/BasicCCReport = unexpected", () => {
 			const ccRequest = MultiChannelCC.encapsulate(
-				fakeDriver,
-				new BasicCCGet(fakeDriver, {
+				host,
+				new BasicCCGet(host, {
 					nodeId: 2,
 					endpoint: 2,
 				}),
 			);
-			const ccResponse = MultiCommandCC.encapsulate(fakeDriver, [
-				new BasicCCReport(fakeDriver, {
+			const ccResponse = MultiCommandCC.encapsulate(host, [
+				new BasicCCReport(host, {
 					nodeId: ccRequest.nodeId,
 					currentValue: 7,
 				}),

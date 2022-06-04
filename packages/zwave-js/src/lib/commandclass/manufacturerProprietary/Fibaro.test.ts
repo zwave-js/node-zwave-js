@@ -26,10 +26,8 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(node2.id, node2);
 
-		// Loading configuration may take a while on CI
-		if (process.env.CI) jest.setTimeout(30000);
 		await fakeDriver.configManager.loadDeviceIndex();
-	});
+	}, 30000);
 
 	afterAll(() => {
 		node2.destroy();
@@ -160,7 +158,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				CommandClasses["Manufacturer Proprietary"],
 			)!;
 
-			cc.interview().catch(() => {
+			cc.interview(fakeDriver).catch(() => {
 				// we expect an error, since there will be no response
 			});
 

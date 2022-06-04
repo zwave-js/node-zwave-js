@@ -23,8 +23,6 @@
 			"label": "Send notifications to associated devices",
 			"description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
 			"allowManualEntry": false,

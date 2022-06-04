@@ -1,38 +1,46 @@
 import { CommandClasses } from "@zwave-js/core";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
 
 // repro from https://github.com/zwave-js/zwavejs2mqtt/issues/101#issuecomment-749007701
 
 describe("regression tests", () => {
 	let driver: Driver;
-	process.env.LOGLEVEL = "debug";
+	let node2: ZWaveNode;
+	let controller: MockController;
 
-	beforeEach(async () => {
-		({ driver } = await createAndStartDriver());
+	beforeAll(async () => {
+		({ driver } = await createAndStartTestingDriver({
+			skipNodeInterview: true,
+			loadConfiguration: false,
+			beforeStartup(mockPort) {
+				controller = new MockController({ serial: mockPort });
+				controller.defineBehavior(
+					...createDefaultMockControllerBehaviors(),
+				);
+			},
+		}));
+		node2 = new ZWaveNode(2, driver);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			node2.id,
+			node2,
+		);
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: () => true,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-		} as any;
-	});
-
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
-
-	it("trying to send a ConfigurationCC::Set with invalid value should throw immediately", async () => {
-		const node2 = new ZWaveNode(2, driver);
 		node2.addCC(CommandClasses.Configuration, {
 			isSupported: true,
 			version: 1,
 		});
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+	}, 30000);
 
+	afterAll(async () => {
+		await driver.destroy();
+	});
+
+	it("trying to send a ConfigurationCC::Set with invalid value should throw immediately", async () => {
 		const spy = jest.fn();
 		driver.on("error", spy);
 

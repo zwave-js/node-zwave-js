@@ -1,16 +1,15 @@
-// To test with Sentry reporting:
-// import { Driver } from "../packages/zwave-js";
-
-// To test without Sentry reporting
+import os from "os";
 import path from "path";
 import "reflect-metadata";
-import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
+import { Driver } from "zwave-js";
 
 process.on("unhandledRejection", (_r) => {
 	debugger;
 });
 
-const driver = new Driver("COM5", {
+const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
+
+const driver = new Driver(port, {
 	// logConfig: {
 	// 	logToFile: true,
 	// },

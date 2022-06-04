@@ -5,9 +5,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
-import type { Driver } from "../driver/Driver";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -19,7 +20,6 @@ import {
 	Switchpoint,
 } from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import { Weekday } from "./ClockCC";
 import {
 	API,
 	CCCommand,
@@ -33,26 +33,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ClimateControlScheduleCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	ChangedGet = 0x04,
-	ChangedReport = 0x05,
-	OverrideSet = 0x06,
-	OverrideGet = 0x07,
-	OverrideReport = 0x08,
-}
-
-/**
- * @publicAPI
- */
-export enum ScheduleOverrideType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import {
+	ClimateControlScheduleCommand,
+	ScheduleOverrideType,
+	Weekday,
+} from "./_Types";
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
@@ -69,6 +54,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
@@ -87,6 +73,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async get(
 		weekday: Weekday,
 	): Promise<readonly Switchpoint[] | undefined> {
@@ -150,6 +137,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async setOverride(
 		type: ScheduleOverrideType,
 		state: SetbackState,
@@ -183,12 +171,12 @@ interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.Set)
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -243,10 +231,10 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.Report)
 export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 28); // 1 + 9 * 3
 		const weekday = this.payload[0] & 0b111;
@@ -303,12 +291,12 @@ interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(ClimateControlScheduleCCReport)
 export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -337,10 +325,10 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
 export class ClimateControlScheduleCCChangedReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._changeCounter = this.payload[0];
@@ -367,10 +355,10 @@ export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
 export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._overrideType = this.payload[0] & 0b11;
@@ -415,12 +403,12 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 @CCCommand(ClimateControlScheduleCommand.OverrideSet)
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ClimateControlScheduleCCOverrideSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

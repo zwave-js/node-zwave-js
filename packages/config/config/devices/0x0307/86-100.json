@@ -20,8 +20,6 @@
 			"label": "Led Indicator",
 			"description": "The LED indicator will be on whenever the connected appliance is off, and turns off when the connected device is on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

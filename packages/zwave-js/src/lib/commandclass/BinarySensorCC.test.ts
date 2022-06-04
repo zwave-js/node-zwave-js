@@ -1,16 +1,15 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	BinarySensorCC,
 	BinarySensorCCGet,
 	BinarySensorCCReport,
 	BinarySensorCCSupportedGet,
 	BinarySensorCCSupportedReport,
-	BinarySensorCommand,
-	BinarySensorType,
 } from "./BinarySensorCC";
+import { BinarySensorCommand, BinarySensorType } from "./_Types";
+
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,20 +21,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/BinarySensorCC => ", () => {
-	const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-	let node1: ZWaveNode;
-
-	beforeAll(() => {
-		node1 = new ZWaveNode(1, fakeDriver as any as Driver);
-		(fakeDriver.controller.nodes as Map<any, any>).set(node1.id, node1);
-	});
-
-	afterAll(() => {
-		node1.destroy();
-	});
-
 	it("the Get command (v1) should serialize correctly", () => {
-		const cc = new BinarySensorCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new BinarySensorCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				BinarySensorCommand.Get, // CC Command
@@ -45,7 +32,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 	});
 
 	it("the Get command (v2) should serialize correctly", () => {
-		const cc = new BinarySensorCCGet(fakeDriver, {
+		const cc = new BinarySensorCCGet(host, {
 			nodeId: 1,
 			sensorType: BinarySensorType.CO,
 		});
@@ -62,7 +49,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 				0xff, // current value
 			]),
 		);
-		const cc = new BinarySensorCCReport(fakeDriver, {
+		const cc = new BinarySensorCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -78,7 +65,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 				BinarySensorType.CO2,
 			]),
 		);
-		const cc = new BinarySensorCCReport(fakeDriver, {
+		const cc = new BinarySensorCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -88,7 +75,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 	});
 
 	it("the SupportedGet command should serialize correctly", () => {
-		const cc = new BinarySensorCCSupportedGet(fakeDriver, { nodeId: 1 });
+		const cc = new BinarySensorCCSupportedGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				BinarySensorCommand.SupportedGet, // CC Command
@@ -105,7 +92,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 				0b10,
 			]),
 		);
-		const cc = new BinarySensorCCSupportedReport(fakeDriver, {
+		const cc = new BinarySensorCCSupportedReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -123,7 +110,7 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new BinarySensorCC(fakeDriver, {
+		const cc: any = new BinarySensorCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

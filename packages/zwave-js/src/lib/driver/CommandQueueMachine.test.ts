@@ -1,11 +1,14 @@
 import { createModel } from "@xstate/test";
 import { SecurityManager } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
-import { SendDataAbort, SendDataRequest } from "../controller/SendDataMessages";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
+import {
+	SendDataAbort,
+	SendDataRequest,
+} from "../serialapi/transport/SendDataMessages";
 import { dummyCallbackNOK, dummyResponseNOK } from "../test/messages";
 import { createEmptyMockDriver } from "../test/mocks";
 import {

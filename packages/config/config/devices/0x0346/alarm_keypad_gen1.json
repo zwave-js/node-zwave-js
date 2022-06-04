@@ -43,8 +43,6 @@
 			"label": "Co-Proc Status",
 			"description": "Check to see if the co-proc is operational",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": true,
 			"allowManualEntry": false,
@@ -92,8 +90,6 @@
 			"#": "7",
 			"label": "Enable / Disable Extended Battery Life Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -156,8 +152,6 @@
 			"#": "13",
 			"label": "Enable / Disable Proximity mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -247,8 +241,6 @@
 			"$if": "productId === 0x0202",
 			"label": "Language",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 11,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

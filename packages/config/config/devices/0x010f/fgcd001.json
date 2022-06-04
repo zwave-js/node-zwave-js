@@ -23,8 +23,6 @@
 			"label": "Z-Wave notifications",
 			"description": "Set the actions sent to controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -51,8 +49,6 @@
 			"label": "LED diode indications",
 			"description": "Set the actions which result in LED diode indications",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -95,8 +91,6 @@
 			"label": "Acoustic signals",
 			"description": "Set the actions which result in acoustic signals",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 7,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -147,8 +141,6 @@
 			"#": "10",
 			"label": "Commands sent to 2nd association group (CO Alarm)",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -170,8 +162,6 @@
 			"#": "11",
 			"label": "Value of BASIC ON command sent to 2nd assoc group",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"allowManualEntry": false,
 			"options": [

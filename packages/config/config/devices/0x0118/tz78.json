@@ -23,8 +23,6 @@
 			"label": "Change the state of indicator light",
 			"description": "Default status of socket LED is on as indicator when the load is off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -43,8 +41,6 @@
 			"label": "Memory Function",
 			"description": "Default with memory: the socket status is same as before when power on",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +59,6 @@
 			"label": "Switch Mode",
 			"description": "Edge or Pulse mode or EdgeToggle mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

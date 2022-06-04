@@ -34,8 +34,6 @@
 			"#": "20",
 			"label": "Input 1 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -65,8 +63,6 @@
 			"#": "21",
 			"label": "Input 2 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -96,8 +92,6 @@
 			"#": "22",
 			"label": "Input 3 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +121,6 @@
 			"#": "23",
 			"label": "Input 4 - operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -233,8 +225,6 @@
 			"#": "150",
 			"label": "Inputs - LED colour control mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -270,8 +260,6 @@
 			"#": "157",
 			"label": "Start programmed sequence",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

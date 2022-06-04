@@ -7,9 +7,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -31,19 +32,10 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { NodeNamingAndLocationCommand } from "./_Types";
 
 function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
-}
-
-// All the supported commands
-export enum NodeNamingAndLocationCommand {
-	NameSet = 0x01,
-	NameGet = 0x02,
-	NameReport = 0x03,
-	LocationSet = 0x04,
-	LocationGet = 0x05,
-	LocationReport = 0x06,
 }
 
 export function getNodeNameValueId(): ValueID {
@@ -123,6 +115,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.name;
 	}
 
+	@validateArgs()
 	public async setName(name: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
@@ -155,6 +148,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		return response?.location;
 	}
 
+	@validateArgs()
 	public async setLocation(location: string): Promise<void> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
@@ -180,49 +174,49 @@ export class NodeNamingAndLocationCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Node Naming and Location"
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "retrieving node name...",
 			direction: "outbound",
 		});
 		const name = await api.getName();
 		if (name != undefined) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `is named "${name}"`,
 				direction: "inbound",
 			});
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "retrieving node location...",
 			direction: "outbound",
 		});
 		const location = await api.getLocation();
 		if (location != undefined) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `received location: ${location}`,
 				direction: "inbound",
 			});
@@ -237,12 +231,12 @@ interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.NameSet)
 export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCNameSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -288,10 +282,10 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
 export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let nameBuffer = this.payload.slice(1);
 		if (encoding === "utf16le") {
@@ -325,12 +319,12 @@ interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 @CCCommand(NodeNamingAndLocationCommand.LocationSet)
 export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| NodeNamingAndLocationCCLocationSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -376,10 +370,10 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
 export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		const encoding = this.payload[0] === 2 ? "utf16le" : "ascii";
 		let locationBuffer = this.payload.slice(1);
 		if (encoding === "utf16le") {
@@ -399,10 +393,6 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 			...super.toLogEntry(),
 			message: { location: this.location },
 		};
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({ location: this.location });
 	}
 }
 

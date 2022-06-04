@@ -13,9 +13,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -37,16 +39,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export type IndicatorMetadata = ValueMetadata & {
-	ccSpecific: {
-		indicatorId: number;
-		propertyId?: number; // only present on V2+ indicators
-	};
-};
+import { IndicatorCommand } from "./_Types";
 
 export function getSupportedIndicatorIDsValueID(
 	endpoint: number | undefined,
@@ -163,15 +156,6 @@ function getIndicatorName(
 	return indicatorName;
 }
 
-// All the supported commands
-export enum IndicatorCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
 const MAX_INDICATOR_OBJECTS = 31;
 
 @API(CommandClasses.Indicator)
@@ -247,6 +231,7 @@ export class IndicatorCCAPI extends CCAPI {
 		throwUnsupportedProperty(this.ccId, property);
 	};
 
+	@validateArgs()
 	public async get(
 		indicatorId?: number,
 	): Promise<number | IndicatorObject[] | undefined> {
@@ -266,6 +251,7 @@ export class IndicatorCCAPI extends CCAPI {
 		return response.value!;
 	}
 
+	@validateArgs()
 	public async set(value: number | IndicatorObject[]): Promise<void> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Set);
 
@@ -277,6 +263,7 @@ export class IndicatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getSupported(indicatorId: number): Promise<
 		| {
 				indicatorId?: number;
@@ -347,33 +334,33 @@ export class IndicatorCCAPI extends CCAPI {
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		this.registerValue(
 			getSupportedIndicatorIDsValueID(undefined).property,
-			true,
+			{ internal: true },
 		);
 		this.registerValue(
 			getSupportedPropertyIDsValueID(undefined, 0).property,
-			true,
+			{ internal: true },
 		);
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		if (this.version > 1) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "scanning supported indicator IDs...",
 				direction: "outbound",
@@ -384,7 +371,7 @@ export class IndicatorCC extends CommandClass {
 			do {
 				const supportedResponse = await api.getSupported(curId);
 				if (!supportedResponse) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Time out while scanning supported indicator IDs, skipping interview...",
@@ -407,7 +394,7 @@ export class IndicatorCC extends CommandClass {
 			const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
 				", ",
 			)}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -415,21 +402,21 @@ export class IndicatorCC extends CommandClass {
 		}
 
 		// Query current values
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Indicator.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version === 1) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting current indicator value...",
 				direction: "outbound",
@@ -441,7 +428,7 @@ export class IndicatorCC extends CommandClass {
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
 				) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `requesting current indicator value (id = ${num2hex(
 						indicatorId,
@@ -465,7 +452,7 @@ export class IndicatorCC extends CommandClass {
 			typeof propertyKey === "number"
 		) {
 			// The indicator property is our property key
-			const prop = this.driver.configManager.lookupProperty(propertyKey);
+			const prop = this.host.configManager.lookupProperty(propertyKey);
 			if (prop) return prop.label;
 		}
 		return super.translatePropertyKey(property, propertyKey);
@@ -477,7 +464,7 @@ export class IndicatorCC extends CommandClass {
 	): string {
 		if (typeof property === "number" && typeof propertyKey === "number") {
 			// The indicator corresponds to our property
-			const label = this.driver.configManager.lookupIndicator(property);
+			const label = this.host.configManager.lookupIndicator(property);
 			if (label) return label;
 		}
 		return super.translateProperty(property, propertyKey);
@@ -519,12 +506,12 @@ type IndicatorCCSetOptions =
 @CCCommand(IndicatorCommand.Set)
 export class IndicatorCCSet extends IndicatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (IndicatorCCSetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -617,10 +604,10 @@ export class IndicatorCCReport extends IndicatorCC {
 	// @noCCValues This CC stores its values diffently
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 
@@ -649,7 +636,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
-					this.driver.controllerLog.logNode(this.nodeId, {
+					this.host.controllerLog.logNode(this.nodeId, {
 						message: `ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",
 						endpoint: this.endpointIndex,
@@ -705,7 +692,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		const valueDB = this.getValueDB();
 
 		const metadata = getIndicatorMetadata(
-			this.driver.configManager,
+			this.host.configManager,
 			value.indicatorId,
 			value.propertyId,
 		);
@@ -755,10 +742,10 @@ interface IndicatorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCReport)
 export class IndicatorCCGet extends IndicatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | IndicatorCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -784,7 +771,7 @@ export class IndicatorCCGet extends IndicatorCC {
 			...super.toLogEntry(),
 			message: {
 				indicator: getIndicatorName(
-					this.driver.configManager,
+					this.host.configManager,
 					this.indicatorId,
 				),
 			},
@@ -795,10 +782,10 @@ export class IndicatorCCGet extends IndicatorCC {
 @CCCommand(IndicatorCommand.SupportedReport)
 export class IndicatorCCSupportedReport extends IndicatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this.indicatorId = this.payload[0];
@@ -841,18 +828,18 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 			...super.toLogEntry(),
 			message: {
 				indicator: getIndicatorName(
-					this.driver.configManager,
+					this.host.configManager,
 					this.indicatorId,
 				),
 				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
-							this.driver.configManager.lookupProperty(id)
-								?.label ?? `Unknown (${num2hex(id)})`,
+							this.host.configManager.lookupProperty(id)?.label ??
+							`Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
 				"next indicator": getIndicatorName(
-					this.driver.configManager,
+					this.host.configManager,
 					this.nextIndicatorId,
 				),
 			},
@@ -868,12 +855,12 @@ interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
 @expectedCCResponse(IndicatorCCSupportedReport)
 export class IndicatorCCSupportedGet extends IndicatorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| IndicatorCCSupportedGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -897,7 +884,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 			...super.toLogEntry(),
 			message: {
 				indicator: getIndicatorName(
-					this.driver.configManager,
+					this.host.configManager,
 					this.indicatorId,
 				),
 			},

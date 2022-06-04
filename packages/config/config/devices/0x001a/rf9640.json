@@ -49,8 +49,6 @@
 			"#": "5",
 			"label": "Power Up State",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

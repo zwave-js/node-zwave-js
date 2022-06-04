@@ -10,7 +10,8 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
+import type { ZWaveHost } from "@zwave-js/host";
+import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -30,6 +31,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SceneActivationCommand } from "./_Types";
 
 // @noInterview This CC is write-only
 
@@ -47,11 +49,6 @@ export function getDimmingDurationValueID(endpoint: number): ValueID {
 		endpoint,
 		property: "dimmingDuration",
 	};
-}
-
-// All the supported commands
-export enum SceneActivationCommand {
-	Set = 0x01,
 }
 
 @API(CommandClasses["Scene Activation"])
@@ -80,6 +77,7 @@ export class SceneActivationCCAPI extends CCAPI {
 	 * Activates the Scene with the given ID
 	 * @param duration The duration specifying how long the transition should take. Can be a Duration instance or a user-friendly duration string like `"1m17s"`.
 	 */
+	@validateArgs()
 	public async set(
 		sceneId: number,
 		dimmingDuration?: Duration | string,
@@ -93,7 +91,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			sceneId,
-			dimmingDuration: Duration.from(dimmingDuration),
+			dimmingDuration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -107,18 +105,18 @@ export class SceneActivationCC extends CommandClass {
 
 interface SceneActivationCCSetOptions extends CCCommandOptions {
 	sceneId: number;
-	dimmingDuration?: Duration;
+	dimmingDuration?: Duration | string;
 }
 
 @CCCommand(SceneActivationCommand.Set)
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SceneActivationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 2);
 			this.sceneId = this.payload[0];
@@ -128,7 +126,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 			this.persistValues();
 		} else {
 			this.sceneId = options.sceneId;
-			this.dimmingDuration = options.dimmingDuration;
+			this.dimmingDuration = Duration.from(options.dimmingDuration);
 		}
 	}
 
@@ -143,7 +141,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Any,
+		...ValueMetadata.Duration,
 		label: "Dimming duration",
 	})
 	public dimmingDuration: Duration | undefined;

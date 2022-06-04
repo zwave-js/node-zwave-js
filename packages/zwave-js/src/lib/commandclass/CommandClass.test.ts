@@ -3,16 +3,16 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { SendDataRequest } from "../controller/SendDataMessages";
+import { createTestingHost } from "@zwave-js/host";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../Utils";
 import type { Driver } from "../driver/Driver";
+import { createAndStartTestingDriver } from "../driver/DriverMock";
 import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 import { BasicCC, BasicCCSet } from "./BasicCC";
-import {
-	CentralSceneCCNotification,
-	CentralSceneCommand,
-	CentralSceneKeys,
-} from "./CentralSceneCC";
+import { CentralSceneCCNotification } from "./CentralSceneCC";
 import {
 	CommandClass,
 	commandClass,
@@ -23,6 +23,7 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 import "./index";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 @implementedVersion(7)
 @commandClass(0xffff as any)
@@ -35,31 +36,19 @@ class DummyCCSubClass2 extends DummyCC {
 	private y: any;
 }
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
-
 describe("lib/commandclass/CommandClass => ", () => {
 	describe("creating and serializing()", () => {
-		let node2: ZWaveNode;
-
-		beforeEach(() => {
-			node2 = new ZWaveNode(2, fakeDriver as any);
-			(fakeDriver.controller.nodes as any).set(2, node2);
-		});
-
-		afterEach(() => {
-			node2.destroy();
-			(fakeDriver.controller.nodes as any).delete(2);
-		});
+		const host = createTestingHost();
 
 		it(`should work for unspecified commands`, () => {
 			// Repro for #1219
-			const cc = new CommandClass(fakeDriver, {
+			const cc = new CommandClass(host, {
 				nodeId: 2,
 				ccId: 0x5d,
 				ccCommand: 0x02,
 				payload: Buffer.from([1, 2, 3]),
 			});
-			const msg = new SendDataRequest(fakeDriver, {
+			const msg = new SendDataRequest(host, {
 				command: cc,
 				callbackId: 0xfe,
 			});
@@ -70,11 +59,13 @@ describe("lib/commandclass/CommandClass => ", () => {
 	});
 
 	describe("from()", () => {
+		const host = createTestingHost();
+
 		it("throws CC_NotImplemented when receiving a non-implemented CC", () => {
 			// This is a Node Provisioning CC. Change it when that CC is implemented
 			assertZWaveError(
 				() =>
-					CommandClass.from(fakeDriver, {
+					CommandClass.from(host, {
 						data: Buffer.from("78030100", "hex"),
 						nodeId: 5,
 					}),
@@ -86,7 +77,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 
 		it("does not throw when the CC is implemented", () => {
 			expect(() =>
-				CommandClass.from(fakeDriver, {
+				CommandClass.from(host, {
 					// CRC-16 with BasicCC
 					data: Buffer.from("560120024d26", "hex"),
 					nodeId: 5,
@@ -96,8 +87,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 	});
 
 	describe("getImplementedVersion()", () => {
+		const host = createTestingHost();
+
 		it("should return the implemented version for a CommandClass instance", () => {
-			const cc = new BasicCC(fakeDriver, { nodeId: 1 });
+			const cc = new BasicCC(host, { nodeId: 1 });
 			expect(getImplementedVersion(cc)).toBe(2);
 		});
 
@@ -141,37 +134,65 @@ describe("lib/commandclass/CommandClass => ", () => {
 	});
 
 	describe("expectMoreMessages()", () => {
+		const host = createTestingHost();
+
 		it("returns false by default", () => {
-			const cc = new DummyCC(fakeDriver, { nodeId: 1 });
+			const cc = new DummyCC(host, { nodeId: 1 });
 			expect(cc.expectMoreMessages([])).toBeFalse();
 		});
 	});
 
 	describe("getExpectedCCResponse()", () => {
+		const host = createTestingHost();
+
 		it("returns the expected CC response like it was defined", () => {
-			const cc = new DummyCCSubClass2(fakeDriver, { nodeId: 1 });
+			const cc = new DummyCCSubClass2(host, { nodeId: 1 });
 			const actual = getExpectedCCResponse(cc);
 			expect(actual).toBe(DummyCCSubClass1);
 		});
 	});
 
 	describe("persistValues()", () => {
+		let driver: Driver;
+		let controller: MockController;
 		let node2: ZWaveNode;
 
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				loadConfiguration: false,
+				skipNodeInterview: true,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+		}, 30000);
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
 		beforeEach(() => {
-			node2 = new ZWaveNode(2, fakeDriver as any);
-			(fakeDriver.controller.nodes as any).set(2, node2);
+			node2 = new ZWaveNode(2, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node2.id,
+				node2,
+			);
 		});
 
 		afterEach(() => {
 			node2.destroy();
-			(fakeDriver.controller.nodes as any).delete(2);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).delete(
+				node2.id,
+			);
 		});
 
 		it(`should not update "interviewComplete" in the value DB`, () => {
 			// Repro for #383
-			const cc = new BasicCCSet(fakeDriver, {
-				nodeId: 2,
+			const cc = new BasicCCSet(driver, {
+				nodeId: node2.id,
 				targetValue: 55,
 			});
 			cc.interviewComplete = true;
@@ -187,8 +208,8 @@ describe("lib/commandclass/CommandClass => ", () => {
 		});
 
 		it(`should not store values marked as "events" (non-stateful)`, async () => {
-			const cc = new CentralSceneCCNotification(fakeDriver, {
-				nodeId: 2,
+			const cc = new CentralSceneCCNotification(driver, {
+				nodeId: node2.id,
 				data: Buffer.from([
 					CommandClasses["Central Scene"],
 					CentralSceneCommand.Notification,

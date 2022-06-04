@@ -15,9 +15,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -38,33 +40,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum MultilevelSensorCommand {
-	GetSupportedSensor = 0x01,
-	SupportedSensorReport = 0x02,
-	GetSupportedScale = 0x03,
-	Get = 0x04,
-	Report = 0x05,
-	SupportedScaleReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export interface MultilevelSensorValue {
-	value: number;
-	scale: Scale;
-}
-
-/**
- * @publicAPI
- */
-export type MultilevelSensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: number;
-		scale: number;
-	};
-};
+import { MultilevelSensorCommand, MultilevelSensorValue } from "./_Types";
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
@@ -210,6 +186,8 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		sensorType: number,
 		scale: number,
 	): Promise<number | undefined>;
+
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
@@ -286,6 +264,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.supportedSensorTypes;
 	}
 
+	@validateArgs()
 	public async getSupportedScales(
 		sensorType: number,
 	): Promise<readonly number[] | undefined> {
@@ -307,6 +286,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return response?.sensorSupportedScales;
 	}
 
+	@validateArgs()
 	public async sendReport(
 		sensorType: number,
 		scale: number | Scale,
@@ -333,14 +313,14 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -348,7 +328,7 @@ export class MultilevelSensorCC extends CommandClass {
 
 		if (this.version >= 5) {
 			// Query the supported sensor types
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported sensor types...",
 				direction: "outbound",
@@ -359,17 +339,17 @@ export class MultilevelSensorCC extends CommandClass {
 					"received supported sensor types:\n" +
 					sensorTypes
 						.map((t) =>
-							this.driver.configManager.getSensorTypeName(t),
+							this.host.configManager.getSensorTypeName(t),
 						)
 						.map((name) => `· ${name}`)
 						.join("\n");
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -381,9 +361,9 @@ export class MultilevelSensorCC extends CommandClass {
 			// As well as the supported scales for each sensor
 
 			for (const type of sensorTypes) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying supported scales for ${this.driver.configManager.getSensorTypeName(
+					message: `querying supported scales for ${this.host.configManager.getSensorTypeName(
 						type,
 					)} sensor`,
 					direction: "outbound",
@@ -395,20 +375,20 @@ export class MultilevelSensorCC extends CommandClass {
 						sensorScales
 							.map(
 								(s) =>
-									this.driver.configManager.lookupSensorScale(
+									this.host.configManager.lookupSensorScale(
 										type,
 										s,
 									).label,
 							)
 							.map((name) => `· ${name}`)
 							.join("\n");
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				} else {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Querying supported scales timed out, skipping interview...",
@@ -419,36 +399,36 @@ export class MultilevelSensorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Multilevel Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		if (this.version <= 4) {
 			// Sensors up to V4 only support a single value
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current sensor reading...",
 				direction: "outbound",
 			});
 			const mlsResponse = await api.get();
 			if (mlsResponse) {
-				const sensorScale = this.driver.configManager.lookupSensorScale(
+				const sensorScale = this.host.configManager.lookupSensorScale(
 					mlsResponse.type,
 					mlsResponse.scale.key,
 				);
 				const logMessage = `received current sensor reading:
-sensor type: ${this.driver.configManager.getSensorTypeName(mlsResponse.type)}
+sensor type: ${this.host.configManager.getSensorTypeName(mlsResponse.type)}
 value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -464,9 +444,9 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}) || [];
 
 			for (const type of sensorTypes) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `querying ${this.driver.configManager.getSensorTypeName(
+					message: `querying ${this.host.configManager.getSensorTypeName(
 						type,
 					)} sensor reading...`,
 					direction: "outbound",
@@ -474,12 +454,12 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				const value = await api.get(type);
 				if (value) {
-					const logMessage = `received current ${this.driver.configManager.getSensorTypeName(
+					const logMessage = `received current ${this.host.configManager.getSensorTypeName(
 						type,
 					)} sensor reading: ${value.value} ${
 						value.scale.unit || ""
 					}`;
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -495,8 +475,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 	): string | undefined {
 		// TODO: check this
 		if (property === "values" && typeof propertyKey === "number") {
-			const type =
-				this.driver.configManager.lookupSensorType(propertyKey);
+			const type = this.host.configManager.lookupSensorType(propertyKey);
 			if (type) return type.label;
 		}
 		return super.translatePropertyKey(property, propertyKey);
@@ -513,57 +492,68 @@ export interface MultilevelSensorCCReportOptions extends CCCommandOptions {
 @CCCommand(MultilevelSensorCommand.Report)
 export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.type = this.payload[0];
-			const sensorType = this.driver.configManager.lookupSensorType(
+			const sensorType = this.host.configManager.lookupSensorType(
 				this.type,
 			);
 			// parseFloatWithScale does its own validation
 			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 			this.value = value;
-			this.scale = this.driver.configManager.lookupSensorScale(
+			this.scale = this.host.configManager.lookupSensorScale(
 				this.type,
 				scale,
 			);
 
-			// Filter out unknown sensor types and scales
-			validatePayload.withReason(
-				`Unknown sensor type ${num2hex(this.type)} or corrupted data`,
-			)(!!sensorType);
-			validatePayload.withReason(
-				`Unknown scale ${num2hex(scale)} or corrupted data`,
-			)(this.scale.label !== getDefaultScale(scale).label);
+			// Filter out unknown sensor types and scales, unless the strict validation is disabled
+			const measurementValidation =
+				!this.getNodeUnsafe()?.deviceConfig?.compat
+					?.disableStrictMeasurementValidation;
 
-			// Filter out unsupported sensor types and scales if possible
-			if (this.version >= 5) {
-				const valueDB = this.getValueDB();
+			if (measurementValidation) {
+				validatePayload.withReason(
+					`Unknown sensor type ${num2hex(
+						this.type,
+					)} or corrupted data`,
+				)(!!sensorType);
+				validatePayload.withReason(
+					`Unknown scale ${num2hex(scale)} or corrupted data`,
+				)(this.scale.label !== getDefaultScale(scale).label);
 
-				const supportedSensorTypes = valueDB.getValue<number[]>(
-					getSupportedSensorTypesValueId(this.endpointIndex),
-				);
-				if (supportedSensorTypes?.length) {
-					validatePayload.withReason(
-						`Unsupported sensor type ${
-							sensorType!.label
-						} or corrupted data`,
-					)(supportedSensorTypes.includes(this.type));
-				}
+				// Filter out unsupported sensor types and scales if possible
+				if (this.version >= 5) {
+					const valueDB = this.getValueDB();
 
-				const supportedScales = valueDB.getValue<number[]>(
-					getSupportedScalesValueId(this.endpointIndex, this.type),
-				);
-				if (supportedScales?.length) {
-					validatePayload.withReason(
-						`Unsupported sensor type ${this.scale.label} or corrupted data`,
-					)(supportedScales.includes(this.scale.key));
+					const supportedSensorTypes = valueDB.getValue<number[]>(
+						getSupportedSensorTypesValueId(this.endpointIndex),
+					);
+					if (supportedSensorTypes?.length) {
+						validatePayload.withReason(
+							`Unsupported sensor type ${
+								sensorType!.label
+							} or corrupted data`,
+						)(supportedSensorTypes.includes(this.type));
+					}
+
+					const supportedScales = valueDB.getValue<number[]>(
+						getSupportedScalesValueId(
+							this.endpointIndex,
+							this.type,
+						),
+					);
+					if (supportedScales?.length) {
+						validatePayload.withReason(
+							`Unsupported sensor type ${this.scale.label} or corrupted data`,
+						)(supportedScales.includes(this.scale.key));
+					}
 				}
 			}
 
@@ -574,7 +564,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			this.scale =
 				options.scale instanceof Scale
 					? options.scale
-					: this.driver.configManager.lookupSensorScale(
+					: this.host.configManager.lookupSensorScale(
 							this.type,
 							options.scale,
 					  );
@@ -582,7 +572,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 
 	public persistValues(): boolean {
-		const typeName = this.driver.configManager.getSensorTypeName(this.type);
+		const typeName = this.host.configManager.getSensorTypeName(this.type);
 		const valueId: ValueID = {
 			commandClass: this.ccId,
 			endpoint: this.endpointIndex,
@@ -617,7 +607,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				type: this.driver.configManager.getSensorTypeName(this.type),
+				type: this.host.configManager.getSensorTypeName(this.type),
 				scale: this.scale.label,
 				value: this.value,
 			},
@@ -649,12 +639,12 @@ type MultilevelSensorCCGetOptions =
 )
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -694,10 +684,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 			this.scale != undefined
 		) {
 			message = {
-				"sensor type": this.driver.configManager.getSensorTypeName(
+				"sensor type": this.host.configManager.getSensorTypeName(
 					this.sensorType,
 				),
-				scale: this.driver.configManager.lookupSensorScale(
+				scale: this.host.configManager.lookupSensorScale(
 					this.sensorType,
 					this.scale,
 				).label,
@@ -713,10 +703,10 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
 export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this._supportedSensorTypes = parseBitMask(this.payload);
 		this.persistValues();
@@ -736,7 +726,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 				"supported sensor types": this.supportedSensorTypes
 					.map(
 						(t) =>
-							`\n· ${this.driver.configManager.getSensorTypeName(
+							`\n· ${this.host.configManager.getSensorTypeName(
 								t,
 							)}`,
 					)
@@ -753,10 +743,10 @@ export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {}
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		const sensorType = this.payload[0];
@@ -783,14 +773,14 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"sensor type": this.driver.configManager.getSensorTypeName(
+				"sensor type": this.host.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 				"supported scales": this.sensorSupportedScales
 					.map(
 						(s) =>
 							`\n· ${
-								this.driver.configManager.lookupSensorScale(
+								this.host.configManager.lookupSensorScale(
 									this.sensorType,
 									s,
 								).label
@@ -810,12 +800,12 @@ interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
 @expectedCCResponse(MultilevelSensorCCSupportedScaleReport)
 export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultilevelSensorCCGetSupportedScaleOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -838,7 +828,7 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"sensor type": this.driver.configManager.getSensorTypeName(
+				"sensor type": this.host.configManager.getSensorTypeName(
 					this.sensorType,
 				),
 			},

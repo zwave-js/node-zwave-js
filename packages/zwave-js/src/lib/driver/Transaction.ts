@@ -1,13 +1,13 @@
 import { highResTimestamp } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import {
 	Comparable,
 	compareNumberOrString,
 	CompareResult,
 } from "alcalzone-shared/comparable";
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 import type { Driver } from "./Driver";
 
 export interface MessageGenerator {

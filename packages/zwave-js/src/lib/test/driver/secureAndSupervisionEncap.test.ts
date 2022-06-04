@@ -27,6 +27,7 @@ describe("regression tests", () => {
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -36,7 +37,6 @@ describe("regression tests", () => {
 	});
 
 	it("secure encapsulation should be used when encapsulated command requires it", async () => {
-		jest.setTimeout(5000);
 		// Repro from Qubino's testing results:
 
 		// A command is sent to a node which supports Multilevel Switch only secure and Supervision is allowed non-securely
@@ -73,5 +73,5 @@ describe("regression tests", () => {
 
 		// The driver should send a secure command
 		expect(serialport.lastWrite?.[6]).toBe(0x98);
-	});
+	}, 5000);
 });

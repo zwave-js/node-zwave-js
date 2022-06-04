@@ -18,8 +18,6 @@
 			"#": "2",
 			"label": "Sensor mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -49,8 +47,6 @@
 			"#": "3",
 			"label": "Floor sensor type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -157,8 +153,6 @@
 			"label": "Temperature display",
 			"description": "Selects which temperature is shown on the display.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

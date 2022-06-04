@@ -1,16 +1,15 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	TimeCC,
 	TimeCCDateGet,
 	TimeCCDateReport,
 	TimeCCTimeGet,
 	TimeCCTimeReport,
-	TimeCommand,
 } from "./TimeCC";
+import { TimeCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -23,7 +22,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/TimeCC => ", () => {
 	it("the TimeGet command should serialize correctly", () => {
-		const cc = new TimeCCTimeGet(fakeDriver, { nodeId: 1 });
+		const cc = new TimeCCTimeGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				TimeCommand.TimeGet, // CC Command
@@ -41,7 +40,7 @@ describe("lib/commandclass/TimeCC => ", () => {
 				59,
 			]),
 		);
-		const cc = new TimeCCTimeReport(fakeDriver, {
+		const cc = new TimeCCTimeReport(host, {
 			nodeId: 8,
 			data: ccData,
 		});
@@ -52,7 +51,7 @@ describe("lib/commandclass/TimeCC => ", () => {
 	});
 
 	it("the DateGet command should serialize correctly", () => {
-		const cc = new TimeCCDateGet(fakeDriver, { nodeId: 1 });
+		const cc = new TimeCCDateGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				TimeCommand.DateGet, // CC Command
@@ -71,7 +70,7 @@ describe("lib/commandclass/TimeCC => ", () => {
 				17,
 			]),
 		);
-		const cc = new TimeCCDateReport(fakeDriver, {
+		const cc = new TimeCCDateReport(host, {
 			nodeId: 8,
 			data: ccData,
 		});
@@ -85,7 +84,7 @@ describe("lib/commandclass/TimeCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new TimeCC(fakeDriver, {
+		const cc: any = new TimeCC(host, {
 			nodeId: 8,
 			data: serializedCC,
 		});

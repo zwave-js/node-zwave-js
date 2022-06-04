@@ -1,4 +1,4 @@
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared/safe";
 
 /**
  * @publicAPI
@@ -128,9 +128,6 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
-
-	// Used to designate values that don't belong to any CC
-	"_NONE" = -1,
 }
 
 export function getCCName(cc: number): string {
@@ -254,6 +251,47 @@ export const applicationCCs: readonly CommandClasses[] = [
 	CommandClasses["Thermostat Setpoint"],
 	CommandClasses["User Code"],
 	CommandClasses["Window Covering"],
+];
+
+/**
+ * Defines which CCs are considered Encapsulation CCs
+ */
+export const encapsulationCCs: readonly CommandClasses[] = [
+	CommandClasses["CRC-16 Encapsulation"],
+	CommandClasses["Multi Channel"],
+	CommandClasses["Multi Command"],
+	CommandClasses.Security,
+	CommandClasses["Security 2"],
+	CommandClasses["Transport Service"],
+];
+
+/**
+ * Defines which CCs are considered Management CCs
+ */
+export const managementCCs: readonly CommandClasses[] = [
+	CommandClasses["Application Capability"],
+	CommandClasses["Application Status"],
+	CommandClasses.Association,
+	CommandClasses["Association Command Configuration"],
+	CommandClasses["Association Group Information"],
+	// Battery is in the Management CC specs, but we consider it a Sensor CC
+	CommandClasses["Device Reset Locally"],
+	CommandClasses["Firmware Update Meta Data"],
+	CommandClasses["Grouping Name"],
+	CommandClasses.Hail,
+	CommandClasses.Indicator,
+	CommandClasses["IP Association"],
+	CommandClasses["Manufacturer Specific"],
+	CommandClasses["Multi Channel Association"],
+	CommandClasses["Node Naming and Location"],
+	CommandClasses["Remote Association Activation"],
+	CommandClasses["Remote Association Configuration"],
+	CommandClasses.Time,
+	CommandClasses["Time Parameters"],
+	CommandClasses.Version,
+	CommandClasses["Wake Up"],
+	CommandClasses["Z/IP Naming and Location"],
+	CommandClasses["Z-Wave Plus Info"],
 ];
 
 /**

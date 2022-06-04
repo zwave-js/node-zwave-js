@@ -1,16 +1,14 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
-	Powerlevel,
 	PowerlevelCC,
 	PowerlevelCCGet,
 	PowerlevelCCReport,
 	PowerlevelCCSet,
-	PowerlevelCommand,
 } from "./PowerlevelCC";
+import { Powerlevel, PowerlevelCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -23,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/PowerlevelCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const cc = new PowerlevelCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new PowerlevelCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				PowerlevelCommand.Get, // CC Command
@@ -33,7 +31,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	});
 
 	it("the Set NormalPower command should serialize correctly", () => {
-		const cc = new PowerlevelCCSet(fakeDriver, {
+		const cc = new PowerlevelCCSet(host, {
 			nodeId: 2,
 			powerlevel: Powerlevel["Normal Power"],
 		});
@@ -48,7 +46,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	});
 
 	it("the Set NormalPower command with timeout should serialize correctly", () => {
-		const cc = new PowerlevelCCSet(fakeDriver, {
+		const cc = new PowerlevelCCSet(host, {
 			nodeId: 2,
 			powerlevel: Powerlevel["Normal Power"],
 			timeout: 50,
@@ -64,7 +62,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 	});
 
 	it("the Set Custom power command should serialize correctly", () => {
-		const cc = new PowerlevelCCSet(fakeDriver, {
+		const cc = new PowerlevelCCSet(host, {
 			nodeId: 2,
 			powerlevel: Powerlevel["-1 dBm"],
 			timeout: 50,
@@ -87,7 +85,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 				50, // timeout (ignored because NormalPower)
 			]),
 		);
-		const cc = new PowerlevelCCReport(fakeDriver, {
+		const cc = new PowerlevelCCReport(host, {
 			nodeId: 5,
 			data: ccData,
 		});
@@ -104,7 +102,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 				50, // timeout (ignored because NormalPower)
 			]),
 		);
-		const cc = new PowerlevelCCReport(fakeDriver, {
+		const cc = new PowerlevelCCReport(host, {
 			nodeId: 5,
 			data: ccData,
 		});
@@ -117,7 +115,7 @@ describe("lib/commandclass/PowerlevelCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new PowerlevelCC(fakeDriver, {
+		const cc: any = new PowerlevelCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

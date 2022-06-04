@@ -9,9 +9,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -30,43 +32,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum BinarySensorCommand {
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x01,
-	SupportedReport = 0x04,
-}
-
-/**
- * @publicAPI
- */
-export enum BinarySensorType {
-	"General Purpose" = 0x01,
-	Smoke = 0x02,
-	CO = 0x03,
-	CO2 = 0x04,
-	Heat = 0x05,
-	Water = 0x06,
-	Freeze = 0x07,
-	Tamper = 0x08,
-	Aux = 0x09,
-	"Door/Window" = 0x0a,
-	Tilt = 0x0b,
-	Motion = 0x0c,
-	"Glass Break" = 0x0d,
-	Any = 0xff,
-}
-
-/**
- * @publicAPI
- */
-export type BinarySensorValueMetadata = ValueMetadata & {
-	ccSpecific: {
-		sensorType: BinarySensorType;
-	};
-};
+import { BinarySensorCommand, BinarySensorType } from "./_Types";
 
 export function getBinarySensorValueId(
 	endpointIndex: number | undefined,
@@ -117,6 +83,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
+	@validateArgs({ strictEnums: true })
 	public async get(
 		sensorType?: BinarySensorType,
 	): Promise<boolean | undefined> {
@@ -164,14 +131,14 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -179,7 +146,7 @@ export class BinarySensorCC extends CommandClass {
 
 		// Find out which sensor types this sensor supports
 		if (this.version >= 2) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported sensor types...",
 				direction: "outbound",
@@ -190,13 +157,13 @@ export class BinarySensorCC extends CommandClass {
 					.map((type) => getEnumMemberName(BinarySensorType, type))
 					.map((name) => `\n· ${name}`)
 					.join("")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -206,29 +173,29 @@ export class BinarySensorCC extends CommandClass {
 			}
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Binary Sensor"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying current value...",
 				direction: "outbound",
 			});
 			const currentValue = await api.get();
 			if (currentValue != undefined) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `received current value: ${currentValue}`,
 					direction: "inbound",
@@ -242,14 +209,14 @@ export class BinarySensorCC extends CommandClass {
 
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying current value for ${sensorName}...`,
 					direction: "outbound",
 				});
 				const currentValue = await api.get(type);
 				if (currentValue != undefined) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `received current value for ${sensorName}: ${currentValue}`,
 						direction: "inbound",
@@ -271,10 +238,10 @@ export class BinarySensorCC extends CommandClass {
 @CCCommand(BinarySensorCommand.Report)
 export class BinarySensorCCReport extends BinarySensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._value = this.payload[0] === 0xff;
@@ -340,10 +307,10 @@ interface BinarySensorCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySensorCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -379,10 +346,10 @@ export class BinarySensorCCGet extends BinarySensorCC {
 @CCCommand(BinarySensorCommand.SupportedReport)
 export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		// The enumeration starts at 1, but the first (reserved) bit is included

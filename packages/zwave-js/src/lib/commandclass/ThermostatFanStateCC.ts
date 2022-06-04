@@ -7,9 +7,10 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -27,24 +28,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatFanStateCommand {
-	Get = 0x02,
-	Report = 0x03,
-}
-
-export enum ThermostatFanState {
-	"Idle / off" = 0x00,
-	"Running / running low" = 0x01,
-	"Running high" = 0x02,
-	"Running medium" = 0x03,
-	"Circulation mode" = 0x04,
-	"Humidity circulation mode" = 0x05,
-	"Right - left circulation mode" = 0x06,
-	"Up - down circulation mode" = 0x07,
-	"Quiet circulation mode" = 0x08,
-}
+import { ThermostatFanState, ThermostatFanStateCommand } from "./_Types";
 
 @API(CommandClasses["Thermostat Fan State"])
 export class ThermostatFanStateCCAPI extends CCAPI {
@@ -95,24 +79,24 @@ export class ThermostatFanStateCCAPI extends CCAPI {
 export class ThermostatFanStateCC extends CommandClass {
 	declare ccCommand: ThermostatFanStateCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Fan State"].withOptions(
 			{
 				priority: MessagePriority.NodeQuery,
@@ -120,14 +104,14 @@ export class ThermostatFanStateCC extends CommandClass {
 		);
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat fan state...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current thermostat fan state: " +
@@ -141,10 +125,10 @@ export class ThermostatFanStateCC extends CommandClass {
 @CCCommand(ThermostatFanStateCommand.Report)
 export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length == 1);
 		this._state = this.payload[0] & 0b1111;

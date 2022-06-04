@@ -150,14 +150,6 @@ getAllEndpoints(): Endpoint[]
 
 This method returns an array of all endpoints on this node. At each index `i` the returned array contains the endpoint instance that would be returned by `getEndpoint(i)`.
 
-### `isControllerNode`
-
-```ts
-isControllerNode(): boolean
-```
-
-This is a little utility function to check if this node is the controller.
-
 ### `hasSecurityClass`
 
 ```ts
@@ -583,6 +575,14 @@ This property tracks the status a node in the network currently has (or is belie
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
 
+### `isControllerNode`
+
+```ts
+readonly isControllerNode: boolean
+```
+
+Returns whether this node is the controller node, i.e. has the ID of the primary controller.
+
 ### `interviewStage`
 
 ```ts
@@ -594,30 +594,27 @@ This property tracks the current status of the node interview. It contains a val
 <!-- #import InterviewStage from "zwave-js" -->
 
 ```ts
-enum InterviewStage {
+declare enum InterviewStage {
 	/** The interview process hasn't started for this node */
-	None,
+	None = 0,
 	/** The node's protocol information has been queried from the controller */
-	ProtocolInfo,
+	ProtocolInfo = 1,
 	/** The node has been queried for supported and controlled command classes */
-	NodeInfo,
-
+	NodeInfo = 2,
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
-	CommandClasses,
-
+	CommandClasses = 3,
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
-	OverwriteConfig,
-
+	OverwriteConfig = 4,
 	/** The interview process has finished */
-	Complete,
+	Complete = 5,
 }
 ```
 
@@ -828,6 +825,14 @@ declare enum ProtocolVersion {
 	"4.5x / 6.0x" = 3,
 }
 ```
+
+### `sdkVersion`
+
+```ts
+readonly sdkVersion: string
+```
+
+The version of the Z-Wave SDK this node's firmware is built with.
 
 ### `firmwareVersion`
 
@@ -1073,6 +1078,35 @@ interface ZWaveNotificationCallbackArgs_EntryControlCC {
 }
 ```
 
+#### `Multilevel Switch CC`
+
+uses the following signature
+
+<!-- #import ZWaveNotificationCallbackParams_MultilevelSwitchCC from "zwave-js" -->
+
+```ts
+type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
+	ccId: typeof CommandClasses["Multilevel Switch"],
+	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
+];
+```
+
+where the argument object has the type
+
+<!-- #import ZWaveNotificationCallbackArgs_MultilevelSwitchCC from "zwave-js" -->
+
+```ts
+interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+	/** The numeric identifier for the event type */
+	eventType:
+		| MultilevelSwitchCommand.StartLevelChange
+		| MultilevelSwitchCommand.StopLevelChange;
+	/** The direction of the level change */
+	direction?: string;
+}
+```
+
 #### `Notification CC`
 
 uses the following signature
@@ -1169,5 +1203,47 @@ interface NodeStatistics {
 	commandsDroppedTX: number;
 	/** No. of Get-type commands where the node's response did not come in time */
 	timeoutResponse: number;
+
+	/**
+	 * Average round-trip-time in ms of commands to this node.
+	 * Consecutive measurements are combined using an exponential moving average.
+	 */
+	rtt?: number;
+
+	/**
+	 * Average RSSI of frames received by this node in dBm.
+	 * Consecutive non-error measurements are combined using an exponential moving average.
+	 */
+	rssi?: RSSI;
+
+	/** The last working route from the controller to this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route from the controller to this node. */
+	nlwr?: RouteStatistics;
+}
+```
+
+<!-- #import RouteStatistics from "zwave-js" -->
+
+```ts
+interface RouteStatistics {
+	/** The protocol and used data rate for this route */
+	protocolDataRate: ProtocolDataRate;
+	/** Which nodes are repeaters for this route */
+	repeaters: number[];
+
+	/** The RSSI of the ACK frame received by the controller */
+	rssi?: RSSI;
+	/**
+	 * The RSSI of the ACK frame received by each repeater.
+	 * If this is set, it has the same length as the repeaters array.
+	 */
+	repeaterRSSI?: RSSI[];
+
+	/**
+	 * The node IDs of the nodes between which the transmission failed most recently.
+	 * Is only set if there recently was a transmission failure.
+	 */
+	routeFailedBetween?: [number, number];
 }
 ```

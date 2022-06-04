@@ -85,6 +85,9 @@ export class Duration {
 	/**
 	 * Takes a user-friendly duration string or a Duration instance and returns a Duration instance (if one was given)
 	 */
+	public static from(input: "default"): Duration;
+	public static from(input?: Duration | string): Duration | undefined;
+
 	public static from(input?: Duration | string): Duration | undefined {
 		if (input instanceof Duration) {
 			return input;

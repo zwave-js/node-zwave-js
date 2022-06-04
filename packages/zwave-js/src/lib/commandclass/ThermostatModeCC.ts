@@ -13,9 +13,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -38,37 +40,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatModeCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-}
-
-/**
- * @publicAPI
- */
-export enum ThermostatMode {
-	"Off" = 0x00,
-	"Heat" = 0x01,
-	"Cool" = 0x02,
-	"Auto" = 0x03,
-	"Auxiliary" = 0x04,
-	"Resume (on)" = 0x05,
-	"Fan" = 0x06,
-	"Furnace" = 0x07,
-	"Dry" = 0x08,
-	"Moist" = 0x09,
-	"Auto changeover" = 0x0a,
-	"Energy heat" = 0x0b,
-	"Energy cool" = 0x0c,
-	"Away" = 0x0d,
-	"Full power" = 0x0f,
-	"Manufacturer specific" = 0x1f,
-}
+import { ThermostatMode, ThermostatModeCommand } from "./_Types";
 
 export function getThermostatModeValueId(endpointIndex: number): ValueID {
 	return {
@@ -115,7 +87,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
 			// aren't able to handle the GET this quickly.
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		}
 	};
 
@@ -162,6 +134,7 @@ export class ThermostatModeCCAPI extends CCAPI {
 		manufacturerData: Buffer,
 	): Promise<void>;
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		mode: ThermostatMode,
 		manufacturerData?: Buffer,
@@ -206,21 +179,21 @@ export class ThermostatModeCCAPI extends CCAPI {
 export class ThermostatModeCC extends CommandClass {
 	declare ccCommand: ThermostatModeCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First query the possible modes to set the metadata
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported thermostat modes...",
 			direction: "outbound",
@@ -231,13 +204,13 @@ export class ThermostatModeCC extends CommandClass {
 			const logMessage = `received supported thermostat modes:${supportedModes
 				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported thermostat modes timed out, skipping interview...",
@@ -246,28 +219,28 @@ export class ThermostatModeCC extends CommandClass {
 			return;
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Mode"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current thermostat mode...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current thermostat mode: " +
@@ -295,12 +268,12 @@ type ThermostatModeCCSetOptions = CCCommandOptions &
 @CCCommand(ThermostatModeCommand.Set)
 export class ThermostatModeCCSet extends ThermostatModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatModeCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -351,10 +324,10 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 @CCCommand(ThermostatModeCommand.Report)
 export class ThermostatModeCCReport extends ThermostatModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._mode = this.payload[0] & 0b11111;
@@ -444,10 +417,10 @@ export class ThermostatModeCCGet extends ThermostatModeCC {}
 @CCCommand(ThermostatModeCommand.SupportedReport)
 export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		this._supportedModes = parseBitMask(this.payload, ThermostatMode.Off);
 
 		// Use this information to create the metadata for the mode property

@@ -48,8 +48,6 @@
 			"#": "4",
 			"label": "Motion Detection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"allowManualEntry": false,

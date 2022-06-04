@@ -16,7 +16,7 @@ function getMessageLength(data: Buffer): number {
 }
 
 export class SerialAPIParser extends Transform {
-	constructor(private logger: SerialLogger) {
+	constructor(private logger?: SerialLogger) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
 	}
@@ -32,31 +32,49 @@ export class SerialAPIParser extends Transform {
 
 		while (this.receiveBuffer.length > 0) {
 			if (this.receiveBuffer[0] !== MessageHeaders.SOF) {
+				let skip = 1;
+
 				switch (this.receiveBuffer[0]) {
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
-						this.logger.ACK("inbound");
+						this.logger?.ACK("inbound");
 						this.push(MessageHeaders.ACK);
 						break;
 					}
 					case MessageHeaders.NAK: {
-						this.logger.NAK("inbound");
+						this.logger?.NAK("inbound");
 						this.push(MessageHeaders.NAK);
 						break;
 					}
 					case MessageHeaders.CAN: {
-						this.logger.CAN("inbound");
+						this.logger?.CAN("inbound");
 						this.push(MessageHeaders.CAN);
 						break;
 					}
 					default: {
 						// INS12350: A host or a Z-Wave chip waiting for new traffic MUST ignore all other
 						// byte values than 0x06 (ACK), 0x15 (NAK), 0x18 (CAN) or 0x01 (Data frame).
-						// Just skip this byte
+
+						// Scan ahead until the next valid byte and log the invalid bytes
+						while (skip < this.receiveBuffer.length) {
+							const byte = this.receiveBuffer[skip];
+							if (
+								byte === MessageHeaders.SOF ||
+								byte === MessageHeaders.ACK ||
+								byte === MessageHeaders.NAK ||
+								byte === MessageHeaders.CAN
+							) {
+								// Next byte is valid, keep it
+								break;
+							}
+							skip++;
+						}
+						const discarded = this.receiveBuffer.slice(0, skip);
+						this.logger?.discarded(discarded);
 					}
 				}
-				// Continue with the next byte
-				this.receiveBuffer = skipBytes(this.receiveBuffer, 1);
+				// Continue with the next valid byte
+				this.receiveBuffer = skipBytes(this.receiveBuffer, skip);
 				continue;
 			}
 
@@ -70,7 +88,7 @@ export class SerialAPIParser extends Transform {
 				const msg = this.receiveBuffer.slice(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
 
-				this.logger.data("inbound", msg);
+				this.logger?.data("inbound", msg);
 				this.push(msg);
 			}
 		}

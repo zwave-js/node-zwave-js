@@ -1,7 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	CentralSceneCC,
 	CentralSceneCCConfigurationGet,
@@ -10,9 +8,10 @@ import {
 	CentralSceneCCNotification,
 	CentralSceneCCSupportedGet,
 	CentralSceneCCSupportedReport,
-	CentralSceneCommand,
-	CentralSceneKeys,
 } from "./CentralSceneCC";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
+
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,21 +23,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/CentralSceneCC => ", () => {
-	let fakeDriver: Driver;
-	let node1: ZWaveNode;
-
-	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-		node1 = new ZWaveNode(1, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(node1.id, node1);
-	});
-
-	afterAll(() => {
-		node1.destroy();
-	});
-
 	it("the ConfigurationGet command should serialize correctly", () => {
-		const cc = new CentralSceneCCConfigurationGet(fakeDriver, {
+		const cc = new CentralSceneCCConfigurationGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -50,7 +36,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 	});
 
 	it("the ConfigurationSet command should serialize correctly (flags set)", () => {
-		const cc = new CentralSceneCCConfigurationSet(fakeDriver, {
+		const cc = new CentralSceneCCConfigurationSet(host, {
 			nodeId: 2,
 			slowRefresh: true,
 		});
@@ -64,7 +50,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 	});
 
 	it("the ConfigurationSet command should serialize correctly (flags not set)", () => {
-		const cc = new CentralSceneCCConfigurationSet(fakeDriver, {
+		const cc = new CentralSceneCCConfigurationSet(host, {
 			nodeId: 2,
 			slowRefresh: false,
 		});
@@ -84,7 +70,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 				0b1000_0000,
 			]),
 		);
-		const cc = new CentralSceneCCConfigurationReport(fakeDriver, {
+		const cc = new CentralSceneCCConfigurationReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -93,7 +79,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 	});
 
 	it("the SupportedGet command should serialize correctly", () => {
-		const cc = new CentralSceneCCSupportedGet(fakeDriver, {
+		const cc = new CentralSceneCCSupportedGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -116,7 +102,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 				0,
 			]),
 		);
-		const cc = new CentralSceneCCSupportedReport(fakeDriver, {
+		const cc = new CentralSceneCCSupportedReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -138,7 +124,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 				8, // scene number
 			]),
 		);
-		const cc = new CentralSceneCCNotification(fakeDriver, {
+		const cc = new CentralSceneCCNotification(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -159,7 +145,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 				8, // scene number
 			]),
 		);
-		const cc = new CentralSceneCCNotification(fakeDriver, {
+		const cc = new CentralSceneCCNotification(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -174,7 +160,7 @@ describe("lib/commandclass/CentralSceneCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new CentralSceneCC(fakeDriver, {
+		const cc: any = new CentralSceneCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

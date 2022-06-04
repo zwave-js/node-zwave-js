@@ -1,0 +1,24 @@
+// tsconfig for building - only applies to the src directory
+{
+	"extends": "./tsconfig.json",
+	"compilerOptions": {
+		"composite": false,
+		"rootDir": "test/fixtures",
+		"outDir": "test/fixtures",
+		"declaration": false,
+		"declarationMap": false,
+		"sourceMap": false,
+		"plugins": [{ "transform": "./build" }],
+		"incremental": false,
+		"experimentalDecorators": true
+	},
+	"references": [
+		{
+			"path": "../maintenance/tsconfig.build.json"
+		},
+		{
+			"path": "./tsconfig.build.json"
+		}
+	],
+	"include": ["test/fixtures/**/*.ts"]
+}

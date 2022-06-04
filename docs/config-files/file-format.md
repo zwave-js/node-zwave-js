@@ -356,6 +356,12 @@ By default, received `Basic CC::Report` commands are mapped to a more appropriat
 
 The specifications mandate strict rules for the data and sequence numbers in `Entry Control CC Notifications`, which some devices do not follow, causing the notifications to get dropped. Setting `disableStrictEntryControlDataValidation` to `true` disables these strict checks.
 
+### `disableStrictMeasurementValidation`
+
+Without the additional integrity checks that encapsulation CCs like `CRC-16`, `Security S0` or `Security S2` provide, multilevel sensors and meters are prone to report and accumulate nonsensical measurements over time due to partially corrupted radio frames. For devices which report their supported meter or sensor types and scales, Z-Wave JS checks that the reported measurements belong to a supported meter or sensor type and/or scale. Invalid measurements are dropped.
+
+Some devices incorrectly encode this support information though, making the checks discard otherwise correct data. To disable the checks, set `disableStrictMeasurementValidation` to `true`.
+
 ### `enableBasicSetMapping`
 
 `Basic CC::Set` commands are not meant to be mapped to other CCs. Some devices still use them to report status. By setting `enableBasicSetMapping` to `true`, `Basic CC::Set` commands are mapped just like `Basic CC::Report`s.
@@ -391,16 +397,24 @@ Many devices unnecessarily use endpoints when they could (or do) provide all fun
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
 
+### `skipConfigurationNameQuery`
+
+Some devices spam the network with lots of `ConfigurationCC::NameReport`s in response to the `NameGet` command. Set this flag to `true` to skip this query for affected devices.
+
 ### `skipConfigurationInfoQuery`
 
-Some devices spam the network with hundreds of invalid `ConfigurationCC::InfoReport`s when one is requested. Set this flag to `true` to skip this query for affected devices.
+Some devices spam the network with lots of (sometimes invalid) `ConfigurationCC::InfoReport`s in response to the `InfoGet` command. Set this flag to `true` to skip this query for affected devices.
 
 ### `treatBasicSetAsEvent`
 
-By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"value"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
+By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"event"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
 
 > [!NOTE]
 > If this option is `true`, it has precedence over `disableBasicMapping`.
+
+### `treatMultilevelSwitchSetAsEvent`
+
+By default, `Multilevel Switch CC::Set` commands are ignored, because they are meant to control end devices. This flag causes the driver to emit a `value event` for the `"event"` property instead, so applications can react to these commands, e.g. for remotes.
 
 ### `treatDestinationEndpointAsSource`
 

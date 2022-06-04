@@ -36,8 +36,6 @@
 			"label": "LED Behavior",
 			"description": "defines the behavior of the blue LED",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -56,8 +54,6 @@
 			"label": "Memory function",
 			"description": "Memory function behaviour control.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

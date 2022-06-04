@@ -19,8 +19,6 @@
 			"label": "mode",
 			"description": "operating mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "2",
 			"label": "Summer/Winter mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 50,
 			"defaultValue": 50,
 			"allowManualEntry": false,
 			"options": [

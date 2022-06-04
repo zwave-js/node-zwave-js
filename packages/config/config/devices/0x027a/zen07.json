@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Send Metering Report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -69,8 +67,6 @@
 			"label": "LED Notifications",
 			"description": "Use this parameter to turn LED notifications on or off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -103,8 +99,6 @@
 			"label": "Auto Turn-Off Timer Enable",
 			"description": ": Use this parameter to enable or disable the auto turn-off timer function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -134,8 +128,6 @@
 			"label": "Manual Control",
 			"description": "Turn the Mini Plug with button",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

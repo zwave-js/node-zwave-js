@@ -28,28 +28,7 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"label": "Locator LED Status",
-			"description": "Controls state of on-device LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED always off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is on",
-					"value": 254
-				},
-				{
-					"label": "LED on when switch is off",
-					"value": 255
-				}
-			]
+			"$import": "templates/config_template.json#locator_led"
 		}
 	]
 }

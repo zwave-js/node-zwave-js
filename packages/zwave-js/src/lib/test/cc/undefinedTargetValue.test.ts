@@ -1,44 +1,52 @@
 import { CommandClasses, ValueID } from "@zwave-js/core";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import {
 	BinarySwitchCC,
 	BinarySwitchCCReport,
-	BinarySwitchCommand,
 } from "../../commandclass/BinarySwitchCC";
 import {
 	CommandClass,
 	getCommandClassStatic,
 } from "../../commandclass/CommandClass";
+import { BinarySwitchCommand } from "../../commandclass/_Types";
 import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
 
 describe("regression tests", () => {
 	let driver: Driver;
+	let node2: ZWaveNode;
+	let controller: MockController;
 
-	beforeEach(async () => {
-		({ driver } = await createAndStartDriver());
+	beforeAll(async () => {
+		({ driver } = await createAndStartTestingDriver({
+			skipNodeInterview: true,
+			beforeStartup(mockPort) {
+				controller = new MockController({ serial: mockPort });
+				controller.defineBehavior(
+					...createDefaultMockControllerBehaviors(),
+				);
+			},
+		}));
+		node2 = new ZWaveNode(2, driver);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			node2.id,
+			node2,
+		);
 
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: () => true,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-		} as any;
-	});
-
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
-
-	it("receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue", async () => {
-		const node2 = new ZWaveNode(2, driver);
 		node2.addCC(CommandClasses["Binary Switch"], {
 			isSupported: true,
 			version: 2,
 		});
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+	}, 30000);
 
+	afterAll(async () => {
+		await driver.destroy();
+	});
+
+	it("receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue", async () => {
 		const targetValueValueID: ValueID = {
 			commandClass: CommandClasses["Binary Switch"],
 			property: "targetValue",

@@ -32,8 +32,6 @@
 			"label": "Power-on state",
 			"description": "The bulb's state after power is applied",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -55,8 +53,6 @@
 			"#": "32",
 			"label": "Send report when color is changed",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +79,6 @@
 			"#": "34",
 			"label": "Allow external switch to turn the bulb on/off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -102,8 +96,6 @@
 			"#": "35",
 			"label": "Allow external switch to change the color",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -121,8 +113,6 @@
 			"#": "36",
 			"label": "Reboot / Save / Exit colorful mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -175,8 +165,6 @@
 			"#": "80",
 			"label": "Send notifications to associated devices (Group 1)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -198,8 +186,6 @@
 			"#": "112",
 			"label": "Dimer mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -239,8 +225,6 @@
 			"#": "252",
 			"label": "Enable/disable Lock Configuration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import { ConfigManager, externalConfigDir } from "@zwave-js/config";
 import {
 	CommandClasses,
+	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
@@ -17,13 +18,23 @@ import {
 	serializeCacheValue,
 	SPANState,
 	timespan,
+	ValueDB,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
+	FunctionType,
+	getDefaultPriority,
+	INodeQuery,
+	isNodeQuery,
+	isSuccessIndicator,
+	Message,
 	MessageHeaders,
+	MessagePriority,
+	MessageType,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
 	ZWaveSocket,
@@ -35,7 +46,8 @@ import {
 	mergeDeep,
 	num2hex,
 	pick,
-	stringify,
+	ReadonlyThrowingMap,
+	ThrowingMap,
 	TypedEventEmitter,
 } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -48,7 +60,7 @@ import { randomBytes } from "crypto";
 import type { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
-import SerialPort from "serialport";
+import { SerialPort } from "serialport";
 import { URL } from "url";
 import * as util from "util";
 import { interpret } from "xstate";
@@ -56,6 +68,7 @@ import {
 	FirmwareUpdateStatus,
 	Security2CC,
 	Security2CCNonceReport,
+	SupervisionResult,
 } from "../commandclass";
 import {
 	assertValidCCs,
@@ -83,8 +96,6 @@ import {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	SupervisionResult,
-	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
 import {
 	isTransportServiceEncapsulation,
@@ -99,26 +110,36 @@ import {
 	getWakeUpIntervalValueId,
 	WakeUpCCNoMoreInformation,
 } from "../commandclass/WakeUpCC";
-import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import { SupervisionStatus } from "../commandclass/_Types";
+import { ZWaveController } from "../controller/Controller";
+import {
+	InclusionState,
+	ProvisioningEntryStatus,
+} from "../controller/Inclusion";
+import { TransmitOptions, TXReport } from "../controller/_Types";
+import { DriverLogger } from "../log/Driver";
+import type { ZWaveNode } from "../node/Node";
+import { InterviewStage, NodeStatus } from "../node/_Types";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestSmartStartHomeIDReceived,
-} from "../controller/ApplicationUpdateRequest";
-import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
-import { ZWaveController } from "../controller/Controller";
-import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
-import { InclusionState } from "../controller/Inclusion";
+} from "../serialapi/application/ApplicationUpdateRequest";
+import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
+import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
+import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
+import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
 	SendDataBridgeRequest,
 	SendDataMulticastBridgeRequest,
-} from "../controller/SendDataBridgeMessages";
+} from "../serialapi/transport/SendDataBridgeMessages";
 import {
 	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
-} from "../controller/SendDataMessages";
+} from "../serialapi/transport/SendDataMessages";
 import {
 	hasTXReport,
 	isSendData,
@@ -126,30 +147,21 @@ import {
 	isSendDataTransmitReport,
 	isTransmitReport,
 	SendDataMessage,
-	TransmitOptions,
-	TXReport,
-} from "../controller/SendDataShared";
-import { SoftResetRequest } from "../controller/SoftResetRequest";
-import { ControllerLogger } from "../log/Controller";
-import { DriverLogger } from "../log/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import { getDefaultPriority, Message } from "../message/Message";
-import { isSuccessIndicator } from "../message/SuccessIndicator";
-import { INodeQuery, isNodeQuery } from "../node/INodeQuery";
-import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
-import type { SerialAPIStartedRequest } from "../serialapi/misc/SerialAPIStartedRequest";
+} from "../serialapi/transport/SendDataShared";
 import { reportMissingDeviceConfig } from "../telemetry/deviceConfig";
+import { initSentry } from "../telemetry/sentry";
 import {
 	AppInfo,
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
 import { createMessageGenerator } from "./MessageGenerators";
+import {
+	cacheKeys,
+	deserializeNetworkCacheValue,
+	migrateLegacyNetworkCache,
+	serializeNetworkCacheValue,
+} from "./NetworkCache";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
@@ -173,7 +185,8 @@ const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require(packageJsonPath);
 const libraryRootDir = path.dirname(packageJsonPath);
-const libVersion: string = packageJson.version;
+export const libVersion: string = packageJson.version;
+export const libName: string = packageJson.name;
 
 // This is made with cfonts:
 const libNameString = `
@@ -189,8 +202,8 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		response: 1600,
-		report: 10000,
+		response: 10000,
+		report: 1000, // ReportTime timeout SHOULD be set to CommandTime + 1 second
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		refreshValue: 5000, // Default should handle most slow devices until we have a better solution
@@ -208,7 +221,6 @@ const defaultOptions: ZWaveOptions = {
 	// By default enable soft reset unless the env variable is set
 	enableSoftReset: !process.env.ZWAVEJS_DISABLE_SOFT_RESET,
 	interview: {
-		skipInterview: false,
 		queryAllUserCodes: false,
 	},
 	storage: {
@@ -238,15 +250,15 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.response < 500 || options.timeouts.response > 5000) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 20000) {
 		throw new ZWaveError(
-			`The Response timeout must be between 500 and 5000 milliseconds!`,
+			`The Response timeout must be between 500 and 20000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.report < 1000 || options.timeouts.report > 40000) {
+	if (options.timeouts.report < 500 || options.timeouts.report > 10000) {
 		throw new ZWaveError(
-			`The Report timeout must be between 1000 and 40000 milliseconds!`,
+			`The Report timeout must be between 500 and 10000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -436,7 +448,10 @@ export type DriverEvents = Extract<keyof DriverEventCallbacks, string>;
  * Any action you want to perform on the Z-Wave network must go through a driver
  * instance or its associated nodes.
  */
-export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
+export class Driver
+	extends TypedEventEmitter<DriverEventCallbacks>
+	implements ZWaveHost
+{
 	public constructor(
 		private port: string,
 		options?: DeepPartial<ZWaveOptions>,
@@ -455,8 +470,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 		// Initialize the cache
 		this.cacheDir = this.options.storage.cacheDir;
-
-		// TODO: Load provisioning list
 
 		// Initialize config manager
 		this.configManager = new ConfigManager({
@@ -605,6 +618,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		// 	}
 		// });
 	}
+
 	/** The serial port instance */
 	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
@@ -640,6 +654,17 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** @internal */
 	public get metadataDB(): JsonlDB<ValueMetadata> | undefined {
 		return this._metadataDB;
+	}
+	private _networkCache: JsonlDB<any> | undefined;
+	/** @internal */
+	public get networkCache(): JsonlDB<any> {
+		if (this._networkCache == undefined) {
+			throw new ZWaveError(
+				"The network cache was not yet initialized!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+		return this._networkCache;
 	}
 
 	public readonly configManager: ConfigManager;
@@ -688,6 +713,31 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._securityManager2;
 	}
 
+	/** @internal This is needed for the ZWaveHost interface */
+	public get homeId(): number {
+		return this.controller.homeId!;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public get ownNodeId(): number {
+		return this.controller.ownNodeId!;
+	}
+
+	/** @internal This is needed for the ZWaveHost interface */
+	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
+		return this.controller.nodes;
+	}
+
+	public getNodeUnsafe(msg: Message): ZWaveNode | undefined {
+		const nodeId = msg.getNodeId();
+		if (nodeId != undefined) return this.controller.nodes.get(nodeId);
+	}
+
+	public getValueDB(nodeId: number): ValueDB {
+		const node = this.controller.nodes.getOrThrow(nodeId);
+		return node.valueDB;
+	}
+
 	/** Updates the logging configuration without having to restart the driver. */
 	public updateLogConfig(config: DeepPartial<LogConfig>): void {
 		this._logContainer.updateConfiguration(config);
@@ -732,8 +782,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
 
-		// Enforce that an error handler is attached
-		if ((this as unknown as EventEmitter).listenerCount("error") === 0) {
+		// Enforce that an error handler is attached, except for testing with a mocked serialport
+		if (
+			!this.options.testingHooks &&
+			(this as unknown as EventEmitter).listenerCount("error") === 0
+		) {
 			throw new ZWaveError(
 				`Before starting the driver, a handler for the "error" event must be attached.`,
 				ZWaveErrorCodes.Driver_NoErrorHandler,
@@ -763,7 +816,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port, this._logContainer);
+			this.serial = new ZWaveSerialPort(
+				this.port,
+				this._logContainer,
+				this.options.testingHooks?.serialPortBinding,
+			);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
@@ -807,6 +864,13 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this._isOpen = true;
 			spOpenPromise.resolve();
 
+			if (
+				typeof this.options.testingHooks?.onSerialPortOpen ===
+				"function"
+			) {
+				await this.options.testingHooks.onSerialPortOpen(this.serial!);
+			}
+
 			// Perform initialization sequence
 			await this.writeHeader(MessageHeaders.NAK);
 			// Per the specs, this should be followed by a soft-reset but we need to be able
@@ -837,20 +901,22 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 
 			// Load the necessary configuration
-			this.driverLog.print("loading configuration...");
-			try {
-				await this.configManager.loadAll();
-			} catch (e) {
-				const message = `Failed to load the configuration: ${getErrorMessage(
-					e,
-				)}`;
-				this.driverLog.print(message, "error");
-				this.emit(
-					"error",
-					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
-				);
-				void this.destroy();
-				return;
+			if (this.options.testingHooks?.loadConfiguration !== false) {
+				this.driverLog.print("loading configuration...");
+				try {
+					await this.configManager.loadAll();
+				} catch (e) {
+					const message = `Failed to load the configuration: ${getErrorMessage(
+						e,
+					)}`;
+					this.driverLog.print(message, "error");
+					this.emit(
+						"error",
+						new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
+					);
+					void this.destroy();
+					return;
+				}
 			}
 
 			this.driverLog.print("beginning interview...");
@@ -918,15 +984,44 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		return this._nodesReadyEventEmitted;
 	}
 
-	private async initValueDBs(homeId: number): Promise<void> {
-		// Always start the value and metadata databases
+	private getJsonlDBOptions(): JsonlDBOptions<any> {
 		const options: JsonlDBOptions<any> = {
 			ignoreReadErrors: true,
 			...throttlePresets[this.options.storage.throttle],
 		};
 		if (this.options.storage.lockDir) {
-			options.lockfileDirectory = this.options.storage.lockDir;
+			options.lockfile = {
+				directory: this.options.storage.lockDir,
+			};
 		}
+		return options;
+	}
+
+	private async initNetworkCache(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
+
+		const networkCacheFile = path.join(
+			this.cacheDir,
+			`${homeId.toString(16)}.jsonl`,
+		);
+		this._networkCache = new JsonlDB(networkCacheFile, {
+			...options,
+			serializer: (key, value) =>
+				serializeNetworkCacheValue(this, key, value),
+			reviver: (key, value) =>
+				deserializeNetworkCacheValue(this, key, value),
+		});
+		await this._networkCache.open();
+
+		if (process.env.NO_CACHE === "true") {
+			// Since the network cache is append-only, we need to
+			// clear it if the cache should be ignored
+			this._networkCache.clear();
+		}
+	}
+
+	private async initValueDBs(homeId: number): Promise<void> {
+		const options = this.getJsonlDBOptions();
 
 		const valueDBFile = path.join(
 			this.cacheDir,
@@ -947,10 +1042,54 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		await this._metadataDB.open();
 
 		if (process.env.NO_CACHE === "true") {
-			// Since value/metadata DBs are append-only, we need to clear them
-			// if the cache should be ignored
+			// Since value/metadata DBs are append-only, we need to
+			// clear them if the cache should be ignored
 			this._valueDB.clear();
 			this._metadataDB.clear();
+		}
+	}
+
+	private async performCacheMigration(): Promise<void> {
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache ||
+			!this._valueDB
+		) {
+			return;
+		}
+
+		// In v9, the network cache was switched from a json file to use a Jsonl-DB
+		// Therefore the legacy cache file must be migrated to the new format
+		if (this._networkCache.size === 0) {
+			// version the cache format, so migrations in the future are easier
+			this._networkCache.set("cacheFormat", 1);
+
+			try {
+				await migrateLegacyNetworkCache(
+					this,
+					this.controller.homeId,
+					this._networkCache,
+					this._valueDB,
+					this.options.storage.driver,
+					this.cacheDir,
+				);
+
+				// Go through the value DB and remove all keys referencing commandClass -1, which used to be a
+				// hacky way to store non-CC specific values
+				for (const key of this._valueDB.keys()) {
+					if (-1 === key.indexOf(`,"commandClass":-1,`)) {
+						continue;
+					}
+					this._valueDB.delete(key);
+				}
+			} catch (e) {
+				const message = `Migrating the legacy cache file to jsonl failed: ${getErrorMessage(
+					e,
+					true,
+				)}`;
+				this.driverLog.print(message, "error");
+			}
 		}
 	}
 
@@ -966,7 +1105,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 				.on("node removed", this.onNodeRemoved.bind(this));
 		}
 
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.testingHooks?.skipControllerIdentification) {
 			// Determine controller IDs to open the Value DBs
 			// We need to do this first because some older controllers, especially the UZB1 and
 			// some 500-series sticks in virtualized environments don't respond after a soft reset
@@ -976,8 +1115,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// Identify the controller and determine if it supports soft reset
 			await this.controller.identify();
+			await this.initNetworkCache(this.controller.homeId!);
 
-			if (this.options.enableSoftReset && !(await this.maySoftReset())) {
+			if (this.options.enableSoftReset && !this.maySoftReset()) {
 				this.driverLog.print(
 					`Soft reset is enabled through config, but this stick does not support it.`,
 					"warn",
@@ -994,7 +1134,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 						e.code === ZWaveErrorCodes.Driver_Failed
 					) {
 						// Remember that soft reset is not supported by this stick
-						await this.rememberNoSoftReset();
+						this.driverLog.print(
+							"Soft reset seems not to be supported by this stick, disabling it.",
+							"warn",
+						);
+						this.controller.supportsSoftReset = false;
 						// Then fail the driver
 						await this.destroy();
 						return;
@@ -1012,7 +1156,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					`Controller identification returned invalid node ID 0 - trying again...`,
 					"warn",
 				);
+				// We might end up with a different home ID, so close the cache before re-identifying the controller
+				await this._networkCache?.close();
 				await this.controller.identify();
+				await this.initNetworkCache(this.controller.homeId!);
 			}
 
 			if (this.controller.ownNodeId === 0) {
@@ -1026,6 +1173,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 			// now that we know the home ID, we can open the databases
 			await this.initValueDBs(this.controller.homeId!);
+			await this.performCacheMigration();
 
 			// Interview the controller.
 			await this._controller.interview(async () => {
@@ -1106,7 +1254,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		this._nodesReady.clear();
 		this._nodesReadyEventEmitted = false;
 
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.testingHooks?.skipNodeInterview) {
 			// Now interview all nodes
 			// First complete the controller interview
 			const controllerNode = this._controller.nodes.get(
@@ -1402,6 +1550,24 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		});
 	}
 
+	/**
+	 * Enables error reporting via Sentry. This is turned off by default, because it registers a
+	 * global `unhandledRejection` event handler, which has an influence how the application will
+	 * behave in case of an unhandled rejection.
+	 */
+	public enableErrorReporting(): void {
+		// Init sentry, unless we're running a a test or some custom-built userland or PR test versions
+		if (
+			process.env.NODE_ENV !== "test" &&
+			!/\-[a-f0-9]{7,}$/.test(libVersion) &&
+			!/\-pr\-\d+\-$/.test(libVersion)
+		) {
+			void initSentry(libraryRootDir, libName, libVersion).catch(() => {
+				/* ignore */
+			});
+		}
+	}
+
 	private _statisticsEnabled: boolean = false;
 	/** Whether reporting usage statistics is currently enabled */
 	public get statisticsEnabled(): boolean {
@@ -1535,7 +1701,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	/** This is called when a new node has been added to the network */
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
-		if (!this.options.interview.skipInterview) {
+		if (!this.options.testingHooks?.skipNodeInterview) {
 			// Interview the node
 			// don't await the interview, because it may take a very long time
 			// if a node is asleep
@@ -1545,10 +1711,23 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	/** This is called when a node was removed from the network */
 	private onNodeRemoved(node: ZWaveNode, replaced: boolean): void {
-		// Remove all listeners
+		// Remove all listeners and timers
 		this.removeNodeEventHandlers(node);
+		if (this.sendNodeToSleepTimers.has(node.id)) {
+			clearTimeout(this.sendNodeToSleepTimers.get(node.id)!);
+			this.sendNodeToSleepTimers.delete(node.id);
+		}
+		if (this.retryNodeInterviewTimeouts.has(node.id)) {
+			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id)!);
+			this.retryNodeInterviewTimeouts.delete(node.id);
+		}
 		// purge node values from the DB
 		node.valueDB.clear();
+		this.cachePurge(cacheKeys.node(node.id)._baseKey);
+
+		// Remove the node from all security manager instances
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
 
 		this.rejectAllTransactionsForNode(
 			node.id,
@@ -1698,29 +1877,11 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 
 	private isSoftResetting: boolean = false;
 
-	private async maySoftReset(): Promise<boolean> {
+	private maySoftReset(): boolean {
 		// If we've previously determined a stick not to support soft reset, don't bother trying again
-		let supportsSoftReset: boolean | undefined;
-		if (this._controllerInterviewed) {
-			supportsSoftReset = this.controller.supportsSoftReset;
-		} else {
-			// The controller wasn't interviewed yet, read the json file manually
-			const fs = this.options.storage.driver;
-
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-			supportsSoftReset = json?.controller?.supportsSoftReset;
-		}
+		const supportsSoftReset = this._networkCache!.get(
+			cacheKeys.controller.supportsSoftReset,
+		) as boolean | undefined;
 		if (supportsSoftReset === false) return false;
 
 		// Blacklist some sticks that are known to not support soft reset
@@ -1755,52 +1916,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 		}
 
 		return true;
-	}
-
-	private async rememberNoSoftReset(): Promise<void> {
-		this.driverLog.print(
-			"Soft reset seems not to be supported by this stick, disabling it.",
-			"warn",
-		);
-		this.controller.supportsSoftReset = false;
-
-		if (this._controllerInterviewed) {
-			// We can use the normal method for this
-			await this.saveNetworkToCacheInternal();
-		} else {
-			// saveNetworkToCache won't write anything, just edit the file "manually"
-
-			// TODO: This is ugly, rework this when changing how the network data is saved
-
-			const fs = this.options.storage.driver;
-
-			await fs.ensureDir(this.cacheDir);
-			const cacheFile = path.join(
-				this.cacheDir,
-				this.controller.homeId!.toString(16) + ".json",
-			);
-
-			// Read it if it exists
-			let json;
-			if (await fs.pathExists(cacheFile)) {
-				try {
-					json = JSON.parse(await fs.readFile(cacheFile, "utf8"));
-				} catch {}
-			}
-
-			// Change the supportsSoftReset flag
-			json ??= {};
-			json.controller ??= {};
-			json.controller.supportsSoftReset = false;
-
-			// And save it again
-			const jsonString = stringify(json);
-			await this.options.storage.driver.writeFile(
-				cacheFile,
-				jsonString,
-				"utf8",
-			);
-		}
 	}
 
 	/**
@@ -1985,7 +2100,9 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 	 */
 	public async hardReset(): Promise<void> {
 		this.ensureReady(true);
-		// Calling ensureReady with true ensures that _controller is defined
+
+		// Update the controller NIF prior to hard resetting
+		await this._controller!.setControllerNIF();
 		await this._controller!.hardReset();
 
 		// Clean up
@@ -2054,23 +2171,28 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			this.serial = undefined;
 		}
 
+		// Attempt to close the value DBs and network cache
 		try {
-			// Attempt to save the network to cache
-			await this.saveNetworkToCacheInternal();
+			await this._valueDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Saving the network to cache failed: ${getErrorMessage(e)}`,
+				`Closing the value DB failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
-
 		try {
-			// Attempt to close the value DBs
-			await this._valueDB?.close();
 			await this._metadataDB?.close();
 		} catch (e) {
 			this.driverLog.print(
-				`Closing the value DBs failed: ${getErrorMessage(e)}`,
+				`Closing the metadata DB failed: ${getErrorMessage(e)}`,
+				"error",
+			);
+		}
+		try {
+			await this._networkCache?.close();
+		} catch (e) {
+			this.driverLog.print(
+				`Closing the network cache failed: ${getErrorMessage(e)}`,
 				"error",
 			);
 		}
@@ -2087,8 +2209,14 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			if (timeout) clearTimeout(timeout);
 		}
 
-		// Destroy all nodes
-		this._controller?.nodes.forEach((n) => n.destroy());
+		// Destroy all nodes and the controller
+		if (this._controller) {
+			this._controller.nodes.forEach((n) => n.destroy());
+			(this._controller.nodes as ThrowingMap<any, any>).clear();
+
+			this._controller.removeAllListeners();
+			this._controller = undefined;
+		}
 
 		this.driverLog.print(`driver instance destroyed`);
 
@@ -2139,7 +2267,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			}
 			if (!!this._controller) {
 				if (isCommandClassContainer(msg)) {
-					msg.getNodeUnsafe()?.incrementStatistics("commandsRX");
+					this.getNodeUnsafe(msg)?.incrementStatistics("commandsRX");
 				} else {
 					this._controller.incrementStatistics("messagesRX");
 				}
@@ -2155,7 +2283,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					if (response) await this.writeHeader(response);
 					if (!!this._controller) {
 						if (isCommandClassContainer(msg)) {
-							msg.getNodeUnsafe()?.incrementStatistics(
+							this.getNodeUnsafe(msg)?.incrementStatistics(
 								"commandsDroppedRX",
 							);
 
@@ -2167,8 +2295,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 								msg.command instanceof InvalidCC
 							) {
 								// If it was, we need to notify the sender that we couldn't decode the command
-								await msg
-									.getNodeUnsafe()
+								await this.getNodeUnsafe(msg)
 									?.createAPI(
 										CommandClasses.Supervision,
 										false,
@@ -2214,7 +2341,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 					msg.command instanceof
 					SecurityCCCommandEncapsulationNonceGet
 				) {
-					void msg.getNodeUnsafe()?.handleSecurityNonceGet();
+					void this.getNodeUnsafe(msg)?.handleSecurityNonceGet();
 				}
 
 				// Transport Service commands must be handled before assembling partial CCs
@@ -2488,7 +2615,7 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> {
 			message: INodeQuery;
 		},
 	): boolean {
-		const node = transaction.message.getNodeUnsafe();
+		const node = this.getNodeUnsafe(transaction.message);
 		if (!node) return false; // This should never happen, but whatever
 
 		const messagePart1 = isSendData(transaction.message)
@@ -2877,7 +3004,7 @@ ${handlers.length} left`,
 		let handlers: RequestHandlerEntry[] | undefined;
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			const node = msg.getNodeUnsafe();
+			const node = this.getNodeUnsafe(msg);
 			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
 				if (node.status === NodeStatus.Dead) {
@@ -2899,7 +3026,7 @@ ${handlers.length} left`,
 			// For further actions, we are only interested in the innermost CC
 			this.unwrapCommands(msg);
 
-			const node = msg.getNodeUnsafe();
+			const node = this.getNodeUnsafe(msg);
 			// If we receive an encrypted message but assume the node is insecure, change our assumption
 			if (
 				node?.isSecure === false &&
@@ -3046,7 +3173,7 @@ ${handlers.length} left`,
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
-				const node = msg.getNodeUnsafe();
+				const node = this.getNodeUnsafe(msg);
 				if (node) {
 					this.controllerLog.logNode(node.id, {
 						message: "Received updated node info",
@@ -3095,6 +3222,14 @@ ${handlers.length} left`,
 				if (!provisioningEntry) {
 					this.controllerLog.print(
 						"NWI Home ID not found in provisioning list, ignoring request...",
+					);
+					return;
+				} else if (
+					provisioningEntry.status ===
+					ProvisioningEntryStatus.Inactive
+				) {
+					this.controllerLog.print(
+						"The provisioning entry for this node is inactive, ignoring request...",
 					);
 					return;
 				}
@@ -3204,7 +3339,7 @@ ${handlers.length} left`,
 
 		// When a node supports S2 and has a valid security class, the command
 		// must be S2-encapsulated
-		const node = msg.command.getNode();
+		const node = msg.command.getNode(this);
 		if (node?.supportsCC(CommandClasses["Security 2"])) {
 			const securityClass = node.getHighestSecurityClass();
 			if (
@@ -3249,7 +3384,7 @@ ${handlers.length} left`,
 		result: Message | undefined,
 	): void {
 		// Update statistics
-		const node = msg.getNodeUnsafe();
+		const node = this.getNodeUnsafe(msg);
 		let success = true;
 		if (isSendData(msg) || isNodeQuery(msg)) {
 			// This shouldn't happen, but just in case
@@ -3262,12 +3397,13 @@ ${handlers.length} left`,
 					node.incrementStatistics("commandsDroppedTX");
 				} else {
 					node.incrementStatistics("commandsTX");
+					node.updateRTT(msg);
 				}
 
 				// Notify listeners about the status report if one was received
 				if (hasTXReport(result)) {
 					options.onTXReport?.(result.txReport);
-					// TODO: Update statistics based on the TX report
+					node.updateRouteStatistics(result.txReport);
 				}
 			}
 
@@ -3313,7 +3449,7 @@ ${handlers.length} left`,
 
 		// Don't send messages to dead nodes
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
-			node = msg.getNodeUnsafe();
+			node = this.getNodeUnsafe(msg);
 			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
 				// Instead of throwing immediately, try to ping the node first - if it responds, continue
 				if (!(await node.ping())) {
@@ -3500,10 +3636,7 @@ ${handlers.length} left`,
 	/** Wraps a CC in the correct SendData message to use for sending */
 	public createSendDataMessage(
 		command: CommandClass,
-		options: Pick<
-			SendCommandOptions,
-			"autoEncapsulate" | "maxSendAttempts" | "transmitOptions"
-		> = {},
+		options: Omit<SendCommandOptions, keyof SendMessageOptions> = {},
 	): SendDataMessage {
 		let msg: SendDataMessage;
 		if (command.isSinglecast()) {
@@ -3611,7 +3744,7 @@ ${handlers.length} left`,
 		}
 
 		// Check if the target supports this command
-		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+		if (!command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support the Supervision CC!`,
 				ZWaveErrorCodes.CC_NotSupported,
@@ -3656,7 +3789,7 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options?: SendSupervisedCommandOptions,
 	): Promise<SupervisionResult | undefined> {
-		if (command.getNode()?.supportsCC(CommandClasses.Supervision)) {
+		if (command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
 			return this.sendSupervisedCommand(command, options);
 		} else {
 			await this.sendCommand(command, options);
@@ -3875,73 +4008,72 @@ ${handlers.length} left`,
 	private isSavingToCache: boolean = false;
 
 	/**
-	 * Does the work for saveNetworkToCache. This is not throttled, so any call
-	 * to this method WILL save the network.
+	 * @internal
+	 * Helper function to read and convert potentially existing values from the network cache
 	 */
-	private async saveNetworkToCacheInternal(): Promise<void> {
-		// Avoid overwriting the cache with empty data if the controller wasn't interviewed yet
-		if (
-			!this._controller ||
-			this._controller.homeId == undefined ||
-			!this._controllerInterviewed
-		)
-			return;
-
-		await this.options.storage.driver.ensureDir(this.cacheDir);
-		const cacheFile = path.join(
-			this.cacheDir,
-			this._controller.homeId.toString(16) + ".json",
-		);
-
-		const serializedObj = this._controller.serialize();
-		const jsonString = stringify(serializedObj);
-		await this.options.storage.driver.writeFile(
-			cacheFile,
-			jsonString,
-			"utf8",
-		);
+	public cacheGet<T>(
+		cacheKey: string,
+		options?: {
+			reviver?: (value: any) => T;
+		},
+	): T | undefined {
+		let ret = this.networkCache.get(cacheKey);
+		if (ret !== undefined && typeof options?.reviver === "function") {
+			try {
+				ret = options.reviver(ret);
+			} catch {
+				// ignore, invalid entry
+			}
+		}
+		return ret;
 	}
 
 	/**
-	 * Saves the current configuration and collected data about the controller and all nodes to a cache file.
-	 * For performance reasons, these calls may be throttled.
+	 * @internal
+	 * Helper function to convert values and write them to the network cache
 	 */
-	public async saveNetworkToCache(): Promise<void> {
-		// TODO: Detect if the network needs to be saved at all
-		if (!this._controller || this._controller.homeId == undefined) return;
-		// Ensure this method isn't being executed too often
-		if (
-			this.isSavingToCache ||
-			Date.now() - this.lastSaveToCache < this.saveToCacheInterval
-		) {
-			// Schedule a save in a couple of ms to collect changes
-			if (!this.saveToCacheTimer) {
-				this.saveToCacheTimer = setTimeout(
-					() => void this.saveNetworkToCache(),
-					this.saveToCacheInterval,
-				);
-			}
-			return;
-		} else {
-			this.saveToCacheTimer = undefined;
+	public cacheSet<T>(
+		cacheKey: string,
+		value: T | undefined,
+		options?: {
+			serializer?: (value: T) => any;
+		},
+	): void {
+		if (value !== undefined && typeof options?.serializer === "function") {
+			value = options.serializer(value);
 		}
-		this.isSavingToCache = true;
-		await this.saveNetworkToCacheInternal();
-		this.isSavingToCache = false;
-		this.lastSaveToCache = Date.now();
+
+		if (value === undefined) {
+			this.networkCache.delete(cacheKey);
+		} else {
+			this.networkCache.set(cacheKey, value);
+		}
+	}
+
+	private cachePurge(prefix: string): void {
+		for (const key of this.networkCache.keys()) {
+			if (key.startsWith(prefix)) {
+				this.networkCache.delete(key);
+			}
+		}
 	}
 
 	/**
 	 * Restores a previously stored Z-Wave network state from cache to speed up the startup process
 	 */
 	public async restoreNetworkStructureFromCache(): Promise<void> {
-		if (!this._controller || !this.controller.homeId) return;
+		if (
+			!this._controller ||
+			!this.controller.homeId ||
+			!this._networkCache
+		) {
+			return;
+		}
 
-		const cacheFile = path.join(
-			this.cacheDir,
-			`${this.controller.homeId.toString(16)}.json`,
-		);
-		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
+		if (this._networkCache.size <= 1) {
+			// If the size is 0 or 1, the cache is empty, so we cannot restore it
+			return;
+		}
 
 		try {
 			this.driverLog.print(
@@ -3949,11 +4081,7 @@ ${handlers.length} left`,
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheString = await this.options.storage.driver.readFile(
-				cacheFile,
-				"utf8",
-			);
-			await this.controller.deserialize(JSON.parse(cacheString));
+			await this.controller.deserialize();
 			this.driverLog.print(
 				`Restoring the network from cache was successful!`,
 			);

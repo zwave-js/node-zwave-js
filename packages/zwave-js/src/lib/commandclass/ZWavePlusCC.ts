@@ -1,46 +1,28 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
+	CCCommandOptions,
 	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	expectedCCResponse,
+	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ZWavePlusCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-/**
- * @publicAPI
- */
-export enum ZWavePlusRoleType {
-	CentralStaticController = 0x00,
-	SubStaticController = 0x01,
-	PortableController = 0x02,
-	PortableReportingController = 0x03,
-	PortableSlave = 0x04,
-	AlwaysOnSlave = 0x05,
-	SleepingReportingSlave = 0x06,
-	SleepingListeningSlave = 0x07,
-}
-
-/**
- * @publicAPI
- */
-export enum ZWavePlusNodeType {
-	Node = 0x00, // ZWave+ Node
-	IPGateway = 0x02, // ZWave+ for IP Gateway
-}
+import {
+	ZWavePlusCommand,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "./_Types";
 
 // SDS13782 The advertised Z-Wave Plus Version, Role Type and Node Type information values
 // MUST be identical for the Root Device and all Multi Channel End Points
@@ -90,6 +72,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
+			case ZWavePlusCommand.Report:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -117,6 +100,18 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 			]);
 		}
 	}
+
+	@validateArgs()
+	public async sendReport(options: ZWavePlusCCReportOptions): Promise<void> {
+		this.assertSupportsCommand(ZWavePlusCommand, ZWavePlusCommand.Report);
+
+		const cc = new ZWavePlusCCReport(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			...options,
+		});
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
 }
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
@@ -124,20 +119,20 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Z-Wave Plus Info"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Z-Wave+ information...",
 			direction: "outbound",
@@ -151,7 +146,7 @@ role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -163,68 +158,82 @@ user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
 	}
 }
 
+export interface ZWavePlusCCReportOptions {
+	zwavePlusVersion: number;
+	nodeType: ZWavePlusNodeType;
+	roleType: ZWavePlusRoleType;
+	installerIcon: number;
+	userIcon: number;
+}
+
 @CCCommand(ZWavePlusCommand.Report)
 export class ZWavePlusCCReport extends ZWavePlusCC {
 	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions,
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & ZWavePlusCCReportOptions),
 	) {
-		super(driver, options);
-
-		validatePayload(this.payload.length >= 7);
-		this._zwavePlusVersion = this.payload[0];
-		this._roleType = this.payload[1];
-		this._nodeType = this.payload[2];
-		this._installerIcon = this.payload.readUInt16BE(3);
-		this._userIcon = this.payload.readUInt16BE(5);
-		this.persistValues();
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 7);
+			this.zwavePlusVersion = this.payload[0];
+			this.roleType = this.payload[1];
+			this.nodeType = this.payload[2];
+			this.installerIcon = this.payload.readUInt16BE(3);
+			this.userIcon = this.payload.readUInt16BE(5);
+			this.persistValues();
+		} else {
+			this.zwavePlusVersion = options.zwavePlusVersion;
+			this.roleType = options.roleType;
+			this.nodeType = options.nodeType;
+			this.installerIcon = options.installerIcon;
+			this.userIcon = options.userIcon;
+		}
 	}
 
-	private _zwavePlusVersion: number;
 	@ccValue({ internal: true })
-	public get zwavePlusVersion(): number {
-		return this._zwavePlusVersion;
-	}
+	public zwavePlusVersion: number;
+	@ccValue({ internal: true })
+	public nodeType: ZWavePlusNodeType;
+	@ccValue({ internal: true })
+	public roleType: ZWavePlusRoleType;
+	@ccValue({ internal: true })
+	public installerIcon: number;
+	@ccValue({ internal: true })
+	public userIcon: number;
 
-	private _nodeType: ZWavePlusNodeType;
-	@ccValue({ internal: true })
-	public get nodeType(): ZWavePlusNodeType {
-		return this._nodeType;
-	}
-
-	private _roleType: ZWavePlusRoleType;
-	@ccValue({ internal: true })
-	public get roleType(): ZWavePlusRoleType {
-		return this._roleType;
-	}
-
-	private _installerIcon: number;
-	@ccValue({ internal: true })
-	public get installerIcon(): number {
-		return this._installerIcon;
-	}
-
-	private _userIcon: number;
-	@ccValue({ internal: true })
-	public get userIcon(): number {
-		return this._userIcon;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.zwavePlusVersion,
+			this.roleType,
+			this.nodeType,
+			// placeholder for icons
+			0,
+			0,
+			0,
+			0,
+		]);
+		this.payload.writeUInt16BE(this.installerIcon, 3);
+		this.payload.writeUInt16BE(this.userIcon, 5);
+		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				version: this._zwavePlusVersion,
+				version: this.zwavePlusVersion,
 				"node type": getEnumMemberName(
 					ZWavePlusNodeType,
-					this._nodeType,
+					this.nodeType,
 				),
 				"role type": getEnumMemberName(
 					ZWavePlusRoleType,
-					this._roleType,
+					this.roleType,
 				),
-				"icon (mgmt.)": num2hex(this._installerIcon),
-				"icon (user)": num2hex(this._userIcon),
+				"icon (mgmt.)": num2hex(this.installerIcon),
+				"icon (user)": num2hex(this.userIcon),
 			},
 		};
 	}

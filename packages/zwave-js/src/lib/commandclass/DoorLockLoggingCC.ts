@@ -7,9 +7,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, isPrintableASCII, num2hex } from "@zwave-js/shared";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { isPrintableASCII, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -23,6 +25,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { userCodeToLogString } from "./UserCodeCC";
+import {
+	DoorLockLoggingCommand,
+	DoorLockLoggingEventType,
+	DoorLockLoggingRecord,
+	DoorLockLoggingRecordStatus,
+} from "./_Types";
 
 interface DateSegments {
 	year: number;
@@ -44,51 +53,7 @@ function segmentsToDate(segments: DateSegments): Date {
 	);
 }
 
-// All the supported commands
-export enum DoorLockLoggingCommand {
-	RecordsSupportedGet = 0x01,
-	RecordsSupportedReport = 0x02,
-	RecordGet = 0x03,
-	RecordReport = 0x04,
-}
-
-// @publicAPI
-export enum EventType {
-	LockCode = 0x01,
-	UnlockCode = 0x02,
-	LockButton = 0x03,
-	UnlockButton = 0x04,
-	LockCodeOutOfSchedule = 0x05,
-	UnlockCodeOutOfSchedule = 0x06,
-	IllegalCode = 0x07,
-	LockManual = 0x08,
-	UnlockManual = 0x09,
-	LockAuto = 0x0a,
-	UnlockAuto = 0x0b,
-	LockRemoteCode = 0x0c,
-	UnlockRemoteCode = 0x0d,
-	LockRemote = 0x0e,
-	UnlockRemote = 0x0f,
-	LockRemoteCodeOutOfSchedule = 0x10,
-	UnlockRemoteCodeOutOfSchedule = 0x11,
-	RemoteIllegalCode = 0x12,
-	LockManual2 = 0x13,
-	UnlockManual2 = 0x14,
-	LockSecured = 0x15,
-	LockUnsecured = 0x16,
-	UserCodeAdded = 0x17,
-	UserCodeDeleted = 0x18,
-	AllUserCodesDeleted = 0x19,
-	MasterCodeChanged = 0x1a,
-	UserCodeChanged = 0x1b,
-	LockReset = 0x1c,
-	ConfigurationChanged = 0x1d,
-	LowBattery = 0x1e,
-	NewBattery = 0x1f,
-	Unknown = 0x20,
-}
-
-const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
+const eventTypeLabel = {
 	LockCode: "Locked via Access Code",
 	UnlockCode: "Unlocked via Access Code",
 	LockButton: "Locked via Lock Button",
@@ -123,23 +88,9 @@ const eventTypeLabel: { [key in keyof typeof EventType]: string } = {
 	LowBattery: "Low Battery",
 	NewBattery: "New Battery Installed",
 	Unknown: "Unknown",
-};
+} as const;
 
 const LATEST_RECORD_NUMBER_KEY = 0;
-
-export interface DoorLockLoggingRecord {
-	timestamp: string;
-	eventType: EventType;
-	label: string;
-	userId?: number;
-	userCode?: string | Buffer;
-}
-
-// @publicAPI
-export enum RecordStatus {
-	Empty = 0x00,
-	HoldsLegalData = 0x01,
-}
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
@@ -173,6 +124,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	}
 
 	/** Retrieves the specified audit record. Defaults to the latest one. */
+	@validateArgs()
 	public async getRecord(
 		recordNumber: number = LATEST_RECORD_NUMBER_KEY,
 	): Promise<DoorLockLoggingRecord | undefined> {
@@ -200,29 +152,29 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 export class DoorLockLoggingCC extends CommandClass {
 	declare ccCommand: DoorLockLoggingCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Door Lock Logging"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying supported number of records...",
 			direction: "outbound",
@@ -230,7 +182,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCount = await api.getRecordsCount();
 
 		if (!recordsCount) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Door Lock Logging records count query timed out, skipping interview...",
@@ -242,7 +194,7 @@ export class DoorLockLoggingCC extends CommandClass {
 		const recordsCountLogMessage = `supports ${recordsCount} record${
 			recordsCount === 1 ? "" : "s"
 		}`;
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: recordsCountLogMessage,
 			direction: "inbound",
@@ -253,10 +205,10 @@ export class DoorLockLoggingCC extends CommandClass {
 @CCCommand(DoorLockLoggingCommand.RecordsSupportedReport)
 export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 
 		this.recordsCount = this.payload[0];
@@ -276,9 +228,9 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 	}
 }
 
-function eventTypeToLabel(eventType: EventType): string {
+function eventTypeToLabel(eventType: DoorLockLoggingEventType): string {
 	return (
-		eventTypeLabel[EventType[eventType] as keyof typeof EventType] ??
+		(eventTypeLabel as any)[DoorLockLoggingEventType[eventType]] ??
 		`Unknown ${num2hex(eventType)}`
 	);
 }
@@ -290,15 +242,15 @@ export class DoorLockLoggingCCRecordsSupportedGet extends DoorLockLoggingCC {}
 @CCCommand(DoorLockLoggingCommand.RecordReport)
 export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 11);
 
 		this.recordNumber = this.payload[0];
 		const recordStatus = this.payload[5] >>> 5;
-		if (recordStatus === RecordStatus.Empty) {
+		if (recordStatus === DoorLockLoggingRecordStatus.Empty) {
 			return;
 		} else {
 			const dateSegments = {
@@ -358,10 +310,9 @@ export class DoorLockLoggingCCRecordReport extends DoorLockLoggingCC {
 				message["user ID"] = this.record.userId;
 			}
 			if (this.record.userCode) {
-				message["user code"] =
-					typeof this.record.userCode === "string"
-						? this.record.userCode
-						: buffer2hex(this.record.userCode);
+				message["user code"] = userCodeToLogString(
+					this.record.userCode,
+				);
 			}
 		}
 		return {
@@ -392,12 +343,12 @@ function testResponseForDoorLockLoggingRecordGet(
 )
 export class DoorLockLoggingCCRecordGet extends DoorLockLoggingCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| DoorLockLoggingCCRecordGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

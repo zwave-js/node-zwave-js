@@ -1,6 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	AssociationCCGet,
 	AssociationCCRemove,
@@ -8,10 +7,10 @@ import {
 	AssociationCCSet,
 	AssociationCCSupportedGroupingsGet,
 	AssociationCCSupportedGroupingsReport,
-	AssociationCommand,
 } from "./AssociationCC";
+import { AssociationCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,7 +23,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/AssociationCC => ", () => {
 	it("the SupportedGroupingsGet command should serialize correctly", () => {
-		const cc = new AssociationCCSupportedGroupingsGet(fakeDriver, {
+		const cc = new AssociationCCSupportedGroupingsGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -42,7 +41,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 				7, // # of groups
 			]),
 		);
-		const cc = new AssociationCCSupportedGroupingsReport(fakeDriver, {
+		const cc = new AssociationCCSupportedGroupingsReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -51,7 +50,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly", () => {
-		const cc = new AssociationCCSet(fakeDriver, {
+		const cc = new AssociationCCSet(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 5],
@@ -69,7 +68,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 		expect(cc.serialize()).toEqual(expected);
 	});
 	it("the Get command should serialize correctly", () => {
-		const cc = new AssociationCCGet(fakeDriver, {
+		const cc = new AssociationCCGet(host, {
 			nodeId: 1,
 			groupId: 9,
 		});
@@ -95,7 +94,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 				5,
 			]),
 		);
-		const cc = new AssociationCCReport(fakeDriver, {
+		const cc = new AssociationCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -107,7 +106,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly", () => {
-		const cc = new AssociationCCRemove(fakeDriver, {
+		const cc = new AssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 			nodeIds: [1, 2, 5],
@@ -126,7 +125,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 	});
 
 	it("the Remove command should serialize correctly (empty node list)", () => {
-		const cc = new AssociationCCRemove(fakeDriver, {
+		const cc = new AssociationCCRemove(host, {
 			nodeId: 2,
 			groupId: 5,
 		});
@@ -144,7 +143,7 @@ describe("lib/commandclass/AssociationCC => ", () => {
 	// 		1,
 	// 		Buffer.from([255]), // not a valid command
 	// 	);
-	// 	const cc: any = new AssociationCC(fakeDriver, {
+	// 	const cc: any = new AssociationCC(host, {
 	// 		data: serializedCC,
 	// 	});
 	// 	expect(cc.constructor).toBe(AssociationCC);

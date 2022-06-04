@@ -43,8 +43,6 @@
 			"label": "Device status 1 click",
 			"description": "Device status when the external switch receives 1 click",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -71,8 +69,6 @@
 			"label": "Device status 2 click",
 			"description": "Device status when the external switch receives 2 clicks",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

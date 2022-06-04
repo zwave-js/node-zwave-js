@@ -6,9 +6,10 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -26,18 +27,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlOperatingStateCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-export enum HumidityControlOperatingState {
-	"Idle" = 0x00,
-	"Humidifying" = 0x01,
-	"De-humidifying" = 0x02,
-}
+import {
+	HumidityControlOperatingState,
+	HumidityControlOperatingStateCommand,
+} from "./_Types";
 
 @API(CommandClasses["Humidity Control Operating State"])
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
@@ -89,24 +82,24 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Operating State"
 		].withOptions({
@@ -114,14 +107,14 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 		});
 
 		// Query the current status
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying current humidity control operating state...",
 			direction: "outbound",
 		});
 		const currentStatus = await api.get();
 		if (currentStatus) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"received current humidity control operating state: " +
@@ -138,10 +131,10 @@ export class HumidityControlOperatingStateCC extends CommandClass {
 @CCCommand(HumidityControlOperatingStateCommand.Report)
 export class HumidityControlOperatingStateCCReport extends HumidityControlOperatingStateCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._state = this.payload[0] & 0b1111;

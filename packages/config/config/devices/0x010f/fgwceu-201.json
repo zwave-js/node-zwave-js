@@ -79,8 +79,6 @@
 			"#": "150",
 			"label": "LED Frame: First Channel Color",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 8,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

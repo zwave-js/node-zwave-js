@@ -6,8 +6,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -30,13 +32,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum LockCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { LockCommand } from "./_Types";
 
 export function getLockedValueId(endpoint: number): ValueID {
 	return {
@@ -75,6 +71,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	 * Locks or unlocks the lock
 	 * @param locked Whether the lock should be locked
 	 */
+	@validateArgs()
 	public async set(locked: boolean): Promise<void> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 
@@ -99,7 +96,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 		await this.set(value);
 
 		// Verify the current value after a delay
-		this.schedulePoll({ property });
+		this.schedulePoll({ property }, value);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -115,35 +112,35 @@ export class LockCCAPI extends PhysicalCCAPI {
 export class LockCC extends CommandClass {
 	declare ccCommand: LockCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Lock.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "requesting current lock state...",
 			direction: "outbound",
 		});
 		const locked = await api.get();
 		const logMessage = `the lock is ${locked ? "locked" : "unlocked"}`;
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
@@ -157,10 +154,10 @@ interface LockCCSetOptions extends CCCommandOptions {
 @CCCommand(LockCommand.Set)
 export class LockCCSet extends LockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LockCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -190,10 +187,10 @@ export class LockCCSet extends LockCC {
 @CCCommand(LockCommand.Report)
 export class LockCCReport extends LockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.locked = this.payload[0] === 1;
 		this.persistValues();

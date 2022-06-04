@@ -1,3 +1,5 @@
+// @ts-check
+
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
@@ -86,16 +88,21 @@ const assignees = [
 
 	// Create a commit
 	await exec.exec("git", ["add", "."]);
-	await exec.exec("git", [
-		"commit",
-		"-m",
-		"docs: update typed documentation",
-	]);
+	await exec.exec(
+		"git",
+		["commit", "-m", "docs: update typed documentation"],
+		// Don't care if this fails due to no changes
+		{
+			ignoreReturnCode: true,
+		},
+	);
 
 	// And push it (real good)
 	if (branchExists) {
-		await exec.exec("git", ["push", "-f"]);
+		console.log(`Force-pushing to remote...`);
+		await exec.exec("git", ["push", "origin", branchName, "--force"]);
 	} else {
+		console.log(`Pushing new branch...`);
 		await exec.exec("git", [
 			"push",
 			"--set-upstream",

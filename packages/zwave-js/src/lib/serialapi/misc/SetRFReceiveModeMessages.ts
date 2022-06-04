@@ -3,22 +3,20 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Driver } from "../../driver/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
+import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedResponse,
+	FunctionType,
 	gotDeserializationOptions,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
-import type { SuccessIndicator } from "../../message/SuccessIndicator";
+} from "@zwave-js/serial";
 
 export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 	/** Whether the stick should receive (true) or not (false) */
@@ -30,10 +28,10 @@ export interface SetRFReceiveModeRequestOptions extends MessageBaseOptions {
 @expectedResponse(FunctionType.SetRFReceiveMode)
 export class SetRFReceiveModeRequest extends Message {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: MessageDeserializationOptions | SetRFReceiveModeRequestOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -67,8 +65,11 @@ export class SetRFReceiveModeResponse
 	extends Message
 	implements SuccessIndicator
 {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.success = this.payload[0] !== 0;
 	}
 

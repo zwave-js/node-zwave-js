@@ -1,9 +1,6 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
-	ColorComponent,
 	ColorSwitchCCGet,
 	ColorSwitchCCReport,
 	ColorSwitchCCSet,
@@ -11,8 +8,10 @@ import {
 	ColorSwitchCCStopLevelChange,
 	ColorSwitchCCSupportedGet,
 	ColorSwitchCCSupportedReport,
-	ColorSwitchCommand,
 } from "./ColorSwitchCC";
+import { ColorComponent, ColorSwitchCommand } from "./_Types";
+
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,21 +23,8 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/ColorSwitchCC => ", () => {
-	let fakeDriver: Driver;
-	let node1: ZWaveNode;
-
-	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-		node1 = new ZWaveNode(1, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(node1.id, node1);
-	});
-
-	afterAll(() => {
-		node1.destroy();
-	});
-
 	it("the SupportedGet command should serialize correctly", () => {
-		const cc = new ColorSwitchCCSupportedGet(fakeDriver, {
+		const cc = new ColorSwitchCCSupportedGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -57,7 +43,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 				0b0000_0001,
 			]),
 		);
-		const cc = new ColorSwitchCCSupportedReport(fakeDriver, {
+		const cc = new ColorSwitchCCSupportedReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -78,7 +64,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the Get command should serialize correctly", () => {
-		const cc = new ColorSwitchCCGet(fakeDriver, {
+		const cc = new ColorSwitchCCGet(host, {
 			nodeId: 1,
 			colorComponent: ColorComponent.Red,
 		});
@@ -99,7 +85,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 				0b1111_1111, // value: 255
 			]),
 		);
-		const cc = new ColorSwitchCCReport(fakeDriver, {
+		const cc = new ColorSwitchCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -120,7 +106,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 				0b0000_0001, // duration: 1
 			]),
 		);
-		const cc = new ColorSwitchCCReport(fakeDriver, {
+		const cc = new ColorSwitchCCReport(host, {
 			nodeId: 1,
 			data: ccData,
 		});
@@ -133,7 +119,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (version 1)", () => {
-		const cc = new ColorSwitchCCSet(fakeDriver, {
+		const cc = new ColorSwitchCCSet(host, {
 			nodeId: 1,
 			red: 128,
 			green: 255,
@@ -155,7 +141,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (version 2)", () => {
-		const cc = new ColorSwitchCCSet(fakeDriver, {
+		const cc = new ColorSwitchCCSet(host, {
 			nodeId: 1,
 			red: 128,
 			green: 255,
@@ -179,7 +165,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command should serialize correctly (up) (version 1)", () => {
-		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new ColorSwitchCCStartLevelChange(host, {
 			nodeId: 1,
 			ignoreStartLevel: false,
 			startLevel: 5,
@@ -200,7 +186,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command should serialize correctly (down) (version 1)", () => {
-		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new ColorSwitchCCStartLevelChange(host, {
 			nodeId: 1,
 			startLevel: 5,
 			ignoreStartLevel: false,
@@ -221,7 +207,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command should serialize correctly (ignoreStartLevel) (version 1)", () => {
-		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new ColorSwitchCCStartLevelChange(host, {
 			nodeId: 1,
 			colorComponent: ColorComponent.Red,
 			ignoreStartLevel: true,
@@ -241,7 +227,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the StartLevelChange command should serialize correctly (duration) (version 3)", () => {
-		const cc = new ColorSwitchCCStartLevelChange(fakeDriver, {
+		const cc = new ColorSwitchCCStartLevelChange(host, {
 			nodeId: 1,
 			startLevel: 5,
 			ignoreStartLevel: false,
@@ -264,7 +250,7 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 	});
 
 	it("the StopLevelChange command should serialize correctly", () => {
-		const cc = new ColorSwitchCCStopLevelChange(fakeDriver, {
+		const cc = new ColorSwitchCCStopLevelChange(host, {
 			nodeId: 1,
 			colorComponent: ColorComponent.Red,
 		});

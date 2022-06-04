@@ -15,10 +15,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -41,35 +43,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ProtectionCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	ExclusiveControlSet = 0x06,
-	ExclusiveControlGet = 0x07,
-	ExclusiveControlReport = 0x08,
-	TimeoutSet = 0x09,
-	TimeoutGet = 0x0a,
-	TimeoutReport = 0x0b,
-}
-
-// @publicAPI
-export enum LocalProtectionState {
-	Unprotected = 0,
-	ProtectedBySequence = 1,
-	NoOperationPossible = 2,
-}
-
-// @publicAPI
-export enum RFProtectionState {
-	Unprotected = 0,
-	NoControl = 1,
-	NoResponse = 2,
-}
+import {
+	LocalProtectionState,
+	ProtectionCommand,
+	RFProtectionState,
+} from "./_Types";
 
 export function getExclusiveControlNodeIdValueID(endpoint: number): ValueID {
 	return {
@@ -234,6 +212,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		local: LocalProtectionState,
 		rf?: RFProtectionState,
@@ -293,6 +272,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.exclusiveControlNodeId;
 	}
 
+	@validateArgs()
 	public async setExclusiveControl(nodeId: number): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
@@ -325,6 +305,7 @@ export class ProtectionCCAPI extends CCAPI {
 		return response?.timeout;
 	}
 
+	@validateArgs()
 	public async setTimeout(timeout: Timeout): Promise<void> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
@@ -345,14 +326,14 @@ export class ProtectionCCAPI extends CCAPI {
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Protection.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -364,7 +345,7 @@ export class ProtectionCC extends CommandClass {
 
 		// First find out what the device supports
 		if (this.version >= 2) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
 			});
@@ -383,7 +364,7 @@ RF protection states:    ${resp.supportedRFStates
 					.map((local) => getEnumMemberName(RFProtectionState, local))
 					.map((str) => `\n· ${str}`)
 					.join("")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: logMessage,
 					direction: "inbound",
 				});
@@ -392,15 +373,15 @@ RF protection states:    ${resp.supportedRFStates
 			}
 		}
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Protection.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -414,7 +395,7 @@ RF protection states:    ${resp.supportedRFStates
 		);
 
 		// Query the current state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "querying protection status...",
 			direction: "outbound",
 		});
@@ -426,7 +407,7 @@ local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
 				logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -434,13 +415,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsTimeout) {
 			// Query the current timeout
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: "querying protection timeout...",
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
 			if (timeout) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message: `received timeout: ${timeout.toString()}`,
 					direction: "inbound",
 				});
@@ -449,13 +430,13 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsExclusiveControl) {
 			// Query the current timeout
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: "querying exclusive control node...",
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
 			if (nodeId != undefined) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					message:
 						(nodeId !== 0
 							? `Node ${padStart(nodeId.toString(), 3, "0")}`
@@ -475,10 +456,10 @@ interface ProtectionCCSetOptions extends CCCommandOptions {
 @CCCommand(ProtectionCommand.Set)
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ProtectionCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -520,10 +501,10 @@ export class ProtectionCCSet extends ProtectionCC {
 @CCCommand(ProtectionCommand.Report)
 export class ProtectionCCReport extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.local = this.payload[0] & 0b1111;
 		if (this.payload.length >= 2) {
@@ -571,10 +552,10 @@ export class ProtectionCCGet extends ProtectionCC {}
 @CCCommand(ProtectionCommand.SupportedReport)
 export class ProtectionCCSupportedReport extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 5);
 		this.supportsTimeout = !!(this.payload[0] & 0b1);
 		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
@@ -652,10 +633,10 @@ export class ProtectionCCSupportedGet extends ProtectionCC {}
 @CCCommand(ProtectionCommand.ExclusiveControlReport)
 export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.exclusiveControlNodeId = this.payload[0];
 		this.persistValues();
@@ -686,12 +667,12 @@ interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
 @expectedCCResponse(ProtectionCCReport)
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ProtectionCCExclusiveControlSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -723,10 +704,10 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 @CCCommand(ProtectionCommand.TimeoutReport)
 export class ProtectionCCTimeoutReport extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.timeout = Timeout.parse(this.payload[0]);
 		this.persistValues();
@@ -755,12 +736,12 @@ interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 @expectedCCResponse(ProtectionCCReport)
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ProtectionCCTimeoutSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

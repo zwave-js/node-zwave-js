@@ -13,7 +13,10 @@ export function checkCCToLogEntry(): void {
 	const tsConfig = loadTSConfig("zwave-js");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
-	const results = new Map<string, boolean | "empty" | "constructor">();
+	const results = new Map<
+		string,
+		boolean | "empty" | "constructor" | "ignored"
+	>();
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
@@ -57,6 +60,11 @@ export function checkCCToLogEntry(): void {
 					// TODO: move this check into lintCCConstructor
 					// highlight constructor only
 					results.set(node.name.text, "constructor");
+				} else if (
+					node.getText(sourceFile).includes("// @noLogEntry")
+				) {
+					// Check disabled with a `// @noLogEntry` comment in the class body
+					results.set(node.name.text, "ignored");
 				} else {
 					const hasToLogEntry = node.members.some(
 						(member) =>
@@ -78,6 +86,8 @@ export function checkCCToLogEntry(): void {
 					? " _(empty CC)_"
 					: checkResult === "constructor"
 					? " **(constructor only)**"
+					: checkResult === "ignored"
+					? " _(ignored with comment)_"
 					: ""
 			}`,
 		);

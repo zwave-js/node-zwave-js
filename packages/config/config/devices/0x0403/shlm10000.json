@@ -1,0 +1,16 @@
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHLM10000",
+	"description": "ABUS Security Center Bulb",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

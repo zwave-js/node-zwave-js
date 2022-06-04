@@ -56,7 +56,12 @@
 		},
 		{
 			"#": "82",
-			"$import": "~/0x0086/templates/aeotec_template.json#wallmote_command_type"
+			"$import": "~/0x0086/templates/aeotec_template.json#wallswitch_command_type"
+		},
+		{
+			"#": "83",
+			"$if": "firmwareVersion >= 1.5",
+			"$import": "~/0x0086/templates/aeotec_template.json#led_function_extended"
 		},
 		{
 			"#": "83",
@@ -93,6 +98,12 @@
 		{
 			"#": "122",
 			"$import": "~/templates/master_template.json#orientation_momentary"
+		},
+		{
+			"#": "252",
+			"$if": "firmwareVersion >= 1.5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Lock Configuration and Manual Button Press"
 		}
 	],
 	"metadata": {

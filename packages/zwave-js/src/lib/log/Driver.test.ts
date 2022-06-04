@@ -3,23 +3,21 @@ import {
 	getDirectionPrefix,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
+import {
+	FunctionType,
+	Message,
+	MessagePriority,
+	MessageType,
+} from "@zwave-js/serial";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import MockDate from "mockdate";
 import type { Driver } from "../driver/Driver";
+import { createAndStartTestingDriver } from "../driver/DriverMock";
 import { Transaction } from "../driver/Transaction";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import { Message } from "../message/Message";
-import { createEmptyMockDriver } from "../test/mocks";
 import { DriverLogger } from "./Driver";
-
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
 
 interface CreateMessageOptions {
 	type: MessageType;
@@ -30,32 +28,51 @@ interface CreateTransactionOptions extends CreateMessageOptions {
 	priority: MessagePriority;
 }
 
-function createMessage(
-	driver: Driver,
-	options: Partial<CreateTransactionOptions>,
-) {
-	return new Message(driver, {
-		type: options.type || MessageType.Request,
-		functionType: options.functionType || (0x00 as any),
-	});
-}
-
-function createTransaction(
-	options: Partial<CreateTransactionOptions>,
-): Transaction {
-	const message = createMessage(fakeDriver, options);
-	const trns = new Transaction(fakeDriver, {
-		message,
-		parts: {} as any,
-		promise: createDeferredPromise(),
-		priority: options.priority || MessagePriority.Controller,
-	});
-	return trns;
-}
-
 describe("lib/log/Driver =>", () => {
 	let driverLogger: DriverLogger;
 	let spyTransport: SpyTransport;
+	let driver: Driver;
+
+	function createMessage(
+		driver: Driver,
+		options: Partial<CreateTransactionOptions>,
+	) {
+		return new Message(driver, {
+			type: options.type || MessageType.Request,
+			functionType: options.functionType || (0x00 as any),
+		});
+	}
+
+	function createTransaction(
+		options: Partial<CreateTransactionOptions>,
+	): Transaction {
+		const message = createMessage(driver, options);
+		const trns = new Transaction(driver, {
+			message,
+			parts: {} as any,
+			promise: createDeferredPromise(),
+			priority: options.priority || MessagePriority.Controller,
+		});
+		return trns;
+	}
+
+	beforeAll(async () => {
+		({ driver } = await createAndStartTestingDriver({
+			loadConfiguration: false,
+			skipNodeInterview: true,
+			skipControllerIdentification: true,
+			// beforeStartup(mockPort) {
+			// 	controller = new MockController({ serial: mockPort });
+			// 	controller.defineBehavior(
+			// 		...createDefaultMockControllerBehaviors(),
+			// 	);
+			// },
+		}));
+	}, 30000);
+
+	afterAll(async () => {
+		await driver.destroy();
+	});
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
@@ -213,7 +230,7 @@ describe("lib/log/Driver =>", () => {
 
 	describe("transactionResponse() (for inbound messages)", () => {
 		it("contains the direction", () => {
-			const msg = createMessage(fakeDriver, {});
+			const msg = createMessage(driver, {});
 			driverLogger.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
@@ -222,7 +239,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the message type as a tag", () => {
-			let msg = createMessage(fakeDriver, {
+			let msg = createMessage(driver, {
 				type: MessageType.Request,
 			});
 			driverLogger.transactionResponse(msg, undefined, null as any);
@@ -230,7 +247,7 @@ describe("lib/log/Driver =>", () => {
 				predicate: (msg) => msg.includes("[REQ]"),
 			});
 
-			msg = createMessage(fakeDriver, {
+			msg = createMessage(driver, {
 				type: MessageType.Response,
 			});
 			driverLogger.transactionResponse(msg, undefined, null as any);
@@ -241,7 +258,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the function type as a tag", () => {
-			const msg = createMessage(fakeDriver, {
+			const msg = createMessage(driver, {
 				functionType: FunctionType.HardReset,
 			});
 			driverLogger.transactionResponse(msg, undefined, null as any);
@@ -251,7 +268,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the role (regarding the transaction) of the received message as a tag", () => {
-			const msg = createMessage(fakeDriver, {
+			const msg = createMessage(driver, {
 				functionType: FunctionType.HardReset,
 			});
 			driverLogger.transactionResponse(
@@ -337,7 +354,7 @@ describe("lib/log/Driver =>", () => {
 
 	describe("colors", () => {
 		it("primary tags are printed in inverse colors", () => {
-			const msg = createMessage(fakeDriver, {
+			const msg = createMessage(driver, {
 				functionType: FunctionType.HardReset,
 				type: MessageType.Response,
 			});

@@ -13,9 +13,8 @@
 			"runtimeArgs": [
 				"node",
 				"--async-stack-traces",
-				"--inspect-brk=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/test/run.ts"
 			],
 			"env": {
@@ -24,7 +23,27 @@
 			},
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Test network mock",
+			"port": 9229,
+			"runtimeExecutable": "yarn",
+			"runtimeArgs": [
+				"node",
+				"--async-stack-traces",
+				"-r",
+				"./maintenance/esbuild-register.js",
+				"${workspaceFolder}/test/mock.ts"
+			],
+			"env": {},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
@@ -37,7 +56,7 @@
 				"--async-stack-traces",
 				"--inspect-brk=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/maintenance/src/generateTypedDocs.ts"
 			],
 			"console": "integratedTerminal",
@@ -58,7 +77,8 @@
 			],
 			"console": "integratedTerminal",
 			"skipFiles": ["<node_internals>/**"],
-			"sourceMaps": true
+			"sourceMaps": true,
+			"preLaunchTask": "npm: build"
 		},
 		{
 			"type": "node",
@@ -71,7 +91,7 @@
 				"--async-stack-traces",
 				"--inspect=9229",
 				"-r",
-				"esbuild-register",
+				"./maintenance/esbuild-register.js",
 				"${workspaceFolder}/packages/config/maintenance/importConfig.ts",
 				"-dm -s zwa"
 			],

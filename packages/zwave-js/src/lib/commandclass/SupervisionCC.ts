@@ -9,9 +9,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -24,29 +24,10 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SupervisionCommand, SupervisionStatus } from "./_Types";
 
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
-
-// All the supported commands
-export enum SupervisionCommand {
-	Get = 0x01,
-	Report = 0x02,
-}
-
-/** @publicAPI */
-export enum SupervisionStatus {
-	NoSupport = 0x00,
-	Working = 0x01,
-	Fail = 0x02,
-	Success = 0xff,
-}
-
-/** @publicAPI */
-export interface SupervisionResult {
-	status: SupervisionStatus;
-	remainingDuration?: Duration;
-}
 
 let sessionId = 0;
 /** Returns the next session ID to be used for supervision */
@@ -57,6 +38,8 @@ export function getNextSessionId(): number {
 	return sessionId;
 }
 
+// @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
+// want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
 export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
@@ -141,7 +124,7 @@ export class SupervisionCC extends CommandClass {
 
 	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
-		driver: Driver,
+		host: ZWaveHost,
 		cc: CommandClass,
 		requestStatusUpdates: boolean = true,
 	): SupervisionCCGet {
@@ -152,7 +135,7 @@ export class SupervisionCC extends CommandClass {
 			);
 		}
 
-		return new SupervisionCCGet(driver, {
+		return new SupervisionCCGet(host, {
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
@@ -205,12 +188,12 @@ export class SupervisionCCReport extends SupervisionCC {
 	// @noCCValues
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (CCCommandOptions & SupervisionCCReportOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
@@ -289,16 +272,16 @@ function testResponseForSupervisionCCGet(
 @expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | SupervisionCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 3);
 			this.requestStatusUpdates = !!(this.payload[0] & 0b1_0_000000);
 			this.sessionId = this.payload[0] & 0b111111;
 
-			this.encapsulated = CommandClass.from(this.driver, {
+			this.encapsulated = CommandClass.from(this.host, {
 				data: this.payload.slice(2),
 				fromEncapsulation: true,
 				encapCC: this,

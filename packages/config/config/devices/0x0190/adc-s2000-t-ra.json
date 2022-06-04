@@ -45,8 +45,6 @@
 			"#": "4",
 			"label": "Configuration Bitmask",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [

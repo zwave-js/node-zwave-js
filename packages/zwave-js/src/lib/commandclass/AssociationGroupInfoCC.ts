@@ -10,11 +10,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
-import type { AssociationCC } from "./AssociationCC";
+import { AssociationCC } from "./AssociationCC";
 import {
 	API,
 	CCCommand,
@@ -29,222 +31,13 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
+import {
+	AssociationGroupInfoCommand,
+	AssociationGroupInfoProfile,
+} from "./_Types";
 
 // @noSetValueAPI This CC only has get-type commands
-
-// All the supported commands
-export enum AssociationGroupInfoCommand {
-	NameGet = 0x01,
-	NameReport = 0x02,
-	InfoGet = 0x03,
-	InfoReport = 0x04,
-	CommandListGet = 0x05,
-	CommandListReport = 0x06,
-}
-
-// TODO: Check if this should be in a config file instead
-/**
- * @publicAPI
- */
-export enum AssociationGroupInfoProfile {
-	"General: N/A" = 0x00_00,
-	"General: Lifeline" = 0x00_01,
-
-	"Control: Key 01" = 0x20_01,
-	"Control: Key 02",
-	"Control: Key 03",
-	"Control: Key 04",
-	"Control: Key 05",
-	"Control: Key 06",
-	"Control: Key 07",
-	"Control: Key 08",
-	"Control: Key 09",
-	"Control: Key 10",
-	"Control: Key 11",
-	"Control: Key 12",
-	"Control: Key 13",
-	"Control: Key 14",
-	"Control: Key 15",
-	"Control: Key 16",
-	"Control: Key 17",
-	"Control: Key 18",
-	"Control: Key 19",
-	"Control: Key 20",
-	"Control: Key 21",
-	"Control: Key 22",
-	"Control: Key 23",
-	"Control: Key 24",
-	"Control: Key 25",
-	"Control: Key 26",
-	"Control: Key 27",
-	"Control: Key 28",
-	"Control: Key 29",
-	"Control: Key 30",
-	"Control: Key 31",
-	"Control: Key 32",
-
-	"Sensor: Air temperature" = 0x31_01,
-	"Sensor: General purpose",
-	"Sensor: Illuminance",
-	"Sensor: Power",
-	"Sensor: Humidity",
-	"Sensor: Velocity",
-	"Sensor: Direction",
-	"Sensor: Atmospheric pressure",
-	"Sensor: Barometric pressure",
-	"Sensor: Solar radiation",
-	"Sensor: Dew point",
-	"Sensor: Rain rate",
-	"Sensor: Tide level",
-	"Sensor: Weight",
-	"Sensor: Voltage",
-	"Sensor: Current",
-	"Sensor: Carbon dioxide (CO2) level",
-	"Sensor: Air flow",
-	"Sensor: Tank capacity",
-	"Sensor: Distance",
-	"Sensor: Angle position",
-	"Sensor: Rotation",
-	"Sensor: Water temperature",
-	"Sensor: Soil temperature",
-	"Sensor: Seismic Intensity",
-	"Sensor: Seismic magnitude",
-	"Sensor: Ultraviolet",
-	"Sensor: Electrical resistivity",
-	"Sensor: Electrical conductivity",
-	"Sensor: Loudness",
-	"Sensor: Moisture",
-	"Sensor: Frequency",
-	"Sensor: Time",
-	"Sensor: Target temperature",
-	"Sensor: Particulate Matter 2.5",
-	"Sensor: Formaldehyde (CH2O) level",
-	"Sensor: Radon concentration",
-	"Sensor: Methane (CH4) density",
-	"Sensor: Volatile Organic Compound level",
-	"Sensor: Carbon monoxide (CO) level",
-	"Sensor: Soil humidity",
-	"Sensor: Soil reactivity",
-	"Sensor: Soil salinity",
-	"Sensor: Heart rate",
-	"Sensor: Blood pressure",
-	"Sensor: Muscle mass",
-	"Sensor: Fat mass",
-	"Sensor: Bone mass",
-	"Sensor: Total body water (TBW)",
-	"Sensor: Basis metabolic rate (BMR)",
-	"Sensor: Body Mass Index (BMI)",
-	"Sensor: Acceleration X-axis",
-	"Sensor: Acceleration Y-axis",
-	"Sensor: Acceleration Z-axis",
-	"Sensor: Smoke density",
-	"Sensor: Water flow",
-	"Sensor: Water pressure",
-	"Sensor: RF signal strength",
-	"Sensor: Particulate Matter 10",
-	"Sensor: Respiratory rate",
-	"Sensor: Relative Modulation level",
-	"Sensor: Boiler water temperature",
-	"Sensor: Domestic Hot Water (DHW) temperature",
-	"Sensor: Outside temperature",
-	"Sensor: Exhaust temperature",
-	"Sensor: Water Chlorine level",
-	"Sensor: Water acidity",
-	"Sensor: Water Oxidation reduction potential",
-	"Sensor: Heart Rate LF/HF ratio",
-	"Sensor: Motion Direction",
-	"Sensor: Applied force on the sensor",
-	"Sensor: Return Air temperature",
-	"Sensor: Supply Air temperature",
-	"Sensor: Condenser Coil temperature",
-	"Sensor: Evaporator Coil temperature",
-	"Sensor: Liquid Line temperature",
-	"Sensor: Discharge Line temperature",
-	"Sensor: Suction Pressure",
-	"Sensor: Discharge Pressure",
-	"Sensor: Defrost temperature",
-
-	"Notification: Smoke Alarm" = 0x71_01,
-	"Notification: CO Alarm",
-	"Notification: CO2 Alarm",
-	"Notification: Heat Alarm",
-	"Notification: Water Alarm",
-	"Notification: Access Control",
-	"Notification: Home Security",
-	"Notification: Power Management",
-	"Notification: System",
-	"Notification: Emergency Alarm",
-	"Notification: Clock",
-	"Notification: Appliance",
-	"Notification: Home Health",
-	"Notification: Siren",
-	"Notification: Water Valve",
-	"Notification: Weather Alarm",
-	"Notification: Irrigation",
-	"Notification: Gas alarm",
-	"Notification: Pest Control",
-	"Notification: Light sensor",
-	"Notification: Water Quality Monitoring",
-	"Notification: Home monitoring",
-
-	"Meter: Electric" = 0x32_01,
-	"Meter: Gas",
-	"Meter: Water",
-	"Meter: Heating",
-	"Meter: Cooling",
-
-	"Irrigation: Channel 01" = 0x6b_01,
-	"Irrigation: Channel 02",
-	"Irrigation: Channel 03",
-	"Irrigation: Channel 04",
-	"Irrigation: Channel 05",
-	"Irrigation: Channel 06",
-	"Irrigation: Channel 07",
-	"Irrigation: Channel 08",
-	"Irrigation: Channel 09",
-	"Irrigation: Channel 10",
-	"Irrigation: Channel 11",
-	"Irrigation: Channel 12",
-	"Irrigation: Channel 13",
-	"Irrigation: Channel 14",
-	"Irrigation: Channel 15",
-	"Irrigation: Channel 16",
-	"Irrigation: Channel 17",
-	"Irrigation: Channel 18",
-	"Irrigation: Channel 19",
-	"Irrigation: Channel 20",
-	"Irrigation: Channel 21",
-	"Irrigation: Channel 22",
-	"Irrigation: Channel 23",
-	"Irrigation: Channel 24",
-	"Irrigation: Channel 25",
-	"Irrigation: Channel 26",
-	"Irrigation: Channel 27",
-	"Irrigation: Channel 28",
-	"Irrigation: Channel 29",
-	"Irrigation: Channel 30",
-	"Irrigation: Channel 31",
-	"Irrigation: Channel 32",
-}
-
-/**
- * @publicAPI
- */
-export interface AssociationGroup {
-	/** How many nodes this association group supports */
-	maxNodes: number;
-	/** Whether this is the lifeline association (where the Controller must not be removed) */
-	isLifeline: boolean;
-	/** Whether multi channel associations are allowed */
-	multiChannel: boolean;
-	/** The name of the group */
-	label: string;
-	/** The association group profile (if known) */
-	profile?: AssociationGroupInfoProfile;
-	/** A map of Command Classes and commands issued by this group (if known) */
-	issuedCommands?: ReadonlyMap<CommandClasses, readonly number[]>;
-}
 
 /** Returns the ValueID used to store the name of an association group */
 function getGroupNameValueID(endpointIndex: number, groupId: number): ValueID {
@@ -299,6 +92,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	@validateArgs()
 	public async getGroupName(groupId: number): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
@@ -318,6 +112,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		if (response) return response.name;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroupInfo(groupId: number, refreshCache: boolean = false) {
 		this.assertSupportsCommand(
@@ -348,6 +143,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,
@@ -379,10 +175,14 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		this.registerValue(getGroupNameValueID(0, 0).property, true);
-		this.registerValue(getGroupInfoValueID(0, 0).property, true);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+		this.registerValue(getGroupNameValueID(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getGroupInfoValueID(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -395,39 +195,56 @@ export class AssociationGroupInfoCC extends CommandClass {
 	}
 
 	/** Returns the name of an association group */
-	public getGroupNameCached(groupId: number): string | undefined {
-		return this.getValueDB().getValue(
-			getGroupNameValueID(this.endpointIndex, groupId),
-		);
+	public static getGroupNameCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		groupId: number,
+	): string | undefined {
+		return host
+			.getValueDB(endpoint.nodeId)
+			.getValue(getGroupNameValueID(endpoint.index, groupId));
 	}
 
 	/** Returns the association profile for an association group */
-	public getGroupProfileCached(
+	public static getGroupProfileCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): AssociationGroupInfoProfile | undefined {
-		return this.getValueDB().getValue<{
+		return host.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
-		}>(getGroupInfoValueID(this.endpointIndex, groupId))?.profile;
+		}>(getGroupInfoValueID(endpoint.index, groupId))?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
-	public getIssuedCommandsCached(
+	public static getIssuedCommandsCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		groupId: number,
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
-		return this.getValueDB().getValue(
-			getIssuedCommandsValueID(this.endpointIndex, groupId),
-		);
+		return host
+			.getValueDB(endpoint.nodeId)
+			.getValue(getIssuedCommandsValueID(endpoint.index, groupId));
 	}
 
-	public findGroupsForIssuedCommand(
+	public static findGroupsForIssuedCommand(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
 		ccId: CommandClasses,
 		command: number,
 	): number[] {
 		const ret: number[] = [];
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount = this.getAssociationGroupCountCached(
+			host,
+			endpoint,
+		);
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Scan the issued commands of all groups if there's a match
-			const issuedCommands = this.getIssuedCommandsCached(groupId);
+			const issuedCommands = this.getIssuedCommandsCached(
+				host,
+				endpoint,
+				groupId,
+			);
 			if (!issuedCommands) continue;
 			if (
 				issuedCommands.has(ccId) &&
@@ -440,47 +257,50 @@ export class AssociationGroupInfoCC extends CommandClass {
 		return ret;
 	}
 
-	private getAssociationGroupCountCached(): number {
-		const endpoint = this.getEndpoint()!;
+	private static getAssociationGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		// The association group count is either determined by the
 		// Association CC or the Multi Channel Association CC
 
-		// First query the Multi Channel Association CC
 		return (
-			endpoint
-				.createCCInstanceUnsafe<MultiChannelAssociationCC>(
-					CommandClasses["Multi Channel Association"],
-				)
-				?.getGroupCountCached() ||
+			// First query the Multi Channel Association CC
+			(endpoint.supportsCC(CommandClasses["Multi Channel Association"]) &&
+				MultiChannelAssociationCC.getGroupCountCached(
+					host,
+					endpoint,
+				)) ||
 			// Then the Association CC
-			endpoint
-				.createCCInstanceUnsafe<AssociationCC>(
-					CommandClasses.Association,
-				)
-				?.getGroupCountCached() ||
+			(endpoint.supportsCC(CommandClasses.Association) &&
+				AssociationCC.getGroupCountCached(host, endpoint)) ||
 			// And fall back to 0
 			0
 		);
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount =
+			AssociationGroupInfoCC.getAssociationGroupCountCached(
+				driver,
+				endpoint,
+			);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// First get the group's name
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying name...`,
 				direction: "outbound",
@@ -488,7 +308,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			const name = await api.getGroupName(groupId);
 			if (name) {
 				const logMessage = `Association group #${groupId} has name "${name}"`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -496,7 +316,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			// Then the command list
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying command list...`,
 				direction: "outbound",
@@ -506,28 +326,32 @@ export class AssociationGroupInfoCC extends CommandClass {
 		}
 
 		// Finally query each group for its information
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
 		// Query the information for each group (this is the only thing that could be dynamic)
-		const associationGroupCount = this.getAssociationGroupCountCached();
+		const associationGroupCount =
+			AssociationGroupInfoCC.getAssociationGroupCountCached(
+				driver,
+				endpoint,
+			);
 		const hasDynamicInfo = this.getValueDB().getValue(
 			getHasDynamicInfoValueID(this.endpointIndex),
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			// Then its information
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Association group #${groupId}: Querying info...`,
 				direction: "outbound",
@@ -540,7 +364,7 @@ profile:         ${getEnumMemberName(
 					AssociationGroupInfoProfile,
 					info.profile,
 				)}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -552,10 +376,10 @@ profile:         ${getEnumMemberName(
 @CCCommand(AssociationGroupInfoCommand.NameReport)
 export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this.groupId = this.payload[0];
 		const nameLength = this.payload[1];
@@ -596,12 +420,12 @@ interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCNameReport)
 export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCNameGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -638,10 +462,10 @@ export interface AssociationGroupInfo {
 @CCCommand(AssociationGroupInfoCommand.InfoReport)
 export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.isListMode = !!(this.payload[0] & 0b1000_0000);
 		this.hasDynamicInfo = !!(this.payload[0] & 0b0100_0000);
@@ -720,12 +544,12 @@ type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
 @expectedCCResponse(AssociationGroupInfoCCInfoReport)
 export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCInfoGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -774,10 +598,10 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
 export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		const groupId = this.payload[0];
 		const listLength = this.payload[1];
@@ -835,12 +659,12 @@ interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationGroupInfoCCCommandListReport)
 export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| AssociationGroupInfoCCCommandListGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

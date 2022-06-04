@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { ZWaveError } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
 import {
 	assign,
 	createMachine,
@@ -9,14 +10,13 @@ import {
 	StateMachine,
 } from "xstate";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { SendDataMulticastBridgeRequest } from "../controller/SendDataBridgeMessages";
-import { SendDataMulticastRequest } from "../controller/SendDataMessages";
+import { SendDataMulticastBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
+import { SendDataMulticastRequest } from "../serialapi/transport/SendDataMessages";
 import {
 	isSendData,
 	isTransmitReport,
 	SendDataMessage,
-} from "../controller/SendDataShared";
-import type { Message } from "../message/Message";
+} from "../serialapi/transport/SendDataShared";
 import type { CommandQueueEvent } from "./CommandQueueMachine";
 import {
 	createMessageDroppedUnexpectedError,

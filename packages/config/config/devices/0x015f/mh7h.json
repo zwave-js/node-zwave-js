@@ -38,8 +38,6 @@
 			"#": "1",
 			"label": "Upload temperature format automatically",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -61,8 +59,6 @@
 			"#": "2",
 			"label": "Upload temperature and humidity automatically",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [

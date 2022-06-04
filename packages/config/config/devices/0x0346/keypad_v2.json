@@ -161,8 +161,6 @@
 			"#": "15",
 			"label": "Proximity Detection",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -284,8 +282,6 @@
 			"#": "24",
 			"label": "Calibrate Speaker",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -299,6 +295,17 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "26",
+			"$if": "firmwareVersion >= 1.18",
+			"label": "Motion Sensor Timeout",
+			"unit": "seconds",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"unsigned": true,
+			"minValue": 0,
+			"maxValue": 60
 		}
 	],
 	"compat": {

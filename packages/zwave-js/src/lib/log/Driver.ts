@@ -8,19 +8,15 @@ import {
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
+import type { Message, ResponseRole } from "@zwave-js/serial";
+import { FunctionType, MessagePriority, MessageType } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Transaction } from "../driver/Transaction";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../message/Constants";
-import type { Message, ResponseRole } from "../message/Message";
-import { NodeStatus } from "../node/Types";
+import { NodeStatus } from "../node/_Types";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";

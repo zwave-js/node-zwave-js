@@ -113,8 +113,6 @@
 			"label": "Single button associations - operating mode",
 			"description": "This parameter allows to choose operating mode for single button associations.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -190,8 +188,6 @@
 			"#": "17",
 			"label": "Paired buttons association for Square and Circle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -209,8 +205,6 @@
 			"#": "18",
 			"label": "Paired buttons association for Cross and Triangle",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -228,8 +222,6 @@
 			"#": "19",
 			"label": "Paired buttons association for Minus and Plus",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

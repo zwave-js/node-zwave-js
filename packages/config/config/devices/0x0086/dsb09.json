@@ -36,8 +36,6 @@
 			"#": "1",
 			"label": "Operating Voltage",
 			"valueSize": 2,
-			"minValue": 120,
-			"maxValue": 240,
 			"defaultValue": 240,
 			"allowManualEntry": false,
 			"options": [
@@ -258,5 +256,11 @@
 	"compat": {
 		// This device reports compound values on the root endpoint
 		"preserveRootApplicationCCValueIDs": true
+	},
+	"metadata": {
+		"inclusion": "1. Put your primary Z-Wave controller into inclusion mode.\n2. Press the Action Button on your HEM. If it has been successfully linked to your network, its LED will remain illuminated. If the linking was unsuccessful, your HEM’s LED will continue to blink.",
+		"exclusion": "1. Put your primary Z-Wave controller into exclusion mode.\n2. Press the Action Button on your HEM. If it has been successfully removed from your network, its LED will blink. If the removal was unsuccessful, its LED will be solid and it will be then repeated again.",
+		"reset": "1. Press and hold the Action Button for 10 seconds.\n2. If successful, the LED on the HEM should begin to blink slowly.",
+		"manual": "https://fccid.io/XBADSB09104/User-Manual/User-manual-1279688.pdf"
 	}
 }

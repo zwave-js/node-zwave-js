@@ -8,9 +8,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
@@ -27,7 +29,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-import type { AssociationAddress } from "./MultiChannelAssociationCC";
+import { AssociationCommand, type AssociationAddress } from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -112,29 +114,6 @@ export function getLifelineGroupIds(endpoint: Endpoint): number[] {
 	return distinct(lifelineGroups).sort();
 }
 
-// All the supported commands
-export enum AssociationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	Remove = 0x04,
-	SupportedGroupingsGet = 0x05,
-	SupportedGroupingsReport = 0x06,
-	// TODO: These two commands are V2. I have no clue how this is supposed to function:
-	// SpecificGroupGet = 0x0b,
-	// SpecificGroupReport = 0x0c,
-
-	// Here's what the docs have to say:
-	// This functionality allows a supporting multi-button device to detect a key press and subsequently advertise
-	// the identity of the key. The following sequence of events takes place:
-	// * The user activates a special identification sequence and pushes the button to be identified
-	// * The device issues a Node Information frame (NIF)
-	// * The NIF allows the portable controller to determine the NodeID of the multi-button device
-	// * The portable controller issues an Association Specific Group Get Command to the multi-button device
-	// * The multi-button device returns an Association Specific Group Report Command that advertises the
-	//   association group that represents the most recently detected button
-}
-
 // @noSetValueAPI
 
 @API(CommandClasses.Association)
@@ -178,6 +157,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(AssociationCommand, AssociationCommand.Get);
@@ -202,6 +182,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes to an association group
 	 */
+	@validateArgs()
 	public async addNodeIds(
 		groupId: number,
 		...nodeIds: number[]
@@ -220,6 +201,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from an association group
 	 */
+	@validateArgs()
 	public async removeNodeIds(
 		options: AssociationCCRemoveOptions,
 	): Promise<void> {
@@ -239,6 +221,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes from all association groups
 	 */
+	@validateArgs()
 	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
 		this.assertSupportsCommand(
 			AssociationCommand,
@@ -267,9 +250,11 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		this.registerValue(getHasLifelineValueId(0).property, true);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+		this.registerValue(getHasLifelineValueId(0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -286,11 +271,14 @@ export class AssociationCC extends CommandClass {
 	 * Returns the number of association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getGroupCountCached(): number {
+	public static getGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getGroupCountValueId(this.endpointIndex),
-			) || 0
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getGroupCountValueId(endpoint.index)) || 0
 		);
 	}
 
@@ -298,17 +286,23 @@ export class AssociationCC extends CommandClass {
 	 * Returns the number of nodes an association group supports.
 	 * This only works AFTER the interview process
 	 */
-	public getMaxNodesCached(groupId: number): number {
+	public static getMaxNodesCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		groupId: number,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ??
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ??
 			// If the information is not available, fall back to the configuration file if possible
 			// This can happen on some legacy devices which have "hidden" association groups
-			this.getNodeUnsafe()?.deviceConfig?.getAssociationConfigForEndpoint(
-				this.endpointIndex,
-				groupId,
-			)?.maxNodes ??
+			host.nodes
+				.get(endpoint.nodeId)
+				?.deviceConfig?.getAssociationConfigForEndpoint(
+					endpoint.index,
+					groupId,
+				)?.maxNodes ??
 			0
 		);
 	}
@@ -317,18 +311,18 @@ export class AssociationCC extends CommandClass {
 	 * Returns all the destinations of all association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getAllDestinationsCached(): ReadonlyMap<
-		number,
-		readonly AssociationAddress[]
-	> {
+	public static getAllDestinationsCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached();
-		const valueDB = this.getValueDB();
+		const groupCount = this.getGroupCountCached(host, endpoint);
+		const valueDB = host.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			// Add all root destinations
 			const nodes =
 				valueDB.getValue<number[]>(
-					getNodeIdsValueId(this.endpointIndex, i),
+					getNodeIdsValueId(endpoint.index, i),
 				) ?? [];
 
 			ret.set(
@@ -340,14 +334,14 @@ export class AssociationCC extends CommandClass {
 		return ret;
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -358,20 +352,20 @@ export class AssociationCC extends CommandClass {
 		// multi channel association groups
 
 		// Find out how many groups are supported
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of association groups...",
 			direction: "outbound",
 		});
 		const groupCount = await api.getGroupCount();
 		if (groupCount != undefined) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying association groups timed out, skipping interview...",
@@ -381,13 +375,13 @@ export class AssociationCC extends CommandClass {
 		}
 
 		// Query each association group for its members
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Skip the remaining quer Association CC in favor of Multi Channel Association if possible
 		if (
 			endpoint.commandClasses["Multi Channel Association"].isSupported()
 		) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: delaying configuration of lifeline associations until after Multi Channel Association interview...`,
 				direction: "none",
@@ -403,18 +397,18 @@ export class AssociationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Association.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		const groupCount = this.getGroupCountCached();
+		const groupCount = AssociationCC.getGroupCountCached(driver, endpoint);
 
 		// Query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
@@ -424,7 +418,7 @@ export class AssociationCC extends CommandClass {
 				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -442,10 +436,10 @@ interface AssociationCCSetOptions extends CCCommandOptions {
 @CCCommand(AssociationCommand.Set)
 export class AssociationCCSet extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -502,12 +496,12 @@ interface AssociationCCRemoveOptions {
 @CCCommand(AssociationCommand.Remove)
 export class AssociationCCRemove extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (AssociationCCRemoveOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -568,10 +562,10 @@ export class AssociationCCRemove extends AssociationCC {
 @CCCommand(AssociationCommand.Report)
 export class AssociationCCReport extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._groupId = this.payload[0];
@@ -649,10 +643,10 @@ interface AssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(AssociationCCReport)
 export class AssociationCCGet extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | AssociationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -688,10 +682,10 @@ export class AssociationCCGet extends AssociationCC {
 @CCCommand(AssociationCommand.SupportedGroupingsReport)
 export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];

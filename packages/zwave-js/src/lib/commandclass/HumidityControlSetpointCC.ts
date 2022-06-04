@@ -12,9 +12,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -36,26 +38,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum HumidityControlSetpointCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	ScaleSupportedGet = 0x06,
-	ScaleSupportedReport = 0x07,
-	CapabilitiesGet = 0x08,
-	CapabilitiesReport = 0x09,
-}
-
-export enum HumidityControlSetpointType {
-	"N/A" = 0x00,
-	"Humidifier" = 0x01, // CC v1
-	"De-humidifier" = 0x02, // CC v1
-	"Auto" = 0x03, // CC v2
-}
+import {
+	HumidityControlSetpointCapabilities,
+	HumidityControlSetpointCommand,
+	HumidityControlSetpointType,
+	HumidityControlSetpointValue,
+} from "./_Types";
 
 const humidityControlSetpointScaleName = "humidity";
 function getScale(configManager: ConfigManager, scale: number): Scale {
@@ -67,27 +55,6 @@ function getScale(configManager: ConfigManager, scale: number): Scale {
 function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 	return getScale(configManager, scale).unit ?? "";
 }
-
-export interface HumidityControlSetpointValue {
-	value: number;
-	scale: number;
-}
-
-export interface HumidityControlSetpointCapabilities {
-	minValue: number;
-	minValueScale: number;
-	maxValue: number;
-	maxValueScale: number;
-}
-
-/**
- * @publicAPI
- */
-export type HumidityControlSetpointMetadata = ValueMetadata & {
-	ccSpecific: {
-		setpointType: HumidityControlSetpointType;
-	};
-};
 
 function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
 	return {
@@ -162,7 +129,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 		if (this.isSinglecast()) {
 			// Verify the current value after a delay
-			this.schedulePoll({ property, propertyKey });
+			this.schedulePoll({ property, propertyKey }, value);
 		}
 	};
 
@@ -187,6 +154,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	public async get(
 		setpointType: HumidityControlSetpointType,
 	): Promise<HumidityControlSetpointValue | undefined> {
@@ -216,6 +184,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			  };
 	}
 
+	@validateArgs()
 	public async set(
 		setpointType: HumidityControlSetpointType,
 		value: number,
@@ -236,6 +205,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	public async getCapabilities(
 		setpointType: HumidityControlSetpointType,
 	): Promise<HumidityControlSetpointCapabilities | undefined> {
@@ -284,6 +254,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		return response?.supportedSetpointTypes;
 	}
 
+	@validateArgs()
 	public async getSupportedScales(
 		setpointType: HumidityControlSetpointType,
 	): Promise<readonly Scale[] | undefined> {
@@ -326,16 +297,16 @@ export class HumidityControlSetpointCC extends CommandClass {
 		}
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Setpoint"
 		].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -343,7 +314,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 
 		// Query the supported setpoint types
 		let setpointTypes: HumidityControlSetpointType[] = [];
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "retrieving supported setpoint types...",
 			direction: "outbound",
@@ -360,13 +331,13 @@ export class HumidityControlSetpointCC extends CommandClass {
 					.map((name) => `· ${name}`)
 					.join("\n");
 
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported setpoint types timed out, skipping interview...",
@@ -381,7 +352,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 				type,
 			);
 			// Find out the capabilities of this setpoint
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `retrieving capabilities for setpoint ${setpointName}...`,
 				direction: "outbound",
@@ -392,7 +363,7 @@ export class HumidityControlSetpointCC extends CommandClass {
 ${setpointScaleSupported
 	.map((t) => `\n· ${t.key} ${t.unit} - ${t.label}`)
 	.join("")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -413,17 +384,17 @@ ${setpointScaleSupported
 			const setpointCaps = await api.getCapabilities(type);
 			if (setpointCaps) {
 				const minValueUnit = getSetpointUnit(
-					this.driver.configManager,
+					this.host.configManager,
 					setpointCaps.minValueScale,
 				);
 				const maxValueUnit = getSetpointUnit(
-					this.driver.configManager,
+					this.host.configManager,
 					setpointCaps.maxValueScale,
 				);
 				const logMessage = `received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -432,15 +403,15 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		}
 
 		// Query the current value for all setpoint types
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Humidity Control Setpoint"
 		].withOptions({
@@ -459,7 +430,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				type,
 			);
 			// Every time, query the current value
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value of setpoint ${setpointName}...`,
 				direction: "outbound",
@@ -469,10 +440,9 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				const logMessage = `received current value of setpoint ${setpointName}: ${
 					setpoint.value
 				} ${
-					getScale(this.driver.configManager, setpoint.scale).unit ??
-					""
+					getScale(this.host.configManager, setpoint.scale).unit ?? ""
 				}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -491,12 +461,12 @@ interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(HumidityControlSetpointCommand.Set)
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -523,7 +493,7 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.driver.configManager, this.scale);
+		const scale = getScale(this.host.configManager, this.scale);
 		return {
 			...super.toLogEntry(),
 			message: {
@@ -540,10 +510,10 @@ export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 @CCCommand(HumidityControlSetpointCommand.Report)
 export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
@@ -551,14 +521,14 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = getScale(this.driver.configManager, 0);
+			this._scale = getScale(this.host.configManager, 0);
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(this.driver.configManager, scale);
+		this._scale = getScale(this.host.configManager, scale);
 
 		this.persistValues();
 	}
@@ -644,12 +614,12 @@ interface HumidityControlSetpointCCGetOptions extends CCCommandOptions {
 )
 export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -684,10 +654,10 @@ export class HumidityControlSetpointCCGet extends HumidityControlSetpointCC {
 @CCCommand(HumidityControlSetpointCommand.SupportedReport)
 export class HumidityControlSetpointCCSupportedReport extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._supportedSetpointTypes = parseBitMask(
@@ -729,10 +699,10 @@ export class HumidityControlSetpointCCSupportedGet extends HumidityControlSetpoi
 @CCCommand(HumidityControlSetpointCommand.ScaleSupportedReport)
 export class HumidityControlSetpointCCScaleSupportedReport extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 
@@ -741,7 +711,7 @@ export class HumidityControlSetpointCCScaleSupportedReport extends HumidityContr
 			0,
 		);
 		this._supportedScales = supportedScaleIndices.map((scale) =>
-			getScale(this.driver.configManager, scale),
+			getScale(this.host.configManager, scale),
 		);
 
 		this.persistValues();
@@ -773,12 +743,12 @@ interface HumidityControlSetpointCCScaleSupportedGetOptions
 @expectedCCResponse(HumidityControlSetpointCCScaleSupportedReport)
 export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCScaleSupportedGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -813,10 +783,10 @@ export class HumidityControlSetpointCCScaleSupportedGet extends HumidityControlS
 @CCCommand(HumidityControlSetpointCommand.CapabilitiesReport)
 export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
@@ -837,11 +807,8 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
-				getSetpointUnit(
-					this.driver.configManager,
-					this._minValueScale,
-				) ||
-				getSetpointUnit(this.driver.configManager, this._maxValueScale),
+				getSetpointUnit(this.host.configManager, this._minValueScale) ||
+				getSetpointUnit(this.host.configManager, this._maxValueScale),
 			ccSpecific: {
 				setpointType: this._type,
 			},
@@ -877,11 +844,11 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			this.driver.configManager,
+			this.host.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			this.driver.configManager,
+			this.host.configManager,
 			this.maxValueScale,
 		);
 		return {
@@ -907,12 +874,12 @@ interface HumidityControlSetpointCCCapabilitiesGetOptions
 @expectedCCResponse(HumidityControlSetpointCCCapabilitiesReport)
 export class HumidityControlSetpointCCCapabilitiesGet extends HumidityControlSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| HumidityControlSetpointCCCapabilitiesGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(

@@ -4,11 +4,12 @@ import {
 	isZWaveError,
 	NodeProtocolInfo,
 	NodeType,
+	RFRegion,
 	stripUndefined,
 	ZWaveError,
 	ZWaveErrorCodes,
-} from "@zwave-js/core";
-import { cloneDeep, pick } from "@zwave-js/shared";
+} from "@zwave-js/core/safe";
+import { cloneDeep, pick } from "@zwave-js/shared/safe";
 import semver from "semver";
 import {
 	ApplicationCCsFile,
@@ -119,7 +120,7 @@ export interface NVMJSONController {
 }
 
 export interface NVMJSONControllerRFConfig {
-	rfRegion: number; // TODO: Should be RF Region
+	rfRegion: RFRegion;
 	txPower: number;
 	measured0dBm: number;
 	enablePTI: number | null;
@@ -177,7 +178,7 @@ function createEmptyPhysicalNode(): NVMJSONNodeWithInfo {
 		supportedDataRates: [],
 		protocolVersion: 0,
 		optionalFunctionality: false,
-		nodeType: NodeType["Routing End Node"],
+		nodeType: NodeType["End Node"],
 		supportsSecurity: false,
 		supportsBeaming: false,
 		genericDeviceClass: 0,
@@ -332,15 +333,15 @@ export function nvmObjectsToJSON(
 		node.sucPendingUpdate = sucPendingUpdate.has(id);
 		node.pendingDiscovery = pendingDiscovery.has(id);
 		if (routeCacheExists.has(id)) {
-			let routeCache: RouteCache;
+			let routeCache: RouteCache | undefined;
 			if (protocolFileFormat === 0) {
 				const fileId = nodeIdToRouteCacheFileIDV0(id);
-				const file = getFileOrThrow<RouteCacheFileV0>(fileId);
-				routeCache = file.routeCache;
+				const file = getFile<RouteCacheFileV0>(fileId);
+				routeCache = file?.routeCache;
 			} else if (protocolFileFormat <= 4) {
 				const fileId = nodeIdToRouteCacheFileIDV1(id);
-				const file = getFileOrThrow<RouteCacheFileV1>(fileId);
-				routeCache = file.routeCaches.find((i) => i.nodeId === id)!;
+				const file = getFile<RouteCacheFileV1>(fileId);
+				routeCache = file?.routeCaches.find((i) => i.nodeId === id);
 			} else {
 				throw new ZWaveError(
 					`Unsupported protocol file format: ${protocolFileFormat}`,
@@ -780,6 +781,23 @@ export function jsonToNVMObjects_v1_to_v4(
 		patch: applPatch,
 	});
 	addApplicationObjects(applVersionFile.serialize());
+
+	// When converting it can be that the rfConfig doesn't exist. Make sure
+	// that it is initialized with proper defaults.
+	target.controller.rfConfig ??= {
+		rfRegion: RFRegion["Default (EU)"],
+		txPower: 0.0,
+		measured0dBm: +3.3,
+		enablePTI: null,
+		maxTXPower: null,
+	};
+
+	// For v3+ targets, the enablePTI and maxTxPower must be set in the rfConfig
+	// or the controller will ignore the file and not accept any changes to the RF config
+	if (format >= 3) {
+		target.controller.rfConfig.enablePTI ??= 0;
+		target.controller.rfConfig.maxTXPower ??= 14.0;
+	}
 
 	addApplicationObjects(...serializeCommonApplicationObjects(target));
 
@@ -1258,6 +1276,8 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			...json500To700(source.json, true),
 			meta: target.json.meta,
 		};
+		// The target is a different series, try to preserve the RF config of the target stick
+		json.controller.rfConfig = target.json.controller.rfConfig;
 		return jsonToNVM(json, target.json.controller.protocolVersion);
 	} else if (source.type === 700 && target.type === 500) {
 		// We need to downgrade the source to 500 series
@@ -1265,7 +1285,7 @@ export function migrateNVM(sourceNVM: Buffer, targetNVM: Buffer): Buffer {
 			...json700To500(source.json),
 			meta: target.json.meta,
 		};
-		// If the target is a 500 series stick, preserve the RF config
+		// The target is a different series, try to preserve the RF config of the target stick
 		json.controller.rfConfig = target.json.controller.rfConfig;
 		return jsonToNVM500(json, target.json.controller.protocolVersion);
 	} else {

@@ -28,8 +28,6 @@
 			"label": "Temperature Reporting Threshold",
 			"description": "Sets the reporting threshold for changes in ambient temperature.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -60,8 +58,6 @@
 			"label": "Utility Lock Enable/Disable",
 			"description": "Enables or Disables the Utility Lock.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,
@@ -82,8 +78,6 @@
 			"label": "Humidity Reporting Threshold",
 			"description": "Sets the reporting threshold for changes in humidity.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -110,8 +104,6 @@
 			"label": "Auxiliary/Emergency",
 			"description": "Enables or Disables the Aux / Emergency Heat.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -130,8 +122,6 @@
 			"label": "Swing Temperature",
 			"description": "Sets the swing threshold before turning on / off HVAC.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 8,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -183,8 +173,6 @@
 			"label": "Thermostat Recovery Mode",
 			"description": "This parameter defines the thermostat recovery mode.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -203,8 +191,6 @@
 			"label": "Simple UI Mode Enable/Disable",
 			"description": "Enables or Disables Simple UI Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -223,8 +209,6 @@
 			"label": "Multicast Enable/Disable",
 			"description": "If set to 0, multicast is disabled, if set to 1, will enable the multicast.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -1,9 +1,8 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import { NoOperationCC } from "./NoOperationCC";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -16,7 +15,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/NoOperationCC => ", () => {
 	it("the CC should serialize correctly", () => {
-		const cc = new NoOperationCC(fakeDriver, { nodeId: 1 });
+		const cc = new NoOperationCC(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([]), // No command!
 		);
@@ -27,6 +26,6 @@ describe("lib/commandclass/NoOperationCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([]), // No command!
 		);
-		void new NoOperationCC(fakeDriver, { nodeId: 2, data: ccData });
+		void new NoOperationCC(host, { nodeId: 2, data: ccData });
 	});
 });

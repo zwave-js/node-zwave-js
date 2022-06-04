@@ -5,10 +5,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -21,27 +23,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ClockCommand {
-	Set = 0x04,
-	Get = 0x05,
-	Report = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum Weekday {
-	Unknown = 0x00,
-	Monday = 0x01,
-	Tuesday = 0x02,
-	Wednesday = 0x03,
-	Thursday = 0x04,
-	Friday = 0x05,
-	Saturday = 0x06,
-	Sunday = 0x07,
-}
+import { ClockCommand, Weekday } from "./_Types";
 
 // @noSetValueAPI - This CC has no simple value to set
 
@@ -74,6 +56,7 @@ export class ClockCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs({ strictEnums: true })
 	public async set(
 		hour: number,
 		minute: number,
@@ -97,29 +80,29 @@ export class ClockCCAPI extends CCAPI {
 export class ClockCC extends CommandClass {
 	declare ccCommand: ClockCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Clock.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "requesting current clock setting...",
 			direction: "outbound",
 		});
@@ -132,7 +115,7 @@ export class ClockCC extends CommandClass {
 			}${response.hour < 10 ? "0" : ""}${response.hour}:${
 				response.minute < 10 ? "0" : ""
 			}${response.minute}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -149,10 +132,10 @@ interface ClockCCSetOptions extends CCCommandOptions {
 @CCCommand(ClockCommand.Set)
 export class ClockCCSet extends ClockCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | ClockCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -200,10 +183,10 @@ export class ClockCCReport extends ClockCC {
 	// @noCCValues Setting the clock is done automatically and needs no values to be stored
 
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 
 		this.weekday = this.payload[0] >>> 5;

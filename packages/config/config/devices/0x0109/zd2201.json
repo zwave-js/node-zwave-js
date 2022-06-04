@@ -27,8 +27,6 @@
 			"label": "Temperature Unit Selection",
 			"description": "Choose °C or °F",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

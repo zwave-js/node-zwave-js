@@ -55,8 +55,6 @@
 			"label": "Disable Scene Holding report",
 			"description": "Send Central Scene Holding when the button is held.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

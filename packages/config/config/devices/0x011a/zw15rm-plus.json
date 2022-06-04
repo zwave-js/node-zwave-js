@@ -19,8 +19,6 @@
 			"label": "ON/OFF",
 			"description": "Synchronization of outlet power and LED indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -1,6 +1,6 @@
 # Development introduction {docsify-ignore-all}
 
-## Help, I know nothing about `npm`, `yarn`, `lerna` and whatever...
+## Help, I know nothing about `npm`, `yarn` and whatever...
 
 _Alright, here's a short introduction if you're new to this stuff. If you know the basics, feel free to [skip forward](`#Prerequisites`)._
 
@@ -11,9 +11,6 @@ _Alright, here's a short introduction if you're new to this stuff. If you know t
 
 `yarn` has a [bunch of commands](https://classic.yarnpkg.com/en/docs/usage) but you'll likely only need to use `yarn` (short for `yarn install`) to install all dependencies. **Don't** install missing dependencies one by one, **don't** install them globally.  
 `yarn` can also run package scripts for you, which we use extensively, e.g. `yarn run build` to compile TypeScript into JavaScript. You'll find most of the scripts in `package.json` under `"scripts"`.
-
-[`lerna`](https://github.com/lerna/lerna) is a tool to manage monorepos (multiple dependent packages in a single repo) that works hand in hand with `yarn`. Since it allows running package scripts of sub-packages, we use it for some of our workflows.  
-To use `lerna`, you need to install it globally with `npm i -g lerna`. If you prefer not to, you can alternatively just prefix the commands with `yarn`, e.g. `yarn lerna run <scriptname>`.
 
 ## Online editor
 

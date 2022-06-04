@@ -1,17 +1,12 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
-import {
-	BasicCC,
-	BasicCCGet,
-	BasicCCReport,
-	BasicCCSet,
-	BasicCommand,
-} from "./BasicCC";
+import { createTestingHost } from "@zwave-js/host";
+import * as nodeUtils from "../node/utils";
+import { createTestNode } from "../test/mocks";
+import { BasicCC, BasicCCGet, BasicCCReport, BasicCCSet } from "./BasicCC";
 import { getCCValueMetadata } from "./CommandClass";
+import { BasicCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,7 +19,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/BasicCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const basicCC = new BasicCCGet(fakeDriver, { nodeId: 1 });
+		const basicCC = new BasicCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				BasicCommand.Get, // CC Command
@@ -34,7 +29,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly", () => {
-		const basicCC = new BasicCCSet(fakeDriver, {
+		const basicCC = new BasicCCSet(host, {
 			nodeId: 2,
 			targetValue: 55,
 		});
@@ -54,7 +49,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 				55, // current value
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, {
+		const basicCC = new BasicCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -73,7 +68,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 				1, // duration
 			]),
 		);
-		const basicCC = new BasicCCReport(fakeDriver, {
+		const basicCC = new BasicCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -88,7 +83,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const basicCC: any = new BasicCC(fakeDriver, {
+		const basicCC: any = new BasicCC(host, {
 			nodeId: 2,
 			data: serializedCC,
 		});
@@ -124,49 +119,45 @@ describe("lib/commandclass/BasicCC => ", () => {
 	describe("getDefinedValueIDs()", () => {
 		it("should include the target value for all endpoints except the node itself", () => {
 			// Repro for GH#377
-			const node = new ZWaveNode(2, fakeDriver as unknown as Driver);
-			(fakeDriver as any).controller.nodes.set(node.id, node);
-			// interviewComplete needs to be true for getEndpoint to work
-			node.valueDB.setValue(
-				{
-					commandClass: CommandClasses["Multi Channel"],
-					property: "interviewComplete",
+			const node2 = createTestNode(host, {
+				id: 2,
+				numEndpoints: 2,
+				supportsCC(cc) {
+					switch (cc) {
+						case CommandClasses.Basic:
+						case CommandClasses["Multi Channel"]:
+							return true;
+					}
+					return false;
 				},
-				true,
-			);
-			// We have 2 endpoints
-			node.valueDB.setValue(
-				{
-					commandClass: CommandClasses["Multi Channel"],
-					property: "individualCount",
+				getCCVersion(cc) {
+					switch (cc) {
+						case CommandClasses.Basic:
+							// We only support V1, so no report of the target value
+							return 1;
+						case CommandClasses["Multi Channel"]:
+							return 2;
+					}
+					return 0;
 				},
-				2,
-			);
-			// And we only support V1, so no report of the target value
-			for (let ep = 0; ep <= 2; ep++) {
-				node.getEndpoint(ep)!.addCC(CommandClasses.Basic, {
-					isSupported: true,
-					version: 1,
-				});
-			}
+			});
+			host.nodes.set(node2.id, node2);
 
-			const valueIDs = node
-				.getDefinedValueIDs()
+			const valueIDs = nodeUtils
+				.getDefinedValueIDs(host, node2)
 				.filter(
 					({ commandClass, property }) =>
 						commandClass === CommandClasses.Basic &&
 						property === "targetValue",
 				);
-			const endpoints = valueIDs.map(({ endpoint }) => endpoint);
-			node.destroy();
-
-			expect(endpoints).toEqual([1, 2]);
+			const endpointIndizes = valueIDs.map(({ endpoint }) => endpoint);
+			expect(endpointIndizes).toEqual([1, 2]);
 		});
 	});
 
 	describe("responses should be detected correctly", () => {
 		it("BasicCCSet should expect no response", () => {
-			const cc = new BasicCCSet(fakeDriver, {
+			const cc = new BasicCCSet(host, {
 				nodeId: 2,
 				endpoint: 2,
 				targetValue: 7,
@@ -175,12 +166,12 @@ describe("lib/commandclass/BasicCC => ", () => {
 		});
 
 		it("BasicCCSet => BasicCCReport = unexpected", () => {
-			const ccRequest = new BasicCCSet(fakeDriver, {
+			const ccRequest = new BasicCCSet(host, {
 				nodeId: 2,
 				endpoint: 2,
 				targetValue: 7,
 			});
-			const ccResponse = new BasicCCReport(fakeDriver, {
+			const ccResponse = new BasicCCReport(host, {
 				nodeId: ccRequest.nodeId,
 				currentValue: 7,
 			});
@@ -189,17 +180,17 @@ describe("lib/commandclass/BasicCC => ", () => {
 		});
 
 		it("BasicCCGet should expect a response", () => {
-			const cc = new BasicCCGet(fakeDriver, {
+			const cc = new BasicCCGet(host, {
 				nodeId: 2,
 			});
 			expect(cc.expectsCCResponse()).toBeTrue();
 		});
 
 		it("BasicCCGet => BasicCCReport = expected", () => {
-			const ccRequest = new BasicCCGet(fakeDriver, {
+			const ccRequest = new BasicCCGet(host, {
 				nodeId: 2,
 			});
-			const ccResponse = new BasicCCReport(fakeDriver, {
+			const ccResponse = new BasicCCReport(host, {
 				nodeId: ccRequest.nodeId,
 				currentValue: 7,
 			});
@@ -208,10 +199,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 		});
 
 		it("BasicCCGet => BasicCCReport (wrong node) = unexpected", () => {
-			const ccRequest = new BasicCCGet(fakeDriver, {
+			const ccRequest = new BasicCCGet(host, {
 				nodeId: 2,
 			});
-			const ccResponse = new BasicCCReport(fakeDriver, {
+			const ccResponse = new BasicCCReport(host, {
 				nodeId: (ccRequest.nodeId as number) + 1,
 				currentValue: 7,
 			});
@@ -220,10 +211,10 @@ describe("lib/commandclass/BasicCC => ", () => {
 		});
 
 		it("BasicCCGet => BasicCCSet = unexpected", () => {
-			const ccRequest = new BasicCCGet(fakeDriver, {
+			const ccRequest = new BasicCCGet(host, {
 				nodeId: 2,
 			});
-			const ccResponse = new BasicCCSet(fakeDriver, {
+			const ccResponse = new BasicCCSet(host, {
 				nodeId: ccRequest.nodeId,
 				targetValue: 7,
 			});

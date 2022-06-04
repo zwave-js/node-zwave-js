@@ -6,9 +6,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	decodeSetbackState,
 	encodeSetbackState,
@@ -33,21 +35,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum ThermostatSetbackCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
-
-/**
- * @publicAPI
- */
-export enum SetbackType {
-	None = 0x00,
-	Temporary = 0x01,
-	Permanent = 0x02,
-}
+import { SetbackType, ThermostatSetbackCommand } from "./_Types";
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together
@@ -98,6 +86,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(
 		setbackType: SetbackType,
 		setbackState: SetbackState,
@@ -122,30 +111,30 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Setback"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the thermostat state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying the current thermostat state...",
 			direction: "outbound",
@@ -155,7 +144,7 @@ export class ThermostatSetbackCC extends CommandClass {
 			const logMessage = `received current state:
 setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
 setback state: ${setbackResp.setbackState}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -172,12 +161,12 @@ interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetbackCommand.Set)
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetbackCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -219,10 +208,10 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 @CCCommand(ThermostatSetbackCommand.Report)
 export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._setbackType = this.payload[0] & 0b11;

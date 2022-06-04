@@ -1,23 +1,17 @@
 import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core";
-import {
-	parseRSSI,
-	RSSI,
-	rssiToString,
-	tryParseRSSI,
-} from "../../controller/SendDataShared";
-import type { Driver } from "../../driver/Driver";
-import {
-	FunctionType,
-	MessagePriority,
-	MessageType,
-} from "../../message/Constants";
+import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
+	FunctionType,
 	Message,
 	MessageDeserializationOptions,
+	MessagePriority,
+	MessageType,
 	messageTypes,
 	priority,
-} from "../../message/Message";
+} from "@zwave-js/serial";
+import { RSSI, rssiToString } from "../../controller/_Types";
+import { parseRSSI, tryParseRSSI } from "../transport/SendDataShared";
 
 @messageTypes(MessageType.Request, FunctionType.GetBackgroundRSSI)
 @priority(MessagePriority.Normal)
@@ -26,8 +20,11 @@ export class GetBackgroundRSSIRequest extends Message {}
 
 @messageTypes(MessageType.Response, FunctionType.GetBackgroundRSSI)
 export class GetBackgroundRSSIResponse extends Message {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions,
+	) {
+		super(host, options);
 		this.rssiChannel0 = parseRSSI(this.payload, 0);
 		this.rssiChannel1 = parseRSSI(this.payload, 1);
 		this.rssiChannel2 = tryParseRSSI(this.payload, 2);

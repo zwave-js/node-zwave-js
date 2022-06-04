@@ -23,9 +23,42 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/config_template.json#fade_on_time"
+		},
+		{
+			"#": "2",
+			"$import": "templates/config_template.json#fade_off_time"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#minimum_dim_level_1-99",
+			"defaultValue": 10
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#maximum_dim_level_0-100"
+		},
+		{
+			"#": "7",
+			"$import": "templates/config_template.json#locator_led"
+		},
+		{
+			"#": "8",
+			"$import": "templates/config_template.json#load_type"
+		}
+	],
+	"metadata": {
+		"inclusion": "Network Wide Inclusion:\nNetwork Wide Inclusion allows your device to be added to the network using devices already in the network to assist with communication. Work your way from the closest devices to the controller outward.\n• Enter Programming Mode by holding the control button for 7 seconds, the Locator LED will blink amber.\n• Tap the control button one time. The Locator LED will quickly flash green.\n• The Decora Smart Z-Wave device is ready to learn into the Z-Wave network.\n• Follow directions in the Z-Wave controller to complete the adding process.\n• Upon successful addition to network the LED will turn off and then blink green 3 times.\n• If the adding process is not successful the LED will flash red 3 times.\nTraditional Inclusion:\nFor older controllers Traditional Inclusion is supported. Depending on the age of the controller, the controller will need to be 3 to 35 feet from the device when including.\n• Enter Programming Mode by holding the control button for 7 seconds; the Locator LED will blink amber.\n• The Decora Smart Z-Wave device is ready to add to the Z-Wave network.\n• Follow directions in the Z-Wave controller to enter learn mode.\n• Tap the control button one time. The Locator LED will quickly flash green. The Z-Wave controller will begin to pair with the Decora Smart device.\n• Upon successful addition to the network the LED will turn off and then blink green 3 times.\n• If the adding process is not successful the LED will flash red 3 times.",
+		"exclusion": "• Enter Programming Mode by holding the control button for 7 seconds; the Locator LED will turn amber.\n• Follow directions in the Z-Wave controller to enter exclusion mode.\n• Tap the control button one time. The Locator LED will quickly flash green. The Z-Wave controller will exclude the Decora Smart device.\n• The Z-Wave controller will confirm successful exclusion from the network.",
+		"reset": "Hold the LED button down for 14 seconds. Upon successful reset, the LED with blink red/amber.",
+		"manual": "https://www.leviton.com/en/docs/DI-000-DZPD3-02B-W.pdf"
 	}
 }

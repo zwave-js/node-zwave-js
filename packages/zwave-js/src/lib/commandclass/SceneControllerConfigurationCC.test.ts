@@ -1,18 +1,14 @@
 import { CommandClasses, Duration } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
+import { createTestNode } from "../test/mocks";
 import { getGroupCountValueId } from "./AssociationCC";
 import {
 	SceneControllerConfigurationCC,
 	SceneControllerConfigurationCCGet,
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
-	SceneControllerConfigurationCommand,
 } from "./SceneControllerConfigurationCC";
-
-const fakeGroupCount = 5;
-const groupCountValueId = getGroupCountValueId();
+import { SceneControllerConfigurationCommand } from "./_Types";
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -24,31 +20,19 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
-	let fakeDriver: Driver;
-	let node2: ZWaveNode;
+	const fakeGroupCount = 5;
+	const groupCountValueId = getGroupCountValueId();
+	let host: TestingHost;
 
 	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-
-		node2 = new ZWaveNode(2, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(2, node2);
-		node2.addCC(CommandClasses["Scene Controller Configuration"], {
-			isSupported: true,
-			version: 1,
-		});
-		node2.addCC(CommandClasses.Association, {
-			isSupported: true,
-			version: 3,
-		});
-		node2.valueDB.setValue(groupCountValueId, fakeGroupCount);
-	});
-
-	afterAll(() => {
-		node2.destroy();
+		host = createTestingHost();
+		const node2 = createTestNode(host, { id: 2 });
+		host.nodes.set(2, node2);
+		host.getValueDB(2).setValue(groupCountValueId, fakeGroupCount);
 	});
 
 	it("the Get command should serialize correctly", () => {
-		const cc = new SceneControllerConfigurationCCGet(fakeDriver, {
+		const cc = new SceneControllerConfigurationCCGet(host, {
 			nodeId: 2,
 			groupId: 1,
 		});
@@ -63,7 +47,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 
 	it("the Get command should throw if GroupId > groupCount", () => {
 		expect(() => {
-			new SceneControllerConfigurationCCGet(fakeDriver, {
+			new SceneControllerConfigurationCCGet(host, {
 				nodeId: 2,
 				groupId: fakeGroupCount + 1,
 			});
@@ -71,7 +55,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly", () => {
-		const cc = new SceneControllerConfigurationCCSet(fakeDriver, {
+		const cc = new SceneControllerConfigurationCCSet(host, {
 			nodeId: 2,
 			groupId: 3,
 			sceneId: 240,
@@ -89,7 +73,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly with undefined duration", () => {
-		const cc = new SceneControllerConfigurationCCSet(fakeDriver, {
+		const cc = new SceneControllerConfigurationCCSet(host, {
 			nodeId: 2,
 			groupId: 3,
 			sceneId: 240,
@@ -109,7 +93,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	it("the Set command should throw if GroupId > groupCount", () => {
 		expect(
 			() =>
-				new SceneControllerConfigurationCCSet(fakeDriver, {
+				new SceneControllerConfigurationCCSet(host, {
 					nodeId: 2,
 					groupId: fakeGroupCount + 1,
 					sceneId: 240,
@@ -127,7 +111,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 				0x05, // dimming duration
 			]),
 		);
-		const cc = new SceneControllerConfigurationCCReport(fakeDriver, {
+		const cc = new SceneControllerConfigurationCCReport(host, {
 			nodeId: 2,
 			data: ccData,
 		});
@@ -141,7 +125,7 @@ describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new SceneControllerConfigurationCC(fakeDriver, {
+		const cc: any = new SceneControllerConfigurationCC(host, {
 			nodeId: 1,
 			data: serializedCC,
 		});

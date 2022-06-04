@@ -1,13 +1,12 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import { CommandClass, getCommandClass } from "./CommandClass";
 import { VersionCC } from "./VersionCC";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 describe("lib/commandclass/VersionCC => ", () => {
-	const cc = new VersionCC(fakeDriver, { nodeId: 9 });
+	const cc = new VersionCC(host, { nodeId: 9 });
 
 	it("should be a CommandClass", () => {
 		expect(cc).toBeInstanceOf(CommandClass);
@@ -17,7 +16,7 @@ describe("lib/commandclass/VersionCC => ", () => {
 	});
 
 	// it("should serialize correctly", () => {
-	// 	const req = new SendDataRequest(fakeDriver, {
+	// 	const req = new SendDataRequest(host, {
 	// 		command: cc,
 	// 		transmitOptions: TransmitOptions.DEFAULT,
 	// 		callbackId: 36,

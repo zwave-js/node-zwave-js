@@ -3,7 +3,7 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
-import { NodeStatus } from "../../node/Types";
+import { NodeStatus } from "../../node/_Types";
 import { createAndStartDriver } from "../utils";
 import { isFunctionSupported_NoBridge } from "./fixtures";
 
@@ -31,6 +31,7 @@ describe("regression tests", () => {
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -40,8 +41,6 @@ describe("regression tests", () => {
 	});
 
 	it("when a NonceReport does not get delivered, it does not block further nonce requests", async () => {
-		jest.setTimeout(5000);
-
 		const node44 = new ZWaveNode(44, driver);
 		(driver.controller.nodes as Map<number, ZWaveNode>).set(44, node44);
 		// Add event handlers for the nodes
@@ -50,8 +49,8 @@ describe("regression tests", () => {
 		}
 		driver["lastCallbackId"] = 2;
 
-		node44["_isListening"] = false;
-		node44["_isFrequentListening"] = false;
+		node44["isListening"] = false;
+		node44["isFrequentListening"] = false;
 		node44.addCC(CommandClasses.Security, { isSupported: true });
 		node44.markAsAsleep();
 		expect(node44.status).toBe(NodeStatus.Asleep);
@@ -119,5 +118,5 @@ describe("regression tests", () => {
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
-	});
+	}, 5000);
 });

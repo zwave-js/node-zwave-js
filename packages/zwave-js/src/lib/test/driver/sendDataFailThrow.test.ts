@@ -21,6 +21,7 @@ describe("regression tests", () => {
 			ownNodeId: 1,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -30,7 +31,6 @@ describe("regression tests", () => {
 	});
 
 	it("when a SendData request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
-		jest.setTimeout(5000);
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported =
 			isFunctionSupported_NoBridge;
@@ -42,8 +42,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node2["_isListening"] = true;
-		node2["_isFrequentListening"] = false;
+		node2["isListening"] = true;
+		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
@@ -85,10 +85,9 @@ describe("regression tests", () => {
 		expect(serialport.lastWrite).toEqual(ACK);
 
 		await expect(promise).toReject();
-	});
+	}, 5000);
 
 	it("when a SendDataBridge request fails, the `sendMessage/sendCommand` call should be rejected", async () => {
-		jest.setTimeout(5000);
 		// Use the normal SendData commands
 		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
 
@@ -149,5 +148,5 @@ describe("regression tests", () => {
 		expect(serialport.lastWrite).toEqual(ACK);
 
 		await expect(promise).toReject();
-	});
+	}, 5000);
 });

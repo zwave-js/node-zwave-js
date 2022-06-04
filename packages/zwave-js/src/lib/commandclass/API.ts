@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, OnlyMethods } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import type { TXReport } from "../controller/SendDataShared";
+import type { TXReport } from "../controller/_Types";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -137,6 +137,7 @@ export class CCAPI {
 	 */
 	protected schedulePoll(
 		property: ValueIDProperties,
+		expectedValue: unknown,
 		{ duration, transition = "slow" }: SchedulePollOptions = {},
 	): boolean {
 		// Figure out the delay. If a non-zero duration was given or this is a "fast" transition,
@@ -158,7 +159,7 @@ export class CCAPI {
 					endpoint: this.endpoint.index,
 					...property,
 				},
-				timeoutMs,
+				{ timeoutMs, expectedValue },
 			);
 		} else if (this.isMulticast()) {
 			// Only poll supporting nodes in multicast
@@ -176,7 +177,7 @@ export class CCAPI {
 						endpoint: this.endpoint.index,
 						...property,
 					},
-					timeoutMs,
+					{ timeoutMs, expectedValue },
 				);
 			}
 			return ret;
@@ -425,6 +426,8 @@ export type CCToName<CC extends CommandClasses> = [CC] extends [
 	? "Humidity Control Setpoint"
 	: [CC] extends [typeof CommandClasses["Indicator"]]
 	? "Indicator"
+	: [CC] extends [typeof CommandClasses["Irrigation"]]
+	? "Irrigation"
 	: [CC] extends [typeof CommandClasses["Language"]]
 	? "Language"
 	: [CC] extends [typeof CommandClasses["Lock"]]
@@ -557,6 +560,7 @@ export interface CCAPIs {
 	"Humidity Control Operating State": import("./HumidityControlOperatingStateCC").HumidityControlOperatingStateCCAPI;
 	"Humidity Control Setpoint": import("./HumidityControlSetpointCC").HumidityControlSetpointCCAPI;
 	Indicator: import("./IndicatorCC").IndicatorCCAPI;
+	Irrigation: import("./IrrigationCC").IrrigationCCAPI;
 	Language: import("./LanguageCC").LanguageCCAPI;
 	Lock: import("./LockCC").LockCCAPI;
 	"Manufacturer Proprietary": import("./ManufacturerProprietaryCC").ManufacturerProprietaryCCAPI;

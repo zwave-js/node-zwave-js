@@ -32,8 +32,6 @@
 			"label": "Beeper",
 			"description": "Enable/Disable keypad beep",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -52,8 +50,6 @@
 			"label": "Vacation Mode",
 			"description": "Enable/Disable Vacation Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -72,8 +68,6 @@
 			"label": "Lock & Leave",
 			"description": "Enable/Disable Lock & Leave",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

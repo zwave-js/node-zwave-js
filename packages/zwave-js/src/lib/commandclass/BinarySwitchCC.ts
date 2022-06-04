@@ -12,8 +12,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -36,6 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { BinarySwitchCommand } from "./_Types";
 
 function getCurrentValueValueId(endpoint?: number): ValueID {
 	return {
@@ -43,13 +46,6 @@ function getCurrentValueValueId(endpoint?: number): ValueID {
 		endpoint,
 		property: "currentValue",
 	};
-}
-
-// All the supported commands
-export enum BinarySwitchCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
 }
 
 @API(CommandClasses["Binary Switch"])
@@ -89,13 +85,12 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
 	 * @param duration The duration after which the target value should be reached. Can be a Duration instance or a user-friendly duration string like `"1m17s"`. Only supported in V2 and above.
 	 */
+	@validateArgs()
 	public async set(
 		targetValue: boolean,
 		duration?: Duration | string,
@@ -109,7 +104,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			targetValue,
-			duration: Duration.from(duration),
+			duration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
@@ -142,14 +137,11 @@ export class BinarySwitchCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 			if (property === "targetValue") property = "currentValue";
-			this.schedulePoll(
-				{ property },
-				{
-					duration,
-					// on/off "transitions" are usually fast
-					transition: "fast",
-				},
-			);
+			this.schedulePoll({ property }, value, {
+				duration,
+				// on/off "transitions" are usually fast
+				transition: "fast",
+			});
 		} else if (this.isMulticast()) {
 			if (!this.driver.options.disableOptimisticValueUpdate) {
 				// Figure out which nodes were affected by this command
@@ -190,30 +182,30 @@ export class BinarySwitchCCAPI extends CCAPI {
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Binary Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// Query the current state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
 			direction: "outbound",
@@ -228,7 +220,7 @@ current value:      ${resp.currentValue}`;
 target value:       ${resp.targetValue}
 remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -251,16 +243,16 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 
 interface BinarySwitchCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
-	duration?: Duration;
+	duration?: Duration | string;
 }
 
 @CCCommand(BinarySwitchCommand.Set)
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BinarySwitchCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,
@@ -268,7 +260,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			);
 		} else {
 			this.targetValue = options.targetValue;
-			this.duration = options.duration;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -301,10 +293,10 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._currentValue = parseMaybeBoolean(this.payload[0]);
@@ -341,8 +333,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Transition duration",
+		...ValueMetadata.ReadOnlyDuration,
+		label: "Remaining duration",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

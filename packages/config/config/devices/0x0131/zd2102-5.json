@@ -19,8 +19,6 @@
 			"label": "External switch",
 			"description": "Determines if external switch can be used.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

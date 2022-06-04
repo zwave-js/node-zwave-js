@@ -13,10 +13,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -40,6 +42,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { CentralSceneCommand, CentralSceneKeys } from "./_Types";
 
 /** Returns the ValueID used to store the current value of a Central Scene */
 export function getSceneValueId(sceneNumber: number): ValueID {
@@ -59,28 +62,6 @@ export function getSlowRefreshValueId(): ValueID {
 		commandClass: CommandClasses["Central Scene"],
 		property: "slowRefresh",
 	};
-}
-
-export enum CentralSceneCommand {
-	SupportedGet = 0x01,
-	SupportedReport = 0x02,
-	Notification = 0x03,
-	ConfigurationSet = 0x04,
-	ConfigurationGet = 0x05,
-	ConfigurationReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum CentralSceneKeys {
-	KeyPressed = 0x00,
-	KeyReleased = 0x01,
-	KeyHeldDown = 0x02,
-	KeyPressed2x = 0x03,
-	KeyPressed3x = 0x04,
-	KeyPressed4x = 0x05,
-	KeyPressed5x = 0x06,
 }
 
 @API(CommandClasses["Central Scene"])
@@ -143,6 +124,7 @@ export class CentralSceneCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {
 		this.assertSupportsCommand(
 			CentralSceneCommand,
@@ -199,14 +181,14 @@ export class CentralSceneCC extends CommandClass {
 		return true;
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Central Scene"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -219,9 +201,10 @@ export class CentralSceneCC extends CommandClass {
 			(node.supportsCC(CommandClasses.Association) ||
 				node.supportsCC(CommandClasses["Multi Channel Association"]))
 		) {
-			const groupsIssueingNotifications = node
-				.createCCInstance(AssociationGroupInfoCC)!
-				.findGroupsForIssuedCommand(
+			const groupsIssueingNotifications =
+				AssociationGroupInfoCC.findGroupsForIssuedCommand(
+					driver,
+					node,
 					this.ccId,
 					CentralSceneCommand.Notification,
 				);
@@ -229,31 +212,31 @@ export class CentralSceneCC extends CommandClass {
 				// We always grab the first group - usually it should be the lifeline
 				const groupId = groupsIssueingNotifications[0];
 				const existingAssociations =
-					this.driver.controller
+					driver.controller
 						.getAssociations({ nodeId: node.id })
 						.get(groupId) ?? [];
 
 				if (
 					!existingAssociations.some(
-						(a) => a.nodeId === this.driver.controller.ownNodeId,
+						(a) => a.nodeId === this.host.ownNodeId,
 					)
 				) {
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Configuring associations to receive Central Scene notifications...",
 						direction: "outbound",
 					});
-					await this.driver.controller.addAssociations(
+					await driver.controller.addAssociations(
 						{ nodeId: node.id },
 						groupId,
-						[{ nodeId: this.driver.controller.ownNodeId! }],
+						[{ nodeId: this.host.ownNodeId }],
 					);
 				}
 			}
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "Querying supported scenes...",
 			direction: "outbound",
@@ -263,13 +246,13 @@ export class CentralSceneCC extends CommandClass {
 			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying supported scenes timed out, skipping interview...",
@@ -280,7 +263,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 
 		// The slow refresh capability should be enabled whenever possible
 		if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Enabling slow refresh capability...",
 				direction: "outbound",
@@ -296,10 +279,10 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 @CCCommand(CentralSceneCommand.Notification)
 export class CentralSceneCCNotification extends CentralSceneCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._sequenceNumber = this.payload[0];
@@ -370,10 +353,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 @CCCommand(CentralSceneCommand.SupportedReport)
 export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
 		this._sceneCount = this.payload[0];
@@ -487,10 +470,10 @@ export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
@@ -529,12 +512,12 @@ interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 @CCCommand(CentralSceneCommand.ConfigurationSet)
 export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| CentralSceneCCConfigurationSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			throw new ZWaveError(
 				`${this.constructor.name}: deserialization not implemented`,

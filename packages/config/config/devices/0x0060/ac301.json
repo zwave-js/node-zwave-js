@@ -71,8 +71,6 @@
 			"#": "6",
 			"label": "Open window detect function",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -99,8 +97,6 @@
 			"#": "8",
 			"label": "Open window detect temperature drop setting",
 			"valueSize": 1,
-			"minValue": 4,
-			"maxValue": 8,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [

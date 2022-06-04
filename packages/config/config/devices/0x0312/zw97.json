@@ -34,8 +34,6 @@
 			"#": "1",
 			"label": "LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

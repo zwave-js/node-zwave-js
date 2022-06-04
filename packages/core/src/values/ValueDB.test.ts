@@ -3,7 +3,8 @@ import { CommandClasses } from "../capabilities/CommandClasses";
 import { ZWaveErrorCodes } from "../error/ZWaveError";
 import { assertZWaveError } from "../test/assertZWaveError";
 import { ValueMetadata } from "../values/Metadata";
-import { dbKeyToValueIdFast, ValueDB, ValueID } from "./ValueDB";
+import { dbKeyToValueIdFast, ValueDB } from "./ValueDB";
+import type { ValueID } from "./_Types";
 
 describe("lib/node/ValueDB => ", () => {
 	let valueDB: ValueDB;

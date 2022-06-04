@@ -27,6 +27,7 @@ describe("regression tests", () => {
 			isFunctionSupported: isFunctionSupported_NoBridge,
 			nodes: new Map(),
 			incrementStatistics: () => {},
+			removeAllListeners: () => {},
 		} as any;
 	});
 
@@ -36,8 +37,6 @@ describe("regression tests", () => {
 	});
 
 	it("Node responses in a BridgeApplicationCommandRequest should be understood", async () => {
-		jest.setTimeout(5000);
-
 		// Repro for #1100
 		const node3 = new ZWaveNode(3, driver);
 		(driver.controller.nodes as Map<number, ZWaveNode>).set(3, node3);
@@ -100,5 +99,5 @@ describe("regression tests", () => {
 		await expect(getNoncePromise).resolves.toEqual(
 			Buffer.from("3e55e4b714973b9e", "hex"),
 		);
-	});
+	}, 5000);
 });

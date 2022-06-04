@@ -19,8 +19,6 @@
 			"label": "Overcurrent protection",
 			"description": "If current exceeds 16A load will be switched off",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -42,8 +40,6 @@
 			"#": "3",
 			"label": "Send Status When Load Changes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -65,8 +61,6 @@
 			"#": "4",
 			"label": "Configure LED mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

@@ -1,0 +1,236 @@
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "TF016 / TF021",
+	"description": "ZWave Thermostat",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			// One of these is labeled TF016, the other TF021
+			"zwaveAllianceId": [1182, 1234]
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 8,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off control",
+			"maxNodes": 8
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Operation mode",
+			"valueSize": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Heat",
+					"value": 1
+				},
+				{
+					"label": "Cool",
+					"value": 2
+				},
+				{
+					"label": "Energy Save Heat",
+					"value": 11
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "Sensor mode",
+			"valueSize": 2,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "F-mode",
+					"value": 0
+				},
+				{
+					"label": "A-mode",
+					"value": 1
+				},
+				{
+					"label": "AF-mode",
+					"value": 2
+				},
+				{
+					"label": "A2-mode",
+					"value": 3
+				},
+				{
+					"label": "P-mode",
+					"value": 4
+				},
+				{
+					"label": "FP-mode",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "Floor sensor type",
+			"valueSize": 2,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10k NTC",
+					"value": 0
+				},
+				{
+					"label": "12k NTC",
+					"value": 1
+				},
+				{
+					"label": "15k NTC",
+					"value": 2
+				},
+				{
+					"label": "22k NTC",
+					"value": 3
+				},
+				{
+					"label": "33k NTC",
+					"value": 4
+				},
+				{
+					"label": "47k NTC",
+					"value": 5
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "DIFF l. Temperature control Hysteresis",
+			"description": "Range 3-30 (0.3°C 3.0°C)",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 30,
+			"defaultValue": 5
+		},
+		{
+			"#": "5",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "FLo, Floor min limit",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "6",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "FHi, Floor max limit",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "7",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "ALo, Air min limit",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 50
+		},
+		{
+			"#": "8",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "AHi, Air max limit",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 400
+		},
+		{
+			"#": "9",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "PLo, FP-mode P setting",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0
+		},
+		{
+			"#": "10",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "CO mode setpoint",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		},
+		{
+			"#": "11",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "ECO mode setpoint",
+			"description": "Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 180
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "P setting",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 2
+		},
+		{
+			"#": "13",
+			"$if": "firmwareVersion >= 1.8",
+			"label": "COOL setpoint",
+			"description": "Only if cooling enabled. Range 50-400 (5.0°C 40.0°C)",
+			"valueSize": 2,
+			"minValue": 50,
+			"maxValue": 400,
+			"defaultValue": 210
+		}
+	],
+	"compat": {
+		// The device reports its relay state via the Basic CC
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "To include the thermostat to your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start adding the device in your home automation software. Start inclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If inclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
+		"exclusion": "To exclude the thermostat from your home automation gateway, press Center (confirm) for 10 seconds.\nThe display will show OFF. Press Right (down) 4 times till you see Con in the display.\nNow start removing the device in your home automation software. Enter exclusion mode by pressing Center (confirm) for approximately 2 seconds. The inclusion/exclusion icon will appear in the display. Confirmation will show Inc/EcL in the display. If exclusion fails, Err (error) will appear.\nLeave programming mode by choosing ESC in menu. Your thermostat is ready for use with default settings",
+		"reset": "By pressing buttons Left and Center (up and confirm) for 20 seconds, the thermostat will perform a complete factory reset.\nPlease use this procedure only when the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1234/Manual_Multireg%20Z-Wave_Ver2015-A.pdf"
+	}
+}

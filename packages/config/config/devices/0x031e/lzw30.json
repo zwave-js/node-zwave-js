@@ -18,8 +18,6 @@
 			"#": "1",
 			"label": "Power On State",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -41,8 +39,6 @@
 			"#": "2",
 			"label": "Invert Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -125,8 +121,6 @@
 			"#": "6",
 			"label": "LED Indicator Intensity (when on)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 5,
 			"allowManualEntry": false,
 			"options": [
@@ -180,8 +174,6 @@
 			"#": "7",
 			"label": "LED Indicator Intensity (when Off)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 10,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -237,8 +229,6 @@
 			"label": "Special Load Type",
 			"description": "Can be used in certain 3-way dumb switch setups where the load is confusing the switch as to which state it should be in.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -257,8 +247,6 @@
 			"$if": "firmwareVersion >= 1.19",
 			"label": "Instant On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,

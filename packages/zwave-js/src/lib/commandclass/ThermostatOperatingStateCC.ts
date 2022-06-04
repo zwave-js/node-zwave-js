@@ -5,9 +5,10 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
 	PollValueImplementation,
@@ -25,35 +26,10 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum ThermostatOperatingStateCommand {
-	Get = 0x02,
-	Report = 0x03,
-	// TODO: Implement V2 commands
-	// LoggingSupportedGet = 0x01,
-	// LoggingSupportedReport = 0x04,
-	// LoggingGet = 0x05,
-	// LoggingReport = 0x06,
-}
-
-/**
- * @publicAPI
- */
-export enum ThermostatOperatingState {
-	"Idle" = 0x00,
-	"Heating" = 0x01,
-	"Cooling" = 0x02,
-	"Fan Only" = 0x03,
-	"Pending Heat" = 0x04,
-	"Pending Cool" = 0x05,
-	"Vent/Economizer" = 0x06,
-	"Aux Heating" = 0x07,
-	"2nd Stage Heating" = 0x08,
-	"2nd Stage Cooling" = 0x09,
-	"2nd Stage Aux Heat" = 0x0a,
-	"3rd Stage Aux Heat" = 0x0b,
-}
+import {
+	ThermostatOperatingState,
+	ThermostatOperatingStateCommand,
+} from "./_Types";
 
 // @noSetValueAPI This CC is read-only
 
@@ -104,24 +80,24 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses[
 			"Thermostat Operating State"
 		].withOptions({
@@ -129,7 +105,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		});
 
 		// Query the current state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
 			direction: "outbound",
@@ -137,7 +113,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 		const state = await api.get();
 		if (state) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received current thermostat operating state: ${getEnumMemberName(
 					ThermostatOperatingState,
@@ -152,10 +128,10 @@ export class ThermostatOperatingStateCC extends CommandClass {
 @CCCommand(ThermostatOperatingStateCommand.Report)
 export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._state = this.payload[0];

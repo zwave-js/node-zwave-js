@@ -19,8 +19,6 @@
 			"label": "Device Status",
 			"description": "How to control the relay",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -46,8 +44,6 @@
 			"#": "20",
 			"label": "Device status upon receipt of a Basic Set command",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -91,8 +87,6 @@
 			"label": "Next State",
 			"description": "Defines the next state if an overcurrent event occurr",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -119,8 +113,6 @@
 			"label": "Meter Reset",
 			"description": "Provides total operating time from last meter reset",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -139,8 +131,6 @@
 			"label": "Energy flow",
 			"description": "Determines whether if energy consumed or energy produced.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -177,8 +167,6 @@
 			"label": "UP Power State",
 			"description": "Defines the next status case of a UP Power event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -233,8 +221,6 @@
 			"label": "DOWN Power State",
 			"description": "Defines the next state case of a DOWN Power event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -280,8 +266,6 @@
 			"label": "Energy Limit State",
 			"description": "Defines the next state in case of Energy Limit event",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -326,8 +310,6 @@
 			"label": "Variation Total Energy",
 			"description": "Defines the increase energy to generate a report",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -440,8 +422,6 @@
 			"label": "Start-up status",
 			"description": "Defines the status of the device following a restart.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -464,8 +444,6 @@
 			"label": "Configuration reset",
 			"description": "Defines which parameters should be reset to default values.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -492,8 +470,6 @@
 			"label": "Type of external switch",
 			"description": "Defines the type of external switch connected to the device.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -520,8 +496,6 @@
 			"label": "Load Control",
 			"description": "Defines the load control mode",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [

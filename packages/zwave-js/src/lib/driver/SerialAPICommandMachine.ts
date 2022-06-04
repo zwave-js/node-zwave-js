@@ -1,3 +1,9 @@
+import type { Message } from "@zwave-js/serial";
+import {
+	isMultiStageCallback,
+	isSuccessIndicator,
+	MessageType,
+} from "@zwave-js/serial";
 import {
 	assign,
 	createMachine,
@@ -7,12 +13,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import { MessageType } from "../message/Constants";
-import type { Message } from "../message/Message";
-import {
-	isMultiStageCallback,
-	isSuccessIndicator,
-} from "../message/SuccessIndicator";
 import {
 	respondUnsolicited,
 	ServiceImplementations,
@@ -320,7 +320,11 @@ export function getSerialAPICommandMachineOptions(
 ): SerialAPICommandMachineOptions {
 	return {
 		services: {
-			send: (ctx) => sendData(ctx.data),
+			send: (ctx) => {
+				// Mark the message as sent immediately before actually sending
+				ctx.msg.markAsSent();
+				return sendData(ctx.data);
+			},
 			notifyRetry: (ctx) => {
 				notifyRetry?.(
 					"SerialAPI",

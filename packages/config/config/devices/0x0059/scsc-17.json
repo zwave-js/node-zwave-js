@@ -31,8 +31,6 @@
 			"label": "Temperature Scale",
 			"description": "Controls the temperature sensor scale",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

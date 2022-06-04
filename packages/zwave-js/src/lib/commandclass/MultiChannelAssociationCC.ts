@@ -10,9 +10,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import { getGroupCountValueId as getAssociationGroupCountValueId } from "./AssociationCC";
 import {
@@ -28,20 +30,11 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-/**
- * @publicAPI
- */
-export interface AssociationAddress {
-	nodeId: number;
-	endpoint?: number;
-}
-
-/**
- * @publicAPI
- * @deprecated use AssociationAddress instead
- */
-export type Association = AssociationAddress;
+import {
+	AssociationAddress,
+	EndpointAddress,
+	MultiChannelAssociationCommand,
+} from "./_Types";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -89,11 +82,6 @@ export function getGroupCountValueId(endpointIndex: number): ValueID {
 		endpoint: endpointIndex,
 		property: "groupCount",
 	};
-}
-
-export interface EndpointAddress {
-	nodeId: number;
-	endpoint: number | number[];
 }
 
 function endpointAddressesToString(
@@ -180,16 +168,6 @@ function deserializeMultiChannelAssociationDestination(data: Buffer): {
 	return { nodeIds, endpoints };
 }
 
-// All the supported commands
-export enum MultiChannelAssociationCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	Remove = 0x04,
-	SupportedGroupingsGet = 0x05,
-	SupportedGroupingsReport = 0x06,
-}
-
 // @noSetValueAPI
 
 @API(CommandClasses["Multi Channel Association"])
@@ -235,6 +213,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Returns information about an association group.
 	 */
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getGroup(groupId: number) {
 		this.assertSupportsCommand(
@@ -260,6 +239,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Adds new nodes or endpoints to an association group
 	 */
+	@validateArgs()
 	public async addDestinations(
 		options: MultiChannelAssociationCCSetOptions,
 	): Promise<void> {
@@ -279,6 +259,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	/**
 	 * Removes nodes or endpoints from an association group
 	 */
+	@validateArgs()
 	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
 	): Promise<void> {
@@ -290,9 +271,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 		if (!options.groupId && this.version === 1) {
 			// V1 does not support omitting the group, manually remove the destination from all groups
 			// We don't want to do too much work, so find out which groups the destination is in
-			const currentDestinations = this.endpoint
-				.createCCInstanceInternal(MultiChannelAssociationCC)!
-				.getAllDestinationsCached();
+			const currentDestinations =
+				MultiChannelAssociationCC.getAllDestinationsCached(
+					this.driver,
+					this.endpoint,
+				);
 			for (const [group, destinations] of currentDestinations) {
 				const cc = new MultiChannelAssociationCCRemove(this.driver, {
 					nodeId: this.endpoint.nodeId,
@@ -324,12 +307,18 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
 		// Make valueIDs internal
-		this.registerValue(getMaxNodesValueId(0, 0).property, true);
-		this.registerValue(getNodeIdsValueId(0, 0).property, true);
-		this.registerValue(getEndpointsValueId(0, 0).property, true);
+		this.registerValue(getMaxNodesValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getNodeIdsValueId(0, 0).property, {
+			internal: true,
+		});
+		this.registerValue(getEndpointsValueId(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
@@ -348,11 +337,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * Returns the number of association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getGroupCountCached(): number {
+	public static getGroupCountCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getGroupCountValueId(this.endpointIndex),
-			) || 0
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getGroupCountValueId(endpoint.index)) || 0
 		);
 	}
 
@@ -360,11 +352,15 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * Returns the number of nodes an association group supports.
 	 * This only works AFTER the interview process
 	 */
-	public getMaxNodesCached(groupId: number): number {
+	public static getMaxNodesCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+		groupId: number,
+	): number {
 		return (
-			this.getValueDB().getValue(
-				getMaxNodesValueId(this.endpointIndex, groupId),
-			) ?? 0
+			host
+				.getValueDB(endpoint.nodeId)
+				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ?? 0
 		);
 	}
 
@@ -372,25 +368,25 @@ export class MultiChannelAssociationCC extends CommandClass {
 	 * Returns all the destinations of all association groups reported by the node/endpoint.
 	 * This only works AFTER the interview process
 	 */
-	public getAllDestinationsCached(): ReadonlyMap<
-		number,
-		readonly AssociationAddress[]
-	> {
+	public static getAllDestinationsCached(
+		host: ZWaveHost,
+		endpoint: ZWaveEndpointBase,
+	): ReadonlyMap<number, readonly AssociationAddress[]> {
 		const ret = new Map<number, AssociationAddress[]>();
-		const groupCount = this.getGroupCountCached();
-		const valueDB = this.getValueDB();
+		const groupCount = this.getGroupCountCached(host, endpoint);
+		const valueDB = host.getValueDB(endpoint.nodeId)!;
 		for (let i = 1; i <= groupCount; i++) {
 			const groupDestinations: AssociationAddress[] = [];
 			// Add all node destinations
 			const nodes =
 				valueDB.getValue<number[]>(
-					getNodeIdsValueId(this.endpointIndex, i),
+					getNodeIdsValueId(endpoint.index, i),
 				) ?? [];
 			groupDestinations.push(...nodes.map((nodeId) => ({ nodeId })));
 			// And all endpoint destinations
 			const endpoints =
 				valueDB.getValue<EndpointAddress[]>(
-					getEndpointsValueId(this.endpointIndex, i),
+					getEndpointsValueId(endpoint.index, i),
 				) ?? [];
 			for (const ep of endpoints) {
 				if (typeof ep.endpoint === "number") {
@@ -424,32 +420,32 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return ret;
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const mcAPI = endpoint.commandClasses["Multi Channel Association"];
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// First find out how many groups are supported as multi channel
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying number of multi channel association groups...",
 			direction: "outbound",
 		});
 		const mcGroupCount = await mcAPI.getGroupCount();
 		if (mcGroupCount != undefined) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${mcGroupCount} multi channel association groups`,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"Querying multi channel association groups timed out, skipping interview...",
@@ -459,7 +455,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		}
 
 		// Query each association group for its members
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// And set up lifeline associations
 		await endpoint.configureLifelineAssociations();
@@ -468,9 +464,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const mcAPI = endpoint.commandClasses[
 			"Multi Channel Association"
 		].withOptions({
@@ -493,7 +489,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 		// Then query each multi channel association group
 		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying multi channel association group #${groupId}...`,
 				direction: "outbound",
@@ -512,7 +508,7 @@ currently assigned endpoints: ${group.endpoints
 					}
 				})
 				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -521,7 +517,7 @@ currently assigned endpoints: ${group.endpoints
 
 		// Check if there are more non-multi-channel association groups we haven't queried yet
 		if (assocAPI.isSupported() && assocGroupCount > mcGroupCount) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying additional non-multi-channel association groups...`,
 				direction: "outbound",
@@ -531,7 +527,7 @@ currently assigned endpoints: ${group.endpoints
 				groupId <= assocGroupCount;
 				groupId++
 			) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying association group #${groupId}...`,
 					direction: "outbound",
@@ -541,7 +537,7 @@ currently assigned endpoints: ${group.endpoints
 				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -562,12 +558,12 @@ type MultiChannelAssociationCCSetOptions = {
 @CCCommand(MultiChannelAssociationCommand.Set)
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCSetOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -633,12 +629,12 @@ interface MultiChannelAssociationCCRemoveOptions {
 @CCCommand(MultiChannelAssociationCommand.Remove)
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| (MultiChannelAssociationCCRemoveOptions & CCCommandOptions),
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -704,10 +700,10 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.Report)
 export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
 		this._groupId = this.payload[0];
@@ -799,12 +795,12 @@ interface MultiChannelAssociationCCGetOptions extends CCCommandOptions {
 @expectedCCResponse(MultiChannelAssociationCCReport)
 export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| MultiChannelAssociationCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -840,10 +836,10 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 @CCCommand(MultiChannelAssociationCommand.SupportedGroupingsReport)
 export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChannelAssociationCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._groupCount = this.payload[0];

@@ -1,4 +1,6 @@
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import type { Message } from "@zwave-js/serial";
+import { MessagePriority } from "@zwave-js/serial";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	Action,
@@ -16,9 +18,7 @@ import {
 } from "xstate";
 import { pure, raise, send, stop } from "xstate/lib/actions";
 import { messageIsPing } from "../commandclass/NoOperationCC";
-import { MessagePriority } from "../message/Constants";
-import type { Message } from "../message/Message";
-import { InterviewStage, NodeStatus } from "../node/Types";
+import { InterviewStage, NodeStatus } from "../node/_Types";
 import {
 	CommandQueueEvent,
 	createCommandQueueMachine,

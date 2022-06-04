@@ -23,8 +23,6 @@
 			"#": "1",
 			"label": "Invert Switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"$if": "firmwareVersion <= 2.255",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -67,8 +63,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "LED Indicator Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -94,8 +88,6 @@
 			"#": "3",
 			"label": "Enable/Disable LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -123,8 +115,6 @@
 			"$if": "firmwareVersion >= 3.0",
 			"label": "Enable/Disable Auto On",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -153,8 +143,6 @@
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -175,8 +163,6 @@
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -197,8 +183,6 @@
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -219,8 +203,6 @@
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -245,8 +227,6 @@
 			"$if": "firmwareVersion >= 3.1",
 			"label": "Enable/Disable Scene Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -265,8 +245,6 @@
 			"$if": "firmwareVersion >= 3.1",
 			"label": "Enable/Disable Local Control",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -286,8 +264,6 @@
 			"label": "Enable Local and Z-Wave Control",
 			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -310,8 +286,6 @@
 			"$if": "firmwareVersion >= 3.4",
 			"label": "3-Way Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -331,8 +305,6 @@
 			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -346,5 +318,11 @@
 				}
 			]
 		}
-	]
+	],
+	"metadata": {
+		"inclusion": "1. Initiate inclusion mode on the Z-Wave hub.\n2. Tap the upper paddle of the dimmer 3 times quickly. The LED indicators will blink to signal communication and remain on for 2 seconds to confirm inclusion",
+		"exclusion": "1. Initiate exclusion mode on the Z-Wave hub.\n2. Tap the lower paddle on the dimmer 3 times quickly\n3. Your hub will confirm exclusion and the device will disappear from your controller's device list",
+		"reset": "1. Tap-tap-tap’n’hold the upper paddle for at least 10 seconds. The LED indicator will flash to confirm successful reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3667/zooz-z-wave-plus-on-off-switch-zen21-ver3.1-manual.pdf"
+	}
 }

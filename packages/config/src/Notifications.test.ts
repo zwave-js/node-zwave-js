@@ -38,18 +38,21 @@ describe("lib/config/Notifications", () => {
 	describe("lookupNotification (with missing file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(false);
-			readFileMock.mockRejectedValue(new Error("File does not exist"));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(false);
+				readFileMock.mockRejectedValue(
+					new Error("File does not exist"),
+				);
 
+				configManager = new ConfigManager();
+				await configManager.loadNotifications();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNotifications();
-		});
+			30000,
+		);
 
 		it("does not throw", () => {
 			expect(() => configManager.lookupNotification(0)).not.toThrow();
@@ -64,18 +67,19 @@ describe("lib/config/Notifications", () => {
 	describe("lookupNotification (with invalid file)", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(`{"0x01": `);
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(`{"0x01": `);
 
+				configManager = new ConfigManager();
+				await configManager.loadNotifications();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNotifications();
-		});
+			30000,
+		);
 
 		it("does not throw", () => {
 			expect(() => configManager.lookupNotification(0x0e)).not.toThrow();
@@ -89,16 +93,19 @@ describe("lib/config/Notifications", () => {
 	describe("lookupNotification()", () => {
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(
+					JSON.stringify(dummyNotifications),
+				);
 
+				configManager = new ConfigManager();
+				await configManager.loadNotifications();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNotifications();
-		});
+			30000,
+		);
 
 		beforeEach(() => {
 			readFileMock.mockClear();
@@ -119,18 +126,21 @@ describe("lib/config/Notifications", () => {
 
 		let configManager: ConfigManager;
 
-		beforeAll(async () => {
-			pathExistsMock.mockClear();
-			readFileMock.mockClear();
-			pathExistsMock.mockResolvedValue(true);
-			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
+		beforeAll(
+			async () => {
+				pathExistsMock.mockClear();
+				readFileMock.mockClear();
+				pathExistsMock.mockResolvedValue(true);
+				readFileMock.mockResolvedValue(
+					JSON.stringify(dummyNotifications),
+				);
 
+				configManager = new ConfigManager();
+				await configManager.loadNotifications();
+			},
 			// Loading configuration may take a while on CI
-			if (process.env.CI) jest.setTimeout(30000);
-
-			configManager = new ConfigManager();
-			await configManager.loadNotifications();
-		});
+			30000,
+		);
 
 		beforeEach(async () => {
 			notification = configManager.lookupNotification(0x0a)!;

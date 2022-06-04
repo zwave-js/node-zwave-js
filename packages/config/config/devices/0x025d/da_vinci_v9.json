@@ -170,8 +170,6 @@
 			"#": "1",
 			"label": "Button 1 Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -209,8 +207,6 @@
 			"#": "2",
 			"label": "Button 1 Partner-Id",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -260,8 +256,6 @@
 			"#": "3",
 			"label": "Button 1 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -295,8 +289,6 @@
 			"#": "4",
 			"label": "Button 1 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -334,8 +326,6 @@
 			"#": "5",
 			"label": "Button 1 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -358,8 +348,6 @@
 			"#": "6",
 			"label": "Button 2 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -393,8 +381,6 @@
 			"#": "7",
 			"label": "Button 2 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -444,8 +430,6 @@
 			"#": "8",
 			"label": "Button 2 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -479,8 +463,6 @@
 			"#": "9",
 			"label": "Button 2 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -518,8 +500,6 @@
 			"#": "10",
 			"label": "Button 2 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -542,8 +522,6 @@
 			"#": "11",
 			"label": "Button 3 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -577,8 +555,6 @@
 			"#": "12",
 			"label": "Button 3 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -628,8 +604,6 @@
 			"#": "13",
 			"label": "Button 3 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -659,8 +633,6 @@
 			"#": "14",
 			"label": "Button 3 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -698,8 +670,6 @@
 			"#": "15",
 			"label": "Button 3 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -722,8 +692,6 @@
 			"#": "16",
 			"label": "Button 4 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -757,8 +725,6 @@
 			"#": "17",
 			"label": "Button 4 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -808,8 +774,6 @@
 			"#": "18",
 			"label": "Button 4 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -839,8 +803,6 @@
 			"#": "19",
 			"label": "Button 4 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 4,
 			"allowManualEntry": false,
 			"options": [
@@ -878,8 +840,6 @@
 			"#": "20",
 			"label": "Button 4 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -902,8 +862,6 @@
 			"#": "21",
 			"label": "Button 5 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -937,8 +895,6 @@
 			"#": "22",
 			"label": "Button 5 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -988,8 +944,6 @@
 			"#": "23",
 			"label": "Button 5 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1019,8 +973,6 @@
 			"#": "24",
 			"label": "Button 5 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 6,
 			"allowManualEntry": false,
 			"options": [
@@ -1058,8 +1010,6 @@
 			"#": "25",
 			"label": "Button 5 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -1082,8 +1032,6 @@
 			"#": "26",
 			"label": "Button 6 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -1117,8 +1065,6 @@
 			"#": "27",
 			"label": "Button 6 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1168,8 +1114,6 @@
 			"#": "28",
 			"label": "Button 6 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1199,8 +1143,6 @@
 			"#": "29",
 			"label": "Button 6 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 6,
 			"allowManualEntry": false,
 			"options": [
@@ -1238,8 +1180,6 @@
 			"#": "30",
 			"label": "Button 6 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -1262,8 +1202,6 @@
 			"#": "31",
 			"label": "Button 7 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -1297,8 +1235,6 @@
 			"#": "32",
 			"label": "Button 7 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1348,8 +1284,6 @@
 			"#": "33",
 			"label": "Button 7 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1379,8 +1313,6 @@
 			"#": "34",
 			"label": "Button 7 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1418,8 +1350,6 @@
 			"#": "35",
 			"label": "Button 7 attribute",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -1442,8 +1372,6 @@
 			"#": "36",
 			"label": "Button 8 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -1477,8 +1405,6 @@
 			"#": "37",
 			"label": "Button 8 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1528,8 +1454,6 @@
 			"#": "38",
 			"label": "Button 8 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1559,8 +1483,6 @@
 			"#": "39",
 			"label": "Button 8 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1598,8 +1520,6 @@
 			"#": "40",
 			"label": "Button 8 attribute",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -1622,8 +1542,6 @@
 			"#": "41",
 			"label": "Button 9 Type",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 6,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -1657,8 +1575,6 @@
 			"#": "42",
 			"label": "Button 9 Partner-Id",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 9,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1708,8 +1624,6 @@
 			"#": "43",
 			"label": "Button 9 Blind Duration",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1739,8 +1653,6 @@
 			"#": "44",
 			"label": "Button 9 Output",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 6,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -1778,8 +1690,6 @@
 			"#": "45",
 			"label": "Button 9 attributes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 7,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -1843,8 +1753,6 @@
 			"#": "51",
 			"label": "Save and Reset",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,

@@ -43,6 +43,10 @@ describe("QR code parsing", () => {
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 			],
+			requestedSecurityClasses: [
+				SecurityClass.S2_Unauthenticated,
+				SecurityClass.S2_Authenticated,
+			],
 			dsk: "51525-35455-41424-34445-31323-33435-21222-32425",
 			applicationVersion: "2.66",
 			genericDeviceClass: 0x11,
@@ -61,6 +65,11 @@ describe("QR code parsing", () => {
 		expect(result).toEqual({
 			version: QRCodeVersion.SmartStart,
 			securityClasses: [
+				SecurityClass.S2_Unauthenticated,
+				SecurityClass.S2_Authenticated,
+				SecurityClass.S2_AccessControl,
+			],
+			requestedSecurityClasses: [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 				SecurityClass.S2_AccessControl,
@@ -84,6 +93,10 @@ describe("QR code parsing", () => {
 		expect(result).toEqual({
 			version: QRCodeVersion.S2,
 			securityClasses: [
+				SecurityClass.S2_Unauthenticated,
+				SecurityClass.S2_Authenticated,
+			],
+			requestedSecurityClasses: [
 				SecurityClass.S2_Unauthenticated,
 				SecurityClass.S2_Authenticated,
 			],

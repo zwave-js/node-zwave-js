@@ -1,13 +1,16 @@
 import {
 	actuatorCCs,
+	CacheBackedMap,
 	CommandClasses,
 	CommandClassInfo,
+	getCCName,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase } from "@zwave-js/host";
 import { num2hex } from "@zwave-js/shared";
-import type { MultiChannelAssociationCC } from "../commandclass";
+import { isDeepStrictEqual } from "util";
 import type { APIMethodsOf, CCAPI, CCAPIs, CCToAPI } from "../commandclass/API";
 import {
 	AssociationCC,
@@ -18,20 +21,23 @@ import {
 	CommandClass,
 	Constructable,
 	getAPI,
-	getCCConstructor,
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
 import {
-	AssociationAddress,
-	EndpointAddress,
 	getEndpointsValueId,
 	getNodeIdsValueId,
+	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import {
 	getInstallerIconValueId,
 	getUserIconValueId,
 } from "../commandclass/ZWavePlusCC";
+import type {
+	AssociationAddress,
+	EndpointAddress,
+} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
+import { cacheKeys } from "../driver/NetworkCache";
 import type { DeviceClass } from "./DeviceClass";
 import type { ZWaveNode } from "./Node";
 
@@ -41,7 +47,7 @@ import type { ZWaveNode } from "./Node";
  *
  * Each endpoint may have different capabilities (device class/supported CCs)
  */
-export class Endpoint {
+export class Endpoint implements ZWaveEndpointBase {
 	public constructor(
 		/** The id of the node this endpoint belongs to */
 		public readonly nodeId: number,
@@ -62,9 +68,29 @@ export class Endpoint {
 		}
 	}
 
-	protected _deviceClass: DeviceClass | undefined;
+	/**
+	 * Only used for endpoints which store their device class differently than nodes.
+	 * DO NOT ACCESS directly!
+	 */
+	private _deviceClass: DeviceClass | undefined;
 	public get deviceClass(): DeviceClass | undefined {
-		return this._deviceClass;
+		if (this.index > 0) {
+			return this._deviceClass;
+		} else {
+			return this.driver.cacheGet(
+				cacheKeys.node(this.nodeId).deviceClass,
+			);
+		}
+	}
+	protected set deviceClass(deviceClass: DeviceClass | undefined) {
+		if (this.index > 0) {
+			this._deviceClass = deviceClass;
+		} else {
+			this.driver.cacheSet(
+				cacheKeys.node(this.nodeId).deviceClass,
+				deviceClass,
+			);
+		}
 	}
 
 	/** Resets all stored information of this endpoint */
@@ -73,17 +99,25 @@ export class Endpoint {
 		this._commandClassAPIs.clear();
 	}
 
-	private _implementedCommandClasses = new Map<
+	private _implementedCommandClasses: Map<
 		CommandClasses,
-		CommandClassInfo
-	>();
+		Readonly<CommandClassInfo>
+	> = new CacheBackedMap(this.driver.networkCache, {
+		prefix: cacheKeys.node(this.nodeId).endpoint(this.index)._ccBaseKey,
+		suffixSerializer: (cc: CommandClasses) => num2hex(cc),
+		suffixDeserializer: (key: string) => {
+			const ccId = parseInt(key, 16);
+			if (ccId in CommandClasses) return ccId;
+		},
+	});
+
 	/**
 	 * @internal
 	 * Information about the implemented Command Classes of this endpoint.
 	 */
 	public get implementedCommandClasses(): ReadonlyMap<
 		CommandClasses,
-		CommandClassInfo
+		Readonly<CommandClassInfo>
 	> {
 		return this._implementedCommandClasses;
 	}
@@ -93,9 +127,9 @@ export class Endpoint {
 	 * **Note:** This does nothing if the device class was already configured
 	 */
 	protected applyDeviceClass(deviceClass?: DeviceClass): void {
-		if (this._deviceClass) return;
+		if (this.deviceClass) return;
 
-		this._deviceClass = deviceClass;
+		this.deviceClass = deviceClass;
 		// Add mandatory CCs
 		if (deviceClass) {
 			for (const cc of deviceClass.mandatorySupportedCCs) {
@@ -116,14 +150,20 @@ export class Endpoint {
 		// Endpoints cannot support Multi Channel CC
 		if (this.index > 0 && cc === CommandClasses["Multi Channel"]) return;
 
-		let ccInfo = this._implementedCommandClasses.get(cc) ?? {
-			isSupported: false,
-			isControlled: false,
-			secure: false,
-			version: 0,
-		};
-		ccInfo = Object.assign(ccInfo, info);
-		this._implementedCommandClasses.set(cc, ccInfo);
+		const original = this._implementedCommandClasses.get(cc);
+		const updated = Object.assign(
+			{},
+			original ?? {
+				isSupported: false,
+				isControlled: false,
+				secure: false,
+				version: 0,
+			},
+			info,
+		);
+		if (!isDeepStrictEqual(original, updated)) {
+			this._implementedCommandClasses.set(cc, updated);
+		}
 	}
 
 	/**
@@ -243,36 +283,19 @@ export class Endpoint {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
-		return this.createCCInstanceInternal(cc);
+		return CommandClass.createInstanceUnchecked(this.driver, this, cc);
 	}
 
 	/**
 	 * Creates an instance of the given CC and links it to this endpoint.
-	 * Returns undefined if the CC is neither supported nor controlled by the endpoint.
+	 * Returns `undefined` if the CC is neither supported nor controlled by the endpoint.
 	 */
 	public createCCInstanceUnsafe<T extends CommandClass>(
 		cc: CommandClasses | Constructable<T>,
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
-			return this.createCCInstanceInternal(cc);
-		}
-	}
-
-	/**
-	 * @internal
-	 * Create an instance of the given CC without checking whether it is supported.
-	 * Applications should not use this directly.
-	 */
-	public createCCInstanceInternal<T extends CommandClass>(
-		cc: CommandClasses | Constructable<T>,
-	): T | undefined {
-		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
-		if (Constructor) {
-			return new Constructor(this.driver, {
-				nodeId: this.nodeId,
-				endpoint: this.index,
-			}) as T;
+			return CommandClass.createInstanceUnchecked(this.driver, this, cc);
 		}
 	}
 
@@ -463,8 +486,32 @@ export class Endpoint {
 		method: TMethod,
 		...args: Parameters<TAPI[TMethod]>
 	): ReturnType<TAPI[TMethod]> {
+		if (typeof cc !== "number" || !(cc in CommandClasses)) {
+			throw new ZWaveError(
+				`Invalid CC ${cc}!`,
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
+
+		const ccName = getCCName(cc);
 		const CCAPI = (this.commandClasses as any)[cc];
-		return CCAPI[method](...args);
+		if (!CCAPI) {
+			throw new ZWaveError(
+				`The API for the ${ccName} CC does not exist or is not implemented!`,
+				ZWaveErrorCodes.CC_NoAPI,
+			);
+		}
+
+		const apiMethod = CCAPI[method];
+		if (typeof apiMethod !== "function") {
+			throw new ZWaveError(
+				`Method "${
+					method as string
+				}" does not exist on the API for the ${ccName} CC!`,
+				ZWaveErrorCodes.CC_NotImplemented,
+			);
+		}
+		return apiMethod.apply(CCAPI, args);
 	}
 
 	/**
@@ -499,22 +546,19 @@ export class Endpoint {
 			CommandClasses["Multi Channel"],
 		);
 
-		let assocInstance: AssociationCC | undefined;
+		let assocInstance: typeof AssociationCC | undefined;
 		const assocAPI = this.commandClasses.Association;
 		if (this.supportsCC(CommandClasses.Association)) {
-			assocInstance = this.createCCInstanceUnsafe(
-				CommandClasses.Association,
-			);
+			assocInstance = AssociationCC;
 		}
 
-		let mcInstance: MultiChannelAssociationCC | undefined;
+		let mcInstance: typeof MultiChannelAssociationCC | undefined;
 		let mcGroupCount = 0;
 		const mcAPI = this.commandClasses["Multi Channel Association"];
 		if (this.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = this.createCCInstanceUnsafe(
-				CommandClasses["Multi Channel Association"],
-			);
-			mcGroupCount = mcInstance?.getGroupCountCached() ?? 0;
+			mcInstance = MultiChannelAssociationCC;
+			mcGroupCount =
+				mcInstance.getGroupCountCached(this.driver, this) ?? 0;
 		}
 
 		const lifelineGroups = getLifelineGroupIds(node);
@@ -596,9 +640,10 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				if (groupSupportsMultiChannelAssociation && mcInstance) {
 					if (
 						// Only consider a group if it doesn't share its associations with the root endpoint
-						mcInstance.getMaxNodesCached(group) > 0 &&
+						mcInstance.getMaxNodesCached(this.driver, this, group) >
+							0 &&
 						!!mcInstance
-							.getAllDestinationsCached()
+							.getAllDestinationsCached(this.driver, this)
 							.get(group)
 							?.some(
 								(addr) =>
@@ -612,9 +657,13 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				if (assocInstance) {
 					if (
 						// Only consider a group if it doesn't share its associations with the root endpoint
-						assocInstance.getMaxNodesCached(group) > 0 &&
+						assocInstance.getMaxNodesCached(
+							this.driver,
+							this,
+							group,
+						) > 0 &&
 						!!assocInstance
-							.getAllDestinationsCached()
+							.getAllDestinationsCached(this.driver, this)
 							.get(group)
 							?.some((addr) => addr.nodeId === ownNodeId)
 					) {
@@ -629,9 +678,10 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				if (mcInstance) {
 					if (
 						// Only consider a group if it doesn't share its associations with the root endpoint
-						mcInstance.getMaxNodesCached(group) > 0 &&
+						mcInstance.getMaxNodesCached(this.driver, this, group) >
+							0 &&
 						mcInstance
-							.getAllDestinationsCached()
+							.getAllDestinationsCached(this.driver, this)
 							.get(group)
 							?.some(
 								(addr) =>
@@ -649,7 +699,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			// invalid lifeline associations which cause reporting problems
 			const invalidEndpointAssociations: EndpointAddress[] =
 				mcInstance
-					?.getAllDestinationsCached()
+					?.getAllDestinationsCached(this.driver, this)
 					.get(group)
 					?.filter(
 						(addr): addr is AssociationAddress & EndpointAddress =>
@@ -703,7 +753,8 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				} else if (
 					assocAPI.isSupported() &&
 					// Some endpoint groups don't support having any destinations because they are shared with the root
-					assocInstance!.getMaxNodesCached(group) > 0
+					assocInstance!.getMaxNodesCached(this.driver, this, group) >
+						0
 				) {
 					// We can use a node association, but first remove any possible endpoint associations
 					this.driver.controllerLog.logNode(node.id, {
@@ -747,7 +798,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				if (
 					!hasLifeline &&
 					mcAPI.isSupported() &&
-					mcInstance!.getMaxNodesCached(group) > 0
+					mcInstance!.getMaxNodesCached(this.driver, this, group) > 0
 				) {
 					// We can use a node association, but first remove any possible endpoint associations
 					this.driver.controllerLog.logNode(node.id, {
@@ -800,7 +851,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 				} else if (
 					mcAPI.isSupported() &&
 					mcAPI.version >= 3 &&
-					mcInstance!.getMaxNodesCached(group) > 0
+					mcInstance!.getMaxNodesCached(this.driver, this, group) > 0
 				) {
 					// We can use a multi channel association, but first remove any possible node associations
 					this.driver.controllerLog.logNode(node.id, {

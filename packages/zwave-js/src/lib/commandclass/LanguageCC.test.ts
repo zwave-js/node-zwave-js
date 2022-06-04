@@ -1,15 +1,14 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	LanguageCC,
 	LanguageCCGet,
 	LanguageCCReport,
 	LanguageCCSet,
-	LanguageCommand,
 } from "./LanguageCC";
+import { LanguageCommand } from "./_Types";
 
-const fakeDriver = createEmptyMockDriver() as unknown as Driver;
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -22,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/LanguageCC => ", () => {
 	it("the Get command should serialize correctly", () => {
-		const cc = new LanguageCCGet(fakeDriver, { nodeId: 1 });
+		const cc = new LanguageCCGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				LanguageCommand.Get, // CC Command
@@ -32,7 +31,7 @@ describe("lib/commandclass/LanguageCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (w/o country code)", () => {
-		const cc = new LanguageCCSet(fakeDriver, {
+		const cc = new LanguageCCSet(host, {
 			nodeId: 2,
 			language: "deu",
 		});
@@ -49,7 +48,7 @@ describe("lib/commandclass/LanguageCC => ", () => {
 	});
 
 	it("the Set command should serialize correctly (w/ country code)", () => {
-		const cc = new LanguageCCSet(fakeDriver, {
+		const cc = new LanguageCCSet(host, {
 			nodeId: 2,
 			language: "deu",
 			country: "DE",
@@ -79,7 +78,7 @@ describe("lib/commandclass/LanguageCC => ", () => {
 				0x75,
 			]),
 		);
-		const cc = new LanguageCCReport(fakeDriver, {
+		const cc = new LanguageCCReport(host, {
 			nodeId: 4,
 			data: ccData,
 		});
@@ -101,7 +100,7 @@ describe("lib/commandclass/LanguageCC => ", () => {
 				0x45,
 			]),
 		);
-		const cc = new LanguageCCReport(fakeDriver, {
+		const cc = new LanguageCCReport(host, {
 			nodeId: 4,
 			data: ccData,
 		});
@@ -114,7 +113,7 @@ describe("lib/commandclass/LanguageCC => ", () => {
 		const serializedCC = buildCCBuffer(
 			Buffer.from([255]), // not a valid command
 		);
-		const cc: any = new LanguageCC(fakeDriver, {
+		const cc: any = new LanguageCC(host, {
 			nodeId: 4,
 			data: serializedCC,
 		});

@@ -31,8 +31,6 @@ describe("ConfigManager", () => {
 		});
 
 		it("syncs the external config dir if it does not exist", async () => {
-			jest.setTimeout(60000);
-
 			const configDir = path.join(tempDir, "extconfig");
 			process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 			const { syncExternalConfigDir } = await import("./utils");
@@ -42,11 +40,9 @@ describe("ConfigManager", () => {
 			expect(
 				await fs.readFile(path.join(configDir, "version"), "utf8"),
 			).toBe(require("../package.json").version);
-		});
+		}, 60000);
 
 		it("syncs the external config dir alone if it is from an incompatible version", async () => {
-			jest.setTimeout(60000);
-
 			const configDir = path.join(tempDir, "extconfig");
 			process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 			const ownVersion = require("../package.json").version;
@@ -67,11 +63,9 @@ describe("ConfigManager", () => {
 			expect(
 				await fs.readFile(path.join(configDir, "version"), "utf8"),
 			).toBe(ownVersion);
-		});
+		}, 60000);
 
 		it("leaves the external config dir alone if it is from a newer compatible version", async () => {
-			jest.setTimeout(60000);
-
 			const configDir = path.join(tempDir, "extconfig");
 			process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 			const ownVersion = require("../package.json").version;
@@ -92,7 +86,7 @@ describe("ConfigManager", () => {
 			expect(
 				await fs.readFile(path.join(configDir, "version"), "utf8"),
 			).toBe(otherVersion);
-		});
+		}, 60000);
 	});
 
 	describe("loading config files from all possible locations works", () => {
@@ -114,8 +108,6 @@ describe("ConfigManager", () => {
 		});
 
 		it("from the embedded config dir", async () => {
-			jest.setTimeout(60000);
-
 			const cm = new ConfigManager({
 				logContainer: new ZWaveLogContainer({ enabled: false }),
 			});
@@ -125,11 +117,9 @@ describe("ConfigManager", () => {
 			const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
 			expect(device).not.toBeUndefined();
 			expect(device?.isEmbedded).toBeTrue();
-		});
+		}, 60000);
 
 		it("from the ZWAVEJS_EXTERNAL_CONFIG", async () => {
-			jest.setTimeout(60000);
-
 			const configDir = path.join(tempDir, "extconfig");
 			process.env.ZWAVEJS_EXTERNAL_CONFIG = configDir;
 
@@ -143,13 +133,11 @@ describe("ConfigManager", () => {
 			const device = await cm.lookupDevice(0x0086, 0x0002, 0x0064);
 			expect(device).not.toBeUndefined();
 			expect(device?.isEmbedded).toBeTrue(); // ZWAVEJS_EXTERNAL_CONFIG is still considered as an embedded config
-		});
+		}, 60000);
 
 		async function testDeviceConfigPriorityDir(
 			useExternalConfig: boolean,
 		): Promise<void> {
-			jest.setTimeout(60000);
-
 			let externalConfigDir: string;
 			if (useExternalConfig) {
 				externalConfigDir = path.join(tempDir, "extconfig");
@@ -220,9 +208,15 @@ describe("ConfigManager", () => {
 			expect(device?.isEmbedded).toBeFalse(); // deviceConfigPriorityDir is considered a user-provided config
 		}
 
-		it("from the deviceConfigPriorityDir (without ZWAVEJS_EXTERNAL_CONFIG)", () =>
-			testDeviceConfigPriorityDir(false));
-		it("from the deviceConfigPriorityDir (with ZWAVEJS_EXTERNAL_CONFIG)", () =>
-			testDeviceConfigPriorityDir(true));
+		it(
+			"from the deviceConfigPriorityDir (without ZWAVEJS_EXTERNAL_CONFIG)",
+			() => testDeviceConfigPriorityDir(false),
+			60000,
+		);
+		it(
+			"from the deviceConfigPriorityDir (with ZWAVEJS_EXTERNAL_CONFIG)",
+			() => testDeviceConfigPriorityDir(true),
+			60000,
+		);
 	});
 });

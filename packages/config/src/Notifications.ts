@@ -1,16 +1,7 @@
-import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { JSONObject, num2hex } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
-import JSON5 from "json5";
-import path from "path";
-import {
-	configDir,
-	externalConfigDir,
-	hexKeyRegexNDigits,
-	throwInvalidConfig,
-} from "./utils";
+import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
 interface NotificationStateDefinition {
 	type: "state";
@@ -33,56 +24,6 @@ export type NotificationValueDefinition = (
 };
 
 export type NotificationMap = ReadonlyMap<number, Notification>;
-
-/** @internal */
-export async function loadNotificationsInternal(
-	externalConfig?: boolean,
-): Promise<NotificationMap> {
-	const configPath = path.join(
-		(externalConfig && externalConfigDir()) || configDir,
-		"notifications.json",
-	);
-
-	if (!(await pathExists(configPath))) {
-		throw new ZWaveError(
-			"The config file does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
-	}
-
-	try {
-		const fileContents = await readFile(configPath, "utf8");
-		const definition = JSON5.parse(fileContents);
-		if (!isObject(definition)) {
-			throwInvalidConfig(
-				"notifications",
-				"the database is not an object",
-			);
-		}
-
-		const notifications = new Map();
-		for (const [id, ntfcnDefinition] of entries(definition)) {
-			if (!hexKeyRegexNDigits.test(id)) {
-				throwInvalidConfig(
-					"notifications",
-					`found invalid key "${id}" at the root. Notifications must have lowercase hexadecimal IDs.`,
-				);
-			}
-			const idNum = parseInt(id.slice(2), 16);
-			notifications.set(
-				idNum,
-				new Notification(idNum, ntfcnDefinition as JSONObject),
-			);
-		}
-		return notifications;
-	} catch (e) {
-		if (isZWaveError(e)) {
-			throw e;
-		} else {
-			throwInvalidConfig("notifications");
-		}
-	}
-}
 
 export class Notification {
 	public constructor(id: number, definition: JSONObject) {

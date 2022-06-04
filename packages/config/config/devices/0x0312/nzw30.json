@@ -19,8 +19,6 @@
 			"label": "LED Indicator",
 			"description": "Set the LED light behavior",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -47,8 +45,6 @@
 			"label": "Switch Orientation",
 			"description": "Invert on & off on the physical switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

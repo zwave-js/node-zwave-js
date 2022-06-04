@@ -1,7 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { ZWaveNode } from "../node/Node";
-import { createEmptyMockDriver } from "../test/mocks";
+import { createTestingHost } from "@zwave-js/host";
 import {
 	EntryControlCCConfigurationGet,
 	EntryControlCCConfigurationReport,
@@ -11,10 +9,14 @@ import {
 	EntryControlCCKeySupportedGet,
 	EntryControlCCKeySupportedReport,
 	EntryControlCCNotification,
+} from "./EntryControlCC";
+import {
 	EntryControlCommand,
 	EntryControlDataTypes,
 	EntryControlEventTypes,
-} from "./EntryControlCC";
+} from "./_Types";
+
+const host = createTestingHost();
 
 function buildCCBuffer(payload: Buffer): Buffer {
 	return Buffer.concat([
@@ -26,19 +28,6 @@ function buildCCBuffer(payload: Buffer): Buffer {
 }
 
 describe("lib/commandclass/EntryControlCC => ", () => {
-	let fakeDriver: Driver;
-	let node1: ZWaveNode;
-
-	beforeAll(() => {
-		fakeDriver = createEmptyMockDriver() as unknown as Driver;
-		node1 = new ZWaveNode(1, fakeDriver as any);
-		(fakeDriver.controller.nodes as any).set(1, node1);
-		node1.addCC(CommandClasses["Entry Control"], {
-			isSupported: true,
-			version: 1,
-		});
-	});
-
 	it("the Notification command should deserialize correctly", () => {
 		const data = buildCCBuffer(
 			Buffer.concat([
@@ -58,7 +47,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			]),
 		);
 
-		const cc = new EntryControlCCNotification(fakeDriver, {
+		const cc = new EntryControlCCNotification(host, {
 			nodeId: 1,
 			data,
 		});
@@ -70,7 +59,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 	});
 
 	it("the ConfigurationGet command should serialize correctly", () => {
-		const cc = new EntryControlCCConfigurationGet(fakeDriver, {
+		const cc = new EntryControlCCConfigurationGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -82,7 +71,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 	});
 
 	it("the ConfigurationSet command should serialize correctly", () => {
-		const cc = new EntryControlCCConfigurationSet(fakeDriver, {
+		const cc = new EntryControlCCConfigurationSet(host, {
 			nodeId: 1,
 			keyCacheSize: 1,
 			keyCacheTimeout: 2,
@@ -106,7 +95,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			]),
 		);
 
-		const cc = new EntryControlCCConfigurationReport(fakeDriver, {
+		const cc = new EntryControlCCConfigurationReport(host, {
 			nodeId: 1,
 			data,
 		});
@@ -116,7 +105,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 	});
 
 	it("the EventSupportedGet command should serialize correctly", () => {
-		const cc = new EntryControlCCEventSupportedGet(fakeDriver, {
+		const cc = new EntryControlCCEventSupportedGet(host, {
 			nodeId: 1,
 		});
 		const expected = buildCCBuffer(
@@ -145,7 +134,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			]),
 		);
 
-		const cc = new EntryControlCCEventSupportedReport(fakeDriver, {
+		const cc = new EntryControlCCEventSupportedReport(host, {
 			nodeId: 1,
 			data,
 		});
@@ -164,7 +153,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 	});
 
 	it("the KeySupportedGet command should serialize correctly", () => {
-		const cc = new EntryControlCCKeySupportedGet(fakeDriver, { nodeId: 1 });
+		const cc = new EntryControlCCKeySupportedGet(host, { nodeId: 1 });
 		const expected = buildCCBuffer(
 			Buffer.from([
 				EntryControlCommand.KeySupportedGet, // CC Command
@@ -182,7 +171,7 @@ describe("lib/commandclass/EntryControlCC => ", () => {
 			]),
 		);
 
-		const cc = new EntryControlCCKeySupportedReport(fakeDriver, {
+		const cc = new EntryControlCCKeySupportedReport(host, {
 			nodeId: 1,
 			data,
 		});

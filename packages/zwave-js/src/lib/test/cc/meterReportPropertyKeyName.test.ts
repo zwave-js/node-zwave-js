@@ -1,54 +1,60 @@
 import { CommandClasses } from "@zwave-js/core";
-import type { MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
 import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
 import { ZWaveNode } from "../../node/Node";
-import { createAndStartDriver } from "../utils";
 
 // repro from https://github.com/zwave-js/zwavejs2mqtt/issues/101#issuecomment-749007701
 
 describe("regression tests", () => {
 	let driver: Driver;
-	let serialport: MockSerialPort;
-	process.env.LOGLEVEL = "debug";
+	let node: ZWaveNode;
+	let controller: MockController;
 
-	beforeEach(async () => {
-		// Loading configuration may take a while on CI
-		if (process.env.CI) jest.setTimeout(30000);
+	beforeAll(async () => {
+		({ driver } = await createAndStartTestingDriver({
+			skipNodeInterview: true,
+			beforeStartup(mockPort) {
+				controller = new MockController({ serial: mockPort });
+				controller.defineBehavior(
+					...createDefaultMockControllerBehaviors(),
+				);
+			},
+		}));
+		node = new ZWaveNode(84, driver);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			node.id,
+			node,
+		);
 
-		({ driver, serialport } = await createAndStartDriver());
-
-		driver["_controller"] = {
-			ownNodeId: 1,
-			isFunctionSupported: () => true,
-			nodes: new Map(),
-			incrementStatistics: () => {},
-		} as any;
-		await driver.configManager.loadMeters();
-	});
-
-	afterEach(async () => {
-		await driver.destroy();
-		driver.removeAllListeners();
-	});
-
-	it("When receiving a MeterCC::Report, the value event should contain", (done) => {
-		const node = new ZWaveNode(84, driver);
 		node.addCC(CommandClasses.Configuration, {
 			isSupported: true,
 			version: 1,
 		});
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(node.id, node);
+	}, 30000);
 
-		node.on("value added", (_node, args) => {
-			expect(args.propertyKeyName).toBe("Electric_kWh_Consumed");
-			done();
+	afterAll(async () => {
+		await driver.destroy();
+	});
+
+	it("When receiving a MeterCC::Report, the value event should contain the meter name in propertyKeyName", async () => {
+		const valueAddedPromise = new Promise<void>((resolve) => {
+			node.on("value added", (_node, args) => {
+				expect(args.propertyKeyName).toBe("Electric_kWh_Consumed");
+				resolve();
+			});
 		});
 
-		serialport.receiveData(
-			Buffer.from(
-				"0116000400540e3202214400013707012d00013707d5001b",
-				"hex",
+		await Promise.all([
+			valueAddedPromise,
+			controller.sendToHost(
+				Buffer.from(
+					"0116000400540e3202214400013707012d00013707d5001b",
+					"hex",
+				),
 			),
-		);
+		]);
 	});
 });

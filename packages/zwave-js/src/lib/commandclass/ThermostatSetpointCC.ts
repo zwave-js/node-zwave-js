@@ -15,9 +15,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -40,35 +42,8 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { ThermostatSetpointCommand, ThermostatSetpointType } from "./_Types";
 
-export enum ThermostatSetpointCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-	SupportedGet = 0x04,
-	SupportedReport = 0x05,
-	CapabilitiesGet = 0x09,
-	CapabilitiesReport = 0x0a,
-}
-
-// TODO: Can we merge this with ThermostatMode?
-/**
- * @publicAPI
- */
-export enum ThermostatSetpointType {
-	"N/A" = 0x00,
-	"Heating" = 0x01, // CC v1
-	"Cooling" = 0x02, // CC v1
-	"Furnace" = 0x07, // CC v1
-	"Dry Air" = 0x08, // CC v1
-	"Moist Air" = 0x09, // CC v1
-	"Auto Changeover" = 0x0a, // CC v1
-	"Energy Save Heating" = 0x0b, // CC v2
-	"Energy Save Cooling" = 0x0c, // CC v2
-	"Away Heating" = 0x0d, // CC v2
-	"Away Cooling" = 0x0e, // CC v3
-	"Full Power" = 0x0f, // CC v3
-}
 // This array is used to map the advertised supported types (interpretation A)
 // to the actual enum values
 // prettier-ignore
@@ -81,27 +56,6 @@ function getScale(configManager: ConfigManager, scale: number): Scale {
 function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 	return getScale(configManager, scale).unit ?? "";
 }
-
-export interface ThermostatSetpointValue {
-	value: number;
-	scale: number;
-}
-
-export interface ThermostatSetpointCapabilities {
-	minValue: number;
-	minValueScale: number;
-	maxValue: number;
-	maxValueScale: number;
-}
-
-/**
- * @publicAPI
- */
-export type ThermostatSetpointMetadata = ValueMetadata & {
-	ccSpecific: {
-		setpointType: ThermostatSetpointType;
-	};
-};
 
 function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
 	return {
@@ -187,7 +141,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
 			// aren't able to handle the GET this quickly.
-			this.schedulePoll({ property, propertyKey });
+			this.schedulePoll({ property, propertyKey }, value);
 		}
 	};
 
@@ -212,6 +166,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		}
 	};
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(
@@ -240,6 +195,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			  };
 	}
 
+	@validateArgs()
 	public async set(
 		setpointType: ThermostatSetpointType,
 		value: number,
@@ -260,6 +216,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getCapabilities(setpointType: ThermostatSetpointType) {
 		this.assertSupportsCommand(
@@ -318,14 +275,15 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
-	public constructor(driver: Driver, options: CommandClassOptions) {
-		super(driver, options);
-		this.registerValue(
-			getSetpointTypesInterpretationValueID(0).property,
-			true,
-		);
+	public constructor(host: ZWaveHost, options: CommandClassOptions) {
+		super(host, options);
+		this.registerValue(getSetpointTypesInterpretationValueID(0).property, {
+			internal: true,
+		});
 		// The setpoint scale is only used internally
-		this.registerValue(getSetpointScaleValueID(0, 0).property, true);
+		this.registerValue(getSetpointScaleValueID(0, 0).property, {
+			internal: true,
+		});
 	}
 
 	public translatePropertyKey(
@@ -342,14 +300,14 @@ export class ThermostatSetpointCC extends CommandClass {
 		}
 	}
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
@@ -365,14 +323,14 @@ export class ThermostatSetpointCC extends CommandClass {
 				getSupportedSetpointTypesValueID(this.endpointIndex);
 
 			// Query the supported setpoint types
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported setpoint types...",
 				direction: "outbound",
 			});
 			const resp = await api.getSupportedSetpointTypes();
 			if (!resp) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported setpoint types timed out, skipping interview...",
@@ -396,14 +354,14 @@ export class ThermostatSetpointCC extends CommandClass {
 			}
 
 			if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "uses Thermostat Setpoint bitmap interpretation A",
 					direction: "none",
 				});
 				switchToInterpretationA();
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
@@ -420,7 +378,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Every time, query the current value
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying current value of setpoint ${setpointName}...`,
 					direction: "outbound",
@@ -438,7 +396,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					} ${setpoint.scale.unit ?? ""}`;
 				} else if (!interpretation) {
 					// The setpoint type is not supported, switch to interpretation A
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `the setpoint type ${type} is unsupported, switching to interpretation A`,
 						direction: "none",
@@ -451,7 +409,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					// We're sure about the interpretation - this should not happen
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -485,7 +443,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Query the supported setpoint types
 			let setpointTypes: ThermostatSetpointType[] = [];
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving supported setpoint types...",
 				direction: "outbound",
@@ -501,13 +459,13 @@ export class ThermostatSetpointCC extends CommandClass {
 						)
 						.map((name) => `· ${name}`)
 						.join("\n");
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			} else {
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported setpoint types timed out, skipping interview...",
@@ -522,7 +480,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Find out the capabilities of this setpoint
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `retrieving capabilities for setpoint ${setpointName}...`,
 					direction: "outbound",
@@ -530,17 +488,17 @@ export class ThermostatSetpointCC extends CommandClass {
 				const setpointCaps = await api.getCapabilities(type);
 				if (setpointCaps) {
 					const minValueUnit = getSetpointUnit(
-						this.driver.configManager,
+						this.host.configManager,
 						setpointCaps.minValueScale,
 					);
 					const maxValueUnit = getSetpointUnit(
-						this.driver.configManager,
+						this.host.configManager,
 						setpointCaps.maxValueScale,
 					);
 					const logMessage = `received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-					this.driver.controllerLog.logNode(node.id, {
+					driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -549,16 +507,16 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 			}
 
 			// Query the current value for all setpoint types
-			await this.refreshValues();
+			await this.refreshValues(driver);
 		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Thermostat Setpoint"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
@@ -575,7 +533,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				type,
 			);
 			// Every time, query the current value
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying current value of setpoint ${setpointName}...`,
 				direction: "outbound",
@@ -585,7 +543,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				const logMessage = `received current value of setpoint ${setpointName}: ${
 					setpoint.value
 				} ${setpoint.scale.unit ?? ""}`;
-				this.driver.controllerLog.logNode(node.id, {
+				driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -604,12 +562,12 @@ interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 @CCCommand(ThermostatSetpointCommand.Set)
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -639,7 +597,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.driver.configManager, this.scale);
+		const scale = getScale(this.host.configManager, this.scale);
 		return {
 			...super.toLogEntry(),
 			message: {
@@ -656,24 +614,24 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.Report)
 export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0] & 0b1111;
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = getScale(this.driver.configManager, 0);
+			this._scale = getScale(this.host.configManager, 0);
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(this.driver.configManager, scale);
+		this._scale = getScale(this.host.configManager, scale);
 
 		this.persistValues();
 	}
@@ -759,12 +717,12 @@ interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 )
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -799,10 +757,10 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.CapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		this._type = this.payload[0];
@@ -823,11 +781,8 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
-				getSetpointUnit(
-					this.driver.configManager,
-					this._minValueScale,
-				) ||
-				getSetpointUnit(this.driver.configManager, this._maxValueScale),
+				getSetpointUnit(this.host.configManager, this._minValueScale) ||
+				getSetpointUnit(this.host.configManager, this._maxValueScale),
 			ccSpecific: {
 				setpointType: this._type,
 			},
@@ -863,11 +818,11 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const minValueScale = getScale(
-			this.driver.configManager,
+			this.host.configManager,
 			this.minValueScale,
 		);
 		const maxValueScale = getScale(
-			this.driver.configManager,
+			this.host.configManager,
 			this.maxValueScale,
 		);
 		return {
@@ -892,12 +847,12 @@ interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
 @expectedCCResponse(ThermostatSetpointCCCapabilitiesReport)
 export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| ThermostatSetpointCCCapabilitiesGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -932,10 +887,10 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 @CCCommand(ThermostatSetpointCommand.SupportedReport)
 export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
 		const bitMask = this.payload;

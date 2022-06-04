@@ -1,4 +1,4 @@
-import type { SecurityClass } from "@zwave-js/core";
+import type { SecurityClass } from "@zwave-js/core/safe";
 
 /** Additional information about the outcome of a node inclusion */
 export interface InclusionResult {
@@ -133,10 +133,29 @@ export type ReplaceNodeOptions =
 				| InclusionStrategy.Security_S0;
 	  };
 
+export enum ProvisioningEntryStatus {
+	Active,
+	Inactive,
+}
+
 export interface PlannedProvisioningEntry {
+	/**
+	 * The status of this provisioning entry, which is assumed to be active by default.
+	 * Inactive entries do not get included automatically.
+	 */
+	status?: ProvisioningEntryStatus;
+
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
+	/**
+	 * The security classes that were **requested** by the device.
+	 * When this is not set, applications should default to {@link securityClasses} instead.
+	 */
+	requestedSecurityClasses?: readonly SecurityClass[];
+
 	/**
 	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
 	 */

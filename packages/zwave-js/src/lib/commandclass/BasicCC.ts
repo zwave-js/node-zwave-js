@@ -10,9 +10,11 @@ import {
 	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { AllOrNone, pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -35,12 +37,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum BasicCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { BasicCommand } from "./_Types";
 
 export function getTargetValueValueId(endpoint?: number): ValueID {
 	return {
@@ -109,7 +106,7 @@ export class BasicCCAPI extends CCAPI {
 			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
 			// that unsolicited updates cancel the scheduled poll
 			if (property === "targetValue") property = "currentValue";
-			this.schedulePoll({ property });
+			this.schedulePoll({ property }, value);
 		} else if (this.isMulticast()) {
 			// Only update currentValue for valid target values
 			if (
@@ -137,12 +134,10 @@ export class BasicCCAPI extends CCAPI {
 
 				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
 				if (property === "targetValue") property = "currentValue";
-				this.schedulePoll({ property });
+				this.schedulePoll({ property }, undefined);
 			}
 		}
 	};
-
-	private refreshTimeout: NodeJS.Timeout | undefined;
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
@@ -179,6 +174,7 @@ export class BasicCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
@@ -196,18 +192,18 @@ export class BasicCCAPI extends CCAPI {
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// try to query the current state
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// create compat event value if necessary
 		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
@@ -223,7 +219,7 @@ export class BasicCC extends CommandClass {
 				getCurrentValueValueId(this.endpointIndex),
 			) == undefined
 		) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"No response to Basic Get command, assuming the node does not support Basic CC...",
@@ -237,15 +233,15 @@ export class BasicCC extends CommandClass {
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Basic.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
 		// try to query the current state
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Basic CC state...",
 			direction: "outbound",
@@ -260,7 +256,7 @@ current value:      ${basicResponse.currentValue}`;
 target value:       ${basicResponse.targetValue}
 remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 			}
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -276,10 +272,10 @@ interface BasicCCSetOptions extends CCCommandOptions {
 @CCCommand(BasicCommand.Set)
 export class BasicCCSet extends BasicCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue = this.payload[0];
@@ -314,16 +310,16 @@ type BasicCCReportOptions = CCCommandOptions & {
 export class BasicCCReport extends BasicCC {
 	// @noCCValues See comment in the constructor
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | BasicCCReportOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.currentValue = parseMaybeNumber(
 				this.payload[0],
-				driver.options.preserveUnknownValues,
+				host.options.preserveUnknownValues,
 			);
 
 			if (this.version >= 2 && this.payload.length >= 3) {
@@ -358,7 +354,7 @@ export class BasicCCReport extends BasicCC {
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration until target value",
+		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
 

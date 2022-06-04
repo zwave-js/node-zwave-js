@@ -169,12 +169,12 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(unprovision?: boolean): Promise<boolean>
+async beginExclusion(unprovision?: boolean | "inactive"): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
 
-The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well.
+The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well. A value of `"inactive"` will keep the provisioning entry, but disable it, preventing automatic inclusion of the corresponding nodes.
 
 ### `stopExclusion`
 
@@ -200,9 +200,23 @@ The parameter has the following shape:
 
 ```ts
 interface PlannedProvisioningEntry {
+	/**
+	 * The status of this provisioning entry, which is assumed to be active by default.
+	 * Inactive entries do not get included automatically.
+	 */
+	status?: ProvisioningEntryStatus;
+
 	/** The device specific key (DSK) in the form aaaaa-bbbbb-ccccc-ddddd-eeeee-fffff-11111-22222 */
 	dsk: string;
+
+	/** The security classes that have been **granted** by the user */
 	securityClasses: SecurityClass[];
+	/**
+	 * The security classes that were **requested** by the device.
+	 * When this is not set, applications should default to {@link securityClasses} instead.
+	 */
+	requestedSecurityClasses?: readonly SecurityClass[];
+
 	/**
 	 * Additional properties to be stored in this provisioning entry, e.g. the device ID from a scanned QR code
 	 */
@@ -268,6 +282,71 @@ To get around this:
 1. Turn the radio off with `controller.toggleRF(false)`
 2. Batch all `getNodeNeighbors` requests together
 3. Turn the radio back on with `controller.toggleRF(true`)
+
+### `getKnownLifelineRoutes`
+
+The routing table of the controller is stored in its memory and not easily accessible during normal operation. Z-Wave JS gets around this by keeping statistics for each node that include the last used routes, the used repeaters, procotol and speed, as well as RSSI readings. This information can be read using
+
+```ts
+getKnownLifelineRoutes(): ReadonlyMap<number, LifelineRoutes>
+```
+
+This has some limitations:
+
+-   The information is dynamically built using TX status reports and may not be accurate at all times.
+-   It may not be available immediately after startup or at all if the controller doesn't support this feature.
+-   It only includes information about the routes between the controller and nodes, not between individual nodes.
+
+> [!NOTE] To keep information returned by this method updated, subscribe to each node's `"statistics"` event and use the included information.
+
+The returned objects have the following shape:
+
+<!-- #import LifelineRoutes from "zwave-js" -->
+
+```ts
+interface LifelineRoutes {
+	/** The last working route from the controller to this node. */
+	lwr?: RouteStatistics;
+	/** The next to last working route from the controller to this node. */
+	nlwr?: RouteStatistics;
+}
+```
+
+<!-- #import RouteStatistics from "zwave-js" -->
+
+```ts
+interface RouteStatistics {
+	/** The protocol and used data rate for this route */
+	protocolDataRate: ProtocolDataRate;
+	/** Which nodes are repeaters for this route */
+	repeaters: number[];
+
+	/** The RSSI of the ACK frame received by the controller */
+	rssi?: RSSI;
+	/**
+	 * The RSSI of the ACK frame received by each repeater.
+	 * If this is set, it has the same length as the repeaters array.
+	 */
+	repeaterRSSI?: RSSI[];
+
+	/**
+	 * The node IDs of the nodes between which the transmission failed most recently.
+	 * Is only set if there recently was a transmission failure.
+	 */
+	routeFailedBetween?: [number, number];
+}
+```
+
+<!-- #import ProtocolDataRate from "zwave-js" -->
+
+```ts
+declare enum ProtocolDataRate {
+	ZWave_9k6 = 1,
+	ZWave_40k = 2,
+	ZWave_100k = 3,
+	LongRange_100k = 4,
+}
+```
 
 ### `healNode`
 
@@ -640,13 +719,13 @@ readonly nodes: ReadonlyMap<number, ZWaveNode>
 
 This property contains a map of all nodes that you can access by their node ID, e.g. `nodes.get(2)` for node 2.
 
-### `libraryVersion`
+### `sdkVersion`
 
 ```ts
-readonly libraryVersion: string
+readonly sdkVersion: string
 ```
 
-Returns the Z-Wave library version that is supported by the controller hardware.
+Returns the Z-Wave SDK version that is supported by the controller hardware.
 
 > [!WARNING]
 > This property is only defined after the controller interview!
@@ -657,24 +736,24 @@ Returns the Z-Wave library version that is supported by the controller hardware.
 readonly type: ZWaveLibraryTypes
 ```
 
-Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are possible:
+Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are defined, although only `"Static Controller"` or `"Bridge Controller"` will realistically be possible:
 
 <!-- #import ZWaveLibraryTypes from "zwave-js" -->
 
 ```ts
-enum ZWaveLibraryTypes {
-	"Unknown",
-	"Static Controller",
-	"Controller",
-	"Enhanced Slave",
-	"Slave",
-	"Installer",
-	"Routing Slave",
-	"Bridge Controller",
-	"Device under Test",
-	"N/A",
-	"AV Remote",
-	"AV Device",
+declare enum ZWaveLibraryTypes {
+	"Unknown" = 0,
+	"Static Controller" = 1,
+	"Controller" = 2,
+	"Enhanced Slave" = 3,
+	"Slave" = 4,
+	"Installer" = 5,
+	"Routing Slave" = 6,
+	"Bridge Controller" = 7,
+	"Device under Test" = 8,
+	"N/A" = 9,
+	"AV Remote" = 10,
+	"AV Device" = 11,
 }
 ```
 
@@ -710,7 +789,7 @@ Returns the ID of the controller in the current network.
 * readonly wasRealPrimary: boolean
 * readonly isStaticUpdateController: boolean
 * readonly isSlave: boolean
-* readonly serialApiVersion: string
+* readonly firmwareVersion: string
 * readonly manufacturerId: number
 * readonly productType: number
 * readonly productId: number

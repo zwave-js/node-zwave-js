@@ -2,7 +2,7 @@
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZMX1",
-	"description": "Scene Capable Push On/Off",
+	"description": "Scene Capable Dimmer",
 	"devices": [
 		{
 			"productType": "0x0001",

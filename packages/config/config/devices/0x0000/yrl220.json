@@ -27,8 +27,6 @@
 			"label": "Audio Volume",
 			"description": "Sets the volume level of the beeps and voice prompts",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 3,
 			"allowManualEntry": false,
 			"options": [
@@ -51,8 +49,6 @@
 			"label": "Auto Re-lock",
 			"description": "When enabled, the unit will automatically re-lock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -92,8 +88,6 @@
 			"label": "Language",
 			"description": "Language used by the voice prompts",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 3,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +121,6 @@
 			"label": "Operating Mode",
 			"description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

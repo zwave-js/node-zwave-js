@@ -2,20 +2,12 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
-	LogContext,
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { SerialLogContext, SERIAL_LABEL, SERIAL_LOGLEVEL } from "./Logger_safe";
 import { MessageHeaders } from "./MessageHeaders";
-
-export const SERIAL_LABEL = "SERIAL";
-const SERIAL_LOGLEVEL = "debug";
-
-export interface SerialLogContext extends LogContext<"serial"> {
-	direction: DataDirection;
-	header?: string;
-}
 
 export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	constructor(loggers: ZWaveLogContainer) {
@@ -51,6 +43,26 @@ export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
 	public CAN(direction: DataDirection): void {
 		if (this.isVisible())
 			this.logMessageHeader(direction, MessageHeaders.CAN);
+	}
+
+	/**
+	 * Logs receipt of unexpected data while waiting for an ACK, NAK, CAN, or data frame
+	 */
+	public discarded(data: Buffer): void {
+		if (this.isVisible()) {
+			const direction: DataDirection = "inbound";
+			this.logger.log({
+				level: "warn",
+				primaryTags: "[DISCARDED]",
+				message: `invalid data ${buffer2hex(data)}`,
+				secondaryTags: `(${data.length} bytes)`,
+				direction: getDirectionPrefix(direction),
+				context: {
+					source: "serial",
+					direction,
+				},
+			});
+		}
 	}
 
 	private logMessageHeader(

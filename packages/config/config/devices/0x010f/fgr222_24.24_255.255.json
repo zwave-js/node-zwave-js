@@ -54,8 +54,6 @@
 			"label": "Reports type",
 			"description": "value should be set to 1 if the module operates in Venetian Blind mode.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -73,8 +71,6 @@
 			"#": "10",
 			"label": "Roller Shutter operating modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -115,8 +111,6 @@
 			"label": "Lamellas positioning mode",
 			"description": "Parameter influences the lamellas positioning in venetian blind mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -139,8 +133,6 @@
 			"label": "Switch type",
 			"description": "either Toggle switches or a single, momentary switch.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -193,8 +185,6 @@
 			"label": "Forced Roller Shutter calibration",
 			"description": "set to 1 will enter calibration mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -212,8 +202,6 @@
 			"#": "30",
 			"label": "Response to General Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
@@ -235,8 +223,6 @@
 			"#": "31",
 			"label": "Response to Water Flood Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -258,8 +244,6 @@
 			"#": "32",
 			"label": "Response to Smoke, CO, CO2 Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -281,8 +265,6 @@
 			"#": "33",
 			"label": "Response to Temperature Alarm",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -305,8 +287,6 @@
 			"label": "Managing lamellas in response to alarm",
 			"description": "0 no change, 1 extreme position",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -355,8 +335,6 @@
 			"label": "Self-measurement",
 			"description": "if power and energy reports are to sent to the main controller",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -375,8 +353,6 @@
 			"label": "Scenes/ Associations activation",
 			"description": "whether scenes or associations are activated by the switch keys",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

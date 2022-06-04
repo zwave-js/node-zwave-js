@@ -6,9 +6,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
 	API,
@@ -23,12 +25,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-export enum LanguageCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { LanguageCommand } from "./_Types";
 
 // @noSetValueAPI It doesn't make sense
 
@@ -61,6 +58,7 @@ export class LanguageCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async set(language: string, country?: string): Promise<void> {
 		this.assertSupportsCommand(LanguageCommand, LanguageCommand.Set);
 
@@ -79,29 +77,29 @@ export class LanguageCCAPI extends CCAPI {
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		await this.refreshValues();
+		await this.refreshValues(driver);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
 
-	public async refreshValues(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async refreshValues(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses.Language.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
@@ -111,7 +109,7 @@ export class LanguageCC extends CommandClass {
 			const logMessage = `received current language setting: ${language}${
 				country != undefined ? `-${country}` : ""
 			}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -127,10 +125,10 @@ interface LanguageCCSetOptions extends CCCommandOptions {
 @CCCommand(LanguageCommand.Set)
 export class LanguageCCSet extends LanguageCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | LanguageCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -197,10 +195,10 @@ export class LanguageCCSet extends LanguageCC {
 @CCCommand(LanguageCommand.Report)
 export class LanguageCCReport extends LanguageCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		// if (gotDeserializationOptions(options)) {
 		validatePayload(this.payload.length >= 3);
 		this.language = this.payload.toString("ascii", 0, 3);

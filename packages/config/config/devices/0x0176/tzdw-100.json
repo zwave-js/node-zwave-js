@@ -19,8 +19,6 @@
 			"label": "Group 2 Command Type",
 			"description": "Select what type of command to be sent to nodes in association group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -63,8 +61,6 @@
 			"label": "Group 2 Signal Type",
 			"description": "Type of commands to association group 2",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -83,8 +79,6 @@
 			"label": "Group 3 Command Type",
 			"description": "Select what type of command to be sent to nodes in association group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -127,8 +121,6 @@
 			"label": "Group 3 Signal Type",
 			"description": "Type of commands to association group 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
@@ -146,8 +138,6 @@
 			"#": "7",
 			"label": "LED-Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
@@ -166,8 +156,6 @@
 			"label": "Lifeline command Type",
 			"description": "Select the type of command to be sent in the Lifeline",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [

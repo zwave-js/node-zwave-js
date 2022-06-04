@@ -5,9 +5,10 @@ import {
 	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core";
+import type { ZWaveEndpointBase, ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
+import { validateArgs } from "@zwave-js/transformers";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
-import type { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -29,18 +30,12 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
-
-// All the supported commands
-export enum TimeParametersCommand {
-	Set = 0x01,
-	Get = 0x02,
-	Report = 0x03,
-}
+import { TimeParametersCommand } from "./_Types";
 
 /**
  * Determines if the node expects local time instead of UTC.
  */
-function shouldUseLocalTime(endpoint: Endpoint): boolean {
+function shouldUseLocalTime(endpoint: ZWaveEndpointBase): boolean {
 	// GH#311 Some nodes have no way to determine the time zone offset,
 	// so they need to interpret the set time as local time instead of UTC.
 	//
@@ -154,6 +149,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		return response?.dateAndTime;
 	}
 
+	@validateArgs()
 	public async set(dateAndTime: Date): Promise<void> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
@@ -174,21 +170,21 @@ export class TimeParametersCCAPI extends CCAPI {
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Time Parameters"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
 		// Synchronize the node's time
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",
 			direction: "outbound",
@@ -203,10 +199,10 @@ export class TimeParametersCC extends CommandClass {
 @CCCommand(TimeParametersCommand.Report)
 export class TimeParametersCCReport extends TimeParametersCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 7);
 		const dateSegments = {
 			year: this.payload.readUInt16BE(0),
@@ -253,12 +249,12 @@ interface TimeParametersCCSetOptions extends CCCommandOptions {
 @CCCommand(TimeParametersCommand.Set)
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| TimeParametersCCSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 7);
 			const dateSegments = {

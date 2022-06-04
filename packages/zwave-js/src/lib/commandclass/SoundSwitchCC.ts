@@ -9,10 +9,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
-import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -36,6 +38,7 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+import { SoundSwitchCommand, ToneId } from "./_Types";
 
 export function getVolumeValueId(endpointIndex: number | undefined): ValueID {
 	return {
@@ -51,26 +54,6 @@ export function getToneIdValueId(endpointIndex: number | undefined): ValueID {
 		endpoint: endpointIndex,
 		property: "toneId",
 	};
-}
-
-// All the supported commands
-export enum SoundSwitchCommand {
-	TonesNumberGet = 0x01,
-	TonesNumberReport = 0x02,
-	ToneInfoGet = 0x03,
-	ToneInfoReport = 0x04,
-	ConfigurationSet = 0x05,
-	ConfigurationGet = 0x06,
-	ConfigurationReport = 0x07,
-	TonePlaySet = 0x08,
-	TonePlayGet = 0x09,
-	TonePlayReport = 0x0a,
-}
-
-// @publicAPI
-export enum ToneId {
-	Off = 0x00,
-	Default = 0xff,
 }
 
 @API(CommandClasses["Sound Switch"])
@@ -107,6 +90,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		return response?.toneCount;
 	}
 
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getToneInfo(toneId: number) {
 		this.assertSupportsCommand(
@@ -127,6 +111,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		if (response) return pick(response, ["duration", "name"]);
 	}
 
+	@validateArgs()
 	public async setConfiguration(
 		defaultToneId: number,
 		defaultVolume: number,
@@ -166,6 +151,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		}
 	}
 
+	@validateArgs()
 	public async play(toneId: number, volume?: number): Promise<void> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
@@ -274,7 +260,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			}
 			if (this.isSinglecast()) {
 				// Verify the current value after a (short) delay
-				this.schedulePoll({ property }, { transition: "fast" });
+				this.schedulePoll({ property }, value, { transition: "fast" });
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
@@ -304,20 +290,20 @@ export class SoundSwitchCCAPI extends CCAPI {
 export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
-	public async interview(): Promise<void> {
-		const node = this.getNode()!;
-		const endpoint = this.getEndpoint()!;
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const endpoint = this.getEndpoint(driver)!;
 		const api = endpoint.commandClasses["Sound Switch"].withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `Interviewing ${this.ccName}...`,
 			direction: "none",
 		});
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "requesting current sound configuration...",
 			direction: "outbound",
 		});
@@ -326,25 +312,25 @@ export class SoundSwitchCC extends CommandClass {
 			const logMessage = `received current sound configuration:
 default tone ID: ${config.defaultToneId}
 default volume: ${config.defaultVolume}`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
 		}
 
-		this.driver.controllerLog.logNode(node.id, {
+		driver.controllerLog.logNode(node.id, {
 			message: "requesting tone count...",
 			direction: "outbound",
 		});
 		const toneCount = await api.getToneCount();
 		if (toneCount != undefined) {
 			const logMessage = `supports ${toneCount} tones`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
 		} else {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "Querying tone count timed out, skipping interview...",
 				level: "warn",
@@ -356,7 +342,7 @@ default volume: ${config.defaultVolume}`;
 			0: "off",
 		};
 		for (let toneId = 1; toneId <= toneCount; toneId++) {
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: `requesting info for tone #${toneId}`,
 				direction: "outbound",
 			});
@@ -365,7 +351,7 @@ default volume: ${config.defaultVolume}`;
 			const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-			this.driver.controllerLog.logNode(node.id, {
+			driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -390,10 +376,10 @@ duration: ${info.duration} seconds`;
 @CCCommand(SoundSwitchCommand.TonesNumberReport)
 export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.toneCount = this.payload[0];
 	}
@@ -417,10 +403,10 @@ export class SoundSwitchCCTonesNumberGet extends SoundSwitchCC {}
 @CCCommand(SoundSwitchCommand.ToneInfoReport)
 export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 4);
 		this.toneId = this.payload[0];
 		this.duration = this.payload.readUInt16BE(1);
@@ -465,12 +451,12 @@ interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 )
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCToneInfoGetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -505,12 +491,12 @@ interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.ConfigurationSet)
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCConfigurationSetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -545,10 +531,10 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
 export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 2);
 		this.defaultVolume = clamp(this.payload[0], 0, 100);
 		this.defaultToneId = this.payload[1];
@@ -599,12 +585,12 @@ interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 @CCCommand(SoundSwitchCommand.TonePlaySet)
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options:
 			| CommandClassDeserializationOptions
 			| SoundSwitchCCTonePlaySetOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
 			// TODO: Deserialize payload
 			throw new ZWaveError(
@@ -648,10 +634,10 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 @CCCommand(SoundSwitchCommand.TonePlayReport)
 export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	public constructor(
-		driver: Driver,
+		host: ZWaveHost,
 		options: CommandClassDeserializationOptions,
 	) {
-		super(driver, options);
+		super(host, options);
 		validatePayload(this.payload.length >= 1);
 		this.toneId = this.payload[0];
 		if (this.toneId !== 0 && this.payload.length >= 2) {

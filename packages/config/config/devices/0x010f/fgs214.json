@@ -1,5 +1,5 @@
 {
-	"manufacturer": "FIBARO System",
+	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGS214",
 	"description": "Smart Module",
@@ -11,6 +11,10 @@
 		{
 			"productType": "0x0404",
 			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0404",
+			"productId": "0x4000"
 		}
 	],
 	"firmwareVersion": {
@@ -35,38 +39,30 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Remember relays state",
-			"description": "This parameter determines the state of relays power supply failure (e.g. power outage). auto OFF and flashing modes the parameter not relevant and the relay will always remain off.",
+			"label": "Relays State After Power Failure",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Relays remain switched off after restoring power",
+					"label": "Always off",
 					"value": 0
 				},
 				{
-					"label": "Restore remembered state of relays after restoring power",
+					"label": "Previous state",
 					"value": 1
 				},
 				{
-					"label": "Restore remembered state of relays after restoring power, but for toggle switches (parameter 20/21 set to 1) set the same state as the current state of the switches",
+					"label": "Toggle switch (synchronize output): current switch state / Other switch types: previous state",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "20",
-			"label": "S1 input – switch type",
-			"description": "S1 - Inputs type configuration",
+			"label": "S1 Input – Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -74,24 +70,20 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"label": "Toggle switch (synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (device changes status when switch changes status)",
+					"label": "Toggle switch (toggle output)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "21",
-			"label": "S2 input – switch type",
-			"description": "S2 - Inputs type configuration",
+			"label": "S2 Input – Switch Type",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true,
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -99,45 +91,223 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"label": "Toggle switch (synchronize output)",
 					"value": 1
 				},
 				{
-					"label": "Toggle switch (device changes status when switch changes status)",
+					"label": "Toggle switch (toggle output)",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "24",
-			"label": "Inputs orientation",
-			"description": "This parameter allows reversing operation of S1 and S2 inputs changing the wiring. Use in case of incorrect wiring.",
+			"label": "Inputs Orientation",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "default (S1 - 1st channel, S2 - 2nd channel)",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "reversed (S1 - 2nd channel, S2 - 1st channel)",
+					"label": "Reversed",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "150",
-			"label": "First channel - operating mode",
-			"description": "This parameter allows to choose operating for channel controlled with Q/Q1 output. timed modes (value 1, 2 or 3), time is set parameter 154 and reaction to input is set with parameter 152.",
-			"valueSize": 1,
-			"minValue": 0,
+			"#": "30[0xff000000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_type",
+			"label": "Alarm Configuration – 1st Slot Notification Type",
+			"defaultValue": 0
+		},
+		{
+			"#": "30[0xff0000]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event",
+			"label": "Alarm Configuration – 1st Slot Notification Status",
+			"defaultValue": 0
+		},
+		{
+			"#": "30[0xff00]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_notification_event_parameter",
+			"label": "Alarm Configuration – 1st Slot Notification Event/State Parameters"
+		},
+		{
+			"#": "30[0xff]",
+			"$import": "templates/fibaro_template.json#alarm_configuration_action",
+			"label": "Alarm Configuration – 1st Slot Action",
 			"maxValue": 3,
+			"allowManualEntry": false,
 			"defaultValue": 0,
-			"unsigned": true,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Turn on",
+					"value": 1
+				},
+				{
+					"label": "Turn off",
+					"value": 2
+				},
+				{
+					"label": "Turn on/off continuously",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "31[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration – 2nd Slot Notification Type",
+			"defaultValue": 5
+		},
+		{
+			"#": "31[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration – 2nd Slot Notification Status",
+			"defaultValue": 255
+		},
+		{
+			"#": "31[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration – 2nd Slot Notification Event/State Parameters",
+			"defaultValue": 0
+		},
+		{
+			"#": "31[0xff]",
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration – 2nd Slot Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration – 3rd Slot Notification Type",
+			"defaultValue": 1
+		},
+		{
+			"#": "32[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration – 3rd Slot Notification Status",
+			"defaultValue": 255
+		},
+		{
+			"#": "32[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration – 3rd Slot Notification Event/State Parameters",
+			"defaultValue": 0
+		},
+		{
+			"#": "32[0xff]",
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration – 3rd Slot Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration – 4th Slot Notification Type",
+			"defaultValue": 2
+		},
+		{
+			"#": "33[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration – 4th Slot Notification Status",
+			"defaultValue": 255
+		},
+		{
+			"#": "33[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration – 4th Slot Notification Event/State Parameters",
+			"defaultValue": 0
+		},
+		{
+			"#": "33[0xff]",
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration – 4th Slot Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xff000000]",
+			"$import": "#paramInformation/30[0xff000000]",
+			"label": "Alarm Configuration – 5th Slot Notification Type",
+			"defaultValue": 4
+		},
+		{
+			"#": "34[0xff0000]",
+			"$import": "#paramInformation/30[0xff0000]",
+			"label": "Alarm Configuration – 5th Slot Notification Status",
+			"defaultValue": 255
+		},
+		{
+			"#": "34[0xff00]",
+			"$import": "#paramInformation/30[0xff00]",
+			"label": "Alarm Configuration – 5th Slot Notification Event/State Parameters",
+			"defaultValue": 0
+		},
+		{
+			"#": "34[0xff]",
+			"$import": "#paramInformation/30[0xff]",
+			"label": "Alarm Configuration – 5th Slot Action",
+			"defaultValue": 0
+		},
+		{
+			"#": "35",
+			"label": "Alarm Configuration – Duration",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"options": [
+				{
+					"label": "Infinite",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "40[0x01]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_1x"
+		},
+		{
+			"#": "40[0x02]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_2x"
+		},
+		{
+			"#": "40[0x04]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_pressed_3x"
+		},
+		{
+			"#": "40[0x08]",
+			"$import": "templates/fibaro_template.json#send_s1_central_scene_hold_release"
+		},
+		{
+			"#": "41[0x01]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_1x"
+		},
+		{
+			"#": "41[0x02]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_2x"
+		},
+		{
+			"#": "41[0x04]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_pressed_3x"
+		},
+		{
+			"#": "41[0x08]",
+			"$import": "templates/fibaro_template.json#send_s2_central_scene_hold_release"
+		},
+		{
+			"#": "150",
+			"label": "Q Output – Operating Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -145,11 +315,11 @@
 					"value": 0
 				},
 				{
-					"label": "Delay Off",
+					"label": "Delay off",
 					"value": 1
 				},
 				{
-					"label": "Auto Off",
+					"label": "Auto off",
 					"value": 2
 				},
 				{
@@ -160,13 +330,9 @@
 		},
 		{
 			"#": "152",
-			"label": "First channel - reaction to input change in delayed/auto OFF modes",
-			"description": "This parameter determines how the device when changing state of S1 input in timed for first channel.",
+			"label": "Q Output – Reaction to Input Change in Timed Modes",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
@@ -174,30 +340,34 @@
 					"value": 0
 				},
 				{
-					"label": "No reaction, mode runs until it ends",
+					"label": "Ignore, mode runs until it ends",
 					"value": 1
 				},
 				{
-					"label": "Reset timer, start counting time from the beginning",
+					"label": "Reset, start time from the beginning",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "154",
-			"label": "First channel – time parameter for delayed/auto OFF and flashing modes",
-			"description": "This parameter allows to set time parameter used in timed modes.",
+			"label": "Q Output – Time Parameter for Timed Modes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
-			"unit": "0.1 s",
+			"unit": "0.1 seconds",
 			"defaultValue": 5,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "0.1 seconds",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "156",
-			"label": "S1 Switch ON value sent to 2nd association group",
-			"description": "This parameter determines value sent with Switch On command to devices associated in 2nd association group.",
+			"label": "S1 Association: Switch On Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -206,8 +376,7 @@
 		},
 		{
 			"#": "157",
-			"label": "S1 Switch OFF value sent to 2nd association group",
-			"description": "This parameter determines value sent with Switch Off command to devices associated in 2nd association group.",
+			"label": "S1 Association: Switch Off Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -216,8 +385,7 @@
 		},
 		{
 			"#": "158",
-			"label": "S1 Switch Double Click value sent to 2nd association groups",
-			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd association group.",
+			"label": "S1 Association: Double Click Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -225,9 +393,17 @@
 			"unsigned": true
 		},
 		{
+			"#": "159",
+			"label": "S2 Association: Switch On Value Sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true
+		},
+		{
 			"#": "160",
-			"label": "S2 Switch OFF value sent to 3rd association group",
-			"description": "This parameter determines value sent with Switch Off command to devices associated in 3rd association group.",
+			"label": "S2 Association: Switch Off Value Sent",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -235,22 +411,28 @@
 			"unsigned": true
 		},
 		{
-			"#": "162",
-			"label": "Q/Q1 output type",
-			"description": "This parameter determines type of Q/Q1 output.",
-			"valueSize": 1,
+			"#": "161",
+			"label": "S2 Association: Double Click Value Sent",
+			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true
+		},
+		{
+			"#": "162",
+			"label": "Q Output Type",
+			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normally Open (relay contacts opened turned off, closed when turned on)",
+					"label": "Normally open",
 					"value": 0
 				},
 				{
-					"label": "Normally Closed (relay contacts closed turned off, opened when turned on)",
+					"label": "Normally closed",
 					"value": 1
 				}
 			]

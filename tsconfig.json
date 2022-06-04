@@ -23,13 +23,12 @@
 
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
-		"types": ["node", "jest", "jest-extended"],
+		"types": ["node", "jest", "jest-extended", "ts-nameof"],
 		"noErrorTruncation": true
 	},
 	"include": [
 		"packages/**/src/**/*.ts",
 		"packages/**/maintenance/**/*.ts",
-		"packages/*/gulpfile.ts",
 		"maintenance/**/*.ts",
 		"test/**/*.ts"
 	],
