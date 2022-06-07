@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is Off",
+					"label": "LED On when load is On",
 					"value": 0
 				},
 				{
-					"label": "LED On when light is turned On",
+					"label": "LED On when load is Off",
 					"value": 1
 				},
 				{
