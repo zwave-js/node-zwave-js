@@ -1300,16 +1300,17 @@ export class Driver
 	}
 
 	/**
-	 * Starts or resumes the interview of a Z-Wave node only when the initial
-	 * interview was bypassed.
+	 * Starts or resumes the interview of a Z-Wave node.
 	 *
-	 * It is advised to NOT await this method as it can take a very long 
-	 * time (minutes to hours)!
+	 * **NOTE:** This is only allowed when the initial interview was bypassed using the
+	 * `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
+	 *
+	 * **NOTE:** It is advised to NOT await this method as it can take a very long time (minutes to hours)!
 	 */
 	public async interviewNode(node: ZWaveNode): Promise<void> {
 		if (!this.options.interview?.disableOnNodeAdded) {
 			throw new ZWaveError(
-				`Interview is blocked, use ZWaveNode.refreshInfo`,
+				`Calling Driver.interviewNode is not allowed because automatic node interviews are enabled. Use ZWaveNode.refreshInfo() to re-interview a node.`,
 				ZWaveErrorCodes.Driver_FeatureDisabled,
 			);
 		}

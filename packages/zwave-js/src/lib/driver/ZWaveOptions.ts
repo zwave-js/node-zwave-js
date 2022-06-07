@@ -78,9 +78,13 @@ export interface ZWaveOptions {
 		queryAllUserCodes?: boolean;
 
 		/**
-		 * Whether a node should be interviewed after successful inclusion
-		 * Note: When enabled, the interview must be triggered manually using
-		 *		 `driver.interviewNode(node: ZWaveNode)`
+		 * Disable the automatic node interview after successful inclusion.
+		 * Note: When this is `true`, the interview must be started manually using
+		 * ```ts
+		 * driver.interviewNode(node: ZWaveNode)
+		 * ```
+		 *
+		 * Default: `false` (automatic interviews enabled)
 		 */
 		disableOnNodeAdded?: boolean;
 	};

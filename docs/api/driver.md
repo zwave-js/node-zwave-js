@@ -35,10 +35,12 @@ The following table gives you an overview of what happens during the startup pro
 ### `interviewNode`
 
 ```ts
-interviewNode(node: ZWaveNode): <Promise>void
+interviewNode(node: ZWaveNode): Promise<void>
 ```
 
-Starts or resumes the interview of a Z-Wave node only when the initial interview was bypassed.
+Starts or resumes the interview of a Z-Wave node.
+
+> [!WARNING] This is only allowed when the initial interview was bypassed using the `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
 
 > [!NOTE] It is advised to NOT await this method as it can take a very long time (minutes to hours)!
 
