@@ -1493,11 +1493,6 @@ protocol version:      ${this.protocolVersion}`;
 				const ccName = CommandClasses[cc];
 				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
 			}
-			logLines.push("controlled CCs:");
-			for (const cc of resp.nodeInformation.controlledCCs) {
-				const ccName = CommandClasses[cc];
-				logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
-			}
 			this.driver.controllerLog.logNode(this.id, {
 				message: logLines.join("\n"),
 				direction: "inbound",
@@ -1885,8 +1880,6 @@ protocol version:      ${this.protocolVersion}`;
 		if (this.interviewStage < InterviewStage.NodeInfo) {
 			for (const cc of nodeInfo.supportedCCs)
 				this.addCC(cc, { isSupported: true });
-			for (const cc of nodeInfo.controlledCCs)
-				this.addCC(cc, { isControlled: true });
 		}
 
 		// As the NIF is sent on wakeup, treat this as a sign that the node is awake

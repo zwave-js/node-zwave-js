@@ -805,15 +805,17 @@ describe("lib/node/Node", () => {
 				isControlled: true,
 			});
 			node.addCC(CommandClasses.Configuration, {
-				isSupported: true,
+				isControlled: true,
 			});
 
 			node.updateNodeInfo({
-				controlledCCs: [CommandClasses.Configuration],
-				supportedCCs: [CommandClasses.Battery],
+				supportedCCs: [
+					CommandClasses.Battery,
+					CommandClasses.Configuration,
+				],
 			} as any);
 			expect(node.supportsCC(CommandClasses.Battery)).toBeTrue();
-			expect(node.controlsCC(CommandClasses.Configuration)).toBeTrue();
+			expect(node.supportsCC(CommandClasses.Configuration)).toBeTrue();
 			node.destroy();
 		});
 
