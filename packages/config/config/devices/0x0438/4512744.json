@@ -1,0 +1,392 @@
+{
+	"manufacturer": "Namron",
+	"manufacturerId": "0x0438",
+	"label": "4512744",
+	"description": "16A Touch thermostat - White",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd013"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Heat Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "2",
+			"label": "Overcurrent Protection",
+			"description": "Allowable range: 5-16",
+			"valueSize": 1,
+			"unit": "A",
+			"minValue": 0,
+			"maxValue": 16,
+			"defaultValue": 16,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "3",
+			"label": "Button Vibrations & Sounds",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable ",
+					"value": 0
+				},
+				{
+					"label": "Low",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_prev"
+		},
+		{
+			"#": "6",
+			"label": "Overheat Protection",
+			"description": "Allowable range: 20-60",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 45,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Temperature Control Hysteresis",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Energy Save Mode"
+		},
+		{
+			"#": "9",
+			"label": "Temperature Sensor Type",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ntc/10k b(25/50℃)=3950",
+					"value": 1
+				},
+				{
+					"label": "Ntc/15k b(25/50℃)=3950",
+					"value": 2
+				},
+				{
+					"label": "Ntc/50k b(25/50℃)=3950",
+					"value": 3
+				},
+				{
+					"label": "Ntc/100k b(25/50℃)=3950",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "10",
+			"label": "Temperature Control Reference",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Room sensor",
+					"value": 1
+				},
+				{
+					"label": "Floor sensor",
+					"value": 2
+				},
+				{
+					"label": "Room and floor sensor",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "11",
+			"label": "Room Sensor Offset",
+			"valueSize": 1,
+			"unit": "0.5 °C",
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "12",
+			"label": "Floor Sensor Offset",
+			"valueSize": 1,
+			"unit": "0.5 °C",
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0
+		},
+		{
+			"#": "13",
+			"label": "Drying Mode Duration",
+			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 5,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Mode to Set After Drying Mode",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Manual/Comfort",
+					"value": 1
+				},
+				{
+					"label": "Auto/Energy saver",
+					"value": 2
+				},
+				{
+					"label": "Away",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Automatic Reporting: Temperature Change Threshold",
+			"description": "Allowable range: 2-10",
+			"valueSize": 1,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Automatic Reporting: Humidity Reporting Interval",
+			"description": "Allowable range: 30-28800",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 28800,
+			"defaultValue": 300,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "18",
+			"label": "Automatic Reporting: Power Change Threshold",
+			"valueSize": 1,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Automatic Reporting: Current Change Threshold",
+			"valueSize": 1,
+			"unit": "0.1 A",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Automatic Reporting: Voltage Change Threshold",
+			"valueSize": 1,
+			"unit": "V",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 2,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Automatic Reporting: Meter Report Interval",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 60,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"unsigned": true
+		},
+		{
+			"#": "22",
+			"label": "Display Brightness",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low",
+					"value": 0
+				},
+				{
+					"label": "Medium",
+					"value": 1
+				},
+				{
+					"label": "High",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "23",
+			"label": "Home Page Sensor Display",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Indoor air temperature",
+					"value": 0
+				},
+				{
+					"label": "External temperature (floor temperature)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "24",
+			"label": "Time Zone Differential",
+			"description": "Specify the time difference from UTC",
+			"valueSize": 1,
+			"minValue": -12,
+			"maxValue": 12,
+			"defaultValue": 0
+		},
+		{
+			"#": "26",
+			"label": "Window Open Detection",
+			"description": "Specifies the temperature change within three minutes to trigger window open detection",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "1.5 °C",
+					"value": 15
+				},
+				{
+					"label": "2.0 °C",
+					"value": 20
+				},
+				{
+					"label": "2.5 °C",
+					"value": 25
+				},
+				{
+					"label": "3.0 °C",
+					"value": 30
+				},
+				{
+					"label": "3.5 °C",
+					"value": 35
+				},
+				{
+					"label": "4.0 °C",
+					"value": 40
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Adding to a Z-Wave Network (Inclusion)\nMethod 1: Select “Add”, then short press button , the device will send out inclusion request, “Status” will show “Inclusion...”. If there is no response from a gateway within 30 seconds, or inclusion failed, “Status” will show “Fail”. If included successfully, “Status” will show “Inclusion OK” and device ID.\nMethod 2: Operate the gateway into inclusion mode, make sure the device is already removed from previous network, reset power of the device, the device will be included to the gateway automatically",
+		"exclusion": "Removing from a Z-Wave Network (Exclusion)\nSelect “Remove”, then short press button , the device will send out exclusion request, “Status” will show “Exclusion...”. If there is no response from a gateway within 30 seconds, or exclusion failed, “Status” will show “Fail”. If excluded successfully, “Status” will show “Exclusion OK” and device ID will be showed as 0",
+		"reset": "Select “Reset”, then short press button F, the device will start reset, “Status” will show “Reset...”. If there is no response from a gateway within 6 seconds, or exclusion failed, “Status” will show “Fail”. If reset successfully, “Status” will show “Reset OK”",
+		"manual": "https://www.elektroimportoren.no/docs/lib/4512744-Brukerveiledning-5.pdf"
+	}
+}
