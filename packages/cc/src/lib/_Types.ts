@@ -1661,7 +1661,7 @@ export enum ZWaveProtocolCommand {
 	AutomaticControllerUpdateStart = 0x10,
 	SUCNodeID = 0x11,
 	SetSUC = 0x12,
-	SetSUCACK = 0x13,
+	SetSUCAck = 0x13,
 	AssignSUCReturnRoute = 0x14,
 	StaticRouteRequest = 0x15,
 	Lost = 0x16,
