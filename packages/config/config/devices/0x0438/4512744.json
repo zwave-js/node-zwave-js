@@ -97,8 +97,8 @@
 		},
 		{
 			"#": "8",
-			"label": "Energy Save Mode",
-			"$import": "~/templates/master_template.json#base_enable_disable"
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Energy Save Mode"
 		},
 		{
 			"#": "9",
