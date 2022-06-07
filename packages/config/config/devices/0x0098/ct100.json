@@ -43,7 +43,6 @@
 	"associations": {
 		"1": {
 			"label": "Lifeline",
-			"description": "Send report about Thermostat Mode, Thermostat Operating State, Fan Mode, Fan State, Setpoint, Sensor Multilevel",
 			"maxNodes": 2,
 			"isLifeline": true
 		}
