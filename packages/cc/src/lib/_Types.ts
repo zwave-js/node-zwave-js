@@ -1,10 +1,13 @@
 import type { Scale } from "@zwave-js/config/safe";
-import type {
+import {
 	CommandClasses,
+	DataRate,
 	Duration,
+	FLiRS,
 	IZWaveNode,
 	Maybe,
 	ValueMetadata,
+	ZWaveDataRate,
 } from "@zwave-js/core/safe";
 import type { NotificationCCReport } from "../cc/NotificationCC";
 
@@ -1636,4 +1639,87 @@ export enum ZWavePlusRoleType {
 export enum ZWavePlusNodeType {
 	Node = 0x00, // ZWave+ Node
 	IPGateway = 0x02, // ZWave+ for IP Gateway
+}
+
+/** @publicAPI */
+export enum ZWaveProtocolCommand {
+	NodeInformationFrame = 0x01,
+	RequestNodeInformationFrame = 0x02,
+	AssignIDs = 0x03,
+	FindNodesInRange = 0x04,
+	GetNodesInRange = 0x05,
+	RangeInfo = 0x06,
+	CommandComplete = 0x07,
+	TransferPresentation = 0x08,
+	TransferNodeInformation = 0x09,
+	TransferRangeInformation = 0x0a,
+	TransferEnd = 0x0b,
+	AssignReturnRoute = 0x0c,
+	NewNodeRegistered = 0x0d,
+	NewRangeRegistered = 0x0e,
+	TransferNewPrimaryControllerComplete = 0x0f,
+	AutomaticControllerUpdateStart = 0x10,
+	SUCNodeID = 0x11,
+	SetSUC = 0x12,
+	SetSUCAck = 0x13,
+	AssignSUCReturnRoute = 0x14,
+	StaticRouteRequest = 0x15,
+	Lost = 0x16,
+	AcceptLost = 0x17,
+	NOPPower = 0x18,
+	ReserveNodeIDs = 0x19,
+	ReservedIDs = 0x1a,
+	NodesExist = 0x1f,
+	NodesExistReply = 0x20,
+	SetNWIMode = 0x22,
+	ExcludeRequest = 0x23,
+	AssignReturnRoutePriority = 0x24,
+	AssignSUCReturnRoutePriority = 0x25,
+	SmartStartIncludedNodeInformation = 0x26,
+	SmartStartPrime = 0x27,
+	SmartStartInclusionRequest = 0x28,
+}
+
+export enum WakeUpTime {
+	None,
+	"1000ms",
+	"250ms",
+}
+
+export function FLiRS2WakeUpTime(value: FLiRS): WakeUpTime {
+	return value === "1000ms" ? 1 : value === "250ms" ? 2 : 0;
+}
+
+export function wakeUpTime2FLiRS(value: WakeUpTime): FLiRS {
+	return value === 1 ? "1000ms" : value === 2 ? "250ms" : false;
+}
+
+export function dataRate2ZWaveDataRate(dataRate: DataRate): ZWaveDataRate {
+	return dataRate === 100000
+		? ZWaveDataRate["100k"]
+		: dataRate === 40000
+		? ZWaveDataRate["40k"]
+		: ZWaveDataRate["9k6"];
+}
+
+export function ZWaveDataRate2DataRate(zdr: ZWaveDataRate): DataRate {
+	return zdr === ZWaveDataRate["100k"]
+		? 100000
+		: zdr === ZWaveDataRate["40k"]
+		? 40000
+		: 9600;
+}
+
+export function parseWakeUpTime(value: number): WakeUpTime {
+	return value <= WakeUpTime["250ms"] ? value : 0;
+}
+
+export enum NetworkTransferStatus {
+	Failed = 0,
+	Success,
+	UpdateDone,
+	UpdateAborted,
+	UpdateWait,
+	UpdateDisabled,
+	UpdateOverflow,
 }
