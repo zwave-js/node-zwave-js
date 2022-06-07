@@ -16,38 +16,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Dim level when the light bulb is turned On",
-			"description": "Turn Dim Level Memory ON/OFF",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable dim level memory",
-					"value": 0
-				},
-				{
-					"label": "Enable dim level memory",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#init_brightness"
 		},
 		{
 			"#": "9",
-			"label": "Dim / Bright Step Level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "10",
-			"label": "Dim / Bright Speed",
-			"description": "How fast the brightness will change with each dimming step",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_speed"
 		}
 	]
 }

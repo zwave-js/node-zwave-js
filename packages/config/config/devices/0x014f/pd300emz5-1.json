@@ -16,136 +16,47 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "LED Intensity",
-			"description": "How bright the device LEDs should be",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "templates/config_template.json#led_brightness"
 		},
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "LED \"Night Light\" behavior",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when load is on, off when load is off",
-					"value": 0
-				},
-				{
-					"label": "LED off when load is on, on when load is off",
-					"value": 1
-				},
-				{
-					"label": "LED is always on",
-					"value": 2
-				},
-				{
-					"label": "LED is always off",
-					"value": 3
-				}
-			]
+			"$import": "templates/config_template.json#night_light_4"
 		},
 		{
 			"#": "7",
-			"label": "Remote Dim Step",
-			"description": "How many levels the dimmer will change each time the Dim Timer expires",
-			"unit": "Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "8",
-			"label": "Remote Dim Time",
-			"description": "How often the dim level will change (in 10 ms resolution)",
-			"unit": "10 ms",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#dim_rate_zwave"
 		},
 		{
 			"#": "9",
-			"label": "Local Dim Step",
-			"description": "How many levels the dimmer will change each time the Dim Timer expires",
-			"unit": "Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_manual"
 		},
 		{
 			"#": "11",
-			"label": "Power Monitoring",
-			"description": "Provide a visual display of the ammount of energy being consumed",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Power Monitoring Off",
-					"value": 0
-				},
-				{
-					"label": "Power Monitoring On",
-					"value": 1
-				}
-			]
+			"$import": "templates/config_template.json#power_monitor"
 		},
 		{
 			"#": "12",
-			"label": "Energy display duration",
-			"description": "Number of seconds LED displays power level usage",
-			"unit": "Seconds",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 60
+			"$import": "templates/config_template.json#energy_display_duration"
 		},
 		{
 			"#": "13",
-			"label": "Engery report frequency",
-			"description": "Number of minutes between automatic reporting",
-			"unit": "Minutes",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 6
+			"$import": "templates/config_template.json#report_interval"
 		},
 		{
 			"#": "16",
-			"label": "Local Dim Time",
-			"description": "How often the dim level will change (in 10 ms resolution)",
-			"unit": "10 ms",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#dim_rate_manual"
 		},
 		{
 			"#": "17",
-			"label": "AllSwitch Dim Step",
-			"description": "How many levels the dimmer will change each time the Dim Timer expires",
-			"unit": "Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_all"
 		},
 		{
 			"#": "18",
-			"label": "AllSwitch Dim Time",
-			"description": "How often the dim level will change (in 10 ms resolution)",
-			"unit": "10 ms",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#dim_rate_all"
 		}
 	]
 }

@@ -16,90 +16,39 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "Control the LED on the device.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 0
+			"$import": "templates/config_template.json#night_light_5"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert the operation of the paddle.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",
-			"label": "Ignore Start Level in Dim Command",
-			"description": "The Start Level sent in a Dim command can be ignored or not.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1
+			"$import": "templates/config_template.json#ignore_dim_start"
 		},
 		{
 			"#": "7",
-			"label": "Dim Remote On/Off Steps",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 3
+			"$import": "templates/config_template.json#dim_step_zwave"
 		},
 		{
 			"#": "8",
-			"label": "Dim Remote On/Off Timer",
-			"unit": "ms",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_zwave"
 		},
 		{
 			"#": "9",
-			"label": "Dim Local On/Off Step",
-			"description": "Dim Local On/Off Step (default = 10, 10 steps)",
-			"unit": "Step(s)",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 10
+			"$import": "templates/config_template.json#dim_step_manual"
 		},
 		{
 			"#": "10",
-			"label": "Dim Local On/Off Timer",
-			"description": "Dim Local On/Off Timer (default = 10, 10 ms)",
-			"unit": "ms",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_manual"
 		},
 		{
 			"#": "11",
-			"label": "Dim ALL On/Off Step",
-			"description": "Dim ALL On/Off Step (default = 10, 10 steps)",
-			"unit": "Step(s)",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 10
+			"$import": "templates/config_template.json#dim_step_all"
 		},
 		{
 			"#": "12",
-			"label": "Dim ALL On/Off Timer",
-			"description": "Dim ALL On/Off Timer (default = 3, 3 ms)",
-			"unit": "ms",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/config_template.json#dim_rate_all"
 		}
 	]
 }

@@ -1,0 +1,198 @@
+{
+	"dim_speed": {
+		"label": "Dimming Speed",
+		"$import": "~/templates/master_template.json#base_1-10_nounit",
+		"defaultValue": 3
+	},
+	"init_brightness": {
+		"label": "Initial Bulb Brightness",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Full Brightness",
+				"value": 0
+			},
+			{
+				"label": "Prior Brightness Level",
+				"value": 1
+			}
+		]
+	},
+	"load_sense": {
+		"label": "Load Sense",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	},
+	"night_light_5": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Off when load is on",
+				"value": 0
+			},
+			{
+				"label": "On when load is on",
+				"value": 1
+			},
+			{
+				"label": "Always on",
+				"value": 2
+			},
+			{
+				"label": "Always off",
+				"value": 3
+			},
+			{
+				"label": "Blink during transmission",
+				"value": 4
+			}
+		]
+	},
+	"night_light_4": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when the load is on",
+				"value": 0
+			},
+			{
+				"label": "On when the load is off",
+				"value": 1
+			},
+			{
+				"label": "Always On",
+				"value": 2
+			},
+			{
+				"label": "Always off",
+				"value": 3
+			}
+		]
+	},
+	"led_indicator": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Flicker while transmitting",
+				"value": 1
+			},
+			{
+				"label": "Flicker for 1 second",
+				"value": 2
+			}
+		]
+	},
+	"report_interval": {
+		"label": "Automatic Reporting Interval",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 6,
+		"unit": "minutes",
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"dim_step_zwave": {
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
+		"label": "Dimming Steps (Z-Wave)"
+	},
+	"dim_rate_zwave": {
+		"$import": "~/templates/master_template.json#dimming_timing",
+		"label": "Dimming Rate (Z-Wave)"
+	},
+	"dim_step_manual": {
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
+		"label": "Dimming Steps (Manual)"
+	},
+	"dim_rate_manual": {
+		"$import": "~/templates/master_template.json#dimming_timing",
+		"label": "Dimming Rate (Manual)"
+	},
+	"dim_step_all": {
+		"$import": "~/templates/master_template.json#base_1-99_nounit",
+		"label": "Dimming Steps (All-On/All-Off)"
+	},
+	"dim_rate_all": {
+		"$import": "~/templates/master_template.json#dimming_timing",
+		"label": "Dimming Rate (All-On/All-Off)"
+	},
+	"power_monitor": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Power Monitoring",
+		"defaultValue": 1
+	},
+	"energy_display_duration": {
+		"label": "Usage Indicator Display Duration",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 1,
+		"maxValue": 255,
+		"defaultValue": 60,
+		"options": [
+			{
+				"label": "Continuous",
+				"value": 255
+			}
+		]
+	},
+	"led_brightness": {
+		"label": "LED Indicator: Brightness",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 0,
+		"maxValue": 100,
+		"defaultValue": 100
+	},
+	"ignore_dim_start": {
+		"label": "Start Dimming From Current Level",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			},
+			{
+				"label": "Enable",
+				"value": 1
+			}
+		]
+	}
+}

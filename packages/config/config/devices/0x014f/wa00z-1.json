@@ -34,12 +34,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert top of switch ON/OFF buttons",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	]
 }

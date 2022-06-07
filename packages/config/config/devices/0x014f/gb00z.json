@@ -15,8 +15,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
-			"description": "Alarms are reported to this group",
+			"label": "Lifeline",
 			"maxNodes": 1,
 			"isLifeline": true
 		}
