@@ -117,7 +117,7 @@ export class SecurityManager {
 	): void {
 		const key = this.normalizeId(id);
 		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key)!);
+			clearTimeout(this._nonceTimers.get(key));
 		}
 		this._nonceStore.set(key, entry);
 		if (free) this._freeNonceIDs.add(key);
@@ -151,7 +151,7 @@ export class SecurityManager {
 
 	private deleteNonceInternal(key: string) {
 		if (this._nonceTimers.has(key)) {
-			clearTimeout(this._nonceTimers.get(key)!);
+			clearTimeout(this._nonceTimers.get(key));
 		}
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);

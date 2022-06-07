@@ -37,7 +37,7 @@
     "@types/clipboardy": "^2",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.1",
-    "@types/node": "^14.18.16",
+    "@types/node": "^14.18.20",
     "@types/prettier": "^2",
     "@types/yargs": "^17.0.10",
     "@zwave-js/core": "workspace:*",

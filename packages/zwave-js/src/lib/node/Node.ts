@@ -2871,7 +2871,7 @@ protocol version:      ${this.protocolVersion}`;
 	private clearNotificationIdleReset(valueId: ValueID): void {
 		const key = valueIdToString(valueId);
 		if (this.notificationIdleTimeouts.has(key)) {
-			clearTimeout(this.notificationIdleTimeouts.get(key)!);
+			clearTimeout(this.notificationIdleTimeouts.get(key));
 			this.notificationIdleTimeouts.delete(key);
 		}
 	}
