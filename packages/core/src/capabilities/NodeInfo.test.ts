@@ -1,8 +1,11 @@
 import { CommandClasses } from "./CommandClasses";
-import { parseNodeInformationFrame, parseNodeUpdatePayload } from "./NodeInfo";
+import {
+	parseApplicationNodeInformation,
+	parseNodeUpdatePayload,
+} from "./NodeInfo";
 
 describe("lib/node/NodeInfo", () => {
-	describe("parseNodeInformationFrame()", () => {
+	describe("parseApplicationNodeInformation()", () => {
 		const payload = Buffer.from([
 			0x01, // Remote Controller
 			0x02, // Portable Scene Controller
@@ -10,17 +13,17 @@ describe("lib/node/NodeInfo", () => {
 			CommandClasses["Multi Channel"],
 			CommandClasses["Multilevel Toggle Switch"],
 			0xef, // ======
-			// Controlled CCs
+			// Controlled CCs (ignored in Application Node Info)
 			CommandClasses["Multilevel Toggle Switch"],
 		]);
-		const eif = parseNodeInformationFrame(payload);
+		const eif = parseApplicationNodeInformation(payload);
 
 		it("should extract the correct GenericDeviceClass", () => {
-			expect(eif.generic).toBe(0x01);
+			expect(eif.genericDeviceClass).toBe(0x01);
 		});
 
 		it("should extract the correct SpecificDeviceClass", () => {
-			expect(eif.specific).toBe(0x02);
+			expect(eif.specificDeviceClass).toBe(0x02);
 		});
 
 		it("should report the correct CCs as supported", () => {
@@ -34,15 +37,12 @@ describe("lib/node/NodeInfo", () => {
 	describe("parseNodeUpdatePayload()", () => {
 		const payload = Buffer.from([
 			5, // NodeID
-			7, // Length (is ignored)
+			2, // CC list length
 			0x03, // Slave
 			0x01, // Remote Controller
 			0x02, // Portable Scene Controller
 			// Supported CCs
 			CommandClasses["Multi Channel"],
-			CommandClasses["Multilevel Toggle Switch"],
-			0xef, // ======
-			// Controlled CCs
 			CommandClasses["Multilevel Toggle Switch"],
 		]);
 		const nup = parseNodeUpdatePayload(payload);
@@ -56,11 +56,11 @@ describe("lib/node/NodeInfo", () => {
 		});
 
 		it("should extract the correct GenericDeviceClass", () => {
-			expect(nup.generic).toBe(1);
+			expect(nup.genericDeviceClass).toBe(1);
 		});
 
 		it("should extract the correct SpecificDeviceClass", () => {
-			expect(nup.specific).toBe(2);
+			expect(nup.specificDeviceClass).toBe(2);
 		});
 
 		it("should report the correct CCs as supported", () => {
@@ -70,16 +70,10 @@ describe("lib/node/NodeInfo", () => {
 			]);
 		});
 
-		it("should report the correct CCs as controlled", () => {
-			expect(nup.controlledCCs).toContainAllValues([
-				CommandClasses["Multilevel Toggle Switch"],
-			]);
-		});
-
 		it("correctly parses extended CCs", () => {
 			const payload = Buffer.from([
 				5, // NodeID
-				7, // Length (is ignored)
+				6, // CC list length
 				0x03,
 				0x01,
 				0x02, // Portable Scene Controller
@@ -88,10 +82,6 @@ describe("lib/node/NodeInfo", () => {
 				0xf1,
 				0x00,
 				CommandClasses["Sensor Configuration"],
-				// ====
-				0xef,
-				// ====
-				// Controlled CCs
 				CommandClasses.Supervision,
 				// --> some hypothetical CC
 				0xfe,
@@ -101,8 +91,6 @@ describe("lib/node/NodeInfo", () => {
 			expect(nup.supportedCCs).toContainAllValues([
 				CommandClasses["Security Mark"],
 				CommandClasses["Sensor Configuration"],
-			]);
-			expect(nup.controlledCCs).toContainAllValues([
 				0xfedc,
 				CommandClasses.Supervision,
 			]);
