@@ -145,7 +145,7 @@
 	},
 	"smart_switch_mode_dimming_reporting": {
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
-		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a multilevel report, regardless of setting.",
+		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a Multilevel Switch report, regardless of setting.",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 1,
@@ -164,7 +164,7 @@
 	},
 	"smart_switch_mode_dimming_reporting_3_options": {
 		"label": "Smart Bulb Mode: Dimming Reporting Behavior",
-		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a multilevel report, regardless of setting.",
+		"description": "Reporting behavior for local control and Z-Wave disabled / enabled, respectively. Final level for Z-Wave control actions is always sent as a Multilevel Switch report, regardless of setting.",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 2,
@@ -172,7 +172,7 @@
 		"allowManualEntry": false,
 		"options": [
 			{
-				"label": "Each brightness level / Final level (basic set)",
+				"label": "Each brightness level / Final level (Basic Set)",
 				"value": 0
 			},
 			{
@@ -180,7 +180,7 @@
 				"value": 1
 			},
 			{
-				"label": "Each brightness level / Final level (multilevel)",
+				"label": "Each brightness level / Final level (Multilevel Switch)",
 				"value": 2
 			}
 		]
@@ -534,7 +534,7 @@
 	},
 	"trigger_action": {
 		"label": "Trigger Action",
-		"description": "0 = Off (basic set), 255 = On (basic set), 1...99 = dimming level (multilevel)",
+		"description": "0 = Off (Basic Set), 255 = On (Basic Set), 1...99 = dimming level (Multilevel Switch)",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 255,
