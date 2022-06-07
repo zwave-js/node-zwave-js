@@ -39,112 +39,33 @@
 	"paramInformation": [
 		{
 			"#": "17",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Invert Water Valve Report",
-			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; ",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"description": "When enabled, the device will report off (0x00) when the valve is open, and on (0xff) when the valve is closed; "
 		},
 		{
 			"#": "18",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 2: Basic Set Value (On)",
-			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is off",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is off"
 		},
 		{
 			"#": "19",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 2: Basic Set Value (Off)",
 			"description": "Note: If parameter 17 is enabled, this level will be set when the valve is on",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 2
 		},
 		{
 			"#": "49",
-			"label": "Association Group 3: Water Leak Basic Set Value (Trigger)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
+			"label": "Association Group 3: Water Leak Basic Set Value (Trigger)"
 		},
 		{
 			"#": "50",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 3: Water Leak Basic Set Value (Cancel)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "33",
@@ -215,21 +136,10 @@
 		},
 		{
 			"#": "34[0xff00]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Temperature Change Reporting: Unit",
 			"valueSize": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "36[0xff]",
@@ -243,21 +153,10 @@
 		},
 		{
 			"#": "36[0xff00]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Overheat Trigger: Unit",
 			"valueSize": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "37[0xff]",
@@ -270,65 +169,22 @@
 		},
 		{
 			"#": "37[0xff00]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Overheat Recover: Unit",
 			"valueSize": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "38",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 4: Overheat Basic Set Value (Trigger)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "39",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 4: Overheat Basic Set Value (Cancel)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "40[0xff]",
@@ -341,21 +197,10 @@
 		},
 		{
 			"#": "40[0xff00]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Freeze Threshold: Unit",
 			"valueSize": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "41[0xff]",
@@ -368,101 +213,34 @@
 		},
 		{
 			"#": "41[0xff00]",
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
 			"label": "Freeze Recover: Unit",
 			"valueSize": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "43",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 5: Freeze Basic Set Value (Trigger)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "44",
+			"$import": "templates/zooz_template.json#basic_set_value_disable_on_off",
 			"label": "Association Group 5: Freeze Basic Set Value (Cancel)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Basic Set on (0xff)",
-					"value": 1
-				},
-				{
-					"label": "Basic Set off (0x00)",
-					"value": 2
-				}
-			]
+			"defaultValue": 0
 		},
 		{
 			"#": "51",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Allow Valve Control - Water Leak Detected",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "42",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Allow Valve Control - Water Leak Detected During Freeze Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "97",
@@ -499,120 +277,45 @@
 		},
 		{
 			"#": "65",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Sound Alarms and Notifications",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "66",
+			"$import": "~/templates/master_template.json#base_0-99_nounit",
 			"label": "LED Brightness Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 80,
-			"unsigned": true
+			"unit": "%",
+			"defaultValue": 80
 		},
 		{
 			"#": "67",
-			"label": "Touch Keylock Protection",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Touch Keylock Protection"
 		},
 		{
 			"#": "81[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Notification Report: Water Valve Open",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "81[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Notification Report: Overheat Detection",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "81[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Notification Report: Freeze Detection",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "81[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Notification Report: Local Water Leak Sensor Probe Detection",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		}
 	],
 	"metadata": {

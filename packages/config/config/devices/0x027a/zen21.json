@@ -21,201 +21,78 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Orientation",
-					"value": 0
-				},
-				{
-					"label": "Invert switch",
-					"value": 1
-				},
-				{
-					"label": "Both paddles toggle",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation_momentary"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 2.255",
-			"label": "LED Indicator Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch on",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_two_options"
 		},
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "LED Indicator Control",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch off",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch on",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				},
-				{
-					"label": "LED always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "3",
+			"$if": "firmwareVersion <= 2.255",
+			"$import": "~/templates/master_template.json#base_enable_disable_inverted",
 			"label": "Enable/Disable LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 0
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 3.0",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-Off Timer"
 		},
 		{
 			"#": "4",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Auto-Off Timer",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_off_timer_duration"
 		},
 		{
 			"#": "5",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Enable/Disable Auto On",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer"
 		},
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 3.0",
-			"label": "Auto On Timer",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_on_timer_duration"
 		},
 		{
 			"#": "7[0x01]",
 			"$if": "firmwareVersion >= 3.4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Local Control",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x02]",
 			"$if": "firmwareVersion >= 3.4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: 3-Way",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x04]",
 			"$if": "firmwareVersion >= 3.4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Z-Wave",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "7[0x08]",
 			"$if": "firmwareVersion >= 3.4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Status Change Report: Timer",
 			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -225,98 +102,27 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Enable/Disable Scene Control",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#enable_scene_control"
 		},
 		{
 			"#": "10",
 			"$if": "firmwareVersion >= 3.1",
-			"label": "Enable/Disable Local Control",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#local_control"
 		},
 		{
 			"#": "11",
 			"$if": "firmwareVersion >= 3.4",
-			"label": "Enable Local and Z-Wave Control",
-			"description": "Enable or disable local control at the switch and Z-Wave control.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Local control disabled, Z-Wave control enabled",
-					"value": 0
-				},
-				{
-					"label": "Local control and Z-Wave control enabled",
-					"value": 1
-				},
-				{
-					"label": "Local control and Z-Wave control disabled",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#smart_switch_mode_0-2"
 		},
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.4",
-			"label": "3-Way Switch Type",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Mechanical (off/on only)",
-					"value": 0
-				},
-				{
-					"label": "Momentary",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#3way_switch_type"
 		},
 		{
 			"#": "13",
 			"$if": "firmwareVersion >= 3.4",
-			"label": "Reporting Behavior When Physical Control Is Disabled",
-			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enabled",
-					"value": 0
-				},
-				{
-					"label": "Disabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#smart_switch_mode_reporting"
 		}
 	],
 	"metadata": {

@@ -57,23 +57,11 @@
 		},
 		{
 			"#": "2",
-			"label": "Battery Report Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#battery_report_threshold"
 		},
 		{
 			"#": "3",
-			"label": "Low Battery Alarm Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#low_battery_alarm_threshold"
 		},
 		{
 			"#": "4",
@@ -100,23 +88,15 @@
 		},
 		{
 			"#": "5",
+			"$import": "~/templates/master_template.json#base_0-3600",
 			"label": "Group 2: On Delay",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 3600,
-			"defaultValue": 0,
-			"unsigned": true
+			"unit": "seconds"
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_0-3600",
 			"label": "Group 2: Off Delay",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 3600,
-			"defaultValue": 0,
-			"unsigned": true
+			"unit": "seconds"
 		},
 		{
 			"#": "7",

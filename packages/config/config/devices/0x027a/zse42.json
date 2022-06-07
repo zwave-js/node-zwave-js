@@ -28,51 +28,22 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-3600",
 			"label": "Alarm Clear Delay",
-			"valueSize": 4,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 3600,
-			"defaultValue": 0,
-			"unsigned": true
+			"unit": "seconds"
 		},
 		{
 			"#": "3",
-			"label": "Battery Reporting Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
-			"maxValue": 50,
-			"defaultValue": 10,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#battery_report_threshold"
 		},
 		{
 			"#": "4",
-			"label": "Low Battery Alarm Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#low_battery_alarm_threshold"
 		},
 		{
 			"#": "5",

@@ -16,24 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "On/Off After Power",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Previous State",
-					"value": 0
-				},
-				{
-					"label": "On",
-					"value": 1
-				},
-				{
-					"label": "Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "2",
@@ -97,125 +80,49 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto-Off (Left Outlet)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-Off Timer (Left Outlet)"
 		},
 		{
 			"#": "9",
-			"label": "Auto-Off Delay (Left Outlet)",
-			"unit": "minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration (Left Outlet)"
 		},
 		{
 			"#": "10",
-			"label": "Auto-On (Left Outlet)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer (Left Outlet)"
 		},
 		{
 			"#": "11",
-			"label": "Auto-On Delay (Left Outlet)",
-			"unit": "minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_on_timer_duration",
+			"label": "Auto Turn-On Timer Duration (Left Outlet)"
 		},
 		{
 			"#": "12",
-			"label": "Auto-Off (Right Outlet)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-Off Timer (Right Outlet)"
 		},
 		{
 			"#": "13",
-			"label": "Auto-Off Delay (Right Outlet)",
-			"unit": "minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration (Right Outlet)"
 		},
 		{
 			"#": "14",
-			"label": "Auto-On (Right Outlet)",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer (Right Outlet)"
 		},
 		{
 			"#": "15",
-			"label": "Auto-On Delay (Right Outlet)",
-			"unit": "minutes",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 60
+			"$import": "templates/zooz_template.json#auto_on_timer_duration",
+			"label": "Auto Turn-On Timer Duration (Right Outlet)"
 		},
 		{
 			"#": "16",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual Control",
-			"description": "Enable/Disable manual control of both outlets",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "17",

@@ -16,25 +16,13 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Metering Report",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled (default).",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "2",
 			"label": "Metering Report Frequency",
-			"description": "Frecuency metering reports to the controller.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
@@ -44,8 +32,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Overload Protection",
-			"description": "Maximum amount of electricity Mini Plug to handle.",
+			"label": "Overload Protection Threshold",
 			"unit": "Amperes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -54,8 +41,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Overload Protection Notification",
-			"description": "LED notifications of heavy load.",
+			"label": "Overload Protection LED Notification Threshold",
 			"unit": "Amperes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -64,30 +50,14 @@
 		},
 		{
 			"#": "5",
-			"label": "LED Notifications",
-			"description": "Use this parameter to turn LED notifications on or off",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED disabled",
-					"value": 0
-				},
-				{
-					"label": "LED enabled (default)",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#enable_led_indicator",
+			"defaultValue": 1
 		},
 		{
 			"#": "6",
+			"$import": "~/templates/master_template.json#base_1-100_nounit",
 			"label": "Power Report Percentage Threshold",
-			"description": "Mini Plug to report energy usage percentage rate.",
 			"unit": "%",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
 			"defaultValue": 5
 		},
 		{
@@ -96,27 +66,13 @@
 		},
 		{
 			"#": "8",
-			"label": "Auto Turn-Off Timer Enable",
-			"description": ": Use this parameter to enable or disable the auto turn-off timer function",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "timer disabled (default)",
-					"value": 0
-				},
-				{
-					"label": "timer enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-Off Timer"
 		},
 		{
 			"#": "9",
 			"label": "Auto Turn-Off Timer Interval",
-			"description": "Set the time to automatically turn off",
-			"unit": "Minutes",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -125,21 +81,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Manual Control",
-			"description": "Turn the Mini Plug with button",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "manual control disabled",
-					"value": 0
-				},
-				{
-					"label": "manual control enabled (default)",
-					"value": 1
-				}
-			]
+			"$import": "templates/zooz_template.json#local_control"
 		}
 	]
 }

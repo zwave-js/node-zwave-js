@@ -39,23 +39,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
+			"$import": "templates/zooz_template.json#battery_report_threshold",
 			"label": "Battery Report Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 5,
-			"unsigned": true
+			"defaultValue": 5
 		},
 		{
 			"#": "2",
-			"label": "Low Battery Alarm Threshold",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 20,
-			"unsigned": true
+			"$import": "templates/zooz_template.json#low_battery_alarm_threshold",
+			"label": "Low Battery Alarm Threshold"
 		},
 		{
 			"#": "3",
@@ -183,13 +175,10 @@
 		},
 		{
 			"#": "9",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "High Humidity Alert Threshold",
-			"valueSize": 1,
 			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "10",
@@ -235,13 +224,10 @@
 		},
 		{
 			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
 			"label": "Low Humidity Alert Threshold",
-			"valueSize": 1,
 			"unit": "%",
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		},
 		{
 			"#": "12",
@@ -287,21 +273,8 @@
 		},
 		{
 			"#": "13",
-			"label": "Temperature Scale",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Celsius",
-					"value": 0
-				},
-				{
-					"label": "Fahrenheit",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#temperature_scale_celsius_fahrenheit",
+			"defaultValue": 1 // Fahrenheit
 		},
 		{
 			"#": "14",
