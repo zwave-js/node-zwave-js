@@ -42,10 +42,310 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
-			"description": "Send report about Thermostat Mode, Thermostat Operating State, Fan Mode, Fan State, Setpoint, Sensor Multilevel",
+			"label": "Lifeline",
 			"maxNodes": 2,
 			"isLifeline": true
 		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Temperature Reporting Threshold",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "0.5 °F",
+					"value": 1
+				},
+				{
+					"label": "1.0 °F",
+					"value": 2
+				},
+				{
+					"label": "1.5 °F",
+					"value": 3
+				},
+				{
+					"label": "2.0 °F",
+					"value": 4
+				}
+			]
+		},
+		{
+			"#": "2[0xff000000]",
+			"label": "HVAC Type",
+			"valueSize": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Heat Pump",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2[0x0f0000]",
+			"label": "Number of Auxiliary or Heat Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"readOnly": true,
+			"unsigned": true,
+			"allowManualEntry": false
+		},
+		{
+			"#": "2[0xf00000]",
+			"label": "Auxiliary Heat Type",
+			"valueSize": 4,
+			"readOnly": true,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gas",
+					"value": 1
+				},
+				{
+					"label": "Electric",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2[0xff00]",
+			"label": "Number of Heat Pump Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"unsigned": true,
+			"allowManualEntry": false
+		},
+		{
+			"#": "2[0xff]",
+			"label": "Number of Cool Stages",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"readOnly": true,
+			"unsigned": true,
+			"allowManualEntry": false
+		},
+		{
+			"#": "3",
+			"label": "Lock Setpoint Changes",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Thermostat Power Type",
+			"valueSize": 1,
+			"readOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "C-Wire",
+					"value": 1
+				},
+				{
+					"label": "Batteries",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Humidity Reporting Threshold",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "3 %rH",
+					"value": 1
+				},
+				{
+					"label": "5 %rH",
+					"value": 2
+				},
+				{
+					"label": "10 %rH",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "6",
+			"label": "Auxiliary/Emergency Heating",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Thermostat Hysteresis",
+			"description": "Variance allowed from setpoint to engage HVAC",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5 °F",
+					"value": 1
+				},
+				{
+					"label": "1.0 °F",
+					"value": 2
+				},
+				{
+					"label": "1.5 °F",
+					"value": 3
+				},
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "2.5 °F",
+					"value": 5
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "3.5 °F",
+					"value": 7
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				}
+			]
+		},
+		{
+			"#": "8[0xff00]",
+			"label": "Heating Differential Temperature",
+			"valueSize": 2,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
+				},
+				{
+					"label": "6.0 °F",
+					"value": 12
+				}
+			]
+		},
+		{
+			"#": "8[0xff]",
+			"label": "Cooling Differential Temperature",
+			"valueSize": 2,
+			"defaultValue": 4,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 °F",
+					"value": 4
+				},
+				{
+					"label": "3.0 °F",
+					"value": 6
+				},
+				{
+					"label": "4.0 °F",
+					"value": 8
+				},
+				{
+					"label": "5.0 °F",
+					"value": 10
+				},
+				{
+					"label": "6.0 °F",
+					"value": 12
+				}
+			]
+		},
+		{
+			"#": "9",
+			"label": "Thermostat Recovery Mode",
+			"valueSize": 1,
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fast recovery mode",
+					"value": 1
+				},
+				{
+					"label": "Economy recovery mode",
+					"value": 2
+				}
+			]
+		}
+	],
+	"compat": {
+		// The device has two endpoints. The temperature gets reported via the root, humidity is on endpoint 2.
+		"mapRootReportsToEndpoint": 1,
+		// Some variants of this device expose their endpoints as different device classes,
+		// causing them to be considered unnecessary
+		"preserveEndpoints": "*"
 	}
 }
