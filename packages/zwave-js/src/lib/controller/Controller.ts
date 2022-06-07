@@ -271,6 +271,7 @@ interface ControllerEventCallbacks
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
+	"node found": (node: ZWaveNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
@@ -2431,6 +2432,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 				// Inclusion is now completed, bootstrap the node
 				const newNode = this._nodePendingInclusion;
+
+				this.emit("node found", newNode);
+
 				const supportedCommandClasses = [
 					...newNode.implementedCommandClasses.entries(),
 				]
@@ -2612,6 +2616,8 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					);
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
+
+					this.emit("node found", newNode);
 
 					// We're communicating with the device, so assume it is alive
 					// If it is actually a sleeping device, it will be marked as such later

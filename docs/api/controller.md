@@ -858,9 +858,19 @@ A node could not be included into or excluded from the network for some reason.
 
 The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
 
+### `"node found"`
+
+A node has successfully been added to the network.
+
+> [!NOTE] At this point, the initial setup and the node interview is still pending, so the node is **not yet operational**.
+
+```ts
+(node: ZWaveNode) => void
+```
+
 ### `"node added"`
 
-A node has successfully been added to the network
+A node has successfully been added to the network and the initial setup was completed. After this event is emitted, a node is operational but **not yet ready to be used** until after the node interview.
 
 ```ts
 (node: ZWaveNode, result: InclusionResult) => void

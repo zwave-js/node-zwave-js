@@ -76,6 +76,17 @@ export interface ZWaveOptions {
 		 * Note that enabling this can cause a lot of traffic during the interview.
 		 */
 		queryAllUserCodes?: boolean;
+
+		/**
+		 * Disable the automatic node interview after successful inclusion.
+		 * Note: When this is `true`, the interview must be started manually using
+		 * ```ts
+		 * driver.interviewNode(node: ZWaveNode)
+		 * ```
+		 *
+		 * Default: `false` (automatic interviews enabled)
+		 */
+		disableOnNodeAdded?: boolean;
 	};
 
 	storage: {

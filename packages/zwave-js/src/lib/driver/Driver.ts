@@ -1260,7 +1260,7 @@ export class Driver
 			const controllerNode = this._controller.nodes.get(
 				this._controller.ownNodeId!,
 			)!;
-			await this.interviewNode(controllerNode);
+			await this.interviewNodeInternal(controllerNode);
 
 			// Then do all the nodes in parallel
 			for (const node of this._controller.nodes.values()) {
@@ -1279,7 +1279,7 @@ export class Driver
 					if (node.interviewStage < InterviewStage.Complete) {
 						// don't await the interview, because it may take a very long time
 						// if a node is asleep
-						await this.interviewNode(node);
+						await this.interviewNodeInternal(node);
 					} else if (node.isListening || node.isFrequentListening) {
 						// Ping non-sleeping nodes to determine their status
 						await node.ping();
@@ -1299,6 +1299,25 @@ export class Driver
 		}
 	}
 
+	/**
+	 * Starts or resumes the interview of a Z-Wave node.
+	 *
+	 * **NOTE:** This is only allowed when the initial interview was bypassed using the
+	 * `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
+	 *
+	 * **NOTE:** It is advised to NOT await this method as it can take a very long time (minutes to hours)!
+	 */
+	public async interviewNode(node: ZWaveNode): Promise<void> {
+		if (!this.options.interview?.disableOnNodeAdded) {
+			throw new ZWaveError(
+				`Calling Driver.interviewNode is not allowed because automatic node interviews are enabled. Use ZWaveNode.refreshInfo() to re-interview a node.`,
+				ZWaveErrorCodes.Driver_FeatureDisabled,
+			);
+		}
+
+		return this.interviewNodeInternal(node);
+	}
+
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -1308,7 +1327,7 @@ export class Driver
 	 * WARNING: Do not call this method from application code. To refresh the information
 	 * for a specific node, use `node.refreshInfo()` instead
 	 */
-	public async interviewNode(node: ZWaveNode): Promise<void> {
+	public async interviewNodeInternal(node: ZWaveNode): Promise<void> {
 		if (node.interviewStage === InterviewStage.Complete) {
 			return;
 		}
@@ -1366,7 +1385,7 @@ export class Driver
 						node.id,
 						setTimeout(() => {
 							this.retryNodeInterviewTimeouts.delete(node.id);
-							void this.interviewNode(node);
+							void this.interviewNodeInternal(node);
 						}, retryTimeout).unref(),
 					);
 				} else {
@@ -1499,7 +1518,7 @@ export class Driver
 			oldStatus === NodeStatus.Dead &&
 			node.interviewStage !== InterviewStage.Complete
 		) {
-			void this.interviewNode(node);
+			void this.interviewNodeInternal(node);
 		}
 	}
 
@@ -1701,12 +1720,14 @@ export class Driver
 	/** This is called when a new node has been added to the network */
 	private onNodeAdded(node: ZWaveNode): void {
 		this.addNodeEventHandlers(node);
-		if (!this.options.testingHooks?.skipNodeInterview) {
-			// Interview the node
-			// don't await the interview, because it may take a very long time
-			// if a node is asleep
-			void this.interviewNode(node);
-		}
+
+		if (this.options.interview?.disableOnNodeAdded) return;
+		if (this.options.testingHooks?.skipNodeInterview) return;
+
+		// Interview the node
+		// don't await the interview, because it may take a very long time
+		// if a node is asleep
+		void this.interviewNodeInternal(node);
 	}
 
 	/** This is called when a node was removed from the network */
