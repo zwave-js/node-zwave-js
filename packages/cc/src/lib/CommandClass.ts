@@ -1053,8 +1053,6 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 // =======================
 // use decorators to link command class values to actual command classes
 
-const METADATA_commandClass = Symbol("commandClass");
-const METADATA_commandClassMap = Symbol("commandClassMap");
 const METADATA_ccResponse = Symbol("ccResponse");
 const METADATA_ccCommand = Symbol("ccCommand");
 const METADATA_ccCommandMap = Symbol("ccCommandMap");
@@ -1068,12 +1066,12 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (host: ZWaveHost, options: any): T;
 };
+
 type APIConstructor = new (
 	applHost: ZWaveApplicationHost,
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ) => CCAPI;
 
-type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
 type APIMap = Map<CommandClasses, APIConstructor>;
 
@@ -1106,28 +1104,25 @@ export type CCResponsePredicate<
 	TReceived extends CommandClass = CommandClass,
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
+const commandClassDecorator = createClassDecorator<
+	CommandClass,
+	[cc: CommandClasses],
+	CommandClasses,
+	Constructable<CommandClass>
+>({
+	name: "commandClass",
+	valueFromArgs: (cc) => cc,
+});
+
 /**
  * @publicAPI
- * Defines the command class associated with a Z-Wave message
+ * Defines the CC ID associated with a Z-Wave Command Class
  */
-export function commandClass<T extends CommandClass>(
-	cc: CommandClasses,
-): TypedClassDecorator<T> {
-	return (messageClass) => {
-		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
-
-		// also store a map in the CommandClass metadata for lookup.
-		const map: CommandClassMap =
-			Reflect.getMetadata(METADATA_commandClassMap, CommandClass) ||
-			new Map();
-		map.set(cc, messageClass as unknown as Constructable<CommandClass>);
-		Reflect.defineMetadata(METADATA_commandClassMap, map, CommandClass);
-	};
-}
+export const commandClass = commandClassDecorator.decorator;
 
 /**
  * @publicAPI
- * Retrieves the command class defined for a Z-Wave message class
+ * Retrieves the CC ID associated with a Z-Wave Command Class or CC API
  */
 export function getCommandClass<T extends CommandClass | CCAPI>(
 	cc: T,
@@ -1137,7 +1132,7 @@ export function getCommandClass<T extends CommandClass | CCAPI>(
 	// retrieve the current metadata
 	const ret: CommandClasses | undefined =
 		cc instanceof CommandClass
-			? Reflect.getMetadata(METADATA_commandClass, constr)
+			? commandClassDecorator.lookupValueStatic(constr)
 			: cc instanceof CCAPI
 			? Reflect.getMetadata(METADATA_API, constr)
 			: undefined;
@@ -1158,9 +1153,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor) as
-		| CommandClasses
-		| undefined;
+	const ret = commandClassDecorator.lookupValueStatic(classConstructor);
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${classConstructor.name}!`,
@@ -1177,11 +1170,7 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 export function getCCConstructor(
 	cc: CommandClasses,
 ): Constructable<CommandClass> | undefined {
-	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) as
-		| CommandClassMap
-		| undefined;
-	if (map != undefined) return map.get(cc);
+	return commandClassDecorator.lookupConstructorByValue(cc);
 }
 
 const implementedVersionDecorator = createClassDecorator<

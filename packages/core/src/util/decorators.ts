@@ -8,6 +8,7 @@ export interface ClassDecoratorGroup<
 	TBase extends Object,
 	TArgs extends any[],
 	TValue,
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
 > {
 	/** The decorator which is used to decorate classes */
 	decorator: <TTarget extends TBase>(
@@ -16,11 +17,12 @@ export interface ClassDecoratorGroup<
 	/** Looks up the value which was assigned to the target class by the decorator, using a class instance */
 	lookupValue: (target: TBase) => TValue | undefined;
 	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
-	lookupValueStatic: (constr: Constructor<TBase>) => TValue | undefined;
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	lookupValueStatic: (constr: Function) => TValue | undefined;
 	/** Looks up the class constructor for a given value. This can only be used if the value does not need to be transformed using `getConstructorLookupKey`. */
-	lookupConstructorByValue: (value: TValue) => Constructor<TBase> | undefined;
+	lookupConstructorByValue: (value: TValue) => TConstructor | undefined;
 	/** Looks up the class constructor for a given lookup key. This MUST be used if the value needs to be transformed using `getConstructorLookupKey`. */
-	lookupConstructorByKey: (key: string) => Constructor<TBase> | undefined;
+	lookupConstructorByKey: (key: string) => TConstructor | undefined;
 }
 
 export interface CreateClassDecoratorOptions<
@@ -28,16 +30,14 @@ export interface CreateClassDecoratorOptions<
 	TBase extends Object,
 	TArgs extends any[],
 	TValue,
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
 > {
 	/** The name of this decorator */
 	name: string;
 	/** Determines the value to be stored for the given arguments */
 	valueFromArgs: (...args: TArgs) => TValue;
 	/** Determines the key under which the constructor should be stored in the Map for reverse constructor lookup. Defaults to the value. */
-	getConstructorLookupKey?: (
-		target: Constructor<TBase>,
-		...args: TArgs
-	) => string;
+	getConstructorLookupKey?: (target: TConstructor, ...args: TArgs) => string;
 }
 
 export function createClassDecorator<
@@ -45,6 +45,7 @@ export function createClassDecorator<
 	TBase extends Object,
 	TArgs extends any[],
 	TValue,
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
 >({
 	name,
 	valueFromArgs,
@@ -53,27 +54,26 @@ export function createClassDecorator<
 }: CreateClassDecoratorOptions<TBase, TArgs, TValue>): ClassDecoratorGroup<
 	TBase,
 	TArgs,
-	TValue
+	TValue,
+	TConstructor
 > {
 	const key = Symbol.for(`METADATA_${name}`);
 	const mapKey = Symbol.for(`METADATA_MAP_${name}`);
 
 	const lookupTarget = Object.create(null);
 
-	const grp: ClassDecoratorGroup<TBase, TArgs, TValue> = {
-		decorator: (...args) => {
+	const grp: ClassDecoratorGroup<TBase, TArgs, TValue, TConstructor> = {
+		decorator: (...args): TypedClassDecorator<TBase> => {
 			const value = valueFromArgs(...args);
-			let body = (target: Constructor<TBase>) => {
+			let body = (target: TConstructor) => {
 				Reflect.defineMetadata(key, value, target);
 
 				const reverseLookupKey =
 					getConstructorLookupKey?.(target, ...args) ?? String(value);
 
 				// Store the constructor on the reverse lookup target
-				const map: Map<
-					string,
-					Constructor<TBase>
-				> = Reflect.getMetadata(mapKey, lookupTarget) || new Map();
+				const map: Map<string, TConstructor> =
+					Reflect.getMetadata(mapKey, lookupTarget) || new Map();
 				map.set(reverseLookupKey, target);
 				Reflect.defineMetadata(mapKey, map, lookupTarget);
 			};
@@ -83,7 +83,7 @@ export function createClassDecorator<
 				value: "decoratorBody_" + name,
 			});
 
-			return body;
+			return body as any;
 		},
 
 		lookupValue: (target) => {
@@ -106,7 +106,7 @@ export function createClassDecorator<
 
 		lookupConstructorByKey: (key: string) => {
 			const map = Reflect.getMetadata(mapKey, lookupTarget) as
-				| Map<string, Constructor<TBase>>
+				| Map<string, TConstructor>
 				| undefined;
 			return map?.get(key);
 		},
