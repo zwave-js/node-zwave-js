@@ -1,5 +1,25 @@
-import { NodeType } from "@zwave-js/core";
-import type { MockControllerBehavior } from "@zwave-js/testing";
+import { WakeUpTime } from "@zwave-js/cc";
+import {
+	ZWaveProtocolCCAssignSUCReturnRoute,
+	ZWaveProtocolCCNodeInformationFrame,
+	ZWaveProtocolCCRequestNodeInformationFrame,
+} from "@zwave-js/cc/ZWaveProtocolCC";
+import {
+	NodeType,
+	TransmitOptions,
+	TransmitStatus,
+	ZWaveDataRate,
+} from "@zwave-js/core";
+import {
+	createMockZWaveRequestFrame,
+	MockControllerBehavior,
+	MOCK_FRAME_ACK_TIMEOUT,
+} from "@zwave-js/testing";
+import {
+	ApplicationUpdateRequest,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeInfoRequestFailed,
+} from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	SerialAPIStartedRequest,
 	SerialAPIWakeUpReason,
@@ -26,6 +46,11 @@ import {
 } from "../serialapi/memory/GetControllerIdMessages";
 import { SoftResetRequest } from "../serialapi/misc/SoftResetRequest";
 import {
+	AssignSUCReturnRouteRequest,
+	AssignSUCReturnRouteRequestTransmitReport,
+	AssignSUCReturnRouteResponse,
+} from "../serialapi/network-mgmt/AssignSUCReturnRouteMessages";
+import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
 } from "../serialapi/network-mgmt/GetNodeProtocolInfoMessages";
@@ -33,6 +58,19 @@ import {
 	GetSUCNodeIdRequest,
 	GetSUCNodeIdResponse,
 } from "../serialapi/network-mgmt/GetSUCNodeIdMessages";
+import {
+	RequestNodeInfoRequest,
+	RequestNodeInfoResponse,
+} from "../serialapi/network-mgmt/RequestNodeInfoMessages";
+import {
+	SendDataRequest,
+	SendDataRequestTransmitReport,
+	SendDataResponse,
+} from "../serialapi/transport/SendDataMessages";
+import {
+	MockControllerCommunicationState,
+	MockControllerStateKeys,
+} from "./MockControllerState";
 import { determineNIF } from "./NodeInformationFrame";
 
 const respondToGetControllerId: MockControllerBehavior = {
@@ -178,6 +216,223 @@ const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 	},
 };
 
+const handleSendData: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof SendDataRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.CommunicationState,
+			) as MockControllerCommunicationState | undefined;
+			if (
+				state != undefined &&
+				state !== MockControllerCommunicationState.Idle
+			) {
+				throw new Error("Received SendDataRequest while not idle");
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Sending,
+			);
+
+			// Send the data to the node
+			const frame = createMockZWaveRequestFrame(msg.command, {
+				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+			});
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			const ackPromise = controller.sendToNode(node, frame);
+
+			// Notify the host that the message was sent
+			const res = new SendDataResponse(host, {
+				wasSent: true,
+			});
+			await controller.sendToHost(res.serialize());
+			// Put the controller into waiting state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.WaitingForNode,
+			);
+
+			// Wait for the ACK and notify the host
+			let ack = false;
+			try {
+				const ackResult = await ackPromise;
+				ack = !!ackResult?.ack;
+			} catch {
+				// No response
+			}
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Idle,
+			);
+
+			const cb = new SendDataRequestTransmitReport(host, {
+				callbackId: msg.callbackId,
+				transmitStatus: ack ? TransmitStatus.OK : TransmitStatus.NoAck,
+			});
+
+			await controller.sendToHost(cb.serialize());
+		}
+		return false;
+	},
+};
+
+const handleRequestNodeInfo: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof RequestNodeInfoRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.CommunicationState,
+			) as MockControllerCommunicationState | undefined;
+			if (
+				state != undefined &&
+				state !== MockControllerCommunicationState.Idle
+			) {
+				throw new Error(
+					"Received RequestNodeInfoRequest while not idle",
+				);
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Sending,
+			);
+
+			// Send the data to the node
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			const command = new ZWaveProtocolCCRequestNodeInformationFrame(
+				host,
+				{ nodeId: node.id },
+			);
+			const frame = createMockZWaveRequestFrame(command, {
+				ackRequested: false,
+			});
+			void controller.sendToNode(node, frame);
+			const nodeInfoPromise = controller.expectNodeCC(
+				node,
+				MOCK_FRAME_ACK_TIMEOUT,
+				(cc): cc is ZWaveProtocolCCNodeInformationFrame =>
+					cc instanceof ZWaveProtocolCCNodeInformationFrame,
+			);
+
+			// Notify the host that the message was sent
+			const res = new RequestNodeInfoResponse(host, {
+				wasSent: true,
+			});
+			await controller.sendToHost(res.serialize());
+
+			// Put the controller into waiting state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.WaitingForNode,
+			);
+
+			// Wait for node information and notify the host
+			let cb: ApplicationUpdateRequest;
+			try {
+				const nodeInfo = await nodeInfoPromise;
+				cb = new ApplicationUpdateRequestNodeInfoReceived(host, {
+					nodeInformation: {
+						...nodeInfo,
+						nodeId: nodeInfo.nodeId as number,
+					},
+				});
+			} catch (e) {
+				cb = new ApplicationUpdateRequestNodeInfoRequestFailed(host);
+			}
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Idle,
+			);
+
+			await controller.sendToHost(cb.serialize());
+		}
+		return false;
+	},
+};
+
+const handleAssignSUCReturnRoute: MockControllerBehavior = {
+	async onHostMessage(host, controller, msg) {
+		if (msg instanceof AssignSUCReturnRouteRequest) {
+			// Check if this command is legal right now
+			const state = controller.state.get(
+				MockControllerStateKeys.CommunicationState,
+			) as MockControllerCommunicationState | undefined;
+			if (
+				state != undefined &&
+				state !== MockControllerCommunicationState.Idle
+			) {
+				throw new Error(
+					"Received AssignSUCReturnRouteRequest while not idle",
+				);
+			}
+
+			// Put the controller into sending state
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Sending,
+			);
+
+			const expectCallback = msg.callbackId !== 0;
+
+			// Send the command to the node
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			const command = new ZWaveProtocolCCAssignSUCReturnRoute(host, {
+				nodeId: host.ownNodeId,
+				repeaters: [], // don't care
+				routeIndex: 0, // don't care
+				destinationSpeed: ZWaveDataRate["100k"],
+				destinationWakeUp: WakeUpTime.None,
+			});
+			const frame = createMockZWaveRequestFrame(command, {
+				ackRequested: expectCallback,
+			});
+			const ackPromise = controller.sendToNode(node, frame);
+
+			// Notify the host that the message was sent
+			const res = new AssignSUCReturnRouteResponse(host, {
+				wasExecuted: true,
+			});
+			await controller.sendToHost(res.serialize());
+
+			let ack = false;
+			if (expectCallback) {
+				// Put the controller into waiting state
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.WaitingForNode,
+				);
+
+				// Wait for the ACK and notify the host
+				try {
+					const ackResult = await ackPromise;
+					ack = !!ackResult?.ack;
+				} catch {
+					// No response
+				}
+			}
+			controller.state.set(
+				MockControllerStateKeys.CommunicationState,
+				MockControllerCommunicationState.Idle,
+			);
+
+			if (expectCallback) {
+				const cb = new AssignSUCReturnRouteRequestTransmitReport(host, {
+					callbackId: msg.callbackId,
+					transmitStatus: ack
+						? TransmitStatus.OK
+						: TransmitStatus.NoAck,
+				});
+
+				await controller.sendToHost(cb.serialize());
+			}
+		}
+		return false;
+	},
+};
+
 /** Predefined default behaviors that are required for interacting with the driver correctly */
 export function createDefaultBehaviors(): MockControllerBehavior[] {
 	return [
@@ -189,5 +444,8 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		respondToGetSerialApiInitData,
 		respondToSoftReset,
 		respondToGetNodeProtocolInfo,
+		handleSendData,
+		handleRequestNodeInfo,
+		handleAssignSUCReturnRoute,
 	];
 }

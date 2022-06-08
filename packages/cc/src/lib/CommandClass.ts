@@ -21,6 +21,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import { MessageOrigin } from "@zwave-js/serial";
 import {
 	buffer2hex,
 	getEnumMemberName,
@@ -40,7 +41,10 @@ import {
 	isCommandClassContainer,
 } from "./ICommandClassContainer";
 
-export type CommandClassDeserializationOptions = { data: Buffer } & (
+export type CommandClassDeserializationOptions = {
+	data: Buffer;
+	origin?: MessageOrigin;
+} & (
 	| {
 			fromEncapsulation?: false;
 			nodeId: number;
@@ -67,6 +71,7 @@ interface CommandClassCreationOptions extends CCCommandOptions {
 	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
+	origin?: undefined;
 }
 
 function gotCCCommandOptions(options: any): options is CCCommandOptions {
@@ -144,7 +149,11 @@ export class CommandClass implements ICommandClass {
 
 		if (this instanceof InvalidCC) return;
 
-		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
+		if (
+			options.origin !== MessageOrigin.Host &&
+			this.isSinglecast() &&
+			this.nodeId !== NODE_ID_BROADCAST
+		) {
 			// For singlecast CCs, set the CC version as high as possible
 			this.version = this.host.getSafeCCVersionForNode(
 				this.ccId,

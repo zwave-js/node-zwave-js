@@ -22,8 +22,15 @@ type Constructable<T extends Message> = new (
 	options?: MessageOptions,
 ) => T;
 
+/** Where a serialized message originates from, to distinguish how certain messages need to be deserialized */
+export enum MessageOrigin {
+	Controller,
+	Host,
+}
+
 export interface MessageDeserializationOptions {
 	data: Buffer;
+	origin?: MessageOrigin;
 }
 
 /**
@@ -227,9 +234,13 @@ export class Message {
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(host: ZWaveHost, data: Buffer): Message {
+	public static from(
+		host: ZWaveHost,
+		data: Buffer,
+		origin?: MessageOrigin,
+	): Message {
 		const Constructor = Message.getConstructor(data);
-		const ret = new Constructor(host, { data });
+		const ret = new Constructor(host, { data, origin });
 		return ret;
 	}
 
