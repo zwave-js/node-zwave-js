@@ -1054,8 +1054,6 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 // use decorators to link command class values to actual command classes
 
 const METADATA_ccResponse = Symbol("ccResponse");
-const METADATA_ccCommand = Symbol("ccCommand");
-const METADATA_ccCommandMap = Symbol("ccCommandMap");
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
@@ -1072,7 +1070,6 @@ type APIConstructor = new (
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ) => CCAPI;
 
-type CCCommandMap = Map<string, Constructable<CommandClass>>;
 type APIMap = Map<CommandClasses, APIConstructor>;
 
 function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
@@ -1217,28 +1214,27 @@ export function getImplementedVersionStatic<
 	return implementedVersionDecorator.lookupValueStatic(classConstructor) ?? 0;
 }
 
+const ccCommandDecorator = createClassDecorator<
+	CommandClass,
+	[command: number],
+	number,
+	Constructable<CommandClass>
+>({
+	name: "CCCommand",
+	valueFromArgs: (command) => command,
+	getConstructorLookupKey(target, command) {
+		const ccId = getCommandClassStatic(
+			target as unknown as typeof CommandClass,
+		);
+		return getCCCommandMapKey(ccId, command);
+	},
+});
+
 /**
  * @publicAPI
  * Defines the CC command a subclass of a CC implements
  */
-export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
-
-		// also store a map in the Message metadata for lookup.
-		const ccId = getCommandClassStatic(
-			ccClass as unknown as typeof CommandClass,
-		);
-		const map: CCCommandMap =
-			Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) ||
-			new Map();
-		map.set(
-			getCCCommandMapKey(ccId, command),
-			ccClass as unknown as Constructable<CommandClass>,
-		);
-		Reflect.defineMetadata(METADATA_ccCommandMap, map, CommandClass);
-	};
-}
+export const CCCommand = ccCommandDecorator.decorator;
 
 /**
  * @publicAPI
@@ -1247,15 +1243,7 @@ export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
 export function getCCCommand<T extends CommandClass>(
 	cc: T,
 ): number | undefined {
-	// get the class constructor
-	const constr = cc.constructor as Constructable<CommandClass>;
-
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccCommand, constr) as
-		| number
-		| undefined;
-
-	return ret;
+	return ccCommandDecorator.lookupValue(cc);
 }
 
 /**
@@ -1266,14 +1254,9 @@ export function getCCCommandConstructor<TBase extends CommandClass>(
 	ccId: CommandClasses,
 	ccCommand: number,
 ): Constructable<TBase> | undefined {
-	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) as
-		| CCCommandMap
-		| undefined;
-	if (map != undefined)
-		return map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown as
-			| Constructable<TBase>
-			| undefined;
+	return ccCommandDecorator.lookupConstructorByKey(
+		getCCCommandMapKey(ccId, ccCommand),
+	) as Constructable<TBase> | undefined;
 }
 
 /**
