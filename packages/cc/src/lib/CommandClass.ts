@@ -1171,6 +1171,7 @@ const implementedVersionDecorator = createClassDecorator<
 >({
 	name: "implementedVersion",
 	valueFromArgs: (version) => version,
+	constructorLookupKey: false,
 });
 
 /**
@@ -1241,7 +1242,7 @@ const ccCommandDecorator = createClassDecorator<
 >({
 	name: "CCCommand",
 	valueFromArgs: (command) => command,
-	getConstructorLookupKey(target, command) {
+	constructorLookupKey(target, command) {
 		const ccId = getCommandClassStatic(
 			target as unknown as typeof CommandClass,
 		);
@@ -1296,7 +1297,7 @@ const expectedCCResponseDecorator = createClassDecorator<
 	name: "expectedCCResponse",
 	valueFromArgs: (cc, predicate) => ({ cc, predicate }),
 	// We don't need reverse lookup
-	getConstructorLookupKey: () => "",
+	constructorLookupKey: false,
 });
 
 /**

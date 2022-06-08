@@ -459,7 +459,7 @@ const messageTypesDecorator = createClassDecorator<
 		messageType,
 		functionType,
 	}),
-	getConstructorLookupKey(target, messageType, functionType) {
+	constructorLookupKey(target, messageType, functionType) {
 		return getMessageTypeMapKey(messageType, functionType);
 	},
 });
@@ -527,6 +527,7 @@ const expectedResponseDecorator = createClassDecorator<
 >({
 	name: "expectedResponse",
 	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
+	constructorLookupKey: false,
 });
 
 /**
@@ -560,6 +561,7 @@ const expectedCallbackDecorator = createClassDecorator<
 >({
 	name: "expectedCallback",
 	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
+	constructorLookupKey: false,
 });
 
 /**
@@ -596,6 +598,7 @@ const priorityDecorator = createClassDecorator<
 >({
 	name: "priority",
 	valueFromArgs: (priority) => priority,
+	constructorLookupKey: false,
 });
 
 /**
