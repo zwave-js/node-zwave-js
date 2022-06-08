@@ -5,20 +5,22 @@ import {
 	NodeType,
 } from "@zwave-js/core";
 
+export type PartialCCCapabilities =
+	| ({
+			ccId: CommandClasses;
+	  } & Partial<CommandClassInfo>)
+	| CommandClasses;
+
 export interface MockNodeCapabilities extends NodeProtocolInfoAndDeviceClass {
 	firmwareVersion: string;
 	manufacturerId: number;
 	productType: number;
 	productId: number;
-
-	commandClasses: ({ ccId: CommandClasses } & CommandClassInfo)[];
-	endpoints: MockEndpointCapabilities[];
 }
 
 export interface MockEndpointCapabilities {
 	genericDeviceClass: number;
 	specificDeviceClass: number;
-	commandClasses: ({ ccId: CommandClasses } & CommandClassInfo)[];
 }
 
 export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
@@ -40,8 +42,14 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 		basicDeviceClass: 0x04, // Routing End Node
 		genericDeviceClass: 0x06, // Appliance
 		specificDeviceClass: 0x01, // General Appliance
+	};
+}
 
-		endpoints: [],
-		commandClasses: [],
+export function getDefaultMockEndpointCapabilities(
+	nodeCaps: MockNodeCapabilities,
+): MockEndpointCapabilities {
+	return {
+		genericDeviceClass: nodeCaps.genericDeviceClass,
+		specificDeviceClass: nodeCaps.specificDeviceClass,
 	};
 }

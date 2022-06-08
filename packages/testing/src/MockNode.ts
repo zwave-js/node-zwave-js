@@ -1,10 +1,12 @@
-import { CommandClasses, type CommandClassInfo } from "@zwave-js/core";
+import type { CommandClasses, CommandClassInfo } from "@zwave-js/core";
 import { TimedExpectation } from "@zwave-js/shared";
 import { isDeepStrictEqual } from "util";
 import type { MockController } from "./MockController";
 import {
+	getDefaultMockEndpointCapabilities,
 	getDefaultMockNodeCapabilities,
 	MockEndpointCapabilities,
+	PartialCCCapabilities,
 	type MockNodeCapabilities,
 } from "./MockNodeCapabilities";
 import {
@@ -16,10 +18,79 @@ import {
 	MOCK_FRAME_ACK_TIMEOUT,
 } from "./MockZWaveFrame";
 
+const defaultCCInfo: CommandClassInfo = {
+	isSupported: true,
+	isControlled: false,
+	secure: false,
+	version: 1,
+};
+
 export interface MockNodeOptions {
 	id: number;
 	controller: MockController;
-	capabilities?: Partial<MockNodeCapabilities>;
+	capabilities?: Partial<MockNodeCapabilities> & {
+		/** The CCs implemented by the root device of this node */
+		commandClasses?: PartialCCCapabilities[];
+		/** Additional, consecutive endpoints. The first one defined will be available at index 1. */
+		endpoints?: (Partial<MockEndpointCapabilities> & {
+			commandClasses?: PartialCCCapabilities[];
+		})[];
+	};
+}
+
+export interface MockEndpointOptions {
+	index: number;
+	node: MockNode;
+	capabilities?: Partial<MockEndpointCapabilities> & {
+		/** The CCs implemented by this endpoint */
+		commandClasses?: PartialCCCapabilities[];
+	};
+}
+
+export class MockEndpoint {
+	public constructor(options: MockEndpointOptions) {
+		this.index = options.index;
+		this.node = options.node;
+
+		const { commandClasses = [], ...capabilities } =
+			options.capabilities ?? {};
+		this.capabilities = {
+			...getDefaultMockEndpointCapabilities(this.node.capabilities),
+			...capabilities,
+		};
+
+		for (const cc of commandClasses) {
+			if (typeof cc === "number") {
+				this.addCC(cc, {});
+			} else {
+				const { ccId, ...ccInfo } = cc;
+				this.addCC(ccId, ccInfo);
+			}
+		}
+	}
+
+	public readonly index: number;
+	public readonly node: MockNode;
+	public readonly capabilities: MockEndpointCapabilities;
+
+	public readonly implementedCCs = new Map<
+		CommandClasses,
+		CommandClassInfo
+	>();
+
+	/** Adds information about a CC to this mock endpoint */
+	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
+		const original = this.implementedCCs.get(cc);
+		const updated = Object.assign({}, original ?? defaultCCInfo, info);
+		if (!isDeepStrictEqual(original, updated)) {
+			this.implementedCCs.set(cc, updated);
+		}
+	}
+
+	/** Removes information about a CC from this mock node */
+	public removeCC(cc: CommandClasses): void {
+		this.implementedCCs.delete(cc);
+	}
 }
 
 /** A mock node that can be used to test the driver as if it were speaking to an actual network */
@@ -28,16 +99,51 @@ export class MockNode {
 		this.id = options.id;
 		this.controller = options.controller;
 
+		const {
+			commandClasses = [],
+			endpoints = [],
+			...capabilities
+		} = options.capabilities ?? {};
 		this.capabilities = {
 			...getDefaultMockNodeCapabilities(),
-			...options.capabilities,
+			...capabilities,
 		};
+
+		for (const cc of commandClasses) {
+			if (typeof cc === "number") {
+				this.addCC(cc, {});
+			} else {
+				const { ccId, ...ccInfo } = cc;
+				this.addCC(ccId, ccInfo);
+			}
+		}
+
+		let index = 0;
+		for (const endpoint of endpoints) {
+			index++;
+			this.endpoints.set(
+				index,
+				new MockEndpoint({
+					index,
+					node: this,
+					capabilities: endpoint,
+				}),
+			);
+		}
 	}
 
 	public readonly id: number;
 	public readonly controller: MockController;
 	public readonly capabilities: MockNodeCapabilities;
+
 	private behaviors: MockNodeBehavior[] = [];
+
+	public readonly implementedCCs = new Map<
+		CommandClasses,
+		CommandClassInfo
+	>();
+
+	public readonly endpoints = new Map<number, MockEndpoint>();
 
 	/** Can be used by behaviors to store controller related state */
 	public readonly state = new Map<string, unknown>();
@@ -151,81 +257,18 @@ export class MockNode {
 		);
 	}
 
-	/** Adds an endpoint to this mock node with the given capabilities. */
-	public addEndpoint(capabilities: Partial<MockEndpointCapabilities>): void {
-		const endpoint: MockEndpointCapabilities = {
-			genericDeviceClass:
-				capabilities.genericDeviceClass ??
-				this.capabilities.genericDeviceClass,
-			specificDeviceClass:
-				capabilities.specificDeviceClass ??
-				this.capabilities.specificDeviceClass,
-			commandClasses:
-				capabilities.commandClasses ?? this.capabilities.commandClasses,
-		};
-		this.capabilities.endpoints.push(endpoint);
-	}
-
-	/** Adds information about a CC to this mock node or one of its endpoints */
-	public addCC(
-		cc: CommandClasses,
-		info: Partial<CommandClassInfo>,
-		endpointIndex: number = 0,
-	): void {
-		// Endpoints cannot support Multi Channel CC
-		if (endpointIndex > 0 && cc === CommandClasses["Multi Channel"]) return;
-
-		let ccArray: typeof this.capabilities.commandClasses;
-		if (endpointIndex === 0) {
-			ccArray = this.capabilities.commandClasses;
-		} else {
-			const endpoint = this.capabilities.endpoints[endpointIndex - 1];
-			if (!endpoint) {
-				throw new Error(
-					`Endpoint ${endpointIndex} does not exist on mock node ${this.id}`,
-				);
-			}
-			ccArray = endpoint.commandClasses;
-		}
-
-		const original = ccArray.find((c) => c.ccId === cc);
-		const originalIndex = original ? ccArray.indexOf(original) : -1;
-		const updated: typeof original = Object.assign(
-			{ ccId: cc },
-			original ?? {
-				isSupported: false,
-				isControlled: false,
-				secure: false,
-				version: 0,
-			},
-			info,
-		);
+	/** Adds information about a CC to this mock node */
+	public addCC(cc: CommandClasses, info: Partial<CommandClassInfo>): void {
+		const original = this.implementedCCs.get(cc);
+		const updated = Object.assign({}, original ?? defaultCCInfo, info);
 		if (!isDeepStrictEqual(original, updated)) {
-			if (originalIndex === -1) {
-				ccArray.push(updated);
-			} else {
-				ccArray[originalIndex] = updated;
-			}
+			this.implementedCCs.set(cc, updated);
 		}
 	}
 
-	/** Removes information about a CC from this mock node or one of its endpoints */
-	public removeCC(cc: CommandClasses, endpointIndex: number = 0): void {
-		let ccArray: typeof this.capabilities.commandClasses;
-		if (endpointIndex === 0) {
-			ccArray = this.capabilities.commandClasses;
-		} else {
-			const endpoint = this.capabilities.endpoints[endpointIndex - 1];
-			if (!endpoint) {
-				throw new Error(
-					`Endpoint ${endpointIndex} does not exist on mock node ${this.id}`,
-				);
-			}
-			ccArray = endpoint.commandClasses;
-		}
-
-		const originalIndex = ccArray.findIndex((c) => c.ccId === cc);
-		ccArray.splice(originalIndex, 1);
+	/** Removes information about a CC from this mock node */
+	public removeCC(cc: CommandClasses): void {
+		this.implementedCCs.delete(cc);
 	}
 
 	public defineBehavior(...behaviors: MockNodeBehavior[]): void {

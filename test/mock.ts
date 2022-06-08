@@ -49,8 +49,6 @@ void (async () => {
 	driver.once("driver ready", async () => {
 		// Test code
 		console.log("driver ready!!!");
-
-		await driver.controller.nodes.getOrThrow(2).ping();
 	});
 
 	const controller = new MockController({
@@ -65,14 +63,10 @@ void (async () => {
 		capabilities: {
 			isListening: true,
 			commandClasses: [
-				{
-					ccId: CommandClasses.Basic,
-					isSupported: true,
-					isControlled: false,
-					secure: false,
-					version: 1,
-				},
+				CommandClasses.Basic,
+				CommandClasses["Binary Switch"],
 			],
+			endpoints: [{ commandClasses: [CommandClasses.Basic] }],
 		},
 	});
 	controller.addNode(node2);

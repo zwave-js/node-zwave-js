@@ -19,9 +19,9 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 				{
 					nodeId: self.id,
 					...self.capabilities,
-					supportedCCs: self.capabilities.commandClasses
-						.filter((cc) => cc.isSupported)
-						.map((cc) => cc.ccId),
+					supportedCCs: [...self.implementedCCs]
+						.filter(([, info]) => info.isSupported)
+						.map(([ccId]) => ccId),
 				},
 			);
 			await self.sendToController(
