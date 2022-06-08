@@ -3443,7 +3443,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/clipboardy@npm:^2":
+"@types/clipboardy@npm:^2.0.1":
   version: 2.0.1
   resolution: "@types/clipboardy@npm:2.0.1"
   dependencies:
@@ -3592,13 +3592,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prettier@npm:^2":
-  version: 2.3.1
-  resolution: "@types/prettier@npm:2.3.1"
-  checksum: 545891e0ecbb60345263e4f142d406b3d4ff97bb24605f247844af55f6523e974d3c7b0b7a83f59467e078e193c879b9491ec24c652c536f1905a4966b3e5784
-  languageName: node
-  linkType: hard
-
 "@types/prettier@npm:^2.1.5":
   version: 2.4.4
   resolution: "@types/prettier@npm:2.4.4"
@@ -3606,12 +3599,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/proper-lockfile@npm:^4":
-  version: 4.1.1
-  resolution: "@types/proper-lockfile@npm:4.1.1"
+"@types/prettier@npm:^2.6.3":
+  version: 2.6.3
+  resolution: "@types/prettier@npm:2.6.3"
+  checksum: e1836699ca189fff6d2a73dc22e028b6a6f693ed1180d5998ac29fa197caf8f85aa92cb38db642e4a370e616b451cb5722ad2395dab11c78e025a1455f37d1f0
+  languageName: node
+  linkType: hard
+
+"@types/proper-lockfile@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "@types/proper-lockfile@npm:4.1.2"
   dependencies:
     "@types/retry": "*"
-  checksum: 7bb0a6c77c2563bfd601f3e32d95a6b1107604ddb8b2941ae739c1aeead35036b75b0ccb470b0f119ffc10e48b06fc79a1be68eed5581d65615bb512cc1e6ec5
+  checksum: 9d8a100f96e6df3ce1213eea2696b86de4b75dce3ab5bbc1767226732976bf38d2d2ce1060d6942e76561e8617576547e83bb172e95375192a0b8df1fbca2331
   languageName: node
   linkType: hard
 
@@ -3629,12 +3629,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/source-map-support@npm:^0":
-  version: 0.5.3
-  resolution: "@types/source-map-support@npm:0.5.3"
+"@types/source-map-support@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "@types/source-map-support@npm:0.5.4"
   dependencies:
     source-map: ^0.6.0
-  checksum: 96eabd19d1640e5921d9830f075d832d16febb0e0d5131c58f47338afcc0070d3fa74f73052d7529906c17c7ba979920a0c660ca845d9d29ae3534f28b91896d
+  checksum: 160ff77e8a101b18d9915cb5320fd73d484679aef8518ce007b9b5988e333631778730196c4bb15517ff881bee805663fd8640c0ce2ebfab65f061103c452369
   languageName: node
   linkType: hard
 
@@ -3924,12 +3924,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/maintenance@workspace:packages/maintenance"
   dependencies:
-    "@types/clipboardy": ^2
+    "@types/clipboardy": ^2.0.1
     "@types/fs-extra": ^9.0.13
     "@types/globrex": ^0.1.2
     "@types/jest": ^27.5.1
     "@types/node": ^14.18.20
-    "@types/prettier": ^2
+    "@types/prettier": ^2.6.3
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -3999,7 +3999,7 @@ __metadata:
     "@types/jest": ^27.5.1
     "@types/node": ^14.18.20
     "@types/semver": ^7.3.9
-    "@types/source-map-support": ^0
+    "@types/source-map-support": ^0.5.4
     "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.27.0
     "@typescript-eslint/parser": ^5.27.0
@@ -10619,9 +10619,9 @@ typescript@^4.4.3:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.1
     "@types/node": ^14.18.20
-    "@types/proper-lockfile": ^4
+    "@types/proper-lockfile": ^4.1.2
     "@types/semver": ^7.3.9
-    "@types/source-map-support": ^0
+    "@types/source-map-support": ^0.5.4
     "@xstate/test": ^0.5.1
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
