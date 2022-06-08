@@ -44,13 +44,6 @@ When the node does not respond due to a timeout, the `value` in the returned arr
 ### `set`
 
 ```ts
-async set(
-	parameter: number,
-	value: ConfigValue,
-	valueSize: 1 | 2 | 4,
-	valueFormat?: ConfigValueFormat,
-): Promise<void>;
-
 async set(options: ConfigurationCCAPISetOptions): Promise<void>;
 ```
 

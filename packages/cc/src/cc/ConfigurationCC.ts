@@ -586,79 +586,41 @@ export class ConfigurationCCAPI extends CCAPI {
 
 	/**
 	 * Sets a new value for a given config parameter of the device.
-	 * @deprecated Use the overload with an options object instead
-	 */
-	public async set(
-		parameter: number,
-		value: ConfigValue,
-		valueSize: 1 | 2 | 4,
-		valueFormat?: ConfigValueFormat,
-	): Promise<void>;
-
-	/**
-	 * Sets a new value for a given config parameter of the device.
-	 */
-	public async set(options: ConfigurationCCAPISetOptions): Promise<void>;
-
-	/**
-	 * Sets a new value for a given config parameter of the device.
 	 */
 	@validateArgs({ strictEnums: true })
-	public async set(
-		...args:
-			| [
-					parameter: number,
-					value: ConfigValue,
-					valueSize: 1 | 2 | 4,
-					valueFormat?: ConfigValueFormat,
-			  ]
-			| [ConfigurationCCAPISetOptions]
-	): Promise<void> {
+	public async set(options: ConfigurationCCAPISetOptions): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
 		);
 
-		let cc: ConfigurationCCSet;
-		if (args.length === 1) {
-			const options = normalizeConfigurationCCAPISetOptions(
+		const normalized = normalizeConfigurationCCAPISetOptions(
+			this.applHost,
+			this.endpoint,
+			options,
+		);
+		let value = normalized.value;
+		if (normalized.bitMask) {
+			const ccc = createConfigurationCCInstance(
 				this.applHost,
 				this.endpoint,
-				args[0],
 			);
-			let value = options.value;
-			if (options.bitMask) {
-				const ccc = createConfigurationCCInstance(
-					this.applHost,
-					this.endpoint,
-				);
-				value = ccc.composePartialParamValue(
-					this.applHost,
-					options.parameter,
-					options.bitMask,
-					options.value,
-				);
-			}
-			cc = new ConfigurationCCSet(this.applHost, {
-				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				resetToDefault: false,
-				parameter: options.parameter,
-				value,
-				valueSize: options.valueSize,
-				valueFormat: options.valueFormat,
-			});
-		} else {
-			cc = new ConfigurationCCSet(this.applHost, {
-				nodeId: this.endpoint.nodeId,
-				// Don't set an endpoint here, Configuration is device specific, not endpoint specific
-				resetToDefault: false,
-				parameter: args[0],
-				value: args[1],
-				valueSize: args[2],
-				valueFormat: args[3] ?? ConfigValueFormat.SignedInteger,
-			});
+			value = ccc.composePartialParamValue(
+				this.applHost,
+				normalized.parameter,
+				normalized.bitMask,
+				normalized.value,
+			);
 		}
+		const cc = new ConfigurationCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
+			resetToDefault: false,
+			parameter: normalized.parameter,
+			value,
+			valueSize: normalized.valueSize,
+			valueFormat: normalized.valueFormat,
+		});
 
 		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
