@@ -1153,19 +1153,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * @param options Defines the inclusion strategy to use.
 	 */
-	public async beginInclusion(options: InclusionOptions): Promise<boolean>;
-
-	/**
-	 * Starts the inclusion process of new nodes.
-	 * Resolves to true when the process was started, and false if the inclusion was already active.
-	 *
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async beginInclusion(includeNonSecure?: boolean): Promise<boolean>;
-
 	public async beginInclusion(
-		options?: InclusionOptions | boolean,
+		options: InclusionOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1173,18 +1164,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
-		}
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
 		}
 
 		// Protect against invalid inclusion options
@@ -3295,26 +3274,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociationGroups(
 		source: AssociationAddress,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	/**
-	 * Returns a dictionary of all association groups for the root device (endpoint 0) of this node.
-	 *
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociationGroups(
-		nodeId: number,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	public getAssociationGroups(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, AssociationGroup> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
-
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
 		return ccUtils.getAssociationGroups(this.driver, endpoint);
 	}
@@ -3336,25 +3298,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociations(
 		source: AssociationAddress,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	/**
-	 * Returns all associations (Multi Channel or normal) that are configured on the root device (endpoint 0) of this node.
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociations(
-		nodeId: number,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	public getAssociations(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
-
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
 		return ccUtils.getAssociations(this.driver, endpoint);
 	}
@@ -3380,26 +3326,7 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destination: AssociationAddress,
-	): boolean;
-
-	/**
-	 * Checks if a given association is allowed.
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public isAssociationAllowed(
-		nodeId: number,
-		group: number,
-		destination: AssociationAddress,
-	): boolean;
-
-	public isAssociationAllowed(
-		source: number | AssociationAddress,
-		group: number,
-		destination: AssociationAddress,
 	): boolean {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
@@ -3418,31 +3345,10 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public addAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 */
-	public addAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+
 		return ccUtils.addAssociations(
 			this.driver,
 			endpoint,
@@ -3458,31 +3364,10 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public removeAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 */
-	public removeAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+
 		return ccUtils.removeAssociations(
 			this.driver,
 			endpoint,
@@ -3621,23 +3506,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
-		options: ReplaceNodeOptions,
-	): Promise<boolean>;
-
-	/**
-	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
-	 * @param nodeId The id of the node to replace
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async replaceFailedNode(
-		nodeId: number,
-		includeNonSecure?: boolean,
-	): Promise<boolean>;
-
-	public async replaceFailedNode(
-		nodeId: number,
-		options?: ReplaceNodeOptions | boolean,
+		options: ReplaceNodeOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -3651,18 +3522,6 @@ ${associatedNodes.join(", ")}`,
 		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Busy);
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
-		}
 
 		this.driver.controllerLog.print(
 			`starting replace failed node process...`,

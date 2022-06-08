@@ -667,15 +667,6 @@ export enum DoorLockLoggingRecordStatus {
 	HoldsLegalData = 0x01,
 }
 
-/**
- * @publicAPI
- * @deprecated Use {@link DoorLockLoggingRecordStatus} instead
- */
-export enum RecordStatus {
-	Empty = 0x00,
-	HoldsLegalData = 0x01,
-}
-
 /** @publicAPI */
 export enum EntryControlCommand {
 	Notification = 0x01,
@@ -1003,12 +994,6 @@ export interface AssociationAddress {
 	nodeId: number;
 	endpoint?: number;
 }
-
-/**
- * @publicAPI
- * @deprecated use AssociationAddress instead
- */
-export type Association = AssociationAddress;
 
 /** @publicAPI */
 export interface EndpointAddress {

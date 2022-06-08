@@ -117,12 +117,6 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
-	 * @deprecated Use `securityKeys.S0_Legacy` instead
-	 * Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes.
-	 */
-	networkKey?: Buffer;
-
-	/**
 	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
