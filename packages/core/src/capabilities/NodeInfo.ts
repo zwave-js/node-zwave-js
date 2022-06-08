@@ -21,18 +21,32 @@ export function parseApplicationNodeInformation(
 
 export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	nodeId: number;
-	basic: number;
+	basicDeviceClass: number;
 }
 
 export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
-	const numCCs = nif[1];
-	// The application node info starts at 3, and contains 2+N bytes
-	validatePayload(nif.length >= 3 + 2 + numCCs);
+	const nodeId = nif[0];
+	const remainingLength = nif[1];
+	validatePayload(nif.length >= 2 + remainingLength);
 	return {
-		nodeId: nif[0],
-		basic: nif[2],
-		...parseApplicationNodeInformation(nif.slice(3, 3 + 2 + numCCs)),
+		nodeId,
+		basicDeviceClass: nif[2],
+		...parseApplicationNodeInformation(nif.slice(3, 2 + remainingLength)),
 	};
+}
+
+export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer {
+	const ccList = encodeCCList(nif.supportedCCs, []);
+	return Buffer.concat([
+		Buffer.from([
+			nif.nodeId,
+			3 + ccList.length,
+			nif.basicDeviceClass,
+			nif.genericDeviceClass,
+			nif.specificDeviceClass,
+		]),
+		ccList,
+	]);
 }
 
 export function isExtendedCCId(ccId: CommandClasses): boolean {

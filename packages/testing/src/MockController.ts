@@ -1,5 +1,11 @@
+import type { ICommandClass } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import { Message, MessageHeaders, SerialAPIParser } from "@zwave-js/serial";
+import {
+	Message,
+	MessageHeaders,
+	MessageOrigin,
+	SerialAPIParser,
+} from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { TimedExpectation } from "@zwave-js/shared/safe";
 import {
@@ -7,6 +13,14 @@ import {
 	MockControllerCapabilities,
 } from "./MockControllerCapabilities";
 import type { MockNode } from "./MockNode";
+import {
+	createMockZWaveAckFrame,
+	MockZWaveAckFrame,
+	MockZWaveFrame,
+	MockZWaveFrameType,
+	MockZWaveRequestFrame,
+	MOCK_FRAME_ACK_TIMEOUT,
+} from "./MockZWaveFrame";
 
 export interface MockControllerOptions {
 	serial: MockPortBinding;
@@ -72,16 +86,34 @@ export class MockController {
 	private readonly serialParser: SerialAPIParser;
 	private expectedHostACK?: TimedExpectation;
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
-	private expectedNodeMessages: Map<
+	private expectedNodeFrames: Map<
 		number,
-		TimedExpectation<Buffer, Buffer>[]
+		TimedExpectation<MockZWaveFrame, MockZWaveFrame>[]
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
 
-	public readonly nodes = new Map<number, MockNode>();
+	private _nodes = new Map<number, MockNode>();
+	public get nodes(): ReadonlyMap<number, MockNode> {
+		return this._nodes;
+	}
+
+	public addNode(node: MockNode): void {
+		this._nodes.set(node.id, node);
+	}
+
+	public removeNode(node: MockNode): void {
+		this._nodes.delete(node.id);
+	}
+
 	public readonly host: ZWaveHost;
 
 	public readonly capabilities: MockControllerCapabilities;
+
+	/** Can be used by behaviors to store controller related state */
+	public readonly state = new Map<string, unknown>();
+
+	/** Controls whether the controller automatically ACKs node frames before handling them */
+	public autoAckNodeFrames: boolean = true;
 
 	/** Gets called when parsed/chunked data is received from the serial port */
 	private async serialOnData(
@@ -116,12 +148,12 @@ export class MockController {
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this.host, data);
+			msg = Message.from(this.host, data, MessageOrigin.Host);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);
 		} catch (e: any) {
 			throw new Error(
-				"Mock controller received an invalid message from the host!",
+				`Mock controller received an invalid message from the host: ${e.stack}`,
 			);
 		}
 
@@ -169,7 +201,7 @@ export class MockController {
 		const expectation = new TimedExpectation<Message, Message>(
 			timeout,
 			predicate,
-			"Host did not respond with an ACK within the provided timeout!",
+			"Host did not send the expected message within the provided timeout!",
 		);
 		try {
 			this.expectedHostMessages.push(expectation);
@@ -185,29 +217,69 @@ export class MockController {
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
-	public async expectNodeMessage(
+	public async expectNodeFrame<T extends MockZWaveFrame = MockZWaveFrame>(
 		node: MockNode,
 		timeout: number,
-		predicate: (data: Buffer) => boolean,
-	): Promise<Buffer> {
-		const expectation = new TimedExpectation<Buffer, Buffer>(
+		predicate: (msg: MockZWaveFrame) => msg is T,
+	): Promise<T> {
+		const expectation = new TimedExpectation<
+			MockZWaveFrame,
+			MockZWaveFrame
+		>(
 			timeout,
 			predicate,
-			"Node did not respond with an ACK within the provided timeout!",
+			`Node ${node.id} did not send the expected frame within the provided timeout!`,
 		);
 		try {
-			if (!this.expectedNodeMessages.has(node.id)) {
-				this.expectedNodeMessages.set(node.id, []);
+			if (!this.expectedNodeFrames.has(node.id)) {
+				this.expectedNodeFrames.set(node.id, []);
 			}
-			this.expectedNodeMessages.get(node.id)!.push(expectation);
-			return await expectation;
+			this.expectedNodeFrames.get(node.id)!.push(expectation);
+			return (await expectation) as T;
 		} finally {
-			const array = this.expectedNodeMessages.get(node.id);
+			const array = this.expectedNodeFrames.get(node.id);
 			if (array) {
 				const index = array.indexOf(expectation);
 				if (index !== -1) array.splice(index, 1);
 			}
 		}
+	}
+
+	/**
+	 * Waits until the node sends a message matching the given predicate or a timeout has elapsed.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 */
+	public async expectNodeCC<T extends ICommandClass = ICommandClass>(
+		node: MockNode,
+		timeout: number,
+		predicate: (cc: ICommandClass) => cc is T,
+	): Promise<T> {
+		const ret = await this.expectNodeFrame(
+			node,
+			timeout,
+			(msg): msg is MockZWaveRequestFrame & { payload: T } =>
+				msg.type === MockZWaveFrameType.Request &&
+				predicate(msg.payload),
+		);
+		return ret.payload;
+	}
+
+	/**
+	 * Waits until the controller sends an ACK frame or a timeout has elapsed.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 */
+	public expectNodeACK(
+		node: MockNode,
+		timeout: number,
+	): Promise<MockZWaveAckFrame> {
+		return this.expectNodeFrame(
+			node,
+			timeout,
+			(msg): msg is MockZWaveAckFrame =>
+				msg.type === MockZWaveFrameType.ACK,
+		);
 	}
 
 	/** Sends a message header (ACK/NAK/CAN) to the host/driver */
@@ -222,33 +294,69 @@ export class MockController {
 		await this.expectHostACK(1000);
 	}
 
-	/** Gets called when a complete chunk of data is received from a {@link MockNode} */
-	public nodeOnData(node: MockNode, data: Buffer): void {
+	/** Gets called when a {@link MockZWaveFrame} is received from a {@link MockNode} */
+	public async onNodeFrame(
+		node: MockNode,
+		frame: MockZWaveFrame,
+	): Promise<void> {
+		// Ack the frame if desired
+		if (
+			this.autoAckNodeFrames &&
+			frame.type === MockZWaveFrameType.Request
+		) {
+			await this.ackNodeRequestFrame(node, frame);
+		}
+
 		// Handle message buffer. Check for pending expectations first.
-		const handler = this.expectedNodeMessages
+		const handler = this.expectedNodeFrames
 			.get(node.id)
-			?.find((e) => !e.predicate || e.predicate(data));
+			?.find((e) => !e.predicate || e.predicate(frame));
 		if (handler) {
-			handler.resolve(data);
+			handler.resolve(frame);
 		} else {
 			// Then apply generic predefined behavior
 			for (const behavior of this.behaviors) {
-				if (behavior.onNodeMessage?.(this.host, this, node, data))
+				if (await behavior.onNodeFrame?.(this.host, this, node, frame))
 					return;
 			}
 		}
 	}
 
 	/**
-	 * Sends a raw buffer to a node
-	 * @param data The data to send. Mock nodes expect a complete message/command.
+	 * Sends an ACK frame to a {@link MockNode}
 	 */
-	public sendToNode(node: MockNode, data: Buffer): void {
-		node.controllerOnData(data);
+	public async ackNodeRequestFrame(
+		node: MockNode,
+		frame?: MockZWaveRequestFrame,
+	): Promise<void> {
+		await this.sendToNode(
+			node,
+			createMockZWaveAckFrame({
+				repeaters: frame?.repeaters,
+			}),
+		);
+	}
+
+	/**
+	 * Sends a {@link MockZWaveFrame} to a {@link MockNode}
+	 */
+	public async sendToNode(
+		node: MockNode,
+		frame: MockZWaveFrame,
+	): Promise<MockZWaveAckFrame | undefined> {
+		let ret: Promise<MockZWaveAckFrame> | undefined;
+		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
+			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
+		}
+		process.nextTick(() => {
+			void node.onControllerFrame(frame);
+		});
+		if (ret) return await ret;
 	}
 
 	public defineBehavior(...behaviors: MockControllerBehavior[]): void {
-		this.behaviors.push(...behaviors);
+		// New behaviors must override existing ones, so we insert at the front of the array
+		this.behaviors.unshift(...behaviors);
 	}
 }
 
@@ -260,10 +368,10 @@ export interface MockControllerBehavior {
 		msg: Message,
 	) => Promise<boolean> | boolean;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
-	onNodeMessage?: (
+	onNodeFrame?: (
 		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
-		data: Buffer,
+		frame: MockZWaveFrame,
 	) => Promise<boolean> | boolean;
 }

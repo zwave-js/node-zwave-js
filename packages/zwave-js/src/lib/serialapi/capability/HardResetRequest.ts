@@ -8,6 +8,7 @@ import {
 	Message,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessageOrigin,
 	MessageType,
 	messageTypes,
 	priority,
@@ -17,11 +18,18 @@ import {
 @priority(MessagePriority.Controller)
 export class HardResetRequestBase extends Message {
 	public constructor(host: ZWaveHost, options?: MessageOptions) {
-		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== HardResetCallback
-		) {
-			return new HardResetCallback(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host &&
+				(new.target as any) !== HardResetRequest
+			) {
+				return new HardResetRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host &&
+				(new.target as any) !== HardResetCallback
+			) {
+				return new HardResetCallback(host, options);
+			}
 		}
 		super(host, options);
 	}

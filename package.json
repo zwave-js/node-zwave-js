@@ -90,7 +90,7 @@
   },
   "scripts": {
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",
-    "prebuild": "yarn workspace @zwave-js/maintenance run build",
+    "prebuild": "yarn workspace @zwave-js/maintenance run build && yarn workspace @zwave-js/cc run prebuild",
     "build": "yarn prebuild && yarn workspace zwave-js run build",
     "watch": "yarn prebuild && yarn workspace zwave-js run watch",
     "clean": "rm -rf packages/*/{build,*.tsbuildinfo}",

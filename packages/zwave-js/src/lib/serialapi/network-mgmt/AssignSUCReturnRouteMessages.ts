@@ -2,36 +2,48 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	TransmitStatus,
-	ZWaveError,
-	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
 	FunctionType,
 	gotDeserializationOptions,
+	INodeQuery,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
+	MessageOrigin,
 	MessageType,
 	messageTypes,
 	priority,
+	SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.AssignSUCReturnRoute)
 @priority(MessagePriority.Normal)
 export class AssignSUCReturnRouteRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== AssignSUCReturnRouteRequestTransmitReport
-		) {
-			return new AssignSUCReturnRouteRequestTransmitReport(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host &&
+				(new.target as any) !== AssignSUCReturnRouteRequest
+			) {
+				return new AssignSUCReturnRouteRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host &&
+				(new.target as any) !==
+					AssignSUCReturnRouteRequestTransmitReport
+			) {
+				return new AssignSUCReturnRouteRequestTransmitReport(
+					host,
+					options,
+				);
+			}
 		}
+
 		super(host, options);
 	}
 }
@@ -54,10 +66,8 @@ export class AssignSUCReturnRouteRequest
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			this.nodeId = this.payload[0];
+			this.callbackId = this.payload[1];
 		} else {
 			this.nodeId = options.nodeId;
 		}
@@ -72,6 +82,10 @@ export class AssignSUCReturnRouteRequest
 	}
 }
 
+interface AssignSUCReturnRouteResponseOptions extends MessageBaseOptions {
+	wasExecuted: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.AssignSUCReturnRoute)
 export class AssignSUCReturnRouteResponse
 	extends Message
@@ -79,22 +93,27 @@ export class AssignSUCReturnRouteResponse
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| AssignSUCReturnRouteResponseOptions,
 	) {
 		super(host, options);
-		this.wasExecuted = this.payload[0] !== 0;
+		if (gotDeserializationOptions(options)) {
+			this.wasExecuted = this.payload[0] !== 0;
+		} else {
+			this.wasExecuted = options.wasExecuted;
+		}
 	}
 
 	public isOK(): boolean {
 		return this.wasExecuted;
 	}
 
-	public readonly wasExecuted: boolean;
+	public wasExecuted: boolean;
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasExecuted: this.wasExecuted,
-		});
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.wasExecuted ? 0x01 : 0]);
+		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -105,34 +124,42 @@ export class AssignSUCReturnRouteResponse
 	}
 }
 
+interface AssignSUCReturnRouteRequestTransmitReportOptions
+	extends MessageBaseOptions {
+	transmitStatus: TransmitStatus;
+	callbackId: number;
+}
+
 export class AssignSUCReturnRouteRequestTransmitReport
 	extends AssignSUCReturnRouteRequestBase
 	implements SuccessIndicator
 {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| AssignSUCReturnRouteRequestTransmitReportOptions,
 	) {
 		super(host, options);
 
-		this.callbackId = this.payload[0];
-		this._transmitStatus = this.payload[1];
+		if (gotDeserializationOptions(options)) {
+			this.callbackId = this.payload[0];
+			this.transmitStatus = this.payload[1];
+		} else {
+			this.callbackId = options.callbackId;
+			this.transmitStatus = options.transmitStatus;
+		}
 	}
 
 	public isOK(): boolean {
-		return this._transmitStatus === TransmitStatus.OK;
+		return this.transmitStatus === TransmitStatus.OK;
 	}
 
-	private _transmitStatus: TransmitStatus;
-	public get transmitStatus(): TransmitStatus {
-		return this._transmitStatus;
-	}
+	public transmitStatus: TransmitStatus;
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.callbackId, this.transmitStatus]);
+		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

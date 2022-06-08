@@ -64,6 +64,7 @@ export class BridgeApplicationCommandRequest
 		this.command = CommandClass.from(this.host, {
 			data: this.payload.slice(offset, offset + commandLength),
 			nodeId: sourceNodeId,
+			origin: options.origin,
 		}) as SinglecastCC<CommandClass>;
 		offset += commandLength;
 
