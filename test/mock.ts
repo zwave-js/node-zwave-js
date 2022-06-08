@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/require-await */
+import { CommandClasses } from "@zwave-js/core";
 import { MockController, MockNode } from "@zwave-js/testing";
 import path from "path";
 import "reflect-metadata";
 import {
 	createAndStartDriverWithMockPort,
 	createDefaultMockControllerBehaviors,
+	createDefaultMockNodeBehaviors,
 } from "zwave-js";
 
 process.on("unhandledRejection", (_r) => {
@@ -13,7 +15,8 @@ process.on("unhandledRejection", (_r) => {
 
 void (async () => {
 	const { driver, continueStartup, mockPort } =
-		await createAndStartDriverWithMockPort("/tty/FAKE", {
+		await createAndStartDriverWithMockPort({
+			portAddress: "/tty/FAKE",
 			logConfig: {
 				// 	logToFile: true,
 				enabled: true,
@@ -58,13 +61,21 @@ void (async () => {
 		id: 2,
 		controller,
 		capabilities: {
-			isListening: false,
+			isListening: true,
+			commandClasses: [
+				CommandClasses.Basic,
+				CommandClasses["Binary Switch"],
+			],
+			endpoints: [{ commandClasses: [CommandClasses.Basic] }],
 		},
 	});
-	controller.nodes.set(2, node2);
+	controller.addNode(node2);
+
+	// node2.autoAckControllerFrames = false;
 
 	// Apply default behaviors that are required for interacting with the driver correctly
 	controller.defineBehavior(...createDefaultMockControllerBehaviors());
+	node2.defineBehavior(...createDefaultMockNodeBehaviors());
 
 	continueStartup();
 })();

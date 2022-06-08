@@ -87,6 +87,7 @@ export class ApplicationCommandRequest
 			this.command = CommandClass.from(this.host, {
 				data: this.payload.slice(3, 3 + commandLength),
 				nodeId,
+				origin: options.origin,
 			}) as SinglecastCC<CommandClass>;
 		} else {
 			// TODO: This logic is unsound

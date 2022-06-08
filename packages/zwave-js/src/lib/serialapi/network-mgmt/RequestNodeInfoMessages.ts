@@ -1,22 +1,60 @@
 import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { INodeQuery, SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
 	FunctionType,
+	gotDeserializationOptions,
+	INodeQuery,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageType,
 	messageTypes,
 	priority,
+	SuccessIndicator,
 } from "@zwave-js/serial";
-import type { JSONObject } from "@zwave-js/shared";
 import {
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
 } from "../application/ApplicationUpdateRequest";
+
+interface RequestNodeInfoResponseOptions extends MessageBaseOptions {
+	wasSent: boolean;
+}
+
+@messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
+export class RequestNodeInfoResponse
+	extends Message
+	implements SuccessIndicator
+{
+	public constructor(
+		host: ZWaveHost,
+		options: MessageDeserializationOptions | RequestNodeInfoResponseOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			this.wasSent = this.payload[0] !== 0;
+		} else {
+			this.wasSent = options.wasSent;
+		}
+	}
+
+	public wasSent: boolean;
+
+	public isOK(): boolean {
+		return this.wasSent;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.wasSent ? 0x01 : 0]);
+		return super.serialize();
+	}
+}
+
+interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
+	nodeId: number;
+}
 
 function testCallbackForRequestNodeInfoRequest(
 	sent: RequestNodeInfoRequest,
@@ -29,46 +67,6 @@ function testCallbackForRequestNodeInfoRequest(
 	);
 }
 
-interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
-	nodeId: number;
-}
-
-@messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
-export class RequestNodeInfoResponse
-	extends Message
-	implements SuccessIndicator
-{
-	public constructor(
-		host: ZWaveHost,
-		options: MessageDeserializationOptions,
-	) {
-		super(host, options);
-		this._wasSent = this.payload[0] !== 0;
-		if (!this._wasSent) this._errorCode = this.payload[0];
-	}
-
-	public isOK(): boolean {
-		return this._wasSent;
-	}
-
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
-		return this._wasSent;
-	}
-
-	private _errorCode: number | undefined;
-	public get errorCode(): number | undefined {
-		return this._errorCode;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-			errorCode: this.errorCode,
-		});
-	}
-}
-
 @messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
 @expectedResponse(RequestNodeInfoResponse)
 @expectedCallback(testCallbackForRequestNodeInfoRequest)
@@ -76,10 +74,14 @@ export class RequestNodeInfoResponse
 export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public constructor(
 		host: ZWaveHost,
-		options: RequestNodeInfoRequestOptions,
+		options: RequestNodeInfoRequestOptions | MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.nodeId = options.nodeId;
+		if (gotDeserializationOptions(options)) {
+			this.nodeId = this.payload[0];
+		} else {
+			this.nodeId = options.nodeId;
+		}
 	}
 
 	public nodeId: number;
@@ -92,11 +94,5 @@ export class RequestNodeInfoRequest extends Message implements INodeQuery {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId]);
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			nodeId: this.nodeId,
-		});
 	}
 }
