@@ -240,6 +240,8 @@ import {
 	getAvailableFirmwareUpdates,
 } from "./FirmwareUpdateService";
 import {
+	ExclusionOptions,
+	ExclusionStrategy,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -350,11 +352,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isPrimary;
 	}
 
-	/** @deprecated Use {@link isPrimary} instead */
-	public get isSecondary(): boolean | undefined {
-		if (typeof this._isPrimary === "boolean") return !this._isPrimary;
-	}
-
 	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
 	public get isUsingHomeIdFromOtherNetwork(): boolean | undefined {
 		return this._isUsingHomeIdFromOtherNetwork;
@@ -380,21 +377,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isSUC;
 	}
 
-	/** @deprecated Use {@link isSUC} instead */
-	public get isStaticUpdateController(): boolean | undefined {
-		return this._isSUC;
-	}
-
 	private _nodeType: NodeType | undefined;
 	public get nodeType(): NodeType | undefined {
 		return this._nodeType;
-	}
-
-	/** @deprecated Use the {@link nodeType} property to check for Controller vs. End Node instead */
-	public get isSlave(): boolean | undefined {
-		if (this._nodeType != undefined) {
-			return this._nodeType !== NodeType.Controller;
-		}
 	}
 
 	/** Checks if the SDK version is greater than the given one */
@@ -1150,8 +1135,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _smartStartEnabled: boolean = false;
 
 	private _includeController: boolean = false;
-	private _unprovisionRemovedNode: boolean | "inactive" = false;
-
+	private _exclusionOptions: ExclusionOptions | undefined;
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
@@ -1164,19 +1148,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * @param options Defines the inclusion strategy to use.
 	 */
-	public async beginInclusion(options: InclusionOptions): Promise<boolean>;
-
-	/**
-	 * Starts the inclusion process of new nodes.
-	 * Resolves to true when the process was started, and false if the inclusion was already active.
-	 *
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async beginInclusion(includeNonSecure?: boolean): Promise<boolean>;
-
 	public async beginInclusion(
-		options?: InclusionOptions | boolean,
+		options: InclusionOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1184,18 +1159,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
-		}
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
 		}
 
 		// Protect against invalid inclusion options
@@ -1541,11 +1504,27 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Starts the exclusion process of new nodes.
 	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
 	 *
+	 * @param options Influences the exclusion process and what happens with the Smart Start provisioning list.
+	 */
+	public async beginExclusion(options?: ExclusionOptions): Promise<boolean>;
+
+	/**
+	 * Starts the exclusion process of new nodes.
+	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
+	 *
 	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
 	 * A value of `"inactive"` will keep the provisioning entry, but disable it.
+	 *
+	 * @deprecated Use the overload with {@link ExclusionOptions} instead.
 	 */
 	public async beginExclusion(
-		unprovision: boolean | "inactive" = false,
+		unprovision: boolean | "inactive",
+	): Promise<boolean>;
+
+	public async beginExclusion(
+		options: ExclusionOptions | boolean | "inactive" = {
+			strategy: ExclusionStrategy.DisableProvisioningEntry,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1553,6 +1532,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
+		}
+
+		if (typeof options === "boolean") {
+			options = {
+				strategy: options
+					? ExclusionStrategy.Unprovision
+					: ExclusionStrategy.ExcludeOnly,
+			};
+		} else if (options === "inactive") {
+			options = {
+				strategy: ExclusionStrategy.DisableProvisioningEntry,
+			};
 		}
 
 		// Leave SmartStart listening mode so we can switch to exclusion mode
@@ -1573,7 +1564,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.controllerLog.print(
 				`The controller is now ready to remove nodes`,
 			);
-			this._unprovisionRemovedNode = unprovision;
+			this._exclusionOptions = options;
 			this.emit("exclusion started");
 			return true;
 		} catch (e) {
@@ -2745,16 +2736,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
 
 				// Avoid automatic re-inclusion using SmartStart if desired
-				if (this._unprovisionRemovedNode === true) {
-					this.unprovisionSmartStartNode(nodeId);
-				} else if (this._unprovisionRemovedNode === "inactive") {
-					const entry = this.getProvisioningEntryInternal(nodeId);
-					if (entry) {
-						entry.status = ProvisioningEntryStatus.Inactive;
-						this.provisionSmartStartNode(entry);
+				switch (this._exclusionOptions?.strategy) {
+					case ExclusionStrategy.Unprovision:
+						this.unprovisionSmartStartNode(nodeId);
+						break;
+
+					case ExclusionStrategy.DisableProvisioningEntry: {
+						const entry = this.getProvisioningEntryInternal(nodeId);
+						if (entry) {
+							entry.status = ProvisioningEntryStatus.Inactive;
+							this.provisionSmartStartNode(entry);
+						}
+						break;
 					}
 				}
-				this._unprovisionRemovedNode = false;
+
+				this._exclusionOptions = undefined;
 
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);
@@ -3306,26 +3303,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociationGroups(
 		source: AssociationAddress,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	/**
-	 * Returns a dictionary of all association groups for the root device (endpoint 0) of this node.
-	 *
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociationGroups(
-		nodeId: number,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	public getAssociationGroups(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, AssociationGroup> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
-
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
 		return ccUtils.getAssociationGroups(this.driver, endpoint);
 	}
@@ -3347,25 +3327,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociations(
 		source: AssociationAddress,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	/**
-	 * Returns all associations (Multi Channel or normal) that are configured on the root device (endpoint 0) of this node.
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociations(
-		nodeId: number,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	public getAssociations(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
-
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
 		return ccUtils.getAssociations(this.driver, endpoint);
 	}
@@ -3391,26 +3355,7 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destination: AssociationAddress,
-	): boolean;
-
-	/**
-	 * Checks if a given association is allowed.
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public isAssociationAllowed(
-		nodeId: number,
-		group: number,
-		destination: AssociationAddress,
-	): boolean;
-
-	public isAssociationAllowed(
-		source: number | AssociationAddress,
-		group: number,
-		destination: AssociationAddress,
 	): boolean {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
@@ -3429,31 +3374,10 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public addAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 */
-	public addAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+
 		return ccUtils.addAssociations(
 			this.driver,
 			endpoint,
@@ -3469,31 +3393,10 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public removeAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 */
-	public removeAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
+
 		return ccUtils.removeAssociations(
 			this.driver,
 			endpoint,
@@ -3632,23 +3535,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
-		options: ReplaceNodeOptions,
-	): Promise<boolean>;
-
-	/**
-	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
-	 * @param nodeId The id of the node to replace
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async replaceFailedNode(
-		nodeId: number,
-		includeNonSecure?: boolean,
-	): Promise<boolean>;
-
-	public async replaceFailedNode(
-		nodeId: number,
-		options?: ReplaceNodeOptions | boolean,
+		options: ReplaceNodeOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -3662,18 +3551,6 @@ ${associatedNodes.join(", ")}`,
 		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Busy);
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
-		}
 
 		this.driver.controllerLog.print(
 			`starting replace failed node process...`,

@@ -645,45 +645,6 @@ export enum DoorLockLoggingEventType {
 	Unknown = 0x20,
 }
 
-/**
- * @publicAPI
- * @deprecated Use {@link DoorLockLoggingEventType} instead
- */
-export enum EventType {
-	LockCode = 0x01,
-	UnlockCode = 0x02,
-	LockButton = 0x03,
-	UnlockButton = 0x04,
-	LockCodeOutOfSchedule = 0x05,
-	UnlockCodeOutOfSchedule = 0x06,
-	IllegalCode = 0x07,
-	LockManual = 0x08,
-	UnlockManual = 0x09,
-	LockAuto = 0x0a,
-	UnlockAuto = 0x0b,
-	LockRemoteCode = 0x0c,
-	UnlockRemoteCode = 0x0d,
-	LockRemote = 0x0e,
-	UnlockRemote = 0x0f,
-	LockRemoteCodeOutOfSchedule = 0x10,
-	UnlockRemoteCodeOutOfSchedule = 0x11,
-	RemoteIllegalCode = 0x12,
-	LockManual2 = 0x13,
-	UnlockManual2 = 0x14,
-	LockSecured = 0x15,
-	LockUnsecured = 0x16,
-	UserCodeAdded = 0x17,
-	UserCodeDeleted = 0x18,
-	AllUserCodesDeleted = 0x19,
-	MasterCodeChanged = 0x1a,
-	UserCodeChanged = 0x1b,
-	LockReset = 0x1c,
-	ConfigurationChanged = 0x1d,
-	LowBattery = 0x1e,
-	NewBattery = 0x1f,
-	Unknown = 0x20,
-}
-
 /** @publicAPI */
 export interface DoorLockLoggingRecord {
 	timestamp: string;
@@ -695,15 +656,6 @@ export interface DoorLockLoggingRecord {
 
 /** @publicAPI */
 export enum DoorLockLoggingRecordStatus {
-	Empty = 0x00,
-	HoldsLegalData = 0x01,
-}
-
-/**
- * @publicAPI
- * @deprecated Use {@link DoorLockLoggingRecordStatus} instead
- */
-export enum RecordStatus {
 	Empty = 0x00,
 	HoldsLegalData = 0x01,
 }
@@ -1039,12 +991,6 @@ export interface AssociationAddress {
 	nodeId: number;
 	endpoint?: number;
 }
-
-/**
- * @publicAPI
- * @deprecated use AssociationAddress instead
- */
-export type Association = AssociationAddress;
 
 /** @publicAPI */
 export interface EndpointAddress {

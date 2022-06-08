@@ -169,12 +169,40 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(unprovision?: boolean | "inactive"): Promise<boolean>
+async beginExclusion(options?: ExclusionOptions): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
 
-The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well. A value of `"inactive"` will keep the provisioning entry, but disable it, preventing automatic inclusion of the corresponding nodes.
+The optional `options` parameter specifies further actions like removing or disabling the node's Smart Start provisioning entries:
+
+<!-- #import ExclusionOptions from "zwave-js" -->
+
+```ts
+type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+```
+
+where the strategy is one of the following values:
+
+<!-- #import ExclusionStrategy from "zwave-js" with comments -->
+
+```ts
+enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+```
+
+> [!NOTE] The default behavior is disabling the provisioning entry.
 
 ### `stopExclusion`
 

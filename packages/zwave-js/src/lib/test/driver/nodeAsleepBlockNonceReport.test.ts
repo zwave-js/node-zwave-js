@@ -15,14 +15,16 @@ describe("regression tests", () => {
 
 	beforeEach(async () => {
 		({ driver, serialport } = await createAndStartDriver({
-			networkKey: Buffer.alloc(16, 0),
+			securityKeys: {
+				S0_Legacy: Buffer.alloc(16, 0),
+			},
 			attempts: {
 				sendData: 1,
 			},
 		}));
 
 		driver["_securityManager"] = new SecurityManager({
-			networkKey: driver.options.networkKey!,
+			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			ownNodeId: 1,
 			nonceTimeout: driver.options.timeouts.nonce,
 		});

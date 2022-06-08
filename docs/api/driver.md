@@ -707,6 +707,7 @@ interface ZWaveOptions extends ZWaveHostOptions {
 		 */
 		throttle: "fast" | "normal" | "slow";
 	};
+
 	/**
 	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
 	 */
