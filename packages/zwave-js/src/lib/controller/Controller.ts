@@ -234,6 +234,8 @@ import {
 } from "./ControllerStatistics";
 import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
+	ExclusionOptions,
+	ExclusionStrategy,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -1139,8 +1141,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _smartStartEnabled: boolean = false;
 
 	private _includeController: boolean = false;
-	private _unprovisionRemovedNode: boolean | "inactive" = false;
-
+	private _exclusionOptions: ExclusionOptions | undefined;
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
@@ -1509,11 +1510,27 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Starts the exclusion process of new nodes.
 	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
 	 *
+	 * @param options Influences the exclusion process and what happens with the Smart Start provisioning list.
+	 */
+	public async beginExclusion(options?: ExclusionOptions): Promise<boolean>;
+
+	/**
+	 * Starts the exclusion process of new nodes.
+	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
+	 *
 	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
 	 * A value of `"inactive"` will keep the provisioning entry, but disable it.
+	 *
+	 * @deprecated Use the overload with {@link ExclusionOptions} instead.
 	 */
 	public async beginExclusion(
-		unprovision: boolean | "inactive" = false,
+		unprovision: boolean | "inactive",
+	): Promise<boolean>;
+
+	public async beginExclusion(
+		options: ExclusionOptions | boolean | "inactive" = {
+			strategy: ExclusionStrategy.DisableProvisioningEntry,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1521,6 +1538,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
+		}
+
+		if (typeof options === "boolean") {
+			options = {
+				strategy: options
+					? ExclusionStrategy.Unprovision
+					: ExclusionStrategy.ExcludeOnly,
+			};
+		} else if (options === "inactive") {
+			options = {
+				strategy: ExclusionStrategy.DisableProvisioningEntry,
+			};
 		}
 
 		// Leave SmartStart listening mode so we can switch to exclusion mode
@@ -1541,7 +1570,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.controllerLog.print(
 				`The controller is now ready to remove nodes`,
 			);
-			this._unprovisionRemovedNode = unprovision;
+			this._exclusionOptions = options;
 			this.emit("exclusion started");
 			return true;
 		} catch (e) {
@@ -2713,16 +2742,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
 
 				// Avoid automatic re-inclusion using SmartStart if desired
-				if (this._unprovisionRemovedNode === true) {
-					this.unprovisionSmartStartNode(nodeId);
-				} else if (this._unprovisionRemovedNode === "inactive") {
-					const entry = this.getProvisioningEntryInternal(nodeId);
-					if (entry) {
-						entry.status = ProvisioningEntryStatus.Inactive;
-						this.provisionSmartStartNode(entry);
+				switch (this._exclusionOptions?.strategy) {
+					case ExclusionStrategy.Unprovision:
+						this.unprovisionSmartStartNode(nodeId);
+						break;
+
+					case ExclusionStrategy.DisableProvisioningEntry: {
+						const entry = this.getProvisioningEntryInternal(nodeId);
+						if (entry) {
+							entry.status = ProvisioningEntryStatus.Inactive;
+							this.provisionSmartStartNode(entry);
+						}
+						break;
 					}
 				}
-				this._unprovisionRemovedNode = false;
+
+				this._exclusionOptions = undefined;
 
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);

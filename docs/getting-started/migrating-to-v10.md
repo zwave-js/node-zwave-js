@@ -148,3 +148,27 @@ The CC implementations have been moved to their own package, `@zwave-js/cc`. Sim
 -   The `Controller.addAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
 -   The `Controller.removeAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
 -   The `networkKey` driver option has been removed. Use `securityKeys.S0_Legacy` instead.
+
+## Deprecated the `unprovision` argument to `Controller.beginExclusion`
+
+The current variant of the argument was confusing, so it has been deprecated. Use the new `ExclusionOptions` object parameter instead. Z-Wave JS now defaults to disabling the provisioning entry.
+
+```ts
+async beginExclusion(options?: ExclusionOptions): Promise<boolean>
+
+type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+
+enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+```
