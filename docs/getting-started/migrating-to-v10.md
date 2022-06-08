@@ -148,6 +148,10 @@ The CC implementations have been moved to their own package, `@zwave-js/cc`. Sim
 -   The `Controller.addAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
 -   The `Controller.removeAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
 -   The `networkKey` driver option has been removed. Use `securityKeys.S0_Legacy` instead.
+-   The `Controller.isSecondary` property was removed. Use `Controller.isPrimary` instead.
+-   The `Controller.isStaticUpdateController` property was renamed to `isSUC` to be in line with the similar `isSIS` property.
+-   The `Controller.isSlave` property was removed. Use the `Controller.nodeType` property to distinguish between `Controller` and `End Node` instead.
+-   The `GetSerialApiInitDataResponse.initVersion` property was removed. Use the `zwaveApiVersion` property instead, which gives additional context.
 
 ## Deprecated the `unprovision` argument to `Controller.beginExclusion`
 
@@ -172,3 +176,7 @@ enum ExclusionStrategy {
 	Unprovision,
 }
 ```
+
+## Further deprecations:
+
+-   The `"Routing End Node"` enum member for the `NodeType` enum was deprecated. Use the alternative `"End Node"` instead.

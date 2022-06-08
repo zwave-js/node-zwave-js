@@ -341,11 +341,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isPrimary;
 	}
 
-	/** @deprecated Use {@link isPrimary} instead */
-	public get isSecondary(): boolean | undefined {
-		if (typeof this._isPrimary === "boolean") return !this._isPrimary;
-	}
-
 	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
 	public get isUsingHomeIdFromOtherNetwork(): boolean | undefined {
 		return this._isUsingHomeIdFromOtherNetwork;
@@ -371,21 +366,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isSUC;
 	}
 
-	/** @deprecated Use {@link isSUC} instead */
-	public get isStaticUpdateController(): boolean | undefined {
-		return this._isSUC;
-	}
-
 	private _nodeType: NodeType | undefined;
 	public get nodeType(): NodeType | undefined {
 		return this._nodeType;
-	}
-
-	/** @deprecated Use the {@link nodeType} property to check for Controller vs. End Node instead */
-	public get isSlave(): boolean | undefined {
-		if (this._nodeType != undefined) {
-			return this._nodeType !== NodeType.Controller;
-		}
 	}
 
 	/** Checks if the SDK version is greater than the given one */
