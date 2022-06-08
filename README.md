@@ -17,7 +17,7 @@
   🔥 <a href="https://twitter.com/acdlite/status/974390255393505280" target="_blank">blazing</a> fast
 </p>
 
-## Intro
+## Intro! 
 
 Z-Wave is an amazing piece of technology, but it is difficult to get started with and develop for.  
 **It shouldn't be!** We've got you covered.
