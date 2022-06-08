@@ -65,7 +65,6 @@ export class GetSerialApiInitDataResponse extends Message {
 					version: apiVersion - 9,
 				};
 			}
-			this.initVersion = apiVersion;
 
 			const capabilities = this.payload[1];
 			if (this.zwaveApiVersion.kind === "official") {
@@ -113,7 +112,6 @@ export class GetSerialApiInitDataResponse extends Message {
 			}
 		} else {
 			this.zwaveApiVersion = options.zwaveApiVersion;
-			this.initVersion = 0; // unused
 			this.isPrimary = options.isPrimary;
 			this.nodeType = options.nodeType;
 			this.supportsTimers = options.supportsTimers;
@@ -123,8 +121,6 @@ export class GetSerialApiInitDataResponse extends Message {
 		}
 	}
 
-	/** @deprecated use {@link zwaveApiVersion} instead */
-	public readonly initVersion: number;
 	public zwaveApiVersion: ZWaveApiVersion;
 
 	public isPrimary: boolean;
