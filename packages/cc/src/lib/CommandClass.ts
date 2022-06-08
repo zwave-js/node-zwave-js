@@ -1057,8 +1057,6 @@ const METADATA_ccResponse = Symbol("ccResponse");
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
-const METADATA_API = Symbol("API");
-const METADATA_APIMap = Symbol("APIMap");
 
 export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
@@ -1069,8 +1067,6 @@ type APIConstructor = new (
 	applHost: ZWaveApplicationHost,
 	endpoint: IZWaveEndpoint | IVirtualEndpoint,
 ) => CCAPI;
-
-type APIMap = Map<CommandClasses, APIConstructor>;
 
 function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 	return JSON.stringify({ ccId, ccCommand });
@@ -1117,29 +1113,28 @@ const commandClassDecorator = createClassDecorator<
  */
 export const commandClass = commandClassDecorator.decorator;
 
+const apiDecorator = createClassDecorator<
+	CCAPI,
+	[cc: CommandClasses],
+	CommandClasses,
+	APIConstructor
+>({
+	name: "api",
+	valueFromArgs: (cc) => cc,
+});
+
 /**
  * @publicAPI
- * Retrieves the CC ID associated with a Z-Wave Command Class or CC API
+ * Defines the CC ID a CC API implementation belongs to
  */
-export function getCommandClass<T extends CommandClass | CCAPI>(
-	cc: T,
-): CommandClasses {
-	// get the class constructor
-	const constr = cc.constructor;
-	// retrieve the current metadata
-	const ret: CommandClasses | undefined =
-		cc instanceof CommandClass
-			? commandClassDecorator.lookupValueStatic(constr)
-			: cc instanceof CCAPI
-			? Reflect.getMetadata(METADATA_API, constr)
-			: undefined;
-	if (ret == undefined) {
-		throw new ZWaveError(
-			`No command class defined for ${constr.name}!`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
-	}
-	return ret;
+export const API = apiDecorator.decorator;
+
+/**
+ * @publicAPI
+ * Retrieves the CC API constructor that is defined for a Z-Wave CC ID
+ */
+export function getAPI(cc: CommandClasses): APIConstructor | undefined {
+	return apiDecorator.lookupConstructorByValue(cc);
 }
 
 /**
@@ -1178,6 +1173,31 @@ const implementedVersionDecorator = createClassDecorator<
 	name: "implementedVersion",
 	valueFromArgs: (version) => version,
 });
+
+/**
+ * @publicAPI
+ * Retrieves the CC ID associated with a Z-Wave Command Class or CC API
+ */
+export function getCommandClass<T extends CommandClass | CCAPI>(
+	cc: T,
+): CommandClasses {
+	// get the class constructor
+	const constr = cc.constructor;
+	// retrieve the current metadata
+	const ret: CommandClasses | undefined =
+		cc instanceof CommandClass
+			? commandClassDecorator.lookupValueStatic(constr)
+			: cc instanceof CCAPI
+			? apiDecorator.lookupValueStatic(constr)
+			: undefined;
+	if (ret == undefined) {
+		throw new ZWaveError(
+			`No command class defined for ${constr.name}!`,
+			ZWaveErrorCodes.CC_Invalid,
+		);
+	}
+	return ret;
+}
 
 /**
  * @publicAPI
@@ -1460,35 +1480,4 @@ export function getCCValueMetadata(
 	const map = metadata[cc] as Map<string | number, ValueMetadata>;
 	if (map.has(property)) return map.get(property)!;
 	return ValueMetadata.Any;
-}
-
-/**
- * @publicAPI
- * Defines the simplified API associated with a Z-Wave command class
- */
-export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
-	return (apiClass) => {
-		// and store the metadata
-		Reflect.defineMetadata(METADATA_API, cc, apiClass);
-
-		// also store a map in the CCAPI metadata for lookup.
-		const map = (Reflect.getMetadata(METADATA_APIMap, CCAPI) ||
-			new Map()) as APIMap;
-		map.set(cc, apiClass as unknown as APIConstructor);
-		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the CC API constructor that is defined for a Z-Wave command class
- */
-export function getAPI(cc: CommandClasses): APIConstructor | undefined {
-	// Retrieve the constructor map from the CCAPI class
-	const map = Reflect.getMetadata(METADATA_APIMap, CCAPI) as
-		| APIMap
-		| undefined;
-	const ret = map?.get(cc);
-
-	return ret;
 }
