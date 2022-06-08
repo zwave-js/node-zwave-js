@@ -61,7 +61,7 @@ Simply pass the driver instance as the first argument whenever you call these me
 
 **Note:** `getDefinedValueIDs` on the `ZWaveNode` class is **not** affected.
 
-# CC-specific methods to read certain values from cache are now static take additional arguments
+## CC-specific methods to read certain values from cache are now static take additional arguments
 
 Some CC implementations expose value-specific methods to read certain values from cache, for example `getNumValvesCached` on the `Irrigation CC`. Previously some of those were protected, some were public. Now all of them are public, `static` on the CC base class, take additional arguments and include `undefined` in the return type:
 
@@ -87,11 +87,11 @@ The same is true for several other similar methods on several other CCs. To use 
 + IrrigationCC.getNumValvesCached(driver, endpoint);
 ```
 
-# The `valueFormat` property in `ConfigurationCCBulkSetOptions` no longer defaults to the last stored format
+## The `valueFormat` property in `ConfigurationCCBulkSetOptions` no longer defaults to the last stored format
 
 Instead, if no `valueFormat` is passed, the default will be `SignedInteger` according to the specification. This change does not affect `setBulk` calls through the `commandClasses` API.
 
-# `CommandClass.interviewComplete` is no longer a property
+## `CommandClass.interviewComplete` is no longer a property
 
 Instead, two methods are used in its place:
 
@@ -111,7 +111,7 @@ if (!instance.isInterviewComplete(applHost)) {
 }
 ```
 
-# `NotificationCC.notificationMode` is no longer a property
+## `NotificationCC.notificationMode` is no longer a property
 
 Instead, a static method on the `Notification CC` is used in its place:
 
@@ -123,11 +123,60 @@ public static getNotificationMode(
 ): "push" | "pull" | undefined;
 ```
 
-# The max. send attempts in SendData messages now defaults to 1 instead of the driver option
+## The max. send attempts in SendData messages now defaults to 1 instead of the driver option
 
 If you're constructing `SendData[Bridge][Multicast]Request`s manually, the `maxSendAttempts` property now needs to be set if more than 1 attempts are desired.
 The driver does this automatically when using the `sendCommand` method, so most use cases should not be affected.
 
-# Removed the `"zwave-js/CommandClass"` sub-package export
+## Removed the `"zwave-js/CommandClass"` sub-package export
 
 The CC implementations have been moved to their own package, `@zwave-js/cc`. Simply replace the imports with the new package name.
+
+## Removed several deprecated method signatures, enums and properties
+
+-   The enum `EventTypes` did not give any context to which CC it belongs and has been removed. Use the `EntryControlEventTypes` enum instead.
+-   The enum `RecordStatus` did not give any context to which CC it belongs and has been removed. Use the `DoorLockLoggingRecordStatus` enum instead.
+-   The type `Association` was not specific enough and has been deprecated for a long time. It has now been removed. Use `AssociationAddress` instead.
+-   The `set` method overload of the `Configuration CC` API with 4 parameters has been removed. Use the overload the single options object instead.
+-   The `Controller.beginInclusion` method overload with the `boolean` parameter has been removed. Use the overload with the `InclusionOptions` object instead.
+    **NOTE:** If you do not pass this object, the new node will be included without security.
+-   The `Controller.replaceFailedNode` method overload accepting the node ID as the second parameter has been removed. Use the overload with the `ReplaceNodeOptions` object instead.
+    **NOTE:** If you do not pass this object, the new node will be included without security.
+-   The `Controller.getAssociationGroups` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
+-   The `Controller.getAssociations` method overload with the `nodeId: number` parameter has been removed. Use the overload with the `AssociationAddress` object instead.
+-   The `Controller.isAssociationAllowed` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+-   The `Controller.addAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+-   The `Controller.removeAssociations` method overload accepting the node ID as the first parameter has been removed. Use the overload which accepts an `AssociationAddress` object instead.
+-   The `networkKey` driver option has been removed. Use `securityKeys.S0_Legacy` instead.
+-   The `Controller.isSecondary` property was removed. Use `Controller.isPrimary` instead.
+-   The `Controller.isStaticUpdateController` property was renamed to `isSUC` to be in line with the similar `isSIS` property.
+-   The `Controller.isSlave` property was removed. Use the `Controller.nodeType` property to distinguish between `Controller` and `End Node` instead.
+-   The `GetSerialApiInitDataResponse.initVersion` property was removed. Use the `zwaveApiVersion` property instead, which gives additional context.
+
+## Deprecated the `unprovision` argument to `Controller.beginExclusion`
+
+The current variant of the argument was confusing, so it has been deprecated. Use the new `ExclusionOptions` object parameter instead. Z-Wave JS now defaults to disabling the provisioning entry.
+
+```ts
+async beginExclusion(options?: ExclusionOptions): Promise<boolean>
+
+type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+
+enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+```
+
+## Further deprecations:
+
+-   The `"Routing End Node"` enum member for the `NodeType` enum was deprecated. Use the alternative `"End Node"` instead.

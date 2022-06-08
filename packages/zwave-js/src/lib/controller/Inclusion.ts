@@ -45,6 +45,15 @@ export enum InclusionStrategy {
 	Security_S2,
 }
 
+export enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+
 export interface InclusionGrant {
 	/**
 	 * An array of security classes that are requested or to be granted.
@@ -114,6 +123,13 @@ export type InclusionOptionsInternal =
 			strategy: InclusionStrategy.SmartStart;
 			provisioning: PlannedProvisioningEntry;
 	  };
+
+export type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
 
 /** Options for replacing a node */
 export type ReplaceNodeOptions =
