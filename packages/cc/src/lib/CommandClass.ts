@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	createClassDecorator,
 	getCCName,
 	ICommandClass,
 	isZWaveError,
@@ -1060,7 +1061,6 @@ const METADATA_ccCommandMap = Symbol("ccCommandMap");
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
-const METADATA_version = Symbol("version");
 const METADATA_API = Symbol("API");
 const METADATA_APIMap = Symbol("APIMap");
 
@@ -1184,17 +1184,20 @@ export function getCCConstructor(
 	if (map != undefined) return map.get(cc);
 }
 
+const implementedVersionDecorator = createClassDecorator<
+	CommandClass,
+	[version: number],
+	number
+>({
+	name: "implementedVersion",
+	valueFromArgs: (version) => version,
+});
+
 /**
  * @publicAPI
  * Defines the implemented version of a Z-Wave command class
  */
-export function implementedVersion(
-	version: number,
-): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_version, version, ccClass);
-	};
-}
+export const implementedVersion = implementedVersionDecorator.decorator;
 
 /**
  * @publicAPI
@@ -1210,13 +1213,9 @@ export function getImplementedVersion<T extends CommandClass>(
 	} else {
 		constr = cc.constructor as Constructable<CommandClass>;
 	}
-	// retrieve the current metadata
-	let ret: number | undefined;
-	if (constr != undefined)
-		ret = Reflect.getMetadata(METADATA_version, constr);
-	if (ret == undefined) ret = 0;
 
-	return ret;
+	if (!constr) return 0;
+	return implementedVersionDecorator.lookupValueStatic(constr) ?? 0;
 }
 
 /**
@@ -1226,12 +1225,7 @@ export function getImplementedVersion<T extends CommandClass>(
 export function getImplementedVersionStatic<
 	T extends Constructable<CommandClass>,
 >(classConstructor: T): number {
-	// retrieve the current metadata
-	const ret =
-		(Reflect.getMetadata(METADATA_version, classConstructor) as
-			| number
-			| undefined) || 0;
-	return ret;
+	return implementedVersionDecorator.lookupValueStatic(classConstructor) ?? 0;
 }
 
 /**
