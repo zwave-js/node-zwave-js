@@ -2,11 +2,9 @@
 
 require("reflect-metadata");
 require("zwave-js");
-const { Message } = require("../packages/zwave-js/build/lib/message/Message");
+const { Message } = require("@zwave-js/serial");
 const { generateAuthKey, generateEncryptionKey } = require("@zwave-js/core");
-const {
-	isCommandClassContainer,
-} = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
+const { isCommandClassContainer } = require("@zwave-js/cc");
 const { ConfigManager } = require("@zwave-js/config");
 
 (async () => {
@@ -21,10 +19,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadIndicators();
 
 	// The data to decode
-	const data = Buffer.from(
-		"011b00a800011f129f03a70015820de70626870e785dafb9090300d543",
-		"hex",
-	);
+	const data = Buffer.from("010e00498414080421015e98845aeff3", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it

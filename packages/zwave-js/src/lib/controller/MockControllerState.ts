@@ -1,9 +1,9 @@
 export enum MockControllerStateKeys {
-	SendDataState = "sendDataState",
+	CommunicationState = "communicationState",
 }
 
-export enum MockControllerSendDataState {
+export enum MockControllerCommunicationState {
 	Idle,
 	Sending,
-	WaitingForAck,
+	WaitingForNode,
 }

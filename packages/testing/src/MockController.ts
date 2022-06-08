@@ -1,3 +1,4 @@
+import type { ICommandClass } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -91,7 +92,19 @@ export class MockController {
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
 
-	public readonly nodes = new Map<number, MockNode>();
+	private _nodes = new Map<number, MockNode>();
+	public get nodes(): ReadonlyMap<number, MockNode> {
+		return this._nodes;
+	}
+
+	public addNode(node: MockNode): void {
+		this._nodes.set(node.id, node);
+	}
+
+	public removeNode(node: MockNode): void {
+		this._nodes.delete(node.id);
+	}
+
 	public readonly host: ZWaveHost;
 
 	public readonly capabilities: MockControllerCapabilities;
@@ -233,6 +246,26 @@ export class MockController {
 	}
 
 	/**
+	 * Waits until the node sends a message matching the given predicate or a timeout has elapsed.
+	 *
+	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
+	 */
+	public async expectNodeCC<T extends ICommandClass = ICommandClass>(
+		node: MockNode,
+		timeout: number,
+		predicate: (cc: ICommandClass) => cc is T,
+	): Promise<T> {
+		const ret = await this.expectNodeFrame(
+			node,
+			timeout,
+			(msg): msg is MockZWaveRequestFrame & { payload: T } =>
+				msg.type === MockZWaveFrameType.Request &&
+				predicate(msg.payload),
+		);
+		return ret.payload;
+	}
+
+	/**
 	 * Waits until the controller sends an ACK frame or a timeout has elapsed.
 	 *
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
@@ -315,7 +348,9 @@ export class MockController {
 		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
 			ret = this.expectNodeACK(node, MOCK_FRAME_ACK_TIMEOUT);
 		}
-		void node.onControllerFrame(frame);
+		process.nextTick(() => {
+			void node.onControllerFrame(frame);
+		});
 		if (ret) return await ret;
 	}
 

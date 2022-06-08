@@ -1,7 +1,10 @@
+import { CommandClasses, type CommandClassInfo } from "@zwave-js/core";
 import { TimedExpectation } from "@zwave-js/shared";
+import { isDeepStrictEqual } from "util";
 import type { MockController } from "./MockController";
 import {
 	getDefaultMockNodeCapabilities,
+	MockEndpointCapabilities,
 	type MockNodeCapabilities,
 } from "./MockNodeCapabilities";
 import {
@@ -98,7 +101,9 @@ export class MockNode {
 		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
 			ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
 		}
-		void this.controller.onNodeFrame(this, frame);
+		process.nextTick(() => {
+			void this.controller.onNodeFrame(this, frame);
+		});
 		if (ret) return await ret;
 	}
 
@@ -146,6 +151,83 @@ export class MockNode {
 		);
 	}
 
+	/** Adds an endpoint to this mock node with the given capabilities. */
+	public addEndpoint(capabilities: Partial<MockEndpointCapabilities>): void {
+		const endpoint: MockEndpointCapabilities = {
+			genericDeviceClass:
+				capabilities.genericDeviceClass ??
+				this.capabilities.genericDeviceClass,
+			specificDeviceClass:
+				capabilities.specificDeviceClass ??
+				this.capabilities.specificDeviceClass,
+			commandClasses:
+				capabilities.commandClasses ?? this.capabilities.commandClasses,
+		};
+		this.capabilities.endpoints.push(endpoint);
+	}
+
+	/** Adds information about a CC to this mock node or one of its endpoints */
+	public addCC(
+		cc: CommandClasses,
+		info: Partial<CommandClassInfo>,
+		endpointIndex: number = 0,
+	): void {
+		// Endpoints cannot support Multi Channel CC
+		if (endpointIndex > 0 && cc === CommandClasses["Multi Channel"]) return;
+
+		let ccArray: typeof this.capabilities.commandClasses;
+		if (endpointIndex === 0) {
+			ccArray = this.capabilities.commandClasses;
+		} else {
+			const endpoint = this.capabilities.endpoints[endpointIndex - 1];
+			if (!endpoint) {
+				throw new Error(
+					`Endpoint ${endpointIndex} does not exist on mock node ${this.id}`,
+				);
+			}
+			ccArray = endpoint.commandClasses;
+		}
+
+		const original = ccArray.find((c) => c.ccId === cc);
+		const originalIndex = original ? ccArray.indexOf(original) : -1;
+		const updated: typeof original = Object.assign(
+			{ ccId: cc },
+			original ?? {
+				isSupported: false,
+				isControlled: false,
+				secure: false,
+				version: 0,
+			},
+			info,
+		);
+		if (!isDeepStrictEqual(original, updated)) {
+			if (originalIndex === -1) {
+				ccArray.push(updated);
+			} else {
+				ccArray[originalIndex] = updated;
+			}
+		}
+	}
+
+	/** Removes information about a CC from this mock node or one of its endpoints */
+	public removeCC(cc: CommandClasses, endpointIndex: number = 0): void {
+		let ccArray: typeof this.capabilities.commandClasses;
+		if (endpointIndex === 0) {
+			ccArray = this.capabilities.commandClasses;
+		} else {
+			const endpoint = this.capabilities.endpoints[endpointIndex - 1];
+			if (!endpoint) {
+				throw new Error(
+					`Endpoint ${endpointIndex} does not exist on mock node ${this.id}`,
+				);
+			}
+			ccArray = endpoint.commandClasses;
+		}
+
+		const originalIndex = ccArray.findIndex((c) => c.ccId === cc);
+		ccArray.splice(originalIndex, 1);
+	}
+
 	public defineBehavior(...behaviors: MockNodeBehavior[]): void {
 		// New behaviors must override existing ones, so we insert at the front of the array
 		this.behaviors.unshift(...behaviors);
@@ -155,7 +237,6 @@ export class MockNode {
 export interface MockNodeBehavior {
 	/** Gets called when a message from the controller is received. Return `true` to indicate that the message has been handled. */
 	onControllerFrame?: (
-		// host: ZWaveHost,
 		controller: MockController,
 		self: MockNode,
 		frame: MockZWaveFrame,

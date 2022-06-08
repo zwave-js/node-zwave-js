@@ -52,7 +52,7 @@ describe("lib/node/NodeInfo", () => {
 		});
 
 		it("should extract the correct BasicDeviceClass", () => {
-			expect(nup.basic).toBe(3);
+			expect(nup.basicDeviceClass).toBe(3);
 		});
 
 		it("should extract the correct GenericDeviceClass", () => {
