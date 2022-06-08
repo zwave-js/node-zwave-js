@@ -15,5 +15,5 @@ inputs:
     description: "(publish-pr task only) The PR that should be published"
     required: false
 runs:
-  using: "node12"
+  using: "node16"
   main: "main.js"
