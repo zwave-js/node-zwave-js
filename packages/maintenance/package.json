@@ -34,12 +34,12 @@
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
-    "@types/clipboardy": "^2",
+    "@types/clipboardy": "^2.0.1",
     "@types/fs-extra": "^9.0.13",
     "@types/globrex": "^0.1.2",
     "@types/jest": "^27.5.1",
     "@types/node": "^14.18.20",
-    "@types/prettier": "^2",
+    "@types/prettier": "^2.6.3",
     "@types/yargs": "^17.0.10",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
