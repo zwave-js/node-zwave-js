@@ -278,6 +278,7 @@ export class SupervisionCCGet extends SupervisionCC {
 				data: this.payload.slice(2),
 				fromEncapsulation: true,
 				encapCC: this,
+				origin: options.origin,
 			});
 		} else {
 			this.sessionId = getNextSessionId();

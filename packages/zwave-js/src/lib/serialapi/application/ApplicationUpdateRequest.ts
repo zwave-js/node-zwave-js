@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	encodeNodeUpdatePayload,
 	getCCName,
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -8,15 +9,18 @@ import {
 	parseNodeUpdatePayload,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	FunctionType,
+	gotDeserializationOptions,
 	Message,
+	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessageOptions,
 	MessageType,
 	messageTypes,
+	SuccessIndicator,
 } from "@zwave-js/serial";
-import { buffer2hex, getEnumMemberName, JSONObject } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 
 export enum ApplicationUpdateTypes {
 	SmartStart_NodeInfo_Received = 0x86, // An included smart start node has been powered up
@@ -30,66 +34,101 @@ export enum ApplicationUpdateTypes {
 	SUC_IdChanged = 0x10,
 }
 
+interface ApplicationUpdateRequestOptions extends MessageBaseOptions {
+	updateType: ApplicationUpdateTypes;
+}
+
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| ApplicationUpdateRequestOptions
+			| MessageDeserializationOptions,
 	) {
 		super(host, options);
-		this.updateType = this.payload[0];
-		this.payload = this.payload.slice(1);
 
-		let CommandConstructor: typeof ApplicationUpdateRequest | undefined;
-		switch (this.updateType) {
-			case ApplicationUpdateTypes.NodeInfo_Received:
-				CommandConstructor = ApplicationUpdateRequestNodeInfoReceived;
-				break;
-			case ApplicationUpdateTypes.NodeInfo_RequestFailed:
-				CommandConstructor =
-					ApplicationUpdateRequestNodeInfoRequestFailed;
-				break;
-			case ApplicationUpdateTypes.SmartStart_HomeId_Received:
-				CommandConstructor =
-					ApplicationUpdateRequestSmartStartHomeIDReceived;
-				break;
-		}
+		if (gotDeserializationOptions(options)) {
+			this.updateType = this.payload[0];
+			this.payload = this.payload.slice(1);
 
-		if (CommandConstructor && (new.target as any) !== CommandConstructor) {
-			return new CommandConstructor(host, options);
+			let CommandConstructor:
+				| (new (
+						host: ZWaveHost,
+						options: MessageDeserializationOptions,
+				  ) => ApplicationUpdateRequest)
+				| undefined;
+
+			switch (this.updateType) {
+				case ApplicationUpdateTypes.NodeInfo_Received:
+					CommandConstructor =
+						ApplicationUpdateRequestNodeInfoReceived;
+					break;
+				case ApplicationUpdateTypes.NodeInfo_RequestFailed:
+					CommandConstructor =
+						ApplicationUpdateRequestNodeInfoRequestFailed;
+					break;
+				case ApplicationUpdateTypes.SmartStart_HomeId_Received:
+					CommandConstructor =
+						ApplicationUpdateRequestSmartStartHomeIDReceived;
+					break;
+			}
+
+			if (
+				CommandConstructor &&
+				(new.target as any) !== CommandConstructor
+			) {
+				return new CommandConstructor(host, options);
+			}
+		} else {
+			this.updateType = options.updateType;
 		}
 	}
 
 	public readonly updateType: ApplicationUpdateTypes;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			Buffer.from([this.updateType]),
+			this.payload,
+		]);
+		return super.serialize();
+	}
+}
+
+interface ApplicationUpdateRequestNodeInfoReceivedOptions
+	extends MessageBaseOptions {
+	nodeInformation: NodeUpdatePayload;
 }
 
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options:
+			| MessageDeserializationOptions
+			| ApplicationUpdateRequestNodeInfoReceivedOptions,
 	) {
-		super(host, options);
-		this._nodeInformation = parseNodeUpdatePayload(this.payload);
-		this._nodeId = this._nodeInformation.nodeId;
-	}
-
-	private _nodeId: number;
-	public get nodeId(): number {
-		return this._nodeId;
-	}
-
-	private _nodeInformation: NodeUpdatePayload;
-	public get nodeInformation(): NodeUpdatePayload {
-		return this._nodeInformation;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			updateType: ApplicationUpdateTypes[this.updateType],
-			nodeId: this.nodeId,
-			nodeInformation: this.nodeInformation,
+		super(host, {
+			...options,
+			updateType: ApplicationUpdateTypes.NodeInfo_Received,
 		});
+
+		if (gotDeserializationOptions(options)) {
+			this.nodeInformation = parseNodeUpdatePayload(this.payload);
+			this.nodeId = this.nodeInformation.nodeId;
+		} else {
+			this.nodeId = options.nodeInformation.nodeId;
+			this.nodeInformation = options.nodeInformation;
+		}
+	}
+
+	public nodeId: number;
+	public nodeInformation: NodeUpdatePayload;
+
+	public serialize(): Buffer {
+		this.payload = encodeNodeUpdatePayload(this.nodeInformation);
+		return super.serialize();
 	}
 }
 
@@ -97,6 +136,13 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 	extends ApplicationUpdateRequest
 	implements SuccessIndicator
 {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
+		super(host, {
+			...options,
+			updateType: ApplicationUpdateTypes.NodeInfo_RequestFailed,
+		});
+	}
+
 	isOK(): boolean {
 		return false;
 	}

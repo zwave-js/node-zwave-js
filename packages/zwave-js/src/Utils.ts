@@ -31,3 +31,4 @@ export {
 	formatRouteHealthCheckSummary,
 	healthCheckRatingToWord,
 } from "./lib/node/HealthCheck";
+export { createDefaultBehaviors as createDefaultMockNodeBehaviors } from "./lib/node/MockNodeBehaviors";

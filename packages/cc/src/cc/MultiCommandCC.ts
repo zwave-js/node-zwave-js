@@ -105,6 +105,7 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 						),
 						fromEncapsulation: true,
 						encapCC: this,
+						origin: options.origin,
 					}),
 				);
 				offset += 1 + cmdLength;
