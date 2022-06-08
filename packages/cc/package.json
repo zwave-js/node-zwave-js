@@ -49,9 +49,10 @@
   },
   "scripts": {
     "b": "yarn ts maintenance/_build.ts",
-    "build": "yarn b prebuild && tsc -b tsconfig.build.json --verbose",
+    "prebuild": "yarn b prebuild",
+    "build": "yarn run prebuild && tsc -b tsconfig.build.json --verbose",
     "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn b prebuild && tsc -b tsconfig.build.json --watch --pretty",
+    "watch": "yarn run prebuild && tsc -b tsconfig.build.json --watch --pretty",
     "lint_zwave": "yarn b lint",
     "ts": "node -r esbuild-register"
   },
