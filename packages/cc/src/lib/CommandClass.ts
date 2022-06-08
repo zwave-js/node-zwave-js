@@ -1118,7 +1118,7 @@ const apiDecorator = createClassDecorator<
 	CommandClasses,
 	APIConstructor
 >({
-	name: "api",
+	name: "API",
 	valueFromArgs: (cc) => cc,
 });
 
@@ -1293,7 +1293,7 @@ const expectedCCResponseDecorator = createClassDecorator<
 		predicate?: CCResponsePredicate<CommandClass, CommandClass>;
 	}
 >({
-	name: "commandClass",
+	name: "expectedCCResponse",
 	valueFromArgs: (cc, predicate) => ({ cc, predicate }),
 	// We don't need reverse lookup
 	getConstructorLookupKey: () => "",
