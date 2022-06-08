@@ -1053,7 +1053,6 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 // =======================
 // use decorators to link command class values to actual command classes
 
-const METADATA_ccResponse = Symbol("ccResponse");
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
@@ -1279,6 +1278,27 @@ export function getCCCommandConstructor<TBase extends CommandClass>(
 	) as Constructable<TBase> | undefined;
 }
 
+const expectedCCResponseDecorator = createClassDecorator<
+	CommandClass,
+	[
+		cc:
+			| Constructable<CommandClass>
+			| DynamicCCResponse<CommandClass, CommandClass>,
+		predicate?: CCResponsePredicate<CommandClass, CommandClass>,
+	],
+	{
+		cc:
+			| Constructable<CommandClass>
+			| DynamicCCResponse<CommandClass, CommandClass>;
+		predicate?: CCResponsePredicate<CommandClass, CommandClass>;
+	}
+>({
+	name: "commandClass",
+	valueFromArgs: (cc, predicate) => ({ cc, predicate }),
+	// We don't need reverse lookup
+	getConstructorLookupKey: () => "",
+});
+
 /**
  * @publicAPI
  * Defines the expected response associated with a Z-Wave message
@@ -1290,9 +1310,7 @@ export function expectedCCResponse<
 	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
 ): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
-	};
+	return expectedCCResponseDecorator.decorator(cc as any, predicate as any);
 }
 
 /**
@@ -1302,13 +1320,7 @@ export function expectedCCResponse<
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
 ): typeof CommandClass | DynamicCCResponse<T> | undefined {
-	// get the class constructor
-	const constr = ccClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| { cc: typeof CommandClass | DynamicCCResponse<T> }
-		| undefined;
-	return ret?.cc;
+	return expectedCCResponseDecorator.lookupValue(ccClass)?.cc;
 }
 
 /**
@@ -1318,13 +1330,7 @@ export function getExpectedCCResponse<T extends CommandClass>(
 export function getCCResponsePredicate<T extends CommandClass>(
 	ccClass: T,
 ): CCResponsePredicate<T> | undefined {
-	// get the class constructor
-	const constr = ccClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| { predicate: CCResponsePredicate<T> | undefined }
-		| undefined;
-	return ret?.predicate;
+	return expectedCCResponseDecorator.lookupValue(ccClass)?.predicate;
 }
 
 /** @publicAPI */
