@@ -37,7 +37,7 @@ describe("lib/node/NodeInfo", () => {
 	describe("parseNodeUpdatePayload()", () => {
 		const payload = Buffer.from([
 			5, // NodeID
-			2, // CC list length
+			5, // remaining length
 			0x03, // Slave
 			0x01, // Remote Controller
 			0x02, // Portable Scene Controller
@@ -73,7 +73,7 @@ describe("lib/node/NodeInfo", () => {
 		it("correctly parses extended CCs", () => {
 			const payload = Buffer.from([
 				5, // NodeID
-				6, // CC list length
+				9, // remaining length
 				0x03,
 				0x01,
 				0x02, // Portable Scene Controller

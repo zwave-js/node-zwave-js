@@ -257,7 +257,6 @@ const handleSendData: MockControllerBehavior = {
 			// Wait for the ACK and notify the host
 			let ack = false;
 			try {
-				// eslint-disable-next-line @typescript-eslint/await-thenable
 				const ackResult = await ackPromise;
 				ack = !!ackResult?.ack;
 			} catch {
@@ -310,7 +309,7 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			const frame = createMockZWaveRequestFrame(command, {
 				ackRequested: false,
 			});
-			controller.sendToNode(node, frame);
+			void controller.sendToNode(node, frame);
 			const nodeInfoPromise = controller.expectNodeCC(
 				node,
 				MOCK_FRAME_ACK_TIMEOUT,
@@ -408,7 +407,6 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 				// Wait for the ACK and notify the host
 				try {
-					// eslint-disable-next-line @typescript-eslint/await-thenable
 					const ackResult = await ackPromise;
 					ack = !!ackResult?.ack;
 				} catch {
