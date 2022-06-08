@@ -284,12 +284,6 @@ function checkOptions(options: ZWaveOptions): void {
 		);
 	}
 	if (options.securityKeys != undefined) {
-		if (options.networkKey != undefined) {
-			throw new ZWaveError(
-				`The deprecated networkKey option may not be used together with the new securityKeys option!`,
-				ZWaveErrorCodes.Driver_InvalidOptions,
-			);
-		}
 		const keys = Object.entries(options.securityKeys);
 		for (let i = 0; i < keys.length; i++) {
 			const [secClass, key] = keys[i];
@@ -305,13 +299,6 @@ function checkOptions(options: ZWaveOptions): void {
 					ZWaveErrorCodes.Driver_InvalidOptions,
 				);
 			}
-		}
-	} else if (options.networkKey != undefined) {
-		if (options.networkKey.length !== 16) {
-			throw new ZWaveError(
-				`The network key must be a buffer with length 16!`,
-				ZWaveErrorCodes.Driver_InvalidOptions,
-			);
 		}
 	}
 	if (options.attempts.controller < 1 || options.attempts.controller > 3) {
@@ -1198,8 +1185,7 @@ export class Driver
 
 		// Set up the S0 security manager. We can only do that after the controller
 		// interview because we need to know the controller node id.
-		const S0Key =
-			this.options.securityKeys?.S0_Legacy ?? this.options.networkKey;
+		const S0Key = this.options.securityKeys?.S0_Legacy;
 		if (S0Key) {
 			this.driverLog.print(
 				"Network key for S0 configured, enabling S0 security manager...",
