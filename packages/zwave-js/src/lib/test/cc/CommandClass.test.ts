@@ -1,6 +1,7 @@
 import "@zwave-js/cc";
 import {
 	BasicCC,
+	BasicCCGet,
 	BasicCCSet,
 	CentralSceneCCNotification,
 	CentralSceneCommand,
@@ -111,7 +112,10 @@ describe("lib/commandclass/CommandClass => ", () => {
 			expect(getImplementedVersion(cc)).toBe(0);
 		});
 
-		it("should work with inheritance", () => {});
+		it("should work with inheritance", () => {
+			const cc = new BasicCCGet(host, { nodeId: 1 });
+			expect(getImplementedVersion(cc)).toBe(2);
+		});
 	});
 
 	describe("getImplementedVersionStatic()", () => {

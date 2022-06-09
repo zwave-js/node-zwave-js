@@ -12,14 +12,39 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { staticExtends } from "@zwave-js/shared/safe";
+import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
+import { isArray } from "alcalzone-shared/typeguards";
 import {
-	expectedCCResponse,
+	POLL_VALUE,
+	SET_VALUE,
+	throwMissingPropertyKey,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+} from "../../lib/API";
+import {
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../../lib/CommandClass";
-import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
+import { expectedCCResponse } from "../../lib/CommandClassDecorators";
+import {
+	ManufacturerProprietaryCC,
+	ManufacturerProprietaryCCAPI,
+} from "../ManufacturerProprietaryCC";
+import {
+	fibaroCC,
+	fibaroCCCommand,
+	getFibaroCCCommand,
+	getFibaroCCCommandConstructor,
+	getFibaroCCConstructor,
+	getFibaroCCId,
+	manufacturerId,
+	manufacturerProprietaryAPI,
+} from "./Decorators";
 
 export const MANUFACTURERID_FIBARO = 0x10f;
 
@@ -65,33 +90,194 @@ export enum FibaroCCIDs {
 	VenetianBlind = 0x26,
 }
 
+@manufacturerProprietaryAPI(MANUFACTURERID_FIBARO)
+export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async fibaroVenetianBlindsGet() {
+		const cc = new FibaroVenetianBlindCCGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.applHost.sendCommand<FibaroVenetianBlindCCReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, ["position", "tilt"]);
+		}
+	}
+
+	@validateArgs()
+	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			position: value,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
+	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tilt: value,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		if (propertyKey === "venetianBlindsPosition") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetPosition(value);
+		} else if (propertyKey === "venetianBlindsTilt") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetTilt(value);
+		} else {
+			// unsupported property key, ignore...
+			return;
+		}
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property, propertyKey }, value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		} else if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		}
+
+		switch (propertyKey) {
+			case "venetianBlindsPosition":
+				return (await this.fibaroVenetianBlindsGet())?.position;
+			case "venetianBlindsTilt":
+				return (await this.fibaroVenetianBlindsGet())?.tilt;
+			default:
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+	};
+}
+
+@manufacturerId(MANUFACTURERID_FIBARO)
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
 		host: ZWaveHost,
 		options: CommandClassDeserializationOptions | CCCommandOptions,
 	) {
+		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			super(host, options);
 			validatePayload(this.payload.length >= 2);
 			this.fibaroCCId = this.payload[0];
 			this.fibaroCCCommand = this.payload[1];
-			this.payload = this.payload.slice(2);
 
+			const FibaroConstructor = getFibaroCCCommandConstructor(
+				this.fibaroCCId,
+				this.fibaroCCCommand,
+			);
 			if (
-				this.fibaroCCId === FibaroCCIDs.VenetianBlind &&
-				!staticExtends(new.target, FibaroVenetianBlindCC)
+				FibaroConstructor &&
+				(new.target as any) !== FibaroConstructor
 			) {
-				return new FibaroVenetianBlindCC(host, options);
+				return new FibaroConstructor(host, options);
 			}
+
+			this.payload = this.payload.slice(2);
 		} else {
-			super(host, { ...options, manufacturerId: MANUFACTURERID_FIBARO });
+			this.fibaroCCId = getFibaroCCId(this);
+			this.fibaroCCCommand = getFibaroCCCommand(this);
 		}
 	}
 
-	public fibaroCCId!: number; // This is either deserialized or set by a subclass
-	public fibaroCCCommand!: number;
+	public fibaroCCId?: number;
+	public fibaroCCCommand?: number;
+
+	private getSupportedFibaroCCIDs(
+		applHost: ZWaveApplicationHost,
+	): FibaroCCIDs[] {
+		const node = this.getNode(applHost)!;
+
+		const proprietaryConfig = applHost.getDeviceConfig?.(
+			node.id,
+		)?.proprietary;
+		if (proprietaryConfig && isArray(proprietaryConfig.fibaroCCs)) {
+			return proprietaryConfig.fibaroCCs as FibaroCCIDs[];
+		}
+
+		return [];
+	}
+
+	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+		const node = this.getNode(applHost)!;
+
+		// Iterate through all supported Fibaro CCs and interview them
+		const supportedFibaroCCIDs = this.getSupportedFibaroCCIDs(applHost);
+		for (const ccId of supportedFibaroCCIDs) {
+			const SubConstructor = getFibaroCCConstructor(ccId);
+			if (SubConstructor) {
+				const instance = new SubConstructor(this.host, {
+					nodeId: node.id,
+				});
+				await instance.interview(applHost);
+			}
+		}
+	}
+
+	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
+		const node = this.getNode(applHost)!;
+
+		// Iterate through all supported Fibaro CCs and let them refresh their values
+		const supportedFibaroCCIDs = this.getSupportedFibaroCCIDs(applHost);
+		for (const ccId of supportedFibaroCCIDs) {
+			const SubConstructor = getFibaroCCConstructor(ccId);
+			if (SubConstructor) {
+				const instance = new SubConstructor(this.host, {
+					nodeId: node.id,
+				});
+				await instance.refreshValues(applHost);
+			}
+		}
+	}
 
 	public serialize(): Buffer {
+		if (this.fibaroCCId == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Fibaro CC without a Fibaro CC ID",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		} else if (this.fibaroCCCommand == undefined) {
+			throw new ZWaveError(
+				"Cannot serialize a Fibaro CC without a Fibaro CC Command",
+				ZWaveErrorCodes.CC_Invalid,
+			);
+		}
 		this.payload = Buffer.concat([
 			Buffer.from([this.fibaroCCId, this.fibaroCCCommand]),
 			this.payload,
@@ -106,7 +292,9 @@ export enum FibaroVenetianBlindCCCommand {
 	Report = 0x03,
 }
 
+@fibaroCC(FibaroCCIDs.VenetianBlind)
 export class FibaroVenetianBlindCC extends FibaroCC {
+	declare fibaroCCId: FibaroCCIDs.VenetianBlind;
 	declare fibaroCCCommand: FibaroVenetianBlindCCCommand;
 
 	public constructor(
@@ -131,14 +319,12 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: `Interviewing ${this.ccName}...`,
+			message: `Interviewing Fibaro Venetian Blind CC...`,
 			direction: "none",
 		});
 
+		// Nothing special, just get the values
 		await this.refreshValues(applHost);
-
-		// Remember that the interview is complete
-		this.setInterviewComplete(applHost, true);
 	}
 
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
@@ -180,6 +366,7 @@ export type FibaroVenetianBlindCCSetOptions = CCCommandOptions &
 		  }
 	);
 
+@fibaroCCCommand(FibaroVenetianBlindCCCommand.Set)
 export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	public constructor(
 		host: ZWaveHost,
@@ -232,6 +419,7 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 }
 
+@fibaroCCCommand(FibaroVenetianBlindCCCommand.Report)
 export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public constructor(
 		host: ZWaveHost,
@@ -318,6 +506,7 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	}
 }
 
+@fibaroCCCommand(FibaroVenetianBlindCCCommand.Get)
 @expectedCCResponse(FibaroVenetianBlindCCReport)
 export class FibaroVenetianBlindCCGet extends FibaroVenetianBlindCC {
 	public constructor(

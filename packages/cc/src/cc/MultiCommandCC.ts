@@ -4,15 +4,17 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	CommandClass,
-	commandClass,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { MultiCommandCommand } from "../lib/_Types";
 
 // TODO: Handle this command when received

@@ -1,11 +1,11 @@
-import type { CommandClass, Constructable } from "@zwave-js/cc";
+import type { CCConstructor, CommandClass } from "@zwave-js/cc";
 import { entries } from "alcalzone-shared/objects";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
 /** Performs assertions on a sendMessage call argument that's supposed to be a CC */
 export function assertCC<
-	TConst extends Constructable<CommandClass> = Constructable<CommandClass>,
+	TConst extends CCConstructor<CommandClass> = CCConstructor<CommandClass>,
 >(
 	callArg: any,
 	options: {

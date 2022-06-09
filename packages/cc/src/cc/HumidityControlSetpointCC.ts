@@ -26,17 +26,19 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import {
 	HumidityControlSetpointCapabilities,
 	HumidityControlSetpointCommand,
