@@ -18,7 +18,7 @@ import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
-type Constructable<T extends Message> = new (
+export type MessageConstructor<T extends Message> = new (
 	host: ZWaveHost,
 	options?: MessageOptions,
 ) => T;
@@ -230,7 +230,7 @@ export class Message {
 	 * Retrieves the correct constructor for the next message in the given Buffer.
 	 * It is assumed that the buffer has been checked beforehand
 	 */
-	public static getConstructor(data: Buffer): Constructable<Message> {
+	public static getConstructor(data: Buffer): MessageConstructor<Message> {
 		return getMessageConstructor(data[2], data[3]) || Message;
 	}
 
@@ -452,7 +452,7 @@ const messageTypesDecorator = createReflectionDecorator<
 	Message,
 	[messageType: MessageType, functionType: FunctionType],
 	{ messageType: MessageType; functionType: FunctionType },
-	Constructable<Message>
+	MessageConstructor<Message>
 >({
 	name: "messageTypes",
 	valueFromArgs: (messageType, functionType) => ({
@@ -481,7 +481,7 @@ export function getMessageType<T extends Message>(
 /**
  * Retrieves the message type defined for a Z-Wave message class
  */
-export function getMessageTypeStatic<T extends Constructable<Message>>(
+export function getMessageTypeStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): MessageType | undefined {
 	return messageTypesDecorator.lookupValueStatic(classConstructor)
@@ -500,7 +500,7 @@ export function getFunctionType<T extends Message>(
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionTypeStatic<T extends Constructable<Message>>(
+export function getFunctionTypeStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): FunctionType | undefined {
 	return messageTypesDecorator.lookupValueStatic(classConstructor)
@@ -513,7 +513,7 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 function getMessageConstructor(
 	messageType: MessageType,
 	functionType: FunctionType,
-): Constructable<Message> | undefined {
+): MessageConstructor<Message> | undefined {
 	return messageTypesDecorator.lookupConstructorByKey(
 		getMessageTypeMapKey(messageType, functionType),
 	);
@@ -523,7 +523,7 @@ const expectedResponseDecorator = createReflectionDecorator<
 	Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
-	Constructable<Message>
+	MessageConstructor<Message>
 >({
 	name: "expectedResponse",
 	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
@@ -547,7 +547,9 @@ export function getExpectedResponse<T extends Message>(
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedResponseStatic<T extends Constructable<Message>>(
+export function getExpectedResponseStatic<
+	T extends MessageConstructor<Message>,
+>(
 	classConstructor: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
 	return expectedResponseDecorator.lookupValueStatic(classConstructor);
@@ -557,7 +559,7 @@ const expectedCallbackDecorator = createReflectionDecorator<
 	Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
-	Constructable<Message>
+	MessageConstructor<Message>
 >({
 	name: "expectedCallback",
 	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
@@ -585,7 +587,9 @@ export function getExpectedCallback<T extends Message>(
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedCallbackStatic<T extends Constructable<Message>>(
+export function getExpectedCallbackStatic<
+	T extends MessageConstructor<Message>,
+>(
 	classConstructor: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
 	return expectedCallbackDecorator.lookupValueStatic(classConstructor);
@@ -618,7 +622,7 @@ export function getDefaultPriority<T extends Message>(
 /**
  * Retrieves the default priority defined for a Z-Wave message class
  */
-export function getDefaultPriorityStatic<T extends Constructable<Message>>(
+export function getDefaultPriorityStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): MessagePriority | undefined {
 	return priorityDecorator.lookupValueStatic(classConstructor);

@@ -16,9 +16,12 @@ enum S2ExtensionType {
 const METADATA_S2ExtensionMap = Symbol("S2ExtensionMap");
 const METADATA_S2Extension = Symbol("S2Extension");
 
-type S2ExtensionMap = Map<S2ExtensionType, Constructable<Security2Extension>>;
+type S2ExtensionMap = Map<
+	S2ExtensionType,
+	Security2ExtensionConstructor<Security2Extension>
+>;
 
-export type Constructable<T extends Security2Extension> =
+export type Security2ExtensionConstructor<T extends Security2Extension> =
 	typeof Security2Extension & {
 		new (options: Security2ExtensionOptions): T;
 	};
@@ -28,7 +31,7 @@ export type Constructable<T extends Security2Extension> =
  */
 export function getS2ExtensionConstructor(
 	type: S2ExtensionType,
-): Constructable<Security2Extension> | undefined {
+): Security2ExtensionConstructor<Security2Extension> | undefined {
 	// Retrieve the constructor map from the CommandClass class
 	const map = Reflect.getMetadata(
 		METADATA_S2ExtensionMap,
@@ -51,7 +54,7 @@ export function extensionType(
 			new Map();
 		map.set(
 			type,
-			extensionClass as unknown as Constructable<Security2Extension>,
+			extensionClass as unknown as Security2ExtensionConstructor<Security2Extension>,
 		);
 		Reflect.defineMetadata(
 			METADATA_S2ExtensionMap,
@@ -157,7 +160,7 @@ export class Security2Extension {
 	 */
 	public static getConstructor(
 		data: Buffer,
-	): Constructable<Security2Extension> {
+	): Security2ExtensionConstructor<Security2Extension> {
 		const type = data[1] & 0b11_1111;
 		return getS2ExtensionConstructor(type) ?? Security2Extension;
 	}

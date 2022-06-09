@@ -8,7 +8,6 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { pick, staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import { isArray } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -33,10 +32,18 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
-	FibaroVenetianBlindCCReport,
-	MANUFACTURERID_FIBARO,
-} from "./manufacturerProprietary/FibaroCC";
+	getManufacturerId,
+	getManufacturerProprietaryCCConstructor,
+} from "./manufacturerProprietary/Decorators";
+import type { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/FibaroCC";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
+
+export type ManufacturerProprietaryCCConstructor<
+	T extends typeof ManufacturerProprietaryCC = typeof ManufacturerProprietaryCC,
+> = T & {
+	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
+	new (host: ZWaveHost, options: any): InstanceType<T>;
+};
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
@@ -180,7 +187,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 }
 
 export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
-	manufacturerId: number;
+	manufacturerId?: number;
 	expectsResponse?: boolean;
 }
 
@@ -218,12 +225,11 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
 			this.manufacturerId =
 				((this.ccCommand as unknown as number) << 8) + this.payload[0];
-			this.payload = this.payload.slice(1);
 			// Incoming messages expect no response
 			this.expectsResponse = false;
 
 			// Try to parse the proprietary command
-			const PCConstructor = getProprietaryCCConstructor(
+			const PCConstructor = getManufacturerProprietaryCCConstructor(
 				this.manufacturerId,
 			);
 			if (
@@ -233,72 +239,79 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			) {
 				return new PCConstructor(host, options);
 			}
+
+			// If the constructor is correct, update the payload for subclass deserialization
+			this.payload = this.payload.slice(1);
 		} else {
-			this.manufacturerId = options.manufacturerId;
+			this.manufacturerId =
+				options.manufacturerId ?? getManufacturerId(this);
+
 			this.expectsResponse = !!options.expectsResponse;
+
 			// To use this CC, a manufacturer ID must exist in the value DB
 			// If it doesn't, the interview procedure will throw.
 		}
 	}
 
-	public manufacturerId: number;
+	public manufacturerId?: number;
 
 	/** @internal */
 	public readonly expectsResponse: boolean;
 
-	private assertManufacturerIdIsSet(): void {
+	private getManufacturerIdOrThrow(): number {
 		if (this.manufacturerId == undefined) {
 			throw new ZWaveError(
 				`To use an instance of ManufacturerProprietaryCC, the manufacturer ID must be stored in the value DB`,
 				ZWaveErrorCodes.ManufacturerProprietaryCC_NoManufacturerId,
 			);
 		}
+		return this.manufacturerId;
 	}
 
 	public serialize(): Buffer {
-		this.assertManufacturerIdIsSet();
+		const manufacturerId = this.getManufacturerIdOrThrow();
 		// ManufacturerProprietaryCC has no CC command, so the first byte
 		// is stored in ccCommand
-		super.ccCommand = (this.manufacturerId >>> 8) & 0xff;
+		super.ccCommand = (manufacturerId >>> 8) & 0xff;
 		// The 2nd byte is in the payload
 		this.payload = Buffer.concat([
 			Buffer.from([
 				// 2nd byte of manufacturerId
-				this.manufacturerId & 0xff,
+				manufacturerId & 0xff,
 			]),
 			this.payload,
 		]);
 		return super.serialize();
 	}
 
+	public createSpecificInstance(): ManufacturerProprietaryCC | undefined {
+		// Try to defer to the correct subclass
+		if (this.manufacturerId != undefined) {
+			const PCConstructor = getManufacturerProprietaryCCConstructor(
+				this.manufacturerId,
+			);
+			if (PCConstructor) {
+				return new PCConstructor(this.host, {
+					nodeId: this.nodeId,
+					endpoint: this.endpointIndex,
+				});
+			}
+		}
+	}
+
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
+		const node = this.getNode(applHost)!;
+
 		// Read the manufacturer ID from Manufacturer Specific CC
 		this.manufacturerId = this.getValueDB(applHost).getValue<number>(
 			getManufacturerIdValueId(),
 		)!;
-		this.assertManufacturerIdIsSet();
-
-		const node = this.getNode(applHost)!;
-		// TODO: Can this be refactored?
-		const proprietaryConfig = applHost.getDeviceConfig?.(
-			node.id,
-		)?.proprietary;
-		if (
-			this.manufacturerId === 0x010f /* Fibaro */ &&
-			proprietaryConfig &&
-			isArray(proprietaryConfig.fibaroCCs) &&
-			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
-		) {
-			const FibaroVenetianBlindCC = (
-				require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC")
-			).FibaroVenetianBlindCC;
-			await new FibaroVenetianBlindCC(this.host, {
-				nodeId: this.nodeId,
-				endpoint: this.endpointIndex,
-			}).interview(applHost);
+		const pcInstance = this.createSpecificInstance();
+		if (pcInstance) {
+			await pcInstance.interview(applHost);
 		} else {
 			applHost.controllerLog.logNode(node.id, {
-				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
+				message: `${this.constructor.name}: skipping interview refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
 			});
 		}
@@ -308,44 +321,22 @@ export class ManufacturerProprietaryCC extends CommandClass {
 	}
 
 	public async refreshValues(applHost: ZWaveApplicationHost): Promise<void> {
-		// Read the manufacturer ID from Manufacturer Specific CC
-		this.manufacturerId = this.getValueDB(applHost).getValue<number>(
-			getManufacturerIdValueId(),
-		)!;
-		this.assertManufacturerIdIsSet();
-
 		const node = this.getNode(applHost)!;
-		// TODO: Can this be refactored?
-		const proprietaryConfig = applHost.getDeviceConfig?.(
-			node.id,
-		)?.proprietary;
-		if (
-			this.manufacturerId === 0x010f /* Fibaro */ &&
-			proprietaryConfig &&
-			isArray(proprietaryConfig.fibaroCCs) &&
-			proprietaryConfig.fibaroCCs.includes(0x26 /* Venetian Blinds */)
-		) {
-			const FibaroVenetianBlindCC = (
-				require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC")
-			).FibaroVenetianBlindCC;
-			await new FibaroVenetianBlindCC(this.host, {
-				nodeId: this.nodeId,
-				endpoint: this.endpointIndex,
-			}).refreshValues(applHost);
+
+		if (this.manufacturerId == undefined) {
+			// Read the manufacturer ID from Manufacturer Specific CC
+			this.manufacturerId = this.getValueDB(applHost).getValue<number>(
+				getManufacturerIdValueId(),
+			)!;
+		}
+		const pcInstance = this.createSpecificInstance();
+		if (pcInstance) {
+			await pcInstance.refreshValues(applHost);
 		} else {
 			applHost.controllerLog.logNode(node.id, {
-				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
+				message: `${this.constructor.name}: skipping value refresh because the matching proprietary CC is not implemented...`,
 				direction: "none",
 			});
 		}
-	}
-}
-
-function getProprietaryCCConstructor(
-	manufacturerId: number,
-): typeof ManufacturerProprietaryCC | undefined {
-	switch (manufacturerId) {
-		case MANUFACTURERID_FIBARO:
-			return require("./manufacturerProprietary/FibaroCC").FibaroCC;
 	}
 }

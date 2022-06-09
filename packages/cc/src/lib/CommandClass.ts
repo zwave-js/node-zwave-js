@@ -313,7 +313,7 @@ export class CommandClass implements ICommandClass {
 	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
 	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
 	 */
-	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
+	public static getConstructor(ccData: Buffer): CCConstructor<CommandClass> {
 		// Encapsulated CCs don't have the two header bytes
 		const cc = CommandClass.getCommandClass(ccData);
 		const ret = getCCConstructor(cc);
@@ -394,7 +394,7 @@ export class CommandClass implements ICommandClass {
 	public static createInstanceUnchecked<T extends CommandClass>(
 		host: ZWaveHost,
 		endpoint: IZWaveEndpoint,
-		cc: CommandClasses | Constructable<T>,
+		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
 		if (Constructor) {
@@ -1063,7 +1063,7 @@ const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
 
-export type Constructable<T extends CommandClass> = typeof CommandClass & {
+export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (host: ZWaveHost, options: any): T;
 };
@@ -1077,7 +1077,7 @@ export type DynamicCCResponse<
 	TReceived extends CommandClass = CommandClass,
 > = (
 	sentCC: TSent,
-) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
+) => CCConstructor<TReceived> | CCConstructor<TReceived>[] | undefined;
 
 /** @publicAPI */
 export type CCResponseRole =

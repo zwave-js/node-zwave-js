@@ -8,9 +8,9 @@ import {
 import type { TypedClassDecorator } from "@zwave-js/shared";
 import type { APIConstructor, CCAPI } from "./API";
 import type {
+	CCConstructor,
 	CCResponsePredicate,
 	CommandClass,
-	Constructable,
 	DynamicCCResponse,
 } from "./CommandClass";
 
@@ -18,7 +18,7 @@ const CCAndCommandDecorator = createReflectionDecoratorPair<
 	CommandClass,
 	[ccId: CommandClasses],
 	[ccCommand: number],
-	Constructable<CommandClass>
+	CCConstructor<CommandClass>
 >({ superName: "ccId", subName: "ccCommand" });
 
 /**
@@ -47,16 +47,16 @@ export const getCCCommand = CCAndCommandDecorator.lookupSubValue;
 
 /**
  * @publicAPI
- * Looks up the command class constructor for a given command class type and function type
+ * Looks up the command class constructor for a given CC ID and command
  */
 export const getCCCommandConstructor =
 	CCAndCommandDecorator.lookupSubConstructor;
 
 /**
  * @publicAPI
- * Retrieves the function type defined for a Z-Wave message class
+ * Retrieves the CC ID defined for a Z-Wave Command Class
  */
-export function getCommandClassStatic<T extends Constructable<CommandClass>>(
+export function getCommandClassStatic<T extends CCConstructor<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
@@ -139,11 +139,11 @@ export function getImplementedVersion<T extends CommandClass>(
 	cc: T | CommandClasses,
 ): number {
 	// get the class constructor
-	let constr: Constructable<CommandClass> | undefined;
+	let constr: CCConstructor<CommandClass> | undefined;
 	if (typeof cc === "number") {
 		constr = getCCConstructor(cc);
 	} else {
-		constr = cc.constructor as Constructable<CommandClass>;
+		constr = cc.constructor as CCConstructor<CommandClass>;
 	}
 
 	if (!constr) return 0;
@@ -155,7 +155,7 @@ export function getImplementedVersion<T extends CommandClass>(
  * Retrieves the implemented version defined for a Z-Wave command class
  */
 export function getImplementedVersionStatic<
-	T extends Constructable<CommandClass>,
+	T extends CCConstructor<CommandClass>,
 >(classConstructor: T): number {
 	return implementedVersionDecorator.lookupValueStatic(classConstructor) ?? 0;
 }
@@ -164,13 +164,13 @@ const expectedCCResponseDecorator = createReflectionDecorator<
 	CommandClass,
 	[
 		cc:
-			| Constructable<CommandClass>
+			| CCConstructor<CommandClass>
 			| DynamicCCResponse<CommandClass, CommandClass>,
 		predicate?: CCResponsePredicate<CommandClass, CommandClass>,
 	],
 	{
 		cc:
-			| Constructable<CommandClass>
+			| CCConstructor<CommandClass>
 			| DynamicCCResponse<CommandClass, CommandClass>;
 		predicate?: CCResponsePredicate<CommandClass, CommandClass>;
 	}
@@ -189,7 +189,7 @@ export function expectedCCResponse<
 	TSent extends CommandClass,
 	TReceived extends CommandClass,
 >(
-	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
+	cc: CCConstructor<TReceived> | DynamicCCResponse<TSent, TReceived>,
 	predicate?: CCResponsePredicate<TSent, TReceived>,
 ): TypedClassDecorator<CommandClass> {
 	return expectedCCResponseDecorator.decorator(cc as any, predicate as any);

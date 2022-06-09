@@ -220,6 +220,18 @@ export {
 } from "./LanguageCC";
 export { LockCC, LockCCGet, LockCCReport, LockCCSet } from "./LockCC";
 export {
+	fibaroCC,
+	fibaroCCCommand,
+	getFibaroCCCommand,
+	getFibaroCCCommandConstructor,
+	getFibaroCCConstructor,
+	getFibaroCCId,
+	getManufacturerId,
+	getManufacturerIdStatic,
+	getManufacturerProprietaryCCConstructor,
+	manufacturerId,
+} from "./manufacturerProprietary/Decorators";
+export {
 	FibaroCC,
 	FibaroVenetianBlindCC,
 	FibaroVenetianBlindCCGet,
