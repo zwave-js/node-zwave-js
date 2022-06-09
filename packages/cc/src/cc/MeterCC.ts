@@ -37,18 +37,20 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
-	getCommandClass,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	getCommandClass,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { MeterCommand, RateType } from "../lib/_Types";
 
 function toPropertyKey(

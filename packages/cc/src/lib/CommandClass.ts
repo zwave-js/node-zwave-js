@@ -3,7 +3,6 @@ import {
 	getCCName,
 	ICommandClass,
 	isZWaveError,
-	IVirtualEndpoint,
 	IZWaveEndpoint,
 	IZWaveNode,
 	MessageOrCCLogEntry,
@@ -28,10 +27,18 @@ import {
 	JSONObject,
 	num2hex,
 	staticExtends,
-	TypedClassDecorator,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI } from "./API";
+import {
+	getCCCommand,
+	getCCCommandConstructor,
+	getCCConstructor,
+	getCCResponsePredicate,
+	getCommandClass,
+	getCommandClassStatic,
+	getExpectedCCResponse,
+	getImplementedVersion,
+} from "./CommandClassDecorators";
 import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
@@ -306,7 +313,7 @@ export class CommandClass implements ICommandClass {
 	 * Retrieves the correct constructor for the CommandClass in the given Buffer.
 	 * It is assumed that the buffer only contains the serialized CC. This throws if the CC is not implemented.
 	 */
-	public static getConstructor(ccData: Buffer): Constructable<CommandClass> {
+	public static getConstructor(ccData: Buffer): CCConstructor<CommandClass> {
 		// Encapsulated CCs don't have the two header bytes
 		const cc = CommandClass.getCommandClass(ccData);
 		const ret = getCCConstructor(cc);
@@ -387,7 +394,7 @@ export class CommandClass implements ICommandClass {
 	public static createInstanceUnchecked<T extends CommandClass>(
 		host: ZWaveHost,
 		endpoint: IZWaveEndpoint,
-		cc: CommandClasses | Constructable<T>,
+		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const Constructor = typeof cc === "number" ? getCCConstructor(cc) : cc;
 		if (Constructor) {
@@ -1052,34 +1059,14 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 // =======================
 // use decorators to link command class values to actual command classes
 
-const METADATA_commandClass = Symbol("commandClass");
-const METADATA_commandClassMap = Symbol("commandClassMap");
-const METADATA_ccResponse = Symbol("ccResponse");
-const METADATA_ccCommand = Symbol("ccCommand");
-const METADATA_ccCommandMap = Symbol("ccCommandMap");
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
 const METADATA_ccValueMeta = Symbol("ccValueMeta");
-const METADATA_version = Symbol("version");
-const METADATA_API = Symbol("API");
-const METADATA_APIMap = Symbol("APIMap");
 
-export type Constructable<T extends CommandClass> = typeof CommandClass & {
+export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (host: ZWaveHost, options: any): T;
 };
-type APIConstructor = new (
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
-) => CCAPI;
-
-type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
-type CCCommandMap = Map<string, Constructable<CommandClass>>;
-type APIMap = Map<CommandClasses, APIConstructor>;
-
-function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
-	return JSON.stringify({ ccId, ccCommand });
-}
 
 /**
  * @publicAPI
@@ -1090,7 +1077,7 @@ export type DynamicCCResponse<
 	TReceived extends CommandClass = CommandClass,
 > = (
 	sentCC: TSent,
-) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
+) => CCConstructor<TReceived> | CCConstructor<TReceived>[] | undefined;
 
 /** @publicAPI */
 export type CCResponseRole =
@@ -1105,241 +1092,6 @@ export type CCResponsePredicate<
 	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass,
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
-
-/**
- * @publicAPI
- * Defines the command class associated with a Z-Wave message
- */
-export function commandClass<T extends CommandClass>(
-	cc: CommandClasses,
-): TypedClassDecorator<T> {
-	return (messageClass) => {
-		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
-
-		// also store a map in the CommandClass metadata for lookup.
-		const map: CommandClassMap =
-			Reflect.getMetadata(METADATA_commandClassMap, CommandClass) ||
-			new Map();
-		map.set(cc, messageClass as unknown as Constructable<CommandClass>);
-		Reflect.defineMetadata(METADATA_commandClassMap, map, CommandClass);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the command class defined for a Z-Wave message class
- */
-export function getCommandClass<T extends CommandClass | CCAPI>(
-	cc: T,
-): CommandClasses {
-	// get the class constructor
-	const constr = cc.constructor;
-	// retrieve the current metadata
-	const ret: CommandClasses | undefined =
-		cc instanceof CommandClass
-			? Reflect.getMetadata(METADATA_commandClass, constr)
-			: cc instanceof CCAPI
-			? Reflect.getMetadata(METADATA_API, constr)
-			: undefined;
-	if (ret == undefined) {
-		throw new ZWaveError(
-			`No command class defined for ${constr.name}!`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
-	}
-	return ret;
-}
-
-/**
- * @publicAPI
- * Retrieves the function type defined for a Z-Wave message class
- */
-export function getCommandClassStatic<T extends Constructable<CommandClass>>(
-	classConstructor: T,
-): CommandClasses {
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor) as
-		| CommandClasses
-		| undefined;
-	if (ret == undefined) {
-		throw new ZWaveError(
-			`No command class defined for ${classConstructor.name}!`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
-	}
-	return ret;
-}
-
-/**
- * @publicAPI
- * Looks up the command class constructor for a given command class type and function type
- */
-export function getCCConstructor(
-	cc: CommandClasses,
-): Constructable<CommandClass> | undefined {
-	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(METADATA_commandClassMap, CommandClass) as
-		| CommandClassMap
-		| undefined;
-	if (map != undefined) return map.get(cc);
-}
-
-/**
- * @publicAPI
- * Defines the implemented version of a Z-Wave command class
- */
-export function implementedVersion(
-	version: number,
-): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_version, version, ccClass);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the implemented version defined for a Z-Wave command class
- */
-export function getImplementedVersion<T extends CommandClass>(
-	cc: T | CommandClasses,
-): number {
-	// get the class constructor
-	let constr: Constructable<CommandClass> | undefined;
-	if (typeof cc === "number") {
-		constr = getCCConstructor(cc);
-	} else {
-		constr = cc.constructor as Constructable<CommandClass>;
-	}
-	// retrieve the current metadata
-	let ret: number | undefined;
-	if (constr != undefined)
-		ret = Reflect.getMetadata(METADATA_version, constr);
-	if (ret == undefined) ret = 0;
-
-	return ret;
-}
-
-/**
- * @publicAPI
- * Retrieves the implemented version defined for a Z-Wave command class
- */
-export function getImplementedVersionStatic<
-	T extends Constructable<CommandClass>,
->(classConstructor: T): number {
-	// retrieve the current metadata
-	const ret =
-		(Reflect.getMetadata(METADATA_version, classConstructor) as
-			| number
-			| undefined) || 0;
-	return ret;
-}
-
-/**
- * @publicAPI
- * Defines the CC command a subclass of a CC implements
- */
-export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
-
-		// also store a map in the Message metadata for lookup.
-		const ccId = getCommandClassStatic(
-			ccClass as unknown as typeof CommandClass,
-		);
-		const map: CCCommandMap =
-			Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) ||
-			new Map();
-		map.set(
-			getCCCommandMapKey(ccId, command),
-			ccClass as unknown as Constructable<CommandClass>,
-		);
-		Reflect.defineMetadata(METADATA_ccCommandMap, map, CommandClass);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the CC command a subclass of a CC implements
- */
-export function getCCCommand<T extends CommandClass>(
-	cc: T,
-): number | undefined {
-	// get the class constructor
-	const constr = cc.constructor as Constructable<CommandClass>;
-
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccCommand, constr) as
-		| number
-		| undefined;
-
-	return ret;
-}
-
-/**
- * @publicAPI
- * Looks up the command class constructor for a given command class type and function type
- */
-export function getCCCommandConstructor<TBase extends CommandClass>(
-	ccId: CommandClasses,
-	ccCommand: number,
-): Constructable<TBase> | undefined {
-	// Retrieve the constructor map from the CommandClass class
-	const map = Reflect.getMetadata(METADATA_ccCommandMap, CommandClass) as
-		| CCCommandMap
-		| undefined;
-	if (map != undefined)
-		return map.get(getCCCommandMapKey(ccId, ccCommand)) as unknown as
-			| Constructable<TBase>
-			| undefined;
-}
-
-/**
- * @publicAPI
- * Defines the expected response associated with a Z-Wave message
- */
-export function expectedCCResponse<
-	TSent extends CommandClass,
-	TReceived extends CommandClass,
->(
-	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
-	predicate?: CCResponsePredicate<TSent, TReceived>,
-): TypedClassDecorator<CommandClass> {
-	return (ccClass) => {
-		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the expected response (static or dynamic) defined for a Z-Wave message class
- */
-export function getExpectedCCResponse<T extends CommandClass>(
-	ccClass: T,
-): typeof CommandClass | DynamicCCResponse<T> | undefined {
-	// get the class constructor
-	const constr = ccClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| { cc: typeof CommandClass | DynamicCCResponse<T> }
-		| undefined;
-	return ret?.cc;
-}
-
-/**
- * @publicAPI
- * Retrieves the CC response predicate defined for a Z-Wave message class
- */
-export function getCCResponsePredicate<T extends CommandClass>(
-	ccClass: T,
-): CCResponsePredicate<T> | undefined {
-	// get the class constructor
-	const constr = ccClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| { predicate: CCResponsePredicate<T> | undefined }
-		| undefined;
-	return ret?.predicate;
-}
 
 /** @publicAPI */
 export interface CCValueOptions {
@@ -1494,35 +1246,4 @@ export function getCCValueMetadata(
 	const map = metadata[cc] as Map<string | number, ValueMetadata>;
 	if (map.has(property)) return map.get(property)!;
 	return ValueMetadata.Any;
-}
-
-/**
- * @publicAPI
- * Defines the simplified API associated with a Z-Wave command class
- */
-export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
-	return (apiClass) => {
-		// and store the metadata
-		Reflect.defineMetadata(METADATA_API, cc, apiClass);
-
-		// also store a map in the CCAPI metadata for lookup.
-		const map = (Reflect.getMetadata(METADATA_APIMap, CCAPI) ||
-			new Map()) as APIMap;
-		map.set(cc, apiClass as unknown as APIConstructor);
-		Reflect.defineMetadata(METADATA_APIMap, map, CCAPI);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves the CC API constructor that is defined for a Z-Wave command class
- */
-export function getAPI(cc: CommandClasses): APIConstructor | undefined {
-	// Retrieve the constructor map from the CCAPI class
-	const map = Reflect.getMetadata(METADATA_APIMap, CCAPI) as
-		| APIMap
-		| undefined;
-	const ret = map?.get(cc);
-
-	return ret;
 }

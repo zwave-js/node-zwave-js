@@ -22,6 +22,7 @@ export * from "./security/SecurityClass";
 export * from "./test/assertZWaveError";
 export * from "./util/crc";
 export * from "./util/date";
+export * from "./util/decorators";
 export * from "./util/firmware";
 export * from "./util/graph";
 export * from "./util/misc";
