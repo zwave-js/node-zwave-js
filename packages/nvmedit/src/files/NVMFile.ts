@@ -99,10 +99,10 @@ const METADATA_nvmFileIDMap = Symbol("nvmFileIDMap");
 
 type NVMFileIDMap = Map<
 	number | ((id: number) => boolean),
-	Constructable<NVMFile>
+	NVMFileConstructor<NVMFile>
 >;
 
-export type Constructable<T extends NVMFile> = typeof NVMFile & {
+export type NVMFileConstructor<T extends NVMFile> = typeof NVMFile & {
 	new (options: any): T;
 };
 
@@ -118,7 +118,7 @@ export function nvmFileID(
 		// also store a map in the NVMFile metadata for lookup.
 		const map: NVMFileIDMap =
 			Reflect.getMetadata(METADATA_nvmFileIDMap, NVMFile) || new Map();
-		map.set(id, messageClass as unknown as Constructable<NVMFile>);
+		map.set(id, messageClass as unknown as NVMFileConstructor<NVMFile>);
 		Reflect.defineMetadata(METADATA_nvmFileIDMap, map, NVMFile);
 	};
 }
@@ -150,7 +150,7 @@ export function getNVMFileID<T extends NVMFile>(
  */
 export function getNVMFileConstructor(
 	id: number,
-): Constructable<NVMFile> | undefined {
+): NVMFileConstructor<NVMFile> | undefined {
 	// Retrieve the constructor map from the NVMFile class
 	const map = Reflect.getMetadata(METADATA_nvmFileIDMap, NVMFile) as
 		| NVMFileIDMap
@@ -167,7 +167,7 @@ export function getNVMFileConstructor(
 /**
  * Retrieves the file ID defined for a NVM file class
  */
-export function getNVMFileIDStatic<T extends Constructable<NVMFile>>(
+export function getNVMFileIDStatic<T extends NVMFileConstructor<NVMFile>>(
 	classConstructor: T,
 ): number | ((id: number) => boolean) {
 	// retrieve the current metadata

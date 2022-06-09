@@ -13,17 +13,19 @@ import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,

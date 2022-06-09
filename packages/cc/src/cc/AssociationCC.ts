@@ -20,18 +20,20 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
 import { AssociationCommand, type AssociationAddress } from "../lib/_Types";
 

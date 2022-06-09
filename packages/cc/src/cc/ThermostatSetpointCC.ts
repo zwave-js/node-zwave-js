@@ -29,18 +29,20 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import {
 	ThermostatSetpointCommand,
 	ThermostatSetpointType,

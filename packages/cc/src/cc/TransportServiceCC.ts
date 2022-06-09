@@ -10,16 +10,18 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex } from "@zwave-js/shared/safe";
 import {
-	CCCommand,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CCResponseRole,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { TransportServiceCommand } from "../lib/_Types";
 
 const MAX_SEGMENT_SIZE = 39;
