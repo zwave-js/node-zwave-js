@@ -25,18 +25,20 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
 	ccValueMetadata,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { BinarySwitchCommand } from "../lib/_Types";
 
 function getCurrentValueValueId(endpoint?: number): ValueID {

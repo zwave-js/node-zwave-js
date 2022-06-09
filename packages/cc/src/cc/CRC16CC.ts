@@ -7,16 +7,18 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { CCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	CommandClass,
-	commandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { CRC16Command } from "../lib/_Types";
 
 // @noSetValueAPI

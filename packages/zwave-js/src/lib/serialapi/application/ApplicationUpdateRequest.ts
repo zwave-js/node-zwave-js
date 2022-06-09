@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	createSimpleReflectionDecorator,
 	encodeNodeUpdatePayload,
 	getCCName,
 	MessageOrCCLogEntry,
@@ -10,6 +11,7 @@ import {
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
+	DeserializingMessageConstructor,
 	FunctionType,
 	gotDeserializationOptions,
 	Message,
@@ -34,6 +36,17 @@ export enum ApplicationUpdateTypes {
 	SUC_IdChanged = 0x10,
 }
 
+const {
+	decorator: applicationUpdateType,
+	lookupConstructor: getApplicationUpdateRequestConstructor,
+} = createSimpleReflectionDecorator<
+	ApplicationUpdateRequest,
+	[updateType: ApplicationUpdateTypes],
+	DeserializingMessageConstructor<ApplicationUpdateRequest>
+>({
+	name: "applicationUpdateType",
+});
+
 interface ApplicationUpdateRequestOptions extends MessageBaseOptions {
 	updateType: ApplicationUpdateTypes;
 }
@@ -51,36 +64,18 @@ export class ApplicationUpdateRequest extends Message {
 
 		if (gotDeserializationOptions(options)) {
 			this.updateType = this.payload[0];
-			this.payload = this.payload.slice(1);
 
-			let CommandConstructor:
-				| (new (
-						host: ZWaveHost,
-						options: MessageDeserializationOptions,
-				  ) => ApplicationUpdateRequest)
-				| undefined;
-
-			switch (this.updateType) {
-				case ApplicationUpdateTypes.NodeInfo_Received:
-					CommandConstructor =
-						ApplicationUpdateRequestNodeInfoReceived;
-					break;
-				case ApplicationUpdateTypes.NodeInfo_RequestFailed:
-					CommandConstructor =
-						ApplicationUpdateRequestNodeInfoRequestFailed;
-					break;
-				case ApplicationUpdateTypes.SmartStart_HomeId_Received:
-					CommandConstructor =
-						ApplicationUpdateRequestSmartStartHomeIDReceived;
-					break;
-			}
-
+			const CommandConstructor = getApplicationUpdateRequestConstructor(
+				this.updateType,
+			);
 			if (
 				CommandConstructor &&
 				(new.target as any) !== CommandConstructor
 			) {
 				return new CommandConstructor(host, options);
 			}
+
+			this.payload = this.payload.slice(1);
 		} else {
 			this.updateType = options.updateType;
 		}
@@ -102,6 +97,7 @@ interface ApplicationUpdateRequestNodeInfoReceivedOptions
 	nodeInformation: NodeUpdatePayload;
 }
 
+@applicationUpdateType(ApplicationUpdateTypes.NodeInfo_Received)
 export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateRequest {
 	public constructor(
 		host: ZWaveHost,
@@ -132,6 +128,7 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 	}
 }
 
+@applicationUpdateType(ApplicationUpdateTypes.NodeInfo_RequestFailed)
 export class ApplicationUpdateRequestNodeInfoRequestFailed
 	extends ApplicationUpdateRequest
 	implements SuccessIndicator
@@ -148,6 +145,7 @@ export class ApplicationUpdateRequestNodeInfoRequestFailed
 	}
 }
 
+@applicationUpdateType(ApplicationUpdateTypes.SmartStart_HomeId_Received)
 export class ApplicationUpdateRequestSmartStartHomeIDReceived extends ApplicationUpdateRequest {
 	public constructor(
 		host: ZWaveHost,

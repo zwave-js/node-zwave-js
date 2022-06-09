@@ -27,19 +27,21 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccKeyValuePair,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CCResponsePredicate,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
 
 /**

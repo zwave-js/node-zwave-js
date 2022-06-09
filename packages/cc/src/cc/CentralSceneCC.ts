@@ -28,18 +28,20 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
 	ccValueMetadata,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
 import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
 import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";

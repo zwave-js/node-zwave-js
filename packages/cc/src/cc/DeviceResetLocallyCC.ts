@@ -1,10 +1,10 @@
 import { CommandClasses } from "@zwave-js/core/safe";
+import { CommandClass } from "../lib/CommandClass";
 import {
 	CCCommand,
 	commandClass,
-	CommandClass,
 	implementedVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClassDecorators";
 import { DeviceResetLocallyCommand } from "../lib/_Types";
 
 // @noAPI: We can only receive this command

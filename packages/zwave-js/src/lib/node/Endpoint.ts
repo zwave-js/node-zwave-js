@@ -2,9 +2,9 @@ import {
 	APIMethodsOf,
 	CCAPI,
 	CCAPIs,
+	CCConstructor,
 	CCToAPI,
 	CommandClass,
-	Constructable,
 	getCommandClassStatic,
 } from "@zwave-js/cc";
 import {
@@ -267,7 +267,7 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Throws if the CC is neither supported nor controlled by the endpoint.
 	 */
 	public createCCInstance<T extends CommandClass>(
-		cc: CommandClasses | Constructable<T>,
+		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (!this.supportsCC(ccId) && !this.controlsCC(ccId)) {
@@ -286,7 +286,7 @@ export class Endpoint implements IZWaveEndpoint {
 	 * Returns `undefined` if the CC is neither supported nor controlled by the endpoint.
 	 */
 	public createCCInstanceUnsafe<T extends CommandClass>(
-		cc: CommandClasses | Constructable<T>,
+		cc: CommandClasses | CCConstructor<T>,
 	): T | undefined {
 		const ccId = typeof cc === "number" ? cc : getCommandClassStatic(cc);
 		if (this.supportsCC(ccId) || this.controlsCC(ccId)) {
