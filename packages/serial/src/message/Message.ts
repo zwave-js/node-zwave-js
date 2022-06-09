@@ -23,6 +23,11 @@ export type MessageConstructor<T extends Message> = new (
 	options?: MessageOptions,
 ) => T;
 
+export type DeserializingMessageConstructor<T extends Message> = new (
+	host: ZWaveHost,
+	options: MessageDeserializationOptions,
+) => T;
+
 /** Where a serialized message originates from, to distinguish how certain messages need to be deserialized */
 export enum MessageOrigin {
 	Controller,

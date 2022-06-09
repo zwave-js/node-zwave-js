@@ -144,6 +144,68 @@ export function createReflectionDecorator<
 	return grp;
 }
 
+export interface SimpleReflectionDecorator<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+	TArgs extends [any],
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+> {
+	/** The decorator which is used to decorate the super class */
+	decorator: <TTarget extends TBase>(
+		...args: TArgs
+	) => TypedClassDecorator<TTarget>;
+
+	/** Looks up the value which was assigned to the target class by the decorator, using a class instance */
+	lookupValue: (target: TBase) => TArgs[0] | undefined;
+
+	/** Looks up the value which was assigned to the target class by the decorator, using the class itself */
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	lookupValueStatic: (constr: Function) => TArgs[0] | undefined;
+
+	/** Looks up the super class constructor for a given value. */
+	lookupConstructor: (...args: TArgs) => TConstructor | undefined;
+}
+
+export interface CreateSimpleReflectionDecoratorOptions {
+	/** The name of the decorator */
+	name: string;
+}
+
+/**
+ * Like {@link createReflectionDecorator}, but for single-value decorators. This has the advantage that the returned functions can be reused easier with named args.
+ */
+export function createSimpleReflectionDecorator<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+	TArgs extends [any],
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+>({
+	name,
+}: CreateSimpleReflectionDecoratorOptions): SimpleReflectionDecorator<
+	TBase,
+	TArgs,
+	TConstructor
+> {
+	const decorator = createReflectionDecorator<
+		TBase,
+		TArgs,
+		TArgs[0],
+		TConstructor
+	>({
+		name,
+		valueFromArgs: (arg) => arg,
+	});
+
+	const ret: SimpleReflectionDecorator<TBase, TArgs, TConstructor> = {
+		decorator: decorator.decorator,
+		lookupValue: decorator.lookupValue,
+		lookupValueStatic: decorator.lookupValueStatic,
+		lookupConstructor: decorator.lookupConstructorByValue,
+	};
+
+	return ret;
+}
+
 export interface ReflectionDecoratorPair<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	TBase extends Object,

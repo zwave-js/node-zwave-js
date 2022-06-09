@@ -1,6 +1,6 @@
 import {
-	createReflectionDecorator,
 	createReflectionDecoratorPair,
+	createSimpleReflectionDecorator,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -14,14 +14,12 @@ import type { FibaroCC } from "./FibaroCC";
 
 // === Define the manufacturer ID for a given Manufacturer Proprietary CC subclass
 
-const manufacturerIdDecorator = createReflectionDecorator<
+const manufacturerIdDecorator = createSimpleReflectionDecorator<
 	ManufacturerProprietaryCC,
 	[manufacturerId: number],
-	number,
 	ManufacturerProprietaryCCConstructor
 >({
 	name: "manufacturerId",
-	valueFromArgs: (manufacturerId) => manufacturerId,
 });
 
 /**
@@ -58,20 +56,15 @@ export function getManufacturerIdStatic<
  * @publicAPI
  * Looks up the Manufacturer Proprietary CC constructor for a given Manufacturer ID
  */
-export function getManufacturerProprietaryCCConstructor(
-	manufacturerId: number,
-): ManufacturerProprietaryCCConstructor | undefined {
-	return manufacturerIdDecorator.lookupConstructorByValue(manufacturerId);
-}
+export const getManufacturerProprietaryCCConstructor =
+	manufacturerIdDecorator.lookupConstructor;
 
-const manufacturerProprietaryAPIDecorator = createReflectionDecorator<
+const manufacturerProprietaryAPIDecorator = createSimpleReflectionDecorator<
 	CCAPI,
 	[manufacturerId: number],
-	number,
 	APIConstructor<ManufacturerProprietaryCCAPI>
 >({
 	name: "manufacturerProprietaryAPI",
-	valueFromArgs: (cc) => cc,
 });
 
 /**
@@ -85,13 +78,8 @@ export const manufacturerProprietaryAPI =
  * @publicAPI
  * Retrieves the Proprietary CC API constructor for a given Manufacturer ID
  */
-export function getManufacturerProprietaryAPI(
-	manufacturerId: number,
-): APIConstructor<ManufacturerProprietaryCCAPI> | undefined {
-	return manufacturerProprietaryAPIDecorator.lookupConstructorByValue(
-		manufacturerId,
-	);
-}
+export const getManufacturerProprietaryAPI =
+	manufacturerProprietaryAPIDecorator.lookupConstructor;
 
 // Fibaro CC specific decorators
 
