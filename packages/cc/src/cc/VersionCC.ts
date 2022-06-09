@@ -19,20 +19,22 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
 	ccValueMetadata,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
-	getCommandClass,
-	getImplementedVersion,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	getCommandClass,
+	getImplementedVersion,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { VersionCommand } from "../lib/_Types";
 
 /** @publicAPI */

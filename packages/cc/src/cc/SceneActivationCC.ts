@@ -20,17 +20,19 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
 	ccValueMetadata,
-	commandClass,
 	CommandClass,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { SceneActivationCommand } from "../lib/_Types";
 
 // @noInterview This CC is write-only

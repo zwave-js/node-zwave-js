@@ -29,19 +29,21 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccValue,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	InvalidCC,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
 import * as ccUtils from "../lib/utils";
 import { NotificationCommand, UserCodeCommand } from "../lib/_Types";

@@ -29,16 +29,18 @@ import { gotDeserializationOptions } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { CCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	CommandClass,
-	commandClass,
-	expectedCCResponse,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import {
 	MGRPExtension,
 	Security2Extension,

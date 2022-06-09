@@ -21,19 +21,21 @@ import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	ccKeyValuePair,
 	ccValue,
 	CommandClass,
-	commandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { MultiChannelCommand } from "../lib/_Types";
 
 // TODO: Handle removal reports of dynamic endpoints
