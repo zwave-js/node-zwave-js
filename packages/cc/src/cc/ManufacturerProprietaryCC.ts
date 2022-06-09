@@ -1,24 +1,15 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import {
 	CommandClasses,
+	IVirtualEndpoint,
+	IZWaveEndpoint,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { pick, staticExtends } from "@zwave-js/shared/safe";
+import { staticExtends } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
-import {
-	CCAPI,
-	PollValueImplementation,
-	POLL_VALUE,
-	SetValueImplementation,
-	SET_VALUE,
-	throwMissingPropertyKey,
-	throwUnsupportedProperty,
-	throwUnsupportedPropertyKey,
-	throwWrongValueType,
-} from "../lib/API";
+import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
 	gotDeserializationOptions,
@@ -33,9 +24,9 @@ import {
 } from "../lib/CommandClassDecorators";
 import {
 	getManufacturerId,
+	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
 } from "./manufacturerProprietary/Decorators";
-import type { FibaroVenetianBlindCCReport } from "./manufacturerProprietary/FibaroCC";
 import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
 
 export type ManufacturerProprietaryCCConstructor<
@@ -47,6 +38,29 @@ export type ManufacturerProprietaryCCConstructor<
 
 @API(CommandClasses["Manufacturer Proprietary"])
 export class ManufacturerProprietaryCCAPI extends CCAPI {
+	public constructor(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint | IVirtualEndpoint,
+	) {
+		super(applHost, endpoint);
+
+		// Read the manufacturer ID from Manufacturer Specific CC
+		const manufacturerId = this.getValueDB().getValue<number>(
+			getManufacturerIdValueId(),
+		);
+		// If possible, try to defer to a specific subclass of this API
+		if (manufacturerId != undefined) {
+			const SpecificAPIConstructor =
+				getManufacturerProprietaryAPI(manufacturerId);
+			if (
+				SpecificAPIConstructor != undefined &&
+				new.target !== SpecificAPIConstructor
+			) {
+				return new SpecificAPIConstructor(applHost, endpoint);
+			}
+		}
+	}
+
 	@validateArgs()
 	public async sendData(
 		manufacturerId: number,
@@ -69,7 +83,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			manufacturerId,
-			expectsResponse: true,
+			unspecifiedExpectsResponse: true,
 		});
 		cc.payload = data ?? Buffer.allocUnsafe(0);
 
@@ -85,114 +99,17 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			};
 		}
 	}
-
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async fibaroVenetianBlindsGet() {
-		const { FibaroVenetianBlindCCGet } =
-			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
-		const cc = new FibaroVenetianBlindCCGet(this.applHost, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-		});
-		const response =
-			await this.applHost.sendCommand<FibaroVenetianBlindCCReport>(
-				cc,
-				this.commandOptions,
-			);
-		if (response) {
-			return pick(response, ["position", "tilt"]);
-		}
-	}
-
-	@validateArgs()
-	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
-		const { FibaroVenetianBlindCCSet } =
-			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
-		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-			position: value,
-		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
-	}
-
-	@validateArgs()
-	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
-		const { FibaroVenetianBlindCCSet } =
-			require("./manufacturerProprietary/FibaroCC") as typeof import("./manufacturerProprietary/FibaroCC");
-		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-			tilt: value,
-		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
-	}
-
-	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
-		value,
-	): Promise<void> => {
-		// TODO: This is pretty hardcoded, can we make this more flexible?
-		if (property !== "FibaroCC") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (propertyKey === "venetianBlindsPosition") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			await this.fibaroVenetianBlindsSetPosition(value);
-		} else if (propertyKey === "venetianBlindsTilt") {
-			if (typeof value !== "number") {
-				throwWrongValueType(
-					this.ccId,
-					property,
-					"number",
-					typeof value,
-				);
-			}
-			await this.fibaroVenetianBlindsSetTilt(value);
-		} else {
-			// unsupported property key, ignore...
-			return;
-		}
-
-		// Verify the current value after a delay
-		this.schedulePoll({ property, propertyKey }, value);
-	};
-
-	protected [POLL_VALUE]: PollValueImplementation = async ({
-		property,
-		propertyKey,
-	}): Promise<unknown> => {
-		if (property !== "FibaroCC") {
-			throwUnsupportedProperty(this.ccId, property);
-		} else if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		}
-
-		switch (propertyKey) {
-			case "venetianBlindsPosition":
-				return (await this.fibaroVenetianBlindsGet())?.position;
-			case "venetianBlindsTilt":
-				return (await this.fibaroVenetianBlindsGet())?.tilt;
-			default:
-				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-	};
 }
 
 export interface ManufacturerProprietaryCCOptions extends CCCommandOptions {
 	manufacturerId?: number;
-	expectsResponse?: boolean;
+	unspecifiedExpectsResponse?: boolean;
 }
 
 function getReponseForManufacturerProprietary(cc: ManufacturerProprietaryCC) {
-	return cc.expectsResponse ? ManufacturerProprietaryCC : undefined;
+	return cc.unspecifiedExpectsResponse
+		? ManufacturerProprietaryCC
+		: undefined;
 }
 
 function testResponseForManufacturerProprietaryRequest(
@@ -225,8 +142,6 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			// ManufacturerProprietaryCC has no CC command, so the first byte is stored in ccCommand.
 			this.manufacturerId =
 				((this.ccCommand as unknown as number) << 8) + this.payload[0];
-			// Incoming messages expect no response
-			this.expectsResponse = false;
 
 			// Try to parse the proprietary command
 			const PCConstructor = getManufacturerProprietaryCCConstructor(
@@ -246,7 +161,8 @@ export class ManufacturerProprietaryCC extends CommandClass {
 			this.manufacturerId =
 				options.manufacturerId ?? getManufacturerId(this);
 
-			this.expectsResponse = !!options.expectsResponse;
+			this.unspecifiedExpectsResponse =
+				options.unspecifiedExpectsResponse;
 
 			// To use this CC, a manufacturer ID must exist in the value DB
 			// If it doesn't, the interview procedure will throw.
@@ -255,8 +171,12 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 	public manufacturerId?: number;
 
-	/** @internal */
-	public readonly expectsResponse: boolean;
+	/**
+	 * @internal
+	 * This is used to indicate that an unspecified Manufacturer Proprietary CC instance expects a response.
+	 * Subclasses should roll their own `@expectedCCResponse` instead.
+	 */
+	public readonly unspecifiedExpectsResponse?: boolean;
 
 	private getManufacturerIdOrThrow(): number {
 		if (this.manufacturerId == undefined) {

@@ -12,14 +12,29 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import { pick } from "@zwave-js/shared";
+import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
+import {
+	POLL_VALUE,
+	SET_VALUE,
+	throwMissingPropertyKey,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+	type PollValueImplementation,
+	type SetValueImplementation,
+} from "../../lib/API";
 import {
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../../lib/CommandClass";
 import { expectedCCResponse } from "../../lib/CommandClassDecorators";
-import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
+import {
+	ManufacturerProprietaryCC,
+	ManufacturerProprietaryCCAPI,
+} from "../ManufacturerProprietaryCC";
 import {
 	fibaroCC,
 	fibaroCCCommand,
@@ -28,6 +43,7 @@ import {
 	getFibaroCCConstructor,
 	getFibaroCCId,
 	manufacturerId,
+	manufacturerProprietaryAPI,
 } from "./Decorators";
 
 export const MANUFACTURERID_FIBARO = 0x10f;
@@ -74,7 +90,103 @@ export enum FibaroCCIDs {
 	VenetianBlind = 0x26,
 }
 
-@manufacturerId(0x10f)
+@manufacturerProprietaryAPI(MANUFACTURERID_FIBARO)
+export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async fibaroVenetianBlindsGet() {
+		const cc = new FibaroVenetianBlindCCGet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response =
+			await this.applHost.sendCommand<FibaroVenetianBlindCCReport>(
+				cc,
+				this.commandOptions,
+			);
+		if (response) {
+			return pick(response, ["position", "tilt"]);
+		}
+	}
+
+	@validateArgs()
+	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			position: value,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	@validateArgs()
+	public async fibaroVenetianBlindsSetTilt(value: number): Promise<void> {
+		const cc = new FibaroVenetianBlindCCSet(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			tilt: value,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	): Promise<void> => {
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		if (propertyKey === "venetianBlindsPosition") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetPosition(value);
+		} else if (propertyKey === "venetianBlindsTilt") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.fibaroVenetianBlindsSetTilt(value);
+		} else {
+			// unsupported property key, ignore...
+			return;
+		}
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property, propertyKey }, value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		if (property !== "fibaro") {
+			throwUnsupportedProperty(this.ccId, property);
+		} else if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		}
+
+		switch (propertyKey) {
+			case "venetianBlindsPosition":
+				return (await this.fibaroVenetianBlindsGet())?.position;
+			case "venetianBlindsTilt":
+				return (await this.fibaroVenetianBlindsGet())?.tilt;
+			default:
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+	};
+}
+
+@manufacturerId(MANUFACTURERID_FIBARO)
 export class FibaroCC extends ManufacturerProprietaryCC {
 	public constructor(
 		host: ZWaveHost,

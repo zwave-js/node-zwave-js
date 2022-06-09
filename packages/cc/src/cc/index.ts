@@ -228,8 +228,10 @@ export {
 	getFibaroCCId,
 	getManufacturerId,
 	getManufacturerIdStatic,
+	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
 	manufacturerId,
+	manufacturerProprietaryAPI,
 } from "./manufacturerProprietary/Decorators";
 export {
 	FibaroCC,

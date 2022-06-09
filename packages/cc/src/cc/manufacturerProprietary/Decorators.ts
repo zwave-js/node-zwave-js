@@ -4,8 +4,10 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import type { APIConstructor, CCAPI } from "../../lib/API";
 import type {
 	ManufacturerProprietaryCC,
+	ManufacturerProprietaryCCAPI,
 	ManufacturerProprietaryCCConstructor,
 } from "../ManufacturerProprietaryCC";
 import type { FibaroCC } from "./FibaroCC";
@@ -60,6 +62,35 @@ export function getManufacturerProprietaryCCConstructor(
 	manufacturerId: number,
 ): ManufacturerProprietaryCCConstructor | undefined {
 	return manufacturerIdDecorator.lookupConstructorByValue(manufacturerId);
+}
+
+const manufacturerProprietaryAPIDecorator = createReflectionDecorator<
+	CCAPI,
+	[manufacturerId: number],
+	number,
+	APIConstructor<ManufacturerProprietaryCCAPI>
+>({
+	name: "manufacturerProprietaryAPI",
+	valueFromArgs: (cc) => cc,
+});
+
+/**
+ * @publicAPI
+ * Defines the manufacturer ID a Proprietary CC API implementation belongs to
+ */
+export const manufacturerProprietaryAPI =
+	manufacturerProprietaryAPIDecorator.decorator;
+
+/**
+ * @publicAPI
+ * Retrieves the Proprietary CC API constructor for a given Manufacturer ID
+ */
+export function getManufacturerProprietaryAPI(
+	manufacturerId: number,
+): APIConstructor<ManufacturerProprietaryCCAPI> | undefined {
+	return manufacturerProprietaryAPIDecorator.lookupConstructorByValue(
+		manufacturerId,
+	);
 }
 
 // Fibaro CC specific decorators
