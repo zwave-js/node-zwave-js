@@ -25,15 +25,17 @@ import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { randomBytes } from "crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	API,
-	CCCommand,
 	CommandClass,
-	commandClass,
-	expectedCCResponse,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	CCCommand,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import { SecurityCommand } from "../lib/_Types";
 import { Security2CC } from "./Security2CC";
 

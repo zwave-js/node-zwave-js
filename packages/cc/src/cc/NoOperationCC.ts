@@ -1,12 +1,12 @@
 import { CommandClasses, MessagePriority } from "@zwave-js/core/safe";
 import type { Message } from "@zwave-js/serial";
 import { PhysicalCCAPI } from "../lib/API";
+import { CommandClass } from "../lib/CommandClass";
 import {
 	API,
 	commandClass,
-	CommandClass,
 	implementedVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClassDecorators";
 import { isCommandClassContainer } from "../lib/ICommandClassContainer";
 
 // @noSetValueAPI This CC has no set-type commands

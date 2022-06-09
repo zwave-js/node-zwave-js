@@ -3,7 +3,7 @@ import "reflect-metadata";
 
 type Constructor<T> = new (...args: any[]) => T;
 
-export interface ClassDecoratorGroup<
+export interface ReflectionDecorator<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	TBase extends Object,
 	TArgs extends any[],
@@ -25,7 +25,7 @@ export interface ClassDecoratorGroup<
 	lookupConstructorByKey: (key: string) => TConstructor | undefined;
 }
 
-export interface CreateClassDecoratorOptions<
+export interface CreateReflectionDecoratorOptions<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	TBase extends Object,
 	TArgs extends any[],
@@ -45,7 +45,8 @@ export interface CreateClassDecoratorOptions<
 		| ((target: TConstructor, ...args: TArgs) => string);
 }
 
-export function createClassDecorator<
+/** Creates a reflection decorator and corresponding methods for reverse lookup of values and constructors */
+export function createReflectionDecorator<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	TBase extends Object,
 	TArgs extends any[],
@@ -56,18 +57,18 @@ export function createClassDecorator<
 	valueFromArgs,
 	// getConstructorLookupTarget,
 	constructorLookupKey,
-}: CreateClassDecoratorOptions<
+}: CreateReflectionDecoratorOptions<
 	TBase,
 	TArgs,
 	TValue,
 	TConstructor
->): ClassDecoratorGroup<TBase, TArgs, TValue, TConstructor> {
+>): ReflectionDecorator<TBase, TArgs, TValue, TConstructor> {
 	const key = Symbol.for(`METADATA_${name}`);
 	const mapKey = Symbol.for(`METADATA_MAP_${name}`);
 
 	const lookupTarget = Object.create(null);
 
-	const grp: ClassDecoratorGroup<TBase, TArgs, TValue, TConstructor> = {
+	const grp: ReflectionDecorator<TBase, TArgs, TValue, TConstructor> = {
 		decorator: (...args): TypedClassDecorator<TBase> => {
 			const value = valueFromArgs(...args);
 			let body = (target: TConstructor) => {
@@ -141,4 +142,118 @@ export function createClassDecorator<
 	}
 
 	return grp;
+}
+
+export interface ReflectionDecoratorPair<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+	TSuperArgs extends [any],
+	TSubArgs extends [any],
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+> {
+	/** The decorator which is used to decorate the super class */
+	superDecorator: <TTarget extends TBase>(
+		...args: TSuperArgs
+	) => TypedClassDecorator<TTarget>;
+
+	/** The decorator which is used to decorate the sub classes */
+	subDecorator: <TTarget extends TBase>(
+		...args: TSubArgs
+	) => TypedClassDecorator<TTarget>;
+
+	/** Looks up the value which was assigned to the target super class by the decorator, using a class instance */
+	lookupSuperValue: (target: TBase) => TSuperArgs[0] | undefined;
+	/** Looks up the value which was assigned to the target sub class by the decorator, using a class instance */
+	lookupSubValue: (target: TBase) => TSubArgs[0] | undefined;
+
+	/** Looks up the value which was assigned to the target super class by the decorator, using the class itself */
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	lookupSuperValueStatic: (constr: Function) => TSuperArgs[0] | undefined;
+	/** Looks up the value which was assigned to the target sub class by the decorator, using the class itself */
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	lookupSubValueStatic: (constr: Function) => TSubArgs[0] | undefined;
+
+	/** Looks up the super class constructor for a given value. */
+	lookupSuperConstructor: (...args: TSuperArgs) => TConstructor | undefined;
+	/** Looks up the sub class constructor for a given value pair. */
+	lookupSubConstructor: (
+		...args: [...TSuperArgs, ...TSubArgs]
+	) => TConstructor | undefined;
+}
+
+export interface CreateReflectionDecoratorPairOptions {
+	/** The name of the super decorator */
+	superName: string;
+	/** The name of the sub decorator */
+	subName: string;
+}
+
+/**
+ * Creates a pair of reflection decorators and corresponding methods for reverse lookup of values and constructors.
+ * This pair is meant to decorate a super class and several of its subclasses
+ */
+export function createReflectionDecoratorPair<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+	TSuperArgs extends [any],
+	TSubArgs extends [any],
+	TConstructor extends Constructor<TBase> = Constructor<TBase>,
+>({
+	superName,
+	subName,
+}: CreateReflectionDecoratorPairOptions): ReflectionDecoratorPair<
+	TBase,
+	TSuperArgs,
+	TSubArgs,
+	TConstructor
+> {
+	const superDecorator = createReflectionDecorator<
+		TBase,
+		TSuperArgs,
+		TSuperArgs[0],
+		TConstructor
+	>({
+		name: superName,
+		valueFromArgs: (arg) => arg,
+	});
+
+	const getLookupKey = (superArg: TSuperArgs[0], subArg: TSubArgs[0]) => {
+		return JSON.stringify({ [superName]: superArg, [subName]: subArg });
+	};
+
+	const subDecorator = createReflectionDecorator<
+		TBase,
+		TSubArgs,
+		TSubArgs[0],
+		TConstructor
+	>({
+		name: subName,
+		valueFromArgs: (arg) => arg,
+		constructorLookupKey: (target, subArg) => {
+			const superArg = superDecorator.lookupValueStatic(target);
+			return getLookupKey(superArg, subArg);
+		},
+	});
+
+	const ret: ReflectionDecoratorPair<
+		TBase,
+		TSuperArgs,
+		TSubArgs,
+		TConstructor
+	> = {
+		superDecorator: superDecorator.decorator,
+		subDecorator: subDecorator.decorator,
+		lookupSuperValue: superDecorator.lookupValue,
+		lookupSubValue: subDecorator.lookupValue,
+		lookupSuperValueStatic: superDecorator.lookupValueStatic,
+		lookupSubValueStatic: subDecorator.lookupValueStatic,
+		lookupSuperConstructor: superDecorator.lookupConstructorByValue,
+		lookupSubConstructor: (...args) => {
+			return subDecorator.lookupConstructorByKey(
+				getLookupKey(args[0], args[1]),
+			);
+		},
+	};
+
+	return ret;
 }

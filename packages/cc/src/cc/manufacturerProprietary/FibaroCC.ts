@@ -14,11 +14,11 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { staticExtends } from "@zwave-js/shared/safe";
 import {
-	expectedCCResponse,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../../lib/CommandClass";
+import { expectedCCResponse } from "../../lib/CommandClassDecorators";
 import { ManufacturerProprietaryCC } from "../ManufacturerProprietaryCC";
 
 export const MANUFACTURERID_FIBARO = 0x10f;

@@ -27,17 +27,19 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
+	CommandClass,
+	CommandClassOptions,
+	gotDeserializationOptions,
+	type CCCommandOptions,
+	type CommandClassDeserializationOptions,
+} from "../lib/CommandClass";
+import {
 	API,
 	CCCommand,
 	commandClass,
-	CommandClass,
 	expectedCCResponse,
-	gotDeserializationOptions,
 	implementedVersion,
-	type CCCommandOptions,
-	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
-} from "../lib/CommandClass";
+} from "../lib/CommandClassDecorators";
 import { IndicatorCommand } from "../lib/_Types";
 
 export function getSupportedIndicatorIDsValueID(

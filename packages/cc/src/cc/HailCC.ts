@@ -1,10 +1,10 @@
 import { CommandClasses } from "@zwave-js/core/safe";
+import { CommandClass } from "../lib/CommandClass";
 import {
 	CCCommand,
 	commandClass,
-	CommandClass,
 	implementedVersion,
-} from "../lib/CommandClass";
+} from "../lib/CommandClassDecorators";
 import { HailCommand } from "../lib/_Types";
 
 // Decorators are applied in the reverse source order, so for @CCCommand to work,

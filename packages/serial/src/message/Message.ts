@@ -1,7 +1,7 @@
 /// <reference types="reflect-metadata" />
 
 import {
-	createClassDecorator,
+	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
 	IZWaveNode,
@@ -448,7 +448,7 @@ function getMessageTypeMapKey(
 	return JSON.stringify({ messageType, functionType });
 }
 
-const messageTypesDecorator = createClassDecorator<
+const messageTypesDecorator = createReflectionDecorator<
 	Message,
 	[messageType: MessageType, functionType: FunctionType],
 	{ messageType: MessageType; functionType: FunctionType },
@@ -519,7 +519,7 @@ function getMessageConstructor(
 	);
 }
 
-const expectedResponseDecorator = createClassDecorator<
+const expectedResponseDecorator = createReflectionDecorator<
 	Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
@@ -553,7 +553,7 @@ export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	return expectedResponseDecorator.lookupValueStatic(classConstructor);
 }
 
-const expectedCallbackDecorator = createClassDecorator<
+const expectedCallbackDecorator = createReflectionDecorator<
 	Message,
 	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
 	FunctionType | typeof Message | ResponsePredicate,
@@ -591,7 +591,7 @@ export function getExpectedCallbackStatic<T extends Constructable<Message>>(
 	return expectedCallbackDecorator.lookupValueStatic(classConstructor);
 }
 
-const priorityDecorator = createClassDecorator<
+const priorityDecorator = createReflectionDecorator<
 	Message,
 	[prio: MessagePriority],
 	MessagePriority

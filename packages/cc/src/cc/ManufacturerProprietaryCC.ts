@@ -21,15 +21,17 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	API,
-	commandClass,
 	CommandClass,
-	expectedCCResponse,
 	gotDeserializationOptions,
-	implementedVersion,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
+import {
+	API,
+	commandClass,
+	expectedCCResponse,
+	implementedVersion,
+} from "../lib/CommandClassDecorators";
 import {
 	FibaroVenetianBlindCCReport,
 	MANUFACTURERID_FIBARO,

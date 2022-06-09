@@ -1,10 +1,8 @@
 import {
 	CommandClasses,
-	createClassDecorator,
 	getCCName,
 	ICommandClass,
 	isZWaveError,
-	IVirtualEndpoint,
 	IZWaveEndpoint,
 	IZWaveNode,
 	MessageOrCCLogEntry,
@@ -29,10 +27,18 @@ import {
 	JSONObject,
 	num2hex,
 	staticExtends,
-	TypedClassDecorator,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
-import { CCAPI } from "./API";
+import {
+	getCCCommand,
+	getCCCommandConstructor,
+	getCCConstructor,
+	getCCResponsePredicate,
+	getCommandClass,
+	getCommandClassStatic,
+	getExpectedCCResponse,
+	getImplementedVersion,
+} from "./CommandClassDecorators";
 import {
 	EncapsulatingCommandClass,
 	isEncapsulatingCommandClass,
@@ -1062,15 +1068,6 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	new (host: ZWaveHost, options: any): T;
 };
 
-type APIConstructor = new (
-	applHost: ZWaveApplicationHost,
-	endpoint: IZWaveEndpoint | IVirtualEndpoint,
-) => CCAPI;
-
-function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
-	return JSON.stringify({ ccId, ccCommand });
-}
-
 /**
  * @publicAPI
  * May be used to define different expected CC responses depending on the sent CC
@@ -1095,244 +1092,6 @@ export type CCResponsePredicate<
 	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass,
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
-
-const commandClassDecorator = createClassDecorator<
-	CommandClass,
-	[cc: CommandClasses],
-	CommandClasses,
-	Constructable<CommandClass>
->({
-	name: "commandClass",
-	valueFromArgs: (cc) => cc,
-});
-
-/**
- * @publicAPI
- * Defines the CC ID associated with a Z-Wave Command Class
- */
-export const commandClass = commandClassDecorator.decorator;
-
-const apiDecorator = createClassDecorator<
-	CCAPI,
-	[cc: CommandClasses],
-	CommandClasses,
-	APIConstructor
->({
-	name: "API",
-	valueFromArgs: (cc) => cc,
-});
-
-/**
- * @publicAPI
- * Defines the CC ID a CC API implementation belongs to
- */
-export const API = apiDecorator.decorator;
-
-/**
- * @publicAPI
- * Retrieves the CC API constructor that is defined for a Z-Wave CC ID
- */
-export function getAPI(cc: CommandClasses): APIConstructor | undefined {
-	return apiDecorator.lookupConstructorByValue(cc);
-}
-
-/**
- * @publicAPI
- * Retrieves the function type defined for a Z-Wave message class
- */
-export function getCommandClassStatic<T extends Constructable<CommandClass>>(
-	classConstructor: T,
-): CommandClasses {
-	// retrieve the current metadata
-	const ret = commandClassDecorator.lookupValueStatic(classConstructor);
-	if (ret == undefined) {
-		throw new ZWaveError(
-			`No command class defined for ${classConstructor.name}!`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
-	}
-	return ret;
-}
-
-/**
- * @publicAPI
- * Looks up the command class constructor for a given command class type and function type
- */
-export function getCCConstructor(
-	cc: CommandClasses,
-): Constructable<CommandClass> | undefined {
-	return commandClassDecorator.lookupConstructorByValue(cc);
-}
-
-const implementedVersionDecorator = createClassDecorator<
-	CommandClass,
-	[version: number],
-	number
->({
-	name: "implementedVersion",
-	valueFromArgs: (version) => version,
-	constructorLookupKey: false,
-});
-
-/**
- * @publicAPI
- * Retrieves the CC ID associated with a Z-Wave Command Class or CC API
- */
-export function getCommandClass<T extends CommandClass | CCAPI>(
-	cc: T,
-): CommandClasses {
-	// get the class constructor
-	const constr = cc.constructor;
-	// retrieve the current metadata
-	const ret: CommandClasses | undefined =
-		cc instanceof CommandClass
-			? commandClassDecorator.lookupValueStatic(constr)
-			: cc instanceof CCAPI
-			? apiDecorator.lookupValueStatic(constr)
-			: undefined;
-	if (ret == undefined) {
-		throw new ZWaveError(
-			`No command class defined for ${constr.name}!`,
-			ZWaveErrorCodes.CC_Invalid,
-		);
-	}
-	return ret;
-}
-
-/**
- * @publicAPI
- * Defines the implemented version of a Z-Wave command class
- */
-export const implementedVersion = implementedVersionDecorator.decorator;
-
-/**
- * @publicAPI
- * Retrieves the implemented version defined for a Z-Wave command class
- */
-export function getImplementedVersion<T extends CommandClass>(
-	cc: T | CommandClasses,
-): number {
-	// get the class constructor
-	let constr: Constructable<CommandClass> | undefined;
-	if (typeof cc === "number") {
-		constr = getCCConstructor(cc);
-	} else {
-		constr = cc.constructor as Constructable<CommandClass>;
-	}
-
-	if (!constr) return 0;
-	return implementedVersionDecorator.lookupValueStatic(constr) ?? 0;
-}
-
-/**
- * @publicAPI
- * Retrieves the implemented version defined for a Z-Wave command class
- */
-export function getImplementedVersionStatic<
-	T extends Constructable<CommandClass>,
->(classConstructor: T): number {
-	return implementedVersionDecorator.lookupValueStatic(classConstructor) ?? 0;
-}
-
-const ccCommandDecorator = createClassDecorator<
-	CommandClass,
-	[command: number],
-	number,
-	Constructable<CommandClass>
->({
-	name: "CCCommand",
-	valueFromArgs: (command) => command,
-	constructorLookupKey(target, command) {
-		const ccId = getCommandClassStatic(
-			target as unknown as typeof CommandClass,
-		);
-		return getCCCommandMapKey(ccId, command);
-	},
-});
-
-/**
- * @publicAPI
- * Defines the CC command a subclass of a CC implements
- */
-export const CCCommand = ccCommandDecorator.decorator;
-
-/**
- * @publicAPI
- * Retrieves the CC command a subclass of a CC implements
- */
-export function getCCCommand<T extends CommandClass>(
-	cc: T,
-): number | undefined {
-	return ccCommandDecorator.lookupValue(cc);
-}
-
-/**
- * @publicAPI
- * Looks up the command class constructor for a given command class type and function type
- */
-export function getCCCommandConstructor<TBase extends CommandClass>(
-	ccId: CommandClasses,
-	ccCommand: number,
-): Constructable<TBase> | undefined {
-	return ccCommandDecorator.lookupConstructorByKey(
-		getCCCommandMapKey(ccId, ccCommand),
-	) as Constructable<TBase> | undefined;
-}
-
-const expectedCCResponseDecorator = createClassDecorator<
-	CommandClass,
-	[
-		cc:
-			| Constructable<CommandClass>
-			| DynamicCCResponse<CommandClass, CommandClass>,
-		predicate?: CCResponsePredicate<CommandClass, CommandClass>,
-	],
-	{
-		cc:
-			| Constructable<CommandClass>
-			| DynamicCCResponse<CommandClass, CommandClass>;
-		predicate?: CCResponsePredicate<CommandClass, CommandClass>;
-	}
->({
-	name: "expectedCCResponse",
-	valueFromArgs: (cc, predicate) => ({ cc, predicate }),
-	// We don't need reverse lookup
-	constructorLookupKey: false,
-});
-
-/**
- * @publicAPI
- * Defines the expected response associated with a Z-Wave message
- */
-export function expectedCCResponse<
-	TSent extends CommandClass,
-	TReceived extends CommandClass,
->(
-	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
-	predicate?: CCResponsePredicate<TSent, TReceived>,
-): TypedClassDecorator<CommandClass> {
-	return expectedCCResponseDecorator.decorator(cc as any, predicate as any);
-}
-
-/**
- * @publicAPI
- * Retrieves the expected response (static or dynamic) defined for a Z-Wave message class
- */
-export function getExpectedCCResponse<T extends CommandClass>(
-	ccClass: T,
-): typeof CommandClass | DynamicCCResponse<T> | undefined {
-	return expectedCCResponseDecorator.lookupValue(ccClass)?.cc;
-}
-
-/**
- * @publicAPI
- * Retrieves the CC response predicate defined for a Z-Wave message class
- */
-export function getCCResponsePredicate<T extends CommandClass>(
-	ccClass: T,
-): CCResponsePredicate<T> | undefined {
-	return expectedCCResponseDecorator.lookupValue(ccClass)?.predicate;
-}
 
 /** @publicAPI */
 export interface CCValueOptions {
