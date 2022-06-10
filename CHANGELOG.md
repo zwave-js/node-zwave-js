@@ -5,10 +5,9 @@
 	Add placeholder for next release with `wip` snippet
 -->
 ## __WORK IN PROGRESS__
-<!-- ### Breaking changes
-
 ### Features
- -->
+* Added `"node found"` event to notify about included nodes before they are bootstrapped, made it possible to delay the automatic interview of newly added nodes (#4692)
+
 ### Bugfixes
 * During NVM migration, try to preserve the RF config of the target stick (#4636)
 * During bootstrapping, remember which security classes were not granted (#4637)
@@ -16,6 +15,14 @@
 ### Config file changes
 * Add fingerprints to Fibaro FGS-2x4 series (#4648)
 * Preserve endpoints for RTC CT101 (#4647)
+* Work around Configuration Info reporting bug in ZEN71/72/76/77 (#4666)
+* Add Namron Z-Wave Touch Thermostat 16A (#3890)
+* Refactor Zooz config files to use templates where possible (#4619)
+* Rework Nortek config params to templates (#4640)
+* Rework Leviton config params to templates (#4642)
+* Update CT100 device config file (#4686)
+* Add fingerprint `0x0003:0x0436` to "Kwikset 912" (#4667)
+* Correct Zooz ZAC36 param numbers for Auto Test Mode (#4658)
 
 ### Changes under the hood
 * Migrated a lot of tests to the new testing setup (#4638, #4649)
