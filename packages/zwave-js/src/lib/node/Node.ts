@@ -2732,9 +2732,7 @@ protocol version:      ${this.protocolVersion}`;
 					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
-					BasicCCValues.compatEvent.withEndpoint(
-						command.endpointIndex,
-					),
+					BasicCCValues.compatEvent.endpoint(command.endpointIndex),
 					command.targetValue,
 					{
 						stateful: false,
@@ -2761,7 +2759,7 @@ protocol version:      ${this.protocolVersion}`;
 				if (!didSetMappedValue) {
 					// Basic Set commands cannot store their value automatically, so store the values manually
 					this._valueDB.setValue(
-						BasicCCValues.currentValue.withEndpoint(
+						BasicCCValues.currentValue.endpoint(
 							command.endpointIndex,
 						),
 						command.targetValue,

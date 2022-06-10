@@ -69,13 +69,15 @@ export const V = {
 		};
 
 		const ret: StaticCCValue<TCommandClass, TBlueprint> = {
-			...valueId,
-			getMeta() {
-				return { ...blueprint.meta };
+			get id() {
+				return { ...valueId };
 			},
-			withEndpoint: (endpoint: number = 0) => {
+			endpoint: (endpoint: number = 0) => {
 				if (!options.supportsEndpoints) endpoint = 0;
 				return { ...valueId, endpoint };
+			},
+			get meta() {
+				return { ...blueprint.meta };
 			},
 		};
 
@@ -168,26 +170,29 @@ export interface CCValueBlueprint extends Readonly<ValueIDProperties> {
 	readonly meta?: Readonly<CCValueMeta>;
 }
 
-type WithDynamicEndpoint<T extends Record<string, any>> = T & {
-	withEndpoint(
+type AddCCValueProperties<ValueIDBase extends Record<string, any>> = {
+	/** Returns the value ID of this CC value, without endpoint information */
+	get id(): ValueIDBase;
+
+	/** Returns the value ID, specialized to the given endpoint */
+	endpoint(
 		endpoint?: number,
 	): Readonly<
-		Pick<T, "commandClass"> & { endpoint: number } & Omit<T, "commandClass">
+		Pick<ValueIDBase, "commandClass"> & { endpoint: number } & Omit<
+				ValueIDBase,
+				"commandClass"
+			>
 	>;
-};
-type WithCCValueMeta<T> = T & {
-	getMeta(): Readonly<CCValueMeta>;
+
+	/** Returns the meta information for this value ID */
+	get meta(): Readonly<CCValueMeta>;
 };
 
 /** A static or evaluated CC value definition */
 export type StaticCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends CCValueBlueprint,
-> = Readonly<
-	WithCCValueMeta<
-		WithDynamicEndpoint<InferValueIDBase<TCommandClass, TBlueprint>>
-	>
->;
+> = Readonly<AddCCValueProperties<InferValueIDBase<TCommandClass, TBlueprint>>>;
 
 export interface CCValueMeta {
 	/**

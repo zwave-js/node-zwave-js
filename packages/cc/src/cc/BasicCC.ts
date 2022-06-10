@@ -84,9 +84,7 @@ export class BasicCCAPI extends CCAPI {
 				value <= 99
 			) {
 				this.getValueDB().setValue(
-					BasicCCValues.currentValue.withEndpoint(
-						this.endpoint.index,
-					),
+					BasicCCValues.currentValue.endpoint(this.endpoint.index),
 					value,
 				);
 			}
@@ -114,7 +112,7 @@ export class BasicCCAPI extends CCAPI {
 					this.applHost
 						.tryGetValueDB(node.id)
 						?.setValue(
-							BasicCCValues.currentValue.withEndpoint(
+							BasicCCValues.currentValue.endpoint(
 								this.endpoint.index,
 							),
 							value,
@@ -158,7 +156,7 @@ export class BasicCCAPI extends CCAPI {
 		);
 		if (response) {
 			this.tryGetValueDB()?.setValue(
-				BasicCCValues.currentValue.withEndpoint(this.endpoint.index),
+				BasicCCValues.currentValue.endpoint(this.endpoint.index),
 				response.currentValue,
 			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
@@ -199,7 +197,7 @@ export class BasicCC extends CommandClass {
 
 		// create compat event value if necessary
 		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
-			const valueId = BasicCCValues.compatEvent.withEndpoint(
+			const valueId = BasicCCValues.compatEvent.endpoint(
 				this.endpointIndex,
 			);
 			if (!valueDB.hasMetadata(valueId)) {
@@ -210,7 +208,7 @@ export class BasicCC extends CommandClass {
 			}
 		} else if (
 			valueDB.getValue(
-				BasicCCValues.currentValue.withEndpoint(this.endpointIndex),
+				BasicCCValues.currentValue.endpoint(this.endpointIndex),
 			) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
