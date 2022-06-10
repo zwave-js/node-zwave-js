@@ -39,7 +39,17 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { defineStaticCCValues, V } from "../lib/Values";
 import { BasicCommand } from "../lib/_Types";
+
+export const BasicCCValues = Object.freeze({
+	...defineStaticCCValues(CommandClasses.Basic, {
+		...V.property("currentValue"),
+		...V.property("targetValue"),
+		// TODO: This should really not be a static CC value:
+		...V.property("event"),
+	}),
+});
 
 export function getTargetValueValueId(endpoint?: number): ValueID {
 	return {
