@@ -9,7 +9,6 @@ import {
 	parseNumber,
 	unknownNumber,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -39,41 +38,17 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
-import { defineStaticCCValues, V } from "../lib/Values";
+import { V } from "../lib/Values";
 import { BasicCommand } from "../lib/_Types";
 
 export const BasicCCValues = Object.freeze({
-	...defineStaticCCValues(CommandClasses.Basic, {
-		...V.property("currentValue"),
-		...V.property("targetValue"),
+	...V.defineStaticCCValues(CommandClasses.Basic, {
+		...V.staticProperty("currentValue"),
+		...V.staticProperty("targetValue"),
 		// TODO: This should really not be a static CC value:
-		...V.property("event"),
+		...V.staticPropertyWithName("compatEvent", "event"),
 	}),
 });
-
-export function getTargetValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "targetValue",
-	};
-}
-
-export function getCurrentValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "currentValue",
-	};
-}
-
-export function getCompatEventValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "event",
-	};
-}
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
@@ -109,7 +84,9 @@ export class BasicCCAPI extends CCAPI {
 				value <= 99
 			) {
 				this.getValueDB().setValue(
-					getCurrentValueValueId(this.endpoint.index),
+					BasicCCValues.currentValue.withEndpoint(
+						this.endpoint.index,
+					),
 					value,
 				);
 			}
@@ -137,7 +114,9 @@ export class BasicCCAPI extends CCAPI {
 					this.applHost
 						.tryGetValueDB(node.id)
 						?.setValue(
-							getCurrentValueValueId(this.endpoint.index),
+							BasicCCValues.currentValue.withEndpoint(
+								this.endpoint.index,
+							),
 							value,
 						);
 				}
@@ -179,7 +158,7 @@ export class BasicCCAPI extends CCAPI {
 		);
 		if (response) {
 			this.tryGetValueDB()?.setValue(
-				getCurrentValueValueId(this.endpoint.index),
+				BasicCCValues.currentValue.withEndpoint(this.endpoint.index),
 				response.currentValue,
 			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
@@ -220,7 +199,9 @@ export class BasicCC extends CommandClass {
 
 		// create compat event value if necessary
 		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
-			const valueId = getCompatEventValueId(this.endpointIndex);
+			const valueId = BasicCCValues.compatEvent.withEndpoint(
+				this.endpointIndex,
+			);
 			if (!valueDB.hasMetadata(valueId)) {
 				valueDB.setMetadata(valueId, {
 					...ValueMetadata.ReadOnlyUInt8,
@@ -228,8 +209,9 @@ export class BasicCC extends CommandClass {
 				});
 			}
 		} else if (
-			valueDB.getValue(getCurrentValueValueId(this.endpointIndex)) ==
-			undefined
+			valueDB.getValue(
+				BasicCCValues.currentValue.withEndpoint(this.endpointIndex),
+			) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

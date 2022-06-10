@@ -48,8 +48,62 @@ export interface CCValueDefinition {
 	options?: DefineCCValueOptions;
 }
 
+// Namespace for utilities to define CC values
 export const V = {
-	property<TProp extends string>(
+	/** Defines multiple static CC values that belong to a CC */
+	defineStaticCCValue<
+		TCommandClass extends CommandClasses,
+		TBlueprint extends CCValueBlueprint,
+	>(
+		commandClass: TCommandClass,
+		blueprint: TBlueprint,
+		options: DefineCCValueOptions = {},
+	): ExpandRecursively<StaticCCValue<TCommandClass, TBlueprint>> {
+		// Normalize generic options
+		options.supportsEndpoints ??= true;
+
+		const valueId = {
+			commandClass,
+			property: blueprint.property,
+			propertyKey: blueprint.propertyKey,
+		};
+
+		const ret: StaticCCValue<TCommandClass, TBlueprint> = {
+			...valueId,
+			getMeta() {
+				return { ...blueprint.meta };
+			},
+			withEndpoint: (endpoint: number = 0) => {
+				if (!options.supportsEndpoints) endpoint = 0;
+				return { ...valueId, endpoint };
+			},
+		};
+
+		return ret as any;
+	},
+
+	/** Defines a single static CC values that belong to a CC */
+	defineStaticCCValues<
+		TCommandClass extends CommandClasses,
+		TValues extends Record<keyof TValues, CCValueDefinition>,
+	>(
+		commandClass: TCommandClass,
+		values: TValues,
+	): TValues extends Record<keyof TValues, CCValueDefinition>
+		? ExpandRecursively<ToStaticCCValues<TCommandClass, TValues>>
+		: never {
+		return Object.fromEntries(
+			Object.entries<CCValueDefinition>(values).map(
+				([key, { blueprint, options }]) => [
+					key,
+					V.defineStaticCCValue(commandClass, blueprint, options),
+				],
+			),
+		) as any;
+	},
+
+	/** Returns a CC value definition that is named like the value `property` */
+	staticProperty<TProp extends string>(
 		property: TProp,
 	): {
 		[K in TProp]: { blueprint: { property: TProp } };
@@ -62,57 +116,45 @@ export const V = {
 			},
 		} as any;
 	},
+
+	/** Returns a CC value definition with the given name and `property` */
+	staticPropertyWithName<TName extends string, TProp extends string>(
+		name: TName,
+		property: TProp,
+	): {
+		[K in TName]: { blueprint: { property: TProp } };
+	} {
+		return {
+			[name]: {
+				blueprint: {
+					property,
+				},
+			},
+		} as any;
+	},
+
+	/** Returns a CC value definition with the given name, `property` and `propertyKey` */
+	staticPropertyAndKeyWithName<
+		TName extends string,
+		TProp extends string,
+		TKey extends string,
+	>(
+		name: TName,
+		property: TProp,
+		propertyKey: TKey,
+	): {
+		[K in TName]: { blueprint: { property: TProp; propertyKey: TKey } };
+	} {
+		return {
+			[name]: {
+				blueprint: {
+					property,
+					propertyKey,
+				},
+			},
+		} as any;
+	},
 };
-
-export function defineStaticCCValues<
-	TCommandClass extends CommandClasses,
-	TValues extends Record<keyof TValues, CCValueDefinition>,
->(
-	commandClass: TCommandClass,
-	values: TValues,
-): TValues extends Record<keyof TValues, CCValueDefinition>
-	? ExpandRecursively<ToStaticCCValues<TCommandClass, TValues>>
-	: never {
-	return Object.fromEntries(
-		Object.entries<CCValueDefinition>(values).map(
-			([key, { blueprint, options }]) => [
-				key,
-				defineStaticCCValue(commandClass, blueprint, options),
-			],
-		),
-	) as any;
-}
-
-export function defineStaticCCValue<
-	TCommandClass extends CommandClasses,
-	TBlueprint extends CCValueBlueprint,
->(
-	commandClass: TCommandClass,
-	blueprint: TBlueprint,
-	options: DefineCCValueOptions = {},
-): ExpandRecursively<StaticCCValue<TCommandClass, TBlueprint>> {
-	// Normalize generic options
-	options.supportsEndpoints ??= true;
-
-	const valueId = {
-		commandClass,
-		property: blueprint.property,
-		propertyKey: blueprint.propertyKey,
-	};
-
-	const ret: StaticCCValue<TCommandClass, TBlueprint> = {
-		...valueId,
-		getMeta() {
-			return { ...blueprint.meta };
-		},
-		withEndpoint: (endpoint: number = 0) => {
-			if (!options.supportsEndpoints) endpoint = 0;
-			return { ...valueId, endpoint };
-		},
-	};
-
-	return ret as any;
-}
 
 // export interface CCValueDynamic extends StaticCCValue {
 // 	/** Evaluates the dynamic part of a CC value definition, e.g. by testing support */

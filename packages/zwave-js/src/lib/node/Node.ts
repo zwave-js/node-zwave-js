@@ -23,8 +23,7 @@ import {
 	BasicCC,
 	BasicCCReport,
 	BasicCCSet,
-	getCompatEventValueId as getBasicCCCompatEventValueId,
-	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+	BasicCCValues,
 } from "@zwave-js/cc/BasicCC";
 import {
 	CentralSceneCCNotification,
@@ -2733,7 +2732,9 @@ protocol version:      ${this.protocolVersion}`;
 					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
-					getBasicCCCompatEventValueId(command.endpointIndex),
+					BasicCCValues.compatEvent.withEndpoint(
+						command.endpointIndex,
+					),
 					command.targetValue,
 					{
 						stateful: false,
@@ -2760,7 +2761,9 @@ protocol version:      ${this.protocolVersion}`;
 				if (!didSetMappedValue) {
 					// Basic Set commands cannot store their value automatically, so store the values manually
 					this._valueDB.setValue(
-						getBasicCCCurrentValueValueId(command.endpointIndex),
+						BasicCCValues.currentValue.withEndpoint(
+							command.endpointIndex,
+						),
 						command.targetValue,
 					);
 					// Since the node sent us a Basic command, we are sure that it is at least controlled
