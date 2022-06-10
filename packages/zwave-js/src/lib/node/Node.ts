@@ -2818,7 +2818,10 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{
 					eventType: MultilevelSwitchCommand.StartLevelChange,
-					eventTypeLabel: "Start level change",
+					eventTypeLabel: getEnumMemberName(
+						MultilevelSwitchCommand,
+						MultilevelSwitchCommand.StartLevelChange,
+					),
 					direction: command.direction,
 				},
 			);
@@ -2834,7 +2837,10 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{
 					eventType: MultilevelSwitchCommand.StopLevelChange,
-					eventTypeLabel: "Stop level change",
+					eventTypeLabel: getEnumMemberName(
+						MultilevelSwitchCommand,
+						MultilevelSwitchCommand.StopLevelChange,
+					),
 				},
 			);
 		}

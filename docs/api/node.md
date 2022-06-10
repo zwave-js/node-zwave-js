@@ -1105,7 +1105,7 @@ interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
 	/** The label for the event type */
-	eventTypeLabel: "Start level change" | "Stop level change";
+	eventTypeLabel: string;
 	/** The direction of the level change */
 	direction?: string;
 }
