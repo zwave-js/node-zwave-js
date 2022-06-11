@@ -156,7 +156,7 @@
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 5,
+			"defaultValue": 5
 		}
 	],
 	"metadata": {
