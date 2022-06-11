@@ -141,7 +141,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Short wake-up time - default",
+					"label": "Short wake-up time",
 					"value": 0
 				},
 				{
