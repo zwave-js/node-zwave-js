@@ -36,7 +36,7 @@
 			"label": "LED Light",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
-			"defaultValue": 1,
+			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
@@ -51,6 +51,10 @@
 				{
 					"label": "LED always Off",
 					"value": 2
+				},
+				{
+					"label": "LED always On",
+					"value": 3
 				}
 			]
 		}
