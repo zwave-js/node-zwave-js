@@ -157,7 +157,6 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 5,
-			"allowManualEntry": true
 		}
 	],
 	"metadata": {
