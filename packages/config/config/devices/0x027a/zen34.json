@@ -152,7 +152,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Dimming Duration - seconds"
+			"label": "Dimming Duration - seconds",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 99,
