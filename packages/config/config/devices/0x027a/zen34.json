@@ -132,6 +132,32 @@
 					"value": 6
 				}
 			]
+		},		
+		{
+			"#": "4",
+			"label": "30 second Wake-up time",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Short wake-up time (default)",
+					"value": 0
+				},
+				{
+					"label": "30-second wake-up time",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Dimming Duration (seconds)"
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 5,
+			"allowManualEntry": true
 		}
 	],
 	"metadata": {
