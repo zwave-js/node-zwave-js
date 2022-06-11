@@ -135,7 +135,7 @@
 		},
 		{
 			"#": "4",
-			"label": "30 second Wake-up time",
+			"label": "30 second wake-up time",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -152,7 +152,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Dimming Duration - seconds",
+			"label": "Dimming duration",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 99,
