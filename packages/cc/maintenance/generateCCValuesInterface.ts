@@ -62,10 +62,9 @@ export async function generateCCValuesInterface(): Promise<void> {
 		"\n" +
 		CCsWithValues.map(
 			({ name, className, file }) =>
-				`\t${name}: typeof import("${path.relative(
-					libDir,
-					ccDir,
-				)}/${file}").${className};`,
+				`\t${name}: typeof import("${path
+					.relative(libDir, ccDir)
+					.replace(/\\/g, "/")}/${file}").${className};`,
 		).join("\n") +
 		"\n" +
 		valuesFileContent.slice(endTokenStart);

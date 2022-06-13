@@ -442,5 +442,7 @@ export type CCValueMeta = Partial<ValueMetadata> & {
 // Do not edit it by hand or your changes will be lost
 export interface CCValues {
 	// AUTO GENERATION BELOW
+	"Alarm Sensor": typeof import("../cc/AlarmSensorCC").AlarmSensorCCValues;
+	Association: typeof import("../cc/AssociationCC").AssociationCCValues;
 	Basic: typeof import("../cc/BasicCC").BasicCCValues;
 }
