@@ -49,3 +49,71 @@ async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void>;
 ```
 
 Removes nodes from all association groups.
+
+## Association CC values
+
+### `groupCount` _(internal)_
+
+```ts
+{
+	commandClass: CommandClasses.Association,
+	endpoint: number,
+	property: "groupCount",
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `hasLifeline` _(internal)_
+
+```ts
+{
+	commandClass: CommandClasses.Association,
+	endpoint: number,
+	property: "hasLifeline",
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `maxNodes(groupId: number)` _(internal)_
+
+```ts
+{
+	commandClass: CommandClasses.Association,
+	endpoint: number,
+	property: "maxNodes",
+	propertyKey: number,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `nodeIds(groupId: number)` _(internal)_
+
+```ts
+{
+	commandClass: CommandClasses.Association,
+	endpoint: number,
+	property: "nodeIds",
+	propertyKey: number,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false

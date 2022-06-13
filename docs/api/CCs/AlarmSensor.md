@@ -21,3 +21,88 @@ Retrieves the current value from this sensor.
 ```ts
 async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>;
 ```
+
+## Alarm Sensor CC values
+
+### `duration(sensorType: AlarmSensorType)`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Alarm Sensor"],
+	endpoint: number,
+	property: "duration",
+	propertyKey: AlarmSensorType,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `propName`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Alarm Sensor"],
+	endpoint: number,
+	property: "supportedSensorTypes",
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `severity(sensorType: AlarmSensorType)`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Alarm Sensor"],
+	endpoint: number,
+	property: "severity",
+	propertyKey: AlarmSensorType,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `state(sensorType: AlarmSensorType)`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Alarm Sensor"],
+	endpoint: number,
+	property: "state",
+	propertyKey: AlarmSensorType,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+
+### `supportedSensorTypes` _(internal)_
+
+```ts
+{
+	commandClass: typeof CommandClasses["Alarm Sensor"],
+	endpoint: number,
+	property: "supportedSensorTypes",
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false

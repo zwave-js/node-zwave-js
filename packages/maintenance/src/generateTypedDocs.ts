@@ -21,6 +21,9 @@ import {
 	PropertySignatureStructure,
 	SourceFile,
 	SyntaxKind,
+	ts,
+	Type,
+	TypeFormatFlags,
 	TypeLiteralNode,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
@@ -401,6 +404,105 @@ ${
 		}
 	}
 
+	// List defined value IDs
+	const valueIDsConst = (() => {
+		for (const stmt of file.getVariableStatements()) {
+			if (!stmt.hasExportKeyword()) continue;
+			for (const decl of stmt.getDeclarations()) {
+				if (decl.getName()?.endsWith("CCValues")) {
+					return decl;
+				}
+			}
+		}
+	})();
+	if (valueIDsConst) {
+		text += `## ${ccName} CC values\n\n`;
+
+		const type = valueIDsConst.getType();
+		const formatValueType = (type: Type<ts.Type>): string => {
+			const prefix = "type _ = ";
+			let ret = formatWithPrettier(
+				"type.ts",
+				prefix +
+					type.getText(valueIDsConst, TypeFormatFlags.NoTruncation),
+			)
+				.trim()
+				.slice(prefix.length, -1);
+
+			// There is probably an official way to do this, but I can't find it
+			ret = ret.replace(/^(\s+)readonly /gm, "$1").replace(/;$/gm, ",");
+
+			return ret;
+		};
+
+		for (const value of type
+			.getProperties()
+			.sort((a, b) => a.getName().localeCompare(b.getName()))) {
+			let valueType = value.getTypeAtLocation(valueIDsConst);
+			let callSignature = "";
+
+			// "Unwrap" dynamic value IDs
+			if (valueType.getCallSignatures().length === 1) {
+				const signature = valueType.getCallSignatures()[0];
+
+				// The call signature has a single argument
+				// args: [arg1: type1, arg2: type2, ...]
+				callSignature = `(${signature
+					.getParameters()[0]
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst)
+					// Remove the [] from the tuple
+					.slice(1, -1)})`;
+
+				valueType = signature.getReturnType();
+			} else if (valueType.getCallSignatures().length > 1) {
+				throw new Error(
+					"Type of value ID had more than 1 call signature",
+				);
+			}
+
+			const idType = valueType
+				.getPropertyOrThrow("endpoint")
+				.getTypeAtLocation(valueIDsConst)
+				.getCallSignatures()[0]
+				.getReturnType();
+
+			const metaType = valueType
+				.getPropertyOrThrow("meta")
+				.getTypeAtLocation(valueIDsConst);
+
+			const getMeta = (prop: string): string =>
+				metaType
+					.getPropertyOrThrow(prop)
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
+			const tryGetMeta = (prop: string): string | undefined =>
+				metaType
+					.getProperty(prop)
+					?.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
+
+			text += `### \`${value.getName()}${callSignature}\`${
+				getMeta("internal") === "true" ? " _(internal)_" : ""
+			}
+
+\`\`\`ts
+${formatValueType(idType)}
+\`\`\`
+`;
+
+			text += `
+* **min. CC version:** ${getMeta("minVersion")}
+* **readable:** ${getMeta("readable")}
+* **writeable:** ${getMeta("writeable")}
+* **stateful:** ${getMeta("stateful")}
+* **secret:** ${getMeta("secret")}
+`;
+
+			// TODO: Print CC Value Metadata
+		}
+	}
+
 	text = text.replace(/\r\n/g, "\n");
 	text = formatWithPrettier(filename, text);
 
@@ -433,6 +535,11 @@ async function generateCCDocs(
 
 	// Find CC APIs
 	const ccFiles = program.getSourceFiles("packages/cc/src/cc/**/*CC.ts");
+	// .filter(
+	// 	(s) =>
+	// 		s.getFilePath().includes("BasicCC") ||
+	// 		s.getFilePath().includes("AssociationCC"),
+	// );
 	let generatedIndex = "";
 	let generatedSidebar = "";
 
@@ -491,8 +598,8 @@ async function main(): Promise<void> {
 	});
 
 	let hasErrors = false;
-	// Replace all imports
-	hasErrors ||= await processImports(piscina);
+	// // Replace all imports
+	// hasErrors ||= await processImports(piscina);
 	// Regenerate all CC documentation files
 	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
 
@@ -514,11 +621,15 @@ export function processImport(filename: string): Promise<boolean> {
 	return processDocFile(getProgram(), filename);
 }
 
-export function processCC(
+export async function processCC(
 	filename: string,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
 	const sourceFile = getProgram().getSourceFileOrThrow(filename);
-	return processCCDocFile(sourceFile);
+	try {
+		return await processCCDocFile(sourceFile);
+	} catch (e: any) {
+		throw new Error(`Error processing CC file: ${filename}\n${e.stack}`);
+	}
 }
 
 // If this is NOT run as a worker thread, execute the main function

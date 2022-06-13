@@ -43,8 +43,20 @@ import { BasicCommand } from "../lib/_Types";
 
 export const BasicCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Basic, {
-		...V.staticProperty("currentValue"),
-		...V.staticProperty("targetValue"),
+		...V.staticProperty("currentValue", {
+			...ValueMetadata.ReadOnlyLevel,
+			label: "Current value",
+		}),
+		...V.staticProperty("targetValue", {
+			...ValueMetadata.Level,
+			label: "Target value",
+			forceCreation: true,
+		}),
+		...V.staticProperty("duration", {
+			...ValueMetadata.ReadOnlyDuration,
+			label: "Remaining duration",
+			minVersion: 2,
+		}),
 		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName("compatEvent", "event"),
 	}),
