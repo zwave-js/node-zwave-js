@@ -1,0 +1,232 @@
+{
+	"manufacturer": "SmartDHOME",
+	"manufacturerId": "0x044c",
+	"label": "MyOT v2",
+	"description": "OpenTherm Actuator v2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum Boiler Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum Boiler Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum DHW Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum DHW Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Maximum Cool Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Minimum Cool Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Flag",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Code",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Sub Code",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Pump State",
+			"readOnly": true
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Comp State",
+			"readOnly": true
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Operation Mode",
+			"readOnly": true
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Summer Mode"
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "DHW Enable"
+		},
+		{
+			"#": "50",
+			"label": "Load Power",
+			"description": "The power of the load W x100 (inverter)",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "51",
+			"label": "Battery Voltage Output",
+			"description": "The voltage output of the battery V x100 (inverter)",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": false,
+			"readOnly": true
+		},
+		{
+			"#": "52",
+			"label": "Battery Current Output",
+			"description": "The current output of the battery A x100 (inverter)",
+			"unit": "A",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": false,
+			"readOnly": true
+		},
+		{
+			"#": "53",
+			"label": "Battery Power Output",
+			"description": "The power output of the battery W x100 (inverter)",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "61",
+			"label": "PV Voltage Output",
+			"description": "The voltage output of the PV V x100 (inverter)",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": false,
+			"readOnly": true
+		},
+		{
+			"#": "62",
+			"label": "PV Current Output",
+			"description": "The current output of the PV A x100 (inverter)",
+			"unit": "A",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": false,
+			"readOnly": true
+		},
+		{
+			"#": "63",
+			"label": "PV Power Output",
+			"description": "The power output of the PV W x100 (inverter)",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "90",
+			"label": "ID",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "91",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Version",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "92",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Modbus Address",
+			"valueSize": 2
+		},
+		{
+			"#": "93",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Modbus Library",
+			"valueSize": 2
+		}
+	],
+	"metadata": {
+		"inclusion": "By pressing the FUNCTIONS button for 8 seconds",
+		"exclusion": "By pressing the FUNCTIONS button for 8 seconds"
+	}
+}
