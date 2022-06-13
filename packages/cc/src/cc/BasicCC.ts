@@ -45,7 +45,7 @@ export const BasicCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Basic, {
 		...V.staticProperty("currentValue"),
 		...V.staticProperty("targetValue"),
-		// TODO: This should really not be a static CC value:
+		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName("compatEvent", "event"),
 	}),
 });

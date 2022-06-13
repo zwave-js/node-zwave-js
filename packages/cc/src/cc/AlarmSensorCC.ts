@@ -6,7 +6,6 @@ import {
 	MessageRecord,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -29,51 +28,33 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { AlarmSensorCommand, AlarmSensorType } from "../lib/_Types";
 
-export function getAlarmSensorStateValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "state",
-		propertyKey: sensorType,
-	};
-}
-
-export function getAlarmSensorSeverityValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "severity",
-		propertyKey: sensorType,
-	};
-}
-
-export function getAlarmSensorDurationValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "duration",
-		propertyKey: sensorType,
-	};
-}
-
-export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "supportedSensorTypes",
-	};
-}
+export const AlarmSensorCCValues = Object.freeze({
+	...V.defineDynamicCCValues(CommandClasses["Alarm Sensor"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"state",
+			"state",
+			(sensorType: AlarmSensorType) => sensorType,
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"severity",
+			"severity",
+			(sensorType: AlarmSensorType) => sensorType,
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"duration",
+			"duration",
+			(sensorType: AlarmSensorType) => sensorType,
+		),
+	}),
+	...V.defineStaticCCValues(CommandClasses["Alarm Sensor"], {
+		...V.staticProperty("supportedSensorTypes", { internal: true }),
+		...V.staticPropertyWithName("propName", "supportedSensorTypes"),
+		...V.staticProperty("supportedSensorTypes", { internal: true }),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -211,7 +192,9 @@ export class AlarmSensorCC extends CommandClass {
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
 			valueDB.getValue(
-				getSupportedSensorTypesValueId(this.endpointIndex),
+				AlarmSensorCCValues.supportedSensorTypes.endpoint(
+					this.endpointIndex,
+				),
 			) ?? [];
 
 		// Always query (all of) the sensor's current value(s)
@@ -248,18 +231,16 @@ duration: ${currentValue.duration}`;
 		applHost: ZWaveApplicationHost,
 		sensorType: AlarmSensorType,
 	): void {
-		const stateValueId = getAlarmSensorStateValueId(
+		const stateValueId = AlarmSensorCCValues.state(sensorType).endpoint(
 			this.endpointIndex,
-			sensorType,
 		);
-		const severityValueId = getAlarmSensorSeverityValueId(
-			this.endpointIndex,
+		const severityValueId = AlarmSensorCCValues.severity(
 			sensorType,
-		);
-		const durationValueId = getAlarmSensorDurationValueId(
-			this.endpointIndex,
+		).endpoint(this.endpointIndex);
+		const durationValueId = AlarmSensorCCValues.duration(
 			sensorType,
-		);
+		).endpoint(this.endpointIndex);
+
 		const valueDB = this.getValueDB(applHost);
 		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
 
@@ -346,18 +327,16 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		// Create metadata if it does not exist
 		this.createMetadataForSensorType(applHost, this.sensorType);
 
-		const stateValueId = getAlarmSensorStateValueId(
-			this.endpointIndex,
+		const stateValueId = AlarmSensorCCValues.state(
 			this.sensorType,
-		);
-		const severityValueId = getAlarmSensorSeverityValueId(
-			this.endpointIndex,
+		).endpoint(this.endpointIndex);
+		const severityValueId = AlarmSensorCCValues.severity(
 			this.sensorType,
-		);
-		const durationValueId = getAlarmSensorDurationValueId(
-			this.endpointIndex,
+		).endpoint(this.endpointIndex);
+		const durationValueId = AlarmSensorCCValues.duration(
 			this.sensorType,
-		);
+		).endpoint(this.endpointIndex);
+
 		const valueDB = this.getValueDB(applHost);
 		valueDB.setValue(stateValueId, this.state);
 		valueDB.setValue(severityValueId, this.severity);

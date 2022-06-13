@@ -18,7 +18,7 @@ import {
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
-import { getHasLifelineValueId } from "@zwave-js/cc/AssociationCC";
+import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {
 	BasicCC,
 	BasicCCReport,
@@ -1909,7 +1909,7 @@ protocol version:      ${this.protocolVersion}`;
 		return (
 			this.interviewStage === InterviewStage.Complete &&
 			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			!this.valueDB.getValue(getHasLifelineValueId())
+			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
 		);
 	}
 

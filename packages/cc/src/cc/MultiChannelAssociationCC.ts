@@ -40,7 +40,7 @@ import {
 	EndpointAddress,
 	MultiChannelAssociationCommand,
 } from "../lib/_Types";
-import { getGroupCountValueId as getAssociationGroupCountValueId } from "./AssociationCC";
+import { AssociationCCValues } from "./AssociationCC";
 
 /** Returns the ValueID used to store the maximum number of nodes of an association group */
 export function getMaxNodesValueId(
@@ -499,7 +499,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		// Some devices report more association groups than multi channel association groups, so we need this info here
 		const assocGroupCount =
 			valueDB.getValue<number>(
-				getAssociationGroupCountValueId(this.endpointIndex),
+				AssociationCCValues.groupCount.endpoint(this.endpointIndex),
 			) || mcGroupCount;
 
 		// Then query each multi channel association group

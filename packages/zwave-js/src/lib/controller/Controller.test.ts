@@ -1,4 +1,4 @@
-import { getGroupCountValueId } from "@zwave-js/cc/AssociationCC";
+import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {
 	assertZWaveError,
 	CommandClasses,
@@ -72,7 +72,7 @@ describe("lib/controller/Controller", () => {
 				isSupported: true,
 				version: 3,
 			});
-			node1.valueDB.setValue(getGroupCountValueId(0), 14);
+			node1.valueDB.setValue(AssociationCCValues.groupCount.id, 14);
 
 			const deviceConfig = await fakeDriver.configManager.lookupDevice(
 				// Logic Group ZDB5100
@@ -98,7 +98,7 @@ describe("lib/controller/Controller", () => {
 				isSupported: true,
 				version: 3,
 			});
-			node1.valueDB.setValue(getGroupCountValueId(0), 14);
+			node1.valueDB.setValue(AssociationCCValues.groupCount.id, 14);
 
 			const deviceConfig = await fakeDriver.configManager.lookupDevice(
 				// Logic Group ZDB5100

@@ -11,7 +11,7 @@ import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	AssociationCC,
-	getHasLifelineValueId,
+	AssociationCCValues,
 	getLifelineGroupIds,
 } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
@@ -553,7 +553,10 @@ export async function configureLifelineAssociations(
 			level: "warn",
 		});
 		// Remember that we have NO lifeline association
-		valueDB.setValue(getHasLifelineValueId(endpoint.index), false);
+		valueDB.setValue(
+			AssociationCCValues.hasLifeline.endpoint(endpoint.index),
+			false,
+		);
 		return;
 	}
 
@@ -957,5 +960,8 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 	}
 
 	// Remember that we did the association assignment
-	valueDB.setValue(getHasLifelineValueId(endpoint.index), true);
+	valueDB.setValue(
+		AssociationCCValues.hasLifeline.endpoint(endpoint.index),
+		true,
+	);
 }
