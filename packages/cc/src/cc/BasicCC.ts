@@ -45,16 +45,16 @@ export const BasicCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Basic, {
 		...V.staticProperty("currentValue", {
 			...ValueMetadata.ReadOnlyLevel,
-			label: "Current value",
+			label: "Current value" as const,
 		}),
 		...V.staticProperty("targetValue", {
 			...ValueMetadata.Level,
-			label: "Target value",
+			label: "Target value" as const,
 			forceCreation: true,
 		}),
 		...V.staticProperty("duration", {
 			...ValueMetadata.ReadOnlyDuration,
-			label: "Remaining duration",
+			label: "Remaining duration" as const,
 			minVersion: 2,
 		}),
 		// TODO: This should really not be a static CC value, but depend on compat flags:

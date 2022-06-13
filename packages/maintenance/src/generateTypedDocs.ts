@@ -217,6 +217,18 @@ export function findImportRanges(docFile: string): ImportRange[] {
 	}));
 }
 
+function stripQuotes(str: string): string {
+	return str.replace(/^['"]|['"]$/g, "");
+}
+
+function assertLiteralString(strType: string, context: string): void {
+	if (strType === "string") {
+		throw new Error(`Received type "string" where a string literal was expected.
+Make sure to define this string using "as const".
+Context: ${context}`);
+	}
+}
+
 const docsDir = path.join(projectRoot, "docs");
 const ccDocsDir = path.join(docsDir, "api/CCs");
 
@@ -476,20 +488,45 @@ ${
 					.getPropertyOrThrow(prop)
 					.getTypeAtLocation(valueIDsConst)
 					.getText(valueIDsConst);
-			const tryGetMeta = (prop: string): string | undefined =>
-				metaType
-					.getProperty(prop)
-					?.getTypeAtLocation(valueIDsConst)
-					.getText(valueIDsConst);
+
+			const tryGetMeta = (
+				prop: string,
+				onSuccess: (meta: string) => void,
+			): void => {
+				const symbol = metaType.getProperty(prop);
+				if (symbol) {
+					const type = symbol
+						.getTypeAtLocation(valueIDsConst)
+						.getText(valueIDsConst);
+					onSuccess(type);
+				}
+			};
 
 			text += `### \`${value.getName()}${callSignature}\`${
 				getMeta("internal") === "true" ? " _(internal)_" : ""
-			}
+			}`;
+
+			text += `
 
 \`\`\`ts
 ${formatValueType(idType)}
 \`\`\`
 `;
+
+			tryGetMeta("label", (label) => {
+				assertLiteralString(
+					label,
+					`label of value "${value.getName()}"`,
+				);
+				text += `\n* **Label:** ${stripQuotes(label)}`;
+			});
+			tryGetMeta("description", (description) => {
+				assertLiteralString(
+					description,
+					`description of value "${value.getName()}"`,
+				);
+				text += `\n* **Description:** ${stripQuotes(description)}`;
+			});
 
 			text += `
 * **min. CC version:** ${getMeta("minVersion")}
@@ -498,6 +535,25 @@ ${formatValueType(idType)}
 * **stateful:** ${getMeta("stateful")}
 * **secret:** ${getMeta("secret")}
 `;
+
+			tryGetMeta("valueType", (meta) => {
+				text += `\n* **value type** ${meta}`;
+			});
+			tryGetMeta("default", (meta) => {
+				text += `\n* **default value** ${meta}`;
+			});
+			tryGetMeta("min", (meta) => {
+				text += `\n* **min value** ${meta}`;
+			});
+			tryGetMeta("max", (meta) => {
+				text += `\n* **max value** ${meta}`;
+			});
+			tryGetMeta("minLength", (meta) => {
+				text += `\n* **min length** ${meta}`;
+			});
+			tryGetMeta("maxLength", (meta) => {
+				text += `\n* **max length** ${meta}`;
+			});
 
 			// TODO: Print CC Value Metadata
 		}
@@ -598,8 +654,8 @@ async function main(): Promise<void> {
 	});
 
 	let hasErrors = false;
-	// // Replace all imports
-	// hasErrors ||= await processImports(piscina);
+	// Replace all imports
+	hasErrors ||= await processImports(piscina);
 	// Regenerate all CC documentation files
 	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
 
