@@ -1,13 +1,13 @@
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
-	"label": "ZMNHHD",
+	"label": "ZMNHHD2",
 	"description": "Mini Dimmer",
 	"devices": [
 		{
 			"productType": "0x0001",
 			"productId": "0x0055",
-			"zwaveAllianceId": 4211
+			"zwaveAllianceId": 4479
 		}
 	],
 	"firmwareVersion": {
@@ -21,33 +21,36 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic On/Off",
+			"label": "Basic OnOff",
 			"maxNodes": 16
 		},
 		"3": {
-			"label": "Start/Stop Level Change",
+			"label": "StartStop level change",
 			"maxNodes": 16
 		},
 		"4": {
-			"label": "Multilevel Switch Set",
+			"label": "Multilevel set",
 			"maxNodes": 16
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "In-wall Switch Type for Load to Control I1",
+			"label": "In-wall Switch Type For Load to Control I1",
+			"description": "With this parameter, you can select between push-button (momentary) and on/off toggle switch types",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Momentary",
+					"label": "Push-button (momentary)",
 					"value": 0
 				},
 				{
-					"label": "Toggle",
+					"label": "On/off toggle switch",
 					"value": 1
 				}
 			]
@@ -72,7 +75,10 @@
 		{
 			"#": "6",
 			"label": "Load Type",
+			"description": "With this parameter, you select the load type, dimmable or non dimmable. device operating in dimmable mode on non dimmable load can lead to device or load malfunction. for non dimmable loads par. 6 must be set to 1. ⓘ note: when par.6 set to 1 (non dimmable load) values of listed parameters will be ingnored (par.60 min. dimming value, par.61 max. dimming value, par.65 dimm. time when key presed par.66 dimm. time when key hold, par.21 double click function ⓘ note: if the bulb is dimmable or non dimmable (generally valid for led) is shown on the bulb itself or on packaging. ⓘ note: parameter 6 is replacing parameter 5. present in previous version",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -82,7 +88,7 @@
 					"value": 0
 				},
 				{
-					"label": "Non-dimmable load",
+					"label": "Non dimmable load",
 					"value": 1
 				}
 			]
@@ -90,6 +96,7 @@
 		{
 			"#": "11",
 			"label": "Turn Load 1 Off Automatically With Timer",
+			"description": "If load is on, you can schedule it to turn off automatically after a period of time defined in this parameter. the timer is reset to zero each time the device receives an on or off command, either remotely (from the gateway (hub) or associated device) or locally from the switch",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -98,7 +105,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Auto off disabled",
 					"value": 0
 				}
 			]
@@ -106,6 +113,7 @@
 		{
 			"#": "12",
 			"label": "Turn Load 1 On Automatically With Timer",
+			"description": "If load is off, you can schedule it to turn on automatically after a period of time defined in this parameter. the timer is reset to zero each time the device receives an off or on command, either remotely (from the gateway (hub) or associated device) or locally from the switch",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 0,
@@ -114,7 +122,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Auto on disabled",
 					"value": 0
 				}
 			]
@@ -130,7 +138,8 @@
 		},
 		{
 			"#": "40",
-			"label": "Power Change Reporting Threshold For Load",
+			"label": "Watt Power Consumption Reporting Threshold For Load",
+			"description": "Choose by how much the power consumption needs to increase or decrease to be reported. values correspond to percentages so if 10 is set (by default), the device will report any power consumption changes of 10% or more compared to the last reading. ⓘ note: the power consumption needs to increase or decrease by at least 2 watts to be reported, regardless of percentage set in this parameter",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -139,59 +148,69 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Power consumption reporting disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "42",
-			"label": "Power Reporting Interval",
+			"label": "Watt Power Consumption Reporting Time Threshold For Load",
+			"description": "Set value refers to the time interval with which power consumption in watts is reported (0 – 32767 seconds). if 300 is entered, energy consumption reports will be sent to the gateway (hub) every 300 seconds (or 5 minutes) if there was a change compared from the last report. ⓘnote: values from 1 to 29 are ignored by device due to standard recommendation. ⓘnote: the report will be send only if there was a change compared to the last report",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Power consumption reporting on time interval disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "60",
-			"label": "Minimum Dimming Level",
+			"label": "Minimum Dimming Value",
+			"description": "0% - 98%, step is 1%. minimum dimming value is set by entering a value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
-			"defaultValue": 0,
+			"defaultValue": 15,
 			"unsigned": true
 		},
 		{
 			"#": "61",
-			"label": "Maximum Dimming Level",
+			"label": "Maximum Dimming Value",
+			"description": "2 % - 99 %, step is 1 %. maximum dimming value is set by entering a value",
 			"valueSize": 1,
-			"minValue": 2,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true
 		},
 		{
 			"#": "65",
-			"label": "Dimming Duration (Key Pressed)",
+			"label": "Dimming Time When Key Pressed (soft On/Off)",
+			"description": "Choose the time during which the device will move between the min. and max. dimming values by a short press of the push-button i1",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 127,
 			"defaultValue": 1,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "1 second",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "66",
-			"label": "Dimming Duration (Key Held)",
-			"description": "1-127 seconds; 128-253 minutes (minus 127)",
+			"label": "Dimming Time When Key Hold",
+			"description": "Choose the time during which the dimmer will move between the min. and max. dimming values during a continuous press of the push-button i1, by an associated device or through the ui controls (basicset, switchmultilevelset)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 253,
@@ -207,7 +226,7 @@
 		{
 			"#": "68",
 			"label": "Dimming Duration",
-			"description": "In switch mode the parameter has no effect",
+			"description": "Choose the time during which the device will transition from the current value to the new target value. this parameter applies to the association group 3. note: parameter is valid only in dimmer mode. in switch mode the parameter has no effect",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -216,14 +235,15 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Dimming duration according to Dimming Duration (Key Held)",
+					"label": "Dimming duration according to parameter 66",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "70",
-			"label": "Overload Protection",
+			"label": "Overload Safety Switch",
+			"description": "The function allows for turning off the controlled device in case of exceeding the defined power for more than 5s. controlled device can be turned back on by input i1 or sending a control frame. ⓘ note: this functionality is not an overload safety protection, please check the technical specifications chapter for more details. in case of overload the following message will be send towards the controller: • command_class_notification_v5 • the alarm v1 type field set to 0x00 • notification type 0x08 and 0x08 (overload detected)",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -232,7 +252,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Function not active",
 					"value": 0
 				}
 			]
@@ -240,28 +260,28 @@
 		{
 			"#": "71",
 			"label": "Calibration Trigger",
+			"description": "Choose when will be the calibration procedure triggered",
 			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "After exclusion",
-					"value": 0
-				},
-				{
-					"label": "After power cycle",
+					"label": "Calibration done after power cycle regardless of inclusion status",
 					"value": 1
 				},
 				{
-					"label": "Force calibration",
+					"label": "Force calibration. calibration will start immediately",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "72",
-			"label": "Calibration Status",
+			"label": "Calibration Status (read Only)",
+			"description": "With this parameter you can check the calibration status",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -270,19 +290,23 @@
 			"readOnly": true,
 			"options": [
 				{
-					"label": "Successful",
+					"label": "Calibration was successful",
 					"value": 1
 				},
 				{
-					"label": "Failed",
+					"label": "Calibration failed",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "73",
-			"label": "Action on Alarm/Notification Events",
+			"label": "Alarm/Notification Events",
+			"description": "This parameter defines the module behaviour in case it receives any alarm/notification events. note: when value 3 is selected the default time interval of the blinking is 10 minutes. it can be stopped with a button press or sending a control frame. to adjust the time interval please refer to parameter 74 – alarm/notification time interval",
 			"valueSize": 1,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -296,14 +320,15 @@
 					"value": 2
 				},
 				{
-					"label": "Blink load",
+					"label": "Start blinking (output turns 1s on, and 1s off)",
 					"value": 3
 				}
 			]
 		},
 		{
 			"#": "74",
-			"label": "Alarm/Notification Action Duration",
+			"label": "Alarm/Notification Time Interval (dependant On Parameter 73)",
+			"description": "1-125 minutes",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 1,
@@ -316,13 +341,6 @@
 		"inclusion": "AUTOMATICALLY ADDING THE DEVICE TO A Z-WAVE NETWORK (SMARTSTART INCLUSION)\n1. Scan QR code on device label and add S2 DSK to Provisioning List in gateway (hub) \n2. Connect the device to the power supply \n3. Inclusion will be initiated automatically within few seconds of connection to the power supply and the device will automatically enrol in your network (when the device is excluded and connected to the power supply it automatically enters the LEARN MODE state). \nNOTE: LEARN MODE state allows the device to receive network information from the controller. \nⓘ SmartStart inclusion is a part of S2 security level, so if you want to use SmartStart, you need to include it as S2 Authenticated.",
 		"exclusion": "REMOVAL FROM A ZWAVE NETWORK (Z-WAVE EXCLUSION)\n1. Connect the device to the power supply.\n2. Make sure the device is within direct range of your Z-Wave gateway (hub) or use a hand-held Z-Wave remote to perform exclusion.\n3. Enable add/remove mode on your Z-Wave gateway (hub).\n4. Toggle the switch connected to the terminal I 3 times within 3 seconds (this procedure put the device in LEARN MODE). The device has to get On/Off signal 3 times, meaning 3 times push of the momentary switch or with toggle switch 3 times On and 3 times Off. \nOR\nPress and hold the S (Service) button between 2 and 6 seconds if connected power supply. For your safety use only 24-30 Vdc power supply when accessing to S (Service) button. This procedure put the device in LEARN MODE.\n5. Exclusion with the switch connected to terminal I is not limited by time. \n6. The device will be removed from your network, but any custom configuration parameters will not be erased.\nⓘ NOTE: LEARN MODE state allows the device to receive network information from the controller.",
 		"reset": "12.5. Device factory reset\n1. Connect the device to the power supply.\n2. Within the first minute (60 seconds) the device is connected to the power supply, toggle the switch connected to the terminal I 5 times within 3 seconds. The device has to get On/Off signal 5 times, meaning 5 times push of the momentary switch or with toggle switch 5 times On and 5 times Off.\nOR\nPress and hold the S (Service) button for at least 6 seconds if connected to power supply. For your safety use only 24-30 Vdc power supply when accessing to S (Service) button. This procedure put the device in LEARN MODE.\nⓘ NOTE: By resetting the device, all custom parameters previously set on the device will return to their default values, and the node ID will be deleted. Use this reset procedure only when the main gateway (hub) is missing or otherwise inoperable. If an end device is factory reset, it is reverted to the Z-Wave SmartStart inclusion state.\nⓘ NOTE: the reset with switch connected to terminal I is possible only in the first minute after the device is connected to the power.\nⓘ NOTE: after the reset is successfully done the autocalibration will trigger and the green LED will start blinking.",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4211/Qubino_Mini%20Dimmer%20PLUS%20extended%20manual_eng_30.10.1.pdf",
-		"comments": [
-			{
-				"$if": "firmwareVersion < 31.0",
-				"level": "warning",
-				"text": "The device stops responding after 2-4 days when included securely (S0 or S2).\nA fix is available in firmware 31.0 or higher, but Qubino does not provide over-the-air upgrades, so devices will have to be sent to them."
-			}
-		]
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4479/Qubino_Mini%20Dimmer%20PLUS%20installation%20manual_eng_multilanguage_A4_ENFRDESV_5.2.pdf"
 	}
 }
