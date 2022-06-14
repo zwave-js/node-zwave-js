@@ -48,7 +48,7 @@ export const BasicCCValues = Object.freeze({
 			label: "Current value" as const,
 		}),
 		...V.staticProperty("targetValue", {
-			...ValueMetadata.Level,
+			...ValueMetadata.UInt8,
 			label: "Target value" as const,
 			forceCreation: true,
 		}),

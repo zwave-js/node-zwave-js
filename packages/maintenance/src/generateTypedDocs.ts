@@ -224,7 +224,7 @@ function stripQuotes(str: string): string {
 function assertLiteralString(strType: string, context: string): void {
 	if (strType === "string") {
 		throw new Error(`Received type "string" where a string literal was expected.
-Make sure to define this string using "as const".
+Make sure to define this string or the entire object using "as const".
 Context: ${context}`);
 	}
 }
@@ -252,7 +252,7 @@ export async function processDocFile(
 		if (!sourceNode) {
 			console.error(
 				red(
-					`Cannot find symbol ${range.symbol} in module ${range.module}!`,
+					`${docFile}: Cannot find symbol ${range.symbol} in module ${range.module}!`,
 				),
 			);
 			hasErrors = true;
@@ -428,7 +428,7 @@ ${
 		}
 	})();
 	if (valueIDsConst) {
-		text += `## ${ccName} CC values\n\n`;
+		let hasPrintedHeader = false;
 
 		const type = valueIDsConst.getType();
 		const formatValueType = (type: Type<ts.Type>): string => {
@@ -483,6 +483,10 @@ ${
 				.getPropertyOrThrow("meta")
 				.getTypeAtLocation(valueIDsConst);
 
+			const optionsType = valueType
+				.getPropertyOrThrow("options")
+				.getTypeAtLocation(valueIDsConst);
+
 			const getMeta = (prop: string): string =>
 				metaType
 					.getPropertyOrThrow(prop)
@@ -502,11 +506,21 @@ ${
 				}
 			};
 
-			text += `### \`${value.getName()}${callSignature}\`${
-				getMeta("internal") === "true" ? " _(internal)_" : ""
-			}`;
+			const getOptions = (prop: string): string =>
+				optionsType
+					.getPropertyOrThrow(prop)
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
 
-			text += `
+			// Do not document internal CC values
+			if (getOptions("internal") === "true") continue;
+
+			if (!hasPrintedHeader) {
+				text += `## ${ccName} CC values\n\n`;
+				hasPrintedHeader = true;
+			}
+
+			text += `### \`${value.getName()}${callSignature}\`
 
 \`\`\`ts
 ${formatValueType(idType)}
@@ -518,44 +532,42 @@ ${formatValueType(idType)}
 					label,
 					`label of value "${value.getName()}"`,
 				);
-				text += `\n* **Label:** ${stripQuotes(label)}`;
+				text += `\n* **label:** ${stripQuotes(label)}`;
 			});
 			tryGetMeta("description", (description) => {
 				assertLiteralString(
 					description,
 					`description of value "${value.getName()}"`,
 				);
-				text += `\n* **Description:** ${stripQuotes(description)}`;
+				text += `\n* **description:** ${stripQuotes(description)}`;
 			});
 
 			text += `
-* **min. CC version:** ${getMeta("minVersion")}
+* **min. CC version:** ${getOptions("minVersion")}
 * **readable:** ${getMeta("readable")}
 * **writeable:** ${getMeta("writeable")}
-* **stateful:** ${getMeta("stateful")}
-* **secret:** ${getMeta("secret")}
+* **stateful:** ${getOptions("stateful")}
+* **secret:** ${getOptions("secret")}
 `;
 
-			tryGetMeta("valueType", (meta) => {
-				text += `\n* **value type** ${meta}`;
+			tryGetMeta("type", (meta) => {
+				text += `* **value type:** \`${meta}\`\n`;
 			});
 			tryGetMeta("default", (meta) => {
-				text += `\n* **default value** ${meta}`;
+				text += `* **default value:** ${meta}\n`;
 			});
 			tryGetMeta("min", (meta) => {
-				text += `\n* **min value** ${meta}`;
+				text += `* **min. value:** ${meta}\n`;
 			});
 			tryGetMeta("max", (meta) => {
-				text += `\n* **max value** ${meta}`;
+				text += `* **max. value:** ${meta}\n`;
 			});
 			tryGetMeta("minLength", (meta) => {
-				text += `\n* **min length** ${meta}`;
+				text += `* **min. length:** ${meta}\n`;
 			});
 			tryGetMeta("maxLength", (meta) => {
-				text += `\n* **max length** ${meta}`;
+				text += `* **max. length:** ${meta}\n`;
 			});
-
-			// TODO: Print CC Value Metadata
 		}
 	}
 
@@ -654,8 +666,8 @@ async function main(): Promise<void> {
 	});
 
 	let hasErrors = false;
-	// Replace all imports
-	hasErrors ||= await processImports(piscina);
+	// // Replace all imports
+	// hasErrors ||= await processImports(piscina);
 	// Regenerate all CC documentation files
 	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
 

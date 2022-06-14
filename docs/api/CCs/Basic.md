@@ -33,6 +33,7 @@ async set(targetValue: number): Promise<void>;
 -   **writeable:** true
 -   **stateful:** true
 -   **secret:** false
+-   **value type:** `"any"`
 
 ### `currentValue`
 
@@ -44,11 +45,15 @@ async set(targetValue: number): Promise<void>;
 }
 ```
 
+-   **label:** Current value
 -   **min. CC version:** 1
--   **readable:** boolean
--   **writeable:** boolean
+-   **readable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 99
 
 ### `duration`
 
@@ -60,11 +65,13 @@ async set(targetValue: number): Promise<void>;
 }
 ```
 
--   **min. CC version:** number
--   **readable:** boolean
--   **writeable:** boolean
+-   **label:** Remaining duration
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
+-   **value type:** `"duration"`
 
 ### `targetValue`
 
@@ -76,8 +83,12 @@ async set(targetValue: number): Promise<void>;
 }
 ```
 
+-   **label:** Target value
 -   **min. CC version:** 1
--   **readable:** boolean
--   **writeable:** boolean
+-   **readable:** true
+-   **writeable:** true
 -   **stateful:** true
 -   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255

@@ -35,27 +35,14 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
+-   **label:** `${string} duration`
+-   **description:** For how long the alarm should be active
 -   **min. CC version:** 1
 -   **readable:** true
--   **writeable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
-
-### `propName`
-
-```ts
-{
-	commandClass: typeof CommandClasses["Alarm Sensor"],
-	endpoint: number,
-	property: "supportedSensorTypes",
-}
-```
-
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
+-   **value type:** `"number"`
 
 ### `severity(sensorType: AlarmSensorType)`
 
@@ -68,11 +55,15 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
+-   **label:** `${string} severity`
 -   **min. CC version:** 1
 -   **readable:** true
--   **writeable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 1
+-   **max. value:** 100
 
 ### `state(sensorType: AlarmSensorType)`
 
@@ -85,24 +76,11 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 }
 ```
 
+-   **label:** `${string} state`
+-   **description:** Whether the alarm is active
 -   **min. CC version:** 1
 -   **readable:** true
--   **writeable:** true
+-   **writeable:** false
 -   **stateful:** true
 -   **secret:** false
-
-### `supportedSensorTypes` _(internal)_
-
-```ts
-{
-	commandClass: typeof CommandClasses["Alarm Sensor"],
-	endpoint: number,
-	property: "supportedSensorTypes",
-}
-```
-
--   **min. CC version:** 1
--   **readable:** true
--   **writeable:** true
--   **stateful:** true
--   **secret:** false
+-   **value type:** `"boolean"`

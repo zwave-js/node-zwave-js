@@ -1,4 +1,4 @@
-import type { CommandClasses, ValueMetadata } from "@zwave-js/core";
+import { CommandClasses, ValueMetadata } from "@zwave-js/core";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -11,23 +11,42 @@ export const VALUES: unique symbol = Symbol.for("CC_VALUE_DEFINITIONS");
 // ts.defaultMaximumTruncationLength = 1000
 // Then restart TS Server
 
-export interface DefineCCValueOptions {
+export interface CCValueOptions {
+	/**
+	 * Whether the CC value is internal. Internal values are not exposed to the user.
+	 */
+	internal?: boolean;
+	/**
+	 * The minimum CC version required for this value to exist.
+	 */
+	minVersion?: number;
+	/**
+	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
+	 */
+	stateful?: boolean;
+	/**
+	 * Omit this value from value logs. Default: `false`
+	 */
+	secret?: boolean;
+	// TODO: Do we need this?
+	/**
+	 * Whether this value should always be created/persisted, even if it is undefined. Default: `false`
+	 */
+	forceCreation?: boolean;
+
 	/** Whether the CC value may exist on endpoints. Default: `true` */
 	supportsEndpoints?: boolean;
 }
 
-const defaultMeta = {
-	// ...ValueMetadata.Any,
-	type: "any",
-	readable: true,
-	writeable: true,
+const defaultOptions = {
 	internal: false,
 	minVersion: 1,
 	secret: false,
 	stateful: true,
+	supportsEndpoints: true,
 } as const;
 
-type DefaultMeta = typeof defaultMeta;
+type DefaultOptions = typeof defaultOptions;
 
 // expands object types recursively
 type ExpandRecursively<T> =
@@ -57,19 +76,19 @@ type InferValueIDBase<
 
 type ToStaticCCValues<
 	TCommandClass extends CommandClasses,
-	TValues extends Record<keyof TValues, CCValueDefinition>,
+	TValues extends Record<keyof TValues, CCValueBlueprint>,
 > = Readonly<{
 	[K in keyof TValues]: ExpandRecursively<
-		StaticCCValue<TCommandClass, TValues[K]["blueprint"]>
+		StaticCCValue<TCommandClass, TValues[K]>
 	>;
 }>;
 
 type ToDynamicCCValues<
 	TCommandClass extends CommandClasses,
-	TValues extends Record<keyof TValues, DynamicCCValueDefinition<any>>,
+	TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>,
 > = Readonly<{
 	[K in keyof TValues]: ExpandRecursively<
-		DynamicCCValue<TCommandClass, TValues[K]["blueprint"]>
+		DynamicCCValue<TCommandClass, TValues[K]>
 	>;
 }>;
 
@@ -92,16 +111,6 @@ function evalOrStatic<T>(fnOrConst: T, ...args: any[]): ReturnTypeOrStatic<T> {
 	return typeof fnOrConst === "function" ? fnOrConst(...args) : fnOrConst;
 }
 
-export interface CCValueDefinition {
-	blueprint: CCValueBlueprint;
-	options?: DefineCCValueOptions;
-}
-
-export type DynamicCCValueDefinition<TArgs extends any[]> = {
-	blueprint: DynamicCCValueBlueprint<TArgs>;
-	options?: DefineCCValueOptions;
-};
-
 /** Defines a single static CC values that belong to a CC */
 function defineStaticCCValue<
 	TCommandClass extends CommandClasses,
@@ -109,15 +118,20 @@ function defineStaticCCValue<
 >(
 	commandClass: TCommandClass,
 	blueprint: TBlueprint,
-	options: DefineCCValueOptions = {},
 ): ExpandRecursively<StaticCCValue<TCommandClass, TBlueprint>> {
-	// Normalize generic options
-	options.supportsEndpoints ??= true;
+	// Normalize value options
+	const _blueprint = {
+		...blueprint,
+		options: {
+			...defaultOptions,
+			...blueprint.options,
+		},
+	};
 
 	const valueId = {
 		commandClass,
-		property: blueprint.property,
-		propertyKey: blueprint.propertyKey,
+		property: _blueprint.property,
+		propertyKey: _blueprint.propertyKey,
 	};
 
 	const ret: StaticCCValue<TCommandClass, TBlueprint> = {
@@ -125,11 +139,14 @@ function defineStaticCCValue<
 			return { ...valueId };
 		},
 		endpoint: (endpoint: number = 0) => {
-			if (!options.supportsEndpoints) endpoint = 0;
+			if (!_blueprint.options.supportsEndpoints) endpoint = 0;
 			return { ...valueId, endpoint };
 		},
 		get meta() {
-			return { ...defaultMeta, ...blueprint.meta } as any;
+			return { ...ValueMetadata.Any, ..._blueprint.meta } as any;
+		},
+		get options() {
+			return { ..._blueprint.options } as any;
 		},
 	};
 
@@ -143,13 +160,18 @@ function defineDynamicCCValue<
 >(
 	commandClass: TCommandClass,
 	blueprint: TBlueprint,
-	options: DefineCCValueOptions = {},
 ): ExpandRecursively<DynamicCCValue<TCommandClass, TBlueprint>> {
-	// Normalize generic options
-	options.supportsEndpoints ??= true;
-
 	return ((...args: Parameters<TBlueprint>) => {
-		const actualBlueprint = blueprint(...args);
+		const _blueprint = blueprint(...args);
+
+		// Normalize value options
+		const actualBlueprint = {
+			..._blueprint,
+			options: {
+				...defaultOptions,
+				..._blueprint.options,
+			},
+		};
 
 		const valueId = {
 			commandClass,
@@ -162,11 +184,14 @@ function defineDynamicCCValue<
 				return { ...valueId };
 			},
 			endpoint: (endpoint: number = 0) => {
-				if (!options.supportsEndpoints) endpoint = 0;
+				if (!actualBlueprint.options.supportsEndpoints) endpoint = 0;
 				return { ...valueId, endpoint };
 			},
 			get meta() {
-				return { ...defaultMeta, ...actualBlueprint.meta } as any;
+				return { ...ValueMetadata.Any, ...actualBlueprint.meta } as any;
+			},
+			get options() {
+				return { ..._blueprint.options } as any;
 			},
 		};
 
@@ -179,38 +204,36 @@ export const V = {
 	/** Defines multiple static CC values that belong to the same CC */
 	defineStaticCCValues<
 		TCommandClass extends CommandClasses,
-		TValues extends Record<keyof TValues, CCValueDefinition>,
+		TValues extends Record<keyof TValues, CCValueBlueprint>,
 	>(
 		commandClass: TCommandClass,
 		values: TValues,
-	): TValues extends Record<keyof TValues, CCValueDefinition>
+	): TValues extends Record<keyof TValues, CCValueBlueprint>
 		? ExpandRecursively<ToStaticCCValues<TCommandClass, TValues>>
 		: never {
 		return Object.fromEntries(
-			Object.entries<CCValueDefinition>(values).map(
-				([key, { blueprint, options }]) => [
-					key,
-					defineStaticCCValue(commandClass, blueprint, options),
-				],
-			),
+			Object.entries<CCValueBlueprint>(values).map(([key, blueprint]) => [
+				key,
+				defineStaticCCValue(commandClass, blueprint),
+			]),
 		) as any;
 	},
 
 	/** Defines multiple static CC values that belong to the same CC */
 	defineDynamicCCValues<
 		TCommandClass extends CommandClasses,
-		TValues extends Record<keyof TValues, DynamicCCValueDefinition<any>>,
+		TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>,
 	>(
 		commandClass: TCommandClass,
 		values: TValues,
-	): TValues extends Record<keyof TValues, DynamicCCValueDefinition<any>>
+	): TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>
 		? ExpandRecursively<ToDynamicCCValues<TCommandClass, TValues>>
 		: never {
 		return Object.fromEntries(
-			Object.entries<DynamicCCValueDefinition<any>>(values).map(
-				([key, { blueprint, options }]) => [
+			Object.entries<DynamicCCValueBlueprint<any>>(values).map(
+				([key, blueprint]) => [
 					key,
-					defineDynamicCCValue(commandClass, blueprint, options),
+					defineDynamicCCValue(commandClass, blueprint),
 				],
 			),
 		) as any;
@@ -219,19 +242,24 @@ export const V = {
 	/** Returns a CC value definition that is named like the value `property` */
 	staticProperty<
 		TProp extends string | number,
-		TMeta extends CCValueMeta | undefined = undefined,
+		TMeta extends ValueMetadata | undefined = undefined,
+		TOptions extends CCValueOptions | undefined = undefined,
 	>(
 		property: TProp,
 		meta?: TMeta,
+		options?: TOptions,
 	): {
-		[K in TProp]: { blueprint: { property: TProp; meta: TMeta } };
+		[K in TProp]: {
+			property: TProp;
+			meta: TMeta;
+			options: TOptions;
+		};
 	} {
 		return {
 			[property]: {
-				blueprint: {
-					property,
-					meta,
-				},
+				property,
+				meta,
+				options,
 			},
 		} as any;
 	},
@@ -240,20 +268,25 @@ export const V = {
 	staticPropertyWithName<
 		TName extends string,
 		TProp extends string | number,
-		TMeta extends CCValueMeta | undefined = undefined,
+		TMeta extends ValueMetadata | undefined = undefined,
+		TOptions extends CCValueOptions | undefined = undefined,
 	>(
 		name: TName,
 		property: TProp,
 		meta?: TMeta,
+		options?: TOptions,
 	): {
-		[K in TName]: { blueprint: { property: TProp; meta: TMeta } };
+		[K in TName]: {
+			property: TProp;
+			meta: TMeta;
+			options: TOptions;
+		};
 	} {
 		return {
 			[name]: {
-				blueprint: {
-					property,
-					meta,
-				},
+				property,
+				meta,
+				options,
 			},
 		} as any;
 	},
@@ -263,28 +296,28 @@ export const V = {
 		TName extends string,
 		TProp extends string | number,
 		TKey extends string | number,
-		TMeta extends CCValueMeta | undefined = undefined,
+		TMeta extends ValueMetadata | undefined = undefined,
+		TOptions extends CCValueOptions | undefined = undefined,
 	>(
 		name: TName,
 		property: TProp,
 		propertyKey: TKey,
 		meta?: TMeta,
+		options?: TOptions,
 	): {
 		[K in TName]: {
-			blueprint: {
-				property: TProp;
-				propertyKey: TKey;
-				meta: TMeta;
-			};
+			property: TProp;
+			propertyKey: TKey;
+			meta: TMeta;
+			options: TOptions;
 		};
 	} {
 		return {
 			[name]: {
-				blueprint: {
-					property,
-					propertyKey,
-					meta,
-				},
+				property,
+				propertyKey,
+				meta,
+				options,
 			},
 		} as any;
 	},
@@ -293,26 +326,29 @@ export const V = {
 	dynamicPropertyWithName<
 		TName extends string,
 		TProp extends FnOrStatic<any[], ValueIDProperties["property"]>,
-		TMeta extends FnOrStatic<any[], CCValueMeta | undefined> = undefined,
+		TMeta extends FnOrStatic<any[], ValueMetadata | undefined> = undefined,
+		TOptions extends FnOrStatic<
+			any[],
+			CCValueOptions | undefined
+		> = undefined,
 	>(
 		name: TName,
 		property: TProp,
 		meta?: TMeta,
+		options?: TOptions,
 	): {
-		[K in TName]: {
-			blueprint: (...args: InferArgs<[TProp, TMeta]>) => {
-				property: ReturnTypeOrStatic<TProp>;
-				meta: ReturnTypeOrStatic<TMeta>;
-			};
+		[K in TName]: (...args: InferArgs<[TProp, TMeta, TOptions]>) => {
+			property: ReturnTypeOrStatic<TProp>;
+			meta: ReturnTypeOrStatic<TMeta>;
+			options: ReturnTypeOrStatic<TOptions>;
 		};
 	} {
 		return {
-			[name]: {
-				blueprint: (...args: InferArgs<[TProp, TMeta]>) => ({
-					property: evalOrStatic(property, ...args),
-					meta: evalOrStatic(meta, ...args),
-				}),
-			},
+			[name]: (...args: InferArgs<[TProp, TMeta, TOptions]>) => ({
+				property: evalOrStatic(property, ...args),
+				meta: evalOrStatic(meta, ...args),
+				options: evalOrStatic(options, ...args),
+			}),
 		} as any;
 	},
 
@@ -321,30 +357,33 @@ export const V = {
 		TName extends string,
 		TProp extends FnOrStatic<any[], ValueIDProperties["property"]>,
 		TKey extends FnOrStatic<any[], ValueIDProperties["propertyKey"]>,
-		TMeta extends FnOrStatic<any[], CCValueMeta | undefined> = undefined,
+		TMeta extends FnOrStatic<any[], ValueMetadata | undefined> = undefined,
+		TOptions extends FnOrStatic<
+			any[],
+			CCValueOptions | undefined
+		> = undefined,
 	>(
 		name: TName,
 		property: TProp,
 		propertyKey: TKey,
 		meta?: TMeta,
+		options?: TOptions,
 	): {
-		[K in TName]: {
-			blueprint: (...args: InferArgs<[TProp, TKey, TMeta]>) => {
-				property: ReturnTypeOrStatic<TProp>;
-				propertyKey: ReturnTypeOrStatic<TKey>;
-				meta: ReturnTypeOrStatic<TMeta>;
-			};
+		[K in TName]: (...args: InferArgs<[TProp, TKey, TMeta, TOptions]>) => {
+			property: ReturnTypeOrStatic<TProp>;
+			propertyKey: ReturnTypeOrStatic<TKey>;
+			meta: ReturnTypeOrStatic<TMeta>;
+			options: ReturnTypeOrStatic<TOptions>;
 		};
 	} {
 		return {
-			[name]: {
-				blueprint: (...args: InferArgs<[TProp, TKey, TMeta]>) => {
-					return {
-						property: evalOrStatic(property, ...args),
-						propertyKey: evalOrStatic(propertyKey, ...args),
-						meta: evalOrStatic(meta, ...args),
-					};
-				},
+			[name]: (...args: InferArgs<[TProp, TKey, TMeta, TOptions]>) => {
+				return {
+					property: evalOrStatic(property, ...args),
+					propertyKey: evalOrStatic(propertyKey, ...args),
+					meta: evalOrStatic(meta, ...args),
+					options: evalOrStatic(options, ...args),
+				};
 			},
 		} as any;
 	},
@@ -359,7 +398,8 @@ export const V = {
 // }
 
 export interface CCValueBlueprint extends Readonly<ValueIDProperties> {
-	readonly meta?: Readonly<CCValueMeta>;
+	readonly meta?: Readonly<ValueMetadata>;
+	readonly options?: Readonly<CCValueOptions>;
 }
 
 /** A blueprint for a CC value which depends on one or more parameters */
@@ -371,8 +411,16 @@ type DropOptional<T> = {
 	[K in keyof T as [undefined] extends [T[K]] ? never : K]: T[K];
 };
 
-type MergeMeta<TMeta extends CCValueMeta | undefined> = DropOptional<
-	TMeta extends CCValueMeta ? Overwrite<DefaultMeta, TMeta> : DefaultMeta
+type MergeOptions<TOptions extends CCValueOptions | undefined> = DropOptional<
+	TOptions extends CCValueOptions
+		? Overwrite<DefaultOptions, TOptions>
+		: DefaultOptions
+>;
+
+type MergeMeta<TMeta extends ValueMetadata | undefined> = DropOptional<
+	TMeta extends ValueMetadata
+		? Overwrite<typeof ValueMetadata["Any"], TMeta>
+		: typeof ValueMetadata["Any"]
 >;
 
 type AddCCValueProperties<
@@ -396,8 +444,10 @@ type AddCCValueProperties<
 			>
 	>;
 
-	/** Returns the meta information for this value ID */
+	/** Returns the metadata for this value ID */
 	get meta(): Readonly<MergeMeta<TBlueprint["meta"]>>;
+	/** Returns the value options for this value ID */
+	get options(): Readonly<MergeOptions<TBlueprint["options"]>>;
 };
 
 /** A blueprint for a CC value which depends on one or more parameters */
@@ -413,30 +463,6 @@ export type StaticCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends CCValueBlueprint,
 > = Readonly<AddCCValueProperties<TCommandClass, TBlueprint>>;
-
-export type CCValueMeta = Partial<ValueMetadata> & {
-	/**
-	 * Whether the CC value is internal. Internal values are not exposed to the user.
-	 */
-	internal?: boolean;
-	/**
-	 * The minimum CC version required for this value to exist.
-	 */
-	minVersion?: number;
-	/**
-	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
-	 */
-	stateful?: boolean;
-	/**
-	 * Omit this value from value logs. Default: `false`
-	 */
-	secret?: boolean;
-	// TODO: Do we need this?
-	/**
-	 * Whether this value should always be created/persisted, even if it is undefined. Default: `false`
-	 */
-	forceCreation?: boolean;
-};
 
 // This interface is auto-generated by maintenance/generateCCValuesInterface.ts
 // Do not edit it by hand or your changes will be lost

@@ -37,22 +37,61 @@ export const AlarmSensorCCValues = Object.freeze({
 			"state",
 			"state",
 			(sensorType: AlarmSensorType) => sensorType,
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${alarmName} state`,
+					description: "Whether the alarm is active",
+					ccSpecific: { sensorType },
+				} as const;
+			},
 		),
 		...V.dynamicPropertyAndKeyWithName(
 			"severity",
 			"severity",
 			(sensorType: AlarmSensorType) => sensorType,
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyNumber,
+					min: 1,
+					max: 100,
+					unit: "%",
+					label: `${alarmName} severity`,
+					ccSpecific: { sensorType },
+				} as const;
+			},
 		),
 		...V.dynamicPropertyAndKeyWithName(
 			"duration",
 			"duration",
 			(sensorType: AlarmSensorType) => sensorType,
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyNumber,
+					unit: "s",
+					label: `${alarmName} duration`,
+					description: "For how long the alarm should be active",
+					ccSpecific: { sensorType },
+				} as const;
+			},
 		),
 	}),
 	...V.defineStaticCCValues(CommandClasses["Alarm Sensor"], {
-		...V.staticProperty("supportedSensorTypes", { internal: true }),
-		...V.staticPropertyWithName("propName", "supportedSensorTypes"),
-		...V.staticProperty("supportedSensorTypes", { internal: true }),
+		...V.staticProperty("supportedSensorTypes", undefined, {
+			internal: true,
+		}),
 	}),
 });
 
@@ -231,46 +270,24 @@ duration: ${currentValue.duration}`;
 		applHost: ZWaveApplicationHost,
 		sensorType: AlarmSensorType,
 	): void {
-		const stateValueId = AlarmSensorCCValues.state(sensorType).endpoint(
-			this.endpointIndex,
-		);
-		const severityValueId = AlarmSensorCCValues.severity(
-			sensorType,
-		).endpoint(this.endpointIndex);
-		const durationValueId = AlarmSensorCCValues.duration(
-			sensorType,
-		).endpoint(this.endpointIndex);
+		const stateValue = AlarmSensorCCValues.state(sensorType);
+		const stateValueId = stateValue.endpoint(this.endpointIndex);
+		const severityValue = AlarmSensorCCValues.severity(sensorType);
+		const severityValueId = severityValue.endpoint(this.endpointIndex);
+		const durationValue = AlarmSensorCCValues.duration(sensorType);
+		const durationValueId = durationValue.endpoint(this.endpointIndex);
 
 		const valueDB = this.getValueDB(applHost);
-		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
 
 		// Always create metadata if it does not exist
 		if (!valueDB.hasMetadata(stateValueId)) {
-			valueDB.setMetadata(stateValueId, {
-				...ValueMetadata.ReadOnlyBoolean,
-				label: `${alarmName} state`,
-				description: "Whether the alarm is active",
-				ccSpecific: { sensorType },
-			});
+			valueDB.setMetadata(stateValueId, stateValue.meta);
 		}
 		if (!valueDB.hasMetadata(severityValueId)) {
-			valueDB.setMetadata(severityValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				min: 1,
-				max: 100,
-				unit: "%",
-				label: `${alarmName} severity`,
-				ccSpecific: { sensorType },
-			});
+			valueDB.setMetadata(severityValueId, severityValue.meta);
 		}
 		if (!valueDB.hasMetadata(durationValueId)) {
-			valueDB.setMetadata(durationValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				unit: "s",
-				label: `${alarmName} duration`,
-				description: "For how long the alarm should be active",
-				ccSpecific: { sensorType },
-			});
+			valueDB.setMetadata(durationValueId, durationValue.meta);
 		}
 	}
 }

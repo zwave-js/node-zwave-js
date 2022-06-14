@@ -39,9 +39,9 @@ import { AssociationCommand, type AssociationAddress } from "../lib/_Types";
 export const AssociationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses.Association, {
 		/** Whether the node has a lifeline association */
-		...V.staticProperty("hasLifeline", { internal: true }),
+		...V.staticProperty("hasLifeline", undefined, { internal: true }),
 		/** How many association groups the node has */
-		...V.staticProperty("groupCount", { internal: true }),
+		...V.staticProperty("groupCount", undefined, { internal: true }),
 	}),
 
 	...V.defineDynamicCCValues(CommandClasses.Association, {
@@ -50,6 +50,7 @@ export const AssociationCCValues = Object.freeze({
 			"maxNodes",
 			"maxNodes",
 			(groupId: number) => groupId,
+			undefined,
 			{ internal: true },
 		),
 		/** The node IDs currently belonging to an association group */
@@ -57,6 +58,7 @@ export const AssociationCCValues = Object.freeze({
 			"nodeIds",
 			"nodeIds",
 			(groupId: number) => groupId,
+			undefined,
 			{ internal: true },
 		),
 	}),
