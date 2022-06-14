@@ -1,4 +1,3 @@
-import type { ValueID } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -25,7 +24,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -38,7 +36,22 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { HumidityControlMode, HumidityControlModeCommand } from "../lib/_Types";
+
+export const HumidityControlModeCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Humidity Control Mode"], {
+		...V.staticProperty("mode", {
+			...ValueMetadata.UInt8,
+			states: enumValuesToMetadataStates(HumidityControlMode),
+			label: "Humidity control mode",
+		} as const),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Humidity Control Mode"], {
+		// Dynamic CC values go here
+	}),
+});
 
 @API(CommandClasses["Humidity Control Mode"])
 export class HumidityControlModeCCAPI extends CCAPI {
@@ -287,11 +300,6 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 
 	private _mode: HumidityControlMode;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		states: enumValuesToMetadataStates(HumidityControlMode),
-		label: "Humidity control mode",
-	})
 	public get mode(): HumidityControlMode {
 		return this._mode;
 	}
@@ -334,14 +342,9 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "mode",
-		};
-		// Only update the dynamic part
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.UInt8,
+		const modeValue = HumidityControlModeCCValues.mode;
+		valueDB.setMetadata(modeValue.endpoint(this.endpointIndex), {
+			...modeValue.meta,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,
 				this._supportedModes,

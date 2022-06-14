@@ -9,6 +9,7 @@ import {
 	HumidityControlModeCCSupportedReport,
 	HumidityControlModeCommand,
 } from "@zwave-js/cc";
+import { HumidityControlModeCCValues } from "@zwave-js/cc/HumidityControlModeCC";
 import { CommandClasses, enumValuesToMetadataStates } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import { assertCC } from "../assertCC";
@@ -95,15 +96,16 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 				HumidityControlMode.Auto, // current value
 			]),
 		);
-		new HumidityControlModeCCReport(host, {
+		const cc = new HumidityControlModeCCReport(host, {
 			nodeId,
 			data: ccData,
 		});
+		cc.persistValues(host);
 
-		const currentValueMeta = getCCValueMetadata(
-			CommandClasses["Humidity Control Mode"],
-			"mode",
-		);
+		const currentValueMeta = host
+			.getValueDB(nodeId)
+			.getMetadata(HumidityControlModeCCValues.mode.id);
+
 		expect(currentValueMeta).toMatchObject({
 			states: enumValuesToMetadataStates(HumidityControlMode),
 			label: "Humidity control mode",
@@ -149,15 +151,16 @@ describe("lib/commandclass/HumidityControlModeCC => ", () => {
 					(1 << HumidityControlMode.Auto),
 			]),
 		);
-		new HumidityControlModeCCSupportedReport(host, {
+		const cc = new HumidityControlModeCCSupportedReport(host, {
 			nodeId,
 			data: ccData,
 		});
+		cc.persistValues(host);
 
-		const currentValueMeta = getCCValueMetadata(
-			CommandClasses["Humidity Control Mode"],
-			"mode",
-		);
+		const currentValueMeta = host
+			.getValueDB(nodeId)
+			.getMetadata(HumidityControlModeCCValues.mode.id);
+
 		expect(currentValueMeta).toMatchObject({
 			states: {
 				0: "Off",

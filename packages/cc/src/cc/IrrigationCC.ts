@@ -31,7 +31,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -44,6 +43,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	IrrigationCommand,
 	IrrigationSensorPolarity,
@@ -52,444 +52,369 @@ import {
 	ValveType,
 } from "../lib/_Types";
 
-function testResponseForIrrigationCommandWithValveId(
-	sent: {
-		valveId: ValveId;
-	},
-	received: {
-		valveId: ValveId;
-	},
-) {
-	return received.valveId === sent.valveId;
-}
+export const IrrigationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Irrigation, {
+		...V.staticProperty("numValves", undefined, { internal: true }),
+		...V.staticProperty("numValveTables", undefined, { internal: true }),
+		...V.staticProperty("supportsMasterValve", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("maxValveTableSize", undefined, { internal: true }),
+
+		...V.staticProperty("systemVoltage", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "System voltage",
+			unit: "V",
+		} as const),
+
+		...V.staticProperty("masterValveDelay", {
+			...ValueMetadata.UInt8,
+			label: "Master valve delay",
+			description:
+				"The delay between turning on the master valve and turning on any zone valve",
+			unit: "seconds",
+		} as const),
+
+		...V.staticProperty("flowSensorActive", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Flow sensor active",
+		} as const),
+
+		...V.staticProperty("pressureSensorActive", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Pressure sensor active",
+		} as const),
+
+		...V.staticProperty("rainSensorActive", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Rain sensor attached and active",
+		} as const),
+
+		...V.staticProperty("rainSensorPolarity", {
+			...ValueMetadata.Number,
+			label: "Rain sensor polarity",
+			min: 0,
+			max: 1,
+			states: enumValuesToMetadataStates(IrrigationSensorPolarity),
+		} as const),
+
+		...V.staticProperty("moistureSensorActive", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Moisture sensor attached and active",
+		} as const),
+
+		...V.staticProperty("moistureSensorPolarity", {
+			...ValueMetadata.Number,
+			label: "Moisture sensor polarity",
+			min: 0,
+			max: 1,
+			states: enumValuesToMetadataStates(IrrigationSensorPolarity),
+		} as const),
+
+		...V.staticProperty("flow", {
+			...ValueMetadata.ReadOnlyNumber,
+			label: "Flow",
+			unit: "l/h",
+		} as const),
+
+		...V.staticProperty("pressure", {
+			...ValueMetadata.ReadOnlyNumber,
+			label: "Pressure",
+			unit: "kPa",
+		} as const),
+
+		...V.staticProperty("shutoffDuration", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "Remaining shutoff duration",
+			unit: "hours",
+		} as const),
+
+		...V.staticProperty("errorNotProgrammed", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Error: device not programmed",
+		} as const),
+
+		...V.staticProperty("errorEmergencyShutdown", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Error: emergency shutdown",
+		} as const),
+
+		...V.staticProperty("errorHighPressure", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Error: high pressure",
+		} as const),
+
+		...V.staticProperty("highPressureThreshold", {
+			...ValueMetadata.Number,
+			label: "High pressure threshold",
+			unit: "kPa",
+		} as const),
+
+		...V.staticProperty("errorLowPressure", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Error: low pressure",
+		} as const),
+
+		...V.staticProperty("lowPressureThreshold", {
+			...ValueMetadata.Number,
+			label: "Low pressure threshold",
+			unit: "kPa",
+		} as const),
+
+		...V.staticProperty("errorValve", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Error: valve reporting error",
+		} as const),
+
+		...V.staticProperty("masterValveOpen", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Master valve is open",
+		} as const),
+
+		...V.staticProperty("firstOpenZoneId", {
+			...ValueMetadata.ReadOnlyNumber,
+			label: "First open zone valve ID",
+		} as const),
+
+		...V.staticPropertyWithName("shutoffSystem", "shutoff", {
+			...ValueMetadata.WriteOnlyBoolean,
+			label: `Shutoff system`,
+		} as const),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses.Irrigation, {
+		...V.dynamicPropertyAndKeyWithName(
+			"valveConnected",
+			(valveId: ValveId) => valveId,
+			"valveConnected",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(valveId)}: Connected`,
+				} as const),
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"nominalCurrent",
+			(valveId: ValveId) => valveId,
+			"nominalCurrent",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Nominal current`,
+					unit: "mA",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"nominalCurrentHighThreshold",
+			(valveId: ValveId) => valveId,
+			"nominalCurrentHighThreshold",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Number,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Nominal current - high threshold`,
+					min: 0,
+					max: 2550,
+					unit: "mA",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"nominalCurrentLowThreshold",
+			(valveId: ValveId) => valveId,
+			"nominalCurrentLowThreshold",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Number,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Nominal current - low threshold`,
+					min: 0,
+					max: 2550,
+					unit: "mA",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorShortCircuit",
+			(valveId: ValveId) => valveId,
+			"errorShortCircuit",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Short circuit detected`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorHighCurrent",
+			(valveId: ValveId) => valveId,
+			"errorHighCurrent",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Current above high threshold`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorLowCurrent",
+			(valveId: ValveId) => valveId,
+			"errorLowCurrent",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Current below low threshold`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"maximumFlow",
+			(valveId: ValveId) => valveId,
+			"maximumFlow",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Number,
+					label: `${valveIdToMetadataPrefix(valveId)}: Maximum flow`,
+					min: 0,
+					unit: "l/h",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorMaximumFlow",
+			(valveId: ValveId) => valveId,
+			"errorMaximumFlow",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Maximum flow detected`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"highFlowThreshold",
+			(valveId: ValveId) => valveId,
+			"highFlowThreshold",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Number,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: High flow threshold`,
+					min: 0,
+					unit: "l/h",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorHighFlow",
+			(valveId: ValveId) => valveId,
+			"errorHighFlow",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Flow above high threshold`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"lowFlowThreshold",
+			(valveId: ValveId) => valveId,
+			"lowFlowThreshold",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Number,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Low flow threshold`,
+					min: 0,
+					unit: "l/h",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"errorLowFlow",
+			(valveId: ValveId) => valveId,
+			"errorLowFlow",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Error - Flow below high threshold`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"useRainSensor",
+			(valveId: ValveId) => valveId,
+			"useRainSensor",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Boolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Use rain sensor`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"useMoistureSensor",
+			(valveId: ValveId) => valveId,
+			"useMoistureSensor",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Boolean,
+					label: `${valveIdToMetadataPrefix(
+						valveId,
+					)}: Use moisture sensor`,
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"valveRunDuration",
+			(valveId: ValveId) => valveId,
+			"duration",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.UInt16,
+					label: `${valveIdToMetadataPrefix(valveId)}: Run duration`,
+					min: 1,
+					unit: "s",
+				} as const),
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"valveRunStartStop",
+			(valveId: ValveId) => valveId,
+			"startStop",
+			(valveId: ValveId) =>
+				({
+					...ValueMetadata.Boolean,
+					label: `${valveIdToMetadataPrefix(valveId)}: Start/Stop`,
+				} as const),
+		),
+	}),
+});
 
 function valveIdToMetadataPrefix(valveId: ValveId): string {
 	if (valveId === "master") return "Master valve";
 	return `Valve ${padStart(valveId.toString(), 3, "0")}`;
-}
-
-export function getNumValvesValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: "numValves",
-	};
-}
-
-export function getSupportsMasterValveValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: "supportsMasterValve",
-	};
-}
-
-export function getMaxValveTableSizeValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: "maxValveTableSize",
-	};
-}
-
-export function getValveConnectedValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "connected",
-	};
-}
-
-export function getValveConnectedValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(valveId)}: Connected`,
-	};
-}
-
-export function getValveNominalCurrentValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "nominalCurrent",
-	};
-}
-
-export function getValveNominalCurrentValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(valveId)}: Nominal current`,
-		unit: "mA",
-	};
-}
-
-export function getValveErrorShortCircuitValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorShortCircuit",
-	};
-}
-
-export function getValveErrorShortCircuitValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Short circuit detected`,
-	};
-}
-
-export function getValveErrorHighCurrentValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorHighCurrent",
-	};
-}
-
-export function getValveErrorHighCurrentValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Current above high threshold`,
-	};
-}
-
-export function getValveErrorLowCurrentValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorLowCurrent",
-	};
-}
-
-export function getValveErrorLowCurrentValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Current below low threshold`,
-	};
-}
-
-export function getValveErrorMaximumFlowValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorMaximumFlow",
-	};
-}
-
-export function getValveErrorMaximumFlowValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Maximum flow detected`,
-	};
-}
-
-export function getValveErrorHighFlowValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorHighFlow",
-	};
-}
-
-export function getValveErrorHighFlowValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Flow above high threshold`,
-	};
-}
-
-export function getValveErrorLowFlowValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "errorLowFlow",
-	};
-}
-
-export function getValveErrorLowFlowValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyBoolean,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Error - Flow below high threshold`,
-	};
-}
-
-export function getNominalCurrentHighThresholdValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "nominalCurrentHighThreshold",
-	};
-}
-
-export function getNominalCurrentHighThresholdValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Nominal current - high threshold`,
-		min: 0,
-		max: 2550,
-		unit: "mA",
-	};
-}
-
-export function getNominalCurrentLowThresholdValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "nominalCurrentLowThreshold",
-	};
-}
-
-export function getNominalCurrentLowThresholdValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(
-			valveId,
-		)}: Nominal current - low threshold`,
-		min: 0,
-		max: 2550,
-		unit: "mA",
-	};
-}
-
-export function getMaximumFlowValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "maximumFlow",
-	};
-}
-
-export function getMaximumFlowValueMetadata(valveId: ValveId): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(valveId)}: Maximum flow`,
-		min: 0,
-		unit: "l/h",
-	};
-}
-
-export function getHighFlowThresholdValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "highFlowThreshold",
-	};
-}
-
-export function getHighFlowThresholdValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(valveId)}: High flow threshold`,
-		min: 0,
-		unit: "l/h",
-	};
-}
-
-export function getLowFlowThresholdValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "lowFlowThreshold",
-	};
-}
-
-export function getLowFlowThresholdValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(valveId)}: Low flow threshold`,
-		min: 0,
-		unit: "l/h",
-	};
-}
-
-export function getUseRainSensorValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "useRainSensor",
-	};
-}
-
-export function getUseRainSensorValueMetadata(valveId: ValveId): ValueMetadata {
-	return {
-		...ValueMetadata.Boolean,
-		label: `${valveIdToMetadataPrefix(valveId)}: Use rain sensor`,
-	};
-}
-
-export function getUseMoistureSensorValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "useMoistureSensor",
-	};
-}
-
-export function getUseMoistureSensorValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Boolean,
-		label: `${valveIdToMetadataPrefix(valveId)}: Use moisture sensor`,
-	};
-}
-
-export function getValveRunDurationValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "duration",
-	};
-}
-
-export function getValveRunDurationValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Number,
-		label: `${valveIdToMetadataPrefix(valveId)}: Run duration`,
-		min: 1,
-		max: 0xffff,
-		unit: "s",
-	};
-}
-
-export function getValveRunStartStopValueId(
-	valveId: ValveId,
-	endpointIndex?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: valveId,
-		propertyKey: "startStop",
-	};
-}
-
-export function getValveRunStartStopValueMetadata(
-	valveId: ValveId,
-): ValueMetadata {
-	return {
-		...ValueMetadata.Boolean,
-		label: `${valveIdToMetadataPrefix(valveId)}: Start/Stop`,
-	};
-}
-
-export function getShutoffValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Irrigation,
-		endpoint: endpointIndex,
-		property: "shutoff",
-	};
-}
-
-export function getShutoffValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.WriteOnlyBoolean,
-		label: `Shutoff`,
-	};
 }
 
 const systemConfigProperties = [
@@ -926,8 +851,7 @@ export class IrrigationCCAPI extends CCAPI {
 				if (value) {
 					// Start a valve run
 					const duration = valueDB.getValue<number>(
-						getValveRunDurationValueId(
-							property,
+						IrrigationCCValues.valveRunDuration(property).endpoint(
 							this.endpoint.index,
 						),
 					);
@@ -1032,7 +956,9 @@ export class IrrigationCC extends CommandClass {
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getMaxValveTableSizeValueId(endpoint.index));
+			.getValue(
+				IrrigationCCValues.maxValveTableSize.endpoint(endpoint.index),
+			);
 	}
 
 	/**
@@ -1045,7 +971,7 @@ export class IrrigationCC extends CommandClass {
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getNumValvesValueId(endpoint.index));
+			.getValue(IrrigationCCValues.numValves.endpoint(endpoint.index));
 	}
 
 	/**
@@ -1058,7 +984,9 @@ export class IrrigationCC extends CommandClass {
 	): boolean {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getSupportsMasterValveValueId(endpoint.index));
+			.getValue(
+				IrrigationCCValues.supportsMasterValve.endpoint(endpoint.index),
+			);
 	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
@@ -1105,22 +1033,18 @@ max. valve table size: ${systemInfo.maxValveTableSize}`;
 		});
 
 		// For each valve, create the values to start/stop a run
-		const valueDB = this.getValueDB(applHost);
 		for (let i = 1; i <= systemInfo.numValves; i++) {
-			valueDB.setMetadata(
-				getValveRunDurationValueId(i, this.endpointIndex),
-				getValveRunDurationValueMetadata(i),
+			this.ensureMetadata(
+				applHost,
+				IrrigationCCValues.valveRunDuration(i),
 			);
-			valueDB.setMetadata(
-				getValveRunStartStopValueId(i, this.endpointIndex),
-				getValveRunStartStopValueMetadata(i),
+			this.ensureMetadata(
+				applHost,
+				IrrigationCCValues.valveRunStartStop(i),
 			);
 		}
 		// And create a shutoff value
-		valueDB.setMetadata(
-			getShutoffValueId(this.endpointIndex),
-			getShutoffValueMetadata(),
-		);
+		this.ensureMetadata(applHost, IrrigationCCValues.shutoffSystem);
 
 		// Query current values
 		await this.refreshValues(applHost);
@@ -1331,112 +1255,48 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "System voltage",
-		unit: "V",
-	})
 	public systemVoltage: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Flow sensor active",
-	})
 	public flowSensorActive: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Pressure sensor active",
-	})
 	public pressureSensorActive: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Rain sensor attached and active",
-	})
 	public rainSensorActive: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Moisture sensor attached and active",
-	})
 	public moistureSensorActive: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyNumber,
-		label: "Flow",
-		unit: "l/h",
-	})
 	public flow?: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyNumber,
-		label: "Pressure",
-		unit: "kPa",
-	})
 	public pressure?: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Remaining shutoff duration",
-		unit: "hours",
-	})
 	public shutoffDuration: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Error: device not programmed",
-	})
 	public errorNotProgrammed: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Error: emergency shutdown",
-	})
 	public errorEmergencyShutdown: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Error: high pressure",
-	})
 	public errorHighPressure: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Error: low pressure",
-	})
 	public errorLowPressure: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Error: valve reporting error",
-	})
 	public errorValve: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Master valve is open",
-	})
 	public masterValveOpen: boolean;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyNumber,
-		label: "First open zone valve ID",
-	})
 	public firstOpenZoneId?: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1610,49 +1470,18 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Master valve delay",
-		description:
-			"The delay between turning on the master valve and turning on any zone valve",
-		unit: "seconds",
-	})
 	public readonly masterValveDelay: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "High pressure threshold",
-		unit: "kPa",
-	})
 	public readonly highPressureThreshold: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "Low pressure threshold",
-		unit: "kPa",
-	})
 	public readonly lowPressureThreshold: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "Rain sensor polarity",
-		min: 0,
-		max: 1,
-		states: enumValuesToMetadataStates(IrrigationSensorPolarity),
-	})
 	public readonly rainSensorPolarity?: IrrigationSensorPolarity;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "Moisture sensor polarity",
-		min: 0,
-		max: 1,
-		states: enumValuesToMetadataStates(IrrigationSensorPolarity),
-	})
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1724,113 +1553,71 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB(applHost);
-
 		// connected
-		let valueId = getValveConnectedValueId(
+		const valveConnectedValue = IrrigationCCValues.valveConnected(
 			this.valveId,
-			this.endpointIndex,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getValveConnectedValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.connected);
+		this.ensureMetadata(applHost, valveConnectedValue);
+		this.storeValue(applHost, valveConnectedValue, this.connected);
 
 		// nominalCurrent
-		valueId = getValveNominalCurrentValueId(
+		const nominalCurrentValue = IrrigationCCValues.nominalCurrent(
 			this.valveId,
-			this.endpointIndex,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getValveNominalCurrentValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.nominalCurrent);
+		this.ensureMetadata(applHost, nominalCurrentValue);
+		this.storeValue(applHost, nominalCurrentValue, this.nominalCurrent);
 
 		// errorShortCircuit
-		valueId = getValveErrorShortCircuitValueId(
+		const errorShortCircuitValue = IrrigationCCValues.errorShortCircuit(
 			this.valveId,
-			this.endpointIndex,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getValveErrorShortCircuitValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.errorShortCircuit);
+		this.ensureMetadata(applHost, errorShortCircuitValue);
+		this.storeValue(
+			applHost,
+			errorShortCircuitValue,
+			this.errorShortCircuit,
+		);
 
 		// errorHighCurrent
-		valueId = getValveErrorHighCurrentValueId(
+		const errorHighCurrentValue = IrrigationCCValues.errorHighCurrent(
 			this.valveId,
-			this.endpointIndex,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getValveErrorHighCurrentValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.errorHighCurrent);
+		this.ensureMetadata(applHost, errorHighCurrentValue);
+		this.storeValue(applHost, errorHighCurrentValue, this.errorHighCurrent);
 
 		// errorLowCurrent
-		valueId = getValveErrorLowCurrentValueId(
+		const errorLowCurrentValue = IrrigationCCValues.errorLowCurrent(
 			this.valveId,
-			this.endpointIndex,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getValveErrorLowCurrentValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.errorLowCurrent);
+		this.ensureMetadata(applHost, errorLowCurrentValue);
+		this.storeValue(applHost, errorLowCurrentValue, this.errorLowCurrent);
 
 		if (this.errorMaximumFlow != undefined) {
-			valueId = getValveErrorMaximumFlowValueId(
+			const errorMaximumFlowValue = IrrigationCCValues.errorMaximumFlow(
 				this.valveId,
-				this.endpointIndex,
 			);
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(
-					valueId,
-					getValveErrorMaximumFlowValueMetadata(this.valveId),
-				);
-			}
-			valueDB.setValue(valueId, this.errorMaximumFlow);
+			this.ensureMetadata(applHost, errorMaximumFlowValue);
+			this.storeValue(
+				applHost,
+				errorMaximumFlowValue,
+				this.errorMaximumFlow,
+			);
 		}
 
 		if (this.errorHighFlow != undefined) {
-			valueId = getValveErrorHighFlowValueId(
+			const errorHighFlowValue = IrrigationCCValues.errorHighFlow(
 				this.valveId,
-				this.endpointIndex,
 			);
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(
-					valueId,
-					getValveErrorHighFlowValueMetadata(this.valveId),
-				);
-			}
-			valueDB.setValue(valueId, this.errorHighFlow);
+			this.ensureMetadata(applHost, errorHighFlowValue);
+			this.storeValue(applHost, errorHighFlowValue, this.errorHighFlow);
 		}
 
 		if (this.errorLowFlow != undefined) {
-			valueId = getValveErrorLowFlowValueId(
+			const errorLowFlowValue = IrrigationCCValues.errorLowFlow(
 				this.valveId,
-				this.endpointIndex,
 			);
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(
-					valueId,
-					getValveErrorLowFlowValueMetadata(this.valveId),
-				);
-			}
-			valueDB.setValue(valueId, this.errorLowFlow);
+			this.ensureMetadata(applHost, errorLowFlowValue);
+			this.storeValue(applHost, errorLowFlowValue, this.errorLowFlow);
 		}
 
 		return true;
@@ -1862,6 +1649,17 @@ export class IrrigationCCValveInfoReport extends IrrigationCC {
 
 export interface IrrigationCCValveInfoGetOptions extends CCCommandOptions {
 	valveId: ValveId;
+}
+
+function testResponseForIrrigationCommandWithValveId(
+	sent: {
+		valveId: ValveId;
+	},
+	received: {
+		valveId: ValveId;
+	},
+) {
+	return received.valveId === sent.valveId;
 }
 
 @CCCommand(IrrigationCommand.ValveInfoGet)
@@ -2043,83 +1841,66 @@ export class IrrigationCCValveConfigReport extends IrrigationCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB(applHost);
-
 		// nominalCurrentHighThreshold
-		let valueId = getNominalCurrentHighThresholdValueId(
-			this.valveId,
-			this.endpointIndex,
+		const nominalCurrentHighThresholdValue =
+			IrrigationCCValues.nominalCurrentHighThreshold(this.valveId);
+		this.ensureMetadata(applHost, nominalCurrentHighThresholdValue);
+		this.storeValue(
+			applHost,
+			nominalCurrentHighThresholdValue,
+			this.nominalCurrentHighThreshold,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getNominalCurrentHighThresholdValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.nominalCurrentHighThreshold);
 
 		// nominalCurrentLowThreshold
-		valueId = getNominalCurrentLowThresholdValueId(
-			this.valveId,
-			this.endpointIndex,
+		const nominalCurrentLowThresholdValue =
+			IrrigationCCValues.nominalCurrentLowThreshold(this.valveId);
+		this.ensureMetadata(applHost, nominalCurrentLowThresholdValue);
+		this.storeValue(
+			applHost,
+			nominalCurrentLowThresholdValue,
+			this.nominalCurrentLowThreshold,
 		);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getNominalCurrentLowThresholdValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.nominalCurrentLowThreshold);
 
 		// maximumFlow
-		valueId = getMaximumFlowValueId(this.valveId, this.endpointIndex);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getMaximumFlowValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.maximumFlow);
+		const maximumFlowValue = IrrigationCCValues.maximumFlow(this.valveId);
+		this.ensureMetadata(applHost, maximumFlowValue);
+		this.storeValue(applHost, maximumFlowValue, this.maximumFlow);
 
 		// highFlowThreshold
-		valueId = getHighFlowThresholdValueId(this.valveId, this.endpointIndex);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getHighFlowThresholdValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.highFlowThreshold);
+		const highFlowThresholdValue = IrrigationCCValues.highFlowThreshold(
+			this.valveId,
+		);
+		this.ensureMetadata(applHost, highFlowThresholdValue);
+		this.storeValue(
+			applHost,
+			highFlowThresholdValue,
+			this.highFlowThreshold,
+		);
 
 		// lowFlowThreshold
-		valueId = getLowFlowThresholdValueId(this.valveId, this.endpointIndex);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getLowFlowThresholdValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.lowFlowThreshold);
+		const lowFlowThresholdValue = IrrigationCCValues.lowFlowThreshold(
+			this.valveId,
+		);
+		this.ensureMetadata(applHost, lowFlowThresholdValue);
+		this.storeValue(applHost, lowFlowThresholdValue, this.lowFlowThreshold);
 
 		// useRainSensor
-		valueId = getUseRainSensorValueId(this.valveId, this.endpointIndex);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getUseRainSensorValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.useRainSensor);
+		const useRainSensorValue = IrrigationCCValues.useRainSensor(
+			this.valveId,
+		);
+		this.ensureMetadata(applHost, useRainSensorValue);
+		this.storeValue(applHost, useRainSensorValue, this.useRainSensor);
 
 		// useMoistureSensor
-		valueId = getUseMoistureSensorValueId(this.valveId, this.endpointIndex);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getUseMoistureSensorValueMetadata(this.valveId),
-			);
-		}
-		valueDB.setValue(valueId, this.useMoistureSensor);
+		const useMoistureSensorValue = IrrigationCCValues.useMoistureSensor(
+			this.valveId,
+		);
+		this.ensureMetadata(applHost, useMoistureSensorValue);
+		this.storeValue(
+			applHost,
+			useMoistureSensorValue,
+			this.useMoistureSensor,
+		);
 
 		return true;
 	}

@@ -17,7 +17,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -28,10 +27,26 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	HumidityControlOperatingState,
 	HumidityControlOperatingStateCommand,
 } from "../lib/_Types";
+
+export const HumidityControlOperatingStateCCValues = Object.freeze({
+	...V.defineStaticCCValues(
+		CommandClasses["Humidity Control Operating State"],
+		{
+			...V.staticProperty("state", {
+				...ValueMetadata.ReadOnlyUInt8,
+				states: enumValuesToMetadataStates(
+					HumidityControlOperatingState,
+				),
+				label: "Humidity control operating state",
+			} as const),
+		},
+	),
+});
 
 @API(CommandClasses["Humidity Control Operating State"])
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
@@ -145,11 +160,6 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 
 	private _state: HumidityControlOperatingState;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		states: enumValuesToMetadataStates(HumidityControlOperatingState),
-		label: "Humidity control operating state",
-	})
 	public get state(): HumidityControlOperatingState {
 		return this._state;
 	}

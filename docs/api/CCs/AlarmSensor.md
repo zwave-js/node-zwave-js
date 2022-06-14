@@ -28,7 +28,7 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Alarm Sensor"],
+	commandClass: CommandClasses["Alarm Sensor"],
 	endpoint: number,
 	property: "duration",
 	propertyKey: AlarmSensorType,
@@ -48,7 +48,7 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Alarm Sensor"],
+	commandClass: CommandClasses["Alarm Sensor"],
 	endpoint: number,
 	property: "severity",
 	propertyKey: AlarmSensorType,
@@ -69,7 +69,7 @@ async getSupportedSensorTypes(): Promise<readonly AlarmSensorType[] | undefined>
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Alarm Sensor"],
+	commandClass: CommandClasses["Alarm Sensor"],
 	endpoint: number,
 	property: "state",
 	propertyKey: AlarmSensorType,

@@ -1,4 +1,4 @@
-import { CommandClasses, ValueMetadata } from "@zwave-js/core";
+import { CommandClasses, ValueID, ValueMetadata } from "@zwave-js/core";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -418,6 +418,14 @@ type MergeMeta<TMeta extends ValueMetadata> = DropOptional<
 		  typeof ValueMetadata["Any"]
 		: Overwrite<typeof ValueMetadata["Any"], TMeta>
 >;
+
+/** The common base type of all CC value definitions */
+export interface CCValue {
+	readonly id: Omit<ValueID, "endpoint">;
+	endpoint(endpoint?: number): ValueID;
+	readonly meta: ValueMetadata;
+	readonly options: CCValueOptions;
+}
 
 type AddCCValueProperties<
 	TCommandClass extends CommandClasses,

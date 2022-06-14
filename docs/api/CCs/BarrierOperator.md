@@ -49,7 +49,7 @@ async setEventSignaling(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Barrier Operator"],
+	commandClass: CommandClasses["Barrier Operator"],
 	endpoint: number,
 	property: "currentState",
 }
@@ -69,7 +69,7 @@ async setEventSignaling(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Barrier Operator"],
+	commandClass: CommandClasses["Barrier Operator"],
 	endpoint: number,
 	property: "position",
 }
@@ -89,7 +89,7 @@ async setEventSignaling(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Barrier Operator"],
+	commandClass: CommandClasses["Barrier Operator"],
 	endpoint: number,
 	property: "signalingState",
 	propertyKey: SubsystemType,
@@ -110,7 +110,7 @@ async setEventSignaling(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Barrier Operator"],
+	commandClass: CommandClasses["Barrier Operator"],
 	endpoint: number,
 	property: "targetState",
 }

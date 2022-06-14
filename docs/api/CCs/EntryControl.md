@@ -37,7 +37,7 @@ async setConfiguration(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Entry Control"],
+	commandClass: CommandClasses["Entry Control"],
 	endpoint: number,
 	property: "keyCacheSize",
 }
@@ -58,7 +58,7 @@ async setConfiguration(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Entry Control"],
+	commandClass: CommandClasses["Entry Control"],
 	endpoint: number,
 	property: "keyCacheTimeout",
 }

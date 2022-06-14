@@ -48,7 +48,7 @@ async setOverride(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Climate Control Schedule"],
+	commandClass: CommandClasses["Climate Control Schedule"],
 	endpoint: number,
 	property: "overrideState",
 }
@@ -67,7 +67,7 @@ async setOverride(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Climate Control Schedule"],
+	commandClass: CommandClasses["Climate Control Schedule"],
 	endpoint: number,
 	property: "overrideType",
 }

@@ -30,7 +30,7 @@ async getSupportedSensorTypes(): Promise<readonly BinarySensorType[] | undefined
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Binary Sensor"],
+	commandClass: CommandClasses["Binary Sensor"],
 	endpoint: number,
 	property: string,
 }

@@ -6,10 +6,7 @@ import {
 	IndicatorCCSet,
 	IndicatorCommand,
 } from "@zwave-js/cc";
-import {
-	getIndicatorValueValueID,
-	getSupportedIndicatorIDsValueID,
-} from "@zwave-js/cc/IndicatorCC";
+import { IndicatorCCValues } from "@zwave-js/cc/IndicatorCC";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { createTestNode } from "../mocks";
@@ -175,7 +172,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 	});
 
 	it("the value IDs should be translated properly", () => {
-		const valueId = getIndicatorValueValueID(2, 0x43, 2);
+		const valueId = IndicatorCCValues.valueV2(0x43, 2).endpoint(2);
 		const testNode = createTestNode(host, { id: 2 });
 		const ccInstance = CommandClass.createInstanceUnchecked(
 			host,

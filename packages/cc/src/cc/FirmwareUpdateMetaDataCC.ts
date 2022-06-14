@@ -1,4 +1,4 @@
-import type { MessageRecord, ValueID } from "@zwave-js/core/safe";
+import type { MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	CRC16_CCITT,
@@ -32,6 +32,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
@@ -43,12 +44,16 @@ import {
 // @noSetValueAPI There are no values to set here
 // @noInterview   The "interview" is part of the update process
 
-function getSupportsActivationValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Firmware Update Meta Data"],
-		property: "supportsActivation",
-	};
-}
+export const FirmwareUpdateMetaDataCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Firmware Update Meta Data"], {
+		...V.staticProperty("continuesToFunction", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsActivation", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 @API(CommandClasses["Firmware Update Meta Data"])
 export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
@@ -65,7 +70,9 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 					this.version >= 4 &&
 					(this.version < 7 ||
 						this.tryGetValueDB()?.getValue(
-							getSupportsActivationValueId(),
+							FirmwareUpdateMetaDataCCValues.supportsActivation.endpoint(
+								this.endpoint.index,
+							),
 						) === true)
 				);
 

@@ -46,7 +46,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "currentColor",
 }
@@ -64,7 +64,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "currentColor",
 	propertyKey: ColorComponent,
@@ -86,7 +86,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "duration",
 }
@@ -104,7 +104,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "hexColor",
 }
@@ -124,7 +124,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "targetColor",
 }
@@ -142,7 +142,7 @@ async stopLevelChange(
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Color Switch"],
+	commandClass: CommandClasses["Color Switch"],
 	endpoint: number,
 	property: "targetColor",
 	propertyKey: ColorComponent,

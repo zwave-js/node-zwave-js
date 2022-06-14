@@ -28,7 +28,7 @@ async setConfiguration(slowRefresh: boolean): Promise<void>;
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Central Scene"],
+	commandClass: CommandClasses["Central Scene"],
 	endpoint: number,
 	property: "scene",
 	propertyKey: string,
@@ -49,7 +49,7 @@ async setConfiguration(slowRefresh: boolean): Promise<void>;
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Central Scene"],
+	commandClass: CommandClasses["Central Scene"],
 	endpoint: number,
 	property: "slowRefresh",
 }

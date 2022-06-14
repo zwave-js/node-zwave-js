@@ -42,7 +42,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "autoRelockTime",
 }
@@ -62,7 +62,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "blockToBlock",
 }
@@ -80,7 +80,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "boltStatus",
 }
@@ -98,7 +98,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "currentMode",
 }
@@ -118,7 +118,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "doorStatus",
 }
@@ -136,7 +136,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "duration",
 }
@@ -154,7 +154,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "holdAndReleaseTime",
 }
@@ -174,7 +174,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "insideHandlesCanOpenDoor",
 }
@@ -192,7 +192,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "insideHandlesCanOpenDoorConfiguration",
 }
@@ -210,7 +210,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "latchStatus",
 }
@@ -228,7 +228,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "lockTimeout",
 }
@@ -248,7 +248,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "lockTimeoutConfiguration",
 }
@@ -268,7 +268,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "operationType",
 }
@@ -288,7 +288,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "outsideHandlesCanOpenDoor",
 }
@@ -306,7 +306,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "outsideHandlesCanOpenDoorConfiguration",
 }
@@ -324,7 +324,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "targetMode",
 }
@@ -344,7 +344,7 @@ async getConfiguration(): Promise<Pick<DoorLockCCConfigurationReport, "operation
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Door Lock"],
+	commandClass: CommandClasses["Door Lock"],
 	endpoint: number,
 	property: "twistAssist",
 }

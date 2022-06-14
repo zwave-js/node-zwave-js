@@ -32,7 +32,7 @@ Sets the switch to the given value.
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Binary Switch"],
+	commandClass: CommandClasses["Binary Switch"],
 	endpoint: number,
 	property: "currentValue",
 }
@@ -50,7 +50,7 @@ Sets the switch to the given value.
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Binary Switch"],
+	commandClass: CommandClasses["Binary Switch"],
 	endpoint: number,
 	property: "duration",
 }
@@ -68,7 +68,7 @@ Sets the switch to the given value.
 
 ```ts
 {
-	commandClass: typeof CommandClasses["Binary Switch"],
+	commandClass: CommandClasses["Binary Switch"],
 	endpoint: number,
 	property: "targetValue",
 }

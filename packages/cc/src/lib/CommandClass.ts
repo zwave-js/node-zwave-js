@@ -47,6 +47,7 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "./ICommandClassContainer";
+import type { CCValue } from "./Values";
 
 export type CommandClassDeserializationOptions = {
 	data: Buffer;
@@ -557,6 +558,29 @@ export class CommandClass implements ICommandClass {
 			"Cannot retrieve the value DB for non-singlecast CCs",
 			ZWaveErrorCodes.CC_NoNodeID,
 		);
+	}
+
+	/** Ensures that the metadata for the given CC value exists in the Value DB or creates it if it does not. */
+	protected ensureMetadata(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): void {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		if (!valueDB.hasMetadata(valueId)) {
+			valueDB.setMetadata(valueId, ccValue.meta);
+		}
+	}
+
+	/** Stores the given value under the value ID for the given CC value in the value DB. */
+	protected storeValue(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+		value: unknown,
+	): void {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		valueDB.setValue(valueId, value);
 	}
 
 	/** Which variables should be persisted when requested */
