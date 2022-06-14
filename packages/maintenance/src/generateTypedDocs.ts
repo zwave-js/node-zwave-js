@@ -229,6 +229,14 @@ Context: ${context}`);
 	}
 }
 
+function assertLiteralNumber(numType: string, context: string): void {
+	if (numType === "number") {
+		throw new Error(`Received type "number" where a number literal was expected.
+Make sure to define this number or the entire object using "as const".
+Context: ${context}`);
+	}
+}
+
 const docsDir = path.join(projectRoot, "docs");
 const ccDocsDir = path.join(docsDir, "api/CCs");
 
@@ -542,8 +550,15 @@ ${formatValueType(idType)}
 				text += `\n* **description:** ${stripQuotes(description)}`;
 			});
 
+			// TODO: This should be moved to TypeScript somehow
+			const minVersion = getOptions("minVersion");
+			assertLiteralNumber(
+				minVersion,
+				`minVersion of value "${value.getName()}"`,
+			);
+
 			text += `
-* **min. CC version:** ${getOptions("minVersion")}
+* **min. CC version:** ${minVersion}
 * **readable:** ${getMeta("readable")}
 * **writeable:** ${getMeta("writeable")}
 * **stateful:** ${getOptions("stateful")}
@@ -666,10 +681,14 @@ async function main(): Promise<void> {
 	});
 
 	let hasErrors = false;
-	// // Replace all imports
-	// hasErrors ||= await processImports(piscina);
-	// Regenerate all CC documentation files
-	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
+	if (!process.argv.includes("--no-imports")) {
+		// Replace all imports
+		hasErrors ||= await processImports(piscina);
+	}
+	if (!process.argv.includes("--no-cc")) {
+		// Regenerate all CC documentation files
+		if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
+	}
 
 	if (hasErrors) {
 		process.exit(1);

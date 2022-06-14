@@ -34,26 +34,30 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { BinarySensorCommand, BinarySensorType } from "../lib/_Types";
 
-export function getBinarySensorValueId(
-	endpointIndex: number | undefined,
-	sensorType: BinarySensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Binary Sensor"],
-		endpoint: endpointIndex,
-		property: getEnumMemberName(BinarySensorType, sensorType),
-	};
-}
+export const BinarySensorCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Binary Sensor"], {
+		...V.staticProperty("supportedSensorTypes", undefined, {
+			internal: true,
+		}),
+	}),
 
-export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Binary Sensor"],
-		endpoint: endpointIndex,
-		property: "supportedSensorTypes",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Binary Sensor"], {
+		...V.dynamicPropertyWithName(
+			"binarySensor",
+			/* property */ (sensorType: BinarySensorType) =>
+				getEnumMemberName(BinarySensorType, sensorType),
+			/* meta */ (sensorType: BinarySensorType) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: getEnumMemberName(BinarySensorType, sensorType),
+					ccSpecific: { sensorType },
+				} as const),
+		),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -215,7 +219,9 @@ export class BinarySensorCC extends CommandClass {
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
 				valueDB.getValue(
-					getSupportedSensorTypesValueId(this.endpointIndex),
+					BinarySensorCCValues.supportedSensorTypes.endpoint(
+						this.endpointIndex,
+					),
 				) ?? [];
 
 			for (const type of supportedSensorTypes) {
@@ -242,7 +248,9 @@ export class BinarySensorCC extends CommandClass {
 		value: number,
 	): boolean {
 		this.getValueDB(applHost).setValue(
-			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
+			BinarySensorCCValues.binarySensor(BinarySensorType.Any).endpoint(
+				this.endpointIndex,
+			),
 			value > 0,
 		);
 		return true;
@@ -269,15 +277,10 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
-		const valueId: ValueID = getBinarySensorValueId(
-			this.endpointIndex,
-			this._type,
-		);
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnlyBoolean,
-			label: getEnumMemberName(BinarySensorType, this._type),
-			ccSpecific: { sensorType: this._type },
-		});
+		const binarySensorValue = BinarySensorCCValues.binarySensor(this._type);
+
+		const valueId: ValueID = binarySensorValue.endpoint(this.endpointIndex);
+		valueDB.setMetadata(valueId, binarySensorValue.meta);
 		valueDB.setValue(valueId, this._value);
 		return true;
 	}

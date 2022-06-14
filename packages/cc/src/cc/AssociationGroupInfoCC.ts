@@ -8,7 +8,6 @@ import {
 	MessageRecord,
 	parseCCId,
 	validatePayload,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -23,7 +22,6 @@ import {
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -32,6 +30,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	AssociationGroupInfoCommand,
 	AssociationGroupInfoProfile,
@@ -39,48 +38,42 @@ import {
 import { AssociationCC } from "./AssociationCC";
 import { MultiChannelAssociationCC } from "./MultiChannelAssociationCC";
 
+export const AssociationGroupInfoCCValues = Object.freeze({
+	// Defines values that do not depend on anything else
+	...V.defineStaticCCValues(CommandClasses["Association Group Information"], {
+		...V.staticProperty("hasDynamicInfo", undefined, { internal: true }),
+	}),
+
+	// Defines values that depend on one or more arguments and need to be called as a function
+	...V.defineDynamicCCValues(
+		CommandClasses["Association Group Information"],
+		{
+			...V.dynamicPropertyAndKeyWithName(
+				"groupName",
+				"name",
+				(groupId: number) => groupId,
+				undefined,
+				{ internal: true },
+			),
+			...V.dynamicPropertyAndKeyWithName(
+				"groupInfo",
+				"info",
+				(groupId: number) => groupId,
+				undefined,
+				{ internal: true },
+			),
+			...V.dynamicPropertyAndKeyWithName(
+				"issuedCommands",
+				"issuedCommands",
+				(groupId: number) => groupId,
+				undefined,
+				{ internal: true },
+			),
+		},
+	),
+});
+
 // @noSetValueAPI This CC only has get-type commands
-
-/** Returns the ValueID used to store the name of an association group */
-function getGroupNameValueID(endpointIndex: number, groupId: number): ValueID {
-	return {
-		commandClass: CommandClasses["Association Group Information"],
-		endpoint: endpointIndex,
-		property: "name",
-		propertyKey: groupId,
-	};
-}
-
-/** Returns the ValueID used to store info for an association group */
-function getGroupInfoValueID(endpointIndex: number, groupId: number): ValueID {
-	return {
-		commandClass: CommandClasses["Association Group Information"],
-		endpoint: endpointIndex,
-		property: "info",
-		propertyKey: groupId,
-	};
-}
-
-/** Returns the ValueID used to store info for an association group */
-function getIssuedCommandsValueID(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Association Group Information"],
-		endpoint: endpointIndex,
-		property: "issuedCommands",
-		propertyKey: groupId,
-	};
-}
-
-function getHasDynamicInfoValueID(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Association Group Information"],
-		endpoint: endpointIndex,
-		property: "hasDynamicInfo",
-	};
-}
 
 @API(CommandClasses["Association Group Information"])
 export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
@@ -177,16 +170,6 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(getGroupNameValueID(0, 0).property, {
-			internal: true,
-		});
-		this.registerValue(getGroupInfoValueID(0, 0).property, {
-			internal: true,
-		});
-	}
-
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [
@@ -204,7 +187,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 	): string | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getGroupNameValueID(endpoint.index, groupId));
+			.getValue(
+				AssociationGroupInfoCCValues.groupName(groupId).endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	/** Returns the association profile for an association group */
@@ -215,7 +202,8 @@ export class AssociationGroupInfoCC extends CommandClass {
 	): AssociationGroupInfoProfile | undefined {
 		return applHost.getValueDB(endpoint.nodeId).getValue<{
 			profile: AssociationGroupInfoProfile;
-		}>(getGroupInfoValueID(endpoint.index, groupId))?.profile;
+		}>(AssociationGroupInfoCCValues.groupInfo(groupId).endpoint(endpoint.index))
+			?.profile;
 	}
 
 	/** Returns the dictionary of all commands issued by the given association group */
@@ -226,7 +214,11 @@ export class AssociationGroupInfoCC extends CommandClass {
 	): ReadonlyMap<CommandClasses, readonly number[]> | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getIssuedCommandsValueID(endpoint.index, groupId));
+			.getValue(
+				AssociationGroupInfoCCValues.issuedCommands(groupId).endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	public static findGroupsForIssuedCommand(
@@ -353,7 +345,9 @@ export class AssociationGroupInfoCC extends CommandClass {
 				endpoint,
 			);
 		const hasDynamicInfo = valueDB.getValue(
-			getHasDynamicInfoValueID(this.endpointIndex),
+			AssociationGroupInfoCCValues.hasDynamicInfo.endpoint(
+				this.endpointIndex,
+			),
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
@@ -402,8 +396,12 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
-		const valueId = getGroupNameValueID(this.endpointIndex, this.groupId);
-		valueDB.setValue(valueId, this.name);
+		valueDB.setValue(
+			AssociationGroupInfoCCValues.groupName(this.groupId).endpoint(
+				this.endpointIndex,
+			),
+			this.name,
+		);
 
 		return true;
 	}
@@ -503,7 +501,9 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
-			const valueId = getGroupInfoValueID(this.endpointIndex, groupId);
+			const valueId = AssociationGroupInfoCCValues.groupInfo(
+				groupId,
+			).endpoint(this.endpointIndex);
 			valueDB.setValue(valueId, {
 				mode,
 				profile,

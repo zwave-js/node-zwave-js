@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core/safe";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -25,7 +25,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -38,6 +37,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	BarrierOperatorCommand,
 	BarrierState,
@@ -45,46 +45,52 @@ import {
 	SubsystemType,
 } from "../lib/_Types";
 
-function getSignalingStateValueId(
-	endpoint: number | undefined,
-	subsystemType: SubsystemType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "signalingState",
-		propertyKey: subsystemType,
-	};
-}
+export const BarrierOperatorCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Barrier Operator"], {
+		...V.staticProperty("supportedSubsystemTypes", undefined, {
+			internal: true,
+		}),
 
-function getSignalingStateMetadata(
-	subsystemType: SubsystemType,
-): ValueMetadata {
-	return {
-		...ValueMetadata.UInt8,
-		label: `Signaling State (${getEnumMemberName(
-			SubsystemType,
-			subsystemType,
-		)})`,
-		states: enumValuesToMetadataStates(SubsystemState),
-	};
-}
+		...V.staticProperty("position", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "Barrier Position",
+			unit: "%",
+			max: 100,
+		} as const),
 
-function getSupportedSubsystemTypesValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "supportedSubsystemTypes",
-	};
-}
+		...V.staticProperty("targetState", {
+			...ValueMetadata.UInt8,
+			label: "Target Barrier State",
+			states: enumValuesToMetadataStates(BarrierState, [
+				BarrierState.Open,
+				BarrierState.Closed,
+			]),
+		} as const),
 
-function getTargetStateValueId(endpoint: number | undefined): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "targetState",
-	};
-}
+		...V.staticProperty("currentState", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "Current Barrier State",
+			states: enumValuesToMetadataStates(BarrierState),
+		} as const),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Barrier Operator"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"signalingState",
+			"signalingState",
+			(subsystemType: SubsystemType) => subsystemType,
+			(subsystemType: SubsystemType) =>
+				({
+					...ValueMetadata.UInt8,
+					label: `Signaling State (${getEnumMemberName(
+						SubsystemType,
+						subsystemType,
+					)})`,
+					states: enumValuesToMetadataStates(SubsystemState),
+				} as const),
+		),
+	}),
+});
 
 @API(CommandClasses["Barrier Operator"])
 export class BarrierOperatorCCAPI extends CCAPI {
@@ -297,16 +303,9 @@ export class BarrierOperatorCC extends CommandClass {
 		});
 
 		// Create targetState value if it does not exist
-		const targetStateValueID = getTargetStateValueId(this.endpointIndex);
-		if (!valueDB.hasMetadata(targetStateValueID)) {
-			valueDB.setMetadata(targetStateValueID, {
-				...ValueMetadata.UInt8,
-				label: "Target Barrier State",
-				states: enumValuesToMetadataStates(BarrierState, [
-					BarrierState.Open,
-					BarrierState.Closed,
-				]),
-			});
+		const targetStateValue = BarrierOperatorCCValues.targetState;
+		if (!valueDB.hasMetadata(targetStateValue.id)) {
+			valueDB.setMetadata(targetStateValue.id, targetStateValue.meta);
 		}
 
 		applHost.controllerLog.logNode(node.id, {
@@ -343,7 +342,9 @@ export class BarrierOperatorCC extends CommandClass {
 
 		const supportedSubsystems =
 			valueDB.getValue<SubsystemType[]>(
-				getSupportedSubsystemTypesValueId(this.endpointIndex),
+				BarrierOperatorCCValues.supportedSubsystemTypes.endpoint(
+					this.endpointIndex,
+				),
 			) ?? [];
 
 		for (const subsystemType of supportedSubsystems) {
@@ -442,20 +443,9 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Current Barrier State",
-		states: enumValuesToMetadataStates(BarrierState),
-	})
 	public readonly currentState: BarrierState | undefined;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Barrier Position",
-		unit: "%",
-		max: 100,
-	})
 	public readonly position: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -578,18 +568,16 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueId = getSignalingStateValueId(
-			this.endpointIndex,
+		const valueDB = this.getValueDB(applHost);
+
+		const signalingStateValue = BarrierOperatorCCValues.signalingState(
 			this.subsystemType,
 		);
-		const valueDB = this.getValueDB(applHost);
+		const valueId = signalingStateValue.endpoint(this.endpointIndex);
 
 		// Create metadata if it does not exist
 		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(
-				valueId,
-				getSignalingStateMetadata(this.subsystemType),
-			);
+			valueDB.setMetadata(valueId, signalingStateValue.meta);
 		}
 
 		valueDB.setValue(valueId, this.subsystemState);

@@ -465,28 +465,33 @@
 		],
 		"description": "Z-Wave Command Class implementation"
 	},
-	"Z-Wave CC Values": {
+	"Z-Wave CC Values (full template)": {
 		"scope": "typescript",
-		"prefix": "zwccvalues",
+		"prefix": "zwccvaluesall",
 		"body": [
 			"export const ${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}CCValues = Object.freeze({",
 			"\t// Defines values that do not depend on anything else",
 			"\t...V.defineStaticCCValues(CommandClasses.${1}, {",
 			"\t\t// Just the property, the value name is identical",
 			"\t\t...V.staticProperty(",
-			"\t\t\t\"property\"",
-			"\t\t\tundefined, // ValueMetadata, defaults to ValueMetadata.Any",
-			"\t\t\t// If any value option differs from the defaults below, change them here:",
+			"\t\t\t\"property\",",
+			"\t\t\t// ValueMetadata, defaults to ValueMetadata.Any when `undefined`",
 			"\t\t\t// {",
+			"\t\t\t// \t...ValueMetadata.Any",
 			"\t\t\t// \t// Whether the CC value is readable.",
 			"\t\t\t// \treadable: true,",
 			"\t\t\t// \t// Whether the CC value is writable.",
 			"\t\t\t// \twritable: true,",
-			"",
+			"\t\t\t// \tlabel: \"This value's label\",",
+			"\t\t\t// },",
+			"\t\t\t// If any value option differs from the defaults below, change them here:",
+			"\t\t\t// {",
 			"\t\t\t// \t// The minimum CC version required for this value to exist.",
 			"\t\t\t// \tminVersion: 1,",
 			"\t\t\t// \t// Whether this value represents a state (`true`) or a notification/event (`false`)",
 			"\t\t\t// \tstateful: true,",
+			"\t\t\t// \t// Whether the CC value may exist on endpoints. If false, the endpoint() method will always use endpoint 0",
+			"\t\t\t// \tsupportsEndpoints: true,",
 			"",
 			"\t\t\t// \t// Whether the CC value is internal. Internal values are not exposed to the user.",
 			"\t\t\t// \tinternal: false,",
@@ -524,6 +529,89 @@
 			""
 		],
 		"description": "Z-Wave Command Class values definition"
+	},
+	"Z-Wave CC Values": {
+		"scope": "typescript",
+		"prefix": "zwccvalues",
+		"body": [
+			"export const ${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}CCValues = Object.freeze({",
+			"\t...V.defineStaticCCValues(CommandClasses.${1}, {",
+			"\t\t// Static CC values go here",
+			"\t}),",
+			"",
+			"\t...V.defineDynamicCCValues(CommandClasses.${1}, {",
+			"\t\t// Dynamic CC values go here",
+			"\t}),",
+			"});",
+			""
+		],
+		"description": "Z-Wave Command Class values definition"
+	},
+	"Z-Wave CC Value (static, property only)": {
+		"scope": "typescript",
+		"prefix": "zwccvaluestatic",
+		"body": [
+			"...V.staticProperty(",
+			"\t\"${1:property}\",",
+			"\t${0:// undefined, // meta}",
+			"\t// { internal: true }, // value options",
+			"),"
+		],
+		"description": "Static CC value"
+	},
+	"Z-Wave CC Value (static, named property)": {
+		"scope": "typescript",
+		"prefix": "zwccvaluestaticname",
+		"body": [
+			"...V.staticPropertyWithName(",
+			"\t\"${1:valueName}\",",
+			"\t\"${1:property}\",",
+			"\t${0:// undefined, // meta}",
+			"\t// { internal: true }, // value options",
+			"),"
+		],
+		"description": "Static CC value with name"
+	},
+	"Z-Wave CC Value (static, named, property & key)": {
+		"scope": "typescript",
+		"prefix": "zwccvaluestaticpropkey",
+		"body": [
+			"...V.staticPropertyAndKeyWithName(",
+			"\t\"${1:valueName}\",",
+			"\t\"${2:property}\",",
+			"\t\"${3:propertyKey}\",",
+			"\t${0:// undefined, // meta}",
+			"\t// { internal: true }, // value options",
+			"),"
+		],
+		"description": "Static CC value with name, property and propertyKey"
+	},
+	"Z-Wave CC Value (dynamic, named property)": {
+		"scope": "typescript",
+		"prefix": "zwccvaluedynamicname",
+		"body": [
+			"...V.dynamicPropertyWithName(",
+			"\t\"${1:valueName}\",",
+			"\t(${2:arg1}: ${3:number}) => ${0:${2}},",
+			"\t// (${2:arg1}: ${3:number}) => ({ ...ValueMetadata.Any }), // meta, can also be a static value",
+			"\t// (${2:arg1}: ${3:number}) => ({ internal: true }), // value options, can also be a static value",
+			"),"
+		],
+		"description": "Dynamic CC value with name"
+	},
+	"Z-Wave CC Value (dynamic, named, property & key)": {
+		"scope": "typescript",
+		"prefix": "zwccvaluedynamicpropkey",
+		"body": [
+			"...V.dynamicPropertyAndKeyWithName(",
+			"\t\"${1:valueName}\",",
+			"\t\"${1:valueName}\",",
+			"\t(${2:arg1}: ${3:number}) => ${0:${2}},",
+			"\t// (${2:arg1}: ${3:number}) => ({ ...ValueMetadata.Any }), // meta, can also be a static value",
+			"\t// (${2:arg1}: ${3:number}) => ({ internal: true }), // value options, can also be a static value",
+			"),"
+		],
+		"description": "Dynamic CC value with name, property and propertyKey"
 	},
 	"Z-Wave CC Command": {
 		"scope": "typescript",

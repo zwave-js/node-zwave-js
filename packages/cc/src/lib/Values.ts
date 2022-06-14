@@ -470,5 +470,8 @@ export interface CCValues {
 	// AUTO GENERATION BELOW
 	"Alarm Sensor": typeof import("../cc/AlarmSensorCC").AlarmSensorCCValues;
 	Association: typeof import("../cc/AssociationCC").AssociationCCValues;
+	"Association Group Information": typeof import("../cc/AssociationGroupInfoCC").AssociationGroupInfoCCValues;
+	"Barrier Operator": typeof import("../cc/BarrierOperatorCC").BarrierOperatorCCValues;
 	Basic: typeof import("../cc/BasicCC").BasicCCValues;
+	Battery: typeof import("../cc/BatteryCC").BatteryCCValues;
 }

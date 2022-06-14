@@ -42,3 +42,86 @@ async setEventSignaling(
 	subsystemState: SubsystemState,
 ): Promise<void>;
 ```
+
+## Barrier Operator CC values
+
+### `currentState`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Barrier Operator"],
+	endpoint: number,
+	property: "currentState",
+}
+```
+
+-   **label:** Current Barrier State
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `position`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Barrier Operator"],
+	endpoint: number,
+	property: "position",
+}
+```
+
+-   **label:** Barrier Position
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 100
+
+### `signalingState(subsystemType: SubsystemType)`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Barrier Operator"],
+	endpoint: number,
+	property: "signalingState",
+	propertyKey: SubsystemType,
+}
+```
+
+-   **label:** `Signaling State (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `targetState`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Barrier Operator"],
+	endpoint: number,
+	property: "targetState",
+}
+```
+
+-   **label:** Target Barrier State
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
