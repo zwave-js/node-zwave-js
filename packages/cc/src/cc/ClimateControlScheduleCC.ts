@@ -1,7 +1,10 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	enumValuesToMetadataStates,
+	Maybe,
+	MessageOrCCLogEntry,
 	validatePayload,
+	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -31,6 +34,7 @@ import {
 	encodeSetbackState,
 	encodeSwitchpoint,
 } from "../lib/serializers";
+import { V } from "../lib/Values";
 import {
 	ClimateControlScheduleCommand,
 	ScheduleOverrideType,
@@ -38,6 +42,21 @@ import {
 	Switchpoint,
 	Weekday,
 } from "../lib/_Types";
+
+export const ClimateControlScheduleCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Climate Control Schedule"], {
+		...V.staticProperty("overrideType", {
+			...ValueMetadata.Number,
+			label: "Override type",
+			states: enumValuesToMetadataStates(ScheduleOverrideType),
+		} as const),
+		...V.staticProperty("overrideState", {
+			...ValueMetadata.Number,
+			label: "Override state",
+			min: -12.8,
+		} as const),
+	}),
+});
 
 @API(CommandClasses["Climate Control Schedule"])
 export class ClimateControlScheduleCCAPI extends CCAPI {
@@ -334,7 +353,7 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 	}
 
 	private _changeCounter: number;
-	@ccValue() public get changeCounter(): number {
+	public get changeCounter(): number {
 		return this._changeCounter;
 	}
 
@@ -365,12 +384,14 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 	}
 
 	private _overrideType: ScheduleOverrideType;
-	@ccValue() public get overrideType(): ScheduleOverrideType {
+	@ccValue()
+	public get overrideType(): ScheduleOverrideType {
 		return this._overrideType;
 	}
 
 	private _overrideState: SetbackState;
-	@ccValue() public get overrideState(): SetbackState {
+	@ccValue()
+	public get overrideState(): SetbackState {
 		return this._overrideState;
 	}
 

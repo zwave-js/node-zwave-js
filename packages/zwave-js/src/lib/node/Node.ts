@@ -27,11 +27,10 @@ import {
 } from "@zwave-js/cc/BasicCC";
 import {
 	CentralSceneCCNotification,
-	getSceneValueId,
-	getSlowRefreshValueId,
+	CentralSceneCCValues,
 } from "@zwave-js/cc/CentralSceneCC";
 import { ClockCCReport } from "@zwave-js/cc/ClockCC";
-import { getCurrentModeValueId as getCurrentLockModeValueId } from "@zwave-js/cc/DoorLockCC";
+import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
@@ -2447,7 +2446,7 @@ protocol version:      ${this.protocolVersion}`;
 			sceneNumber: number,
 			key: CentralSceneKeys,
 		): void => {
-			const valueId = getSceneValueId(sceneNumber);
+			const valueId = CentralSceneCCValues.scene(sceneNumber).id;
 			this.valueDB.setValue(valueId, key, { stateful: false });
 		};
 
@@ -2473,6 +2472,9 @@ protocol version:      ${this.protocolVersion}`;
 			forceKeyUp();
 		}
 
+		const slowRefreshValueId = CentralSceneCCValues.slowRefresh.endpoint(
+			this.index,
+		);
 		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// Set or refresh timer to force a release of the key
 			this.centralSceneForcedKeyUp = false;
@@ -2483,7 +2485,7 @@ protocol version:      ${this.protocolVersion}`;
 			// slow refresh node. We use the stored value for fallback behavior
 			const slowRefresh =
 				command.slowRefresh ??
-				this.valueDB.getValue<boolean>(getSlowRefreshValueId());
+				this.valueDB.getValue<boolean>(slowRefreshValueId);
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
 				// Unref'ing long running timers allows the process to exit mid-timeout
@@ -2500,7 +2502,7 @@ protocol version:      ${this.protocolVersion}`;
 			} else if (this.centralSceneForcedKeyUp) {
 				// If we timed out and the controller subsequently receives a Key Released Notification,
 				// we SHOULD consider the sending node to be operating with the Slow Refresh capability enabled.
-				this.valueDB.setValue(getSlowRefreshValueId(), true);
+				this.valueDB.setValue(slowRefreshValueId, true);
 				// Do not raise the duplicate event
 				return;
 			}
@@ -3052,7 +3054,9 @@ protocol version:      ${this.protocolVersion}`;
 			// Update the current lock status
 			if (this.supportsCC(CommandClasses["Door Lock"])) {
 				this.valueDB.setValue(
-					getCurrentLockModeValueId(command.endpointIndex),
+					DoorLockCCValues.currentMode.endpoint(
+						command.endpointIndex,
+					),
 					isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
 				);
 			}

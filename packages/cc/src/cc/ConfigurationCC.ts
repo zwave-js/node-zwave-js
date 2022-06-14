@@ -54,6 +54,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { ConfigurationCommand, ConfigValue } from "../lib/_Types";
 
 function configValueToString(value: ConfigValue): string {
@@ -74,21 +75,27 @@ export class ConfigurationCCError extends ZWaveError {
 	}
 }
 
-export function getParamInformationValueID(
-	parameter: number,
-	bitMask?: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Configuration,
-		property: parameter,
-		propertyKey: bitMask,
-	};
-}
+export const ConfigurationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Configuration, {
+		...V.staticProperty(
+			"isParamInformationFromConfig",
+			undefined, // meta
+			{ internal: true, supportsEndpoints: false }, // value options
+		),
+	}),
 
-const isParamInfoFromConfigValueId: ValueID = {
-	commandClass: CommandClasses.Configuration,
-	property: "isParamInformationFromConfig",
-};
+	...V.defineDynamicCCValues(CommandClasses.Configuration, {
+		...V.dynamicPropertyAndKeyWithName(
+			"paramInformation",
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			(parameter: number, bitMask?: number) => parameter,
+			(parameter: number, bitMask?: number) => bitMask,
+			// Metadata is determined dynamically depending on other factors
+			undefined,
+			{ supportsEndpoints: false },
+		),
+	}),
+});
 
 export type ConfigurationCCAPISetOptions = {
 	parameter: number;
@@ -1149,8 +1156,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		applHost: ZWaveApplicationHost,
 	): boolean {
 		return (
-			this.getValueDB(applHost).getValue(isParamInfoFromConfigValueId) ===
-			true
+			this.getValueDB(applHost).getValue(
+				ConfigurationCCValues.isParamInformationFromConfig.id,
+			) === true
 		);
 	}
 
@@ -1168,7 +1176,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		if (this.isParamInformationFromConfig(applHost)) return;
 
 		const valueDB = this.getValueDB(applHost);
-		const valueId = getParamInformationValueID(parameter, valueBitMask);
+		const valueId = ConfigurationCCValues.paramInformation(
+			parameter,
+			valueBitMask,
+		).id;
 		// Retrieve the base metadata
 		const metadata = this.getParamInformation(
 			applHost,
@@ -1191,7 +1202,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		valueBitMask?: number,
 	): ConfigurationMetadata {
 		const valueDB = this.getValueDB(applHost);
-		const valueId = getParamInformationValueID(parameter, valueBitMask);
+		const valueId = ConfigurationCCValues.paramInformation(
+			parameter,
+			valueBitMask,
+		).id;
 		return (valueDB.getMetadata(valueId) ?? {
 			...ValueMetadata.Any,
 		}) as ConfigurationMetadata;
@@ -1301,7 +1315,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 
 		// Allow overwriting the param info (mark it as unloaded)
-		valueDB.setValue(isParamInfoFromConfigValueId, false);
+		valueDB.setValue(
+			ConfigurationCCValues.isParamInformationFromConfig.id,
+			false,
+		);
 
 		for (const [param, info] of config.entries()) {
 			// We need to make the config information compatible with the
@@ -1342,7 +1359,10 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 
 		// Remember that we loaded the param information from a config file
-		valueDB.setValue(isParamInfoFromConfigValueId, true);
+		valueDB.setValue(
+			ConfigurationCCValues.isParamInformationFromConfig.id,
+			true,
+		);
 	}
 
 	public translatePropertyKey(

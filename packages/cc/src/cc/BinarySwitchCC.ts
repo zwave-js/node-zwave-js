@@ -8,7 +8,6 @@ import {
 	parseBoolean,
 	parseMaybeBoolean,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -26,7 +25,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -39,15 +37,36 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { BinarySwitchCommand } from "../lib/_Types";
 
-function getCurrentValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses["Binary Switch"],
-		endpoint,
-		property: "currentValue",
-	};
-}
+export const BinarySwitchCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Binary Switch"], {
+		...V.staticProperty("currentValue", {
+			...ValueMetadata.ReadOnlyBoolean,
+			label: "Current value",
+		} as const),
+
+		...V.staticProperty(
+			"targetValue",
+			{
+				...ValueMetadata.Boolean,
+				label: "Target value",
+				valueChangeOptions: ["transitionDuration"],
+			} as const,
+			{ forceCreation: true },
+		),
+
+		...V.staticProperty(
+			"duration",
+			{
+				...ValueMetadata.ReadOnlyDuration,
+				label: "Remaining duration",
+			} as const,
+			{ minVersion: 2 } as const,
+		),
+	}),
+});
 
 @API(CommandClasses["Binary Switch"])
 export class BinarySwitchCCAPI extends CCAPI {
@@ -124,14 +143,15 @@ export class BinarySwitchCCAPI extends CCAPI {
 		const duration = Duration.from(options?.transitionDuration);
 		await this.set(value, duration);
 
+		const currentValueValueId = BinarySwitchCCValues.currentValue.endpoint(
+			this.endpoint.index,
+		);
+
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			if (!this.applHost.options.disableOptimisticValueUpdate) {
-				this.getValueDB().setValue(
-					getCurrentValueValueId(this.endpoint.index),
-					value,
-				);
+				this.getValueDB().setValue(currentValueValueId, value);
 			}
 
 			// Verify the current value after a delay
@@ -155,10 +175,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 				for (const node of affectedNodes) {
 					this.applHost
 						.tryGetValueDB(node.id)
-						?.setValue(
-							getCurrentValueValueId(this.endpoint.index),
-							value,
-						);
+						?.setValue(currentValueValueId, value);
 				}
 			}
 			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
@@ -239,11 +256,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 		value: number,
 	): boolean {
 		this.getValueDB(applHost).setValue(
-			{
-				commandClass: this.ccId,
-				endpoint: this.endpointIndex,
-				property: "currentValue",
-			},
+			BinarySwitchCCValues.currentValue.endpoint(this.endpointIndex),
 			value > 0,
 		);
 		return true;
@@ -319,31 +332,18 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	private _currentValue: Maybe<boolean> | undefined;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Current value",
-	})
 	public get currentValue(): Maybe<boolean> | undefined {
 		return this._currentValue;
 	}
 
 	private _targetValue: boolean | undefined;
 	@ccValue({ forceCreation: true })
-	@ccValueMetadata({
-		...ValueMetadata.Boolean,
-		label: "Target value",
-		valueChangeOptions: ["transitionDuration"],
-	})
 	public get targetValue(): boolean | undefined {
 		return this._targetValue;
 	}
 
 	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration",
-	})
 	public get duration(): Duration | undefined {
 		return this._duration;
 	}

@@ -2,7 +2,6 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -27,7 +26,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -40,27 +38,49 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	EntryControlCommand,
 	EntryControlDataTypes,
 	EntryControlEventTypes,
 } from "../lib/_Types";
 
-function getValueID(property: string, endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Entry Control"],
-		endpoint,
-		property: property,
-	};
-}
+export const EntryControlCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Entry Control"], {
+		...V.staticProperty("keyCacheSize", {
+			...ValueMetadata.UInt8,
+			label: "Key cache size",
+			description:
+				"Number of character that must be stored before sending",
+			min: 1,
+			max: 32,
+		} as const),
 
-export function getKeyCacheSizeStateValueID(endpoint: number): ValueID {
-	return getValueID("keyCacheSize", endpoint);
-}
+		...V.staticProperty("keyCacheTimeout", {
+			...ValueMetadata.UInt8,
+			label: "Key cache timeout",
+			unit: "seconds",
+			description:
+				"How long the key cache must wait for additional characters",
+			min: 1,
+			max: 10,
+		} as const),
 
-export function getKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
-	return getValueID("keyCacheTimeout", endpoint);
-}
+		...V.staticProperty("supportedDataTypes", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedEventTypes", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedKeys", undefined, {
+			internal: true,
+		}),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Entry Control"], {
+		// Dynamic CC values go here
+	}),
+});
 
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
@@ -188,7 +208,7 @@ export class EntryControlCCAPI extends CCAPI {
 			keyCacheTimeout = value;
 
 			const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
-				getKeyCacheSizeStateValueID(this.endpoint.index),
+				EntryControlCCValues.keyCacheSize.endpoint(this.endpoint.index),
 			);
 			if (oldKeyCacheSize == undefined) {
 				throw new ZWaveError(
@@ -483,20 +503,16 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		const valueDB = this.getValueDB(applHost);
 
 		// Store min/max cache size and timeout as metadata
-		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
-			this.endpointIndex,
-		);
-		valueDB.setMetadata(keyCacheSizeValueId, {
-			...ValueMetadata.UInt8,
+		const keyCacheSizeValue = EntryControlCCValues.keyCacheSize;
+		valueDB.setMetadata(keyCacheSizeValue.endpoint(this.endpointIndex), {
+			...keyCacheSizeValue.meta,
 			min: this.minKeyCacheSize,
 			max: this.maxKeyCacheSize,
 		});
 
-		const keyCacheTimeoutValueId = getKeyCacheTimeoutStateValueID(
-			this.endpointIndex,
-		);
-		valueDB.setMetadata(keyCacheTimeoutValueId, {
-			...ValueMetadata.UInt8,
+		const keyCacheTimeoutValue = EntryControlCCValues.keyCacheTimeout;
+		valueDB.setMetadata(keyCacheTimeoutValue.endpoint(this.endpointIndex), {
+			...keyCacheTimeoutValue.meta,
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,
 		});
@@ -554,25 +570,9 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Key cache size",
-		description: "Number of character that must be stored before sending",
-		min: 1,
-		max: 32,
-	})
 	public readonly keyCacheSize: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Key cache timeout",
-		unit: "seconds",
-		description:
-			"How long the key cache must wait for additional characters",
-		min: 1,
-		max: 10,
-	})
 	public readonly keyCacheTimeout: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

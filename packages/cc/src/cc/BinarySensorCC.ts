@@ -46,13 +46,16 @@ export const BinarySensorCCValues = Object.freeze({
 
 	...V.defineDynamicCCValues(CommandClasses["Binary Sensor"], {
 		...V.dynamicPropertyWithName(
-			"binarySensor",
+			"state",
 			/* property */ (sensorType: BinarySensorType) =>
 				getEnumMemberName(BinarySensorType, sensorType),
 			/* meta */ (sensorType: BinarySensorType) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
-					label: getEnumMemberName(BinarySensorType, sensorType),
+					label: `Sensor state (${getEnumMemberName(
+						BinarySensorType,
+						sensorType,
+					)})`,
 					ccSpecific: { sensorType },
 				} as const),
 		),
@@ -248,7 +251,7 @@ export class BinarySensorCC extends CommandClass {
 		value: number,
 	): boolean {
 		this.getValueDB(applHost).setValue(
-			BinarySensorCCValues.binarySensor(BinarySensorType.Any).endpoint(
+			BinarySensorCCValues.state(BinarySensorType.Any).endpoint(
 				this.endpointIndex,
 			),
 			value > 0,
@@ -277,7 +280,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
-		const binarySensorValue = BinarySensorCCValues.binarySensor(this._type);
+		const binarySensorValue = BinarySensorCCValues.state(this._type);
 
 		const valueId: ValueID = binarySensorValue.endpoint(this.endpointIndex);
 		valueDB.setMetadata(valueId, binarySensorValue.meta);

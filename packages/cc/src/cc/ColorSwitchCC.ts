@@ -32,12 +32,10 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -46,6 +44,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	ColorComponent,
 	ColorComponentMap,
@@ -85,53 +84,71 @@ function colorComponentToTableKey(
 	}
 }
 
-function getSupportedColorComponentsValueID(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Color Switch"],
-		endpoint: endpointIndex,
-		property: "supportedColorComponents",
-	};
-}
+export const ColorSwitchCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Color Switch"], {
+		...V.staticProperty("supportedColorComponents", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsHexColor", undefined, {
+			internal: true,
+		}),
 
-function getCurrentColorValueID(
-	endpointIndex: number,
-	component?: ColorComponent,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Color Switch"],
-		property: "currentColor",
-		endpoint: endpointIndex,
-		propertyKey: component,
-	};
-}
+		// The compound color (static)
+		...V.staticPropertyWithName("currentColor", "currentColor", {
+			...ValueMetadata.ReadOnly,
+			label: `Current color`,
+		} as const),
+		...V.staticPropertyWithName("targetColor", "targetColor", {
+			...ValueMetadata.Any,
+			label: `Target color`,
+			valueChangeOptions: ["transitionDuration"],
+		} as const),
+		...V.staticProperty("duration", {
+			...ValueMetadata.ReadOnlyDuration,
+			label: "Remaining duration",
+		} as const),
 
-function getTargetColorValueID(
-	endpointIndex: number,
-	component?: ColorComponent,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Color Switch"],
-		property: "targetColor",
-		endpoint: endpointIndex,
-		propertyKey: component,
-	};
-}
+		// The compound color as HEX
+		...V.staticProperty("hexColor", {
+			...ValueMetadata.Color,
+			minLength: 6,
+			maxLength: 7, // to allow #rrggbb
+			label: `RGB Color`,
+			valueChangeOptions: ["transitionDuration"],
+		} as const),
+	}),
 
-function getSupportsHexColorValueID(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Color Switch"],
-		property: "supportsHexColor",
-		endpoint: endpointIndex,
-	};
-}
-
-function getHexColorValueID(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Color Switch"],
-		property: "hexColor",
-		endpoint: endpointIndex,
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Color Switch"], {
+		// The individual color channels (dynamic)
+		...V.dynamicPropertyAndKeyWithName(
+			"currentColorChannel",
+			"currentColor",
+			(component: ColorComponent) => component,
+			(component: ColorComponent) => {
+				const colorName = getEnumMemberName(ColorComponent, component);
+				return {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: `Current value (${colorName})`,
+					description: `The current value of the ${colorName} channel.`,
+				} as const;
+			},
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"targetColorChannel",
+			"targetColor",
+			(component: ColorComponent) => component,
+			(component: ColorComponent) => {
+				const colorName = getEnumMemberName(ColorComponent, component);
+				return {
+					...ValueMetadata.UInt8,
+					label: `Target value (${colorName})`,
+					description: `The target value of the ${colorName} channel.`,
+					valueChangeOptions: ["transitionDuration"],
+				} as const;
+			},
+		),
+	}),
+});
 
 @API(CommandClasses["Color Switch"])
 export class ColorSwitchCCAPI extends CCAPI {
@@ -226,14 +243,21 @@ export class ColorSwitchCCAPI extends CCAPI {
 	/** Updates the current color for a given node by merging in the given changes */
 	private updateCurrentColor(valueDB: ValueDB, colorTable: ColorTable) {
 		let updatedRGB = false;
-		const currentCompoundValue =
+		const currentColorValueId = ColorSwitchCCValues.currentColor.endpoint(
+			this.endpoint.index,
+		);
+		const targetColorValueId = ColorSwitchCCValues.targetColor.endpoint(
+			this.endpoint.index,
+		);
+		const currentCompoundColor =
 			valueDB.getValue<Partial<Record<ColorKey, number>>>(
-				getCurrentColorValueID(this.endpoint.index),
+				currentColorValueId,
 			) ?? {};
-		const targetCompoundValue =
+		const targetCompoundColor =
 			valueDB.getValue<Partial<Record<ColorKey, number>>>(
-				getCurrentColorValueID(this.endpoint.index),
+				targetColorValueId,
 			) ?? {};
+
 		for (const [key, value] of entries(colorTable)) {
 			const component = colorTableKeyToComponent(key);
 			if (
@@ -245,32 +269,30 @@ export class ColorSwitchCCAPI extends CCAPI {
 			}
 
 			valueDB.setValue(
-				getCurrentColorValueID(this.endpoint.index, component),
+				ColorSwitchCCValues.currentColorChannel(component).endpoint(
+					this.endpoint.index,
+				),
 				value,
 			);
 
 			// Update the compound value
 			if (key in ColorComponentMap) {
-				currentCompoundValue[key as ColorKey] = value;
-				targetCompoundValue[key as ColorKey] = value;
+				currentCompoundColor[key as ColorKey] = value;
+				targetCompoundColor[key as ColorKey] = value;
 			}
 		}
 		// And store the updated compound values
-		valueDB.setValue(
-			getCurrentColorValueID(this.endpoint.index),
-			currentCompoundValue,
-		);
-		valueDB.setValue(
-			getTargetColorValueID(this.endpoint.index),
-			targetCompoundValue,
-		);
+		valueDB.setValue(currentColorValueId, currentCompoundColor);
+		valueDB.setValue(targetColorValueId, targetCompoundColor);
 
 		// and hex color if necessary
 		const supportsHex = valueDB.getValue<boolean>(
-			getSupportsHexColorValueID(this.endpoint.index),
+			ColorSwitchCCValues.supportsHexColor.endpoint(this.endpoint.index),
 		);
 		if (supportsHex && updatedRGB) {
-			const hexValueId = getHexColorValueID(this.endpoint.index);
+			const hexValueId = ColorSwitchCCValues.hexColor.endpoint(
+				this.endpoint.index,
+			);
 			const [r, g, b] = [
 				ColorComponent.Red,
 				ColorComponent.Green,
@@ -278,7 +300,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 			].map(
 				(c) =>
 					valueDB.getValue<number>(
-						getCurrentColorValueID(this.endpoint.index, c),
+						ColorSwitchCCValues.currentColorChannel(c).endpoint(
+							this.endpoint.index,
+						),
 					) ?? 0,
 			);
 			const hexValue = (r << 16) | (g << 8) | b;
@@ -375,7 +399,11 @@ export class ColorSwitchCCAPI extends CCAPI {
 				if (this.isSinglecast()) {
 					const supportedColors = this.tryGetValueDB()?.getValue<
 						readonly ColorComponent[]
-					>(getSupportedColorComponentsValueID(this.endpoint.index));
+					>(
+						ColorSwitchCCValues.supportedColorComponents.endpoint(
+							this.endpoint.index,
+						),
+					);
 					if (supportedColors) {
 						value = pick(
 							value,
@@ -443,13 +471,6 @@ export class ColorSwitchCCAPI extends CCAPI {
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(getSupportsHexColorValueID(0).property, {
-			internal: true,
-		});
-	}
-
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
@@ -494,34 +515,31 @@ export class ColorSwitchCC extends CommandClass {
 
 		// Create metadata for the separate color channels
 		for (const color of supportedColors) {
-			const colorName = getEnumMemberName(ColorComponent, color);
+			const currentColorChannelValue =
+				ColorSwitchCCValues.currentColorChannel(color);
 			valueDB.setMetadata(
-				getCurrentColorValueID(this.endpointIndex, color),
-				{
-					...ValueMetadata.ReadOnlyUInt8,
-					label: `Current value (${colorName})`,
-					description: `The current value of the ${colorName} color.`,
-				},
+				currentColorChannelValue.endpoint(this.endpointIndex),
+				currentColorChannelValue.meta,
 			);
+
+			const targetColorChannelValue =
+				ColorSwitchCCValues.targetColorChannel(color);
 			valueDB.setMetadata(
-				getTargetColorValueID(this.endpointIndex, color),
-				{
-					...ValueMetadata.UInt8,
-					label: `Target value (${colorName})`,
-					description: `The target value of the ${colorName} color.`,
-				},
+				targetColorChannelValue.endpoint(this.endpointIndex),
+				targetColorChannelValue.meta,
 			);
 		}
 		// And the compound one
-		valueDB.setMetadata(getCurrentColorValueID(this.endpointIndex), {
-			...ValueMetadata.ReadOnly,
-			label: `Current Color`,
-		});
-		valueDB.setMetadata(getTargetColorValueID(this.endpointIndex), {
-			...ValueMetadata.Any,
-			label: `Target Color`,
-			valueChangeOptions: ["transitionDuration"],
-		});
+		const currentColorValue = ColorSwitchCCValues.currentColor;
+		valueDB.setMetadata(
+			currentColorValue.endpoint(this.endpointIndex),
+			currentColorValue.meta,
+		);
+		const targetColorValue = ColorSwitchCCValues.targetColor;
+		valueDB.setMetadata(
+			targetColorValue.endpoint(this.endpointIndex),
+			targetColorValue.meta,
+		);
 
 		// Create the collective HEX color values
 		const supportsHex = [
@@ -530,17 +548,15 @@ export class ColorSwitchCC extends CommandClass {
 			ColorComponent.Blue,
 		].every((c) => supportedColors.includes(c));
 		valueDB.setValue(
-			getSupportsHexColorValueID(this.endpointIndex),
+			ColorSwitchCCValues.supportsHexColor.endpoint(this.endpointIndex),
 			supportsHex,
 		);
 		if (supportsHex) {
-			valueDB.setMetadata(getHexColorValueID(this.endpointIndex), {
-				...ValueMetadata.Color,
-				minLength: 6,
-				maxLength: 7, // to allow #rrggbb
-				label: `RGB Color`,
-				valueChangeOptions: ["transitionDuration"],
-			});
+			const hexColorValue = ColorSwitchCCValues.hexColor;
+			valueDB.setMetadata(
+				hexColorValue.endpoint(this.endpointIndex),
+				hexColorValue.meta,
+			);
 		}
 
 		// Query all color components
@@ -564,7 +580,9 @@ export class ColorSwitchCC extends CommandClass {
 
 		const supportedColors: readonly ColorComponent[] =
 			valueDB.getValue(
-				getSupportedColorComponentsValueID(this.endpointIndex),
+				ColorSwitchCCValues.supportedColorComponents.endpoint(
+					this.endpointIndex,
+				),
 			) ?? [];
 
 		for (const color of supportedColors) {
@@ -653,25 +671,29 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		if (!super.persistValues(applHost)) return false;
 		const valueDB = this.getValueDB(applHost);
 
-		const valueId = getCurrentColorValueID(
-			this.endpointIndex,
-			this.colorComponent,
+		valueDB.setValue(
+			ColorSwitchCCValues.currentColorChannel(
+				this.colorComponent,
+			).endpoint(this.endpointIndex),
+			this.currentValue,
 		);
-		valueDB.setValue(valueId, this.currentValue);
 
 		// Update target value if required
 		if (this.targetValue != undefined) {
-			const targetValueId = getTargetColorValueID(
-				this.endpointIndex,
-				this.colorComponent,
+			valueDB.setValue(
+				ColorSwitchCCValues.targetColorChannel(
+					this.colorComponent,
+				).endpoint(this.endpointIndex),
+				this.targetValue,
 			);
-			valueDB.setValue(targetValueId, this.targetValue);
 		}
 
 		// Update compound current value
 		const colorTableKey = colorComponentToTableKey(this.colorComponent);
 		if (colorTableKey) {
-			const compoundValueId = getCurrentColorValueID(this.endpointIndex);
+			const compoundValueId = ColorSwitchCCValues.currentColor.endpoint(
+				this.endpointIndex,
+			);
 			const compoundValue: Partial<Record<ColorKey, number>> =
 				valueDB.getValue(compoundValueId) ?? {};
 			compoundValue[colorTableKey] = this.currentValue;
@@ -679,9 +701,10 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 			// and target value
 			if (this.targetValue != undefined) {
-				const compoundTargetValueId = getTargetColorValueID(
-					this.endpointIndex,
-				);
+				const compoundTargetValueId =
+					ColorSwitchCCValues.targetColor.endpoint(
+						this.endpointIndex,
+					);
 				const compoundTargetValue: Partial<Record<ColorKey, number>> =
 					valueDB.getValue(compoundTargetValueId) ?? {};
 				compoundTargetValue[colorTableKey] = this.targetValue;
@@ -691,7 +714,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 		// Update collective hex value if required
 		const supportsHex = valueDB.getValue<boolean>(
-			getSupportsHexColorValueID(this.endpointIndex),
+			ColorSwitchCCValues.supportsHexColor.endpoint(this.endpointIndex),
 		);
 		if (
 			supportsHex &&
@@ -699,7 +722,9 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				this.colorComponent === ColorComponent.Green ||
 				this.colorComponent === ColorComponent.Blue)
 		) {
-			const hexValueId = getHexColorValueID(this.endpointIndex);
+			const hexValueId = ColorSwitchCCValues.hexColor.endpoint(
+				this.endpointIndex,
+			);
 			const hexValue = valueDB.getValue<string>(hexValueId) ?? "000000";
 			const byteOffset = ColorComponent.Blue - this.colorComponent;
 			const byteMask = 0xff << (byteOffset * 8);
@@ -721,10 +746,6 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	public readonly targetValue: number | undefined;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration",
-	})
 	public readonly duration: Duration | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

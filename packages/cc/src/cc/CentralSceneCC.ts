@@ -1,8 +1,4 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -29,7 +25,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -43,28 +38,43 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
+import { V } from "../lib/Values";
 import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
 import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
-/** Returns the ValueID used to store the current value of a Central Scene */
-export function getSceneValueId(sceneNumber: number): ValueID {
-	return {
-		commandClass: CommandClasses["Central Scene"],
-		property: "scene",
-		propertyKey: padStart(sceneNumber.toString(), 3, "0"),
-	};
-}
+export const CentralSceneCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Central Scene"], {
+		...V.staticProperty("sceneCount", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsSlowRefresh", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedKeyAttributes", undefined, {
+			internal: true,
+		}),
 
-function getSceneLabel(sceneNumber: number): string {
-	return `Scene ${padStart(sceneNumber.toString(), 3, "0")}`;
-}
+		...V.staticProperty("slowRefresh", {
+			...ValueMetadata.Boolean,
+			label: "Send held down notifications at a slow rate",
+			description:
+				"When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.",
+		} as const),
+	}),
 
-export function getSlowRefreshValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Central Scene"],
-		property: "slowRefresh",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Central Scene"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"scene",
+			"scene",
+			(sceneNumber: number) => padStart(sceneNumber.toString(), 3, "0"),
+			(sceneNumber: number) =>
+				({
+					...ValueMetadata.ReadOnlyUInt8,
+					label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
+				} as const),
+		),
+	}),
+});
 
 @API(CommandClasses["Central Scene"])
 export class CentralSceneCCAPI extends CCAPI {
@@ -305,12 +315,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		const valueDB = this.getValueDB(applHost);
 
 		// In case the interview is not yet completed, we still create some basic metadata
-		const valueId = getSceneValueId(this._sceneNumber);
+		const sceneValue = CentralSceneCCValues.scene(this._sceneNumber);
+		const valueId = sceneValue.id;
 		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: getSceneLabel(this._sceneNumber),
-			});
+			valueDB.setMetadata(valueId, sceneValue.meta);
 		}
 
 		// The spec behavior is pretty complicated, so we cannot just store
@@ -400,13 +408,12 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		// Create metadata for all scenes
+		// Create/extend metadata for all scenes
 		const valueDB = this.getValueDB(applHost);
 		for (let i = 1; i <= this._sceneCount; i++) {
-			const valueId = getSceneValueId(i);
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: getSceneLabel(i),
+			const sceneValue = CentralSceneCCValues.scene(i);
+			valueDB.setMetadata(sceneValue.id, {
+				...sceneValue.meta,
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,
 					this._supportedKeyAttributes.get(i),
@@ -457,24 +464,6 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			message,
 		};
 	}
-
-	// private _keyAttributesHaveIdenticalSupport: boolean;
-	// @ccValue({ internal: true })
-	// public get keyAttributesHaveIdenticalSupport(): boolean {
-	// 	return this._keyAttributesHaveIdenticalSupport;
-	// }
-
-	// public supportsKeyAttribute(
-	// 	sceneNumber: number,
-	// 	keyAttribute: CentralSceneKeys,
-	// ): boolean {
-	// 	const mapIndex = this._keyAttributesHaveIdenticalSupport
-	// 		? 1
-	// 		: sceneNumber;
-	// 	return this._supportedKeyAttributes
-	// 		.get(mapIndex)!
-	// 		.includes(keyAttribute);
-	// }
 }
 
 @CCCommand(CentralSceneCommand.SupportedGet)
@@ -495,13 +484,6 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 
 	private _slowRefresh: boolean;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Boolean,
-		label: "Send held down notifications at a slow rate",
-		description:
-			"When this is true, KeyHeldDown notifications are sent every 55s. " +
-			"When this is false, the notifications are sent every 200ms.",
-	})
 	public get slowRefresh(): boolean {
 		return this._slowRefresh;
 	}

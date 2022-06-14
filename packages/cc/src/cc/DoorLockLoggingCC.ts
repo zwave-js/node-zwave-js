@@ -26,6 +26,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
@@ -92,6 +93,12 @@ const eventTypeLabel = {
 } as const;
 
 const LATEST_RECORD_NUMBER_KEY = 0;
+
+export const DoorLockLoggingCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Door Lock Logging"], {
+		...V.staticProperty("recordsCount", undefined, { internal: true }),
+	}),
+});
 
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {

@@ -41,3 +41,42 @@ async setOverride(
 	state: SetbackState,
 ): Promise<void>;
 ```
+
+## Climate Control Schedule CC values
+
+### `overrideState`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Climate Control Schedule"],
+	endpoint: number,
+	property: "overrideState",
+}
+```
+
+-   **label:** Override state
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** -12.8
+
+### `overrideType`
+
+```ts
+{
+	commandClass: typeof CommandClasses["Climate Control Schedule"],
+	endpoint: number,
+	property: "overrideType",
+}
+```
+
+-   **label:** Override type
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
