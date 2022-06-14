@@ -242,8 +242,8 @@ export const V = {
 	/** Returns a CC value definition that is named like the value `property` */
 	staticProperty<
 		TProp extends string | number,
-		TMeta extends ValueMetadata | undefined = undefined,
-		TOptions extends CCValueOptions | undefined = undefined,
+		TMeta extends ValueMetadata,
+		TOptions extends CCValueOptions,
 	>(
 		property: TProp,
 		meta?: TMeta,
@@ -268,8 +268,8 @@ export const V = {
 	staticPropertyWithName<
 		TName extends string,
 		TProp extends string | number,
-		TMeta extends ValueMetadata | undefined = undefined,
-		TOptions extends CCValueOptions | undefined = undefined,
+		TMeta extends ValueMetadata,
+		TOptions extends CCValueOptions,
 	>(
 		name: TName,
 		property: TProp,
@@ -296,8 +296,8 @@ export const V = {
 		TName extends string,
 		TProp extends string | number,
 		TKey extends string | number,
-		TMeta extends ValueMetadata | undefined = undefined,
-		TOptions extends CCValueOptions | undefined = undefined,
+		TMeta extends ValueMetadata,
+		TOptions extends CCValueOptions,
 	>(
 		name: TName,
 		property: TProp,
@@ -326,11 +326,8 @@ export const V = {
 	dynamicPropertyWithName<
 		TName extends string,
 		TProp extends FnOrStatic<any[], ValueIDProperties["property"]>,
-		TMeta extends FnOrStatic<any[], ValueMetadata | undefined> = undefined,
-		TOptions extends FnOrStatic<
-			any[],
-			CCValueOptions | undefined
-		> = undefined,
+		TMeta extends FnOrStatic<any[], ValueMetadata> = ValueMetadata,
+		TOptions extends FnOrStatic<any[], CCValueOptions> = CCValueOptions,
 	>(
 		name: TName,
 		property: TProp,
@@ -357,11 +354,8 @@ export const V = {
 		TName extends string,
 		TProp extends FnOrStatic<any[], ValueIDProperties["property"]>,
 		TKey extends FnOrStatic<any[], ValueIDProperties["propertyKey"]>,
-		TMeta extends FnOrStatic<any[], ValueMetadata | undefined> = undefined,
-		TOptions extends FnOrStatic<
-			any[],
-			CCValueOptions | undefined
-		> = undefined,
+		TMeta extends FnOrStatic<any[], ValueMetadata> = ValueMetadata,
+		TOptions extends FnOrStatic<any[], CCValueOptions> = CCValueOptions,
 	>(
 		name: TName,
 		property: TProp,
@@ -411,16 +405,18 @@ type DropOptional<T> = {
 	[K in keyof T as [undefined] extends [T[K]] ? never : K]: T[K];
 };
 
-type MergeOptions<TOptions extends CCValueOptions | undefined> = DropOptional<
-	TOptions extends CCValueOptions
-		? Overwrite<DefaultOptions, TOptions>
-		: DefaultOptions
+type MergeOptions<TOptions extends CCValueOptions> = DropOptional<
+	CCValueOptions extends TOptions
+		? // When the type cannot be inferred exactly (not given), default to DefaultOptions
+		  DefaultOptions
+		: Overwrite<DefaultOptions, TOptions>
 >;
 
-type MergeMeta<TMeta extends ValueMetadata | undefined> = DropOptional<
-	TMeta extends ValueMetadata
-		? Overwrite<typeof ValueMetadata["Any"], TMeta>
-		: typeof ValueMetadata["Any"]
+type MergeMeta<TMeta extends ValueMetadata> = DropOptional<
+	ValueMetadata extends TMeta
+		? // When the type cannot be inferred exactly (not given), default to ValueMetadata.Any
+		  typeof ValueMetadata["Any"]
+		: Overwrite<typeof ValueMetadata["Any"], TMeta>
 >;
 
 type AddCCValueProperties<
@@ -445,9 +441,9 @@ type AddCCValueProperties<
 	>;
 
 	/** Returns the metadata for this value ID */
-	get meta(): Readonly<MergeMeta<TBlueprint["meta"]>>;
+	get meta(): Readonly<MergeMeta<NonNullable<TBlueprint["meta"]>>>;
 	/** Returns the value options for this value ID */
-	get options(): Readonly<MergeOptions<TBlueprint["options"]>>;
+	get options(): Readonly<MergeOptions<NonNullable<TBlueprint["options"]>>>;
 };
 
 /** A blueprint for a CC value which depends on one or more parameters */
@@ -474,4 +470,6 @@ export interface CCValues {
 	"Barrier Operator": typeof import("../cc/BarrierOperatorCC").BarrierOperatorCCValues;
 	Basic: typeof import("../cc/BasicCC").BasicCCValues;
 	Battery: typeof import("../cc/BatteryCC").BatteryCCValues;
+	"Binary Sensor": typeof import("../cc/BinarySensorCC").BinarySensorCCValues;
+	"Binary Switch": typeof import("../cc/BinarySwitchCC").BinarySwitchCCValues;
 }

@@ -65,7 +65,7 @@ export interface ValueMetadataAny {
 	/** CC-specific information to help identify this value */
 	ccSpecific?: Record<string, any>;
 	/** Options that can be provided when changing this value on a device via its value ID. */
-	valueChangeOptions?: (keyof ValueChangeOptions)[];
+	valueChangeOptions?: readonly (keyof ValueChangeOptions)[];
 }
 
 /**
