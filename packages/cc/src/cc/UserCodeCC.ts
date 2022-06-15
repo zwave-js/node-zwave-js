@@ -37,7 +37,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
@@ -89,6 +88,20 @@ export const UserCodeCCValues = Object.freeze({
 				label: "Keypad Mode",
 			} as const,
 			{ minVersion: 2 } as const,
+		),
+
+		...V.staticProperty(
+			"masterCode",
+			{
+				...ValueMetadata.String,
+				label: "Master Code",
+				minLength: 4,
+				maxLength: 10,
+			} as const,
+			{
+				minVersion: 2,
+				secret: true,
+			} as const,
 		),
 	}),
 
@@ -1553,12 +1566,6 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	@ccValue({
 		minVersion: 2,
 		secret: true,
-	})
-	@ccValueMetadata({
-		...ValueMetadata.String,
-		label: "Master Code",
-		minLength: 4,
-		maxLength: 10,
 	})
 	public readonly masterCode: string;
 

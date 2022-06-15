@@ -10,7 +10,6 @@ import {
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
-	getCCValueMetadata,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
 	Powerlevel,
@@ -790,13 +789,7 @@ export class ZWaveNode
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		const { commandClass, property } = valueId;
-		return {
-			// Merge static metadata
-			...getCCValueMetadata(commandClass, property),
-			// with potentially existing dynamic metadata
-			...this._valueDB.getMetadata(valueId),
-		};
+		return this._valueDB.getMetadata(valueId) ?? ValueMetadata.Any;
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */

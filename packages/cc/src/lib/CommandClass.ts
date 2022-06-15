@@ -1160,7 +1160,6 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 
 const METADATA_ccValues = Symbol("ccValues");
 const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
-const METADATA_ccValueMeta = Symbol("ccValueMeta");
 
 export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
@@ -1306,43 +1305,4 @@ function getCCKeyValuePairDefinitions(
 		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
 	if (!(cc in metadata)) return new Map();
 	return metadata[cc] as Map<string | number, CCValueOptions>;
-}
-
-/**
- * @publicAPI
- * Defines additional metadata for the given CC value
- */
-export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
-	return (target: unknown, property: string | number | symbol) => {
-		if (!target || !(target instanceof CommandClass)) return;
-		// get the class constructor
-		const constr = target.constructor as typeof CommandClass;
-		const cc = getCommandClassStatic(constr);
-		// retrieve the current metadata
-		const metadata =
-			Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map();
-		// And add the variable
-		const variables: Map<string | number, ValueMetadata> = metadata[cc];
-		variables.set(property as string | number, meta);
-		// store back to the object
-		Reflect.defineMetadata(METADATA_ccValueMeta, metadata, CommandClass);
-	};
-}
-
-/**
- * @publicAPI
- * Retrieves defined metadata for the given CC value. If none is found, the default settings are returned.
- */
-export function getCCValueMetadata(
-	cc: CommandClasses,
-	property: string | number,
-): ValueMetadata {
-	// retrieve the current metadata
-	const metadata =
-		Reflect.getMetadata(METADATA_ccValueMeta, CommandClass) || {};
-	if (!(cc in metadata)) return ValueMetadata.Any;
-	const map = metadata[cc] as Map<string | number, ValueMetadata>;
-	if (map.has(property)) return map.get(property)!;
-	return ValueMetadata.Any;
 }

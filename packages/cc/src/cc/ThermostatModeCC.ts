@@ -24,7 +24,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -384,11 +383,6 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 
 	private _mode: ThermostatMode;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		states: enumValuesToMetadataStates(ThermostatMode),
-		label: "Thermostat mode",
-	})
 	public get mode(): ThermostatMode {
 		return this._mode;
 	}

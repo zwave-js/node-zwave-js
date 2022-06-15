@@ -25,7 +25,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -352,26 +351,14 @@ export class BasicCCReport extends BasicCC {
 
 	private _currentValue: Maybe<number> | undefined;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyLevel,
-		label: "Current value",
-	})
 	public get currentValue(): Maybe<number> | undefined {
 		return this._currentValue;
 	}
 
 	@ccValue({ forceCreation: true })
-	@ccValueMetadata({
-		...ValueMetadata.Level,
-		label: "Target value",
-	})
 	public readonly targetValue: number | undefined;
 
 	@ccValue({ minVersion: 2 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration",
-	})
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {
