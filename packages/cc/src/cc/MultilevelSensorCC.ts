@@ -597,7 +597,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		const typeName = applHost.configManager.getSensorTypeName(this.type);
 		const sensorValue = MultilevelSensorCCValues.value(typeName);
 
-		this.storeMetadata(applHost, sensorValue, {
+		this.setMetadata(applHost, sensorValue, {
 			...sensorValue.meta,
 			unit: scale.unit,
 			ccSpecific: {
@@ -605,7 +605,7 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 				scale: scale.key,
 			},
 		});
-		this.storeValue(applHost, sensorValue, this.value);
+		this.setValue(applHost, sensorValue, this.value);
 
 		return true;
 	}

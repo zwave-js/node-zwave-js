@@ -822,12 +822,12 @@ export class NotificationCCReport extends NotificationCC {
 		if (this.alarmType != undefined) {
 			const alarmTypeValue = NotificationCCValues.alarmType;
 			this.ensureMetadata(applHost, alarmTypeValue);
-			this.storeValue(applHost, alarmTypeValue, this.alarmType);
+			this.setValue(applHost, alarmTypeValue, this.alarmType);
 		}
 		if (this.alarmLevel != undefined) {
 			const alarmLevelValue = NotificationCCValues.alarmLevel;
 			this.ensureMetadata(applHost, alarmLevelValue);
-			this.storeValue(applHost, alarmLevelValue, this.alarmLevel);
+			this.setValue(applHost, alarmLevelValue, this.alarmLevel);
 		}
 
 		return true;
@@ -1275,7 +1275,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		if (!notificationConfig) {
 			// This is an unknown notification
-			this.storeMetadata(
+			this.setMetadata(
 				applHost,
 				NotificationCCValues.unknownNotificationType(
 					this._notificationType,
@@ -1299,7 +1299,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 						valueConfig,
 					);
 
-					this.storeMetadata(applHost, notificationValue, metadata);
+					this.setMetadata(applHost, notificationValue, metadata);
 				}
 			}
 		}

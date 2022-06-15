@@ -584,7 +584,7 @@ export class MultilevelSwitchCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		value: number,
 	): boolean {
-		this.storeValue(applHost, MultilevelSwitchCCValues.currentValue, value);
+		this.setValue(applHost, MultilevelSwitchCCValues.currentValue, value);
 		return true;
 	}
 

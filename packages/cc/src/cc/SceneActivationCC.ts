@@ -2,7 +2,6 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -21,7 +20,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,25 +31,35 @@ import {
 	commandClass,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { SceneActivationCommand } from "../lib/_Types";
 
+export const SceneActivationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Scene Activation"], {
+		// Static CC values go here
+		...V.staticProperty(
+			"sceneId",
+			{
+				...ValueMetadata.UInt8,
+				min: 1,
+				label: "Scene ID",
+				valueChangeOptions: ["transitionDuration"],
+			} as const,
+			{ stateful: false },
+		),
+
+		...V.staticProperty("dimmingDuration", {
+			...ValueMetadata.Duration,
+			label: "Dimming duration",
+		} as const),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Scene Activation"], {
+		// Dynamic CC values go here
+	}),
+});
+
 // @noInterview This CC is write-only
-
-export function getSceneIdValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Activation"],
-		endpoint,
-		property: "sceneId",
-	};
-}
-
-export function getDimmingDurationValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Activation"],
-		endpoint,
-		property: "dimmingDuration",
-	};
-}
 
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
@@ -132,19 +140,9 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	}
 
 	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		min: 1,
-		label: "Scene ID",
-		valueChangeOptions: ["transitionDuration"],
-	})
 	public sceneId: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Dimming duration",
-	})
 	public dimmingDuration: Duration | undefined;
 
 	public serialize(): Buffer {

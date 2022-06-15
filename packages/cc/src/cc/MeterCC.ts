@@ -627,7 +627,7 @@ export class MeterCCReport extends MeterCC {
 			),
 			unit: scale.label,
 		});
-		this.storeValue(applHost, valueValue, this._value);
+		this.setValue(applHost, valueValue, this._value);
 
 		return true;
 	}

@@ -25,7 +25,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -39,7 +38,48 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { SoundSwitchCommand, ToneId } from "../lib/_Types";
+
+export const SoundSwitchCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Sound Switch"], {
+		...V.staticProperty("volume", {
+			...ValueMetadata.UInt8,
+			min: 0,
+			max: 100,
+			unit: "%",
+			label: "Volume",
+			states: {
+				0: "default",
+			},
+		} as const),
+
+		...V.staticProperty("toneId", {
+			...ValueMetadata.UInt8,
+			label: "Play Tone",
+			valueChangeOptions: ["volume"],
+		} as const),
+
+		...V.staticProperty("defaultVolume", {
+			...ValueMetadata.Number,
+			min: 0,
+			max: 100,
+			unit: "%",
+			label: "Default volume",
+		} as const),
+
+		...V.staticProperty("defaultToneId", {
+			...ValueMetadata.Number,
+			min: 0,
+			max: 254,
+			label: "Default tone ID",
+		} as const),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Sound Switch"], {
+		// Dynamic CC values go here
+	}),
+});
 
 export function getVolumeValueId(endpointIndex: number | undefined): ValueID {
 	return {
@@ -299,7 +339,6 @@ export class SoundSwitchCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -363,13 +402,12 @@ duration: ${info.duration} seconds`;
 		}
 		metadataStates[0xff] = "default";
 
-		// Store tone count and info as a single metadata
-		valueDB.setMetadata(getToneIdValueId(this.endpointIndex), {
-			...ValueMetadata.Number,
+		// Remember tone count and info on the tone ID metadata
+		this.setMetadata(applHost, SoundSwitchCCValues.toneId, {
+			...SoundSwitchCCValues.toneId.meta,
 			min: 0,
 			max: toneCount,
 			states: metadataStates,
-			label: "Play Tone",
 		});
 
 		// Remember that the interview is complete
@@ -541,22 +579,9 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		min: 0,
-		max: 100,
-		unit: "%",
-		label: "Default volume",
-	})
 	public readonly defaultVolume: number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		min: 0,
-		max: 254,
-		label: "Default tone ID",
-	})
 	public readonly defaultToneId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -644,24 +669,9 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Tone ID",
-		valueChangeOptions: ["volume"],
-	})
 	public readonly toneId: ToneId | number;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		min: 0,
-		max: 100,
-		unit: "%",
-		label: "Volume",
-		states: {
-			0: "default",
-		},
-	})
 	public volume?: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

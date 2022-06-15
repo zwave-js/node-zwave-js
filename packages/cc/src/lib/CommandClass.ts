@@ -562,6 +562,7 @@ export class CommandClass implements ICommandClass {
 
 	/**
 	 * Ensures that the metadata for the given CC value exists in the Value DB or creates it if it does not.
+	 * The endpoint index of the current CC instance is automatically taken into account.
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
 	protected ensureMetadata(
@@ -578,9 +579,10 @@ export class CommandClass implements ICommandClass {
 
 	/**
 	 * Writes the metadata for the given CC value into the Value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
 	 * @param meta Will be used in place of the predefined metadata when given
 	 */
-	protected storeMetadata(
+	protected setMetadata(
 		applHost: ZWaveApplicationHost,
 		ccValue: CCValue,
 		meta?: ValueMetadata,
@@ -590,8 +592,11 @@ export class CommandClass implements ICommandClass {
 		valueDB.setMetadata(valueId, meta ?? ccValue.meta);
 	}
 
-	/** Stores the given value under the value ID for the given CC value in the value DB. */
-	protected storeValue(
+	/**
+	 * Stores the given value under the value ID for the given CC value in the value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
+	protected setValue(
 		applHost: ZWaveApplicationHost,
 		ccValue: CCValue,
 		value: unknown,
@@ -601,7 +606,10 @@ export class CommandClass implements ICommandClass {
 		valueDB.setValue(valueId, value);
 	}
 
-	/** Reads the value stored for the value ID of the given CC value from the value DB. */
+	/**
+	 * Reads the value stored for the value ID of the given CC value from the value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
 	protected getValue<T>(
 		applHost: ZWaveApplicationHost,
 		ccValue: CCValue,
