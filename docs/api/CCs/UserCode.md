@@ -117,6 +117,26 @@ async getUserCodeChecksum(): Promise<number | undefined>;
 -   **secret:** false
 -   **value type:** `"number"`
 
+### `masterCode`
+
+```ts
+{
+	commandClass: CommandClasses["User Code"],
+	endpoint: number,
+	property: "masterCode",
+}
+```
+
+-   **label:** Master Code
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** true
+-   **value type:** `"string"`
+-   **min. length:** 4
+-   **max. length:** 10
+
 ### `userCode(userId: number)`
 
 ```ts
