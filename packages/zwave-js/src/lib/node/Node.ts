@@ -66,21 +66,12 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
+import { VersionCCValues } from "@zwave-js/cc/VersionCC";
 import {
-	getFirmwareVersionsValueId,
-	getSDKVersionValueId,
-} from "@zwave-js/cc/VersionCC";
-import {
-	getWakeUpIntervalValueId,
-	getWakeUpOnDemandSupportedValueId,
+	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
 } from "@zwave-js/cc/WakeUpCC";
-import {
-	getNodeTypeValueId,
-	getRoleTypeValueId,
-	getZWavePlusVersionValueId,
-	ZWavePlusCCGet,
-} from "@zwave-js/cc/ZWavePlusCC";
+import { ZWavePlusCCGet, ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type {
 	DeviceConfig,
 	Notification,
@@ -663,7 +654,9 @@ export class ZWaveNode
 
 	public get firmwareVersion(): string | undefined {
 		// We're only interested in the first (main) firmware
-		const ret = this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+		const ret = this.getValue<string[]>(
+			VersionCCValues.firmwareVersions.id,
+		)?.[0];
 
 		// Special case for the official 700 series firmwares which are aligned with the SDK version
 		// We want to work with the full x.y.z firmware version here.
@@ -678,23 +671,23 @@ export class ZWaveNode
 	}
 
 	public get sdkVersion(): string | undefined {
-		return this.getValue(getSDKVersionValueId());
+		return this.getValue(VersionCCValues.sdkVersion.id);
 	}
 
 	public get zwavePlusVersion(): number | undefined {
-		return this.getValue(getZWavePlusVersionValueId());
+		return this.getValue(ZWavePlusCCValues.zwavePlusVersion.id);
 	}
 
 	public get zwavePlusNodeType(): ZWavePlusNodeType | undefined {
-		return this.getValue(getNodeTypeValueId());
+		return this.getValue(ZWavePlusCCValues.nodeType.id);
 	}
 
 	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
-		return this.getValue(getRoleTypeValueId());
+		return this.getValue(ZWavePlusCCValues.roleType.id);
 	}
 
 	public get supportsWakeUpOnDemand(): boolean | undefined {
-		return this.getValue(getWakeUpOnDemandSupportedValueId());
+		return this.getValue(WakeUpCCValues.wakeUpOnDemandSupported.id);
 	}
 
 	/**
@@ -2540,7 +2533,7 @@ protocol version:      ${this.protocolVersion}`;
 		if (this.lastWakeUp) {
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
-				this.getValue<number>(getWakeUpIntervalValueId()) ?? 1;
+				this.getValue<number>(WakeUpCCValues.wakeUpInterval.id) ?? 1;
 			// The wakeup interval is specified in seconds. Also add 5 minutes tolerance to avoid
 			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
 			// so the interval shouldn't be verified

@@ -4,7 +4,6 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -23,7 +22,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -36,29 +34,40 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { WakeUpCommand } from "../lib/_Types";
 
-export function getControllerNodeIdValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Wake Up"],
-		property: "controllerNodeId",
-	};
-}
+export const WakeUpCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Wake Up"], {
+		...V.staticProperty(
+			"controllerNodeId",
+			{
+				...ValueMetadata.ReadOnly,
+				label: "Node ID of the controller",
+			} as const,
+			{
+				supportsEndpoints: false,
+			},
+		),
 
-/** @publicAPI */
-export function getWakeUpIntervalValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Wake Up"],
-		property: "wakeUpInterval",
-	};
-}
+		...V.staticProperty(
+			"wakeUpInterval",
+			{
+				...ValueMetadata.UInt24,
+				label: "Wake Up interval",
+			} as const,
+			{
+				supportsEndpoints: false,
+			},
+		),
 
-export function getWakeUpOnDemandSupportedValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Wake Up"],
-		property: "wakeUpOnDemandSupported",
-	};
-}
+		...V.staticProperty("wakeUpOnDemandSupported", undefined, {
+			internal: true,
+			supportsEndpoints: false,
+			minVersion: 3,
+		}),
+	}),
+});
 
 @API(CommandClasses["Wake Up"])
 export class WakeUpCCAPI extends CCAPI {
@@ -200,7 +209,6 @@ export class WakeUpCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -278,7 +286,11 @@ controller node: ${wakeupResp.controllerNodeId}`;
 						direction: "outbound",
 					});
 					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-					valueDB.setValue(getControllerNodeIdValueId(), ownNodeId);
+					this.setValue(
+						applHost,
+						WakeUpCCValues.controllerNodeId,
+						ownNodeId,
+					);
 					applHost.controllerLog.logNode(
 						node.id,
 						"wakeup destination node changed!",
@@ -364,20 +376,12 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 
 	private _wakeUpInterval: number;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt24,
-		label: "Wake Up interval",
-	})
 	public get wakeUpInterval(): number {
 		return this._wakeUpInterval;
 	}
 
 	private _controllerNodeId: number;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Node ID of the controller",
-	})
 	public get controllerNodeId(): number {
 		return this._controllerNodeId;
 	}
@@ -472,10 +476,6 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 
 	private _wakeUpOnDemandSupported: boolean;
 	@ccValue({ minVersion: 3 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyBoolean,
-		label: "Wake Up On Demand supported",
-	})
 	public get wakeUpOnDemandSupported(): boolean {
 		return this._wakeUpOnDemandSupported;
 	}

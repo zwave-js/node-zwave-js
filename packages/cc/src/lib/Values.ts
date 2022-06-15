@@ -513,4 +513,10 @@ export interface CCValues {
 	"Thermostat Mode": typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
 	"Thermostat Operating State": typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
 	"Thermostat Setback": typeof import("../cc/ThermostatSetbackCC").ThermostatSetbackCCValues;
+	"Thermostat Setpoint": typeof import("../cc/ThermostatSetpointCC").ThermostatSetpointCCValues;
+	"Time Parameters": typeof import("../cc/TimeParametersCC").TimeParametersCCValues;
+	"User Code": typeof import("../cc/UserCodeCC").UserCodeCCValues;
+	Version: typeof import("../cc/VersionCC").VersionCCValues;
+	"Wake Up": typeof import("../cc/WakeUpCC").WakeUpCCValues;
+	"Z-Wave Plus Info": typeof import("../cc/ZWavePlusCC").ZWavePlusCCValues;
 }

@@ -1,9 +1,5 @@
 import {
 	ECDHProfiles,
-	getFirmwareVersionsMetadata,
-	getFirmwareVersionsValueId,
-	getSDKVersionMetadata,
-	getSDKVersionValueId,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
@@ -15,6 +11,7 @@ import {
 	Security2CCPublicKeyReport,
 	Security2CCTransferEnd,
 	utils as ccUtils,
+	VersionCCValues,
 	type AssociationAddress,
 	type AssociationGroup,
 } from "@zwave-js/cc";
@@ -1015,17 +1012,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 
 		// Set firmware version information for the controller node
 		controllerValueDB.setMetadata(
-			getFirmwareVersionsValueId(),
-			getFirmwareVersionsMetadata(),
+			VersionCCValues.firmwareVersions.id,
+			VersionCCValues.firmwareVersions.meta,
 		);
-		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
+		controllerValueDB.setValue(VersionCCValues.firmwareVersions.id, [
 			this._firmwareVersion,
 		]);
 		controllerValueDB.setMetadata(
-			getSDKVersionValueId(),
-			getSDKVersionMetadata(),
+			VersionCCValues.sdkVersion.id,
+			VersionCCValues.sdkVersion.meta,
 		);
-		controllerValueDB.setValue(getSDKVersionValueId(), this._sdkVersion);
+		controllerValueDB.setValue(
+			VersionCCValues.sdkVersion.id,
+			this._sdkVersion,
+		);
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"] &&

@@ -96,3 +96,60 @@ async setMasterCode(masterCode: string): Promise<void>;
 ```ts
 async getUserCodeChecksum(): Promise<number | undefined>;
 ```
+
+## User Code CC values
+
+### `keypadMode`
+
+```ts
+{
+	commandClass: CommandClasses["User Code"],
+	endpoint: number,
+	property: "keypadMode",
+}
+```
+
+-   **label:** Keypad Mode
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+
+### `userCode(userId: number)`
+
+```ts
+{
+	commandClass: CommandClasses["User Code"],
+	endpoint: number,
+	property: "userCode",
+	propertyKey: number,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** true
+-   **value type:** `"any"`
+
+### `userIdStatus(userId: number)`
+
+```ts
+{
+	commandClass: CommandClasses["User Code"],
+	endpoint: number,
+	property: "userIdStatus",
+	propertyKey: number,
+}
+```
+
+-   **label:** `User ID status (${number})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`

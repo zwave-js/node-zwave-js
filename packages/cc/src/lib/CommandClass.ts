@@ -578,6 +578,19 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/**
+	 * Removes the metadata for the given CC value from the value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
+	protected removeMetadata(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): void {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		valueDB.setMetadata(valueId, undefined);
+	}
+
+	/**
 	 * Writes the metadata for the given CC value into the Value DB.
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 * @param meta Will be used in place of the predefined metadata when given
@@ -617,6 +630,19 @@ export class CommandClass implements ICommandClass {
 		const valueDB = this.getValueDB(applHost);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setValue(valueId, value);
+	}
+
+	/**
+	 * Removes the value for the given CC value from the value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
+	protected removeValue(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): void {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		valueDB.removeValue(valueId);
 	}
 
 	/**

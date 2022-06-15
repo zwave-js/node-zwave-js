@@ -504,6 +504,7 @@ export {
 	ThermostatSetpointCCSet,
 	ThermostatSetpointCCSupportedGet,
 	ThermostatSetpointCCSupportedReport,
+	ThermostatSetpointCCValues,
 } from "./ThermostatSetpointCC";
 export {
 	TimeCC,
@@ -520,6 +521,7 @@ export {
 	TimeParametersCCGet,
 	TimeParametersCCReport,
 	TimeParametersCCSet,
+	TimeParametersCCValues,
 } from "./TimeParametersCC";
 export {
 	isTransportServiceEncapsulation,
@@ -551,12 +553,9 @@ export {
 	UserCodeCCUserCodeChecksumReport,
 	UserCodeCCUsersNumberGet,
 	UserCodeCCUsersNumberReport,
+	UserCodeCCValues,
 } from "./UserCodeCC";
 export {
-	getFirmwareVersionsMetadata,
-	getFirmwareVersionsValueId,
-	getSDKVersionMetadata,
-	getSDKVersionValueId,
 	VersionCC,
 	VersionCCCapabilitiesGet,
 	VersionCCCapabilitiesReport,
@@ -564,11 +563,11 @@ export {
 	VersionCCCommandClassReport,
 	VersionCCGet,
 	VersionCCReport,
+	VersionCCValues,
 	VersionCCZWaveSoftwareGet,
 	VersionCCZWaveSoftwareReport,
 } from "./VersionCC";
 export {
-	getWakeUpIntervalValueId,
 	WakeUpCC,
 	WakeUpCCIntervalCapabilitiesGet,
 	WakeUpCCIntervalCapabilitiesReport,
@@ -576,9 +575,15 @@ export {
 	WakeUpCCIntervalReport,
 	WakeUpCCIntervalSet,
 	WakeUpCCNoMoreInformation,
+	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
 } from "./WakeUpCC";
-export { ZWavePlusCC, ZWavePlusCCGet, ZWavePlusCCReport } from "./ZWavePlusCC";
+export {
+	ZWavePlusCC,
+	ZWavePlusCCGet,
+	ZWavePlusCCReport,
+	ZWavePlusCCValues,
+} from "./ZWavePlusCC";
 export {
 	ZWaveProtocolCC,
 	ZWaveProtocolCCAcceptLost,

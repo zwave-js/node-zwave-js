@@ -6,6 +6,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
+	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -32,7 +33,17 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { TimeParametersCommand } from "../lib/_Types";
+
+export const TimeParametersCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Time Parameters"], {
+		...V.staticProperty("dateAndTime", {
+			...ValueMetadata.Any,
+			label: "Date and Time",
+		} as const),
+	}),
+});
 
 /**
  * Determines if the node expects local time instead of UTC.
