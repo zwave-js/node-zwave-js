@@ -576,6 +576,20 @@ export class CommandClass implements ICommandClass {
 		}
 	}
 
+	/**
+	 * Writes the metadata for the given CC value into the Value DB.
+	 * @param meta Will be used in place of the predefined metadata when given
+	 */
+	protected storeMetadata(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+		meta?: ValueMetadata,
+	): void {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		valueDB.setMetadata(valueId, meta ?? ccValue.meta);
+	}
+
 	/** Stores the given value under the value ID for the given CC value in the value DB. */
 	protected storeValue(
 		applHost: ZWaveApplicationHost,

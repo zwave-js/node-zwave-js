@@ -2,11 +2,11 @@ import {
 	CommandClasses,
 	MessagePriority,
 	validatePayload,
+	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type Maybe,
 	type MessageOrCCLogEntry,
-	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -34,24 +34,33 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { NodeNamingAndLocationCommand } from "../lib/_Types";
+
+export const NodeNamingAndLocationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Node Naming and Location"], {
+		...V.staticProperty(
+			"name",
+			{
+				...ValueMetadata.String,
+				label: "Node name",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+
+		...V.staticProperty(
+			"location",
+			{
+				...ValueMetadata.String,
+				label: "Node location",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+	}),
+});
 
 function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
-}
-
-export function getNodeNameValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Node Naming and Location"],
-		property: "name",
-	};
-}
-
-export function getNodeLocationValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Node Naming and Location"],
-		property: "location",
-	};
 }
 
 @API(CommandClasses["Node Naming and Location"])

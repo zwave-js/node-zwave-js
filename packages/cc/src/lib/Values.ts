@@ -499,4 +499,5 @@ export interface CCValues {
 	Meter: typeof import("../cc/MeterCC").MeterCCValues;
 	"Multi Channel Association": typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
 	"Multi Channel": typeof import("../cc/MultiChannelCC").MultiChannelCCValues;
+	"Multilevel Sensor": typeof import("../cc/MultilevelSensorCC").MultilevelSensorCCValues;
 }

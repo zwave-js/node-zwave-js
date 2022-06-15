@@ -458,9 +458,11 @@ ${
 			return ret;
 		};
 
-		for (const value of type
+		const sortedProperties = type
 			.getProperties()
-			.sort((a, b) => a.getName().localeCompare(b.getName()))) {
+			.sort((a, b) => a.getName().localeCompare(b.getName()));
+
+		for (const value of sortedProperties) {
 			let valueType = value.getTypeAtLocation(valueIDsConst);
 			let callSignature = "";
 
@@ -539,17 +541,27 @@ ${formatValueType(idType)}
 `;
 
 			tryGetMeta("label", (label) => {
-				assertLiteralString(
-					label,
-					`label of value "${value.getName()}"`,
-				);
+				// If the label is definitely not dynamic, ensure it has a literal type
+				if (!callSignature) {
+					assertLiteralString(
+						label,
+						`label of value "${value.getName()}"`,
+					);
+				} else if (label === "string") {
+					label = "_(dynamic)_";
+				}
 				text += `\n* **label:** ${stripQuotes(label)}`;
 			});
 			tryGetMeta("description", (description) => {
-				assertLiteralString(
-					description,
-					`description of value "${value.getName()}"`,
-				);
+				// If the description is definitely not dynamic, ensure it has a literal type
+				if (!callSignature) {
+					assertLiteralString(
+						description,
+						`description of value "${value.getName()}"`,
+					);
+				} else if (description === "string") {
+					description = "_(dynamic)_";
+				}
 				text += `\n* **description:** ${stripQuotes(description)}`;
 			});
 

@@ -28,12 +28,15 @@ async set(targetValue: number): Promise<void>;
 }
 ```
 
+-   **label:** Event value
 -   **min. CC version:** 1
 -   **readable:** true
--   **writeable:** true
--   **stateful:** true
+-   **writeable:** false
+-   **stateful:** false
 -   **secret:** false
--   **value type:** `"any"`
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
 
 ### `currentValue`
 

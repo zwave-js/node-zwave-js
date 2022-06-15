@@ -43,21 +43,18 @@ import { LockCCValues } from "@zwave-js/cc/LockCC";
 import { ManufacturerSpecificCCValues } from "@zwave-js/cc/ManufacturerSpecificCC";
 import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
-	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
 	MultilevelSwitchCC,
 	MultilevelSwitchCCSet,
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
+	MultilevelSwitchCCValues,
 } from "@zwave-js/cc/MultilevelSwitchCC";
-import {
-	getNodeLocationValueId,
-	getNodeNameValueId,
-} from "@zwave-js/cc/NodeNamingCC";
+import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
 	getNotificationValueMetadata,
-	getNotificationValueMetadataUnknownType,
 	NotificationCC,
 	NotificationCCReport,
+	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
 import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
@@ -707,13 +704,16 @@ export class ZWaveNode
 	 * the `commandClasses` API.
 	 */
 	public get name(): string | undefined {
-		return this.getValue(getNodeNameValueId());
+		return this.getValue(NodeNamingAndLocationCCValues.name.id);
 	}
 	public set name(value: string | undefined) {
 		if (value != undefined) {
-			this._valueDB.setValue(getNodeNameValueId(), value);
+			this._valueDB.setValue(
+				NodeNamingAndLocationCCValues.name.id,
+				value,
+			);
 		} else {
-			this._valueDB.removeValue(getNodeNameValueId());
+			this._valueDB.removeValue(NodeNamingAndLocationCCValues.name.id);
 		}
 	}
 
@@ -724,13 +724,18 @@ export class ZWaveNode
 	 * the `commandClasses` API.
 	 */
 	public get location(): string | undefined {
-		return this.getValue(getNodeLocationValueId());
+		return this.getValue(NodeNamingAndLocationCCValues.location.id);
 	}
 	public set location(value: string | undefined) {
 		if (value != undefined) {
-			this._valueDB.setValue(getNodeLocationValueId(), value);
+			this._valueDB.setValue(
+				NodeNamingAndLocationCCValues.location.id,
+				value,
+			);
 		} else {
-			this._valueDB.removeValue(getNodeLocationValueId());
+			this._valueDB.removeValue(
+				NodeNamingAndLocationCCValues.location.id,
+			);
 		}
 	}
 
@@ -2779,7 +2784,9 @@ protocol version:      ${this.protocolVersion}`;
 				message: "treating MultiLevelSwitchCCSet::Set as a value event",
 			});
 			this._valueDB.setValue(
-				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				MultilevelSwitchCCValues.compatEvent.endpoint(
+					command.endpointIndex,
+				),
 				command.targetValue,
 				{
 					stateful: false,
@@ -2889,17 +2896,6 @@ protocol version:      ${this.protocolVersion}`;
 				this.valueDB.setMetadata(valueId, metadata);
 			}
 		};
-		const ensureValueMetadataUnknownType = (
-			valueId: ValueID,
-			notificationConfig: Notification,
-		) => {
-			if (command.version === 2 && !this.valueDB.hasMetadata(valueId)) {
-				const metadata = getNotificationValueMetadataUnknownType(
-					notificationConfig.id,
-				);
-				this.valueDB.setMetadata(valueId, metadata);
-			}
-		};
 
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
@@ -2908,7 +2904,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		if (notificationConfig) {
 			// This is a known notification (status or event)
-			const property = notificationConfig.name;
+			const notificationName = notificationConfig.name;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
@@ -2918,13 +2914,12 @@ protocol version:      ${this.protocolVersion}`;
 				// Some properties may not be reset to idle
 				if (!valueConfig.idle) return;
 
-				const propertyKey = valueConfig.variableName;
-				const valueId: ValueID = {
-					commandClass: command.ccId,
-					endpoint: command.endpointIndex,
-					property,
-					propertyKey,
-				};
+				const variableName = valueConfig.variableName;
+				const valueId = NotificationCCValues.notificationVariable(
+					notificationName,
+					variableName,
+				).endpoint(command.endpointIndex);
+
 				// Since the node has reset the notification itself, we don't need the idle reset
 				this.clearNotificationIdleReset(valueId);
 				extendValueMetadata(valueId, notificationConfig, valueConfig);
@@ -2947,7 +2942,7 @@ protocol version:      ${this.protocolVersion}`;
 						.filter(
 							(v) =>
 								(v.endpoint || 0) === command.endpointIndex &&
-								v.property === property &&
+								v.property === notificationName &&
 								typeof v.value === "number" &&
 								v.value !== 0,
 						);
@@ -2958,7 +2953,6 @@ protocol version:      ${this.protocolVersion}`;
 				return;
 			}
 
-			let propertyKey: string;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
 
@@ -2967,12 +2961,9 @@ protocol version:      ${this.protocolVersion}`;
 
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
-				// This is an unknown value, collect it in an unknown bucket
-				propertyKey = "unknown";
 				// We don't know what this notification refers to, so we don't force a reset
 				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
-				propertyKey = valueConfig.variableName;
 				allowIdleReset = valueConfig.idle;
 			} else {
 				this.emit("notification", this, CommandClasses.Notification, {
@@ -2986,16 +2977,28 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Now that we've gathered all we need to know, update the value in our DB
-			const valueId: ValueID = {
-				commandClass: command.ccId,
-				endpoint: command.endpointIndex,
-				property,
-				propertyKey,
-			};
+			let valueId: ValueID;
 			if (valueConfig) {
+				valueId = NotificationCCValues.notificationVariable(
+					notificationName,
+					valueConfig.variableName,
+				).endpoint(command.endpointIndex);
+
 				extendValueMetadata(valueId, notificationConfig, valueConfig);
 			} else {
-				ensureValueMetadataUnknownType(valueId, notificationConfig);
+				// Collect unknown values in an "unknown" bucket
+				const unknownValue =
+					NotificationCCValues.unknownNotificationVariable(
+						command.notificationType,
+						notificationName,
+					);
+				valueId = unknownValue.endpoint(command.endpointIndex);
+
+				if (command.version === 2) {
+					if (!this.valueDB.hasMetadata(valueId)) {
+						this.valueDB.setMetadata(valueId, unknownValue.meta);
+					}
+				}
 			}
 			this.valueDB.setValue(valueId, value);
 
@@ -3013,12 +3016,10 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		} else {
 			// This is an unknown notification
-			const property = `UNKNOWN_${num2hex(command.notificationType)}`;
-			const valueId: ValueID = {
-				commandClass: command.ccId,
-				endpoint: command.endpointIndex,
-				property,
-			};
+			const valueId = NotificationCCValues.unknownNotificationType(
+				command.notificationType,
+			).endpoint(command.endpointIndex);
+
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
 		}

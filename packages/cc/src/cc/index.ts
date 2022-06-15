@@ -329,6 +329,7 @@ export {
 	MultilevelSensorCCReport,
 	MultilevelSensorCCSupportedScaleReport,
 	MultilevelSensorCCSupportedSensorReport,
+	MultilevelSensorCCValues,
 } from "./MultilevelSensorCC";
 export type { MultilevelSensorCCReportOptions } from "./MultilevelSensorCC";
 export {

@@ -42,7 +42,39 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { MultilevelSensorCommand, MultilevelSensorValue } from "../lib/_Types";
+
+export const MultilevelSensorCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Multilevel Sensor"], {
+		...V.staticProperty("supportedSensorTypes", undefined, {
+			internal: true,
+		}),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Multilevel Sensor"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"supportedScales",
+			"supportedScales",
+			(sensorType: number) => sensorType,
+			undefined,
+			{ internal: true },
+		),
+
+		...V.dynamicPropertyWithName(
+			"value",
+			// This should have been the sensor type, but it is too late to change now
+			// Maybe we can migrate this without breaking in the future
+			(sensorTypeName: string) => sensorTypeName,
+			(sensorTypeName: string) =>
+				({
+					// Just the base metadata, to be extended using a config manager
+					...ValueMetadata.ReadOnlyNumber,
+					label: sensorTypeName,
+				} as const),
+		),
+	}),
+});
 
 /**
  * Determine the scale to use to query a sensor reading. Uses the user-preferred scale if given,
@@ -118,25 +150,6 @@ function getPreferredSensorScale(
 	} else {
 		return preferred;
 	}
-}
-
-export function getSupportedSensorTypesValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Multilevel Sensor"],
-		endpoint: endpoint,
-		property: "supportedSensorTypes",
-	};
-}
-export function getSupportedScalesValueId(
-	endpoint: number,
-	sensorType: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Multilevel Sensor"],
-		endpoint: endpoint,
-		property: "supportedScales",
-		propertyKey: sensorType,
-	};
 }
 
 // @noSetValueAPI This CC is read-only
@@ -535,7 +548,6 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		const sensorType = applHost.configManager.lookupSensorType(this.type);
 		const scale = applHost.configManager.lookupSensorScale(
@@ -558,8 +570,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 
 			// Filter out unsupported sensor types and scales if possible
 			if (this.version >= 5) {
-				const supportedSensorTypes = valueDB.getValue<number[]>(
-					getSupportedSensorTypesValueId(this.endpointIndex),
+				const supportedSensorTypes = this.getValue<number[]>(
+					applHost,
+					MultilevelSensorCCValues.supportedSensorTypes,
 				);
 				if (supportedSensorTypes?.length) {
 					validatePayload.withReason(
@@ -569,8 +582,9 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 					)(supportedSensorTypes.includes(this.type));
 				}
 
-				const supportedScales = valueDB.getValue<number[]>(
-					getSupportedScalesValueId(this.endpointIndex, this.type),
+				const supportedScales = this.getValue<number[]>(
+					applHost,
+					MultilevelSensorCCValues.supportedScales(this.type),
 				);
 				if (supportedScales?.length) {
 					validatePayload.withReason(
@@ -581,21 +595,18 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		}
 
 		const typeName = applHost.configManager.getSensorTypeName(this.type);
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: typeName,
-		};
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnlyNumber,
+		const sensorValue = MultilevelSensorCCValues.value(typeName);
+
+		this.storeMetadata(applHost, sensorValue, {
+			...sensorValue.meta,
 			unit: scale.unit,
-			label: typeName,
 			ccSpecific: {
 				sensorType: this.type,
 				scale: scale.key,
 			},
 		});
-		valueDB.setValue(valueId, this.value);
+		this.storeValue(applHost, sensorValue, this.value);
+
 		return true;
 	}
 

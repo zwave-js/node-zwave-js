@@ -58,7 +58,15 @@ export const BasicCCValues = Object.freeze({
 			minVersion: 2,
 		}),
 		// TODO: This should really not be a static CC value, but depend on compat flags:
-		...V.staticPropertyWithName("compatEvent", "event"),
+		...V.staticPropertyWithName(
+			"compatEvent",
+			"event",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Event value",
+			} as const,
+			{ stateful: false },
+		),
 	}),
 });
 
