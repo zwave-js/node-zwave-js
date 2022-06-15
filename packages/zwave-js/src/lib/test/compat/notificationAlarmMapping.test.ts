@@ -1,9 +1,5 @@
 import { CommandClass } from "@zwave-js/cc";
-import {
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
-} from "@zwave-js/cc/ManufacturerSpecificCC";
+import { ManufacturerSpecificCCValues } from "@zwave-js/cc/ManufacturerSpecificCC";
 import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
@@ -45,9 +41,15 @@ describe("compat flags", () => {
 	});
 
 	it("the alarmMapping compat flag works correctly (using the example Kwikset 910)", async () => {
-		node2.valueDB.setValue(getManufacturerIdValueId(), 0x90);
-		node2.valueDB.setValue(getProductTypeValueId(), 0x01);
-		node2.valueDB.setValue(getProductIdValueId(), 0x01);
+		node2.valueDB.setValue(
+			ManufacturerSpecificCCValues.manufacturerId.id,
+			0x90,
+		);
+		node2.valueDB.setValue(
+			ManufacturerSpecificCCValues.productType.id,
+			0x01,
+		);
+		node2.valueDB.setValue(ManufacturerSpecificCCValues.productId.id, 0x01);
 		await node2["loadDeviceConfig"]();
 
 		const rawNotification = new NotificationCCReport(driver, {

@@ -13,7 +13,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -26,55 +25,39 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { DeviceIdType, ManufacturerSpecificCommand } from "../lib/_Types";
 
-/** @publicAPI */
-export function getManufacturerIdValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "manufacturerId",
-	};
-}
+export const ManufacturerSpecificCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Manufacturer Specific"], {
+		...V.staticProperty(
+			"manufacturerId",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Manufacturer ID",
+			} as const,
+			{ supportsEndpoints: false },
+		),
 
-/** @publicAPI */
-export function getProductTypeValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "productType",
-	};
-}
+		...V.staticProperty(
+			"productType",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Product type",
+			} as const,
+			{ supportsEndpoints: false },
+		),
 
-/** @publicAPI */
-export function getProductIdValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "productId",
-	};
-}
-
-/** @publicAPI */
-export function getManufacturerIdValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Manufacturer ID",
-	};
-}
-
-/** @publicAPI */
-export function getProductTypeValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product type",
-	};
-}
-
-/** @publicAPI */
-export function getProductIdValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product ID",
-	};
-}
+		...V.staticProperty(
+			"productId",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Product ID",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -207,21 +190,18 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 
 	private _manufacturerId: number;
 	@ccValue()
-	@ccValueMetadata(getManufacturerIdValueMetadata())
 	public get manufacturerId(): number {
 		return this._manufacturerId;
 	}
 
 	private _productType: number;
 	@ccValue()
-	@ccValueMetadata(getProductTypeValueMetadata())
 	public get productType(): number {
 		return this._productType;
 	}
 
 	private _productId: number;
 	@ccValue()
-	@ccValueMetadata(getProductIdValueMetadata())
 	public get productId(): number {
 		return this._productId;
 	}

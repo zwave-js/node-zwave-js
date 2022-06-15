@@ -3,9 +3,7 @@ import {
 	FibaroVenetianBlindCCGet,
 	FibaroVenetianBlindCCReport,
 	FibaroVenetianBlindCCSet,
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
+	ManufacturerSpecificCCValues,
 } from "@zwave-js/cc";
 import {
 	FibaroCCIDs,
@@ -35,7 +33,10 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 
 	beforeAll(async () => {
 		const manufacturerId = 0x10f;
-		node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
+		node2.valueDB.setValue(
+			ManufacturerSpecificCCValues.manufacturerId.id,
+			manufacturerId,
+		);
 
 		node2.addCC(CommandClasses["Manufacturer Proprietary"], {
 			isSupported: true,
@@ -133,8 +134,14 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			const productId = 0x1000;
 			const firmwareVersion = "25.25";
 
-			node2.valueDB.setValue(getProductTypeValueId(), productType);
-			node2.valueDB.setValue(getProductIdValueId(), productId);
+			node2.valueDB.setValue(
+				ManufacturerSpecificCCValues.productType.id,
+				productType,
+			);
+			node2.valueDB.setValue(
+				ManufacturerSpecificCCValues.productId.id,
+				productId,
+			);
 			node2.valueDB.setValue(
 				{
 					commandClass: CommandClasses.Version,

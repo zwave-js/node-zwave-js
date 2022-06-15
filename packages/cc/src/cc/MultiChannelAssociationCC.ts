@@ -1,8 +1,4 @@
-import type {
-	IZWaveEndpoint,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
+import type { IZWaveEndpoint, MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -25,7 +21,6 @@ import {
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -35,6 +30,7 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
+import { V } from "../lib/Values";
 import {
 	AssociationAddress,
 	EndpointAddress,
@@ -42,53 +38,41 @@ import {
 } from "../lib/_Types";
 import { AssociationCCValues } from "./AssociationCC";
 
-/** Returns the ValueID used to store the maximum number of nodes of an association group */
-export function getMaxNodesValueId(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel Association"],
-		endpoint: endpointIndex,
-		property: "maxNodes",
-		propertyKey: groupId,
-	};
-}
+export const MultiChannelAssociationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Multi Channel Association"], {
+		// number multi channel association groups
+		...V.staticProperty("groupCount", undefined, { internal: true }),
+	}),
 
-/** Returns the ValueID used to store the node IDs of a multi channel association group */
-export function getNodeIdsValueId(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel Association"],
-		endpoint: endpointIndex,
-		property: "nodeIds",
-		propertyKey: groupId,
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Multi Channel Association"], {
+		// maximum number of nodes of a multi channel association group
+		...V.dynamicPropertyAndKeyWithName(
+			"maxNodes",
+			"maxNodes",
+			(groupId: number) => groupId,
+			undefined,
+			{ internal: true },
+		),
 
-/** Returns the ValueID used to store the endpoint addresses of a multi channel association group */
-export function getEndpointsValueId(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel Association"],
-		endpoint: endpointIndex,
-		property: "endpoints",
-		propertyKey: groupId,
-	};
-}
+		// node IDs of a multi channel association group
+		...V.dynamicPropertyAndKeyWithName(
+			"nodeIds",
+			"nodeIds",
+			(groupId: number) => groupId,
+			undefined,
+			{ internal: true },
+		),
 
-/** Returns the ValueID used to store the number of multi channel association group */
-export function getGroupCountValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel Association"],
-		endpoint: endpointIndex,
-		property: "groupCount",
-	};
-}
+		// Endpoint addresses of a multi channel association group
+		...V.dynamicPropertyAndKeyWithName(
+			"endpoints",
+			"endpoints",
+			(groupId: number) => groupId,
+			undefined,
+			{ internal: true },
+		),
+	}),
+});
 
 function endpointAddressesToString(
 	endpoints: readonly EndpointAddress[],
@@ -313,20 +297,6 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		// Make valueIDs internal
-		this.registerValue(getMaxNodesValueId(0, 0).property, {
-			internal: true,
-		});
-		this.registerValue(getNodeIdsValueId(0, 0).property, {
-			internal: true,
-		});
-		this.registerValue(getEndpointsValueId(0, 0).property, {
-			internal: true,
-		});
-	}
-
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// MultiChannelAssociationCC must be interviewed after Z-Wave+ if that is supported
 		return [
@@ -350,7 +320,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return (
 			applHost
 				.getValueDB(endpoint.nodeId)
-				.getValue(getGroupCountValueId(endpoint.index)) || 0
+				.getValue(
+					MultiChannelAssociationCCValues.groupCount.endpoint(
+						endpoint.index,
+					),
+				) || 0
 		);
 	}
 
@@ -366,7 +340,11 @@ export class MultiChannelAssociationCC extends CommandClass {
 		return (
 			applHost
 				.getValueDB(endpoint.nodeId)
-				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ?? 0
+				.getValue(
+					MultiChannelAssociationCCValues.maxNodes(groupId).endpoint(
+						endpoint.index,
+					),
+				) ?? 0
 		);
 	}
 
@@ -386,13 +364,17 @@ export class MultiChannelAssociationCC extends CommandClass {
 			// Add all node destinations
 			const nodes =
 				valueDB.getValue<number[]>(
-					getNodeIdsValueId(endpoint.index, i),
+					MultiChannelAssociationCCValues.nodeIds(i).endpoint(
+						endpoint.index,
+					),
 				) ?? [];
 			groupDestinations.push(...nodes.map((nodeId) => ({ nodeId })));
 			// And all endpoint destinations
 			const endpoints =
 				valueDB.getValue<EndpointAddress[]>(
-					getEndpointsValueId(endpoint.index, i),
+					MultiChannelAssociationCCValues.endpoints(i).endpoint(
+						endpoint.index,
+					),
 				) ?? [];
 			for (const ep of endpoints) {
 				if (typeof ep.endpoint === "number") {
@@ -494,7 +476,10 @@ export class MultiChannelAssociationCC extends CommandClass {
 		const valueDB = this.getValueDB(applHost);
 
 		const mcGroupCount: number =
-			valueDB.getValue(getGroupCountValueId(this.endpointIndex)) ?? 0;
+			this.getValue(
+				applHost,
+				MultiChannelAssociationCCValues.groupCount,
+			) ?? 0;
 
 		// Some devices report more association groups than multi channel association groups, so we need this info here
 		const assocGroupCount =

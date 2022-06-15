@@ -560,15 +560,19 @@ export class CommandClass implements ICommandClass {
 		);
 	}
 
-	/** Ensures that the metadata for the given CC value exists in the Value DB or creates it if it does not. */
+	/**
+	 * Ensures that the metadata for the given CC value exists in the Value DB or creates it if it does not.
+	 * @param meta Will be used in place of the predefined metadata when given
+	 */
 	protected ensureMetadata(
 		applHost: ZWaveApplicationHost,
 		ccValue: CCValue,
+		meta?: ValueMetadata,
 	): void {
 		const valueDB = this.getValueDB(applHost);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, ccValue.meta);
+			valueDB.setMetadata(valueId, meta ?? ccValue.meta);
 		}
 	}
 
@@ -581,6 +585,16 @@ export class CommandClass implements ICommandClass {
 		const valueDB = this.getValueDB(applHost);
 		const valueId = ccValue.endpoint(this.endpointIndex);
 		valueDB.setValue(valueId, value);
+	}
+
+	/** Reads the value stored for the value ID of the given CC value from the value DB. */
+	protected getValue<T>(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): T | undefined {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		return valueDB.getValue(valueId);
 	}
 
 	/** Which variables should be persisted when requested */

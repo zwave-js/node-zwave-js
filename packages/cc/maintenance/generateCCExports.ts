@@ -140,7 +140,12 @@ function findExports() {
 				node.modifiers?.some(
 					(m) => m.kind === ts.SyntaxKind.ExportKeyword,
 				) &&
-				hasPublicAPIComment(node, sourceFile)
+				// Export consts marked with @publicAPI
+				(hasPublicAPIComment(node, sourceFile) ||
+					// and the xyzCCValues const
+					node.declarationList.declarations.some((d) =>
+						d.name.getText().endsWith("CCValues"),
+					))
 			) {
 				for (const variable of node.declarationList.declarations) {
 					if (ts.isIdentifier(variable.name)) {

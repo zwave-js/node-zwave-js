@@ -1,11 +1,5 @@
 import { CommandClass } from "@zwave-js/cc";
-import {
-	getAggregatedCountValueId,
-	getCountIsDynamicValueId,
-	getEndpointIndizesValueId,
-	getIdenticalCapabilitiesValueId,
-	getIndividualCountValueId,
-} from "@zwave-js/cc/MultiChannelCC";
+import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	allCCs,
 	applicationCCs,
@@ -43,28 +37,44 @@ export function endpointCountIsDynamic(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): boolean | undefined {
-	return getValue(applHost, node, getCountIsDynamicValueId());
+	return getValue(
+		applHost,
+		node,
+		MultiChannelCCValues.endpointCountIsDynamic.id,
+	);
 }
 
 export function endpointsHaveIdenticalCapabilities(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): boolean | undefined {
-	return getValue(applHost, node, getIdenticalCapabilitiesValueId());
+	return getValue(
+		applHost,
+		node,
+		MultiChannelCCValues.endpointsHaveIdenticalCapabilities.id,
+	);
 }
 
 export function getIndividualEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): number | undefined {
-	return getValue(applHost, node, getIndividualCountValueId());
+	return getValue(
+		applHost,
+		node,
+		MultiChannelCCValues.individualEndpointCount.id,
+	);
 }
 
 export function getAggregatedEndpointCount(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): number | undefined {
-	return getValue(applHost, node, getAggregatedCountValueId());
+	return getValue(
+		applHost,
+		node,
+		MultiChannelCCValues.aggregatedEndpointCount.id,
+	);
 }
 
 export function getEndpointCount(
@@ -82,7 +92,12 @@ export function setIndividualEndpointCount(
 	node: IZWaveNode,
 	count: number,
 ): void {
-	setValue(applHost, node, getIndividualCountValueId(), count);
+	setValue(
+		applHost,
+		node,
+		MultiChannelCCValues.individualEndpointCount.id,
+		count,
+	);
 }
 
 export function setAggregatedEndpointCount(
@@ -90,14 +105,23 @@ export function setAggregatedEndpointCount(
 	node: IZWaveNode,
 	count: number,
 ): void {
-	setValue(applHost, node, getAggregatedCountValueId(), count);
+	setValue(
+		applHost,
+		node,
+		MultiChannelCCValues.aggregatedEndpointCount.id,
+		count,
+	);
 }
 
 export function getEndpointIndizes(
 	applHost: ZWaveApplicationHost,
 	node: IZWaveNode,
 ): number[] {
-	let ret = getValue<number[]>(applHost, node, getEndpointIndizesValueId());
+	let ret = getValue<number[]>(
+		applHost,
+		node,
+		MultiChannelCCValues.endpointIndizes.id,
+	);
 	if (!ret) {
 		// Endpoint indizes not stored, assume sequential endpoints
 		ret = [];
@@ -113,7 +137,7 @@ export function setEndpointIndizes(
 	node: IZWaveNode,
 	indizes: number[],
 ): void {
-	setValue(applHost, node, getEndpointIndizesValueId(), indizes);
+	setValue(applHost, node, MultiChannelCCValues.endpointIndizes.id, indizes);
 }
 
 export function isMultiChannelInterviewComplete(

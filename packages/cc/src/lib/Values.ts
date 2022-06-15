@@ -480,4 +480,23 @@ export interface CCValues {
 	Battery: typeof import("../cc/BatteryCC").BatteryCCValues;
 	"Binary Sensor": typeof import("../cc/BinarySensorCC").BinarySensorCCValues;
 	"Binary Switch": typeof import("../cc/BinarySwitchCC").BinarySwitchCCValues;
+	"Central Scene": typeof import("../cc/CentralSceneCC").CentralSceneCCValues;
+	"Climate Control Schedule": typeof import("../cc/ClimateControlScheduleCC").ClimateControlScheduleCCValues;
+	"Color Switch": typeof import("../cc/ColorSwitchCC").ColorSwitchCCValues;
+	Configuration: typeof import("../cc/ConfigurationCC").ConfigurationCCValues;
+	"Door Lock": typeof import("../cc/DoorLockCC").DoorLockCCValues;
+	"Door Lock Logging": typeof import("../cc/DoorLockLoggingCC").DoorLockLoggingCCValues;
+	"Entry Control": typeof import("../cc/EntryControlCC").EntryControlCCValues;
+	"Firmware Update Meta Data": typeof import("../cc/FirmwareUpdateMetaDataCC").FirmwareUpdateMetaDataCCValues;
+	"Humidity Control Mode": typeof import("../cc/HumidityControlModeCC").HumidityControlModeCCValues;
+	"Humidity Control Operating State": typeof import("../cc/HumidityControlOperatingStateCC").HumidityControlOperatingStateCCValues;
+	"Humidity Control Setpoint": typeof import("../cc/HumidityControlSetpointCC").HumidityControlSetpointCCValues;
+	Indicator: typeof import("../cc/IndicatorCC").IndicatorCCValues;
+	Irrigation: typeof import("../cc/IrrigationCC").IrrigationCCValues;
+	Language: typeof import("../cc/LanguageCC").LanguageCCValues;
+	Lock: typeof import("../cc/LockCC").LockCCValues;
+	"Manufacturer Specific": typeof import("../cc/ManufacturerSpecificCC").ManufacturerSpecificCCValues;
+	Meter: typeof import("../cc/MeterCC").MeterCCValues;
+	"Multi Channel Association": typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
+	"Multi Channel": typeof import("../cc/MultiChannelCC").MultiChannelCCValues;
 }

@@ -16,9 +16,8 @@ import {
 } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
 import {
-	getEndpointsValueId,
-	getNodeIdsValueId,
 	MultiChannelAssociationCC,
+	MultiChannelAssociationCCValues,
 } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
 import type {
@@ -900,11 +899,13 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 			});
 
 			if (!rootMustUseNodeAssociation) {
-				const rootNodesValueId = getNodeIdsValueId(0, group);
+				const rootNodesValueId =
+					MultiChannelAssociationCCValues.nodeIds(group).id;
 				const rootHasNodeAssociation = !!valueDB
 					.getValue<number[]>(rootNodesValueId)
 					?.some((a) => a === ownNodeId);
-				const rootEndpointsValueId = getEndpointsValueId(0, group);
+				const rootEndpointsValueId =
+					MultiChannelAssociationCCValues.endpoints(group).id;
 				const rootHasEndpointAssociation = !!valueDB
 					.getValue<EndpointAddress[]>(rootEndpointsValueId)
 					?.some((a) => a.nodeId === ownNodeId && a.endpoint === 0);

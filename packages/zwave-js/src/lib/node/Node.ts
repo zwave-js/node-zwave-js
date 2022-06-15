@@ -39,16 +39,9 @@ import {
 	FirmwareUpdateMetaDataCCStatusReport,
 } from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
 import { HailCC } from "@zwave-js/cc/HailCC";
-import { getLockedValueId } from "@zwave-js/cc/LockCC";
-import {
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
-} from "@zwave-js/cc/ManufacturerSpecificCC";
-import {
-	getEndpointCCsValueId,
-	getEndpointDeviceClassValueId,
-} from "@zwave-js/cc/MultiChannelCC";
+import { LockCCValues } from "@zwave-js/cc/LockCC";
+import { ManufacturerSpecificCCValues } from "@zwave-js/cc/ManufacturerSpecificCC";
+import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
 	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
 	MultilevelSwitchCC,
@@ -660,15 +653,15 @@ export class ZWaveNode
 	}
 
 	public get manufacturerId(): number | undefined {
-		return this.getValue(getManufacturerIdValueId());
+		return this.getValue(ManufacturerSpecificCCValues.manufacturerId.id);
 	}
 
 	public get productId(): number | undefined {
-		return this.getValue(getProductIdValueId());
+		return this.getValue(ManufacturerSpecificCCValues.productId.id);
 	}
 
 	public get productType(): number | undefined {
-		return this.getValue(getProductTypeValueId());
+		return this.getValue(ManufacturerSpecificCCValues.productType.id);
 	}
 
 	public get firmwareVersion(): string | undefined {
@@ -1034,7 +1027,7 @@ export class ZWaveNode
 			generic: number;
 			specific: number;
 		}>(
-			getEndpointDeviceClassValueId(
+			MultiChannelCCValues.endpointDeviceClass.endpoint(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
@@ -1052,7 +1045,7 @@ export class ZWaveNode
 
 	private getEndpointCCs(index: number): CommandClasses[] | undefined {
 		const ret = this.getValue(
-			getEndpointCCsValueId(
+			MultiChannelCCValues.endpointCCs.endpoint(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
@@ -3062,7 +3055,7 @@ protocol version:      ${this.protocolVersion}`;
 			}
 			if (this.supportsCC(CommandClasses.Lock)) {
 				this.valueDB.setValue(
-					getLockedValueId(command.endpointIndex),
+					LockCCValues.locked.endpoint(command.endpointIndex),
 					isLocked,
 				);
 			}

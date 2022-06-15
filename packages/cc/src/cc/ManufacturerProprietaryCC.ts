@@ -27,7 +27,7 @@ import {
 	getManufacturerProprietaryAPI,
 	getManufacturerProprietaryCCConstructor,
 } from "./manufacturerProprietary/Decorators";
-import { getManufacturerIdValueId } from "./ManufacturerSpecificCC";
+import { ManufacturerSpecificCCValues } from "./ManufacturerSpecificCC";
 
 export type ManufacturerProprietaryCCConstructor<
 	T extends typeof ManufacturerProprietaryCC = typeof ManufacturerProprietaryCC,
@@ -46,7 +46,7 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		const manufacturerId = this.getValueDB().getValue<number>(
-			getManufacturerIdValueId(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
 		);
 		// If possible, try to defer to a specific subclass of this API
 		if (manufacturerId != undefined) {
@@ -224,7 +224,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 		// Read the manufacturer ID from Manufacturer Specific CC
 		this.manufacturerId = this.getValueDB(applHost).getValue<number>(
-			getManufacturerIdValueId(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
 		)!;
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
@@ -246,7 +246,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		if (this.manufacturerId == undefined) {
 			// Read the manufacturer ID from Manufacturer Specific CC
 			this.manufacturerId = this.getValueDB(applHost).getValue<number>(
-				getManufacturerIdValueId(),
+				ManufacturerSpecificCCValues.manufacturerId.id,
 			)!;
 		}
 		const pcInstance = this.createSpecificInstance();

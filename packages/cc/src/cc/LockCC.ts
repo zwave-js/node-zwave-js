@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core/safe";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -21,7 +21,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -34,15 +33,18 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { LockCommand } from "../lib/_Types";
 
-export function getLockedValueId(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Lock,
-		endpoint,
-		property: "locked",
-	};
-}
+export const LockCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Lock, {
+		...V.staticProperty("locked", {
+			...ValueMetadata.Boolean,
+			label: "Locked",
+			description: "Whether the lock is locked",
+		} as const),
+	}),
+});
 
 @API(CommandClasses.Lock)
 export class LockCCAPI extends PhysicalCCAPI {
@@ -202,11 +204,6 @@ export class LockCCReport extends LockCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Boolean,
-		label: "Locked",
-		description: "Whether the lock is locked",
-	})
 	public readonly locked: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

@@ -17,7 +17,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,7 +29,22 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { LanguageCommand } from "../lib/_Types";
+
+export const LanguageCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Language, {
+		...V.staticProperty("language", {
+			...ValueMetadata.ReadOnlyString,
+			label: "Language code",
+		} as const),
+
+		...V.staticProperty("country", {
+			...ValueMetadata.ReadOnlyString,
+			label: "Country code",
+		} as const),
+	}),
+});
 
 // @noSetValueAPI It doesn't make sense
 
@@ -218,17 +232,9 @@ export class LanguageCCReport extends LanguageCC {
 	}
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Language code",
-	})
 	public readonly language: string;
 
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Country code",
-	})
 	public readonly country: string | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

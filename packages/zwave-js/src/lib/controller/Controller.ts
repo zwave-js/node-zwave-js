@@ -2,17 +2,12 @@ import {
 	ECDHProfiles,
 	getFirmwareVersionsMetadata,
 	getFirmwareVersionsValueId,
-	getManufacturerIdValueId,
-	getManufacturerIdValueMetadata,
-	getProductIdValueId,
-	getProductIdValueMetadata,
-	getProductTypeValueId,
-	getProductTypeValueMetadata,
 	getSDKVersionMetadata,
 	getSDKVersionValueId,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
+	ManufacturerSpecificCCValues,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -994,23 +989,29 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Set manufacturer information for the controller node
 		const controllerValueDB = this.valueDB;
 		controllerValueDB.setMetadata(
-			getManufacturerIdValueId(),
-			getManufacturerIdValueMetadata(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
+			ManufacturerSpecificCCValues.manufacturerId.meta,
 		);
 		controllerValueDB.setMetadata(
-			getProductTypeValueId(),
-			getProductTypeValueMetadata(),
+			ManufacturerSpecificCCValues.productType.id,
+			ManufacturerSpecificCCValues.productType.meta,
 		);
 		controllerValueDB.setMetadata(
-			getProductIdValueId(),
-			getProductIdValueMetadata(),
+			ManufacturerSpecificCCValues.productId.id,
+			ManufacturerSpecificCCValues.productId.meta,
 		);
 		controllerValueDB.setValue(
-			getManufacturerIdValueId(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
 			this._manufacturerId,
 		);
-		controllerValueDB.setValue(getProductTypeValueId(), this._productType);
-		controllerValueDB.setValue(getProductIdValueId(), this._productId);
+		controllerValueDB.setValue(
+			ManufacturerSpecificCCValues.productType.id,
+			this._productType,
+		);
+		controllerValueDB.setValue(
+			ManufacturerSpecificCCValues.productId.id,
+			this._productId,
+		);
 
 		// Set firmware version information for the controller node
 		controllerValueDB.setMetadata(
