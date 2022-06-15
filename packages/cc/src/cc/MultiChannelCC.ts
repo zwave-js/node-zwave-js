@@ -590,7 +590,11 @@ supported CCs:`;
 				});
 			}
 		}
-		valueDB.setValue(MultiChannelCCValues.endpointIndizes.id, allEndpoints);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointIndizes,
+			allEndpoints,
+		);
 
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);
@@ -645,16 +649,26 @@ supported CCs:`;
 		// Store the collected information
 		// We have only individual and no dynamic and no aggregated endpoints
 		const numEndpoints = Math.max(...endpointCounts.values());
-		valueDB.setValue(MultiChannelCCValues.endpointCountIsDynamic.id, false);
-		valueDB.setValue(MultiChannelCCValues.aggregatedEndpointCount.id, 0);
-		valueDB.setValue(
-			MultiChannelCCValues.individualEndpointCount.id,
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointCountIsDynamic,
+			false,
+		);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.aggregatedEndpointCount,
+			0,
+		);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.individualEndpointCount,
 			numEndpoints,
 		);
 		// Since we queried all CCs separately, we can assume that all
 		// endpoints have different capabilities
-		valueDB.setValue(
-			MultiChannelCCValues.endpointsHaveIdenticalCapabilities.id,
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointsHaveIdenticalCapabilities,
 			false,
 		);
 
@@ -768,25 +782,19 @@ export class MultiChannelCCCapabilityReport
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		const deviceClassValueId =
-			MultiChannelCCValues.endpointDeviceClass.endpoint(
-				this.endpointIndex,
-			);
-		const ccsValueId = MultiChannelCCValues.endpointCCs.endpoint(
-			this.endpointIndex,
-		);
+		const deviceClassValue = MultiChannelCCValues.endpointDeviceClass;
+		const ccsValue = MultiChannelCCValues.endpointCCs;
 
 		if (this.wasRemoved) {
-			valueDB.removeValue(deviceClassValueId);
-			valueDB.removeValue(ccsValueId);
+			this.removeValue(applHost, deviceClassValue);
+			this.removeValue(applHost, ccsValue);
 		} else {
-			valueDB.setValue(deviceClassValueId, {
+			this.setValue(applHost, deviceClassValue, {
 				generic: this.genericDeviceClass,
 				specific: this.specificDeviceClass,
 			});
-			valueDB.setValue(ccsValueId, this.supportedCCs);
+			this.setValue(applHost, ccsValue, this.supportedCCs);
 		}
 		return true;
 	}

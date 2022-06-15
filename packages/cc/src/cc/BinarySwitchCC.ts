@@ -255,10 +255,7 @@ remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
 		applHost: ZWaveApplicationHost,
 		value: number,
 	): boolean {
-		this.getValueDB(applHost).setValue(
-			BinarySwitchCCValues.currentValue.endpoint(this.endpointIndex),
-			value > 0,
-		);
+		this.setValue(applHost, BinarySwitchCCValues.currentValue, value > 0);
 		return true;
 	}
 }

@@ -481,7 +481,6 @@ export class ColorSwitchCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -517,29 +516,17 @@ export class ColorSwitchCC extends CommandClass {
 		for (const color of supportedColors) {
 			const currentColorChannelValue =
 				ColorSwitchCCValues.currentColorChannel(color);
-			valueDB.setMetadata(
-				currentColorChannelValue.endpoint(this.endpointIndex),
-				currentColorChannelValue.meta,
-			);
+			this.setMetadata(applHost, currentColorChannelValue);
 
 			const targetColorChannelValue =
 				ColorSwitchCCValues.targetColorChannel(color);
-			valueDB.setMetadata(
-				targetColorChannelValue.endpoint(this.endpointIndex),
-				targetColorChannelValue.meta,
-			);
+			this.setMetadata(applHost, targetColorChannelValue);
 		}
 		// And the compound one
 		const currentColorValue = ColorSwitchCCValues.currentColor;
-		valueDB.setMetadata(
-			currentColorValue.endpoint(this.endpointIndex),
-			currentColorValue.meta,
-		);
+		this.setMetadata(applHost, currentColorValue);
 		const targetColorValue = ColorSwitchCCValues.targetColor;
-		valueDB.setMetadata(
-			targetColorValue.endpoint(this.endpointIndex),
-			targetColorValue.meta,
-		);
+		this.setMetadata(applHost, targetColorValue);
 
 		// Create the collective HEX color values
 		const supportsHex = [
@@ -547,16 +534,14 @@ export class ColorSwitchCC extends CommandClass {
 			ColorComponent.Green,
 			ColorComponent.Blue,
 		].every((c) => supportedColors.includes(c));
-		valueDB.setValue(
-			ColorSwitchCCValues.supportsHexColor.endpoint(this.endpointIndex),
+		this.setValue(
+			applHost,
+			ColorSwitchCCValues.supportsHexColor,
 			supportsHex,
 		);
 		if (supportsHex) {
 			const hexColorValue = ColorSwitchCCValues.hexColor;
-			valueDB.setMetadata(
-				hexColorValue.endpoint(this.endpointIndex),
-				hexColorValue.meta,
-			);
+			this.setMetadata(applHost, hexColorValue);
 		}
 
 		// Query all color components
@@ -576,13 +561,11 @@ export class ColorSwitchCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const supportedColors: readonly ColorComponent[] =
-			valueDB.getValue(
-				ColorSwitchCCValues.supportedColorComponents.endpoint(
-					this.endpointIndex,
-				),
+			this.getValue(
+				applHost,
+				ColorSwitchCCValues.supportedColorComponents,
 			) ?? [];
 
 		for (const color of supportedColors) {
@@ -669,21 +652,18 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Duration is stored globally instead of per component
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		valueDB.setValue(
-			ColorSwitchCCValues.currentColorChannel(
-				this.colorComponent,
-			).endpoint(this.endpointIndex),
+		this.setValue(
+			applHost,
+			ColorSwitchCCValues.currentColorChannel(this.colorComponent),
 			this.currentValue,
 		);
 
 		// Update target value if required
 		if (this.targetValue != undefined) {
-			valueDB.setValue(
-				ColorSwitchCCValues.targetColorChannel(
-					this.colorComponent,
-				).endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				ColorSwitchCCValues.targetColorChannel(this.colorComponent),
 				this.targetValue,
 			);
 		}
@@ -691,30 +671,35 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		// Update compound current value
 		const colorTableKey = colorComponentToTableKey(this.colorComponent);
 		if (colorTableKey) {
-			const compoundValueId = ColorSwitchCCValues.currentColor.endpoint(
-				this.endpointIndex,
+			const compoundCurrentColorValue = ColorSwitchCCValues.currentColor;
+			const compoundCurrentColor: Partial<Record<ColorKey, number>> =
+				this.getValue(applHost, compoundCurrentColorValue) ?? {};
+			compoundCurrentColor[colorTableKey] = this.currentValue;
+			this.setValue(
+				applHost,
+				compoundCurrentColorValue,
+				compoundCurrentColor,
 			);
-			const compoundValue: Partial<Record<ColorKey, number>> =
-				valueDB.getValue(compoundValueId) ?? {};
-			compoundValue[colorTableKey] = this.currentValue;
-			valueDB.setValue(compoundValueId, compoundValue);
 
 			// and target value
 			if (this.targetValue != undefined) {
-				const compoundTargetValueId =
-					ColorSwitchCCValues.targetColor.endpoint(
-						this.endpointIndex,
-					);
-				const compoundTargetValue: Partial<Record<ColorKey, number>> =
-					valueDB.getValue(compoundTargetValueId) ?? {};
-				compoundTargetValue[colorTableKey] = this.targetValue;
-				valueDB.setValue(compoundTargetValueId, compoundTargetValue);
+				const compoundTargetColorValue =
+					ColorSwitchCCValues.targetColor;
+				const compoundTargetColor: Partial<Record<ColorKey, number>> =
+					this.getValue(applHost, compoundTargetColorValue) ?? {};
+				compoundTargetColor[colorTableKey] = this.targetValue;
+				this.setValue(
+					applHost,
+					compoundTargetColorValue,
+					compoundTargetColor,
+				);
 			}
 		}
 
 		// Update collective hex value if required
-		const supportsHex = valueDB.getValue<boolean>(
-			ColorSwitchCCValues.supportsHexColor.endpoint(this.endpointIndex),
+		const supportsHex = !!this.getValue(
+			applHost,
+			ColorSwitchCCValues.supportsHexColor,
 		);
 		if (
 			supportsHex &&
@@ -722,18 +707,19 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 				this.colorComponent === ColorComponent.Green ||
 				this.colorComponent === ColorComponent.Blue)
 		) {
-			const hexValueId = ColorSwitchCCValues.hexColor.endpoint(
-				this.endpointIndex,
-			);
-			const hexValue = valueDB.getValue<string>(hexValueId) ?? "000000";
+			const hexColorValue = ColorSwitchCCValues.hexColor;
+
+			const hexValue: string =
+				this.getValue(applHost, hexColorValue) ?? "000000";
 			const byteOffset = ColorComponent.Blue - this.colorComponent;
 			const byteMask = 0xff << (byteOffset * 8);
 			let hexValueNumeric = parseInt(hexValue, 16);
 			hexValueNumeric =
 				(hexValueNumeric & ~byteMask) |
 				(this.currentValue << (byteOffset * 8));
-			valueDB.setValue(
-				hexValueId,
+			this.setValue(
+				applHost,
+				hexColorValue,
 				hexValueNumeric.toString(16).padStart(6, "0"),
 			);
 		}

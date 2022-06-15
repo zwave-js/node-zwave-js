@@ -336,7 +336,6 @@ export class AssociationGroupInfoCC extends CommandClass {
 			applHost,
 			endpoint,
 		).withOptions({ priority: MessagePriority.NodeQuery });
-		const valueDB = this.getValueDB(applHost);
 
 		// Query the information for each group (this is the only thing that could be dynamic)
 		const associationGroupCount =
@@ -344,10 +343,9 @@ export class AssociationGroupInfoCC extends CommandClass {
 				applHost,
 				endpoint,
 			);
-		const hasDynamicInfo = valueDB.getValue(
-			AssociationGroupInfoCCValues.hasDynamicInfo.endpoint(
-				this.endpointIndex,
-			),
+		const hasDynamicInfo = this.getValue<boolean>(
+			applHost,
+			AssociationGroupInfoCCValues.hasDynamicInfo,
 		);
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
@@ -497,18 +495,18 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		for (const group of this.groups) {
 			const { groupId, mode, profile, eventCode } = group;
-			const valueId = AssociationGroupInfoCCValues.groupInfo(
-				groupId,
-			).endpoint(this.endpointIndex);
-			valueDB.setValue(valueId, {
-				mode,
-				profile,
-				eventCode,
-			});
+			this.setValue(
+				applHost,
+				AssociationGroupInfoCCValues.groupInfo(groupId),
+				{
+					mode,
+					profile,
+					eventCode,
+				},
+			);
 		}
 		return true;
 	}

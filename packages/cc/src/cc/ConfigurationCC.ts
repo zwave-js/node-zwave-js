@@ -1156,8 +1156,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		applHost: ZWaveApplicationHost,
 	): boolean {
 		return (
-			this.getValueDB(applHost).getValue(
-				ConfigurationCCValues.isParamInformationFromConfig.id,
+			this.getValue(
+				applHost,
+				ConfigurationCCValues.isParamInformationFromConfig,
 			) === true
 		);
 	}
@@ -1201,14 +1202,14 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		parameter: number,
 		valueBitMask?: number,
 	): ConfigurationMetadata {
-		const valueDB = this.getValueDB(applHost);
-		const valueId = ConfigurationCCValues.paramInformation(
-			parameter,
-			valueBitMask,
-		).id;
-		return (valueDB.getMetadata(valueId) ?? {
-			...ValueMetadata.Any,
-		}) as ConfigurationMetadata;
+		return (
+			this.getMetadata(
+				applHost,
+				ConfigurationCCValues.paramInformation(parameter, valueBitMask),
+			) ?? {
+				...ValueMetadata.Any,
+			}
+		);
 	}
 
 	/**
@@ -1315,8 +1316,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 
 		// Allow overwriting the param info (mark it as unloaded)
-		valueDB.setValue(
-			ConfigurationCCValues.isParamInformationFromConfig.id,
+		this.setValue(
+			applHost,
+			ConfigurationCCValues.isParamInformationFromConfig,
 			false,
 		);
 
@@ -1359,8 +1361,9 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 		}
 
 		// Remember that we loaded the param information from a config file
-		valueDB.setValue(
-			ConfigurationCCValues.isParamInformationFromConfig.id,
+		this.setValue(
+			applHost,
+			ConfigurationCCValues.isParamInformationFromConfig,
 			true,
 		);
 	}

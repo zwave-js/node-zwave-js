@@ -477,8 +477,9 @@ export class NotificationCC extends CommandClass {
 			}
 
 			// Determine whether the node is a push or pull node
-			let notificationMode = valueDB.getValue<"push" | "pull">(
-				NotificationCCValues.notificationMode.id,
+			let notificationMode = this.getValue<"push" | "pull">(
+				applHost,
+				NotificationCCValues.notificationMode,
 			);
 			if (notificationMode !== "push" && notificationMode !== "pull") {
 				notificationMode = await this.determineNotificationMode(
@@ -486,8 +487,9 @@ export class NotificationCC extends CommandClass {
 					api,
 					supportedNotificationEvents,
 				);
-				valueDB.setValue(
-					NotificationCCValues.notificationMode.id,
+				this.setValue(
+					applHost,
+					NotificationCCValues.notificationMode,
 					notificationMode,
 				);
 			}
@@ -1258,13 +1260,13 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Store which events this notification supports
-		valueDB.setValue(
+		this.setValue(
+			applHost,
 			NotificationCCValues.supportedNotificationEvents(
 				this._notificationType,
-			).id,
+			),
 			this._supportedEvents,
 		);
 

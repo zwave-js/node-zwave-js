@@ -204,7 +204,6 @@ export class BasicCC extends CommandClass {
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -217,19 +216,9 @@ export class BasicCC extends CommandClass {
 
 		// create compat event value if necessary
 		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
-			const valueId = BasicCCValues.compatEvent.endpoint(
-				this.endpointIndex,
-			);
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.ReadOnlyUInt8,
-					label: "Event value",
-				});
-			}
+			this.ensureMetadata(applHost, BasicCCValues.compatEvent);
 		} else if (
-			valueDB.getValue(
-				BasicCCValues.currentValue.endpoint(this.endpointIndex),
-			) == undefined
+			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,

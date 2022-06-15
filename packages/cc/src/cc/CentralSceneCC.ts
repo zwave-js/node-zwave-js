@@ -312,14 +312,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// In case the interview is not yet completed, we still create some basic metadata
 		const sceneValue = CentralSceneCCValues.scene(this._sceneNumber);
-		const valueId = sceneValue.id;
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, sceneValue.meta);
-		}
+		this.ensureMetadata(applHost, sceneValue);
 
 		// The spec behavior is pretty complicated, so we cannot just store
 		// the value and call it a day. Handling of these notifications will
@@ -409,10 +405,9 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		if (!super.persistValues(applHost)) return false;
 
 		// Create/extend metadata for all scenes
-		const valueDB = this.getValueDB(applHost);
 		for (let i = 1; i <= this._sceneCount; i++) {
 			const sceneValue = CentralSceneCCValues.scene(i);
-			valueDB.setMetadata(sceneValue.id, {
+			this.setMetadata(applHost, sceneValue, {
 				...sceneValue.meta,
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,

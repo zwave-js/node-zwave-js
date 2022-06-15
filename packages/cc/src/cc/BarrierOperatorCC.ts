@@ -294,7 +294,6 @@ export class BarrierOperatorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -303,10 +302,7 @@ export class BarrierOperatorCC extends CommandClass {
 		});
 
 		// Create targetState value if it does not exist
-		const targetStateValue = BarrierOperatorCCValues.targetState;
-		if (!valueDB.hasMetadata(targetStateValue.id)) {
-			valueDB.setMetadata(targetStateValue.id, targetStateValue.meta);
-		}
+		this.ensureMetadata(applHost, BarrierOperatorCCValues.targetState);
 
 		applHost.controllerLog.logNode(node.id, {
 			message: "Querying signaling capabilities...",
@@ -338,13 +334,11 @@ export class BarrierOperatorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
-		const supportedSubsystems =
-			valueDB.getValue<SubsystemType[]>(
-				BarrierOperatorCCValues.supportedSubsystemTypes.endpoint(
-					this.endpointIndex,
-				),
+		const supportedSubsystems: SubsystemType[] =
+			this.getValue(
+				applHost,
+				BarrierOperatorCCValues.supportedSubsystemTypes,
 			) ?? [];
 
 		for (const subsystemType of supportedSubsystems) {
@@ -568,19 +562,12 @@ export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB(applHost);
-
 		const signalingStateValue = BarrierOperatorCCValues.signalingState(
 			this.subsystemType,
 		);
-		const valueId = signalingStateValue.endpoint(this.endpointIndex);
 
-		// Create metadata if it does not exist
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, signalingStateValue.meta);
-		}
-
-		valueDB.setValue(valueId, this.subsystemState);
+		this.ensureMetadata(applHost, signalingStateValue);
+		this.setValue(applHost, signalingStateValue, this.subsystemState);
 
 		return true;
 	}

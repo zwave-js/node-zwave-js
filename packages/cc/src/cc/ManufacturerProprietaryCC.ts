@@ -223,8 +223,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 		const node = this.getNode(applHost)!;
 
 		// Read the manufacturer ID from Manufacturer Specific CC
-		this.manufacturerId = this.getValueDB(applHost).getValue<number>(
-			ManufacturerSpecificCCValues.manufacturerId.id,
+		this.manufacturerId = this.getValue(
+			applHost,
+			ManufacturerSpecificCCValues.manufacturerId,
 		)!;
 		const pcInstance = this.createSpecificInstance();
 		if (pcInstance) {
@@ -245,8 +246,9 @@ export class ManufacturerProprietaryCC extends CommandClass {
 
 		if (this.manufacturerId == undefined) {
 			// Read the manufacturer ID from Manufacturer Specific CC
-			this.manufacturerId = this.getValueDB(applHost).getValue<number>(
-				ManufacturerSpecificCCValues.manufacturerId.id,
+			this.manufacturerId = this.getValue(
+				applHost,
+				ManufacturerSpecificCCValues.manufacturerId,
 			)!;
 		}
 		const pcInstance = this.createSpecificInstance();

@@ -414,7 +414,6 @@ export class DoorLockCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -470,28 +469,22 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 
 				// Update metadata of settable states
 				const targetModeValue = DoorLockCCValues.targetMode;
-				valueDB.setMetadata(
-					targetModeValue.endpoint(this.endpointIndex),
-					{
-						...targetModeValue.meta,
-						states: enumValuesToMetadataStates(
-							DoorLockMode,
-							resp.supportedDoorLockModes,
-						),
-					},
-				);
+				this.setMetadata(applHost, targetModeValue, {
+					...targetModeValue.meta,
+					states: enumValuesToMetadataStates(
+						DoorLockMode,
+						resp.supportedDoorLockModes,
+					),
+				});
 
 				const operationTypeValue = DoorLockCCValues.operationType;
-				valueDB.setMetadata(
-					operationTypeValue.endpoint(this.endpointIndex),
-					{
-						...operationTypeValue.meta,
-						states: enumValuesToMetadataStates(
-							DoorLockOperationType,
-							resp.supportedOperationTypes,
-						),
-					},
-				);
+				this.setMetadata(applHost, operationTypeValue, {
+					...operationTypeValue.meta,
+					states: enumValuesToMetadataStates(
+						DoorLockOperationType,
+						resp.supportedOperationTypes,
+					),
+				});
 			} else {
 				hadCriticalTimeout = true;
 			}
@@ -500,32 +493,38 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 		if (!hadCriticalTimeout) {
 			// Save support information for the status values
 			const doorStatusValue = DoorLockCCValues.doorStatus;
-			valueDB.setMetadata(
-				doorStatusValue.endpoint(this.endpointIndex),
+			this.setMetadata(
+				applHost,
+				doorStatusValue,
 				doorSupported ? doorStatusValue.meta : undefined,
 			);
-			valueDB.setValue(
-				DoorLockCCValues.doorSupported.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.doorSupported,
 				doorSupported,
 			);
 
 			const latchStatusValue = DoorLockCCValues.latchStatus;
-			valueDB.setMetadata(
-				latchStatusValue.endpoint(this.endpointIndex),
+			this.setMetadata(
+				applHost,
+				latchStatusValue,
 				latchSupported ? latchStatusValue.meta : undefined,
 			);
-			valueDB.setValue(
-				DoorLockCCValues.latchSupported.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.latchSupported,
 				latchSupported,
 			);
 
 			const boltStatusValue = DoorLockCCValues.boltStatus;
-			valueDB.setMetadata(
-				boltStatusValue.endpoint(this.endpointIndex),
+			this.setMetadata(
+				applHost,
+				boltStatusValue,
 				boltSupported ? boltStatusValue.meta : undefined,
 			);
-			valueDB.setValue(
-				DoorLockCCValues.boltSupported.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.boltSupported,
 				boltSupported,
 			);
 		}
@@ -714,33 +713,38 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Only store the door/bolt/latch status if the lock supports it
-		const supportsDoorStatus = !!valueDB.getValue(
-			DoorLockCCValues.doorSupported.endpoint(this.endpointIndex),
+		const supportsDoorStatus = !!this.getValue(
+			applHost,
+			DoorLockCCValues.doorSupported,
 		);
 		if (supportsDoorStatus) {
-			valueDB.setValue(
-				DoorLockCCValues.doorStatus.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.doorStatus,
 				this.doorStatus,
 			);
 		}
-		const supportsBoltStatus = !!valueDB.getValue(
-			DoorLockCCValues.boltSupported.endpoint(this.endpointIndex),
+		const supportsBoltStatus = !!this.getValue(
+			applHost,
+			DoorLockCCValues.boltSupported,
 		);
 		if (supportsBoltStatus) {
-			valueDB.setValue(
-				DoorLockCCValues.boltStatus.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.boltStatus,
 				this.boltStatus,
 			);
 		}
-		const supportsLatchStatus = !!valueDB.getValue(
-			DoorLockCCValues.latchSupported.endpoint(this.endpointIndex),
+		const supportsLatchStatus = !!this.getValue(
+			applHost,
+			DoorLockCCValues.latchSupported,
 		);
 		if (supportsLatchStatus) {
-			valueDB.setValue(
-				DoorLockCCValues.latchStatus.endpoint(this.endpointIndex),
+			this.setValue(
+				applHost,
+				DoorLockCCValues.latchStatus,
 				this.latchStatus,
 			);
 		}

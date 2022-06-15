@@ -327,7 +327,6 @@ export class HumidityControlSetpointCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -394,14 +393,13 @@ ${setpointScaleSupported
 
 				const scaleValue =
 					HumidityControlSetpointCCValues.setpointScale(type);
-				const scaleValueId = scaleValue.endpoint(this.endpointIndex);
 				const states: Record<number, string> = {};
 				for (const scale of setpointScaleSupported) {
 					if (scale.unit) states[scale.key] = scale.unit;
 				}
-				valueDB.setMetadata(scaleValueId, {
+				this.setMetadata(applHost, scaleValue, {
 					...scaleValue.meta,
-					states: states,
+					states,
 				});
 			}
 			const setpointCaps = await api.getCapabilities(type);

@@ -5,7 +5,6 @@ import {
 	MessagePriority,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -202,7 +201,6 @@ export class BinarySensorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
@@ -221,10 +219,9 @@ export class BinarySensorCC extends CommandClass {
 			}
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
-				valueDB.getValue(
-					BinarySensorCCValues.supportedSensorTypes.endpoint(
-						this.endpointIndex,
-					),
+				this.getValue(
+					applHost,
+					BinarySensorCCValues.supportedSensorTypes,
 				) ?? [];
 
 			for (const type of supportedSensorTypes) {
@@ -250,10 +247,9 @@ export class BinarySensorCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		value: number,
 	): boolean {
-		this.getValueDB(applHost).setValue(
-			BinarySensorCCValues.state(BinarySensorType.Any).endpoint(
-				this.endpointIndex,
-			),
+		this.setValue(
+			applHost,
+			BinarySensorCCValues.state(BinarySensorType.Any),
 			value > 0,
 		);
 		return true;
@@ -278,13 +274,11 @@ export class BinarySensorCCReport extends BinarySensorCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		const binarySensorValue = BinarySensorCCValues.state(this._type);
+		this.setMetadata(applHost, binarySensorValue, binarySensorValue.meta);
+		this.setValue(applHost, binarySensorValue, this._value);
 
-		const valueId: ValueID = binarySensorValue.endpoint(this.endpointIndex);
-		valueDB.setMetadata(valueId, binarySensorValue.meta);
-		valueDB.setValue(valueId, this._value);
 		return true;
 	}
 

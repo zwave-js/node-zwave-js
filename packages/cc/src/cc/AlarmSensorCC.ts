@@ -227,14 +227,10 @@ export class AlarmSensorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			valueDB.getValue(
-				AlarmSensorCCValues.supportedSensorTypes.endpoint(
-					this.endpointIndex,
-				),
-			) ?? [];
+			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes) ??
+			[];
 
 		// Always query (all of) the sensor's current value(s)
 		for (const type of supportedSensorTypes) {
@@ -271,24 +267,13 @@ duration: ${currentValue.duration}`;
 		sensorType: AlarmSensorType,
 	): void {
 		const stateValue = AlarmSensorCCValues.state(sensorType);
-		const stateValueId = stateValue.endpoint(this.endpointIndex);
 		const severityValue = AlarmSensorCCValues.severity(sensorType);
-		const severityValueId = severityValue.endpoint(this.endpointIndex);
 		const durationValue = AlarmSensorCCValues.duration(sensorType);
-		const durationValueId = durationValue.endpoint(this.endpointIndex);
-
-		const valueDB = this.getValueDB(applHost);
 
 		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(stateValueId)) {
-			valueDB.setMetadata(stateValueId, stateValue.meta);
-		}
-		if (!valueDB.hasMetadata(severityValueId)) {
-			valueDB.setMetadata(severityValueId, severityValue.meta);
-		}
-		if (!valueDB.hasMetadata(durationValueId)) {
-			valueDB.setMetadata(durationValueId, durationValue.meta);
-		}
+		this.ensureMetadata(applHost, stateValue);
+		this.ensureMetadata(applHost, severityValue);
+		this.ensureMetadata(applHost, durationValue);
 	}
 }
 
@@ -344,20 +329,13 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		// Create metadata if it does not exist
 		this.createMetadataForSensorType(applHost, this.sensorType);
 
-		const stateValueId = AlarmSensorCCValues.state(
-			this.sensorType,
-		).endpoint(this.endpointIndex);
-		const severityValueId = AlarmSensorCCValues.severity(
-			this.sensorType,
-		).endpoint(this.endpointIndex);
-		const durationValueId = AlarmSensorCCValues.duration(
-			this.sensorType,
-		).endpoint(this.endpointIndex);
+		const stateValue = AlarmSensorCCValues.state(this.sensorType);
+		const severityValue = AlarmSensorCCValues.severity(this.sensorType);
+		const durationValue = AlarmSensorCCValues.duration(this.sensorType);
 
-		const valueDB = this.getValueDB(applHost);
-		valueDB.setValue(stateValueId, this.state);
-		valueDB.setValue(severityValueId, this.severity);
-		valueDB.setValue(durationValueId, this.duration);
+		this.setValue(applHost, stateValue, this.state);
+		this.setValue(applHost, severityValue, this.severity);
+		this.setValue(applHost, durationValue, this.duration);
 
 		return true;
 	}

@@ -473,7 +473,6 @@ export class MultiChannelAssociationCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const mcGroupCount: number =
 			this.getValue(
@@ -482,10 +481,9 @@ export class MultiChannelAssociationCC extends CommandClass {
 			) ?? 0;
 
 		// Some devices report more association groups than multi channel association groups, so we need this info here
-		const assocGroupCount =
-			valueDB.getValue<number>(
-				AssociationCCValues.groupCount.endpoint(this.endpointIndex),
-			) || mcGroupCount;
+		const assocGroupCount: number =
+			this.getValue(applHost, AssociationCCValues.groupCount) ||
+			mcGroupCount;
 
 		// Then query each multi channel association group
 		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {

@@ -2,8 +2,6 @@ import { CommandClasses, ValueID, ValueMetadata } from "@zwave-js/core";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
-export const VALUES: unique symbol = Symbol.for("CC_VALUE_DEFINITIONS");
-
 // HINT: To fully view types for definitions created by this, open
 // node_modules/typescript/lib/tsserver.js and change the definition of
 // ts.defaultMaximumTruncationLength = 160
