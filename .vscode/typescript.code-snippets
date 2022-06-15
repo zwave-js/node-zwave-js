@@ -535,11 +535,11 @@
 		"prefix": "zwccvalues",
 		"body": [
 			"export const ${1:${TM_FILENAME_BASE/(.*)CC$/$1/}}CCValues = Object.freeze({",
-			"\t...V.defineStaticCCValues(CommandClasses.${1}, {",
+			"\t...V${0}.defineStaticCCValues(CommandClasses.${2:${TM_FILENAME_BASE/(.*)CC$/$1/}}, {",
 			"\t\t// Static CC values go here",
 			"\t}),",
 			"",
-			"\t...V.defineDynamicCCValues(CommandClasses.${1}, {",
+			"\t...V.defineDynamicCCValues(CommandClasses.${2}, {",
 			"\t\t// Dynamic CC values go here",
 			"\t}),",
 			"});",
@@ -565,9 +565,9 @@
 		"body": [
 			"...V.staticPropertyWithName(",
 			"\t\"${1:valueName}\",",
-			"\t\"${1:property}\",",
-			"\t${2:// undefined, // meta}",
-			"\t${3:// { internal: true \\}, // value options}",
+			"\t\"${2:property}\",",
+			"\t${3:// undefined, // meta}",
+			"\t${4:// { internal: true \\}, // value options}",
 			"),"
 		],
 		"description": "Static CC value with name"

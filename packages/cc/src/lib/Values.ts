@@ -500,4 +500,17 @@ export interface CCValues {
 	"Multi Channel Association": typeof import("../cc/MultiChannelAssociationCC").MultiChannelAssociationCCValues;
 	"Multi Channel": typeof import("../cc/MultiChannelCC").MultiChannelCCValues;
 	"Multilevel Sensor": typeof import("../cc/MultilevelSensorCC").MultilevelSensorCCValues;
+	"Multilevel Switch": typeof import("../cc/MultilevelSwitchCC").MultilevelSwitchCCValues;
+	"Node Naming and Location": typeof import("../cc/NodeNamingCC").NodeNamingAndLocationCCValues;
+	Notification: typeof import("../cc/NotificationCC").NotificationCCValues;
+	Protection: typeof import("../cc/ProtectionCC").ProtectionCCValues;
+	"Scene Activation": typeof import("../cc/SceneActivationCC").SceneActivationCCValues;
+	"Scene Actuator Configuration": typeof import("../cc/SceneActuatorConfigurationCC").SceneActuatorConfigurationCCValues;
+	"Scene Controller Configuration": typeof import("../cc/SceneControllerConfigurationCC").SceneControllerConfigurationCCValues;
+	"Sound Switch": typeof import("../cc/SoundSwitchCC").SoundSwitchCCValues;
+	"Thermostat Fan Mode": typeof import("../cc/ThermostatFanModeCC").ThermostatFanModeCCValues;
+	"Thermostat Fan State": typeof import("../cc/ThermostatFanStateCC").ThermostatFanStateCCValues;
+	"Thermostat Mode": typeof import("../cc/ThermostatModeCC").ThermostatModeCCValues;
+	"Thermostat Operating State": typeof import("../cc/ThermostatOperatingStateCC").ThermostatOperatingStateCCValues;
+	"Thermostat Setback": typeof import("../cc/ThermostatSetbackCC").ThermostatSetbackCCValues;
 }

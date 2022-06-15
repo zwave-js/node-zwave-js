@@ -17,7 +17,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -28,10 +27,21 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	ThermostatOperatingState,
 	ThermostatOperatingStateCommand,
 } from "../lib/_Types";
+
+export const ThermostatOperatingStateCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Operating State"], {
+		...V.staticPropertyWithName("operatingState", "state", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "Operating state",
+			states: enumValuesToMetadataStates(ThermostatOperatingState),
+		} as const),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -143,11 +153,6 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 
 	private _state: ThermostatOperatingState;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Operating state",
-		states: enumValuesToMetadataStates(ThermostatOperatingState),
-	})
 	public get state(): ThermostatOperatingState {
 		return this._state;
 	}

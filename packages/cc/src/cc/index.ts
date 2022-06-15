@@ -341,6 +341,7 @@ export {
 	MultilevelSwitchCCStopLevelChange,
 	MultilevelSwitchCCSupportedGet,
 	MultilevelSwitchCCSupportedReport,
+	MultilevelSwitchCCValues,
 } from "./MultilevelSwitchCC";
 export {
 	NodeNamingAndLocationCC,
@@ -350,6 +351,7 @@ export {
 	NodeNamingAndLocationCCNameGet,
 	NodeNamingAndLocationCCNameReport,
 	NodeNamingAndLocationCCNameSet,
+	NodeNamingAndLocationCCValues,
 } from "./NodeNamingCC";
 export { messageIsPing, NoOperationCC } from "./NoOperationCC";
 export {
@@ -361,6 +363,7 @@ export {
 	NotificationCCSet,
 	NotificationCCSupportedGet,
 	NotificationCCSupportedReport,
+	NotificationCCValues,
 } from "./NotificationCC";
 export {
 	PowerlevelCC,
@@ -384,19 +387,26 @@ export {
 	ProtectionCCTimeoutGet,
 	ProtectionCCTimeoutReport,
 	ProtectionCCTimeoutSet,
+	ProtectionCCValues,
 } from "./ProtectionCC";
-export { SceneActivationCC, SceneActivationCCSet } from "./SceneActivationCC";
+export {
+	SceneActivationCC,
+	SceneActivationCCSet,
+	SceneActivationCCValues,
+} from "./SceneActivationCC";
 export {
 	SceneActuatorConfigurationCC,
 	SceneActuatorConfigurationCCGet,
 	SceneActuatorConfigurationCCReport,
 	SceneActuatorConfigurationCCSet,
+	SceneActuatorConfigurationCCValues,
 } from "./SceneActuatorConfigurationCC";
 export {
 	SceneControllerConfigurationCC,
 	SceneControllerConfigurationCCGet,
 	SceneControllerConfigurationCCReport,
 	SceneControllerConfigurationCCSet,
+	SceneControllerConfigurationCCValues,
 } from "./SceneControllerConfigurationCC";
 export {
 	Security2CC,
@@ -441,6 +451,7 @@ export {
 	SoundSwitchCCTonePlaySet,
 	SoundSwitchCCTonesNumberGet,
 	SoundSwitchCCTonesNumberReport,
+	SoundSwitchCCValues,
 } from "./SoundSwitchCC";
 export {
 	SupervisionCC,
@@ -454,11 +465,13 @@ export {
 	ThermostatFanModeCCSet,
 	ThermostatFanModeCCSupportedGet,
 	ThermostatFanModeCCSupportedReport,
+	ThermostatFanModeCCValues,
 } from "./ThermostatFanModeCC";
 export {
 	ThermostatFanStateCC,
 	ThermostatFanStateCCGet,
 	ThermostatFanStateCCReport,
+	ThermostatFanStateCCValues,
 } from "./ThermostatFanStateCC";
 export {
 	ThermostatModeCC,
@@ -467,17 +480,20 @@ export {
 	ThermostatModeCCSet,
 	ThermostatModeCCSupportedGet,
 	ThermostatModeCCSupportedReport,
+	ThermostatModeCCValues,
 } from "./ThermostatModeCC";
 export {
 	ThermostatOperatingStateCC,
 	ThermostatOperatingStateCCGet,
 	ThermostatOperatingStateCCReport,
+	ThermostatOperatingStateCCValues,
 } from "./ThermostatOperatingStateCC";
 export {
 	ThermostatSetbackCC,
 	ThermostatSetbackCCGet,
 	ThermostatSetbackCCReport,
 	ThermostatSetbackCCSet,
+	ThermostatSetbackCCValues,
 } from "./ThermostatSetbackCC";
 export {
 	ThermostatSetpointCC,

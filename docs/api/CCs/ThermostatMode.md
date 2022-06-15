@@ -33,3 +33,25 @@ async getSupportedModes(): Promise<
 	readonly ThermostatMode[] | undefined
 >;
 ```
+
+## Thermostat Mode CC values
+
+### `thermostatMode`
+
+```ts
+{
+	commandClass: CommandClasses["Thermostat Mode"],
+	endpoint: number,
+	property: "mode",
+}
+```
+
+-   **label:** Thermostat mode
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255

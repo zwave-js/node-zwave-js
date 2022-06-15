@@ -442,13 +442,11 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const setpointTypes: HumidityControlSetpointType[] =
-			valueDB.getValue(
-				HumidityControlSetpointCCValues.supportedSetpointTypes.endpoint(
-					this.endpointIndex,
-				),
+			this.getValue(
+				applHost,
+				HumidityControlSetpointCCValues.supportedSetpointTypes,
 			) ?? [];
 
 		// Query each setpoint's current value
@@ -564,28 +562,29 @@ export class HumidityControlSetpointCCReport extends HumidityControlSetpointCC {
 
 		const scale = getScale(applHost.configManager, this.scale);
 
-		const valueDB = this.getValueDB(applHost);
 		const setpointValue = HumidityControlSetpointCCValues.setpoint(
 			this.type,
 		);
-		const setpointValueId = setpointValue.endpoint(this.endpointIndex);
-		const existingMetadata = valueDB.getMetadata(setpointValueId) as
-			| ValueMetadataNumeric
-			| undefined;
+		const existingMetadata = this.getMetadata<ValueMetadataNumeric>(
+			applHost,
+			setpointValue,
+		);
+
 		// Update the metadata when it is missing or the unit has changed
 		if (existingMetadata?.unit !== scale.unit) {
-			valueDB.setMetadata(setpointValueId, {
+			this.setMetadata(applHost, setpointValue, {
 				...(existingMetadata ?? setpointValue.meta),
 				unit: scale.unit,
 			});
 		}
-		valueDB.setValue(setpointValueId, this._value);
+		this.setValue(applHost, setpointValue, this._value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
-		const scaleValueId = HumidityControlSetpointCCValues.setpointScale(
-			this._type,
-		).endpoint(this.endpointIndex);
-		valueDB.setValue(scaleValueId, this.scale);
+		this.setValue(
+			applHost,
+			HumidityControlSetpointCCValues.setpointScale(this.type),
+			this.scale,
+		);
 		return true;
 	}
 
@@ -817,13 +816,12 @@ export class HumidityControlSetpointCCCapabilitiesReport extends HumidityControl
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Predefine the metadata
 		const setpointValue = HumidityControlSetpointCCValues.setpoint(
 			this.type,
 		);
-		valueDB.setMetadata(setpointValue.endpoint(this.endpointIndex), {
+		this.setMetadata(applHost, setpointValue, {
 			...setpointValue.meta,
 			min: this._minValue,
 			max: this._maxValue,

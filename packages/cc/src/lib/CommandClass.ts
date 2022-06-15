@@ -593,6 +593,19 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/**
+	 * Reads the metadata for the given CC value from the Value DB.
+	 * The endpoint index of the current CC instance is automatically taken into account.
+	 */
+	protected getMetadata<T extends ValueMetadata>(
+		applHost: ZWaveApplicationHost,
+		ccValue: CCValue,
+	): T | undefined {
+		const valueDB = this.getValueDB(applHost);
+		const valueId = ccValue.endpoint(this.endpointIndex);
+		return valueDB.getMetadata(valueId) as any;
+	}
+
+	/**
 	 * Stores the given value under the value ID for the given CC value in the value DB.
 	 * The endpoint index of the current CC instance is automatically taken into account.
 	 */

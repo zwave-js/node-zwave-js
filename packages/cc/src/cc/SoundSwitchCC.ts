@@ -5,7 +5,6 @@ import {
 	MessagePriority,
 	MessageRecord,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -80,22 +79,6 @@ export const SoundSwitchCCValues = Object.freeze({
 		// Dynamic CC values go here
 	}),
 });
-
-export function getVolumeValueId(endpointIndex: number | undefined): ValueID {
-	return {
-		commandClass: CommandClasses["Sound Switch"],
-		endpoint: endpointIndex,
-		property: "volume",
-	};
-}
-
-export function getToneIdValueId(endpointIndex: number | undefined): ValueID {
-	return {
-		commandClass: CommandClasses["Sound Switch"],
-		endpoint: endpointIndex,
-		property: "toneId",
-	};
-}
 
 @API(CommandClasses["Sound Switch"])
 export class SoundSwitchCCAPI extends CCAPI {
@@ -291,7 +274,9 @@ export class SoundSwitchCCAPI extends CCAPI {
 					options?.volume !== undefined
 						? options.volume
 						: this.tryGetValueDB()?.getValue<number>(
-								getVolumeValueId(this.endpoint.index),
+								SoundSwitchCCValues.volume.endpoint(
+									this.endpoint.index,
+								),
 						  );
 				await this.play(value, volume);
 			} else {

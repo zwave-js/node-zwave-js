@@ -18,7 +18,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -32,11 +31,29 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
+import { V } from "../lib/Values";
 import {
 	SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
 } from "../lib/_Types";
+
+export const ThermostatSetbackCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Setback"], {
+		...V.staticProperty("setbackType", {
+			// TODO: This should be a value list
+			...ValueMetadata.Any,
+			label: "Setback type",
+		} as const),
+
+		...V.staticProperty("setbackState", {
+			...ValueMetadata.Int8,
+			min: -12.8,
+			max: 12,
+			label: "Setback state",
+		} as const),
+	}),
+});
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together
@@ -227,11 +244,6 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 
 	private _setbackType: SetbackType;
 	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.Any,
-		label: "Setback type",
-	})
 	public get setbackType(): SetbackType {
 		return this._setbackType;
 	}
@@ -239,12 +251,6 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	private _setbackState: SetbackState;
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Int8,
-		min: -12.8,
-		max: 12,
-		label: "Setback state",
-	})
 	public get setbackState(): SetbackState {
 		return this._setbackState;
 	}

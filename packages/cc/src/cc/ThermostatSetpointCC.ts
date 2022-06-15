@@ -1,7 +1,6 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
-	ValueID,
 	ValueMetadataNumeric,
 } from "@zwave-js/core/safe";
 import {
@@ -34,7 +33,6 @@ import {
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
@@ -43,6 +41,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	ThermostatSetpointCommand,
 	ThermostatSetpointType,
@@ -61,42 +60,43 @@ function getSetpointUnit(configManager: ConfigManager, scale: number): string {
 	return getScale(configManager, scale).unit ?? "";
 }
 
-function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Setpoint"],
-		property: "supportedSetpointTypes",
-		endpoint,
-	};
-}
+export const ThermostatSetpointCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Setpoint"], {
+		...V.staticProperty("supportedSetpointTypes", undefined, {
+			internal: true,
+		}),
 
-function getSetpointTypesInterpretationValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Setpoint"],
-		property: "setpointTypesInterpretation",
-		endpoint,
-	};
-}
+		...V.staticProperty("setpointTypesInterpretation", undefined, {
+			internal: true,
+		}),
+	}),
 
-function getSetpointValueID(endpoint: number, setpointType: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Setpoint"],
-		endpoint,
-		property: "setpoint",
-		propertyKey: setpointType,
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Thermostat Setpoint"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"setpoint",
+			"setpoint",
+			(setpointType: ThermostatSetpointType) => setpointType,
+			(setpointType: ThermostatSetpointType) =>
+				({
+					...ValueMetadata.Number,
+					label: `Setpoint (${getEnumMemberName(
+						ThermostatSetpointType,
+						setpointType,
+					)})`,
+					ccSpecific: { setpointType },
+				} as const),
+		),
 
-function getSetpointScaleValueID(
-	endpoint: number,
-	setpointType: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Setpoint"],
-		endpoint,
-		property: "setpointScale",
-		propertyKey: setpointType,
-	};
-}
+		// The setpoint scale is only used internally
+		...V.dynamicPropertyAndKeyWithName(
+			"setpointScale",
+			"setpointScale",
+			(setpointType: ThermostatSetpointType) => setpointType,
+			undefined,
+			{ internal: true },
+		),
+	}),
+});
 
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
@@ -135,7 +135,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
 		// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
 		const preferredScale = this.tryGetValueDB()?.getValue<number>(
-			getSetpointScaleValueID(this.endpoint.index, propertyKey),
+			ThermostatSetpointCCValues.setpointScale(propertyKey).endpoint(
+				this.endpoint.index,
+			),
 		);
 		await this.set(propertyKey, value, preferredScale ?? 0);
 
@@ -278,17 +280,6 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(getSetpointTypesInterpretationValueID(0).property, {
-			internal: true,
-		});
-		// The setpoint scale is only used internally
-		this.registerValue(getSetpointScaleValueID(0, 0).property, {
-			internal: true,
-		});
-	}
-
 	public translatePropertyKey(
 		applHost: ZWaveApplicationHost,
 		property: string | number,
@@ -314,7 +305,6 @@ export class ThermostatSetpointCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -327,9 +317,6 @@ export class ThermostatSetpointCC extends CommandClass {
 			let interpretation: "A" | "B" | undefined;
 			// Whether our tests changed the assumed bitmask interpretation
 			let interpretationChanged = false;
-
-			const supportedSetpointTypesValueId =
-				getSupportedSetpointTypesValueID(this.endpointIndex);
 
 			// Query the supported setpoint types
 			applHost.controllerLog.logNode(node.id, {
@@ -435,15 +422,17 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// Remember which setpoint types are actually supported, so we don't
 			// need to do this guesswork again
-			valueDB.setValue(
-				supportedSetpointTypesValueId,
+			this.setValue(
+				applHost,
+				ThermostatSetpointCCValues.supportedSetpointTypes,
 				supportedSetpointTypes,
 			);
 
 			// Also save the bitmap interpretation if we know it now
 			if (interpretationChanged) {
-				valueDB.setValue(
-					getSetpointTypesInterpretationValueID(this.endpointIndex),
+				this.setValue(
+					applHost,
+					ThermostatSetpointCCValues.setpointTypesInterpretation,
 					interpretation,
 				);
 			}
@@ -533,11 +522,11 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const setpointTypes: ThermostatSetpointType[] =
-			valueDB.getValue(
-				getSupportedSetpointTypesValueID(this.endpointIndex),
+			this.getValue(
+				applHost,
+				ThermostatSetpointCCValues.supportedSetpointTypes,
 			) ?? [];
 
 		// Query each setpoint's current value
@@ -653,35 +642,27 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 
 		const scale = getScale(applHost.configManager, this.scale);
 
-		const valueDB = this.getValueDB(applHost);
-		const setpointValueId = getSetpointValueID(
-			this.endpointIndex,
-			this._type,
+		const setpointValue = ThermostatSetpointCCValues.setpoint(this.type);
+		const existingMetadata = this.getMetadata<ValueMetadataNumeric>(
+			applHost,
+			setpointValue,
 		);
+
 		// Update the metadata when it is missing or the unit has changed
-		if (
-			(
-				valueDB.getMetadata(setpointValueId) as
-					| ValueMetadataNumeric
-					| undefined
-			)?.unit !== scale.unit
-		) {
-			valueDB.setMetadata(setpointValueId, {
-				...ValueMetadata.Number,
+		if (existingMetadata?.unit !== scale.unit) {
+			this.setMetadata(applHost, setpointValue, {
+				...(existingMetadata ?? setpointValue.meta),
 				unit: scale.unit,
-				ccSpecific: {
-					setpointType: this._type,
-				},
 			});
 		}
-		valueDB.setValue(setpointValueId, this._value);
+		this.setValue(applHost, setpointValue, this._value);
 
 		// Remember the device-preferred setpoint scale so it can be used in SET commands
-		const scaleValueId = getSetpointScaleValueID(
-			this.endpointIndex,
-			this._type,
+		this.setValue(
+			applHost,
+			ThermostatSetpointCCValues.setpointScale(this.type),
+			scale.key,
 		);
-		valueDB.setValue(scaleValueId, scale.key);
 		return true;
 	}
 
@@ -793,17 +774,14 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		if (!super.persistValues(applHost)) return false;
 
 		// Predefine the metadata
-		const valueId = getSetpointValueID(this.endpointIndex, this._type);
-		this.getValueDB(applHost).setMetadata(valueId, {
-			...ValueMetadata.Number,
+		const setpointValue = ThermostatSetpointCCValues.setpoint(this.type);
+		this.setMetadata(applHost, setpointValue, {
+			...setpointValue.meta,
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
 				getSetpointUnit(applHost.configManager, this._minValueScale) ||
 				getSetpointUnit(applHost.configManager, this._maxValueScale),
-			ccSpecific: {
-				setpointType: this._type,
-			},
 		});
 
 		return true;

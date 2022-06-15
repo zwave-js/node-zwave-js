@@ -18,7 +18,6 @@ import {
 } from "../lib/API";
 import {
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
@@ -29,7 +28,18 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { ThermostatFanState, ThermostatFanStateCommand } from "../lib/_Types";
+
+export const ThermostatFanStateCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Fan State"], {
+		...V.staticPropertyWithName("fanState", "state", {
+			...ValueMetadata.ReadOnlyUInt8,
+			states: enumValuesToMetadataStates(ThermostatFanState),
+			label: "Thermostat fan state",
+		} as const),
+	}),
+});
 
 @API(CommandClasses["Thermostat Fan State"])
 export class ThermostatFanStateCCAPI extends CCAPI {
@@ -139,11 +149,6 @@ export class ThermostatFanStateCCReport extends ThermostatFanStateCC {
 
 	private _state: ThermostatFanState;
 	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		states: enumValuesToMetadataStates(ThermostatFanState),
-		label: "Thermostat fan state",
-	})
 	public get state(): ThermostatFanState {
 		return this._state;
 	}

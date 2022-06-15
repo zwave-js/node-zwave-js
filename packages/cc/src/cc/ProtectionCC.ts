@@ -58,7 +58,7 @@ export const ProtectionCCValues = Object.freeze({
 				max: MAX_NODES,
 				label: "Node ID with exclusive control",
 			} as const,
-			{ minVersion: 2 },
+			{ minVersion: 2 } as const,
 		),
 
 		...V.staticPropertyWithName("localProtectionState", "local", {
@@ -75,7 +75,7 @@ export const ProtectionCCValues = Object.freeze({
 				label: "RF protection state",
 				states: enumValuesToMetadataStates(RFProtectionState),
 			} as const,
-			{ minVersion: 2 },
+			{ minVersion: 2 } as const,
 		),
 
 		...V.staticProperty(
@@ -84,7 +84,7 @@ export const ProtectionCCValues = Object.freeze({
 				...ValueMetadata.UInt8,
 				label: "RF protection timeout",
 			} as const,
-			{ minVersion: 2 },
+			{ minVersion: 2 } as const,
 		),
 
 		...V.staticProperty("supportsExclusiveControl", undefined, {
@@ -99,10 +99,6 @@ export const ProtectionCCValues = Object.freeze({
 		...V.staticProperty("supportedRFStates", undefined, {
 			internal: true,
 		}),
-	}),
-
-	...V.defineDynamicCCValues(CommandClasses.Protection, {
-		// Dynamic CC values go here
 	}),
 });
 

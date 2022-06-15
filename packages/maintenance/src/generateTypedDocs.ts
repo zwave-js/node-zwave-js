@@ -4,7 +4,7 @@
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
-import { red } from "ansi-colors";
+import { red, yellow } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
@@ -221,19 +221,23 @@ function stripQuotes(str: string): string {
 	return str.replace(/^['"]|['"]$/g, "");
 }
 
-function assertLiteralString(strType: string, context: string): void {
+function expectLiteralString(strType: string, context: string): void {
 	if (strType === "string") {
-		throw new Error(`Received type "string" where a string literal was expected.
-Make sure to define this string or the entire object using "as const".
-Context: ${context}`);
+		console.warn(
+			yellow(`WARNING: Received type "string" where a string literal was expected.
+		Make sure to define this string or the entire object using "as const".
+		Context: ${context}`),
+		);
 	}
 }
 
-function assertLiteralNumber(numType: string, context: string): void {
+function expectLiteralNumber(numType: string, context: string): void {
 	if (numType === "number") {
-		throw new Error(`Received type "number" where a number literal was expected.
+		console.warn(
+			yellow(`WARNING: Received type "number" where a number literal was expected.
 Make sure to define this number or the entire object using "as const".
-Context: ${context}`);
+Context: ${context}`),
+		);
 	}
 }
 
@@ -543,7 +547,7 @@ ${formatValueType(idType)}
 			tryGetMeta("label", (label) => {
 				// If the label is definitely not dynamic, ensure it has a literal type
 				if (!callSignature) {
-					assertLiteralString(
+					expectLiteralString(
 						label,
 						`label of value "${value.getName()}"`,
 					);
@@ -555,7 +559,7 @@ ${formatValueType(idType)}
 			tryGetMeta("description", (description) => {
 				// If the description is definitely not dynamic, ensure it has a literal type
 				if (!callSignature) {
-					assertLiteralString(
+					expectLiteralString(
 						description,
 						`description of value "${value.getName()}"`,
 					);
@@ -567,7 +571,7 @@ ${formatValueType(idType)}
 
 			// TODO: This should be moved to TypeScript somehow
 			const minVersion = getOptions("minVersion");
-			assertLiteralNumber(
+			expectLiteralNumber(
 				minVersion,
 				`minVersion of value "${value.getName()}"`,
 			);

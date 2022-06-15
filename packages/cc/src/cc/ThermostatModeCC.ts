@@ -1,8 +1,4 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -41,23 +37,20 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { ThermostatMode, ThermostatModeCommand } from "../lib/_Types";
 
-export function getThermostatModeValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Mode"],
-		endpoint: endpointIndex,
-		property: "mode",
-	};
-}
+export const ThermostatModeCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Mode"], {
+		...V.staticPropertyWithName("thermostatMode", "mode", {
+			...ValueMetadata.UInt8,
+			states: enumValuesToMetadataStates(ThermostatMode),
+			label: "Thermostat mode",
+		} as const),
 
-export function getSupportedModesValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Mode"],
-		endpoint: endpointIndex,
-		property: "supportedModes",
-	};
-}
+		...V.staticProperty("supportedModes", undefined, { internal: true }),
+	}),
+});
 
 @API(CommandClasses["Thermostat Mode"])
 export class ThermostatModeCCAPI extends CCAPI {
@@ -360,13 +353,12 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 
 		// Update the supported modes if a mode is used that wasn't previously
 		// reported to be supported. This shouldn't happen, but well... it does anyways
-		const valueDB = this.getValueDB(applHost);
-		const modeValueId = getThermostatModeValueId(this.endpointIndex);
-		const supportedModesValueId = getSupportedModesValueId(
-			this.endpointIndex,
-		);
-		const supportedModes = valueDB.getValue<ThermostatMode[]>(
-			supportedModesValueId,
+		const thermostatModeValue = ThermostatModeCCValues.thermostatMode;
+		const supportedModesValue = ThermostatModeCCValues.supportedModes;
+
+		const supportedModes = this.getValue<ThermostatMode[]>(
+			applHost,
+			supportedModesValue,
 		);
 
 		if (
@@ -377,14 +369,14 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			supportedModes.push(this._mode);
 			supportedModes.sort();
 
-			valueDB.setValue(supportedModesValueId, supportedModes);
-			valueDB.setMetadata(modeValueId, {
-				...ValueMetadata.UInt8,
+			this.setMetadata(applHost, thermostatModeValue, {
+				...thermostatModeValue.meta,
 				states: enumValuesToMetadataStates(
 					ThermostatMode,
 					supportedModes,
 				),
 			});
+			this.setValue(applHost, supportedModesValue, supportedModes);
 		}
 
 		return super.persistValues(applHost);
@@ -437,12 +429,11 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = getThermostatModeValueId(this.endpointIndex);
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.UInt8,
+		const thermostatModeValue = ThermostatModeCCValues.thermostatMode;
+		this.setMetadata(applHost, thermostatModeValue, {
+			...thermostatModeValue.meta,
 			states: enumValuesToMetadataStates(
 				ThermostatMode,
 				this._supportedModes,

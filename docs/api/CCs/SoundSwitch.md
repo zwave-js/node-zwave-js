@@ -48,3 +48,85 @@ async stopPlaying(): Promise<void>;
 ```ts
 async getPlaying(): Promise<Pick<SoundSwitchCCTonePlayReport, "toneId" | "volume"> | undefined>;
 ```
+
+## Sound Switch CC values
+
+### `defaultToneId`
+
+```ts
+{
+	commandClass: CommandClasses["Sound Switch"],
+	endpoint: number,
+	property: "defaultToneId",
+}
+```
+
+-   **label:** Default tone ID
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 254
+
+### `defaultVolume`
+
+```ts
+{
+	commandClass: CommandClasses["Sound Switch"],
+	endpoint: number,
+	property: "defaultVolume",
+}
+```
+
+-   **label:** Default volume
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 100
+
+### `toneId`
+
+```ts
+{
+	commandClass: CommandClasses["Sound Switch"],
+	endpoint: number,
+	property: "toneId",
+}
+```
+
+-   **label:** Play Tone
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `volume`
+
+```ts
+{
+	commandClass: CommandClasses["Sound Switch"],
+	endpoint: number,
+	property: "volume",
+}
+```
+
+-   **label:** Volume
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 100
