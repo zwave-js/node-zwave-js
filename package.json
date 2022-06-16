@@ -116,7 +116,7 @@
     "commit": "git-cz",
     "release": "release-script",
     "release:all": "release-script --publish-all",
-    "postinstall": "husky install ; ts-patch install -s",
+    "postinstall": "husky install && ts-patch install -s && yarn node maintenance/patch-tsserver.js",
     "prepare": "ts-patch install -s",
     "config": "yarn ts packages/config/maintenance/importConfig.ts",
     "docs": "docsify serve docs",
