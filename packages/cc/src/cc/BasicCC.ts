@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -197,6 +198,7 @@ export class BasicCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
+@CCValues(BasicCCValues)
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 

@@ -30,6 +30,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -196,6 +197,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Wake Up"])
 @implementedVersion(3)
+@CCValues(WakeUpCCValues)
 export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 

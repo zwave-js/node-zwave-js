@@ -34,6 +34,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -235,6 +236,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Entry Control"])
 @implementedVersion(1)
+@CCValues(EntryControlCCValues)
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 

@@ -3,7 +3,9 @@ import {
 	BasicCCGet,
 	BasicCCReport,
 	BasicCCSet,
+	BasicCCValues,
 	BasicCommand,
+	getCCValues,
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
@@ -224,6 +226,19 @@ describe("lib/commandclass/BasicCC => ", () => {
 			});
 
 			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
+		});
+	});
+
+	describe("Looking up CC values for a CC instance", () => {
+		it("should work", () => {
+			const cc = new BasicCCGet(host, {
+				nodeId: 2,
+			});
+			const values = getCCValues<typeof BasicCCValues>(cc)!;
+			expect(values.currentValue.id).toMatchObject({
+				commandClass: CommandClasses.Basic,
+				property: "currentValue",
+			});
 		});
 	});
 });

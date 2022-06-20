@@ -26,6 +26,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -52,6 +53,8 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 				"groupName",
 				"name",
 				(groupId: number) => groupId,
+				({ property, propertyKey }) =>
+					property === "name" && typeof propertyKey === "number",
 				undefined,
 				{ internal: true },
 			),
@@ -59,6 +62,8 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 				"groupInfo",
 				"info",
 				(groupId: number) => groupId,
+				({ property, propertyKey }) =>
+					property === "info" && typeof propertyKey === "number",
 				undefined,
 				{ internal: true },
 			),
@@ -66,6 +71,9 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 				"issuedCommands",
 				"issuedCommands",
 				(groupId: number) => groupId,
+				({ property, propertyKey }) =>
+					property === "issuedCommands" &&
+					typeof propertyKey === "number",
 				undefined,
 				{ internal: true },
 			),
@@ -167,6 +175,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Association Group Information"])
 @implementedVersion(3)
+@CCValues(AssociationGroupInfoCCValues)
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 

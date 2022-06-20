@@ -27,6 +27,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	getImplementedVersion,
@@ -331,6 +332,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
+@CCValues(VersionCCValues)
 export class VersionCC extends CommandClass {
 	declare ccCommand: VersionCommand;
 

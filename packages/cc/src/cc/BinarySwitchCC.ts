@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -198,6 +199,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
+@CCValues(BinarySwitchCCValues)
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 

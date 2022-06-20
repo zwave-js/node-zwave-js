@@ -23,6 +23,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -89,6 +90,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Thermostat Operating State"])
 @implementedVersion(2)
+@CCValues(ThermostatOperatingStateCCValues)
 export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 

@@ -44,6 +44,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -110,6 +111,8 @@ export const UserCodeCCValues = Object.freeze({
 			"userIdStatus",
 			"userIdStatus",
 			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userIdStatus" && typeof propertyKey === "number",
 			(userId: number) =>
 				({
 					...ValueMetadata.Number,
@@ -121,6 +124,8 @@ export const UserCodeCCValues = Object.freeze({
 			"userCode",
 			"userCode",
 			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userCode" && typeof propertyKey === "number",
 			// The user code metadata is dynamically created
 			undefined,
 			{ secret: true },
@@ -811,6 +816,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["User Code"])
 @implementedVersion(2)
+@CCValues(UserCodeCCValues)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 

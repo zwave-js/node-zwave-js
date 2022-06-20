@@ -42,7 +42,6 @@ import {
 } from "../lib/API";
 import {
 	CommandClass,
-	CommandClassOptions,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
@@ -50,6 +49,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -90,6 +90,9 @@ export const ConfigurationCCValues = Object.freeze({
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			(parameter: number, bitMask?: number) => parameter,
 			(parameter: number, bitMask?: number) => bitMask,
+			({ property, propertyKey }) =>
+				typeof property === "number" &&
+				(typeof propertyKey === "number" || propertyKey == undefined),
 			// Metadata is determined dynamically depending on other factors
 			undefined,
 			{ supportsEndpoints: false },
@@ -921,15 +924,9 @@ export class ConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
+@CCValues(ConfigurationCCValues)
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
-
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue("isParamInformationFromConfig" as any, {
-			internal: true,
-		});
-	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;

@@ -25,6 +25,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -50,6 +51,8 @@ export const MultiChannelAssociationCCValues = Object.freeze({
 			"maxNodes",
 			"maxNodes",
 			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "maxNodes" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -59,6 +62,8 @@ export const MultiChannelAssociationCCValues = Object.freeze({
 			"nodeIds",
 			"nodeIds",
 			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "nodeIds" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -68,6 +73,8 @@ export const MultiChannelAssociationCCValues = Object.freeze({
 			"endpoints",
 			"endpoints",
 			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "endpoints" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -294,6 +301,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Multi Channel Association"])
 @implementedVersion(4)
+@CCValues(MultiChannelAssociationCCValues)
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
 

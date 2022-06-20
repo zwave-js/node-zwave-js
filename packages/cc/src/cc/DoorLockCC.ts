@@ -35,6 +35,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -401,6 +402,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Door Lock"])
 @implementedVersion(4)
+@CCValues(DoorLockCCValues)
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 

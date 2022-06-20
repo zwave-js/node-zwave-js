@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -79,6 +80,9 @@ export const BarrierOperatorCCValues = Object.freeze({
 			"signalingState",
 			"signalingState",
 			(subsystemType: SubsystemType) => subsystemType,
+			({ property, propertyKey }) =>
+				property === "signalingState" &&
+				typeof propertyKey === "number",
 			(subsystemType: SubsystemType) =>
 				({
 					...ValueMetadata.UInt8,
@@ -281,6 +285,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Barrier Operator"])
 @implementedVersion(1)
+@CCValues(BarrierOperatorCCValues)
 export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
 

@@ -21,6 +21,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -123,6 +124,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
+@CCValues(ManufacturerSpecificCCValues)
 export class ManufacturerSpecificCC extends CommandClass {
 	declare ccCommand: ManufacturerSpecificCommand;
 

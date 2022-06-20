@@ -35,6 +35,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -200,6 +201,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Fan Mode"])
 @implementedVersion(5)
+@CCValues(ThermostatFanModeCCValues)
 export class ThermostatFanModeCC extends CommandClass {
 	declare ccCommand: ThermostatFanModeCommand;
 

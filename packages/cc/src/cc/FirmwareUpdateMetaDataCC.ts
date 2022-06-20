@@ -28,6 +28,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -198,6 +199,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Firmware Update Meta Data"])
 @implementedVersion(7)
+@CCValues(FirmwareUpdateMetaDataCCValues)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
 }

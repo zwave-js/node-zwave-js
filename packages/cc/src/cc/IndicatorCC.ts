@@ -31,6 +31,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -58,6 +59,9 @@ export const IndicatorCCValues = Object.freeze({
 			"supportedPropertyIDs",
 			"supportedPropertyIDs",
 			(indicatorId: number) => indicatorId,
+			({ property, propertyKey }) =>
+				property === "supportedPropertyIDs" &&
+				typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -67,6 +71,8 @@ export const IndicatorCCValues = Object.freeze({
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			(indicatorId: number, propertyId: number) => indicatorId,
 			(indicatorId: number, propertyId: number) => propertyId,
+			({ property, propertyKey }) =>
+				typeof property === "number" && typeof propertyKey === "number",
 			// The metadata is highly dependent on the indicator and property
 			// so this is just a baseline
 			(indicatorId: number, propertyId: number) => ({
@@ -318,6 +324,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Indicator)
 @implementedVersion(3)
+@CCValues(IndicatorCCValues)
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 

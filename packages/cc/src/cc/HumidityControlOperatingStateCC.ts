@@ -23,6 +23,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -95,6 +96,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Operating State"])
 @implementedVersion(1)
+@CCValues(HumidityControlOperatingStateCCValues)
 export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 

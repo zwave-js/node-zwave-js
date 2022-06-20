@@ -18,6 +18,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -111,6 +112,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
+@CCValues(ZWavePlusCCValues)
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 

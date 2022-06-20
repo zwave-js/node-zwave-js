@@ -30,6 +30,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -177,6 +178,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Node Naming and Location"])
 @implementedVersion(1)
+@CCValues(NodeNamingAndLocationCCValues)
 export class NodeNamingAndLocationCC extends CommandClass {
 	declare ccCommand: NodeNamingAndLocationCommand;
 

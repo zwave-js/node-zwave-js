@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -311,6 +312,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Sound Switch"])
 @implementedVersion(2)
+@CCValues(SoundSwitchCCValues)
 export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 

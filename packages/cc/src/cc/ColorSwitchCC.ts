@@ -40,6 +40,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -124,6 +125,8 @@ export const ColorSwitchCCValues = Object.freeze({
 			"currentColorChannel",
 			"currentColor",
 			(component: ColorComponent) => component,
+			({ property, propertyKey }) =>
+				property === "currentColor" && typeof propertyKey === "number",
 			(component: ColorComponent) => {
 				const colorName = getEnumMemberName(ColorComponent, component);
 				return {
@@ -137,6 +140,8 @@ export const ColorSwitchCCValues = Object.freeze({
 			"targetColorChannel",
 			"targetColor",
 			(component: ColorComponent) => component,
+			({ property, propertyKey }) =>
+				property === "targetColor" && typeof propertyKey === "number",
 			(component: ColorComponent) => {
 				const colorName = getEnumMemberName(ColorComponent, component);
 				return {
@@ -468,6 +473,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Color Switch"])
 @implementedVersion(3)
+@CCValues(ColorSwitchCCValues)
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 

@@ -1,4 +1,9 @@
-import { CommandClasses, ValueID, ValueMetadata } from "@zwave-js/core";
+import {
+	CommandClasses,
+	ValueID,
+	ValueMetadata,
+	ValueMetadataAny,
+} from "@zwave-js/core";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -47,17 +52,37 @@ const defaultOptions = {
 type DefaultOptions = typeof defaultOptions;
 
 // expands object types recursively
-type ExpandRecursively<T> =
-	// Keep funktions but expand their return type
+export type ExpandRecursively<T> =
+	// Split functions with properties into the function and object parts
 	T extends (...args: infer A) => infer R
-		? (...args: A) => ExpandRecursively<R>
-		: // : // Ignore the CCValueMeta type
-		// T extends CCValueMeta
-		// ? T
-		// Expand object types
+		? [keyof T] extends [never]
+			? (...args: A) => ExpandRecursively<R>
+			: ((...args: A) => ExpandRecursively<R>) & {
+					[P in keyof T]: ExpandRecursively<T[P]>;
+			  }
+		: // Expand object types
 		T extends object
 		? T extends infer O
 			? { [K in keyof O]: ExpandRecursively<O[K]> }
+			: never
+		: // Fallback to the type itself if no match
+		  T;
+
+export type ExpandRecursivelySkipMeta<T> =
+	// Split functions with properties into the function and object parts
+	T extends (...args: infer A) => infer R
+		? [keyof T] extends [never]
+			? (...args: A) => ExpandRecursivelySkipMeta<R>
+			: ((...args: A) => ExpandRecursivelySkipMeta<R>) & {
+					[P in keyof T]: ExpandRecursivelySkipMeta<T[P]>;
+			  }
+		: // Ignore the ValueMetadata type
+		T extends ValueMetadata
+		? T
+		: // Expand object types
+		T extends object
+		? T extends infer O
+			? { [K in keyof O]: ExpandRecursivelySkipMeta<O[K]> }
 			: never
 		: // Fallback to the type itself if no match
 		  T;
@@ -140,6 +165,13 @@ function defineStaticCCValue<
 			if (!_blueprint.options.supportsEndpoints) endpoint = 0;
 			return { ...valueId, endpoint };
 		},
+		is: (testValueId) => {
+			return (
+				valueId.commandClass === testValueId.commandClass &&
+				valueId.property === testValueId.property &&
+				valueId.propertyKey === testValueId.propertyKey
+			);
+		},
 		get meta() {
 			return { ...ValueMetadata.Any, ..._blueprint.meta } as any;
 		},
@@ -159,16 +191,19 @@ function defineDynamicCCValue<
 	commandClass: TCommandClass,
 	blueprint: TBlueprint,
 ): ExpandRecursively<DynamicCCValue<TCommandClass, TBlueprint>> {
-	return ((...args: Parameters<TBlueprint>) => {
+	const options = {
+		...defaultOptions,
+		...blueprint.options,
+	};
+
+	const ret: ExpandRecursively<DynamicCCValue<TCommandClass, TBlueprint>> = ((
+		...args: Parameters<TBlueprint>
+	) => {
 		const _blueprint = blueprint(...args);
 
 		// Normalize value options
 		const actualBlueprint = {
 			..._blueprint,
-			options: {
-				...defaultOptions,
-				..._blueprint.options,
-			},
 		};
 
 		const valueId = {
@@ -177,24 +212,42 @@ function defineDynamicCCValue<
 			propertyKey: actualBlueprint.propertyKey,
 		};
 
-		const ret: StaticCCValue<TCommandClass, ReturnType<TBlueprint>> = {
+		const value: Omit<
+			StaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
+			"options" | "is"
+		> = {
 			get id() {
 				return { ...valueId };
 			},
 			endpoint: (endpoint: number = 0) => {
-				if (!actualBlueprint.options.supportsEndpoints) endpoint = 0;
+				if (!options.supportsEndpoints) endpoint = 0;
 				return { ...valueId, endpoint };
 			},
 			get meta() {
 				return { ...ValueMetadata.Any, ...actualBlueprint.meta } as any;
 			},
-			get options() {
-				return { ..._blueprint.options } as any;
-			},
 		};
 
-		return ret;
+		return value;
 	}) as any;
+
+	Object.defineProperty(ret, "options", {
+		configurable: false,
+		enumerable: true,
+		get() {
+			return { ...options };
+		},
+	});
+
+	Object.defineProperty(ret, "is", {
+		configurable: false,
+		enumerable: false,
+		writable: false,
+		value: (id: ValueID) =>
+			id.commandClass === commandClass && blueprint.is(id),
+	});
+
+	return ret;
 }
 
 // Namespace for utilities to define CC values
@@ -325,25 +378,31 @@ export const V = {
 		TName extends string,
 		TProp extends FnOrStatic<any[], ValueIDProperties["property"]>,
 		TMeta extends FnOrStatic<any[], ValueMetadata> = ValueMetadata,
-		TOptions extends FnOrStatic<any[], CCValueOptions> = CCValueOptions,
+		TOptions extends CCValueOptions = CCValueOptions,
 	>(
 		name: TName,
 		property: TProp,
+		is: PartialCCValuePredicate,
 		meta?: TMeta,
-		options?: TOptions,
+		options?: TOptions | undefined,
 	): {
-		[K in TName]: (...args: InferArgs<[TProp, TMeta, TOptions]>) => {
-			property: ReturnTypeOrStatic<TProp>;
-			meta: ReturnTypeOrStatic<TMeta>;
-			options: ReturnTypeOrStatic<TOptions>;
+		[K in TName]: {
+			(...args: InferArgs<[TProp, TMeta]>): {
+				property: ReturnTypeOrStatic<TProp>;
+				meta: ReturnTypeOrStatic<TMeta>;
+			};
+			is: PartialCCValuePredicate;
+			options: TOptions;
 		};
 	} {
 		return {
-			[name]: (...args: InferArgs<[TProp, TMeta, TOptions]>) => ({
-				property: evalOrStatic(property, ...args),
-				meta: evalOrStatic(meta, ...args),
-				options: evalOrStatic(options, ...args),
-			}),
+			[name]: Object.assign(
+				(...args: InferArgs<[TProp, TMeta]>) => ({
+					property: evalOrStatic(property, ...args),
+					meta: evalOrStatic(meta, ...args),
+				}),
+				{ is, options },
+			),
 		} as any;
 	},
 
@@ -358,46 +417,51 @@ export const V = {
 		name: TName,
 		property: TProp,
 		propertyKey: TKey,
+		is: PartialCCValuePredicate,
 		meta?: TMeta,
-		options?: TOptions,
+		options?: TOptions | undefined,
 	): {
-		[K in TName]: (...args: InferArgs<[TProp, TKey, TMeta, TOptions]>) => {
-			property: ReturnTypeOrStatic<TProp>;
-			propertyKey: ReturnTypeOrStatic<TKey>;
-			meta: ReturnTypeOrStatic<TMeta>;
-			options: ReturnTypeOrStatic<TOptions>;
+		[K in TName]: {
+			(...args: InferArgs<[TProp, TKey, TMeta]>): {
+				property: ReturnTypeOrStatic<TProp>;
+				propertyKey: ReturnTypeOrStatic<TKey>;
+				meta: ReturnTypeOrStatic<TMeta>;
+			};
+			is: PartialCCValuePredicate;
+			options: TOptions;
 		};
 	} {
 		return {
-			[name]: (...args: InferArgs<[TProp, TKey, TMeta, TOptions]>) => {
-				return {
-					property: evalOrStatic(property, ...args),
-					propertyKey: evalOrStatic(propertyKey, ...args),
-					meta: evalOrStatic(meta, ...args),
-					options: evalOrStatic(options, ...args),
-				};
-			},
+			[name]: Object.assign(
+				(...args: any[]) => {
+					return {
+						property: evalOrStatic(property, ...args),
+						propertyKey: evalOrStatic(propertyKey, ...args),
+						meta: evalOrStatic(meta, ...args),
+					};
+				},
+				{ is, options },
+			),
 		} as any;
 	},
 };
-
-// export interface CCValueDynamic extends StaticCCValue {
-// 	/** Evaluates the dynamic part of a CC value definition, e.g. by testing support */
-// 	eval(
-// 		applHost: ZWaveApplicationHost,
-// 		endpoint: IZWaveEndpoint,
-// 	): StaticCCValue;
-// }
 
 export interface CCValueBlueprint extends Readonly<ValueIDProperties> {
 	readonly meta?: Readonly<ValueMetadata>;
 	readonly options?: Readonly<CCValueOptions>;
 }
 
+export type CCValuePredicate = (valueId: ValueID) => boolean;
+export type PartialCCValuePredicate = (
+	properties: ValueIDProperties,
+) => boolean;
+
 /** A blueprint for a CC value which depends on one or more parameters */
-export type DynamicCCValueBlueprint<TArgs extends any[]> = (
-	...args: TArgs
-) => CCValueBlueprint;
+export interface DynamicCCValueBlueprint<TArgs extends any[]> {
+	(...args: TArgs): Omit<CCValueBlueprint, "options">;
+	is: PartialCCValuePredicate;
+	readonly options?: Readonly<CCValueOptions>;
+}
 
 type DropOptional<T> = {
 	[K in keyof T as [undefined] extends [T[K]] ? never : K]: T[K];
@@ -422,7 +486,6 @@ export interface CCValue {
 	readonly id: Omit<ValueID, "endpoint">;
 	endpoint(endpoint?: number): ValueID;
 	readonly meta: ValueMetadata;
-	readonly options: CCValueOptions;
 }
 
 type AddCCValueProperties<
@@ -446,6 +509,9 @@ type AddCCValueProperties<
 			>
 	>;
 
+	/** Whether the given value ID matches this value definition */
+	is: CCValuePredicate;
+
 	/** Returns the metadata for this value ID */
 	get meta(): Readonly<MergeMeta<NonNullable<TBlueprint["meta"]>>>;
 	/** Returns the value options for this value ID */
@@ -457,7 +523,20 @@ export type DynamicCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends DynamicCCValueBlueprint<any[]>,
 > = TBlueprint extends DynamicCCValueBlueprint<infer TArgs>
-	? (...args: TArgs) => StaticCCValue<TCommandClass, ReturnType<TBlueprint>>
+	? {
+			(...args: TArgs): Omit<
+				StaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
+				"options" | "is"
+			>;
+
+			/** Whether the given value ID matches this value definition */
+			is: CCValuePredicate;
+
+			readonly options: StaticCCValue<
+				TCommandClass,
+				ReturnType<TBlueprint> & { options: TBlueprint["options"] }
+			>["options"];
+	  }
 	: never;
 
 /** A static or evaluated CC value definition */
@@ -465,6 +544,24 @@ export type StaticCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends CCValueBlueprint,
 > = Readonly<AddCCValueProperties<TCommandClass, TBlueprint>>;
+
+type StaticCCValueUnspecified = Pick<
+	StaticCCValue<CommandClasses, Readonly<ValueIDProperties>>,
+	"id" | "endpoint"
+> & {
+	meta?: ValueMetadataAny;
+};
+
+type DynamicCCValueUnspecified = (...args: any[]) => StaticCCValueUnspecified;
+
+/** Matches both static and dynamic CC values */
+export type DynamicOrStaticCCValue = ExpandRecursivelySkipMeta<
+	StaticCCValueUnspecified | DynamicCCValueUnspecified
+> & {
+	/** Whether the given value ID matches this value definition */
+	is: CCValuePredicate;
+	readonly options?: CCValueOptions;
+};
 
 // This interface is auto-generated by maintenance/generateCCValuesInterface.ts
 // Do not edit it by hand or your changes will be lost

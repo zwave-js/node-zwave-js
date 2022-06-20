@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -67,6 +68,10 @@ export const CentralSceneCCValues = Object.freeze({
 			"scene",
 			"scene",
 			(sceneNumber: number) => padStart(sceneNumber.toString(), 3, "0"),
+			({ property, propertyKey }) =>
+				property === "scene" &&
+				typeof propertyKey === "string" &&
+				/^\d{3}$/.test(propertyKey),
 			(sceneNumber: number) =>
 				({
 					...ValueMetadata.ReadOnlyUInt8,
@@ -176,6 +181,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
+@CCValues(CentralSceneCCValues)
 export class CentralSceneCC extends CommandClass {
 	declare ccCommand: CentralSceneCommand;
 

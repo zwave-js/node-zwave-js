@@ -29,6 +29,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -48,6 +49,8 @@ export const BinarySensorCCValues = Object.freeze({
 			"state",
 			/* property */ (sensorType: BinarySensorType) =>
 				getEnumMemberName(BinarySensorType, sensorType),
+			({ property }) =>
+				typeof property === "string" && property in BinarySensorType,
 			/* meta */ (sensorType: BinarySensorType) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -136,6 +139,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
+@CCValues(BinarySensorCCValues)
 export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 

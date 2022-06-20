@@ -32,6 +32,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -45,6 +46,8 @@ export const SceneActuatorConfigurationCCValues = Object.freeze({
 			"level",
 			"level",
 			(sceneId: number) => sceneId,
+			({ property, propertyKey }) =>
+				property === "level" && typeof propertyKey === "number",
 			(sceneId: number) =>
 				({
 					...ValueMetadata.UInt8,
@@ -57,6 +60,9 @@ export const SceneActuatorConfigurationCCValues = Object.freeze({
 			"dimmingDuration",
 			"dimmingDuration",
 			(sceneId: number) => sceneId,
+			({ property, propertyKey }) =>
+				property === "dimmingDuration" &&
+				typeof propertyKey === "number",
 			(sceneId: number) =>
 				({
 					...ValueMetadata.Duration,
@@ -265,6 +271,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Actuator Configuration"])
 @implementedVersion(1)
+@CCValues(SceneActuatorConfigurationCCValues)
 export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
 

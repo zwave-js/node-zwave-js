@@ -30,6 +30,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -332,6 +333,7 @@ export interface EndpointCapability {
 
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
+@CCValues(MultiChannelCCValues)
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 

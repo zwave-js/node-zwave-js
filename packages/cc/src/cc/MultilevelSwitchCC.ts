@@ -33,6 +33,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -43,6 +44,22 @@ import {
 	MultilevelSwitchCommand,
 	SwitchType,
 } from "../lib/_Types";
+
+/**
+ * Translates a switch type into two actions that may be performed. Unknown types default to Down/Up
+ */
+function switchTypeToActions(switchType: string): [down: string, up: string] {
+	if (!switchType.includes("/")) switchType = SwitchType[0x02]; // Down/Up
+	return switchType.split("/", 2) as any;
+}
+
+/**
+ * The property names are organized so that positive motions are at odd indices and negative motions at even indices
+ */
+const switchTypeProperties = Object.keys(SwitchType)
+	.filter((key) => key.indexOf("/") > -1)
+	.map((key) => switchTypeToActions(key))
+	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 export const MultilevelSwitchCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Multilevel Switch"], {
@@ -97,6 +114,9 @@ export const MultilevelSwitchCCValues = Object.freeze({
 				const [, up] = switchTypeToActions(switchTypeName);
 				return up;
 			},
+			({ property }) =>
+				typeof property === "string" &&
+				switchTypeProperties.indexOf(property) % 2 === 1,
 			(switchType: SwitchType) => {
 				const switchTypeName = getEnumMemberName(
 					SwitchType,
@@ -124,6 +144,9 @@ export const MultilevelSwitchCCValues = Object.freeze({
 				const [down] = switchTypeToActions(switchTypeName);
 				return down;
 			},
+			({ property }) =>
+				typeof property === "string" &&
+				switchTypeProperties.indexOf(property) % 2 === 0,
 			(switchType: SwitchType) => {
 				const switchTypeName = getEnumMemberName(
 					SwitchType,
@@ -140,18 +163,6 @@ export const MultilevelSwitchCCValues = Object.freeze({
 		),
 	}),
 });
-
-/**
- * Translates a switch type into two actions that may be performed. Unknown types default to Down/Up
- */
-function switchTypeToActions(switchType: string): [down: string, up: string] {
-	if (!switchType.includes("/")) switchType = SwitchType[0x02]; // Down/Up
-	return switchType.split("/", 2) as any;
-}
-const switchTypeProperties = Object.keys(SwitchType)
-	.filter((key) => key.indexOf("/") > -1)
-	.map((key) => switchTypeToActions(key))
-	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
 @API(CommandClasses["Multilevel Switch"])
 export class MultilevelSwitchCCAPI extends CCAPI {
@@ -503,6 +514,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
+@CCValues(MultilevelSwitchCCValues)
 export class MultilevelSwitchCC extends CommandClass {
 	declare ccCommand: MultilevelSwitchCommand;
 

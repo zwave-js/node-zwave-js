@@ -38,6 +38,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -57,6 +58,9 @@ export const MultilevelSensorCCValues = Object.freeze({
 			"supportedScales",
 			"supportedScales",
 			(sensorType: number) => sensorType,
+			({ property, propertyKey }) =>
+				property === "supportedScales" &&
+				typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -66,6 +70,7 @@ export const MultilevelSensorCCValues = Object.freeze({
 			// This should have been the sensor type, but it is too late to change now
 			// Maybe we can migrate this without breaking in the future
 			(sensorTypeName: string) => sensorTypeName,
+			({ property }) => typeof property === "string",
 			(sensorTypeName: string) =>
 				({
 					// Just the base metadata, to be extended using a config manager
@@ -332,6 +337,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
+@CCValues(MultilevelSensorCCValues)
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 

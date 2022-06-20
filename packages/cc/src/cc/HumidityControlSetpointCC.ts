@@ -35,6 +35,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -59,6 +60,8 @@ export const HumidityControlSetpointCCValues = Object.freeze({
 			"setpoint",
 			"setpoint",
 			(setpointType: number) => setpointType,
+			({ property, propertyKey }) =>
+				property === "setpoint" && typeof propertyKey === "number",
 			(setpointType: number) =>
 				({
 					// This is the base metadata that will be extended on the fly
@@ -75,6 +78,8 @@ export const HumidityControlSetpointCCValues = Object.freeze({
 			"setpointScale",
 			"setpointScale",
 			(setpointType: number) => setpointType,
+			({ property, propertyKey }) =>
+				property === "setpointScale" && typeof propertyKey === "number",
 			(setpointType: number) =>
 				({
 					...ValueMetadata.ReadOnlyUInt8,
@@ -299,6 +304,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Setpoint"])
 @implementedVersion(2)
+@CCValues(HumidityControlSetpointCCValues)
 export class HumidityControlSetpointCC extends CommandClass {
 	declare ccCommand: HumidityControlSetpointCommand;
 

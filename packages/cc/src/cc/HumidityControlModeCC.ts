@@ -32,6 +32,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -159,6 +160,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Mode"])
 @implementedVersion(2)
+@CCValues(HumidityControlModeCCValues)
 export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
 

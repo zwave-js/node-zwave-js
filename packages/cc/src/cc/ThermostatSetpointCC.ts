@@ -37,6 +37,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -76,6 +77,8 @@ export const ThermostatSetpointCCValues = Object.freeze({
 			"setpoint",
 			"setpoint",
 			(setpointType: ThermostatSetpointType) => setpointType,
+			({ property, propertyKey }) =>
+				property === "setpoint" && typeof propertyKey === "number",
 			(setpointType: ThermostatSetpointType) =>
 				({
 					...ValueMetadata.Number,
@@ -92,6 +95,8 @@ export const ThermostatSetpointCCValues = Object.freeze({
 			"setpointScale",
 			"setpointScale",
 			(setpointType: ThermostatSetpointType) => setpointType,
+			({ property, propertyKey }) =>
+				property === "setpointScale" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -277,6 +282,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
+@CCValues(ThermostatSetpointCCValues)
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 

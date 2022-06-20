@@ -29,6 +29,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -190,6 +191,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Time Parameters"])
 @implementedVersion(1)
+@CCValues(TimeParametersCCValues)
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 

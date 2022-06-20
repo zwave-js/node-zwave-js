@@ -6,20 +6,33 @@ import { AlarmSensorType } from "./_Types";
 describe("Value ID definitions", () => {
 	it("defineDynamicCCValues, dynamic property and meta", () => {
 		const dfn = V.defineDynamicCCValues(CommandClasses.Basic, {
-			prop1: (valueType: string) => ({
-				property: valueType,
-				propertyKey: valueType,
-				options: {
-					internal: valueType === "internal",
-				},
-			}),
-			prop2: (valueType: string) => ({
-				property: valueType + "2",
-				propertyKey: valueType + "2",
-				options: {
-					secret: valueType !== "not-internal",
-				},
-			}),
+			...V.dynamicPropertyAndKeyWithName(
+				"prop1",
+				(valueType: string) => valueType,
+				(valueType: string) => valueType,
+				({ property, propertyKey }: any) =>
+					typeof property === "string" && property === propertyKey,
+				(valueType: string) =>
+					({
+						...ValueMetadata.Any,
+						readable: valueType === "readable",
+					} as const),
+				{ internal: true },
+			),
+			...V.dynamicPropertyAndKeyWithName(
+				"prop2",
+				(valueType: string) => valueType + "2",
+				(valueType: string) => valueType + "2",
+				({ property, propertyKey }: any) =>
+					typeof property === "string" &&
+					property.endsWith("2") &&
+					property === propertyKey,
+				(valueType: string) => ({
+					...ValueMetadata.Any,
+					writeable: valueType !== "not-writeable",
+				}),
+				{ secret: true },
+			),
 		});
 
 		const actual1a = dfn.prop1("bar");
@@ -28,17 +41,21 @@ describe("Value ID definitions", () => {
 			property: "bar",
 			propertyKey: "bar",
 		});
-		expect(actual1a.options).toMatchObject({
-			internal: false,
+		expect(actual1a.meta).toMatchObject({
+			readable: false,
 		});
-		const actual1b = dfn.prop1("internal");
+		const actual1b = dfn.prop1("readable");
 		expect(actual1b.id).toEqual({
 			commandClass: CommandClasses.Basic,
-			property: "internal",
-			propertyKey: "internal",
+			property: "readable",
+			propertyKey: "readable",
 		});
-		expect(actual1b.options).toMatchObject({
+		expect(actual1b.meta).toMatchObject({
+			readable: true,
+		});
+		expect(dfn.prop1.options).toMatchObject({
 			internal: true,
+			secret: false,
 		});
 
 		const actual2a = dfn.prop2("bar");
@@ -47,18 +64,38 @@ describe("Value ID definitions", () => {
 			property: "bar2",
 			propertyKey: "bar2",
 		});
-		expect(actual2a.options).toMatchObject({
-			secret: true,
+		expect(actual2a.meta).toMatchObject({
+			writeable: true,
 		});
-		const actual2b = dfn.prop2("not-internal");
+		const actual2b = dfn.prop2("not-writeable");
 		expect(actual2b.id).toEqual({
 			commandClass: CommandClasses.Basic,
-			property: "not-internal2",
-			propertyKey: "not-internal2",
+			property: "not-writeable2",
+			propertyKey: "not-writeable2",
 		});
-		expect(actual2b.options).toMatchObject({
-			secret: false,
+		expect(actual2b.meta).toMatchObject({
+			writeable: false,
 		});
+		expect(dfn.prop2.options).toMatchObject({
+			internal: false,
+			secret: true,
+		});
+
+		expect(
+			dfn.prop1.is({
+				commandClass: CommandClasses.Basic,
+				property: "the same",
+				propertyKey: "the same",
+			}),
+		).toBeTrue();
+
+		expect(
+			dfn.prop1.is({
+				commandClass: CommandClasses.Basic,
+				property: "the same",
+				propertyKey: "not the same",
+			}),
+		).toBeFalse();
 	});
 
 	// This is a copy of the Basic CC value definitions, for resiliency
@@ -103,6 +140,8 @@ describe("Value ID definitions", () => {
 				"state",
 				"state",
 				(sensorType: number) => sensorType,
+				({ property, propertyKey }) =>
+					property === "state" && typeof propertyKey === "number",
 				(sensorType: AlarmSensorType) => {
 					const alarmName = getEnumMemberName(
 						AlarmSensorType,
@@ -119,6 +158,8 @@ describe("Value ID definitions", () => {
 			...V.dynamicPropertyWithName(
 				"type",
 				(sensorType: number) => sensorType,
+				({ property, propertyKey }) =>
+					typeof property === "number" && propertyKey == undefined,
 			),
 			// TODO: others
 		}),

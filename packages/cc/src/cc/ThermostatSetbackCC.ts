@@ -26,6 +26,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -126,6 +127,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
+@CCValues(ThermostatSetbackCCValues)
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 

@@ -29,6 +29,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -113,6 +114,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Lock)
 @implementedVersion(1)
+@CCValues(LockCCValues)
 export class LockCC extends CommandClass {
 	declare ccCommand: LockCommand;
 

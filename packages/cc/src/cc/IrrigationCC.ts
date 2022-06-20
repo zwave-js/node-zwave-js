@@ -39,6 +39,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -187,6 +188,9 @@ export const IrrigationCCValues = Object.freeze({
 			"valveConnected",
 			(valveId: ValveId) => valveId,
 			"valveConnected",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "valveConnected",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -197,6 +201,9 @@ export const IrrigationCCValues = Object.freeze({
 			"nominalCurrent",
 			(valveId: ValveId) => valveId,
 			"nominalCurrent",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "nominalCurrent",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -211,6 +218,9 @@ export const IrrigationCCValues = Object.freeze({
 			"nominalCurrentHighThreshold",
 			(valveId: ValveId) => valveId,
 			"nominalCurrentHighThreshold",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "nominalCurrentHighThreshold",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Number,
@@ -227,6 +237,9 @@ export const IrrigationCCValues = Object.freeze({
 			"nominalCurrentLowThreshold",
 			(valveId: ValveId) => valveId,
 			"nominalCurrentLowThreshold",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "nominalCurrentLowThreshold",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Number,
@@ -243,6 +256,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorShortCircuit",
 			(valveId: ValveId) => valveId,
 			"errorShortCircuit",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorShortCircuit",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -256,6 +272,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorHighCurrent",
 			(valveId: ValveId) => valveId,
 			"errorHighCurrent",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorHighCurrent",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -269,6 +288,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorLowCurrent",
 			(valveId: ValveId) => valveId,
 			"errorLowCurrent",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorLowCurrent",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -282,6 +304,9 @@ export const IrrigationCCValues = Object.freeze({
 			"maximumFlow",
 			(valveId: ValveId) => valveId,
 			"maximumFlow",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "maximumFlow",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Number,
@@ -295,6 +320,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorMaximumFlow",
 			(valveId: ValveId) => valveId,
 			"errorMaximumFlow",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorMaximumFlow",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -308,6 +336,9 @@ export const IrrigationCCValues = Object.freeze({
 			"highFlowThreshold",
 			(valveId: ValveId) => valveId,
 			"highFlowThreshold",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "highFlowThreshold",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Number,
@@ -323,6 +354,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorHighFlow",
 			(valveId: ValveId) => valveId,
 			"errorHighFlow",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorHighFlow",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -336,6 +370,9 @@ export const IrrigationCCValues = Object.freeze({
 			"lowFlowThreshold",
 			(valveId: ValveId) => valveId,
 			"lowFlowThreshold",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "lowFlowThreshold",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Number,
@@ -351,6 +388,9 @@ export const IrrigationCCValues = Object.freeze({
 			"errorLowFlow",
 			(valveId: ValveId) => valveId,
 			"errorLowFlow",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "errorLowFlow",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.ReadOnlyBoolean,
@@ -364,6 +404,9 @@ export const IrrigationCCValues = Object.freeze({
 			"useRainSensor",
 			(valveId: ValveId) => valveId,
 			"useRainSensor",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "useRainSensor",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Boolean,
@@ -377,6 +420,9 @@ export const IrrigationCCValues = Object.freeze({
 			"useMoistureSensor",
 			(valveId: ValveId) => valveId,
 			"useMoistureSensor",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "useMoistureSensor",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Boolean,
@@ -390,6 +436,9 @@ export const IrrigationCCValues = Object.freeze({
 			"valveRunDuration",
 			(valveId: ValveId) => valveId,
 			"duration",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "duration",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.UInt16,
@@ -403,6 +452,9 @@ export const IrrigationCCValues = Object.freeze({
 			"valveRunStartStop",
 			(valveId: ValveId) => valveId,
 			"startStop",
+			({ property, propertyKey }) =>
+				(typeof property === "number" || property === "master") &&
+				propertyKey === "startStop",
 			(valveId: ValveId) =>
 				({
 					...ValueMetadata.Boolean,
@@ -943,6 +995,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Irrigation)
 @implementedVersion(1)
+@CCValues(IrrigationCCValues)
 export class IrrigationCC extends CommandClass {
 	declare ccCommand: IrrigationCommand;
 

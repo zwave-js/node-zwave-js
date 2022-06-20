@@ -24,6 +24,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -178,6 +179,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Climate Control Schedule"])
 @implementedVersion(1)
+@CCValues(ClimateControlScheduleCCValues)
 export class ClimateControlScheduleCC extends CommandClass {
 	declare ccCommand: ClimateControlScheduleCommand;
 }

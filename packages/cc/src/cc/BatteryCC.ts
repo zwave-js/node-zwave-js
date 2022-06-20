@@ -29,6 +29,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -257,6 +258,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Battery)
 @implementedVersion(3)
+@CCValues(BatteryCCValues)
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 

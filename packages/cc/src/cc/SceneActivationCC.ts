@@ -28,6 +28,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
@@ -109,6 +110,7 @@ export class SceneActivationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Activation"])
 @implementedVersion(1)
+@CCValues(SceneActivationCCValues)
 export class SceneActivationCC extends CommandClass {
 	declare ccCommand: SceneActivationCommand;
 }

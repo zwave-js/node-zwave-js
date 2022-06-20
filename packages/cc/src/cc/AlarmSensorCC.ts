@@ -24,6 +24,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -37,6 +38,8 @@ export const AlarmSensorCCValues = Object.freeze({
 			"state",
 			"state",
 			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "state" && typeof propertyKey === "number",
 			(sensorType: AlarmSensorType) => {
 				const alarmName = getEnumMemberName(
 					AlarmSensorType,
@@ -54,6 +57,8 @@ export const AlarmSensorCCValues = Object.freeze({
 			"severity",
 			"severity",
 			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "severity" && typeof propertyKey === "number",
 			(sensorType: AlarmSensorType) => {
 				const alarmName = getEnumMemberName(
 					AlarmSensorType,
@@ -73,6 +78,8 @@ export const AlarmSensorCCValues = Object.freeze({
 			"duration",
 			"duration",
 			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "duration" && typeof propertyKey === "number",
 			(sensorType: AlarmSensorType) => {
 				const alarmName = getEnumMemberName(
 					AlarmSensorType,
@@ -151,6 +158,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Alarm Sensor"])
 @implementedVersion(1)
+@CCValues(AlarmSensorCCValues)
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 

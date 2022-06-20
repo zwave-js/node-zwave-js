@@ -34,6 +34,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -43,13 +44,6 @@ import { SceneControllerConfigurationCommand } from "../lib/_Types";
 import { AssociationCC } from "./AssociationCC";
 
 export const SceneControllerConfigurationCCValues = Object.freeze({
-	...V.defineStaticCCValues(
-		CommandClasses["Scene Controller Configuration"],
-		{
-			// Static CC values go here
-		},
-	),
-
 	...V.defineDynamicCCValues(
 		CommandClasses["Scene Controller Configuration"],
 		{
@@ -57,19 +51,23 @@ export const SceneControllerConfigurationCCValues = Object.freeze({
 				"sceneId",
 				"sceneId",
 				(groupId: number) => groupId,
+				({ property, propertyKey }) =>
+					property === "sceneId" && typeof propertyKey === "number",
 				(groupId: number) =>
 					({
 						...ValueMetadata.UInt8,
 						label: `Associated Scene ID (${groupId})`,
 						valueChangeOptions: ["transitionDuration"],
 					} as const),
-				// (groupId: number) => ({ internal: true }), // value options, can also be a static value
 			),
 
 			...V.dynamicPropertyAndKeyWithName(
 				"dimmingDuration",
 				"dimmingDuration",
 				(groupId: number) => groupId,
+				({ property, propertyKey }) =>
+					property === "dimmingDuration" &&
+					typeof propertyKey === "number",
 				(groupId: number) =>
 					({
 						...ValueMetadata.Duration,
@@ -338,6 +336,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Controller Configuration"])
 @implementedVersion(1)
+@CCValues(SceneControllerConfigurationCCValues)
 export class SceneControllerConfigurationCC extends CommandClass {
 	declare ccCommand: SceneControllerConfigurationCommand;
 

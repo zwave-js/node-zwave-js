@@ -28,6 +28,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -50,6 +51,8 @@ export const AssociationCCValues = Object.freeze({
 			"maxNodes",
 			"maxNodes",
 			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "maxNodes" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -58,6 +61,8 @@ export const AssociationCCValues = Object.freeze({
 			"nodeIds",
 			"nodeIds",
 			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "nodeIds" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -241,6 +246,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Association)
 @implementedVersion(3)
+@CCValues(AssociationCCValues)
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 

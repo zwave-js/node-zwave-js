@@ -38,6 +38,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -78,6 +79,9 @@ export const NotificationCCValues = Object.freeze({
 			"supportedNotificationEvents",
 			"supportedNotificationEvents",
 			(notificationType: number) => notificationType,
+			({ property, propertyKey }) =>
+				property === "supportedNotificationEvents" &&
+				typeof propertyKey === "number",
 			undefined,
 			{ internal: true, supportsEndpoints: false },
 		),
@@ -88,6 +92,8 @@ export const NotificationCCValues = Object.freeze({
 			"unknownNotificationType",
 			(notificationType: number) =>
 				`UNKNOWN_${num2hex(notificationType)}`,
+			({ property }) =>
+				typeof property === "string" && /^UNKNOWN_0x/.test(property),
 			(notificationType: number) =>
 				({
 					...ValueMetadata.ReadOnlyUInt8,
@@ -104,6 +110,8 @@ export const NotificationCCValues = Object.freeze({
 			(notificationType: number, notificationName: string) =>
 				notificationName,
 			"unknown",
+			({ property, propertyKey }) =>
+				typeof property === "string" && propertyKey === "unknown",
 			(notificationType: number, notificationName: string) =>
 				({
 					...ValueMetadata.ReadOnlyUInt8,
@@ -119,6 +127,9 @@ export const NotificationCCValues = Object.freeze({
 			(notificationName: string, variableName: string) =>
 				notificationName,
 			(notificationName: string, variableName: string) => variableName,
+			({ property, propertyKey }) =>
+				typeof property === "string" && typeof propertyKey === "string",
+
 			// Notification metadata is so dynamic, it does not make sense to define it here
 			undefined,
 		),
@@ -305,6 +316,7 @@ export function getNotificationValueMetadata(
 
 @commandClass(CommandClasses.Notification)
 @implementedVersion(8)
+@CCValues(NotificationCCValues)
 export class NotificationCC extends CommandClass {
 	declare ccCommand: NotificationCommand;
 

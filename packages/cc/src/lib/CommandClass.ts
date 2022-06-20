@@ -34,6 +34,7 @@ import {
 	getCCCommandConstructor,
 	getCCConstructor,
 	getCCResponsePredicate,
+	getCCValues,
 	getCommandClass,
 	getCommandClassStatic,
 	getExpectedCCResponse,
@@ -47,7 +48,7 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "./ICommandClassContainer";
-import type { CCValue } from "./Values";
+import type { CCValue, DynamicOrStaticCCValue } from "./Values";
 
 export type CommandClassDeserializationOptions = {
 	data: Buffer;
@@ -106,7 +107,7 @@ export class CommandClass implements ICommandClass {
 			("supervised" in options ? options.supervised : undefined) ?? false;
 
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
-		this.registerValue("interviewComplete", { internal: true });
+		// this.registerValue("interviewComplete", { internal: true });
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
@@ -658,23 +659,16 @@ export class CommandClass implements ICommandClass {
 		return valueDB.getValue(valueId);
 	}
 
-	/** Which variables should be persisted when requested */
-	private _registeredCCValues = new Map<
-		string | number,
-		Pick<CCValueOptions, "internal" | "secret">
-	>();
-	/**
-	 * Creates a value that will be stored in the valueDB alongside with the ones marked with `@ccValue()`
-	 * @param property The property the value belongs to
-	 * @param internal Whether the value should be exposed to library users
-	 */
-	public registerValue(
-		property: string | number,
-		options: Pick<CCValueOptions, "internal" | "secret"> = {},
-	): void {
-		options.internal ??= false;
-		options.secret ??= false;
-		this._registeredCCValues.set(property, options);
+	/** Returns the CC value definition for the current CC which matches the given value ID */
+	protected getCCValue(valueId: ValueID): DynamicOrStaticCCValue | undefined {
+		const ccValues = getCCValues(this);
+		if (!ccValues) return;
+
+		for (const value of Object.values(ccValues)) {
+			if (value?.is(valueId)) {
+				return value;
+			}
+		}
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
@@ -695,12 +689,6 @@ export class CommandClass implements ICommandClass {
 			const dbKey = valueIdToString(valueId);
 			if (!ret.has(dbKey)) ret.set(dbKey, valueId);
 		};
-
-		// Return all manually registered CC values that are not internal
-		const registeredCCValueNames = [...this._registeredCCValues]
-			.filter(([, isInternal]) => !isInternal)
-			.map(([key]) => key);
-		registeredCCValueNames.forEach((property) => addValueId(property));
 
 		// Return all defined non-internal CC values that are available in the current version of this CC
 		const valueDefinitions = getCCValueDefinitions(this);
@@ -723,12 +711,6 @@ export class CommandClass implements ICommandClass {
 			...valueDB.getAllMetadata(this.ccId),
 		]
 			.filter((valueId) => valueId.endpoint === this.endpointIndex)
-			// allow the value id if it is NOT registered or it is registered as non-internal
-			.filter(
-				(valueId) =>
-					this._registeredCCValues.get(valueId.property)?.internal !==
-					true,
-			)
 			// allow the value ID if it is NOT defined or it is defined as non-internal
 			.filter(
 				(valueId) =>
@@ -747,10 +729,10 @@ export class CommandClass implements ICommandClass {
 
 	/** Determines if the given value is an internal value */
 	public isInternalValue(property: keyof this): boolean {
+		// Hard-coded: interviewComplete is always internal
+		if (property === "interviewComplete") return true;
+
 		// A value is internal if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(property as string)?.internal) {
-			return true;
-		}
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			property as string,
 		);
@@ -765,9 +747,6 @@ export class CommandClass implements ICommandClass {
 	/** Determines if the given value is an secret value */
 	public isSecretValue(property: keyof this): boolean {
 		// A value is secret if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(property as string)?.secret) {
-			return true;
-		}
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			property as string,
 		);
@@ -828,7 +807,6 @@ export class CommandClass implements ICommandClass {
 		// But filter out those that don't match the minimum version
 		if (!valueNames) {
 			valueNames = [
-				...this._registeredCCValues.keys(),
 				...ccValueDefinitions.map(([key]) => key),
 				...keyValuePairs.map(([key]) => key),
 			] as unknown as (keyof this)[];

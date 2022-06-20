@@ -25,6 +25,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -93,6 +94,7 @@ export class LanguageCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
+@CCValues(LanguageCCValues)
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 

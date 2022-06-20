@@ -42,6 +42,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	getCommandClass,
@@ -70,6 +71,8 @@ export const MeterCCValues = Object.freeze({
 			"resetSingle",
 			"reset",
 			(meterType: number) => meterType,
+			({ property, propertyKey }) =>
+				property === "reset" && typeof propertyKey === "number",
 			(meterType: number) =>
 				({
 					...ValueMetadata.WriteOnlyBoolean,
@@ -84,6 +87,8 @@ export const MeterCCValues = Object.freeze({
 			"value",
 			"value",
 			toPropertyKey,
+			({ property, propertyKey }) =>
+				property === "value" && typeof propertyKey === "number",
 			(meterType: number, rateType: RateType, scale: number) =>
 				({
 					...ValueMetadata.ReadOnlyNumber,
@@ -338,6 +343,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Meter)
 @implementedVersion(6)
+@CCValues(MeterCCValues)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 

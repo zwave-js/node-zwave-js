@@ -13,6 +13,7 @@ import type {
 	CommandClass,
 	DynamicCCResponse,
 } from "./CommandClass";
+import type { DynamicOrStaticCCValue } from "./Values";
 
 const CCAndCommandDecorator = createReflectionDecoratorPair<
 	CommandClass,
@@ -213,4 +214,34 @@ export function getCCResponsePredicate<T extends CommandClass>(
 	ccClass: T,
 ): CCResponsePredicate<T> | undefined {
 	return expectedCCResponseDecorator.lookupValue(ccClass)?.predicate;
+}
+
+const CCValuesDecorator = createReflectionDecorator<
+	CommandClass,
+	// It doesn't seem possible to find a type all of the generic CC value definitions are assignable to
+	// So unknown is an escape hatch here
+	// [valueDefinition: unknown],
+	[valueDefinition: Record<string, DynamicOrStaticCCValue>],
+	Record<string, DynamicOrStaticCCValue | undefined>
+>({
+	name: "CCValues",
+	valueFromArgs: (valueDefinition) => valueDefinition as any,
+	// We don't need reverse lookup
+	constructorLookupKey: false,
+});
+
+/**
+ * @publicAPI
+ * Defines which CC value definitions belong to a Z-Wave command class
+ */
+export const CCValues = CCValuesDecorator.decorator;
+
+/**
+ * @publicAPI
+ * Retrieves the CC value definitions which belong to a Z-Wave command class
+ */
+export function getCCValues<
+	T extends Record<string, DynamicOrStaticCCValue | undefined>,
+>(cc: CommandClass): T | undefined {
+	return CCValuesDecorator.lookupValue(cc) as T;
 }

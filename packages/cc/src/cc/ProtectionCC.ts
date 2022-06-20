@@ -37,6 +37,7 @@ import {
 import {
 	API,
 	CCCommand,
+	CCValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -334,6 +335,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Protection)
 @implementedVersion(2)
+@CCValues(ProtectionCCValues)
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
