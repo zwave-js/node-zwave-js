@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturer": "AiBase Smart Technology",
 	"manufacturerId": "0x0384",
 	"label": "HA-ZW-5PA",
 	"description": "Smart Plug",
@@ -16,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5
 		}
 	},
@@ -24,7 +24,6 @@
 		{
 			"#": "1",
 			"label": "Overcurrent Protection",
-			"description": "Smart plug keep detecting the load power, once the ac current exceeds 16.5a for more than 4 seconds, smart plug's relay will turn off",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -34,19 +33,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "The function is enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "100",
-			"label": "Setting The Parameters 101~104 to The Default States",
-			"description": "Available settings",
+			"label": "Set Parameters 101~104 to The Default States",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,
@@ -55,104 +53,103 @@
 		},
 		{
 			"#": "101",
-			"label": "Setting Time For Sending Meter Report (watt)",
-			"description": "The interval time of sending meter report (watt) to associated device (group lifeline)",
+			"label": "Time For Sending Meter Report (watt)",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 600,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "102",
-			"label": "Setting Time For Sending Meter Report (kwh)",
-			"description": "The interval of sending meter report (kwh) to association device (group lifeline)",
+			"label": "Time For Sending Meter Report (kwh)",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 3600,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "103",
-			"label": "Setting Time For Sending Meter Report (voltage)",
-			"description": "The interval of sending meter report (voltage) to association device (group lifeline)",
+			"label": "Time For Sending Meter Report (voltage)",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "104",
-			"label": "Setting Time For Sending Meter Report (current)",
-			"description": "The interval time of sending meter report (current) to associated device (group lifeline)",
+			"label": "Time For Sending Meter Report (current)",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2678400,
 			"defaultValue": 0,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "The Value Here Represents Minimum Change in Wattage (in Terms of Wattage) For a Meter Report to Be Sent",
-			"description": "When the change value of load power exceeds the setting value, smart plug will send meter report (watt) to associated device (group lifeline)",
+			"label": "Minimum Change in Wattage For a Meter Report",
 			"valueSize": 2,
-			"minValue": -32768,
+			"unit": "W",
+			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 50,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "17",
-			"label": "The Value Here Represents Minimum Change in Wattage Percent (in Terms of Percentage) For a Meter Report (watt) to Be Sent",
-			"description": "When the change value of the load power exceeds the setting value, smart plug will send meter report to associated device (group lifeline)",
+			"label": "Minimum Change in Wattage Percent For a Meter Report",
 			"valueSize": 1,
-			"minValue": -128,
+			"unit": "%",
+			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10,
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The function is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "2",
-			"label": "Setting Device Status After Power Failure",
-			"description": "Define how the plug reacts after the power supply is back on",
+			"label": "Device State After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -161,23 +158,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Smart plug memorizes its state after a power failure",
+					"label": "Last State",
 					"value": 0
 				},
 				{
-					"label": "Smart plug does not memorize its state after a power failure. connected device will be on after the power supply is reconnected",
+					"label": "Power On",
 					"value": 1
 				},
 				{
-					"label": "Smart plug does not memorize its state after a power failure. connected device will be off after the power supply is reconnected",
+					"label": "Power Off",
 					"value": 2
 				}
 			]
 		},
 		{
 			"#": "254",
-			"label": "Enable/Disable The Configuration Command",
-			"description": "Lock/unlock all configuration parameters",
+			"label": "Configuration Lock",
+			"description": "Allows locking or unlocking all configurations",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -186,11 +183,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unlock",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Lock",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -198,7 +195,6 @@
 		{
 			"#": "3",
 			"label": "Notification When Load Status Change",
-			"description": "Smart plug can send notifications to associated device (group lifeline) when the status of smart plug’s load is changed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -219,7 +215,6 @@
 		{
 			"#": "4",
 			"label": "Led Load Indicator Mode Selection",
-			"description": "Configure LED display mode to prevent light pollution at night",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
