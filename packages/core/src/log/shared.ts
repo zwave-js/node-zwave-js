@@ -216,6 +216,9 @@ export class ZWaveLogContainer extends winston.Container {
 	private createFileTransport(): DailyRotateFile {
 		const ret = new DailyRotateFile({
 			filename: this.logConfig.filename,
+			auditFile: `${this.logConfig.filename
+				.replace("_%DATE%", "_logrotate")
+				.replace(/\.log$/, "")}.json`,
 			datePattern: "YYYY-MM-DD",
 			createSymlink: true,
 			symlinkName: path
