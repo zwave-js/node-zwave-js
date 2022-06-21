@@ -47,7 +47,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Interval for Temperature Reporting",
+			"label": "Temperature Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -63,7 +63,7 @@
 		},
 		{
 			"#": "102",
-			"label": "Interval for Humidity Reporting",
+			"label": "Humidity Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -79,7 +79,7 @@
 		},
 		{
 			"#": "103",
-			"label": "Interval for Luminance Reporting",
+			"label": "Luminance Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -95,7 +95,7 @@
 		},
 		{
 			"#": "104",
-			"label": "Interval for Battery Level Reporting",
+			"label": "Battery Level Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -132,7 +132,6 @@
 		{
 			"#": "111",
 			"label": "Temperature Change Threshold",
-			"description": "Units are fraction of a full ℃ (0.1℃ increments)",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 0,
@@ -154,7 +153,7 @@
 			"#": "113",
 			"label": "Luminance Change Threshold",
 			"valueSize": 2,
-			"unit": "Lux",
+			"unit": "lux",
 			"minValue": 1,
 			"maxValue": 65528,
 			"defaultValue": 150,
@@ -172,7 +171,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Pir Sensitivity",
+			"label": "PIR Sensitivity",
 			"description": "0x0a indicates the highest sensitivity, 0x00 means off PIR detection function",
 			"valueSize": 1,
 			"minValue": 0,
@@ -192,7 +191,7 @@
 		},
 		{
 			"#": "14",
-			"label": "Send Basic Set After Pir Triggered",
+			"label": "Send Basic Set On Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
