@@ -2,7 +2,6 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -27,8 +26,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -37,27 +34,41 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { ThermostatFanMode, ThermostatFanModeCommand } from "../lib/_Types";
 
-export function getOffStateValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Fan Mode"],
-		endpoint,
-		property: "off",
-	};
-}
+export const ThermostatFanModeCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Fan Mode"], {
+		...V.staticPropertyWithName(
+			"turnedOff",
+			"off",
+			{
+				...ValueMetadata.Boolean,
+				label: "Thermostat fan turned off",
+			} as const,
+			{ minVersion: 3 } as const,
+		),
 
-export function getModeStateValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Thermostat Fan Mode"],
-		endpoint,
-		property: "mode",
-	};
-}
+		...V.staticPropertyWithName("fanMode", "mode", {
+			...ValueMetadata.UInt8,
+			states: enumValuesToMetadataStates(ThermostatFanMode),
+			label: "Thermostat fan mode",
+		} as const),
+
+		...V.staticPropertyWithName(
+			"supportedFanModes",
+			"supportedModes",
+			undefined,
+			{ internal: true },
+		),
+	}),
+});
 
 @API(CommandClasses["Thermostat Fan Mode"])
 export class ThermostatFanModeCCAPI extends CCAPI {
@@ -88,7 +99,9 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			}
 			// Preserve the value of the "off" flag
 			const off = valueDB.getValue<boolean>(
-				getOffStateValueID(this.endpoint.index),
+				ThermostatFanModeCCValues.turnedOff.endpoint(
+					this.endpoint.index,
+				),
 			);
 			await this.set(value, off);
 		} else if (property === "off") {
@@ -101,7 +114,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 				);
 			}
 			const mode = valueDB.getValue<ThermostatFanMode>(
-				getModeStateValueID(this.endpoint.index),
+				ThermostatFanModeCCValues.fanMode.endpoint(this.endpoint.index),
 			);
 			if (mode == undefined) {
 				throw new ZWaveError(
@@ -195,6 +208,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Fan Mode"])
 @implementedVersion(5)
+@ccValues(ThermostatFanModeCCValues)
 export class ThermostatFanModeCC extends CommandClass {
 	declare ccCommand: ThermostatFanModeCommand;
 
@@ -342,33 +356,18 @@ export class ThermostatFanModeCCReport extends ThermostatFanModeCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._mode = this.payload[0] & 0b1111;
+		this.mode = this.payload[0] & 0b1111;
 
 		if (this.version >= 3) {
-			this._off = !!(this.payload[0] & 0b1000_0000);
+			this.off = !!(this.payload[0] & 0b1000_0000);
 		}
 	}
 
-	private _mode: ThermostatFanMode;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		states: enumValuesToMetadataStates(ThermostatFanMode),
-		label: "Thermostat fan mode",
-	})
-	public get mode(): ThermostatFanMode {
-		return this._mode;
-	}
+	@ccValue(ThermostatFanModeCCValues.fanMode)
+	public readonly mode: ThermostatFanMode;
 
-	private _off: boolean | undefined;
-	@ccValue({ minVersion: 3 })
-	@ccValueMetadata({
-		...ValueMetadata.Boolean,
-		label: "Thermostat fan turned off",
-	})
-	public get off(): boolean | undefined {
-		return this._off;
-	}
+	@ccValue(ThermostatFanModeCCValues.turnedOff)
+	public readonly off: boolean | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -395,7 +394,7 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(host, options);
-		this._supportedModes = parseBitMask(
+		this.supportedModes = parseBitMask(
 			this.payload,
 			ThermostatFanMode["Auto low"],
 		);
@@ -403,31 +402,22 @@ export class ThermostatFanModeCCSupportedReport extends ThermostatFanModeCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "mode",
-		};
-		// Only update the dynamic part
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.UInt8,
+		// Remember which fan modes are supported
+		const fanModeValue = ThermostatFanModeCCValues.fanMode;
+		this.setMetadata(applHost, fanModeValue, {
+			...fanModeValue.meta,
 			states: enumValuesToMetadataStates(
 				ThermostatFanMode,
-				this._supportedModes,
+				this.supportedModes,
 			),
 		});
 
 		return true;
 	}
 
-	private _supportedModes: ThermostatFanMode[];
-	@ccValue({ internal: true })
-	public get supportedModes(): readonly ThermostatFanMode[] {
-		return this._supportedModes;
-	}
+	@ccValue(ThermostatFanModeCCValues.supportedFanModes)
+	public readonly supportedModes: ThermostatFanMode[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

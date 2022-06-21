@@ -5,7 +5,6 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -33,89 +32,45 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { SceneActuatorConfigurationCommand } from "../lib/_Types";
 
-export function getLevelValueID(
-	endpoint: number | undefined,
-	sceneId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Actuator Configuration"],
-		endpoint,
-		property: "level",
-		propertyKey: sceneId,
-	};
-}
+export const SceneActuatorConfigurationCCValues = Object.freeze({
+	...V.defineDynamicCCValues(CommandClasses["Scene Actuator Configuration"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"level",
+			"level",
+			(sceneId: number) => sceneId,
+			({ property, propertyKey }) =>
+				property === "level" && typeof propertyKey === "number",
+			(sceneId: number) =>
+				({
+					...ValueMetadata.UInt8,
+					label: `Level (${sceneId})`,
+					valueChangeOptions: ["transitionDuration"],
+				} as const),
+		),
 
-export function getDimmingDurationValueID(
-	endpoint: number | undefined,
-	sceneId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Actuator Configuration"],
-		endpoint,
-		property: "dimmingDuration",
-		propertyKey: sceneId,
-	};
-}
-
-function setSceneActuatorConfigMetaData(
-	this: SceneActuatorConfigurationCC,
-	applHost: ZWaveApplicationHost,
-	sceneId: number,
-) {
-	const valueDB = this.getValueDB(applHost);
-	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
-	const dimmingDurationValueId = getDimmingDurationValueID(
-		this.endpointIndex,
-		sceneId,
-	);
-
-	if (!valueDB.hasMetadata(levelValueId)) {
-		valueDB.setMetadata(levelValueId, {
-			...ValueMetadata.UInt8,
-			label: `Level (${sceneId})`,
-			valueChangeOptions: ["transitionDuration"],
-		});
-	}
-	if (!valueDB.hasMetadata(dimmingDurationValueId)) {
-		valueDB.setMetadata(dimmingDurationValueId, {
-			...ValueMetadata.Duration,
-			label: `Dimming duration (${sceneId})`,
-		});
-	}
-}
-
-function persistSceneActuatorConfig(
-	this: SceneActuatorConfigurationCC,
-	applHost: ZWaveApplicationHost,
-	sceneId: number,
-	level: number,
-	dimmingDuration: Duration,
-): boolean {
-	const valueDB = this.getValueDB(applHost);
-	const levelValueId = getLevelValueID(this.endpointIndex, sceneId);
-	const dimmingDurationValueId = getDimmingDurationValueID(
-		this.endpointIndex,
-		sceneId,
-	);
-
-	if (
-		!valueDB.hasMetadata(levelValueId) ||
-		!valueDB.hasMetadata(dimmingDurationValueId)
-	) {
-		setSceneActuatorConfigMetaData.call(this, applHost, sceneId);
-	}
-
-	valueDB.setValue(levelValueId, level);
-	valueDB.setValue(dimmingDurationValueId, dimmingDuration);
-
-	return true;
-}
+		...V.dynamicPropertyAndKeyWithName(
+			"dimmingDuration",
+			"dimmingDuration",
+			(sceneId: number) => sceneId,
+			({ property, propertyKey }) =>
+				property === "dimmingDuration" &&
+				typeof propertyKey === "number",
+			(sceneId: number) =>
+				({
+					...ValueMetadata.Duration,
+					label: `Dimming duration (${sceneId})`,
+				} as const),
+		),
+	}),
+});
 
 @API(CommandClasses["Scene Actuator Configuration"])
 export class SceneActuatorConfigurationCCAPI extends CCAPI {
@@ -159,7 +114,9 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			const dimmingDuration =
 				Duration.from(options?.transitionDuration) ??
 				this.tryGetValueDB()?.getValue<Duration>(
-					getDimmingDurationValueID(this.endpoint.index, propertyKey),
+					SceneActuatorConfigurationCCValues.dimmingDuration(
+						propertyKey,
+					).endpoint(this.endpoint.index),
 				);
 			await this.set(propertyKey, dimmingDuration, value);
 		} else if (property === "dimmingDuration") {
@@ -188,7 +145,9 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			// Use saved value, if it's defined. Otherwise the default
 			// will be used.
 			const level = this.tryGetValueDB()?.getValue<number>(
-				getLevelValueID(this.endpoint.index, propertyKey),
+				SceneActuatorConfigurationCCValues.level(propertyKey).endpoint(
+					this.endpoint.index,
+				),
 			);
 
 			await this.set(propertyKey, dimmingDuration, level);
@@ -312,6 +271,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Actuator Configuration"])
 @implementedVersion(1)
+@ccValues(SceneActuatorConfigurationCCValues)
 export class SceneActuatorConfigurationCC extends CommandClass {
 	declare ccCommand: SceneActuatorConfigurationCommand;
 
@@ -324,8 +284,15 @@ export class SceneActuatorConfigurationCC extends CommandClass {
 			direction: "none",
 		});
 
+		// Create Metadata for all scenes
 		for (let sceneId = 1; sceneId <= 255; sceneId++) {
-			setSceneActuatorConfigMetaData.call(this, applHost, sceneId);
+			const levelValue =
+				SceneActuatorConfigurationCCValues.level(sceneId);
+			this.ensureMetadata(applHost, levelValue);
+
+			const dimmingDurationValue =
+				SceneActuatorConfigurationCCValues.dimmingDuration(sceneId);
+			this.ensureMetadata(applHost, dimmingDurationValue);
 		}
 
 		this.setInterviewComplete(applHost, true);
@@ -446,13 +413,19 @@ export class SceneActuatorConfigurationCCReport extends SceneActuatorConfigurati
 			return false;
 		}
 
-		return persistSceneActuatorConfig.call(
-			this,
-			applHost,
+		const levelValue = SceneActuatorConfigurationCCValues.level(
 			this.sceneId,
-			this.level,
-			this.dimmingDuration,
 		);
+		this.ensureMetadata(applHost, levelValue);
+
+		const dimmingDurationValue =
+			SceneActuatorConfigurationCCValues.dimmingDuration(this.sceneId);
+		this.ensureMetadata(applHost, dimmingDurationValue);
+
+		this.setValue(applHost, levelValue, this.level);
+		this.setValue(applHost, dimmingDurationValue, this.dimmingDuration);
+
+		return true;
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

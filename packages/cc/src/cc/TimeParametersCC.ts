@@ -6,6 +6,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	validatePayload,
+	ValueMetadata,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -19,7 +20,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -28,11 +28,23 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { TimeParametersCommand } from "../lib/_Types";
+
+export const TimeParametersCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Time Parameters"], {
+		...V.staticProperty("dateAndTime", {
+			...ValueMetadata.Any,
+			label: "Date and Time",
+		} as const),
+	}),
+});
 
 /**
  * Determines if the node expects local time instead of UTC.
@@ -179,6 +191,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Time Parameters"])
 @implementedVersion(1)
+@ccValues(TimeParametersCCValues)
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
@@ -244,7 +257,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
-			const segments = dateToSegments(this._dateAndTime, false);
+			const segments = dateToSegments(this.dateAndTime, false);
 			this._dateAndTime = segmentsToDate(segments, local);
 		}
 
@@ -252,7 +265,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	}
 
 	private _dateAndTime: Date;
-	@ccValue()
+	@ccValue(TimeParametersCCValues.dateAndTime)
 	public get dateAndTime(): Date {
 		return this._dateAndTime;
 	}

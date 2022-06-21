@@ -16,8 +16,6 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -26,11 +24,28 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { LanguageCommand } from "../lib/_Types";
+
+export const LanguageCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Language, {
+		...V.staticProperty("language", {
+			...ValueMetadata.ReadOnlyString,
+			label: "Language code",
+		} as const),
+
+		...V.staticProperty("country", {
+			...ValueMetadata.ReadOnlyString,
+			label: "Country code",
+		} as const),
+	}),
+});
 
 // @noSetValueAPI It doesn't make sense
 
@@ -79,6 +94,7 @@ export class LanguageCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
+@ccValues(LanguageCCValues)
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
@@ -217,18 +233,10 @@ export class LanguageCCReport extends LanguageCC {
 		// }
 	}
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Language code",
-	})
+	@ccValue(LanguageCCValues.language)
 	public readonly language: string;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Country code",
-	})
+	@ccValue(LanguageCCValues.country)
 	public readonly country: string | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

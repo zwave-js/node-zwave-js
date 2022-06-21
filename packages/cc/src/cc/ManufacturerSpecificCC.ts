@@ -12,8 +12,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -22,59 +20,45 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { DeviceIdType, ManufacturerSpecificCommand } from "../lib/_Types";
 
-/** @publicAPI */
-export function getManufacturerIdValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "manufacturerId",
-	};
-}
+export const ManufacturerSpecificCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Manufacturer Specific"], {
+		...V.staticProperty(
+			"manufacturerId",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Manufacturer ID",
+			} as const,
+			{ supportsEndpoints: false },
+		),
 
-/** @publicAPI */
-export function getProductTypeValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "productType",
-	};
-}
+		...V.staticProperty(
+			"productType",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Product type",
+			} as const,
+			{ supportsEndpoints: false },
+		),
 
-/** @publicAPI */
-export function getProductIdValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Manufacturer Specific"],
-		property: "productId",
-	};
-}
-
-/** @publicAPI */
-export function getManufacturerIdValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Manufacturer ID",
-	};
-}
-
-/** @publicAPI */
-export function getProductTypeValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product type",
-	};
-}
-
-/** @publicAPI */
-export function getProductIdValueMetadata(): ValueMetadata {
-	return {
-		...ValueMetadata.ReadOnlyUInt16,
-		label: "Product ID",
-	};
-}
+		...V.staticProperty(
+			"productId",
+			{
+				...ValueMetadata.ReadOnlyUInt16,
+				label: "Product ID",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -140,6 +124,7 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Manufacturer Specific"])
 @implementedVersion(2)
+@ccValues(ManufacturerSpecificCCValues)
 export class ManufacturerSpecificCC extends CommandClass {
 	declare ccCommand: ManufacturerSpecificCommand;
 
@@ -200,39 +185,27 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 6);
-		this._manufacturerId = this.payload.readUInt16BE(0);
-		this._productType = this.payload.readUInt16BE(2);
-		this._productId = this.payload.readUInt16BE(4);
+		this.manufacturerId = this.payload.readUInt16BE(0);
+		this.productType = this.payload.readUInt16BE(2);
+		this.productId = this.payload.readUInt16BE(4);
 	}
 
-	private _manufacturerId: number;
-	@ccValue()
-	@ccValueMetadata(getManufacturerIdValueMetadata())
-	public get manufacturerId(): number {
-		return this._manufacturerId;
-	}
+	@ccValue(ManufacturerSpecificCCValues.manufacturerId)
+	public readonly manufacturerId: number;
 
-	private _productType: number;
-	@ccValue()
-	@ccValueMetadata(getProductTypeValueMetadata())
-	public get productType(): number {
-		return this._productType;
-	}
+	@ccValue(ManufacturerSpecificCCValues.productType)
+	public readonly productType: number;
 
-	private _productId: number;
-	@ccValue()
-	@ccValueMetadata(getProductIdValueMetadata())
-	public get productId(): number {
-		return this._productId;
-	}
+	@ccValue(ManufacturerSpecificCCValues.productId)
+	public readonly productId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"manufacturer id": num2hex(this._manufacturerId),
-				"product type": num2hex(this._productType),
-				"product id": num2hex(this._productId),
+				"manufacturer id": num2hex(this.manufacturerId),
+				"product type": num2hex(this.productType),
+				"product id": num2hex(this.productId),
 			},
 		};
 	}

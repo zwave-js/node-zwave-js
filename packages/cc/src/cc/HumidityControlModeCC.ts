@@ -1,4 +1,3 @@
-import type { ValueID } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -24,8 +23,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -34,11 +31,26 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { HumidityControlMode, HumidityControlModeCommand } from "../lib/_Types";
+
+export const HumidityControlModeCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Humidity Control Mode"], {
+		...V.staticProperty("mode", {
+			...ValueMetadata.UInt8,
+			states: enumValuesToMetadataStates(HumidityControlMode),
+			label: "Humidity control mode",
+		} as const),
+
+		...V.staticProperty("supportedModes", undefined, { internal: true }),
+	}),
+});
 
 @API(CommandClasses["Humidity Control Mode"])
 export class HumidityControlModeCCAPI extends CCAPI {
@@ -146,6 +158,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Mode"])
 @implementedVersion(2)
+@ccValues(HumidityControlModeCCValues)
 export class HumidityControlModeCC extends CommandClass {
 	declare ccCommand: HumidityControlModeCommand;
 
@@ -282,19 +295,11 @@ export class HumidityControlModeCCReport extends HumidityControlModeCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._mode = this.payload[0] & 0b1111;
+		this.mode = this.payload[0] & 0b1111;
 	}
 
-	private _mode: HumidityControlMode;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		states: enumValuesToMetadataStates(HumidityControlMode),
-		label: "Humidity control mode",
-	})
-	public get mode(): HumidityControlMode {
-		return this._mode;
-	}
+	@ccValue(HumidityControlModeCCValues.mode)
+	public readonly mode: HumidityControlMode;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -331,17 +336,11 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Use this information to create the metadata for the mode property
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "mode",
-		};
-		// Only update the dynamic part
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.UInt8,
+		const modeValue = HumidityControlModeCCValues.mode;
+		this.setMetadata(applHost, modeValue, {
+			...modeValue.meta,
 			states: enumValuesToMetadataStates(
 				HumidityControlMode,
 				this._supportedModes,
@@ -352,7 +351,7 @@ export class HumidityControlModeCCSupportedReport extends HumidityControlModeCC 
 	}
 
 	private _supportedModes: HumidityControlMode[];
-	@ccValue({ internal: true })
+	@ccValue(HumidityControlModeCCValues.supportedModes)
 	public get supportedModes(): readonly HumidityControlMode[] {
 		return this._supportedModes;
 	}

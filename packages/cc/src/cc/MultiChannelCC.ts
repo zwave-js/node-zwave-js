@@ -12,7 +12,6 @@ import {
 	parseApplicationNodeInformation,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -21,74 +20,101 @@ import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	ccKeyValuePair,
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { MultiChannelCommand } from "../lib/_Types";
 
 // TODO: Handle removal reports of dynamic endpoints
 
+export const MultiChannelCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Multi Channel"], {
+		...V.staticProperty("endpointIndizes", undefined, {
+			internal: true,
+			supportsEndpoints: false,
+		}),
+
+		...V.staticPropertyWithName(
+			"individualEndpointCount",
+			"individualCount",
+			undefined,
+			{
+				internal: true,
+				supportsEndpoints: false,
+			},
+		),
+
+		...V.staticPropertyWithName(
+			"aggregatedEndpointCount",
+			"aggregatedCount",
+			undefined,
+			{
+				internal: true,
+				supportsEndpoints: false,
+			},
+		),
+
+		...V.staticPropertyWithName(
+			"endpointCountIsDynamic",
+			"countIsDynamic",
+			undefined,
+			{
+				internal: true,
+				supportsEndpoints: false,
+			},
+		),
+
+		...V.staticPropertyWithName(
+			"endpointsHaveIdenticalCapabilities",
+			"identicalCapabilities",
+			undefined,
+			{
+				internal: true,
+				supportsEndpoints: false,
+			},
+		),
+
+		...V.staticPropertyWithName(
+			"endpointCCs",
+			"commandClasses",
+			undefined,
+			{ internal: true },
+		),
+
+		...V.staticPropertyWithName(
+			"endpointDeviceClass",
+			"deviceClass",
+			undefined,
+			{ internal: true },
+		),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Multi Channel"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"aggregatedEndpointMembers",
+			"members",
+			(endpointIndex: number) => endpointIndex,
+			({ property, propertyKey }) =>
+				property === "members" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+	}),
+});
+
 // @noSetValueAPI
-
-export function getEndpointIndizesValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		property: "endpointIndizes",
-	};
-}
-
-export function getEndpointCCsValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		endpoint: endpointIndex,
-		property: "commandClasses",
-	};
-}
-
-export function getEndpointDeviceClassValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		endpoint: endpointIndex,
-		property: "deviceClass",
-	};
-}
-
-export function getCountIsDynamicValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		property: "countIsDynamic",
-	};
-}
-export function getIdenticalCapabilitiesValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		property: "identicalCapabilities",
-	};
-}
-export function getIndividualCountValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		property: "individualCount",
-	};
-}
-export function getAggregatedCountValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Multi Channel"],
-		property: "aggregatedCount",
-	};
-}
 
 /**
  * Many devices unnecessarily use endpoints when they could (or do) provide all functionality via the root device.
@@ -102,7 +128,8 @@ function areAllEndpointsDifferent(
 	// Endpoints are useless if all of them have different device classes
 	const deviceClasses = new Set<number>();
 	for (const endpoint of endpointIndizes) {
-		const devClassValueId = getEndpointDeviceClassValueId(endpoint);
+		const devClassValueId =
+			MultiChannelCCValues.endpointDeviceClass.endpoint(endpoint);
 		const deviceClass = applHost.getValueDB(node.id).getValue<{
 			generic: number;
 			specific: number;
@@ -317,21 +344,9 @@ export interface EndpointCapability {
 
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
+@ccValues(MultiChannelCCValues)
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
-
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(getEndpointIndizesValueId().property, {
-			internal: true,
-		});
-		this.registerValue(getEndpointCCsValueId(0).property, {
-			internal: true,
-		});
-		this.registerValue(getEndpointDeviceClassValueId(0).property, {
-			internal: true,
-		});
-	}
 
 	/** Tests if a command targets a specific endpoint and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
@@ -508,16 +523,21 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 
 				// copy the capabilities from the first endpoint
 				const devClass = valueDB.getValue(
-					getEndpointDeviceClassValueId(allEndpoints[0]),
+					MultiChannelCCValues.endpointDeviceClass.endpoint(
+						allEndpoints[0],
+					),
 				);
 				valueDB.setValue(
-					getEndpointDeviceClassValueId(endpoint),
+					MultiChannelCCValues.endpointDeviceClass.endpoint(endpoint),
 					devClass,
 				);
 				const ep1Caps = valueDB.getValue<CommandClasses[]>(
-					getEndpointCCsValueId(allEndpoints[0]),
+					MultiChannelCCValues.endpointCCs.endpoint(allEndpoints[0]),
 				)!;
-				valueDB.setValue(getEndpointCCsValueId(endpoint), [...ep1Caps]);
+				valueDB.setValue(
+					MultiChannelCCValues.endpointCCs.endpoint(endpoint),
+					[...ep1Caps],
+				);
 
 				continue;
 			}
@@ -583,7 +603,11 @@ supported CCs:`;
 				});
 			}
 		}
-		valueDB.setValue(getEndpointIndizesValueId(), allEndpoints);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointIndizes,
+			allEndpoints,
+		);
 
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);
@@ -638,12 +662,28 @@ supported CCs:`;
 		// Store the collected information
 		// We have only individual and no dynamic and no aggregated endpoints
 		const numEndpoints = Math.max(...endpointCounts.values());
-		valueDB.setValue(getCountIsDynamicValueId(), false);
-		valueDB.setValue(getAggregatedCountValueId(), 0);
-		valueDB.setValue(getIndividualCountValueId(), numEndpoints);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointCountIsDynamic,
+			false,
+		);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.aggregatedEndpointCount,
+			0,
+		);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.individualEndpointCount,
+			numEndpoints,
+		);
 		// Since we queried all CCs separately, we can assume that all
 		// endpoints have different capabilities
-		valueDB.setValue(getIdenticalCapabilitiesValueId(), false);
+		this.setValue(
+			applHost,
+			MultiChannelCCValues.endpointsHaveIdenticalCapabilities,
+			false,
+		);
 
 		for (let endpoint = 1; endpoint <= numEndpoints; endpoint++) {
 			// Check which CCs exist on this endpoint
@@ -651,7 +691,10 @@ supported CCs:`;
 				.filter(([, ccEndpoints]) => ccEndpoints >= endpoint)
 				.map(([ccId]) => ccId);
 			// And store it per endpoint
-			valueDB.setValue(getEndpointCCsValueId(endpoint), endpointCCs);
+			valueDB.setValue(
+				MultiChannelCCValues.endpointCCs.endpoint(endpoint),
+				endpointCCs,
+			);
 		}
 
 		// Remember that the interview is complete
@@ -668,37 +711,25 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._countIsDynamic = !!(this.payload[0] & 0b10000000);
-		this._identicalCapabilities = !!(this.payload[0] & 0b01000000);
-		this._individualCount = this.payload[1] & 0b01111111;
+		this.countIsDynamic = !!(this.payload[0] & 0b10000000);
+		this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
+		this.individualCount = this.payload[1] & 0b01111111;
 		if (this.version >= 4 && this.payload.length >= 3) {
-			this._aggregatedCount = this.payload[2] & 0b01111111;
+			this.aggregatedCount = this.payload[2] & 0b01111111;
 		}
 	}
 
-	private _countIsDynamic: boolean;
-	@ccValue({ internal: true })
-	public get countIsDynamic(): boolean {
-		return this._countIsDynamic;
-	}
+	@ccValue(MultiChannelCCValues.endpointCountIsDynamic)
+	public readonly countIsDynamic: boolean;
 
-	private _identicalCapabilities: boolean;
-	@ccValue({ internal: true })
-	public get identicalCapabilities(): boolean {
-		return this._identicalCapabilities;
-	}
+	@ccValue(MultiChannelCCValues.endpointsHaveIdenticalCapabilities)
+	public readonly identicalCapabilities: boolean;
 
-	private _individualCount: number;
-	@ccValue({ internal: true })
-	public get individualCount(): number {
-		return this._individualCount;
-	}
+	@ccValue(MultiChannelCCValues.individualEndpointCount)
+	public readonly individualCount: number;
 
-	private _aggregatedCount: number | undefined;
-	@ccValue({ internal: true })
-	public get aggregatedCount(): number | undefined {
-		return this._aggregatedCount;
-	}
+	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
+	public readonly aggregatedCount: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -752,22 +783,19 @@ export class MultiChannelCCCapabilityReport
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		const deviceClassValueId = getEndpointDeviceClassValueId(
-			this.endpointIndex,
-		);
-		const ccsValueId = getEndpointCCsValueId(this.endpointIndex);
+		const deviceClassValue = MultiChannelCCValues.endpointDeviceClass;
+		const ccsValue = MultiChannelCCValues.endpointCCs;
 
 		if (this.wasRemoved) {
-			valueDB.removeValue(deviceClassValueId);
-			valueDB.removeValue(ccsValueId);
+			this.removeValue(applHost, deviceClassValue);
+			this.removeValue(applHost, ccsValue);
 		} else {
-			valueDB.setValue(deviceClassValueId, {
+			this.setValue(applHost, deviceClassValue, {
 				generic: this.genericDeviceClass,
 				specific: this.specificDeviceClass,
 			});
-			valueDB.setValue(ccsValueId, this.supportedCCs);
+			this.setValue(applHost, ccsValue, this.supportedCCs);
 		}
 		return true;
 	}
@@ -985,30 +1013,27 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		const endpoint = this.payload[0] & 0b0111_1111;
+		this.aggregatedEndpointIndex = this.payload[0] & 0b0111_1111;
 		const bitMaskLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + bitMaskLength);
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
-		const members = parseBitMask(bitMask);
-		this.aggregatedEndpointMembers = [endpoint, members];
+		this.members = parseBitMask(bitMask);
 	}
 
-	@ccKeyValuePair({ internal: true })
-	private aggregatedEndpointMembers: [number, number[]];
+	public readonly aggregatedEndpointIndex: number;
 
-	public get aggregatedEndpoint(): number {
-		return this.aggregatedEndpointMembers[0];
-	}
-
-	public get members(): readonly number[] {
-		return this.aggregatedEndpointMembers[1];
-	}
+	@ccValue(
+		MultiChannelCCValues.aggregatedEndpointMembers,
+		(self: MultiChannelCCAggregatedMembersReport) =>
+			[self.aggregatedEndpointIndex] as const,
+	)
+	public readonly members: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				endpoint: this.endpointIndex,
+				"aggregated endpoint": this.aggregatedEndpointIndex,
 				members: this.members.join(", "),
 			},
 		};

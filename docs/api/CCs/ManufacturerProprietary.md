@@ -16,23 +16,5 @@ async sendData(
 ### `sendAndReceiveData`
 
 ```ts
-async sendAndReceiveData(manufacturerId: number, data?: Buffer): Promise<{ manufacturerId: number; data: Buffer; } | undefined>;
-```
-
-### `fibaroVenetianBlindsGet`
-
-```ts
-async fibaroVenetianBlindsGet(): Promise<Pick<FibaroVenetianBlindCCReport, "position" | "tilt"> | undefined>;
-```
-
-### `fibaroVenetianBlindsSetPosition`
-
-```ts
-async fibaroVenetianBlindsSetPosition(value: number): Promise<void>;
-```
-
-### `fibaroVenetianBlindsSetTilt`
-
-```ts
-async fibaroVenetianBlindsSetTilt(value: number): Promise<void>;
+async sendAndReceiveData(manufacturerId: number, data?: Buffer): Promise<{ manufacturerId: number | undefined; data: Buffer; } | undefined>;
 ```

@@ -13,7 +13,7 @@ describe("TypeScript transformers", () => {
 			(f) => f.startsWith("test") && f.endsWith(".js"),
 		);
 		files.push(...jsFiles);
-	}, 60000);
+	}, 180000);
 
 	it("run fixtures", async () => {
 		for (const file of files) {
