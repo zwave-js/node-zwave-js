@@ -9,6 +9,12 @@ import {
 } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
+import type { ThrowingMap } from "@zwave-js/shared";
+import { MockController } from "@zwave-js/testing";
+import { createDefaultMockControllerBehaviors } from "../../../Utils";
+import type { Driver } from "../../driver/Driver";
+import { createAndStartTestingDriver } from "../../driver/DriverMock";
+import { ZWaveNode } from "../../node/Node";
 import * as nodeUtils from "../../node/utils";
 import { createTestNode } from "../mocks";
 
@@ -158,6 +164,59 @@ describe("lib/commandclass/BasicCC => ", () => {
 				);
 			const endpointIndizes = valueIDs.map(({ endpoint }) => endpoint);
 			expect(endpointIndizes).toEqual([1, 2]);
+		});
+	});
+
+	describe("getDefinedValueIDs() part 2", () => {
+		let driver: Driver;
+		let node2: ZWaveNode;
+		let controller: MockController;
+
+		beforeAll(async () => {
+			({ driver } = await createAndStartTestingDriver({
+				skipNodeInterview: true,
+				loadConfiguration: false,
+				beforeStartup(mockPort) {
+					controller = new MockController({ serial: mockPort });
+					controller.defineBehavior(
+						...createDefaultMockControllerBehaviors(),
+					);
+				},
+			}));
+			node2 = new ZWaveNode(2, driver);
+			(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+				node2.id,
+				node2,
+			);
+
+			node2.addCC(CommandClasses.Basic, {
+				isSupported: true,
+			});
+		}, 30000);
+
+		afterAll(async () => {
+			await driver.destroy();
+		});
+
+		it("should NOT include the compat event value", () => {
+			const valueIDs = node2.getDefinedValueIDs();
+			expect(valueIDs.map(({ property }) => property)).not.toContain(
+				BasicCCValues.compatEvent.id.property,
+			);
+		});
+
+		it("except when the corresponding compat flag is set", () => {
+			// @ts-expect-error
+			node2["_deviceConfig"] = {
+				compat: {
+					treatBasicSetAsEvent: true,
+				},
+			};
+
+			const valueIDs = node2.getDefinedValueIDs();
+			expect(valueIDs.map(({ property }) => property)).toContain(
+				BasicCCValues.compatEvent.id.property,
+			);
 		});
 	});
 

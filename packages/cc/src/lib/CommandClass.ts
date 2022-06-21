@@ -740,6 +740,18 @@ export class CommandClass implements ICommandClass {
 			// Skip internal values
 			if (value.options.internal) continue;
 
+			// And determine if this value should be automatically "created"
+			if (
+				value.options.autoCreate === false ||
+				(typeof value.options.autoCreate === "function" &&
+					!value.options.autoCreate(
+						applHost,
+						this.getEndpoint(applHost)!,
+					))
+			) {
+				continue;
+			}
+
 			existingValueIds.push(value.endpoint(this.endpointIndex));
 		}
 

@@ -75,10 +75,6 @@ export const SoundSwitchCCValues = Object.freeze({
 			label: "Default tone ID",
 		} as const),
 	}),
-
-	...V.defineDynamicCCValues(CommandClasses["Sound Switch"], {
-		// Dynamic CC values go here
-	}),
 });
 
 @API(CommandClasses["Sound Switch"])

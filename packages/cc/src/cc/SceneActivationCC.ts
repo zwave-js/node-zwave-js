@@ -37,7 +37,6 @@ import { SceneActivationCommand } from "../lib/_Types";
 
 export const SceneActivationCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Scene Activation"], {
-		// Static CC values go here
 		...V.staticProperty(
 			"sceneId",
 			{
@@ -53,10 +52,6 @@ export const SceneActivationCCValues = Object.freeze({
 			...ValueMetadata.Duration,
 			label: "Dimming duration",
 		} as const),
-	}),
-
-	...V.defineDynamicCCValues(CommandClasses["Scene Activation"], {
-		// Dynamic CC values go here
 	}),
 });
 

@@ -77,10 +77,6 @@ export const EntryControlCCValues = Object.freeze({
 			internal: true,
 		}),
 	}),
-
-	...V.defineDynamicCCValues(CommandClasses["Entry Control"], {
-		// Dynamic CC values go here
-	}),
 });
 
 @API(CommandClasses["Entry Control"])

@@ -86,7 +86,12 @@ export const MultilevelSwitchCCValues = Object.freeze({
 				...ValueMetadata.ReadOnlyUInt8,
 				label: "Event value",
 			} as const,
-			{ stateful: false },
+			{
+				stateful: false,
+				autoCreate: (applHost, endpoint) =>
+					!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+						?.treatMultilevelSwitchSetAsEvent,
+			},
 		),
 
 		...V.staticProperty("switchType", undefined, { internal: true }),

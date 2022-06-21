@@ -50,10 +50,6 @@ export const HumidityControlModeCCValues = Object.freeze({
 
 		...V.staticProperty("supportedModes", undefined, { internal: true }),
 	}),
-
-	...V.defineDynamicCCValues(CommandClasses["Humidity Control Mode"], {
-		// Dynamic CC values go here
-	}),
 });
 
 @API(CommandClasses["Humidity Control Mode"])

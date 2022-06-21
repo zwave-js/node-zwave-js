@@ -1,4 +1,10 @@
-import { CommandClasses, ValueID, ValueMetadata } from "@zwave-js/core";
+import {
+	CommandClasses,
+	IZWaveEndpoint,
+	ValueID,
+	ValueMetadata,
+} from "@zwave-js/core";
+import type { ZWaveApplicationHost } from "@zwave-js/host";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -29,6 +35,17 @@ export interface CCValueOptions {
 
 	/** Whether the CC value may exist on endpoints. Default: `true` */
 	supportsEndpoints?: boolean;
+
+	/**
+	 * Can be used to dynamically decide if this value should be created automatically.
+	 * This is ignored for dynamic values and defaults to `true` if not given.
+	 */
+	autoCreate?:
+		| boolean
+		| ((
+				applHost: ZWaveApplicationHost,
+				endpoint: IZWaveEndpoint,
+		  ) => boolean);
 }
 
 export const defaultCCValueOptions = {
@@ -37,7 +54,7 @@ export const defaultCCValueOptions = {
 	secret: false,
 	stateful: true,
 	supportsEndpoints: true,
-	forceCreation: false,
+	autoCreate: true,
 } as const;
 
 type DefaultOptions = typeof defaultCCValueOptions;
