@@ -11,14 +11,13 @@ import { ObjectKeyMap, type ReadonlyObjectKeyMap } from "@zwave-js/shared/safe";
 import { distinct } from "alcalzone-shared/arrays";
 import {
 	AssociationCC,
-	getHasLifelineValueId,
+	AssociationCCValues,
 	getLifelineGroupIds,
 } from "../cc/AssociationCC";
 import { AssociationGroupInfoCC } from "../cc/AssociationGroupInfoCC";
 import {
-	getEndpointsValueId,
-	getNodeIdsValueId,
 	MultiChannelAssociationCC,
+	MultiChannelAssociationCCValues,
 } from "../cc/MultiChannelAssociationCC";
 import { CCAPI } from "./API";
 import type {
@@ -553,7 +552,10 @@ export async function configureLifelineAssociations(
 			level: "warn",
 		});
 		// Remember that we have NO lifeline association
-		valueDB.setValue(getHasLifelineValueId(endpoint.index), false);
+		valueDB.setValue(
+			AssociationCCValues.hasLifeline.endpoint(endpoint.index),
+			false,
+		);
 		return;
 	}
 
@@ -897,11 +899,13 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 			});
 
 			if (!rootMustUseNodeAssociation) {
-				const rootNodesValueId = getNodeIdsValueId(0, group);
+				const rootNodesValueId =
+					MultiChannelAssociationCCValues.nodeIds(group).id;
 				const rootHasNodeAssociation = !!valueDB
 					.getValue<number[]>(rootNodesValueId)
 					?.some((a) => a === ownNodeId);
-				const rootEndpointsValueId = getEndpointsValueId(0, group);
+				const rootEndpointsValueId =
+					MultiChannelAssociationCCValues.endpoints(group).id;
 				const rootHasEndpointAssociation = !!valueDB
 					.getValue<EndpointAddress[]>(rootEndpointsValueId)
 					?.some((a) => a.nodeId === ownNodeId && a.endpoint === 0);
@@ -957,5 +961,8 @@ must use node association:     ${rootMustUseNodeAssociation}`,
 	}
 
 	// Remember that we did the association assignment
-	valueDB.setValue(getHasLifelineValueId(endpoint.index), true);
+	valueDB.setValue(
+		AssociationCCValues.hasLifeline.endpoint(endpoint.index),
+		true,
+	);
 }

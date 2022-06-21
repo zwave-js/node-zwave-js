@@ -1809,26 +1809,14 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		it("dynamic metadata is merged with static metadata", () => {
+		it("writing to the value DB overwrites the statically defined metadata", () => {
 			// Create dynamic metadata
 			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
 			// The label should be preserved from the static metadata
-			expect(currentValueMeta).toMatchObject({ label: "Current value" });
-		});
-
-		it("dynamic metadata is prioritized", () => {
-			// Update the dynamic metadata
-			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
-
-			const currentValueMeta = node.getValueMetadata(valueId);
-
-			// But the dynamic metadata properties are preferred over statically defined ones
-			expect(currentValueMeta).toMatchObject(
-				ValueMetadata.WriteOnlyInt32,
-			);
+			expect(currentValueMeta).toEqual(ValueMetadata.WriteOnlyInt32);
 		});
 	});
 

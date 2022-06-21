@@ -1,9 +1,5 @@
 import type { ConfigManager } from "@zwave-js/config";
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	Maybe,
@@ -28,7 +24,6 @@ import {
 } from "../lib/API";
 import {
 	CommandClass,
-	CommandClassOptions,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
@@ -36,56 +31,61 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { IndicatorCommand } from "../lib/_Types";
 
-export function getSupportedIndicatorIDsValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Indicator,
-		endpoint,
-		property: "supportedIndicatorIds",
-	};
-}
+export const IndicatorCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Indicator, {
+		...V.staticProperty("supportedIndicatorIds", undefined, {
+			internal: true,
+		}),
 
-export function getSupportedPropertyIDsValueID(
-	endpoint: number | undefined,
-	indicatorId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Indicator,
-		endpoint,
-		property: "supportedPropertyIDs",
-		propertyKey: indicatorId,
-	};
-}
+		...V.staticPropertyWithName("valueV1", "value", {
+			...ValueMetadata.UInt8,
+			label: "Indicator value",
+			ccSpecific: {
+				indicatorId: 0,
+			},
+		} as const),
+	}),
 
-export function getIndicatorValueValueID(
-	endpoint: number | undefined,
-	indicatorId: number,
-	propertyId: number,
-): ValueID {
-	if (indicatorId === 0) {
-		// V1
-		return {
-			commandClass: CommandClasses.Indicator,
-			endpoint,
-			property: "value",
-		};
-	} else {
-		// V2+
-		return {
-			commandClass: CommandClasses.Indicator,
-			endpoint,
-			property: indicatorId,
-			propertyKey: propertyId,
-		};
-	}
-}
+	...V.defineDynamicCCValues(CommandClasses.Indicator, {
+		...V.dynamicPropertyAndKeyWithName(
+			"supportedPropertyIDs",
+			"supportedPropertyIDs",
+			(indicatorId: number) => indicatorId,
+			({ property, propertyKey }) =>
+				property === "supportedPropertyIDs" &&
+				typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+
+		...V.dynamicPropertyAndKeyWithName(
+			"valueV2",
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			(indicatorId: number, propertyId: number) => indicatorId,
+			(indicatorId: number, propertyId: number) => propertyId,
+			({ property, propertyKey }) =>
+				typeof property === "number" && typeof propertyKey === "number",
+			// The metadata is highly dependent on the indicator and property
+			// so this is just a baseline
+			(indicatorId: number, propertyId: number) => ({
+				...ValueMetadata.Any,
+				ccSpecific: {
+					indicatorId,
+					propertyId,
+				},
+			}),
+			{ minVersion: 2 } as const,
+		),
+	}),
+});
 
 /**
  * Looks up the configured metadata for the given indicator and property
@@ -97,48 +97,40 @@ function getIndicatorMetadata(
 ): ValueMetadata {
 	const label = configManager.lookupIndicator(indicatorId);
 	const prop = configManager.lookupProperty(propertyId);
+	const baseMetadata = IndicatorCCValues.valueV2(
+		indicatorId,
+		propertyId,
+	).meta;
 	if (!label && !prop) {
 		return {
+			...baseMetadata,
 			...ValueMetadata.UInt8,
-			ccSpecific: {
-				indicatorId,
-				propertyId,
-			},
 		};
 	} else if (!prop) {
 		return {
+			...baseMetadata,
 			...ValueMetadata.UInt8,
 			label,
-			ccSpecific: {
-				indicatorId,
-				propertyId,
-			},
 		};
 	} else {
 		if (prop.type === "boolean") {
 			return {
+				...baseMetadata,
 				...ValueMetadata.Boolean,
 				label: `${label} - ${prop.label}`,
 				description: prop.description,
 				readable: !prop.readonly,
-				ccSpecific: {
-					indicatorId,
-					propertyId,
-				},
 			};
 		} else {
 			// UInt8
 			return {
+				...baseMetadata,
 				...ValueMetadata.UInt8,
 				label: `${label} - ${prop.label}`,
 				description: prop.description,
 				min: prop.min,
 				max: prop.max,
 				readable: !prop.readonly,
-				ccSpecific: {
-					indicatorId,
-					propertyId,
-				},
 			};
 		}
 	}
@@ -332,20 +324,9 @@ export class IndicatorCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Indicator)
 @implementedVersion(3)
+@ccValues(IndicatorCCValues)
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
-
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(
-			getSupportedIndicatorIDsValueID(undefined).property,
-			{ internal: true },
-		);
-		this.registerValue(
-			getSupportedPropertyIDsValueID(undefined, 0).property,
-			{ internal: true },
-		);
-	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
@@ -357,7 +338,6 @@ export class IndicatorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -393,8 +373,9 @@ export class IndicatorCC extends CommandClass {
 			} while (curId !== 0x00);
 
 			// The IDs are not stored by the report CCs so store them here once we have all of them
-			valueDB.setValue(
-				getSupportedIndicatorIDsValueID(this.endpointIndex),
+			this.setValue(
+				applHost,
+				IndicatorCCValues.supportedIndicatorIds,
 				supportedIndicatorIds,
 			);
 			const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
@@ -424,7 +405,6 @@ export class IndicatorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		if (this.version === 1) {
 			applHost.controllerLog.logNode(node.id, {
@@ -435,8 +415,9 @@ export class IndicatorCC extends CommandClass {
 			await api.get();
 		} else {
 			const supportedIndicatorIds: number[] =
-				valueDB.getValue(
-					getSupportedIndicatorIDsValueID(this.endpointIndex),
+				this.getValue(
+					applHost,
+					IndicatorCCValues.supportedIndicatorIds,
 				) ?? [];
 			for (const indicatorId of supportedIndicatorIds) {
 				applHost.controllerLog.logNode(node.id, {
@@ -484,20 +465,18 @@ export class IndicatorCC extends CommandClass {
 	}
 
 	protected supportsV2Indicators(applHost: ZWaveApplicationHost): boolean {
-		const valueDB = this.getValueDB(applHost);
 		// First test if there are any indicator ids defined
-		const supportedIndicatorIds = valueDB.getValue<number[]>(
-			getSupportedIndicatorIDsValueID(this.endpointIndex),
+		const supportedIndicatorIds = this.getValue<number[]>(
+			applHost,
+			IndicatorCCValues.supportedIndicatorIds,
 		);
 		if (!supportedIndicatorIds?.length) return false;
 		// Then test if there are any property ids defined
 		return supportedIndicatorIds.some(
 			(indicatorId) =>
-				!!valueDB.getValue<number[]>(
-					getSupportedPropertyIDsValueID(
-						this.endpointIndex,
-						indicatorId,
-					),
+				!!this.getValue<number[]>(
+					applHost,
+					IndicatorCCValues.supportedPropertyIDs(indicatorId),
 				)?.length,
 		);
 	}
@@ -671,24 +650,12 @@ export class IndicatorCCReport extends IndicatorCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		const valueDB = this.getValueDB(applHost);
-
 		if (this.value != undefined) {
 			if (!this.supportsV2Indicators(applHost)) {
 				// Publish the value
-				const valueId = getIndicatorValueValueID(
-					this.endpointIndex,
-					0,
-					1,
-				);
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.UInt8,
-					label: "Indicator value",
-					ccSpecific: {
-						indicatorId: 0,
-					},
-				});
-				valueDB.setValue(valueId, this.value);
+				const valueV1 = IndicatorCCValues.valueV1;
+				this.setMetadata(applHost, valueV1);
+				this.setValue(applHost, valueV1, this.value);
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
@@ -715,8 +682,6 @@ export class IndicatorCCReport extends IndicatorCC {
 		applHost: ZWaveApplicationHost,
 		value: IndicatorObject,
 	): void {
-		const valueDB = this.getValueDB(applHost);
-
 		const metadata = getIndicatorMetadata(
 			applHost.configManager,
 			value.indicatorId,
@@ -728,13 +693,12 @@ export class IndicatorCCReport extends IndicatorCC {
 		}
 
 		// Publish the value
-		const valueId = getIndicatorValueValueID(
-			this.endpointIndex,
+		const valueV2 = IndicatorCCValues.valueV2(
 			value.indicatorId,
 			value.propertyId,
 		);
-		valueDB.setMetadata(valueId, metadata);
-		valueDB.setValue(valueId, value.value);
+		this.setMetadata(applHost, valueV2, metadata);
+		this.setValue(applHost, valueV2, value.value);
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -833,11 +797,9 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 
 		if (this.indicatorId !== 0x00) {
 			// Remember which property IDs are supported
-			this.getValueDB(applHost).setValue(
-				getSupportedPropertyIDsValueID(
-					this.endpointIndex,
-					this.indicatorId,
-				),
+			this.setValue(
+				applHost,
+				IndicatorCCValues.supportedPropertyIDs(this.indicatorId),
 				this.supportedProperties,
 			);
 		}

@@ -9,7 +9,6 @@ import {
 	parseBitMask,
 	unknownBoolean,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -37,144 +36,102 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import type { NotificationEventPayload } from "../lib/NotificationEventPayload";
+import { V } from "../lib/Values";
 import { KeypadMode, UserCodeCommand, UserIDStatus } from "../lib/_Types";
 
-export function getSupportedUsersValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportedUsers",
-	};
-}
+export const UserCodeCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["User Code"], {
+		...V.staticProperty("supportedUsers", undefined, { internal: true }),
+		...V.staticProperty("supportsMasterCode", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsMasterCodeDeactivation", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsUserCodeChecksum", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsMultipleUserCodeReport", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsMultipleUserCodeSet", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedUserIDStatuses", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedKeypadModes", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedASCIIChars", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("userCodeChecksum", undefined, { internal: true }),
 
-export function getUserIdStatusValueID(
-	endpoint: number | undefined,
-	userId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "userIdStatus",
-		propertyKey: userId,
-	};
-}
+		...V.staticProperty(
+			"keypadMode",
+			{
+				...ValueMetadata.ReadOnlyNumber,
+				label: "Keypad Mode",
+			} as const,
+			{ minVersion: 2 } as const,
+		),
 
-export function getUserCodeValueID(
-	endpoint: number | undefined,
-	userId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "userCode",
-		propertyKey: userId,
-	};
-}
+		...V.staticProperty(
+			"masterCode",
+			{
+				...ValueMetadata.String,
+				label: "Master Code",
+				minLength: 4,
+				maxLength: 10,
+			} as const,
+			{
+				minVersion: 2,
+				secret: true,
+			} as const,
+		),
+	}),
 
-export function getUserCodeChecksumValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "userCodeChecksum",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["User Code"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"userIdStatus",
+			"userIdStatus",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userIdStatus" && typeof propertyKey === "number",
+			(userId: number) =>
+				({
+					...ValueMetadata.Number,
+					label: `User ID status (${userId})`,
+				} as const),
+		),
 
-export function getSupportsMasterCodeValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportsMasterCode",
-	};
-}
-
-export function getSupportsMasterCodeDeactivationValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportsMasterCodeDeactivation",
-	};
-}
-
-export function getSupportsUserCodeChecksumValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportsUserCodeChecksum",
-	};
-}
-
-export function getSupportedUserIDStatusesValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportedUserIDStatuses",
-	};
-}
-
-export function getSupportedKeypadModesValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportedKeypadModes",
-	};
-}
-
-export function getKeypadModeValueID(endpoint: number | undefined): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "keypadMode",
-	};
-}
-
-export function getSupportedASCIICharsValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportedASCIIChars",
-	};
-}
-
-export function getSupportsMultipleUserCodeSetValueID(
-	endpoint: number | undefined,
-): ValueID {
-	return {
-		commandClass: CommandClasses["User Code"],
-		endpoint,
-		property: "supportsMultipleUserCodeSet",
-	};
-}
+		...V.dynamicPropertyAndKeyWithName(
+			"userCode",
+			"userCode",
+			(userId: number) => userId,
+			({ property, propertyKey }) =>
+				property === "userCode" && typeof propertyKey === "number",
+			// The user code metadata is dynamically created
+			undefined,
+			{ secret: true },
+		),
+	}),
+});
 
 function parseExtendedUserCode(payload: Buffer): {
 	code: UserCode;
@@ -207,13 +164,11 @@ function setUserCodeMetadata(
 	userId: number,
 	userCode?: string | Buffer,
 ) {
-	const valueDB = this.getValueDB(applHost);
-	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
-	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	const supportedUserIDStatuses =
-		valueDB.getValue<UserIDStatus[]>(
-			getSupportedUserIDStatusesValueID(this.endpointIndex),
-		) ??
+	const statusValue = UserCodeCCValues.userIdStatus(userId);
+	const codeValue = UserCodeCCValues.userCode(userId);
+
+	const supportedUserIDStatuses: UserIDStatus[] =
+		this.getValue(applHost, UserCodeCCValues.supportedUserIDStatuses) ??
 		(this.version === 1
 			? [
 					UserIDStatus.Available,
@@ -227,16 +182,15 @@ function setUserCodeMetadata(
 					UserIDStatus.Messaging,
 					UserIDStatus.PassageMode,
 			  ]);
-	if (!valueDB.hasMetadata(statusValueId)) {
-		valueDB.setMetadata(statusValueId, {
-			...ValueMetadata.Number,
-			label: `User ID status (${userId})`,
-			states: enumValuesToMetadataStates(
-				UserIDStatus,
-				supportedUserIDStatuses,
-			),
-		});
-	}
+
+	this.ensureMetadata(applHost, statusValue, {
+		...statusValue.meta,
+		states: enumValuesToMetadataStates(
+			UserIDStatus,
+			supportedUserIDStatuses,
+		),
+	});
+
 	const codeMetadata: ValueMetadata = {
 		...(Buffer.isBuffer(userCode)
 			? ValueMetadata.Buffer
@@ -245,8 +199,8 @@ function setUserCodeMetadata(
 		maxLength: 10,
 		label: `User Code (${userId})`,
 	};
-	if (valueDB.getMetadata(codeValueId)?.type !== codeMetadata.type) {
-		valueDB.setMetadata(codeValueId, codeMetadata);
+	if (this.getMetadata(applHost, codeValue)?.type !== codeMetadata.type) {
+		this.setMetadata(applHost, codeValue, codeMetadata);
 	}
 }
 
@@ -257,22 +211,21 @@ function persistUserCode(
 	userIdStatus: UserIDStatus,
 	userCode: string | Buffer,
 ) {
-	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
-	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
-	const valueDB = this.getValueDB(applHost);
+	const statusValue = UserCodeCCValues.userIdStatus(userId);
+	const codeValue = UserCodeCCValues.userCode(userId);
 
 	// Check if this code is supported
 	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
 		// It is not, remove all values if any exist
-		valueDB.removeValue(statusValueId);
-		valueDB.removeValue(codeValueId);
-		valueDB.setMetadata(statusValueId, undefined);
-		valueDB.setMetadata(codeValueId, undefined);
+		this.removeValue(applHost, statusValue);
+		this.removeValue(applHost, codeValue);
+		this.removeMetadata(applHost, statusValue);
+		this.removeMetadata(applHost, codeValue);
 	} else {
 		// Always create metadata in case it does not exist
 		setUserCodeMetadata.call(this, applHost, userId, userCode);
-		valueDB.setValue(statusValueId, userIdStatus);
-		valueDB.setValue(codeValueId, userCode);
+		this.setValue(applHost, statusValue, userIdStatus);
+		this.setValue(applHost, codeValue, userCode);
 	}
 
 	return true;
@@ -305,7 +258,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				if (this.version < 2) return false;
 				return (
 					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						getSupportsMasterCodeValueID(this.endpoint.index),
+						UserCodeCCValues.supportsMasterCode.endpoint(
+							this.endpoint.index,
+						),
 					) ?? unknownBoolean
 				);
 			}
@@ -314,7 +269,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				if (this.version < 2) return false;
 				return (
 					this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						getSupportsUserCodeChecksumValueID(this.endpoint.index),
+						UserCodeCCValues.supportsUserCodeChecksum.endpoint(
+							this.endpoint.index,
+						),
 					) ?? unknownBoolean
 				);
 			}
@@ -367,7 +324,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			} else {
 				// We need to set the user code along with the status
 				const userCode = this.getValueDB().getValue<string>(
-					getUserCodeValueID(this.endpoint.index, propertyKey),
+					UserCodeCCValues.userCode(propertyKey).endpoint(
+						this.endpoint.index,
+					),
 				);
 				await this.set(propertyKey, value, userCode!);
 			}
@@ -388,7 +347,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 			// We need to set the user id status along with the code
 			let userIdStatus = this.getValueDB().getValue<UserIDStatus>(
-				getUserIdStatusValueID(this.endpoint.index, propertyKey),
+				UserCodeCCValues.userIdStatus(propertyKey).endpoint(
+					this.endpoint.index,
+				),
 			);
 			if (
 				userIdStatus === UserIDStatus.Available ||
@@ -855,16 +816,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["User Code"])
 @implementedVersion(2)
+@ccValues(UserCodeCCValues)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
-
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		// Hide user codes from value logs
-		this.registerValue(getUserCodeValueID(undefined, 0).property, {
-			secret: true,
-		});
-	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
@@ -939,24 +893,20 @@ export class UserCodeCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
-		const supportsMasterCode =
-			valueDB.getValue<boolean>(
-				getSupportsMasterCodeValueID(this.endpointIndex),
+		const supportsMasterCode: boolean =
+			this.getValue(applHost, UserCodeCCValues.supportsMasterCode) ??
+			false;
+		const supportsUserCodeChecksum: boolean =
+			this.getValue(
+				applHost,
+				UserCodeCCValues.supportsUserCodeChecksum,
 			) ?? false;
-		const supportsUserCodeChecksum =
-			valueDB.getValue<boolean>(
-				getSupportsUserCodeChecksumValueID(this.endpointIndex),
-			) ?? false;
-		const supportedKeypadModes =
-			valueDB.getValue<readonly KeypadMode[]>(
-				getSupportedKeypadModesValueID(this.endpointIndex),
-			) ?? [];
-		const supportedUsers =
-			valueDB.getValue<number>(
-				getSupportedUsersValueID(this.endpointIndex),
-			) ?? 0;
+		const supportedKeypadModes: readonly KeypadMode[] =
+			this.getValue(applHost, UserCodeCCValues.supportedKeypadModes) ??
+			[];
+		const supportedUsers: number =
+			this.getValue(applHost, UserCodeCCValues.supportedUsers) ?? 0;
 
 		// Check for changed values and codes
 		if (this.version >= 2) {
@@ -974,10 +924,9 @@ export class UserCodeCC extends CommandClass {
 				});
 				await api.getKeypadMode();
 			}
-			const storedUserCodeChecksum =
-				valueDB.getValue<number>(
-					getUserCodeChecksumValueID(this.endpointIndex),
-				) ?? 0;
+			const storedUserCodeChecksum: number =
+				this.getValue(applHost, UserCodeCCValues.userCodeChecksum) ?? 0;
+
 			let currentUserCodeChecksum: number | undefined = 0;
 			if (supportsUserCodeChecksum) {
 				applHost.controllerLog.logNode(node.id, {
@@ -1032,7 +981,7 @@ export class UserCodeCC extends CommandClass {
 	): number | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getSupportedUsersValueID(endpoint.index));
+			.getValue(UserCodeCCValues.supportedUsers.endpoint(endpoint.index));
 	}
 
 	/**
@@ -1045,7 +994,9 @@ export class UserCodeCC extends CommandClass {
 	): KeypadMode[] | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getSupportedKeypadModesValueID(endpoint.index));
+			.getValue(
+				UserCodeCCValues.supportedKeypadModes.endpoint(endpoint.index),
+			);
 	}
 
 	/**
@@ -1058,7 +1009,11 @@ export class UserCodeCC extends CommandClass {
 	): UserIDStatus[] | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getSupportedUserIDStatusesValueID(endpoint.index));
+			.getValue(
+				UserCodeCCValues.supportedUserIDStatuses.endpoint(
+					endpoint.index,
+				),
+			);
 	}
 
 	/**
@@ -1071,7 +1026,9 @@ export class UserCodeCC extends CommandClass {
 	): string | undefined {
 		return applHost
 			.getValueDB(endpoint.nodeId)
-			.getValue(getSupportedASCIICharsValueID(endpoint.index));
+			.getValue(
+				UserCodeCCValues.supportedASCIIChars.endpoint(endpoint.index),
+			);
 	}
 
 	/**
@@ -1085,7 +1042,9 @@ export class UserCodeCC extends CommandClass {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<boolean>(
-				getSupportsMasterCodeDeactivationValueID(endpoint.index),
+				UserCodeCCValues.supportsMasterCodeDeactivation.endpoint(
+					endpoint.index,
+				),
 			);
 	}
 
@@ -1100,7 +1059,9 @@ export class UserCodeCC extends CommandClass {
 		return !!applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue<boolean>(
-				getSupportsMultipleUserCodeSetValueID(endpoint.index),
+				UserCodeCCValues.supportsMultipleUserCodeSet.endpoint(
+					endpoint.index,
+				),
 			);
 	}
 }
@@ -1343,7 +1304,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		}
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1415,21 +1376,28 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		).toString("ascii");
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.supportsMasterCode)
 	public readonly supportsMasterCode: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMasterCodeDeactivation)
 	public readonly supportsMasterCodeDeactivation: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsUserCodeChecksum)
 	public readonly supportsUserCodeChecksum: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMultipleUserCodeReport)
 	public readonly supportsMultipleUserCodeReport: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMultipleUserCodeSet)
 	public readonly supportsMultipleUserCodeSet: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedUserIDStatuses)
 	public readonly supportedUserIDStatuses: readonly UserIDStatus[];
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedKeypadModes)
 	public readonly supportedKeypadModes: readonly KeypadMode[];
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1515,17 +1483,16 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Update the keypad modes metadata
-		const supportedKeypadModes = valueDB.getValue<KeypadMode[]>(
-			getSupportedKeypadModesValueID(this.endpointIndex),
+		const supportedKeypadModes: KeypadMode[] = this.getValue(
+			applHost,
+			UserCodeCCValues.supportedKeypadModes,
 		) ?? [this.keypadMode];
 
-		const valueId = getKeypadModeValueID(this.endpointIndex);
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnlyNumber,
-			label: "Keypad Mode",
+		const keypadModeValue = UserCodeCCValues.keypadMode;
+		this.setMetadata(applHost, keypadModeValue, {
+			...keypadModeValue.meta,
 			states: enumValuesToMetadataStates(
 				KeypadMode,
 				supportedKeypadModes,
@@ -1535,7 +1502,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return true;
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1609,16 +1576,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 			.toString("ascii");
 	}
 
-	@ccValue({
-		minVersion: 2,
-		secret: true,
-	})
-	@ccValueMetadata({
-		...ValueMetadata.String,
-		label: "Master Code",
-		minLength: 4,
-		maxLength: 10,
-	})
+	@ccValue(UserCodeCCValues.masterCode)
 	public readonly masterCode: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1644,7 +1602,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		this.userCodeChecksum = this.payload.readUInt16BE(0);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

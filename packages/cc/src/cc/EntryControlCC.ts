@@ -2,7 +2,6 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -26,8 +25,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -36,31 +33,51 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	EntryControlCommand,
 	EntryControlDataTypes,
 	EntryControlEventTypes,
 } from "../lib/_Types";
 
-function getValueID(property: string, endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Entry Control"],
-		endpoint,
-		property: property,
-	};
-}
+export const EntryControlCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Entry Control"], {
+		...V.staticProperty("keyCacheSize", {
+			...ValueMetadata.UInt8,
+			label: "Key cache size",
+			description:
+				"Number of character that must be stored before sending",
+			min: 1,
+			max: 32,
+		} as const),
 
-export function getKeyCacheSizeStateValueID(endpoint: number): ValueID {
-	return getValueID("keyCacheSize", endpoint);
-}
+		...V.staticProperty("keyCacheTimeout", {
+			...ValueMetadata.UInt8,
+			label: "Key cache timeout",
+			unit: "seconds",
+			description:
+				"How long the key cache must wait for additional characters",
+			min: 1,
+			max: 10,
+		} as const),
 
-export function getKeyCacheTimeoutStateValueID(endpoint: number): ValueID {
-	return getValueID("keyCacheTimeout", endpoint);
-}
+		...V.staticProperty("supportedDataTypes", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedEventTypes", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedKeys", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 @API(CommandClasses["Entry Control"])
 export class EntryControlCCAPI extends CCAPI {
@@ -188,7 +205,7 @@ export class EntryControlCCAPI extends CCAPI {
 			keyCacheTimeout = value;
 
 			const oldKeyCacheSize = this.tryGetValueDB()?.getValue<number>(
-				getKeyCacheSizeStateValueID(this.endpoint.index),
+				EntryControlCCValues.keyCacheSize.endpoint(this.endpoint.index),
 			);
 			if (oldKeyCacheSize == undefined) {
 				throw new ZWaveError(
@@ -215,6 +232,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Entry Control"])
 @implementedVersion(1)
+@ccValues(EntryControlCCValues)
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
@@ -419,7 +437,7 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedKeys)
 	public readonly supportedKeys: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -480,23 +498,18 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// Store min/max cache size and timeout as metadata
-		const keyCacheSizeValueId = getKeyCacheSizeStateValueID(
-			this.endpointIndex,
-		);
-		valueDB.setMetadata(keyCacheSizeValueId, {
-			...ValueMetadata.UInt8,
+		const keyCacheSizeValue = EntryControlCCValues.keyCacheSize;
+		this.setMetadata(applHost, keyCacheSizeValue, {
+			...keyCacheSizeValue.meta,
 			min: this.minKeyCacheSize,
 			max: this.maxKeyCacheSize,
 		});
 
-		const keyCacheTimeoutValueId = getKeyCacheTimeoutStateValueID(
-			this.endpointIndex,
-		);
-		valueDB.setMetadata(keyCacheTimeoutValueId, {
-			...ValueMetadata.UInt8,
+		const keyCacheTimeoutValue = EntryControlCCValues.keyCacheTimeout;
+		this.setMetadata(applHost, keyCacheTimeoutValue, {
+			...keyCacheTimeoutValue.meta,
 			min: this.minKeyCacheTimeout,
 			max: this.maxKeyCacheTimeout,
 		});
@@ -504,10 +517,10 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		return true;
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedDataTypes)
 	public readonly supportedDataTypes: readonly EntryControlDataTypes[];
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedEventTypes)
 	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
 	public readonly minKeyCacheSize: number;
@@ -553,26 +566,10 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheTimeout = this.payload[1];
 	}
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Key cache size",
-		description: "Number of character that must be stored before sending",
-		min: 1,
-		max: 32,
-	})
+	@ccValue(EntryControlCCValues.keyCacheSize)
 	public readonly keyCacheSize: number;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		label: "Key cache timeout",
-		unit: "seconds",
-		description:
-			"How long the key cache must wait for additional characters",
-		min: 1,
-		max: 10,
-	})
+	@ccValue(EntryControlCCValues.keyCacheTimeout)
 	public readonly keyCacheTimeout: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

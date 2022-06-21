@@ -9,7 +9,6 @@ import {
 	parseNumber,
 	unknownNumber,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -25,8 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -35,35 +32,48 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { BasicCommand } from "../lib/_Types";
 
-export function getTargetValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "targetValue",
-	};
-}
-
-export function getCurrentValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "currentValue",
-	};
-}
-
-export function getCompatEventValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Basic,
-		endpoint,
-		property: "event",
-	};
-}
+export const BasicCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Basic, {
+		...V.staticProperty("currentValue", {
+			...ValueMetadata.ReadOnlyLevel,
+			label: "Current value" as const,
+		}),
+		...V.staticProperty("targetValue", {
+			...ValueMetadata.UInt8,
+			label: "Target value" as const,
+			forceCreation: true,
+		}),
+		...V.staticProperty("duration", {
+			...ValueMetadata.ReadOnlyDuration,
+			label: "Remaining duration" as const,
+			minVersion: 2,
+		}),
+		// TODO: This should really not be a static CC value, but depend on compat flags:
+		...V.staticPropertyWithName(
+			"compatEvent",
+			"event",
+			{
+				...ValueMetadata.ReadOnlyUInt8,
+				label: "Event value",
+			} as const,
+			{
+				stateful: false,
+				autoCreate: (applHost, endpoint) =>
+					!!applHost.getDeviceConfig?.(endpoint.nodeId)?.compat
+						?.treatBasicSetAsEvent,
+			},
+		),
+	}),
+});
 
 @API(CommandClasses.Basic)
 export class BasicCCAPI extends CCAPI {
@@ -99,7 +109,7 @@ export class BasicCCAPI extends CCAPI {
 				value <= 99
 			) {
 				this.getValueDB().setValue(
-					getCurrentValueValueId(this.endpoint.index),
+					BasicCCValues.currentValue.endpoint(this.endpoint.index),
 					value,
 				);
 			}
@@ -127,7 +137,9 @@ export class BasicCCAPI extends CCAPI {
 					this.applHost
 						.tryGetValueDB(node.id)
 						?.setValue(
-							getCurrentValueValueId(this.endpoint.index),
+							BasicCCValues.currentValue.endpoint(
+								this.endpoint.index,
+							),
 							value,
 						);
 				}
@@ -169,7 +181,7 @@ export class BasicCCAPI extends CCAPI {
 		);
 		if (response) {
 			this.tryGetValueDB()?.setValue(
-				getCurrentValueValueId(this.endpoint.index),
+				BasicCCValues.currentValue.endpoint(this.endpoint.index),
 				response.currentValue,
 			);
 			return pick(response, ["currentValue", "targetValue", "duration"]);
@@ -191,13 +203,13 @@ export class BasicCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
+@ccValues(BasicCCValues)
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
 		const endpoint = this.getEndpoint(applHost)!;
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -210,16 +222,9 @@ export class BasicCC extends CommandClass {
 
 		// create compat event value if necessary
 		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
-			const valueId = getCompatEventValueId(this.endpointIndex);
-			if (!valueDB.hasMetadata(valueId)) {
-				valueDB.setMetadata(valueId, {
-					...ValueMetadata.ReadOnlyUInt8,
-					label: "Event value",
-				});
-			}
+			this.ensureMetadata(applHost, BasicCCValues.compatEvent);
 		} else if (
-			valueDB.getValue(getCurrentValueValueId(this.endpointIndex)) ==
-			undefined
+			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -352,27 +357,15 @@ export class BasicCCReport extends BasicCC {
 	}
 
 	private _currentValue: Maybe<number> | undefined;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyLevel,
-		label: "Current value",
-	})
+	@ccValue(BasicCCValues.currentValue)
 	public get currentValue(): Maybe<number> | undefined {
 		return this._currentValue;
 	}
 
-	@ccValue({ forceCreation: true })
-	@ccValueMetadata({
-		...ValueMetadata.Level,
-		label: "Target value",
-	})
+	@ccValue(BasicCCValues.targetValue)
 	public readonly targetValue: number | undefined;
 
-	@ccValue({ minVersion: 2 })
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyDuration,
-		label: "Remaining duration",
-	})
+	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {

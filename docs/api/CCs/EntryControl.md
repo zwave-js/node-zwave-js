@@ -30,3 +30,47 @@ async setConfiguration(
 	keyCacheTimeout: number,
 ): Promise<Pick<EntryControlCCConfigurationReport, "keyCacheSize" | "keyCacheTimeout"> | undefined>;
 ```
+
+## Entry Control CC values
+
+### `keyCacheSize`
+
+```ts
+{
+	commandClass: CommandClasses["Entry Control"],
+	endpoint: number,
+	property: "keyCacheSize",
+}
+```
+
+-   **label:** Key cache size
+-   **description:** Number of character that must be stored before sending
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 1
+-   **max. value:** 32
+
+### `keyCacheTimeout`
+
+```ts
+{
+	commandClass: CommandClasses["Entry Control"],
+	endpoint: number,
+	property: "keyCacheTimeout",
+}
+```
+
+-   **label:** Key cache timeout
+-   **description:** How long the key cache must wait for additional characters
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 1
+-   **max. value:** 10

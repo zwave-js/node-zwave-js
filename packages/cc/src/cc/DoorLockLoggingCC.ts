@@ -13,7 +13,6 @@ import { isPrintableASCII, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -22,10 +21,13 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	DoorLockLoggingCommand,
 	DoorLockLoggingEventType,
@@ -93,6 +95,12 @@ const eventTypeLabel = {
 
 const LATEST_RECORD_NUMBER_KEY = 0;
 
+export const DoorLockLoggingCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Door Lock Logging"], {
+		...V.staticProperty("recordsCount", undefined, { internal: true }),
+	}),
+});
+
 @API(CommandClasses["Door Lock Logging"])
 export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: DoorLockLoggingCommand): Maybe<boolean> {
@@ -150,6 +158,7 @@ export class DoorLockLoggingCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Door Lock Logging"])
 @implementedVersion(1)
+@ccValues(DoorLockLoggingCCValues)
 export class DoorLockLoggingCC extends CommandClass {
 	declare ccCommand: DoorLockLoggingCommand;
 
@@ -219,7 +228,7 @@ export class DoorLockLoggingCCRecordsSupportedReport extends DoorLockLoggingCC {
 		this.recordsCount = this.payload[0];
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(DoorLockLoggingCCValues.recordsCount)
 	public readonly recordsCount: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
