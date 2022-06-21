@@ -730,6 +730,7 @@ enum ZWavePlusRoleType {
 	AlwaysOnSlave = 0x05,
 	SleepingReportingSlave = 0x06,
 	SleepingListeningSlave = 0x07,
+	NetworkAwareSlave = 0x08,
 }
 ```
 
