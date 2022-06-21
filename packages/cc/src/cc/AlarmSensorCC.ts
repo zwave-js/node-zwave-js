@@ -6,7 +6,6 @@ import {
 	MessageRecord,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -16,7 +15,6 @@ import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -25,55 +23,84 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { AlarmSensorCommand, AlarmSensorType } from "../lib/_Types";
 
-export function getAlarmSensorStateValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "state",
-		propertyKey: sensorType,
-	};
-}
-
-export function getAlarmSensorSeverityValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "severity",
-		propertyKey: sensorType,
-	};
-}
-
-export function getAlarmSensorDurationValueId(
-	endpointIndex: number | undefined,
-	sensorType: AlarmSensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "duration",
-		propertyKey: sensorType,
-	};
-}
-
-export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Alarm Sensor"],
-		endpoint: endpointIndex,
-		property: "supportedSensorTypes",
-	};
-}
+export const AlarmSensorCCValues = Object.freeze({
+	...V.defineDynamicCCValues(CommandClasses["Alarm Sensor"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"state",
+			"state",
+			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "state" && typeof propertyKey === "number",
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `${alarmName} state`,
+					description: "Whether the alarm is active",
+					ccSpecific: { sensorType },
+				} as const;
+			},
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"severity",
+			"severity",
+			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "severity" && typeof propertyKey === "number",
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyNumber,
+					min: 1,
+					max: 100,
+					unit: "%",
+					label: `${alarmName} severity`,
+					ccSpecific: { sensorType },
+				} as const;
+			},
+		),
+		...V.dynamicPropertyAndKeyWithName(
+			"duration",
+			"duration",
+			(sensorType: AlarmSensorType) => sensorType,
+			({ property, propertyKey }) =>
+				property === "duration" && typeof propertyKey === "number",
+			(sensorType: AlarmSensorType) => {
+				const alarmName = getEnumMemberName(
+					AlarmSensorType,
+					sensorType,
+				);
+				return {
+					...ValueMetadata.ReadOnlyNumber,
+					unit: "s",
+					label: `${alarmName} duration`,
+					description: "For how long the alarm should be active",
+					ccSpecific: { sensorType },
+				} as const;
+			},
+		),
+	}),
+	...V.defineStaticCCValues(CommandClasses["Alarm Sensor"], {
+		...V.staticProperty("supportedSensorTypes", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -131,6 +158,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Alarm Sensor"])
 @implementedVersion(1)
+@ccValues(AlarmSensorCCValues)
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
@@ -207,12 +235,10 @@ export class AlarmSensorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		const supportedSensorTypes: readonly AlarmSensorType[] =
-			valueDB.getValue(
-				getSupportedSensorTypesValueId(this.endpointIndex),
-			) ?? [];
+			this.getValue(applHost, AlarmSensorCCValues.supportedSensorTypes) ??
+			[];
 
 		// Always query (all of) the sensor's current value(s)
 		for (const type of supportedSensorTypes) {
@@ -248,49 +274,14 @@ duration: ${currentValue.duration}`;
 		applHost: ZWaveApplicationHost,
 		sensorType: AlarmSensorType,
 	): void {
-		const stateValueId = getAlarmSensorStateValueId(
-			this.endpointIndex,
-			sensorType,
-		);
-		const severityValueId = getAlarmSensorSeverityValueId(
-			this.endpointIndex,
-			sensorType,
-		);
-		const durationValueId = getAlarmSensorDurationValueId(
-			this.endpointIndex,
-			sensorType,
-		);
-		const valueDB = this.getValueDB(applHost);
-		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
+		const stateValue = AlarmSensorCCValues.state(sensorType);
+		const severityValue = AlarmSensorCCValues.severity(sensorType);
+		const durationValue = AlarmSensorCCValues.duration(sensorType);
 
 		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(stateValueId)) {
-			valueDB.setMetadata(stateValueId, {
-				...ValueMetadata.ReadOnlyBoolean,
-				label: `${alarmName} state`,
-				description: "Whether the alarm is active",
-				ccSpecific: { sensorType },
-			});
-		}
-		if (!valueDB.hasMetadata(severityValueId)) {
-			valueDB.setMetadata(severityValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				min: 1,
-				max: 100,
-				unit: "%",
-				label: `${alarmName} severity`,
-				ccSpecific: { sensorType },
-			});
-		}
-		if (!valueDB.hasMetadata(durationValueId)) {
-			valueDB.setMetadata(durationValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				unit: "s",
-				label: `${alarmName} duration`,
-				description: "For how long the alarm should be active",
-				ccSpecific: { sensorType },
-			});
-		}
+		this.ensureMetadata(applHost, stateValue);
+		this.ensureMetadata(applHost, severityValue);
+		this.ensureMetadata(applHost, durationValue);
 	}
 }
 
@@ -346,22 +337,13 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 		// Create metadata if it does not exist
 		this.createMetadataForSensorType(applHost, this.sensorType);
 
-		const stateValueId = getAlarmSensorStateValueId(
-			this.endpointIndex,
-			this.sensorType,
-		);
-		const severityValueId = getAlarmSensorSeverityValueId(
-			this.endpointIndex,
-			this.sensorType,
-		);
-		const durationValueId = getAlarmSensorDurationValueId(
-			this.endpointIndex,
-			this.sensorType,
-		);
-		const valueDB = this.getValueDB(applHost);
-		valueDB.setValue(stateValueId, this.state);
-		valueDB.setValue(severityValueId, this.severity);
-		valueDB.setValue(durationValueId, this.duration);
+		const stateValue = AlarmSensorCCValues.state(this.sensorType);
+		const severityValue = AlarmSensorCCValues.severity(this.sensorType);
+		const durationValue = AlarmSensorCCValues.duration(this.sensorType);
+
+		this.setValue(applHost, stateValue, this.state);
+		this.setValue(applHost, severityValue, this.severity);
+		this.setValue(applHost, durationValue, this.duration);
 
 		return true;
 	}
@@ -438,7 +420,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	}
 
 	private _supportedSensorTypes: AlarmSensorType[];
-	@ccValue({ internal: true })
+	@ccValue(AlarmSensorCCValues.supportedSensorTypes)
 	public get supportedSensorTypes(): readonly AlarmSensorType[] {
 		return this._supportedSensorTypes;
 	}

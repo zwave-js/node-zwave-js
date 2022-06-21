@@ -1,8 +1,4 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
+import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -28,8 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -38,33 +32,54 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
+import { V } from "../lib/Values";
 import { CentralSceneCommand, CentralSceneKeys } from "../lib/_Types";
 import { AssociationGroupInfoCC } from "./AssociationGroupInfoCC";
 
-/** Returns the ValueID used to store the current value of a Central Scene */
-export function getSceneValueId(sceneNumber: number): ValueID {
-	return {
-		commandClass: CommandClasses["Central Scene"],
-		property: "scene",
-		propertyKey: padStart(sceneNumber.toString(), 3, "0"),
-	};
-}
+export const CentralSceneCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Central Scene"], {
+		...V.staticProperty("sceneCount", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsSlowRefresh", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedKeyAttributes", undefined, {
+			internal: true,
+		}),
 
-function getSceneLabel(sceneNumber: number): string {
-	return `Scene ${padStart(sceneNumber.toString(), 3, "0")}`;
-}
+		...V.staticProperty("slowRefresh", {
+			...ValueMetadata.Boolean,
+			label: "Send held down notifications at a slow rate",
+			description:
+				"When this is true, KeyHeldDown notifications are sent every 55s. When this is false, the notifications are sent every 200ms.",
+		} as const),
+	}),
 
-export function getSlowRefreshValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Central Scene"],
-		property: "slowRefresh",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Central Scene"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"scene",
+			"scene",
+			(sceneNumber: number) => padStart(sceneNumber.toString(), 3, "0"),
+			({ property, propertyKey }) =>
+				property === "scene" &&
+				typeof propertyKey === "string" &&
+				/^\d{3}$/.test(propertyKey),
+			(sceneNumber: number) =>
+				({
+					...ValueMetadata.ReadOnlyUInt8,
+					label: `Scene ${padStart(sceneNumber.toString(), 3, "0")}`,
+				} as const),
+		),
+	}),
+});
 
 @API(CommandClasses["Central Scene"])
 export class CentralSceneCCAPI extends CCAPI {
@@ -166,6 +181,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
+@ccValues(CentralSceneCCValues)
 export class CentralSceneCC extends CommandClass {
 	declare ccCommand: CentralSceneCommand;
 
@@ -287,31 +303,25 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
-		this._sequenceNumber = this.payload[0];
-		this._keyAttribute = this.payload[1] & 0b111;
-		this._sceneNumber = this.payload[2];
+		this.sequenceNumber = this.payload[0];
+		this.keyAttribute = this.payload[1] & 0b111;
+		this.sceneNumber = this.payload[2];
 		if (
-			this._keyAttribute === CentralSceneKeys.KeyHeldDown &&
+			this.keyAttribute === CentralSceneKeys.KeyHeldDown &&
 			this.version >= 3
 		) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
-			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
+			this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
 		}
 	}
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
 		// In case the interview is not yet completed, we still create some basic metadata
-		const valueId = getSceneValueId(this._sceneNumber);
-		if (!valueDB.hasMetadata(valueId)) {
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: getSceneLabel(this._sceneNumber),
-			});
-		}
+		const sceneValue = CentralSceneCCValues.scene(this.sceneNumber);
+		this.ensureMetadata(applHost, sceneValue);
 
 		// The spec behavior is pretty complicated, so we cannot just store
 		// the value and call it a day. Handling of these notifications will
@@ -320,25 +330,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		return true;
 	}
 
-	private _sequenceNumber: number;
-	public get sequenceNumber(): number {
-		return this._sequenceNumber;
-	}
-
-	private _keyAttribute: CentralSceneKeys;
-	public get keyAttribute(): CentralSceneKeys {
-		return this._keyAttribute;
-	}
-
-	private _sceneNumber: number;
-	public get sceneNumber(): number {
-		return this._sceneNumber;
-	}
-
-	private _slowRefresh: boolean | undefined;
-	public get slowRefresh(): boolean | undefined {
-		return this._slowRefresh;
-	}
+	public readonly sequenceNumber: number;
+	public readonly keyAttribute: CentralSceneKeys;
+	public readonly sceneNumber: number;
+	public readonly slowRefresh: boolean | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -368,8 +363,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._sceneCount = this.payload[0];
-		this._supportsSlowRefresh =
+		this.sceneCount = this.payload[0];
+		this.supportsSlowRefresh =
 			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
@@ -388,7 +383,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		}
 		if (identicalKeyAttributes) {
 			// The key attributes are only transmitted for scene 1, copy them to the others
-			for (let i = 2; i <= this._sceneCount; i++) {
+			for (let i = 2; i <= this.sceneCount; i++) {
 				this._supportedKeyAttributes.set(
 					i,
 					this._supportedKeyAttributes.get(1)!,
@@ -400,13 +395,11 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
 
-		// Create metadata for all scenes
-		const valueDB = this.getValueDB(applHost);
-		for (let i = 1; i <= this._sceneCount; i++) {
-			const valueId = getSceneValueId(i);
-			valueDB.setMetadata(valueId, {
-				...ValueMetadata.ReadOnlyUInt8,
-				label: getSceneLabel(i),
+		// Create/extend metadata for all scenes
+		for (let i = 1; i <= this.sceneCount; i++) {
+			const sceneValue = CentralSceneCCValues.scene(i);
+			this.setMetadata(applHost, sceneValue, {
+				...sceneValue.meta,
 				states: enumValuesToMetadataStates(
 					CentralSceneKeys,
 					this._supportedKeyAttributes.get(i),
@@ -417,24 +410,19 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return true;
 	}
 
-	private _sceneCount: number;
-	@ccValue({ internal: true })
-	public get sceneCount(): number {
-		return this._sceneCount;
-	}
+	@ccValue(CentralSceneCCValues.sceneCount)
+	public readonly sceneCount: number;
 
 	// TODO: Only offer `slowRefresh` if this is true
-	private _supportsSlowRefresh: boolean | undefined;
-	@ccValue({ internal: true })
-	public get supportsSlowRefresh(): boolean | undefined {
-		return this._supportsSlowRefresh;
-	}
+	@ccValue(CentralSceneCCValues.supportsSlowRefresh)
+	public readonly supportsSlowRefresh: boolean | undefined;
 
 	private _supportedKeyAttributes = new Map<
 		number,
 		readonly CentralSceneKeys[]
 	>();
-	@ccValue({ internal: true })
+
+	@ccValue(CentralSceneCCValues.supportedKeyAttributes)
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
 		readonly CentralSceneKeys[]
@@ -457,24 +445,6 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 			message,
 		};
 	}
-
-	// private _keyAttributesHaveIdenticalSupport: boolean;
-	// @ccValue({ internal: true })
-	// public get keyAttributesHaveIdenticalSupport(): boolean {
-	// 	return this._keyAttributesHaveIdenticalSupport;
-	// }
-
-	// public supportsKeyAttribute(
-	// 	sceneNumber: number,
-	// 	keyAttribute: CentralSceneKeys,
-	// ): boolean {
-	// 	const mapIndex = this._keyAttributesHaveIdenticalSupport
-	// 		? 1
-	// 		: sceneNumber;
-	// 	return this._supportedKeyAttributes
-	// 		.get(mapIndex)!
-	// 		.includes(keyAttribute);
-	// }
 }
 
 @CCCommand(CentralSceneCommand.SupportedGet)
@@ -490,26 +460,16 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
+		this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
 	}
 
-	private _slowRefresh: boolean;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Boolean,
-		label: "Send held down notifications at a slow rate",
-		description:
-			"When this is true, KeyHeldDown notifications are sent every 55s. " +
-			"When this is false, the notifications are sent every 200ms.",
-	})
-	public get slowRefresh(): boolean {
-		return this._slowRefresh;
-	}
+	@ccValue(CentralSceneCCValues.slowRefresh)
+	public readonly slowRefresh: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
-			message: { "slow refresh": this._slowRefresh },
+			message: { "slow refresh": this.slowRefresh },
 		};
 	}
 }

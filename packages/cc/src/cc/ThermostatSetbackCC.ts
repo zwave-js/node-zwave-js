@@ -17,8 +17,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -27,16 +25,36 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
+import { V } from "../lib/Values";
 import {
 	SetbackState,
 	SetbackType,
 	ThermostatSetbackCommand,
 } from "../lib/_Types";
+
+export const ThermostatSetbackCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Setback"], {
+		...V.staticProperty("setbackType", {
+			// TODO: This should be a value list
+			...ValueMetadata.Any,
+			label: "Setback type",
+		} as const),
+
+		...V.staticProperty("setbackState", {
+			...ValueMetadata.Int8,
+			min: -12.8,
+			max: 12,
+			label: "Setback state",
+		} as const),
+	}),
+});
 
 // @noSetValueAPI
 // The setback state consist of two values that must be set together
@@ -109,6 +127,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
+@ccValues(ThermostatSetbackCCValues)
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
@@ -219,35 +238,18 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._setbackType = this.payload[0] & 0b11;
+		this.setbackType = this.payload[0] & 0b11;
 		// If we receive an unknown setback state, return the raw value
-		this._setbackState =
+		this.setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
 	}
 
-	private _setbackType: SetbackType;
-	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.Any,
-		label: "Setback type",
-	})
-	public get setbackType(): SetbackType {
-		return this._setbackType;
-	}
+	@ccValue(ThermostatSetbackCCValues.setbackType)
+	public readonly setbackType: SetbackType;
 
-	private _setbackState: SetbackState;
+	@ccValue(ThermostatSetbackCCValues.setbackState)
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Int8,
-		min: -12.8,
-		max: 12,
-		label: "Setback state",
-	})
-	public get setbackState(): SetbackState {
-		return this._setbackState;
-	}
+	public readonly setbackState: SetbackState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

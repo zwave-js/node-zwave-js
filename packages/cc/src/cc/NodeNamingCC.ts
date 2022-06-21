@@ -2,11 +2,11 @@ import {
 	CommandClasses,
 	MessagePriority,
 	validatePayload,
+	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type Maybe,
 	type MessageOrCCLogEntry,
-	type ValueID,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -21,7 +21,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,28 +29,39 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { NodeNamingAndLocationCommand } from "../lib/_Types";
+
+export const NodeNamingAndLocationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Node Naming and Location"], {
+		...V.staticProperty(
+			"name",
+			{
+				...ValueMetadata.String,
+				label: "Node name",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+
+		...V.staticProperty(
+			"location",
+			{
+				...ValueMetadata.String,
+				label: "Node location",
+			} as const,
+			{ supportsEndpoints: false },
+		),
+	}),
+});
 
 function isASCII(str: string): boolean {
 	return /^[\x00-\x7F]*$/.test(str);
-}
-
-export function getNodeNameValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Node Naming and Location"],
-		property: "name",
-	};
-}
-
-export function getNodeLocationValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Node Naming and Location"],
-		property: "location",
-	};
 }
 
 @API(CommandClasses["Node Naming and Location"])
@@ -168,6 +178,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Node Naming and Location"])
 @implementedVersion(1)
+@ccValues(NodeNamingAndLocationCCValues)
 export class NodeNamingAndLocationCC extends CommandClass {
 	declare ccCommand: NodeNamingAndLocationCommand;
 
@@ -300,7 +311,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		this.name = nameBuffer.toString(encoding);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -387,7 +398,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 		this.location = locationBuffer.toString(encoding);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

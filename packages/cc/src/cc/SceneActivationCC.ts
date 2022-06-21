@@ -2,7 +2,6 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -20,8 +19,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,28 +27,35 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { SceneActivationCommand } from "../lib/_Types";
 
+export const SceneActivationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Scene Activation"], {
+		...V.staticProperty(
+			"sceneId",
+			{
+				...ValueMetadata.UInt8,
+				min: 1,
+				label: "Scene ID",
+				valueChangeOptions: ["transitionDuration"],
+			} as const,
+			{ stateful: false },
+		),
+
+		...V.staticProperty("dimmingDuration", {
+			...ValueMetadata.Duration,
+			label: "Dimming duration",
+		} as const),
+	}),
+});
+
 // @noInterview This CC is write-only
-
-export function getSceneIdValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Activation"],
-		endpoint,
-		property: "sceneId",
-	};
-}
-
-export function getDimmingDurationValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses["Scene Activation"],
-		endpoint,
-		property: "dimmingDuration",
-	};
-}
 
 @API(CommandClasses["Scene Activation"])
 export class SceneActivationCCAPI extends CCAPI {
@@ -101,6 +105,7 @@ export class SceneActivationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Activation"])
 @implementedVersion(1)
+@ccValues(SceneActivationCCValues)
 export class SceneActivationCC extends CommandClass {
 	declare ccCommand: SceneActivationCommand;
 }
@@ -131,20 +136,10 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		}
 	}
 
-	@ccValue({ stateful: false })
-	@ccValueMetadata({
-		...ValueMetadata.UInt8,
-		min: 1,
-		label: "Scene ID",
-		valueChangeOptions: ["transitionDuration"],
-	})
+	@ccValue(SceneActivationCCValues.sceneId)
 	public sceneId: number;
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Duration,
-		label: "Dimming duration",
-	})
+	@ccValue(SceneActivationCCValues.dimmingDuration)
 	public dimmingDuration: Duration | undefined;
 
 	public serialize(): Buffer {

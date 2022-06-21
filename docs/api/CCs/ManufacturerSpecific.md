@@ -17,3 +17,65 @@ async deviceSpecificGet(
 	deviceIdType: DeviceIdType,
 ): Promise<string | undefined>;
 ```
+
+## Manufacturer Specific CC values
+
+### `manufacturerId`
+
+```ts
+{
+	commandClass: CommandClasses["Manufacturer Specific"],
+	endpoint: number,
+	property: "manufacturerId",
+}
+```
+
+-   **label:** Manufacturer ID
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 65535
+
+### `productId`
+
+```ts
+{
+	commandClass: CommandClasses["Manufacturer Specific"],
+	endpoint: number,
+	property: "productId",
+}
+```
+
+-   **label:** Product ID
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 65535
+
+### `productType`
+
+```ts
+{
+	commandClass: CommandClasses["Manufacturer Specific"],
+	endpoint: number,
+	property: "productType",
+}
+```
+
+-   **label:** Product type
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 65535

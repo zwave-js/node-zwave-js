@@ -1,38 +1,34 @@
-import type {
-	CCAPI,
-	PollValueImplementation,
-	SetValueAPIOptions,
-} from "@zwave-js/cc";
 import {
+	CCAPI,
 	CentralSceneKeys,
 	CommandClass,
 	DoorLockMode,
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
-	getCCValueMetadata,
+	getCCValues,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
+	PollValueImplementation,
 	Powerlevel,
 	PowerlevelTestStatus,
+	SetValueAPIOptions,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
-import { getHasLifelineValueId } from "@zwave-js/cc/AssociationCC";
+import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import {
 	BasicCC,
 	BasicCCReport,
 	BasicCCSet,
-	getCompatEventValueId as getBasicCCCompatEventValueId,
-	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+	BasicCCValues,
 } from "@zwave-js/cc/BasicCC";
 import {
 	CentralSceneCCNotification,
-	getSceneValueId,
-	getSlowRefreshValueId,
+	CentralSceneCCValues,
 } from "@zwave-js/cc/CentralSceneCC";
 import { ClockCCReport } from "@zwave-js/cc/ClockCC";
-import { getCurrentModeValueId as getCurrentLockModeValueId } from "@zwave-js/cc/DoorLockCC";
+import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import {
 	FirmwareUpdateMetaDataCC,
@@ -41,32 +37,22 @@ import {
 	FirmwareUpdateMetaDataCCStatusReport,
 } from "@zwave-js/cc/FirmwareUpdateMetaDataCC";
 import { HailCC } from "@zwave-js/cc/HailCC";
-import { getLockedValueId } from "@zwave-js/cc/LockCC";
+import { LockCCValues } from "@zwave-js/cc/LockCC";
+import { ManufacturerSpecificCCValues } from "@zwave-js/cc/ManufacturerSpecificCC";
+import { MultiChannelCCValues } from "@zwave-js/cc/MultiChannelCC";
 import {
-	getManufacturerIdValueId,
-	getProductIdValueId,
-	getProductTypeValueId,
-} from "@zwave-js/cc/ManufacturerSpecificCC";
-import {
-	getEndpointCCsValueId,
-	getEndpointDeviceClassValueId,
-} from "@zwave-js/cc/MultiChannelCC";
-import {
-	getCompatEventValueId as getMultilevelSwitchCCCompatEventValueId,
 	MultilevelSwitchCC,
 	MultilevelSwitchCCSet,
 	MultilevelSwitchCCStartLevelChange,
 	MultilevelSwitchCCStopLevelChange,
+	MultilevelSwitchCCValues,
 } from "@zwave-js/cc/MultilevelSwitchCC";
-import {
-	getNodeLocationValueId,
-	getNodeNameValueId,
-} from "@zwave-js/cc/NodeNamingCC";
+import { NodeNamingAndLocationCCValues } from "@zwave-js/cc/NodeNamingCC";
 import {
 	getNotificationValueMetadata,
-	getNotificationValueMetadataUnknownType,
 	NotificationCC,
 	NotificationCCReport,
+	NotificationCCValues,
 } from "@zwave-js/cc/NotificationCC";
 import { PowerlevelCCTestNodeReport } from "@zwave-js/cc/PowerlevelCC";
 import { SceneActivationCCSet } from "@zwave-js/cc/SceneActivationCC";
@@ -78,21 +64,12 @@ import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "@zwave-js/cc/SecurityCC";
+import { VersionCCValues } from "@zwave-js/cc/VersionCC";
 import {
-	getFirmwareVersionsValueId,
-	getSDKVersionValueId,
-} from "@zwave-js/cc/VersionCC";
-import {
-	getWakeUpIntervalValueId,
-	getWakeUpOnDemandSupportedValueId,
+	WakeUpCCValues,
 	WakeUpCCWakeUpNotification,
 } from "@zwave-js/cc/WakeUpCC";
-import {
-	getNodeTypeValueId,
-	getRoleTypeValueId,
-	getZWavePlusVersionValueId,
-	ZWavePlusCCGet,
-} from "@zwave-js/cc/ZWavePlusCC";
+import { ZWavePlusCCGet, ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type {
 	DeviceConfig,
 	Notification,
@@ -368,11 +345,9 @@ export class ZWaveNode
 			this,
 			arg.commandClass,
 		);
-		const isInternalValue = ccInstance?.isInternalValue(
-			arg.property as any,
-		);
+		const isInternalValue = ccInstance?.isInternalValue(arg);
 		// Check whether this value change may be logged
-		const isSecretValue = !!ccInstance?.isSecretValue(arg.property as any);
+		const isSecretValue = !!ccInstance?.isSecretValue(arg);
 		if (
 			!isSecretValue &&
 			(arg as any as ValueUpdatedArgs).source !== "driver"
@@ -662,20 +637,22 @@ export class ZWaveNode
 	}
 
 	public get manufacturerId(): number | undefined {
-		return this.getValue(getManufacturerIdValueId());
+		return this.getValue(ManufacturerSpecificCCValues.manufacturerId.id);
 	}
 
 	public get productId(): number | undefined {
-		return this.getValue(getProductIdValueId());
+		return this.getValue(ManufacturerSpecificCCValues.productId.id);
 	}
 
 	public get productType(): number | undefined {
-		return this.getValue(getProductTypeValueId());
+		return this.getValue(ManufacturerSpecificCCValues.productType.id);
 	}
 
 	public get firmwareVersion(): string | undefined {
 		// We're only interested in the first (main) firmware
-		const ret = this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+		const ret = this.getValue<string[]>(
+			VersionCCValues.firmwareVersions.id,
+		)?.[0];
 
 		// Special case for the official 700 series firmwares which are aligned with the SDK version
 		// We want to work with the full x.y.z firmware version here.
@@ -690,23 +667,23 @@ export class ZWaveNode
 	}
 
 	public get sdkVersion(): string | undefined {
-		return this.getValue(getSDKVersionValueId());
+		return this.getValue(VersionCCValues.sdkVersion.id);
 	}
 
 	public get zwavePlusVersion(): number | undefined {
-		return this.getValue(getZWavePlusVersionValueId());
+		return this.getValue(ZWavePlusCCValues.zwavePlusVersion.id);
 	}
 
 	public get zwavePlusNodeType(): ZWavePlusNodeType | undefined {
-		return this.getValue(getNodeTypeValueId());
+		return this.getValue(ZWavePlusCCValues.nodeType.id);
 	}
 
 	public get zwavePlusRoleType(): ZWavePlusRoleType | undefined {
-		return this.getValue(getRoleTypeValueId());
+		return this.getValue(ZWavePlusCCValues.roleType.id);
 	}
 
 	public get supportsWakeUpOnDemand(): boolean | undefined {
-		return this.getValue(getWakeUpOnDemandSupportedValueId());
+		return this.getValue(WakeUpCCValues.wakeUpOnDemandSupported.id);
 	}
 
 	/**
@@ -716,13 +693,16 @@ export class ZWaveNode
 	 * the `commandClasses` API.
 	 */
 	public get name(): string | undefined {
-		return this.getValue(getNodeNameValueId());
+		return this.getValue(NodeNamingAndLocationCCValues.name.id);
 	}
 	public set name(value: string | undefined) {
 		if (value != undefined) {
-			this._valueDB.setValue(getNodeNameValueId(), value);
+			this._valueDB.setValue(
+				NodeNamingAndLocationCCValues.name.id,
+				value,
+			);
 		} else {
-			this._valueDB.removeValue(getNodeNameValueId());
+			this._valueDB.removeValue(NodeNamingAndLocationCCValues.name.id);
 		}
 	}
 
@@ -733,13 +713,18 @@ export class ZWaveNode
 	 * the `commandClasses` API.
 	 */
 	public get location(): string | undefined {
-		return this.getValue(getNodeLocationValueId());
+		return this.getValue(NodeNamingAndLocationCCValues.location.id);
 	}
 	public set location(value: string | undefined) {
 		if (value != undefined) {
-			this._valueDB.setValue(getNodeLocationValueId(), value);
+			this._valueDB.setValue(
+				NodeNamingAndLocationCCValues.location.id,
+				value,
+			);
 		} else {
-			this._valueDB.removeValue(getNodeLocationValueId());
+			this._valueDB.removeValue(
+				NodeNamingAndLocationCCValues.location.id,
+			);
 		}
 	}
 
@@ -801,13 +786,22 @@ export class ZWaveNode
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		const { commandClass, property } = valueId;
-		return {
-			// Merge static metadata
-			...getCCValueMetadata(commandClass, property),
-			// with potentially existing dynamic metadata
-			...this._valueDB.getMetadata(valueId),
-		};
+		// First attempt: look in the value DB
+		if (this._valueDB.hasMetadata(valueId)) {
+			return this._valueDB.getMetadata(valueId)!;
+		}
+
+		// Second attempt: check if a corresponding CC value is defined for this value ID
+		const definedCCValues = getCCValues(valueId.commandClass);
+		if (definedCCValues) {
+			const value = Object.values(definedCCValues).find((v) =>
+				v?.is(valueId),
+			);
+			if (value && typeof value !== "function") return value.meta;
+		}
+
+		// Default: Any
+		return ValueMetadata.Any;
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
@@ -1036,7 +1030,7 @@ export class ZWaveNode
 			generic: number;
 			specific: number;
 		}>(
-			getEndpointDeviceClassValueId(
+			MultiChannelCCValues.endpointDeviceClass.endpoint(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
@@ -1054,7 +1048,7 @@ export class ZWaveNode
 
 	private getEndpointCCs(index: number): CommandClasses[] | undefined {
 		const ret = this.getValue(
-			getEndpointCCsValueId(
+			MultiChannelCCValues.endpointCCs.endpoint(
 				this.endpointsHaveIdenticalCapabilities ? 1 : index,
 			),
 		);
@@ -1910,7 +1904,7 @@ protocol version:      ${this.protocolVersion}`;
 		return (
 			this.interviewStage === InterviewStage.Complete &&
 			!this.supportsCC(CommandClasses["Z-Wave Plus Info"]) &&
-			!this.valueDB.getValue(getHasLifelineValueId())
+			!this.valueDB.getValue(AssociationCCValues.hasLifeline.id)
 		);
 	}
 
@@ -2448,7 +2442,7 @@ protocol version:      ${this.protocolVersion}`;
 			sceneNumber: number,
 			key: CentralSceneKeys,
 		): void => {
-			const valueId = getSceneValueId(sceneNumber);
+			const valueId = CentralSceneCCValues.scene(sceneNumber).id;
 			this.valueDB.setValue(valueId, key, { stateful: false });
 		};
 
@@ -2474,6 +2468,9 @@ protocol version:      ${this.protocolVersion}`;
 			forceKeyUp();
 		}
 
+		const slowRefreshValueId = CentralSceneCCValues.slowRefresh.endpoint(
+			this.index,
+		);
 		if (command.keyAttribute === CentralSceneKeys.KeyHeldDown) {
 			// Set or refresh timer to force a release of the key
 			this.centralSceneForcedKeyUp = false;
@@ -2484,7 +2481,7 @@ protocol version:      ${this.protocolVersion}`;
 			// slow refresh node. We use the stored value for fallback behavior
 			const slowRefresh =
 				command.slowRefresh ??
-				this.valueDB.getValue<boolean>(getSlowRefreshValueId());
+				this.valueDB.getValue<boolean>(slowRefreshValueId);
 			this.centralSceneKeyHeldDownContext = {
 				sceneNumber: command.sceneNumber,
 				// Unref'ing long running timers allows the process to exit mid-timeout
@@ -2501,7 +2498,7 @@ protocol version:      ${this.protocolVersion}`;
 			} else if (this.centralSceneForcedKeyUp) {
 				// If we timed out and the controller subsequently receives a Key Released Notification,
 				// we SHOULD consider the sending node to be operating with the Slow Refresh capability enabled.
-				this.valueDB.setValue(getSlowRefreshValueId(), true);
+				this.valueDB.setValue(slowRefreshValueId, true);
 				// Do not raise the duplicate event
 				return;
 			}
@@ -2541,7 +2538,7 @@ protocol version:      ${this.protocolVersion}`;
 		if (this.lastWakeUp) {
 			// we've already measured the wake up interval, so we can check whether a refresh is necessary
 			const wakeUpInterval =
-				this.getValue<number>(getWakeUpIntervalValueId()) ?? 1;
+				this.getValue<number>(WakeUpCCValues.wakeUpInterval.id) ?? 1;
 			// The wakeup interval is specified in seconds. Also add 5 minutes tolerance to avoid
 			// unnecessary queries since there might be some delay. A wakeup interval of 0 means manual wakeup,
 			// so the interval shouldn't be verified
@@ -2733,7 +2730,7 @@ protocol version:      ${this.protocolVersion}`;
 					message: "treating BasicCC::Set as a value event",
 				});
 				this._valueDB.setValue(
-					getBasicCCCompatEventValueId(command.endpointIndex),
+					BasicCCValues.compatEvent.endpoint(command.endpointIndex),
 					command.targetValue,
 					{
 						stateful: false,
@@ -2760,7 +2757,9 @@ protocol version:      ${this.protocolVersion}`;
 				if (!didSetMappedValue) {
 					// Basic Set commands cannot store their value automatically, so store the values manually
 					this._valueDB.setValue(
-						getBasicCCCurrentValueValueId(command.endpointIndex),
+						BasicCCValues.currentValue.endpoint(
+							command.endpointIndex,
+						),
 						command.targetValue,
 					);
 					// Since the node sent us a Basic command, we are sure that it is at least controlled
@@ -2783,7 +2782,9 @@ protocol version:      ${this.protocolVersion}`;
 				message: "treating MultiLevelSwitchCCSet::Set as a value event",
 			});
 			this._valueDB.setValue(
-				getMultilevelSwitchCCCompatEventValueId(command.endpointIndex),
+				MultilevelSwitchCCValues.compatEvent.endpoint(
+					command.endpointIndex,
+				),
 				command.targetValue,
 				{
 					stateful: false,
@@ -2893,17 +2894,6 @@ protocol version:      ${this.protocolVersion}`;
 				this.valueDB.setMetadata(valueId, metadata);
 			}
 		};
-		const ensureValueMetadataUnknownType = (
-			valueId: ValueID,
-			notificationConfig: Notification,
-		) => {
-			if (command.version === 2 && !this.valueDB.hasMetadata(valueId)) {
-				const metadata = getNotificationValueMetadataUnknownType(
-					notificationConfig.id,
-				);
-				this.valueDB.setMetadata(valueId, metadata);
-			}
-		};
 
 		// Look up the received notification in the config
 		const notificationConfig = this.driver.configManager.lookupNotification(
@@ -2912,7 +2902,7 @@ protocol version:      ${this.protocolVersion}`;
 
 		if (notificationConfig) {
 			// This is a known notification (status or event)
-			const property = notificationConfig.name;
+			const notificationName = notificationConfig.name;
 
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
@@ -2922,13 +2912,12 @@ protocol version:      ${this.protocolVersion}`;
 				// Some properties may not be reset to idle
 				if (!valueConfig.idle) return;
 
-				const propertyKey = valueConfig.variableName;
-				const valueId: ValueID = {
-					commandClass: command.ccId,
-					endpoint: command.endpointIndex,
-					property,
-					propertyKey,
-				};
+				const variableName = valueConfig.variableName;
+				const valueId = NotificationCCValues.notificationVariable(
+					notificationName,
+					variableName,
+				).endpoint(command.endpointIndex);
+
 				// Since the node has reset the notification itself, we don't need the idle reset
 				this.clearNotificationIdleReset(valueId);
 				extendValueMetadata(valueId, notificationConfig, valueConfig);
@@ -2951,7 +2940,7 @@ protocol version:      ${this.protocolVersion}`;
 						.filter(
 							(v) =>
 								(v.endpoint || 0) === command.endpointIndex &&
-								v.property === property &&
+								v.property === notificationName &&
 								typeof v.value === "number" &&
 								v.value !== 0,
 						);
@@ -2962,7 +2951,6 @@ protocol version:      ${this.protocolVersion}`;
 				return;
 			}
 
-			let propertyKey: string;
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
 
@@ -2971,12 +2959,9 @@ protocol version:      ${this.protocolVersion}`;
 
 			let allowIdleReset: boolean;
 			if (!valueConfig) {
-				// This is an unknown value, collect it in an unknown bucket
-				propertyKey = "unknown";
 				// We don't know what this notification refers to, so we don't force a reset
 				allowIdleReset = false;
 			} else if (valueConfig.type === "state") {
-				propertyKey = valueConfig.variableName;
 				allowIdleReset = valueConfig.idle;
 			} else {
 				this.emit("notification", this, CommandClasses.Notification, {
@@ -2990,16 +2975,28 @@ protocol version:      ${this.protocolVersion}`;
 			}
 
 			// Now that we've gathered all we need to know, update the value in our DB
-			const valueId: ValueID = {
-				commandClass: command.ccId,
-				endpoint: command.endpointIndex,
-				property,
-				propertyKey,
-			};
+			let valueId: ValueID;
 			if (valueConfig) {
+				valueId = NotificationCCValues.notificationVariable(
+					notificationName,
+					valueConfig.variableName,
+				).endpoint(command.endpointIndex);
+
 				extendValueMetadata(valueId, notificationConfig, valueConfig);
 			} else {
-				ensureValueMetadataUnknownType(valueId, notificationConfig);
+				// Collect unknown values in an "unknown" bucket
+				const unknownValue =
+					NotificationCCValues.unknownNotificationVariable(
+						command.notificationType,
+						notificationName,
+					);
+				valueId = unknownValue.endpoint(command.endpointIndex);
+
+				if (command.version === 2) {
+					if (!this.valueDB.hasMetadata(valueId)) {
+						this.valueDB.setMetadata(valueId, unknownValue.meta);
+					}
+				}
 			}
 			this.valueDB.setValue(valueId, value);
 
@@ -3017,12 +3014,10 @@ protocol version:      ${this.protocolVersion}`;
 			}
 		} else {
 			// This is an unknown notification
-			const property = `UNKNOWN_${num2hex(command.notificationType)}`;
-			const valueId: ValueID = {
-				commandClass: command.ccId,
-				endpoint: command.endpointIndex,
-				property,
-			};
+			const valueId = NotificationCCValues.unknownNotificationType(
+				command.notificationType,
+			).endpoint(command.endpointIndex);
+
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
 		}
@@ -3051,13 +3046,15 @@ protocol version:      ${this.protocolVersion}`;
 			// Update the current lock status
 			if (this.supportsCC(CommandClasses["Door Lock"])) {
 				this.valueDB.setValue(
-					getCurrentLockModeValueId(command.endpointIndex),
+					DoorLockCCValues.currentMode.endpoint(
+						command.endpointIndex,
+					),
 					isLocked ? DoorLockMode.Secured : DoorLockMode.Unsecured,
 				);
 			}
 			if (this.supportsCC(CommandClasses.Lock)) {
 				this.valueDB.setValue(
-					getLockedValueId(command.endpointIndex),
+					LockCCValues.locked.endpoint(command.endpointIndex),
 					isLocked,
 				);
 			}

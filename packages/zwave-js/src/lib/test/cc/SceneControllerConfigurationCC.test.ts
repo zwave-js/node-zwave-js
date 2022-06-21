@@ -5,7 +5,7 @@ import {
 	SceneControllerConfigurationCCSet,
 	SceneControllerConfigurationCommand,
 } from "@zwave-js/cc";
-import { getGroupCountValueId } from "@zwave-js/cc/AssociationCC";
+import { AssociationCCValues } from "@zwave-js/cc/AssociationCC";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { createTestNode } from "../mocks";
@@ -21,7 +21,7 @@ function buildCCBuffer(payload: Buffer): Buffer {
 
 describe("lib/commandclass/SceneControllerConfigurationCC => ", () => {
 	const fakeGroupCount = 5;
-	const groupCountValueId = getGroupCountValueId();
+	const groupCountValueId = AssociationCCValues.groupCount.id;
 	let host: TestingHost;
 
 	beforeAll(() => {

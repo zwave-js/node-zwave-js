@@ -1,4 +1,4 @@
-import { getCurrentValueValueId as getBasicCCCurrentValueValueId } from "@zwave-js/cc/BasicCC";
+import { BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { createThrowingMap, ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -46,7 +46,7 @@ describe("regression tests", () => {
 		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
-		const valueId = getBasicCCCurrentValueValueId(0);
+		const valueId = BasicCCValues.currentValue.id;
 		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
@@ -76,7 +76,7 @@ describe("regression tests", () => {
 		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
-		const valueId = getBasicCCCurrentValueValueId(0);
+		const valueId = BasicCCValues.currentValue.id;
 		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
@@ -124,7 +124,7 @@ describe("regression tests", () => {
 		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
-		const valueId = getBasicCCCurrentValueValueId(0);
+		const valueId = BasicCCValues.currentValue.id;
 		expect(node2.getValue(valueId)).toBeUndefined();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
