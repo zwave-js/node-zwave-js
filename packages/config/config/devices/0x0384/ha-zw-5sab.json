@@ -133,7 +133,7 @@
 			"#": "111",
 			"label": "Temperature Change Threshold",
 			"valueSize": 2,
-			"unit": "°C",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
