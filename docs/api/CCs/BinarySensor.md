@@ -23,3 +23,23 @@ Retrieves the current value from this sensor.
 ```ts
 async getSupportedSensorTypes(): Promise<readonly BinarySensorType[] | undefined>;
 ```
+
+## Binary Sensor CC values
+
+### `state(sensorType: BinarySensorType)`
+
+```ts
+{
+	commandClass: CommandClasses["Binary Sensor"],
+	endpoint: number,
+	property: string,
+}
+```
+
+-   **label:** `Sensor state (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`

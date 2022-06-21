@@ -4,7 +4,6 @@ import type {
 	IZWaveNode,
 	Maybe,
 	MessageRecord,
-	ValueID,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -20,66 +19,55 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
-	type CommandClassOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
+import { V } from "../lib/Values";
 import { AssociationCommand, type AssociationAddress } from "../lib/_Types";
 
-/** Returns the ValueID used to store the maximum number of nodes of an association group */
-export function getMaxNodesValueId(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Association,
-		endpoint: endpointIndex,
-		property: "maxNodes",
-		propertyKey: groupId,
-	};
-}
+export const AssociationCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Association, {
+		/** Whether the node has a lifeline association */
+		...V.staticProperty("hasLifeline", undefined, { internal: true }),
+		/** How many association groups the node has */
+		...V.staticProperty("groupCount", undefined, { internal: true }),
+	}),
 
-/** Returns the ValueID used to store the node IDs of an association group */
-export function getNodeIdsValueId(
-	endpointIndex: number,
-	groupId: number,
-): ValueID {
-	return {
-		commandClass: CommandClasses.Association,
-		endpoint: endpointIndex,
-		property: "nodeIds",
-		propertyKey: groupId,
-	};
-}
-
-/** Returns the ValueID used to store the group count of an association group */
-export function getGroupCountValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Association,
-		endpoint: endpointIndex,
-		property: "groupCount",
-	};
-}
-
-/** Returns the ValueID used to store whether a node has a lifeline association */
-export function getHasLifelineValueId(endpointIndex?: number): ValueID {
-	return {
-		commandClass: CommandClasses.Association,
-		endpoint: endpointIndex,
-		property: "hasLifeline",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses.Association, {
+		/** The maximum number of nodes in an association group */
+		...V.dynamicPropertyAndKeyWithName(
+			"maxNodes",
+			"maxNodes",
+			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "maxNodes" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+		/** The node IDs currently belonging to an association group */
+		...V.dynamicPropertyAndKeyWithName(
+			"nodeIds",
+			"nodeIds",
+			(groupId: number) => groupId,
+			({ property, propertyKey }) =>
+				property === "nodeIds" && typeof propertyKey === "number",
+			undefined,
+			{ internal: true },
+		),
+	}),
+});
 
 export function getLifelineGroupIds(
 	applHost: ZWaveApplicationHost,
@@ -245,7 +233,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			// We have to remove the node manually from all groups
 			const groupCount =
 				this.tryGetValueDB()?.getValue<number>(
-					getGroupCountValueId(this.endpoint.index),
+					AssociationCCValues.groupCount.endpoint(
+						this.endpoint.index,
+					),
 				) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
 				await this.removeNodeIds({ nodeIds, groupId });
@@ -256,15 +246,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Association)
 @implementedVersion(3)
+@ccValues(AssociationCCValues)
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
-
-	public constructor(host: ZWaveHost, options: CommandClassOptions) {
-		super(host, options);
-		this.registerValue(getHasLifelineValueId(0).property, {
-			internal: true,
-		});
-	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// AssociationCC must be interviewed after Z-Wave+ if that is supported
@@ -287,7 +271,9 @@ export class AssociationCC extends CommandClass {
 		return (
 			applHost
 				.getValueDB(endpoint.nodeId)
-				.getValue(getGroupCountValueId(endpoint.index)) || 0
+				.getValue(
+					AssociationCCValues.groupCount.endpoint(endpoint.index),
+				) || 0
 		);
 	}
 
@@ -303,7 +289,11 @@ export class AssociationCC extends CommandClass {
 		return (
 			applHost
 				.getValueDB(endpoint.nodeId)
-				.getValue(getMaxNodesValueId(endpoint.index, groupId)) ??
+				.getValue(
+					AssociationCCValues.maxNodes(groupId).endpoint(
+						endpoint.index,
+					),
+				) ??
 			// If the information is not available, fall back to the configuration file if possible
 			// This can happen on some legacy devices which have "hidden" association groups
 			applHost
@@ -329,7 +319,7 @@ export class AssociationCC extends CommandClass {
 			// Add all root destinations
 			const nodes =
 				valueDB.getValue<number[]>(
-					getNodeIdsValueId(endpoint.index, i),
+					AssociationCCValues.nodeIds(i).endpoint(endpoint.index),
 				) ?? [];
 
 			ret.set(
@@ -596,13 +586,19 @@ export class AssociationCCReport extends AssociationCC {
 	}
 
 	private _maxNodes: number;
-	@ccValue({ internal: true })
+	@ccValue(
+		AssociationCCValues.maxNodes,
+		(self: AssociationCCReport) => [self.groupId] as const,
+	)
 	public get maxNodes(): number {
 		return this._maxNodes;
 	}
 
 	private _nodeIds: number[];
-	@ccValue({ internal: true })
+	@ccValue(
+		AssociationCCValues.nodeIds,
+		(self: AssociationCCReport) => [self.groupId] as const,
+	)
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
@@ -701,7 +697,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	}
 
 	private _groupCount: number;
-	@ccValue({ internal: true })
+	@ccValue(AssociationCCValues.groupCount)
 	public get groupCount(): number {
 		return this._groupCount;
 	}

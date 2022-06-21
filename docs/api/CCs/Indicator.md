@@ -38,3 +38,43 @@ async identify(): Promise<void>;
 ```
 
 Instructs the node to identify itself. Available starting with V3 of this CC.
+
+## Indicator CC values
+
+### `valueV1`
+
+```ts
+{
+	commandClass: CommandClasses.Indicator,
+	endpoint: number,
+	property: "value",
+}
+```
+
+-   **label:** Indicator value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `valueV2(indicatorId: number, propertyId: number)`
+
+```ts
+{
+	commandClass: CommandClasses.Indicator,
+	endpoint: number,
+	property: number,
+	propertyKey: number,
+}
+```
+
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"any"`

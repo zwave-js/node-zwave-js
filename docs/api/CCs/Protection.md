@@ -48,3 +48,81 @@ async getTimeout(): Promise<Timeout | undefined>;
 ```ts
 async setTimeout(timeout: Timeout): Promise<void>;
 ```
+
+## Protection CC values
+
+### `exclusiveControlNodeId`
+
+```ts
+{
+	commandClass: CommandClasses.Protection,
+	endpoint: number,
+	property: "exclusiveControlNodeId",
+}
+```
+
+-   **label:** Node ID with exclusive control
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 1
+-   **max. value:** 232
+
+### `localProtectionState`
+
+```ts
+{
+	commandClass: CommandClasses.Protection,
+	endpoint: number,
+	property: "local",
+}
+```
+
+-   **label:** Local protection state
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+
+### `rfProtectionState`
+
+```ts
+{
+	commandClass: CommandClasses.Protection,
+	endpoint: number,
+	property: "rf",
+}
+```
+
+-   **label:** RF protection state
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+
+### `timeout`
+
+```ts
+{
+	commandClass: CommandClasses.Protection,
+	endpoint: number,
+	property: "timeout",
+}
+```
+
+-   **label:** RF protection timeout
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255

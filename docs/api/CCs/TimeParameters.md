@@ -15,3 +15,23 @@ async get(): Promise<Date | undefined>;
 ```ts
 async set(dateAndTime: Date): Promise<void>;
 ```
+
+## Time Parameters CC values
+
+### `dateAndTime`
+
+```ts
+{
+	commandClass: CommandClasses["Time Parameters"],
+	endpoint: number,
+	property: "dateAndTime",
+}
+```
+
+-   **label:** Date and Time
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"any"`

@@ -7,7 +7,6 @@ import {
 	MessageRecord,
 	unknownBoolean,
 	validatePayload,
-	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -21,7 +20,6 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,10 +28,13 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	FirmwareDownloadStatus,
 	FirmwareUpdateActivationStatus,
@@ -44,33 +45,22 @@ import {
 
 // @noSetValueAPI There are no values to set here
 
-export function getSupportsActivationValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Firmware Update Meta Data"],
-		property: "supportsActivation",
-	};
-}
-
-export function getFirmwareUpgradableValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Firmware Update Meta Data"],
-		property: "firmwareUpgradable",
-	};
-}
-
-export function getAdditionalFirmwareIDsValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Firmware Update Meta Data"],
-		property: "additionalFirmwareIDs",
-	};
-}
-
-export function getContinuesToFunctionValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Firmware Update Meta Data"],
-		property: "continuesToFunction",
-	};
-}
+export const FirmwareUpdateMetaDataCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Firmware Update Meta Data"], {
+		...V.staticProperty("supportsActivation", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("firmwareUpgradable", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("additionalFirmwareIDs", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("continuesToFunction", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 @API(CommandClasses["Firmware Update Meta Data"])
 export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
@@ -87,7 +77,9 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 					this.version >= 4 &&
 					(this.version < 7 ||
 						this.tryGetValueDB()?.getValue(
-							getSupportsActivationValueId(),
+							FirmwareUpdateMetaDataCCValues.supportsActivation.endpoint(
+								this.endpoint.index,
+							),
 						) === true)
 				);
 
@@ -213,6 +205,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Firmware Update Meta Data"])
 @implementedVersion(7)
+@ccValues(FirmwareUpdateMetaDataCCValues)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
 
@@ -321,17 +314,16 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 	public readonly manufacturerId: number;
 	public readonly firmwareId: number;
 	public readonly checksum: number;
-	@ccValue({ internal: true })
+	@ccValue(FirmwareUpdateMetaDataCCValues.firmwareUpgradable)
 	public readonly firmwareUpgradable: boolean;
 	public readonly maxFragmentSize?: number;
-	@ccValue({ internal: true })
+	@ccValue(FirmwareUpdateMetaDataCCValues.additionalFirmwareIDs)
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
-
-	@ccValue({ internal: true })
+	@ccValue(FirmwareUpdateMetaDataCCValues.continuesToFunction)
 	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
 
-	@ccValue({ internal: true })
+	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
 	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

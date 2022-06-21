@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core/safe";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -9,7 +9,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -18,10 +17,13 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	ZWavePlusCommand,
 	ZWavePlusNodeType,
@@ -32,42 +34,32 @@ import {
 // MUST be identical for the Root Device and all Multi Channel End Points
 // --> We only access endpoint 0
 
-export function getZWavePlusVersionValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Z-Wave Plus Info"],
-		property: "zwavePlusVersion",
-	};
-}
+export const ZWavePlusCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Z-Wave Plus Info"], {
+		...V.staticProperty("zwavePlusVersion", undefined, {
+			supportsEndpoints: false,
+			internal: true,
+		}),
 
-export function getNodeTypeValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Z-Wave Plus Info"],
-		property: "nodeType",
-	};
-}
+		...V.staticProperty("nodeType", undefined, {
+			supportsEndpoints: false,
+			internal: true,
+		}),
 
-export function getRoleTypeValueId(): ValueID {
-	return {
-		commandClass: CommandClasses["Z-Wave Plus Info"],
-		property: "roleType",
-	};
-}
+		...V.staticProperty("roleType", undefined, {
+			supportsEndpoints: false,
+			internal: true,
+		}),
 
-export function getInstallerIconValueId(endpoint: number = 0): ValueID {
-	return {
-		commandClass: CommandClasses["Z-Wave Plus Info"],
-		endpoint,
-		property: "installerIcon",
-	};
-}
+		...V.staticProperty("userIcon", undefined, {
+			internal: true,
+		}),
 
-export function getUserIconValueId(endpoint: number = 0): ValueID {
-	return {
-		commandClass: CommandClasses["Z-Wave Plus Info"],
-		endpoint,
-		property: "userIcon",
-	};
-}
+		...V.staticProperty("installerIcon", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -120,6 +112,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
+@ccValues(ZWavePlusCCValues)
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
@@ -199,15 +192,19 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		}
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(ZWavePlusCCValues.zwavePlusVersion)
 	public zwavePlusVersion: number;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.nodeType)
 	public nodeType: ZWavePlusNodeType;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.roleType)
 	public roleType: ZWavePlusRoleType;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.installerIcon)
 	public installerIcon: number;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.userIcon)
 	public userIcon: number;
 
 	public serialize(): Buffer {

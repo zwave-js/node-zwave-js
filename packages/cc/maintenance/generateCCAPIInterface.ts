@@ -65,10 +65,9 @@ export async function generateCCAPIInterface(): Promise<void> {
 		"\n" +
 		CCsWithAPI.map(
 			({ name, className, file }) =>
-				`\t${name}: import("${path.relative(
-					libDir,
-					ccDir,
-				)}/${file}").${className};`,
+				`\t${name}: import("${path
+					.relative(libDir, ccDir)
+					.replace(/\\/g, "/")}/${file}").${className};`,
 		).join("\n") +
 		"\n" +
 		apiFileContent.slice(endTokenStart);

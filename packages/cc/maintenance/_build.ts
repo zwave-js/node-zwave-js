@@ -1,6 +1,7 @@
 import { red } from "ansi-colors";
 import { generateCCAPIInterface } from "./generateCCAPIInterface";
 import { generateCCExports } from "./generateCCExports";
+import { generateCCValuesInterface } from "./generateCCValuesInterface";
 // import { lintCCConstructors } from "./lintCCConstructor";
 import { lintCCInterview } from "./lintCCInterview";
 import { lintCCValidateArgs } from "./lintCCValidateArgs";
@@ -14,7 +15,11 @@ const lint = () =>
 		lintCCValidateArgs(),
 	]);
 const prebuild = () =>
-	Promise.all([generateCCAPIInterface(), generateCCExports()]);
+	Promise.all([
+		generateCCAPIInterface(),
+		generateCCValuesInterface(),
+		generateCCExports(),
+	]);
 
 (async () => {
 	if (argv.includes("lint")) {

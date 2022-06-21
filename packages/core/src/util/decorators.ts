@@ -319,3 +319,84 @@ export function createReflectionDecoratorPair<
 
 	return ret;
 }
+
+// export interface PropertyReflectionDecorator<
+// 	// eslint-disable-next-line @typescript-eslint/ban-types
+// 	TTarget extends Object,
+// 	TArgs extends any[],
+// 	TValue,
+// > {
+// 	/** The decorator which is used to decorate properties */
+// 	decorator: (...args: TArgs) => TypedPropertyDecorator<TTarget>;
+// 	/** Looks up all decorated properties and the decorator arguments for a class instance */
+// 	lookupValues: (target: TTarget) => ReadonlyMap<string | number, TValue>;
+// }
+
+// export interface CreatePropertyReflectionDecoratorOptions<
+// 	TArgs extends any[],
+// 	TValue,
+// > {
+// 	/** The name of this decorator */
+// 	name: string;
+// 	/** Determines the value to be stored for the given arguments */
+// 	valueFromArgs: (...args: TArgs) => TValue;
+// }
+
+// /** Creates a reflection decorator for a class property and the corresponding method for reverse lookup of defined values */
+// export function createPropertyReflectionDecorator<
+// 	// eslint-disable-next-line @typescript-eslint/ban-types
+// 	TTarget extends Object,
+// 	TArgs extends any[],
+// 	TValue,
+// >({
+// 	name,
+// 	valueFromArgs,
+// }: CreatePropertyReflectionDecoratorOptions<
+// 	TArgs,
+// 	TValue
+// >): PropertyReflectionDecorator<TTarget, TArgs, TValue> {
+// 	const key = Symbol.for(`METADATA_${name}`);
+
+// 	const prp: PropertyReflectionDecorator<TTarget, TArgs, TValue> = {
+// 		decorator: (...args) => {
+// 			const value = valueFromArgs(...args);
+// 			let body = (
+// 				target: TTarget,
+// 				property: string | number | symbol,
+// 			) => {
+// 				// get the class constructor
+// 				const constr = target.constructor;
+
+// 				// retrieve the current metadata
+// 				const metadata: Map<string | number, TValue> =
+// 					Reflect.getMetadata(key, constr) ?? new Map();
+
+// 				// Add the variable
+// 				metadata.set(property as string | number, value);
+
+// 				// And store it back
+// 				Reflect.defineMetadata(key, metadata, constr);
+// 			};
+
+// 			// Rename the decorator body so it is easier to identify in stack traces
+// 			body = Object.defineProperty(body, "name", {
+// 				value: "decoratorBody_" + name,
+// 			});
+
+// 			return body;
+// 		},
+
+// 		lookupValues: (target) => {
+// 			return Reflect.getMetadata(key, target.constructor);
+// 		},
+// 	};
+
+// 	// Rename the decorator functions so they are easier to identify in stack traces
+// 	for (const property of ["decorator", "lookupValues"] as const) {
+// 		prp[property] = Object.defineProperty(prp[property], "name", {
+// 			value: `${property}_${name}`,
+// 		}) as any;
+// 	}
+
+// 	return prp;
+// }
