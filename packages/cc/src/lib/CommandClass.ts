@@ -35,7 +35,7 @@ import {
 	getCCCommandConstructor,
 	getCCConstructor,
 	getCCResponsePredicate,
-	getCCValueDefinitions,
+	getCCValueProperties,
 	getCCValues,
 	getCommandClass,
 	getExpectedCCResponse,
@@ -719,10 +719,31 @@ export class CommandClass implements ICommandClass {
 		// Return all value IDs for this CC...
 		const valueDB = this.getValueDB(applHost);
 		// ...which either have metadata or a value
-		const existingValueIds = [
+		const existingValueIds: ValueID[] = [
 			...valueDB.getValues(this.ccId),
 			...valueDB.getAllMetadata(this.ccId),
 		];
+
+		// ...or which are statically defined using @ccValues(...)
+		for (const value of Object.values(getCCValues(this) ?? {})) {
+			// Skip dynamic CC values - they need a specific subclass instance to be evaluated
+			if (!value || typeof value === "function") continue;
+
+			// Skip those values that are only supported in higher versions of the CC
+			if (
+				value.options.minVersion != undefined &&
+				value.options.minVersion > this.version
+			) {
+				continue;
+			}
+
+			// Skip internal values
+			if (value.options.internal) continue;
+
+			existingValueIds.push(value.endpoint(this.endpointIndex));
+		}
+
+		// TODO: this is a bit awkward for the statically defined ones
 		const ccValues = this.getAllCCValues();
 		for (const valueId of existingValueIds) {
 			// ...belonging to the current endpoint
@@ -776,7 +797,7 @@ export class CommandClass implements ICommandClass {
 		}
 
 		// Get all properties of this CC which are annotated with a @ccValue decorator and store them.
-		for (const [prop, _value] of getCCValueDefinitions(this)) {
+		for (const [prop, _value] of getCCValueProperties(this)) {
 			// Evaluate dynamic CC values first
 			const value = typeof _value === "function" ? _value(this) : _value;
 
@@ -792,7 +813,9 @@ export class CommandClass implements ICommandClass {
 
 			// Metadata always gets created for non-internal values, regardless of the actual value being defined
 			if (!value.options.internal) {
-				this.ensureMetadata(applHost, value);
+				if (!valueDB.hasMetadata(valueId)) {
+					valueDB.setMetadata(valueId, value.meta);
+				}
 			}
 
 			// The value only gets written if it is not undefined

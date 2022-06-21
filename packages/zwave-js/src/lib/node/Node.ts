@@ -1,19 +1,18 @@
-import type {
-	CCAPI,
-	PollValueImplementation,
-	SetValueAPIOptions,
-} from "@zwave-js/cc";
 import {
+	CCAPI,
 	CentralSceneKeys,
 	CommandClass,
 	DoorLockMode,
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
+	getCCValues,
 	isCommandClassContainer,
 	MultilevelSwitchCommand,
+	PollValueImplementation,
 	Powerlevel,
 	PowerlevelTestStatus,
+	SetValueAPIOptions,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
@@ -346,11 +345,9 @@ export class ZWaveNode
 			this,
 			arg.commandClass,
 		);
-		const isInternalValue = ccInstance?.isInternalValue(
-			arg.property as any,
-		);
+		const isInternalValue = ccInstance?.isInternalValue(arg);
 		// Check whether this value change may be logged
-		const isSecretValue = !!ccInstance?.isSecretValue(arg.property as any);
+		const isSecretValue = !!ccInstance?.isSecretValue(arg);
 		if (
 			!isSecretValue &&
 			(arg as any as ValueUpdatedArgs).source !== "driver"
@@ -789,7 +786,22 @@ export class ZWaveNode
 	 * This can be used to enhance the user interface of an application
 	 */
 	public getValueMetadata(valueId: ValueID): ValueMetadata {
-		return this._valueDB.getMetadata(valueId) ?? ValueMetadata.Any;
+		// First attempt: look in the value DB
+		if (this._valueDB.hasMetadata(valueId)) {
+			return this._valueDB.getMetadata(valueId)!;
+		}
+
+		// Second attempt: check if a corresponding CC value is defined for this value ID
+		const definedCCValues = getCCValues(valueId.commandClass);
+		if (definedCCValues) {
+			const value = Object.values(definedCCValues).find((v) =>
+				v?.is(valueId),
+			);
+			if (value && typeof value !== "function") return value.meta;
+		}
+
+		// Default: Any
+		return ValueMetadata.Any;
 	}
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */

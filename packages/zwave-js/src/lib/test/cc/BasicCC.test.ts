@@ -234,7 +234,7 @@ describe("lib/commandclass/BasicCC => ", () => {
 			const cc = new BasicCCGet(host, {
 				nodeId: 2,
 			});
-			const values = getCCValues<typeof BasicCCValues>(cc)!;
+			const values = getCCValues(cc) as typeof BasicCCValues;
 			expect(values.currentValue.id).toMatchObject({
 				commandClass: CommandClasses.Basic,
 				property: "currentValue",
