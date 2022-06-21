@@ -16,22 +16,38 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	HumidityControlOperatingState,
 	HumidityControlOperatingStateCommand,
 } from "../lib/_Types";
+
+export const HumidityControlOperatingStateCCValues = Object.freeze({
+	...V.defineStaticCCValues(
+		CommandClasses["Humidity Control Operating State"],
+		{
+			...V.staticProperty("state", {
+				...ValueMetadata.ReadOnlyUInt8,
+				states: enumValuesToMetadataStates(
+					HumidityControlOperatingState,
+				),
+				label: "Humidity control operating state",
+			} as const),
+		},
+	),
+});
 
 @API(CommandClasses["Humidity Control Operating State"])
 export class HumidityControlOperatingStateCCAPI extends CCAPI {
@@ -80,6 +96,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Operating State"])
 @implementedVersion(1)
+@ccValues(HumidityControlOperatingStateCCValues)
 export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 
@@ -140,19 +157,11 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._state = this.payload[0] & 0b1111;
+		this.state = this.payload[0] & 0b1111;
 	}
 
-	private _state: HumidityControlOperatingState;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		states: enumValuesToMetadataStates(HumidityControlOperatingState),
-		label: "Humidity control operating state",
-	})
-	public get state(): HumidityControlOperatingState {
-		return this._state;
-	}
+	@ccValue(HumidityControlOperatingStateCCValues.state)
+	public readonly state: HumidityControlOperatingState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

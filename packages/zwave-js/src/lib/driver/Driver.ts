@@ -6,7 +6,6 @@ import {
 	DeviceResetLocallyCCNotification,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
-	getWakeUpIntervalValueId,
 	ICommandClassContainer,
 	InvalidCC,
 	isCommandClassContainer,
@@ -32,6 +31,7 @@ import {
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
 	WakeUpCCNoMoreInformation,
+	WakeUpCCValues,
 } from "@zwave-js/cc";
 import {
 	ConfigManager,
@@ -4235,7 +4235,7 @@ ${handlers.length} left`,
 			!this.hasPendingMessages(node)
 		) {
 			const wakeUpInterval = node.getValue<number>(
-				getWakeUpIntervalValueId(),
+				WakeUpCCValues.wakeUpInterval.id,
 			);
 			// GH#2179: when a device only wakes up manually, don't send it back to sleep
 			// Best case, the user wanted to interact with it.

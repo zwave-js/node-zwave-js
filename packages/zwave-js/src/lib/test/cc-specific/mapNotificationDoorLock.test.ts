@@ -1,5 +1,5 @@
 import { DoorLockMode } from "@zwave-js/cc";
-import { getCurrentModeValueId as getCurrentLockModeValueId } from "@zwave-js/cc/DoorLockCC";
+import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { NotificationCCReport } from "@zwave-js/cc/NotificationCC";
 import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
@@ -44,7 +44,7 @@ describe("map Notification CC to Door Lock CC", () => {
 	});
 
 	it("When receiving a NotificationCC::Report with a lock operation, the current value for Door Lock CC should be updated accordingly", () => {
-		const valueId = getCurrentLockModeValueId(0);
+		const valueId = DoorLockCCValues.currentMode.id;
 
 		let cmd = new NotificationCCReport(driver, {
 			nodeId: node2.id,

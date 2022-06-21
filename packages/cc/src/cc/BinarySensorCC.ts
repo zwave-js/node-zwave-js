@@ -5,7 +5,6 @@ import {
 	MessagePriority,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -21,7 +20,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,30 +28,41 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import { BinarySensorCommand, BinarySensorType } from "../lib/_Types";
 
-export function getBinarySensorValueId(
-	endpointIndex: number | undefined,
-	sensorType: BinarySensorType,
-): ValueID {
-	return {
-		commandClass: CommandClasses["Binary Sensor"],
-		endpoint: endpointIndex,
-		property: getEnumMemberName(BinarySensorType, sensorType),
-	};
-}
+export const BinarySensorCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Binary Sensor"], {
+		...V.staticProperty("supportedSensorTypes", undefined, {
+			internal: true,
+		}),
+	}),
 
-export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
-	return {
-		commandClass: CommandClasses["Binary Sensor"],
-		endpoint: endpointIndex,
-		property: "supportedSensorTypes",
-	};
-}
+	...V.defineDynamicCCValues(CommandClasses["Binary Sensor"], {
+		...V.dynamicPropertyWithName(
+			"state",
+			/* property */ (sensorType: BinarySensorType) =>
+				getEnumMemberName(BinarySensorType, sensorType),
+			({ property }) =>
+				typeof property === "string" && property in BinarySensorType,
+			/* meta */ (sensorType: BinarySensorType) =>
+				({
+					...ValueMetadata.ReadOnlyBoolean,
+					label: `Sensor state (${getEnumMemberName(
+						BinarySensorType,
+						sensorType,
+					)})`,
+					ccSpecific: { sensorType },
+				} as const),
+		),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -130,6 +139,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
+@ccValues(BinarySensorCCValues)
 export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 
@@ -195,7 +205,6 @@ export class BinarySensorCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		// Query (all of) the sensor's current value(s)
 		if (this.version === 1) {
@@ -214,8 +223,9 @@ export class BinarySensorCC extends CommandClass {
 			}
 		} else {
 			const supportedSensorTypes: readonly BinarySensorType[] =
-				valueDB.getValue(
-					getSupportedSensorTypesValueId(this.endpointIndex),
+				this.getValue(
+					applHost,
+					BinarySensorCCValues.supportedSensorTypes,
 				) ?? [];
 
 			for (const type of supportedSensorTypes) {
@@ -241,8 +251,9 @@ export class BinarySensorCC extends CommandClass {
 		applHost: ZWaveApplicationHost,
 		value: number,
 	): boolean {
-		this.getValueDB(applHost).setValue(
-			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
+		this.setValue(
+			applHost,
+			BinarySensorCCValues.state(BinarySensorType.Any),
 			value > 0,
 		);
 		return true;
@@ -267,18 +278,11 @@ export class BinarySensorCCReport extends BinarySensorCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
 
-		const valueId: ValueID = getBinarySensorValueId(
-			this.endpointIndex,
-			this._type,
-		);
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnlyBoolean,
-			label: getEnumMemberName(BinarySensorType, this._type),
-			ccSpecific: { sensorType: this._type },
-		});
-		valueDB.setValue(valueId, this._value);
+		const binarySensorValue = BinarySensorCCValues.state(this._type);
+		this.setMetadata(applHost, binarySensorValue, binarySensorValue.meta);
+		this.setValue(applHost, binarySensorValue, this._value);
+
 		return true;
 	}
 
@@ -370,22 +374,19 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		validatePayload(this.payload.length >= 1);
 		// The enumeration starts at 1, but the first (reserved) bit is included
 		// in the report
-		this._supportedSensorTypes = parseBitMask(this.payload, 0).filter(
+		this.supportedSensorTypes = parseBitMask(this.payload, 0).filter(
 			(t) => t !== 0,
 		);
 	}
 
-	private _supportedSensorTypes: BinarySensorType[];
-	@ccValue({ internal: true })
-	public get supportedSensorTypes(): readonly BinarySensorType[] {
-		return this._supportedSensorTypes;
-	}
+	@ccValue(BinarySensorCCValues.supportedSensorTypes)
+	public readonly supportedSensorTypes: readonly BinarySensorType[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"supported types": this._supportedSensorTypes
+				"supported types": this.supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))
 					.join(", "),
 			},

@@ -7,10 +7,7 @@ import {
 	CommandClass,
 	getCommandClassStatic,
 } from "@zwave-js/cc";
-import {
-	getInstallerIconValueId,
-	getUserIconValueId,
-} from "@zwave-js/cc/ZWavePlusCC";
+import { ZWavePlusCCValues } from "@zwave-js/cc/ZWavePlusCC";
 import type { IZWaveEndpoint } from "@zwave-js/core";
 import {
 	actuatorCCs,
@@ -481,12 +478,14 @@ export class Endpoint implements IZWaveEndpoint {
 	/** Z-Wave+ Icon (for management) */
 	public get installerIcon(): number | undefined {
 		return this.getNodeUnsafe()?.getValue(
-			getInstallerIconValueId(this.index),
+			ZWavePlusCCValues.installerIcon.endpoint(this.index),
 		);
 	}
 
 	/** Z-Wave+ Icon (for end users) */
 	public get userIcon(): number | undefined {
-		return this.getNodeUnsafe()?.getValue(getUserIconValueId(this.index));
+		return this.getNodeUnsafe()?.getValue(
+			ZWavePlusCCValues.userIcon.endpoint(this.index),
+		);
 	}
 }

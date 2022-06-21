@@ -16,22 +16,33 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	ThermostatOperatingState,
 	ThermostatOperatingStateCommand,
 } from "../lib/_Types";
+
+export const ThermostatOperatingStateCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses["Thermostat Operating State"], {
+		...V.staticPropertyWithName("operatingState", "state", {
+			...ValueMetadata.ReadOnlyUInt8,
+			label: "Operating state",
+			states: enumValuesToMetadataStates(ThermostatOperatingState),
+		} as const),
+	}),
+});
 
 // @noSetValueAPI This CC is read-only
 
@@ -79,6 +90,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Thermostat Operating State"])
 @implementedVersion(2)
+@ccValues(ThermostatOperatingStateCCValues)
 export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 
@@ -138,19 +150,11 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._state = this.payload[0];
+		this.state = this.payload[0];
 	}
 
-	private _state: ThermostatOperatingState;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Operating state",
-		states: enumValuesToMetadataStates(ThermostatOperatingState),
-	})
-	public get state(): ThermostatOperatingState {
-		return this._state;
-	}
+	@ccValue(ThermostatOperatingStateCCValues.operatingState)
+	public readonly state: ThermostatOperatingState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

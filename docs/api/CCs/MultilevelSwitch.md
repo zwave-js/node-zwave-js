@@ -45,3 +45,119 @@ async stopLevelChange(): Promise<void>;
 ```ts
 async getSupported(): Promise<SwitchType | undefined>;
 ```
+
+## Multilevel Switch CC values
+
+### `compatEvent`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: "event",
+}
+```
+
+-   **label:** Event value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** false
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `currentValue`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: "currentValue",
+}
+```
+
+-   **label:** Current value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 99
+
+### `duration`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: "duration",
+}
+```
+
+-   **label:** Remaining duration
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"duration"`
+
+### `levelChangeDown(switchType: SwitchType)`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: string,
+}
+```
+
+-   **label:** `Perform a level change (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `levelChangeUp(switchType: SwitchType)`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: string,
+}
+```
+
+-   **label:** `Perform a level change (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `targetValue`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: "targetValue",
+}
+```
+
+-   **label:** Target value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 99

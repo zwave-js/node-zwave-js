@@ -7,7 +7,7 @@ describe("BridgeApplicationCommandRequest", () => {
 	beforeAll(async () => {
 		host = createTestingHost();
 		await host.configManager.loadMeters();
-	});
+	}, 30000);
 
 	describe("regression tests", () => {
 		it("parsing without RSSI", async () => {

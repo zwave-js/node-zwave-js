@@ -4,7 +4,7 @@
 
 import { CommandClasses, getCCName } from "@zwave-js/core";
 import { enumFilesRecursive, num2hex } from "@zwave-js/shared";
-import { red } from "ansi-colors";
+import { red, yellow } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
 import Piscina from "piscina";
@@ -21,6 +21,9 @@ import {
 	PropertySignatureStructure,
 	SourceFile,
 	SyntaxKind,
+	ts,
+	Type,
+	TypeFormatFlags,
 	TypeLiteralNode,
 } from "ts-morph";
 import { isMainThread } from "worker_threads";
@@ -214,6 +217,30 @@ export function findImportRanges(docFile: string): ImportRange[] {
 	}));
 }
 
+function stripQuotes(str: string): string {
+	return str.replace(/^['"]|['"]$/g, "");
+}
+
+function expectLiteralString(strType: string, context: string): void {
+	if (strType === "string") {
+		console.warn(
+			yellow(`WARNING: Received type "string" where a string literal was expected.
+		Make sure to define this string or the entire object using "as const".
+		Context: ${context}`),
+		);
+	}
+}
+
+function expectLiteralNumber(numType: string, context: string): void {
+	if (numType === "number") {
+		console.warn(
+			yellow(`WARNING: Received type "number" where a number literal was expected.
+Make sure to define this number or the entire object using "as const".
+Context: ${context}`),
+		);
+	}
+}
+
 const docsDir = path.join(projectRoot, "docs");
 const ccDocsDir = path.join(docsDir, "api/CCs");
 
@@ -237,7 +264,7 @@ export async function processDocFile(
 		if (!sourceNode) {
 			console.error(
 				red(
-					`Cannot find symbol ${range.symbol} in module ${range.module}!`,
+					`${docFile}: Cannot find symbol ${range.symbol} in module ${range.module}!`,
 				),
 			);
 			hasErrors = true;
@@ -401,6 +428,184 @@ ${
 		}
 	}
 
+	// List defined value IDs
+	const valueIDsConst = (() => {
+		for (const stmt of file.getVariableStatements()) {
+			if (!stmt.hasExportKeyword()) continue;
+			for (const decl of stmt.getDeclarations()) {
+				if (decl.getName()?.endsWith("CCValues")) {
+					return decl;
+				}
+			}
+		}
+	})();
+	if (valueIDsConst) {
+		let hasPrintedHeader = false;
+
+		const type = valueIDsConst.getType();
+		const formatValueType = (type: Type<ts.Type>): string => {
+			const prefix = "type _ = ";
+			let ret = formatWithPrettier(
+				"type.ts",
+				prefix +
+					type.getText(valueIDsConst, TypeFormatFlags.NoTruncation),
+			)
+				.trim()
+				.slice(prefix.length, -1);
+
+			// There is probably an official way to do this, but I can't find it
+			ret = ret
+				.replace(/typeof CommandClasses/g, "CommandClasses")
+				.replace(/^(\s+)readonly /gm, "$1")
+				.replace(/;$/gm, ",");
+
+			return ret;
+		};
+
+		const sortedProperties = type
+			.getProperties()
+			.sort((a, b) => a.getName().localeCompare(b.getName()));
+
+		for (const value of sortedProperties) {
+			let valueType = value.getTypeAtLocation(valueIDsConst);
+			let callSignature = "";
+
+			// Remember the options type before resolving dynamic values
+			const optionsType = valueType
+				.getPropertyOrThrow("options")
+				.getTypeAtLocation(valueIDsConst);
+
+			const getOptions = (prop: string): string =>
+				optionsType
+					.getPropertyOrThrow(prop)
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
+
+			// Do not document internal CC values
+			if (getOptions("internal") === "true") continue;
+
+			// "Unwrap" dynamic value IDs
+			if (valueType.getCallSignatures().length === 1) {
+				const signature = valueType.getCallSignatures()[0];
+
+				// The call signature has a single argument
+				// args: [arg1: type1, arg2: type2, ...]
+				callSignature = `(${signature
+					.getParameters()[0]
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst)
+					// Remove the [] from the tuple
+					.slice(1, -1)})`;
+
+				valueType = signature.getReturnType();
+			} else if (valueType.getCallSignatures().length > 1) {
+				throw new Error(
+					"Type of value ID had more than 1 call signature",
+				);
+			}
+
+			const idType = valueType
+				.getPropertyOrThrow("endpoint")
+				.getTypeAtLocation(valueIDsConst)
+				.getCallSignatures()[0]
+				.getReturnType();
+
+			const metaType = valueType
+				.getPropertyOrThrow("meta")
+				.getTypeAtLocation(valueIDsConst);
+
+			const getMeta = (prop: string): string =>
+				metaType
+					.getPropertyOrThrow(prop)
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
+
+			const tryGetMeta = (
+				prop: string,
+				onSuccess: (meta: string) => void,
+			): void => {
+				const symbol = metaType.getProperty(prop);
+				if (symbol) {
+					const type = symbol
+						.getTypeAtLocation(valueIDsConst)
+						.getText(valueIDsConst);
+					onSuccess(type);
+				}
+			};
+
+			if (!hasPrintedHeader) {
+				text += `## ${ccName} CC values\n\n`;
+				hasPrintedHeader = true;
+			}
+
+			text += `### \`${value.getName()}${callSignature}\`
+
+\`\`\`ts
+${formatValueType(idType)}
+\`\`\`
+`;
+
+			tryGetMeta("label", (label) => {
+				// If the label is definitely not dynamic, ensure it has a literal type
+				if (!callSignature) {
+					expectLiteralString(
+						label,
+						`label of value "${value.getName()}"`,
+					);
+				} else if (label === "string") {
+					label = "_(dynamic)_";
+				}
+				text += `\n* **label:** ${stripQuotes(label)}`;
+			});
+			tryGetMeta("description", (description) => {
+				// If the description is definitely not dynamic, ensure it has a literal type
+				if (!callSignature) {
+					expectLiteralString(
+						description,
+						`description of value "${value.getName()}"`,
+					);
+				} else if (description === "string") {
+					description = "_(dynamic)_";
+				}
+				text += `\n* **description:** ${stripQuotes(description)}`;
+			});
+
+			// TODO: This should be moved to TypeScript somehow
+			const minVersion = getOptions("minVersion");
+			expectLiteralNumber(
+				minVersion,
+				`minVersion of value "${value.getName()}"`,
+			);
+
+			text += `
+* **min. CC version:** ${minVersion}
+* **readable:** ${getMeta("readable")}
+* **writeable:** ${getMeta("writeable")}
+* **stateful:** ${getOptions("stateful")}
+* **secret:** ${getOptions("secret")}
+`;
+
+			tryGetMeta("type", (meta) => {
+				text += `* **value type:** \`${meta}\`\n`;
+			});
+			tryGetMeta("default", (meta) => {
+				text += `* **default value:** ${meta}\n`;
+			});
+			tryGetMeta("min", (meta) => {
+				text += `* **min. value:** ${meta}\n`;
+			});
+			tryGetMeta("max", (meta) => {
+				text += `* **max. value:** ${meta}\n`;
+			});
+			tryGetMeta("minLength", (meta) => {
+				text += `* **min. length:** ${meta}\n`;
+			});
+			tryGetMeta("maxLength", (meta) => {
+				text += `* **max. length:** ${meta}\n`;
+			});
+		}
+	}
+
 	text = text.replace(/\r\n/g, "\n");
 	text = formatWithPrettier(filename, text);
 
@@ -433,6 +638,11 @@ async function generateCCDocs(
 
 	// Find CC APIs
 	const ccFiles = program.getSourceFiles("packages/cc/src/cc/**/*CC.ts");
+	// .filter(
+	// 	(s) =>
+	// 		s.getFilePath().includes("BasicCC") ||
+	// 		s.getFilePath().includes("AssociationCC"),
+	// );
 	let generatedIndex = "";
 	let generatedSidebar = "";
 
@@ -491,10 +701,14 @@ async function main(): Promise<void> {
 	});
 
 	let hasErrors = false;
-	// Replace all imports
-	hasErrors ||= await processImports(piscina);
-	// Regenerate all CC documentation files
-	if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
+	if (!process.argv.includes("--no-imports")) {
+		// Replace all imports
+		hasErrors ||= await processImports(piscina);
+	}
+	if (!process.argv.includes("--no-cc")) {
+		// Regenerate all CC documentation files
+		if (!hasErrors) hasErrors ||= await generateCCDocs(program, piscina);
+	}
 
 	if (hasErrors) {
 		process.exit(1);
@@ -514,11 +728,15 @@ export function processImport(filename: string): Promise<boolean> {
 	return processDocFile(getProgram(), filename);
 }
 
-export function processCC(
+export async function processCC(
 	filename: string,
 ): Promise<{ generatedIndex: string; generatedSidebar: any } | undefined> {
 	const sourceFile = getProgram().getSourceFileOrThrow(filename);
-	return processCCDocFile(sourceFile);
+	try {
+		return await processCCDocFile(sourceFile);
+	} catch (e: any) {
+		throw new Error(`Error processing CC file: ${filename}\n${e.stack}`);
+	}
 }
 
 // If this is NOT run as a worker thread, execute the main function

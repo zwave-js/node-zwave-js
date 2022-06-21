@@ -11,12 +11,7 @@ import {
 	DoorLockMode,
 	DoorLockOperationType,
 } from "@zwave-js/cc";
-import {
-	getBoltSupportedValueId,
-	getDoorStatusValueId,
-	getDoorSupportedValueId,
-	getLatchSupportedValueId,
-} from "@zwave-js/cc/DoorLockCC";
+import { DoorLockCCValues } from "@zwave-js/cc/DoorLockCC";
 import { CommandClasses, Duration } from "@zwave-js/core";
 import { createTestingHost, TestingHost } from "@zwave-js/host";
 
@@ -37,15 +32,15 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 
 		// Node 1 supports all Door Lock sensors
 		const valueDB1 = host.getValueDB(1);
-		valueDB1.setValue(getDoorSupportedValueId(0), true);
-		valueDB1.setValue(getBoltSupportedValueId(0), true);
-		valueDB1.setValue(getLatchSupportedValueId(0), true);
+		valueDB1.setValue(DoorLockCCValues.doorSupported.id, true);
+		valueDB1.setValue(DoorLockCCValues.boltSupported.id, true);
+		valueDB1.setValue(DoorLockCCValues.latchSupported.id, true);
 
 		// Node 2 doesn't support the door sensor
 		const valueDB2 = host.getValueDB(2);
-		valueDB2.setValue(getDoorSupportedValueId(0), false);
-		valueDB2.setValue(getBoltSupportedValueId(0), true);
-		valueDB2.setValue(getLatchSupportedValueId(0), true);
+		valueDB2.setValue(DoorLockCCValues.doorSupported.id, false);
+		valueDB2.setValue(DoorLockCCValues.boltSupported.id, true);
+		valueDB2.setValue(DoorLockCCValues.latchSupported.id, true);
 	});
 
 	it("the OperationGet command should serialize correctly", () => {
@@ -144,7 +139,9 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 		expect(
 			host
 				.getValueDB(cc.nodeId as number)
-				.getValue(getDoorStatusValueId(cc.endpointIndex)),
+				.getValue(
+					DoorLockCCValues.doorStatus.endpoint(cc.endpointIndex),
+				),
 		).toBe(undefined);
 		expect(cc.targetMode).toBe(DoorLockMode.Secured);
 		expect(cc.duration).toEqual(new Duration(1, "seconds"));

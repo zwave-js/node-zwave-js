@@ -1,13 +1,11 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
+	MAX_NODES,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
 	Timeout,
 	unknownBoolean,
@@ -30,8 +28,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -40,63 +36,72 @@ import {
 import {
 	API,
 	CCCommand,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { V } from "../lib/Values";
 import {
 	LocalProtectionState,
 	ProtectionCommand,
 	RFProtectionState,
 } from "../lib/_Types";
 
-export function getExclusiveControlNodeIdValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "exclusiveControlNodeId",
-	};
-}
+export const ProtectionCCValues = Object.freeze({
+	...V.defineStaticCCValues(CommandClasses.Protection, {
+		...V.staticProperty(
+			"exclusiveControlNodeId",
+			{
+				...ValueMetadata.UInt8,
+				min: 1,
+				max: MAX_NODES,
+				label: "Node ID with exclusive control",
+			} as const,
+			{ minVersion: 2 } as const,
+		),
 
-export function getLocalStateValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "local",
-	};
-}
+		...V.staticPropertyWithName("localProtectionState", "local", {
+			...ValueMetadata.Number,
+			label: "Local protection state",
+			states: enumValuesToMetadataStates(LocalProtectionState),
+		} as const),
 
-export function getRFStateValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "rf",
-	};
-}
+		...V.staticPropertyWithName(
+			"rfProtectionState",
+			"rf",
+			{
+				...ValueMetadata.Number,
+				label: "RF protection state",
+				states: enumValuesToMetadataStates(RFProtectionState),
+			} as const,
+			{ minVersion: 2 } as const,
+		),
 
-export function getTimeoutValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "timeout",
-	};
-}
+		...V.staticProperty(
+			"timeout",
+			{
+				...ValueMetadata.UInt8,
+				label: "RF protection timeout",
+			} as const,
+			{ minVersion: 2 } as const,
+		),
 
-export function getSupportsExclusiveControlValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "supportsExclusiveControl",
-	};
-}
-
-export function getSupportsTimeoutValueID(endpoint: number): ValueID {
-	return {
-		commandClass: CommandClasses.Protection,
-		endpoint,
-		property: "supportsTimeout",
-	};
-}
+		...V.staticProperty("supportsExclusiveControl", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportsTimeout", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedLocalStates", undefined, {
+			internal: true,
+		}),
+		...V.staticProperty("supportedRFStates", undefined, {
+			internal: true,
+		}),
+	}),
+});
 
 @API(CommandClasses.Protection)
 export class ProtectionCCAPI extends CCAPI {
@@ -113,7 +118,9 @@ export class ProtectionCCAPI extends CCAPI {
 				return (
 					this.isSinglecast() &&
 					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						getSupportsTimeoutValueID(this.endpoint.index),
+						ProtectionCCValues.supportsTimeout.endpoint(
+							this.endpoint.index,
+						),
 					) ??
 						unknownBoolean)
 				);
@@ -123,7 +130,9 @@ export class ProtectionCCAPI extends CCAPI {
 				return (
 					this.isSinglecast() &&
 					(this.tryGetValueDB()?.getValue<Maybe<boolean>>(
-						getSupportsExclusiveControlValueID(this.endpoint.index),
+						ProtectionCCValues.supportsExclusiveControl.endpoint(
+							this.endpoint.index,
+						),
 					) ??
 						unknownBoolean)
 				);
@@ -148,7 +157,9 @@ export class ProtectionCCAPI extends CCAPI {
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
 			const rf = valueDB?.getValue<RFProtectionState>(
-				getRFStateValueID(this.endpoint.index),
+				ProtectionCCValues.rfProtectionState.endpoint(
+					this.endpoint.index,
+				),
 			);
 			await this.set(value, rf);
 		} else if (property === "rf") {
@@ -162,7 +173,9 @@ export class ProtectionCCAPI extends CCAPI {
 			}
 			// We need to set both values together, so retrieve the other one from the value DB
 			const local = valueDB?.getValue<LocalProtectionState>(
-				getLocalStateValueID(this.endpoint.index),
+				ProtectionCCValues.localProtectionState.endpoint(
+					this.endpoint.index,
+				),
 			);
 			await this.set(local ?? LocalProtectionState.Unprotected, value);
 		} else if (property === "exclusiveControlNodeId") {
@@ -322,6 +335,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Protection)
 @implementedVersion(2)
+@ccValues(ProtectionCCValues)
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
@@ -392,13 +406,14 @@ RF protection states:    ${resp.supportedRFStates
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
-		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
-			getSupportsExclusiveControlValueID(this.endpointIndex),
+		const supportsExclusiveControl = !!this.getValue(
+			applHost,
+			ProtectionCCValues.supportsExclusiveControl,
 		);
-		const supportsTimeout = !!valueDB.getValue<boolean>(
-			getSupportsTimeoutValueID(this.endpointIndex),
+		const supportsTimeout = !!this.getValue(
+			applHost,
+			ProtectionCCValues.supportsTimeout,
 		);
 
 		// Query the current state
@@ -519,21 +534,10 @@ export class ProtectionCCReport extends ProtectionCC {
 		}
 	}
 
-	// TODO: determine possible states during interview
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "Local protection state",
-		states: enumValuesToMetadataStates(LocalProtectionState),
-	})
+	@ccValue(ProtectionCCValues.localProtectionState)
 	public readonly local: LocalProtectionState;
 
-	@ccValue({ minVersion: 2 })
-	@ccValueMetadata({
-		...ValueMetadata.Number,
-		label: "RF protection state",
-		states: enumValuesToMetadataStates(RFProtectionState),
-	})
+	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -576,36 +580,39 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		const valueDb = this.getValueDB(applHost);
+
 		// update metadata (partially) for the local and rf values
-		valueDb.setMetadata(getLocalStateValueID(this.endpointIndex), {
-			...ValueMetadata.Number,
+		const localStateValue = ProtectionCCValues.localProtectionState;
+		this.setMetadata(applHost, localStateValue, {
+			...localStateValue.meta,
 			states: enumValuesToMetadataStates(
 				LocalProtectionState,
 				this.supportedLocalStates,
 			),
 		});
-		// update metadata (partially) for the local and rf values
-		valueDb.setMetadata(getRFStateValueID(this.endpointIndex), {
-			...ValueMetadata.Number,
+
+		const rfStateValue = ProtectionCCValues.rfProtectionState;
+		this.setMetadata(applHost, rfStateValue, {
+			...rfStateValue.meta,
 			states: enumValuesToMetadataStates(
 				RFProtectionState,
 				this.supportedRFStates,
 			),
 		});
+
 		return true;
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportsExclusiveControl)
 	public readonly supportsExclusiveControl: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportsTimeout)
 	public readonly supportsTimeout: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportedLocalStates)
 	public readonly supportedLocalStates: LocalProtectionState[];
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -644,7 +651,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		this.exclusiveControlNodeId = this.payload[0];
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -714,7 +721,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		this.timeout = Timeout.parse(this.payload[0]);
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
