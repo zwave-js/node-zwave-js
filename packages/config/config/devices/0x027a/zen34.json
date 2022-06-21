@@ -134,6 +134,11 @@
 			]
 		}
 	],
+	"compat": {
+		// The device sends Configuration CC info reports in 4-byte chunks, causing each query to block the network for roughly 1.5 seconds.
+		"skipConfigurationNameQuery": true,
+		"skipConfigurationInfoQuery": true
+	},
 	"metadata": {
 		"inclusion": "Put your Z-Wave hub into inclusion mode and click the upper paddle 6 times quickly. The LED indicator\nwill blink blue during the process and light up green once added successfully. It will light up red if failed",
 		"exclusion": "1. Bring the Remote Switch within direct range of your Z-Wave gateway (hub).\n2. Put the Z-Wave hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Click the lower paddle 6 times very quickly\n4. Your hub will confirm exclusion and the device will disappear from your controller's device list",
