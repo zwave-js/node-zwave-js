@@ -220,10 +220,11 @@ export class BasicCC extends CommandClass {
 		// try to query the current state
 		await this.refreshValues(applHost);
 
-		// create compat event value if necessary
-		if (applHost.getDeviceConfig?.(node.id)?.compat?.treatBasicSetAsEvent) {
-			this.ensureMetadata(applHost, BasicCCValues.compatEvent);
-		} else if (
+		// Remove Basic CC support when there was no response,
+		// but only if the compat event shouldn't be used.
+		if (
+			!applHost.getDeviceConfig?.(node.id)?.compat
+				?.treatBasicSetAsEvent &&
 			this.getValue(applHost, BasicCCValues.currentValue) == undefined
 		) {
 			applHost.controllerLog.logNode(node.id, {

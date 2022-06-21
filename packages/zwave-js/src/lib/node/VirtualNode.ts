@@ -1,7 +1,6 @@
-import type { CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
+import { BasicCCValues, CCAPI, SetValueAPIOptions } from "@zwave-js/cc";
 import {
 	actuatorCCs,
-	CommandClasses,
 	isZWaveError,
 	IVirtualNode,
 	TranslatedValueID,
@@ -164,16 +163,14 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 		for (const endpoint of exposedEndpoints) {
 			// TODO: This should be defined in the Basic CC file
 			const valueId: TranslatedValueID = {
-				commandClass: CommandClasses.Basic,
+				...BasicCCValues.targetValue.endpoint(endpoint),
 				commandClassName: "Basic",
-				endpoint,
-				property: "targetValue",
 				propertyName: "Target value",
 			};
 			const ccVersion = 1;
 			const metadata: ValueMetadataNumeric = {
-				...ValueMetadata.WriteOnlyUInt8,
-				label: "Target value",
+				...BasicCCValues.targetValue.meta,
+				readable: false,
 			};
 			ret.set(valueIdToString(valueId), {
 				...valueId,

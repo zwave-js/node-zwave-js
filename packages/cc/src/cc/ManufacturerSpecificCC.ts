@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core/safe";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -56,6 +56,23 @@ export const ManufacturerSpecificCCValues = Object.freeze({
 				label: "Product ID",
 			} as const,
 			{ supportsEndpoints: false },
+		),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Manufacturer Specific"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"deviceId",
+			"deviceId",
+			(type: DeviceIdType) => getEnumMemberName(DeviceIdType, type),
+			({ property, propertyKey }) =>
+				property === "deviceId" &&
+				typeof propertyKey === "string" &&
+				propertyKey in DeviceIdType,
+			(type: DeviceIdType) => ({
+				...ValueMetadata.ReadOnlyString,
+				label: `Device ID (${getEnumMemberName(DeviceIdType, type)})`,
+			}),
+			{ minVersion: 2 } as const,
 		),
 	}),
 });
@@ -236,26 +253,13 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 				: "0x" + deviceIdData.toString("hex");
 	}
 
-	public persistValues(applHost: ZWaveApplicationHost): boolean {
-		if (!super.persistValues(applHost)) return false;
-		const valueDB = this.getValueDB(applHost);
-
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "deviceId",
-			propertyKey: DeviceIdType[this.type],
-		};
-		valueDB.setMetadata(valueId, {
-			...ValueMetadata.ReadOnly,
-			label: `Device ID (${valueId.propertyKey})`,
-		});
-		valueDB.setValue(valueId, this.deviceId);
-
-		return true;
-	}
-
 	public readonly type: DeviceIdType;
+
+	@ccValue(
+		ManufacturerSpecificCCValues.deviceId,
+		(self: ManufacturerSpecificCCDeviceSpecificReport) =>
+			[self.type] as const,
+	)
 	public readonly deviceId: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
