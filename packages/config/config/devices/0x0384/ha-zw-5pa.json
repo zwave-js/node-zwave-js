@@ -44,7 +44,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set Parameters 101~104 to The Default States",
+			"label": "Set Parameters 101~104 to Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 85,
@@ -53,7 +53,7 @@
 		},
 		{
 			"#": "101",
-			"label": "Time For Sending Meter Report (watt)",
+			"label": "Meter Report Interval (W)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -62,14 +62,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "102",
-			"label": "Time For Sending Meter Report (kwh)",
+			"label": "Meter Report Interval (kWh)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -78,14 +78,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "103",
-			"label": "Time For Sending Meter Report (voltage)",
+			"label": "Meter Report Interval (V)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -94,14 +94,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "104",
-			"label": "Time For Sending Meter Report (current)",
+			"label": "Meter Report Interval (A)",
 			"valueSize": 4,
 			"unit": "seconds",
 			"minValue": 0,
@@ -110,14 +110,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "16",
-			"label": "Minimum Change in Wattage For a Meter Report",
+			"label": "Meter Report Threshold",
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
@@ -126,14 +126,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "17",
-			"label": "Minimum Change in Wattage Percent For a Meter Report",
+			"label": "Meter Report Threshold (Relative)",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -142,7 +142,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -173,8 +173,7 @@
 		},
 		{
 			"#": "254",
-			"label": "Configuration Lock",
-			"description": "Allows locking or unlocking all configurations",
+			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
