@@ -149,27 +149,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Device State After Power Failure",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Last State",
-					"value": 0
-				},
-				{
-					"label": "Power On",
-					"value": 1
-				},
-				{
-					"label": "Power Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "254",
