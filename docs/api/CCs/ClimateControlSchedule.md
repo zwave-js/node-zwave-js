@@ -80,3 +80,22 @@ async setOverride(
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"number"`
+
+### `schedule(weekday: Weekday)`
+
+```ts
+{
+	commandClass: CommandClasses["Climate Control Schedule"],
+	endpoint: number,
+	property: "schedule",
+	propertyKey: Weekday,
+}
+```
+
+-   **label:** `Schedule (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"any"`

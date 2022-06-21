@@ -187,7 +187,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		const translatedPropertyKey = ccInstance.translatePropertyKey(
 			host,
 			valueId.property,
-			valueId.propertyKey!,
+			valueId.propertyKey,
 		);
 		expect(translatedProperty).toBe("Button 1 indication");
 		expect(translatedPropertyKey).toBe("Binary");

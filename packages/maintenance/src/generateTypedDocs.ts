@@ -470,6 +470,20 @@ ${
 			let valueType = value.getTypeAtLocation(valueIDsConst);
 			let callSignature = "";
 
+			// Remember the options type before resolving dynamic values
+			const optionsType = valueType
+				.getPropertyOrThrow("options")
+				.getTypeAtLocation(valueIDsConst);
+
+			const getOptions = (prop: string): string =>
+				optionsType
+					.getPropertyOrThrow(prop)
+					.getTypeAtLocation(valueIDsConst)
+					.getText(valueIDsConst);
+
+			// Do not document internal CC values
+			if (getOptions("internal") === "true") continue;
+
 			// "Unwrap" dynamic value IDs
 			if (valueType.getCallSignatures().length === 1) {
 				const signature = valueType.getCallSignatures()[0];
@@ -500,10 +514,6 @@ ${
 				.getPropertyOrThrow("meta")
 				.getTypeAtLocation(valueIDsConst);
 
-			const optionsType = valueType
-				.getPropertyOrThrow("options")
-				.getTypeAtLocation(valueIDsConst);
-
 			const getMeta = (prop: string): string =>
 				metaType
 					.getPropertyOrThrow(prop)
@@ -522,15 +532,6 @@ ${
 					onSuccess(type);
 				}
 			};
-
-			const getOptions = (prop: string): string =>
-				optionsType
-					.getPropertyOrThrow(prop)
-					.getTypeAtLocation(valueIDsConst)
-					.getText(valueIDsConst);
-
-			// Do not document internal CC values
-			if (getOptions("internal") === "true") continue;
 
 			if (!hasPrintedHeader) {
 				text += `## ${ccName} CC values\n\n`;

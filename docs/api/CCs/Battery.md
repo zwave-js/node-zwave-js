@@ -241,5 +241,5 @@ async getHealth(): Promise<Pick<BatteryCCHealthReport, "maximumCapacity" | "temp
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"number"`
--   **min. value:** 0
--   **max. value:** 255
+-   **min. value:** -128
+-   **max. value:** 127

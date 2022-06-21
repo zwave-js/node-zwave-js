@@ -36,6 +36,24 @@ async getSupportedModes(): Promise<
 
 ## Thermostat Mode CC values
 
+### `manufacturerData`
+
+```ts
+{
+	commandClass: CommandClasses["Thermostat Mode"],
+	endpoint: number,
+	property: "manufacturerData",
+}
+```
+
+-   **label:** Manufacturer data
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"buffer"`
+
 ### `thermostatMode`
 
 ```ts
