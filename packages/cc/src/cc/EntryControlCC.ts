@@ -25,7 +25,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -34,7 +33,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -236,7 +236,7 @@ export class EntryControlCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Entry Control"])
 @implementedVersion(1)
-@CCValues(EntryControlCCValues)
+@ccValues(EntryControlCCValues)
 export class EntryControlCC extends CommandClass {
 	declare ccCommand: EntryControlCommand;
 
@@ -441,7 +441,7 @@ export class EntryControlCCKeySupportedReport extends EntryControlCC {
 		this.supportedKeys = parseBitMask(this.payload.slice(1, 1 + length), 0);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedKeys)
 	public readonly supportedKeys: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -521,10 +521,10 @@ export class EntryControlCCEventSupportedReport extends EntryControlCC {
 		return true;
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedDataTypes)
 	public readonly supportedDataTypes: readonly EntryControlDataTypes[];
 
-	@ccValue({ internal: true })
+	@ccValue(EntryControlCCValues.supportedEventTypes)
 	public readonly supportedEventTypes: readonly EntryControlEventTypes[];
 
 	public readonly minKeyCacheSize: number;
@@ -570,10 +570,10 @@ export class EntryControlCCConfigurationReport extends EntryControlCC {
 		this.keyCacheTimeout = this.payload[1];
 	}
 
-	@ccValue()
+	@ccValue(EntryControlCCValues.keyCacheSize)
 	public readonly keyCacheSize: number;
 
-	@ccValue()
+	@ccValue(EntryControlCCValues.keyCacheTimeout)
 	public readonly keyCacheTimeout: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

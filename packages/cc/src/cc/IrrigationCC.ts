@@ -30,7 +30,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -39,7 +38,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -995,7 +995,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Irrigation)
 @implementedVersion(1)
-@CCValues(IrrigationCCValues)
+@ccValues(IrrigationCCValues)
 export class IrrigationCC extends CommandClass {
 	declare ccCommand: IrrigationCommand;
 
@@ -1233,16 +1233,16 @@ export class IrrigationCCSystemInfoReport extends IrrigationCC {
 		this.maxValveTableSize = this.payload[3] & 0b1111;
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(IrrigationCCValues.numValves)
 	public readonly numValves: number;
 
-	@ccValue({ internal: true })
+	@ccValue(IrrigationCCValues.numValveTables)
 	public readonly numValveTables: number;
 
-	@ccValue({ internal: true })
+	@ccValue(IrrigationCCValues.supportsMasterValve)
 	public readonly supportsMasterValve: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(IrrigationCCValues.maxValveTableSize)
 	public readonly maxValveTableSize: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1307,49 +1307,49 @@ export class IrrigationCCSystemStatusReport extends IrrigationCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.systemVoltage)
 	public systemVoltage: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.flowSensorActive)
 	public flowSensorActive: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.pressureSensorActive)
 	public pressureSensorActive: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.rainSensorActive)
 	public rainSensorActive: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.moistureSensorActive)
 	public moistureSensorActive: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.flow)
 	public flow?: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.pressure)
 	public pressure?: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.shutoffDuration)
 	public shutoffDuration: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.errorNotProgrammed)
 	public errorNotProgrammed: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.errorEmergencyShutdown)
 	public errorEmergencyShutdown: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.errorHighPressure)
 	public errorHighPressure: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.errorLowPressure)
 	public errorLowPressure: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.errorValve)
 	public errorValve: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.masterValveOpen)
 	public masterValveOpen: boolean;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.firstOpenZoneId)
 	public firstOpenZoneId?: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1522,19 +1522,19 @@ export class IrrigationCCSystemConfigReport extends IrrigationCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.masterValveDelay)
 	public readonly masterValveDelay: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.highPressureThreshold)
 	public readonly highPressureThreshold: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.lowPressureThreshold)
 	public readonly lowPressureThreshold: number;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.rainSensorPolarity)
 	public readonly rainSensorPolarity?: IrrigationSensorPolarity;
 
-	@ccValue()
+	@ccValue(IrrigationCCValues.moistureSensorPolarity)
 	public readonly moistureSensorPolarity?: IrrigationSensorPolarity;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

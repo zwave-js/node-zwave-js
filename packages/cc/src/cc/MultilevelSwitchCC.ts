@@ -24,7 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -68,22 +68,17 @@ export const MultilevelSwitchCCValues = Object.freeze({
 			label: "Current value",
 		} as const),
 
-		...V.staticProperty(
-			"targetValue",
-			{
-				...ValueMetadata.Level,
-				label: "Target value",
-				valueChangeOptions: ["transitionDuration"],
-			} as const,
-			{ forceCreation: true },
-		),
+		...V.staticProperty("targetValue", {
+			...ValueMetadata.Level,
+			label: "Target value",
+			valueChangeOptions: ["transitionDuration"],
+		} as const),
 
 		...V.staticProperty("duration", {
 			...ValueMetadata.ReadOnlyDuration,
 			label: "Remaining duration",
 		} as const),
 
-		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName(
 			"compatEvent",
 			"event",
@@ -93,6 +88,8 @@ export const MultilevelSwitchCCValues = Object.freeze({
 			} as const,
 			{ stateful: false },
 		),
+
+		...V.staticProperty("switchType", undefined, { internal: true }),
 
 		// TODO: Solve this differently
 		...V.staticProperty("superviseStartStopLevelChange", undefined, {
@@ -514,7 +511,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Multilevel Switch"])
 @implementedVersion(4)
-@CCValues(MultilevelSwitchCCValues)
+@ccValues(MultilevelSwitchCCValues)
 export class MultilevelSwitchCC extends CommandClass {
 	declare ccCommand: MultilevelSwitchCommand;
 
@@ -697,14 +694,14 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 		return super.persistValues(applHost);
 	}
 
-	@ccValue({ forceCreation: true })
+	@ccValue(MultilevelSwitchCCValues.targetValue)
 	public readonly targetValue: number | undefined;
 
-	@ccValue()
+	@ccValue(MultilevelSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	private _currentValue: Maybe<number> | undefined;
-	@ccValue()
+	@ccValue(MultilevelSwitchCCValues.currentValue)
 	public get currentValue(): Maybe<number> | undefined {
 		return this._currentValue;
 	}
@@ -819,19 +816,16 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._switchType = this.payload[0] & 0b11111;
+		this.switchType = this.payload[0] & 0b11111;
 	}
 
 	// This is the primary switch type. We're not supporting secondary switch types
-	private _switchType: SwitchType;
-	@ccValue({ internal: true })
-	public get switchType(): SwitchType {
-		return this._switchType;
-	}
+	@ccValue(MultilevelSwitchCCValues.switchType)
+	public readonly switchType: SwitchType;
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		this.createMetadataForLevelChangeActions(applHost, this._switchType);
+		this.createMetadataForLevelChangeActions(applHost, this.switchType);
 		return true;
 	}
 

@@ -20,8 +20,6 @@ import { num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	ccKeyValuePair,
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,7 +28,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -97,6 +96,18 @@ export const MultiChannelCCValues = Object.freeze({
 		...V.staticPropertyWithName(
 			"endpointDeviceClass",
 			"deviceClass",
+			undefined,
+			{ internal: true },
+		),
+	}),
+
+	...V.defineDynamicCCValues(CommandClasses["Multi Channel"], {
+		...V.dynamicPropertyAndKeyWithName(
+			"aggregatedEndpointMembers",
+			"members",
+			(endpointIndex: number) => endpointIndex,
+			({ property, propertyKey }) =>
+				property === "members" && typeof propertyKey === "number",
 			undefined,
 			{ internal: true },
 		),
@@ -333,7 +344,7 @@ export interface EndpointCapability {
 
 @commandClass(CommandClasses["Multi Channel"])
 @implementedVersion(4)
-@CCValues(MultiChannelCCValues)
+@ccValues(MultiChannelCCValues)
 export class MultiChannelCC extends CommandClass {
 	declare ccCommand: MultiChannelCommand;
 
@@ -700,37 +711,25 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._countIsDynamic = !!(this.payload[0] & 0b10000000);
-		this._identicalCapabilities = !!(this.payload[0] & 0b01000000);
-		this._individualCount = this.payload[1] & 0b01111111;
+		this.countIsDynamic = !!(this.payload[0] & 0b10000000);
+		this.identicalCapabilities = !!(this.payload[0] & 0b01000000);
+		this.individualCount = this.payload[1] & 0b01111111;
 		if (this.version >= 4 && this.payload.length >= 3) {
-			this._aggregatedCount = this.payload[2] & 0b01111111;
+			this.aggregatedCount = this.payload[2] & 0b01111111;
 		}
 	}
 
-	private _countIsDynamic: boolean;
-	@ccValue({ internal: true })
-	public get countIsDynamic(): boolean {
-		return this._countIsDynamic;
-	}
+	@ccValue(MultiChannelCCValues.endpointCountIsDynamic)
+	public readonly countIsDynamic: boolean;
 
-	private _identicalCapabilities: boolean;
-	@ccValue({ internal: true })
-	public get identicalCapabilities(): boolean {
-		return this._identicalCapabilities;
-	}
+	@ccValue(MultiChannelCCValues.endpointsHaveIdenticalCapabilities)
+	public readonly identicalCapabilities: boolean;
 
-	private _individualCount: number;
-	@ccValue({ internal: true })
-	public get individualCount(): number {
-		return this._individualCount;
-	}
+	@ccValue(MultiChannelCCValues.individualEndpointCount)
+	public readonly individualCount: number;
 
-	private _aggregatedCount: number | undefined;
-	@ccValue({ internal: true })
-	public get aggregatedCount(): number | undefined {
-		return this._aggregatedCount;
-	}
+	@ccValue(MultiChannelCCValues.aggregatedEndpointCount)
+	public readonly aggregatedCount: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -1014,30 +1013,27 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		const endpoint = this.payload[0] & 0b0111_1111;
+		this.aggregatedEndpointIndex = this.payload[0] & 0b0111_1111;
 		const bitMaskLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + bitMaskLength);
 		const bitMask = this.payload.slice(2, 2 + bitMaskLength);
-		const members = parseBitMask(bitMask);
-		this.aggregatedEndpointMembers = [endpoint, members];
+		this.members = parseBitMask(bitMask);
 	}
 
-	@ccKeyValuePair({ internal: true })
-	private aggregatedEndpointMembers: [number, number[]];
+	public readonly aggregatedEndpointIndex: number;
 
-	public get aggregatedEndpoint(): number {
-		return this.aggregatedEndpointMembers[0];
-	}
-
-	public get members(): readonly number[] {
-		return this.aggregatedEndpointMembers[1];
-	}
+	@ccValue(
+		MultiChannelCCValues.aggregatedEndpointMembers,
+		(self: MultiChannelCCAggregatedMembersReport) =>
+			[self.aggregatedEndpointIndex] as const,
+	)
+	public readonly members: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				endpoint: this.endpointIndex,
+				"aggregated endpoint": this.aggregatedEndpointIndex,
 				members: this.members.join(", "),
 			},
 		};

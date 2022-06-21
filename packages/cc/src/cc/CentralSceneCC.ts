@@ -24,7 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -181,7 +181,7 @@ export class CentralSceneCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Central Scene"])
 @implementedVersion(3)
-@CCValues(CentralSceneCCValues)
+@ccValues(CentralSceneCCValues)
 export class CentralSceneCC extends CommandClass {
 	declare ccCommand: CentralSceneCommand;
 
@@ -303,16 +303,16 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
-		this._sequenceNumber = this.payload[0];
-		this._keyAttribute = this.payload[1] & 0b111;
-		this._sceneNumber = this.payload[2];
+		this.sequenceNumber = this.payload[0];
+		this.keyAttribute = this.payload[1] & 0b111;
+		this.sceneNumber = this.payload[2];
 		if (
-			this._keyAttribute === CentralSceneKeys.KeyHeldDown &&
+			this.keyAttribute === CentralSceneKeys.KeyHeldDown &&
 			this.version >= 3
 		) {
 			// A receiving node MUST ignore this field if the command is not
 			// carrying the Key Held Down key attribute.
-			this._slowRefresh = !!(this.payload[1] & 0b1000_0000);
+			this.slowRefresh = !!(this.payload[1] & 0b1000_0000);
 		}
 	}
 
@@ -320,7 +320,7 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		if (!super.persistValues(applHost)) return false;
 
 		// In case the interview is not yet completed, we still create some basic metadata
-		const sceneValue = CentralSceneCCValues.scene(this._sceneNumber);
+		const sceneValue = CentralSceneCCValues.scene(this.sceneNumber);
 		this.ensureMetadata(applHost, sceneValue);
 
 		// The spec behavior is pretty complicated, so we cannot just store
@@ -330,25 +330,10 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		return true;
 	}
 
-	private _sequenceNumber: number;
-	public get sequenceNumber(): number {
-		return this._sequenceNumber;
-	}
-
-	private _keyAttribute: CentralSceneKeys;
-	public get keyAttribute(): CentralSceneKeys {
-		return this._keyAttribute;
-	}
-
-	private _sceneNumber: number;
-	public get sceneNumber(): number {
-		return this._sceneNumber;
-	}
-
-	private _slowRefresh: boolean | undefined;
-	public get slowRefresh(): boolean | undefined {
-		return this._slowRefresh;
-	}
+	public readonly sequenceNumber: number;
+	public readonly keyAttribute: CentralSceneKeys;
+	public readonly sceneNumber: number;
+	public readonly slowRefresh: boolean | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
@@ -378,8 +363,8 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._sceneCount = this.payload[0];
-		this._supportsSlowRefresh =
+		this.sceneCount = this.payload[0];
+		this.supportsSlowRefresh =
 			this.version >= 3 ? !!(this.payload[1] & 0b1000_0000) : undefined;
 		const bitMaskBytes = (this.payload[1] & 0b110) >>> 1;
 		const identicalKeyAttributes = !!(this.payload[1] & 0b1);
@@ -398,7 +383,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		}
 		if (identicalKeyAttributes) {
 			// The key attributes are only transmitted for scene 1, copy them to the others
-			for (let i = 2; i <= this._sceneCount; i++) {
+			for (let i = 2; i <= this.sceneCount; i++) {
 				this._supportedKeyAttributes.set(
 					i,
 					this._supportedKeyAttributes.get(1)!,
@@ -411,7 +396,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		if (!super.persistValues(applHost)) return false;
 
 		// Create/extend metadata for all scenes
-		for (let i = 1; i <= this._sceneCount; i++) {
+		for (let i = 1; i <= this.sceneCount; i++) {
 			const sceneValue = CentralSceneCCValues.scene(i);
 			this.setMetadata(applHost, sceneValue, {
 				...sceneValue.meta,
@@ -425,24 +410,19 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return true;
 	}
 
-	private _sceneCount: number;
-	@ccValue({ internal: true })
-	public get sceneCount(): number {
-		return this._sceneCount;
-	}
+	@ccValue(CentralSceneCCValues.sceneCount)
+	public readonly sceneCount: number;
 
 	// TODO: Only offer `slowRefresh` if this is true
-	private _supportsSlowRefresh: boolean | undefined;
-	@ccValue({ internal: true })
-	public get supportsSlowRefresh(): boolean | undefined {
-		return this._supportsSlowRefresh;
-	}
+	@ccValue(CentralSceneCCValues.supportsSlowRefresh)
+	public readonly supportsSlowRefresh: boolean | undefined;
 
 	private _supportedKeyAttributes = new Map<
 		number,
 		readonly CentralSceneKeys[]
 	>();
-	@ccValue({ internal: true })
+
+	@ccValue(CentralSceneCCValues.supportedKeyAttributes)
 	public get supportedKeyAttributes(): ReadonlyMap<
 		number,
 		readonly CentralSceneKeys[]
@@ -480,19 +460,16 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._slowRefresh = !!(this.payload[0] & 0b1000_0000);
+		this.slowRefresh = !!(this.payload[0] & 0b1000_0000);
 	}
 
-	private _slowRefresh: boolean;
-	@ccValue()
-	public get slowRefresh(): boolean {
-		return this._slowRefresh;
-	}
+	@ccValue(CentralSceneCCValues.slowRefresh)
+	public readonly slowRefresh: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
-			message: { "slow refresh": this._slowRefresh },
+			message: { "slow refresh": this.slowRefresh },
 		};
 	}
 }

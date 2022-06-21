@@ -16,14 +16,14 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -96,7 +96,7 @@ export class HumidityControlOperatingStateCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Operating State"])
 @implementedVersion(1)
-@CCValues(HumidityControlOperatingStateCCValues)
+@ccValues(HumidityControlOperatingStateCCValues)
 export class HumidityControlOperatingStateCC extends CommandClass {
 	declare ccCommand: HumidityControlOperatingStateCommand;
 
@@ -157,14 +157,11 @@ export class HumidityControlOperatingStateCCReport extends HumidityControlOperat
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._state = this.payload[0] & 0b1111;
+		this.state = this.payload[0] & 0b1111;
 	}
 
-	private _state: HumidityControlOperatingState;
-	@ccValue()
-	public get state(): HumidityControlOperatingState {
-		return this._state;
-	}
+	@ccValue(HumidityControlOperatingStateCCValues.state)
+	public readonly state: HumidityControlOperatingState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

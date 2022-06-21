@@ -28,7 +28,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -37,7 +36,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -282,7 +282,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setpoint"])
 @implementedVersion(3)
-@CCValues(ThermostatSetpointCCValues)
+@ccValues(ThermostatSetpointCCValues)
 export class ThermostatSetpointCC extends CommandClass {
 	declare ccCommand: ThermostatSetpointCommand;
 
@@ -899,13 +899,13 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		const supported = parseBitMask(bitMask, ThermostatSetpointType["N/A"]);
 		if (this.version >= 3) {
 			// Interpretation A
-			this._supportedSetpointTypes = supported.map(
+			this.supportedSetpointTypes = supported.map(
 				(i) => thermostatSetpointTypeMap[i],
 			);
 		} else {
 			// It is unknown which interpretation the device complies to.
 			// This must be tested during the interview
-			this._supportedSetpointTypes = supported;
+			this.supportedSetpointTypes = supported;
 		}
 		// TODO:
 		// Some devices skip the gaps in the ThermostatSetpointType (Interpretation A), some don't (Interpretation B)
@@ -919,11 +919,8 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 		// node MUST conclude that the actual Setpoint Type is not supported.
 	}
 
-	private _supportedSetpointTypes: ThermostatSetpointType[];
-	@ccValue({ internal: true })
-	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
-		return this._supportedSetpointTypes;
-	}
+	@ccValue(ThermostatSetpointCCValues.supportedSetpointTypes)
+	public readonly supportedSetpointTypes: readonly ThermostatSetpointType[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

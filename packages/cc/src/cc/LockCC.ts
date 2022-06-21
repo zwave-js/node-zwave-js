@@ -20,7 +20,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -29,7 +28,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -114,7 +114,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Lock)
 @implementedVersion(1)
-@CCValues(LockCCValues)
+@ccValues(LockCCValues)
 export class LockCC extends CommandClass {
 	declare ccCommand: LockCommand;
 
@@ -205,7 +205,7 @@ export class LockCCReport extends LockCC {
 		this.locked = this.payload[0] === 1;
 	}
 
-	@ccValue()
+	@ccValue(LockCCValues.locked)
 	public readonly locked: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

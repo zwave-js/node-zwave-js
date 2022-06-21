@@ -20,7 +20,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -29,7 +28,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -139,7 +139,7 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Binary Sensor"])
 @implementedVersion(2)
-@CCValues(BinarySensorCCValues)
+@ccValues(BinarySensorCCValues)
 export class BinarySensorCC extends CommandClass {
 	declare ccCommand: BinarySensorCommand;
 
@@ -374,22 +374,19 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		validatePayload(this.payload.length >= 1);
 		// The enumeration starts at 1, but the first (reserved) bit is included
 		// in the report
-		this._supportedSensorTypes = parseBitMask(this.payload, 0).filter(
+		this.supportedSensorTypes = parseBitMask(this.payload, 0).filter(
 			(t) => t !== 0,
 		);
 	}
 
-	private _supportedSensorTypes: BinarySensorType[];
-	@ccValue({ internal: true })
-	public get supportedSensorTypes(): readonly BinarySensorType[] {
-		return this._supportedSensorTypes;
-	}
+	@ccValue(BinarySensorCCValues.supportedSensorTypes)
+	public readonly supportedSensorTypes: readonly BinarySensorType[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"supported types": this._supportedSensorTypes
+				"supported types": this.supportedSensorTypes
 					.map((type) => getEnumMemberName(BinarySensorType, type))
 					.join(", "),
 			},

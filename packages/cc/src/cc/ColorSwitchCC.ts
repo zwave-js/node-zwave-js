@@ -31,7 +31,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -40,7 +39,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -473,7 +473,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Color Switch"])
 @implementedVersion(3)
-@CCValues(ColorSwitchCCValues)
+@ccValues(ColorSwitchCCValues)
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
 
@@ -618,7 +618,7 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 		);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(ColorSwitchCCValues.supportedColorComponents)
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -658,21 +658,6 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		// Duration is stored globally instead of per component
 		if (!super.persistValues(applHost)) return false;
-
-		this.setValue(
-			applHost,
-			ColorSwitchCCValues.currentColorChannel(this.colorComponent),
-			this.currentValue,
-		);
-
-		// Update target value if required
-		if (this.targetValue != undefined) {
-			this.setValue(
-				applHost,
-				ColorSwitchCCValues.targetColorChannel(this.colorComponent),
-				this.targetValue,
-			);
-		}
 
 		// Update compound current value
 		const colorTableKey = colorComponentToTableKey(this.colorComponent);
@@ -734,10 +719,19 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	}
 
 	public readonly colorComponent: ColorComponent;
+	@ccValue(
+		ColorSwitchCCValues.currentColorChannel,
+		(self: ColorSwitchCCReport) => [self.colorComponent] as const,
+	)
 	public readonly currentValue: number;
+
+	@ccValue(
+		ColorSwitchCCValues.targetColorChannel,
+		(self: ColorSwitchCCReport) => [self.colorComponent] as const,
+	)
 	public readonly targetValue: number | undefined;
 
-	@ccValue()
+	@ccValue(ColorSwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

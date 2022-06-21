@@ -20,7 +20,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -29,7 +28,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -191,7 +191,7 @@ export class TimeParametersCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Time Parameters"])
 @implementedVersion(1)
-@CCValues(TimeParametersCCValues)
+@ccValues(TimeParametersCCValues)
 export class TimeParametersCC extends CommandClass {
 	declare ccCommand: TimeParametersCommand;
 
@@ -257,7 +257,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 		);
 		if (local) {
 			// The initial assumption was incorrect, re-interpret the time
-			const segments = dateToSegments(this._dateAndTime, false);
+			const segments = dateToSegments(this.dateAndTime, false);
 			this._dateAndTime = segmentsToDate(segments, local);
 		}
 
@@ -265,7 +265,7 @@ export class TimeParametersCCReport extends TimeParametersCC {
 	}
 
 	private _dateAndTime: Date;
-	@ccValue()
+	@ccValue(TimeParametersCCValues.dateAndTime)
 	public get dateAndTime(): Date {
 		return this._dateAndTime;
 	}

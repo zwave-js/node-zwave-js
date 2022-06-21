@@ -19,7 +19,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { distinct } from "alcalzone-shared/arrays";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -28,7 +27,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -246,7 +246,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Association)
 @implementedVersion(3)
-@CCValues(AssociationCCValues)
+@ccValues(AssociationCCValues)
 export class AssociationCC extends CommandClass {
 	declare ccCommand: AssociationCommand;
 
@@ -586,13 +586,19 @@ export class AssociationCCReport extends AssociationCC {
 	}
 
 	private _maxNodes: number;
-	@ccValue({ internal: true })
+	@ccValue(
+		AssociationCCValues.maxNodes,
+		(self: AssociationCCReport) => [self.groupId] as const,
+	)
 	public get maxNodes(): number {
 		return this._maxNodes;
 	}
 
 	private _nodeIds: number[];
-	@ccValue({ internal: true })
+	@ccValue(
+		AssociationCCValues.nodeIds,
+		(self: AssociationCCReport) => [self.groupId] as const,
+	)
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
@@ -691,7 +697,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	}
 
 	private _groupCount: number;
-	@ccValue({ internal: true })
+	@ccValue(AssociationCCValues.groupCount)
 	public get groupCount(): number {
 		return this._groupCount;
 	}

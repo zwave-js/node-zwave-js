@@ -24,7 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -48,15 +48,11 @@ export const BinarySwitchCCValues = Object.freeze({
 			label: "Current value",
 		} as const),
 
-		...V.staticProperty(
-			"targetValue",
-			{
-				...ValueMetadata.Boolean,
-				label: "Target value",
-				valueChangeOptions: ["transitionDuration"],
-			} as const,
-			{ forceCreation: true },
-		),
+		...V.staticProperty("targetValue", {
+			...ValueMetadata.Boolean,
+			label: "Target value",
+			valueChangeOptions: ["transitionDuration"],
+		} as const),
 
 		...V.staticProperty(
 			"duration",
@@ -199,7 +195,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Binary Switch"])
 @implementedVersion(2)
-@CCValues(BinarySwitchCCValues)
+@ccValues(BinarySwitchCCValues)
 export class BinarySwitchCC extends CommandClass {
 	declare ccCommand: BinarySwitchCommand;
 
@@ -320,32 +316,23 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._currentValue = parseMaybeBoolean(this.payload[0]);
+		this.currentValue = parseMaybeBoolean(this.payload[0]);
 
 		if (this.version >= 2 && this.payload.length >= 3) {
 			// V2
-			this._targetValue = parseBoolean(this.payload[1]);
-			this._duration = Duration.parseReport(this.payload[2]);
+			this.targetValue = parseBoolean(this.payload[1]);
+			this.duration = Duration.parseReport(this.payload[2]);
 		}
 	}
 
-	private _currentValue: Maybe<boolean> | undefined;
-	@ccValue()
-	public get currentValue(): Maybe<boolean> | undefined {
-		return this._currentValue;
-	}
+	@ccValue(BinarySwitchCCValues.currentValue)
+	public readonly currentValue: Maybe<boolean> | undefined;
 
-	private _targetValue: boolean | undefined;
-	@ccValue({ forceCreation: true })
-	public get targetValue(): boolean | undefined {
-		return this._targetValue;
-	}
+	@ccValue(BinarySwitchCCValues.targetValue)
+	public readonly targetValue: boolean | undefined;
 
-	private _duration: Duration | undefined;
-	@ccValue({ minVersion: 2 })
-	public get duration(): Duration | undefined {
-		return this._duration;
-	}
+	@ccValue(BinarySwitchCCValues.duration)
+	public readonly duration: Duration | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

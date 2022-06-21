@@ -28,7 +28,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -37,7 +36,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -335,7 +335,7 @@ export class ProtectionCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Protection)
 @implementedVersion(2)
-@CCValues(ProtectionCCValues)
+@ccValues(ProtectionCCValues)
 export class ProtectionCC extends CommandClass {
 	declare ccCommand: ProtectionCommand;
 
@@ -534,10 +534,10 @@ export class ProtectionCCReport extends ProtectionCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(ProtectionCCValues.localProtectionState)
 	public readonly local: LocalProtectionState;
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(ProtectionCCValues.rfProtectionState)
 	public readonly rf?: RFProtectionState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -603,16 +603,16 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		return true;
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportsExclusiveControl)
 	public readonly supportsExclusiveControl: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportsTimeout)
 	public readonly supportsTimeout: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportedLocalStates)
 	public readonly supportedLocalStates: LocalProtectionState[];
 
-	@ccValue({ internal: true })
+	@ccValue(ProtectionCCValues.supportedRFStates)
 	public readonly supportedRFStates: RFProtectionState[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -651,7 +651,7 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 		this.exclusiveControlNodeId = this.payload[0];
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(ProtectionCCValues.exclusiveControlNodeId)
 	public readonly exclusiveControlNodeId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -721,7 +721,7 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 		this.timeout = Timeout.parse(this.payload[0]);
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(ProtectionCCValues.timeout)
 	public readonly timeout: Timeout;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

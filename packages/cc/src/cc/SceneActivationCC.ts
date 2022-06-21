@@ -19,7 +19,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -28,7 +27,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
@@ -110,7 +110,7 @@ export class SceneActivationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Activation"])
 @implementedVersion(1)
-@CCValues(SceneActivationCCValues)
+@ccValues(SceneActivationCCValues)
 export class SceneActivationCC extends CommandClass {
 	declare ccCommand: SceneActivationCommand;
 }
@@ -141,10 +141,10 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		}
 	}
 
-	@ccValue({ stateful: false })
+	@ccValue(SceneActivationCCValues.sceneId)
 	public sceneId: number;
 
-	@ccValue()
+	@ccValue(SceneActivationCCValues.dimmingDuration)
 	public dimmingDuration: Duration | undefined;
 
 	public serialize(): Buffer {

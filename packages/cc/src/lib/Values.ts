@@ -1,9 +1,4 @@
-import {
-	CommandClasses,
-	ValueID,
-	ValueMetadata,
-	ValueMetadataAny,
-} from "@zwave-js/core";
+import { CommandClasses, ValueID, ValueMetadata } from "@zwave-js/core";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ValueIDProperties } from "./API";
 
@@ -31,25 +26,21 @@ export interface CCValueOptions {
 	 * Omit this value from value logs. Default: `false`
 	 */
 	secret?: boolean;
-	// TODO: Do we need this?
-	/**
-	 * Whether this value should always be created/persisted, even if it is undefined. Default: `false`
-	 */
-	forceCreation?: boolean;
 
 	/** Whether the CC value may exist on endpoints. Default: `true` */
 	supportsEndpoints?: boolean;
 }
 
-const defaultOptions = {
+export const defaultCCValueOptions = {
 	internal: false,
 	minVersion: 1,
 	secret: false,
 	stateful: true,
 	supportsEndpoints: true,
+	forceCreation: false,
 } as const;
 
-type DefaultOptions = typeof defaultOptions;
+type DefaultOptions = typeof defaultCCValueOptions;
 
 // expands object types recursively
 export type ExpandRecursively<T> =
@@ -102,7 +93,7 @@ type ToStaticCCValues<
 	TValues extends Record<keyof TValues, CCValueBlueprint>,
 > = Readonly<{
 	[K in keyof TValues]: ExpandRecursively<
-		StaticCCValue<TCommandClass, TValues[K]>
+		InferStaticCCValue<TCommandClass, TValues[K]>
 	>;
 }>;
 
@@ -111,7 +102,7 @@ type ToDynamicCCValues<
 	TValues extends Record<keyof TValues, DynamicCCValueBlueprint<any>>,
 > = Readonly<{
 	[K in keyof TValues]: ExpandRecursively<
-		DynamicCCValue<TCommandClass, TValues[K]>
+		InferDynamicCCValue<TCommandClass, TValues[K]>
 	>;
 }>;
 
@@ -141,12 +132,12 @@ function defineStaticCCValue<
 >(
 	commandClass: TCommandClass,
 	blueprint: TBlueprint,
-): ExpandRecursively<StaticCCValue<TCommandClass, TBlueprint>> {
+): ExpandRecursively<InferStaticCCValue<TCommandClass, TBlueprint>> {
 	// Normalize value options
 	const _blueprint = {
 		...blueprint,
 		options: {
-			...defaultOptions,
+			...defaultCCValueOptions,
 			...blueprint.options,
 		},
 	};
@@ -157,7 +148,7 @@ function defineStaticCCValue<
 		propertyKey: _blueprint.propertyKey,
 	};
 
-	const ret: StaticCCValue<TCommandClass, TBlueprint> = {
+	const ret: InferStaticCCValue<TCommandClass, TBlueprint> = {
 		get id() {
 			return { ...valueId };
 		},
@@ -190,15 +181,15 @@ function defineDynamicCCValue<
 >(
 	commandClass: TCommandClass,
 	blueprint: TBlueprint,
-): ExpandRecursively<DynamicCCValue<TCommandClass, TBlueprint>> {
+): ExpandRecursively<InferDynamicCCValue<TCommandClass, TBlueprint>> {
 	const options = {
-		...defaultOptions,
+		...defaultCCValueOptions,
 		...blueprint.options,
 	};
 
-	const ret: ExpandRecursively<DynamicCCValue<TCommandClass, TBlueprint>> = ((
-		...args: Parameters<TBlueprint>
-	) => {
+	const ret: ExpandRecursively<
+		InferDynamicCCValue<TCommandClass, TBlueprint>
+	> = ((...args: Parameters<TBlueprint>) => {
 		const _blueprint = blueprint(...args);
 
 		// Normalize value options
@@ -213,7 +204,7 @@ function defineDynamicCCValue<
 		};
 
 		const value: Omit<
-			StaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
+			InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
 			"options" | "is"
 		> = {
 			get id() {
@@ -518,50 +509,49 @@ type AddCCValueProperties<
 	get options(): Readonly<MergeOptions<NonNullable<TBlueprint["options"]>>>;
 };
 
-/** A blueprint for a CC value which depends on one or more parameters */
-export type DynamicCCValue<
+/** A CC value definition which depends on one or more parameters, transparently inferred from its arguments */
+export type InferDynamicCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends DynamicCCValueBlueprint<any[]>,
 > = TBlueprint extends DynamicCCValueBlueprint<infer TArgs>
 	? {
 			(...args: TArgs): Omit<
-				StaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
+				InferStaticCCValue<TCommandClass, ReturnType<TBlueprint>>,
 				"options" | "is"
 			>;
 
 			/** Whether the given value ID matches this value definition */
 			is: CCValuePredicate;
 
-			readonly options: StaticCCValue<
+			readonly options: InferStaticCCValue<
 				TCommandClass,
 				ReturnType<TBlueprint> & { options: TBlueprint["options"] }
 			>["options"];
 	  }
 	: never;
 
-/** A static or evaluated CC value definition */
-export type StaticCCValue<
+/** A static or evaluated CC value definition, transparently inferred from its arguments */
+export type InferStaticCCValue<
 	TCommandClass extends CommandClasses,
 	TBlueprint extends CCValueBlueprint,
 > = Readonly<AddCCValueProperties<TCommandClass, TBlueprint>>;
 
-type StaticCCValueUnspecified = Pick<
-	StaticCCValue<CommandClasses, Readonly<ValueIDProperties>>,
-	"id" | "endpoint"
-> & {
-	meta?: ValueMetadataAny;
-};
-
-type DynamicCCValueUnspecified = (...args: any[]) => StaticCCValueUnspecified;
-
-/** Matches both static and dynamic CC values */
-export type DynamicOrStaticCCValue = ExpandRecursivelySkipMeta<
-	StaticCCValueUnspecified | DynamicCCValueUnspecified
-> & {
+/** The generic variant of {@link InferStaticCCValue}, without inferring arguments */
+export interface StaticCCValue extends CCValue {
 	/** Whether the given value ID matches this value definition */
 	is: CCValuePredicate;
-	readonly options?: CCValueOptions;
-};
+	readonly options: Required<CCValueOptions>;
+}
+
+/** The generic variant of {@link InferDynamicCCValue}, without inferring arguments */
+export type DynamicCCValue<TArgs extends any[] = any[]> =
+	ExpandRecursivelySkipMeta<(...args: TArgs) => CCValue> & {
+		/** Whether the given value ID matches this value definition */
+		is: CCValuePredicate;
+		readonly options: Required<CCValueOptions>;
+	};
+
+export type StaticCCValueFactory<T> = (self: T) => StaticCCValue;
 
 // This interface is auto-generated by maintenance/generateCCValuesInterface.ts
 // Do not edit it by hand or your changes will be lost

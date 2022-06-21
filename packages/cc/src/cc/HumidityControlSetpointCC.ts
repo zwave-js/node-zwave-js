@@ -26,7 +26,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -35,7 +34,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -304,7 +304,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Humidity Control Setpoint"])
 @implementedVersion(2)
-@CCValues(HumidityControlSetpointCCValues)
+@ccValues(HumidityControlSetpointCCValues)
 export class HumidityControlSetpointCC extends CommandClass {
 	declare ccCommand: HumidityControlSetpointCommand;
 
@@ -684,17 +684,14 @@ export class HumidityControlSetpointCCSupportedReport extends HumidityControlSet
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._supportedSetpointTypes = parseBitMask(
+		this.supportedSetpointTypes = parseBitMask(
 			this.payload,
 			HumidityControlSetpointType["N/A"],
 		);
 	}
 
-	private _supportedSetpointTypes: HumidityControlSetpointType[];
-	@ccValue({ internal: true })
-	public get supportedSetpointTypes(): readonly HumidityControlSetpointType[] {
-		return this._supportedSetpointTypes;
-	}
+	@ccValue(HumidityControlSetpointCCValues.supportedSetpointTypes)
+	public readonly supportedSetpointTypes: readonly HumidityControlSetpointType[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

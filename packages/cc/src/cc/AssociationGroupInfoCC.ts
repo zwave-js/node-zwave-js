@@ -16,8 +16,6 @@ import { cpp2js, getEnumMemberName, num2hex } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccKeyValuePair,
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -26,7 +24,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -68,7 +67,7 @@ export const AssociationGroupInfoCCValues = Object.freeze({
 				{ internal: true },
 			),
 			...V.dynamicPropertyAndKeyWithName(
-				"issuedCommands",
+				"commands",
 				"issuedCommands",
 				(groupId: number) => groupId,
 				({ property, propertyKey }) =>
@@ -175,7 +174,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Association Group Information"])
 @implementedVersion(3)
-@CCValues(AssociationGroupInfoCCValues)
+@ccValues(AssociationGroupInfoCCValues)
 export class AssociationGroupInfoCC extends CommandClass {
 	declare ccCommand: AssociationGroupInfoCommand;
 
@@ -224,7 +223,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 		return applHost
 			.getValueDB(endpoint.nodeId)
 			.getValue(
-				AssociationGroupInfoCCValues.issuedCommands(groupId).endpoint(
+				AssociationGroupInfoCCValues.commands(groupId).endpoint(
 					endpoint.index,
 				),
 			);
@@ -522,7 +521,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 
 	public readonly isListMode: boolean;
 
-	@ccValue({ internal: true })
+	@ccValue(AssociationGroupInfoCCValues.hasDynamicInfo)
 	public readonly hasDynamicInfo: boolean;
 
 	public readonly groups: readonly AssociationGroupInfo[];
@@ -621,7 +620,7 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 	) {
 		super(host, options);
 		validatePayload(this.payload.length >= 2);
-		const groupId = this.payload[0];
+		this.groupId = this.payload[0];
 		const listLength = this.payload[1];
 		validatePayload(this.payload.length >= 2 + listLength);
 		const listBytes = this.payload.slice(2, 2 + listLength);
@@ -636,19 +635,17 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 			offset += bytesRead + 1;
 		}
 
-		this.issuedCommands = [groupId, commands];
+		this.commands = commands;
 	}
 
-	@ccKeyValuePair({ internal: true })
-	private issuedCommands: [number, this["commands"]];
+	public readonly groupId: number;
 
-	public get groupId(): number {
-		return this.issuedCommands[0];
-	}
-
-	public get commands(): ReadonlyMap<CommandClasses, readonly number[]> {
-		return this.issuedCommands[1];
-	}
+	@ccValue(
+		AssociationGroupInfoCCValues.commands,
+		(self: AssociationGroupInfoCCCommandListReport) =>
+			[self.groupId] as const,
+	)
+	public readonly commands: ReadonlyMap<CommandClasses, readonly number[]>;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

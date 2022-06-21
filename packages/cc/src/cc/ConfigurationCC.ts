@@ -49,7 +49,7 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -924,7 +924,7 @@ export class ConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Configuration)
 @implementedVersion(4)
-@CCValues(ConfigurationCCValues)
+@ccValues(ConfigurationCCValues)
 export class ConfigurationCC extends CommandClass {
 	declare ccCommand: ConfigurationCommand;
 

@@ -19,7 +19,6 @@ import {
 import { validateArgs } from "@zwave-js/transformers";
 import { PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -28,7 +27,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -47,9 +47,6 @@ import {
 
 export const FirmwareUpdateMetaDataCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Firmware Update Meta Data"], {
-		...V.staticProperty("continuesToFunction", undefined, {
-			internal: true,
-		}),
 		...V.staticProperty("supportsActivation", undefined, {
 			internal: true,
 		}),
@@ -199,7 +196,7 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Firmware Update Meta Data"])
 @implementedVersion(7)
-@CCValues(FirmwareUpdateMetaDataCCValues)
+@ccValues(FirmwareUpdateMetaDataCCValues)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
 }
@@ -257,11 +254,9 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 	public readonly maxFragmentSize?: number;
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
-
-	@ccValue({ internal: true })
 	public readonly continuesToFunction: Maybe<boolean> = unknownBoolean;
 
-	@ccValue({ internal: true })
+	@ccValue(FirmwareUpdateMetaDataCCValues.supportsActivation)
 	public readonly supportsActivation: Maybe<boolean> = unknownBoolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

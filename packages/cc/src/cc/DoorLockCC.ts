@@ -26,7 +26,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -35,7 +34,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -71,6 +71,10 @@ export const DoorLockCCValues = Object.freeze({
 			{ minVersion: 3 } as const,
 		),
 
+		...V.staticProperty("supportedOutsideHandles", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty("outsideHandlesCanOpenDoorConfiguration", {
 			...ValueMetadata.Any,
 			label: "Which outside handles can open the door (configuration)",
@@ -80,6 +84,10 @@ export const DoorLockCCValues = Object.freeze({
 			label: "Which outside handles can open the door (actual status)",
 		} as const),
 
+		...V.staticProperty("supportedInsideHandles", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty("insideHandlesCanOpenDoorConfiguration", {
 			...ValueMetadata.Any,
 			label: "Which inside handles can open the door (configuration)",
@@ -104,6 +112,10 @@ export const DoorLockCCValues = Object.freeze({
 			label: "Seconds until lock mode times out",
 		} as const),
 
+		...V.staticProperty("autoRelockSupported", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty(
 			"autoRelockTime",
 			{
@@ -112,6 +124,11 @@ export const DoorLockCCValues = Object.freeze({
 			} as const,
 			{ minVersion: 4 } as const,
 		),
+
+		...V.staticProperty("holdAndReleaseSupported", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty(
 			"holdAndReleaseTime",
 			{
@@ -120,6 +137,11 @@ export const DoorLockCCValues = Object.freeze({
 			} as const,
 			{ minVersion: 4 } as const,
 		),
+
+		...V.staticProperty("twistAssistSupported", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty(
 			"twistAssist",
 			{
@@ -128,6 +150,11 @@ export const DoorLockCCValues = Object.freeze({
 			} as const,
 			{ minVersion: 4 } as const,
 		),
+
+		...V.staticProperty("blockToBlockSupported", undefined, {
+			internal: true,
+			minVersion: 4,
+		}),
 		...V.staticProperty(
 			"blockToBlock",
 			{
@@ -154,10 +181,6 @@ export const DoorLockCCValues = Object.freeze({
 			...ValueMetadata.ReadOnly,
 			label: "Current status of the door",
 		} as const),
-	}),
-
-	...V.defineDynamicCCValues(CommandClasses["Door Lock"], {
-		// Dynamic CC values go here
 	}),
 });
 
@@ -402,7 +425,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Door Lock"])
 @implementedVersion(4)
-@CCValues(DoorLockCCValues)
+@ccValues(DoorLockCCValues)
 export class DoorLockCC extends CommandClass {
 	declare ccCommand: DoorLockCommand;
 
@@ -754,26 +777,26 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		return true;
 	}
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.currentMode)
 	public readonly currentMode: DoorLockMode;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.targetMode)
 	public readonly targetMode?: DoorLockMode;
 
-	@ccValue({ minVersion: 3 })
+	@ccValue(DoorLockCCValues.duration)
 	public readonly duration?: Duration;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.outsideHandlesCanOpenDoor)
 	public readonly outsideHandlesCanOpenDoor: DoorHandleStatus;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.insideHandlesCanOpenDoor)
 	public readonly insideHandlesCanOpenDoor: DoorHandleStatus;
 
 	public readonly latchStatus?: "open" | "closed";
 	public readonly boltStatus?: "locked" | "unlocked";
 	public readonly doorStatus?: "open" | "closed";
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.lockTimeout)
 	public readonly lockTimeout?: number; // in seconds
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -856,28 +879,28 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.operationType)
 	public readonly operationType: DoorLockOperationType;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.outsideHandlesCanOpenDoorConfiguration)
 	public readonly outsideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.insideHandlesCanOpenDoorConfiguration)
 	public readonly insideHandlesCanOpenDoorConfiguration: DoorHandleStatus;
 
-	@ccValue()
+	@ccValue(DoorLockCCValues.lockTimeoutConfiguration)
 	public readonly lockTimeoutConfiguration?: number;
 
-	@ccValue({ minVersion: 4 })
+	@ccValue(DoorLockCCValues.autoRelockTime)
 	public readonly autoRelockTime?: number;
 
-	@ccValue({ minVersion: 4 })
+	@ccValue(DoorLockCCValues.holdAndReleaseTime)
 	public readonly holdAndReleaseTime?: number;
 
-	@ccValue({ minVersion: 4 })
+	@ccValue(DoorLockCCValues.twistAssist)
 	public readonly twistAssist?: boolean;
 
-	@ccValue({ minVersion: 4 })
+	@ccValue(DoorLockCCValues.blockToBlock)
 	public readonly blockToBlock?: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1139,26 +1162,26 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 	public readonly supportedOperationTypes: readonly DoorLockOperationType[];
 	public readonly supportedDoorLockModes: readonly DoorLockMode[];
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.supportedOutsideHandles)
 	public readonly supportedOutsideHandles: DoorHandleStatus;
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.supportedInsideHandles)
 	public readonly supportedInsideHandles: DoorHandleStatus;
 
 	public readonly latchSupported: boolean;
 	public readonly boltSupported: boolean;
 	public readonly doorSupported: boolean;
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.autoRelockSupported)
 	public readonly autoRelockSupported: boolean;
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.holdAndReleaseSupported)
 	public readonly holdAndReleaseSupported: boolean;
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.twistAssistSupported)
 	public readonly twistAssistSupported: boolean;
 
-	@ccValue({ internal: true, minVersion: 4 })
+	@ccValue(DoorLockCCValues.blockToBlockSupported)
 	public readonly blockToBlockSupported: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

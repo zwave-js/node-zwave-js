@@ -18,7 +18,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -27,7 +26,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	getImplementedVersion,
@@ -332,7 +332,7 @@ export class VersionCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Version)
 @implementedVersion(3)
-@CCValues(VersionCCValues)
+@ccValues(VersionCCValues)
 export class VersionCC extends CommandClass {
 	declare ccCommand: VersionCommand;
 
@@ -537,11 +537,11 @@ export class VersionCCReport extends VersionCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 5);
-		this._libraryType = this.payload[0];
-		this._protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
-		this._firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
+		this.libraryType = this.payload[0];
+		this.protocolVersion = `${this.payload[1]}.${this.payload[2]}`;
+		this.firmwareVersions = [`${this.payload[3]}.${this.payload[4]}`];
 		if (this.version >= 2 && this.payload.length >= 7) {
-			this._hardwareVersion = this.payload[5];
+			this.hardwareVersion = this.payload[5];
 			const additionalFirmwares = this.payload[6];
 			validatePayload(this.payload.length >= 7 + 2 * additionalFirmwares);
 			for (let i = 0; i < additionalFirmwares; i++) {
@@ -552,41 +552,29 @@ export class VersionCCReport extends VersionCC {
 		}
 	}
 
-	private _libraryType: ZWaveLibraryTypes;
-	@ccValue()
-	public get libraryType(): ZWaveLibraryTypes {
-		return this._libraryType;
-	}
+	@ccValue(VersionCCValues.libraryType)
+	public readonly libraryType: ZWaveLibraryTypes;
 
-	private _protocolVersion: string;
-	@ccValue()
-	public get protocolVersion(): string {
-		return this._protocolVersion;
-	}
+	@ccValue(VersionCCValues.protocolVersion)
+	public readonly protocolVersion: string;
 
-	private _firmwareVersions: string[];
-	@ccValue()
-	public get firmwareVersions(): string[] {
-		return this._firmwareVersions;
-	}
+	@ccValue(VersionCCValues.firmwareVersions)
+	public readonly firmwareVersions: string[];
 
-	private _hardwareVersion: number | undefined;
-	@ccValue({ minVersion: 2 })
-	public get hardwareVersion(): number | undefined {
-		return this._hardwareVersion;
-	}
+	@ccValue(VersionCCValues.hardwareVersion)
+	public readonly hardwareVersion: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"library type": getEnumMemberName(
 				ZWaveLibraryTypes,
-				this._libraryType,
+				this.libraryType,
 			),
-			"protocol version": this._protocolVersion,
-			"firmware versions": this._firmwareVersions.join(", "),
+			"protocol version": this.protocolVersion,
+			"firmware versions": this.firmwareVersions.join(", "),
 		};
-		if (this._hardwareVersion != undefined) {
-			message["hardware version"] = this._hardwareVersion;
+		if (this.hardwareVersion != undefined) {
+			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
 			...super.toLogEntry(applHost),
@@ -694,24 +682,18 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 
 		validatePayload(this.payload.length >= 1);
 		const capabilities = this.payload[0];
-		this._supportsZWaveSoftwareGet = !!(capabilities & 0b100);
+		this.supportsZWaveSoftwareGet = !!(capabilities & 0b100);
 	}
 
-	private _supportsZWaveSoftwareGet: boolean;
-	@ccValue({
-		minVersion: 3,
-		internal: true,
-	})
-	public get supportsZWaveSoftwareGet(): boolean {
-		return this._supportsZWaveSoftwareGet;
-	}
+	@ccValue(VersionCCValues.supportsZWaveSoftwareGet)
+	public readonly supportsZWaveSoftwareGet: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
 				"supports Z-Wave Software Get command":
-					this._supportsZWaveSoftwareGet,
+					this.supportsZWaveSoftwareGet,
 			},
 		};
 	}
@@ -730,113 +712,85 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 23);
-		this._sdkVersion = parseVersion(this.payload);
-		this._applicationFrameworkAPIVersion = parseVersion(
+		this.sdkVersion = parseVersion(this.payload);
+		this.applicationFrameworkAPIVersion = parseVersion(
 			this.payload.slice(3),
 		);
-		if (this._applicationFrameworkAPIVersion !== "unused") {
-			this._applicationFrameworkBuildNumber =
-				this.payload.readUInt16BE(6);
+		if (this.applicationFrameworkAPIVersion !== "unused") {
+			this.applicationFrameworkBuildNumber = this.payload.readUInt16BE(6);
 		} else {
-			this._applicationFrameworkBuildNumber = 0;
+			this.applicationFrameworkBuildNumber = 0;
 		}
-		this._hostInterfaceVersion = parseVersion(this.payload.slice(8));
-		if (this._hostInterfaceVersion !== "unused") {
-			this._hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
+		this.hostInterfaceVersion = parseVersion(this.payload.slice(8));
+		if (this.hostInterfaceVersion !== "unused") {
+			this.hostInterfaceBuildNumber = this.payload.readUInt16BE(11);
 		} else {
-			this._hostInterfaceBuildNumber = 0;
+			this.hostInterfaceBuildNumber = 0;
 		}
-		this._zWaveProtocolVersion = parseVersion(this.payload.slice(13));
-		if (this._zWaveProtocolVersion !== "unused") {
-			this._zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
+		this.zWaveProtocolVersion = parseVersion(this.payload.slice(13));
+		if (this.zWaveProtocolVersion !== "unused") {
+			this.zWaveProtocolBuildNumber = this.payload.readUInt16BE(16);
 		} else {
-			this._zWaveProtocolBuildNumber = 0;
+			this.zWaveProtocolBuildNumber = 0;
 		}
-		this._applicationVersion = parseVersion(this.payload.slice(18));
-		if (this._applicationVersion !== "unused") {
-			this._applicationBuildNumber = this.payload.readUInt16BE(21);
+		this.applicationVersion = parseVersion(this.payload.slice(18));
+		if (this.applicationVersion !== "unused") {
+			this.applicationBuildNumber = this.payload.readUInt16BE(21);
 		} else {
-			this._applicationBuildNumber = 0;
+			this.applicationBuildNumber = 0;
 		}
 	}
 
-	private _sdkVersion: string;
-	@ccValue({ minVersion: 3 })
-	public get sdkVersion(): string {
-		return this._sdkVersion;
-	}
+	@ccValue(VersionCCValues.sdkVersion)
+	public readonly sdkVersion: string;
 
-	private _applicationFrameworkAPIVersion: string;
-	@ccValue({ minVersion: 3 })
-	public get applicationFrameworkAPIVersion(): string {
-		return this._applicationFrameworkAPIVersion;
-	}
+	@ccValue(VersionCCValues.applicationFrameworkAPIVersion)
+	public readonly applicationFrameworkAPIVersion: string;
 
-	private _applicationFrameworkBuildNumber: number;
-	@ccValue({ minVersion: 3 })
-	public get applicationFrameworkBuildNumber(): number {
-		return this._applicationFrameworkBuildNumber;
-	}
+	@ccValue(VersionCCValues.applicationFrameworkBuildNumber)
+	public readonly applicationFrameworkBuildNumber: number;
 
-	private _hostInterfaceVersion: string;
-	@ccValue({ minVersion: 3 })
-	public get hostInterfaceVersion(): string {
-		return this._hostInterfaceVersion;
-	}
+	@ccValue(VersionCCValues.serialAPIVersion)
+	public readonly hostInterfaceVersion: string;
 
-	private _hostInterfaceBuildNumber: number;
-	@ccValue({ minVersion: 3 })
-	public get hostInterfaceBuildNumber(): number {
-		return this._hostInterfaceBuildNumber;
-	}
+	@ccValue(VersionCCValues.serialAPIBuildNumber)
+	public readonly hostInterfaceBuildNumber: number;
 
-	private _zWaveProtocolVersion: string;
-	@ccValue({ minVersion: 3 })
-	public get zWaveProtocolVersion(): string {
-		return this._zWaveProtocolVersion;
-	}
+	@ccValue(VersionCCValues.zWaveProtocolVersion)
+	public readonly zWaveProtocolVersion: string;
 
-	private _zWaveProtocolBuildNumber: number;
-	@ccValue({ minVersion: 3 })
-	public get zWaveProtocolBuildNumber(): number {
-		return this._zWaveProtocolBuildNumber;
-	}
+	@ccValue(VersionCCValues.zWaveProtocolBuildNumber)
+	public readonly zWaveProtocolBuildNumber: number;
 
-	private _applicationVersion: string;
-	@ccValue({ minVersion: 3 })
-	public get applicationVersion(): string {
-		return this._applicationVersion;
-	}
+	@ccValue(VersionCCValues.applicationVersion)
+	public readonly applicationVersion: string;
 
-	private _applicationBuildNumber: number;
-	@ccValue({ minVersion: 3 })
-	public get applicationBuildNumber(): number {
-		return this._applicationBuildNumber;
-	}
+	@ccValue(VersionCCValues.applicationBuildNumber)
+	public readonly applicationBuildNumber: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"SDK version": this._sdkVersion,
+			"SDK version": this.sdkVersion,
 		};
 		message["appl. framework API version"] =
-			this._applicationFrameworkAPIVersion;
-		if (this._applicationFrameworkAPIVersion !== "unused") {
+			this.applicationFrameworkAPIVersion;
+		if (this.applicationFrameworkAPIVersion !== "unused") {
 			message["appl. framework build number"] =
-				this._applicationFrameworkBuildNumber;
+				this.applicationFrameworkBuildNumber;
 		}
-		message["host interface version"] = this._hostInterfaceVersion;
-		if (this._hostInterfaceVersion !== "unused") {
+		message["host interface version"] = this.hostInterfaceVersion;
+		if (this.hostInterfaceVersion !== "unused") {
 			message["host interface  build number"] =
-				this._hostInterfaceBuildNumber;
+				this.hostInterfaceBuildNumber;
 		}
-		message["Z-Wave protocol version"] = this._zWaveProtocolVersion;
-		if (this._zWaveProtocolVersion !== "unused") {
+		message["Z-Wave protocol version"] = this.zWaveProtocolVersion;
+		if (this.zWaveProtocolVersion !== "unused") {
 			message["Z-Wave protocol build number"] =
-				this._zWaveProtocolBuildNumber;
+				this.zWaveProtocolBuildNumber;
 		}
-		message["application version"] = this._applicationVersion;
-		if (this._applicationVersion !== "unused") {
-			message["application build number"] = this._applicationBuildNumber;
+		message["application version"] = this.applicationVersion;
+		if (this.applicationVersion !== "unused") {
+			message["application build number"] = this.applicationBuildNumber;
 		}
 		return {
 			...super.toLogEntry(applHost),

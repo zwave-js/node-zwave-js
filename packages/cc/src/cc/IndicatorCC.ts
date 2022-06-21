@@ -31,7 +31,7 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -324,7 +324,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Indicator)
 @implementedVersion(3)
-@CCValues(IndicatorCCValues)
+@ccValues(IndicatorCCValues)
 export class IndicatorCC extends CommandClass {
 	declare ccCommand: IndicatorCommand;
 

@@ -33,7 +33,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -42,7 +41,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	getCommandClass,
@@ -343,7 +343,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses.Meter)
 @implementedVersion(6)
-@CCValues(MeterCCValues)
+@ccValues(MeterCCValues)
 export class MeterCC extends CommandClass {
 	declare ccCommand: MeterCommand;
 
@@ -794,8 +794,8 @@ export class MeterCCSupportedReport extends MeterCC {
 	) {
 		super(host, options);
 		validatePayload(this.payload.length >= 2);
-		this._type = this.payload[0] & 0b0_00_11111;
-		this._supportsReset = !!(this.payload[0] & 0b1_00_00000);
+		this.type = this.payload[0] & 0b0_00_11111;
+		this.supportsReset = !!(this.payload[0] & 0b1_00_00000);
 		const hasMoreScales = !!(this.payload[1] & 0b1_0000000);
 		if (hasMoreScales) {
 			// The bitmask is spread out
@@ -804,7 +804,7 @@ export class MeterCCSupportedReport extends MeterCC {
 			validatePayload(this.payload.length >= 3 + extraBytes);
 			// The bitmask is the original payload byte plus all following bytes
 			// Since the first byte only has 7 bits, we need to reduce all following bits by 1
-			this._supportedScales = parseBitMask(
+			this.supportedScales = parseBitMask(
 				Buffer.concat([
 					Buffer.from([this.payload[1] & 0b0_1111111]),
 					this.payload.slice(3, 3 + extraBytes),
@@ -813,45 +813,33 @@ export class MeterCCSupportedReport extends MeterCC {
 			).map((scale) => (scale >= 8 ? scale - 1 : scale));
 		} else {
 			// only 7 bits in the bitmask. Bit 7 is 0, so no need to mask it out
-			this._supportedScales = parseBitMask(
+			this.supportedScales = parseBitMask(
 				Buffer.from([this.payload[1]]),
 				0,
 			);
 		}
 		// This is only present in V4+
-		this._supportedRateTypes = parseBitMask(
+		this.supportedRateTypes = parseBitMask(
 			Buffer.from([(this.payload[0] & 0b0_11_00000) >>> 5]),
 			1,
 		);
 	}
 
-	private _type: number;
-	@ccValue({ internal: true })
-	public get type(): number {
-		return this._type;
-	}
+	@ccValue(MeterCCValues.type)
+	public readonly type: number;
 
-	private _supportsReset: boolean;
-	@ccValue({ internal: true })
-	public get supportsReset(): boolean {
-		return this._supportsReset;
-	}
+	@ccValue(MeterCCValues.supportsReset)
+	public readonly supportsReset: boolean;
 
-	private _supportedScales: number[];
-	@ccValue({ internal: true })
-	public get supportedScales(): readonly number[] {
-		return this._supportedScales;
-	}
+	@ccValue(MeterCCValues.supportedScales)
+	public readonly supportedScales: readonly number[];
 
-	private _supportedRateTypes: RateType[];
-	@ccValue({ internal: true })
-	public get supportedRateTypes(): readonly RateType[] {
-		return this._supportedRateTypes;
-	}
+	@ccValue(MeterCCValues.supportedRateTypes)
+	public readonly supportedRateTypes: readonly RateType[];
 
 	public persistValues(applHost: ZWaveApplicationHost): boolean {
 		if (!super.persistValues(applHost)) return false;
-		if (!this._supportsReset) return true;
+		if (!this.supportsReset) return true;
 
 		// Create reset values
 		if (this.version < 6) {
@@ -862,7 +850,7 @@ export class MeterCCSupportedReport extends MeterCC {
 				...resetSingleValue.meta,
 				label: `Reset (${getMeterTypeName(
 					applHost.configManager,
-					this._type,
+					this.type,
 				)})`,
 			});
 		}
@@ -875,14 +863,14 @@ export class MeterCCSupportedReport extends MeterCC {
 				applHost.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
-			"supports reset": this._supportsReset,
-			"supported scales": `${this._supportedScales
+			"supports reset": this.supportsReset,
+			"supported scales": `${this.supportedScales
 				.map(
 					(scale) => `
 · ${applHost.configManager.lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
-			"supported rate types": this._supportedRateTypes
+			"supported rate types": this.supportedRateTypes
 				.map((rt) => getEnumMemberName(RateType, rt))
 				.join(", "),
 		};

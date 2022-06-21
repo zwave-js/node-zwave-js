@@ -24,7 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -198,7 +198,7 @@ export class BasicCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Basic)
 @implementedVersion(2) // Update tests in CommandClass.test.ts when changing this
-@CCValues(BasicCCValues)
+@ccValues(BasicCCValues)
 export class BasicCC extends CommandClass {
 	declare ccCommand: BasicCommand;
 
@@ -352,15 +352,15 @@ export class BasicCCReport extends BasicCC {
 	}
 
 	private _currentValue: Maybe<number> | undefined;
-	@ccValue()
+	@ccValue(BasicCCValues.currentValue)
 	public get currentValue(): Maybe<number> | undefined {
 		return this._currentValue;
 	}
 
-	@ccValue({ forceCreation: true })
+	@ccValue(BasicCCValues.targetValue)
 	public readonly targetValue: number | undefined;
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(BasicCCValues.duration)
 	public readonly duration: Duration | undefined;
 
 	public serialize(): Buffer {

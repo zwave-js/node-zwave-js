@@ -24,7 +24,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -285,7 +285,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Barrier Operator"])
 @implementedVersion(1)
-@CCValues(BarrierOperatorCCValues)
+@ccValues(BarrierOperatorCCValues)
 export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
 
@@ -441,10 +441,10 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(BarrierOperatorCCValues.currentState)
 	public readonly currentState: BarrierState | undefined;
 
-	@ccValue()
+	@ccValue(BarrierOperatorCCValues.position)
 	public readonly position: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -473,17 +473,14 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 	) {
 		super(host, options);
 
-		this._supportedsubsystemTypes = parseBitMask(
+		this.supportedSubsystemTypes = parseBitMask(
 			this.payload,
 			SubsystemType.Audible,
 		);
 	}
 
-	private _supportedsubsystemTypes: SubsystemType[];
-	@ccValue({ internal: true })
-	public get supportedSubsystemTypes(): readonly SubsystemType[] {
-		return this._supportedsubsystemTypes;
-	}
+	@ccValue(BarrierOperatorCCValues.supportedSubsystemTypes)
+	public readonly supportedSubsystemTypes: readonly SubsystemType[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

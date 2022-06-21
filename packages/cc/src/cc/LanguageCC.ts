@@ -16,7 +16,6 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -25,7 +24,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -94,7 +94,7 @@ export class LanguageCCAPI extends CCAPI {
 
 @commandClass(CommandClasses.Language)
 @implementedVersion(1)
-@CCValues(LanguageCCValues)
+@ccValues(LanguageCCValues)
 export class LanguageCC extends CommandClass {
 	declare ccCommand: LanguageCommand;
 
@@ -233,10 +233,10 @@ export class LanguageCCReport extends LanguageCC {
 		// }
 	}
 
-	@ccValue()
+	@ccValue(LanguageCCValues.language)
 	public readonly language: string;
 
-	@ccValue()
+	@ccValue(LanguageCCValues.country)
 	public readonly country: string | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

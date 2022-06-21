@@ -28,7 +28,6 @@ import { validateArgs } from "@zwave-js/transformers";
 import { isArray } from "alcalzone-shared/typeguards";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	InvalidCC,
@@ -38,7 +37,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -316,7 +316,7 @@ export function getNotificationValueMetadata(
 
 @commandClass(CommandClasses.Notification)
 @implementedVersion(8)
-@CCValues(NotificationCCValues)
+@ccValues(NotificationCCValues)
 export class NotificationCC extends CommandClass {
 	declare ccCommand: NotificationCommand;
 
@@ -1196,31 +1196,25 @@ export class NotificationCCSupportedReport extends NotificationCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
+		this.supportsV1Alarm = !!(this.payload[0] & 0b1000_0000);
 		const numBitMaskBytes = this.payload[0] & 0b0001_1111;
 		validatePayload(
 			numBitMaskBytes > 0,
 			this.payload.length >= 1 + numBitMaskBytes,
 		);
 		const notificationBitMask = this.payload.slice(1, 1 + numBitMaskBytes);
-		this._supportedNotificationTypes = parseBitMask(
+		this.supportedNotificationTypes = parseBitMask(
 			notificationBitMask,
 			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
 			0,
 		);
 	}
 
-	private _supportsV1Alarm: boolean;
-	@ccValue({ internal: true })
-	public get supportsV1Alarm(): boolean {
-		return this._supportsV1Alarm;
-	}
+	@ccValue(NotificationCCValues.supportsV1Alarm)
+	public readonly supportsV1Alarm: boolean;
 
-	private _supportedNotificationTypes: number[];
-	@ccValue({ internal: true })
-	public get supportedNotificationTypes(): readonly number[] {
-		return this._supportedNotificationTypes;
-	}
+	@ccValue(NotificationCCValues.supportedNotificationTypes)
+	public readonly supportedNotificationTypes: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

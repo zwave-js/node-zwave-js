@@ -16,7 +16,6 @@ import { pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -25,7 +24,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -301,7 +301,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Multi Channel Association"])
 @implementedVersion(4)
-@CCValues(MultiChannelAssociationCCValues)
+@ccValues(MultiChannelAssociationCCValues)
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
 
@@ -712,50 +712,50 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 3);
-		this._groupId = this.payload[0];
-		this._maxNodes = this.payload[1];
-		this._reportsToFollow = this.payload[2];
+		this.groupId = this.payload[0];
+		this.maxNodes = this.payload[1];
+		this.reportsToFollow = this.payload[2];
 		({ nodeIds: this._nodeIds, endpoints: this._endpoints } =
 			deserializeMultiChannelAssociationDestination(
 				this.payload.slice(3),
 			));
 	}
 
-	private _groupId: number;
-	public get groupId(): number {
-		return this._groupId;
-	}
+	public readonly groupId: number;
 
-	private _maxNodes: number;
-	@ccValue({ internal: true })
-	public get maxNodes(): number {
-		return this._maxNodes;
-	}
+	@ccValue(
+		MultiChannelAssociationCCValues.maxNodes,
+		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
+	)
+	public readonly maxNodes: number;
 
 	private _nodeIds: number[];
-	@ccValue({ internal: true })
+	@ccValue(
+		MultiChannelAssociationCCValues.nodeIds,
+		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
+	)
 	public get nodeIds(): readonly number[] {
 		return this._nodeIds;
 	}
 
 	private _endpoints: EndpointAddress[];
-	@ccValue({ internal: true })
+	@ccValue(
+		MultiChannelAssociationCCValues.endpoints,
+		(self: MultiChannelAssociationCCReport) => [self.groupId] as const,
+	)
 	public get endpoints(): readonly EndpointAddress[] {
 		return this._endpoints;
 	}
 
-	private _reportsToFollow: number;
-	public get reportsToFollow(): number {
-		return this._reportsToFollow;
-	}
+	public readonly reportsToFollow: number;
 
 	public getPartialCCSessionId(): Record<string, any> | undefined {
 		// Distinguish sessions by the association group ID
-		return { groupId: this._groupId };
+		return { groupId: this.groupId };
 	}
 
 	public expectMoreMessages(): boolean {
-		return this._reportsToFollow > 0;
+		return this.reportsToFollow > 0;
 	}
 
 	public mergePartialCCs(
@@ -764,11 +764,11 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	): void {
 		// Concat the list of nodes
 		this._nodeIds = [...partials, this]
-			.map((report) => report._nodeIds)
+			.map((report) => [...report.nodeIds])
 			.reduce((prev, cur) => prev.concat(...cur), []);
 		// Concat the list of endpoints
 		this._endpoints = [...partials, this]
-			.map((report) => report._endpoints)
+			.map((report) => [...report.endpoints])
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
 
@@ -840,14 +840,11 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._groupCount = this.payload[0];
+		this.groupCount = this.payload[0];
 	}
 
-	private _groupCount: number;
-	@ccValue({ internal: true })
-	public get groupCount(): number {
-		return this._groupCount;
-	}
+	@ccValue(MultiChannelAssociationCCValues.groupCount)
+	public readonly groupCount: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

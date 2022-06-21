@@ -9,7 +9,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -18,7 +17,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -112,7 +112,7 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Z-Wave Plus Info"])
 @implementedVersion(2)
-@CCValues(ZWavePlusCCValues)
+@ccValues(ZWavePlusCCValues)
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
@@ -192,15 +192,19 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		}
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(ZWavePlusCCValues.zwavePlusVersion)
 	public zwavePlusVersion: number;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.nodeType)
 	public nodeType: ZWavePlusNodeType;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.roleType)
 	public roleType: ZWavePlusRoleType;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.installerIcon)
 	public installerIcon: number;
-	@ccValue({ internal: true })
+
+	@ccValue(ZWavePlusCCValues.userIcon)
 	public userIcon: number;
 
 	public serialize(): Buffer {

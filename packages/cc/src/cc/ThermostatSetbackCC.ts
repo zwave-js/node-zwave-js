@@ -17,7 +17,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -26,7 +25,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -127,7 +127,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Thermostat Setback"])
 @implementedVersion(1)
-@CCValues(ThermostatSetbackCCValues)
+@ccValues(ThermostatSetbackCCValues)
 export class ThermostatSetbackCC extends CommandClass {
 	declare ccCommand: ThermostatSetbackCommand;
 
@@ -238,24 +238,18 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._setbackType = this.payload[0] & 0b11;
+		this.setbackType = this.payload[0] & 0b11;
 		// If we receive an unknown setback state, return the raw value
-		this._setbackState =
+		this.setbackState =
 			decodeSetbackState(this.payload[1]) || this.payload[1];
 	}
 
-	private _setbackType: SetbackType;
-	@ccValue()
-	public get setbackType(): SetbackType {
-		return this._setbackType;
-	}
+	@ccValue(ThermostatSetbackCCValues.setbackType)
+	public readonly setbackType: SetbackType;
 
-	private _setbackState: SetbackState;
+	@ccValue(ThermostatSetbackCCValues.setbackState)
 	/** The offset from the setpoint in 0.1 Kelvin or a special mode */
-	@ccValue()
-	public get setbackState(): SetbackState {
-		return this._setbackState;
-	}
+	public readonly setbackState: SetbackState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

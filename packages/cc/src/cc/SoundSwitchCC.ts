@@ -23,7 +23,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -33,7 +32,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -312,7 +312,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Sound Switch"])
 @implementedVersion(2)
-@CCValues(SoundSwitchCCValues)
+@ccValues(SoundSwitchCCValues)
 export class SoundSwitchCC extends CommandClass {
 	declare ccCommand: SoundSwitchCommand;
 
@@ -565,10 +565,10 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		this.defaultToneId = this.payload[1];
 	}
 
-	@ccValue()
+	@ccValue(SoundSwitchCCValues.defaultVolume)
 	public readonly defaultVolume: number;
 
-	@ccValue()
+	@ccValue(SoundSwitchCCValues.defaultToneId)
 	public readonly defaultToneId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -655,10 +655,10 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue(SoundSwitchCCValues.toneId)
 	public readonly toneId: ToneId | number;
 
-	@ccValue()
+	@ccValue(SoundSwitchCCValues.volume)
 	public volume?: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

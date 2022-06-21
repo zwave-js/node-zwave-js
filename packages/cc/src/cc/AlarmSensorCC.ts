@@ -15,7 +15,6 @@ import { getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -24,7 +23,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -158,7 +158,7 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Alarm Sensor"])
 @implementedVersion(1)
-@CCValues(AlarmSensorCCValues)
+@ccValues(AlarmSensorCCValues)
 export class AlarmSensorCC extends CommandClass {
 	declare ccCommand: AlarmSensorCommand;
 
@@ -420,7 +420,7 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	}
 
 	private _supportedSensorTypes: AlarmSensorType[];
-	@ccValue({ internal: true })
+	@ccValue(AlarmSensorCCValues.supportedSensorTypes)
 	public get supportedSensorTypes(): readonly AlarmSensorType[] {
 		return this._supportedSensorTypes;
 	}

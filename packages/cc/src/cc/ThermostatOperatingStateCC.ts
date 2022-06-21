@@ -16,14 +16,14 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -90,7 +90,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Thermostat Operating State"])
 @implementedVersion(2)
-@CCValues(ThermostatOperatingStateCCValues)
+@ccValues(ThermostatOperatingStateCCValues)
 export class ThermostatOperatingStateCC extends CommandClass {
 	declare ccCommand: ThermostatOperatingStateCommand;
 
@@ -150,14 +150,11 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 		super(host, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._state = this.payload[0];
+		this.state = this.payload[0];
 	}
 
-	private _state: ThermostatOperatingState;
-	@ccValue()
-	public get state(): ThermostatOperatingState {
-		return this._state;
-	}
+	@ccValue(ThermostatOperatingStateCCValues.operatingState)
+	public readonly state: ThermostatOperatingState;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {

@@ -21,7 +21,6 @@ import {
 	type SetValueImplementation,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,7 +29,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -197,7 +197,7 @@ export class WakeUpCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Wake Up"])
 @implementedVersion(3)
-@CCValues(WakeUpCCValues)
+@ccValues(WakeUpCCValues)
 export class WakeUpCC extends CommandClass {
 	declare ccCommand: WakeUpCommand;
 
@@ -372,28 +372,22 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 4);
-		this._wakeUpInterval = this.payload.readUIntBE(0, 3);
-		this._controllerNodeId = this.payload[3];
+		this.wakeUpInterval = this.payload.readUIntBE(0, 3);
+		this.controllerNodeId = this.payload[3];
 	}
 
-	private _wakeUpInterval: number;
-	@ccValue()
-	public get wakeUpInterval(): number {
-		return this._wakeUpInterval;
-	}
+	@ccValue(WakeUpCCValues.wakeUpInterval)
+	public readonly wakeUpInterval: number;
 
-	private _controllerNodeId: number;
-	@ccValue()
-	public get controllerNodeId(): number {
-		return this._controllerNodeId;
-	}
+	@ccValue(WakeUpCCValues.controllerNodeId)
+	public readonly controllerNodeId: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
 				"wake-up interval": `${this.wakeUpInterval} seconds`,
-				"controller node id": this._controllerNodeId,
+				"controller node id": this.controllerNodeId,
 			},
 		};
 	}
@@ -418,16 +412,16 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 12);
-		this._minWakeUpInterval = this.payload.readUIntBE(0, 3);
-		this._maxWakeUpInterval = this.payload.readUIntBE(3, 3);
-		this._defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
-		this._wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
+		this.minWakeUpInterval = this.payload.readUIntBE(0, 3);
+		this.maxWakeUpInterval = this.payload.readUIntBE(3, 3);
+		this.defaultWakeUpInterval = this.payload.readUIntBE(6, 3);
+		this.wakeUpIntervalSteps = this.payload.readUIntBE(9, 3);
 
 		// Get 'Wake Up on Demand Support' if node supports V3 and sends 13th byte
 		if (this.version >= 3 && this.payload.length >= 13) {
-			this._wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
+			this.wakeUpOnDemandSupported = !!(this.payload[12] & 0b1);
 		} else {
-			this._wakeUpOnDemandSupported = false;
+			this.wakeUpOnDemandSupported = false;
 		}
 	}
 
@@ -444,10 +438,10 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 			},
 			{
 				...ValueMetadata.WriteOnlyUInt24,
-				min: this._minWakeUpInterval,
-				max: this._maxWakeUpInterval,
-				steps: this._wakeUpIntervalSteps,
-				default: this._defaultWakeUpInterval,
+				min: this.minWakeUpInterval,
+				max: this.maxWakeUpInterval,
+				steps: this.wakeUpIntervalSteps,
+				default: this.defaultWakeUpInterval,
 			},
 		);
 
@@ -456,41 +450,23 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 		return true;
 	}
 
-	private _minWakeUpInterval: number;
-	public get minWakeUpInterval(): number {
-		return this._minWakeUpInterval;
-	}
+	public readonly minWakeUpInterval: number;
+	public readonly maxWakeUpInterval: number;
+	public readonly defaultWakeUpInterval: number;
+	public readonly wakeUpIntervalSteps: number;
 
-	private _maxWakeUpInterval: number;
-	public get maxWakeUpInterval(): number {
-		return this._maxWakeUpInterval;
-	}
-
-	private _defaultWakeUpInterval: number;
-	public get defaultWakeUpInterval(): number {
-		return this._defaultWakeUpInterval;
-	}
-
-	private _wakeUpIntervalSteps: number;
-	public get wakeUpIntervalSteps(): number {
-		return this._wakeUpIntervalSteps;
-	}
-
-	private _wakeUpOnDemandSupported: boolean;
-	@ccValue({ minVersion: 3 })
-	public get wakeUpOnDemandSupported(): boolean {
-		return this._wakeUpOnDemandSupported;
-	}
+	@ccValue(WakeUpCCValues.wakeUpOnDemandSupported)
+	public readonly wakeUpOnDemandSupported: boolean;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"default interval": `${this._defaultWakeUpInterval} seconds`,
-				"minimum interval": `${this._minWakeUpInterval} seconds`,
-				"maximum interval": `${this._maxWakeUpInterval} seconds`,
-				"interval steps": `${this._wakeUpIntervalSteps} seconds`,
-				"wake up on demand supported": `${this._wakeUpOnDemandSupported}`,
+				"default interval": `${this.defaultWakeUpInterval} seconds`,
+				"minimum interval": `${this.minWakeUpInterval} seconds`,
+				"maximum interval": `${this.maxWakeUpInterval} seconds`,
+				"interval steps": `${this.wakeUpIntervalSteps} seconds`,
+				"wake up on demand supported": `${this.wakeUpOnDemandSupported}`,
 			},
 		};
 	}

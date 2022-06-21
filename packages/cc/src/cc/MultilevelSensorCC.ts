@@ -27,8 +27,6 @@ import {
 	throwUnsupportedProperty,
 } from "../lib/API";
 import {
-	ccKeyValuePair,
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -38,7 +36,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -310,7 +309,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 				cc,
 				this.commandOptions,
 			);
-		return response?.sensorSupportedScales;
+		return response?.supportedScales;
 	}
 
 	@validateArgs()
@@ -337,7 +336,7 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Multilevel Sensor"])
 @implementedVersion(11)
-@CCValues(MultilevelSensorCCValues)
+@ccValues(MultilevelSensorCCValues)
 export class MultilevelSensorCC extends CommandClass {
 	declare ccCommand: MultilevelSensorCommand;
 
@@ -736,15 +735,12 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 	) {
 		super(host, options);
 		validatePayload(this.payload.length >= 1);
-		this._supportedSensorTypes = parseBitMask(this.payload);
+		this.supportedSensorTypes = parseBitMask(this.payload);
 	}
 
-	private _supportedSensorTypes: number[];
 	// TODO: Use this during interview to precreate values
-	@ccValue({ internal: true })
-	public get supportedSensorTypes(): readonly number[] {
-		return this._supportedSensorTypes;
-	}
+	@ccValue(MultilevelSensorCCValues.supportedSensorTypes)
+	public readonly supportedSensorTypes: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -776,24 +772,21 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 		super(host, options);
 
 		validatePayload(this.payload.length >= 2);
-		const sensorType = this.payload[0];
-		const supportedScales = parseBitMask(
+		this.sensorType = this.payload[0];
+		this.supportedScales = parseBitMask(
 			Buffer.from([this.payload[1] & 0b1111]),
 			0,
 		);
-		this.supportedScales = [sensorType, supportedScales];
 	}
 
-	@ccKeyValuePair({ internal: true })
-	private supportedScales: [number, number[]];
+	public readonly sensorType: number;
 
-	public get sensorType(): number {
-		return this.supportedScales[0];
-	}
-
-	public get sensorSupportedScales(): readonly number[] {
-		return this.supportedScales[1];
-	}
+	@ccValue(
+		MultilevelSensorCCValues.supportedScales,
+		(self: MultilevelSensorCCSupportedScaleReport) =>
+			[self.sensorType] as const,
+	)
+	public readonly supportedScales: readonly number[];
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
@@ -802,7 +795,7 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 				"sensor type": applHost.configManager.getSensorTypeName(
 					this.sensorType,
 				),
-				"supported scales": this.sensorSupportedScales
+				"supported scales": this.supportedScales
 					.map(
 						(s) =>
 							`\n· ${

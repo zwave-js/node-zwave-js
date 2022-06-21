@@ -29,14 +29,15 @@ import {
 	staticExtends,
 } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
+import type { ValueIDProperties } from "./API";
 import {
 	getCCCommand,
 	getCCCommandConstructor,
 	getCCConstructor,
 	getCCResponsePredicate,
+	getCCValueDefinitions,
 	getCCValues,
 	getCommandClass,
-	getCommandClassStatic,
 	getExpectedCCResponse,
 	getImplementedVersion,
 } from "./CommandClassDecorators";
@@ -48,7 +49,12 @@ import {
 	ICommandClassContainer,
 	isCommandClassContainer,
 } from "./ICommandClassContainer";
-import type { CCValue, DynamicOrStaticCCValue } from "./Values";
+import {
+	CCValue,
+	defaultCCValueOptions,
+	DynamicCCValue,
+	StaticCCValue,
+} from "./Values";
 
 export type CommandClassDeserializationOptions = {
 	data: Buffer;
@@ -660,7 +666,9 @@ export class CommandClass implements ICommandClass {
 	}
 
 	/** Returns the CC value definition for the current CC which matches the given value ID */
-	protected getCCValue(valueId: ValueID): DynamicOrStaticCCValue | undefined {
+	protected getCCValue(
+		valueId: ValueID,
+	): StaticCCValue | DynamicCCValue | undefined {
 		const ccValues = getCCValues(this);
 		if (!ccValues) return;
 
@@ -669,6 +677,24 @@ export class CommandClass implements ICommandClass {
 				return value;
 			}
 		}
+	}
+
+	private getAllCCValues(): (StaticCCValue | DynamicCCValue)[] {
+		return Object.values(getCCValues(this) ?? {}) as (
+			| StaticCCValue
+			| DynamicCCValue
+		)[];
+	}
+
+	private getCCValueForValueId(
+		properties: ValueIDProperties,
+	): StaticCCValue | DynamicCCValue | undefined {
+		return this.getAllCCValues().find((value) =>
+			value.is({
+				commandClass: this.ccId,
+				...properties,
+			}),
+		);
 	}
 
 	/** Returns a list of all value names that are defined for this CommandClass */
@@ -690,202 +716,94 @@ export class CommandClass implements ICommandClass {
 			if (!ret.has(dbKey)) ret.set(dbKey, valueId);
 		};
 
-		// Return all defined non-internal CC values that are available in the current version of this CC
-		const valueDefinitions = getCCValueDefinitions(this);
-		const definedCCValueNames = [...valueDefinitions]
-			.filter(
-				([, options]) =>
-					options.internal !== true &&
-					(options.minVersion == undefined ||
-						options.minVersion <= this.version),
-			)
-			.map(([key]) => key);
-		definedCCValueNames.forEach((property) => addValueId(property));
-
-		const kvpDefinitions = getCCKeyValuePairDefinitions(this);
-
-		// Also return all existing value ids that are not internal (values AND metadata without values!)
+		// Return all value IDs for this CC...
 		const valueDB = this.getValueDB(applHost);
+		// ...which either have metadata or a value
 		const existingValueIds = [
 			...valueDB.getValues(this.ccId),
 			...valueDB.getAllMetadata(this.ccId),
-		]
-			.filter((valueId) => valueId.endpoint === this.endpointIndex)
-			// allow the value ID if it is NOT defined or it is defined as non-internal
-			.filter(
-				(valueId) =>
-					valueDefinitions.get(valueId.property)?.internal !== true,
-			)
-			.filter(
-				(valueId) =>
-					kvpDefinitions.get(valueId.property)?.internal !== true,
-			);
-		existingValueIds.forEach(({ property, propertyKey }) =>
-			addValueId(property, propertyKey),
-		);
+		];
+		const ccValues = this.getAllCCValues();
+		for (const valueId of existingValueIds) {
+			// ...belonging to the current endpoint
+			if ((valueId.endpoint ?? 0) !== this.endpointIndex) continue;
+
+			// Hard-coded: interviewComplete is always internal
+			if (valueId.property === "interviewComplete") continue;
+
+			// ... which don't have a CC value definition
+			// ... or one that does not mark the value ID as internal
+			const ccValue = ccValues.find((value) => value.is(valueId));
+			if (!ccValue || !ccValue.options.internal) {
+				addValueId(valueId.property, valueId.propertyKey);
+			}
+		}
 
 		return [...ret.values()];
 	}
 
 	/** Determines if the given value is an internal value */
-	public isInternalValue(property: keyof this): boolean {
+	public isInternalValue(properties: ValueIDProperties): boolean {
 		// Hard-coded: interviewComplete is always internal
-		if (property === "interviewComplete") return true;
+		if (properties.property === "interviewComplete") return true;
 
-		// A value is internal if any of the possible definitions say so (true)
-		const ccValueDefinition = getCCValueDefinitions(this).get(
-			property as string,
-		);
-		if (ccValueDefinition?.internal === true) return true;
-		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
-			property as string,
-		);
-		if (ccKeyValuePairDefinition?.internal === true) return true;
-		return false;
+		const ccValue = this.getCCValueForValueId(properties);
+		return ccValue?.options.internal ?? defaultCCValueOptions.internal;
 	}
 
 	/** Determines if the given value is an secret value */
-	public isSecretValue(property: keyof this): boolean {
-		// A value is secret if any of the possible definitions say so (true)
-		const ccValueDefinition = getCCValueDefinitions(this).get(
-			property as string,
-		);
-		if (ccValueDefinition?.secret === true) return true;
-		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
-			property as string,
-		);
-		if (ccKeyValuePairDefinition?.secret === true) return true;
-		return false;
-	}
-
-	/** Determines if the given value should always be persisted */
-	public shouldValueAlwaysBeCreated(property: keyof this): boolean {
-		const ccValueDefinition = getCCValueDefinitions(this).get(
-			property as string,
-		);
-		if (ccValueDefinition?.forceCreation === true) return true;
-		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
-			property as string,
-		);
-		if (ccKeyValuePairDefinition?.forceCreation === true) return true;
-		return false;
+	public isSecretValue(properties: ValueIDProperties): boolean {
+		const ccValue = this.getCCValueForValueId(properties);
+		return ccValue?.options.secret ?? defaultCCValueOptions.secret;
 	}
 
 	/** Determines if the given value should be persisted or represents an event */
-	public isStatefulValue(property: keyof this): boolean {
-		const ccValueDefinition = getCCValueDefinitions(this).get(
-			property as string,
-		);
-		if (ccValueDefinition?.stateful === false) return false;
-		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
-			property as string,
-		);
-		if (ccKeyValuePairDefinition?.stateful === false) return false;
-		return true;
+	public isStatefulValue(properties: ValueIDProperties): boolean {
+		const ccValue = this.getCCValueForValueId(properties);
+		return ccValue?.options.stateful ?? defaultCCValueOptions.stateful;
 	}
 
-	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
-	public persistValues(
-		applHost: ZWaveApplicationHost,
-		valueNames?: (keyof this)[],
-	): boolean {
-		// In order to avoid cluttering applications with heaps of unsupported properties,
-		// we filter out those that are only available in future versions of this CC
-		// or have no version constraint
-		const keyValuePairDefinitions = getCCKeyValuePairDefinitions(this);
-		const keyValuePairs = [...keyValuePairDefinitions].filter(
-			([, options]) =>
-				options.minVersion == undefined ||
-				options.minVersion <= this.version,
-		);
-		const ccValueDefinitions = [...getCCValueDefinitions(this)].filter(
-			([, options]) =>
-				options.minVersion == undefined ||
-				options.minVersion <= this.version,
-		);
-		// If not specified otherwise, persist all registered values in the value db
-		// But filter out those that don't match the minimum version
-		if (!valueNames) {
-			valueNames = [
-				...ccValueDefinitions.map(([key]) => key),
-				...keyValuePairs.map(([key]) => key),
-			] as unknown as (keyof this)[];
-		}
-		let db: ValueDB;
+	/**
+	 * Persists all values for this CC instance into the value DB which are annotated with @ccValue.
+	 * Returns `true` if the process succeeded, `false` if the value DB cannot be accessed.
+	 */
+	public persistValues(applHost: ZWaveApplicationHost): boolean {
+		let valueDB: ValueDB;
 		try {
-			db = this.getValueDB(applHost);
+			valueDB = this.getValueDB(applHost);
 		} catch {
 			return false;
 		}
 
-		const cc = getCommandClass(this);
-		for (const variable of valueNames as string[]) {
-			// interviewComplete automatically updates the value DB, so no need to persist again
-			if (variable === "interviewComplete") continue;
-			// Only persist non-undefined values and things that are not functions
-			const sourceValue = this[variable as keyof this];
-			if (typeof sourceValue === "function") continue;
+		// Get all properties of this CC which are annotated with a @ccValue decorator and store them.
+		for (const [prop, _value] of getCCValueDefinitions(this)) {
+			// Evaluate dynamic CC values first
+			const value = typeof _value === "function" ? _value(this) : _value;
+
+			// Skip those values that are only supported in higher versions of the CC
 			if (
-				sourceValue == undefined &&
-				!this.shouldValueAlwaysBeCreated(variable as keyof this)
+				value.options.minVersion != undefined &&
+				value.options.minVersion > this.version
 			) {
 				continue;
 			}
 
-			if (keyValuePairDefinitions.has(variable)) {
-				// This value is one or more key value pair(s) to be stored in a map
-				if (sourceValue instanceof Map) {
-					// Just copy the entries
-					for (const [propertyKey, value] of (
-						sourceValue as Map<string | number, unknown>
-					).entries()) {
-						db.setValue(
-							{
-								commandClass: cc,
-								endpoint: this.endpointIndex,
-								property: variable,
-								propertyKey,
-							},
-							value,
-						);
-					}
-				} else if (isArray(sourceValue)) {
-					const [propertyKey, value] = sourceValue as any as [
-						string | number,
-						unknown,
-					];
-					db.setValue(
-						{
-							commandClass: cc,
-							endpoint: this.endpointIndex,
-							property: variable,
-							propertyKey,
-						},
-						value,
-					);
-				} else {
-					throw new ZWaveError(
-						`ccKeyValuePairs can only be Maps or [key, value]-tuples`,
-						ZWaveErrorCodes.Argument_Invalid,
-					);
-				}
-			} else {
-				// This value belongs to a simple property
-				const valueId: ValueID = {
-					commandClass: cc,
-					endpoint: this.endpointIndex,
-					property: variable,
-				};
-				// Avoid overwriting existing values with undefined if forceCreation is true
-				if (sourceValue != undefined || !db.hasValue(valueId)) {
-					// Tell the value DB if this is a stateful value
-					const stateful = this.isStatefulValue(
-						variable as keyof this,
-					);
-					db.setValue(valueId, sourceValue, { stateful });
-				}
+			const valueId: ValueID = value.endpoint(this.endpointIndex);
+
+			// Metadata always gets created for non-internal values, regardless of the actual value being defined
+			if (!value.options.internal) {
+				this.ensureMetadata(applHost, value);
 			}
+
+			// The value only gets written if it is not undefined
+			const sourceValue = this[prop as keyof this];
+			if (sourceValue == undefined) continue;
+
+			valueDB.setValue(valueId, sourceValue, {
+				stateful: value.options.stateful,
+			});
 		}
+
 		return true;
 	}
 
@@ -1133,12 +1051,6 @@ export function assertValidCCs(container: ICommandClassContainer): void {
 	}
 }
 
-// =======================
-// use decorators to link command class values to actual command classes
-
-const METADATA_ccValues = Symbol("ccValues");
-const METADATA_ccKeyValuePairs = Symbol("ccKeyValuePairs");
-
 export type CCConstructor<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (host: ZWaveHost, options: any): T;
@@ -1168,119 +1080,3 @@ export type CCResponsePredicate<
 	TSent extends CommandClass,
 	TReceived extends CommandClass = CommandClass,
 > = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
-
-/** @publicAPI */
-export interface CCValueOptions {
-	/**
-	 * Whether the decorated CC value is internal. Internal values are not exposed to the user.
-	 */
-	internal?: boolean;
-	/**
-	 * The minimum CC version required for this value to exist.
-	 */
-	minVersion?: number;
-	/**
-	 * Whether this value should always be created/persisted, even if it is undefined. Default: false
-	 */
-	forceCreation?: boolean;
-	/**
-	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
-	 */
-	stateful?: boolean;
-	/**
-	 * Omit this value from value logs. Default: `false`
-	 */
-	secret?: boolean;
-}
-
-/**
- * @publicAPI
- * Marks the decorated property as a value of the Command Class. This allows saving it on the node with persistValues()
- * @param internal Whether the value should be exposed to library users
- */
-export function ccValue(options?: CCValueOptions): PropertyDecorator {
-	return (target: unknown, property: string | number | symbol) => {
-		if (!target || !(target instanceof CommandClass)) return;
-		// Set default arguments
-		if (!options) options = {};
-		if (options.internal == undefined) options.internal = false;
-		if (options.minVersion == undefined) options.minVersion = 1;
-		if (options.forceCreation == undefined) options.forceCreation = false;
-		// get the class constructor
-		const constr = target.constructor as typeof CommandClass;
-		const cc = getCommandClassStatic(constr);
-		// retrieve the current metadata
-		const metadata =
-			Reflect.getMetadata(METADATA_ccValues, CommandClass) ?? {};
-		if (!(cc in metadata)) metadata[cc] = new Map();
-		// And add the variable
-		const variables: Map<string | number, CCValueOptions> = metadata[cc];
-		variables.set(property as string | number, options);
-		// store back to the object
-		Reflect.defineMetadata(METADATA_ccValues, metadata, CommandClass);
-	};
-}
-
-/**
- * Returns all CC values and their definitions that have been defined with @ccValue()
- */
-function getCCValueDefinitions(
-	commandClass: CommandClass,
-): ReadonlyMap<string | number, CCValueOptions> {
-	// get the class constructor
-	const constr = commandClass.constructor as typeof CommandClass;
-	const cc = getCommandClassStatic(constr);
-	// retrieve the current metadata
-	const metadata = Reflect.getMetadata(METADATA_ccValues, CommandClass) ?? {};
-	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string | number, CCValueOptions>;
-}
-
-/**
- * @publicAPI
- * Marks the decorated property as the key of a Command Class's key value pair,
- * which can later be saved with persistValues()
- * @param internal Whether the key value pair should be exposed to library users
- */
-export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
-	return (target: unknown, property: string | number | symbol) => {
-		if (!target || !(target instanceof CommandClass)) return;
-		// Set default arguments
-		if (!options) options = {};
-		if (options.internal == undefined) options.internal = false;
-		if (options.minVersion == undefined) options.minVersion = 1;
-		if (options.forceCreation == undefined) options.forceCreation = false;
-		// get the class constructor
-		const constr = target.constructor as typeof CommandClass;
-		const cc = getCommandClassStatic(constr);
-		// retrieve the current metadata
-		const metadata =
-			Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
-		if (!(cc in metadata)) metadata[cc] = new Map();
-		// And add the variable
-		const variables: Map<string | number, CCValueOptions> = metadata[cc];
-		variables.set(property as string | number, options);
-		// store back to the object
-		Reflect.defineMetadata(
-			METADATA_ccKeyValuePairs,
-			metadata,
-			CommandClass,
-		);
-	};
-}
-
-/**
- * Returns all CC key value pairs and their definitions that have been defined with @ccKeyValuePair()
- */
-function getCCKeyValuePairDefinitions(
-	commandClass: CommandClass,
-): ReadonlyMap<string | number, CCValueOptions> {
-	// get the class constructor
-	const constr = commandClass.constructor as typeof CommandClass;
-	const cc = getCommandClassStatic(constr);
-	// retrieve the current metadata
-	const metadata =
-		Reflect.getMetadata(METADATA_ccKeyValuePairs, CommandClass) || {};
-	if (!(cc in metadata)) return new Map();
-	return metadata[cc] as Map<string | number, CCValueOptions>;
-}

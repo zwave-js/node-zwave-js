@@ -34,7 +34,7 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -336,7 +336,7 @@ export class SceneControllerConfigurationCCAPI extends CCAPI {
 
 @commandClass(CommandClasses["Scene Controller Configuration"])
 @implementedVersion(1)
-@CCValues(SceneControllerConfigurationCCValues)
+@ccValues(SceneControllerConfigurationCCValues)
 export class SceneControllerConfigurationCC extends CommandClass {
 	declare ccCommand: SceneControllerConfigurationCommand;
 

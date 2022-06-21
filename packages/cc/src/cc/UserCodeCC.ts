@@ -36,7 +36,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
@@ -44,7 +43,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -816,7 +816,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["User Code"])
 @implementedVersion(2)
-@CCValues(UserCodeCCValues)
+@ccValues(UserCodeCCValues)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
 
@@ -1304,7 +1304,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 		}
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.supportedUsers)
 	public readonly supportedUsers: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1376,21 +1376,28 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		).toString("ascii");
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.supportsMasterCode)
 	public readonly supportsMasterCode: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMasterCodeDeactivation)
 	public readonly supportsMasterCodeDeactivation: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsUserCodeChecksum)
 	public readonly supportsUserCodeChecksum: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMultipleUserCodeReport)
 	public readonly supportsMultipleUserCodeReport: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportsMultipleUserCodeSet)
 	public readonly supportsMultipleUserCodeSet: boolean;
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedUserIDStatuses)
 	public readonly supportedUserIDStatuses: readonly UserIDStatus[];
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedKeypadModes)
 	public readonly supportedKeypadModes: readonly KeypadMode[];
-	@ccValue({ internal: true })
+
+	@ccValue(UserCodeCCValues.supportedASCIIChars)
 	public readonly supportedASCIIChars: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1495,7 +1502,7 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		return true;
 	}
 
-	@ccValue({ minVersion: 2 })
+	@ccValue(UserCodeCCValues.keypadMode)
 	public readonly keypadMode: KeypadMode;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1569,10 +1576,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 			.toString("ascii");
 	}
 
-	@ccValue({
-		minVersion: 2,
-		secret: true,
-	})
+	@ccValue(UserCodeCCValues.masterCode)
 	public readonly masterCode: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -1598,7 +1602,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		this.userCodeChecksum = this.payload.readUInt16BE(0);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(UserCodeCCValues.userCodeChecksum)
 	public readonly userCodeChecksum: number;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {

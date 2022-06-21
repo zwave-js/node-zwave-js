@@ -21,7 +21,6 @@ import {
 	throwWrongValueType,
 } from "../lib/API";
 import {
-	ccValue,
 	CommandClass,
 	gotDeserializationOptions,
 	type CCCommandOptions,
@@ -30,7 +29,8 @@ import {
 import {
 	API,
 	CCCommand,
-	CCValues,
+	ccValue,
+	ccValues,
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
@@ -178,7 +178,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 
 @commandClass(CommandClasses["Node Naming and Location"])
 @implementedVersion(1)
-@CCValues(NodeNamingAndLocationCCValues)
+@ccValues(NodeNamingAndLocationCCValues)
 export class NodeNamingAndLocationCC extends CommandClass {
 	declare ccCommand: NodeNamingAndLocationCommand;
 
@@ -311,7 +311,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		this.name = nameBuffer.toString(encoding);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(NodeNamingAndLocationCCValues.name)
 	public readonly name: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
@@ -398,7 +398,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 		this.location = locationBuffer.toString(encoding);
 	}
 
-	@ccValue({ internal: true })
+	@ccValue(NodeNamingAndLocationCCValues.location)
 	public readonly location: string;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
