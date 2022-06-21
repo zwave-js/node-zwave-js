@@ -172,12 +172,18 @@
 		{
 			"#": "12",
 			"label": "PIR Sensitivity",
-			"description": "0x0a indicates the highest sensitivity, 0x00 means off PIR detection function",
+			"description": "1 = lowest sensitivity, 10 = highest sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "13",
@@ -211,8 +217,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Pir Triggers The Correspondence Between The Value of The Basic Set And The PIR State",
-			"description": "When value is 0x00 PIR triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00, otherwise PIR triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+			"label": "Motion: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -221,11 +226,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Pir triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00",
+					"label": "0xff on triggered, 0x00 on cleared",
 					"value": 0
 				},
 				{
-					"label": "Pir triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+					"label": "0x00 on triggered, 0xff on cleared",
 					"value": 1
 				}
 			]
