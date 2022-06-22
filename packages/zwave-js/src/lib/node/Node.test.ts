@@ -7,7 +7,7 @@ import {
 	getCCConstructor,
 	WakeUpCommand,
 } from "@zwave-js/cc";
-import { BasicCC } from "@zwave-js/cc/BasicCC";
+import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
 import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
 import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
 import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
@@ -1780,10 +1780,7 @@ describe("lib/node/Node", () => {
 		});
 
 		let node: ZWaveNode;
-		const valueId: ValueID = {
-			commandClass: CommandClasses.Basic,
-			property: "currentValue",
-		};
+		const valueId = BasicCCValues.currentValue.id;
 
 		beforeEach(() => {
 			node = new ZWaveNode(1, driver);
