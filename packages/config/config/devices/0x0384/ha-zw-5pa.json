@@ -1,0 +1,227 @@
+{
+	"manufacturer": "AiBase Smart Technology",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5PA",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x000b",
+			"zwaveAllianceId": 3007
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Overcurrent Protection",
+			"valueSize": 1,
+			"unit": "seconds",
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "100",
+			"label": "Set Meter Report Intervals to Default",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Idle",
+					"value": 0
+				},
+				{
+					"label": "Reset to default",
+					"value": 85
+				}
+			]
+		},
+		{
+			"#": "101",
+			"label": "Meter Report Interval (W)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "Meter Report Interval (kWh)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "103",
+			"label": "Meter Report Interval (V)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "104",
+			"label": "Meter Report Interval (A)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "16",
+			"label": "Meter Report Threshold",
+			"valueSize": 2,
+			"unit": "W",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": "Meter Report Threshold (Relative)",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
+		},
+		{
+			"#": "3",
+			"label": "Load Status: Change Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Basic Report (Z-Wave and manual operation)",
+					"value": 1
+				},
+				{
+					"label": "Basic Report (manual operation)",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "4",
+			"label": "Load Status: LED Indicator",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED status follows the load change",
+					"value": 0
+				},
+				{
+					"label": "When operating the load, the LED lights for 5 seconds and then turns off",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "254",
+			"label": "Lock Configuration Parameters",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "To add the product to the Z-Wave network:\na. Make sure that the Smart Plug has been connected to the power supply.\nb. Set the Z-Wave network main controller into inclusion mode.\nc. Power on.\nd. The LED will blink fast until the inclusion is completed and then the LED will keep turning on or off. Otherwise, the LED will still blink slowly, in which you need to repeat the process from step b",
+		"exclusion": "To remove the product from the Z-Wave network:\na. Insert the Smart Plug to power socket, the LED will follow the status (on or off) of its load’s power level.\nb. Set the Z-Wave network main controller into exclusion mode.\nc. Short press Button 3 times within 1.5 second.\nd. The LED will blink fast until the exclusion is completed, then the LED will keep on blinking slowly. Otherwise, the LED will keep on blink fast for 35 seconds and then follow the status (on or off) of its load status",
+		"reset": "Reset Smart Plug to factory default:\n1. Make sure that the Smart Plug has been connected to the power supply.\n2. Press and hold the Button for 5 seconds.\n3. If holding time is more than one second, the LED will blink faster and faster. If holding time is more than 5 seconds, the LED will be solid for 3 seconds to indicate that the resetting is successful. Otherwise, repeat step 2.\nNote:\nReset to factory will remove Smart Plug from the Z-Wave network. Use this procedure only in the event that the network primary controller missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3007/Aibase%20Smart%20Plug%20(Z-Wave)%20User%20Guide.pdf"
+	}
+}
