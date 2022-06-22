@@ -26,8 +26,6 @@
 			"label": "Overcurrent Protection",
 			"valueSize": 1,
 			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -46,8 +44,6 @@
 			"#": "100",
 			"label": "Set Meter Report Intervals to Default",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 85,
 			"defaultValue": 0,
 			"unsigned": true,
 			"writeOnly": true,
@@ -167,8 +163,6 @@
 			"#": "3",
 			"label": "Load Status: Change Reports",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -183,7 +177,7 @@
 				},
 				{
 					"label": "Basic Report (manual operation)",
-					"value": 1
+					"value": 2
 				}
 			]
 		},
@@ -191,8 +185,6 @@
 			"#": "4",
 			"label": "Load Status: LED Indicator",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -211,8 +203,6 @@
 			"#": "254",
 			"label": "Lock Configuration Parameters",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
