@@ -135,7 +135,7 @@
 		},
 		{
 			"#": "4",
-			"$if": "firmwareVersion >= 1.3",
+			"$if": "firmwareVersion >= 1.30",
 			"label": "Manual Wake-Up Duration",
 			"description": "A longer duration makes it easier to change multiple parameters at once",
 			"valueSize": 1,
@@ -154,7 +154,7 @@
 		},
 		{
 			"#": "5",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.40",
 			"label": "Dimmer Control Group: Dimming Duration",
 			"unit": "seconds",
 			"valueSize": 2,
