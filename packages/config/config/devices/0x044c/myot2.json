@@ -92,7 +92,7 @@
 		{
 			"#": "21",
 			"$import": "~/templates/master_template.json#base_enable_disable",
-			"label": "Comp State",
+			"label": "Compressor State",
 			"readOnly": true
 		},
 		{
