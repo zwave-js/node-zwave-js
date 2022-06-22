@@ -79,6 +79,11 @@ export const MultilevelSwitchCCValues = Object.freeze({
 			label: "Remaining duration",
 		} as const),
 
+		...V.staticProperty("restorePrevious", {
+			...ValueMetadata.WriteOnlyBoolean,
+			label: "Restore previous value" as const,
+		}),
+
 		...V.staticPropertyWithName(
 			"compatEvent",
 			"event",
@@ -126,7 +131,7 @@ export const MultilevelSwitchCCValues = Object.freeze({
 				);
 				const [, up] = switchTypeToActions(switchTypeName);
 				return {
-					...ValueMetadata.Boolean,
+					...ValueMetadata.WriteOnlyBoolean,
 					label: `Perform a level change (${up})`,
 					valueChangeOptions: ["transitionDuration"],
 					ccSpecific: { switchType },
@@ -156,7 +161,7 @@ export const MultilevelSwitchCCValues = Object.freeze({
 				);
 				const [down] = switchTypeToActions(switchTypeName);
 				return {
-					...ValueMetadata.Boolean,
+					...ValueMetadata.WriteOnlyBoolean,
 					label: `Perform a level change (${down})`,
 					valueChangeOptions: ["transitionDuration"],
 					ccSpecific: { switchType },
@@ -372,6 +377,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		value,
 		options,
 	): Promise<void> => {
+		// Enable restoring the previous non-zero value
+		if (property === "restorePrevious") {
+			property = "targetValue";
+			value = 255;
+		}
+
 		if (property === "targetValue") {
 			if (typeof value !== "number") {
 				throwWrongValueType(

@@ -57,6 +57,12 @@ export const BasicCCValues = Object.freeze({
 			label: "Remaining duration" as const,
 			minVersion: 2,
 		}),
+
+		...V.staticProperty("restorePrevious", {
+			...ValueMetadata.WriteOnlyBoolean,
+			label: "Restore previous value" as const,
+		}),
+
 		// TODO: This should really not be a static CC value, but depend on compat flags:
 		...V.staticPropertyWithName(
 			"compatEvent",
@@ -91,6 +97,12 @@ export class BasicCCAPI extends CCAPI {
 		{ property },
 		value,
 	): Promise<void> => {
+		// Enable restoring the previous non-zero value
+		if (property === "restorePrevious") {
+			property = "targetValue";
+			value = 255;
+		}
+
 		if (property !== "targetValue") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
