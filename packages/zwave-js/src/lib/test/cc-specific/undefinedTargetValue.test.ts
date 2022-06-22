@@ -6,8 +6,9 @@ import {
 import {
 	BinarySwitchCC,
 	BinarySwitchCCReport,
+	BinarySwitchCCValues,
 } from "@zwave-js/cc/BinarySwitchCC";
-import { CommandClasses, ValueID } from "@zwave-js/core";
+import { CommandClasses } from "@zwave-js/core";
 import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { createDefaultMockControllerBehaviors } from "../../../Utils";
@@ -47,10 +48,7 @@ describe("regression tests", () => {
 	});
 
 	it("receiving a BinarySwitchCC::Report with undefined targetValue should not delete the actual targetValue", async () => {
-		const targetValueValueID: ValueID = {
-			commandClass: CommandClasses["Binary Switch"],
-			property: "targetValue",
-		};
+		const targetValueValueID = BinarySwitchCCValues.targetValue.id;
 		node2.valueDB.setValue(targetValueValueID, false);
 
 		const data = Buffer.from([

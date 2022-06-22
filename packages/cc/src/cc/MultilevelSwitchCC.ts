@@ -563,14 +563,6 @@ export class MultilevelSwitchCC extends CommandClass {
 
 		await this.refreshValues(applHost);
 
-		// create compat event value if necessary
-		if (
-			applHost.getDeviceConfig?.(node.id)?.compat
-				?.treatMultilevelSwitchSetAsEvent
-		) {
-			this.ensureMetadata(applHost, MultilevelSwitchCCValues.compatEvent);
-		}
-
 		// Remember that the interview is complete
 		this.setInterviewComplete(applHost, true);
 	}
