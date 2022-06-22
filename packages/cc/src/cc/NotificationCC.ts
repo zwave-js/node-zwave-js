@@ -16,7 +16,6 @@ import {
 	MessageRecord,
 	parseBitMask,
 	validatePayload,
-	ValueID,
 	ValueMetadata,
 	ValueMetadataNumeric,
 	ZWaveError,
@@ -416,7 +415,6 @@ export class NotificationCC extends CommandClass {
 		).withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
-		const valueDB = this.getValueDB(applHost);
 
 		applHost.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -525,7 +523,6 @@ export class NotificationCC extends CommandClass {
 
 					// Set the value to idle if possible and there is no value yet
 					if (notificationConfig) {
-						const property = notificationConfig.name;
 						const events = supportedNotificationEvents.get(type);
 						if (events) {
 							// Find all variables that are supported by this node and have an idle state
@@ -537,22 +534,25 @@ export class NotificationCC extends CommandClass {
 										events.includes(key),
 									)
 								) {
-									const propertyKey = variable.name;
-									const valueId: ValueID = {
-										commandClass:
-											CommandClasses.Notification,
-										endpoint: endpoint.index,
-										property,
-										propertyKey,
-									};
+									const value =
+										NotificationCCValues.notificationVariable(
+											notificationConfig.name,
+											variable.name,
+										);
+
 									// Set the value to idle if it has no value yet
 									// TODO: GH#1028
 									// * do this only if the last update was more than 5 minutes ago
 									// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current applHost start
 									if (
-										valueDB.getValue(valueId) == undefined
+										this.getValue(applHost, value) ==
+										undefined
 									) {
-										valueDB.setValue(valueId, 0 /* idle */);
+										this.setValue(
+											applHost,
+											value,
+											0 /* idle */,
+										);
 									}
 								}
 							}
