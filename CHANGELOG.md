@@ -4,6 +4,18 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Use predictable filename for log rotation, prevent collision with other applications (#4728)
+* Mark `Node Naming And Location CC` commands `NameSet` and `LocationSet` as supported (#4735)
+* Add missing enum member `ZWavePlusRoleType.NetworkAwareSlave` (#4723)
+
+### Config file changes
+* Work around Configuration Info reporting bug in Zooz ZEN34 (#4731)
+* Add param 6 to HomeSeer HS-WS200+, FW 5.12+ (#4720)
+* Add AIBase HA-ZW-5SABC (#4143)
+* Add AIBase HA-ZW-5PAB (#4142)
+
 ## 9.4.0 (2022-06-10)
 ### Features
 * Added `"node found"` event to notify about included nodes before they are bootstrapped, made it possible to delay the automatic interview of newly added nodes (#4692)
