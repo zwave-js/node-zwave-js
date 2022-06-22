@@ -38,7 +38,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set Params 101 - 104 to Default",
+			"label": "Set Reporting Intervals to Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -171,7 +171,7 @@
 		},
 		{
 			"#": "12",
-			"label": "PIR Sensitivity",
+			"label": "Motion Sensor Sensitivity",
 			"description": "1 = lowest sensitivity, 10 = highest sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
@@ -187,11 +187,11 @@
 		},
 		{
 			"#": "13",
-			"label": "Pir Triggers Waiting Time Value",
-			"description": "Range: 0x05-0x3BC4",
+			"label": "Motion Re-trigger Wait Time",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 30,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 15300,
 			"defaultValue": 30,
 			"unsigned": true
 		},
