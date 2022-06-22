@@ -1,5 +1,5 @@
 {
-	"manufacturer": "Ameta International Co. Ltd.",
+	"manufacturer": "AiBase Smart Technology",
 	"manufacturerId": "0x0384",
 	"label": "HA-ZW-5SAB",
 	"description": "4-in-1 Motion Sensor",
@@ -16,7 +16,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -29,8 +29,8 @@
 		{
 			"#": "10",
 			"label": "Low Battery Power Level",
-			"description": "Low battery power level of alarm threshold values",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
@@ -38,8 +38,7 @@
 		},
 		{
 			"#": "100",
-			"label": "Set 101 ~ 104 to Default",
-			"description": "Set 101 ~ 104 to default",
+			"label": "Set Reporting Intervals to Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -48,8 +47,7 @@
 		},
 		{
 			"#": "101",
-			"label": "The Interval Time of Sending The Temperature Reporting",
-			"description": "The interval time of sending the temperature reporting. if setting to 0 then the temperature reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"label": "Temperature Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -58,15 +56,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The temperature reporting is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "102",
-			"label": "The Interval Time of Sending The Humidity Reporting",
-			"description": "The interval time of sending the humidity reporting. if setting to 0 then the humidity reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"label": "Humidity Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -75,15 +72,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The luminance reporting is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "103",
-			"label": "The Interval Time of Sending The Luminance Reporting",
-			"description": "The interval time of sending the luminance reporting. if setting to 0 then the luminance reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"label": "Luminance Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -92,15 +88,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The luminance reporting is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "104",
-			"label": "The Interval Time of Sending The Battery Level Reporting",
-			"description": "The interval time of sending the battery level reporting. if setting to 0 then the battery level reporting is disabled  1. valid values: 0x00-0x28de80 2. the minimum interval time is 1 minutes. for example, if the value is set to be more than 1 and less than 60, the interval time is 1 minutes, if the value is set to be more than 60 and less than 120, the interval time is 2 minutes",
+			"label": "Battery Level Reporting Interval",
 			"valueSize": 4,
 			"unit": "minutes",
 			"minValue": 0,
@@ -109,15 +104,14 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "The battery level reporting is disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "110",
-			"label": "Enable 111 ~ 114 Temperature/Humidity/Luminance/ Battery Level Change Reporting",
-			"description": "Enable 111 ~ 114 temperature/humidity/luminance/ battery level change reporting. 0 = unable 1 = enable",
+			"label": "Status Change (Temperature/Humidity/Luminance/Battery) Reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -126,7 +120,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -137,9 +131,9 @@
 		},
 		{
 			"#": "111",
-			"label": "Configuration Temperature Change Threshold",
-			"description": "The temperature change threshold value(unit 0.1℃)",
+			"label": "Temperature Change Threshold",
 			"valueSize": 2,
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
@@ -147,9 +141,9 @@
 		},
 		{
 			"#": "112",
-			"label": "Configuration Humidity Change Threshold",
-			"description": "Humidity change threshold value(unit %)",
+			"label": "Humidity Change Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 5,
@@ -157,19 +151,19 @@
 		},
 		{
 			"#": "113",
-			"label": "Configuration Luminance Change Threshold",
-			"description": "Configuration luminance change threshold. valid values: 1-65528(unit lx)",
+			"label": "Luminance Change Threshold",
 			"valueSize": 2,
-			"minValue": -32767,
-			"maxValue": 32766,
+			"unit": "lux",
+			"minValue": 1,
+			"maxValue": 65528,
 			"defaultValue": 150,
 			"unsigned": true
 		},
 		{
 			"#": "114",
-			"label": "Configuration Battery Level Change Threshold",
-			"description": "Battery level change threshold value(unit)%",
+			"label": "Battery Level Change Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
@@ -177,39 +171,33 @@
 		},
 		{
 			"#": "12",
-			"label": "Turn On/Off Pir",
-			"description": "0x0a indicates the highest sensitivity, 0x00 means off PIR detection function",
+			"label": "Motion Sensor Sensitivity",
+			"description": "1 = lowest sensitivity, 10 = highest sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
-			"unsigned": true
-		},
-		{
-			"#": "13",
-			"label": "Pir Triggers The Waiting Time Value",
-			"description": "Pir triggers the waiting time value",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 30,
-			"defaultValue": 30,
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unable",
+					"label": "Disable",
 					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
 				}
 			]
 		},
 		{
+			"#": "13",
+			"label": "Motion Re-trigger Wait Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 15300,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
 			"#": "14",
-			"label": "Whether The Basic Set Command is Sent After The PIR is Triggered",
-			"description": "Whether the Basic Set command is sent after the PIR is triggered",
+			"label": "Send Basic Set On Motion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -218,7 +206,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Unable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -229,8 +217,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Pir Triggers The Correspondence Between The Value of The Basic Set And The PIR State",
-			"description": "Pir triggers the correspondence between the value of the Basic Set and the PIR state, when value is 0x00 PIR triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00, otherwise PIR triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+			"label": "Motion: Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -239,11 +226,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Pir triggers send the Basic Set command 0xff PIR alarm release send the Basic Set command 0x00",
+					"label": "0xff on triggered, 0x00 on cleared",
 					"value": 0
 				},
 				{
-					"label": "Pir triggers send the Basic Set command 0x00 PIR alarm release send the Basic Set command 0xff",
+					"label": "0x00 on triggered, 0xff on cleared",
 					"value": 1
 				}
 			]
