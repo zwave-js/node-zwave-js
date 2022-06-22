@@ -135,24 +135,27 @@
 		},
 		{
 			"#": "4",
-			"label": "30 second wake-up time",
+			"$if": "firmwareVersion >= 1.3",
+			"label": "Manual Wake-Up Duration",
+			"description": "A longer duration makes it easier to change multiple parameters at once",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Short wake-up time",
+					"label": "Short",
 					"value": 0
 				},
 				{
-					"label": "30-second wake-up time",
+					"label": "30 seconds",
 					"value": 1
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Dimming duration",
+			"$if": "firmwareVersion >= 1.4",
+			"label": "Dimmer Control Group: Dimming Duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 1,
