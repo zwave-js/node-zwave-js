@@ -57,7 +57,9 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NodeNamingAndLocationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NodeNamingAndLocationCommand.NameGet:
+			case NodeNamingAndLocationCommand.NameSet:
 			case NodeNamingAndLocationCommand.LocationGet:
+			case NodeNamingAndLocationCommand.LocationSet:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
