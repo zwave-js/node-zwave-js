@@ -121,7 +121,7 @@
 			"valueSize": 2,
 			"unit": "W",
 			"minValue": 0,
-			"maxValue": 32767,
+			"maxValue": 65535,
 			"defaultValue": 50,
 			"unsigned": true,
 			"options": [
