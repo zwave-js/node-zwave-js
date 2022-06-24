@@ -795,6 +795,10 @@ export class ZWaveNode
 		}
 	}
 
+	public get isFirmwareUpdateInProgress(): boolean {
+		return this._firmwareUpdateStatus != undefined;
+	}
+
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values

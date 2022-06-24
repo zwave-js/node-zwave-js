@@ -831,6 +831,14 @@ enum InclusionState {
 }
 ```
 
+### `isAnyFirmwareUpdateInProgress`
+
+```ts
+readonly isAnyFirmwareUpdateInProgress: boolean;
+```
+
+Returns whether a firmware update is in progress for any node.
+
 ## Controller events
 
 The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:

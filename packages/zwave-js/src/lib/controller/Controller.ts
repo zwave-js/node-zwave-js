@@ -534,6 +534,13 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		this.driver.cacheSet(cacheKeys.controller.supportsSoftReset, value);
 	}
 
+	public get isAnyFirmwareUpdateInProgress(): boolean {
+		for (const node of this._nodes.values()) {
+			if (node.isFirmwareUpdateInProgress) return true;
+		}
+		return false;
+	}
+
 	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
