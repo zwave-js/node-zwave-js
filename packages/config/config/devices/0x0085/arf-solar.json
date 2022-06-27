@@ -1,13 +1,12 @@
 {
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
-	"label": "ARZ Z-Wave Solar",
-	"description": "Roller Shutter",
+	"label": "ARF Z-Wave Solar",
+	"description": "Roller Blind",
 	"devices": [
 		{
-			// Solar variant of ARZ Z-Wave
-			"productType": "0x0003",
-			"productId": "0x0112"
+			"productType": "0x0004",
+			"productId": "0x0012"
 		}
 	],
 	"firmwareVersion": {
