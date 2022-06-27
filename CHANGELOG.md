@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.4.1 (2022-06-27)
 ### Bugfixes
 * Use predictable filename for log rotation, prevent collision with other applications (#4728)
 * Mark `Node Naming And Location CC` commands `NameSet` and `LocationSet` as supported (#4735)
