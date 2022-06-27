@@ -36,21 +36,11 @@
 		},
 		{
 			"#": "12",
-			"label": "Callibrate",
-			"description": "This parameter on/off callibration function",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1
+			"$import": "~/templates/fakro_template.json#calibration"
 		},
 		{
 			"#": "13",
-			"label": "Last saved position",
-			"description": "Set servomotor in previous position",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 2,
-			"defaultValue": 1
+			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		},
 		{
 			"#": "15",

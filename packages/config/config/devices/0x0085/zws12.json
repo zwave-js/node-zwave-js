@@ -52,39 +52,11 @@
 		},
 		{
 			"#": "12",
-			"label": "Calibrate",
-			"description": "This parameter on/off callibration function",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Calibrated",
-					"value": 1
-				},
-				{
-					"label": "Discalibrated",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#calibration"
 		},
 		{
 			"#": "13",
-			"label": "Last saved position",
-			"description": "Set servomotor in previous position",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "FF go to Max",
-					"value": 1
-				},
-				{
-					"label": "FF go to previous position",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		},
 		{
 			"#": "15",

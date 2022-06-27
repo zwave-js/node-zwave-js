@@ -32,45 +32,15 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"$import": "arz_z-wave.json#paramInformation/13"
+			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		},
 		{
 			"#": "99",
-			"label": "Reset to Factory Defaults",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to Factory Default",
-					"value": 1
-				},
-				{
-					"label": "Parameters are changed",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#factory_reset"
 		},
 		{
 			"#": "100",
-			"label": "Autoexclude",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Idle",
-					"value": 1
-				},
-				{
-					"label": "Autoexclude",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#autoexclude"
 		}
 	]
 }

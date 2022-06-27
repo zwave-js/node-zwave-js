@@ -38,38 +38,11 @@
 	"paramInformation": [
 		{
 			"#": "12",
-			"label": "Calibration",
-			"description": "To calibrate, first select Discalibrated, then Calibrated",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Calibrated",
-					"value": 1
-				},
-				{
-					"label": "Discalibrated",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#calibration"
 		},
 		{
 			"#": "13",
-			"label": "Response to Basic Set (0xff)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Fully open",
-					"value": 1
-				},
-				{
-					"label": "Previous position",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		}
 	],
 	"metadata": {

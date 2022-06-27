@@ -1,0 +1,72 @@
+{
+	"shutter_response_to_basic_set_0xff": {
+		"label": "Response to Basic Set (0xff)",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Fully open",
+				"value": 1
+			},
+			{
+				"label": "Previous position",
+				"value": 2
+			}
+		]
+	},
+	"factory_reset": {
+		"label": "Reset Parameters to Factory Defaults",
+		"description": "If the value changes to 2 after resetting the parameters, some non-default parameters were reset to their respective default values.",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Reset all parameters",
+				"value": 1
+			},
+			{
+				"label": "Some parameters were reset",
+				"value": 2
+			}
+		]
+	},
+	"autoexclude": {
+		"label": "Autoexclude",
+		"description": "Can be used to exclude the device in hard-to-reach locations.",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"unsigned": true,
+		"writeOnly": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Idle",
+				"value": 1
+			},
+			{
+				"label": "Autoexclude",
+				"value": 2
+			}
+		]
+	},
+	"calibration": {
+		"label": "Calibration",
+		"description": "To calibrate, first select Discalibrated, then Calibrated",
+		"valueSize": 1,
+		"defaultValue": 1,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Calibrated",
+				"value": 1
+			},
+			{
+				"label": "Discalibrated",
+				"value": 2
+			}
+		]
+	}
+}
