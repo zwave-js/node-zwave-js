@@ -87,11 +87,11 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Forever",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Disabled",
+					"label": "Forever",
 					"value": 255
 				}
 			]
