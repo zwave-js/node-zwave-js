@@ -32,15 +32,15 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
+			"$import": "templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		},
 		{
 			"#": "99",
-			"$import": "~/templates/fakro_template.json#factory_reset"
+			"$import": "templates/fakro_template.json#factory_reset"
 		},
 		{
 			"#": "100",
-			"$import": "~/templates/fakro_template.json#autoexclude"
+			"$import": "templates/fakro_template.json#autoexclude"
 		}
 	]
 }

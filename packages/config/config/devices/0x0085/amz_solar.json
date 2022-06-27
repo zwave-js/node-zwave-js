@@ -72,11 +72,11 @@
 		},
 		{
 			"#": "12",
-			"$import": "~/templates/fakro_template.json#calibration"
+			"$import": "templates/fakro_template.json#calibration"
 		},
 		{
 			"#": "13",
-			"$import": "~/templates/fakro_template.json#shutter_response_to_basic_set_0xff"
+			"$import": "templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		}
 	]
 }
