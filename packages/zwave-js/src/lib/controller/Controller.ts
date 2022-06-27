@@ -4957,7 +4957,7 @@ ${associatedNodes.join(", ")}`,
 	 *
 	 * Returns whether an OTA firmware update is in progress for any node.
 	 */
-	public isOTAFirmwareUpdateInProgress(): boolean {
+	public isAnyOTAFirmwareUpdateInProgress(): boolean {
 		for (const node of this._nodes.values()) {
 			if (node.isFirmwareUpdateInProgress()) return true;
 		}

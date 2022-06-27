@@ -709,10 +709,10 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
-### `isAnyFirmwareUpdateInProgress`
+### `isAnyOTAFirmwareUpdateInProgress`
 
 ```ts
-isAnyFirmwareUpdateInProgress(): boolean;
+isAnyOTAFirmwareUpdateInProgress(): boolean;
 ```
 
 Returns whether an OTA firmware update is in progress for any node.
