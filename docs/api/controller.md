@@ -709,6 +709,14 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
+### `isAnyFirmwareUpdateInProgress`
+
+```ts
+isAnyFirmwareUpdateInProgress(): boolean;
+```
+
+Returns whether an OTA firmware update is in progress for any node.
+
 ## Controller properties
 
 ### `nodes`
@@ -830,14 +838,6 @@ enum InclusionState {
 	SmartStart,
 }
 ```
-
-### `isAnyFirmwareUpdateInProgress`
-
-```ts
-readonly isAnyFirmwareUpdateInProgress: boolean;
-```
-
-Returns whether a firmware update is in progress for any node.
 
 ## Controller events
 

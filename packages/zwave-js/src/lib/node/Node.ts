@@ -795,10 +795,6 @@ export class ZWaveNode
 		}
 	}
 
-	public get isFirmwareUpdateInProgress(): boolean {
-		return this._firmwareUpdateStatus !== undefined;
-	}
-
 	private _valueDB: ValueDB;
 	/**
 	 * Provides access to this node's values
@@ -4332,5 +4328,13 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			ret.lwr = newStats;
 			return ret;
 		});
+	}
+
+	/**
+	 *
+	 * Returns whether a firmware update is in progress for this node.
+	 */
+	public isFirmwareUpdateInProgress(): boolean {
+		return this._firmwareUpdateStatus !== undefined;
 	}
 }

@@ -527,6 +527,14 @@ The health rating expressed as a number from 0 (not working at all) to 10 (perfe
 
 > [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatRouteHealthCheckSummary` and/or `formatRouteHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
 
+### `isFirmwareUpdateInProgress`
+
+```ts
+isFirmwareUpdateInProgress(): boolean;
+```
+
+Return whether a firmware update is in progress for this node.
+
 ## ZWaveNode properties
 
 ### `id`
@@ -876,14 +884,6 @@ keepAwake: boolean;
 
 In order to save energy, battery powered devices should go back to sleep after they no longer need to communicate with the controller. This library honors this requirement by sending nodes back to sleep as soon as there are no more pending messages.
 When configuring devices or during longer message exchanges, this behavior may be annoying. You can set the `keepAwake` property of a node to `true` to avoid sending the node back to sleep immediately.
-
-### `isFirmwareUpdateInProgress`
-
-```ts
-readonly isFirmwareUpdateInProgress: boolean;
-```
-
-Return whether a firmware update is in progress for this node.
 
 ## ZWaveNode events
 
