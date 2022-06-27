@@ -9,12 +9,16 @@
 * Use predictable filename for log rotation, prevent collision with other applications (#4728)
 * Mark `Node Naming And Location CC` commands `NameSet` and `LocationSet` as supported (#4735)
 * Add missing enum member `ZWavePlusRoleType.NetworkAwareSlave` (#4723)
+* Accept `SceneActivationCCSet` commands which are missing the mandatory dimming duration field (#4748)
+* Soft-reset controller after NVM backup, preventing strange controller behavior (#4750)
 
 ### Config file changes
 * Work around Configuration Info reporting bug in Zooz ZEN34 (#4731)
+* Add wake time and dimming duration params to Zooz ZEN34 (#4708)
 * Add param 6 to HomeSeer HS-WS200+, FW 5.12+ (#4720)
 * Add AIBase HA-ZW-5SABC (#4143)
 * Add AIBase HA-ZW-5PAB (#4142)
+* Add Fakro ARF Solar, template Fakro configs (#4740)
 
 ## 9.4.0 (2022-06-10)
 ### Features
