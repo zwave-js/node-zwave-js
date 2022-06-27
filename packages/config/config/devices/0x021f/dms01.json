@@ -80,7 +80,7 @@
 			"#": "3",
 			"label": "Secondary Notification Length",
 			"valueSize": 1,
-			"unit": "minutes",
+			"unit": "cycles",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
