@@ -796,7 +796,7 @@ export class ZWaveNode
 	}
 
 	public get isFirmwareUpdateInProgress(): boolean {
-		return this._firmwareUpdateStatus != undefined;
+		return this._firmwareUpdateStatus !== undefined;
 	}
 
 	private _valueDB: ValueDB;
