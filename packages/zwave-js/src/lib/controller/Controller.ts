@@ -4611,6 +4611,9 @@ ${associatedNodes.join(", ")}`,
 		try {
 			if (this.sdkVersionGte("7.0")) {
 				ret = await this.backupNVMRaw700(onProgress);
+				// All 7.xx versions so far seem to have a bug where the NVM is not properly closed after reading
+				// resulting in extremely strange controller behavior after a backup. To work around this, restart the stick if possible
+				await this.driver.trySoftReset();
 			} else {
 				ret = await this.backupNVMRaw500(onProgress);
 			}

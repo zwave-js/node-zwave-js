@@ -1943,7 +1943,7 @@ export class Driver
 	 * Soft-resets the controller if the feature is enabled
 	 */
 	public async trySoftReset(): Promise<void> {
-		if (this.options.enableSoftReset) {
+		if (this.options.enableSoftReset && this.maySoftReset()) {
 			await this.softReset();
 		} else {
 			const message = `The soft reset feature is not enabled, skipping API call.`;
