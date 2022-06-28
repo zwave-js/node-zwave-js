@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add methods to check if an OTA firmware update is in progress (#4742)
+
+### Bugfixes
+* Export `SerialAPISetupCommand` enum (#4754)
+
+### Config file changes
+* Correct param 3 unit and option labels for Dome Wireless Siren (#4751)
+
 ## 9.4.1 (2022-06-27)
 ### Bugfixes
 * Use predictable filename for log rotation, prevent collision with other applications (#4728)
