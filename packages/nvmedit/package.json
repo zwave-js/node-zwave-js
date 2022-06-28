@@ -55,7 +55,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --verbose",
-    "clean": "yarn run build --clean",
+    "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {

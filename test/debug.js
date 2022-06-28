@@ -2,12 +2,12 @@
 
 require("reflect-metadata");
 require("zwave-js");
-const { Message } = require("../packages/zwave-js/build/lib/message/Message");
+const { Message } = require("@zwave-js/serial");
 const { generateAuthKey, generateEncryptionKey } = require("@zwave-js/core");
+const { ConfigManager } = require("@zwave-js/config");
 const {
 	isCommandClassContainer,
 } = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
-const { ConfigManager } = require("@zwave-js/config");
 
 (async () => {
 	const configManager = new ConfigManager();
@@ -31,37 +31,41 @@ const { ConfigManager } = require("@zwave-js/config");
 	const networkKey = Buffer.from("96bcdaa2da7b00621a7fa57e38813786", "hex");
 
 	console.log(Message.getMessageLength(data));
-	const msg = Message.from(
-		/** @type {any} */ ({
-			getSafeCCVersionForNode: () => 1,
-			configManager,
-			controller: {
-				ownNodeId: 1,
-				nodes: {
-					get() {
-						return {
-							valueDB: {
-								hasMetadata: () => false,
-								setMetadata() {},
-								getMetadata() {},
-								setValue() {},
-								getValue() {},
-							},
-							isCCSecure: () => true,
-							getEndpoint() {},
-						};
-					},
+	const host = {
+		getSafeCCVersionForNode: () => 1,
+		configManager,
+		controller: {
+			ownNodeId: 1,
+			nodes: {
+				get() {
+					return {
+						valueDB: {
+							hasMetadata: () => false,
+							setMetadata() {},
+							getMetadata() {},
+							setValue() {},
+							getValue() {},
+						},
+						isCCSecure: () => true,
+						getEndpoint() {},
+					};
 				},
 			},
-			securityManager: {
-				getNonce: () => nonce,
-				deleteNonce() {},
-				authKey: generateAuthKey(networkKey),
-				encryptionKey: generateEncryptionKey(networkKey),
-			},
-		}),
-		data,
-	);
+		},
+		get ownNodeId() {
+			return host.controller.ownNodeId;
+		},
+		get nodes() {
+			return host.controller.nodes;
+		},
+		securityManager: {
+			getNonce: () => nonce,
+			deleteNonce() {},
+			authKey: generateAuthKey(networkKey),
+			encryptionKey: generateEncryptionKey(networkKey),
+		},
+	};
+	const msg = Message.from(/** @type {any} */ (host), data);
 
 	if (isCommandClassContainer(msg)) {
 		msg.command.mergePartialCCs([]);
