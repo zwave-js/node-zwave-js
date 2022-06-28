@@ -527,6 +527,14 @@ The health rating expressed as a number from 0 (not working at all) to 10 (perfe
 
 > [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatRouteHealthCheckSummary` and/or `formatRouteHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
 
+### `isFirmwareUpdateInProgress`
+
+```ts
+isFirmwareUpdateInProgress(): boolean;
+```
+
+Return whether a firmware update is in progress for this node.
+
 ## ZWaveNode properties
 
 ### `id`

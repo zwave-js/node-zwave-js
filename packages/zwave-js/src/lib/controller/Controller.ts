@@ -4955,4 +4955,15 @@ ${associatedNodes.join(", ")}`,
 		);
 		return pick(ret, ["rssiChannel0", "rssiChannel1", "rssiChannel2"]);
 	}
+
+	/**
+	 *
+	 * Returns whether an OTA firmware update is in progress for any node.
+	 */
+	public isAnyOTAFirmwareUpdateInProgress(): boolean {
+		for (const node of this._nodes.values()) {
+			if (node.isFirmwareUpdateInProgress()) return true;
+		}
+		return false;
+	}
 }

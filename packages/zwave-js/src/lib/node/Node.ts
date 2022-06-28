@@ -4329,4 +4329,12 @@ ${formatRouteHealthCheckSummary(this.id, otherNode.id, summary)}`,
 			return ret;
 		});
 	}
+
+	/**
+	 *
+	 * Returns whether a firmware update is in progress for this node.
+	 */
+	public isFirmwareUpdateInProgress(): boolean {
+		return this._firmwareUpdateStatus !== undefined;
+	}
 }
