@@ -18,6 +18,7 @@ export {
 	SDKVersion,
 	TXReport,
 } from "./lib/controller/_Types";
+export { SerialAPISetupCommand } from "./lib/serialapi/capability/SerialAPISetupMessages";
 export type {
 	ZWaveApiVersion,
 	ZWaveLibraryTypes,
