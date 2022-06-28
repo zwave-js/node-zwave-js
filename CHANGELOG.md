@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.5.0 (2022-06-28)
 ### Features
 * Add methods to check if an OTA firmware update is in progress (#4742)
 
