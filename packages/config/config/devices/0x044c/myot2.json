@@ -138,7 +138,7 @@
 			"#": "53",
 			"$import": "~/templates/master_template.json#base_0-65535",
 			"label": "Battery Power Output",
-			"unit": "0.01 W",		
+			"unit": "0.01 W",
 			"readOnly": true
 		},
 		{
