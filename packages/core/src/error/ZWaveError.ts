@@ -58,6 +58,10 @@ export enum ZWaveErrorCodes {
 	/** A Serial API command resulted in an error response */
 	Controller_CommandError,
 
+	/** Could not fetch some information to determine firmware upgrades from a node */
+	FWUpdateService_MissingInformation = 260,
+	FWUpdateService_RequestError,
+
 	/** The given NVM version/format is unsupported */
 	NVM_NotSupported = 280,
 	/** Could not parse the JSON representation of an NVM due to invalid data */
