@@ -1,3 +1,4 @@
+import { wait } from "alcalzone-shared/async";
 import os from "os";
 import path from "path";
 import "reflect-metadata";
@@ -36,6 +37,18 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code
+		const updates = await driver.getAvailableFirmwareUpdates(2);
+		console.log("Found updates:");
+		console.dir(updates, { depth: Infinity });
+
+		await wait(1000);
+		try {
+			console.log(`Installing update ${updates[0].version}...`);
+			await wait(1000);
+			await driver.beginOTAFirmwareUpdate(2, updates[0].files[0]);
+		} catch (e) {
+			console.error(e);
+		}
 	});
 void driver.start();
 // driver.enableStatistics({

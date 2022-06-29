@@ -60,7 +60,10 @@ export enum ZWaveErrorCodes {
 
 	/** Could not fetch some information to determine firmware upgrades from a node */
 	FWUpdateService_MissingInformation = 260,
+	/** Any error related to HTTP requests during firmware update communication */
 	FWUpdateService_RequestError,
+	/** The integrity check of the downloaded firmware update failed */
+	FWUpdateService_IntegrityCheckFailed,
 
 	/** The given NVM version/format is unsupported */
 	NVM_NotSupported = 280,

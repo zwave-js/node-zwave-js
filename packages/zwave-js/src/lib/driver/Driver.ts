@@ -7,6 +7,7 @@ import {
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
+	Firmware,
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
@@ -155,7 +156,10 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
-import { getAvailableFirmwareUpdates } from "./FirmwareUpdateService";
+import {
+	downloadFirmwareUpdate,
+	getAvailableFirmwareUpdates,
+} from "./FirmwareUpdateService";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -181,7 +185,7 @@ import {
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
 import type { ZWaveOptions } from "./ZWaveOptions";
-import type { AvailableFirmwareUpdates } from "./_Types";
+import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -4294,7 +4298,7 @@ ${handlers.length} left`,
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
-	): Promise<AvailableFirmwareUpdates> {
+	): Promise<FirmwareUpdateInfo[]> {
 		this.ensureReady();
 
 		const node = this.controller.nodes.getOrThrow(nodeId);
@@ -4348,5 +4352,54 @@ ${handlers.length} left`,
 				ZWaveErrorCodes.FWUpdateService_RequestError,
 			);
 		}
+	}
+
+	/**
+	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
+	 */
+	public async beginOTAFirmwareUpdate(
+		nodeId: number,
+		update: FirmwareUpdateFileInfo,
+	): Promise<void> {
+		this.ensureReady();
+
+		const node = this.controller.nodes.getOrThrow(nodeId);
+
+		let firmware: Firmware;
+		try {
+			this.controllerLog.logNode(
+				nodeId,
+				`Downloading firmware update from ${update.url}...`,
+			);
+			firmware = await downloadFirmwareUpdate(update);
+		} catch (e: any) {
+			let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
+			if (isZWaveError(e)) {
+				// Pass "real" Z-Wave errors through
+				throw new ZWaveError(message + e.message, e.code);
+			} else if (e.response) {
+				// And construct a better error message for HTTP errors
+				if (
+					isObject(e.response.data) &&
+					typeof e.response.data.message === "string"
+				) {
+					message += `${e.response.data.message} `;
+				}
+				message += `[${e.response.status} ${e.response.statusText}]`;
+			} else {
+				message += `Failed to download firmware update`;
+			}
+
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FWUpdateService_RequestError,
+			);
+		}
+
+		this.controllerLog.logNode(
+			nodeId,
+			`Firmware update ${update.url} downloaded, installing...`,
+		);
+		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
 	}
 }
