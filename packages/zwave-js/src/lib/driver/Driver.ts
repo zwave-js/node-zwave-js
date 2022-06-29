@@ -4343,6 +4343,8 @@ ${handlers.length} left`,
 					message += `${e.response.data.message} `;
 				}
 				message += `[${e.response.status} ${e.response.statusText}]`;
+			} else if (typeof e.message === "string") {
+				message += e.message;
 			} else {
 				message += `Failed to download update information!`;
 			}
@@ -4386,8 +4388,10 @@ ${handlers.length} left`,
 					message += `${e.response.data.message} `;
 				}
 				message += `[${e.response.status} ${e.response.statusText}]`;
+			} else if (typeof e.message === "string") {
+				message += e.message;
 			} else {
-				message += `Failed to download firmware update`;
+				message += `Failed to download firmware update!`;
 			}
 
 			throw new ZWaveError(
