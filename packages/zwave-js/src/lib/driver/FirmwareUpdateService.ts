@@ -10,8 +10,9 @@ import axios from "axios";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
-// const serviceURL = "https://firmware.zwave-js.io";
-const serviceURL = "http://localhost:3000";
+const serviceURL = "https://firmware.zwave-js.io";
+const DOWNLOAD_TIMEOUT = 60000;
+const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
@@ -54,8 +55,8 @@ export async function downloadFirmwareUpdate(
 
 	// Download the firmware file
 	const downloadResponse = await axios.get<Buffer>(file.url, {
-		timeout: 60000,
-		maxContentLength: 10 * 1024 * 1024, // 10MB should be enough for any conceivable Z-Wave chip
+		timeout: DOWNLOAD_TIMEOUT,
+		maxContentLength: MAX_FIRMWARE_SIZE,
 		responseType: "arraybuffer",
 	});
 	const rawData = downloadResponse.data;
