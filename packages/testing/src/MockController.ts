@@ -84,7 +84,7 @@ export class MockController {
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
-	private expectedHostACK?: TimedExpectation;
+	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeFrames: Map<
 		number,
@@ -127,7 +127,7 @@ export class MockController {
 			switch (data) {
 				case MessageHeaders.ACK: {
 					// If we were waiting for this ACK, resolve the expectation
-					this.expectedHostACK?.resolve();
+					this.expectedHostACKs?.shift()?.resolve();
 					return;
 				}
 				case MessageHeaders.NAK: {
@@ -177,15 +177,17 @@ export class MockController {
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
 	public async expectHostACK(timeout: number): Promise<void> {
+		const ack = new TimedExpectation(
+			timeout,
+			undefined,
+			"Host did not respond with an ACK within the provided timeout!",
+		);
 		try {
-			this.expectedHostACK = new TimedExpectation(
-				timeout,
-				undefined,
-				"Host did not respond with an ACK within the provided timeout!",
-			);
-			return await this.expectedHostACK;
+			this.expectedHostACKs.push(ack);
+			return await ack;
 		} finally {
-			this.expectedHostACK = undefined;
+			const index = this.expectedHostACKs.indexOf(ack);
+			if (index !== -1) this.expectedHostACKs.splice(index, 1);
 		}
 	}
 
@@ -366,12 +368,12 @@ export interface MockControllerBehavior {
 		host: ZWaveHost,
 		controller: MockController,
 		msg: Message,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeFrame?: (
 		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
 		frame: MockZWaveFrame,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 }

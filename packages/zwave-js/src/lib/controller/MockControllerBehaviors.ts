@@ -1,5 +1,6 @@
-import { WakeUpTime } from "@zwave-js/cc";
+import { CommandClass, WakeUpTime } from "@zwave-js/cc";
 import {
+	ZWaveProtocolCC,
 	ZWaveProtocolCCAssignSUCReturnRoute,
 	ZWaveProtocolCCNodeInformationFrame,
 	ZWaveProtocolCCRequestNodeInformationFrame,
@@ -13,8 +14,10 @@ import {
 import {
 	createMockZWaveRequestFrame,
 	MockControllerBehavior,
+	MockZWaveFrameType,
 	MOCK_FRAME_ACK_TIMEOUT,
 } from "@zwave-js/testing";
+import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -83,7 +86,6 @@ const respondToGetControllerId: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -96,7 +98,6 @@ const respondToGetSerialApiCapabilities: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -109,7 +110,6 @@ const respondToGetControllerVersion: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -122,7 +122,6 @@ const respondToGetControllerCapabilities: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -138,7 +137,6 @@ const respondToGetSUCNodeId: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -162,7 +160,6 @@ const respondToGetSerialApiInitData: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -179,7 +176,6 @@ const respondToSoftReset: MockControllerBehavior = {
 			await controller.sendToHost(ret.serialize());
 			return true;
 		}
-		return false;
 	},
 };
 
@@ -212,7 +208,6 @@ const respondToGetNodeProtocolInfo: MockControllerBehavior = {
 				return true;
 			}
 		}
-		return false;
 	},
 };
 
@@ -273,8 +268,8 @@ const handleSendData: MockControllerBehavior = {
 			});
 
 			await controller.sendToHost(cb.serialize());
+			return true;
 		}
-		return false;
 	},
 };
 
@@ -348,8 +343,8 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			);
 
 			await controller.sendToHost(cb.serialize());
+			return true;
 		}
-		return false;
 	},
 };
 
@@ -428,8 +423,25 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 				await controller.sendToHost(cb.serialize());
 			}
+			return true;
 		}
-		return false;
+	},
+};
+
+const forwardCommandClassesToHost: MockControllerBehavior = {
+	async onNodeFrame(host, controller, node, frame) {
+		if (
+			frame.type === MockZWaveFrameType.Request &&
+			frame.payload instanceof CommandClass &&
+			!(frame.payload instanceof ZWaveProtocolCC)
+		) {
+			// This is a CC that is meant for the host application
+			const msg = new ApplicationCommandRequest(host, {
+				command: frame.payload,
+			});
+			await controller.sendToHost(msg.serialize());
+			return true;
+		}
 	},
 };
 
@@ -447,5 +459,6 @@ export function createDefaultBehaviors(): MockControllerBehavior[] {
 		handleSendData,
 		handleRequestNodeInfo,
 		handleAssignSUCReturnRoute,
+		forwardCommandClassesToHost,
 	];
 }

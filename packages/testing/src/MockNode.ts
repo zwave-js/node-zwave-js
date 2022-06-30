@@ -283,5 +283,5 @@ export interface MockNodeBehavior {
 		controller: MockController,
 		self: MockNode,
 		frame: MockZWaveFrame,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 }
