@@ -549,6 +549,38 @@ export enum EntryControlEventTypes {
 	Cancel = 0x19,
 }
 
+export const entryControlEventTypeLabels: Record<
+	EntryControlEventTypes,
+	string
+> = {
+	[EntryControlEventTypes.Caching]: "Caching",
+	[EntryControlEventTypes.CachedKeys]: "Cached keys",
+	[EntryControlEventTypes.Enter]: "Enter",
+	[EntryControlEventTypes.DisarmAll]: "Disarm all",
+	[EntryControlEventTypes.ArmAll]: "Arm all",
+	[EntryControlEventTypes.ArmAway]: "Away",
+	[EntryControlEventTypes.ArmHome]: "Home",
+	[EntryControlEventTypes.ExitDelay]: "Arm delay",
+	[EntryControlEventTypes.Arm1]: "Arm zone 1",
+	[EntryControlEventTypes.Arm2]: "Arm zone 2",
+	[EntryControlEventTypes.Arm3]: "Arm zone 3",
+	[EntryControlEventTypes.Arm4]: "Arm zone 4",
+	[EntryControlEventTypes.Arm5]: "Arm zone 5",
+	[EntryControlEventTypes.Arm6]: "Arm zone 6",
+	[EntryControlEventTypes.Rfid]: "RFID",
+	[EntryControlEventTypes.Bell]: "Bell",
+	[EntryControlEventTypes.Fire]: "Fire",
+	[EntryControlEventTypes.Police]: "Police",
+	[EntryControlEventTypes.AlertPanic]: "Panic alert",
+	[EntryControlEventTypes.AlertMedical]: "Medical alert",
+	[EntryControlEventTypes.GateOpen]: "Open gate",
+	[EntryControlEventTypes.GateClose]: "Close gate",
+	[EntryControlEventTypes.Lock]: "Lock",
+	[EntryControlEventTypes.Unlock]: "Unlock",
+	[EntryControlEventTypes.Test]: "Test",
+	[EntryControlEventTypes.Cancel]: "Cancel",
+};
+
 export enum DoorLockLoggingCommand {
 	RecordsSupportedGet = 0x01,
 	RecordsSupportedReport = 0x02,
@@ -677,7 +709,11 @@ export enum EntryControlDataTypes {
 /** @publicAPI */
 export interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	eventType: EntryControlEventTypes;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
 	dataType: EntryControlDataTypes;
+	/** A human-readable label for the data type */
+	dataTypeLabel: string;
 	eventData?: Buffer | string;
 }
 
@@ -1071,6 +1107,8 @@ export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
 	eventType:
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
 	/** The direction of the level change */
 	direction?: string;
 }
