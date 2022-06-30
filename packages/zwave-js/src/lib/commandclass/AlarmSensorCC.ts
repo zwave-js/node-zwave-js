@@ -91,7 +91,9 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
-	@validateArgs({ strictEnums: true })
+	// We had `strictEnums: true` here, but this creates interview issues for devices
+	// that don't encode the bitmask correctly.
+	@validateArgs()
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: AlarmSensorType) {
 		this.assertSupportsCommand(AlarmSensorCommand, AlarmSensorCommand.Get);
