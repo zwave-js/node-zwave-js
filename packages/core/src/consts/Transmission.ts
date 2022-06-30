@@ -1,4 +1,5 @@
 import type { ProtocolDataRate } from "../capabilities/Protocols";
+import type { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
@@ -158,11 +159,50 @@ export interface SendMessageOptions {
 	onTXReport?: (report: TXReport) => void;
 }
 
-export interface SendCommandOptions extends SendMessageOptions {
+export type SendCommandOptions = SendMessageOptions & {
 	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
 	/** Whether the driver should automatically handle the encapsulation. Default: true */
 	autoEncapsulate?: boolean;
 	/** Overwrite the default transmit options */
 	transmitOptions?: TransmitOptions;
+} & (
+		| {
+				requestStatusUpdates?: false;
+		  }
+		| {
+				requestStatusUpdates: true;
+				onUpdate: SupervisionUpdateHandler;
+		  }
+	);
+
+export type SendCommandReturnType<
+	TBase,
+	TResponse extends TBase,
+> = TBase extends TResponse
+	? TResponse | SupervisionResult | undefined
+	: TResponse | undefined;
+
+export enum SupervisionStatus {
+	NoSupport = 0x00,
+	Working = 0x01,
+	Fail = 0x02,
+	Success = 0xff,
 }
+
+export type SupervisionResult =
+	| {
+			status:
+				| SupervisionStatus.NoSupport
+				| SupervisionStatus.Fail
+				| SupervisionStatus.Success;
+	  }
+	| {
+			status: SupervisionStatus.Working;
+			remainingDuration: Duration;
+	  };
+
+export type SupervisionUpdateHandler = (
+	status: SupervisionStatus,
+	remainingDuration?: Duration,
+) => void;
