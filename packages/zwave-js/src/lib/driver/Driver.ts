@@ -19,11 +19,10 @@ import {
 	Security2CCNonceReport,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
+	shouldUseSupervision,
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
-	SupervisionResult,
-	SupervisionStatus,
 	TransportServiceCCFirstSegment,
 	TransportServiceCCSegmentComplete,
 	TransportServiceCCSegmentRequest,
@@ -43,7 +42,6 @@ import {
 	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
-	Duration,
 	highResTimestamp,
 	ICommandClass,
 	isZWaveError,
@@ -56,9 +54,13 @@ import {
 	SecurityManager,
 	SecurityManager2,
 	SendCommandOptions,
+	SendCommandReturnType,
 	SendMessageOptions,
 	serializeCacheValue,
 	SPANState,
+	SupervisionResult,
+	SupervisionStatus,
+	SupervisionUpdateHandler,
 	timespan,
 	TransmitOptions,
 	ValueDB,
@@ -350,22 +352,6 @@ interface AwaitedCommandEntry {
 	timeout?: NodeJS.Timeout;
 	predicate: (cc: ICommandClass) => boolean;
 }
-
-export type SupervisionUpdateHandler = (
-	status: SupervisionStatus,
-	remainingDuration?: Duration,
-) => void;
-
-export type SendSupervisedCommandOptions = SendCommandOptions &
-	(
-		| {
-				requestStatusUpdates: false;
-		  }
-		| {
-				requestStatusUpdates: true;
-				onUpdate: SupervisionUpdateHandler;
-		  }
-	);
 
 interface TransportServiceSession {
 	fragmentSize: number;
@@ -3800,9 +3786,14 @@ ${handlers.length} left`,
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	public async sendCommand<TResponse extends ICommandClass = ICommandClass>(
+	private async sendCommandInternal<
+		TResponse extends ICommandClass = ICommandClass,
+	>(
 		command: CommandClass,
-		options: SendCommandOptions = {},
+		options: Omit<
+			SendCommandOptions,
+			"requestStatusUpdates" | "onUpdate"
+		> = {},
 	): Promise<TResponse | undefined> {
 		const msg = this.createSendDataMessage(command, options);
 		try {
@@ -3840,7 +3831,7 @@ ${handlers.length} left`,
 	 */
 	public async sendSupervisedCommand(
 		command: CommandClass,
-		options: SendSupervisedCommandOptions = {
+		options: SendCommandOptions = {
 			requestStatusUpdates: false,
 		},
 	): Promise<SupervisionResult | undefined> {
@@ -3867,7 +3858,7 @@ ${handlers.length} left`,
 			options.requestStatusUpdates,
 		);
 
-		const resp = await this.sendCommand<SupervisionCCReport>(
+		const resp = await this.sendCommandInternal<SupervisionCCReport>(
 			command,
 			options,
 		);
@@ -3881,33 +3872,70 @@ ${handlers.length} left`,
 			);
 		}
 		// In any case, return the status
-		return {
-			status: resp.status,
-			remainingDuration: resp.duration,
-		};
-	}
-
-	/**
-	 * Sends a supervised command to a Z-Wave node if the Supervision CC is supported. If not, a normal command is sent.
-	 * This does not return any Report values, so only use this for Set-type commands.
-	 *
-	 * @param command The command to send
-	 * @param options (optional) Options regarding the message transmission
-	 */
-	public async trySendCommandSupervised(
-		command: CommandClass,
-		options?: SendSupervisedCommandOptions,
-	): Promise<SupervisionResult | undefined> {
-		if (command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
-			return this.sendSupervisedCommand(command, options);
+		if (resp.status === SupervisionStatus.Working) {
+			return {
+				status: resp.status,
+				remainingDuration: resp.duration!,
+			};
 		} else {
-			await this.sendCommand(command, options);
+			return {
+				status: resp.status,
+			};
 		}
 	}
 
 	/**
+	 * Sends a command to a Z-Wave node. The return value depends on several factors:
+	 * * If the node returns a command in response, that command will be the return value.
+	 * * If the command is a SET-type command and Supervision CC can and should be used, a {@link SupervisionResult} will be returned.
+	 * * If the command expects no response **or** the response times out, nothing will be returned.
+	 *
+	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
+	 * @param options (optional) Options regarding the message transmission
+	 */
+	public async sendCommand<TResponse extends ICommandClass = ICommandClass>(
+		command: CommandClass,
+		options?: SendCommandOptions,
+	): Promise<SendCommandReturnType<ICommandClass, TResponse>> {
+		// Only use supervision if...
+		const node = command.getNode(this);
+		const endpoint = command.getEndpoint(this);
+		if (
+			node &&
+			endpoint &&
+			// ... the node supports it
+			node.supportsCC(CommandClasses.Supervision) &&
+			// ... the command is marked as "should use supervision"
+			shouldUseSupervision(command) &&
+			// ... and we haven't previously determined that the node doesn't properly support it
+			SupervisionCC.getCCSupportedWithSupervision(
+				this,
+				endpoint,
+				command.ccId,
+			)
+		) {
+			const result = await this.sendSupervisedCommand(command, options);
+			if (result?.status === SupervisionStatus.NoSupport) {
+				// The node should support supervision but it doesn't for this command. Remember this
+				SupervisionCC.setCCSupportedWithSupervision(
+					this,
+					endpoint,
+					command.ccId,
+					false,
+				);
+			}
+			// @ts-expect-error TS doesn't know we've narrowed the return type to match
+			return result;
+		}
+
+		// Fall back to non-supervised commands
+		// @ts-expect-error TS doesn't know we've narrowed the return type to match
+		return this.sendCommandInternal(command, options);
+	}
+
+	/**
 	 * Sends a low-level message like ACK, NAK or CAN immediately
-	 * @param message The low-level message to send
+	 * @param header The low-level message to send
 	 */
 	private writeHeader(header: MessageHeaders): Promise<void> {
 		// ACK, CAN, NAK

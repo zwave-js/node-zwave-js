@@ -2,10 +2,12 @@ import {
 	CommandClasses,
 	Duration,
 	isTransmissionError,
+	IZWaveEndpoint,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	SupervisionStatus,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -26,7 +28,24 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
-import { SupervisionCommand, SupervisionStatus } from "../lib/_Types";
+import { V } from "../lib/Values";
+import { SupervisionCommand } from "../lib/_Types";
+
+export const SupervisionCCValues = Object.freeze({
+	...V.defineDynamicCCValues(CommandClasses.Supervision, {
+		// Used to remember whether a node supports supervision-encapsulation of the given CC
+		...V.dynamicPropertyAndKeyWithName(
+			"ccSupported",
+			"ccSupported",
+			(ccId: CommandClasses) => ccId,
+			({ property, propertyKey }) =>
+				property === "commandSupported" &&
+				typeof propertyKey === "number",
+			undefined,
+			{ internal: true, supportsEndpoints: false },
+		),
+	}),
+});
 
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
@@ -158,6 +177,43 @@ export class SupervisionCC extends CommandClass {
 				return supervisionEncapsulation.sessionId;
 			}
 		}
+	}
+
+	/**
+	 * Returns whether a node supports the given CC with Supervision encapsulation.
+	 */
+	public static getCCSupportedWithSupervision(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		ccId: CommandClasses,
+	): boolean {
+		// By default assume supervision is supported for all CCs, unless we've remembered one not to be
+		return (
+			applHost
+				.getValueDB(endpoint.nodeId)
+				.getValue(
+					SupervisionCCValues.ccSupported(ccId).endpoint(
+						endpoint.index,
+					),
+				) ?? true
+		);
+	}
+
+	/**
+	 * Remembers whether a node supports the given CC with Supervision encapsulation.
+	 */
+	public static setCCSupportedWithSupervision(
+		applHost: ZWaveApplicationHost,
+		endpoint: IZWaveEndpoint,
+		ccId: CommandClasses,
+		supported: boolean,
+	): void {
+		applHost
+			.getValueDB(endpoint.nodeId)
+			.setValue(
+				SupervisionCCValues.ccSupported(ccId).endpoint(endpoint.index),
+				supported,
+			);
 	}
 }
 

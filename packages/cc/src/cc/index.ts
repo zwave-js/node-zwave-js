@@ -457,6 +457,7 @@ export {
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
+	SupervisionCCValues,
 } from "./SupervisionCC";
 export {
 	ThermostatFanModeCC,

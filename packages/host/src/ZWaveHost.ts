@@ -9,6 +9,7 @@ import type {
 	SecurityManager,
 	SecurityManager2,
 	SendCommandOptions,
+	SendCommandReturnType,
 	ValueDB,
 	ValueID,
 } from "@zwave-js/core";
@@ -94,7 +95,7 @@ export interface ZWaveApplicationHost extends ZWaveHost {
 	sendCommand<TResponse extends ICommandClass = ICommandClass>(
 		command: ICommandClass,
 		options?: SendCommandOptions,
-	): Promise<TResponse | undefined>;
+	): Promise<SendCommandReturnType<ICommandClass, TResponse>>;
 
 	waitForCommand<T extends ICommandClass>(
 		predicate: (cc: ICommandClass) => boolean,

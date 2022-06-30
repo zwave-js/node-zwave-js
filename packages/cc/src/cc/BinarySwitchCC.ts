@@ -9,8 +9,6 @@ import {
 	parseMaybeBoolean,
 	validatePayload,
 	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
@@ -37,6 +35,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { BinarySwitchCommand } from "../lib/_Types";
@@ -264,6 +263,7 @@ interface BinarySwitchCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BinarySwitchCommand.Set)
+@useSupervision()
 export class BinarySwitchCCSet extends BinarySwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -271,10 +271,11 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.targetValue = !!this.payload[0];
+			if (this.payload.length >= 2) {
+				this.duration = Duration.parseSet(this.payload[1]);
+			}
 		} else {
 			this.targetValue = options.targetValue;
 			this.duration = Duration.from(options.duration);
