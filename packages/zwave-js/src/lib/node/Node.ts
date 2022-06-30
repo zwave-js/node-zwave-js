@@ -145,6 +145,8 @@ import {
 import {
 	CentralSceneKeys,
 	DoorLockMode,
+	EntryControlDataTypes,
+	entryControlEventTypeLabels,
 	FirmwareUpdateCapabilities,
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
@@ -2818,10 +2820,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{
 					eventType: MultilevelSwitchCommand.StartLevelChange,
-					eventTypeLabel: getEnumMemberName(
-						MultilevelSwitchCommand,
-						MultilevelSwitchCommand.StartLevelChange,
-					),
+					eventTypeLabel: "Start level change",
 					direction: command.direction,
 				},
 			);
@@ -2837,10 +2836,7 @@ protocol version:      ${this.protocolVersion}`;
 				CommandClasses["Multilevel Switch"],
 				{
 					eventType: MultilevelSwitchCommand.StopLevelChange,
-					eventTypeLabel: getEnumMemberName(
-						MultilevelSwitchCommand,
-						MultilevelSwitchCommand.StopLevelChange,
-					),
+					eventTypeLabel: "Stop level change",
 				},
 			);
 		}
@@ -3672,18 +3668,14 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		// Notify listeners
-		this.emit(
-			"notification",
-			this,
-			CommandClasses["Entry Control"],
-			pick(command, [
-				"eventType",
-				"eventTypeLabel",
-				"dataType",
-				"dataTypeLabel",
-				"eventData",
-			]),
-		);
+		this.emit("notification", this, CommandClasses["Entry Control"], {
+			...pick(command, ["eventType", "dataType", "eventData"]),
+			eventTypeLabel: entryControlEventTypeLabels[command.eventType],
+			dataTypeLabel: getEnumMemberName(
+				EntryControlDataTypes,
+				command.dataType,
+			),
+		});
 	}
 
 	private handlePowerlevelTestNodeReport(

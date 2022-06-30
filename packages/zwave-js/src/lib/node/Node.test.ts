@@ -1733,7 +1733,7 @@ describe("lib/node/Node", () => {
 				dataType: EntryControlDataTypes.ASCII,
 				dataTypeLabel: "ASCII",
 				eventType: EntryControlEventTypes.DisarmAll,
-				eventTypeLabel: "DisarmAll",
+				eventTypeLabel: "Disarm all",
 				eventData: "1234",
 			});
 
