@@ -159,22 +159,32 @@ export interface SendMessageOptions {
 	onTXReport?: (report: TXReport) => void;
 }
 
-export type SendCommandOptions = SendMessageOptions & {
-	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
-	maxSendAttempts?: number;
-	/** Whether the driver should automatically handle the encapsulation. Default: true */
-	autoEncapsulate?: boolean;
-	/** Overwrite the default transmit options */
-	transmitOptions?: TransmitOptions;
-} & (
-		| {
-				requestStatusUpdates?: false;
-		  }
-		| {
-				requestStatusUpdates: true;
-				onUpdate: SupervisionUpdateHandler;
-		  }
-	);
+export type SupervisionOptions =
+	| ({
+			/** Whether supervision may be used. `false` disables supervision. Default: `"auto"`. */
+			useSupervision?: "auto";
+	  } & (
+			| {
+					requestStatusUpdates?: false;
+			  }
+			| {
+					requestStatusUpdates: true;
+					onUpdate: SupervisionUpdateHandler;
+			  }
+	  ))
+	| {
+			useSupervision: false;
+	  };
+
+export type SendCommandOptions = SendMessageOptions &
+	SupervisionOptions & {
+		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
+		maxSendAttempts?: number;
+		/** Whether the driver should automatically handle the encapsulation. Default: true */
+		autoEncapsulate?: boolean;
+		/** Overwrite the default transmit options */
+		transmitOptions?: TransmitOptions;
+	};
 
 export type SendCommandReturnType<
 	TBase,

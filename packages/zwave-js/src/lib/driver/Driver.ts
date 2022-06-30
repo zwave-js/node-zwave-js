@@ -3829,9 +3829,9 @@ ${handlers.length} left`,
 	 * @param command The command to send
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	public async sendSupervisedCommand(
+	private async sendSupervisedCommand(
 		command: CommandClass,
-		options: SendCommandOptions = {
+		options: SendCommandOptions & { useSupervision?: "auto" } = {
 			requestStatusUpdates: false,
 		},
 	): Promise<SupervisionResult | undefined> {
@@ -3901,6 +3901,8 @@ ${handlers.length} left`,
 		const node = command.getNode(this);
 		const endpoint = command.getEndpoint(this);
 		if (
+			// ... not disabled
+			options?.useSupervision !== false &&
 			node &&
 			endpoint &&
 			// ... the node supports it
