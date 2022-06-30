@@ -312,57 +312,6 @@ Checks whether there is a compatible update for the currently installed config p
 
 > [!NOTE] Although the updated config gets loaded after the update, bugfixes and changes to device configuration generally require either a driver restart or re-interview of the changed devices to take effect.
 
-### `getAvailableFirmwareUpdates`
-
-```ts
-getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>
-```
-
-Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
-
-<!-- #import FirmwareUpdateInfo from "zwave-js" -->
-
-```ts
-type FirmwareUpdateInfo = {
-	version: string;
-	changelog: string;
-	files: FirmwareUpdateFileInfo[];
-};
-```
-
-where each entry in `files` looks like this:
-
-<!-- #import FirmwareUpdateFileInfo from "zwave-js" -->
-
-```ts
-interface FirmwareUpdateFileInfo {
-	target: number;
-	url: string;
-	integrity: `sha256:${string}`;
-}
-```
-
-The `version` and `changelog` are meant to be presented to the user prior to choosing an update.
-
-Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the user needs to select one.
-
-> [!NOTE] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work.
-
-> [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
-
-### `beginOTAFirmwareUpdate`
-
-```ts
-beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>
-```
-
-> [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
-
-Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and starts an over-the-air (OTA) firmware update for the given node.  
-This is very similar to [`ZWaveNode.beginFirmwareUpdate`](api/node#beginfirmwareupdate), except that the updates are officially provided by manufacturers and downloaded in the background.
-
-> [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
-
 ## Driver properties
 
 ### `cacheDir`

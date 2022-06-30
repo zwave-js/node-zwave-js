@@ -13,5 +13,4 @@ export type {
 export { Driver, libName, libVersion } from "./lib/driver/Driver";
 export type { SendMessageOptions } from "./lib/driver/Driver";
 export type { ZWaveOptions } from "./lib/driver/ZWaveOptions";
-export * from "./lib/driver/_Types";
 export { DriverLogContext } from "./lib/log/Driver";

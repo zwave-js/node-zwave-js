@@ -7,7 +7,6 @@ import {
 	deserializeCacheValue,
 	dskFromString,
 	Duration,
-	Firmware,
 	highResTimestamp,
 	isZWaveError,
 	LogConfig,
@@ -156,10 +155,6 @@ import {
 	compileStatistics,
 	sendStatistics,
 } from "../telemetry/statistics";
-import {
-	downloadFirmwareUpdate,
-	getAvailableFirmwareUpdates,
-} from "./FirmwareUpdateService";
 import { createMessageGenerator } from "./MessageGenerators";
 import {
 	cacheKeys,
@@ -185,7 +180,6 @@ import {
 	installConfigUpdateInDocker,
 } from "./UpdateConfig";
 import type { ZWaveOptions } from "./ZWaveOptions";
-import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
 const packageJsonPath = require.resolve("zwave-js/package.json");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -4290,120 +4284,5 @@ ${handlers.length} left`,
 		}
 
 		return true;
-	}
-
-	/**
-	 * Retrieves the available firmware updates for the given node from the Z-Wave JS firmware update service.
-	 * **Note:** Sleeping nodes need to be woken up for this to work.
-	 */
-	public async getAvailableFirmwareUpdates(
-		nodeId: number,
-	): Promise<FirmwareUpdateInfo[]> {
-		this.ensureReady();
-
-		const node = this.controller.nodes.getOrThrow(nodeId);
-
-		// Do not rely on stale information, query everything fresh from the node
-		const manufacturerResponse = await node.commandClasses[
-			"Manufacturer Specific"
-		].get();
-
-		if (!manufacturerResponse) {
-			throw new ZWaveError(
-				`Cannot check for firmware updates for node ${nodeId}: Failed to query fingerprint from the node!`,
-				ZWaveErrorCodes.FWUpdateService_MissingInformation,
-			);
-		}
-		const { manufacturerId, productType, productId } = manufacturerResponse;
-
-		const versionResponse = await node.commandClasses.Version.get();
-		if (!versionResponse) {
-			throw new ZWaveError(
-				`Cannot check for firmware updates for node ${nodeId}: Failed to query firmware version from the node!`,
-				ZWaveErrorCodes.FWUpdateService_MissingInformation,
-			);
-		}
-		const firmwareVersion = versionResponse.firmwareVersions[0];
-
-		// Now invoke the service
-		try {
-			return await getAvailableFirmwareUpdates(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-			);
-		} catch (e: any) {
-			let message = `Cannot check for firmware updates for node ${nodeId}: `;
-			if (e.response) {
-				if (
-					isObject(e.response.data) &&
-					typeof e.response.data.message === "string"
-				) {
-					message += `${e.response.data.message} `;
-				}
-				message += `[${e.response.status} ${e.response.statusText}]`;
-			} else if (typeof e.message === "string") {
-				message += e.message;
-			} else {
-				message += `Failed to download update information!`;
-			}
-
-			throw new ZWaveError(
-				message,
-				ZWaveErrorCodes.FWUpdateService_RequestError,
-			);
-		}
-	}
-
-	/**
-	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
-	 */
-	public async beginOTAFirmwareUpdate(
-		nodeId: number,
-		update: FirmwareUpdateFileInfo,
-	): Promise<void> {
-		this.ensureReady();
-
-		const node = this.controller.nodes.getOrThrow(nodeId);
-
-		let firmware: Firmware;
-		try {
-			this.controllerLog.logNode(
-				nodeId,
-				`Downloading firmware update from ${update.url}...`,
-			);
-			firmware = await downloadFirmwareUpdate(update);
-		} catch (e: any) {
-			let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
-			if (isZWaveError(e)) {
-				// Pass "real" Z-Wave errors through
-				throw new ZWaveError(message + e.message, e.code);
-			} else if (e.response) {
-				// And construct a better error message for HTTP errors
-				if (
-					isObject(e.response.data) &&
-					typeof e.response.data.message === "string"
-				) {
-					message += `${e.response.data.message} `;
-				}
-				message += `[${e.response.status} ${e.response.statusText}]`;
-			} else if (typeof e.message === "string") {
-				message += e.message;
-			} else {
-				message += `Failed to download firmware update!`;
-			}
-
-			throw new ZWaveError(
-				message,
-				ZWaveErrorCodes.FWUpdateService_RequestError,
-			);
-		}
-
-		this.controllerLog.logNode(
-			nodeId,
-			`Firmware update ${update.url} downloaded, installing...`,
-		);
-		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
 	}
 }
