@@ -3815,7 +3815,7 @@ __metadata:
     axios: ^0.27.2
     comment-json: ^4.2.2
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
     js-levenshtein: ^1.1.6
@@ -3844,7 +3844,7 @@ __metadata:
     ansi-colors: ^4.1.3
     dayjs: ^1.11.2
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
     logform: ^2.4.0
     nrf-intel-hex: ^1.3.0
@@ -3885,7 +3885,7 @@ __metadata:
     ansi-colors: ^4.1.3
     clipboardy: ^2.3.0
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
     piscina: ^3.2.0
@@ -3910,7 +3910,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
     reflect-metadata: ^0.1.13
@@ -3964,7 +3964,7 @@ __metadata:
     commitizen: ^4.2.4
     cz-conventional-changelog: ^3.3.0
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     eslint: ^8.16.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.0.0
@@ -4001,7 +4001,7 @@ __metadata:
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.3
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
     serialport: ^10.4.0
     typescript: 4.6.4
@@ -4018,7 +4018,7 @@ __metadata:
     "@types/node": ^14.18.21
     alcalzone-shared: ^4.0.1
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
     typescript: 4.6.4
@@ -4038,7 +4038,7 @@ __metadata:
     "@zwave-js/shared": "workspace:*"
     ansi-colors: ^4.1.3
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
     triple-beam: "*"
     typescript: 4.6.4
@@ -5598,12 +5598,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esbuild-register@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "esbuild-register@npm:3.3.2"
+"esbuild-register@npm:^3.3.3":
+  version: 3.3.3
+  resolution: "esbuild-register@npm:3.3.3"
   peerDependencies:
     esbuild: ">=0.12 <1"
-  checksum: 94c353571b23f9a54d00e4551f03696c99b068699f6afaa2bed9cdf5247ec54536f50ea4c68572485904026a4fd374625418682fd240837895839aeba3f29ec2
+  checksum: f43fecb9f5c48fcf859a0b3681368af8987c299c822da9a996b90f453b9b2226b9a90c7dbaec0968a86b53ee524af0d8b4ed828866c29bfede5c176834bc0f2b
   languageName: node
   linkType: hard
 
@@ -10505,7 +10505,7 @@ typescript@^4.4.3:
     ansi-colors: ^4.1.3
     axios: ^0.27.2
     esbuild: 0.14.48
-    esbuild-register: ^3.3.2
+    esbuild-register: ^3.3.3
     execa: ^5.1.1
     fs-extra: ^10.1.0
     jest-extended: ^2.0.0
