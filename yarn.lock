@@ -3846,7 +3846,7 @@ __metadata:
     esbuild: 0.14.48
     esbuild-register: ^3.3.3
     jest-extended: ^2.0.0
-    logform: ^2.4.0
+    logform: ^2.4.1
     nrf-intel-hex: ^1.3.0
     triple-beam: "*"
     typescript: 4.6.4
@@ -7805,6 +7805,19 @@ __metadata:
     safe-stable-stringify: ^2.3.1
     triple-beam: ^1.3.0
   checksum: e75ccccc1a2664612ade3c7f3d3185787198b4028e54ea2795df87901f28b3881eddd8d7e73ce03f4420dca638a1cbe6d42254179685ab2075e4ac38a71ffb6c
+  languageName: node
+  linkType: hard
+
+"logform@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "logform@npm:2.4.1"
+  dependencies:
+    "@colors/colors": 1.5.0
+    fecha: ^4.2.0
+    ms: ^2.1.1
+    safe-stable-stringify: ^2.3.1
+    triple-beam: ^1.3.0
+  checksum: 94b859926dfe6ee99889aaf1c28dcc7de2ed9f55524c9161196e1c889f7317dce84f24a23280e496d5e543e65ebc134c99c96be2008a3108307cc7a2a62781f4
   languageName: node
   linkType: hard
 
