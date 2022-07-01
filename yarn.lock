@@ -3363,7 +3363,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node12@npm:^1.0.7, @tsconfig/node12@npm:^1.0.9":
+"@tsconfig/node12@npm:^1.0.11":
+  version: 1.0.11
+  resolution: "@tsconfig/node12@npm:1.0.11"
+  checksum: 5ce29a41b13e7897a58b8e2df11269c5395999e588b9a467386f99d1d26f6c77d1af2719e407621412520ea30517d718d5192a32403b8dfcc163bf33e40a338a
+  languageName: node
+  linkType: hard
+
+"@tsconfig/node12@npm:^1.0.7":
   version: 1.0.9
   resolution: "@tsconfig/node12@npm:1.0.9"
   checksum: a01b2400ab3582b86b589c6d31dcd0c0656f333adecde85d6d7d4086adb059808b82692380bb169546d189bf771ae21d02544a75b57bd6da4a5dd95f8567bec9
@@ -3934,7 +3941,7 @@ __metadata:
     "@babel/preset-typescript": ^7.18.6
     "@commitlint/cli": ^16.3.0
     "@commitlint/config-conventional": ^16.2.4
-    "@tsconfig/node12": ^1.0.9
+    "@tsconfig/node12": ^1.0.11
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.1
     "@types/node": ^14.18.20
