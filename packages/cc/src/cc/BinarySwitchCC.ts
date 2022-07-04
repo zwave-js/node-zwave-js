@@ -7,6 +7,7 @@ import {
 	MessageRecord,
 	parseBoolean,
 	parseMaybeBoolean,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core/safe";
@@ -110,7 +111,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 	public async set(
 		targetValue: boolean,
 		duration?: Duration | string,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			BinarySwitchCommand,
 			BinarySwitchCommand.Set,
@@ -122,7 +123,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

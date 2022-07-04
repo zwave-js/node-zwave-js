@@ -7,6 +7,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	SinglecastCC,
 	SupervisionStatus,
 	validatePayload,
 	ZWaveError,
@@ -27,6 +28,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	shouldUseSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { SupervisionCommand } from "../lib/_Types";
@@ -214,6 +216,36 @@ export class SupervisionCC extends CommandClass {
 				SupervisionCCValues.ccSupported(ccId).endpoint(endpoint.index),
 				supported,
 			);
+	}
+
+	/** Returns whether this is a valid command to send supervised */
+	public static mayUseSupervision<T extends CommandClass>(
+		applHost: ZWaveApplicationHost,
+		command: T,
+	): command is SinglecastCC<T> {
+		// Supervision may only be used for singlecast CCs that expect no response
+		if (!command.isSinglecast()) return false;
+		if (command.expectsCCResponse()) return false;
+
+		// with a valid node and endpoint
+		const node = command.getNode(applHost);
+		if (!node) return false;
+		const endpoint = command.getEndpoint(applHost);
+		if (!endpoint) return false;
+
+		// and only if ...
+		return (
+			// ... the node supports it
+			node.supportsCC(CommandClasses.Supervision) &&
+			// ... the command is marked as "should use supervision"
+			shouldUseSupervision(command) &&
+			// ... and we haven't previously determined that the node doesn't properly support it
+			SupervisionCC.getCCSupportedWithSupervision(
+				applHost,
+				endpoint,
+				command.ccId,
+			)
+		);
 	}
 }
 

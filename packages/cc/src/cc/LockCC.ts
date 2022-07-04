@@ -1,4 +1,8 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type {
+	Maybe,
+	MessageOrCCLogEntry,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -33,6 +37,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { LockCommand } from "../lib/_Types";
@@ -77,7 +82,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	 * @param locked Whether the lock should be locked
 	 */
 	@validateArgs()
-	public async set(locked: boolean): Promise<void> {
+	public async set(locked: boolean): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 
 		const cc = new LockCCSet(this.applHost, {
@@ -85,7 +90,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			locked,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -162,6 +167,7 @@ interface LockCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(LockCommand.Set)
+@useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
 		host: ZWaveHost,

@@ -1,4 +1,8 @@
-import type { MessageOrCCLogEntry, MessageRecord } from "@zwave-js/core/safe";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	Duration,
@@ -39,6 +43,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -361,7 +366,9 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 	}
 
 	@validateArgs({ strictEnums: true })
-	public async set(mode: DoorLockMode): Promise<void> {
+	public async set(
+		mode: DoorLockMode,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.OperationSet,
@@ -372,13 +379,13 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			mode,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
 	public async setConfiguration(
 		configuration: DoorLockCCConfigurationSetOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			DoorLockCommand,
 			DoorLockCommand.ConfigurationSet,
@@ -389,7 +396,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...configuration,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -654,6 +661,7 @@ interface DoorLockCCOperationSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(DoorLockCommand.OperationSet)
+@useSupervision()
 export class DoorLockCCOperationSet extends DoorLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -964,6 +972,7 @@ type DoorLockCCConfigurationSetOptions = (
 };
 
 @CCCommand(DoorLockCommand.ConfigurationSet)
+@useSupervision()
 export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public constructor(
 		host: ZWaveHost,

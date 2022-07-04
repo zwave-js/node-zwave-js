@@ -7,6 +7,7 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	SupervisionResult,
 	unknownNumber,
 	validatePayload,
 	ValueMetadata,
@@ -37,6 +38,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -218,7 +220,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public async set(
 		targetValue: number,
 		duration?: Duration | string,
-	): Promise<boolean> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.Set,
@@ -230,8 +232,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
-		return true;
+		return this.applHost.sendCommand(cc, this.commandOptions);
 
 		// // Multilevel Switch commands may take some time to be executed.
 		// // Therefore we try to supervise the command execution
@@ -261,7 +262,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	@validateArgs()
 	public async startLevelChange(
 		options: MultilevelSwitchCCStartLevelChangeOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.StartLevelChange,
@@ -303,11 +304,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		// 	}
 		// }
 		// if (!mayUseSupervision) {
-		await this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc);
 		// }
 	}
 
-	public async stopLevelChange(): Promise<void> {
+	public async stopLevelChange(): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.StopLevelChange,
@@ -350,7 +351,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		// }
 
 		// if (!mayUseSupervision) {
-		await this.applHost.sendCommand(cc);
+		return this.applHost.sendCommand(cc);
 		// }
 	}
 
@@ -628,6 +629,7 @@ interface MultilevelSwitchCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(MultilevelSwitchCommand.Set)
+@useSupervision()
 export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -750,6 +752,7 @@ type MultilevelSwitchCCStartLevelChangeOptions = {
 	};
 
 @CCCommand(MultilevelSwitchCommand.StartLevelChange)
+@useSupervision()
 export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -813,6 +816,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 }
 
 @CCCommand(MultilevelSwitchCommand.StopLevelChange)
+@useSupervision()
 export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {}
 
 @CCCommand(MultilevelSwitchCommand.SupportedReport)

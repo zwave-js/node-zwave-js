@@ -4,6 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -37,6 +38,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { SoundSwitchCommand, ToneId } from "../lib/_Types";
@@ -136,7 +138,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 	public async setConfiguration(
 		defaultToneId: number,
 		defaultVolume: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.ConfigurationSet,
@@ -148,7 +150,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			defaultToneId,
 			defaultVolume,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -173,7 +175,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async play(toneId: number, volume?: number): Promise<void> {
+	public async play(
+		toneId: number,
+		volume?: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonePlaySet,
@@ -192,10 +197,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId,
 			volume,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
-	public async stopPlaying(): Promise<void> {
+	public async stopPlaying(): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonePlaySet,
@@ -207,7 +212,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId: 0x00,
 			volume: 0x00,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -510,6 +515,7 @@ interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SoundSwitchCommand.ConfigurationSet)
+@useSupervision()
 export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -589,6 +595,7 @@ interface SoundSwitchCCTonePlaySetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SoundSwitchCommand.TonePlaySet)
+@useSupervision()
 export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 	public constructor(
 		host: ZWaveHost,

@@ -1,3 +1,5 @@
+import { isObject } from "alcalzone-shared/typeguards";
+import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
 import type { Duration } from "../values/Duration";
 
@@ -186,12 +188,10 @@ export type SendCommandOptions = SendMessageOptions &
 		transmitOptions?: TransmitOptions;
 	};
 
-export type SendCommandReturnType<
-	TBase,
-	TResponse extends TBase,
-> = TBase extends TResponse
-	? TResponse | SupervisionResult | undefined
-	: TResponse | undefined;
+export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
+	undefined extends TResponse
+		? SupervisionResult | undefined
+		: TResponse | undefined;
 
 export enum SupervisionStatus {
 	NoSupport = 0x00,
@@ -216,3 +216,33 @@ export type SupervisionUpdateHandler = (
 	status: SupervisionStatus,
 	remainingDuration?: Duration,
 ) => void;
+
+export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
+	return (
+		isObject(obj) &&
+		"status" in obj &&
+		typeof SupervisionStatus[obj.status as any] === "string"
+	);
+}
+
+export function supervisedCommandSucceeded(
+	result: SupervisionResult,
+): result is SupervisionResult & {
+	status: SupervisionStatus.Success | SupervisionStatus.Working;
+} {
+	return (
+		result.status === SupervisionStatus.Success ||
+		result.status === SupervisionStatus.Working
+	);
+}
+
+export function supervisedCommandFailed(
+	result: SupervisionResult,
+): result is SupervisionResult & {
+	status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
+} {
+	return (
+		result.status === SupervisionStatus.Fail ||
+		result.status === SupervisionStatus.NoSupport
+	);
+}

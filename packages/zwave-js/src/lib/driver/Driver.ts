@@ -19,7 +19,6 @@ import {
 	Security2CCNonceReport,
 	SecurityCC,
 	SecurityCCCommandEncapsulationNonceGet,
-	shouldUseSupervision,
 	SupervisionCC,
 	SupervisionCCGet,
 	SupervisionCCReport,
@@ -57,6 +56,7 @@ import {
 	SendCommandReturnType,
 	SendMessageOptions,
 	serializeCacheValue,
+	SinglecastCC,
 	SPANState,
 	SupervisionResult,
 	SupervisionStatus,
@@ -3830,27 +3830,11 @@ ${handlers.length} left`,
 	 * @param options (optional) Options regarding the message transmission
 	 */
 	private async sendSupervisedCommand(
-		command: CommandClass,
+		command: SinglecastCC<CommandClass>,
 		options: SendCommandOptions & { useSupervision?: "auto" } = {
 			requestStatusUpdates: false,
 		},
 	): Promise<SupervisionResult | undefined> {
-		const nodeId = command.nodeId;
-		if (typeof nodeId !== "number") {
-			throw new ZWaveError(
-				`Sending a supervised command is only supported with singlecast!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// Check if the target supports this command
-		if (!command.getNode(this)?.supportsCC(CommandClasses.Supervision)) {
-			throw new ZWaveError(
-				`Node ${nodeId} does not support the Supervision CC!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
 		// Create the encapsulating CC so we have a session ID
 		command = SupervisionCC.encapsulate(
 			this,
@@ -3866,7 +3850,7 @@ ${handlers.length} left`,
 
 		// If future updates are expected, listen for them
 		if (options.requestStatusUpdates && resp.moreUpdatesFollow) {
-			this.ensureNodeSessions(nodeId).supervision.set(
+			this.ensureNodeSessions(command.nodeId).supervision.set(
 				(command as SupervisionCCGet).sessionId,
 				options.onUpdate,
 			);
@@ -3893,35 +3877,25 @@ ${handlers.length} left`,
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
-	public async sendCommand<TResponse extends ICommandClass = ICommandClass>(
+	public async sendCommand<
+		TResponse extends ICommandClass | undefined = undefined,
+	>(
 		command: CommandClass,
 		options?: SendCommandOptions,
-	): Promise<SendCommandReturnType<ICommandClass, TResponse>> {
+	): Promise<SendCommandReturnType<TResponse>> {
 		// Only use supervision if...
-		const node = command.getNode(this);
-		const endpoint = command.getEndpoint(this);
 		if (
 			// ... not disabled
 			options?.useSupervision !== false &&
-			node &&
-			endpoint &&
-			// ... the node supports it
-			node.supportsCC(CommandClasses.Supervision) &&
-			// ... the command is marked as "should use supervision"
-			shouldUseSupervision(command) &&
-			// ... and we haven't previously determined that the node doesn't properly support it
-			SupervisionCC.getCCSupportedWithSupervision(
-				this,
-				endpoint,
-				command.ccId,
-			)
+			// ... and it is legal for the command
+			SupervisionCC.mayUseSupervision(this, command)
 		) {
 			const result = await this.sendSupervisedCommand(command, options);
 			if (result?.status === SupervisionStatus.NoSupport) {
 				// The node should support supervision but it doesn't for this command. Remember this
 				SupervisionCC.setCCSupportedWithSupervision(
 					this,
-					endpoint,
+					command.getEndpoint(this)!,
 					command.ccId,
 					false,
 				);
