@@ -4,6 +4,23 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Features
+* Add labels to Multilevel Switch/Entry Control notifications (#4652)
+* Cache firmware update capabilities during the interview (#4779)
+* Add experimental support for semi-automatic firmware updates through the Z-Wave JS firmware update service. For details see https://github.com/zwave-js/firmware-updates/ (#4758)
+
+### Bugfixes
+* The legacy V1 alarm values contained in standardized V2+ notifications are now preserved/exposed (#4756)
+* Disable strict enum validation for `AlarmSensorCCAPI.get()` to work around devices with an incorrectly encoded sensor bitmask (#4759)
+* Outgoing `Supervision CC Reports` are no longer sent with the ACK flag. This should avoid long delays when a node request confirmation but cannot be reached (#4777)
+
+### Config file changes
+* Add alarm mapping for P-KFCON-MOD-YALE (#4760)
+* Add Zooz ZSE44 params for FW 1.20 (#4767)
+* Add MyOT OpenTherm Actuator v2 (#4711)
+* Add fingerprint to McoHome MH-S220 (#4778)
+
 ## 9.5.0 (2022-06-28)
 ### Features
 * Add methods to check if an OTA firmware update is in progress (#4742)
