@@ -12,6 +12,7 @@ import {
 import type { ZWaveHost } from "@zwave-js/host";
 import { MessagePriority } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { TransmitOptions } from "../controller/_Types";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -93,8 +94,9 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 				...this.commandOptions,
 				// Supervision Reports must be prioritized over normal messages
 				priority: MessagePriority.Supervision,
-				// We don't want failures causing us to treat the node as asleep or dead
-				changeNodeStatusOnMissingACK: false,
+				// But we don't want to wait for an ACK because this can lock up the network for seconds
+				// if the target node is asleep or unreachable
+				transmitOptions: TransmitOptions.DEFAULT_NOACK,
 				// Only try sending the report once. If it fails, the node will ask again
 				maxSendAttempts: 1,
 			});
