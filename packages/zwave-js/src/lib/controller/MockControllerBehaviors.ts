@@ -243,31 +243,42 @@ const handleSendData: MockControllerBehavior = {
 				wasSent: true,
 			});
 			await controller.sendToHost(res.serialize());
-			// Put the controller into waiting state
-			controller.state.set(
-				MockControllerStateKeys.CommunicationState,
-				MockControllerCommunicationState.WaitingForNode,
-			);
 
-			// Wait for the ACK and notify the host
-			let ack = false;
-			try {
-				const ackResult = await ackPromise;
-				ack = !!ackResult?.ack;
-			} catch {
-				// No response
+			if (msg.callbackId !== 0) {
+				// Put the controller into waiting state
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.WaitingForNode,
+				);
+
+				// Wait for the ACK and notify the host
+				let ack = false;
+				try {
+					const ackResult = await ackPromise;
+					ack = !!ackResult?.ack;
+				} catch {
+					// No response
+				}
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
+
+				const cb = new SendDataRequestTransmitReport(host, {
+					callbackId: msg.callbackId,
+					transmitStatus: ack
+						? TransmitStatus.OK
+						: TransmitStatus.NoAck,
+				});
+
+				await controller.sendToHost(cb.serialize());
+			} else {
+				// No callback was requested, we're done
+				controller.state.set(
+					MockControllerStateKeys.CommunicationState,
+					MockControllerCommunicationState.Idle,
+				);
 			}
-			controller.state.set(
-				MockControllerStateKeys.CommunicationState,
-				MockControllerCommunicationState.Idle,
-			);
-
-			const cb = new SendDataRequestTransmitReport(host, {
-				callbackId: msg.callbackId,
-				transmitStatus: ack ? TransmitStatus.OK : TransmitStatus.NoAck,
-			});
-
-			await controller.sendToHost(cb.serialize());
 			return true;
 		}
 	},
