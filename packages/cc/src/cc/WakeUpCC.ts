@@ -88,7 +88,7 @@ export class WakeUpCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "wakeUpInterval") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -101,6 +101,8 @@ export class WakeUpCCAPI extends CCAPI {
 			// Verify the current value after a (short) delay
 			this.schedulePoll({ property }, value, { transition: "fast" });
 		}
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

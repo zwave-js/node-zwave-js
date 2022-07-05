@@ -80,7 +80,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "name" && property !== "location") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -96,6 +96,8 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 				await this.setLocation(value);
 				break;
 		}
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

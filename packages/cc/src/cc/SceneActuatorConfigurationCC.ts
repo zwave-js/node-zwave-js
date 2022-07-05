@@ -90,7 +90,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		{ property, propertyKey },
 		value,
 		options,
-	): Promise<void> => {
+	) => {
 		if (propertyKey == undefined) {
 			throwMissingPropertyKey(this.ccId, property);
 		} else if (typeof propertyKey !== "number") {
@@ -154,6 +154,8 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
