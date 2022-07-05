@@ -10,8 +10,10 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import { MessagePriority } from "@zwave-js/serial";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
+import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
 import {
 	API,
@@ -34,12 +36,32 @@ import {
 } from "./_Types";
 
 // @noSetValueAPI There are no values to set here
-// @noInterview   The "interview" is part of the update process
 
-function getSupportsActivationValueId(): ValueID {
+export function getSupportsActivationValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Firmware Update Meta Data"],
 		property: "supportsActivation",
+	};
+}
+
+export function getFirmwareUpgradableValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Firmware Update Meta Data"],
+		property: "firmwareUpgradable",
+	};
+}
+
+export function getAdditionalFirmwareIDsValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Firmware Update Meta Data"],
+		property: "additionalFirmwareIDs",
+	};
+}
+
+export function getContinuesToFunctionValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Firmware Update Meta Data"],
+		property: "continuesToFunction",
 	};
 }
 
@@ -186,6 +208,58 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 @implementedVersion(7)
 export class FirmwareUpdateMetaDataCC extends CommandClass {
 	declare ccCommand: FirmwareUpdateMetaDataCommand;
+
+	public skipEndpointInterview(): boolean {
+		return true;
+	}
+
+	public async interview(driver: Driver): Promise<void> {
+		const node = this.getNode(driver)!;
+		const api = node.commandClasses[
+			"Firmware Update Meta Data"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `Interviewing ${this.ccName}...`,
+			direction: "none",
+		});
+
+		driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "Querying firmware update capabilities...",
+			direction: "outbound",
+		});
+
+		const caps = await api.getMetaData();
+		if (caps) {
+			let logMessage = `Received firmware update capabilities:`;
+			if (caps.firmwareUpgradable) {
+				logMessage += `
+  firmware targets:      ${[0, ...caps.additionalFirmwareIDs].join(", ")}
+  continues to function: ${caps.continuesToFunction}
+  supports activation:   ${caps.supportsActivation}`;
+			} else {
+				logMessage += `\nfirmware upgradeable: false`;
+			}
+			driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		} else {
+			driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Firmware update capability query timed out",
+				direction: "inbound",
+			});
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 @CCCommand(FirmwareUpdateMetaDataCommand.MetaDataReport)
@@ -239,8 +313,10 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 	public readonly manufacturerId: number;
 	public readonly firmwareId: number;
 	public readonly checksum: number;
+	@ccValue({ internal: true })
 	public readonly firmwareUpgradable: boolean;
 	public readonly maxFragmentSize?: number;
+	@ccValue({ internal: true })
 	public readonly additionalFirmwareIDs: readonly number[] = [];
 	public readonly hardwareVersion?: number;
 
