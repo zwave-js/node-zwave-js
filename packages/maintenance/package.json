@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/maintenance",
-  "version": "9.4.1",
+  "version": "9.6.0",
   "description": "zwave-js: maintenance scripts",
   "private": true,
   "keywords": [],

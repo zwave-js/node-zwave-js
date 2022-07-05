@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.6.0 (2022-07-05)
 ### Features
 * Add labels to Multilevel Switch/Entry Control notifications (#4652)
 * Cache firmware update capabilities during the interview (#4779)
