@@ -1,15 +1,14 @@
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	Duration,
 	enumValuesToMetadataStates,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -218,7 +217,7 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property === "targetMode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -228,10 +227,19 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 					typeof value,
 				);
 			}
-			await this.set(value);
+			const result = await this.set(value);
 
-			// Verify the current value after a delay
-			this.schedulePoll({ property }, value);
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (supervisedCommandSucceeded(result)) {
+				this.getValueDB().setValue(
+					DoorLockCCValues.currentMode.endpoint(this.endpoint.index),
+					value,
+				);
+			} else {
+				this.schedulePoll({ property }, value);
+			}
+
+			return result;
 		} else if (
 			typeof property === "string" &&
 			configurationSetParameters.includes(property as any)
@@ -261,11 +269,14 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 				config.outsideHandlesCanOpenDoorConfiguration = allTrue;
 			}
 
-			await this.setConfiguration(config);
+			const result = await this.setConfiguration(config);
 
-			// Refresh the current value
-			// TODO: #1321, #1521
-			await this.getConfiguration();
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (!supervisedCommandSucceeded(result)) {
+				this.schedulePoll({ property }, value);
+			}
+
+			return result;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}

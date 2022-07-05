@@ -7,6 +7,8 @@ import {
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	unknownNumber,
 	validatePayload,
 	ValueMetadata,
@@ -37,6 +39,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { BasicCommand } from "../lib/_Types";
@@ -96,7 +99,7 @@ export class BasicCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		// Enable restoring the previous non-zero value
 		if (property === "restorePrevious") {
 			property = "targetValue";
@@ -109,34 +112,39 @@ export class BasicCCAPI extends CCAPI {
 		if (typeof value !== "number") {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
-		await this.set(value);
+
+		const result = await this.set(value);
+
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
+		const shouldUpdateOptimistically =
+			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+			(!this.applHost.options.disableOptimisticValueUpdate &&
+				result == undefined) ||
+			// TODO: Consider delaying the optimistic update if the result is WORKING
+			supervisedCommandSucceeded(result);
 
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			// Only update currentValue for valid target values
-			if (
-				!this.applHost.options.disableOptimisticValueUpdate &&
-				value >= 0 &&
-				value <= 99
-			) {
-				this.getValueDB().setValue(
+			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
+				this.tryGetValueDB()?.setValue(
 					BasicCCValues.currentValue.endpoint(this.endpoint.index),
 					value,
 				);
 			}
 
-			// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
-			// that unsolicited updates cancel the scheduled poll
-			if (property === "targetValue") property = "currentValue";
-			this.schedulePoll({ property }, value);
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (!supervisedCommandSucceeded(result)) {
+				// and verify the current value after a delay. We query currentValue instead of targetValue to make sure
+				// that unsolicited updates cancel the scheduled poll
+				if (property === "targetValue") property = "currentValue";
+				this.schedulePoll({ property }, value);
+			}
 		} else if (this.isMulticast()) {
 			// Only update currentValue for valid target values
-			if (
-				!this.applHost.options.disableOptimisticValueUpdate &&
-				value >= 0 &&
-				value <= 99
-			) {
+			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
 				// Figure out which nodes were affected by this command
 				const affectedNodes = this.endpoint.node.physicalNodes.filter(
 					(node) =>
@@ -164,6 +172,8 @@ export class BasicCCAPI extends CCAPI {
 				this.schedulePoll({ property }, undefined);
 			}
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -201,7 +211,9 @@ export class BasicCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async set(targetValue: number): Promise<void> {
+	public async set(
+		targetValue: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
 		const cc = new BasicCCSet(this.applHost, {
@@ -209,7 +221,7 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -294,6 +306,7 @@ interface BasicCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BasicCommand.Set)
+@useSupervision()
 export class BasicCCSet extends BasicCC {
 	public constructor(
 		host: ZWaveHost,

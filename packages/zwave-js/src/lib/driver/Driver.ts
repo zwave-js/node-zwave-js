@@ -3164,10 +3164,10 @@ ${handlers.length} left`,
 				});
 
 				// Call the update handler
-				nodeSessions.supervision.get(msg.command.sessionId)!(
-					msg.command.status,
-					msg.command.duration,
-				);
+				nodeSessions.supervision.get(msg.command.sessionId)!({
+					status: msg.command.status,
+					remainingDuration: msg.command.duration,
+				} as SupervisionResult);
 				// If this was a final report, remove the handler
 				if (!msg.command.moreUpdatesFollow) {
 					nodeSessions.supervision.delete(msg.command.sessionId);

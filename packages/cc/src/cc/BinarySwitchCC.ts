@@ -7,6 +7,7 @@ import {
 	MessageRecord,
 	parseBoolean,
 	parseMaybeBoolean,
+	supervisedCommandSucceeded,
 	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
@@ -130,7 +131,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 		{ property },
 		value,
 		options,
-	): Promise<void> => {
+	) => {
 		if (property !== "targetValue") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -138,29 +139,38 @@ export class BinarySwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		const duration = Duration.from(options?.transitionDuration);
-		await this.set(value, duration);
+		const result = await this.set(value, duration);
+
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
+		const shouldUpdateOptimistically =
+			// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+			(!this.applHost.options.disableOptimisticValueUpdate &&
+				result == undefined) ||
+			// TODO: Consider delaying the optimistic update if the result is WORKING
+			supervisedCommandSucceeded(result);
 
 		const currentValueValueId = BinarySwitchCCValues.currentValue.endpoint(
 			this.endpoint.index,
 		);
 
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			if (!this.applHost.options.disableOptimisticValueUpdate) {
-				this.getValueDB().setValue(currentValueValueId, value);
+			if (shouldUpdateOptimistically) {
+				this.tryGetValueDB()?.setValue(currentValueValueId, value);
 			}
 
-			// Verify the current value after a delay
-			// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-			if (property === "targetValue") property = "currentValue";
-			this.schedulePoll({ property }, value, {
-				duration,
-				// on/off "transitions" are usually fast
-				transition: "fast",
-			});
+			// Verify the current value after a delay, unless the command was supervised and successful
+			if (!supervisedCommandSucceeded(result)) {
+				// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+				if (property === "targetValue") property = "currentValue";
+				this.schedulePoll({ property }, value, {
+					duration,
+					// on/off "transitions" are usually fast
+					transition: "fast",
+				});
+			}
 		} else if (this.isMulticast()) {
-			if (!this.applHost.options.disableOptimisticValueUpdate) {
+			if (shouldUpdateOptimistically) {
 				// Figure out which nodes were affected by this command
 				const affectedNodes = this.endpoint.node.physicalNodes.filter(
 					(node) =>
@@ -177,6 +187,8 @@ export class BinarySwitchCCAPI extends CCAPI {
 			}
 			// For multicasts, do not schedule a refresh - this could cause a LOT of traffic
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

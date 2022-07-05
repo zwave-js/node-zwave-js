@@ -9,6 +9,7 @@ import {
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
+	isUnsupervisedOrSucceeded,
 	IVirtualEndpoint,
 	IZWaveEndpoint,
 	Maybe,
@@ -292,7 +293,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		// Config parameters are addressed with numeric properties/keys
 		if (typeof property !== "number") {
 			throwUnsupportedProperty(this.ccId, property);
@@ -416,15 +417,18 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		await this.set({
+		const result = await this.set({
 			parameter: property,
 			value: targetValue,
 			valueSize: valueSize as any,
 			valueFormat,
 		});
 
-		if ((this as ConfigurationCCAPI).isSinglecast()) {
-			// Verify the current value after a delay
+		if (
+			!isUnsupervisedOrSucceeded(result) &&
+			(this as ConfigurationCCAPI).isSinglecast()
+		) {
+			// Verify the current value after a delay, unless the command was supervised and successful
 			(this as ConfigurationCCAPI).schedulePoll(
 				{ property, propertyKey },
 				targetValue,
@@ -432,6 +436,8 @@ export class ConfigurationCCAPI extends CCAPI {
 				{ transition: "fast" },
 			);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

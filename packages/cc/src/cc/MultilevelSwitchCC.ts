@@ -1,13 +1,16 @@
 import {
 	CommandClasses,
 	Duration,
+	isSupervisionResult,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
+	supervisedCommandSucceeded,
 	SupervisionResult,
+	SupervisionStatus,
 	unknownNumber,
 	validatePayload,
 	ValueMetadata,
@@ -233,30 +236,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			duration,
 		});
 		return this.applHost.sendCommand(cc, this.commandOptions);
-
-		// // Multilevel Switch commands may take some time to be executed.
-		// // Therefore we try to supervise the command execution
-		// const supervisionResult = await this.applHost.trySendCommandSupervised(
-		// 	cc,
-		// 	{
-		// 		requestStatusUpdates: true,
-		// 		onUpdate: (status) => {
-		// 			if (
-		// 				status === SupervisionStatus.Working ||
-		// 				status === SupervisionStatus.Success
-		// 			) {
-		// 				void this.get().catch(() => {
-		// 					/* ignore */
-		// 				});
-		// 			}
-		// 		},
-		// 	},
-		// );
-
-		// return (
-		// 	!supervisionResult ||
-		// 	supervisionResult.status === SupervisionStatus.Success
-		// );
 	}
 
 	@validateArgs()
@@ -274,38 +253,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		// let mayUseSupervision: boolean;
-		// if (this.endpoint.virtual) {
-		// 	// We cannot use supervision when communicating with multiple nodes
-		// 	mayUseSupervision = false;
-		// } else {
-		// 	// For singlecast, try to use supervision unless we know it is not supported
-		// 	const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		// 	const valueDB = this.getValueDB();
-		// 	mayUseSupervision = valueDB.getValue(superviseValueId) !== false;
-
-		// 	if (mayUseSupervision) {
-		// 		// Try to supervise the command execution
-		// 		const supervisionResult =
-		// 			await this.applHost.trySendCommandSupervised(cc);
-
-		// 		if (supervisionResult?.status === SupervisionStatus.Fail) {
-		// 			throw new ZWaveError(
-		// 				"startLevelChange failed",
-		// 				ZWaveErrorCodes.SupervisionCC_CommandFailed,
-		// 			);
-		// 		} else if (
-		// 			supervisionResult?.status === SupervisionStatus.NoSupport
-		// 		) {
-		// 			// Remember that we shouldn't use supervision for that
-		// 			valueDB.setValue(superviseValueId, false);
-		// 			mayUseSupervision = false;
-		// 		}
-		// 	}
-		// }
-		// if (!mayUseSupervision) {
 		return this.applHost.sendCommand(cc);
-		// }
 	}
 
 	public async stopLevelChange(): Promise<SupervisionResult | undefined> {
@@ -319,40 +267,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		// let mayUseSupervision: boolean;
-		// if (this.endpoint.virtual) {
-		// 	// We cannot use supervision when communicating with multiple nodes
-		// 	mayUseSupervision = false;
-		// } else {
-		// 	// For singlecast, try to use supervision unless we know it is not supported
-		// 	const valueDB = this.getValueDB();
-		// 	const superviseValueId = getSuperviseStartStopLevelChangeValueId();
-		// 	mayUseSupervision =
-		// 		valueDB.getValue<boolean>(superviseValueId) !== false;
-
-		// 	if (mayUseSupervision) {
-		// 		// Try to supervise the command execution
-		// 		const supervisionResult =
-		// 			await this.applHost.trySendCommandSupervised(cc);
-
-		// 		if (supervisionResult?.status === SupervisionStatus.Fail) {
-		// 			throw new ZWaveError(
-		// 				"stopLevelChange failed",
-		// 				ZWaveErrorCodes.SupervisionCC_CommandFailed,
-		// 			);
-		// 		} else if (
-		// 			supervisionResult?.status === SupervisionStatus.NoSupport
-		// 		) {
-		// 			// Remember that we shouldn't use supervision for that
-		// 			valueDB.setValue(superviseValueId, false);
-		// 			mayUseSupervision = false;
-		// 		}
-		// 	}
-		// }
-
-		// if (!mayUseSupervision) {
 		return this.applHost.sendCommand(cc);
-		// }
 	}
 
 	public async getSupported(): Promise<SwitchType | undefined> {
@@ -377,7 +292,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		{ property },
 		value,
 		options,
-	): Promise<void> => {
+	) => {
 		// Enable restoring the previous non-zero value
 		if (property === "restorePrevious") {
 			property = "targetValue";
@@ -394,81 +309,104 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				);
 			}
 			const duration = Duration.from(options?.transitionDuration);
-			const completed = await this.set(value, duration);
+			const currentValueValueId =
+				MultilevelSwitchCCValues.currentValue.endpoint(
+					this.endpoint.index,
+				);
+
+			// Multilevel Switch commands may take some time to be executed.
+			// Therefore we try to supervise the command execution and delay the
+			// optimistic update until the final result is received.
+			const result = await this.withOptions(
+				value !== 255
+					? {
+							requestStatusUpdates: true,
+							onUpdate: (update) => {
+								if (
+									update.status === SupervisionStatus.Success
+								) {
+									this.tryGetValueDB()?.setValue(
+										currentValueValueId,
+										value,
+									);
+								} else if (
+									update.status === SupervisionStatus.Fail
+								) {
+									// The transition failed, so now we don't know the status
+									// Refresh the current value
+
+									// eslint-disable-next-line @typescript-eslint/no-empty-function
+									void this.get().catch(() => {});
+								}
+							},
+					  }
+					: {},
+			).set(value, duration);
 
 			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 			// so UIs have immediate feedback
-			if (completed) {
-				if (this.isSinglecast()) {
-					// Only update currentValue for valid target values
-					if (
-						!this.applHost.options.disableOptimisticValueUpdate &&
-						value >= 0 &&
-						value <= 99
-					) {
-						this.tryGetValueDB()?.setValue(
-							MultilevelSwitchCCValues.currentValue.endpoint(
-								this.endpoint.index,
-							),
-							value,
-						);
-					}
+			const shouldUpdateOptimistically =
+				// For unsupervised commands, make the choice to update optimistically dependent on the driver options
+				(!this.applHost.options.disableOptimisticValueUpdate &&
+					result == undefined) ||
+				(isSupervisionResult(result) &&
+					result.status === SupervisionStatus.Success);
 
-					// Verify the current value after a delay, unless the device supports Supervision and we know the actual value
-					if (
-						value === 255 ||
-						!this.endpoint
-							.getNodeUnsafe()
-							?.supportsCC(CommandClasses.Supervision)
-					) {
-						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						if (property === "targetValue")
-							property = "currentValue";
+			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+			// so UIs have immediate feedback
+			if (this.isSinglecast()) {
+				// Only update currentValue for valid target values
+				if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
+					this.tryGetValueDB()?.setValue(currentValueValueId, value);
+				}
 
-						this.schedulePoll(
-							{ property },
-							value === 255 ? undefined : value,
-							{ duration },
+				// Verify the current value after a delay, unless...
+				// ...the command was supervised and successful
+				// ...and we know the actual value
+				if (!supervisedCommandSucceeded(result) || value === 255) {
+					// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+					if (property === "targetValue") property = "currentValue";
+
+					this.schedulePoll(
+						{ property },
+						value === 255 ? undefined : value,
+						{ duration },
+					);
+				}
+			} else if (this.isMulticast()) {
+				// Only update currentValue for valid target values
+				if (shouldUpdateOptimistically && value >= 0 && value <= 99) {
+					// Figure out which nodes were affected by this command
+					const affectedNodes =
+						this.endpoint.node.physicalNodes.filter((node) =>
+							node
+								.getEndpoint(this.endpoint.index)
+								?.supportsCC(this.ccId),
 						);
-					}
-				} else if (this.isMulticast()) {
-					// Only update currentValue for valid target values
-					if (
-						!this.applHost.options.disableOptimisticValueUpdate &&
-						value >= 0 &&
-						value <= 99
-					) {
-						// Figure out which nodes were affected by this command
-						const affectedNodes =
-							this.endpoint.node.physicalNodes.filter((node) =>
-								node
-									.getEndpoint(this.endpoint.index)
-									?.supportsCC(this.ccId),
+					// and optimistically update the currentValue
+					for (const node of affectedNodes) {
+						this.applHost
+							.tryGetValueDB(node.id)
+							?.setValue(
+								MultilevelSwitchCCValues.currentValue.endpoint(
+									this.endpoint.index,
+								),
+								value,
 							);
-						// and optimistically update the currentValue
-						for (const node of affectedNodes) {
-							this.applHost
-								.tryGetValueDB(node.id)
-								?.setValue(
-									MultilevelSwitchCCValues.currentValue.endpoint(
-										this.endpoint.index,
-									),
-									value,
-								);
-						}
-					} else if (value === 255) {
-						// We generally don't want to poll for multicasts because of how much traffic it can cause
-						// However, when setting the value 255 (ON), we don't know the actual state
-
-						// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
-						if (property === "targetValue")
-							property = "currentValue";
-						this.schedulePoll({ property }, undefined, {
-							duration,
-						});
 					}
+				} else if (value === 255) {
+					// We generally don't want to poll for multicasts because of how much traffic it can cause
+					// However, when setting the value 255 (ON), we don't know the actual state
+
+					// We query currentValue instead of targetValue to make sure that unsolicited updates cancel the scheduled poll
+					if (property === "targetValue") property = "currentValue";
+					this.schedulePoll({ property }, undefined, {
+						duration,
+					});
 				}
 			}
+
+			return result;
 		} else if (switchTypeProperties.includes(property as string)) {
 			// Since the switch only supports one of the switch types, we would
 			// need to check if the correct one is used. But since the names are
@@ -498,14 +436,14 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				);
 				// And perform the level change
 				const duration = Duration.from(options?.transitionDuration);
-				await this.startLevelChange({
+				return this.startLevelChange({
 					direction,
 					ignoreStartLevel: true,
 					startLevel,
 					duration,
 				});
 			} else {
-				await this.stopLevelChange();
+				return this.stopLevelChange();
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);

@@ -1,11 +1,10 @@
-import type {
-	Maybe,
-	MessageOrCCLogEntry,
-	SupervisionResult,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -96,17 +95,21 @@ export class LockCCAPI extends PhysicalCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "locked") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "boolean") {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
-		await this.set(value);
+		const result = await this.set(value);
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property }, value);
+		// Verify the current value after a delay, unless the command was supervised and successful
+		if (!supervisedCommandSucceeded(result)) {
+			this.schedulePoll({ property }, value);
+		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

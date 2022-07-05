@@ -206,16 +206,14 @@ export type SupervisionResult =
 				| SupervisionStatus.NoSupport
 				| SupervisionStatus.Fail
 				| SupervisionStatus.Success;
+			remainingDuration?: undefined;
 	  }
 	| {
 			status: SupervisionStatus.Working;
 			remainingDuration: Duration;
 	  };
 
-export type SupervisionUpdateHandler = (
-	status: SupervisionStatus,
-	remainingDuration?: Duration,
-) => void;
+export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
 
 export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
 	return (
@@ -226,23 +224,35 @@ export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
 }
 
 export function supervisedCommandSucceeded(
-	result: SupervisionResult,
+	result: unknown,
 ): result is SupervisionResult & {
 	status: SupervisionStatus.Success | SupervisionStatus.Working;
 } {
 	return (
-		result.status === SupervisionStatus.Success ||
-		result.status === SupervisionStatus.Working
+		isSupervisionResult(result) &&
+		(result.status === SupervisionStatus.Success ||
+			result.status === SupervisionStatus.Working)
 	);
 }
 
 export function supervisedCommandFailed(
-	result: SupervisionResult,
+	result: unknown,
 ): result is SupervisionResult & {
 	status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
 } {
 	return (
-		result.status === SupervisionStatus.Fail ||
-		result.status === SupervisionStatus.NoSupport
+		isSupervisionResult(result) &&
+		(result.status === SupervisionStatus.Fail ||
+			result.status === SupervisionStatus.NoSupport)
 	);
+}
+
+export function isUnsupervisedOrSucceeded(
+	result: SupervisionResult | undefined,
+): result is
+	| undefined
+	| (SupervisionResult & {
+			status: SupervisionStatus.Success | SupervisionStatus.Working;
+	  }) {
+	return !result || supervisedCommandSucceeded(result);
 }

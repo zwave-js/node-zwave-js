@@ -146,7 +146,7 @@ export class ProtectionCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		const valueDB = this.tryGetValueDB();
 		if (property === "local") {
 			if (typeof value !== "number") {
@@ -163,7 +163,7 @@ export class ProtectionCCAPI extends CCAPI {
 					this.endpoint.index,
 				),
 			);
-			await this.set(value, rf);
+			return this.set(value, rf);
 		} else if (property === "rf") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -179,7 +179,7 @@ export class ProtectionCCAPI extends CCAPI {
 					this.endpoint.index,
 				),
 			);
-			await this.set(local ?? LocalProtectionState.Unprotected, value);
+			return this.set(local ?? LocalProtectionState.Unprotected, value);
 		} else if (property === "exclusiveControlNodeId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -189,7 +189,7 @@ export class ProtectionCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setExclusiveControl(value);
+			return this.setExclusiveControl(value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}

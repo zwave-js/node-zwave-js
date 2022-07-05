@@ -4,6 +4,7 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
+	supervisedCommandSucceeded,
 	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
@@ -240,7 +241,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		{ property },
 		value,
 		options,
-	): Promise<void> => {
+	) => {
 		if (property === "defaultToneId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -250,7 +251,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setConfiguration(value, 0xff /* keep current volume */);
+			return this.setConfiguration(value, 0xff /* keep current volume */);
 		} else if (property === "defaultVolume") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -260,7 +261,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setConfiguration(0x00 /* keep current tone */, value);
+			return this.setConfiguration(0x00 /* keep current tone */, value);
 		} else if (property === "toneId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -270,6 +271,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
+			let result: SupervisionResult | undefined;
 			if (value > 0) {
 				// Use provided volume or try to use the current volume if it exists
 				const volume =
@@ -280,14 +282,16 @@ export class SoundSwitchCCAPI extends CCAPI {
 									this.endpoint.index,
 								),
 						  );
-				await this.play(value, volume);
+				result = await this.play(value, volume);
 			} else {
-				await this.stopPlaying();
+				result = await this.stopPlaying();
 			}
-			if (this.isSinglecast()) {
-				// Verify the current value after a (short) delay
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
+				// Verify the current value after a (short) delay, unless the command was supervised and successful
 				this.schedulePoll({ property }, value, { transition: "fast" });
 			}
+
+			return result;
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
