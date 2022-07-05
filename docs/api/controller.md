@@ -743,7 +743,7 @@ The `version` and `changelog` are meant to be presented to the user prior to cho
 
 Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the user needs to select one.
 
-> [!NOTE] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work.
+> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw.
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 

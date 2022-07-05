@@ -4981,12 +4981,26 @@ ${associatedNodes.join(", ")}`,
 
 	/**
 	 * Retrieves the available firmware updates for the given node from the Z-Wave JS firmware update service.
-	 * **Note:** Sleeping nodes need to be woken up for this to work.
+	 *
+	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
+	 * which did not wake up within a minute.
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
+
+		const didNodeWakeup = await Promise.race([
+			wait(60000, true).then(() => false as const),
+			node.waitForWakeup().then(() => true as const),
+		]);
+
+		if (!didNodeWakeup) {
+			throw new ZWaveError(
+				`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
+				ZWaveErrorCodes.FWUpdateService_MissingInformation,
+			);
+		}
 
 		// Do not rely on stale information, query everything fresh from the node
 		const manufacturerResponse = await node.commandClasses[
