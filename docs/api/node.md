@@ -222,6 +222,18 @@ getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>
 
 Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
 
+> [!NOTE] This variant communicates with the node to retrieve fresh information.
+
+### `getFirmwareUpdateCapabilitiesCached`
+
+```ts
+getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities
+```
+
+Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
+
+> [!NOTE] This method uses cached information from the most recent interview.
+
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts

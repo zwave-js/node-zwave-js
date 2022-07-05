@@ -87,6 +87,10 @@ import {
 	FirmwareUpdateMetaDataCCGet,
 	FirmwareUpdateMetaDataCCReport,
 	FirmwareUpdateMetaDataCCStatusReport,
+	getAdditionalFirmwareIDsValueId,
+	getContinuesToFunctionValueId,
+	getFirmwareUpgradableValueId,
+	getSupportsActivationValueId,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
 import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -3155,7 +3159,46 @@ protocol version:      ${this.protocolVersion}`;
 		  }
 		| undefined;
 
-	/** Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update */
+	/**
+	 * Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update.
+	 * This method uses cached information from the most recent interview.
+	 */
+	public getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities {
+		const firmwareUpgradable = this.valueDB.getValue<boolean>(
+			getFirmwareUpgradableValueId(),
+		);
+		const supportsActivation = this.valueDB.getValue<boolean>(
+			getSupportsActivationValueId(),
+		);
+		const continuesToFunction = this.valueDB.getValue<boolean>(
+			getContinuesToFunctionValueId(),
+		);
+		const additionalFirmwareIDs = this.valueDB.getValue<number[]>(
+			getAdditionalFirmwareIDsValueId(),
+		);
+
+		// Ensure all information was queried
+		if (
+			!firmwareUpgradable ||
+			supportsActivation == undefined ||
+			continuesToFunction == undefined ||
+			!isArray(additionalFirmwareIDs)
+		) {
+			return { firmwareUpgradable: false };
+		}
+
+		return {
+			firmwareUpgradable: true,
+			firmwareTargets: [0, ...additionalFirmwareIDs],
+			continuesToFunction,
+			supportsActivation,
+		};
+	}
+
+	/**
+	 * Retrieves the firmware update capabilities of a node to decide which options to offer a user prior to the update.
+	 * This communicates with the node to retrieve fresh information.
+	 */
 	public async getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities> {
 		const api = this.commandClasses["Firmware Update Meta Data"];
 		const meta = await api.getMetaData();
