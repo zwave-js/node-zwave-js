@@ -11,6 +11,8 @@ export type { ControllerStatistics } from "./lib/controller/ControllerStatistics
 export { ZWaveFeature } from "./lib/controller/Features";
 export * from "./lib/controller/Inclusion";
 export {
+	FirmwareUpdateFileInfo,
+	FirmwareUpdateInfo,
 	HealNodeStatus,
 	isRssiError,
 	RSSI,

@@ -36,6 +36,20 @@ const driver = new Driver(port, {
 	.on("error", console.error)
 	.once("driver ready", async () => {
 		// Test code
+		// const updates = await driver.controller.getAvailableFirmwareUpdates(2);
+		// console.log("Found updates:");
+		// console.dir(updates, { depth: Infinity });
+		// await wait(1000);
+		// try {
+		// 	console.log(`Installing update ${updates[0].version}...`);
+		// 	await wait(1000);
+		// 	await driver.controller.beginOTAFirmwareUpdate(
+		// 		2,
+		// 		updates[0].files[0],
+		// 	);
+		// } catch (e) {
+		// 	console.error(e);
+		// }
 	});
 void driver.start();
 // driver.enableStatistics({

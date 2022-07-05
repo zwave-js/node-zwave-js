@@ -8,6 +8,7 @@ import {
 	dskFromString,
 	dskToString,
 	encodeX25519KeyDERSPKI,
+	Firmware,
 	indexDBsByNode,
 	isRecoverableZWaveError,
 	isTransmissionError,
@@ -48,6 +49,7 @@ import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
+import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
@@ -245,6 +247,10 @@ import {
 } from "./ControllerStatistics";
 import { minFeatureVersions, ZWaveFeature } from "./Features";
 import {
+	downloadFirmwareUpdate,
+	getAvailableFirmwareUpdates,
+} from "./FirmwareUpdateService";
+import {
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -260,7 +266,13 @@ import { determineNIF } from "./NodeInformationFrame";
 import { assertProvisioningEntry } from "./utils";
 import type { UnknownZWaveChipType } from "./ZWaveChipTypes";
 import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
-import type { HealNodeStatus, RSSI, SDKVersion } from "./_Types";
+import type {
+	FirmwareUpdateFileInfo,
+	FirmwareUpdateInfo,
+	HealNodeStatus,
+	RSSI,
+	SDKVersion,
+} from "./_Types";
 
 // Strongly type the event emitter events
 interface ControllerEventCallbacks
@@ -4965,5 +4977,130 @@ ${associatedNodes.join(", ")}`,
 			if (node.isFirmwareUpdateInProgress()) return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Retrieves the available firmware updates for the given node from the Z-Wave JS firmware update service.
+	 *
+	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
+	 * which did not wake up within a minute.
+	 */
+	public async getAvailableFirmwareUpdates(
+		nodeId: number,
+	): Promise<FirmwareUpdateInfo[]> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		const didNodeWakeup = await Promise.race([
+			wait(60000, true).then(() => false as const),
+			node.waitForWakeup().then(() => true as const),
+		]);
+
+		if (!didNodeWakeup) {
+			throw new ZWaveError(
+				`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
+				ZWaveErrorCodes.FWUpdateService_MissingInformation,
+			);
+		}
+
+		// Do not rely on stale information, query everything fresh from the node
+		const manufacturerResponse = await node.commandClasses[
+			"Manufacturer Specific"
+		].get();
+
+		if (!manufacturerResponse) {
+			throw new ZWaveError(
+				`Cannot check for firmware updates for node ${nodeId}: Failed to query fingerprint from the node!`,
+				ZWaveErrorCodes.FWUpdateService_MissingInformation,
+			);
+		}
+		const { manufacturerId, productType, productId } = manufacturerResponse;
+
+		const versionResponse = await node.commandClasses.Version.get();
+		if (!versionResponse) {
+			throw new ZWaveError(
+				`Cannot check for firmware updates for node ${nodeId}: Failed to query firmware version from the node!`,
+				ZWaveErrorCodes.FWUpdateService_MissingInformation,
+			);
+		}
+		const firmwareVersion = versionResponse.firmwareVersions[0];
+
+		// Now invoke the service
+		try {
+			return await getAvailableFirmwareUpdates(
+				manufacturerId,
+				productType,
+				productId,
+				firmwareVersion,
+			);
+		} catch (e: any) {
+			let message = `Cannot check for firmware updates for node ${nodeId}: `;
+			if (e.response) {
+				if (
+					isObject(e.response.data) &&
+					typeof e.response.data.message === "string"
+				) {
+					message += `${e.response.data.message} `;
+				}
+				message += `[${e.response.status} ${e.response.statusText}]`;
+			} else if (typeof e.message === "string") {
+				message += e.message;
+			} else {
+				message += `Failed to download update information!`;
+			}
+
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FWUpdateService_RequestError,
+			);
+		}
+	}
+
+	/**
+	 * Downloads the desired firmware update from the Z-Wave JS firmware update service and starts a firmware update for the given node.
+	 */
+	public async beginOTAFirmwareUpdate(
+		nodeId: number,
+		update: FirmwareUpdateFileInfo,
+	): Promise<void> {
+		const node = this.nodes.getOrThrow(nodeId);
+
+		let firmware: Firmware;
+		try {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Downloading firmware update from ${update.url}...`,
+			);
+			firmware = await downloadFirmwareUpdate(update);
+		} catch (e: any) {
+			let message = `Downloading the firmware update for node ${nodeId} failed:\n`;
+			if (isZWaveError(e)) {
+				// Pass "real" Z-Wave errors through
+				throw new ZWaveError(message + e.message, e.code);
+			} else if (e.response) {
+				// And construct a better error message for HTTP errors
+				if (
+					isObject(e.response.data) &&
+					typeof e.response.data.message === "string"
+				) {
+					message += `${e.response.data.message} `;
+				}
+				message += `[${e.response.status} ${e.response.statusText}]`;
+			} else if (typeof e.message === "string") {
+				message += e.message;
+			} else {
+				message += `Failed to download firmware update!`;
+			}
+
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.FWUpdateService_RequestError,
+			);
+		}
+
+		this.driver.controllerLog.logNode(
+			nodeId,
+			`Firmware update ${update.url} downloaded, installing...`,
+		);
+		await node.beginFirmwareUpdate(firmware.data, firmware.firmwareTarget);
 	}
 }
