@@ -1,9 +1,5 @@
-import {
-	BasicCCSet,
-	SupervisionCC,
-	SupervisionCCReport,
-	SupervisionStatus,
-} from "@zwave-js/cc";
+import { BasicCCSet, SupervisionCC, SupervisionCCReport } from "@zwave-js/cc";
+import { SupervisionStatus } from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 
 const host = createTestingHost();
