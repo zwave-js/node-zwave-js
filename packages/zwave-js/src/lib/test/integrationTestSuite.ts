@@ -171,7 +171,7 @@ export function integrationTest(
 					node.once("ready", () => {
 						if (clearMessageStatsBeforeTest) {
 							mockNode.clearReceivedControllerFrames();
-							mockNode.clearSentControllerFrames;
+							mockNode.clearSentControllerFrames();
 							mockController.clearReceivedHostMessages();
 						}
 
