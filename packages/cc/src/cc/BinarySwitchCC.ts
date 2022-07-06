@@ -1,6 +1,8 @@
 import {
 	CommandClasses,
 	Duration,
+	encodeBoolean,
+	encodeMaybeBoolean,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
@@ -9,10 +11,12 @@ import {
 	parseMaybeBoolean,
 	supervisedCommandSucceeded,
 	SupervisionResult,
+	unknownBoolean,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
+import type { AllOrNone } from "@zwave-js/shared";
 import { validateArgs } from "@zwave-js/transformers";
 import {
 	CCAPI,
@@ -321,21 +325,31 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	}
 }
 
+export type BinarySwitchCCReportOptions = CCCommandOptions & {
+	currentValue: boolean;
+} & AllOrNone<{
+		targetValue: boolean;
+		duration: Duration | string;
+	}>;
+
 @CCCommand(BinarySwitchCommand.Report)
 export class BinarySwitchCCReport extends BinarySwitchCC {
-	public constructor(
-		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
-	) {
+	public constructor(host: ZWaveHost, options: BinarySwitchCCReportOptions) {
 		super(host, options);
 
-		validatePayload(this.payload.length >= 1);
-		this.currentValue = parseMaybeBoolean(this.payload[0]);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 1);
+			this.currentValue = parseMaybeBoolean(this.payload[0]);
 
-		if (this.version >= 2 && this.payload.length >= 3) {
-			// V2
-			this.targetValue = parseBoolean(this.payload[1]);
-			this.duration = Duration.parseReport(this.payload[2]);
+			if (this.version >= 2 && this.payload.length >= 3) {
+				// V2
+				this.targetValue = parseBoolean(this.payload[1]);
+				this.duration = Duration.parseReport(this.payload[2]);
+			}
+		} else {
+			this.currentValue = options.currentValue;
+			this.targetValue = options.targetValue;
+			this.duration = Duration.from(options.duration);
 		}
 	}
 
@@ -347,6 +361,24 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	@ccValue(BinarySwitchCCValues.duration)
 	public readonly duration: Duration | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			encodeMaybeBoolean(this.currentValue ?? unknownBoolean),
+		]);
+		if (this.targetValue != undefined) {
+			this.payload = Buffer.concat([
+				this.payload,
+				Buffer.from([
+					encodeBoolean(this.targetValue),
+					(
+						this.duration ?? new Duration(0, "default")
+					).serializeReport(),
+				]),
+			]);
+		}
+		return super.serialize();
+	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		const message: MessageRecord = {

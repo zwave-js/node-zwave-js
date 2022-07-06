@@ -92,6 +92,9 @@ export class MockController {
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
 
+	/** Records the messages received from the host to perform assertions on them */
+	private receivedHostMessages: Message[] = [];
+
 	private _nodes = new Map<number, MockNode>();
 	public get nodes(): ReadonlyMap<number, MockNode> {
 		return this._nodes;
@@ -149,6 +152,7 @@ export class MockController {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
 			msg = Message.from(this.host, data, MessageOrigin.Host);
+			this.receivedHostMessages.push(msg);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);
 		} catch (e: any) {
@@ -359,6 +363,29 @@ export class MockController {
 	public defineBehavior(...behaviors: MockControllerBehavior[]): void {
 		// New behaviors must override existing ones, so we insert at the front of the array
 		this.behaviors.unshift(...behaviors);
+	}
+
+	/** Asserts that a message matching the given predicate was received from the host */
+	public assertReceivedHostMessage(
+		predicate: (msg: Message) => boolean,
+		options?: {
+			errorMessage?: string;
+		},
+	): void {
+		const { errorMessage } = options ?? {};
+		const index = this.receivedHostMessages.findIndex(predicate);
+		if (index === -1) {
+			throw new Error(
+				`Did not receive a host message matching the predicate!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		}
+	}
+
+	/** Forgets all recorded messages received from the host */
+	public clearReceivedHostMessages(): void {
+		this.receivedHostMessages = [];
 	}
 }
 
