@@ -93,7 +93,27 @@
 		{
 			"#": "16",
 			"$import": "templates/zooz_template.json#association_reports"
-		}
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion >= 10.0",
+			"label": "Enable/Disable Programming on the Paddles",
+			"description": "Enable or disable programming functionality on the switch paddles. If this setting is disabled, then inclusion, exclusion, smart bulb mode no longer work when switch paddles are activated (factory reset and scene control will still work) - that means you can now use triple-tap triggers on the switch for scenes and remote control of other devices.",
+			"defaultValue": 0,
+			"valueSize": 1,
+			"unsigned": true,
+			"allowManualEntry": false,			
+			"options": [
+				{
+					"label": "Programming Enabled",
+					"value": 0
+				},
+				{
+					"label": "Programming Disabled",
+					"value": 1
+				}
+			]			
+		}		
 	],
 	"compat": {
 		// The device sends Configuration CC info reports in 4-byte chunks, causing each query to block the network for roughly 1.5 seconds.
