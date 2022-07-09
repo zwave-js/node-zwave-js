@@ -107,7 +107,7 @@
 			"#": "2",
 			"$if": "firmwareVersion <= 3.1",
 			"label": "Motion Sensor's Blind Time (Insensitive)",
-			"description": "Period of time through which the PIR sensor is “blind”.",
+			"description": "Period of time through which the PIR sensor is \"blind\".",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -117,16 +117,16 @@
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - blind time",
-			"description": "Period of time through which the PIR sensor is “blind”.",
+			"description": "Period of time (divide by 2 to get seconds) through which the PIR sensor won't detect motion after detecting motion.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 3
+			"defaultValue": 15
 		},
 		{
 			"#": "3",
-			"label": "PIR Sensor’s “PULSE COUNTER”",
-			"description": "Sets the number of moves required for the PIR sensor to report motion.",
+			"label": "Motion detection - pulse counter",
+			"description": "Sets the number of moves required (1-4) for the PIR sensor to report motion. The more the value is, the less sensitive it is.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -134,12 +134,29 @@
 		},
 		{
 			"#": "4",
-			"label": "PIR Sensor’s “WINDOW TIME”",
-			"description": "The higher the value, the more sensitive the PIR sensor.",
+			"label": "Motion detection - window time",
+			"description": "The amount of time the movements specified in parameter #4 need to take place in. The higher the value, the more sensitive the PIR sensor.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 2
+			"defaultValue": 2,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "4 seconds",
+					"value": 0
+				},
+				{
+					"label": "8 seconds",
+					"value": 1
+				},
+				{
+					"label": "12 seconds",
+					"value": 2
+				},
+				{
+					"label": "16 seconds",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "6",
@@ -147,16 +164,14 @@
 			"label": "Motion Alarm Cancellation Delay",
 			"description": "Period of time after wich Motion alarm will be cancelled.",
 			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 65535,
 			"defaultValue": 30,
-			"unsigned": true
+			"allowManualEntry": false
 		},
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - alarm cancellation delay",
-			"description": "Period of time after wich Motion alarm will be cancelled.",
+			"description": "Amount of time (seconds) the alarm will be canceled after.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -199,7 +214,7 @@
 			"#": "9",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - night/day",
-			"description": "The parameter defines the difference between night and day.",
+			"description": "The difference between night and day (lux), used in parameter #8.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -207,8 +222,32 @@
 		},
 		{
 			"#": "12",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "BASIC command class configuration",
-			"description": "Determines the command frames sent in 1st association group.",
+			"description": "Determines the command frames sent to 1st association group.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC ON and BASIC OFF",
+					"value": 0
+				},
+				{
+					"label": "Only the BASIC ON",
+					"value": 1
+				},
+				{
+					"label": "Only the BASIC OFF",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "12",
+			"$if": "firmwareVersion >= 3.2",
+			"label": "BASIC command class configuration",
+			"description": "Determines the command frames sent to 2nd association group.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -273,7 +312,7 @@
 			"#": "18",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Associations in Z-Wave network Security Mode",
-			"description": "This parameter defines how commands are sent in specified association groups",
+			"description": "This parameter defines in which association groups commands should be secure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -293,7 +332,7 @@
 			"#": "20",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Tamper - sensitivity",
-			"description": "Change in force that will result in tamper alarm",
+			"description": "Change in g-force acceleration that will result in the tamper alarm where 0 = off, 1 = 0.08g (most sensitive), and 121 = 2g (least sensitive).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 121,
@@ -314,7 +353,7 @@
 			"#": "22",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Tamper - alarm cancellation delay",
-			"description": "Time period after which a tamper alarm will be cancelled.",
+			"description": "Time period after which a tamper alarm will be cancelled (seconds).",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -385,7 +424,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Do not send tamper cancellation report",
+					"label": "Don't send tamper cancellation report",
 					"value": 0
 				},
 				{
@@ -396,6 +435,7 @@
 		},
 		{
 			"#": "26",
+			"$if": "firmwareVersion <= 3.1",
 			"label": "Tamper Alarm Broadcast Mode",
 			"description": "Alarm frame will or will not be sent in broadcast mode.",
 			"valueSize": 1,
@@ -446,7 +486,7 @@
 					"value": 0
 				},
 				{
-					"label": "Reported in broadcast mode to 5th assoc grp",
+					"label": "Reported in broadcast mode",
 					"value": 1
 				}
 			]
@@ -466,7 +506,7 @@
 			"#": "40",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Illuminance report - threshold",
-			"description": "Change in light intensity level resulting in illumination report",
+			"description": "Minimum change in light intensity level resulting in illumination report (lux).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -487,7 +527,7 @@
 			"#": "42",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Illuminance report - interval",
-			"description": "Time interval between consecutive illumination reports",
+			"description": "Time interval (seconds) between consecutive illumination reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -508,7 +548,7 @@
 			"#": "60",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature report - threshold",
-			"description": "The change in temperature resulting in temperature report",
+			"description": "The change in temperature resulting in temperature report (where 255 = 25.5°C).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -550,7 +590,7 @@
 			"#": "64",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature report - interval",
-			"description": "How often the temperature reports will be sent",
+			"description": "Time interval (seconds) between consecutive temperature reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -571,7 +611,7 @@
 			"#": "66",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature offset",
-			"description": "Value added to the actual temperature",
+			"description": "Value added to the actual temperature (1000 = 100°C, -1000 = -100°C).",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -580,18 +620,18 @@
 		{
 			"#": "80",
 			"label": "LED Signalling Mode",
-			"description": "Way in which LED diode behaves after motion has been detected.",
+			"description": "How the light behaves after motion has been detected.",
 			"valueSize": 1,
 			"defaultValue": 10,
 			"unsigned": true,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED inactive.",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "LED colour depends on the temperature.",
+					"label": "Depends on the temperature",
 					"value": 1
 				},
 				{
@@ -599,99 +639,99 @@
 					"value": 2
 				},
 				{
-					"label": "White.",
+					"label": "White",
 					"value": 3
 				},
 				{
-					"label": "Red.",
+					"label": "Red",
 					"value": 4
 				},
 				{
-					"label": "Green.",
+					"label": "Green",
 					"value": 5
 				},
 				{
-					"label": "Blue.",
+					"label": "Blue",
 					"value": 6
 				},
 				{
-					"label": "Yellow.",
+					"label": "Yellow",
 					"value": 7
 				},
 				{
-					"label": "Cyan.",
+					"label": "Cyan",
 					"value": 8
 				},
 				{
-					"label": "Magenta.",
+					"label": "Magenta",
 					"value": 9
 				},
 				{
-					"label": "LED colour depends on the temperature",
+					"label": "Depends on the temperature (blink again when motion is detected)",
 					"value": 10
 				},
 				{
-					"label": "Flashlight mode",
+					"label": "Flashlight mode (motion extends the flashlight)",
 					"value": 11
 				},
 				{
-					"label": "White",
+					"label": "White (blink again when motion is detected)",
 					"value": 12
 				},
 				{
-					"label": "Red",
+					"label": "Red (blink again when motion is detected)",
 					"value": 13
 				},
 				{
-					"label": "Green",
+					"label": "Green (blink again when motion is detected)",
 					"value": 14
 				},
 				{
-					"label": "Blue",
+					"label": "Blue (blink again when motion is detected)",
 					"value": 15
 				},
 				{
-					"label": "Yellow",
+					"label": "Yellow (blink again when motion is detected)",
 					"value": 16
 				},
 				{
-					"label": "Cyan",
+					"label": "Cyan (blink again when motion is detected)",
 					"value": 17
 				},
 				{
-					"label": "Magenta",
+					"label": "Magenta (blink again when motion is detected)",
 					"value": 18
 				},
 				{
-					"label": "LED colour depends on the temperature",
+					"label": "LED colour depends on the temperature (blink twice again when motion is detected)",
 					"value": 19
 				},
 				{
-					"label": "White",
+					"label": "White (blink twice again when motion is detected)",
 					"value": 20
 				},
 				{
-					"label": "Red",
+					"label": "Red (blink twice again when motion is detected)",
 					"value": 21
 				},
 				{
-					"label": "Green",
+					"label": "Green (blink twice again when motion is detected)",
 					"value": 22
 				},
 				{
-					"label": "Blue",
+					"label": "Blue (blink twice again when motion is detected)",
 					"value": 23
 				},
 				{
-					"label": "Yellow",
+					"label": "Yellow (blink twice again when motion is detected)",
 					"value": 24
 				},
 				{
-					"label": "Cyan",
+					"label": "Cyan (blink twice again when motion is detected)",
 					"value": 25
 				},
 				{
-					"label": "Magenta",
+					"label": "Magenta (blink twice again when motion is detected)",
 					"value": 26
 				}
 			]
@@ -699,7 +739,7 @@
 		{
 			"#": "81",
 			"label": "LED Brightness",
-			"description": "The parameter determines the brightness of LED when indicating motion.",
+			"description": "Percent brightness the LED lights up to.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -720,7 +760,7 @@
 			"#": "82",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - illuminance for low indicator brightness",
-			"description": "Light intensity level below which brightness of visual indicator is set to 1%.",
+			"description": "When the light intensity (lux) is below this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -741,7 +781,7 @@
 			"#": "83",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - illuminance for high indicator brightness",
-			"description": "Light intensity level above which brightness of visual indicator is set to 100%.",
+			"description": "When the light intensity (lux) is above this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -761,7 +801,7 @@
 			"#": "86",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - temperature for blue colour",
-			"description": "Minimum temperature resulting in blue LED illumination",
+			"description": "When the temperature is below this (°C), the light is blue.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -781,7 +821,7 @@
 			"#": "87",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - temperature for red colour",
-			"description": "Minimum temperature resulting in red LED illumination",
+			"description": "When the temperature is above this (°C), the light is blue.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -811,7 +851,7 @@
 			"#": "89",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - tamper alarm",
-			"description": "Indicating mode resembles a police car (white, red and blue",
+			"description": "Indicating mode resembles a police car (white, red and blue)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
