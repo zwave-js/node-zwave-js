@@ -164,8 +164,10 @@
 			"label": "Motion Alarm Cancellation Delay",
 			"description": "Period of time after wich Motion alarm will be cancelled.",
 			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
 			"defaultValue": 30,
-			"allowManualEntry": false
+			"unsigned": true
 		},
 		{
 			"#": "6",
