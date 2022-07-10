@@ -14,6 +14,10 @@
 		},
 		{
 			"productType": "0x0602",
+			"productId": "0x4001"
+		},
+		{
+			"productType": "0x0602",
 			"productId": "0x4003"
 		}
 	],
