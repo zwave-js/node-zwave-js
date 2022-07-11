@@ -36,7 +36,7 @@
 			"maxValue": 3600,
 			"defaultValue": 240,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -52,7 +52,7 @@
 			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Restart timeout with each motion event",
@@ -73,7 +73,7 @@
 			"maxValue": 3600,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Disable motion clear report",
@@ -90,7 +90,7 @@
 			"maxValue": 50,
 			"defaultValue": 10,
 			"unsigned": true,
-			"readOnly": true
+			"readOnly": false
 		},
 		{
 			"#": "5",
@@ -101,7 +101,7 @@
 			"maxValue": 120,
 			"defaultValue": 12,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -118,7 +118,7 @@
 			"maxValue": 60,
 			"defaultValue": 50,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -145,7 +145,7 @@
 			"maxValue": 120,
 			"defaultValue": 6,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"options": [
 				{
 					"label": "Disable",
@@ -163,7 +163,7 @@
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
-			"readOnly": true,
+			"readOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
