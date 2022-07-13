@@ -67,7 +67,7 @@
 	"metadata": {
 		"inclusion": "With the bulb turned off, start the inclusion process on your hub/gateway.  Once the inclusion process has started, turn on the bulb and it will immediately blink twice (2x) indicating it's in inclusion (pairing) mode.  If the bulb was included successfully, it will blink one more (1x) time.  If it was not included successfully, you may have to run an exclusion.  If there's still issues, please ensure your bulb is within range.",
 		"exclusion": "Put your hub in exclusion mode and turn the power to the bulb on.  Your bulb will blink twice (2x) indicating it's in exclusion mode.  When exclusion is successful, it will blink one more time (1x) to confirm.  Your hub should say that the device is excluded.",
-		"reset": "You may power on/off the bulb 6x (between 0.5-2 seconds each time) or useacertifiedcontroller to remove the device from your network to factory default.  Only use this procedure in the event that the network primary controller is missing or otherwise inoperable.  Your bulb will flash twice to confirm factory reset.",
+		"reset": "You may power on/off the bulb 6x (between 0.5-2 seconds each time) or use a certified controller to remove the device from your network to factory default.  Only use this procedure in the event that the network primary controller is missing or otherwise inoperable.  Your bulb will flash twice to confirm factory reset.",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3613/LZW42%20Manual.pdf"
 	}
 }
