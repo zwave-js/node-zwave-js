@@ -1,0 +1,169 @@
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "Z-DIM2",
+	"description": "Heatit Z-Dim2",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0004",
+			"zwaveAllianceId": 4666
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch Multilevel",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Power Restore Level",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"unsigned": true
+		},
+		{
+			"#": "10",
+			"label": "Load Dimming Mode",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "11",
+			"label": "Maximum Dim Level",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 90,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Meter Report Threshold",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "13",
+			"label": "Meter Report Interval",
+			"description": "0",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 65535,
+			"defaultValue": 780,
+			"unsigned": true
+		},
+		{
+			"#": "2",
+			"label": "Switch On Level",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Automatic Turn Off",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Automatic Turn On",
+			"description": "0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 86400,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Turn Off Delay Time",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Rotary Wheel Press Functionality",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "External Switch Functionality",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Dimming Duration",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"unsigned": true
+		},
+		{
+			"#": "9",
+			"label": "Choose The Dimmer Curve",
+			"description": "0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true
+		}
+	],
+	"metadata": {
+		"inclusion": "The primary controller/gateway has a mode for adding devices. Please refer to your primary controller manual on how to set the primary controller in add mode. The device may only be added to the network if the primary controller is in add mode. \n\nMethod 1: Standard (Manual)\nAdd mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been added to the network. To start the configuration process press the Reset button, or the external switch connected to P, 3 times in rapid succession. The LED will blink green for 3 seconds if adding is successful. The device is now ready for use with default settings",
+		"exclusion": "The primary controller/gateway has a mode for removing devices. Please refer to your primary controller manual on how to set the primary controller in remove mode. The device may only be removed from the network if the primary controller is in remove mode. When the device is removed from the network, it will NOT revert to factory settings.\n\nRemove mode is indicated on the device by a blinking green LED. It indicates this for 90 seconds until a timeout occurs, or until the module has been removed from the network. To start the configuration process press the Reset button, or the external switch connected to P, 3 times in rapid succession. The LED will blink green for 3 seconds if removing is successful. The device is now ready for use with default settings",
+		"reset": "Press and hold the reset button. After 3 seconds the LED will start to blink in green. After 20 seconds the LED will shine solid green for 3 seconds. You may now release the button.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}
