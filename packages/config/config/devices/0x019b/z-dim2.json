@@ -1,5 +1,5 @@
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-DIM2",
 	"description": "Heatit Z-Dim2",
@@ -8,6 +8,10 @@
 			"productType": "0x0002",
 			"productId": "0x0004",
 			"zwaveAllianceId": 4666
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x2201"
 		}
 	],
 	"firmwareVersion": {
@@ -33,27 +37,44 @@
 		{
 			"#": "1",
 			"label": "Power Restore Level",
-			"description": "0",
+			"description": "Range between 0(off) and 99(max)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Returns to level before power outage",
+					"value": 100
+				}
+			]
 		},
 		{
 			"#": "10",
 			"label": "Load Dimming Mode",
-			"description": "0",
+			"description": "Choose the dimming type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trailing edge",
+					"value": 0
+				},
+				{
+					"label": "Leading edge",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "11",
 			"label": "Maximum Dim Level",
-			"description": "0",
+			"description": "Max dim level, range 2-99",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -63,7 +84,7 @@
 		{
 			"#": "12",
 			"label": "Meter Report Threshold",
-			"description": "0",
+			"description": "Threshold for meter report, defined in W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 250,
@@ -73,7 +94,7 @@
 		{
 			"#": "13",
 			"label": "Meter Report Interval",
-			"description": "0",
+			"description": "Time between meter reports, defined in seconds",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 65535,
@@ -83,67 +104,121 @@
 		{
 			"#": "2",
 			"label": "Switch On Level",
-			"description": "0",
+			"description": "Dimming level when restored from the OFF state, range 1-99",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Restores last dim level",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "3",
 			"label": "Automatic Turn Off",
-			"description": "0",
+			"description": "Timer to automaticly turn off dimmer, defined in seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Auto OFF disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "4",
 			"label": "Automatic Turn On",
-			"description": "0",
+			"description": "Timer to automaticly turn on dimmer, defined in seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Auto ON disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "5",
 			"label": "Turn Off Delay Time",
-			"description": "0",
+			"description": "The time it takes before the dimmer turns off after turning it off, defined in seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "6",
 			"label": "Rotary Wheel Press Functionality",
-			"description": "0",
+			"description": "Defines action for button push",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double click to 100%",
+					"value": 0
+				},
+				{
+					"label": "Scene controller function",
+					"value": 1
+				},
+				{
+					"label": "Disabled",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "7",
 			"label": "External Switch Functionality",
-			"description": "0",
+			"description": "Decide how external switch function.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double click to 100%",
+					"value": 0
+				},
+				{
+					"label": "Scene controller function",
+					"value": 1
+				},
+				{
+					"label": "Disabled",
+					"value": 2
+				}
+			]
 		},
 		{
 			"#": "8",
 			"label": "Dimming Duration",
-			"description": "0",
+			"description": "Define dimming time using external source, defined in MS",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -158,7 +233,18 @@
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Linear dimming",
+					"value": 0
+				},
+				{
+					"label": "Logarithmic dimming",
+					"value": 1
+				}
+			]
 		}
 	],
 	"metadata": {
