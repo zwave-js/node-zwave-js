@@ -45,7 +45,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Returns to level before power outage",
+					"label": "Return to last level",
 					"value": 100
 				}
 			]
