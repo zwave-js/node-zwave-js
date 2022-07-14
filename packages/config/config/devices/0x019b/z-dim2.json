@@ -5,8 +5,8 @@
 	"description": "Heatit Z-Dim2",
 	"devices": [
 		{
-			"productType": "0x0002",
-			"productId": "0x0004",
+			"productType": "0x0004",
+			"productId": "0x2201",
 			"zwaveAllianceId": 4666
 		},
 		{
