@@ -140,6 +140,33 @@
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Suppress State Reporting When Local Control is Disabled"
 	},
+	"led_indicator_four_options_inverted": {
+		"label": "LED Indicator",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 3,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "On when load is on",
+				"value": 0
+			},
+			{
+				"label": "On when load is off",
+				"value": 1
+			},
+			{
+				"label": "LED always off",
+				"value": 2
+			},
+			{
+				"label": "LED always on",
+				"value": 3
+			}
+		]
+	},
 	"led_indicator_color": {
 		"label": "Led Indicator: Color",
 		"valueSize": 1,
@@ -272,5 +299,32 @@
 		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Send Status Change Report: Timer",
 		"defaultValue": 1
+	},
+	"power_meter_reporting_threshold_time": {
+		"label": "Time Reporting Threshold",
+		"valueSize": 4,
+		"unit": "minutes",
+		"minValue": 1,
+		"maxValue": 65535,
+		"defaultValue": 5,
+		"unsigned": true
+	},
+	"power_meter_reporting_threshold_current": {
+		"label": "Current Reporting Threshold",
+		"valueSize": 1,
+		"unit": "0.1 A",
+		"minValue": 1,
+		"maxValue": 10,
+		"defaultValue": 1,
+		"unsigned": true
+	},
+	"power_meter_reporting_threshold_energy": {
+		"label": "Energy Reporting Threshold",
+		"valueSize": 1,
+		"unit": "0.01 kWh",
+		"minValue": 1,
+		"maxValue": 100,
+		"defaultValue": 1,
+		"unsigned": true
 	}
 }
