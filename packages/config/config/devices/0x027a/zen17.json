@@ -490,6 +490,92 @@
 			]
 		},
 		{
+			"#": "19",
+			"label": "Reverse the reported values for your selected input type on S1 C terminals",
+			"description": "Reverse the reported values for your selected input type on S1 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)"
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Values reported as normally open, not reversed (default)",
+					"value": 0
+				},
+				{
+					"label": "Leak alarm (water sensor)",
+					"value": 4
+				},
+				{
+					"label": "Heat alarm",
+					"value": 5
+				}
+				{
+					"label": "Motion alert",
+					"value": 6
+				},
+				{
+					"label": "Open/close alert (door sensor)",
+					"value": 7
+				},
+				{
+					"label": "CO alarm",
+					"value": 8
+				}
+				{
+					"label": "CO2 alarm",
+					"value": 9
+				}
+				{
+					"label": "On/off report (dry contact switch/sensor)",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "20",
+			"label": "Reverse the reported values for your selected input type on S2 C terminals",
+			"description": "Reverse the reported values for your selected input type on S2 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)"
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Values reported as normally open, not reversed (default)",
+					"value": 0
+				},
+				{
+					"label": "Leak alarm (water sensor)",
+					"value": 4
+				},
+				{
+					"label": "Heat alarm",
+					"value": 5
+				}
+				{
+					"label": "Motion alert",
+					"value": 6
+				},
+				{
+					"label": "Open/close alert (door sensor)",
+					"value": 7
+				},
+				{
+					"label": "CO alarm",
+					"value": 8
+				}
+				{
+					"label": "CO2 alarm",
+					"value": 9
+				}
+				{
+					"label": "On/off report (dry contact switch/sensor)",
+					"value": 10
+				}
+			]
+		},
+		{
 			"#": "24",
 			"label": "DC Motor Mode",
 			"description": "Sync R1 and R2 together to prevent both being activated at the same time",
