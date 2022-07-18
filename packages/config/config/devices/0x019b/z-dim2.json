@@ -156,12 +156,8 @@
 		{
 			"#": "6",
 			"label": "Rotary Wheel Press Functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
+			"$import": "~/templates/master_template.json#base_0-2_options_nounit",
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Double click to 100%",
@@ -180,12 +176,8 @@
 		{
 			"#": "7",
 			"label": "External Switch Functionality",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
+			"$import": "~/templates/master_template.json#base_0-2_options_nounit",
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Double click to 100%",
