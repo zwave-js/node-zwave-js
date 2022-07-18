@@ -85,7 +85,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Motion Sensor's Sensitivity",
+			"label": "Motion Sensor Sensitivity",
 			"description": "The lower the value, the more sensitive the PIR sensor.",
 			"valueSize": 1,
 			"minValue": 8,
@@ -96,7 +96,7 @@
 		{
 			"#": "1",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Motion detection - sensitivity",
+			"label": "Motion Sensor Sensitivity",
 			"description": "The lower the value, the more sensitive the PIR sensor.",
 			"valueSize": 2,
 			"minValue": 8,
@@ -106,7 +106,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Motion Sensor's Blind Time (Insensitive)",
+			"label": "After Motion Blind Time",
 			"description": "Period of time through which the PIR sensor is \"blind\".",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +116,7 @@
 		{
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Motion detection - blind time",
+			"label": "After Motion Blind Time",
 			"description": "Period of time through which the PIR sensor won't detect motion after detecting motion.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -126,16 +126,33 @@
 		},
 		{
 			"#": "3",
-			"label": "Motion detection - pulse counter",
-			"description": "Sets the number of moves required (1-4) for the PIR sensor to report motion. The more the value is, the less sensitive it is.",
+			"label": "Motion Pulses Required",
+			"description": "Sets the number of moves required for the PIR sensor to report motion. The more the value is, the less sensitive it is.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1 move",
+					"value": 0
+				},
+				{
+					"label": "2 moves",
+					"value": 1
+				},
+				{
+					"label": "3 moves",
+					"value": 2
+				},
+				{
+					"label": "4 moves",
+					"value": 3
+				}
+			]
 		},
 		{
 			"#": "4",
-			"label": "Motion detection - window time",
+			"label": "Motion Window Time",
 			"description": "The amount of time the movements specified in parameter #4 need to take place in. The higher the value, the more sensitive the PIR sensor.",
 			"valueSize": 1,
 			"defaultValue": 2,
@@ -173,7 +190,7 @@
 		{
 			"#": "6",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Motion detection - alarm cancellation delay",
+			"label": "Motion Alarm Cancellation Delay",
 			"description": "Amount of time the alarm will be canceled after.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -183,7 +200,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Motion detection - operating mode",
+			"label": "Motion Day/Night Mode",
 			"description": "The parameter determines the part of day in which the PIR sensor will be active.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -206,7 +223,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Night / Day",
+			"label": "Night/Day Threshold",
 			"description": "The parameter defines the difference between night and day.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -217,7 +234,7 @@
 		{
 			"#": "9",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Motion detection - night/day",
+			"label": "Night/Day Threshold",
 			"description": "The difference between night and day, used in parameter #8.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -228,7 +245,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "BASIC command class configuration",
+			"label": "BASIC Command Class Configuration",
 			"description": "Determines the command frames sent to 1st association group.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -251,7 +268,7 @@
 		{
 			"#": "12",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "BASIC command class configuration",
+			"label": "BASIC Command Class Configuration",
 			"description": "Determines the command frames sent to 2nd association group.",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -274,7 +291,7 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "BASIC ON command frame value",
+			"label": "BASIC ON Command Frame Value",
 			"description": "The value of 255 allows to turn ON a device.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -285,7 +302,7 @@
 		{
 			"#": "14",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "BASIC ON command frame value",
+			"label": "BASIC ON Command Frame Value",
 			"description": "The value of 255 allows to turn ON a device.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -295,7 +312,7 @@
 		{
 			"#": "16",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "BASIC OFF command frame value",
+			"label": "BASIC OFF Command Frame Value",
 			"description": "The value of 0 allows to turn OFF a device.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -306,23 +323,37 @@
 		{
 			"#": "16",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "BASIC OFF command frame value",
+			"label": "BASIC OFF Command Frame Value",
 			"description": "The value of 0 allows to turn OFF a device.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		{
-			"#": "18",
-			"$if": "firmwareVersion >= 3.2",
-			"label": "Associations in Z-Wave network Security Mode",
-			"description": "This parameter defines in which association groups commands should be secure.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15
-		},
+		{ 
+			"#": "18[0x01]", 
+			"$if": "firmwareVersion >= 3.2", 
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2", 
+			"defaultValue": 1 
+		}, 
+		{ 
+			"#": "18[0x02]", 
+			"$if": "firmwareVersion >= 3.2", 
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3", 
+			"defaultValue": 1 
+		}, 
+		{ 
+			"#": "18[0x04]", 
+			"$if": "firmwareVersion >= 3.2", 
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4", 
+			"defaultValue": 1 
+		}, 
+		{ 
+			"#": "18[0x08]", 
+			"$if": "firmwareVersion >= 3.2", 
+			"$import": "templates/fibaro_template.json#send_secure_commands_group5", 
+			"defaultValue": 1 
+		}, 
 		{
 			"#": "20",
 			"$if": "firmwareVersion <= 3.1",
@@ -336,7 +367,7 @@
 		{
 			"#": "20",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - sensitivity",
+			"label": "Tamper Sensitivity",
 			"description": "Change in g-force acceleration that will result in the tamper alarm where 0 = off, 1 = 0.08g (most sensitive), and 121 = 2g (least sensitive).",
 			"valueSize": 1,
 			"minValue": 0,
@@ -346,7 +377,7 @@
 		{
 			"#": "22",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Tamper - alarm cancellation delay",
+			"label": "Tamper Alarm Cancellation Delay",
 			"description": "Time period after which a tamper alarm will be cancelled.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -357,7 +388,7 @@
 		{
 			"#": "22",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - alarm cancellation delay",
+			"label": "Tamper Alarm Cancellation Delay",
 			"description": "Time period after which a tamper alarm will be cancelled.",
 			"valueSize": 2,
 			"minValue": 1,
@@ -400,7 +431,7 @@
 		{
 			"#": "24",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - operating modes",
+			"label": "Tamper Operating Modes",
 			"description": "This parameter determines function of the tamper and sent reports",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -423,7 +454,7 @@
 		{
 			"#": "25",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - alarm cancellation",
+			"label": "Tamper Alarm Cancellation",
 			"description": "This parameter allows to disable cancellation of the tamper alarm.",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -450,11 +481,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Tamper alarm is not sent in broadcast mode.",
+					"label": "Tamper alarm is not sent in broadcast mode",
 					"value": 0
 				},
 				{
-					"label": "Tamper alarm sent in broadcast mode.",
+					"label": "Tamper alarm sent in broadcast mode",
 					"value": 1
 				}
 			]
@@ -462,14 +493,14 @@
 		{
 			"#": "28",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - broadcast mode",
+			"label": "Tamper Alarm Broadcast Mode",
 			"description": "Determines whether the tamper alarm frame will be sent in broadcast mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reported to association groups.",
+					"label": "Reported to association groups",
 					"value": 0
 				},
 				{
@@ -481,14 +512,14 @@
 		{
 			"#": "29",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Tamper - backward compatible broadcast mode",
+			"label": "Tamper Backward Compatible Broadcast Mode",
 			"description": "Determines whether the tamper alarm frame will be sent in broadcast mode",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Reported to association groups.",
+					"label": "Reported to association groups",
 					"value": 0
 				},
 				{
@@ -511,7 +542,7 @@
 		{
 			"#": "40",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Illuminance report - threshold",
+			"label": "Illuminance Report Threshold",
 			"description": "Minimum change in light intensity level resulting in illumination report.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -522,7 +553,7 @@
 		{
 			"#": "42",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Illumination Reports Interval",
+			"label": "Illumination Report Interval",
 			"description": "Time interval between consecutive illumination reports.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -533,7 +564,7 @@
 		{
 			"#": "42",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Illuminance report - interval",
+			"label": "Illuminance Report Interval",
 			"description": "Time interval between consecutive illumination reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
@@ -555,7 +586,7 @@
 		{
 			"#": "60",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature report - threshold",
+			"label": "Temperature Report Threshold",
 			"description": "The change in temperature resulting in temperature report.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -566,7 +597,7 @@
 		{
 			"#": "62",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Interval of Temperature Measuring",
+			"label": "Temperature Measuring Interval",
 			"description": "The parameter determines how often the temperature will be measured.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -577,7 +608,7 @@
 		{
 			"#": "62",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature measuring - interval",
+			"label": "Temperature Measuring Interval",
 			"description": "How often the temperature will be measured",
 			"valueSize": 2,
 			"minValue": 0,
@@ -587,7 +618,7 @@
 		{
 			"#": "64",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Temperature Reports Interval",
+			"label": "Temperature Report Interval",
 			"description": "How often temperature reports will be sent to the main controller.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -598,7 +629,7 @@
 		{
 			"#": "64",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature report - interval",
+			"label": "Temperature Report Interval",
 			"description": "Time interval between consecutive temperature reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
@@ -620,7 +651,7 @@
 		{
 			"#": "66",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "Temperature offset",
+			"label": "Temperature Offset",
 			"description": "Value added to the actual temperature.",
 			"valueSize": 2,
 			"minValue": -1000,
@@ -760,7 +791,7 @@
 		{
 			"#": "82",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Lower Ambient Illumination Level",
+			"label": "Low Brightness Illuminance Threshold",
 			"description": "Below which LED brightness is set to 1%",
 			"valueSize": 2,
 			"minValue": 0,
@@ -771,7 +802,7 @@
 		{
 			"#": "82",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED - illuminance for low indicator brightness",
+			"label": "Low Brightness Illuminance Threshold",
 			"description": "When the light intensity is below this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -782,7 +813,7 @@
 		{
 			"#": "83",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Upper Ambient Illumination Level",
+			"label": "High Brightness Illuminance Threshold",
 			"description": "Above which LED brightness is set to 100%",
 			"valueSize": 2,
 			"minValue": 0,
@@ -793,7 +824,7 @@
 		{
 			"#": "83",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED - illuminance for high indicator brightness",
+			"label": "High Brightness Illuminance Threshold",
 			"description": "When the light intensity is above this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -804,7 +835,7 @@
 		{
 			"#": "86",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Min Temperature Resulting in Blue LED Illumination",
+			"label": "Low Temperature Threshold For Blue",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -814,7 +845,7 @@
 		{
 			"#": "86",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED - temperature for blue colour",
+			"label": "Low Temperature Threshold For Blue",
 			"description": "When the temperature is below this, the light is blue.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -825,7 +856,7 @@
 		{
 			"#": "87",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "Max Temperature Resulting in Red LED Illumination",
+			"label": "High Temperature Threshold For Red",
 			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -835,7 +866,7 @@
 		{
 			"#": "87",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED - temperature for red colour",
+			"label": "High Temperature Threshold For Red",
 			"description": "When the temperature is above this, the light is red.",
 			"valueSize": 2,
 			"minValue": 0,
@@ -846,7 +877,7 @@
 		{
 			"#": "89",
 			"$if": "firmwareVersion <= 3.1",
-			"label": "LED indicating Tamper Alarm",
+			"label": "LED Tamper Alarm",
 			"description": "Indicating mode resembles a police car (white, red and blue).",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -854,11 +885,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED does not indicate tamper alarm.",
+					"label": "LED does not indicate tamper alarm",
 					"value": 0
 				},
 				{
-					"label": "LED indicates tamper alarm.",
+					"label": "LED indicates tamper alarm",
 					"value": 1
 				}
 			]
@@ -866,18 +897,18 @@
 		{
 			"#": "89",
 			"$if": "firmwareVersion >= 3.2",
-			"label": "LED - tamper alarm",
+			"label": "LED Tamper Alarm",
 			"description": "Indicating mode resembles a police car (white, red and blue)",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED does not indicate tamper alarm.",
+					"label": "LED does not indicate tamper alarm",
 					"value": 0
 				},
 				{
-					"label": "LED indicates tamper alarm.",
+					"label": "LED indicates tamper alarm",
 					"value": 1
 				}
 			]
