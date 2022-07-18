@@ -92,17 +92,17 @@
 		{
 			"#": "13",
 			"label": "Meter Report Interval",
-			"description": "Time between meter reports, defined in seconds",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 780,
+			"unit": "s",
 			"unsigned": true
 		},
 		{
 			"#": "2",
 			"label": "Switch On Level",
-			"description": "Dimming level when restored from the OFF state, range 1-99",
+			"description": "Dimming level when restored from the OFF state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -118,12 +118,13 @@
 		{
 			"#": "3",
 			"label": "Automatic Turn Off",
-			"description": "Timer to automaticly turn off dimmer, defined in seconds",
+			"description": "Timer to automaticly turn off dimmer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
+			"unit": "s",
 			"options": [
 				{
 					"label": "Auto OFF disabled",
@@ -134,12 +135,13 @@
 		{
 			"#": "4",
 			"label": "Automatic Turn On",
-			"description": "Timer to automaticly turn on dimmer, defined in seconds",
+			"description": "Timer to automaticly turn on dimmer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
+			"unit": "s",
 			"options": [
 				{
 					"label": "Auto ON disabled",
@@ -150,12 +152,12 @@
 		{
 			"#": "5",
 			"label": "Turn Off Delay Time",
-			"description": "The time it takes before the dimmer turns off after turning it off, defined in seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
 			"defaultValue": 0,
 			"unsigned": true,
+			"unit": "s",
 			"options": [
 				{
 					"label": "Disabled",
