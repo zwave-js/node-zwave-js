@@ -55,9 +55,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Dimming Principle",
-			"description": "Choose the dimming type",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#dimmer_type_trail_lead",
 			"defaultValue": 1,
 			"options": [
 				{
