@@ -100,6 +100,7 @@
 		}
 	],
 	"compat": {
+		// The device does not pad ASCII data to fill 16-byte blocks
 		"disableStrictEntryControlDataValidation": true
 	},
 	"metadata": {
