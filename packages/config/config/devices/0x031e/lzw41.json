@@ -43,11 +43,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Nothing",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Switch Multilevel Report",
+					"label": "Multilevel Switch Report",
 					"value": 1
 				}
 			]
