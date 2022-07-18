@@ -117,11 +117,12 @@
 			"#": "2",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - blind time",
-			"description": "Period of time (divide by 2 to get seconds) through which the PIR sensor won't detect motion after detecting motion.",
+			"description": "Period of time through which the PIR sensor won't detect motion after detecting motion.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
-			"defaultValue": 15
+			"defaultValue": 15,
+			"unit": "2 seconds"
 		},
 		{
 			"#": "3",
@@ -173,11 +174,12 @@
 			"#": "6",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - alarm cancellation delay",
-			"description": "Amount of time (seconds) the alarm will be canceled after.",
+			"description": "Amount of time the alarm will be canceled after.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"unit": "seconds"
 		},
 		{
 			"#": "8",
@@ -216,11 +218,12 @@
 			"#": "9",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Motion detection - night/day",
-			"description": "The difference between night and day (lux), used in parameter #8.",
+			"description": "The difference between night and day, used in parameter #8.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 200
+			"defaultValue": 200,
+			"unit": "lux"
 		},
 		{
 			"#": "12",
@@ -355,11 +358,12 @@
 			"#": "22",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Tamper - alarm cancellation delay",
-			"description": "Time period after which a tamper alarm will be cancelled (seconds).",
+			"description": "Time period after which a tamper alarm will be cancelled.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
-			"defaultValue": 30
+			"defaultValue": 30,
+			"unit": "seconds"
 		},
 		{
 			"#": "24",
@@ -508,11 +512,12 @@
 			"#": "40",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Illuminance report - threshold",
-			"description": "Minimum change in light intensity level resulting in illumination report (lux).",
+			"description": "Minimum change in light intensity level resulting in illumination report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 200
+			"defaultValue": 200,
+			"unit": "lux"
 		},
 		{
 			"#": "42",
@@ -529,11 +534,12 @@
 			"#": "42",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Illuminance report - interval",
-			"description": "Time interval (seconds) between consecutive illumination reports (sent even when there is no change).",
+			"description": "Time interval between consecutive illumination reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 3600
+			"defaultValue": 3600,
+			"unit": "seconds"
 		},
 		{
 			"#": "60",
@@ -550,11 +556,12 @@
 			"#": "60",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature report - threshold",
-			"description": "The change in temperature resulting in temperature report (where 255 = 25.5°C).",
+			"description": "The change in temperature resulting in temperature report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 20
+			"defaultValue": 20,
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "62",
@@ -592,11 +599,12 @@
 			"#": "64",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature report - interval",
-			"description": "Time interval (seconds) between consecutive temperature reports (sent even when there is no change).",
+			"description": "Time interval between consecutive temperature reports (sent even when there is no change).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "seconds"
 		},
 		{
 			"#": "66",
@@ -613,11 +621,12 @@
 			"#": "66",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "Temperature offset",
-			"description": "Value added to the actual temperature (1000 = 100°C, -1000 = -100°C).",
+			"description": "Value added to the actual temperature.",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
-			"defaultValue": 0
+			"defaultValue": 0,
+			"unit": "0.1 °C"
 		},
 		{
 			"#": "80",
@@ -741,11 +750,12 @@
 		{
 			"#": "81",
 			"label": "LED Brightness",
-			"description": "Percent brightness the LED lights up to.",
+			"description": "Brightness of the LED when it's on.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
-			"defaultValue": 50
+			"defaultValue": 50,
+			"unit": "%"
 		},
 		{
 			"#": "82",
@@ -762,11 +772,12 @@
 			"#": "82",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - illuminance for low indicator brightness",
-			"description": "When the light intensity (lux) is below this, the brightness of the light is 1%.",
+			"description": "When the light intensity is below this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 100
+			"defaultValue": 100,
+			"unit": "lux"
 		},
 		{
 			"#": "83",
@@ -783,11 +794,12 @@
 			"#": "83",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - illuminance for high indicator brightness",
-			"description": "When the light intensity (lux) is above this, the brightness of the light is 1%.",
+			"description": "When the light intensity is above this, the brightness of the light is 1%.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
-			"defaultValue": 1000
+			"defaultValue": 1000,
+			"unit": "lux"
 		},
 		{
 			"#": "86",
@@ -803,11 +815,12 @@
 			"#": "86",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - temperature for blue colour",
-			"description": "When the temperature is below this (°C), the light is blue.",
+			"description": "When the temperature is below this, the light is blue.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 18
+			"defaultValue": 18,
+			"unit": "°C"
 		},
 		{
 			"#": "87",
@@ -823,11 +836,12 @@
 			"#": "87",
 			"$if": "firmwareVersion >= 3.2",
 			"label": "LED - temperature for red colour",
-			"description": "When the temperature is above this (°C), the light is blue.",
+			"description": "When the temperature is above this, the light is red.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 28
+			"defaultValue": 28,
+			"unit": "°C"
 		},
 		{
 			"#": "89",
