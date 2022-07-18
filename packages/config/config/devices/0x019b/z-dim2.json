@@ -29,37 +29,36 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Multilevel Switch",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Power Restore Level",
-			"description": "Range between 0(off) and 99(max)",
+			"label": "Brightness After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 100,
 			"unsigned": true,
 			"options": [
-				{
-					"label": "Return to last level",
-					"value": 100
-				}
+				{ 
+					"label": "Off", 
+					"value": 0 
+				}, 
+				{ 
+					"label": "Previous state", 
+					"value": 100 
+				} 
 			]
 		},
 		{
 			"#": "10",
-			"label": "Load Dimming Mode",
+			"label": "Dimming Principle",
 			"description": "Choose the dimming type",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"defaultValue": 1, 
 			"options": [
 				{
 					"label": "Trailing edge",
@@ -74,7 +73,6 @@
 		{
 			"#": "11",
 			"label": "Maximum Dim Level",
-			"description": "Max dim level, range 2-99",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -84,11 +82,11 @@
 		{
 			"#": "12",
 			"label": "Meter Report Threshold",
-			"description": "Threshold for meter report, defined in W",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
+			"unit": "W",
 			"unsigned": true
 		},
 		{
@@ -168,7 +166,6 @@
 		{
 			"#": "6",
 			"label": "Rotary Wheel Press Functionality",
-			"description": "Defines action for button push",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -193,7 +190,6 @@
 		{
 			"#": "7",
 			"label": "External Switch Functionality",
-			"description": "Decide how external switch function.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -218,8 +214,8 @@
 		{
 			"#": "8",
 			"label": "Dimming Duration",
-			"description": "Define dimming time using external source, defined in MS",
 			"valueSize": 1,
+			"unit": "ms",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -227,8 +223,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Choose The Dimmer Curve",
-			"description": "0",
+			"label": "Dimmer Curve",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -237,11 +232,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Linear dimming",
+					"label": "Linear",
 					"value": 0
 				},
 				{
-					"label": "Logarithmic dimming",
+					"label": "Logarithmic",
 					"value": 1
 				}
 			]
