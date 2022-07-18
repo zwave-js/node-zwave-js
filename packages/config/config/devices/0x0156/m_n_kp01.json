@@ -99,6 +99,10 @@
 			"unsigned": true
 		}
 	],
+	"compat": {
+		// The device does not pad ASCII data to fill 16-byte blocks
+		"disableStrictEntryControlDataValidation": true
+	},
 	"metadata": {
 		"inclusion": "Use this standard method for adding Z-Wave devices at the panel or hub. Use the \"PAIR/RESET\" button next to the battery tray. Follow the onscreen prompts to add the keypad.",
 		"exclusion": "Removing Keypad from System\nTo remove the device, place the panel Use this standard method for excluding Z-Wave devices at the panel or hub. Use the \"PAIR/RESET\" button next to the battery tray. Follow the onscreen prompts to add the keypad",
