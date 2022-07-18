@@ -4990,12 +4990,12 @@ ${associatedNodes.join(", ")}`,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		// Ensure the node is awake if it supports sleep
-		if (node.canSleep || node.supportsCC(CommandClasses["Wake Up"])) {
+		// Ensure the node is awake if it can sleep
+		if (node.canSleep) {
 			const didNodeWakeup = await Promise.race([
-				wait(60000, true).then(() => false as const),
-				node.waitForWakeup().then(() => true as const),
-			]);
+				wait(60000, true).then(() => false),
+				node.waitForWakeup().then(() => true),
+			]).catch(() => false);
 
 			if (!didNodeWakeup) {
 				throw new ZWaveError(
