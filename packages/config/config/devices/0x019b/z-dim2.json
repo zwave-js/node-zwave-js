@@ -56,17 +56,7 @@
 		{
 			"#": "10",
 			"$import": "~/templates/master_template.json#dimmer_type_trail_lead",
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Trailing edge",
-					"value": 0
-				},
-				{
-					"label": "Leading edge",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "11",
