@@ -74,7 +74,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
-			"unit": "W",
+			"unit": "Watt",
 			"unsigned": true
 		},
 		{
@@ -84,7 +84,7 @@
 			"minValue": 30,
 			"maxValue": 65535,
 			"defaultValue": 780,
-			"unit": "s",
+			"unit": "seconds",
 			"unsigned": true
 		},
 		{
@@ -98,7 +98,7 @@
 			"unsigned": true,
 			"options": [
 				{
-					"label": "Restores last dim level",
+					"label": "Restore previous brightness",
 					"value": 0
 				}
 			]
@@ -112,10 +112,10 @@
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "s",
+			"unit": "seconds",
 			"options": [
 				{
-					"label": "Auto OFF disabled",
+					"label": "Disabled",
 					"value": 0
 				}
 			]
@@ -129,7 +129,7 @@
 			"maxValue": 86400,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "s",
+			"unit": "seconds",
 			"options": [
 				{
 					"label": "Auto ON disabled",
@@ -145,10 +145,10 @@
 			"maxValue": 60,
 			"defaultValue": 0,
 			"unsigned": true,
-			"unit": "s",
+			"unit": "seconds",
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Instant",
 					"value": 0
 				}
 			]
