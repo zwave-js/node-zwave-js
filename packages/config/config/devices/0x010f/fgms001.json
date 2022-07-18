@@ -330,30 +330,30 @@
 			"maxValue": 255,
 			"defaultValue": 0
 		},
-		{ 
-			"#": "18[0x01]", 
-			"$if": "firmwareVersion >= 3.2", 
-			"$import": "templates/fibaro_template.json#send_secure_commands_group2", 
-			"defaultValue": 1 
-		}, 
-		{ 
-			"#": "18[0x02]", 
-			"$if": "firmwareVersion >= 3.2", 
-			"$import": "templates/fibaro_template.json#send_secure_commands_group3", 
-			"defaultValue": 1 
-		}, 
-		{ 
-			"#": "18[0x04]", 
-			"$if": "firmwareVersion >= 3.2", 
-			"$import": "templates/fibaro_template.json#send_secure_commands_group4", 
-			"defaultValue": 1 
-		}, 
-		{ 
-			"#": "18[0x08]", 
-			"$if": "firmwareVersion >= 3.2", 
-			"$import": "templates/fibaro_template.json#send_secure_commands_group5", 
-			"defaultValue": 1 
-		}, 
+		{
+			"#": "18[0x01]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group2",
+			"defaultValue": 1
+		},
+		{
+			"#": "18[0x02]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group3",
+			"defaultValue": 1
+		},
+		{
+			"#": "18[0x04]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group4",
+			"defaultValue": 1
+		},
+		{
+			"#": "18[0x08]",
+			"$if": "firmwareVersion >= 3.2",
+			"$import": "templates/fibaro_template.json#send_secure_commands_group5",
+			"defaultValue": 1
+		},
 		{
 			"#": "20",
 			"$if": "firmwareVersion <= 3.1",
