@@ -226,12 +226,8 @@
 		{
 			"#": "9",
 			"label": "Dimmer Curve",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
+			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
 			"unsigned": true,
-			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Linear",
