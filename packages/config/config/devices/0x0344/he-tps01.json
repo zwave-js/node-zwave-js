@@ -51,7 +51,7 @@
 		{
 			"#": "12",
 			"$import": "templates/heltun_template.json#relay_load_power",
-			"label": "Relay Load Power in watt"
+			"label": "Relay 1: Load Power"
 		},
 		{
 			"#": "17",
