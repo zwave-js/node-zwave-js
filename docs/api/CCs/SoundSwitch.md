@@ -22,7 +22,7 @@ async getToneInfo(toneId: number): Promise<Pick<SoundSwitchCCToneInfoReport, "du
 async setConfiguration(
 	defaultToneId: number,
 	defaultVolume: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getConfiguration`
@@ -34,13 +34,16 @@ async getConfiguration(): Promise<Pick<SoundSwitchCCConfigurationReport, "defaul
 ### `play`
 
 ```ts
-async play(toneId: number, volume?: number): Promise<void>;
+async play(
+	toneId: number,
+	volume?: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `stopPlaying`
 
 ```ts
-async stopPlaying(): Promise<void>;
+async stopPlaying(): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getPlaying`

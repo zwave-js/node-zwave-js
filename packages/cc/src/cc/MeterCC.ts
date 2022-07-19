@@ -310,7 +310,7 @@ export class MeterCCAPI extends PhysicalCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "reset") {
 			throwUnsupportedProperty(this.ccId, property);
 		} else if (
@@ -338,6 +338,8 @@ export class MeterCCAPI extends PhysicalCCAPI {
 
 		// Refresh values
 		await this.getAll();
+
+		return undefined;
 	};
 }
 

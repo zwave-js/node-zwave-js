@@ -206,6 +206,51 @@ export function createSimpleReflectionDecorator<
 	return ret;
 }
 
+export interface ValuelessReflectionDecorator<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+> {
+	/** The decorator which is used to decorate the super class */
+	decorator: <TTarget extends TBase>() => TypedClassDecorator<TTarget>;
+
+	/** Checks if the target class was decorated by this decorator, using a class instance */
+	isDecorated: (target: TBase) => boolean;
+
+	/** Checks if the target class was decorated by this decorator, using the class itself */
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	isDecoratedStatic: (constr: Function) => boolean;
+}
+
+export interface CreateValuelessReflectionDecoratorOptions {
+	/** The name of the decorator */
+	name: string;
+}
+
+/**
+ * Like {@link createReflectionDecorator}, but for valueless decorators.
+ */
+export function createValuelessReflectionDecorator<
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	TBase extends Object,
+>({
+	name,
+}: CreateValuelessReflectionDecoratorOptions): ValuelessReflectionDecorator<TBase> {
+	const decorator = createReflectionDecorator<TBase, [], boolean>({
+		name,
+		valueFromArgs: () => true,
+	});
+
+	const ret: ValuelessReflectionDecorator<TBase> = {
+		decorator: decorator.decorator,
+		isDecorated: (target: TBase) => !!decorator.lookupValue(target),
+		// eslint-disable-next-line @typescript-eslint/ban-types
+		isDecoratedStatic: (constr: Function) =>
+			!!decorator.lookupValueStatic(constr),
+	};
+
+	return ret;
+}
+
 export interface ReflectionDecoratorPair<
 	// eslint-disable-next-line @typescript-eslint/ban-types
 	TBase extends Object,

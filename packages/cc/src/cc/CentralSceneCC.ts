@@ -159,7 +159,7 @@ export class CentralSceneCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "slowRefresh") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -167,6 +167,8 @@ export class CentralSceneCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

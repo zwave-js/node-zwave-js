@@ -7,6 +7,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	SupervisionResult,
 	Timeout,
 	unknownBoolean,
 	validatePayload,
@@ -41,6 +42,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -144,7 +146,7 @@ export class ProtectionCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		const valueDB = this.tryGetValueDB();
 		if (property === "local") {
 			if (typeof value !== "number") {
@@ -161,7 +163,7 @@ export class ProtectionCCAPI extends CCAPI {
 					this.endpoint.index,
 				),
 			);
-			await this.set(value, rf);
+			return this.set(value, rf);
 		} else if (property === "rf") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -177,7 +179,7 @@ export class ProtectionCCAPI extends CCAPI {
 					this.endpoint.index,
 				),
 			);
-			await this.set(local ?? LocalProtectionState.Unprotected, value);
+			return this.set(local ?? LocalProtectionState.Unprotected, value);
 		} else if (property === "exclusiveControlNodeId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -187,7 +189,7 @@ export class ProtectionCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setExclusiveControl(value);
+			return this.setExclusiveControl(value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -228,7 +230,7 @@ export class ProtectionCCAPI extends CCAPI {
 	public async set(
 		local: LocalProtectionState,
 		rf?: RFProtectionState,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ProtectionCommand, ProtectionCommand.Set);
 
 		const cc = new ProtectionCCSet(this.applHost, {
@@ -237,7 +239,7 @@ export class ProtectionCCAPI extends CCAPI {
 			local,
 			rf,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -285,7 +287,9 @@ export class ProtectionCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async setExclusiveControl(nodeId: number): Promise<void> {
+	public async setExclusiveControl(
+		nodeId: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlSet,
@@ -296,7 +300,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			exclusiveControlNodeId: nodeId,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimeout(): Promise<Timeout | undefined> {
@@ -318,7 +322,9 @@ export class ProtectionCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async setTimeout(timeout: Timeout): Promise<void> {
+	public async setTimeout(
+		timeout: Timeout,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutSet,
@@ -329,7 +335,7 @@ export class ProtectionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			timeout,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -476,6 +482,7 @@ interface ProtectionCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ProtectionCommand.Set)
+@useSupervision()
 export class ProtectionCCSet extends ProtectionCC {
 	public constructor(
 		host: ZWaveHost,
@@ -674,6 +681,7 @@ interface ProtectionCCExclusiveControlSetOptions extends CCCommandOptions {
 
 @CCCommand(ProtectionCommand.ExclusiveControlSet)
 @expectedCCResponse(ProtectionCCReport)
+@useSupervision()
 export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 	public constructor(
 		host: ZWaveHost,
@@ -742,6 +750,7 @@ interface ProtectionCCTimeoutSetOptions extends CCCommandOptions {
 
 @CCCommand(ProtectionCommand.TimeoutSet)
 @expectedCCResponse(ProtectionCCReport)
+@useSupervision()
 export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public constructor(
 		host: ZWaveHost,

@@ -13,7 +13,9 @@ async get(): Promise<HumidityControlMode | undefined>;
 ### `set`
 
 ```ts
-async set(mode: HumidityControlMode): Promise<void>;
+async set(
+	mode: HumidityControlMode,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupportedModes`

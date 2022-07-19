@@ -18,12 +18,12 @@ async set(
 		ThermostatMode,
 		typeof ThermostatMode["Manufacturer specific"]
 	>,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 
 async set(
 	mode: typeof ThermostatMode["Manufacturer specific"],
 	manufacturerData: Buffer,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupportedModes`

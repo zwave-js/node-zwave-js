@@ -105,7 +105,7 @@ export function createTestingHost(
 			node.setSecurityClass(securityClass, granted);
 		},
 		sendCommand: async (_command, _options) => {
-			return undefined;
+			return undefined as any;
 		},
 		waitForCommand: async (_predicate, _timeout) => {
 			return undefined as any;

@@ -1,6 +1,7 @@
 import {
 	createReflectionDecorator,
 	createReflectionDecoratorPair,
+	createValuelessReflectionDecorator,
 	ZWaveError,
 	ZWaveErrorCodes,
 	type CommandClasses,
@@ -350,3 +351,19 @@ export function getCCValueProperties<TTarget extends CommandClass>(
 //  * Retrieves the defined mapping between properties and CC values of a Z-Wave command class instance
 //  */
 // export const getCCValueDefinitions = ccValueDecorator.lookupValues;
+
+const supervisionDecorator = createValuelessReflectionDecorator<CommandClass>({
+	name: "useSupervision",
+});
+
+/**
+ * @publicAPI
+ * Defines that this CC may be sent supervised
+ */
+export const useSupervision = supervisionDecorator.decorator;
+
+/**
+ * @publicAPI
+ * Checks if the given CC may be sent supervised
+ */
+export const shouldUseSupervision = supervisionDecorator.isDecorated;

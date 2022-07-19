@@ -131,7 +131,7 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "fibaro") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -163,6 +163,8 @@ export class FibaroCCAPI extends ManufacturerProprietaryCCAPI {
 
 		// Verify the current value after a delay
 		this.schedulePoll({ property, propertyKey }, value);
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

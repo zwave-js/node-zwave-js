@@ -13,7 +13,9 @@ async get(): Promise<Pick<BasicCCReport, "currentValue" | "targetValue" | "durat
 ### `set`
 
 ```ts
-async set(targetValue: number): Promise<void>;
+async set(
+	targetValue: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Basic CC values
@@ -75,6 +77,24 @@ async set(targetValue: number): Promise<void>;
 -   **stateful:** true
 -   **secret:** false
 -   **value type:** `"duration"`
+
+### `restorePrevious`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "restorePrevious",
+}
+```
+
+-   **label:** Restore previous value
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
 
 ### `targetValue`
 

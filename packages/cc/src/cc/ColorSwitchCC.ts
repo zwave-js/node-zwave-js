@@ -1,11 +1,14 @@
 import {
 	CommandClasses,
 	Duration,
+	isUnsupervisedOrSucceeded,
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueDB,
 	ValueID,
@@ -44,6 +47,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -210,7 +214,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async set(options: ColorSwitchCCSetOptions): Promise<void> {
+	public async set(
+		options: ColorSwitchCCSetOptions,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ColorSwitchCommand, ColorSwitchCommand.Set);
 
 		const cc = new ColorSwitchCCSet(this.applHost, {
@@ -219,30 +225,34 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		const result = await this.applHost.sendCommand(cc, this.commandOptions);
 
-		// If the command did not fail, assume that it succeeded and update the values accordingly
-		// TODO: The API methods should not modify the value DB directly, but to do so
-		// this requires a nicer way of synchronizing hexColor with the others
-		if (this.isSinglecast()) {
-			// Update each color component separately and record the changes to the compound value
-			this.updateCurrentColor(this.getValueDB(), cc.colorTable);
-		} else if (this.isMulticast()) {
-			// Figure out which nodes were affected by this command
-			const affectedNodes = this.endpoint.node.physicalNodes.filter(
-				(node) =>
-					node
-						.getEndpoint(this.endpoint.index)
-						?.supportsCC(this.ccId),
-			);
-			// and optimistically update the currentColor
-			for (const node of affectedNodes) {
-				const valueDB = this.applHost.tryGetValueDB(node.id);
-				if (valueDB) {
-					this.updateCurrentColor(valueDB, cc.colorTable);
+		if (isUnsupervisedOrSucceeded(result)) {
+			// If the command did not fail, assume that it succeeded and update the values accordingly
+			// TODO: The API methods should not modify the value DB directly, but to do so
+			// this requires a nicer way of synchronizing hexColor with the others
+			if (this.isSinglecast()) {
+				// Update each color component separately and record the changes to the compound value
+				this.updateCurrentColor(this.getValueDB(), cc.colorTable);
+			} else if (this.isMulticast()) {
+				// Figure out which nodes were affected by this command
+				const affectedNodes = this.endpoint.node.physicalNodes.filter(
+					(node) =>
+						node
+							.getEndpoint(this.endpoint.index)
+							?.supportsCC(this.ccId),
+				);
+				// and optimistically update the currentColor
+				for (const node of affectedNodes) {
+					const valueDB = this.applHost.tryGetValueDB(node.id);
+					if (valueDB) {
+						this.updateCurrentColor(valueDB, cc.colorTable);
+					}
 				}
 			}
 		}
+
+		return result;
 	}
 
 	/** Updates the current color for a given node by merging in the given changes */
@@ -321,7 +331,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async startLevelChange(
 		options: ColorSwitchCCStartLevelChangeOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.StartLevelChange,
@@ -333,13 +343,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
 	public async stopLevelChange(
 		colorComponent: ColorComponent,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.StopLevelChange,
@@ -351,7 +361,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			colorComponent,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -377,15 +387,23 @@ export class ColorSwitchCCAPI extends CCAPI {
 						typeof value,
 					);
 				}
-				await this.set({ [propertyKey]: value, duration });
+				const result = await this.set({
+					[propertyKey]: value,
+					duration,
+				});
 
-				if (this.isSinglecast()) {
-					// Verify the current value after a (short) delay
+				if (
+					this.isSinglecast() &&
+					!supervisedCommandSucceeded(result)
+				) {
+					// Verify the current value after a (short) delay, unless the command was supervised and successful
 					this.schedulePoll({ property, propertyKey }, value, {
 						duration,
 						transition: "fast",
 					});
 				}
+
+				return result;
 			} else {
 				// Set the compound color object
 				if (
@@ -422,7 +440,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				// Avoid sending empty commands
 				if (Object.keys(value as any).length === 0) return;
 
-				await this.set({ ...(value as ColorTable), duration });
+				return this.set({ ...(value as ColorTable), duration });
 
 				// We're not going to poll each color component separately
 			}
@@ -438,7 +456,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			}
 
 			const duration = Duration.from(options?.transitionDuration);
-			await this.set({ hexColor: value, duration });
+			return this.set({ hexColor: value, duration });
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -822,6 +840,7 @@ export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 };
 
 @CCCommand(ColorSwitchCommand.Set)
+@useSupervision()
 export class ColorSwitchCCSet extends ColorSwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -919,6 +938,7 @@ type ColorSwitchCCStartLevelChangeOptions = {
 	};
 
 @CCCommand(ColorSwitchCommand.StartLevelChange)
+@useSupervision()
 export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 	public constructor(
 		host: ZWaveHost,
@@ -987,6 +1007,7 @@ export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
 }
 
 @CCCommand(ColorSwitchCommand.StopLevelChange)
+@useSupervision()
 export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public constructor(
 		host: ZWaveHost,

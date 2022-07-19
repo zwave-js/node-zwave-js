@@ -20,6 +20,25 @@ async deviceSpecificGet(
 
 ## Manufacturer Specific CC values
 
+### `deviceId(type: DeviceIdType)`
+
+```ts
+{
+	commandClass: CommandClasses["Manufacturer Specific"],
+	endpoint: number,
+	property: "deviceId",
+	propertyKey: string,
+}
+```
+
+-   **label:** _(dynamic)_
+-   **min. CC version:** 2
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"string"`
+
 ### `manufacturerId`
 
 ```ts

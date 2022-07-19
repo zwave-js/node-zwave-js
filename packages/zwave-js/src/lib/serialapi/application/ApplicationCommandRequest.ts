@@ -134,7 +134,11 @@ export class ApplicationCommandRequest
 
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
-			Buffer.from([statusByte, this.host.ownNodeId, serializedCC.length]),
+			Buffer.from([
+				statusByte,
+				this.getNodeId() ?? this.host.ownNodeId,
+				serializedCC.length,
+			]),
 			serializedCC,
 		]);
 

@@ -84,13 +84,16 @@ export class MockController {
 
 	public readonly serial: MockPortBinding;
 	private readonly serialParser: SerialAPIParser;
-	private expectedHostACK?: TimedExpectation;
+	private expectedHostACKs: TimedExpectation[] = [];
 	private expectedHostMessages: TimedExpectation<Message, Message>[] = [];
 	private expectedNodeFrames: Map<
 		number,
 		TimedExpectation<MockZWaveFrame, MockZWaveFrame>[]
 	> = new Map();
 	private behaviors: MockControllerBehavior[] = [];
+
+	/** Records the messages received from the host to perform assertions on them */
+	private receivedHostMessages: Message[] = [];
 
 	private _nodes = new Map<number, MockNode>();
 	public get nodes(): ReadonlyMap<number, MockNode> {
@@ -127,7 +130,7 @@ export class MockController {
 			switch (data) {
 				case MessageHeaders.ACK: {
 					// If we were waiting for this ACK, resolve the expectation
-					this.expectedHostACK?.resolve();
+					this.expectedHostACKs?.shift()?.resolve();
 					return;
 				}
 				case MessageHeaders.NAK: {
@@ -149,6 +152,7 @@ export class MockController {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
 			msg = Message.from(this.host, data, MessageOrigin.Host);
+			this.receivedHostMessages.push(msg);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);
 		} catch (e: any) {
@@ -177,15 +181,17 @@ export class MockController {
 	 * @param timeout The number of milliseconds to wait. If the timeout elapses, the returned promise will be rejected
 	 */
 	public async expectHostACK(timeout: number): Promise<void> {
+		const ack = new TimedExpectation(
+			timeout,
+			undefined,
+			"Host did not respond with an ACK within the provided timeout!",
+		);
 		try {
-			this.expectedHostACK = new TimedExpectation(
-				timeout,
-				undefined,
-				"Host did not respond with an ACK within the provided timeout!",
-			);
-			return await this.expectedHostACK;
+			this.expectedHostACKs.push(ack);
+			return await ack;
 		} finally {
-			this.expectedHostACK = undefined;
+			const index = this.expectedHostACKs.indexOf(ack);
+			if (index !== -1) this.expectedHostACKs.splice(index, 1);
 		}
 	}
 
@@ -358,6 +364,29 @@ export class MockController {
 		// New behaviors must override existing ones, so we insert at the front of the array
 		this.behaviors.unshift(...behaviors);
 	}
+
+	/** Asserts that a message matching the given predicate was received from the host */
+	public assertReceivedHostMessage(
+		predicate: (msg: Message) => boolean,
+		options?: {
+			errorMessage?: string;
+		},
+	): void {
+		const { errorMessage } = options ?? {};
+		const index = this.receivedHostMessages.findIndex(predicate);
+		if (index === -1) {
+			throw new Error(
+				`Did not receive a host message matching the predicate!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		}
+	}
+
+	/** Forgets all recorded messages received from the host */
+	public clearReceivedHostMessages(): void {
+		this.receivedHostMessages = [];
+	}
 }
 
 export interface MockControllerBehavior {
@@ -366,12 +395,12 @@ export interface MockControllerBehavior {
 		host: ZWaveHost,
 		controller: MockController,
 		msg: Message,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 	/** Gets called when a message from a node is received. Return `true` to indicate that the message has been handled. */
 	onNodeFrame?: (
 		host: ZWaveHost,
 		controller: MockController,
 		node: MockNode,
 		frame: MockZWaveFrame,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 }

@@ -1,13 +1,13 @@
-import type {
-	Maybe,
-	MessageOrCCLogEntry,
-	MessageRecord,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	MessageRecord,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -39,6 +39,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { ThermostatFanMode, ThermostatFanModeCommand } from "../lib/_Types";
@@ -86,8 +87,10 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		const valueDB = this.getValueDB();
+		let result: SupervisionResult | undefined;
+
 		if (property === "mode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -103,7 +106,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 					this.endpoint.index,
 				),
 			);
-			await this.set(value, off);
+			result = await this.set(value, off);
 		} else if (property === "off") {
 			if (typeof value !== "boolean") {
 				throwWrongValueType(
@@ -122,17 +125,19 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
-			await this.set(mode, value);
+			result = await this.set(mode, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 
-		if (this.isSinglecast()) {
-			// Verify the current value after a delay
+		// Verify the current value after a delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
 			// aren't able to handle the GET this quickly.
 			this.schedulePoll({ property }, value);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -170,7 +175,10 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 	}
 
 	@validateArgs({ strictEnums: true })
-	public async set(mode: ThermostatFanMode, off?: boolean): Promise<void> {
+	public async set(
+		mode: ThermostatFanMode,
+		off?: boolean,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatFanModeCommand,
 			ThermostatFanModeCommand.Set,
@@ -182,7 +190,7 @@ export class ThermostatFanModeCCAPI extends CCAPI {
 			mode,
 			off,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupportedModes(): Promise<
@@ -305,6 +313,7 @@ type ThermostatFanModeCCSetOptions = CCCommandOptions & {
 };
 
 @CCCommand(ThermostatFanModeCommand.Set)
+@useSupervision()
 export class ThermostatFanModeCCSet extends ThermostatFanModeCC {
 	public constructor(
 		host: ZWaveHost,
