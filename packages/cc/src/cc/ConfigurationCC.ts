@@ -9,7 +9,6 @@ import {
 	getIntegerLimits,
 	getMinIntegerSize,
 	isConsecutiveArray,
-	isUnsupervisedOrSucceeded,
 	IVirtualEndpoint,
 	IZWaveEndpoint,
 	Maybe,
@@ -19,6 +18,7 @@ import {
 	parseBitMask,
 	parsePartial,
 	stripUndefined,
+	supervisedCommandSucceeded,
 	SupervisionResult,
 	validatePayload,
 	ValueID,
@@ -425,7 +425,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 
 		if (
-			!isUnsupervisedOrSucceeded(result) &&
+			!supervisedCommandSucceeded(result) &&
 			(this as ConfigurationCCAPI).isSinglecast()
 		) {
 			// Verify the current value after a delay, unless the command was supervised and successful

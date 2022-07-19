@@ -352,8 +352,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				(isSupervisionResult(result) &&
 					result.status === SupervisionStatus.Success);
 
-			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-			// so UIs have immediate feedback
 			if (this.isSinglecast()) {
 				// Only update currentValue for valid target values
 				if (shouldUpdateOptimistically && value >= 0 && value <= 99) {

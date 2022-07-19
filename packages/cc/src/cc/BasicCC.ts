@@ -124,8 +124,6 @@ export class BasicCCAPI extends CCAPI {
 			// TODO: Consider delaying the optimistic update if the result is WORKING
 			supervisedCommandSucceeded(result);
 
-		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
-		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
 			// Only update currentValue for valid target values
 			if (shouldUpdateOptimistically && value >= 0 && value <= 99) {

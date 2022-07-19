@@ -239,7 +239,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			const result = await this.set(targetValue);
 
 			// Verify the change after a delay, unless the command was supervised and successful
-			if (!supervisedCommandSucceeded(result)) {
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 				this.schedulePoll({ property }, targetValue);
 			}
 
