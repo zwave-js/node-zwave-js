@@ -74,7 +74,7 @@
 			"minValue": 0,
 			"maxValue": 250,
 			"defaultValue": 10,
-			"unit": "Watt",
+			"unit": "W",
 			"unsigned": true
 		},
 		{
@@ -105,8 +105,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Automatic Turn Off",
-			"description": "Timer to automaticly turn off dimmer",
+			"label": "Auto-Off Timer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
@@ -115,15 +114,14 @@
 			"unit": "seconds",
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "4",
-			"label": "Automatic Turn On",
-			"description": "Timer to automaticly turn on dimmer",
+			"label": "Auto-On Timer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 86400,
@@ -132,14 +130,14 @@
 			"unit": "seconds",
 			"options": [
 				{
-					"label": "Auto ON disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "5",
-			"label": "Turn Off Delay Time",
+			"label": "Turn Off Delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
