@@ -34,44 +34,11 @@
 		{
 			"$if": "firmwareVersion >= 5.24",
 			"#": "3",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when light on",
-					"value": 0
-				},
-				{
-					"label": "LED on when light off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Default",
-					"value": 0
-				},
-				{
-					"label": "Invert",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	],
 	"compat": {

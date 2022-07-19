@@ -16,40 +16,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Dim level when light is turned ON",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Full brightness",
-					"value": 0
-				},
-				{
-					"label": "Last non-zero brightness",
-					"value": 1
-				},
-				{
-					"label": "Previous state",
-					"value": 2
-				}
-			]
+			"$import": "templates/jasco_template.json#default_dim_level"
 		},
 		{
 			"#": "9",
-			"label": "Dimming/Brightening Step Level",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"label": "Dimming/Brightening Step Timing",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 3
+			"$import": "templates/jasco_template.json#dimmer_times"
 		}
 	]
 }

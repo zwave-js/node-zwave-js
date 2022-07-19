@@ -33,89 +33,31 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON when load is Off",
-					"value": 0
-				},
-				{
-					"label": "LED On when light is turned On",
-					"value": 1
-				},
-				{
-					"label": "LED always Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		},
 		{
 			"#": "7",
-			"label": "Dim Rate Steps (Z-Wave)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
 		},
 		{
 			"#": "8",
-			"label": "Dim Rate Timing (Z-Wave)",
-			"description": "Timing of steps",
-			"unit": "10ms",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_times_z"
 		},
 		{
 			"#": "9",
-			"label": "Dim Rate Steps (Manual)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"label": "Dim Rate Timing (Manual)",
-			"description": "Timing of steps",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_times"
 		},
 		{
 			"#": "11",
-			"label": "Dim Rate Steps (All-On/All-Off)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
 		},
 		{
 			"#": "12",
-			"label": "Dim Rate Timing (All-On/All-Off)",
-			"description": "Timing of steps",
-			"valueSize": 2,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dimmer_times_a"
 		}
 	],
 	"compat": {

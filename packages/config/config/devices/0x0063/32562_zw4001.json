@@ -17,25 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"label": "Change Open/Close Report Method",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Notification",
-					"value": 1
-				},
-				{
-					"label": "Basic Set",
-					"value": 2
-				},
-				{
-					"label": "Basic report",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#report_method"
 		}
 	],
 	"metadata": {
