@@ -24,15 +24,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "templates/config_template.json#default_dim_level"
+			"$import": "templates/jasco_template.json#default_dim_level"
 		},
 		{
 			"#": "9",
-			"$import": "templates/config_template.json#dimmer_steps"
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"$import": "templates/config_template.json#dimmer_times"
+			"$import": "templates/jasco_template.json#dimmer_times"
 		}
 	],
 	"metadata": {

@@ -37,27 +37,27 @@
 		},
 		{
 			"#": "6",
-			"$import": "templates/config_template.json#dim_rate"
+			"$import": "templates/jasco_template.json#dim_rate"
 		},
 		{
 			"#": "16",
-			"$import": "templates/config_template.json#switch_mode"
+			"$import": "templates/jasco_template.json#switch_mode"
 		},
 		{
 			"#": "19",
-			"$import": "templates/config_template.json#alternate_exclusion"
+			"$import": "templates/jasco_template.json#alternate_exclusion"
 		},
 		{
 			"#": "20",
-			"$import": "templates/config_template.json#dim_threshold_min"
+			"$import": "templates/jasco_template.json#dim_threshold_min"
 		},
 		{
 			"#": "31",
-			"$import": "templates/config_template.json#dim_threshold_max"
+			"$import": "templates/jasco_template.json#dim_threshold_max"
 		},
 		{
 			"#": "32",
-			"$import": "templates/config_template.json#default_brightness_level"
+			"$import": "templates/jasco_template.json#default_brightness_level"
 		}
 	],
 	"compat": {

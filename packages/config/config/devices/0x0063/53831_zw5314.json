@@ -33,7 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"$import": "templates/config_template.json#control_groups"
+			"$import": "templates/jasco_template.json#control_groups"
 		}
 	],
 	"compat": {

@@ -16,7 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "20",
-			"$import": "templates/config_template.json#report_method"
+			"$import": "templates/jasco_template.json#report_method"
 		}
 	]
 }

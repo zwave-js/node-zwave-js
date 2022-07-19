@@ -17,7 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "19",
-			"$import": "templates/config_template.json#alternate_exclusion_h"
+			"$import": "templates/jasco_template.json#alternate_exclusion_h"
 		},
 		{
 			"#": "21",

@@ -17,19 +17,19 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"$import": "templates/config_template.json#pir_sensitivity"
+			"$import": "templates/jasco_template.json#pir_sensitivity"
 		},
 		{
 			"#": "18",
-			"$import": "templates/config_template.json#pir_timeout_duration"
+			"$import": "templates/jasco_template.json#pir_timeout_duration"
 		},
 		{
 			"#": "20",
-			"$import": "templates/config_template.json#report_method"
+			"$import": "templates/jasco_template.json#report_method"
 		},
 		{
 			"#": "28",
-			"$import": "templates/config_template.json#led_indication"
+			"$import": "templates/jasco_template.json#led_indication"
 		}
 	],
 	"metadata": {

@@ -41,27 +41,27 @@
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#dimmer_steps_z"
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#dimmer_times_z"
+			"$import": "templates/jasco_template.json#dimmer_times_z"
 		},
 		{
 			"#": "9",
-			"$import": "templates/config_template.json#dimmer_steps"
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"$import": "templates/config_template.json#dimmer_times"
+			"$import": "templates/jasco_template.json#dimmer_times"
 		},
 		{
 			"#": "11",
-			"$import": "templates/config_template.json#dimmer_steps_a"
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
 		},
 		{
 			"#": "12",
-			"$import": "templates/config_template.json#dimmer_times_a"
+			"$import": "templates/jasco_template.json#dimmer_times_a"
 		}
 	],
 	"compat": {

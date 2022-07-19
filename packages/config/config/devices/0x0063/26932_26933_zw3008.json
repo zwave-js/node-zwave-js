@@ -31,19 +31,19 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "templates/config_template.json#timeout_duration"
+			"$import": "templates/jasco_template.json#timeout_duration"
 		},
 		{
 			"#": "2",
-			"$import": "templates/config_template.json#dim_level"
+			"$import": "templates/jasco_template.json#dim_level"
 		},
 		{
 			"#": "3",
-			"$import": "templates/config_template.json#operation_mode"
+			"$import": "templates/jasco_template.json#operation_mode"
 		},
 		{
 			"#": "4",
-			"$import": "templates/config_template.json#association_mode"
+			"$import": "templates/jasco_template.json#association_mode"
 		},
 		{
 			"#": "5",
@@ -51,59 +51,59 @@
 		},
 		{
 			"#": "6",
-			"$import": "templates/config_template.json#motion_sensor"
+			"$import": "templates/jasco_template.json#motion_sensor"
 		},
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#dimmer_steps_z"
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#dimmer_times_z"
+			"$import": "templates/jasco_template.json#dimmer_times_z"
 		},
 		{
 			"#": "9",
-			"$import": "templates/config_template.json#dimmer_steps"
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "10",
-			"$import": "templates/config_template.json#dimmer_times"
+			"$import": "templates/jasco_template.json#dimmer_times"
 		},
 		{
 			"#": "11",
-			"$import": "templates/config_template.json#dimmer_steps_a"
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
 		},
 		{
 			"#": "12",
-			"$import": "templates/config_template.json#dimmer_times_a"
+			"$import": "templates/jasco_template.json#dimmer_times_a"
 		},
 		{
 			"#": "13",
-			"$import": "templates/config_template.json#motion_sensitivity"
+			"$import": "templates/jasco_template.json#motion_sensitivity"
 		},
 		{
 			"#": "14",
-			"$import": "templates/config_template.json#light_sensor"
+			"$import": "templates/jasco_template.json#light_sensor"
 		},
 		{
 			"#": "15",
-			"$import": "templates/config_template.json#reset_cycle"
+			"$import": "templates/jasco_template.json#reset_cycle"
 		},
 		{
 			"#": "16",
-			"$import": "templates/config_template.json#switch_mode"
+			"$import": "templates/jasco_template.json#switch_mode"
 		},
 		{
 			"#": "17",
-			"$import": "templates/config_template.json#switch_level"
+			"$import": "templates/jasco_template.json#switch_level"
 		},
 		{
 			"#": "18",
-			"$import": "templates/config_template.json#dim_rate"
+			"$import": "templates/jasco_template.json#dim_rate"
 		},
 		{
 			"#": "19",
-			"$import": "templates/config_template.json#alternate_exclusion"
+			"$import": "templates/jasco_template.json#alternate_exclusion"
 		}
 	],
 	// Add compat flag to re-enable basic command events to replicate central scene functionality.

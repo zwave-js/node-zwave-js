@@ -21,7 +21,7 @@
 		},
 		{
 			"#": "29",
-			"$import": "templates/config_template.json#load_sensing"
+			"$import": "templates/jasco_template.json#load_sensing"
 		}
 	]
 }

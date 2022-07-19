@@ -17,15 +17,15 @@
 	"paramInformation": [
 		{
 			"#": "7",
-			"$import": "templates/config_template.json#dimmer_steps"
+			"$import": "templates/jasco_template.json#dimmer_steps"
 		},
 		{
 			"#": "8",
-			"$import": "templates/config_template.json#dimmer_times"
+			"$import": "templates/jasco_template.json#dimmer_times"
 		},
 		{
 			"#": "29",
-			"$import": "templates/config_template.json#load_sensing"
+			"$import": "templates/jasco_template.json#load_sensing"
 		}
 	]
 }
