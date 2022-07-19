@@ -4990,16 +4990,19 @@ ${associatedNodes.join(", ")}`,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		const didNodeWakeup = await Promise.race([
-			wait(60000, true).then(() => false as const),
-			node.waitForWakeup().then(() => true as const),
-		]);
+		// Ensure the node is awake if it can sleep
+		if (node.canSleep) {
+			const didNodeWakeup = await Promise.race([
+				wait(60000, true).then(() => false),
+				node.waitForWakeup().then(() => true),
+			]).catch(() => false);
 
-		if (!didNodeWakeup) {
-			throw new ZWaveError(
-				`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
-				ZWaveErrorCodes.FWUpdateService_MissingInformation,
-			);
+			if (!didNodeWakeup) {
+				throw new ZWaveError(
+					`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
+					ZWaveErrorCodes.FWUpdateService_MissingInformation,
+				);
+			}
 		}
 
 		// Do not rely on stale information, query everything fresh from the node
