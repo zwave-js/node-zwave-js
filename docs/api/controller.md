@@ -775,6 +775,8 @@ Many Z-Wave devices only have a single upgradeable firmware target (chip), so th
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
+> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+
 ### `beginOTAFirmwareUpdate`
 
 ```ts
