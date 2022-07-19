@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.6.1 (2022-07-19)
 ### Bugfixes
 * Check if node can sleep in `getAvailableFirmwareUpdates` before waiting for wake up (#4802)
 
