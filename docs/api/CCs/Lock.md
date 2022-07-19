@@ -13,7 +13,7 @@ async get(): Promise<boolean | undefined>;
 ### `set`
 
 ```ts
-async set(locked: boolean): Promise<void>;
+async set(locked: boolean): Promise<SupervisionResult | undefined>;
 ```
 
 Locks or unlocks the lock.

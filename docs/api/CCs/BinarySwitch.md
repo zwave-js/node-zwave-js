@@ -16,7 +16,7 @@ async get(): Promise<{ currentValue: Maybe<boolean>; targetValue: boolean | unde
 async set(
 	targetValue: boolean,
 	duration?: Duration | string,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets the switch to the given value.

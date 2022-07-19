@@ -19,7 +19,7 @@ async set(
 	setpointType: ThermostatSetpointType,
 	value: number,
 	scale: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getCapabilities`

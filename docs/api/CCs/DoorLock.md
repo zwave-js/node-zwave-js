@@ -19,7 +19,9 @@ async get(): Promise<Pick<DoorLockCCOperationReport, "currentMode" | "targetMode
 ### `set`
 
 ```ts
-async set(mode: DoorLockMode): Promise<void>;
+async set(
+	mode: DoorLockMode,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `setConfiguration`
@@ -27,7 +29,7 @@ async set(mode: DoorLockMode): Promise<void>;
 ```ts
 async setConfiguration(
 	configuration: DoorLockCCConfigurationSetOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getConfiguration`

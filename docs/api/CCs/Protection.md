@@ -16,7 +16,7 @@ async get(): Promise<Pick<ProtectionCCReport, "local" | "rf"> | undefined>;
 async set(
 	local: LocalProtectionState,
 	rf?: RFProtectionState,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupported`
@@ -34,7 +34,9 @@ async getExclusiveControl(): Promise<number | undefined>;
 ### `setExclusiveControl`
 
 ```ts
-async setExclusiveControl(nodeId: number): Promise<void>;
+async setExclusiveControl(
+	nodeId: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getTimeout`
@@ -46,7 +48,9 @@ async getTimeout(): Promise<Timeout | undefined>;
 ### `setTimeout`
 
 ```ts
-async setTimeout(timeout: Timeout): Promise<void>;
+async setTimeout(
+	timeout: Timeout,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Protection CC values

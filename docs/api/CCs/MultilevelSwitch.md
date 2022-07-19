@@ -16,7 +16,7 @@ async get(): Promise<Pick<MultilevelSwitchCCReport, "currentValue" | "targetValu
 async set(
 	targetValue: number,
 	duration?: Duration | string,
-): Promise<boolean>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets the switch to a new value.
@@ -31,13 +31,13 @@ Sets the switch to a new value.
 ```ts
 async startLevelChange(
 	options: MultilevelSwitchCCStartLevelChangeOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `stopLevelChange`
 
 ```ts
-async stopLevelChange(): Promise<void>;
+async stopLevelChange(): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupported`
@@ -118,7 +118,7 @@ async getSupported(): Promise<SwitchType | undefined>;
 
 -   **label:** `Perform a level change (${string})`
 -   **min. CC version:** 1
--   **readable:** true
+-   **readable:** false
 -   **writeable:** true
 -   **stateful:** true
 -   **secret:** false
@@ -136,7 +136,25 @@ async getSupported(): Promise<SwitchType | undefined>;
 
 -   **label:** `Perform a level change (${string})`
 -   **min. CC version:** 1
--   **readable:** true
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `restorePrevious`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Switch"],
+	endpoint: number,
+	property: "restorePrevious",
+}
+```
+
+-   **label:** Restore previous value
+-   **min. CC version:** 1
+-   **readable:** false
 -   **writeable:** true
 -   **stateful:** true
 -   **secret:** false

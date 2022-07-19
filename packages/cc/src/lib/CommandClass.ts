@@ -215,7 +215,7 @@ export class CommandClass implements ICommandClass {
 	 * Whether the command progress should be supervised.
 	 * This only has an effect if the target endpoint supports the Supervision CC.
 	 *
-	 * Don't use this directly, but rather use `Driver.sendSupervisedCommand`
+	 * Don't use this directly, but rather use `Driver.sendCommand` with the corresponding supervision options.
 	 */
 	public supervised: boolean;
 

@@ -44,7 +44,9 @@ When the node does not respond due to a timeout, the `value` in the returned arr
 ### `set`
 
 ```ts
-async set(options: ConfigurationCCAPISetOptions): Promise<void>;
+async set(
+	options: ConfigurationCCAPISetOptions,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets a new value for a given config parameter of the device.
@@ -54,7 +56,7 @@ Sets a new value for a given config parameter of the device.
 ```ts
 async setBulk(
 	values: ConfigurationCCAPISetOptions[],
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
@@ -62,7 +64,9 @@ Sets new values for multiple config parameters of the device. Uses the `BulkSet`
 ### `reset`
 
 ```ts
-async reset(parameter: number): Promise<void>;
+async reset(
+	parameter: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Resets a configuration parameter to its default value.
