@@ -168,7 +168,7 @@ export class IndicatorCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property === "value") {
 			// V1 value
 			if (typeof value !== "number") {
@@ -211,6 +211,8 @@ export class IndicatorCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

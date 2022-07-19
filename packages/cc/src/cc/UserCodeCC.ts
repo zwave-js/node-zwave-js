@@ -282,7 +282,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property === "keypadMode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -366,6 +366,8 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		this.schedulePoll({ property, propertyKey }, value, {
 			transition: "fast",
 		});
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

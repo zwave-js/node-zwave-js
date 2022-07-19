@@ -1,4 +1,7 @@
+import { isObject } from "alcalzone-shared/typeguards";
+import type { ICommandClass } from "../abstractions/ICommandClass";
 import type { ProtocolDataRate } from "../capabilities/Protocols";
+import type { Duration } from "../values/Duration";
 
 /** The priority of messages, sorted from high (0) to low (>0) */
 export enum MessagePriority {
@@ -159,11 +162,98 @@ export interface SendMessageOptions {
 	onTXReport?: (report: TXReport) => void;
 }
 
-export interface SendCommandOptions extends SendMessageOptions {
-	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
-	maxSendAttempts?: number;
-	/** Whether the driver should automatically handle the encapsulation. Default: true */
-	autoEncapsulate?: boolean;
-	/** Overwrite the default transmit options */
-	transmitOptions?: TransmitOptions;
+export type SupervisionOptions =
+	| ({
+			/** Whether supervision may be used. `false` disables supervision. Default: `"auto"`. */
+			useSupervision?: "auto";
+	  } & (
+			| {
+					requestStatusUpdates?: false;
+			  }
+			| {
+					requestStatusUpdates: true;
+					onUpdate: SupervisionUpdateHandler;
+			  }
+	  ))
+	| {
+			useSupervision: false;
+	  };
+
+export type SendCommandOptions = SendMessageOptions &
+	SupervisionOptions & {
+		/** How many times the driver should try to send the message. Defaults to the configured Driver option */
+		maxSendAttempts?: number;
+		/** Whether the driver should automatically handle the encapsulation. Default: true */
+		autoEncapsulate?: boolean;
+		/** Overwrite the default transmit options */
+		transmitOptions?: TransmitOptions;
+	};
+
+export type SendCommandReturnType<TResponse extends ICommandClass | undefined> =
+	undefined extends TResponse
+		? SupervisionResult | undefined
+		: TResponse | undefined;
+
+export enum SupervisionStatus {
+	NoSupport = 0x00,
+	Working = 0x01,
+	Fail = 0x02,
+	Success = 0xff,
+}
+
+export type SupervisionResult =
+	| {
+			status:
+				| SupervisionStatus.NoSupport
+				| SupervisionStatus.Fail
+				| SupervisionStatus.Success;
+			remainingDuration?: undefined;
+	  }
+	| {
+			status: SupervisionStatus.Working;
+			remainingDuration: Duration;
+	  };
+
+export type SupervisionUpdateHandler = (update: SupervisionResult) => void;
+
+export function isSupervisionResult(obj: unknown): obj is SupervisionResult {
+	return (
+		isObject(obj) &&
+		"status" in obj &&
+		typeof SupervisionStatus[obj.status as any] === "string"
+	);
+}
+
+export function supervisedCommandSucceeded(
+	result: unknown,
+): result is SupervisionResult & {
+	status: SupervisionStatus.Success | SupervisionStatus.Working;
+} {
+	return (
+		isSupervisionResult(result) &&
+		(result.status === SupervisionStatus.Success ||
+			result.status === SupervisionStatus.Working)
+	);
+}
+
+export function supervisedCommandFailed(
+	result: unknown,
+): result is SupervisionResult & {
+	status: SupervisionStatus.Fail | SupervisionStatus.NoSupport;
+} {
+	return (
+		isSupervisionResult(result) &&
+		(result.status === SupervisionStatus.Fail ||
+			result.status === SupervisionStatus.NoSupport)
+	);
+}
+
+export function isUnsupervisedOrSucceeded(
+	result: SupervisionResult | undefined,
+): result is
+	| undefined
+	| (SupervisionResult & {
+			status: SupervisionStatus.Success | SupervisionStatus.Working;
+	  }) {
+	return !result || supervisedCommandSucceeded(result);
 }

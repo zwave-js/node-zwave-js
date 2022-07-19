@@ -15,7 +15,7 @@ async get(): Promise<Pick<BarrierOperatorCCReport, "currentState" | "position"> 
 ```ts
 async set(
 	targetState: BarrierState.Open | BarrierState.Closed,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSignalingCapabilities`

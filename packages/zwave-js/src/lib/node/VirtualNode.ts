@@ -70,6 +70,10 @@ export class VirtualNode extends VirtualEndpoint implements IVirtualNode {
 				value,
 				options,
 			);
+
+			// api.setValue could technically return a SupervisionResult
+			// but supervision isn't used for multicast / broadcast
+
 			if (api.isSetValueOptimistic(valueId)) {
 				// If the call did not throw, assume that the call was successful and remember the new value
 				// for each node that was affected by this command

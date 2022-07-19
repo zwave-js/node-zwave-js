@@ -1,9 +1,12 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -37,6 +40,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -134,7 +138,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async set(
 		targetState: BarrierState.Open | BarrierState.Closed,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.Set,
@@ -145,7 +149,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetState,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -217,7 +221,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property === "targetState") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -232,12 +236,14 @@ export class BarrierOperatorCCAPI extends CCAPI {
 				value === BarrierState.Closed
 					? BarrierState.Closed
 					: BarrierState.Open;
-			await this.set(targetValue);
+			const result = await this.set(targetValue);
 
-			// Verify the change after a delay
-			if (this.isSinglecast()) {
+			// Verify the change after a delay, unless the command was supervised and successful
+			if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 				this.schedulePoll({ property }, targetValue);
 			}
+
+			return result;
 		} else if (property === "signalingState") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -379,6 +385,7 @@ interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BarrierOperatorCommand.Set)
+@useSupervision()
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
 		host: ZWaveHost,

@@ -125,7 +125,7 @@ export class TimeParametersCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "dateAndTime") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -133,6 +133,8 @@ export class TimeParametersCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
 		await this.set(value);
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

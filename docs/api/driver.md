@@ -179,7 +179,7 @@ The behavior of this method strongly depends on the message that should be sent:
 ### `sendCommand`
 
 ```ts
-async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOptions): Promise<TResponse | undefined>
+async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOptions): Promise<SendCommandReturnType<TResponse>>
 ```
 
 This method sends a command to a Z-Wave node. It takes two arguments:
@@ -187,26 +187,15 @@ This method sends a command to a Z-Wave node. It takes two arguments:
 -   `command` - An instance of the command class that should be sent
 -   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendCommandOptions`](#SendCommandOptions) for a detailed description.
 
-If it is known in advance which type the response will have, you can optionally pass the desired return type.
+The return value depends on several factors:
+
+-   If the node returns a command in response, that command will be the return value.
+-   If the command is a SET-type command and `Supervision CC` can and should be used, the command will be sent using supervision and a [`SupervisionResult`](#SupervisionResult) will be returned.
+-   If the command expects no response **or** the response times out, `undefined` will be returned.
+
+If it is known in advance which type the response will have, you can optionally pass the desired response type to help TypeScript infer the return type of the method.
 
 Internally, it wraps the command in a `SendDataRequest` and calls `sendMessage` with it. Anything that applies to `sendMethod` is therefore true for `sendCommand`.
-
-### `sendSupervisedCommand / trySendCommandSupervised`
-
-```ts
-async sendSupervisedCommand(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult>
-```
-
-Sends a supervised command to a Z-Wave node. When status updates are requested (default: `false`), the passed callback will be executed for every non-final update.
-Internally, it wraps the command in a `Supervision CC` and calls `sendCommand` with it.
-
-For convenience you can use `trySendCommandSupervised` if you don't want to check if `Supervision CC` is supported before each command. It has the following signature:
-
-```ts
-trySendCommandSupervised(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult | undefined>
-```
-
-If `Supervision CC` is not supported, the returned promise resolves to `undefined`.
 
 ### `waitForMessage`
 
@@ -568,43 +557,38 @@ declare enum ProtocolDataRate {
 
 ### `SendCommandOptions`
 
-Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
+Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) and [`SupervisionOptions`](#SupervisionOptions) plus the following:
 
 -   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
 -   `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
 -   `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
 
-### `SendSupervisedCommandOptions`
+### `SupervisionOptions`
 
-Influences the behavior of `driver.sendSupervisedCommand`. Has all the properties of [`SendCommandOptions`](#SendCommandOptions) plus the following:
+Configures how `driver.sendCommand` deals with supervised commands. It is an object with the following properties:
 
--   `requestStatusUpdates: boolean` - Whether status updates should be requested.
--   `onUpdate: SupervisionUpdateHandler` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
+-   `useSupervision: "auto" | false` - _(optional)_ Whether supervision may be used. `false` disables supervision. The default `"auto"` lets the driver decide.
 
-The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?: Duration) => void` where `SupervisionStatus` is defined as follows:
-
-<!-- #import SupervisionStatus from "zwave-js" -->
-
-```ts
-declare enum SupervisionStatus {
-	NoSupport = 0,
-	Working = 1,
-	Fail = 2,
-	Success = 255,
-}
-```
+-   `requestStatusUpdates: boolean` - _(optional, only if `useSupervision` is not `false`)_ Whether status updates for long-running commands should be requested.
+-   `onUpdate: (update: SupervisionResult) => void` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
 
 ### `SupervisionResult`
 
-Is used to report the status of a supervised command execution.
-
-<!-- #import SupervisionResult from "zwave-js" -->
+<!-- #import SupervisionResult from "@zwave-js/core" -->
 
 ```ts
-interface SupervisionResult {
-	status: SupervisionStatus;
-	remainingDuration?: Duration;
-}
+type SupervisionResult =
+	| {
+			status:
+				| SupervisionStatus.NoSupport
+				| SupervisionStatus.Fail
+				| SupervisionStatus.Success;
+			remainingDuration?: undefined;
+	  }
+	| {
+			status: SupervisionStatus.Working;
+			remainingDuration: Duration;
+	  };
 ```
 
 ### `ZWaveOptions`

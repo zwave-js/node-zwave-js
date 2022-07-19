@@ -191,7 +191,7 @@ export class EntryControlCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "keyCacheSize" && property !== "keyCacheTimeout") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -216,6 +216,8 @@ export class EntryControlCCAPI extends CCAPI {
 			keyCacheSize = oldKeyCacheSize;
 		}
 		await this.setConfiguration(keyCacheSize, keyCacheTimeout);
+
+		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

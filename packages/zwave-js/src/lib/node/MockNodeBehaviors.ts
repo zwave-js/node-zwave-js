@@ -29,8 +29,8 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 					ackRequested: false,
 				}),
 			);
+			return true;
 		}
-		return false;
 	},
 };
 

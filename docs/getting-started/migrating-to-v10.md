@@ -132,6 +132,10 @@ The driver does this automatically when using the `sendCommand` method, so most 
 
 The CC implementations have been moved to their own package, `@zwave-js/cc`. Simply replace the imports with the new package name.
 
+## Removed the `sendSupervisedCommand` and `trySendCommandSupervised` driver methods
+
+Whether supervision is used or not can now be controlled by the `options` argument of the `sendCommand` method. By default, the driver will now determine on its own whether supervision should be used or not. As a result, a wider range of commands can now be sent with supervision automatically.
+
 ## Removed several deprecated method signatures, enums and properties
 
 -   The enum `EventTypes` did not give any context to which CC it belongs and has been removed. Use the `EntryControlEventTypes` enum instead.
