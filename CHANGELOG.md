@@ -4,6 +4,28 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Check if node can sleep in `getAvailableFirmwareUpdates` before waiting for wake up (#4802)
+
+### Config file changes
+* Add Minoston MP22ZP, fix MP21ZP param 1 (#4807)
+* Work around Configuration Info reporting bug in ZEN73/74 (#4815)
+* Rename GE/Jasco 12724 from ZW3003 to ZW3005 (#4814)
+* Simplify base_options templates (#4813)
+* Rework GE/Jasco config params to templates (#4622)
+* Add Heatit Z-Dim2 (#4801)
+* Preserve endpoint 1 for Zooz ZEN30 (#4736)
+* Add Load Power parameter to Heltun HE-TPS01 (#4812)
+* Standardize labels of schedule params for Trane XR524 (#4783)
+* Disable strict entry control payload validation for Vivint Keypad (#4800)
+* Fix configuration files for Inovelli LZW41 and LZW42 (#4798)
+* Mark parameters of Ness Corporation 117001 as writable (#4792)
+* Add missing fingerprints to Fibargroup fgwp102 and fgdw002 (#4791)
+* Parameter 6 for the Leviton ZW4SF is led_timeout, not locator_led (#4788)
+* Parameter 6 for the Leviton DZ6HD is led_timeout, not locator_led (#4789)
+* Add parameter 17 to Zooz ZEN76, FW 10.0+ (#4784)
+
 ## 9.6.0 (2022-07-05)
 ### Features
 * Add labels to Multilevel Switch/Entry Control notifications (#4652)
