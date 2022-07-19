@@ -14,13 +14,16 @@ import {
 	createAndStartDriverWithMockPort,
 	CreateAndStartDriverWithMockPortResult,
 } from "../driver/DriverMock";
+import type { ZWaveOptions } from "../driver/ZWaveOptions";
 import type { ZWaveNode } from "../node/Node";
 
 function prepareDriver(
 	cacheDir: string = path.join(__dirname, "cache"),
 	logToFile: boolean = false,
+	additionalOptions: Partial<ZWaveOptions> = {},
 ): Promise<CreateAndStartDriverWithMockPortResult> {
 	return createAndStartDriverWithMockPort({
+		...additionalOptions,
 		portAddress: "/tty/FAKE",
 		...(logToFile
 			? {
@@ -111,6 +114,8 @@ export function integrationTest(
 			mockController: MockController,
 			mockNode: MockNode,
 		) => Promise<void>;
+
+		additionalDriverOptions?: Partial<ZWaveOptions>;
 	},
 ): void {
 	const {
@@ -120,6 +125,7 @@ export function integrationTest(
 		debug = false,
 		provisioningDirectory,
 		clearMessageStatsBeforeTest = true,
+		additionalDriverOptions,
 	} = options;
 
 	describe(name, () => {
@@ -153,6 +159,7 @@ export function integrationTest(
 			({ driver, continueStartup, mockPort } = await prepareDriver(
 				cacheDir,
 				debug,
+				additionalDriverOptions,
 			));
 			({ mockController, mockNode } = prepareMocks(
 				mockPort,

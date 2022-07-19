@@ -8,7 +8,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"secure encapsulation should be used when encapsulated command requires it",
 	{
-		debug: true,
+		// debug: true,
 		// We need the cache to skip the CC interviews and mark S0 as supported
 		provisioningDirectory: path.join(
 			__dirname,
