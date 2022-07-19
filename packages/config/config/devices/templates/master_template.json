@@ -71,6 +71,13 @@
 		"defaultValue": 0,
 		"allowManualEntry": false
 	},
+	"base_0-2_options_nounit": {
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 2,
+		"defaultValue": 0,
+		"allowManualEntry": false
+	},
 	"base_0-10_nounit": {
 		"valueSize": 1,
 		"minValue": 0,
