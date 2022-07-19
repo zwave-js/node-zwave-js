@@ -53,13 +53,18 @@ async getValveConfig(valveId: ValveId): Promise<Pick<IrrigationCCValveConfigRepo
 ### `runValve`
 
 ```ts
-async runValve(valveId: ValveId, duration: number): Promise<void>;
+async runValve(
+	valveId: ValveId,
+	duration: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `shutoffValve`
 
 ```ts
-shutoffValve(valveId: ValveId): Promise<void>;
+shutoffValve(
+	valveId: ValveId,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `setValveTable`
@@ -82,13 +87,17 @@ async getValveTable(
 ### `runTables`
 
 ```ts
-async runTables(tableIDs: number[]): Promise<void>;
+async runTables(
+	tableIDs: number[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `shutoffSystem`
 
 ```ts
-async shutoffSystem(duration: number): Promise<void>;
+async shutoffSystem(
+	duration: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Shuts off the entire system for the given duration.
@@ -100,7 +109,7 @@ Shuts off the entire system for the given duration.
 ### `shutoffSystemPermanently`
 
 ```ts
-shutoffSystemPermanently(): Promise<void>;
+shutoffSystemPermanently(): Promise<SupervisionResult | undefined>;
 ```
 
 Shuts off the entire system permanently and prevents schedules from running.

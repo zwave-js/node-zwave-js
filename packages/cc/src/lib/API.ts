@@ -9,6 +9,7 @@ import {
 	NODE_ID_BROADCAST,
 	SendCommandOptions,
 	stripUndefined,
+	SupervisionResult,
 	TXReport,
 	unknownBoolean,
 	ValueChangeOptions,
@@ -30,7 +31,7 @@ export type SetValueImplementation = (
 	property: ValueIDProperties,
 	value: unknown,
 	options?: SetValueAPIOptions,
-) => Promise<void>;
+) => Promise<SupervisionResult | undefined>;
 
 /**
  * A generic options bag for the `setValue` API.

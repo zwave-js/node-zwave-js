@@ -1,17 +1,17 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
-import type {
-	MessageOrCCLogEntry,
-	ValueMetadataNumeric,
-} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
 	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
 	parseBitMask,
 	parseFloatWithScale,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
+	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -41,6 +41,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -121,7 +122,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "setpoint") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -144,14 +145,16 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				this.endpoint.index,
 			),
 		);
-		await this.set(propertyKey, value, preferredScale ?? 0);
+		const result = await this.set(propertyKey, value, preferredScale ?? 0);
 
-		if (this.isSinglecast()) {
-			// Verify the current value after a delay
+		// Verify the current value after a delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 			// TODO: Ideally this would be a short delay, but some thermostats like Remotec ZXT-600
 			// aren't able to handle the GET this quickly.
 			this.schedulePoll({ property, propertyKey }, value);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -210,7 +213,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		setpointType: ThermostatSetpointType,
 		value: number,
 		scale: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
 			ThermostatSetpointCommand.Set,
@@ -223,7 +226,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			value,
 			scale,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -569,6 +572,7 @@ interface ThermostatSetpointCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ThermostatSetpointCommand.Set)
+@useSupervision()
 export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public constructor(
 		host: ZWaveHost,

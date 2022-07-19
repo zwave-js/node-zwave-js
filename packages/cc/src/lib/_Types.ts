@@ -2,7 +2,6 @@ import type { Scale } from "@zwave-js/config/safe";
 import {
 	CommandClasses,
 	DataRate,
-	Duration,
 	FLiRS,
 	IZWaveNode,
 	Maybe,
@@ -1316,20 +1315,6 @@ export enum ToneId {
 export enum SupervisionCommand {
 	Get = 0x01,
 	Report = 0x02,
-}
-
-/** @publicAPI */
-export enum SupervisionStatus {
-	NoSupport = 0x00,
-	Working = 0x01,
-	Fail = 0x02,
-	Success = 0xff,
-}
-
-/** @publicAPI */
-export interface SupervisionResult {
-	status: SupervisionStatus;
-	remainingDuration?: Duration;
 }
 
 /** @publicAPI */

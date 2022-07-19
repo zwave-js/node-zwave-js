@@ -5,6 +5,8 @@ import {
 	MessageOrCCLogEntry,
 	MessagePriority,
 	parseBitMask,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -36,6 +38,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { HumidityControlMode, HumidityControlModeCommand } from "../lib/_Types";
@@ -68,7 +71,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property === "mode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -81,11 +84,15 @@ export class HumidityControlModeCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-		await this.set(value);
 
-		if (this.isSinglecast()) {
+		const result = await this.set(value);
+
+		// Verify the change after a delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 			this.schedulePoll({ property }, value);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -121,7 +128,9 @@ export class HumidityControlModeCCAPI extends CCAPI {
 	}
 
 	@validateArgs({ strictEnums: true })
-	public async set(mode: HumidityControlMode): Promise<void> {
+	public async set(
+		mode: HumidityControlMode,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlModeCommand,
 			HumidityControlModeCommand.Set,
@@ -132,7 +141,7 @@ export class HumidityControlModeCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			mode,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupportedModes(): Promise<
@@ -250,6 +259,7 @@ interface HumidityControlModeCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(HumidityControlModeCommand.Set)
+@useSupervision()
 export class HumidityControlModeCCSet extends HumidityControlModeCC {
 	public constructor(
 		host: ZWaveHost,

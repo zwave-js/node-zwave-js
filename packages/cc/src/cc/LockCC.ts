@@ -1,7 +1,10 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
+	Maybe,
+	MessageOrCCLogEntry,
 	MessagePriority,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -33,6 +36,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { LockCommand } from "../lib/_Types";
@@ -77,7 +81,7 @@ export class LockCCAPI extends PhysicalCCAPI {
 	 * @param locked Whether the lock should be locked
 	 */
 	@validateArgs()
-	public async set(locked: boolean): Promise<void> {
+	public async set(locked: boolean): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Set);
 
 		const cc = new LockCCSet(this.applHost, {
@@ -85,23 +89,27 @@ export class LockCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			locked,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "locked") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 		if (typeof value !== "boolean") {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
-		await this.set(value);
+		const result = await this.set(value);
 
-		// Verify the current value after a delay
-		this.schedulePoll({ property }, value);
+		// Verify the current value after a delay, unless the command was supervised and successful
+		if (!supervisedCommandSucceeded(result)) {
+			this.schedulePoll({ property }, value);
+		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -162,6 +170,7 @@ interface LockCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(LockCommand.Set)
+@useSupervision()
 export class LockCCSet extends LockCC {
 	public constructor(
 		host: ZWaveHost,

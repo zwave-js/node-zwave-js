@@ -156,6 +156,11 @@ export class MockNode {
 		MockZWaveFrame
 	>[] = [];
 
+	/** Records the frames received from the controller to perform assertions on them */
+	private receivedControllerFrames: MockZWaveFrame[] = [];
+	/** Records the frames sent to the controller to perform assertions on them */
+	private sentControllerFrames: MockZWaveFrame[] = [];
+
 	/**
 	 * Waits until the controller sends a frame matching the given predicate or a timeout has elapsed.
 	 *
@@ -207,6 +212,7 @@ export class MockNode {
 		if (frame.type === MockZWaveFrameType.Request && frame.ackRequested) {
 			ret = this.expectControllerACK(MOCK_FRAME_ACK_TIMEOUT);
 		}
+		this.sentControllerFrames.push(frame);
 		process.nextTick(() => {
 			void this.controller.onNodeFrame(this, frame);
 		});
@@ -215,6 +221,8 @@ export class MockNode {
 
 	/** Gets called when a {@link MockZWaveFrame} is received from the {@link MockController} */
 	public async onControllerFrame(frame: MockZWaveFrame): Promise<void> {
+		this.receivedControllerFrames.push(frame);
+
 		// Ack the frame if desired
 		if (
 			this.autoAckControllerFrames &&
@@ -275,6 +283,74 @@ export class MockNode {
 		// New behaviors must override existing ones, so we insert at the front of the array
 		this.behaviors.unshift(...behaviors);
 	}
+
+	/** Asserts that a frame matching the given predicate was received from the controller */
+	public assertReceivedControllerFrame(
+		predicate: (frame: MockZWaveFrame) => boolean,
+		options?: {
+			noMatch?: boolean;
+			errorMessage?: string;
+		},
+	): void {
+		const { errorMessage, noMatch } = options ?? {};
+		const index = this.receivedControllerFrames.findIndex(predicate);
+		if (index === -1 && !noMatch) {
+			throw new Error(
+				`Node ${
+					this.id
+				} did not receive a Z-Wave frame matching the predicate!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		} else if (index > -1 && noMatch) {
+			throw new Error(
+				`Node ${
+					this.id
+				} received a Z-Wave frame matching the predicate, but this was not expected!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		}
+	}
+
+	/** Forgets all recorded frames received from the controller */
+	public clearReceivedControllerFrames(): void {
+		this.receivedControllerFrames = [];
+	}
+
+	/** Asserts that a frame matching the given predicate was sent to the controller */
+	public assertSentControllerFrame(
+		predicate: (frame: MockZWaveFrame) => boolean,
+		options?: {
+			noMatch?: boolean;
+			errorMessage?: string;
+		},
+	): void {
+		const { errorMessage, noMatch } = options ?? {};
+		const index = this.sentControllerFrames.findIndex(predicate);
+		if (index === -1 && !noMatch) {
+			throw new Error(
+				`Node ${
+					this.id
+				} did not send a Z-Wave frame matching the predicate!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		} else if (index > -1 && noMatch) {
+			throw new Error(
+				`Node ${
+					this.id
+				} sent a Z-Wave frame matching the predicate, but this was not expected!${
+					errorMessage ? ` ${errorMessage}` : ""
+				}`,
+			);
+		}
+	}
+
+	/** Forgets all recorded frames sent to the controller */
+	public clearSentControllerFrames(): void {
+		this.sentControllerFrames = [];
+	}
 }
 
 export interface MockNodeBehavior {
@@ -283,5 +359,5 @@ export interface MockNodeBehavior {
 		controller: MockController,
 		self: MockNode,
 		frame: MockZWaveFrame,
-	) => Promise<boolean> | boolean;
+	) => Promise<boolean | undefined> | boolean | undefined;
 }

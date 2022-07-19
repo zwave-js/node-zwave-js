@@ -14,11 +14,20 @@ export class TimedExpectation<TResult = void, TPredicate = never>
 	) {
 		this.promise = createDeferredPromise<TResult>();
 		this.timeout = setTimeout(() => this.reject(), timeoutMs);
+
+		// We need create the stack on a temporary object or the Error
+		// class will try to print the message
+		const tmp = { message: "" };
+		Error.captureStackTrace(tmp, TimedExpectation);
+		this.stack = (tmp as any).stack.replace(/^Error:?\s*\n/, "");
 	}
 
 	private promise: DeferredPromise<TResult>;
 	private timeout?: NodeJS.Timeout;
 	private _done: boolean = false;
+
+	/** The stack trace where the timed expectation was created */
+	public readonly stack: string;
 
 	public resolve(result: TResult): void {
 		if (this._done) return;
@@ -35,7 +44,9 @@ export class TimedExpectation<TResult = void, TPredicate = never>
 		if (this.timeout) {
 			clearTimeout(this.timeout);
 		}
-		this.promise.reject(new Error(this.timeoutErrorMessage));
+		const err = new Error(this.timeoutErrorMessage);
+		err.stack = this.stack;
+		this.promise.reject(err);
 	}
 
 	// Make this await-able

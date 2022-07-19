@@ -89,6 +89,7 @@ import {
 	getCCName,
 	isRssiError,
 	isTransmissionError,
+	isUnsupervisedOrSucceeded,
 	isZWaveError,
 	IZWaveNode,
 	Maybe,
@@ -832,7 +833,7 @@ export class ZWaveNode
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 			// And call it
-			await api.setValue(
+			const result = await api.setValue(
 				{
 					property: valueId.property,
 					propertyKey: valueId.propertyKey,
@@ -840,8 +841,14 @@ export class ZWaveNode
 				value,
 				options,
 			);
-			if (api.isSetValueOptimistic(valueId)) {
-				// If the call did not throw, assume that the call was successful and remember the new value
+
+			// Remember the new value if...
+			// ... the call did not throw (assume that the call was successful)
+			// ... the call was supervised and successful
+			if (
+				api.isSetValueOptimistic(valueId) &&
+				isUnsupervisedOrSucceeded(result)
+			) {
 				this._valueDB.setValue(
 					valueId,
 					value,

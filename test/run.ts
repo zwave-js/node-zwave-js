@@ -36,7 +36,10 @@ const driver = new Driver(port, {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		await driver.controller.nodes.getOrThrow(20).refreshInfo();
+		// setTimeout(
+		// 	() => driver.controller.nodes.getOrThrow(2).refreshInfo(),
+		// 	2500,
+		// );
 		// Test code
 		// const updates = await driver.controller.getAvailableFirmwareUpdates(2);
 		// console.log("Found updates:");

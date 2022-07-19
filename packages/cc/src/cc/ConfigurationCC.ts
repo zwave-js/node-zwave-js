@@ -18,6 +18,8 @@ import {
 	parseBitMask,
 	parsePartial,
 	stripUndefined,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -53,6 +55,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { ConfigurationCommand, ConfigValue } from "../lib/_Types";
@@ -290,7 +293,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		// Config parameters are addressed with numeric properties/keys
 		if (typeof property !== "number") {
 			throwUnsupportedProperty(this.ccId, property);
@@ -414,15 +417,18 @@ export class ConfigurationCCAPI extends CCAPI {
 			);
 		}
 
-		await this.set({
+		const result = await this.set({
 			parameter: property,
 			value: targetValue,
 			valueSize: valueSize as any,
 			valueFormat,
 		});
 
-		if ((this as ConfigurationCCAPI).isSinglecast()) {
-			// Verify the current value after a delay
+		if (
+			!supervisedCommandSucceeded(result) &&
+			(this as ConfigurationCCAPI).isSinglecast()
+		) {
+			// Verify the current value after a delay, unless the command was supervised and successful
 			(this as ConfigurationCCAPI).schedulePoll(
 				{ property, propertyKey },
 				targetValue,
@@ -430,6 +436,8 @@ export class ConfigurationCCAPI extends CCAPI {
 				{ transition: "fast" },
 			);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -600,7 +608,9 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * Sets a new value for a given config parameter of the device.
 	 */
 	@validateArgs({ strictEnums: true })
-	public async set(options: ConfigurationCCAPISetOptions): Promise<void> {
+	public async set(
+		options: ConfigurationCCAPISetOptions,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -634,7 +644,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueFormat: normalized.valueFormat,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -643,7 +653,7 @@ export class ConfigurationCCAPI extends CCAPI {
 	@validateArgs({ strictEnums: true })
 	public async setBulk(
 		values: ConfigurationCCAPISetOptions[],
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		// Normalize the values so we can better work with them
 		const normalized = values.map((v) =>
 			normalizeConfigurationCCAPISetOptions(
@@ -678,7 +688,7 @@ export class ConfigurationCCAPI extends CCAPI {
 				values: allParams.map((v) => v.value as number),
 				handshake: true,
 			});
-			await this.applHost.sendCommand(cc, this.commandOptions);
+			return this.applHost.sendCommand(cc, this.commandOptions);
 		} else {
 			this.assertSupportsCommand(
 				ConfigurationCommand,
@@ -698,6 +708,7 @@ export class ConfigurationCCAPI extends CCAPI {
 					valueSize,
 					valueFormat,
 				});
+				// TODO: handle intermediate errors
 				await this.applHost.sendCommand(cc, this.commandOptions);
 			}
 		}
@@ -709,7 +720,9 @@ export class ConfigurationCCAPI extends CCAPI {
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
 	@validateArgs()
-	public async reset(parameter: number): Promise<void> {
+	public async reset(
+		parameter: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -721,7 +734,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			parameter,
 			resetToDefault: true,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -1618,6 +1631,7 @@ type ConfigurationCCSetOptions = CCCommandOptions &
 	);
 
 @CCCommand(ConfigurationCommand.Set)
+@useSupervision()
 export class ConfigurationCCSet extends ConfigurationCC {
 	public constructor(
 		host: ZWaveHost,

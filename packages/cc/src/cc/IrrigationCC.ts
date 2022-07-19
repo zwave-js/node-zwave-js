@@ -8,6 +8,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseFloatWithScale,
+	SupervisionResult,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -43,6 +44,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -699,7 +701,10 @@ export class IrrigationCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async runValve(valveId: ValveId, duration: number): Promise<void> {
+	public async runValve(
+		valveId: ValveId,
+		duration: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveRun,
@@ -712,11 +717,13 @@ export class IrrigationCCAPI extends CCAPI {
 			duration,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
-	public shutoffValve(valveId: ValveId): Promise<void> {
+	public shutoffValve(
+		valveId: ValveId,
+	): Promise<SupervisionResult | undefined> {
 		return this.runValve(valveId, 0);
 	}
 
@@ -781,7 +788,9 @@ export class IrrigationCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async runTables(tableIDs: number[]): Promise<void> {
+	public async runTables(
+		tableIDs: number[],
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.ValveTableRun,
@@ -793,7 +802,7 @@ export class IrrigationCCAPI extends CCAPI {
 			tableIDs,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -801,7 +810,9 @@ export class IrrigationCCAPI extends CCAPI {
 	 * @param duration Shutoff duration in hours. A value of 255 will shut off the entire system permanently and prevents schedules from running.
 	 */
 	@validateArgs()
-	public async shutoffSystem(duration: number): Promise<void> {
+	public async shutoffSystem(
+		duration: number,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			IrrigationCommand,
 			IrrigationCommand.SystemShutoff,
@@ -813,18 +824,18 @@ export class IrrigationCCAPI extends CCAPI {
 			duration,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Shuts off the entire system permanently and prevents schedules from running */
-	public shutoffSystemPermanently(): Promise<void> {
+	public shutoffSystemPermanently(): Promise<SupervisionResult | undefined> {
 		return this.shutoffSystem(255);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		const valueDB = this.getValueDB();
 
 		if (systemConfigProperties.includes(property as any)) {
@@ -850,7 +861,7 @@ export class IrrigationCCAPI extends CCAPI {
 
 			await this.setSystemConfig(options);
 		} else if (property === "shutoff") {
-			await this.shutoffSystem(0);
+			return this.shutoffSystem(0);
 		} else if (
 			property === "master" ||
 			(typeof property === "number" && property >= 1)
@@ -913,10 +924,10 @@ export class IrrigationCCAPI extends CCAPI {
 							ZWaveErrorCodes.Argument_Invalid,
 						);
 					}
-					await this.runValve(property, duration);
+					return this.runValve(property, duration);
 				} else {
 					// Stop a valve run
-					await this.shutoffValve(property);
+					return this.shutoffValve(property);
 				}
 			} else {
 				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
@@ -2026,6 +2037,7 @@ interface IrrigationCCValveRunOptions extends CCCommandOptions {
 }
 
 @CCCommand(IrrigationCommand.ValveRun)
+@useSupervision()
 export class IrrigationCCValveRun extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -2235,6 +2247,7 @@ interface IrrigationCCValveTableRunOptions extends CCCommandOptions {
 }
 
 @CCCommand(IrrigationCommand.ValveTableRun)
+@useSupervision()
 export class IrrigationCCValveTableRun extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -2288,6 +2301,7 @@ interface IrrigationCCSystemShutoffOptions extends CCCommandOptions {
 }
 
 @CCCommand(IrrigationCommand.SystemShutoff)
+@useSupervision()
 export class IrrigationCCSystemShutoff extends IrrigationCC {
 	public constructor(
 		host: ZWaveHost,

@@ -1,5 +1,4 @@
 import type { ConfigManager, Scale } from "@zwave-js/config";
-import type { ValueMetadataNumeric } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -8,8 +7,11 @@ import {
 	MessagePriority,
 	parseBitMask,
 	parseFloatWithScale,
+	supervisedCommandSucceeded,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
+	ValueMetadataNumeric,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
@@ -39,6 +41,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import {
@@ -122,7 +125,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property, propertyKey },
 		value,
-	): Promise<void> => {
+	) => {
 		if (property !== "setpoint") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -143,12 +146,15 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		).endpoint(this.endpoint.index);
 		const preferredScale =
 			this.tryGetValueDB()?.getValue<number>(scaleValueId);
-		await this.set(propertyKey, value, preferredScale ?? 0);
 
-		if (this.isSinglecast()) {
-			// Verify the current value after a delay
+		const result = await this.set(propertyKey, value, preferredScale ?? 0);
+
+		// Verify the change after a delay, unless the command was supervised and successful
+		if (this.isSinglecast() && !supervisedCommandSucceeded(result)) {
 			this.schedulePoll({ property, propertyKey }, value);
 		}
+
+		return result;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -207,7 +213,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 		setpointType: HumidityControlSetpointType,
 		value: number,
 		scale: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			HumidityControlSetpointCommand,
 			HumidityControlSetpointCommand.Set,
@@ -220,7 +226,7 @@ export class HumidityControlSetpointCCAPI extends CCAPI {
 			value,
 			scale,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -489,6 +495,7 @@ interface HumidityControlSetpointCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(HumidityControlSetpointCommand.Set)
+@useSupervision()
 export class HumidityControlSetpointCCSet extends HumidityControlSetpointCC {
 	public constructor(
 		host: ZWaveHost,

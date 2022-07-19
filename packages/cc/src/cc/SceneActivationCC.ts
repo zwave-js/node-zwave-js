@@ -68,7 +68,7 @@ export class SceneActivationCCAPI extends CCAPI {
 		{ property },
 		value,
 		options,
-	): Promise<void> => {
+	) => {
 		if (property !== "sceneId") {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -77,6 +77,8 @@ export class SceneActivationCCAPI extends CCAPI {
 		}
 		const duration = Duration.from(options?.transitionDuration);
 		await this.set(value, duration);
+
+		return undefined;
 	};
 
 	/**

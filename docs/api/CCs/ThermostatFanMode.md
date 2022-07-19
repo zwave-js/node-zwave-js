@@ -13,7 +13,10 @@ async get(): Promise<Pick<ThermostatFanModeCCReport, "mode" | "off"> | undefined
 ### `set`
 
 ```ts
-async set(mode: ThermostatFanMode, off?: boolean): Promise<void>;
+async set(
+	mode: ThermostatFanMode,
+	off?: boolean,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupportedModes`

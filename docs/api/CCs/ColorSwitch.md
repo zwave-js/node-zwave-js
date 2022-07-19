@@ -21,7 +21,9 @@ async get(component: ColorComponent): Promise<Pick<ColorSwitchCCReport, "current
 ### `set`
 
 ```ts
-async set(options: ColorSwitchCCSetOptions): Promise<void>;
+async set(
+	options: ColorSwitchCCSetOptions,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `startLevelChange`
@@ -29,7 +31,7 @@ async set(options: ColorSwitchCCSetOptions): Promise<void>;
 ```ts
 async startLevelChange(
 	options: ColorSwitchCCStartLevelChangeOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `stopLevelChange`
@@ -37,7 +39,7 @@ async startLevelChange(
 ```ts
 async stopLevelChange(
 	colorComponent: ColorComponent,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Color Switch CC values
