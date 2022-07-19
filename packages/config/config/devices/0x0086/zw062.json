@@ -49,7 +49,7 @@
 		},
 		{
 			"#": "34",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Sensor Calibration",
 			"description": "To calibrate, close door fully. Initiate calibration. Open door fully, then close door fully.",
 			"options": [
@@ -261,7 +261,7 @@
 		},
 		{
 			"#": "47",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Short/Long Press Function of Button- And Button+",
 			"options": [
 				{

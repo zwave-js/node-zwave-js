@@ -154,7 +154,7 @@
 		{
 			"#": "6",
 			"label": "Rotary Wheel Press Functionality",
-			"$import": "~/templates/master_template.json#base_0-2_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"unsigned": true,
 			"options": [
 				{
@@ -174,7 +174,7 @@
 		{
 			"#": "7",
 			"label": "External Switch Functionality",
-			"$import": "~/templates/master_template.json#base_0-2_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"unsigned": true,
 			"options": [
 				{
@@ -204,7 +204,7 @@
 		{
 			"#": "9",
 			"label": "Dimmer Curve",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"unsigned": true,
 			"options": [
 				{
