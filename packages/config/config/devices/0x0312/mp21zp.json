@@ -17,15 +17,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_four_options_inverted"
+			"$import": "templates/minoston_template.json#led_indicator_four_options_inverted"
 		},
 		{
 			"#": "2",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "3",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+			"$import": "templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "4",
@@ -43,15 +43,15 @@
 		},
 		{
 			"#": "6",
-			"$import": "~/0x0312/templates/minoston_template.json#power_meter_reporting_threshold_time"
+			"$import": "templates/minoston_template.json#power_reporting_interval"
 		},
 		{
 			"#": "7",
-			"$import": "~/0x0312/templates/minoston_template.json#power_meter_reporting_threshold_current"
+			"$import": "templates/minoston_template.json#current_reporting_threshold"
 		},
 		{
 			"#": "8",
-			"$import": "~/0x0312/templates/minoston_template.json#power_meter_reporting_threshold_energy"
+			"$import": "templates/minoston_template.json#energy_reporting_threshold"
 		}
 	],
 	"metadata": {

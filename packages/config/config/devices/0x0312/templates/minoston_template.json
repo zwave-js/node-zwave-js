@@ -300,8 +300,8 @@
 		"label": "Send Status Change Report: Timer",
 		"defaultValue": 1
 	},
-	"power_meter_reporting_threshold_time": {
-		"label": "Time Reporting Threshold",
+	"power_reporting_interval": {
+		"label": "Power Reporting Interval",
 		"valueSize": 4,
 		"unit": "minutes",
 		"minValue": 1,
@@ -309,7 +309,7 @@
 		"defaultValue": 5,
 		"unsigned": true
 	},
-	"power_meter_reporting_threshold_current": {
+	"current_reporting_threshold": {
 		"label": "Current Reporting Threshold",
 		"valueSize": 1,
 		"unit": "0.1 A",
@@ -318,7 +318,7 @@
 		"defaultValue": 1,
 		"unsigned": true
 	},
-	"power_meter_reporting_threshold_energy": {
+	"energy_reporting_threshold": {
 		"label": "Energy Reporting Threshold",
 		"valueSize": 1,
 		"unit": "0.01 kWh",
