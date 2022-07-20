@@ -4,6 +4,30 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
+* Dropped support for Node.js 12 (#4824, #4491)
+* Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
+* Added support to provide an API key for the firmware update service, soon mandatory (#4816)
+* Removed several deprecated things and reworked `beginExclusion` to use an options object instead (#4699)
+* CC implementations were moved into their own package (#4668)
+* CC code can now be used mostly without a driver instance (#4651)
+* Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
+* `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
+
+### Features
+* Implement Z-Wave Protocol CC, for internal use (#4691)
+* Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697)
+* Add values to `Basic CC` and `Multilevel Switch CC` to restore previous non-zero level (#4732)
+
+### Bugfixes
+* Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
+
+### Changes under the hood
+* Patch `tsserver` after install to allow displaying large types
+* Upgrade dependencies (#4820, #4663)
+* Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
+
 ## 9.6.2 (2022-07-20)
 ### Bugfixes
 * `Color Switch CC`: Validate that all compound `targetColor` components are numeric (#4819)
