@@ -20,7 +20,7 @@ const replacements = [
 ];
 
 for (const [search, replace] of replacements) {
-	if (!fileContent.includes(search)) {
+	if (!fileContent.includes(search) && !fileContent.includes(replace)) {
 		fs.writeFileSync(
 			"patch-tsserver.log",
 			`Failed to patch tsserver.js - search string not found:
