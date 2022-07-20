@@ -14,6 +14,7 @@
 * CC code can now be used mostly without a driver instance (#4651)
 * Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
 * `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
+* Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
 
 ### Features
 * Implement Z-Wave Protocol CC, for internal use (#4691)
@@ -22,6 +23,7 @@
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
+* Do not request ACK when sending node to sleep (#4826)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
