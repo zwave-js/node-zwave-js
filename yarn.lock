@@ -3490,13 +3490,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node12@npm:^1.0.11":
-  version: 1.0.11
-  resolution: "@tsconfig/node12@npm:1.0.11"
-  checksum: 5ce29a41b13e7897a58b8e2df11269c5395999e588b9a467386f99d1d26f6c77d1af2719e407621412520ea30517d718d5192a32403b8dfcc163bf33e40a338a
-  languageName: node
-  linkType: hard
-
 "@tsconfig/node12@npm:^1.0.7":
   version: 1.0.9
   resolution: "@tsconfig/node12@npm:1.0.9"
@@ -3508,6 +3501,13 @@ __metadata:
   version: 1.0.1
   resolution: "@tsconfig/node14@npm:1.0.1"
   checksum: 976345e896c0f059867f94f8d0f6ddb8b1844fb62bf36b727de8a9a68f024857e5db97ed51d3325e23e0616a5e48c034ff51a8d595b3fe7e955f3587540489be
+  languageName: node
+  linkType: hard
+
+"@tsconfig/node14@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@tsconfig/node14@npm:1.0.3"
+  checksum: 19275fe80c4c8d0ad0abed6a96dbf00642e88b220b090418609c4376e1cef81bf16237bf170ad1b341452feddb8115d8dd2e5acdfdea1b27422071163dc9ba9d
   languageName: node
   linkType: hard
 
@@ -4100,7 +4100,7 @@ __metadata:
     "@babel/preset-typescript": ^7.18.6
     "@commitlint/cli": ^17.0.3
     "@commitlint/config-conventional": ^17.0.3
-    "@tsconfig/node12": ^1.0.11
+    "@tsconfig/node14": ^1.0.3
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.22
