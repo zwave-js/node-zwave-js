@@ -10,7 +10,7 @@ export function checkCCToLogEntry(): void {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig("@zwave-js/cc");
+	const tsConfig = loadTSConfig("cc");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
 	const results = new Map<
@@ -27,8 +27,8 @@ export function checkCCToLogEntry(): void {
 		// Only look at files in this package
 		if (relativePath.startsWith("..")) continue;
 
-		// Only look at the commandclass dir
-		if (!relativePath.includes("/commandclass/")) {
+		// Only look at the cc dir
+		if (!relativePath.includes("/src/cc/")) {
 			continue;
 		}
 		// Ignore test files and the index

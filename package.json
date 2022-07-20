@@ -111,7 +111,7 @@
     "lint": "yarn run lint:exports && yarn run lint:ts && yarn run lint:prettier && yarn run lint:configjson",
     "implemented_ccs": "yarn ts packages/maintenance/src/implementedCCs.ts",
     "gh-cc-table": "yarn run implemented_ccs --flavor=github --only-incomplete",
-    "toLogEntryOverview": "yarn ts packages/zwave-js/maintenance/checkCCToLogEntry.ts",
+    "toLogEntryOverview": "yarn ts packages/cc/maintenance/checkCCToLogEntry.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
     "release": "release-script",

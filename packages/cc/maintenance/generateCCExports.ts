@@ -27,7 +27,7 @@ function findExports() {
 	// Create a Program to represent the project, then pull out the
 	// source file to parse its AST.
 
-	const tsConfig = loadTSConfig("@zwave-js/cc");
+	const tsConfig = loadTSConfig("cc");
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 	const checker = program.getTypeChecker();
 
