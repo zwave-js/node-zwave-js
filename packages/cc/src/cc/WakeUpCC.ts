@@ -3,6 +3,7 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	TransmitOptions,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -193,6 +194,9 @@ export class WakeUpCCAPI extends CCAPI {
 			priority: MessagePriority.WakeUp,
 			// Don't try to resend this - if we get no response, the node is most likely asleep
 			maxSendAttempts: 1,
+			// Also we don't want to wait for an ACK because this can lock up the network for seconds
+			// if the target node is asleep and doesn't respond to the command
+			transmitOptions: TransmitOptions.DEFAULT_NOACK,
 		});
 	}
 }
