@@ -41,7 +41,8 @@ const driver = new Driver(port, {
 		// 	2500,
 		// );
 		// Test code
-		// const updates = await driver.controller.getAvailableFirmwareUpdates(2);
+		// await wait(1000);
+		// const updates = await driver.controller.getAvailableFirmwareUpdates(10);
 		// console.log("Found updates:");
 		// console.dir(updates, { depth: Infinity });
 		// await wait(1000);

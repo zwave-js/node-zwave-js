@@ -6,7 +6,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
@@ -23,19 +23,24 @@ export async function getAvailableFirmwareUpdates(
 	productType: number,
 	productId: number,
 	firmwareVersion: string,
+	apiKey?: string,
 ): Promise<FirmwareUpdateInfo[]> {
-	const response: FirmwareUpdateInfo[] = (
-		await axios({
-			method: "post",
-			url: `${serviceURL}/api/v1/updates`,
-			data: {
-				manufacturerId: formatId(manufacturerId),
-				productType: formatId(productType),
-				productId: formatId(productId),
-				firmwareVersion,
-			},
-		})
-	).data;
+	const config: AxiosRequestConfig = {
+		method: "post",
+		url: `${serviceURL}/api/v1/updates`,
+		data: {
+			manufacturerId: formatId(manufacturerId),
+			productType: formatId(productType),
+			productId: formatId(productId),
+			firmwareVersion,
+		},
+	};
+	if (apiKey) {
+		config.headers = {
+			"X-API-Key": apiKey,
+		};
+	}
+	const response: FirmwareUpdateInfo[] = (await axios(config)).data;
 
 	return response;
 }
