@@ -42,7 +42,7 @@
     "url": "https://github.com/sponsors/AlCalzone/"
   },
   "engines": {
-    "node": ">=v12.22.2"
+    "node": ">=14.13.0"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",
