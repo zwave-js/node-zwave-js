@@ -234,6 +234,7 @@ import {
 import {
 	ExclusionOptions,
 	ExclusionStrategy,
+	FoundNode,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -265,7 +266,7 @@ interface ControllerEventCallbacks
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
-	"node found": (node: ZWaveNode) => void;
+	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
@@ -2425,27 +2426,33 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// Inclusion is now completed, bootstrap the node
 				const newNode = this._nodePendingInclusion;
 
-				this.emit("node found", newNode);
-
-				const supportedCommandClasses = [
+				const supportedCCs = [
 					...newNode.implementedCommandClasses.entries(),
 				]
 					.filter(([, info]) => info.isSupported)
 					.map(([cc]) => cc);
-				const controlledCommandClasses = [
+				const controlledCCs = [
 					...newNode.implementedCommandClasses.entries(),
 				]
 					.filter(([, info]) => info.isControlled)
 					.map(([cc]) => cc);
+
+				this.emit("node found", {
+					id: newNode.id,
+					deviceClass: newNode.deviceClass,
+					supportedCCs,
+					controlledCCs,
+				});
+
 				this.driver.controllerLog.print(
 					`finished adding node ${newNode.id}:
   basic device class:    ${newNode.deviceClass?.basic.label}
   generic device class:  ${newNode.deviceClass?.generic.label}
   specific device class: ${newNode.deviceClass?.specific.label}
-  supported CCs: ${supportedCommandClasses
+  supported CCs: ${supportedCCs
 		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}
-  controlled CCs: ${controlledCommandClasses
+  controlled CCs: ${controlledCCs
 		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}`,
 				);
@@ -2609,7 +2616,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
 
-					this.emit("node found", newNode);
+					this.emit("node found", {
+						id: newNode.id,
+					});
 
 					// We're communicating with the device, so assume it is alive
 					// If it is actually a sleeping device, it will be marked as such later
