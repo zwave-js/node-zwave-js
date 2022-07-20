@@ -1,4 +1,5 @@
-import type { SecurityClass } from "@zwave-js/core/safe";
+import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
+import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
 export interface InclusionResult {
@@ -197,4 +198,12 @@ export enum InclusionState {
 	Busy,
 	/** The controller listening for SmartStart nodes to announce themselves. */
 	SmartStart,
+}
+
+/** The known information about a node immediately after the Z-Wave protocol is done including it */
+export interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
 }

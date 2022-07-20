@@ -954,7 +954,18 @@ A node has successfully been added to the network.
 > [!NOTE] At this point, the initial setup and the node interview is still pending, so the node is **not yet operational**.
 
 ```ts
-(node: ZWaveNode) => void
+(node: FoundNode) => void
+```
+
+<!-- #import FoundNode from "zwave-js" -->
+
+```ts
+interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
+}
 ```
 
 ### `"node added"`
