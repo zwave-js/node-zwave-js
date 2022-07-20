@@ -4431,6 +4431,8 @@ ${associatedNodes.join(", ")}`,
 	 *
 	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
 	 * which did not wake up within a minute.
+	 *
+	 * **Note:** This requires an API key to be set in the driver options.
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
@@ -4481,15 +4483,17 @@ ${associatedNodes.join(", ")}`,
 				productType,
 				productId,
 				firmwareVersion,
+				this.driver.options.apiKeys?.firmwareUpdateService,
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;
 			if (e.response) {
-				if (
-					isObject(e.response.data) &&
-					typeof e.response.data.message === "string"
-				) {
-					message += `${e.response.data.message} `;
+				if (isObject(e.response.data)) {
+					if (typeof e.response.data.error === "string") {
+						message += `${e.response.data.error} `;
+					} else if (typeof e.response.data.message === "string") {
+						message += `${e.response.data.message} `;
+					}
 				}
 				message += `[${e.response.status} ${e.response.statusText}]`;
 			} else if (typeof e.message === "string") {
