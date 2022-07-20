@@ -68,7 +68,7 @@ integrationTest(
 			mockNode.defineBehavior(respondToSupervisionGet);
 		},
 
-		testBody: async (driver, node, mockController, _mockNode) => {
+		testBody: async (driver, node, _mockController, _mockNode) => {
 			const promise = node.setValue(
 				MultilevelSwitchCCValues.targetValue.id,
 				77,

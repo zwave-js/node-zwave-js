@@ -191,6 +191,11 @@ enum ExclusionStrategy {
 }
 ```
 
-## Further deprecations:
+## Further deprecations
 
 -   The `"Routing End Node"` enum member for the `NodeType` enum was deprecated. Use the alternative `"End Node"` instead.
+
+## Dropped support for Node.js 12
+
+Node.js 12 has been EOL since May 2022 and many libraries already dropped support, which continuously makes it harder to maintain compatibility.
+As such, we have dropped support for Node.js 12 in the v10 release. You might find that it still works, but we can no longer guarantee this.
