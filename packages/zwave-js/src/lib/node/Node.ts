@@ -1181,6 +1181,29 @@ export class ZWaveNode
 	}
 
 	/**
+	 * Starts or resumes a deferred initial interview of this node.
+	 *
+	 * **WARNING:** This is only allowed when the initial interview was deferred using the
+	 * `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
+	 *
+	 * **NOTE:** It is advised to NOT await this method as it can take a very long time (minutes to hours)!
+	 */
+	public async interview(): Promise<void> {
+		// The initial interview of the controller node is always done
+		// and cannot be deferred.
+		if (this.isControllerNode) return;
+
+		if (!this.driver.options.interview?.disableOnNodeAdded) {
+			throw new ZWaveError(
+				`Calling ZWaveNode.interview() is not allowed because automatic node interviews are enabled. Wait for the driver to interview the node or use ZWaveNode.refreshInfo() to re-interview a node.`,
+				ZWaveErrorCodes.Driver_FeatureDisabled,
+			);
+		}
+
+		return this.driver.interviewNodeInternal(this);
+	}
+
+	/**
 	 * Resets all information about this node and forces a fresh interview.
 	 * **Note:** This does nothing for the controller node.
 	 *
@@ -1254,7 +1277,7 @@ export class ZWaveNode
 	 * WARNING: Do not call this method from application code. To refresh the information
 	 * for a specific node, use `node.refreshInfo()` instead
 	 */
-	public async interview(): Promise<boolean> {
+	public async interviewInternal(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
 			this.driver.controllerLog.logNode(
 				this.id,
