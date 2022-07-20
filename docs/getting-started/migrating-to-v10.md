@@ -128,6 +128,11 @@ public static getNotificationMode(
 If you're constructing `SendData[Bridge][Multicast]Request`s manually, the `maxSendAttempts` property now needs to be set if more than 1 attempts are desired.
 The driver does this automatically when using the `sendCommand` method, so most use cases should not be affected.
 
+## Moved the `Driver.interviewNode` method to the `ZWaveNode` class
+
+The method `interviewNode(node: ZWaveNode)` which is meant to kick off a deferred initial interview for a node was moved to the `ZWaveNode` class.
+The new signature is now `node.interview()`.
+
 ## The firmware update service now requires API keys
 
 There will be a grace period on this, but soon after the release of v10, the service will respond with an error when no or an invalid API key is provided.
