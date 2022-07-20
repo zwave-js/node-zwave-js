@@ -503,9 +503,9 @@ export class SerialAPISetup_GetPowerlevelResponse extends SerialAPISetupResponse
 	) {
 		super(host, options);
 		validatePayload(this.payload.length >= 2);
-		// The values are in 0.1 dBm
-		this.powerlevel = this.payload[0] / 10;
-		this.measured0dBm = this.payload[1] / 10;
+		// The values are in 0.1 dBm, signed
+		this.powerlevel = this.payload.readInt8(0) / 10;
+		this.measured0dBm = this.payload.readInt8(1) / 10;
 	}
 
 	/** The configured normal powerlevel in dBm */
@@ -572,11 +572,11 @@ export class SerialAPISetup_SetPowerlevelRequest extends SerialAPISetupRequest {
 	public measured0dBm: number;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			// The values are in 0.1 dBm
-			Math.round(this.powerlevel * 10),
-			Math.round(this.measured0dBm * 10),
-		]);
+		this.payload = Buffer.allocUnsafe(2);
+		// The values are in 0.1 dBm
+		this.payload.writeInt8(Math.round(this.powerlevel * 10), 0);
+		this.payload.writeInt8(Math.round(this.measured0dBm * 10), 1);
+
 		return super.serialize();
 	}
 
