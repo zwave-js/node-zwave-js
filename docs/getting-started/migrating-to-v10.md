@@ -133,6 +133,11 @@ The driver does this automatically when using the `sendCommand` method, so most 
 The method `interviewNode(node: ZWaveNode)` which is meant to kick off a deferred initial interview for a node was moved to the `ZWaveNode` class.
 The new signature is now `node.interview()`.
 
+## The firmware update service now requires API keys
+
+There will be a grace period on this, but soon after the release of v10, the service will respond with an error when no or an invalid API key is provided.
+Please refer to https://github.com/zwave-js/firmware-updates/ for requesting an API key and set it using the new `apiKeys.firmwareUpdateService` property on the driver options.
+
 ## Removed the `"zwave-js/CommandClass"` sub-package export
 
 The CC implementations have been moved to their own package, `@zwave-js/cc`. Simply replace the imports with the new package name.
