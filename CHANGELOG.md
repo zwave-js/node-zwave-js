@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 9.6.2 (2022-07-20)
 ### Bugfixes
 * `Color Switch CC`: Validate that all compound `targetColor` components are numeric (#4819)
 
