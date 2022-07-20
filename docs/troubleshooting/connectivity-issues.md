@@ -4,8 +4,8 @@
 
 → **Commands sometimes don't go through**  
 → **Nodes that go dead and come back alive**  
-→ **Reports go missing**
-→ **Nodes that are close to the controller are missing from its neighbor list**
+→ **Reports go missing**  
+→ **Nodes that are close to the controller are missing from its neighbor list**  
 → **Nodes are vaninshing from the controller's neighbor list**
 
 Z-Wave sticks in particular are prone to interference by USB ports, especially by USB3 ports. We recommend putting the stick in a suitable location:
