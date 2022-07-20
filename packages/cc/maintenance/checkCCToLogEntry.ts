@@ -47,6 +47,7 @@ export function checkCCToLogEntry(): void {
 				node.name &&
 				node.name.text.includes("CC") &&
 				!node.name.text.endsWith("CC") &&
+				!node.name.text.startsWith("ZWaveProtocol") &&
 				!node.name.text.endsWith("API")
 			) {
 				// Only look at implementations of toLogEntry
