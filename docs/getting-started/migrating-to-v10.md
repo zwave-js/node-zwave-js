@@ -199,3 +199,22 @@ enum ExclusionStrategy {
 
 Node.js 12 has been EOL since May 2022 and many libraries already dropped support, which continuously makes it harder to maintain compatibility.
 As such, we have dropped support for Node.js 12 in the v10 release. You might find that it still works, but we can no longer guarantee this.
+
+## Changed argument type of `"node found"` event
+
+This event is emitted immediately after the Z-Wave protocol is done including a node. At this point, the node is not operational yet, but the argument type `ZWaveNode` did not make that clear. The event callback was changed to:
+
+```ts
+(node: FoundNode) => void;
+```
+
+where `FoundNode` is defined as
+
+```ts
+interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
+}
+```
