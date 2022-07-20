@@ -1280,25 +1280,6 @@ export class Driver
 		}
 	}
 
-	/**
-	 * Starts or resumes the interview of a Z-Wave node.
-	 *
-	 * **NOTE:** This is only allowed when the initial interview was bypassed using the
-	 * `interview.disableOnNodeAdded` option. Otherwise, this method will throw an error.
-	 *
-	 * **NOTE:** It is advised to NOT await this method as it can take a very long time (minutes to hours)!
-	 */
-	public async interviewNode(node: ZWaveNode): Promise<void> {
-		if (!this.options.interview?.disableOnNodeAdded) {
-			throw new ZWaveError(
-				`Calling Driver.interviewNode is not allowed because automatic node interviews are enabled. Use ZWaveNode.refreshInfo() to re-interview a node.`,
-				ZWaveErrorCodes.Driver_FeatureDisabled,
-			);
-		}
-
-		return this.interviewNodeInternal(node);
-	}
-
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -1332,7 +1313,7 @@ export class Driver
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
 
 		try {
-			if (!(await node.interview())) {
+			if (!(await node.interviewInternal())) {
 				// Find out if we may retry the interview
 				if (node.status === NodeStatus.Dead) {
 					this.controllerLog.logNode(

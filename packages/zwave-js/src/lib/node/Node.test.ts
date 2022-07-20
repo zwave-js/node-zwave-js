@@ -642,7 +642,7 @@ describe("lib/node/Node", () => {
 
 			it("should execute all the interview methods", async () => {
 				node.interviewStage = InterviewStage.None;
-				await node.interview();
+				await node.interviewInternal();
 				for (const method of Object.keys(originalMethods)) {
 					expect((node as any)[method]).toBeCalled();
 				}
@@ -650,7 +650,7 @@ describe("lib/node/Node", () => {
 
 			it("should not execute any interview method if the interview is completed", async () => {
 				node.interviewStage = InterviewStage.Complete;
-				await node.interview();
+				await node.interviewInternal();
 				for (const method of Object.keys(originalMethods)) {
 					expect((node as any)[method]).not.toBeCalled();
 				}
@@ -658,7 +658,7 @@ describe("lib/node/Node", () => {
 
 			it("should skip all methods that belong to an earlier stage", async () => {
 				node.interviewStage = InterviewStage.NodeInfo;
-				await node.interview();
+				await node.interviewInternal();
 
 				const expectCalled = [
 					"interviewCCs",
