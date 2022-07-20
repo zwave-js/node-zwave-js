@@ -194,6 +194,11 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		scales: Partial<Record<string | number, string | number>>;
 	};
 
+	apiKeys?: {
+		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
+		firmwareUpdateService?: string;
+	};
+
 	/** @internal Used for testing internally */
 	testingHooks?: {
 		serialPortBinding?: typeof SerialPort;
