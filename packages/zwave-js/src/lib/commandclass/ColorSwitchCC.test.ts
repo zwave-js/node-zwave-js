@@ -1,6 +1,12 @@
-import { CommandClasses, Duration } from "@zwave-js/core";
+import {
+	assertZWaveError,
+	CommandClasses,
+	Duration,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { createTestingHost } from "@zwave-js/host";
 import {
+	ColorSwitchCCAPI,
 	ColorSwitchCCGet,
 	ColorSwitchCCReport,
 	ColorSwitchCCSet,
@@ -262,5 +268,23 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 			]),
 		);
 		expect(cc.serialize()).toEqual(expected);
+	});
+
+	it("the setValue API verifies that targetColor isn't set with non-numeric keys", async () => {
+		// Repro for https://github.com/zwave-js/node-zwave-js/issues/4811
+		const API = new ColorSwitchCCAPI(undefined as any, undefined as any);
+		await assertZWaveError(
+			() =>
+				API.setValue!(
+					{ property: "targetColor" },
+					{
+						red: null,
+					},
+				),
+			{
+				errorCode: ZWaveErrorCodes.Argument_Invalid,
+				messageMatches: `must be of type "number"`,
+			},
+		);
 	});
 });

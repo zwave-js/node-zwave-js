@@ -359,6 +359,8 @@ export class ColorSwitchCCAPI extends CCAPI {
 				}
 			} else {
 				// Set the compound color object
+
+				// Ensure the value is an object with only valid keys
 				if (
 					!isObject(value) ||
 					!Object.keys(value).every((key) => key in ColorComponentMap)
@@ -369,6 +371,18 @@ export class ColorSwitchCCAPI extends CCAPI {
 						}: "${property}" must be set to an object which specifies each color channel`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
+				}
+
+				// Ensure that each property is numeric
+				for (const [key, val] of entries(value)) {
+					if (typeof val !== "number") {
+						throwWrongValueType(
+							this.ccId,
+							`${property}.${key}`,
+							"number",
+							typeof val,
+						);
+					}
 				}
 
 				// GH#2527: strip unsupported color components, because some devices don't react otherwise
