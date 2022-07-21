@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export { SerialLogContext } from "./Logger_safe";
 export * from "./message/Constants";

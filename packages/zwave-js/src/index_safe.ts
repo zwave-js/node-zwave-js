@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export * from "./Controller_safe";
 // export * from "./Driver";

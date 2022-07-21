@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export * from "./abstractions/ICommandClass";
 export * from "./abstractions/IZWaveEndpoint";
