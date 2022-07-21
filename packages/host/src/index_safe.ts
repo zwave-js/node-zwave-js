@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export * from "./FileSystem";
 export * from "./ZWaveHost";

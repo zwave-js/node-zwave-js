@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 import "reflect-metadata";
 
