@@ -182,5 +182,9 @@
 			"#": "42",
 			"$import": "templates/honeywell_template.json#temperature_offset"
 		}
-	]
+	],
+	"compat": {
+		"skipConfigurationNameQuery": true,
+		"skipConfigurationInfoQuery": true
+	}
 }
