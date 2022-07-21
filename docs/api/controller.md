@@ -39,7 +39,7 @@ The options parameter is used to specify the inclusion strategy and provide call
     **Not recommended**, because S2 should be used where possible.
 
 -   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
-    **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+    **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 
 -   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
     **Not recommended** because `Default` is more versatile and less complicated for the user.
@@ -892,7 +892,7 @@ enum InclusionState {
 
 ## Controller events
 
-The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
 
 ### `"inclusion started"`
 

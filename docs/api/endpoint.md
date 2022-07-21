@@ -126,7 +126,7 @@ If the `Z-Wave+` Command Class is supported, this returns the icon to be shown t
 readonly commandClasses(): CCAPIs
 ```
 
-This property provides access to simplified APIs that are taylored to specific CCs.
+This property provides access to simplified APIs that are tailored to specific CCs.
 
 Make sure to check support of each API using `API.isSupported()` before using it, since all other API calls will throw if the API is not supported. Example:
 

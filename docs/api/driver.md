@@ -10,7 +10,7 @@ new (port: string, options?: ZWaveOptions) => Driver
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desription.
+For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desrciption.
 
 ## Driver methods
 
@@ -795,5 +795,5 @@ For more control over writing the cache files, you can use the `storage` options
 The `throttle` option allows you to fine-tune the filesystem. The default value is `"normal"`.
 Note that the lockfiles to avoid concurrent cache accesses are updated every couple of seconds. If you have concerns regarding SD card wear, you can change the `lockDir` option to point a directory that resides in a RAM filesystem.
 
-For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
+For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more information.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.
