@@ -184,6 +184,7 @@
 		}
 	],
 	"compat": {
+		// The device responds in a weird way to these requests which causes S2 collisions
 		"skipConfigurationNameQuery": true,
 		"skipConfigurationInfoQuery": true
 	}
