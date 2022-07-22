@@ -54,7 +54,7 @@ export enum ScheduleEntryLockCommand {
 }
 
 @commandClass(CommandClasses["Schedule Entry Lock"])
-@implementedVersion(2)
+@implementedVersion(3)
 @ccValues(ScheduleEntryLockCCValues)
 export class ScheduleEntryLockCC extends CommandClass {
 	declare ccCommand: ScheduleEntryLockCommand;
@@ -160,7 +160,7 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 			this.numWeekDaySlots,
 			this.numYearDaySlots,
 		]);
-		if (this.version >= 2 && this.numDailyRepeatingSlots != undefined) {
+		if (this.version >= 3 && this.numDailyRepeatingSlots != undefined) {
 			this.payload = Buffer.concat([
 				this.payload,
 				Buffer.from([this.numDailyRepeatingSlots]),
