@@ -2,6 +2,9 @@
   "name": "@zwave-js/testing",
   "version": "10.0.0-beta.1",
   "description": "zwave-js: testing utilities",
+  "publishConfig": {
+    "access": "public"
+  },
   "keywords": [],
   "main": "build/index.js",
   "types": "build/index.d.ts",
