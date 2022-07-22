@@ -16,29 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indicator",
-			"description": "Set the LED light behavior",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Turn LED indicator on when switch is off",
-					"value": 0
-				},
-				{
-					"label": "Turn LED indicator on when switch is on",
-					"value": 1
-				},
-				{
-					"label": "Indicator LED is always off",
-					"value": 2
-				},
-				{
-					"label": "Indicator LED is always on",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "4",
@@ -60,12 +38,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto-Off Timer",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		}
 	]
 }

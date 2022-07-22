@@ -34,13 +34,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Countdown",
-			"description": "Countdown to shutoff",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		}
 	]
 }

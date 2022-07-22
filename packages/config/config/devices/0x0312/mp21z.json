@@ -22,41 +22,11 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Status LED Configuration",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when load off, LED off when load on",
-					"value": 0
-				},
-				{
-					"label": "LED on when load on, LED off when load off",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		},
 		{
 			"#": "2",
-			"label": "Auto-Off Timer",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 36000,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				}
-			]
+			"$import": "templates/minoston_template.json#auto_off_timer_36000s"
 		}
 	],
 	"metadata": {

@@ -43,29 +43,8 @@
 		},
 		{
 			"#": "3",
-			"label": "LED Indicator",
-			"description": "Turn LED indicator ON when light is ON (paddle switch only)",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "OFF",
-					"value": 0
-				},
-				{
-					"label": "ON",
-					"value": 1
-				},
-				{
-					"label": "Disabled",
-					"value": 2
-				},
-				{
-					"label": "Always ON",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options",
+			"defaultValue": 1
 		},
 		{
 			"#": "4",
@@ -87,12 +66,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Auto Off Timer",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		},
 		{
 			"#": "7",
