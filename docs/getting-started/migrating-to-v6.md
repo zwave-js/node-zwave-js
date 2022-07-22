@@ -8,7 +8,7 @@ The environment variables for logging are no longer evaluated lazily, so they no
 
 ## Updated `interview failed` event handler signature
 
-The second parameter (`errorMessage: string`) was replaced with an [object parameter](api/node?id=quotinterview-failedquot) that was previously the optional third parameter. If you are using the legacy signature with two params, replace the occurences of the error message with `args.errorMessage`. If you are using the transitional signature with three params, remove the second parameter.
+The second parameter (`errorMessage: string`) was replaced with an [object parameter](api/node?id=quotinterview-failedquot) that was previously the optional third parameter. If you are using the legacy signature with two params, replace the occurrences of the error message with `args.errorMessage`. If you are using the transitional signature with three params, remove the second parameter.
 
 ## New `"value notification"` event
 

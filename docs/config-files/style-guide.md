@@ -81,7 +81,7 @@ The primary reporting group (usually group 1 for Z-Wave Plus) **must** be called
 
 Shorten labels wherever possible. E.g. `Threshold at which to send a battery report` becomes `Battery Report Threshold`.
 
-Labels should be clear and concise. They should clearly explain what the parameter does while avoiding unnnecessary technical jargon:
+Labels should be clear and concise. They should clearly explain what the parameter does while avoiding unnecessary technical jargon:
 
 ?> Labels should be **Title Case**.
 

@@ -27,13 +27,13 @@ Other Z-Wave drivers work around many more issues, sometimes going as far as pro
 This may sound cynical but I don't think this should be done at all.
 Buggy devices should really become a problem of the manufacturers who release them and don't offer any support whatsoever. The huge bunch of workarounds that other drivers implemented make it too easy for manufacturers to reject responsibility and claim _"But it works in XYZ, cannot be our fault!"_
 
-I can understand the sentiment of making things work when you're using unofficial APIs etc, but Z-Wave is a standard, devices have to be certified and still too many devices with non-compliant behavior slip through the cracks - partially empowered by softwares with workarounds.
+I can understand the sentiment of making things work when you're using unofficial APIs etc, but Z-Wave is a standard, devices have to be certified and still too many devices with non-compliant behavior slip through the cracks - partially empowered by software with workarounds.
 
 Only when we **stop solving the manufacturers' mistakes for them** and make them fix them, then we can get to a point where it becomes a benefit for the smart home community. Many issues I keep seeing would have been caught by QA if they bothered to test it at all, e.g.:
 
 -   RGB controllers that are missing the blue channel from their list of supported colors
 -   Thermostats with off-by-one errors, leading to the wrong scales/units being advertised (or none at all)
--   Power meters that randomly flip the most siginificant bit in their reports
+-   Power meters that randomly flip the most significant bit in their reports
 
 Unfortunately, I can't make manufacturers do that, but I can take a stance and choose not to fix their mistakes (and neither should the other projects), even if it is annoying for users.
 But maybe **having a majority of their users complain** because their stuff does not work with a standards-compliant software will change that mentality:

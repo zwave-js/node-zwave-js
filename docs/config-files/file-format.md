@@ -395,7 +395,7 @@ Many devices unnecessarily use endpoints when they could (or do) provide all fun
 
 ### `preserveRootApplicationCCValueIDs`
 
-The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
+The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achieve this, set `preserveRootApplicationCCValueIDs` to `true`.
 
 ### `skipConfigurationNameQuery`
 
