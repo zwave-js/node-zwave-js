@@ -363,5 +363,10 @@
 		"maxValue": 100,
 		"defaultValue": 1,
 		"unsigned": true
+	},
+	"enable_local_control": {
+		"$import": "#base_enable_disable",
+		"label": "Local Control",
+		"defaultValue": 1
 	}
 }

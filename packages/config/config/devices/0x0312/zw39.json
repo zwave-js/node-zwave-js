@@ -48,21 +48,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"description": "Invert on & off on the physical switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",

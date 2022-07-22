@@ -98,79 +98,19 @@
 		},
 		{
 			"#": "7[0x01]",
-			"label": "Send Status Change Report: Local Control",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/minoston_template.json#status_change_report_local_control"
 		},
 		{
 			"#": "7[0x02]",
-			"label": "Send Status Change Report: 3-Way",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/minoston_template.json#status_change_report_three_way"
 		},
 		{
 			"#": "7[0x04]",
-			"label": "Send Status Change Report: Z-Wave",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/minoston_template.json#status_change_report_zwave"
 		},
 		{
 			"#": "7[0x08]",
-			"label": "Send Status Change Report: Timer",
-			"description": "Determine whether a trigger of this type should prompt a status change report to associated devices.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/minoston_template.json#status_change_report_timer"
 		},
 		{
 			"#": "8",
@@ -178,21 +118,7 @@
 		},
 		{
 			"#": "9",
-			"label": "Enable/Disable Local Control",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/minoston_template.json#enable_local_control"
 		}
 	],
 	"metadata": {
