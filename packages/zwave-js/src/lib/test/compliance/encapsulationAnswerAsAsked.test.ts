@@ -1,6 +1,8 @@
 import {
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
+	MultiChannelCC,
+	MultiChannelCCCommandEncapsulation,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,
 } from "@zwave-js/cc";
@@ -15,9 +17,9 @@ import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
-	"Responses to encapsulated requests use the same encapsulation",
+	"Responses to encapsulated requests use the same encapsulation (CRC-16)",
 	{
-		debug: true,
+		// debug: true,
 		provisioningDirectory: path.join(__dirname, "fixtures/base_2_nodes"),
 
 		nodeCapabilities: {
@@ -43,16 +45,74 @@ integrationTest(
 			const cc = CRC16CC.encapsulate(mockController.host, zwpRequest);
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
-			const { payload: response } = await mockNode.expectControllerFrame(
-				1000,
-				(msg): msg is MockZWaveRequestFrame =>
-					msg.type === MockZWaveFrameType.Request,
-			);
+			const { payload: response } =
+				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
+					1000,
+					(msg): msg is MockZWaveRequestFrame =>
+						msg.type === MockZWaveFrameType.Request,
+				);
 
 			expect(response).toBeInstanceOf(CRC16CCCommandEncapsulation);
 			expect(
 				(response as CRC16CCCommandEncapsulation).encapsulated,
 			).toBeInstanceOf(ZWavePlusCCReport);
+
+			// Allow for everything to settle
+			await wait(100);
+		},
+	},
+);
+
+integrationTest(
+	"Responses to encapsulated requests use the same encapsulation (Multi Channel)",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/encapsulationAnswerAsAsked",
+		),
+
+		nodeCapabilities: {
+			commandClasses: [
+				{
+					ccId: CommandClasses["Multi Channel"],
+					version: 4,
+					isSupported: true,
+				},
+				{
+					ccId: CommandClasses["Z-Wave Plus Info"],
+					isSupported: true,
+					version: 2,
+				},
+			],
+		},
+
+		testBody: async (driver, node, mockController, mockNode) => {
+			// We know that the driver must respond to Z-Wave Plus Info Get
+			// so we can use that to test
+			const zwpRequest = new ZWavePlusCCGet(mockController.host, {
+				nodeId: mockNode.id,
+			});
+			const cc = MultiChannelCC.encapsulate(
+				mockController.host,
+				zwpRequest,
+			);
+			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
+
+			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
+
+			const { payload: response } =
+				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
+					1000,
+					(msg): msg is MockZWaveRequestFrame =>
+						msg.type === MockZWaveFrameType.Request,
+				);
+
+			expect(response).toBeInstanceOf(MultiChannelCCCommandEncapsulation);
+			const mcc = response as MultiChannelCCCommandEncapsulation;
+			expect(mcc.destination).toBe(2);
+			const inner = mcc.encapsulated;
+			expect(inner).toBeInstanceOf(ZWavePlusCCReport);
 
 			// Allow for everything to settle
 			await wait(100);

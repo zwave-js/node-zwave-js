@@ -1,5 +1,9 @@
 import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
-import { CommandClasses, validatePayload } from "@zwave-js/core/safe";
+import {
+	CommandClasses,
+	EncapsulationFlags,
+	validatePayload,
+} from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { CCAPI } from "../lib/API";
@@ -62,17 +66,28 @@ export class MultiCommandCC extends CommandClass {
 		);
 	}
 
-	/** Encapsulates a command that targets a specific endpoint */
 	public static encapsulate(
 		host: ZWaveHost,
 		CCs: CommandClass[],
 	): MultiCommandCCCommandEncapsulation {
-		return new MultiCommandCCCommandEncapsulation(host, {
+		const ret = new MultiCommandCCCommandEncapsulation(host, {
 			nodeId: CCs[0].nodeId,
 			encapsulated: CCs,
-			// MultiCommand CC is wrapped inside Supervision CC, so the supervision status must be preserved
-			supervised: CCs.some((cc) => cc.supervised),
 		});
+
+		// Copy the "sum" of the encapsulation flags from the encapsulated CCs
+		for (const flag of [
+			EncapsulationFlags.Supervision,
+			EncapsulationFlags.Security,
+			EncapsulationFlags.CRC16,
+		] as const) {
+			ret.setEncapsulationFlag(
+				flag,
+				CCs.some((cc) => cc.encapsulationFlags & flag),
+			);
+		}
+
+		return ret;
 	}
 }
 

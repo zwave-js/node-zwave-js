@@ -1,0 +1,7 @@
+{"k":"{\"nodeId\":2,\"commandClass\":86,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"endpointIndizes\"}","v":[1,2,3]}
+{"k":"{\"nodeId\":2,\"commandClass\":94,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":94,\"endpoint\":1,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":94,\"endpoint\":2,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":94,\"endpoint\":3,\"property\":\"interviewComplete\"}","v":true}

@@ -8,6 +8,7 @@ import { SecurityCCCommandEncapsulation } from "@zwave-js/cc/SecurityCC";
 import { WakeUpCCIntervalSet } from "@zwave-js/cc/WakeUpCC";
 import {
 	CommandClasses,
+	EncapsulationFlags,
 	TransmitOptions,
 	ValueID,
 	ZWaveError,
@@ -162,7 +163,7 @@ describe("lib/driver/Driver", () => {
 			const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
 				nodeId: 2,
 			});
-			testMsg3.secure = true;
+			testMsg3.setEncapsulationFlag(EncapsulationFlags.Security, true);
 			expect(driver.computeNetCCPayloadSize(testMsg3)).toBe(46 - 20 - 2);
 		});
 	});
