@@ -3,6 +3,7 @@ import {
 	ZWavePlusCCReport,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
+import { CommandClasses } from "@zwave-js/core";
 import {
 	createMockZWaveRequestFrame,
 	MockZWaveFrameType,
@@ -16,15 +17,15 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 	// debug: true,
 	provisioningDirectory: path.join(__dirname, "fixtures/base_2_nodes"),
 
-	// nodeCapabilities: {
-	// 	commandClasses: [
-	// 		{
-	// 			ccId: CommandClasses["Z-Wave Plus Info"],
-	// 			isSupported: true,
-	// 			version: 2,
-	// 		},
-	// 	],
-	// },
+	nodeCapabilities: {
+		commandClasses: [
+			{
+				ccId: CommandClasses["Z-Wave Plus Info"],
+				isSupported: true,
+				version: 2,
+			},
+		],
+	},
 
 	testBody: async (driver, node, mockController, mockNode) => {
 		const zwpRequest = new ZWavePlusCCGet(mockController.host, {
