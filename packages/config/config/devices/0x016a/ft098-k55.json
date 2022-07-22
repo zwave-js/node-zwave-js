@@ -241,7 +241,7 @@
 		},
 		{
 			"#": "80",
-			"label": "To Set Whcih Notification Can Be Sent to The Associated Devices (group 1) When The State of LED Bulb is Changed",
+			"label": "To Set Which Notification Can Be Sent to The Associated Devices (group 1) When The State of LED Bulb is Changed",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,

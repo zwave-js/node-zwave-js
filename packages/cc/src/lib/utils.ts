@@ -671,7 +671,7 @@ must use endpoint association: ${mustUseMultiChannelAssociation}`,
 			return false;
 		};
 
-		// If the node was used with other controller softwares, there might be
+		// If the node was used with other controller software, there might be
 		// invalid lifeline associations which cause reporting problems
 		const invalidEndpointAssociations: EndpointAddress[] =
 			mcInstance

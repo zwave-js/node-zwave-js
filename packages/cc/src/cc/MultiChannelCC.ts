@@ -883,7 +883,7 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		this._genericClass = this.payload[1];
 		this._specificClass = this.payload[2];
 
-		// Some devices omit the endpoint list althought that is not allowed in the specs
+		// Some devices omit the endpoint list although that is not allowed in the specs
 		// therefore don't validatePayload here.
 		this._foundEndpoints = [...this.payload.slice(3)]
 			.map((e) => e & 0b01111111)

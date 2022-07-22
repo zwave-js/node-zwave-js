@@ -361,7 +361,7 @@ export class Security2CC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		// Only on the highest security class the reponse includes the supported commands
+		// Only on the highest security class the response includes the supported commands
 		const secClass = node.getHighestSecurityClass();
 		let hasReceivedSecureCommands = false;
 
