@@ -48,21 +48,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Enable/Disable Auto Turn-off Timer",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Auto Turn-off Timer"
 		},
 		{
 			"#": "4",
@@ -73,21 +60,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Enable/Disable Auto Turn-on Timer",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Enable/Disable Auto Turn-on Timer"
 		},
 		{
 			"#": "6",

@@ -365,7 +365,7 @@
 		"unsigned": true
 	},
 	"enable_local_control": {
-		"$import": "#base_enable_disable",
+		"$import": "~/templates/master_template.json#base_enable_disable",
 		"label": "Local Control",
 		"defaultValue": 1
 	}
