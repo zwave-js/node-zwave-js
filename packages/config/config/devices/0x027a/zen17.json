@@ -492,8 +492,10 @@
 		{
 			"#": "19",
 			"label": "Reverse the reported values for your selected input type on S1 C terminals",
-			"description": "Reverse the reported values for your selected input type on S1 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)"
+			"description": "Reverse the reported values for your selected input type on S1 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)",
 			"valueSize": 1,
+        	"minValue": 0,
+        	"maxValue": 10,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
@@ -535,8 +537,10 @@
 		{
 			"#": "20",
 			"label": "Reverse the reported values for your selected input type on S2 C terminals",
-			"description": "Reverse the reported values for your selected input type on S2 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)"
+			"description": "Reverse the reported values for your selected input type on S2 C terminals (select the same value as you chose for parameter 2 to reverse the values for open and closed circuit)",
 			"valueSize": 1,
+	       	"minValue": 0,
+        	"maxValue": 10,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
