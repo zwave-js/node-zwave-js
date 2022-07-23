@@ -1,7 +1,7 @@
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit Controls AB",
 	"manufacturerId": "0x019b",
-	"label": "Heatit Z-TRM 2",
+	"label": "Z-TRM 2",
 	"description": "Floor Thermostat",
 	"devices": [
 		{

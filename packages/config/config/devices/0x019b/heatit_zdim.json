@@ -1,7 +1,7 @@
 {
-	"manufacturer": "ThermoFloor",
+	"manufacturer": "Heatit Controls AB",
 	"manufacturerId": "0x019b",
-	"label": "HeatIt ZDim",
+	"label": "ZDim",
 	"description": "Knob Smart Dimmer",
 	"devices": [
 		{
