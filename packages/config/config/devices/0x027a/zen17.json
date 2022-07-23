@@ -66,7 +66,7 @@
 		},
 		{
 			"#": "2",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.1",
 			"label": "Input Type for S1 Terminal",
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
 			"valueSize": 1,
@@ -126,7 +126,7 @@
 		},
 		{
 			"#": "2",
-			"$if": "firmwareVersion < 1.4",
+			"$if": "firmwareVersion < 1.1",
 			"label": "Input Type for S1 Terminal",
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
@@ -182,7 +182,7 @@
 		},
 		{
 			"#": "3",
-			"$if": "firmwareVersion >= 1.4",
+			"$if": "firmwareVersion >= 1.1",
 			"label": "Input Type for S2 Terminal",
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
 			"valueSize": 1,
@@ -242,7 +242,7 @@
 		},
 		{
 			"#": "3",
-			"$if": "firmwareVersion < 1.4",
+			"$if": "firmwareVersion < 1.1",
 			"label": "Input Type for S2 Terminal",
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
