@@ -511,7 +511,7 @@
 				{
 					"label": "Heat alarm",
 					"value": 5
-				}
+				},
 				{
 					"label": "Motion alert",
 					"value": 6
@@ -523,11 +523,11 @@
 				{
 					"label": "CO alarm",
 					"value": 8
-				}
+				},
 				{
 					"label": "CO2 alarm",
 					"value": 9
-				}
+				},
 				{
 					"label": "On/off report (dry contact switch/sensor)",
 					"value": 10
@@ -556,7 +556,7 @@
 				{
 					"label": "Heat alarm",
 					"value": 5
-				}
+				},
 				{
 					"label": "Motion alert",
 					"value": 6
@@ -568,11 +568,11 @@
 				{
 					"label": "CO alarm",
 					"value": 8
-				}
+				},
 				{
 					"label": "CO2 alarm",
 					"value": 9
-				}
+				},
 				{
 					"label": "On/off report (dry contact switch/sensor)",
 					"value": 10
