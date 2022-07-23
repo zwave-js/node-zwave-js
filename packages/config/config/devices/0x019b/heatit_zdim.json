@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Heatit Controls AB",
 	"manufacturerId": "0x019b",
-	"label": "ZDim",
+	"label": "Z-Dim",
 	"description": "Knob Smart Dimmer",
 	"devices": [
 		{
