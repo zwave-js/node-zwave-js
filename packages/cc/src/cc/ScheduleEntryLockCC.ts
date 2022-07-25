@@ -1,5 +1,6 @@
 import { CommandClasses, validatePayload } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
+import type { AllOrNone } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
 import {
 	CCCommandOptions,
@@ -16,6 +17,11 @@ import {
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
+import {
+	ScheduleEntryLockCommand,
+	ScheduleEntryLockSetAction,
+	ScheduleEntryLockWeekday,
+} from "../lib/_Types";
 
 export const ScheduleEntryLockCCValues = Object.freeze({
 	...V.defineStaticCCValues(CommandClasses["Schedule Entry Lock"], {
@@ -34,24 +40,6 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 
 // TODO: Move this enumeration into the src/lib/_Types.ts file
 // All additional type definitions (except CC constructor options) must be defined there too
-export enum ScheduleEntryLockCommand {
-	EnableSet = 0x01,
-	EnableAllSet = 0x02,
-	WeekDayScheduleSet = 0x03,
-	WeekDayScheduleGet = 0x04,
-	WeekDayScheduleReport = 0x05,
-	YearDayScheduleSet = 0x06,
-	YearDayScheduleGet = 0x07,
-	YearDayScheduleReport = 0x08,
-	SupportedGet = 0x09,
-	SupportedReport = 0x0a,
-	TimeOffsetGet = 0x0b,
-	TimeOffsetReport = 0x0c,
-	TimeOffsetSet = 0x0d,
-	DailyRepeatingGet = 0x0e,
-	DailyRepeatingReport = 0x0f,
-	DailyRepeatingSet = 0x10,
-}
 
 @commandClass(CommandClasses["Schedule Entry Lock"])
 @implementedVersion(3)
@@ -174,9 +162,202 @@ export class ScheduleEntryLockCCSupportedReport extends ScheduleEntryLockCC {
 @expectedCCResponse(ScheduleEntryLockCCSupportedReport)
 export class ScheduleEntryLockCCSupportedGet extends ScheduleEntryLockCC {}
 
-// WeekDayScheduleSet = 0x03,
-// WeekDayScheduleGet = 0x04,
-// WeekDayScheduleReport = 0x05,
+/** @publicAPI */
+export type ScheduleEntryLockCCWeekDayScheduleSetOptions = {
+	userId: number;
+	slotId: number;
+} & (
+	| {
+			action: ScheduleEntryLockSetAction.Erase;
+	  }
+	| {
+			action: ScheduleEntryLockSetAction.Set;
+			weekday: ScheduleEntryLockWeekday;
+			startHour: number;
+			startMinute: number;
+			stopHour: number;
+			stopMinute: number;
+	  }
+);
+
+@CCCommand(ScheduleEntryLockCommand.WeekDayScheduleSet)
+export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & ScheduleEntryLockCCWeekDayScheduleSetOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.action = this.payload[0];
+			validatePayload(
+				this.action === ScheduleEntryLockSetAction.Set ||
+					this.action === ScheduleEntryLockSetAction.Erase,
+			);
+			this.userId = this.payload[1];
+			this.slotId = this.payload[2];
+			if (this.action === ScheduleEntryLockSetAction.Set) {
+				validatePayload(this.payload.length >= 8);
+				this.weekday = this.payload[3];
+				this.startHour = this.payload[4];
+				this.startMinute = this.payload[5];
+				this.stopHour = this.payload[6];
+				this.stopMinute = this.payload[7];
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.action = options.action;
+			if (options.action === ScheduleEntryLockSetAction.Set) {
+				this.weekday = options.weekday;
+				this.startHour = options.startHour;
+				this.startMinute = options.startMinute;
+				this.stopHour = options.stopHour;
+				this.stopMinute = options.stopMinute;
+			}
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public action: ScheduleEntryLockSetAction;
+
+	public weekday?: ScheduleEntryLockWeekday;
+	public startHour?: number;
+	public startMinute?: number;
+	public stopHour?: number;
+	public stopMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.action,
+			this.userId,
+			this.slotId,
+			// The report should have these fields set to 0xff
+			// if the slot is erased. The specs don't mention anything
+			// for the Set command, so we just assume the same is okay
+			this.weekday ?? 0xff,
+			this.startHour ?? 0xff,
+			this.startMinute ?? 0xff,
+			this.stopHour ?? 0xff,
+			this.stopMinute ?? 0xff,
+		]);
+		return super.serialize();
+	}
+}
+
+type ScheduleEntryLockCCWeekDayScheduleReportOptions = {
+	userId: number;
+	slotId: number;
+} & AllOrNone<{
+	weekday: ScheduleEntryLockWeekday;
+	startHour: number;
+	startMinute: number;
+	stopHour: number;
+	stopMinute: number;
+}>;
+
+@CCCommand(ScheduleEntryLockCommand.WeekDayScheduleReport)
+export class ScheduleEntryLockCCWeekDayScheduleReport extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions &
+					ScheduleEntryLockCCWeekDayScheduleReportOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+			if (this.payload.length >= 7) {
+				if (this.payload[2] !== 0xff) {
+					this.weekday = this.payload[2];
+				}
+				if (this.payload[3] !== 0xff) {
+					this.startHour = this.payload[3];
+				}
+				if (this.payload[4] !== 0xff) {
+					this.startMinute = this.payload[4];
+				}
+				if (this.payload[5] !== 0xff) {
+					this.stopHour = this.payload[5];
+				}
+				if (this.payload[6] !== 0xff) {
+					this.stopMinute = this.payload[6];
+				}
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.weekday = options.weekday;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.stopHour = options.stopHour;
+			this.stopMinute = options.stopMinute;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+	public weekday?: ScheduleEntryLockWeekday;
+	public startHour?: number;
+	public startMinute?: number;
+	public stopHour?: number;
+	public stopMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.userId,
+			this.slotId,
+			this.weekday ?? 0xff,
+			this.startHour ?? 0xff,
+			this.startMinute ?? 0xff,
+			this.stopHour ?? 0xff,
+			this.stopMinute ?? 0xff,
+		]);
+		return super.serialize();
+	}
+}
+
+interface ScheduleEntryLockCCWeekDayScheduleGetOptions
+	extends CCCommandOptions {
+	userId: number;
+	slotId: number;
+}
+
+@CCCommand(ScheduleEntryLockCommand.WeekDayScheduleGet)
+@expectedCCResponse(ScheduleEntryLockCCWeekDayScheduleReport)
+export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| ScheduleEntryLockCCWeekDayScheduleGetOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.userId, this.slotId]);
+		return super.serialize();
+	}
+}
 
 // YearDayScheduleSet = 0x06,
 // YearDayScheduleGet = 0x07,

@@ -1259,6 +1259,44 @@ export enum SceneControllerConfigurationCommand {
 }
 
 /** @publicAPI */
+export enum ScheduleEntryLockCommand {
+	EnableSet = 0x01,
+	EnableAllSet = 0x02,
+	WeekDayScheduleSet = 0x03,
+	WeekDayScheduleGet = 0x04,
+	WeekDayScheduleReport = 0x05,
+	YearDayScheduleSet = 0x06,
+	YearDayScheduleGet = 0x07,
+	YearDayScheduleReport = 0x08,
+	SupportedGet = 0x09,
+	SupportedReport = 0x0a,
+	TimeOffsetGet = 0x0b,
+	TimeOffsetReport = 0x0c,
+	TimeOffsetSet = 0x0d,
+	DailyRepeatingGet = 0x0e,
+	DailyRepeatingReport = 0x0f,
+	DailyRepeatingSet = 0x10,
+}
+
+/** @publicAPI */
+export enum ScheduleEntryLockSetAction {
+	Erase,
+	Set,
+}
+
+/** @publicAPI */
+export enum ScheduleEntryLockWeekday {
+	// Yay, consistency!
+	Sunday = 0x00,
+	Monday = 0x01,
+	Tuesday = 0x02,
+	Wednesday = 0x03,
+	Thursday = 0x04,
+	Friday = 0x05,
+	Saturday = 0x06,
+}
+
+/** @publicAPI */
 export enum Security2Command {
 	NonceGet = 0x01,
 	NonceReport = 0x02,
