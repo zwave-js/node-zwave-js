@@ -25,7 +25,7 @@
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Buttom Button - Basic Set",
+			"label": "Bottom Button - Basic Set",
 			"maxNodes": 5
 		},
 		"4": {
@@ -107,8 +107,8 @@
 		}
 	],
 	"metadata": {
-		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press the Top/Buttom button once on product",
-		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. 3*tap the Top/Buttom button on product",
+		"inclusion": "1. Turn your primary controller into inclusion mode.\n2. Press the Top/Bottom button once on product",
+		"exclusion": "1. Turn your primary controller into exclusion mode.\n2. 3*tap the Top/Bottom button on product",
 		"reset": "Press and hold the Top/ Bottom button for 20s",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4273/Aeotec%20Wall%20Switch%20manual.pdf"
 	}

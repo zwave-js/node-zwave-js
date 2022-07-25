@@ -164,7 +164,7 @@
 		{
 			"#": "32",
 			"label": "Level of low battery",
-			"description": "This parameter defines a battery level as the \"low bettery\"",
+			"description": "This parameter defines a battery level as the \"low battery\"",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,

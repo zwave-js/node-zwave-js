@@ -17,7 +17,7 @@
 		{
 			"#": "1",
 			"label": "Sensitivity level",
-			"description": "8 = Highest sensitivity, 255 = lowest sesitivity",
+			"description": "8 = Highest sensitivity, 255 = lowest sensitivity",
 			"valueSize": 1,
 			"minValue": 8,
 			"maxValue": 255,

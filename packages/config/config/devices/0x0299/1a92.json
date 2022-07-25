@@ -67,7 +67,7 @@
 		{
 			"#": "4",
 			"label": "Button operation mode",
-			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toogle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
+			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toggle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

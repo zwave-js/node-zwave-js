@@ -250,7 +250,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Auto Report Door/Windo W State",
+			"label": "Auto Report Door/Window State",
 			"description": "The default value is 12. the tick time can setting by the configuration no.20",
 			"valueSize": 1,
 			"minValue": 0,

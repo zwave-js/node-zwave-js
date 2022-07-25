@@ -140,7 +140,7 @@
 					"value": 2000
 				},
 				{
-					"label": "Input I2 doesnt influence on the Heat/Cool process",
+					"label": "Input I2 doesn't influence on the Heat/Cool process",
 					"value": 32767
 				}
 			]

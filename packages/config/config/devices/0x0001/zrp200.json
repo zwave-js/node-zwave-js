@@ -2,7 +2,7 @@
 	"manufacturer": "HomePro",
 	"manufacturerId": "0x0001",
 	"label": "ZRP200",
-	"description": "Applicance Module",
+	"description": "Appliance Module",
 	"devices": [
 		{
 			"productType": "0x7fff",

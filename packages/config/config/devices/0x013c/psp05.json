@@ -62,7 +62,7 @@
 		},
 		{
 			"#": "10",
-			"label": "Batery level reporting interval",
+			"label": "Battery level reporting interval",
 			"description": "How frequently battery status should be reported",
 			"valueSize": 1,
 			"minValue": 0,

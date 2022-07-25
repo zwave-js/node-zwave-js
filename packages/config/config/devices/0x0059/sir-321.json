@@ -44,7 +44,7 @@
 		{
 			"#": "2",
 			"label": "Temperature Scale",
-			"description": "Set the Temperatur scale to Celsius",
+			"description": "Set the Temperature scale to Celsius",
 			"valueSize": 2,
 			"unit": "°C",
 			"minValue": 0,

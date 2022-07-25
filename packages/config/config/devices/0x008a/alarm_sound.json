@@ -49,8 +49,8 @@
 		},
 		{
 			"#": "3",
-			"label": "Desitnation routine succes time",
-			"description": "Time it takes to send a new frame after the last frame has succesfully send",
+			"label": "Desitnation routine success time",
+			"description": "Time it takes to send a new frame after the last frame has successfully send",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,

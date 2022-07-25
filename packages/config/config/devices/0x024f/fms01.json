@@ -176,7 +176,7 @@
 		},
 		{
 			"#": "64",
-			"label": "Temperature Report Inteval",
+			"label": "Temperature Report Interval",
 			"description": "Report Interval in seconds",
 			"unit": "seconds",
 			"valueSize": 2,

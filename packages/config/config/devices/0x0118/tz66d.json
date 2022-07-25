@@ -91,7 +91,7 @@
 		{
 			"#": "4",
 			"label": "Invert Switch",
-			"description": "To change the top of the switch to off and the botton to on",
+			"description": "To change the top of the switch to off and the button to on",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
