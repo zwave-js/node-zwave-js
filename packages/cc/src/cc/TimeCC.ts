@@ -28,6 +28,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { parseTimezone } from "../lib/serializers";
 import { TimeCommand } from "../lib/_Types";
 
 // @noSetValueAPI
@@ -358,15 +359,9 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	) {
 		super(host, options);
 		validatePayload(this.payload.length >= 9);
-		// TODO: Refactor this into its own method
-		const hourSign = !!(this.payload[0] & 0b1000_0000);
-		const hour = this.payload[0] & 0b0111_1111;
-		const minute = this.payload[1];
-		this._standardOffset = (hourSign ? -1 : 1) * (hour * 60 + minute);
-		const deltaSign = !!(this.payload[2] & 0b1000_0000);
-		const deltaMinutes = this.payload[2] & 0b0111_1111;
-		this._dstOffset =
-			this._standardOffset + (deltaSign ? -1 : 1) * deltaMinutes;
+		const { standardOffset, dstOffset } = parseTimezone(this.payload);
+		this._standardOffset = standardOffset;
+		this._dstOffset = dstOffset;
 
 		const currentYear = new Date().getUTCFullYear();
 		this._dstStartDate = new Date(

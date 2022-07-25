@@ -1356,6 +1356,12 @@ export enum SupervisionCommand {
 }
 
 /** @publicAPI */
+export interface Timezone {
+	standardOffset: number;
+	dstOffset: number;
+}
+
+/** @publicAPI */
 export enum ThermostatFanModeCommand {
 	Set = 0x01,
 	Get = 0x02,

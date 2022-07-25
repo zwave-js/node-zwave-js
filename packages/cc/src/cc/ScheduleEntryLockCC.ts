@@ -1,4 +1,9 @@
-import { CommandClasses, validatePayload } from "@zwave-js/core";
+import {
+	CommandClasses,
+	encodeBitMask,
+	parseBitMask,
+	validatePayload,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { AllOrNone } from "@zwave-js/shared";
 import { CCAPI } from "../lib/API";
@@ -16,6 +21,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { V } from "../lib/Values";
 import {
 	ScheduleEntryLockCommand,
@@ -616,10 +622,291 @@ export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
 	}
 }
 
-// TimeOffsetGet = 0x0b,
-// TimeOffsetReport = 0x0c,
-// TimeOffsetSet = 0x0d,
+interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOptions {
+	standardOffset: number;
+	dstOffset: number;
+}
 
-// DailyRepeatingGet = 0x0e,
-// DailyRepeatingReport = 0x0f,
-// DailyRepeatingSet = 0x10,
+@CCCommand(ScheduleEntryLockCommand.TimeOffsetSet)
+export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| ScheduleEntryLockCCTimeOffsetSetOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			const { standardOffset, dstOffset } = parseTimezone(this.payload);
+			this.standardOffset = standardOffset;
+			this.dstOffset = dstOffset;
+		} else {
+			this.standardOffset = options.standardOffset;
+			this.dstOffset = options.dstOffset;
+		}
+	}
+
+	public standardOffset: number;
+	public dstOffset: number;
+
+	public serialize(): Buffer {
+		this.payload = encodeTimezone({
+			standardOffset: this.standardOffset,
+			dstOffset: this.dstOffset,
+		});
+		return super.serialize();
+	}
+}
+
+interface ScheduleEntryLockCCTimeOffsetReportOptions extends CCCommandOptions {
+	standardOffset: number;
+	dstOffset: number;
+}
+
+@CCCommand(ScheduleEntryLockCommand.TimeOffsetReport)
+export class ScheduleEntryLockCCTimeOffsetReport extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| ScheduleEntryLockCCTimeOffsetReportOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			const { standardOffset, dstOffset } = parseTimezone(this.payload);
+			this.standardOffset = standardOffset;
+			this.dstOffset = dstOffset;
+		} else {
+			this.standardOffset = options.standardOffset;
+			this.dstOffset = options.dstOffset;
+		}
+	}
+
+	public standardOffset: number;
+	public dstOffset: number;
+
+	public serialize(): Buffer {
+		this.payload = encodeTimezone({
+			standardOffset: this.standardOffset,
+			dstOffset: this.dstOffset,
+		});
+		return super.serialize();
+	}
+}
+
+@CCCommand(ScheduleEntryLockCommand.TimeOffsetGet)
+@expectedCCResponse(ScheduleEntryLockCCTimeOffsetReport)
+export class ScheduleEntryLockCCTimeOffsetGet extends ScheduleEntryLockCC {}
+
+/** @publicAPI */
+export type ScheduleEntryLockCCDailyRepeatingSetOptions = {
+	userId: number;
+	slotId: number;
+} & (
+	| {
+			action: ScheduleEntryLockSetAction.Erase;
+	  }
+	| {
+			action: ScheduleEntryLockSetAction.Set;
+			weekdays: ScheduleEntryLockWeekday[];
+			startHour: number;
+			startMinute: number;
+			durationHour: number;
+			durationMinute: number;
+	  }
+);
+
+@CCCommand(ScheduleEntryLockCommand.DailyRepeatingSet)
+export class ScheduleEntryLockCCDailyRepeatingSet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & ScheduleEntryLockCCDailyRepeatingSetOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.action = this.payload[0];
+			validatePayload(
+				this.action === ScheduleEntryLockSetAction.Set ||
+					this.action === ScheduleEntryLockSetAction.Erase,
+			);
+			this.userId = this.payload[1];
+			this.slotId = this.payload[2];
+			if (this.action === ScheduleEntryLockSetAction.Set) {
+				validatePayload(this.payload.length >= 8);
+				this.weekdays = parseBitMask(
+					this.payload.slice(3, 4),
+					ScheduleEntryLockWeekday.Sunday,
+				);
+				this.startHour = this.payload[4];
+				this.startMinute = this.payload[5];
+				this.durationHour = this.payload[6];
+				this.durationMinute = this.payload[7];
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.action = options.action;
+			if (options.action === ScheduleEntryLockSetAction.Set) {
+				this.weekdays = options.weekdays;
+				this.startHour = options.startHour;
+				this.startMinute = options.startMinute;
+				this.durationHour = options.durationHour;
+				this.durationMinute = options.durationMinute;
+			}
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public action: ScheduleEntryLockSetAction;
+
+	public weekdays?: ScheduleEntryLockWeekday[];
+	public startHour?: number;
+	public startMinute?: number;
+	public durationHour?: number;
+	public durationMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.action, this.userId, this.slotId]);
+		if (this.action === ScheduleEntryLockSetAction.Set) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeBitMask(
+					this.weekdays!,
+					ScheduleEntryLockWeekday.Saturday,
+					ScheduleEntryLockWeekday.Sunday,
+				),
+				Buffer.from([
+					this.startHour!,
+					this.startMinute!,
+					this.durationHour!,
+					this.durationMinute!,
+				]),
+			]);
+		} else {
+			// Not sure if this is correct
+			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0xff)]);
+		}
+
+		return super.serialize();
+	}
+}
+
+type ScheduleEntryLockCCDailyRepeatingReportOptions = {
+	userId: number;
+	slotId: number;
+} & AllOrNone<{
+	weekdays: ScheduleEntryLockWeekday[];
+	startHour: number;
+	startMinute: number;
+	durationHour: number;
+	durationMinute: number;
+}>;
+
+@CCCommand(ScheduleEntryLockCommand.DailyRepeatingReport)
+export class ScheduleEntryLockCCDailyRepeatingReport extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions &
+					ScheduleEntryLockCCDailyRepeatingReportOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+			if (this.payload.length >= 7) {
+				this.weekdays = parseBitMask(
+					this.payload.slice(2, 3),
+					ScheduleEntryLockWeekday.Sunday,
+				);
+				this.startHour = this.payload[3];
+				this.startMinute = this.payload[4];
+				this.durationHour = this.payload[5];
+				this.durationMinute = this.payload[6];
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.weekdays = options.weekdays;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.durationHour = options.durationHour;
+			this.durationMinute = options.durationMinute;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public weekdays?: ScheduleEntryLockWeekday[];
+	public startHour?: number;
+	public startMinute?: number;
+	public durationHour?: number;
+	public durationMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.userId, this.slotId]);
+		if (this.weekdays) {
+			this.payload = Buffer.concat([
+				this.payload,
+				encodeBitMask(
+					this.weekdays,
+					ScheduleEntryLockWeekday.Saturday,
+					ScheduleEntryLockWeekday.Sunday,
+				),
+				Buffer.from([
+					this.startHour!,
+					this.startMinute!,
+					this.durationHour!,
+					this.durationMinute!,
+				]),
+			]);
+		} else {
+			// Not sure if this is correct
+			this.payload = Buffer.concat([this.payload, Buffer.alloc(5, 0xff)]);
+		}
+
+		return super.serialize();
+	}
+}
+
+interface ScheduleEntryLockCCDailyRepeatingGetOptions extends CCCommandOptions {
+	userId: number;
+	slotId: number;
+}
+
+@CCCommand(ScheduleEntryLockCommand.DailyRepeatingGet)
+@expectedCCResponse(ScheduleEntryLockCCDailyRepeatingReport)
+export class ScheduleEntryLockCCDailyRepeatingGet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| ScheduleEntryLockCCDailyRepeatingGetOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.userId, this.slotId]);
+		return super.serialize();
+	}
+}
