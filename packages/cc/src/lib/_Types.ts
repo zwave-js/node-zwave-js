@@ -1273,15 +1273,21 @@ export enum ScheduleEntryLockCommand {
 	TimeOffsetGet = 0x0b,
 	TimeOffsetReport = 0x0c,
 	TimeOffsetSet = 0x0d,
-	DailyRepeatingGet = 0x0e,
-	DailyRepeatingReport = 0x0f,
-	DailyRepeatingSet = 0x10,
+	DailyRepeatingScheduleGet = 0x0e,
+	DailyRepeatingScheduleReport = 0x0f,
+	DailyRepeatingScheduleSet = 0x10,
 }
 
 /** @publicAPI */
 export enum ScheduleEntryLockSetAction {
 	Erase,
 	Set,
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockSlotId {
+	userId: number;
+	slotId: number;
 }
 
 /** @publicAPI */
@@ -1294,6 +1300,38 @@ export enum ScheduleEntryLockWeekday {
 	Thursday = 0x04,
 	Friday = 0x05,
 	Saturday = 0x06,
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockDailyRepeatingSchedule {
+	weekdays: ScheduleEntryLockWeekday[];
+	startHour: number;
+	startMinute: number;
+	durationHour: number;
+	durationMinute: number;
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockYearDaySchedule {
+	startYear: number;
+	startMonth: number;
+	startDay: number;
+	startHour: number;
+	startMinute: number;
+	stopYear: number;
+	stopMonth: number;
+	stopDay: number;
+	stopHour: number;
+	stopMinute: number;
+}
+
+/** @publicAPI */
+export interface ScheduleEntryLockWeekDaySchedule {
+	weekday: ScheduleEntryLockWeekday;
+	startHour: number;
+	startMinute: number;
+	stopHour: number;
+	stopMinute: number;
 }
 
 /** @publicAPI */
