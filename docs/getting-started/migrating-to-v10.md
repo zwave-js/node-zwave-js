@@ -11,7 +11,7 @@ The implementations of serial messages and Command Classes have been decoupled f
 -   `IVirtualEndpoint` - A barebones abstraction of an endpoint on a virtual (multicast, broadcast) node
 -   `IVirtualNode` - A barebones abstraction of a virtual (multicast, broadcast) node. Similar to how `VirtualNode` is a `VirtualEndpoint`, an `IVirtualNode` is an `IVirtualEndpoint`
 
-These abstractions are mainly used internally. Object instances exposed to applications throught the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
+These abstractions are mainly used internally. Object instances exposed to applications through the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
 
 For many use cases, these changes should not affect applications, unless they are using some CC methods directly. The `commandClasses` APIs are unchanged.
 

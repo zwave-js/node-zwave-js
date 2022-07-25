@@ -273,7 +273,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				message: `failed to decode the message, retrying with SPAN extension...`,
 				direction: "none",
 			});
-			// Prepare the messsage for re-transmission
+			// Prepare the message for re-transmission
 			msg.callbackId = undefined;
 			msg.command.unsetSequenceNumber();
 
@@ -325,7 +325,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 			};
 
 			async function* gen() {
-				// Determine which message generator implemenation should be used
+				// Determine which message generator implementation should be used
 				let implementation: MessageGeneratorImplementation =
 					simpleMessageGenerator;
 				if (isSendData(msg)) {

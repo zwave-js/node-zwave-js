@@ -69,7 +69,7 @@ export interface ValueMetadataAny {
 }
 
 /**
- * Helper function to define metadata templates while checking that they satify a constraint.
+ * Helper function to define metadata templates while checking that they satisfy a constraint.
  */
 // TODO: Revisit this when https://github.com/microsoft/TypeScript/issues/47920 is solved
 const define =

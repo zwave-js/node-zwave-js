@@ -411,7 +411,7 @@ export class Endpoint implements IZWaveEndpoint {
 	}.bind(this);
 
 	/**
-	 * Provides access to simplified APIs that are taylored to specific CCs.
+	 * Provides access to simplified APIs that are tailored to specific CCs.
 	 * Make sure to check support of each API using `API.isSupported()` since
 	 * all other API calls will throw if the API is not supported
 	 */
