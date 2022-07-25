@@ -537,8 +537,6 @@
 			"label": "Reverse the reported values for your selected input type on S2 C terminals",
 			"description": "Select the same value as you chose for parameter 2 to reverse the values for open and closed circuit",
 			"valueSize": 1,
-	       	"minValue": 0,
-        	"maxValue": 10,
 			"defaultValue": 0,
 			"unsigned": true,
 			"allowManualEntry": false,
