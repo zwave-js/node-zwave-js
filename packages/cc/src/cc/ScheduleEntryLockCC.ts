@@ -359,9 +359,262 @@ export class ScheduleEntryLockCCWeekDayScheduleGet extends ScheduleEntryLockCC {
 	}
 }
 
-// YearDayScheduleSet = 0x06,
-// YearDayScheduleGet = 0x07,
-// YearDayScheduleReport = 0x08,
+/** @publicAPI */
+export type ScheduleEntryLockCCYearDayScheduleSetOptions = {
+	userId: number;
+	slotId: number;
+} & (
+	| {
+			action: ScheduleEntryLockSetAction.Erase;
+	  }
+	| {
+			action: ScheduleEntryLockSetAction.Set;
+			startYear: number;
+			startMonth: number;
+			startDay: number;
+			startHour: number;
+			startMinute: number;
+			stopYear: number;
+			stopMonth: number;
+			stopDay: number;
+			stopHour: number;
+			stopMinute: number;
+	  }
+);
+
+@CCCommand(ScheduleEntryLockCommand.YearDayScheduleSet)
+export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions & ScheduleEntryLockCCYearDayScheduleSetOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 3);
+			this.action = this.payload[0];
+			validatePayload(
+				this.action === ScheduleEntryLockSetAction.Set ||
+					this.action === ScheduleEntryLockSetAction.Erase,
+			);
+			this.userId = this.payload[1];
+			this.slotId = this.payload[2];
+			if (this.action === ScheduleEntryLockSetAction.Set) {
+				validatePayload(this.payload.length >= 13);
+				this.startYear = this.payload[3];
+				this.startMonth = this.payload[4];
+				this.startDay = this.payload[5];
+				this.startHour = this.payload[6];
+				this.startMinute = this.payload[7];
+				this.stopYear = this.payload[8];
+				this.stopMonth = this.payload[9];
+				this.stopDay = this.payload[10];
+				this.stopHour = this.payload[11];
+				this.stopMinute = this.payload[12];
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.action = options.action;
+			if (options.action === ScheduleEntryLockSetAction.Set) {
+				this.startYear = options.startYear;
+				this.startMonth = options.startMonth;
+				this.startDay = options.startDay;
+				this.startHour = options.startHour;
+				this.startMinute = options.startMinute;
+				this.stopYear = options.stopYear;
+				this.stopMonth = options.stopMonth;
+				this.stopDay = options.stopDay;
+				this.stopHour = options.stopHour;
+				this.stopMinute = options.stopMinute;
+			}
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public action: ScheduleEntryLockSetAction;
+
+	public startYear?: number;
+	public startMonth?: number;
+	public startDay?: number;
+	public startHour?: number;
+	public startMinute?: number;
+	public stopYear?: number;
+	public stopMonth?: number;
+	public stopDay?: number;
+	public stopHour?: number;
+	public stopMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.action,
+			this.userId,
+			this.slotId,
+			// The report should have these fields set to 0xff
+			// if the slot is erased. The specs don't mention anything
+			// for the Set command, so we just assume the same is okay
+			this.startYear ?? 0xff,
+			this.startMonth ?? 0xff,
+			this.startDay ?? 0xff,
+			this.startHour ?? 0xff,
+			this.startMinute ?? 0xff,
+			this.stopYear ?? 0xff,
+			this.stopMonth ?? 0xff,
+			this.stopDay ?? 0xff,
+			this.stopHour ?? 0xff,
+			this.stopMinute ?? 0xff,
+		]);
+		return super.serialize();
+	}
+}
+
+type ScheduleEntryLockCCYearDayScheduleReportOptions = {
+	userId: number;
+	slotId: number;
+} & AllOrNone<{
+	startYear: number;
+	startMonth: number;
+	startDay: number;
+	startHour: number;
+	startMinute: number;
+	stopYear: number;
+	stopMonth: number;
+	stopDay: number;
+	stopHour: number;
+	stopMinute: number;
+}>;
+
+@CCCommand(ScheduleEntryLockCommand.YearDayScheduleReport)
+export class ScheduleEntryLockCCYearDayScheduleReport extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| (CCCommandOptions &
+					ScheduleEntryLockCCYearDayScheduleReportOptions),
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+			if (this.payload.length >= 12) {
+				if (this.payload[2] !== 0xff) {
+					this.startYear = this.payload[2];
+				}
+				if (this.payload[3] !== 0xff) {
+					this.startMonth = this.payload[3];
+				}
+				if (this.payload[4] !== 0xff) {
+					this.startDay = this.payload[4];
+				}
+				if (this.payload[5] !== 0xff) {
+					this.startHour = this.payload[5];
+				}
+				if (this.payload[6] !== 0xff) {
+					this.startMinute = this.payload[6];
+				}
+				if (this.payload[7] !== 0xff) {
+					this.stopYear = this.payload[7];
+				}
+				if (this.payload[8] !== 0xff) {
+					this.stopMonth = this.payload[8];
+				}
+				if (this.payload[9] !== 0xff) {
+					this.stopDay = this.payload[9];
+				}
+				if (this.payload[10] !== 0xff) {
+					this.stopHour = this.payload[10];
+				}
+				if (this.payload[11] !== 0xff) {
+					this.stopMinute = this.payload[11];
+				}
+			}
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+			this.startYear = options.startYear;
+			this.startMonth = options.startMonth;
+			this.startDay = options.startDay;
+			this.startHour = options.startHour;
+			this.startMinute = options.startMinute;
+			this.stopYear = options.stopYear;
+			this.stopMonth = options.stopMonth;
+			this.stopDay = options.stopDay;
+			this.stopHour = options.stopHour;
+			this.stopMinute = options.stopMinute;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+	public startYear?: number;
+	public startMonth?: number;
+	public startDay?: number;
+	public startHour?: number;
+	public startMinute?: number;
+	public stopYear?: number;
+	public stopMonth?: number;
+	public stopDay?: number;
+	public stopHour?: number;
+	public stopMinute?: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.userId,
+			this.slotId,
+			this.startYear ?? 0xff,
+			this.startMonth ?? 0xff,
+			this.startDay ?? 0xff,
+			this.startHour ?? 0xff,
+			this.startMinute ?? 0xff,
+			this.stopYear ?? 0xff,
+			this.stopMonth ?? 0xff,
+			this.stopDay ?? 0xff,
+			this.stopHour ?? 0xff,
+			this.stopMinute ?? 0xff,
+		]);
+		return super.serialize();
+	}
+}
+
+interface ScheduleEntryLockCCYearDayScheduleGetOptions
+	extends CCCommandOptions {
+	userId: number;
+	slotId: number;
+}
+
+@CCCommand(ScheduleEntryLockCommand.YearDayScheduleGet)
+@expectedCCResponse(ScheduleEntryLockCCYearDayScheduleReport)
+export class ScheduleEntryLockCCYearDayScheduleGet extends ScheduleEntryLockCC {
+	public constructor(
+		host: ZWaveHost,
+		options:
+			| CommandClassDeserializationOptions
+			| ScheduleEntryLockCCYearDayScheduleGetOptions,
+	) {
+		super(host, options);
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 2);
+			this.userId = this.payload[0];
+			this.slotId = this.payload[1];
+		} else {
+			this.userId = options.userId;
+			this.slotId = options.slotId;
+		}
+	}
+
+	public userId: number;
+	public slotId: number;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.userId, this.slotId]);
+		return super.serialize();
+	}
+}
 
 // TimeOffsetGet = 0x0b,
 // TimeOffsetReport = 0x0c,
