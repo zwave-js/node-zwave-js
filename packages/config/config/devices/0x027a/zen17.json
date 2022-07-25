@@ -491,7 +491,7 @@
 		},
 		{
 			"#": "19",
-			"label": "Reverse the reported values for your selected input type on S1 C terminals",
+			"label": "S1 Terminal: Invert Values",
 			"description": "Select the same value as you chose for parameter 2 to reverse the values for open and closed circuit",
 			"valueSize": 1,
         	"minValue": 0,
