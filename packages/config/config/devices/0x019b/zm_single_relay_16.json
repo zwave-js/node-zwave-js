@@ -2,7 +2,7 @@
 	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "ZM Single Relay 16A",
-	"description": "16A Single Z-wave relay",
+	"description": "High power relay",
 	"devices": [
 		{
 			"productType": "0x0004",
