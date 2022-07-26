@@ -1,5 +1,6 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
 	MessageRecord,
 	validatePayload,
 	ZWaveError,
@@ -15,7 +16,6 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,

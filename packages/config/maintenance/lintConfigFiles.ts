@@ -1085,7 +1085,7 @@ Consider converting this parameter to unsigned using ${white(
 		addError(
 			entry.filename,
 			`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId})
-The first occurence of this device is in file config/devices/${index[firstIndex].filename}`,
+The first occurrence of this device is in file config/devices/${index[firstIndex].filename}`,
 		);
 	}
 

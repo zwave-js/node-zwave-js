@@ -60,7 +60,7 @@ export type CommandQueueEvent =
 	| { type: "message"; message: Message }
 	| { type: "unsolicited"; message: Message }
 	| { type: "remove"; transaction: Transaction } // Used to abort the given transaction and remove it from the command queue
-	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
+	| { type: "command_error"; error: Error } // An unexpected error occurred during command execution
 	| ({ type: "command_success" } & Omit<
 			CommandQueueDoneData & { type: "success" },
 			"type"

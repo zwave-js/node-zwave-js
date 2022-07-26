@@ -13,5 +13,105 @@ async get(): Promise<Pick<BasicCCReport, "currentValue" | "targetValue" | "durat
 ### `set`
 
 ```ts
-async set(targetValue: number): Promise<void>;
+async set(
+	targetValue: number,
+): Promise<SupervisionResult | undefined>;
 ```
+
+## Basic CC values
+
+### `compatEvent`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "event",
+}
+```
+
+-   **label:** Event value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** false
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `currentValue`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "currentValue",
+}
+```
+
+-   **label:** Current value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 99
+
+### `duration`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "duration",
+}
+```
+
+-   **label:** Remaining duration
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"duration"`
+
+### `restorePrevious`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "restorePrevious",
+}
+```
+
+-   **label:** Restore previous value
+-   **min. CC version:** 1
+-   **readable:** false
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`
+
+### `targetValue`
+
+```ts
+{
+	commandClass: CommandClasses.Basic,
+	endpoint: number,
+	property: "targetValue",
+}
+```
+
+-   **label:** Target value
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255

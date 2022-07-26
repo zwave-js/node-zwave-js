@@ -1,4 +1,5 @@
-import { MessageOrCCLogEntry, NodeType } from "@zwave-js/core";
+import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import { MessagePriority } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import type { MultiStageCallback, SuccessIndicator } from "@zwave-js/serial";
 import {
@@ -9,13 +10,11 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { computeNeighborDiscoveryTimeout } from "./AddNodeToNetworkRequest";
 
 export enum NodeNeighborUpdateStatus {
 	UpdateStarted = 0x21,
@@ -26,6 +25,8 @@ export enum NodeNeighborUpdateStatus {
 export interface RequestNodeNeighborUpdateRequestOptions
 	extends MessageBaseOptions {
 	nodeId: number;
+	/** This must be determined with {@link computeNeighborDiscoveryTimeout} */
+	discoveryTimeout: number;
 }
 
 @messageTypes(MessageType.Request, FunctionType.RequestNodeNeighborUpdate)
@@ -50,9 +51,11 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	) {
 		super(host, options);
 		this.nodeId = options.nodeId;
+		this.discoveryTimeout = options.discoveryTimeout;
 	}
 
 	public nodeId: number;
+	public discoveryTimeout: number;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.nodeId, this.callbackId]);
@@ -60,13 +63,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	}
 
 	public getCallbackTimeout(): number | undefined {
-		// During inclusion, the timeout is mainly required for the node to detect all neighbors
-		// We do the same here, so we just reuse the timeout
-		return computeNeighborDiscoveryTimeout(
-			this.host,
-			// Controllers take longer, just assume the worst case here
-			NodeType.Controller,
-		);
+		return this.discoveryTimeout;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

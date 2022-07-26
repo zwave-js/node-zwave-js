@@ -87,7 +87,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Alwas wake up",
+					"label": "Always wake up",
 					"value": 0
 				},
 				{

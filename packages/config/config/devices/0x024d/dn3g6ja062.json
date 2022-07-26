@@ -2,7 +2,7 @@
 	"manufacturer": "Z-works Inc.",
 	"manufacturerId": "0x024d",
 	"label": "DN3G6JA062",
-	"description": "Lock Dectector",
+	"description": "Lock Detector",
 	"devices": [
 		{
 			"productType": "0x4761",

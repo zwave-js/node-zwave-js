@@ -1,14 +1,12 @@
 import {
 	MessageRecord,
 	protocolDataRateToString,
-	stripUndefined,
-} from "@zwave-js/core/safe";
-import {
 	RSSI,
 	RssiError,
 	rssiToString,
+	stripUndefined,
 	TXReport,
-} from "../../controller/_Types";
+} from "@zwave-js/core/safe";
 import { AssignReturnRouteRequestTransmitReport } from "../network-mgmt/AssignReturnRouteMessages";
 import { AssignSUCReturnRouteRequestTransmitReport } from "../network-mgmt/AssignSUCReturnRouteMessages";
 import { DeleteReturnRouteRequestTransmitReport } from "../network-mgmt/DeleteReturnRouteMessages";

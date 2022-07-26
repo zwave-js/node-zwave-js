@@ -1,17 +1,19 @@
 import {
-	CommandClasses,
-	ZWaveError,
-	ZWaveErrorCodes,
-} from "@zwave-js/core/safe";
-import { num2hex, staticExtends } from "@zwave-js/shared/safe";
-import { distinct } from "alcalzone-shared/arrays";
-import {
 	APIMethodsOf,
 	CCAPI,
 	CCAPIs,
+	getAPI,
 	PhysicalCCAPI,
-} from "../commandclass/API";
-import { getAPI, MulticastDestination } from "../commandclass/CommandClass";
+} from "@zwave-js/cc";
+import {
+	CommandClasses,
+	IVirtualEndpoint,
+	MulticastDestination,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core/safe";
+import { staticExtends } from "@zwave-js/shared/safe";
+import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
 import type { VirtualNode } from "./VirtualNode";
@@ -22,7 +24,7 @@ import type { VirtualNode } from "./VirtualNode";
  *
  * The endpoint's capabilities are determined by the capabilities of the individual nodes' endpoints.
  */
-export class VirtualEndpoint {
+export class VirtualEndpoint implements IVirtualEndpoint {
 	public constructor(
 		/** The virtual node this endpoint belongs to (or undefined if it set later) */
 		node: VirtualNode | undefined,
@@ -33,6 +35,9 @@ export class VirtualEndpoint {
 	) {
 		if (node) this._node = node;
 	}
+
+	/** Required by {@link IZWaveEndpoint} */
+	public readonly virtual = true;
 
 	/** The virtual node this endpoint belongs to */
 	private _node!: VirtualNode;
@@ -81,41 +86,8 @@ export class VirtualEndpoint {
 	 * @param ccId The command class to create an API instance for
 	 */
 	public createAPI(ccId: CommandClasses): CCAPI {
-		const APIConstructor = getAPI(ccId);
-		const ccName = CommandClasses[ccId];
-		if (APIConstructor == undefined) {
-			throw new ZWaveError(
-				`Command Class ${ccName} (${num2hex(
-					ccId,
-				)}) has no associated API!`,
-				ZWaveErrorCodes.CC_NoAPI,
-			);
-		}
-		const apiInstance = new APIConstructor(this.driver, this);
-		return new Proxy(apiInstance, {
-			get: (target, property) => {
-				// Forbid access to the API if it is not supported by the node
-				if (
-					property !== "ccId" &&
-					property !== "endpoint" &&
-					property !== "isSupported" &&
-					property !== "withOptions" &&
-					property !== "commandOptions" &&
-					!target.isSupported()
-				) {
-					const hasNodeId = typeof this.nodeId === "number";
-					throw new ZWaveError(
-						`${hasNodeId ? "The" : "This"} virtual node${
-							hasNodeId ? ` ${this.nodeId as number}` : ""
-						}${
-							this.index === 0 ? "" : ` (endpoint ${this.index})`
-						} does not support the Command Class ${ccName}!`,
-						ZWaveErrorCodes.CC_NotSupported,
-					);
-				}
-				return target[property as keyof CCAPI];
-			},
-		});
+		// Trust me on this, TypeScript :)
+		return CCAPI.create(ccId, this.driver, this) as any;
 	}
 
 	private _commandClassAPIs = new Map<CommandClasses, CCAPI>();
@@ -145,7 +117,7 @@ export class VirtualEndpoint {
 				// typeof ccNameOrId === "string"
 				let ccId: CommandClasses | undefined;
 				// The command classes are exposed to library users by their name or the ID
-				if (/\d+/.test(ccNameOrId)) {
+				if (/^\d+$/.test(ccNameOrId)) {
 					// Since this is a property accessor, ccNameOrID is passed as a string,
 					// even when it was a number (CommandClasses)
 					ccId = +ccNameOrId;
@@ -164,7 +136,7 @@ export class VirtualEndpoint {
 
 				// When accessing a CC API for the first time, we need to create it
 				if (!target.has(ccId)) {
-					const api = this.createAPI(ccId);
+					const api = CCAPI.create(ccId, this.driver, this);
 					target.set(ccId, api);
 				}
 				return target.get(ccId);
@@ -197,7 +169,7 @@ export class VirtualEndpoint {
 	}.bind(this);
 
 	/**
-	 * Provides access to simplified APIs that are taylored to specific CCs.
+	 * Provides access to simplified APIs that are tailored to specific CCs.
 	 * Make sure to check support of each API using `API.isSupported()` since
 	 * all other API calls will throw if the API is not supported
 	 */

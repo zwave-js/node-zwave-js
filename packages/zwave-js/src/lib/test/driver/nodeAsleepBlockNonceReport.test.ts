@@ -1,5 +1,6 @@
 import { CommandClasses, SecurityManager } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -14,14 +15,16 @@ describe("regression tests", () => {
 
 	beforeEach(async () => {
 		({ driver, serialport } = await createAndStartDriver({
-			networkKey: Buffer.alloc(16, 0),
+			securityKeys: {
+				S0_Legacy: Buffer.alloc(16, 0),
+			},
 			attempts: {
 				sendData: 1,
 			},
 		}));
 
 		driver["_securityManager"] = new SecurityManager({
-			networkKey: driver.options.networkKey!,
+			networkKey: driver.options.securityKeys!.S0_Legacy!,
 			ownNodeId: 1,
 			nonceTimeout: driver.options.timeouts.nonce,
 		});
@@ -42,7 +45,10 @@ describe("regression tests", () => {
 
 	it("when a NonceReport does not get delivered, it does not block further nonce requests", async () => {
 		const node44 = new ZWaveNode(44, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(44, node44);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			44,
+			node44,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -118,5 +124,5 @@ describe("regression tests", () => {
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
-	}, 5000);
+	}, 30000);
 });

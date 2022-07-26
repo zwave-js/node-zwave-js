@@ -13,7 +13,7 @@ import type { SerialPort } from "serialport";
 import { Driver } from "./Driver";
 import type { ZWaveOptions } from "./ZWaveOptions";
 
-interface CreateAndStartDriverWithMockPortResult {
+export interface CreateAndStartDriverWithMockPortResult {
 	driver: Driver;
 	continueStartup: () => void;
 	mockPort: MockPortBinding;

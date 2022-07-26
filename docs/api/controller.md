@@ -39,7 +39,7 @@ The options parameter is used to specify the inclusion strategy and provide call
     **Not recommended**, because S2 should be used where possible.
 
 -   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
-    **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+    **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 
 -   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
     **Not recommended** because `Default` is more versatile and less complicated for the user.
@@ -169,12 +169,40 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(unprovision?: boolean | "inactive"): Promise<boolean>
+async beginExclusion(options?: ExclusionOptions): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
 
-The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well. A value of `"inactive"` will keep the provisioning entry, but disable it, preventing automatic inclusion of the corresponding nodes.
+The optional `options` parameter specifies further actions like removing or disabling the node's Smart Start provisioning entries:
+
+<!-- #import ExclusionOptions from "zwave-js" -->
+
+```ts
+type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+```
+
+where the strategy is one of the following values:
+
+<!-- #import ExclusionStrategy from "zwave-js" with comments -->
+
+```ts
+enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+```
+
+> [!NOTE] The default behavior is disabling the provisioning entry.
 
 ### `stopExclusion`
 
@@ -747,6 +775,8 @@ Many Z-Wave devices only have a single upgradeable firmware target (chip), so th
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
+> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+
 ### `beginOTAFirmwareUpdate`
 
 ```ts
@@ -892,7 +922,7 @@ enum InclusionState {
 
 ## Controller events
 
-The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
 
 ### `"inclusion started"`
 
@@ -924,7 +954,18 @@ A node has successfully been added to the network.
 > [!NOTE] At this point, the initial setup and the node interview is still pending, so the node is **not yet operational**.
 
 ```ts
-(node: ZWaveNode) => void
+(node: FoundNode) => void
+```
+
+<!-- #import FoundNode from "zwave-js" -->
+
+```ts
+interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
+}
 ```
 
 ### `"node added"`

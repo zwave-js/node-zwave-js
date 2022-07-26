@@ -1,6 +1,13 @@
+import type { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
 	MessageOrCCLogEntry,
+	MessagePriority,
+	MulticastCC,
+	SinglecastCC,
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -15,24 +22,12 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
-import type {
-	CommandClass,
-	MulticastCC,
-	SinglecastCC,
-} from "../../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import {
-	TransmitOptions,
-	TransmitStatus,
-	TXReport,
-} from "../../controller/_Types";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { MAX_SEND_ATTEMPTS } from "./SendDataMessages";
@@ -85,8 +80,9 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */
@@ -325,8 +321,9 @@ export class SendDataMulticastBridgeRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** Which Node ID this command originates from */

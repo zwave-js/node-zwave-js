@@ -180,7 +180,7 @@
 			"#": "6",
 			"$if": "firmwareVersion <= 3.1",
 			"label": "Motion Alarm Cancellation Delay",
-			"description": "Period of time after wich Motion alarm will be cancelled.",
+			"description": "Period of time after which Motion alarm will be cancelled.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 1,

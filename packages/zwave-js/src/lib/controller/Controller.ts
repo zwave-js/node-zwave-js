@@ -1,5 +1,21 @@
 import {
-	actuatorCCs,
+	ECDHProfiles,
+	inclusionTimeouts,
+	KEXFailType,
+	KEXSchemes,
+	ManufacturerSpecificCCValues,
+	Security2CCKEXFail,
+	Security2CCKEXSet,
+	Security2CCNetworkKeyGet,
+	Security2CCNetworkKeyVerify,
+	Security2CCPublicKeyReport,
+	Security2CCTransferEnd,
+	utils as ccUtils,
+	VersionCCValues,
+	type AssociationAddress,
+	type AssociationGroup,
+} from "@zwave-js/cc";
+import {
 	authHomeIdFromDSK,
 	CommandClasses,
 	computePRK,
@@ -18,6 +34,7 @@ import {
 	nwiHomeIdFromDSK,
 	ProtocolType,
 	RFRegion,
+	RSSI,
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
@@ -35,7 +52,6 @@ import {
 	getErrorMessage,
 	Mixin,
 	num2hex,
-	ObjectKeyMap,
 	padVersion,
 	pick,
 	ReadonlyObjectKeyMap,
@@ -53,42 +69,6 @@ import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
-import {
-	Security2CCKEXFail,
-	Security2CCKEXSet,
-	Security2CCNetworkKeyGet,
-	Security2CCNetworkKeyVerify,
-	Security2CCPublicKeyReport,
-	Security2CCTransferEnd,
-} from "../commandclass";
-import { AssociationCC } from "../commandclass/AssociationCC";
-import { AssociationGroupInfoCC } from "../commandclass/AssociationGroupInfoCC";
-import {
-	getManufacturerIdValueId,
-	getManufacturerIdValueMetadata,
-	getProductIdValueId,
-	getProductIdValueMetadata,
-	getProductTypeValueId,
-	getProductTypeValueMetadata,
-} from "../commandclass/ManufacturerSpecificCC";
-import { MultiChannelAssociationCC } from "../commandclass/MultiChannelAssociationCC";
-import {
-	ECDHProfiles,
-	inclusionTimeouts,
-	KEXFailType,
-	KEXSchemes,
-} from "../commandclass/Security2/shared";
-import {
-	getFirmwareVersionsMetadata,
-	getFirmwareVersionsValueId,
-	getSDKVersionMetadata,
-	getSDKVersionValueId,
-} from "../commandclass/VersionCC";
-import type {
-	AssociationAddress,
-	AssociationGroup,
-	EndpointAddress,
-} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
@@ -162,6 +142,7 @@ import {
 	AddNodeToNetworkRequest,
 	AddNodeToNetworkRequestStatusReport,
 	AddNodeType,
+	computeNeighborDiscoveryTimeout,
 	EnableSmartStartListenRequest,
 } from "../serialapi/network-mgmt/AddNodeToNetworkRequest";
 import { AssignReturnRouteRequest } from "../serialapi/network-mgmt/AssignReturnRouteMessages";
@@ -251,6 +232,9 @@ import {
 	getAvailableFirmwareUpdates,
 } from "./FirmwareUpdateService";
 import {
+	ExclusionOptions,
+	ExclusionStrategy,
+	FoundNode,
 	InclusionOptions,
 	InclusionOptionsInternal,
 	InclusionResult,
@@ -270,7 +254,6 @@ import type {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
 	HealNodeStatus,
-	RSSI,
 	SDKVersion,
 } from "./_Types";
 
@@ -283,7 +266,7 @@ interface ControllerEventCallbacks
 	"exclusion started": () => void;
 	"inclusion stopped": () => void;
 	"exclusion stopped": () => void;
-	"node found": (node: ZWaveNode) => void;
+	"node found": (node: FoundNode) => void;
 	"node added": (node: ZWaveNode, result: InclusionResult) => void;
 	"node removed": (node: ZWaveNode, replaced: boolean) => void;
 	"heal network progress": (
@@ -362,11 +345,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isPrimary;
 	}
 
-	/** @deprecated Use {@link isPrimary} instead */
-	public get isSecondary(): boolean | undefined {
-		if (typeof this._isPrimary === "boolean") return !this._isPrimary;
-	}
-
 	private _isUsingHomeIdFromOtherNetwork: boolean | undefined;
 	public get isUsingHomeIdFromOtherNetwork(): boolean | undefined {
 		return this._isUsingHomeIdFromOtherNetwork;
@@ -392,21 +370,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		return this._isSUC;
 	}
 
-	/** @deprecated Use {@link isSUC} instead */
-	public get isStaticUpdateController(): boolean | undefined {
-		return this._isSUC;
-	}
-
 	private _nodeType: NodeType | undefined;
 	public get nodeType(): NodeType | undefined {
 		return this._nodeType;
-	}
-
-	/** @deprecated Use the {@link nodeType} property to check for Controller vs. End Node instead */
-	public get isSlave(): boolean | undefined {
-		if (this._nodeType != undefined) {
-			return this._nodeType !== NodeType.Controller;
-		}
 	}
 
 	/** Checks if the SDK version is greater than the given one */
@@ -1032,37 +998,46 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 		// Set manufacturer information for the controller node
 		const controllerValueDB = this.valueDB;
 		controllerValueDB.setMetadata(
-			getManufacturerIdValueId(),
-			getManufacturerIdValueMetadata(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
+			ManufacturerSpecificCCValues.manufacturerId.meta,
 		);
 		controllerValueDB.setMetadata(
-			getProductTypeValueId(),
-			getProductTypeValueMetadata(),
+			ManufacturerSpecificCCValues.productType.id,
+			ManufacturerSpecificCCValues.productType.meta,
 		);
 		controllerValueDB.setMetadata(
-			getProductIdValueId(),
-			getProductIdValueMetadata(),
+			ManufacturerSpecificCCValues.productId.id,
+			ManufacturerSpecificCCValues.productId.meta,
 		);
 		controllerValueDB.setValue(
-			getManufacturerIdValueId(),
+			ManufacturerSpecificCCValues.manufacturerId.id,
 			this._manufacturerId,
 		);
-		controllerValueDB.setValue(getProductTypeValueId(), this._productType);
-		controllerValueDB.setValue(getProductIdValueId(), this._productId);
+		controllerValueDB.setValue(
+			ManufacturerSpecificCCValues.productType.id,
+			this._productType,
+		);
+		controllerValueDB.setValue(
+			ManufacturerSpecificCCValues.productId.id,
+			this._productId,
+		);
 
 		// Set firmware version information for the controller node
 		controllerValueDB.setMetadata(
-			getFirmwareVersionsValueId(),
-			getFirmwareVersionsMetadata(),
+			VersionCCValues.firmwareVersions.id,
+			VersionCCValues.firmwareVersions.meta,
 		);
-		controllerValueDB.setValue(getFirmwareVersionsValueId(), [
+		controllerValueDB.setValue(VersionCCValues.firmwareVersions.id, [
 			this._firmwareVersion,
 		]);
 		controllerValueDB.setMetadata(
-			getSDKVersionValueId(),
-			getSDKVersionMetadata(),
+			VersionCCValues.sdkVersion.id,
+			VersionCCValues.sdkVersion.meta,
 		);
-		controllerValueDB.setValue(getSDKVersionValueId(), this._sdkVersion);
+		controllerValueDB.setValue(
+			VersionCCValues.sdkVersion.id,
+			this._sdkVersion,
+		);
 
 		if (
 			this.type !== ZWaveLibraryTypes["Bridge Controller"] &&
@@ -1162,8 +1137,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private _smartStartEnabled: boolean = false;
 
 	private _includeController: boolean = false;
-	private _unprovisionRemovedNode: boolean | "inactive" = false;
-
+	private _exclusionOptions: ExclusionOptions | undefined;
 	private _inclusionOptions: InclusionOptionsInternal | undefined;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
@@ -1176,19 +1150,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 *
 	 * @param options Defines the inclusion strategy to use.
 	 */
-	public async beginInclusion(options: InclusionOptions): Promise<boolean>;
-
-	/**
-	 * Starts the inclusion process of new nodes.
-	 * Resolves to true when the process was started, and false if the inclusion was already active.
-	 *
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async beginInclusion(includeNonSecure?: boolean): Promise<boolean>;
-
 	public async beginInclusion(
-		options?: InclusionOptions | boolean,
+		options: InclusionOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1196,18 +1161,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
-		}
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
 		}
 
 		// Protect against invalid inclusion options
@@ -1553,11 +1506,27 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	 * Starts the exclusion process of new nodes.
 	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
 	 *
+	 * @param options Influences the exclusion process and what happens with the Smart Start provisioning list.
+	 */
+	public async beginExclusion(options?: ExclusionOptions): Promise<boolean>;
+
+	/**
+	 * Starts the exclusion process of new nodes.
+	 * Resolves to true when the process was started, and false if an inclusion or exclusion process was already active.
+	 *
 	 * @param unprovision Whether the removed node should also be removed from the Smart Start provisioning list.
 	 * A value of `"inactive"` will keep the provisioning entry, but disable it.
+	 *
+	 * @deprecated Use the overload with {@link ExclusionOptions} instead.
 	 */
 	public async beginExclusion(
-		unprovision: boolean | "inactive" = false,
+		unprovision: boolean | "inactive",
+	): Promise<boolean>;
+
+	public async beginExclusion(
+		options: ExclusionOptions | boolean | "inactive" = {
+			strategy: ExclusionStrategy.DisableProvisioningEntry,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -1565,6 +1534,18 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this._inclusionState === InclusionState.Busy
 		) {
 			return false;
+		}
+
+		if (typeof options === "boolean") {
+			options = {
+				strategy: options
+					? ExclusionStrategy.Unprovision
+					: ExclusionStrategy.ExcludeOnly,
+			};
+		} else if (options === "inactive") {
+			options = {
+				strategy: ExclusionStrategy.DisableProvisioningEntry,
+			};
 		}
 
 		// Leave SmartStart listening mode so we can switch to exclusion mode
@@ -1585,7 +1566,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			this.driver.controllerLog.print(
 				`The controller is now ready to remove nodes`,
 			);
-			this._unprovisionRemovedNode = unprovision;
+			this._exclusionOptions = options;
 			this.emit("exclusion started");
 			return true;
 		} catch (e) {
@@ -2445,27 +2426,33 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				// Inclusion is now completed, bootstrap the node
 				const newNode = this._nodePendingInclusion;
 
-				this.emit("node found", newNode);
-
-				const supportedCommandClasses = [
+				const supportedCCs = [
 					...newNode.implementedCommandClasses.entries(),
 				]
 					.filter(([, info]) => info.isSupported)
 					.map(([cc]) => cc);
-				const controlledCommandClasses = [
+				const controlledCCs = [
 					...newNode.implementedCommandClasses.entries(),
 				]
 					.filter(([, info]) => info.isControlled)
 					.map(([cc]) => cc);
+
+				this.emit("node found", {
+					id: newNode.id,
+					deviceClass: newNode.deviceClass,
+					supportedCCs,
+					controlledCCs,
+				});
+
 				this.driver.controllerLog.print(
 					`finished adding node ${newNode.id}:
   basic device class:    ${newNode.deviceClass?.basic.label}
   generic device class:  ${newNode.deviceClass?.generic.label}
   specific device class: ${newNode.deviceClass?.specific.label}
-  supported CCs: ${supportedCommandClasses
+  supported CCs: ${supportedCCs
 		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}
-  controlled CCs: ${controlledCommandClasses
+  controlled CCs: ${controlledCCs
 		.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
 		.join("")}`,
 				);
@@ -2629,7 +2616,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
 
-					this.emit("node found", newNode);
+					this.emit("node found", {
+						id: newNode.id,
+					});
 
 					// We're communicating with the device, so assume it is alive
 					// If it is actually a sleeping device, it will be marked as such later
@@ -2757,16 +2746,22 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				this.driver.controllerLog.print(`Node ${nodeId} was removed`);
 
 				// Avoid automatic re-inclusion using SmartStart if desired
-				if (this._unprovisionRemovedNode === true) {
-					this.unprovisionSmartStartNode(nodeId);
-				} else if (this._unprovisionRemovedNode === "inactive") {
-					const entry = this.getProvisioningEntryInternal(nodeId);
-					if (entry) {
-						entry.status = ProvisioningEntryStatus.Inactive;
-						this.provisionSmartStartNode(entry);
+				switch (this._exclusionOptions?.strategy) {
+					case ExclusionStrategy.Unprovision:
+						this.unprovisionSmartStartNode(nodeId);
+						break;
+
+					case ExclusionStrategy.DisableProvisioningEntry: {
+						const entry = this.getProvisioningEntryInternal(nodeId);
+						if (entry) {
+							entry.status = ProvisioningEntryStatus.Inactive;
+							this.provisionSmartStartNode(entry);
+						}
+						break;
 					}
 				}
-				this._unprovisionRemovedNode = false;
+
+				this._exclusionOptions = undefined;
 
 				// notify listeners
 				this.emit("node removed", this._nodePendingExclusion, false);
@@ -3017,11 +3012,20 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					message: `refreshing neighbor list (attempt ${attempt})...`,
 					direction: "outbound",
 				});
+				// During inclusion, the timeout is mainly required for the node to detect all neighbors
+				// We do the same here, so we just reuse the timeout
+				const discoveryTimeout = computeNeighborDiscoveryTimeout(
+					this.driver,
+					// Controllers take longer, just assume the worst case here
+					NodeType.Controller,
+				);
+
 				try {
 					const resp =
 						await this.driver.sendMessage<RequestNodeNeighborUpdateReport>(
 							new RequestNodeNeighborUpdateRequest(this.driver, {
 								nodeId,
+								discoveryTimeout,
 							}),
 						);
 					if (
@@ -3309,120 +3313,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociationGroups(
 		source: AssociationAddress,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	/**
-	 * Returns a dictionary of all association groups for the root device (endpoint 0) of this node.
-	 *
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociationGroups(
-		nodeId: number,
-	): ReadonlyMap<number, AssociationGroup>;
-
-	public getAssociationGroups(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, AssociationGroup> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
-
-		// Check whether we have multi channel support or not
-		let assocInstance: typeof AssociationCC;
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-		} else {
-			throw new ZWaveError(
-				`Node ${nodeId}${
-					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-		}
-
-		const assocGroupCount =
-			assocInstance.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const mcGroupCount =
-			mcInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const groupCount = Math.max(assocGroupCount, mcGroupCount);
-
-		const ret = new Map<number, AssociationGroup>();
-
-		if (
-			endpoint.supportsCC(CommandClasses["Association Group Information"])
-		) {
-			// We can read all information we need from the AGI CC
-			const agiInstance = AssociationGroupInfoCC;
-			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig =
-					node.deviceConfig?.getAssociationConfigForEndpoint(
-						endpointIndex,
-						group,
-					);
-				const multiChannel = !!mcInstance && group <= mcGroupCount;
-				ret.set(group, {
-					maxNodes:
-						(multiChannel
-							? mcInstance!
-							: assocInstance
-						).getMaxNodesCached(this.driver, endpoint, group) || 1,
-					// AGI implies Z-Wave+ where group 1 is the lifeline
-					isLifeline: group === 1,
-					label:
-						// prefer the configured label if we have one
-						assocConfig?.label ??
-						// the ones reported by AGI are sometimes pretty bad
-						agiInstance.getGroupNameCached(
-							this.driver,
-							endpoint,
-							group,
-						) ??
-						// but still better than "unnamed"
-						`Unnamed group ${group}`,
-					multiChannel,
-					profile: agiInstance.getGroupProfileCached(
-						this.driver,
-						endpoint,
-						group,
-					),
-					issuedCommands: agiInstance.getIssuedCommandsCached(
-						this.driver,
-						endpoint,
-						group,
-					),
-				});
-			}
-		} else {
-			// we need to consult the device config
-			for (let group = 1; group <= groupCount; group++) {
-				const assocConfig =
-					node.deviceConfig?.getAssociationConfigForEndpoint(
-						endpointIndex,
-						group,
-					);
-				const multiChannel = !!mcInstance && group <= mcGroupCount;
-				ret.set(group, {
-					maxNodes:
-						(multiChannel
-							? mcInstance!
-							: assocInstance
-						).getMaxNodesCached(this.driver, endpoint, group) ||
-						assocConfig?.maxNodes ||
-						1,
-					isLifeline: assocConfig?.isLifeline ?? group === 1,
-					label: assocConfig?.label ?? `Unnamed group ${group}`,
-					multiChannel,
-				});
-			}
-		}
-		return ret;
+		return ccUtils.getAssociationGroups(this.driver, endpoint);
 	}
 
 	/**
@@ -3433,20 +3328,7 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 	): ReadonlyMap<number, ReadonlyMap<number, AssociationGroup>> {
 		const node = this.nodes.getOrThrow(nodeId);
-
-		const ret = new Map<number, ReadonlyMap<number, AssociationGroup>>();
-		for (const endpoint of node.getAllEndpoints()) {
-			if (endpoint.supportsCC(CommandClasses.Association)) {
-				ret.set(
-					endpoint.index,
-					this.getAssociationGroups({
-						nodeId,
-						endpoint: endpoint.index,
-					}),
-				);
-			}
-		}
-		return ret;
+		return ccUtils.getAllAssociationGroups(this.driver, node);
 	}
 
 	/**
@@ -3455,74 +3337,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public getAssociations(
 		source: AssociationAddress,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	/**
-	 * Returns all associations (Multi Channel or normal) that are configured on the root device (endpoint 0) of this node.
-	 * @deprecated Use the overload with `source: AssociationAddress` instead
-	 */
-	public getAssociations(
-		nodeId: number,
-	): ReadonlyMap<number, readonly AssociationAddress[]>;
-
-	public getAssociations(
-		source: number | AssociationAddress,
 	): ReadonlyMap<number, readonly AssociationAddress[]> {
-		const nodeId = typeof source === "number" ? source : source.nodeId;
-		const endpointIndex =
-			typeof source === "number" ? 0 : source.endpoint ?? 0;
+		const node = this.nodes.getOrThrow(source.nodeId);
+		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		const node = this.nodes.getOrThrow(nodeId);
-		const endpoint = node.getEndpointOrThrow(endpointIndex);
-
-		const ret = new Map<number, readonly AssociationAddress[]>();
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			const destinations = AssociationCC.getAllDestinationsCached(
-				this.driver,
-				endpoint,
-			);
-			for (const [groupId, assocs] of destinations) {
-				ret.set(groupId, assocs);
-			}
-		} else {
-			throw new ZWaveError(
-				`Node ${nodeId}${
-					endpointIndex > 0 ? `, endpoint ${endpointIndex}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// Merge the "normal" destinations with multi channel destinations
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			const destinations =
-				MultiChannelAssociationCC.getAllDestinationsCached(
-					this.driver,
-					endpoint,
-				);
-			for (const [groupId, assocs] of destinations) {
-				if (ret.has(groupId)) {
-					const normalAssociations = ret.get(groupId)!;
-					ret.set(groupId, [
-						...normalAssociations,
-						// Eliminate potential duplicates
-						...assocs.filter(
-							(a1) =>
-								normalAssociations.findIndex(
-									(a2) =>
-										a1.nodeId === a2.nodeId &&
-										a1.endpoint === a2.endpoint,
-								) === -1,
-						),
-					]);
-				} else {
-					ret.set(groupId, assocs);
-				}
-			}
-		}
-
-		return ret;
+		return ccUtils.getAssociations(this.driver, endpoint);
 	}
 
 	/**
@@ -3536,21 +3355,7 @@ ${associatedNodes.join(", ")}`,
 		ReadonlyMap<number, readonly AssociationAddress[]>
 	> {
 		const node = this.nodes.getOrThrow(nodeId);
-
-		const ret = new ObjectKeyMap<
-			AssociationAddress,
-			ReadonlyMap<number, readonly AssociationAddress[]>
-		>();
-		for (const endpoint of node.getAllEndpoints()) {
-			const address: AssociationAddress = {
-				nodeId,
-				endpoint: endpoint.index,
-			};
-			if (endpoint.supportsCC(CommandClasses.Association)) {
-				ret.set(address, this.getAssociations(address));
-			}
-		}
-		return ret;
+		return ccUtils.getAllAssociations(this.driver, node);
 	}
 
 	/**
@@ -3558,87 +3363,18 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public isAssociationAllowed(
 		source: AssociationAddress,
-		group: number,
-		destination: AssociationAddress,
-	): boolean;
-
-	/**
-	 * Checks if a given association is allowed.
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public isAssociationAllowed(
-		nodeId: number,
-		group: number,
-		destination: AssociationAddress,
-	): boolean;
-
-	public isAssociationAllowed(
-		source: number | AssociationAddress,
 		group: number,
 		destination: AssociationAddress,
 	): boolean {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
 
-		// Check that the target endpoint exists except when adding an association to the controller
-		const targetNode = this.nodes.getOrThrow(destination.nodeId);
-		const targetEndpoint =
-			destination.nodeId === this._ownNodeId
-				? targetNode
-				: targetNode.getEndpointOrThrow(destination.endpoint ?? 0);
-
-		// SDS14223:
-		// A controlling node MUST NOT associate Node A to a Node B destination that does not support
-		// the Command Class that the Node A will be controlling
-		//
-		// To determine this, the node must support the AGI CC or we have no way of knowing which
-		// CCs the node will control
-		if (
-			!endpoint.supportsCC(CommandClasses.Association) &&
-			!endpoint.supportsCC(CommandClasses["Multi Channel Association"])
-		) {
-			throw new ZWaveError(
-				`Node ${node.id}${
-					endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-				} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		} else if (
-			!endpoint.supportsCC(
-				CommandClasses["Association Group Information"],
-			)
-		) {
-			return true;
-		}
-
-		// The following checks don't apply to Lifeline associations
-		if (destination.nodeId === this._ownNodeId) return true;
-
-		const groupCommandList = AssociationGroupInfoCC.getIssuedCommandsCached(
+		return ccUtils.isAssociationAllowed(
 			this.driver,
 			endpoint,
 			group,
+			destination,
 		);
-		if (!groupCommandList || !groupCommandList.size) {
-			// We don't know which CCs this group controls, just allow it
-			return true;
-		}
-		const groupCCs = [...groupCommandList.keys()];
-
-		// A controlling node MAY create an association to a destination supporting an
-		// actuator Command Class if the actual association group sends Basic Control Command Class.
-		if (
-			groupCCs.includes(CommandClasses.Basic) &&
-			actuatorCCs.some((cc) => targetEndpoint?.supportsCC(cc))
-		) {
-			return true;
-		}
-
-		// Enforce that at least one issued CC is supported
-		return groupCCs.some((cc) => targetEndpoint?.supportsCC(cc));
 	}
 
 	/**
@@ -3648,154 +3384,16 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public addAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Adds associations to a node or endpoint
-	 */
-	public async addAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
-		const nodeAndEndpointString = `${node.id}${
-			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-		}`;
 
-		// Check whether we should add any associations the device does not have support for
-		let assocInstance: typeof AssociationCC | undefined;
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		// Split associations into conventional and endpoint associations
-		const nodeAssociations = distinct(
-			destinations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId),
+		return ccUtils.addAssociations(
+			this.driver,
+			endpoint,
+			group,
+			destinations,
 		);
-		const endpointAssociations = destinations.filter(
-			(a) => a.endpoint != undefined,
-		) as EndpointAddress[];
-
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-		} else if (nodeAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		const assocGroupCount =
-			assocInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const mcGroupCount =
-			mcInstance?.getGroupCountCached(this.driver, endpoint) ?? 0;
-		const groupCount = Math.max(assocGroupCount, mcGroupCount);
-		if (group > groupCount) {
-			throw new ZWaveError(
-				`Group ${group} does not exist on node ${nodeAndEndpointString}`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-
-		const groupIsMultiChannel =
-			!!mcInstance &&
-			group <= mcGroupCount &&
-			node.deviceConfig?.associations?.get(group)?.multiChannel !== false;
-
-		if (groupIsMultiChannel) {
-			// Check that all associations are allowed
-			const disallowedAssociations = destinations.filter(
-				(a) =>
-					!this.isAssociationAllowed(
-						source as AssociationAddress,
-						group,
-						a,
-					),
-			);
-			if (disallowedAssociations.length) {
-				let message = `The following associations are not allowed:`;
-				message += disallowedAssociations
-					.map(
-						(a) =>
-							`\n· Node ${a.nodeId}${
-								a.endpoint ? `, endpoint ${a.endpoint}` : ""
-							}`,
-					)
-					.join("");
-				throw new ZWaveError(
-					message,
-					ZWaveErrorCodes.AssociationCC_NotAllowed,
-				);
-			}
-
-			// And add them
-			await endpoint.commandClasses[
-				"Multi Channel Association"
-			].addDestinations({
-				groupId: group,
-				nodeIds: nodeAssociations,
-				endpoints: endpointAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses["Multi Channel Association"].getGroup(
-				group,
-			);
-		} else {
-			// Although the node supports multi channel associations, this group only supports "normal" associations
-			if (destinations.some((a) => a.endpoint != undefined)) {
-				throw new ZWaveError(
-					`Node ${nodeAndEndpointString}, group ${group} does not support multi channel associations!`,
-					ZWaveErrorCodes.CC_NotSupported,
-				);
-			}
-
-			// Check that all associations are allowed
-			const disallowedAssociations = destinations.filter(
-				(a) =>
-					!this.isAssociationAllowed(
-						source as AssociationAddress,
-						group,
-						a,
-					),
-			);
-			if (disallowedAssociations.length) {
-				throw new ZWaveError(
-					`The associations to the following nodes are not allowed: ${disallowedAssociations
-						.map((a) => a.nodeId)
-						.join(", ")}`,
-					ZWaveErrorCodes.AssociationCC_NotAllowed,
-				);
-			}
-
-			await endpoint.commandClasses.Association.addNodeIds(
-				group,
-				...destinations.map((a) => a.nodeId),
-			);
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		}
 	}
 
 	/**
@@ -3805,132 +3403,16 @@ ${associatedNodes.join(", ")}`,
 		source: AssociationAddress,
 		group: number,
 		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 * @deprecated Use the overload with param type `source: AssociationAddress` instead.
-	 */
-	public removeAssociations(
-		nodeId: number,
-		group: number,
-		destinations: AssociationAddress[],
-	): Promise<void>;
-
-	/**
-	 * Removes the given associations from a node or endpoint
-	 */
-	public async removeAssociations(
-		source: number | AssociationAddress,
-		group: number,
-		destinations: AssociationAddress[],
 	): Promise<void> {
-		if (typeof source === "number") {
-			source = { nodeId: source };
-		}
 		const node = this.nodes.getOrThrow(source.nodeId);
 		const endpoint = node.getEndpointOrThrow(source.endpoint ?? 0);
-		const nodeAndEndpointString = `${node.id}${
-			endpoint.index > 0 ? `, endpoint ${endpoint.index}` : ""
-		}`;
 
-		// Split associations into conventional and endpoint associations
-		const nodeAssociations = distinct(
-			destinations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId),
+		return ccUtils.removeAssociations(
+			this.driver,
+			endpoint,
+			group,
+			destinations,
 		);
-		const endpointAssociations = destinations.filter(
-			(a) => a.endpoint != undefined,
-		) as EndpointAddress[];
-
-		// Removing associations is not either/or - we could have a device with duplicated associations between
-		// Association CC and Multi Channel Association CC
-		// Figure out what we need to use to remove the associations
-
-		let groupExistsAsMultiChannel = false;
-		let groupExistsAsNodeAssociation = false;
-
-		let mcInstance: typeof MultiChannelAssociationCC | undefined;
-		let assocInstance: typeof AssociationCC | undefined;
-
-		// To remove a multi channel association, we need to make sure that the group exists
-		// and the node supports multi channel associations
-		if (endpoint.supportsCC(CommandClasses["Multi Channel Association"])) {
-			mcInstance = MultiChannelAssociationCC;
-			if (
-				group <= mcInstance.getGroupCountCached(this.driver, endpoint)
-			) {
-				groupExistsAsMultiChannel = true;
-			}
-		} else if (endpointAssociations.length > 0) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support multi channel associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// To remove a normal association, we need to make sure that the group exists either as a normal association
-		// or as a multi channel association
-		if (endpoint.supportsCC(CommandClasses.Association)) {
-			assocInstance = AssociationCC;
-			if (
-				group <=
-				assocInstance.getGroupCountCached(this.driver, endpoint)
-			) {
-				groupExistsAsNodeAssociation = true;
-			}
-		}
-
-		if (!mcInstance && !assocInstance) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString} does not support associations!`,
-				ZWaveErrorCodes.CC_NotSupported,
-			);
-		}
-
-		// Ensure the group exists and can be used
-		if (!groupExistsAsMultiChannel && !groupExistsAsNodeAssociation) {
-			throw new ZWaveError(
-				` Association group ${group} does not exist for node ${nodeAndEndpointString}`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-		if (endpointAssociations.length > 0 && !groupExistsAsMultiChannel) {
-			throw new ZWaveError(
-				`Node ${nodeAndEndpointString}, association group ${group} does not support multi channel associations!`,
-				ZWaveErrorCodes.AssociationCC_InvalidGroup,
-			);
-		}
-
-		// Even if we only remove node associations, we use both CCs since it has been found that some
-		// devices do not correctly share the node list between the two commands
-		if (
-			assocInstance &&
-			nodeAssociations.length > 0 &&
-			groupExistsAsNodeAssociation
-		) {
-			await endpoint.commandClasses.Association.removeNodeIds({
-				groupId: group,
-				nodeIds: nodeAssociations,
-			});
-			// Refresh the association list
-			await endpoint.commandClasses.Association.getGroup(group);
-		}
-
-		if (mcInstance && groupExistsAsMultiChannel) {
-			await endpoint.commandClasses[
-				"Multi Channel Association"
-			].removeDestinations({
-				groupId: group,
-				nodeIds: nodeAssociations,
-				endpoints: endpointAssociations,
-			});
-			// Refresh the multi channel association list
-			await endpoint.commandClasses["Multi Channel Association"].getGroup(
-				group,
-			);
-		}
 	}
 
 	/**
@@ -4063,23 +3545,9 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
-		options: ReplaceNodeOptions,
-	): Promise<boolean>;
-
-	/**
-	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
-	 * @param nodeId The id of the node to replace
-	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security S0. By default, S0 will be used.
-	 * @deprecated Use the overload with options instead
-	 */
-	public async replaceFailedNode(
-		nodeId: number,
-		includeNonSecure?: boolean,
-	): Promise<boolean>;
-
-	public async replaceFailedNode(
-		nodeId: number,
-		options?: ReplaceNodeOptions | boolean,
+		options: ReplaceNodeOptions = {
+			strategy: InclusionStrategy.Insecure,
+		},
 	): Promise<boolean> {
 		if (
 			this._inclusionState === InclusionState.Including ||
@@ -4093,18 +3561,6 @@ ${associatedNodes.join(", ")}`,
 		await this.pauseSmartStart();
 
 		this.setInclusionState(InclusionState.Busy);
-
-		if (options == undefined) {
-			options = {
-				strategy: InclusionStrategy.Security_S0,
-			};
-		} else if (typeof options === "boolean") {
-			options = {
-				strategy: options
-					? InclusionStrategy.Insecure
-					: InclusionStrategy.Security_S0,
-			};
-		}
 
 		this.driver.controllerLog.print(
 			`starting replace failed node process...`,
@@ -4984,22 +4440,27 @@ ${associatedNodes.join(", ")}`,
 	 *
 	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
 	 * which did not wake up within a minute.
+	 *
+	 * **Note:** This requires an API key to be set in the driver options.
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
-		const didNodeWakeup = await Promise.race([
-			wait(60000, true).then(() => false as const),
-			node.waitForWakeup().then(() => true as const),
-		]);
+		// Ensure the node is awake if it can sleep
+		if (node.canSleep) {
+			const didNodeWakeup = await Promise.race([
+				wait(60000, true).then(() => false),
+				node.waitForWakeup().then(() => true),
+			]).catch(() => false);
 
-		if (!didNodeWakeup) {
-			throw new ZWaveError(
-				`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
-				ZWaveErrorCodes.FWUpdateService_MissingInformation,
-			);
+			if (!didNodeWakeup) {
+				throw new ZWaveError(
+					`Cannot check for firmware updates for node ${nodeId}: The node did not wake up within 1 minute!`,
+					ZWaveErrorCodes.FWUpdateService_MissingInformation,
+				);
+			}
 		}
 
 		// Do not rely on stale information, query everything fresh from the node
@@ -5031,15 +4492,17 @@ ${associatedNodes.join(", ")}`,
 				productType,
 				productId,
 				firmwareVersion,
+				this.driver.options.apiKeys?.firmwareUpdateService,
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;
 			if (e.response) {
-				if (
-					isObject(e.response.data) &&
-					typeof e.response.data.message === "string"
-				) {
-					message += `${e.response.data.message} `;
+				if (isObject(e.response.data)) {
+					if (typeof e.response.data.error === "string") {
+						message += `${e.response.data.error} `;
+					} else if (typeof e.response.data.message === "string") {
+						message += `${e.response.data.message} `;
+					}
 				}
 				message += `[${e.response.status} ${e.response.statusText}]`;
 			} else if (typeof e.message === "string") {

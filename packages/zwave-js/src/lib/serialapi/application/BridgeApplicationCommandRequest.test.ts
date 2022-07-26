@@ -1,14 +1,13 @@
-import { createTestingHost } from "@zwave-js/host";
+import "@zwave-js/cc";
+import { createTestingHost, TestingHost } from "@zwave-js/host";
 import { Message } from "@zwave-js/serial";
-import "../../commandclass/index";
-import { type TestingHost } from "../../test/mocks";
 
 describe("BridgeApplicationCommandRequest", () => {
 	let host: TestingHost;
 	beforeAll(async () => {
 		host = createTestingHost();
 		await host.configManager.loadMeters();
-	});
+	}, 30000);
 
 	describe("regression tests", () => {
 		it("parsing without RSSI", async () => {

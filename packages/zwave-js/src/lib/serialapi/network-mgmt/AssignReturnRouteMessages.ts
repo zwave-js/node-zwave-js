@@ -1,5 +1,7 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
+	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -14,13 +16,11 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
 import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import { TransmitStatus } from "../../controller/_Types";
 
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)

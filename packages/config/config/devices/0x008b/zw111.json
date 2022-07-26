@@ -109,7 +109,7 @@
 		},
 		{
 			"#": "81",
-			"label": "Group 3 notificaiton",
+			"label": "Group 3 notification",
 			"description": "Set notification sent to associated nodes (group 3)",
 			"valueSize": 1,
 			"defaultValue": 0,
@@ -127,7 +127,7 @@
 		},
 		{
 			"#": "82",
-			"label": "Group 4 notificaiton",
+			"label": "Group 4 notification",
 			"description": "Set notification sent to associated nodes (group 4)",
 			"valueSize": 1,
 			"defaultValue": 1,

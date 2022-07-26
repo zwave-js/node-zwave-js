@@ -17,15 +17,15 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"$import": "~/templates/master_template.json#led_indicator_four_options"
+			"$import": "templates/minoston_template.json#led_indicator_four_options_inverted"
 		},
 		{
 			"#": "2",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "3",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+			"$import": "templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "4",
@@ -33,7 +33,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Automating Reporting: Power Change Threshold",
+			"label": "Power Wattage Reporting Threshold",
 			"valueSize": 1,
 			"unit": "W",
 			"minValue": 0,
@@ -43,33 +43,15 @@
 		},
 		{
 			"#": "6",
-			"label": "Automating Reporting: Power Interval",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 1,
-			"maxValue": 54424,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#power_reporting_interval"
 		},
 		{
 			"#": "7",
-			"label": "Automating Reporting: Current Change Threshold",
-			"valueSize": 1,
-			"unit": "0.1 A",
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#current_reporting_threshold"
 		},
 		{
 			"#": "8",
-			"label": "Automating Reporting: kWh Change Threshold",
-			"valueSize": 1,
-			"unit": "0.01 kWh",
-			"minValue": 1,
-			"maxValue": 100,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#energy_reporting_threshold"
 		}
 	],
 	"metadata": {

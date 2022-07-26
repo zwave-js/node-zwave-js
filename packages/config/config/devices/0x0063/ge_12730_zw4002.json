@@ -15,7 +15,7 @@
 	},
 	"associations": {
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
@@ -32,38 +32,11 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "Sets when the LED on the switch is lit.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when light off",
-					"value": 0
-				},
-				{
-					"label": "LED on when light on",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		},
 		{
 			"#": "4",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		}
 	],
 	"compat": {

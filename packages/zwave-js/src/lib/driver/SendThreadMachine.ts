@@ -1,6 +1,11 @@
-import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { messageIsPing } from "@zwave-js/cc/NoOperationCC";
+import {
+	CommandClasses,
+	MessagePriority,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	Action,
@@ -17,7 +22,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { pure, raise, send, stop } from "xstate/lib/actions";
-import { messageIsPing } from "../commandclass/NoOperationCC";
 import { InterviewStage, NodeStatus } from "../node/_Types";
 import {
 	CommandQueueEvent,
@@ -185,7 +189,7 @@ const guards: NonNullable<
 		if (!nextTransaction) return false;
 
 		const message = nextTransaction.message;
-		const targetNode = message.getNodeUnsafe();
+		const targetNode = message.getNodeUnsafe(nextTransaction.driver);
 
 		// The send queue is sorted automatically. If the first message is for a sleeping node, all messages in the queue are.
 		// There are a few exceptions:

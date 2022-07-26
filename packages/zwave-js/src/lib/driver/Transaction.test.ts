@@ -1,5 +1,6 @@
-import { getDefaultPriority, Message, MessagePriority } from "@zwave-js/serial";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
+import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
+import { MessagePriority } from "@zwave-js/core";
+import { getDefaultPriority, Message } from "@zwave-js/serial";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/_Types";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
@@ -25,12 +26,13 @@ function createDummyMessageGenerator(msg: Message): MessageGenerator {
 }
 
 function createDummyTransaction(
+	driver: any,
 	options: Partial<TransactionOptions>,
 ): Transaction {
 	options.priority ??= MessagePriority.Normal;
 	options.message ??= {} as any;
 	options.parts = createDummyMessageGenerator(options.message!);
-	return new Transaction(undefined as any, options as TransactionOptions);
+	return new Transaction(driver, options as TransactionOptions);
 }
 
 interface MockNode {
@@ -43,21 +45,36 @@ interface MockNode {
 
 describe("lib/driver/Transaction => ", () => {
 	it("should compare priority, then the timestamp", () => {
+		const driverMock = {
+			controller: {
+				nodes: new Map<number, MockNode>(),
+			},
+			get nodes() {
+				return driverMock.controller.nodes;
+			},
+			getSafeCCVersionForNode() {},
+			isCCSecure: () => false,
+			options: {
+				attempts: {},
+			},
+		};
 		// "winning" means the position of a transaction in the queue is lower
 
 		// t2 has a later timestamp by default
-		const t1 = createDummyTransaction({
+		const t1 = createDummyTransaction(driverMock, {
 			priority: MessagePriority.Controller,
 		});
-		const t2 = createDummyTransaction({
+		const t2 = createDummyTransaction(driverMock, {
 			priority: MessagePriority.Controller,
 		});
 		// equal priority, earlier timestamp wins
 		expect(t1.compareTo(t2)).toBe(-1);
 		expect(t2.compareTo(t1)).toBe(1);
 
-		const t3 = createDummyTransaction({ priority: MessagePriority.Poll });
-		const t4 = createDummyTransaction({
+		const t3 = createDummyTransaction(driverMock, {
+			priority: MessagePriority.Poll,
+		});
+		const t4 = createDummyTransaction(driverMock, {
 			priority: MessagePriority.Controller,
 		});
 		// lower priority loses
@@ -65,10 +82,10 @@ describe("lib/driver/Transaction => ", () => {
 		expect(t4.compareTo(t3)).toBe(-1);
 
 		// this should not happen but we still need to test it
-		const t5 = createDummyTransaction({
+		const t5 = createDummyTransaction(driverMock, {
 			priority: MessagePriority.Controller,
 		});
-		const t6 = createDummyTransaction({
+		const t6 = createDummyTransaction(driverMock, {
 			priority: MessagePriority.Controller,
 		});
 		t6.creationTimestamp = t5.creationTimestamp;
@@ -133,6 +150,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			isCCSecure: () => false,
 			options: {
 				attempts: {},
 			},
@@ -151,7 +169,7 @@ describe("lib/driver/Transaction => ", () => {
 							}),
 					  })
 					: new GetControllerVersionRequest(driver);
-			const ret = createDummyTransaction({
+			const ret = createDummyTransaction(driverMock, {
 				priority,
 				message: msg,
 			});
@@ -251,6 +269,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			isCCSecure: () => false,
 			options: {
 				attempts: {},
 			},
@@ -261,7 +280,7 @@ describe("lib/driver/Transaction => ", () => {
 			const msg = new SendDataRequest(driver, {
 				command: new NoOperationCC(driver, { nodeId }),
 			});
-			const ret = createDummyTransaction({
+			const ret = createDummyTransaction(driverMock, {
 				priority,
 				message: msg,
 			});
@@ -345,6 +364,7 @@ describe("lib/driver/Transaction => ", () => {
 				return driverMock.controller.nodes;
 			},
 			getSafeCCVersionForNode() {},
+			isCCSecure: () => false,
 			options: {
 				attempts: {},
 			},
@@ -355,7 +375,7 @@ describe("lib/driver/Transaction => ", () => {
 			msg: Message,
 			priority: MessagePriority = getDefaultPriority(msg)!,
 		) {
-			const ret = createDummyTransaction({
+			const ret = createDummyTransaction(driverMock, {
 				priority,
 				message: msg,
 			});
@@ -380,7 +400,20 @@ describe("lib/driver/Transaction => ", () => {
 	});
 
 	it("should capture a stack trace where it was created", () => {
-		const test = createDummyTransaction({
+		const driverMock = {
+			controller: {
+				nodes: new Map<number, MockNode>(),
+			},
+			get nodes() {
+				return driverMock.controller.nodes;
+			},
+			getSafeCCVersionForNode() {},
+			isCCSecure: () => false,
+			options: {
+				attempts: {},
+			},
+		};
+		const test = createDummyTransaction(driverMock, {
 			message: "FOOBAR" as any,
 		});
 		expect(test.stack).toInclude("Transaction.test.ts");

@@ -9,6 +9,7 @@
     -   [Migrating to v7](getting-started/migrating-to-v7.md)
     -   [Migrating to v8](getting-started/migrating-to-v8.md)
     -   [Migrating to v9](getting-started/migrating-to-v9.md)
+    -   [Migrating to v10](getting-started/migrating-to-v10.md)
     -   [🦎's device review](getting-started/device-review.md)
 
 -   API

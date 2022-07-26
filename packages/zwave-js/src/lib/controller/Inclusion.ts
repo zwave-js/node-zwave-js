@@ -1,4 +1,5 @@
-import type { SecurityClass } from "@zwave-js/core/safe";
+import type { CommandClasses, SecurityClass } from "@zwave-js/core/safe";
+import type { DeviceClass } from "../node/DeviceClass";
 
 /** Additional information about the outcome of a node inclusion */
 export interface InclusionResult {
@@ -34,7 +35,7 @@ export enum InclusionStrategy {
 	 *
 	 * Issues a warning if Security S0 is not supported or the secure bootstrapping fails.
 	 *
-	 * **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+	 * **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 	 */
 	Security_S0,
 	/**
@@ -43,6 +44,15 @@ export enum InclusionStrategy {
 	 * **Not recommended** because the *Default* strategy is more versatile and user-friendly.
 	 */
 	Security_S2,
+}
+
+export enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
 }
 
 export interface InclusionGrant {
@@ -115,6 +125,13 @@ export type InclusionOptionsInternal =
 			provisioning: PlannedProvisioningEntry;
 	  };
 
+export type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+
 /** Options for replacing a node */
 export type ReplaceNodeOptions =
 	// We don't know which security CCs a node supports when it is a replacement
@@ -181,4 +198,12 @@ export enum InclusionState {
 	Busy,
 	/** The controller listening for SmartStart nodes to announce themselves. */
 	SmartStart,
+}
+
+/** The known information about a node immediately after the Z-Wave protocol is done including it */
+export interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
 }

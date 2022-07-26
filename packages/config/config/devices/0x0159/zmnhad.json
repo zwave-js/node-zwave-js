@@ -41,11 +41,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normaly open) input type",
+					"label": "NO (normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normaly close) input type",
+					"label": "NC (normally close) input type",
 					"value": 1
 				}
 			]
@@ -59,11 +59,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "NO (normaly open) input type",
+					"label": "NO (normally open) input type",
 					"value": 0
 				},
 				{
-					"label": "NC (normaly close) input type",
+					"label": "NC (normally close) input type",
 					"value": 1
 				}
 			]

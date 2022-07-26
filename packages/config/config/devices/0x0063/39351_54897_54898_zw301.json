@@ -33,117 +33,31 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indication Configuration",
-			"description": "LED status when device on or off.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED ON when load is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED On when light is turned On",
-					"value": 1
-				},
-				{
-					"label": "LED always OFF",
-					"value": 2
-				},
-				{
-					"label": "LED always ON",
-					"value": 3
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
 		},
 		{
 			"#": "6",
-			"label": "Dim up/down rate",
-			"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Dim up/down quickly",
-					"value": 0
-				},
-				{
-					"label": "Dim up/down slowly",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#dim_rate"
 		},
 		{
 			"#": "16",
-			"label": "Switch Mode",
-			"description": "Turn your dimmer into an On/Off switch with switch mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Operation",
-					"value": 0
-				},
-				{
-					"label": "Switch Mode",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#switch_mode"
 		},
 		{
 			"#": "19",
-			"label": "Alternate Exclusion",
-			"description": "Never accidentally remove a device during with alternate exclusion",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation, press any button on the device",
-					"value": 0
-				},
-				{
-					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if exclusion is successful",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#alternate_exclusion"
 		},
 		{
 			"#": "30",
-			"label": "Minimum Dim Threshold",
-			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dim_threshold_min"
 		},
 		{
 			"#": "31",
-			"label": "Maximum Brightness Threshold",
-			"description": "Set the maximum brightness threshold when manually or remotely controlled",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dim_threshold_max"
 		},
 		{
 			"#": "32",
-			"label": "Default Brightness Level",
-			"description": "Set the default brightness level that the dimmer will turn on when being controlled manually",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#default_brightness_level"
 		}
 	],
 	"compat": {

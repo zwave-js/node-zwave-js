@@ -121,7 +121,7 @@
 		},
 		{
 			"#": "42",
-			"label": "Power (W) Reporting Interal",
+			"label": "Power (W) Reporting Internal",
 			"description": "Allowable range: 60-32535",
 			"unit": "seconds",
 			"valueSize": 2,

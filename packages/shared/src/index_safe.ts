@@ -1,4 +1,4 @@
-/* @noExternalImports */
+/* @forbiddenImports external */
 
 export * from "./errors";
 export * from "./inheritance";

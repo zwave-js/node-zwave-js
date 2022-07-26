@@ -1,27 +1,40 @@
-/// <reference types="reflect-metadata" />
-
 import {
+	createReflectionDecorator,
 	getNodeTag,
 	highResTimestamp,
+	IZWaveNode,
 	MessageOrCCLogEntry,
+	MessagePriority,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ZWaveHost, ZWaveNodeBase } from "@zwave-js/host";
-import type { JSONObject } from "@zwave-js/shared/safe";
+import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
+import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
 import { entries } from "alcalzone-shared/objects";
 import { MessageHeaders } from "../MessageHeaders";
-import { FunctionType, MessagePriority, MessageType } from "./Constants";
+import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
 
-type Constructable<T extends Message> = new (
+export type MessageConstructor<T extends Message> = new (
 	host: ZWaveHost,
 	options?: MessageOptions,
 ) => T;
 
+export type DeserializingMessageConstructor<T extends Message> = new (
+	host: ZWaveHost,
+	options: MessageDeserializationOptions,
+) => T;
+
+/** Where a serialized message originates from, to distinguish how certain messages need to be deserialized */
+export enum MessageOrigin {
+	Controller,
+	Host,
+}
+
 export interface MessageDeserializationOptions {
 	data: Buffer;
+	origin?: MessageOrigin;
 }
 
 /**
@@ -220,14 +233,18 @@ export class Message {
 	 * Retrieves the correct constructor for the next message in the given Buffer.
 	 * It is assumed that the buffer has been checked beforehand
 	 */
-	public static getConstructor(data: Buffer): Constructable<Message> {
+	public static getConstructor(data: Buffer): MessageConstructor<Message> {
 		return getMessageConstructor(data[2], data[3]) || Message;
 	}
 
 	/** Creates an instance of the message that is serialized in the given buffer */
-	public static from(host: ZWaveHost, data: Buffer): Message {
+	public static from(
+		host: ZWaveHost,
+		data: Buffer,
+		origin?: MessageOrigin,
+	): Message {
 		const Constructor = Message.getConstructor(data);
-		const ret = new Constructor(host, { data });
+		const ret = new Constructor(host, { data, origin });
 		return ret;
 	}
 
@@ -362,9 +379,11 @@ export class Message {
 	/**
 	 * Returns the node this message is linked to or undefined
 	 */
-	public getNodeUnsafe(): ZWaveNodeBase | undefined {
+	public getNodeUnsafe(
+		applHost: ZWaveApplicationHost,
+	): IZWaveNode | undefined {
 		const nodeId = this.getNodeId();
-		if (nodeId != undefined) return this.host.nodes.get(nodeId);
+		if (nodeId != undefined) return applHost.nodes.get(nodeId);
 	}
 
 	private _transmissionTimestamp: number | undefined;
@@ -409,24 +428,6 @@ function computeChecksum(message: Buffer): number {
 
 // =======================
 // use decorators to link function types to message classes
-const METADATA_messageTypes = Symbol("messageTypes");
-const METADATA_messageTypeMap = Symbol("messageTypeMap");
-const METADATA_expectedResponse = Symbol("expectedResponse");
-const METADATA_expectedCallback = Symbol("expectedCallback");
-const METADATA_priority = Symbol("priority");
-
-type MessageTypeMap = Map<string, Constructable<Message>>;
-interface MessageTypeMapEntry {
-	messageType: MessageType;
-	functionType: FunctionType;
-}
-
-function getMessageTypeMapKey(
-	messageType: MessageType,
-	functionType: FunctionType,
-): string {
-	return JSON.stringify({ messageType, functionType });
-}
 
 export type ResponseRole =
 	| "unexpected" // a message that does not belong to this transaction
@@ -443,32 +444,33 @@ export type ResponsePredicate<TSent extends Message = Message> = (
 	receivedMessage: Message,
 ) => boolean;
 
+function getMessageTypeMapKey(
+	messageType: MessageType,
+	functionType: FunctionType,
+): string {
+	return JSON.stringify({ messageType, functionType });
+}
+
+const messageTypesDecorator = createReflectionDecorator<
+	Message,
+	[messageType: MessageType, functionType: FunctionType],
+	{ messageType: MessageType; functionType: FunctionType },
+	MessageConstructor<Message>
+>({
+	name: "messageTypes",
+	valueFromArgs: (messageType, functionType) => ({
+		messageType,
+		functionType,
+	}),
+	constructorLookupKey(target, messageType, functionType) {
+		return getMessageTypeMapKey(messageType, functionType);
+	},
+});
+
 /**
  * Defines the message and function type associated with a Z-Wave message
  */
-export function messageTypes(
-	messageType: MessageType,
-	functionType: FunctionType,
-): ClassDecorator {
-	return (messageClass) => {
-		Reflect.defineMetadata(
-			METADATA_messageTypes,
-			{ messageType, functionType },
-			messageClass,
-		);
-
-		// also store a map in the Message metadata for lookup.
-		const map: MessageTypeMap = (Reflect.getMetadata(
-			METADATA_messageTypeMap,
-			Message,
-		) || new Map()) as MessageTypeMap;
-		map.set(
-			getMessageTypeMapKey(messageType, functionType),
-			messageClass as any as Constructable<Message>,
-		);
-		Reflect.defineMetadata(METADATA_messageTypeMap, map, Message);
-	};
-}
+export const messageTypes = messageTypesDecorator.decorator;
 
 /**
  * Retrieves the message type defined for a Z-Wave message class
@@ -476,27 +478,17 @@ export function messageTypes(
 export function getMessageType<T extends Message>(
 	messageClass: T,
 ): MessageType | undefined {
-	// get the class constructor
-	const constr = messageClass.constructor;
-	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
-		| MessageTypeMapEntry
-		| undefined;
-	return meta?.messageType;
+	return messageTypesDecorator.lookupValue(messageClass)?.messageType;
 }
 
 /**
  * Retrieves the message type defined for a Z-Wave message class
  */
-export function getMessageTypeStatic<T extends Constructable<Message>>(
+export function getMessageTypeStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): MessageType | undefined {
-	// retrieve the current metadata
-	const meta = Reflect.getMetadata(
-		METADATA_messageTypes,
-		classConstructor,
-	) as MessageTypeMapEntry | undefined;
-	return meta?.messageType;
+	return messageTypesDecorator.lookupValueStatic(classConstructor)
+		?.messageType;
 }
 
 /**
@@ -505,27 +497,17 @@ export function getMessageTypeStatic<T extends Constructable<Message>>(
 export function getFunctionType<T extends Message>(
 	messageClass: T,
 ): FunctionType | undefined {
-	// get the class constructor
-	const constr = messageClass.constructor;
-	// retrieve the current metadata
-	const meta = Reflect.getMetadata(METADATA_messageTypes, constr) as
-		| MessageTypeMapEntry
-		| undefined;
-	return meta?.functionType;
+	return messageTypesDecorator.lookupValue(messageClass)?.functionType;
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getFunctionTypeStatic<T extends Constructable<Message>>(
+export function getFunctionTypeStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): FunctionType | undefined {
-	// retrieve the current metadata
-	const meta = Reflect.getMetadata(
-		METADATA_messageTypes,
-		classConstructor,
-	) as MessageTypeMapEntry | undefined;
-	return meta?.functionType;
+	return messageTypesDecorator.lookupValueStatic(classConstructor)
+		?.functionType;
 }
 
 /**
@@ -534,32 +516,27 @@ export function getFunctionTypeStatic<T extends Constructable<Message>>(
 function getMessageConstructor(
 	messageType: MessageType,
 	functionType: FunctionType,
-): Constructable<Message> | undefined {
-	// Retrieve the constructor map from the Message class
-	const functionTypeMap = Reflect.getMetadata(
-		METADATA_messageTypeMap,
-		Message,
-	) as MessageTypeMap | undefined;
-	if (functionTypeMap != null) {
-		return functionTypeMap.get(
-			getMessageTypeMapKey(messageType, functionType),
-		);
-	}
+): MessageConstructor<Message> | undefined {
+	return messageTypesDecorator.lookupConstructorByKey(
+		getMessageTypeMapKey(messageType, functionType),
+	);
 }
+
+const expectedResponseDecorator = createReflectionDecorator<
+	Message,
+	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
+	FunctionType | typeof Message | ResponsePredicate,
+	MessageConstructor<Message>
+>({
+	name: "expectedResponse",
+	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
+	constructorLookupKey: false,
+});
+
 /**
  * Defines the expected response function type or message class for a Z-Wave message
  */
-export function expectedResponse(
-	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
-): ClassDecorator {
-	return (messageClass) => {
-		Reflect.defineMetadata(
-			METADATA_expectedResponse,
-			typeOrPredicate,
-			messageClass,
-		);
-	};
-}
+export const expectedResponse = expectedResponseDecorator.decorator;
 
 /**
  * Retrieves the expected response function type or message class defined for a Z-Wave message class
@@ -567,44 +544,38 @@ export function expectedResponse(
 export function getExpectedResponse<T extends Message>(
 	messageClass: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
-	// get the class constructor
-	const constr = messageClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr) as
-		| FunctionType
-		| typeof Message
-		| ResponsePredicate
-		| undefined;
-	return ret;
+	return expectedResponseDecorator.lookupValue(messageClass);
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedResponseStatic<T extends Constructable<Message>>(
+export function getExpectedResponseStatic<
+	T extends MessageConstructor<Message>,
+>(
 	classConstructor: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(
-		METADATA_expectedResponse,
-		classConstructor,
-	) as FunctionType | typeof Message | ResponsePredicate | undefined;
-	return ret;
+	return expectedResponseDecorator.lookupValueStatic(classConstructor);
 }
+
+const expectedCallbackDecorator = createReflectionDecorator<
+	Message,
+	[typeOrPredicate: FunctionType | typeof Message | ResponsePredicate],
+	FunctionType | typeof Message | ResponsePredicate,
+	MessageConstructor<Message>
+>({
+	name: "expectedCallback",
+	valueFromArgs: (typeOrPredicate) => typeOrPredicate,
+	constructorLookupKey: false,
+});
 
 /**
  * Defines the expected callback function type or message class for a Z-Wave message
  */
 export function expectedCallback<TSent extends Message>(
 	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>,
-): ClassDecorator {
-	return (messageClass) => {
-		Reflect.defineMetadata(
-			METADATA_expectedCallback,
-			typeOrPredicate,
-			messageClass,
-		);
-	};
+): TypedClassDecorator<Message> {
+	return expectedCallbackDecorator.decorator(typeOrPredicate as any);
 }
 
 /**
@@ -613,39 +584,34 @@ export function expectedCallback<TSent extends Message>(
 export function getExpectedCallback<T extends Message>(
 	messageClass: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
-	// get the class constructor
-	const constr = messageClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_expectedCallback, constr) as
-		| FunctionType
-		| typeof Message
-		| ResponsePredicate
-		| undefined;
-	return ret;
+	return expectedCallbackDecorator.lookupValue(messageClass);
 }
 
 /**
  * Retrieves the function type defined for a Z-Wave message class
  */
-export function getExpectedCallbackStatic<T extends Constructable<Message>>(
+export function getExpectedCallbackStatic<
+	T extends MessageConstructor<Message>,
+>(
 	classConstructor: T,
 ): FunctionType | typeof Message | ResponsePredicate | undefined {
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(
-		METADATA_expectedCallback,
-		classConstructor,
-	) as FunctionType | typeof Message | ResponsePredicate | undefined;
-	return ret;
+	return expectedCallbackDecorator.lookupValueStatic(classConstructor);
 }
+
+const priorityDecorator = createReflectionDecorator<
+	Message,
+	[prio: MessagePriority],
+	MessagePriority
+>({
+	name: "priority",
+	valueFromArgs: (priority) => priority,
+	constructorLookupKey: false,
+});
 
 /**
  * Defines the default priority associated with a Z-Wave message
  */
-export function priority(prio: MessagePriority): ClassDecorator {
-	return (messageClass) => {
-		Reflect.defineMetadata(METADATA_priority, prio, messageClass);
-	};
-}
+export const priority = priorityDecorator.decorator;
 
 /**
  * Retrieves the default priority defined for a Z-Wave message class
@@ -653,24 +619,14 @@ export function priority(prio: MessagePriority): ClassDecorator {
 export function getDefaultPriority<T extends Message>(
 	messageClass: T,
 ): MessagePriority | undefined {
-	// get the class constructor
-	const constr = messageClass.constructor;
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, constr) as
-		| MessagePriority
-		| undefined;
-	return ret;
+	return priorityDecorator.lookupValue(messageClass);
 }
 
 /**
  * Retrieves the default priority defined for a Z-Wave message class
  */
-export function getDefaultPriorityStatic<T extends Constructable<Message>>(
+export function getDefaultPriorityStatic<T extends MessageConstructor<Message>>(
 	classConstructor: T,
 ): MessagePriority | undefined {
-	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_priority, classConstructor) as
-		| MessagePriority
-		| undefined;
-	return ret;
+	return priorityDecorator.lookupValueStatic(classConstructor);
 }

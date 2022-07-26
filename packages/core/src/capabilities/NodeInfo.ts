@@ -1,43 +1,52 @@
 import { sum } from "@zwave-js/shared/safe";
-import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { validatePayload } from "../util/misc";
 import { CommandClasses } from "./CommandClasses";
 
-export interface NodeInformationFrame {
-	generic: number;
-	specific: number;
+export interface ApplicationNodeInformation {
+	genericDeviceClass: number;
+	specificDeviceClass: number;
 	supportedCCs: CommandClasses[];
 }
 
-export interface ExtendedNodeInformationFrame extends NodeInformationFrame {
-	// controlledCCs isn't actually included in a NIF, but this way we can reuse the parser code
-	controlledCCs: CommandClasses[];
+export function parseApplicationNodeInformation(
+	nif: Buffer,
+): ApplicationNodeInformation {
+	validatePayload(nif.length >= 2);
+	return {
+		genericDeviceClass: nif[0],
+		specificDeviceClass: nif[1],
+		supportedCCs: parseCCList(nif.slice(2)).supportedCCs,
+	};
 }
 
-// This is sometimes used interchangeably with the NIF
-export interface NodeUpdatePayload extends ExtendedNodeInformationFrame {
+export interface NodeUpdatePayload extends ApplicationNodeInformation {
 	nodeId: number;
-	basic: number;
+	basicDeviceClass: number;
 }
 
 export function parseNodeUpdatePayload(nif: Buffer): NodeUpdatePayload {
+	const nodeId = nif[0];
+	const remainingLength = nif[1];
+	validatePayload(nif.length >= 2 + remainingLength);
 	return {
-		nodeId: nif[0],
-		// length is byte 1
-		basic: nif[2],
-		...internalParseNodeInformationFrame(nif.slice(3)),
+		nodeId,
+		basicDeviceClass: nif[2],
+		...parseApplicationNodeInformation(nif.slice(3, 2 + remainingLength)),
 	};
 }
 
-function internalParseNodeInformationFrame(
-	nif: Buffer,
-): ExtendedNodeInformationFrame {
-	validatePayload(nif.length >= 2);
-	return {
-		generic: nif[0],
-		specific: nif[1],
-		...parseCCList(nif.slice(2)),
-	};
+export function encodeNodeUpdatePayload(nif: NodeUpdatePayload): Buffer {
+	const ccList = encodeCCList(nif.supportedCCs, []);
+	return Buffer.concat([
+		Buffer.from([
+			nif.nodeId,
+			3 + ccList.length,
+			nif.basicDeviceClass,
+			nif.genericDeviceClass,
+			nif.specificDeviceClass,
+		]),
+		ccList,
+	]);
 }
 
 export function isExtendedCCId(ccId: CommandClasses): boolean {
@@ -128,11 +137,6 @@ export function encodeCCList(
 	return ret;
 }
 
-export function parseNodeInformationFrame(nif: Buffer): NodeInformationFrame {
-	const { controlledCCs, ...ret } = internalParseNodeInformationFrame(nif);
-	return ret;
-}
-
 export enum ProtocolVersion {
 	"unknown" = 0,
 	"2.0" = 1,
@@ -179,16 +183,14 @@ export interface NodeProtocolInfoAndDeviceClass
 	specificDeviceClass: number;
 }
 
+export type NodeInformationFrame = NodeProtocolInfoAndDeviceClass &
+	ApplicationNodeInformation;
+
 export function parseNodeProtocolInfo(
 	buffer: Buffer,
 	offset: number,
 ): NodeProtocolInfo {
-	if (buffer.length < offset + 3) {
-		throw new ZWaveError(
-			"Cannot parse protocol info, the buffer is too short!",
-			ZWaveErrorCodes.PacketFormat_Truncated,
-		);
-	}
+	validatePayload(buffer.length >= offset + 3);
 
 	const isListening = !!(buffer[offset] & 0b10_000_000);
 	const isRouting = !!(buffer[offset] & 0b01_000_000);
@@ -277,4 +279,62 @@ export function encodeNodeProtocolInfo(info: NodeProtocolInfo): Buffer {
 	if (info.hasSpecificDeviceClass) ret[1] |= 0b100;
 
 	return ret;
+}
+
+export function parseNodeProtocolInfoAndDeviceClass(buffer: Buffer): {
+	info: NodeProtocolInfoAndDeviceClass;
+	bytesRead: number;
+} {
+	validatePayload(buffer.length >= 5);
+	const protocolInfo = parseNodeProtocolInfo(buffer, 0);
+	let offset = 3;
+	const basic = buffer[offset++];
+	const generic = buffer[offset++];
+	let specific = 0;
+	if (protocolInfo.hasSpecificDeviceClass) {
+		validatePayload(buffer.length >= offset + 1);
+		specific = buffer[offset++];
+	}
+	return {
+		info: {
+			...protocolInfo,
+			basicDeviceClass: basic,
+			genericDeviceClass: generic,
+			specificDeviceClass: specific,
+		},
+		bytesRead: offset,
+	};
+}
+
+export function encodeNodeProtocolInfoAndDeviceClass(
+	info: NodeProtocolInfoAndDeviceClass,
+): Buffer {
+	return Buffer.concat([
+		encodeNodeProtocolInfo({ ...info, hasSpecificDeviceClass: true }),
+		Buffer.from([
+			info.basicDeviceClass,
+			info.genericDeviceClass,
+			info.specificDeviceClass,
+		]),
+	]);
+}
+
+export function parseNodeInformationFrame(
+	buffer: Buffer,
+): NodeInformationFrame {
+	const { info, bytesRead: offset } =
+		parseNodeProtocolInfoAndDeviceClass(buffer);
+	const supportedCCs = parseCCList(buffer.slice(offset)).supportedCCs;
+
+	return {
+		...info,
+		supportedCCs,
+	};
+}
+
+export function encodeNodeInformationFrame(info: NodeInformationFrame): Buffer {
+	return Buffer.concat([
+		encodeNodeProtocolInfoAndDeviceClass(info),
+		encodeCCList(info.supportedCCs, []),
+	]);
 }

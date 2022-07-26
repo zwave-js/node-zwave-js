@@ -186,7 +186,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Comfirm OTA",
+					"label": "Confirm OTA",
 					"value": 1
 				}
 			]

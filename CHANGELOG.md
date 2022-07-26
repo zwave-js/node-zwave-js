@@ -4,6 +4,64 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.0.0-beta.3 (2022-07-26) · _„Woo-Hoo!”_
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
+* Dropped support for Node.js 12 (#4824, #4491)
+* Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
+* Added support to provide an API key for the firmware update service, soon mandatory (#4816)
+* Removed several deprecated things and reworked `beginExclusion` to use an options object instead (#4699)
+* CC implementations were moved into their own package (#4668)
+* CC code can now be used mostly without a driver instance (#4651)
+* Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
+* `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
+* Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
+
+### Features
+* Implement Z-Wave Protocol CC, for internal use (#4691)
+* Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697)
+* Add values to `Basic CC` and `Multilevel Switch CC` to restore previous non-zero level (#4732)
+
+### Bugfixes
+* Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
+* Do not request ACK when sending node to sleep (#4826)
+* Correctly interpret powerlevel values as signed in `GetPowerlevelResponse` (#4827)
+* Add missing `reflect-metadata` dependency to some packages that were meant to be used standalone (#4846)
+
+### Config file changes
+* Corrected manufacturer and device labels for Heatit devices (#4838)
+
+### Changes under the hood
+* Patch `tsserver` after install to allow displaying large types
+* Upgrade dependencies (#4820, #4663)
+* Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
+* Fixed typos in config files and some others (#4837)
+
+## 9.6.2 (2022-07-20)
+### Bugfixes
+* `Color Switch CC`: Validate that all compound `targetColor` components are numeric (#4819)
+
+## 9.6.1 (2022-07-19)
+### Bugfixes
+* Check if node can sleep in `getAvailableFirmwareUpdates` before waiting for wake up (#4802)
+
+### Config file changes
+* Add Minoston MP22ZP, fix MP21ZP param 1 (#4807)
+* Work around Configuration Info reporting bug in ZEN73/74 (#4815)
+* Rename GE/Jasco 12724 from ZW3003 to ZW3005 (#4814)
+* Simplify base_options templates (#4813)
+* Rework GE/Jasco config params to templates (#4622)
+* Add Heatit Z-Dim2 (#4801)
+* Preserve endpoint 1 for Zooz ZEN30 (#4736)
+* Add Load Power parameter to Heltun HE-TPS01 (#4812)
+* Standardize labels of schedule params for Trane XR524 (#4783)
+* Disable strict entry control payload validation for Vivint Keypad (#4800)
+* Fix configuration files for Inovelli LZW41 and LZW42 (#4798)
+* Mark parameters of Ness Corporation 117001 as writable (#4792)
+* Add missing fingerprints to Fibargroup fgwp102 and fgdw002 (#4791)
+* Parameter 6 for the Leviton ZW4SF is led_timeout, not locator_led (#4788)
+* Parameter 6 for the Leviton DZ6HD is led_timeout, not locator_led (#4789)
+* Add parameter 17 to Zooz ZEN76, FW 10.0+ (#4784)
+
 ## 9.6.0 (2022-07-05)
 ### Features
 * Add labels to Multilevel Switch/Entry Control notifications (#4652)

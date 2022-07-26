@@ -1,12 +1,14 @@
 import { createModel } from "@xstate/test";
-import { assertZWaveError } from "@zwave-js/core";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "@zwave-js/cc";
+import {
+	assertZWaveError,
+	MessagePriority,
+	TransmitStatus,
+} from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import { assign, StateValue } from "xstate";
 import { interpret, Interpreter } from "xstate/lib/interpreter";
 import { createMachine } from "xstate/lib/Machine";
-import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass";
-import { TransmitStatus } from "../controller/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	GetControllerIdRequest,
@@ -340,6 +342,7 @@ describe("lib/driver/TransactionMachine", () => {
 						command: new BasicCCGet(fakeDriver, {
 							nodeId: 2,
 						}),
+						maxSendAttempts: 3,
 					});
 
 					const sendDataBasicReport = new ApplicationCommandRequest(
@@ -357,6 +360,7 @@ describe("lib/driver/TransactionMachine", () => {
 							nodeId: 2,
 							targetValue: 22,
 						}),
+						maxSendAttempts: 3,
 					});
 					const testMessages = {
 						GetControllerIdRequest: ctrlrIdRequest,

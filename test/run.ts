@@ -12,6 +12,7 @@ const port = os.platform() === "win32" ? "COM5" : "/dev/ttyUSB0";
 const driver = new Driver(port, {
 	// logConfig: {
 	// 	logToFile: true,
+	// 	forceConsole: true,
 	// },
 	securityKeys: {
 		S0_Legacy: Buffer.from("0102030405060708090a0b0c0d0e0f10", "hex"),
@@ -35,8 +36,13 @@ const driver = new Driver(port, {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		// setTimeout(
+		// 	() => driver.controller.nodes.getOrThrow(2).refreshInfo(),
+		// 	2500,
+		// );
 		// Test code
-		// const updates = await driver.controller.getAvailableFirmwareUpdates(2);
+		// await wait(1000);
+		// const updates = await driver.controller.getAvailableFirmwareUpdates(10);
 		// console.log("Found updates:");
 		// console.dir(updates, { depth: Infinity });
 		// await wait(1000);
