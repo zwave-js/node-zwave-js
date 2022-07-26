@@ -55,6 +55,9 @@ If a range other than 0.0-255.255 is used, the firmware ranges should be reflect
 > [!NOTE]
 > Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.
 
+> [!NOTE]
+> Newer devices may have firmware versions of the form `1.2.3` as opposed to just `1.2`, both forms are accepted. For comparisons, versions will be padded with a `0` patch version, e.g. `1.2` becomes `1.2.0`.
+
 ## `metadata`
 
 Can be used to add instructions for the user to a device:

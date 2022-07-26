@@ -348,7 +348,7 @@ function isHexKeyWith4Digits(val: any): val is string {
 	return typeof val === "string" && hexKeyRegex4Digits.test(val);
 }
 
-const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}$/;
+const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}(\.\d{1,3})?$/;
 function isFirmwareVersion(val: any): val is string {
 	return (
 		typeof val === "string" &&
@@ -435,7 +435,7 @@ devices is malformed (not an object or type/id that is not a lowercase 4-digit h
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-firmwareVersion is malformed or invalid`,
+firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z are integers between 0 and 255`,
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;

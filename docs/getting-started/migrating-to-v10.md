@@ -224,3 +224,9 @@ interface FoundNode {
 In order to support inclusion controllers (which is required for certification), the inclusion user callbacks had to be decoupled from application-initiated inclusion, since inclusion controllers will tell Z-Wave JS when to bootstrap S2 capable nodes.
 
 Instead of passing them via the `userCallbacks` property of the `InclusionOptions`, they are now passed directly to the driver via the `inclusionUserCallbacks` property of the `ZWaveOptions`.
+
+## Node `firmwareVersion` supports `major.minor.patch` format
+
+Some newer devices can report their primary firmware version in the `major.minor.patch` format instead of just `major.minor`. These versions will now be exposed through the `firmwareVersion` property of the `ZWaveNode` class.
+
+Internally, Z-Wave JS pads the old versions to `major.minor.0` and compares them according to `semver`, so applications that operate on the versions should likely do the same.

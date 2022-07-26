@@ -653,10 +653,11 @@ export class ZWaveNode
 	}
 
 	public get firmwareVersion(): string | undefined {
-		// We're only interested in the first (main) firmware
-		const ret = this.getValue<string[]>(
-			VersionCCValues.firmwareVersions.id,
-		)?.[0];
+		// On supporting nodes, use the applicationVersion, which is the
+		// same as the first (main) firmware, plus the patch version.
+		const ret =
+			this.getValue<string>(VersionCCValues.applicationVersion.id) ??
+			this.getValue<string[]>(VersionCCValues.firmwareVersions.id)?.[0];
 
 		// Special case for the official 700 series firmwares which are aligned with the SDK version
 		// We want to work with the full x.y.z firmware version here.
