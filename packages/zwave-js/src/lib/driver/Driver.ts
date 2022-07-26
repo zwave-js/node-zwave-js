@@ -329,6 +329,26 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
+
+	if (options.inclusionUserCallbacks) {
+		if (!isObject(options.inclusionUserCallbacks)) {
+			throw new ZWaveError(
+				`The inclusionUserCallbacks must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (
+			typeof options.inclusionUserCallbacks.grantSecurityClasses !==
+				"function" ||
+			typeof options.inclusionUserCallbacks.validateDSKAndEnterPIN !==
+				"function" ||
+			typeof options.inclusionUserCallbacks.abort !== "function"
+		) {
+			throw new ZWaveError(
+				`The inclusionUserCallbacks must contain the following functions: grantSecurityClasses, validateDSKAndEnterPIN, abort!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+	}
 }
 
 /**
