@@ -15,6 +15,8 @@ You can do so using the `"$if"` property. It accepts a string with logic inside,
 
 The logic supports the JavaScript operators `<`, `<=`, `>`, `>=` and `===`, as well as `&&`, `||` and `(...)`. Available variables are `manufacturerId`, `productType`, `productId` and `firmwareVersion`.
 
+Version comparisons support versions with and without a patch number. If the patch number is missing, it is assumed to be 0. Given the firmware version `1.2.3`, the condition `firmwareVersion >= 1.2` will be satisfied, since `1.2.3 >= 1.2.0`.
+
 You can use `"$if"` in the following locations:
 
 -   In the top-level `manufacturer`, `label` or `description` properties
