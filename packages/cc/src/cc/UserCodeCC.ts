@@ -909,6 +909,10 @@ export class UserCodeCC extends CommandClass {
 			[];
 		const supportedUsers: number =
 			this.getValue(applHost, UserCodeCCValues.supportedUsers) ?? 0;
+		const supportsMultipleUserCodeReport = !!this.getValue(
+			applHost,
+			UserCodeCCValues.supportsMultipleUserCodeReport,
+		);
 
 		// Check for changed values and codes
 		if (this.version >= 2) {
@@ -946,18 +950,27 @@ export class UserCodeCC extends CommandClass {
 						"checksum changed or is not supported, querying all user codes...",
 					direction: "outbound",
 				});
-				let nextUserId = 1;
-				while (nextUserId > 0 && nextUserId <= supportedUsers) {
-					const response = await api.get(nextUserId, true);
-					if (response) {
-						nextUserId = response.nextUserId;
-					} else {
-						applHost.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
-							level: "warn",
-						});
-						break;
+
+				if (supportsMultipleUserCodeReport) {
+					// Query the user codes in bulk
+					let nextUserId = 1;
+					while (nextUserId > 0 && nextUserId <= supportedUsers) {
+						const response = await api.get(nextUserId, true);
+						if (response) {
+							nextUserId = response.nextUserId;
+						} else {
+							applHost.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
+								level: "warn",
+							});
+							break;
+						}
+					}
+				} else {
+					// Query one user code at a time
+					for (let userId = 1; userId <= supportedUsers; userId++) {
+						await api.get(userId);
 					}
 				}
 			}
