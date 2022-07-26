@@ -1,5 +1,3 @@
-/// <reference types="reflect-metadata" />
-
 import {
 	createReflectionDecorator,
 	getNodeTag,

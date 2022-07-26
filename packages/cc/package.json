@@ -61,7 +61,8 @@
     "@zwave-js/host": "workspace:*",
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.1"
+    "alcalzone-shared": "^4.0.1",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/fs-extra": "^9.0.13",
