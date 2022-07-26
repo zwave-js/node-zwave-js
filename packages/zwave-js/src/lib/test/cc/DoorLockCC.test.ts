@@ -356,7 +356,7 @@ describe("lib/commandclass/DoorLockCC => ", () => {
 			Buffer.from([
 				DoorLockCommand.CapabilitiesReport, // CC Command
 				1, // bit mask length
-				0b11, // operation types
+				0b110, // operation types
 				3, // list length
 				DoorLockMode.Unsecured,
 				DoorLockMode.InsideUnsecured,

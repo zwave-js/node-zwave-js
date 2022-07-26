@@ -1144,6 +1144,8 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 		validatePayload(this.payload.length >= offset + bitMaskLength + 1);
 		this.supportedOperationTypes = parseBitMask(
 			this.payload.slice(offset, offset + bitMaskLength),
+			// bit 0 is reserved, bitmask starts at 1
+			0,
 		);
 		offset += bitMaskLength;
 
