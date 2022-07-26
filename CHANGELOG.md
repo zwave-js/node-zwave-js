@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.3 (2022-07-26) · _„Woo-Hoo!”_
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -15,26 +15,33 @@
 * Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
 * `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
 * Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
+* S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856)
+* Node firmware versions are now exposed as `major.minor.patch` where supported (#4857)
 
 ### Features
 * Implement Z-Wave Protocol CC, for internal use (#4691)
 * Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697)
 * Add values to `Basic CC` and `Multilevel Switch CC` to restore previous non-zero level (#4732)
+* Answer incoming requests with the same encapsulation (#4832)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
 * Do not request ACK when sending node to sleep (#4826)
 * Correctly interpret powerlevel values as signed in `GetPowerlevelResponse` (#4827)
 * Add missing `reflect-metadata` dependency to some packages that were meant to be used standalone (#4846)
+* Fixed an off-by-one error while parsing the `supportedOperationTypes` bitmask of `User Code CC` (#4848)
+* Query user codes 1-by-1 if bulk reading is not supported (#4849)
 
 ### Config file changes
 * Corrected manufacturer and device labels for Heatit devices (#4838)
+* Slightly clean up the Fibaro Motion Sensor config (#4790)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
 * Upgrade dependencies (#4820, #4663)
 * Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
-* Fixed typos in config files and some others (#4837)
+* Fixed typos throughout the project (#4837, #4842)
+* Added compliance tests for Z-Wave certification (#4832)
 
 ## 9.6.2 (2022-07-20)
 ### Bugfixes
