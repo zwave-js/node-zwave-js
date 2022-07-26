@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	computeMAC,
 	decryptAES128OFB,
+	EncapsulationFlags,
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
@@ -361,7 +362,7 @@ export class SecurityCC extends CommandClass {
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
-			cc.secure &&
+			!!(cc.encapsulationFlags & EncapsulationFlags.Security) &&
 			// Already encapsulated (SecurityCCCommandEncapsulationNonceGet is a subclass)
 			!(cc instanceof Security2CC) &&
 			!(cc instanceof SecurityCCCommandEncapsulation) &&
@@ -379,10 +380,17 @@ export class SecurityCC extends CommandClass {
 		cc: CommandClass,
 	): SecurityCCCommandEncapsulation {
 		// TODO: When to return a SecurityCCCommandEncapsulationNonceGet?
-		return new SecurityCCCommandEncapsulation(host, {
+		const ret = new SecurityCCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
+
+		// Copy the encapsulation flags from the encapsulated command
+		// but omit Security, since we're doing that right now
+		ret.encapsulationFlags =
+			cc.encapsulationFlags & ~EncapsulationFlags.Security;
+
+		return ret;
 	}
 }
 

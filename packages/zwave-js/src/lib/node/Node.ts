@@ -2857,17 +2857,24 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
-	private async handleZWavePlusGet(_command: ZWavePlusCCGet): Promise<void> {
+	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
 		// treat this as a sign that the node is awake
 		this.markAsAwake();
 
-		await this.commandClasses["Z-Wave Plus Info"].sendReport({
-			zwavePlusVersion: 2,
-			roleType: ZWavePlusRoleType.CentralStaticController,
-			nodeType: ZWavePlusNodeType.Node,
-			installerIcon: 0x0500, // Generic Gateway
-			userIcon: 0x0500, // Generic Gateway
-		});
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses["Z-Wave Plus Info"]
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			})
+			.sendReport({
+				zwavePlusVersion: 2,
+				roleType: ZWavePlusRoleType.CentralStaticController,
+				nodeType: ZWavePlusNodeType.Node,
+				installerIcon: 0x0500, // Generic Gateway
+				userIcon: 0x0500, // Generic Gateway
+			});
 	}
 
 	/**

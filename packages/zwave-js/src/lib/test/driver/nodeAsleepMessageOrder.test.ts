@@ -152,5 +152,5 @@ describe("regression tests", () => {
 		await expect(pingPromise17).resolves.toBeFalse();
 
 		driver.driverLog.sendQueue(driver["sendThread"].state.context.queue);
-	}, 5000);
+	}, 30000);
 });

@@ -1,7 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	CRC16_CCITT,
+	EncapsulationFlags,
+	Maybe,
+	MessageOrCCLogEntry,
 	validatePayload,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
@@ -56,15 +58,30 @@ export class CRC16CCAPI extends CCAPI {
 export class CRC16CC extends CommandClass {
 	declare ccCommand: CRC16Command;
 
+	/** Tests if a command should be supervised and thus requires encapsulation */
+	public static requiresEncapsulation(cc: CommandClass): boolean {
+		return (
+			!!(cc.encapsulationFlags & EncapsulationFlags.CRC16) &&
+			!(cc instanceof CRC16CCCommandEncapsulation)
+		);
+	}
+
 	/** Encapsulates a command in a CRC-16 CC */
 	public static encapsulate(
 		host: ZWaveHost,
 		cc: CommandClass,
 	): CRC16CCCommandEncapsulation {
-		return new CRC16CCCommandEncapsulation(host, {
+		const ret = new CRC16CCCommandEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 		});
+
+		// Copy the encapsulation flags from the encapsulated command
+		// but omit CRC-16, since we're doing that right now
+		ret.encapsulationFlags =
+			cc.encapsulationFlags & ~EncapsulationFlags.CRC16;
+
+		return ret;
 	}
 }
 

@@ -1,5 +1,6 @@
 import {
 	CommandClasses,
+	EncapsulationFlags,
 	getCCName,
 	ICommandClass,
 	isZWaveError,
@@ -79,7 +80,6 @@ export function gotDeserializationOptions(
 export interface CCCommandOptions {
 	nodeId: number | MulticastDestination;
 	endpoint?: number;
-	supervised?: boolean;
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
@@ -108,9 +108,6 @@ export class CommandClass implements ICommandClass {
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
-		// Default to non-supervised commands
-		this.supervised =
-			("supervised" in options ? options.supervised : undefined) ?? false;
 
 		// We cannot use @ccValue for non-derived classes, so register interviewComplete as an internal value here
 		// this.registerValue("interviewComplete", { internal: true });
@@ -177,10 +174,13 @@ export class CommandClass implements ICommandClass {
 			);
 
 			// Send secure commands if necessary
-			this.secure = this.host.isCCSecure(
-				this.ccId,
-				this.nodeId,
-				this.endpointIndex,
+			this.setEncapsulationFlag(
+				EncapsulationFlags.Security,
+				this.host.isCCSecure(
+					this.ccId,
+					this.nodeId,
+					this.endpointIndex,
+				),
 			);
 		} else {
 			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
@@ -212,21 +212,26 @@ export class CommandClass implements ICommandClass {
 	public endpointIndex: number;
 
 	/**
-	 * Whether the command progress should be supervised.
-	 * This only has an effect if the target endpoint supports the Supervision CC.
+	 * Which encapsulation CCs this CC is/was/should be encapsulated with.
 	 *
-	 * Don't use this directly, but rather use `Driver.sendCommand` with the corresponding supervision options.
+	 * Don't use this directly, this is used internally.
 	 */
-	public supervised: boolean;
+	public encapsulationFlags: EncapsulationFlags = EncapsulationFlags.None;
+
+	/** Activates or deactivates the given encapsulation flag */
+	public setEncapsulationFlag(
+		flag: EncapsulationFlags,
+		active: boolean,
+	): void {
+		if (active) {
+			this.encapsulationFlags |= flag;
+		} else {
+			this.encapsulationFlags &= ~flag;
+		}
+	}
 
 	/** Contains a reference to the encapsulating CC if this CC is encapsulated */
 	public encapsulatingCC?: EncapsulatingCommandClass;
-
-	/**
-	 * Whether the command should be sent encrypted
-	 * This only has an effect if the target node supports Security.
-	 */
-	public secure: boolean = false;
 
 	/** Returns true if this CC is an extended CC (0xF100..0xFFFF) */
 	public isExtended(): boolean {

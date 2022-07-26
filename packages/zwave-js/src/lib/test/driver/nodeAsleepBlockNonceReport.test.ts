@@ -124,5 +124,5 @@ describe("regression tests", () => {
 		);
 		await wait(10);
 		serialport.receiveData(ACK);
-	}, 5000);
+	}, 30000);
 });

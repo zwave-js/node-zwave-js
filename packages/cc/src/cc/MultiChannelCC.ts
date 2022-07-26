@@ -368,18 +368,26 @@ export class MultiChannelCC extends CommandClass {
 			CommandClasses["Multi Channel"],
 			cc.nodeId as number,
 		);
+		let ret:
+			| MultiChannelCCCommandEncapsulation
+			| MultiChannelCCV1CommandEncapsulation;
 		if (ccVersion === 1) {
-			return new MultiChannelCCV1CommandEncapsulation(host, {
+			ret = new MultiChannelCCV1CommandEncapsulation(host, {
 				nodeId: cc.nodeId,
 				encapsulated: cc,
 			});
 		} else {
-			return new MultiChannelCCCommandEncapsulation(host, {
+			ret = new MultiChannelCCCommandEncapsulation(host, {
 				nodeId: cc.nodeId,
 				encapsulated: cc,
 				destination: cc.endpointIndex,
 			});
 		}
+
+		// Copy the encapsulation flags from the encapsulated command
+		ret.encapsulationFlags = cc.encapsulationFlags;
+
+		return ret;
 	}
 
 	public skipEndpointInterview(): boolean {
@@ -1170,8 +1178,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
 			this.destination = options.destination;
-			// If the encapsulated command requires security, so does this one
-			if (this.encapsulated.secure) this.secure = true;
+
 			if (
 				this.host.getDeviceConfig?.(this.nodeId as number)?.compat
 					?.treatDestinationEndpointAsSource

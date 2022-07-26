@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import {
 	assertValidCCs,
 	CommandClass,
+	CRC16CC,
 	DeviceResetLocallyCCNotification,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
@@ -41,6 +42,7 @@ import {
 	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
+	EncapsulationFlags,
 	highResTimestamp,
 	ICommandClass,
 	isZWaveError,
@@ -2326,11 +2328,12 @@ export class Driver
 											sessionId: supervisionSessionId,
 											moreUpdatesFollow: false,
 											status: SupervisionStatus.NoSupport,
-											secure: msg.command.secure,
 											requestWakeUpOnDemand:
 												this.shouldRequestWakeupOnDemand(
 													node,
 												),
+											encapsulationFlags:
+												msg.command.encapsulationFlags,
 										});
 								}
 								return;
@@ -3015,7 +3018,7 @@ ${handlers.length} left`,
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
 		if (
-			cc.secure &&
+			cc.encapsulationFlags & EncapsulationFlags.Security &&
 			cc.ccId !== CommandClasses.Security &&
 			cc.ccId !== CommandClasses["Security 2"]
 		) {
@@ -3158,7 +3161,7 @@ ${handlers.length} left`,
 				const supervisionSessionId = SupervisionCC.getSessionId(
 					msg.command,
 				);
-				const secure = msg.command.secure;
+				const encapsulationFlags = msg.command.encapsulationFlags;
 
 				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
 				// so we need to trust the information we already have.
@@ -3177,9 +3180,9 @@ ${handlers.length} left`,
 									sessionId: supervisionSessionId,
 									moreUpdatesFollow: false,
 									status: SupervisionStatus.Success,
-									secure,
 									requestWakeUpOnDemand:
 										this.shouldRequestWakeupOnDemand(node),
+									encapsulationFlags,
 								});
 						}
 						return;
@@ -3198,9 +3201,9 @@ ${handlers.length} left`,
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
-								secure,
 								requestWakeUpOnDemand:
 									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
 							});
 					} catch (e) {
 						await node
@@ -3209,9 +3212,9 @@ ${handlers.length} left`,
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Fail,
-								secure,
 								requestWakeUpOnDemand:
 									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
 							});
 
 						// In any case we don't want to swallow the error
@@ -3389,23 +3392,27 @@ ${handlers.length} left`,
 
 		// 5.
 
-		// When a node supports S2 and has a valid security class, the command
-		// must be S2-encapsulated
-		const node = msg.command.getNode(this);
-		if (node?.supportsCC(CommandClasses["Security 2"])) {
-			const securityClass = node.getHighestSecurityClass();
-			if (
-				((securityClass != undefined &&
-					securityClass !== SecurityClass.S0_Legacy) ||
-					this.securityManager2?.tempKeys.has(node.id)) &&
-				Security2CC.requiresEncapsulation(msg.command)
-			) {
-				msg.command = Security2CC.encapsulate(this, msg.command);
+		if (CRC16CC.requiresEncapsulation(msg.command)) {
+			msg.command = CRC16CC.encapsulate(this, msg.command);
+		} else {
+			// When a node supports S2 and has a valid security class, the command
+			// must be S2-encapsulated
+			const node = msg.command.getNode(this);
+			if (node?.supportsCC(CommandClasses["Security 2"])) {
+				const securityClass = node.getHighestSecurityClass();
+				if (
+					((securityClass != undefined &&
+						securityClass !== SecurityClass.S0_Legacy) ||
+						this.securityManager2?.tempKeys.has(node.id)) &&
+					Security2CC.requiresEncapsulation(msg.command)
+				) {
+					msg.command = Security2CC.encapsulate(this, msg.command);
+				}
 			}
-		}
-		// This check will return false for S2-encapsulated commands
-		if (SecurityCC.requiresEncapsulation(msg.command)) {
-			msg.command = SecurityCC.encapsulate(this, msg.command);
+			// This check will return false for S2-encapsulated commands
+			if (SecurityCC.requiresEncapsulation(msg.command)) {
+				msg.command = SecurityCC.encapsulate(this, msg.command);
+			}
 		}
 	}
 
@@ -3423,6 +3430,31 @@ ${handlers.length} left`,
 				);
 				return;
 			}
+
+			// Copy the encapsulation flags and add the current encapsulation
+			unwrapped.encapsulationFlags = msg.command.encapsulationFlags;
+			switch (msg.command.ccId) {
+				case CommandClasses.Supervision:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.Supervision,
+						true,
+					);
+					break;
+				case CommandClasses["Security 2"]:
+				case CommandClasses.Security:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.Security,
+						true,
+					);
+					break;
+				case CommandClasses["CRC-16 Encapsulation"]:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.CRC16,
+						true,
+					);
+					break;
+			}
+
 			msg.command = unwrapped;
 		}
 	}
@@ -3864,6 +3896,10 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options?: SendCommandOptions,
 	): Promise<SendCommandReturnType<TResponse>> {
+		if (options?.encapsulationFlags != undefined) {
+			command.encapsulationFlags = options.encapsulationFlags;
+		}
+
 		// Only use supervision if...
 		if (
 			// ... not disabled

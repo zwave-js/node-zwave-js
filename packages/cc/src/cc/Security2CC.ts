@@ -24,6 +24,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { EncapsulationFlags } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { gotDeserializationOptions } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
@@ -503,7 +504,9 @@ export class Security2CC extends CommandClass {
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		// Everything that's not an S2 CC needs to be encapsulated if the CC is secure
-		if (!cc.secure) return false;
+		if (!(cc.encapsulationFlags & EncapsulationFlags.Security)) {
+			return false;
+		}
 		if (!(cc instanceof Security2CC)) return true;
 		// These S2 commands need additional encapsulation
 		switch (cc.ccCommand) {
@@ -541,11 +544,18 @@ export class Security2CC extends CommandClass {
 		cc: CommandClass,
 		securityClass?: SecurityClass,
 	): Security2CCMessageEncapsulation {
-		return new Security2CCMessageEncapsulation(host, {
+		const ret = new Security2CCMessageEncapsulation(host, {
 			nodeId: cc.nodeId,
 			encapsulated: cc,
 			securityClass,
 		});
+
+		// Copy the encapsulation flags from the encapsulated command
+		// but omit Security, since we're doing that right now
+		ret.encapsulationFlags =
+			cc.encapsulationFlags & ~EncapsulationFlags.Security;
+
+		return ret;
 	}
 }
 
