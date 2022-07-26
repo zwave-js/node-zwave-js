@@ -204,6 +204,11 @@ export {
 	HumidityControlSetpointCCValues,
 } from "./HumidityControlSetpointCC";
 export {
+	InclusionControllerCC,
+	InclusionControllerCCComplete,
+	InclusionControllerCCInitiate,
+} from "./InclusionControllerCC";
+export {
 	IndicatorCC,
 	IndicatorCCGet,
 	IndicatorCCReport,
