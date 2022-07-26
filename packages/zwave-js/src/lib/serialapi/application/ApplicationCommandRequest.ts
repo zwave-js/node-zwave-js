@@ -30,7 +30,7 @@ export enum ApplicationCommandStatusFlags {
 
 	Explore = 0b10000, // Received an explore frame
 
-	ForeignFrame = 0b0100_0000, // Received a foreign frame (only promiscous mode)
+	ForeignFrame = 0b0100_0000, // Received a foreign frame (only promiscuous mode)
 	ForeignHomeId = 0b1000_0000, // The received frame is received from a foreign HomeID. Only Controllers in Smart Start AddNode mode can receive this status.
 }
 

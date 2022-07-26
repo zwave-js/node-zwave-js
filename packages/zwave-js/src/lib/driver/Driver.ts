@@ -832,7 +832,7 @@ export class Driver
 		if (this.serial.isOpen) await this.serial.close();
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
-		// Everything async (inluding opening the serial port) must happen in the setImmediate callback
+		// Everything async (including opening the serial port) must happen in the setImmediate callback
 
 		// asynchronously open the serial port
 		setImmediate(async () => {
@@ -3356,7 +3356,7 @@ ${handlers.length} left`,
 
 	private lastCallbackId = 0xff;
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correllate requests
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
 	public getNextCallbackId(): number {

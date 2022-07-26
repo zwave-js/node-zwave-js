@@ -1426,7 +1426,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Assume that sleeping nodes start asleep
 		if (this.canSleep) {
 			if (this.status === NodeStatus.Alive) {
-				// unless it was just inluded and is currently communicating with us
+				// unless it was just included and is currently communicating with us
 				// In that case we need to switch from alive/dead to awake/asleep
 				this.markAsAwake();
 			} else {

@@ -189,7 +189,7 @@ export class DriverLogger extends ZWaveLoggerBase<DriverLogContext> {
 		}
 	}
 
-	/** Logs whats currently in the driver's send queue */
+	/** Logs what's currently in the driver's send queue */
 	public sendQueue(queue: SortedList<Transaction>): void {
 		if (!this.isSendQueueLogVisible()) return;
 

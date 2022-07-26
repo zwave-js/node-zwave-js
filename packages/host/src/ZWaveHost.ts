@@ -62,7 +62,7 @@ export interface ZWaveHost {
 	): void;
 
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correllate requests
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;

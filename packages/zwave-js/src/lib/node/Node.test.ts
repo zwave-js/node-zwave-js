@@ -1856,7 +1856,7 @@ describe("lib/node/Node", () => {
 				},
 				true,
 			);
-			// The endpoint suppports Binary Switch
+			// The endpoint supports Binary Switch
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});

@@ -256,7 +256,7 @@ export function createTestNode(
 		},
 
 		getEndpoint: ((index: number) => {
-			// When the endpoint count is known, return undefined for non-existant endpoints
+			// When the endpoint count is known, return undefined for non-existent endpoints
 			if (
 				options.numEndpoints != undefined &&
 				index > options.numEndpoints
