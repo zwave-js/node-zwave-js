@@ -93,7 +93,6 @@ export interface InclusionUserCallbacks {
 export type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
-			userCallbacks: InclusionUserCallbacks;
 			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
@@ -102,11 +101,12 @@ export type InclusionOptions =
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
-	  }
-	| {
-			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			/**
+			 * The optional provisioning entry for the device to be included.
+			 * If not given, the inclusion user callbacks of the driver options
+			 * will be used.
+			 */
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -138,11 +138,7 @@ export type ReplaceNodeOptions =
 	// Therefore we need the user to specify how the node should be included
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
-	  }
-	| {
-			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:

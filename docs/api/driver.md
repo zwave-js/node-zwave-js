@@ -703,6 +703,12 @@ interface ZWaveOptions extends ZWaveHostOptions {
 	};
 
 	/**
+	 * Defines the callbacks that are necessary to trigger user interaction during S2 inclusion.
+	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
+	 */
+	inclusionUserCallbacks?: InclusionUserCallbacks;
+
+	/**
 	 * Some Command Classes support reporting that a value is unknown.
 	 * When this flag is `false`, unknown values are exposed as `undefined`.
 	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).

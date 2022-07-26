@@ -218,3 +218,9 @@ interface FoundNode {
 	controlledCCs?: CommandClasses[];
 }
 ```
+
+## Moved user callbacks for S2 inclusion into the driver options
+
+In order to support inclusion controllers (which is required for certification), the inclusion user callbacks had to be decoupled from application-initiated inclusion, since inclusion controllers will tell Z-Wave JS when to bootstrap S2 capable nodes.
+
+Instead of passing them via the `userCallbacks` property of the `InclusionOptions`, they are now passed directly to the driver via the `inclusionUserCallbacks` property of the `ZWaveOptions`.

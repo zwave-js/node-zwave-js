@@ -1751,6 +1751,46 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 			return;
 		}
 
+		let userCallbacks: InclusionUserCallbacks;
+		const inclusionOptions = this
+			._inclusionOptions as InclusionOptionsInternal & {
+			strategy:
+				| InclusionStrategy.Security_S2
+				| InclusionStrategy.SmartStart;
+		};
+		if (inclusionOptions.provisioning) {
+			const grantedSecurityClasses =
+				inclusionOptions.provisioning.securityClasses;
+			const fullDSK = inclusionOptions.provisioning.dsk;
+			// SmartStart and S2 with QR code are pre-provisioned, so we don't need to ask the user for anything
+			userCallbacks = {
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				abort() {},
+				grantSecurityClasses: (requested) => {
+					return Promise.resolve({
+						clientSideAuth: false,
+						securityClasses: requested.securityClasses.filter((r) =>
+							grantedSecurityClasses.includes(r),
+						),
+					});
+				},
+				validateDSKAndEnterPIN: (dsk) => {
+					const pin = fullDSK.slice(0, 5);
+					// Make sure the DSK matches
+					if (pin + dsk !== fullDSK) return Promise.resolve(false);
+					return Promise.resolve(pin);
+				},
+			};
+		} else if (this.driver.options.inclusionUserCallbacks) {
+			// Use the provided callbacks
+			userCallbacks = this.driver.options.inclusionUserCallbacks;
+		} else {
+			// Cannot bootstrap S2 without user callbacks, abort.
+			// Remember that the node was NOT granted any S2 security classes
+			unGrantSecurityClasses();
+			return;
+		}
+
 		// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
 		// Querying the node info however kicks some devices out of secure inclusion mode.
 		// Therefore we must assume that the node supports Security in order to support replacing a node securely
@@ -1760,41 +1800,6 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				isSupported: true,
 				version: 1,
 			});
-		}
-
-		let userCallbacks: InclusionUserCallbacks;
-		const inclusionOptions = this
-			._inclusionOptions as InclusionOptionsInternal & {
-			strategy:
-				| InclusionStrategy.Security_S2
-				| InclusionStrategy.SmartStart;
-		};
-		if ("provisioning" in inclusionOptions) {
-			// SmartStart and S2 with QR code are pre-provisioned, so we don't need to ask the user for anything
-			userCallbacks = {
-				// eslint-disable-next-line @typescript-eslint/no-empty-function
-				abort() {},
-				grantSecurityClasses: (requested) => {
-					return Promise.resolve({
-						clientSideAuth: false,
-						securityClasses: requested.securityClasses.filter((r) =>
-							inclusionOptions.provisioning.securityClasses.includes(
-								r,
-							),
-						),
-					});
-				},
-				validateDSKAndEnterPIN: (dsk) => {
-					const fullDSK = inclusionOptions.provisioning.dsk;
-					const pin = fullDSK.slice(0, 5);
-					// Make sure the DSK matches
-					if (pin + dsk !== fullDSK) return Promise.resolve(false);
-					return Promise.resolve(pin);
-				},
-			};
-		} else {
-			// Use the provided callbacks
-			userCallbacks = inclusionOptions.userCallbacks;
 		}
 
 		const deleteTempKey = () => {
