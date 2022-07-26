@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.2 (2022-07-22) · _„Woo-Hoo!”_
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -25,11 +25,16 @@
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
 * Do not request ACK when sending node to sleep (#4826)
 * Correctly interpret powerlevel values as signed in `GetPowerlevelResponse` (#4827)
+* Add missing `reflect-metadata` dependency to some packages that were meant to be used standalone (#4846)
+
+### Config file changes
+* Corrected manufacturer and device labels for Heatit devices (#4838)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
 * Upgrade dependencies (#4820, #4663)
 * Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
+* Fixed typos in config files and some others (#4837)
 
 ## 9.6.2 (2022-07-20)
 ### Bugfixes
