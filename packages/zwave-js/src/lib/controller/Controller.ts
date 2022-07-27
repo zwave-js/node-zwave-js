@@ -1,5 +1,9 @@
 import {
 	ECDHProfiles,
+	InclusionControllerCCComplete,
+	InclusionControllerCCInitiate,
+	InclusionControllerStatus,
+	InclusionControllerStep,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
@@ -38,6 +42,7 @@ import {
 	SecurityClass,
 	securityClassIsS2,
 	securityClassOrder,
+	SinglecastCC,
 	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -76,6 +81,13 @@ import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { VirtualNode } from "../node/VirtualNode";
 import { InterviewStage, LifelineRoutes, NodeStatus } from "../node/_Types";
+import {
+	ApplicationUpdateRequestNodeAdded,
+	ApplicationUpdateRequestNodeInfoReceived,
+	ApplicationUpdateRequestNodeRemoved,
+	ApplicationUpdateRequestSmartStartHomeIDReceived,
+	type ApplicationUpdateRequest,
+} from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	GetControllerCapabilitiesRequest,
 	GetControllerCapabilitiesResponse,
@@ -1646,6 +1658,362 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				);
 			}
 			throw e;
+		}
+	}
+
+	/** @internal */
+	public async handleApplicationUpdateRequest(
+		msg: ApplicationUpdateRequest,
+	): Promise<void> {
+		const nodeId = msg.getNodeId();
+		let node: ZWaveNode | undefined;
+		if (nodeId != undefined) {
+			node = this.nodes.get(nodeId);
+		}
+
+		if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
+			if (node) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: "Received updated node info",
+					direction: "inbound",
+				});
+				node.updateNodeInfo(msg.nodeInformation);
+
+				// Tell the send thread that we received a NIF from the node
+				this.driver["sendThread"].send({
+					type: "NIF",
+					nodeId: node.id,
+				});
+
+				if (
+					node.canSleep &&
+					node.supportsCC(CommandClasses["Wake Up"])
+				) {
+					// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+					this.driver.debounceSendNodeToSleep(node);
+				}
+
+				return;
+			}
+		} else if (
+			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
+		) {
+			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
+			this.driver.controllerLog.print(
+				"Received Smart Start inclusion request",
+			);
+
+			if (
+				this.inclusionState !== InclusionState.Idle &&
+				this.inclusionState !== InclusionState.SmartStart
+			) {
+				this.driver.controllerLog.print(
+					"Controller is busy and cannot handle this inclusion request right now...",
+				);
+				return;
+			}
+
+			// Check if the node is on the provisioning list
+			const provisioningEntry = this.provisioningList.find((entry) =>
+				nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+					msg.nwiHomeId,
+				),
+			);
+			if (!provisioningEntry) {
+				this.driver.controllerLog.print(
+					"NWI Home ID not found in provisioning list, ignoring request...",
+				);
+				return;
+			} else if (
+				provisioningEntry.status === ProvisioningEntryStatus.Inactive
+			) {
+				this.driver.controllerLog.print(
+					"The provisioning entry for this node is inactive, ignoring request...",
+				);
+				return;
+			}
+
+			this.driver.controllerLog.print(
+				"NWI Home ID found in provisioning list, including node...",
+			);
+			try {
+				const result = await this.beginInclusionSmartStart(
+					provisioningEntry,
+				);
+				if (!result) {
+					this.driver.controllerLog.print(
+						"Smart Start inclusion could not be started",
+						"error",
+					);
+				}
+			} catch (e) {
+				this.driver.controllerLog.print(
+					`Smart Start inclusion could not be started: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+			}
+		} else if (msg instanceof ApplicationUpdateRequestNodeRemoved) {
+			// A node was removed by another controller
+			const node = this.nodes.get(msg.nodeId);
+			if (node) {
+				this.driver.controllerLog.logNode(
+					node.id,
+					"was removed from the network by another controller",
+				);
+
+				this.emit("node removed", node, false);
+			}
+		} else if (msg instanceof ApplicationUpdateRequestNodeAdded) {
+			// A node was included by another controller
+			const nodeId = msg.nodeId;
+			const nodeInfo = msg.nodeInformation;
+
+			this.setInclusionState(InclusionState.Busy);
+
+			const deviceClass = new DeviceClass(
+				this.driver.configManager,
+				nodeInfo.basicDeviceClass,
+				nodeInfo.genericDeviceClass,
+				nodeInfo.specificDeviceClass,
+			);
+
+			const newNode = new ZWaveNode(
+				nodeId,
+				this.driver,
+				deviceClass,
+				nodeInfo.supportedCCs,
+				undefined,
+				// Create an empty value DB and specify that it contains no values
+				// to avoid indexing the existing values
+				this.createValueDBForNode(nodeId, new Set()),
+			);
+			this._nodePendingInclusion = newNode;
+
+			this.driver.controllerLog.print(
+				`Node ${newNode.id} was included by another controller:
+basic device class:    ${newNode.deviceClass?.basic.label}
+generic device class:  ${newNode.deviceClass?.generic.label}
+specific device class: ${newNode.deviceClass?.specific.label}
+supported CCs: ${nodeInfo.supportedCCs
+					.map((cc) => `\n  · ${CommandClasses[cc]} (${num2hex(cc)})`)
+					.join("")}`,
+			);
+
+			this.emit("node found", {
+				id: nodeId,
+				deviceClass,
+				supportedCCs: nodeInfo.supportedCCs,
+			});
+
+			this.driver.controllerLog.logNode(
+				nodeId,
+				"Waiting for initiate command to bootstrap node...",
+			);
+
+			// Handle inclusion in the background
+			process.nextTick(async () => {
+				// If an Inclusion Controller that does not support the Inclusion Controller Command Class includes a
+				// new node in a network, the SIS will never receive an Inclusion Controller Initiate Command. If no
+				// Initiate Command has been received approximately 10 seconds after a new node has been added to a
+				// network, the SIS SHOULD start interviewing the newly included node
+
+				const initiate = await this.driver
+					.waitForCommand<
+						SinglecastCC<InclusionControllerCCInitiate>
+					>(
+						(cc) =>
+							cc instanceof InclusionControllerCCInitiate &&
+							cc.isSinglecast() &&
+							cc.includedNodeId === nodeId &&
+							(cc.step ===
+								InclusionControllerStep.ProxyInclusion ||
+								cc.step ===
+									InclusionControllerStep.ProxyInclusionReplace),
+						10000,
+					)
+					.catch(() => undefined);
+
+				// TODO: handle replacing correctly
+
+				// Assume the device is alive
+				// If it is actually a sleeping device, it will be marked as such later
+				newNode.markAsAlive();
+
+				let inclCtrlr: ZWaveNode | undefined;
+				let lowSecurity = false;
+
+				if (initiate) {
+					inclCtrlr = this.nodes.getOrThrow(initiate.nodeId);
+
+					this.driver.controllerLog.logNode(
+						nodeId,
+						`Initiate command received from node ${inclCtrlr.id}`,
+					);
+
+					// Inclusion is handled by the inclusion controller, which (hopefully) sets the SUC return route
+					newNode.hasSUCReturnRoute = true;
+
+					// SIS, A, MUST request a Node Info Frame from Joining Node, B
+					const requestedNodeInfo = await newNode
+						.requestNodeInfo()
+						.catch(() => undefined);
+					if (requestedNodeInfo)
+						newNode.updateNodeInfo(requestedNodeInfo);
+
+					// Include using the default inclusion strategy:
+					// * Use S2 if possible,
+					// * only use S0 if necessary,
+					// * use no encryption otherwise
+					if (newNode.supportsCC(CommandClasses["Security 2"])) {
+						await this.secureBootstrapS2(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
+					} else if (
+						newNode.supportsCC(CommandClasses.Security) &&
+						(deviceClass.specific ?? deviceClass.generic)
+							.requiresSecurity
+					) {
+						// S0 bootstrapping is deferred to the inclusion controller
+						this.driver.controllerLog.logNode(
+							nodeId,
+							`Waiting for node ${inclCtrlr.id} to perform S0 bootstrapping...`,
+						);
+
+						await inclCtrlr.commandClasses[
+							"Inclusion Controller"
+						].initiateStep(
+							newNode.id,
+							InclusionControllerStep.S0Inclusion,
+						);
+						// Wait 60s for the S0 bootstrapping to complete
+						const s0result = await this.driver
+							.waitForCommand<InclusionControllerCCComplete>(
+								(cc) =>
+									cc.nodeId === inclCtrlr!.id &&
+									cc instanceof
+										InclusionControllerCCComplete &&
+									cc.step ===
+										InclusionControllerStep.S0Inclusion,
+								60000,
+							)
+							.catch(() => undefined);
+
+						this.driver.controllerLog.logNode(
+							nodeId,
+							`S0 bootstrapping ${
+								s0result == undefined
+									? "timed out"
+									: s0result.status ===
+									  InclusionControllerStatus.OK
+									? "succeeded"
+									: "failed"
+							}`,
+						);
+
+						// When bootstrapping with S0, no other keys are granted
+						for (const secClass of securityClassOrder) {
+							if (secClass !== SecurityClass.S0_Legacy) {
+								newNode.securityClasses.set(secClass, false);
+							}
+						}
+						// Whether the S0 key is granted depends on the result
+						// received from the inclusion controller
+						newNode.securityClasses.set(
+							SecurityClass.S0_Legacy,
+							s0result?.status === InclusionControllerStatus.OK,
+						);
+						lowSecurity = !newNode.hasSecurityClass(
+							SecurityClass.S0_Legacy,
+						);
+					} else {
+						// Remember that no security classes were granted
+						for (const secClass of securityClassOrder) {
+							newNode.securityClasses.set(secClass, false);
+						}
+					}
+				} else {
+					// No command received, bootstrap node by ourselves
+					this.driver.controllerLog.logNode(
+						nodeId,
+						"no initiate command received, bootstrapping node...",
+					);
+
+					// Assign SUC return route to make sure the node knows where to get its routes from
+					newNode.hasSUCReturnRoute = await this.assignSUCReturnRoute(
+						newNode.id,
+					);
+
+					// Include using the default inclusion strategy:
+					// * Use S2 if possible,
+					// * only use S0 if necessary,
+					// * use no encryption otherwise
+					if (newNode.supportsCC(CommandClasses["Security 2"])) {
+						await this.secureBootstrapS2(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass <
+								SecurityClass.S2_Unauthenticated
+						) {
+							lowSecurity = true;
+						}
+					} else if (
+						newNode.supportsCC(CommandClasses.Security) &&
+						(deviceClass.specific ?? deviceClass.generic)
+							.requiresSecurity
+					) {
+						await this.secureBootstrapS0(newNode);
+						const actualSecurityClass =
+							newNode.getHighestSecurityClass();
+						if (
+							actualSecurityClass == undefined ||
+							actualSecurityClass < SecurityClass.S0_Legacy
+						) {
+							lowSecurity = true;
+						}
+					} else {
+						// Remember that no security classes were granted
+						for (const secClass of securityClassOrder) {
+							newNode.securityClasses.set(secClass, false);
+						}
+					}
+				}
+
+				// Bootstrap the node's lifelines, so it knows where the controller is
+				await this.bootstrapLifelineAndWakeup(newNode);
+
+				// We're done adding this node, notify listeners
+				const result: InclusionResult = {};
+				if (lowSecurity) result.lowSecurity = true;
+				this.emit("node added", newNode, result);
+
+				this.setInclusionState(InclusionState.Idle);
+
+				if (inclCtrlr && initiate) {
+					const inclCtrlrId = inclCtrlr.id;
+					const step = initiate.step;
+					newNode.once("ready", () => {
+						this.driver.controllerLog.logNode(
+							nodeId,
+							`Notifying ${inclCtrlrId} of finished inclusion`,
+						);
+						void inclCtrlr!.commandClasses["Inclusion Controller"]
+							.completeStep(step, InclusionControllerStatus.OK)
+							// eslint-disable-next-line @typescript-eslint/no-empty-function
+							.catch(() => {});
+					});
+				}
+			});
 		}
 	}
 

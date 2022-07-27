@@ -17,6 +17,7 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
+	MessageOptions,
 	MessageType,
 	messageTypes,
 	SuccessIndicator,
@@ -50,10 +51,7 @@ const {
 @messageTypes(MessageType.Request, FunctionType.ApplicationUpdateRequest)
 // this is only received, not sent!
 export class ApplicationUpdateRequest extends Message {
-	public constructor(
-		host: ZWaveHost,
-		options: MessageBaseOptions | MessageDeserializationOptions,
-	) {
+	public constructor(host: ZWaveHost, options?: MessageOptions) {
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
@@ -123,7 +121,7 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 
 @applicationUpdateType(ApplicationUpdateTypes.NodeInfo_RequestFailed)
 export class ApplicationUpdateRequestNodeInfoRequestFailed
-	extends ApplicationUpdateRequestWithNodeInfo
+	extends ApplicationUpdateRequest
 	implements SuccessIndicator
 {
 	isOK(): boolean {

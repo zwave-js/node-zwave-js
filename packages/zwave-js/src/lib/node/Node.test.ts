@@ -53,8 +53,8 @@ class TestNode extends ZWaveNode {
 	public async ping(): Promise<boolean> {
 		return super.ping();
 	}
-	public async queryNodeInfo(): Promise<void> {
-		return super["queryNodeInfo"]();
+	public async interviewNodeInfo(): Promise<void> {
+		return super["interviewNodeInfo"]();
 	}
 	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
@@ -357,20 +357,20 @@ describe("lib/node/Node", () => {
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it(`should set the interview stage to "NodeInfo"`, async () => {
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(node.interviewStage).toBe(InterviewStage.NodeInfo);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
 				// Temporarily make this node the controller node
 				fakeDriver.controller.ownNodeId = node.id;
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				fakeDriver.controller.ownNodeId = 1;
 			});
 
 			it("should send a RequestNodeInfoRequest with the node's ID", async () => {
-				await node["queryNodeInfo"]();
+				await node["interviewNodeInfo"]();
 				expect(fakeDriver.sendMessage).toBeCalled();
 				const request: RequestNodeInfoRequest =
 					fakeDriver.sendMessage.mock.calls[0][0];
@@ -606,7 +606,7 @@ describe("lib/node/Node", () => {
 				};
 				originalMethods = {
 					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
-					queryNodeInfo: node["queryNodeInfo"].bind(node),
+					queryNodeInfo: node["interviewNodeInfo"].bind(node),
 					interviewCCs: node["interviewCCs"].bind(node),
 				};
 				for (const method of Object.keys(

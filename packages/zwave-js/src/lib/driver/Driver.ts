@@ -41,7 +41,6 @@ import {
 	CommandClasses,
 	ControllerLogger,
 	deserializeCacheValue,
-	dskFromString,
 	EncapsulationFlags,
 	highResTimestamp,
 	ICommandClass,
@@ -49,7 +48,6 @@ import {
 	LogConfig,
 	Maybe,
 	MessagePriority,
-	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
 	SecurityManager,
@@ -118,20 +116,13 @@ import * as util from "util";
 import { interpret } from "xstate";
 
 import { ZWaveController } from "../controller/Controller";
-import {
-	InclusionState,
-	ProvisioningEntryStatus,
-} from "../controller/Inclusion";
+import { InclusionState } from "../controller/Inclusion";
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateRequestNodeInfoReceived,
-	ApplicationUpdateRequestSmartStartHomeIDReceived,
-} from "../serialapi/application/ApplicationUpdateRequest";
+import { ApplicationUpdateRequest } from "../serialapi/application/ApplicationUpdateRequest";
 import { BridgeApplicationCommandRequest } from "../serialapi/application/BridgeApplicationCommandRequest";
 import type { SerialAPIStartedRequest } from "../serialapi/application/SerialAPIStartedRequest";
 import { GetControllerVersionRequest } from "../serialapi/capability/GetControllerVersionMessages";
@@ -3270,7 +3261,9 @@ ${handlers.length} left`,
 
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
-			return this.handleApplicationUpdateRequest(msg);
+			// Make sure we're ready to handle this command
+			this.ensureReady(true);
+			return this.controller.handleApplicationUpdateRequest(msg);
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -3310,95 +3303,6 @@ ${handlers.length} left`,
 			}
 		} else {
 			this.driverLog.print("  no handlers registered!", "warn");
-		}
-	}
-
-	private async handleApplicationUpdateRequest(
-		msg: ApplicationUpdateRequest,
-	): Promise<void> {
-		// Make sure we're ready to handle this command
-		this.ensureReady(true);
-
-		if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
-			const node = this.getNodeUnsafe(msg);
-			if (node) {
-				this.controllerLog.logNode(node.id, {
-					message: "Received updated node info",
-					direction: "inbound",
-				});
-				node.updateNodeInfo(msg.nodeInformation);
-
-				// Tell the send thread that we received a NIF from the node
-				this.sendThread.send({ type: "NIF", nodeId: node.id });
-
-				if (
-					node.canSleep &&
-					node.supportsCC(CommandClasses["Wake Up"])
-				) {
-					// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
-					this.debounceSendNodeToSleep(node);
-				}
-
-				return;
-			}
-		} else if (
-			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
-		) {
-			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
-			this.controllerLog.print("Received Smart Start inclusion request");
-
-			if (
-				this.controller.inclusionState !== InclusionState.Idle &&
-				this.controller.inclusionState !== InclusionState.SmartStart
-			) {
-				this.controllerLog.print(
-					"Controller is busy and cannot handle this inclusion request right now...",
-				);
-				return;
-			}
-
-			// Check if the node is on the provisioning list
-			const provisioningEntry = this.controller.provisioningList.find(
-				(entry) =>
-					nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
-						msg.nwiHomeId,
-					),
-			);
-			if (!provisioningEntry) {
-				this.controllerLog.print(
-					"NWI Home ID not found in provisioning list, ignoring request...",
-				);
-				return;
-			} else if (
-				provisioningEntry.status === ProvisioningEntryStatus.Inactive
-			) {
-				this.controllerLog.print(
-					"The provisioning entry for this node is inactive, ignoring request...",
-				);
-				return;
-			}
-
-			this.controllerLog.print(
-				"NWI Home ID found in provisioning list, including node...",
-			);
-			try {
-				const result = await this.controller.beginInclusionSmartStart(
-					provisioningEntry,
-				);
-				if (!result) {
-					this.controllerLog.print(
-						"Smart Start inclusion could not be started",
-						"error",
-					);
-				}
-			} catch (e) {
-				this.controllerLog.print(
-					`Smart Start inclusion could not be started: ${getErrorMessage(
-						e,
-					)}`,
-					"error",
-				);
-			}
 		}
 	}
 

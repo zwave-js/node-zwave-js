@@ -11,7 +11,6 @@ import {
 	API,
 	CCCommand,
 	commandClass,
-	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
 import {
@@ -41,7 +40,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 	public async initiateStep(
 		nodeId: number,
 		step: InclusionControllerStep,
-	): Promise<InclusionControllerStatus | undefined> {
+	): Promise<void> {
 		this.assertSupportsCommand(
 			InclusionControllerCommand,
 			InclusionControllerCommand.Initiate,
@@ -53,13 +52,7 @@ export class InclusionControllerCCAPI extends CCAPI {
 			includedNodeId: nodeId,
 			step,
 		});
-		const response =
-			await this.applHost.sendCommand<InclusionControllerCCComplete>(
-				cc,
-				this.commandOptions,
-			);
-
-		return response?.status;
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Indicate to the other node that the given inclusion step has been completed */
@@ -124,7 +117,6 @@ interface InclusionControllerCCInitiateOptions extends CCCommandOptions {
 }
 
 @CCCommand(InclusionControllerCommand.Initiate)
-@expectedCCResponse(InclusionControllerCCComplete)
 export class InclusionControllerCCInitiate extends InclusionControllerCC {
 	public constructor(
 		host: ZWaveHost,
