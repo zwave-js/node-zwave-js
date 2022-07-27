@@ -3270,91 +3270,7 @@ ${handlers.length} left`,
 
 			return;
 		} else if (msg instanceof ApplicationUpdateRequest) {
-			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
-				const node = this.getNodeUnsafe(msg);
-				if (node) {
-					this.controllerLog.logNode(node.id, {
-						message: "Received updated node info",
-						direction: "inbound",
-					});
-					node.updateNodeInfo(msg.nodeInformation);
-
-					// Tell the send thread that we received a NIF from the node
-					this.sendThread.send({ type: "NIF", nodeId: node.id });
-
-					if (
-						node.canSleep &&
-						node.supportsCC(CommandClasses["Wake Up"])
-					) {
-						// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
-						this.debounceSendNodeToSleep(node);
-					}
-
-					return;
-				}
-			} else if (
-				msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
-			) {
-				// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
-				this.controllerLog.print(
-					"Received Smart Start inclusion request",
-				);
-
-				if (
-					this.controller.inclusionState !== InclusionState.Idle &&
-					this.controller.inclusionState !== InclusionState.SmartStart
-				) {
-					this.controllerLog.print(
-						"Controller is busy and cannot handle this inclusion request right now...",
-					);
-					return;
-				}
-
-				// Check if the node is on the provisioning list
-				const provisioningEntry = this.controller.provisioningList.find(
-					(entry) =>
-						nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
-							msg.nwiHomeId,
-						),
-				);
-				if (!provisioningEntry) {
-					this.controllerLog.print(
-						"NWI Home ID not found in provisioning list, ignoring request...",
-					);
-					return;
-				} else if (
-					provisioningEntry.status ===
-					ProvisioningEntryStatus.Inactive
-				) {
-					this.controllerLog.print(
-						"The provisioning entry for this node is inactive, ignoring request...",
-					);
-					return;
-				}
-
-				this.controllerLog.print(
-					"NWI Home ID found in provisioning list, including node...",
-				);
-				try {
-					const result =
-						await this.controller.beginInclusionSmartStart(
-							provisioningEntry,
-						);
-					if (!result) {
-						this.controllerLog.print(
-							"Smart Start inclusion could not be started",
-							"error",
-						);
-					}
-				} catch (e) {
-					this.controllerLog.print(
-						`Smart Start inclusion could not be started: ${getErrorMessage(
-							e,
-						)}`,
-						"error",
-					);
-				}
-			}
+			return this.handleApplicationUpdateRequest(msg);
 		} else {
 			// TODO: This deserves a nicer formatting
 			this.driverLog.print(
@@ -3394,6 +3310,95 @@ ${handlers.length} left`,
 			}
 		} else {
 			this.driverLog.print("  no handlers registered!", "warn");
+		}
+	}
+
+	private async handleApplicationUpdateRequest(
+		msg: ApplicationUpdateRequest,
+	): Promise<void> {
+		// Make sure we're ready to handle this command
+		this.ensureReady(true);
+
+		if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
+			const node = this.getNodeUnsafe(msg);
+			if (node) {
+				this.controllerLog.logNode(node.id, {
+					message: "Received updated node info",
+					direction: "inbound",
+				});
+				node.updateNodeInfo(msg.nodeInformation);
+
+				// Tell the send thread that we received a NIF from the node
+				this.sendThread.send({ type: "NIF", nodeId: node.id });
+
+				if (
+					node.canSleep &&
+					node.supportsCC(CommandClasses["Wake Up"])
+				) {
+					// In case this is a sleeping node and there are no messages in the queue, the node may go back to sleep very soon
+					this.debounceSendNodeToSleep(node);
+				}
+
+				return;
+			}
+		} else if (
+			msg instanceof ApplicationUpdateRequestSmartStartHomeIDReceived
+		) {
+			// the controller is in Smart Start learn mode and a node requests inclusion via Smart Start
+			this.controllerLog.print("Received Smart Start inclusion request");
+
+			if (
+				this.controller.inclusionState !== InclusionState.Idle &&
+				this.controller.inclusionState !== InclusionState.SmartStart
+			) {
+				this.controllerLog.print(
+					"Controller is busy and cannot handle this inclusion request right now...",
+				);
+				return;
+			}
+
+			// Check if the node is on the provisioning list
+			const provisioningEntry = this.controller.provisioningList.find(
+				(entry) =>
+					nwiHomeIdFromDSK(dskFromString(entry.dsk)).equals(
+						msg.nwiHomeId,
+					),
+			);
+			if (!provisioningEntry) {
+				this.controllerLog.print(
+					"NWI Home ID not found in provisioning list, ignoring request...",
+				);
+				return;
+			} else if (
+				provisioningEntry.status === ProvisioningEntryStatus.Inactive
+			) {
+				this.controllerLog.print(
+					"The provisioning entry for this node is inactive, ignoring request...",
+				);
+				return;
+			}
+
+			this.controllerLog.print(
+				"NWI Home ID found in provisioning list, including node...",
+			);
+			try {
+				const result = await this.controller.beginInclusionSmartStart(
+					provisioningEntry,
+				);
+				if (!result) {
+					this.controllerLog.print(
+						"Smart Start inclusion could not be started",
+						"error",
+					);
+				}
+			} catch (e) {
+				this.controllerLog.print(
+					`Smart Start inclusion could not be started: ${getErrorMessage(
+						e,
+					)}`,
+					"error",
+				);
+			}
 		}
 	}
 
