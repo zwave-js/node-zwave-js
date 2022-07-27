@@ -1,5 +1,4 @@
 import type { JSONObject } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { throwInvalidConfig } from "../utils_safe";
 import {
@@ -43,7 +42,7 @@ export class ConditionalEndpointConfig
 Endpoint ${index}: associations is not an object`,
 				);
 			}
-			for (const [key, assocDefinition] of entries(
+			for (const [key, assocDefinition] of Object.entries(
 				definition.associations,
 			)) {
 				if (!/^[1-9][0-9]*$/.test(key)) {
@@ -60,7 +59,7 @@ Endpoint ${index}: found non-numeric group id "${key}" in associations`,
 					new ConditionalAssociationConfig(
 						filename,
 						keyNum,
-						assocDefinition,
+						assocDefinition as any,
 					),
 				);
 			}

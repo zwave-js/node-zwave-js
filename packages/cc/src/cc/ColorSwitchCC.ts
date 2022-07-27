@@ -20,7 +20,6 @@ import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared/safe";
 import { validateArgs } from "@zwave-js/transformers";
 import { clamp } from "alcalzone-shared/math";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import {
 	CCAPI,
@@ -273,7 +272,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				targetColorValueId,
 			) ?? {};
 
-		for (const [key, value] of entries(colorTable)) {
+		for (const [key, value] of Object.entries(colorTable)) {
 			const component = colorTableKeyToComponent(key);
 			if (
 				component === ColorComponent.Red ||
@@ -421,7 +420,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 				}
 
 				// Ensure that each property is numeric
-				for (const [key, val] of entries(value)) {
+				for (const [key, val] of Object.entries(value)) {
 					if (typeof val !== "number") {
 						throwWrongValueType(
 							this.ccId,
@@ -901,7 +900,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 		);
 		this.payload[0] = populatedColorCount & 0b11111;
 		let i = 1;
-		for (const [key, value] of entries(this.colorTable)) {
+		for (const [key, value] of Object.entries(this.colorTable)) {
 			const component = colorTableKeyToComponent(key);
 			this.payload[i] = component;
 			this.payload[i + 1] = clamp(value, 0, 0xff);

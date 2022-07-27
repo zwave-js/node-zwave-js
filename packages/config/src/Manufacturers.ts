@@ -1,6 +1,5 @@
 import { isZWaveError, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { formatId, stringify } from "@zwave-js/shared";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
@@ -36,7 +35,7 @@ export async function loadManufacturersInternal(
 		}
 
 		const manufacturers = new Map();
-		for (const [id, name] of entries(definition)) {
+		for (const [id, name] of Object.entries(definition)) {
 			if (!hexKeyRegex4Digits.test(id)) {
 				throwInvalidConfig(
 					"manufacturers",
