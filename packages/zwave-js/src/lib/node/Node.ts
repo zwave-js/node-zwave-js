@@ -15,6 +15,9 @@ import {
 	Powerlevel,
 	PowerlevelTestStatus,
 	SetValueAPIOptions,
+	TimeCCDateGet,
+	TimeCCTimeGet,
+	TimeCCTimeOffsetGet,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
@@ -87,6 +90,7 @@ import {
 	DataRate,
 	FLiRS,
 	getCCName,
+	getDSTInfo,
 	isRssiError,
 	isTransmissionError,
 	isUnsupervisedOrSucceeded,
@@ -2234,6 +2238,12 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
 			return this.handlePowerlevelTestNodeReport(command);
+		} else if (command instanceof TimeCCTimeGet) {
+			return this.handleTimeGet(command);
+		} else if (command instanceof TimeCCDateGet) {
+			return this.handleDateGet(command);
+		} else if (command instanceof TimeCCTimeOffsetGet) {
+			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
 		}
@@ -3157,6 +3167,68 @@ protocol version:      ${this.protocolVersion}`;
 				// ignore
 			}
 			this.busySettingClock = false;
+		}
+	}
+
+	private async handleTimeGet(command: TimeCCTimeGet): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const now = new Date();
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		const seconds = now.getSeconds();
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportTime(hours, minutes, seconds);
+		} catch (e) {
+			// ignore
+		}
+	}
+
+	private async handleDateGet(command: TimeCCDateGet): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportDate(year, month, day);
+		} catch (e) {
+			// ignore
+		}
+	}
+
+	private async handleTimeOffsetGet(
+		command: TimeCCTimeOffsetGet,
+	): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const timezone = getDSTInfo(new Date());
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportTimezone(timezone);
+		} catch (e) {
+			// ignore
 		}
 	}
 
