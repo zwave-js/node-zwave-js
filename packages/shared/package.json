@@ -48,10 +48,12 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --verbose",
+    "extract-api": "yarn api-extractor run",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.22",

@@ -46,6 +46,7 @@
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
     "build": "yarn prebuild && tsc -b tsconfig.build.json",
+    "extract-api": "yarn api-extractor run",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty",
     "lint_config": "yarn ts maintenance/lintConfigFiles.ts",
@@ -63,6 +64,7 @@
     "winston": "^3.8.1"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
     "@types/js-levenshtein": "^1.1.1",
