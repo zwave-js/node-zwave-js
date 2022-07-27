@@ -33,6 +33,7 @@ import { wait } from "alcalzone-shared/async";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
+import { ApplicationUpdateRequestNodeInfoReceived } from "../serialapi/application/ApplicationUpdateRequest";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
@@ -348,10 +349,20 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		describe(`queryNodeInfo()`, () => {
+		describe(`interviewNodeInfo()`, () => {
 			beforeAll(() =>
 				fakeDriver.sendMessage.mockImplementation(() =>
-					Promise.resolve(),
+					Promise.resolve(
+						new ApplicationUpdateRequestNodeInfoReceived(
+							undefined as any,
+							{
+								nodeInformation: {
+									nodeId: 2,
+									supportedCCs: [],
+								},
+							} as any,
+						),
+					),
 				),
 			);
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
@@ -597,7 +608,7 @@ describe("lib/node/Node", () => {
 			beforeAll(() => {
 				const interviewStagesAfter: Record<string, InterviewStage> = {
 					queryProtocolInfo: InterviewStage.ProtocolInfo,
-					queryNodeInfo: InterviewStage.NodeInfo,
+					interviewNodeInfo: InterviewStage.NodeInfo,
 					interviewCCs: InterviewStage.CommandClasses,
 				};
 				const returnValues: Partial<Record<keyof TestNode, any>> = {
@@ -606,7 +617,7 @@ describe("lib/node/Node", () => {
 				};
 				originalMethods = {
 					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
-					queryNodeInfo: node["interviewNodeInfo"].bind(node),
+					interviewNodeInfo: node["interviewNodeInfo"].bind(node),
 					interviewCCs: node["interviewCCs"].bind(node),
 				};
 				for (const method of Object.keys(
