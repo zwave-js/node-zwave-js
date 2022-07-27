@@ -87,7 +87,8 @@
     "zwave-js": "workspace:*"
   },
   "resolutions": {
-    "minimist": "^1.2.6"
+    "minimist": "^1.2.6",
+    "colors": "1.4.0"
   },
   "scripts": {
     "foreach": "yarn workspaces foreach -pvi --exclude @zwave-js/repo",

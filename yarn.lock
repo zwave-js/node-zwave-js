@@ -5286,13 +5286,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colors@npm:~1.2.1":
-  version: 1.2.5
-  resolution: "colors@npm:1.2.5"
-  checksum: b6e23de735f68b72d5cdf6fd854ca43d1b66d82dcf54bda0b788083b910164a040f2c4edf23c670d36a7a2d8f1b7d6e62e3292703e4642691e6ccaa1c62d8f74
-  languageName: node
-  linkType: hard
-
 "colorspace@npm:1.1.x":
   version: 1.1.2
   resolution: "colorspace@npm:1.1.2"
