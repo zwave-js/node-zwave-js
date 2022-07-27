@@ -1424,6 +1424,11 @@ export enum ThermostatSetbackCommand {
 	Report = 0x03,
 }
 
+export interface Timezone {
+	standardOffset: number;
+	dstOffset: number;
+}
+
 /** @publicAPI */
 export enum SetbackType {
 	None = 0x00,
