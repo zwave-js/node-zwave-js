@@ -55,7 +55,7 @@
 		{
 			"#": "12",
 			"label": "Energy Reporting Threshold",
-            "description": "Determines the minimum change in energy consumption (in relation to the previously reported) that will result in sending a new report",
+			"description": "Determines the minimum change in energy consumption (in relation to the previously reported) that will result in sending a new report",
 			"unit": "0.01 kWh",
 			"valueSize": 2,
 			"minValue": 0,
@@ -65,7 +65,7 @@
 		{
 			"#": "13",
 			"label": "Periodic Power Report",
-            "description": "Defines time period between reports sent when changes in power load have not been recorded or if changes are smaller than defined in parameter 11. By default reports are sent every hour.",
+			"description": "Defines time period between reports sent when changes in power load have not been recorded or if changes are smaller than defined in parameter 11. By default reports are sent every hour.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -75,7 +75,7 @@
 		{
 			"#": "14",
 			"label": "Periodic Energy Report",
-            "description": "Defines time period between reports sent when changes in power load have not been recorded or if changes are smaller than in parameter 11. By default reports are sent every hour.",
+			"description": "Defines time period between reports sent when changes in power load have not been recorded or if changes are smaller than in parameter 11. By default reports are sent every hour.",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
