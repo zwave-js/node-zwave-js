@@ -1,13 +1,9 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
-	"label": "45603",
-	"description": "Fluorescent Light & Appliance Module",
+	"label": "45603 / ZW4101",
+	"description": "Plug-in 2-Outlet Smart Switch, 1 Controlled, 300S",
 	"devices": [
-		{
-			"productType": "0x5052",
-			"productId": "0x3031"
-		},
 		{
 			"productType": "0x5250",
 			"productId": "0x3030"

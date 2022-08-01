@@ -1,15 +1,11 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
-	"label": "45604",
-	"description": "Outdoor Lighting Control Module",
+	"label": "45604 / ZW4201",
+	"description": "Plug-in Outdoor Smart Switch, 300S",
 	"devices": [
 		{
 			"productType": "0x5250",
-			"productId": "0x3130"
-		},
-		{
-			"productType": "0x6363",
 			"productId": "0x3130"
 		}
 	],

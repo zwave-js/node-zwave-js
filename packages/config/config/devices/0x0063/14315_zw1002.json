@@ -1,13 +1,13 @@
 {
-	"manufacturer": "GE",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14288 / ZW1002",
+	"label": "14315 / ZW1002",
 	"description": "In-Wall Smart Outlet, Tamper Resistant, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3133",
-			"zwaveAllianceId": 2732
+			"productId": "0x3134",
+			"zwaveAllianceId": [2236, 2372]
 		}
 	],
 	"firmwareVersion": {

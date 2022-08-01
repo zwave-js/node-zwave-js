@@ -1,13 +1,9 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "AT&T",
 	"manufacturerId": "0x0063",
-	"label": "45609",
-	"description": "On/Off Relay Switch",
+	"label": "45655 / ZW4001",
+	"description": "In-Wall Smart Paddle Switch, 300S",
 	"devices": [
-		{
-			"productType": "0x5257",
-			"productId": "0x3533"
-		},
 		{
 			"productType": "0x6363",
 			"productId": "0x3533"

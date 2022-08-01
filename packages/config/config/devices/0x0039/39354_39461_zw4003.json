@@ -1,18 +1,13 @@
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39354",
-	"description": "In-Wall Smart Toggle Switch",
+	"label": "39354 / 39461 / ZW4003",
+	"description": "In-Wall Smart Toggle Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",
 			"productId": "0x3037",
 			"zwaveAllianceId": 2726
-		},
-		{
-			"productType": "0x4952",
-			"productId": "0x3137",
-			"zwaveAllianceId": 3400
 		}
 	],
 	"firmwareVersion": {
