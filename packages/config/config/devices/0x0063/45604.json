@@ -5,10 +5,6 @@
 	"description": "Outdoor Lighting Control Module",
 	"devices": [
 		{
-			"productType": "0x4f50",
-			"productId": "0x3031"
-		},
-		{
 			"productType": "0x5250",
 			"productId": "0x3130"
 		},
