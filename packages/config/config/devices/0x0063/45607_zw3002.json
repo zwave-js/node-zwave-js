@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "45607 / ZW3002",
-	"description": "In-Wall Decora Style Incandescent Light Dimmer, No Neutral, White, (Included Only in 45613 kit)",
+	"description": "In-Wall Smart Paddle Dimmer, 300S",
 	"devices": [
 		{
 			"productType": "0x4457",

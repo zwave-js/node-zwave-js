@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "55249 / ZW4106",
-	"description": "Plug-in Smart Switch (Dual Plug with Simultaneous Control)",
+	"description": "Plug-in 2-Outlet Smart Switch, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",

@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12722 / ZW4005",
-	"description": "On/Off Relay Switch",
+	"description": "In-Wall Smart Paddle Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

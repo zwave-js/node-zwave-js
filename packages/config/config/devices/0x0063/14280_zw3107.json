@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14280 / ZW3107",
-	"description": "Plug-In Smart Dimmer (Dual Linked Outlets)",
+	"description": "Plug-in 2-Outlet Smart Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

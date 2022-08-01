@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
-	"label": "34194/ZW6302",
-	"description": "Portable Smart Motion Sensor",
+	"label": "34194 / ZW6302",
+	"description": "Portable Smart Motion Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

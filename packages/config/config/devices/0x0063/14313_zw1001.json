@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14313 / ZW1001",
-	"description": "In-Wall Smart Outlet",
+	"description": "In-Wall Smart Outlet, 300S",
 	"devices": [
 		{
 			"productType": "0x4952",

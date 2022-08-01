@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "45633 / ZW5303",
-	"description": "Wireless Lighting Control Advanced Remote",
+	"description": "Handheld LCD Remote Controller, 400S",
 	"devices": [
 		{
 			"productType": "0x8009",

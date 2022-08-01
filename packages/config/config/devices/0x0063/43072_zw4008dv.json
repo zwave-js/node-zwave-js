@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE/Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "43072 / ZW4008DV",
-	"description": "In-Wall Smart Switch (120/277VAC)",
+	"description": "In-Wall Smart Paddle Switch, 120+277, Quick-fit Simple Wire, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",
