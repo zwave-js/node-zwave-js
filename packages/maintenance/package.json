@@ -39,7 +39,7 @@
     "@types/globrex": "^0.1.2",
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.23",
-    "@types/prettier": "^2.6.3",
+    "@types/prettier": "^2.6.4",
     "@types/yargs": "^17.0.10",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
