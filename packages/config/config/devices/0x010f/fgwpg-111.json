@@ -1,11 +1,11 @@
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGWPG-121",
-	"description": "Fibaro Wall Plug",
+	"label": "FGWPG-111",
+	"description": "FIBARO Wall Plug UK",
 	"devices": [
 		{
-			"productType": "0x1501",
+			"productType": "0x1801",
 			"productId": "0x1000"
 		}
 	],
