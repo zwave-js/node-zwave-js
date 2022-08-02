@@ -27,7 +27,7 @@ import {
 	priority,
 	SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
@@ -130,14 +130,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -371,14 +363,6 @@ export class SendDataMulticastRequest<
 		return super.serialize();
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -429,13 +413,6 @@ export class SendDataMulticastRequestTransmitReport
 		return this._transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -471,12 +448,6 @@ export class SendDataMulticastResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

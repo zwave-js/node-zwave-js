@@ -14,7 +14,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import type { JSONObject } from "@zwave-js/shared";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
@@ -46,14 +45,6 @@ export class GetRoutingInfoRequest extends Message {
 			0, // callbackId - this must be 0 as per the docs
 		]);
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			nodeId: this.sourceNodeId,
-			removeNonRepeaters: this.removeNonRepeaters,
-			removeBadLinks: this.removeBadLinks,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
