@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39363 / 39470 / ZW4203",
-	"description": "Plug-in Outdoor Smart Switch V2, 500S",
+	"description": "Plug-in Outdoor Switch V2, 500S",
 	"devices": [
 		{
 			"productType": "0x4f50",

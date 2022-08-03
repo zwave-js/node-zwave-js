@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14289 / ZW3009",
-	"description": "In-Wall Capacitive Touch Smart Dimmer, 500S",
+	"description": "In-Wall Capacitive Touch Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

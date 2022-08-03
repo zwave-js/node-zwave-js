@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14299 / ZW3006",
-	"description": "In-Wall 1000W Smart Paddle Dimmer, 500S",
+	"description": "In-Wall 1000W Paddle Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

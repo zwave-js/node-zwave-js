@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12726 / ZW4004",
-	"description": "Direct Wire 40A Outdoor Smart Switch, 300S",
+	"description": "Direct Wire 40A Outdoor Switch, 300S",
 	"devices": [
 		{
 			"productType": "0x4f44",

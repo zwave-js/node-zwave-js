@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14292 / ZW4003",
-	"description": "In-Wall Smart Toggle Switch, 500S",
+	"description": "In-Wall Toggle Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

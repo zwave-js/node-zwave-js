@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "14285 / ZW4007",
-	"description": "Direct Wire 40A Outdoor Smart Switch, 500S",
+	"description": "Direct Wire 40A Outdoor Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4f44",

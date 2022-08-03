@@ -2,7 +2,7 @@
 	"manufacturer": "GE/Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "26933 / ZW3008",
-	"description": "In-Wall Smart Motion Dimmer, 500S",
+	"description": "In-Wall Motion Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x494d",

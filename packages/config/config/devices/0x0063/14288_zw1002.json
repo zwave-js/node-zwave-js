@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14288 / ZW1002",
-	"description": "In-Wall Smart Outlet, Tamper Resistant, 500S",
+	"description": "In-Wall Outlet, TR, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

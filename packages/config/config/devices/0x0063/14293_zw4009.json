@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "14293 / ZW4009",
-	"description": "In-Wall Smart Toggle Switch, Lt Almd, Quick-fit Simple Wire, 500S",
+	"description": "In-Wall Toggle Switch, Lt Almd, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

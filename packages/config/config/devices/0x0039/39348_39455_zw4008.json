@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39348 / 39455 / ZW4008",
-	"description": "In-Wall Smart Paddle Switch, Quick-fit Simple Wire, 500S",
+	"description": "In-Wall Paddle Switch, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

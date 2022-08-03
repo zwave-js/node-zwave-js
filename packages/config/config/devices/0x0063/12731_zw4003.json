@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12731 / ZW4003",
-	"description": "In-Wall Smart Toggle Switch, Lt Almd, 300S",
+	"description": "In-Wall Toggle Switch, Lt Almd, 300S",
 	"devices": [
 		{
 			"productType": "0x4952",

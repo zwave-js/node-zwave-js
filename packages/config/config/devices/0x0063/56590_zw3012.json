@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "56590 / ZW3012",
-	"description": "In-Wall Smart Paddle Dimmer, No Ntrl, 700S",
+	"description": "In-Wall Paddle Dimmer, No Ntrl, 700S",
 	"devices": [
 		{
 			"productType": "0x4944",

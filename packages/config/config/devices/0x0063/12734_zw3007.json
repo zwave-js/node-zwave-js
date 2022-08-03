@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12734 / ZW3007",
-	"description": "In-Wall Smart Toggle Dimmer, No Ntrl, 300S",
+	"description": "In-Wall Toggle Dimmer, No Ntrl, 300S",
 	"devices": [
 		{
 			"productType": "0x4944",

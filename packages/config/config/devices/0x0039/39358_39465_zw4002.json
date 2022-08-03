@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39358 / 39465 / ZW4002",
-	"description": "In-Wall Smart Fan Speed Control, 500S",
+	"description": "In-Wall Fan Speed Control, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "46202 / ZW4009",
-	"description": "In-Wall Smart Toggle Switch, Quick-fit Simple Wire, 500S",
+	"description": "In-Wall Toggle Switch, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

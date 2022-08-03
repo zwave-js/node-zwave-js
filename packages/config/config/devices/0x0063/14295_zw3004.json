@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14295 / ZW3004",
-	"description": "In-Wall Smart Toggle Dimmer, 500S",
+	"description": "In-Wall Toggle Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

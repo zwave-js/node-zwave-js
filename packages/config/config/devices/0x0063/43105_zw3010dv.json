@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "43105 / ZW3010DV",
-	"description": "In-Wall Smart Paddle Dimmer, 120+277, 500S",
+	"description": "In-Wall Paddle Dimmer, 120+277, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

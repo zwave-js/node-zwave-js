@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "46564 / ZW3010",
-	"description": "In-Wall Smart Paddle Dimmer, Quick-fit Simple Wire, 500S",
+	"description": "In-Wall Paddle Dimmer, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

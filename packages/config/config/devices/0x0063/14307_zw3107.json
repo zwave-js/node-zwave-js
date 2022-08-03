@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14307 / ZW3107",
-	"description": "Plug-in 2-Outlet Smart Dimmer, Simultaneous, 500S",
+	"description": "Plug-in 2-Outlet Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

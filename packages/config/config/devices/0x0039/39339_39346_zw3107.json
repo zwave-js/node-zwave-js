@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39339 / 39346 / ZW3107",
-	"description": "Plug-in 2-Outlet Smart Dimmer, Simultaneous, 500S",
+	"description": "Plug-in 2-Outlet Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "35931 / ZW7101",
-	"description": "LED A19 Smart Bulb, 500S",
+	"description": "LED A19 Bulb, 500S",
 	"devices": [
 		{
 			"productType": "0x4c42",

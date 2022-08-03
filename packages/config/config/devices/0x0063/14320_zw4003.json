@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14320 / ZW4003",
-	"description": "In-Wall Smart Toggle Switch, Lt Almd, 500S",
+	"description": "In-Wall Toggle Switch, Lt Almd, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

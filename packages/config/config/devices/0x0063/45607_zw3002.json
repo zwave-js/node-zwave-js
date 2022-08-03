@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "45607 / ZW3002",
-	"description": "In-Wall Smart Paddle Dimmer, 300S",
+	"description": "In-Wall Paddle Dimmer, 300S",
 	"devices": [
 		{
 			"productType": "0x4457",

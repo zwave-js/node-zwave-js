@@ -2,7 +2,7 @@
 	"manufacturer": "AT&T",
 	"manufacturerId": "0x0063",
 	"label": "45658 / ZW4201",
-	"description": "Plug-in Outdoor Smart Switch, 300S",
+	"description": "Plug-in Outdoor Switch, 300S",
 	"devices": [
 		{
 			"productType": "0x6363",

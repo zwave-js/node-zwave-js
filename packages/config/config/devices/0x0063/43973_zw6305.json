@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "43973 / ZW6305",
-	"description": "Slim Door and Window Sensor, 500S",
+	"description": "Slim Door+Window Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

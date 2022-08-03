@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14326 / ZW3006",
-	"description": "In-Wall 1000W Smart Toggle Dimmer, 500S",
+	"description": "In-Wall 1000W Toggle Dimmer, 500S",
 	"devices": [
 		{
 			"productType": "0x4944",

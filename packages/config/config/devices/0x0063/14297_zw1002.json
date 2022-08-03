@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "14297 / ZW1002",
-	"description": "In-Wall Smart Outlet, Tamper Resistant, Lt Almd, 500S",
+	"description": "In-Wall Outlet, TR, Lt Almd, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

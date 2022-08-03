@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28172 / ZW4104",
-	"description": "Plug-in 2-Outlet Smart Switch, 1 Controlled, 500S",
+	"description": "Plug-in 2-Outlet Switch, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",

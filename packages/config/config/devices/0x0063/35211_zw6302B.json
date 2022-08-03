@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "35211 / ZW6302B",
-	"description": "Portable Smart Multi-Sensor, Motion+Temp+Light, 500S",
+	"description": "Portable Motion+Temp+Light Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

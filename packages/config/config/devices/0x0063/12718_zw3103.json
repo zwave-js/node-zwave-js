@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12718 / ZW3103",
-	"description": "Plug-in 2-Outlet Smart Dimmer, 1 Controlled, 300S",
+	"description": "Plug-in 2-Outlet Dimmer, 1 Controlled, 300S",
 	"devices": [
 		{
 			"productType": "0x5044",

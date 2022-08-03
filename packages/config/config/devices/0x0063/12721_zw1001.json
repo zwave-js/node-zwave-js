@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "12721 / ZW1001",
-	"description": "In-Wall Smart Outlet, 300S",
+	"description": "In-Wall Outlet, 300S",
 	"devices": [
 		{
 			"productType": "0x4952",

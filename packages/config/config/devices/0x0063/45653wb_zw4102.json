@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "45653WB / ZW4102",
-	"description": "Plug-in 1-Outlet Smart Switch, Energy Monitoring, 300S",
+	"description": "Plug-in 1-Outlet Switch With Energy, 300S",
 	"devices": [
 		{
 			"productType": "0x5250",

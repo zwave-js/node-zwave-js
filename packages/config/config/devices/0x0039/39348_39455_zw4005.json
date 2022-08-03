@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39348 / 39455 / ZW4005",
-	"description": "In-Wall Smart Paddle Switch, 500S",
+	"description": "In-Wall Paddle Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

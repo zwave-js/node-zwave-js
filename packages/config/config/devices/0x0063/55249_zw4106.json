@@ -2,7 +2,7 @@
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "55249 / ZW4106",
-	"description": "Plug-in 2-Outlet Smart Switch, Simultaneous, 500S",
+	"description": "Plug-in 2-Outlet Switch, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",

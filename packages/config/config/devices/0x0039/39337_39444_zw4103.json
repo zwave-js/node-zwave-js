@@ -2,7 +2,7 @@
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39337 / 39444 / ZW4103",
-	"description": "Plug-in 1-Outlet Smart Switch, 500S",
+	"description": "Plug-in 1-Outlet Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x5052",

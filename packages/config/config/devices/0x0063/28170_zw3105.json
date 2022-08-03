@@ -2,7 +2,7 @@
 	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28170 / ZW3105",
-	"description": "Plug-in 2-Outlet Smart Dimmer, 1 Controlled, 500S",
+	"description": "Plug-in 2-Outlet Dimmer, 1 Controlled, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

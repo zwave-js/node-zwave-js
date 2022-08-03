@@ -2,7 +2,7 @@
 	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14291 / ZW4005",
-	"description": "In-Wall Smart Paddle Switch, 500S",
+	"description": "In-Wall Paddle Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",
