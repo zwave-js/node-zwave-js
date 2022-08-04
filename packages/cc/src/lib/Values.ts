@@ -504,8 +504,8 @@ type AddCCValueProperties<
 		TBlueprint
 	>,
 > = {
-	// WARNING: These properties must be defined in alphabetical order,
-	// or api-extractor will randomly complain about a changed API surface.
+	/** Returns the value ID of this CC value, without endpoint information */
+	get id(): ValueIDBase;
 
 	/** Returns the value ID, specialized to the given endpoint */
 	endpoint(
@@ -516,9 +516,6 @@ type AddCCValueProperties<
 				"commandClass"
 			>
 	>;
-
-	/** Returns the value ID of this CC value, without endpoint information */
-	get id(): ValueIDBase;
 
 	/** Whether the given value ID matches this value definition */
 	is: CCValuePredicate;
