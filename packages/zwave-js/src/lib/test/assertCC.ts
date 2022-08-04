@@ -1,5 +1,4 @@
 import type { CCConstructor, CommandClass } from "@zwave-js/cc";
-import { entries } from "alcalzone-shared/objects";
 import { SendDataBridgeRequest } from "../serialapi/transport/SendDataBridgeMessages";
 import { SendDataRequest } from "../serialapi/transport/SendDataMessages";
 
@@ -25,7 +24,7 @@ export function assertCC<
 	const command = request.command;
 	expect(command).toBeInstanceOf(options.cc);
 	if (options.ccValues) {
-		for (const [prop, val] of entries(options.ccValues)) {
+		for (const [prop, val] of Object.entries(options.ccValues)) {
 			expect((command as any)[prop]).toBe(val);
 		}
 	}

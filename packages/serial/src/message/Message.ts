@@ -11,7 +11,6 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
@@ -288,15 +287,6 @@ export class Message {
 		if (this.expectedResponse != null)
 			ret.expectedResponse = FunctionType[this.functionType];
 		ret.payload = this.payload.toString("hex");
-		return ret;
-	}
-
-	protected toJSONInherited(props: JSONObject): JSONObject {
-		const ret = this.toJSONInternal();
-		delete ret.payload;
-		for (const [key, value] of entries(props)) {
-			if (value !== undefined) ret[key] = value;
-		}
 		return ret;
 	}
 
