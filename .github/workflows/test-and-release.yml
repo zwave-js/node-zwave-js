@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -41,6 +41,42 @@ jobs:
 
     - name: Compile TypeScript code
       run: yarn build
+
+    - name: Cache TypeScript build output
+      uses: actions/upload-artifact@v3
+      with:
+        name: built
+        path: |
+          packages/*/src
+          packages/*/build
+          packages/*/*.tsbuildinfo
+
+  lint:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --immutable
+
+    - name: Download cached TypeScript build output
+      uses: actions/download-artifact@v3
+      with:
+        name: built
+        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
 
     - name: Run linters
       run: yarn run lint
@@ -78,6 +114,8 @@ jobs:
   # ===================
 
   lint-zwave:
+    needs: [build]
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -96,8 +134,11 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Compile TypeScript code
-      run: yarn build
+    - name: Download cached TypeScript build output
+      uses: actions/download-artifact@v3
+      with:
+        name: built
+        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
 
     - name: Lint config files
       run: yarn run lint:config
@@ -108,6 +149,8 @@ jobs:
   # ===================
   # Runs unit tests on all supported node versions and OSes
   unit-tests:
+    needs: [build]
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -127,9 +170,11 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    # Compilation is necessary, or the tests won't run
-    - name: Compile TypeScript code
-      run: yarn run build
+    - name: Download cached TypeScript build output
+      uses: actions/download-artifact@v3
+      with:
+        name: built
+        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
 
     # Test that the generated packages are ok
     - name: Import main entry points for each package
@@ -246,8 +291,11 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Create a clean build
-      run: yarn run build
+    - name: Download cached TypeScript build output
+      uses: actions/download-artifact@v3
+      with:
+        name: built
+        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
 
     - name: Publish packages to npm
       env:
