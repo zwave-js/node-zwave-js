@@ -42,4 +42,11 @@ jobs:
       if: failure()
       run: |
         echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
-        echo "Please run \`yarn extract-api --local\` and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+        echo "Please run" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "yarn clean" >> $GITHUB_STEP_SUMMARY
+        echo "yarn build" >> $GITHUB_STEP_SUMMARY
+        echo "yarn extract-api --local" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
