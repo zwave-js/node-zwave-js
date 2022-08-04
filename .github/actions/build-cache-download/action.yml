@@ -1,0 +1,14 @@
+name: 'Download Build Cache'
+description: 'Downloads previously cached build artifacts'
+author: 'AlCalzone'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download cached build artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: built
+
+    - name: Extract cached build artifacts
+      run: tar -xvzf built.tgz && rm built.tgz

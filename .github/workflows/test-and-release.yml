@@ -30,26 +30,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
-
-    - name: Install dependencies
-      run: yarn install --immutable
 
     - name: Compile TypeScript code
       run: yarn build
 
-    - name: Cache TypeScript build output (step 1)
-      run: tar -cvzf built.tgz packages/*/build packages/*/src packages/*/*.tsbuildinfo
+    - name: Cache build output
+      uses: ./.github/actions/build-cache-upload
 
-    - name: Cache TypeScript build output (step 2)
-      uses: actions/upload-artifact@v3
-      with:
-        name: built
-        path: built.tgz
+  # ===================
 
   lint:
     needs: [build]
@@ -63,22 +55,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Download cached TypeScript build output (step 1)
-      uses: actions/download-artifact@v3
-      with:
-        name: built
-
-    - name: Download cached TypeScript build output (step 2)
-      run: tar -xvzf built.tgz && rm built.tgz
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
 
     - name: Run linters
       run: yarn run lint
@@ -127,22 +110,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Download cached TypeScript build output (step 1)
-      uses: actions/download-artifact@v3
-      with:
-        name: built
-
-    - name: Download cached TypeScript build output (step 2)
-      run: tar -xvzf built.tgz && rm built.tgz
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
 
     - name: Lint config files
       run: yarn run lint:config
@@ -165,22 +139,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
 
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Download cached TypeScript build output (step 1)
-      uses: actions/download-artifact@v3
-      with:
-        name: built
-
-    - name: Download cached TypeScript build output (step 2)
-      run: tar -xvzf built.tgz && rm built.tgz
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
 
     # Test that the generated packages are ok
     - name: Import main entry points for each package
@@ -210,6 +175,119 @@ jobs:
         CI: true
 
   # ===================
+  # This job checks if a PR changes the public API surface
+  api-surface:
+    name: Check public API surface
+    # Only run for PRs
+    if: github.event_name == 'pull_request'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
+
+    - name: Generate API report
+      run: yarn run extract-api
+
+    - name: Show changes
+      if: failure()
+      run: |
+        cat packages/*/.tmp/api.md
+
+    - name: Comment on PR
+      if: failure()
+      run: |
+        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+        echo "Please run" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "yarn clean" >> $GITHUB_STEP_SUMMARY
+        echo "yarn build" >> $GITHUB_STEP_SUMMARY
+        echo "yarn extract-api --local" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+  # ===================
+
+  gh-cc-table:
+    name: Update CC implementation status
+    # Only run for master branch
+    if: github.ref == 'refs/heads/master'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
+
+    - name: Update CC table # (maybe)
+      uses: ./.github/actions/gh-cc-table
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true
+
+  # ===================
+
+  generate-overview:
+    name: Update toLogEntry overview
+    # Only run for master branch
+    if: github.ref == 'refs/heads/master'
+
+    needs: [build]
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
+
+    - name: Update overview
+      uses: ./.github/actions/toLogEntry
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true
 
   # # Generate coverage reports when the unit tests have succeeded
   # coverage:
@@ -272,11 +350,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
+
+    - name: Download cached build output
+      uses: ./.github/actions/build-cache-download
 
     - name: Extract the version and commit body from the tag
       id: extract_release
@@ -293,17 +373,6 @@ jobs:
         if [[ $VERSION == *"-"* ]] ; then
           echo "::set-output name=TAG::--tag next"
         fi
-
-    - name: Install dependencies
-      run: yarn install --immutable
-
-    - name: Download cached TypeScript build output (step 1)
-      uses: actions/download-artifact@v3
-      with:
-        name: built
-
-    - name: Download cached TypeScript build output (step 2)
-      run: tar -xvzf built.tgz && rm built.tgz
 
     - name: Publish packages to npm
       env:
