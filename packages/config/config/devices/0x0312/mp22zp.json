@@ -43,13 +43,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Power Reporting Threshold",
-			"valueSize": 1,
-			"unit": "W",
-			"minValue": 5,
-			"maxValue": 50,
-			"defaultValue": 5,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#power_reporting_threshold"
 		},
 		{
 			"#": "6",

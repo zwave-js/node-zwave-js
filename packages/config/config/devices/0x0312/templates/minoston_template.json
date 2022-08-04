@@ -59,6 +59,20 @@
 			}
 		]
 	},
+	"auto_off_timer_36000s": {
+		"$import": "#auto_off_timer",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 36000
+	},
+	"auto_off_timer_32767s": {
+		"$import": "#auto_off_timer",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 0,
+		"maxValue": 32767
+	},
 	"single_tap_function": {
 		"label": "Single Tap Function",
 		"valueSize": 1,
@@ -113,7 +127,22 @@
 			}
 		]
 	},
-	"association_reports": {
+	"association_reports_basic_binary": {
+		"$import": "~/templates/master_template.json#base_options_nounit",
+		"label": "Association Reports",
+		"defaultValue": 1,
+		"options": [
+			{
+				"label": "Binary Switch report (Z-Wave); Basic Set report (local control)",
+				"value": 0
+			},
+			{
+				"label": "Binary Switch report (all)",
+				"value": 1
+			}
+		]
+	},
+	"association_reports_basic_multilevel": {
 		"label": "Association Reports",
 		"valueSize": 1,
 		"minValue": 0,
@@ -300,6 +329,14 @@
 		"label": "Send Status Change Report: Timer",
 		"defaultValue": 1
 	},
+	"power_reporting_threshold": {
+		"label": "Power Reporting Threshold",
+		"valueSize": 1,
+		"unit": "W",
+		"minValue": 5,
+		"maxValue": 50,
+		"defaultValue": 5
+	},
 	"power_reporting_interval": {
 		"label": "Power Reporting Interval",
 		"valueSize": 4,
@@ -326,5 +363,10 @@
 		"maxValue": 100,
 		"defaultValue": 1,
 		"unsigned": true
+	},
+	"enable_local_control": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "Local Control",
+		"defaultValue": 1
 	}
 }
