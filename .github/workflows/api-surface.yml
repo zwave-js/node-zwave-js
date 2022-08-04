@@ -1,4 +1,4 @@
-name: Generate documentation
+name: Check public API surface
 
 # Run this workflow on all pull requests
 on:
