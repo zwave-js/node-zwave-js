@@ -33,6 +33,11 @@ jobs:
     - name: Generate API report
       run: yarn run extract-api
 
+    - name: Show changes
+      if: failure()
+      run: |
+        cat packages/*/.tmp/api.md
+
     - name: Comment on PR
       if: failure()
       run: |
