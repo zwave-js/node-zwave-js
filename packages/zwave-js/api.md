@@ -55,7 +55,7 @@ import { IVirtualEndpoint } from '@zwave-js/core/safe';
 import { IVirtualNode } from '@zwave-js/core';
 import type { IZWaveEndpoint } from '@zwave-js/core';
 import { IZWaveNode } from '@zwave-js/core';
-import { JSONObject } from '@zwave-js/shared';
+import type { JSONObject } from '@zwave-js/shared';
 import { KEXFailType } from '@zwave-js/cc';
 import { LogConfig } from '@zwave-js/core';
 import { LogContext } from '@zwave-js/core';

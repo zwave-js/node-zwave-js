@@ -425,8 +425,6 @@ export class Message {
     get rtt(): number | undefined;
     serialize(): Buffer;
     toJSON(): JSONObject;
-    // (undocumented)
-    protected toJSONInherited(props: JSONObject): JSONObject;
     toLogEntry(): MessageOrCCLogEntry;
     get transmissionTimestamp(): number | undefined;
     // (undocumented)

@@ -6,7 +6,7 @@ on:
 
 jobs:
   # This job checks if a PR changes the public API surface
-  check-and-update:
+  check-api-surface:
     runs-on: ubuntu-latest
     strategy:
       matrix:
