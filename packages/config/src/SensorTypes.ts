@@ -1,6 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core/safe";
 import { JSONObject, num2hex } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import type { ConfigManager } from "./ConfigManager";
 import { Scale, ScaleGroup } from "./Scales";
@@ -50,7 +49,7 @@ export class SensorType {
 					"sensor types",
 					`scale definition for ${num2hex(key)} is not an object`,
 				);
-			for (const [scaleKey, scaleDefinition] of entries(
+			for (const [scaleKey, scaleDefinition] of Object.entries(
 				definition.scales,
 			)) {
 				if (!hexKeyRegexNDigits.test(scaleKey))
@@ -63,7 +62,7 @@ export class SensorType {
 				const scaleKeyNum = parseInt(scaleKey.slice(2), 16);
 				scales.set(
 					scaleKeyNum,
-					new Scale(scaleKeyNum, scaleDefinition),
+					new Scale(scaleKeyNum, scaleDefinition as any),
 				);
 			}
 			this.scales = scales;

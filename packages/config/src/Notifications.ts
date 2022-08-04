@@ -1,5 +1,4 @@
 import { JSONObject, num2hex } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { hexKeyRegexNDigits, throwInvalidConfig } from "./utils_safe";
 
@@ -34,7 +33,7 @@ export class Notification {
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {
-			for (const [eventId, eventDefinition] of entries(
+			for (const [eventId, eventDefinition] of Object.entries(
 				definition.events,
 			)) {
 				if (!hexKeyRegexNDigits.test(eventId)) {
@@ -48,7 +47,7 @@ export class Notification {
 				const eventIdNum = parseInt(eventId.slice(2), 16);
 				events.set(
 					eventIdNum,
-					new NotificationEvent(eventIdNum, eventDefinition),
+					new NotificationEvent(eventIdNum, eventDefinition as any),
 				);
 			}
 		}
@@ -100,7 +99,9 @@ export class NotificationVariable {
 			);
 		}
 		const states = new Map<number, NotificationState>();
-		for (const [stateId, stateDefinition] of entries(definition.states)) {
+		for (const [stateId, stateDefinition] of Object.entries(
+			definition.states,
+		)) {
 			if (!hexKeyRegexNDigits.test(stateId)) {
 				throwInvalidConfig(
 					"notifications",
@@ -110,7 +111,7 @@ export class NotificationVariable {
 			const stateIdNum = parseInt(stateId.slice(2), 16);
 			states.set(
 				stateIdNum,
-				new NotificationState(stateIdNum, stateDefinition),
+				new NotificationState(stateIdNum, stateDefinition as any),
 			);
 		}
 		this.states = states;
