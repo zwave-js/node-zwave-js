@@ -7,10 +7,6 @@
 		{
 			"productType": "0x1401",
 			"productId": "0x2000"
-		},
-		{
-			"productType": "0x1801",
-			"productId": "0x1000"
 		}
 	],
 	"firmwareVersion": {

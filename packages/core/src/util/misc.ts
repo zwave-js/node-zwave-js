@@ -1,4 +1,3 @@
-import { entries } from "alcalzone-shared/objects";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 
 /** Ensures that the values array is consecutive */
@@ -9,7 +8,7 @@ export function isConsecutiveArray(values: number[]): boolean {
 /** Returns an object that includes all non-undefined properties from the original one */
 export function stripUndefined<T>(obj: Record<string, T>): Record<string, T> {
 	const ret = {} as Record<string, T>;
-	for (const [key, value] of entries(obj)) {
+	for (const [key, value] of Object.entries(obj)) {
 		if (value !== undefined) ret[key] = value;
 	}
 	return ret;

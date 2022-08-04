@@ -32,64 +32,27 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "LED Indicator",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "On when load is on",
-					"value": 0
-				},
-				{
-					"label": "On when load is off",
-					"value": 1
-				},
-				{
-					"label": "Disable",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
 		},
 		{
 			"#": "2",
-			"label": "Outlet 1 (Left): Auto Off Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#auto_off_timer",
+			"label": "Outlet 1 (Left): Auto Off Timer"
 		},
 		{
 			"#": "4",
-			"label": "Outlet 1 (Left): Auto On Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#auto_on_timer",
+			"label": "Outlet 1 (Left): Auto On Timer"
 		},
 		{
 			"#": "3",
-			"label": "Outlet 2 (Right): Auto Off Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#auto_off_timer",
+			"label": "Outlet 2 (Right): Auto Off Timer"
 		},
 		{
 			"#": "5",
-			"label": "Outlet 2 (Right): Auto On Timer",
-			"valueSize": 4,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#auto_on_timer",
+			"label": "Outlet 2 (Right): Auto On Timer"
 		},
 		{
 			"#": "6",

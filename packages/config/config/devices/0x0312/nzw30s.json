@@ -16,52 +16,15 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Indicator",
-			"description": "Set the LED light behavior",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Turn LED indicator on when switch is on",
-					"value": 0
-				},
-				{
-					"label": "Turn LED indicator on when switch is off",
-					"value": 1
-				},
-				{
-					"label": "Indicator LED is always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
 		},
 		{
 			"#": "4",
-			"label": "Switch Orientation",
-			"description": "Invert on & off on the physical switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Up=On, Down=Off",
-					"value": 0
-				},
-				{
-					"label": "Up=Off, Down=On",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",
-			"label": "Countdown Timer",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		}
 	]
 }

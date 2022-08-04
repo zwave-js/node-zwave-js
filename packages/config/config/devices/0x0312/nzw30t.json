@@ -16,31 +16,11 @@
 	"paramInformation": [
 		{
 			"#": "4",
-			"label": "Invert",
-			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Default",
-					"value": 0
-				},
-				{
-					"label": "Inverted",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",
-			"label": "Countdown",
-			"description": "Countdown to shutoff",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		}
 	]
 }

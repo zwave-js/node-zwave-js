@@ -21,11 +21,11 @@
 		},
 		{
 			"#": "3",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "5",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+			"$import": "templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "8",
@@ -51,7 +51,7 @@
 		},
 		{
 			"#": "12",
-			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
+			"$import": "templates/minoston_template.json#double_tap_function"
 		},
 		{
 			"#": "15",
@@ -59,7 +59,7 @@
 		},
 		{
 			"#": "21",
-			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
+			"$import": "templates/minoston_template.json#report_state_when_local_control_disabled"
 		},
 		{
 			"#": "16",
@@ -67,19 +67,19 @@
 		},
 		{
 			"#": "20",
-			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
+			"$import": "templates/minoston_template.json#association_reports_basic_multilevel"
 		},
 		{
 			"#": "22",
-			"$import": "~/0x0312/templates/minoston_template.json#night_mode_brightness"
+			"$import": "templates/minoston_template.json#night_mode_brightness"
 		},
 		{
 			"#": "23",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
+			"$import": "templates/minoston_template.json#led_indicator_color"
 		},
 		{
 			"#": "26",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+			"$import": "templates/minoston_template.json#led_indicator_brightness"
 		}
 	],
 	"metadata": {

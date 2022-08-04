@@ -1,5 +1,5 @@
 import type { JSONObject } from "@zwave-js/shared";
-import { composeObject, entries } from "alcalzone-shared/objects";
+import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { Duration } from "./Duration";
 import type { ValueMetadata } from "./Metadata";
@@ -70,7 +70,7 @@ export function deserializeCacheValue(value: SerializedValue): unknown {
 				SerializedValue
 			>;
 			return new Map<unknown, unknown>(
-				entries(rest)
+				Object.entries(rest)
 					// We assume that all keys that resemble a number should be a number
 					.map(([k, v]) => [/^\d+$/.test(k) ? parseInt(k, 10) : k, v])
 					// recursively deserialize the value
