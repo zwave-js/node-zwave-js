@@ -28,6 +28,7 @@ import {
 	expectedCCResponse,
 	implementedVersion,
 } from "../lib/CommandClassDecorators";
+import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { TimeCommand } from "../lib/_Types";
 
 // @noSetValueAPI
@@ -38,9 +39,12 @@ export class TimeCCAPI extends CCAPI {
 	public supportsCommand(cmd: TimeCommand): Maybe<boolean> {
 		switch (cmd) {
 			case TimeCommand.TimeGet:
+			case TimeCommand.TimeReport:
 			case TimeCommand.DateGet:
+			case TimeCommand.DateReport:
 				return this.isSinglecast(); // "mandatory"
 			case TimeCommand.TimeOffsetGet:
+			case TimeCommand.TimeOffsetReport:
 				return this.version >= 2 && this.isSinglecast();
 			case TimeCommand.TimeOffsetSet:
 				return this.version >= 2;
@@ -65,6 +69,23 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
+	public async reportTime(
+		hour: number,
+		minute: number,
+		second: number,
+	): Promise<void> {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeReport);
+
+		const cc = new TimeCCTimeReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			hour,
+			minute,
+			second,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
+	}
+
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async getDate() {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateGet);
@@ -80,6 +101,23 @@ export class TimeCCAPI extends CCAPI {
 		if (response) {
 			return pick(response, ["day", "month", "year"]);
 		}
+	}
+
+	public async reportDate(
+		year: number,
+		month: number,
+		day: number,
+	): Promise<void> {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.DateReport);
+
+		const cc = new TimeCCDateReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			year,
+			month,
+			day,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -117,6 +155,21 @@ export class TimeCCAPI extends CCAPI {
 				endDate: response.dstEndDate,
 			};
 		}
+	}
+
+	@validateArgs()
+	public async reportTimezone(timezone: DSTInfo): Promise<void> {
+		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetReport);
+
+		const cc = new TimeCCTimeOffsetReport(this.applHost, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			standardOffset: timezone.standardOffset,
+			dstOffset: timezone.dstOffset,
+			dstStart: timezone.startDate,
+			dstEnd: timezone.endDate,
+		});
+		await this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -313,26 +366,19 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	public dstEndDate: Date;
 
 	public serialize(): Buffer {
-		const signTZO = Math.sign(this.standardOffset);
-		const hourTZO = Math.floor(Math.abs(this.standardOffset) / 60);
-		const hourByte =
-			(signTZO < 0 ? 0b1000_0000 : 0) | (hourTZO & 0b0111_1111);
-		const minuteTZO = Math.abs(this.standardOffset) % 60;
-		const delta = this.dstOffset - this.standardOffset;
-		const signDelta = Math.sign(delta);
-		const minuteDelta = Math.abs(delta);
-		const deltaByte =
-			(signDelta < 0 ? 0b1000_0000 : 0) | (minuteDelta & 0b0111_1111);
-		this.payload = Buffer.from([
-			hourByte,
-			minuteTZO,
-			deltaByte,
-			this.dstStartDate.getUTCMonth() + 1,
-			this.dstStartDate.getUTCDate(),
-			this.dstStartDate.getUTCHours(),
-			this.dstEndDate.getUTCMonth() + 1,
-			this.dstEndDate.getUTCDate(),
-			this.dstEndDate.getUTCHours(),
+		this.payload = Buffer.concat([
+			encodeTimezone({
+				standardOffset: this.standardOffset,
+				dstOffset: this.dstOffset,
+			}),
+			Buffer.from([
+				this.dstStartDate.getUTCMonth() + 1,
+				this.dstStartDate.getUTCDate(),
+				this.dstStartDate.getUTCHours(),
+				this.dstEndDate.getUTCMonth() + 1,
+				this.dstEndDate.getUTCDate(),
+				this.dstEndDate.getUTCHours(),
+			]),
 		]);
 		return super.serialize();
 	}
@@ -350,68 +396,84 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 	}
 }
 
+interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
+	standardOffset: number;
+	dstOffset: number;
+	dstStart: Date;
+	dstEnd: Date;
+}
+
 @CCCommand(TimeCommand.TimeOffsetReport)
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
-		options: CommandClassDeserializationOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| TimeCCTimeOffsetReportOptions,
 	) {
 		super(host, options);
-		validatePayload(this.payload.length >= 9);
-		// TODO: Refactor this into its own method
-		const hourSign = !!(this.payload[0] & 0b1000_0000);
-		const hour = this.payload[0] & 0b0111_1111;
-		const minute = this.payload[1];
-		this._standardOffset = (hourSign ? -1 : 1) * (hour * 60 + minute);
-		const deltaSign = !!(this.payload[2] & 0b1000_0000);
-		const deltaMinutes = this.payload[2] & 0b0111_1111;
-		this._dstOffset =
-			this._standardOffset + (deltaSign ? -1 : 1) * deltaMinutes;
+		if (gotDeserializationOptions(options)) {
+			validatePayload(this.payload.length >= 9);
+			const { standardOffset, dstOffset } = parseTimezone(this.payload);
+			this.standardOffset = standardOffset;
+			this.dstOffset = dstOffset;
 
-		const currentYear = new Date().getUTCFullYear();
-		this._dstStartDate = new Date(
-			Date.UTC(
-				currentYear,
-				this.payload[3] - 1,
-				this.payload[4],
-				this.payload[5],
-			),
-		);
-		this._dstEndDate = new Date(
-			Date.UTC(
-				currentYear,
-				this.payload[6] - 1,
-				this.payload[7],
-				this.payload[8],
-			),
-		);
+			const currentYear = new Date().getUTCFullYear();
+			this.dstStartDate = new Date(
+				Date.UTC(
+					currentYear,
+					this.payload[3] - 1,
+					this.payload[4],
+					this.payload[5],
+				),
+			);
+			this.dstEndDate = new Date(
+				Date.UTC(
+					currentYear,
+					this.payload[6] - 1,
+					this.payload[7],
+					this.payload[8],
+				),
+			);
+		} else {
+			this.standardOffset = options.standardOffset;
+			this.dstOffset = options.dstOffset;
+			this.dstStartDate = options.dstStart;
+			this.dstEndDate = options.dstEnd;
+		}
 	}
 
-	private _standardOffset: number;
-	public get standardOffset(): number {
-		return this._standardOffset;
-	}
-	private _dstOffset: number;
-	public get dstOffset(): number {
-		return this._dstOffset;
-	}
-	private _dstStartDate: Date;
-	public get dstStartDate(): Date {
-		return this._dstStartDate;
-	}
-	private _dstEndDate: Date;
-	public get dstEndDate(): Date {
-		return this._dstEndDate;
+	public standardOffset: number;
+	public dstOffset: number;
+	public dstStartDate: Date;
+	public dstEndDate: Date;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.concat([
+			encodeTimezone({
+				standardOffset: this.standardOffset,
+				dstOffset: this.dstOffset,
+			}),
+			Buffer.from([
+				this.dstStartDate.getUTCMonth() + 1,
+				this.dstStartDate.getUTCDate(),
+				this.dstStartDate.getUTCHours(),
+				this.dstEndDate.getUTCMonth() + 1,
+				this.dstEndDate.getUTCDate(),
+				this.dstEndDate.getUTCHours(),
+			]),
+		]);
+		return super.serialize();
 	}
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(applHost),
 			message: {
-				"standard time offset": `${this._standardOffset} minutes`,
-				"DST offset": `${this._dstOffset} minutes`,
-				"DST start date": formatDate(this._dstStartDate, "YYYY-MM-DD"),
-				"DST end date": formatDate(this._dstEndDate, "YYYY-MM-DD"),
+				"standard time offset": `${this.standardOffset} minutes`,
+				"DST offset": `${this.dstOffset} minutes`,
+				"DST start date": formatDate(this.dstStartDate, "YYYY-MM-DD"),
+				"DST end date": formatDate(this.dstEndDate, "YYYY-MM-DD"),
 			},
 		};
 	}

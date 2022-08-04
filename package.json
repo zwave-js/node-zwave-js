@@ -96,7 +96,7 @@
     "prebuild": "yarn workspace @zwave-js/maintenance run build && yarn workspace @zwave-js/cc run prebuild",
     "build": "yarn prebuild && yarn workspace zwave-js run build",
     "watch": "yarn prebuild && yarn workspace zwave-js run watch",
-    "extract-api": "yarn workspaces foreach -vi --exclude @zwave-js/repo run extract-api",
+    "extract-api": "yarn workspaces foreach -vp --exclude @zwave-js/repo run extract-api",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:ci": "yarn run test:ts --runInBand --forceExit",
