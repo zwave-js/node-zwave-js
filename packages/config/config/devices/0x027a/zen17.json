@@ -66,9 +66,9 @@
 		},
 		{
 			"#": "2",
-			"$if": "firmwareVersion >= 1.1",
-			"label": "Input Type for S1 Terminal",
-			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
+			"$if": "firmwareVersion < 1.4",
+			"label": "S1 Terminal: Input Type",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"unsigned": true,
@@ -117,73 +117,13 @@
 				{
 					"label": "On/off report (dry contact switch/sensor)",
 					"value": 10
-				},
-				{
-					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
-					"value": 11
 				}
 			]
 		},
 		{
 			"#": "2",
-			"$if": "firmwareVersion < 1.1",
-			"label": "Input Type for S1 Terminal",
-			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary switch",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle switch (change on toggle)",
-					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode)",
-					"value": 3
-				},
-				{
-					"label": "Water sensor",
-					"value": 4
-				},
-				{
-					"label": "Heat alarm",
-					"value": 5
-				},
-				{
-					"label": "Motion alert",
-					"value": 6
-				},
-				{
-					"label": "Door sensor (open/close)",
-					"value": 7
-				},
-				{
-					"label": "CO alarm",
-					"value": 8
-				},
-				{
-					"label": "CO2 alarm",
-					"value": 9
-				},
-				{
-					"label": "On/off report (dry contact switch/sensor)",
-					"value": 10
-				}
-			]
-		},
-		{
-			"#": "3",
-			"$if": "firmwareVersion >= 1.1",
-			"label": "Input Type for S2 Terminal",
+			"$if": "firmwareVersion >= 1.4",
+			"label": "S1 Terminal: Input Type",
 			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
 			"valueSize": 1,
 			"defaultValue": 1,
@@ -241,63 +181,8 @@
 			]
 		},
 		{
-			"#": "3",
-			"$if": "firmwareVersion < 1.1",
-			"label": "Input Type for S2 Terminal",
-			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Momentary switch",
-					"value": 0
-				},
-				{
-					"label": "Toggle switch (follow switch)",
-					"value": 1
-				},
-				{
-					"label": "Toggle switch (change on toggle)",
-					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode)",
-					"value": 3
-				},
-				{
-					"label": "Water sensor",
-					"value": 4
-				},
-				{
-					"label": "Heat alarm",
-					"value": 5
-				},
-				{
-					"label": "Motion alert",
-					"value": 6
-				},
-				{
-					"label": "Door sensor (open/close)",
-					"value": 7
-				},
-				{
-					"label": "CO alarm",
-					"value": 8
-				},
-				{
-					"label": "CO2 alarm",
-					"value": 9
-				},
-				{
-					"label": "On/off report (dry contact switch/sensor)",
-					"value": 10
-				}
-			]
-		},
-		{
 			"#": "19",
+			"$if": "firmwareVersion >= 1.10",
 			"label": "S1 Terminal: Invert Values",
 			"description": "Select the same value as you chose for parameter 2 to reverse the values for open and closed circuit",
 			"valueSize": 1,
@@ -340,7 +225,124 @@
 			]
 		},
 		{
+			"#": "3",
+			"$if": "firmwareVersion < 1.4",
+			"label": "S2 Terminal: Input Type",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-10",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (change on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode)",
+					"value": 3
+				},
+				{
+					"label": "Water sensor",
+					"value": 4
+				},
+				{
+					"label": "Heat alarm",
+					"value": 5
+				},
+				{
+					"label": "Motion alert",
+					"value": 6
+				},
+				{
+					"label": "Door sensor (open/close)",
+					"value": 7
+				},
+				{
+					"label": "CO alarm",
+					"value": 8
+				},
+				{
+					"label": "CO2 alarm",
+					"value": 9
+				},
+				{
+					"label": "On/off report (dry contact switch/sensor)",
+					"value": 10
+				}
+			]
+		},
+		{
+			"#": "3",
+			"$if": "firmwareVersion >= 1.4",
+			"label": "S2 Terminal: Input Type",
+			"description": "Note: The device must be excluded (without resetting it) and re-included after changing to/from values 4-11",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (change on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode)",
+					"value": 3
+				},
+				{
+					"label": "Water sensor",
+					"value": 4
+				},
+				{
+					"label": "Heat alarm",
+					"value": 5
+				},
+				{
+					"label": "Motion alert",
+					"value": 6
+				},
+				{
+					"label": "Door sensor (open/close)",
+					"value": 7
+				},
+				{
+					"label": "CO alarm",
+					"value": 8
+				},
+				{
+					"label": "CO2 alarm",
+					"value": 9
+				},
+				{
+					"label": "On/off report (dry contact switch/sensor)",
+					"value": 10
+				},
+				{
+					"label": "Garage door mode (momentary mode) for relay and door sensor (open/close) for input",
+					"value": 11
+				}
+			]
+		},
+		{
 			"#": "20",
+			"$if": "firmwareVersion >= 1.10",
 			"$import": "#paramInformation/19",
 			"label": "S2 Terminal: Invert Values",
 			"description": "Select the same value as you chose for parameter 3 to reverse the values for open and closed circuit"
