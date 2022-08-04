@@ -15003,15 +15003,18 @@ export class TimeCCTimeOffsetGet extends TimeCC {
 //
 // @public (undocumented)
 export class TimeCCTimeOffsetReport extends TimeCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "TimeCCTimeOffsetReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | TimeCCTimeOffsetReportOptions);
     // (undocumented)
-    get dstEndDate(): Date;
+    dstEndDate: Date;
     // (undocumented)
-    get dstOffset(): number;
+    dstOffset: number;
     // (undocumented)
-    get dstStartDate(): Date;
+    dstStartDate: Date;
     // (undocumented)
-    get standardOffset(): number;
+    serialize(): Buffer;
+    // (undocumented)
+    standardOffset: number;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry;
 }
@@ -15163,6 +15166,16 @@ export enum TimeParametersCommand {
     Report = 3,
     // (undocumented)
     Set = 1
+}
+
+// Warning: (ae-missing-release-tag) "Timezone" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface Timezone {
+    // (undocumented)
+    dstOffset: number;
+    // (undocumented)
+    standardOffset: number;
 }
 
 // Warning: (tsdoc-undefined-tag) The TSDoc tag "@publicAPI" is not defined in this configuration
