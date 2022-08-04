@@ -1,0 +1,52 @@
+name: Check public API surface
+
+# Run this workflow on all pull requests
+on:
+  pull_request: {}
+
+jobs:
+  # This job checks if a PR changes the public API surface
+  check-api-surface:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --immutable
+
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    - name: Generate API report
+      run: yarn run extract-api
+
+    - name: Show changes
+      if: failure()
+      run: |
+        cat packages/*/.tmp/api.md
+
+    - name: Comment on PR
+      if: failure()
+      run: |
+        echo "The public API surface has changed!" >> $GITHUB_STEP_SUMMARY
+        echo "Please run" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "yarn clean" >> $GITHUB_STEP_SUMMARY
+        echo "yarn build" >> $GITHUB_STEP_SUMMARY
+        echo "yarn extract-api --local" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "and review the changes, then commit them if desired." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
