@@ -6,6 +6,7 @@ runs:
   using: "composite"
   steps:
     - name: Compress build artifacts # Uploading or downloading many files takes ages
+      shell: bash
       run: tar -cvzf built.tgz packages/*/build packages/*/src packages/*/*.tsbuildinfo
 
     - name: Upload build artifacts to cache

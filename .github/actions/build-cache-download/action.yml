@@ -11,4 +11,5 @@ runs:
         name: built
 
     - name: Extract cached build artifacts
+      shell: bash
       run: tar -xvzf built.tgz && rm built.tgz
