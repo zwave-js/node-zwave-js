@@ -48,6 +48,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json --verbose",
+    "extract-api": "yarn api-extractor run",
     "clean": "tsc -b tsconfig.build.json --clean",
     "watch": "yarn run build --watch --pretty"
   },
@@ -61,6 +62,7 @@
     "winston": "^3.8.1"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "*",
     "@serialport/binding-mock": "^10.2.2",
     "@serialport/bindings-interface": "*",
     "@serialport/stream": "*",
