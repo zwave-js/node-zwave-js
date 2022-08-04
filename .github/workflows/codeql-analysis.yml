@@ -13,7 +13,7 @@ jobs:
   analyze:
     name: Analyze
     runs-on: ubuntu-latest
-    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
     permissions:
       actions: read
       contents: read
