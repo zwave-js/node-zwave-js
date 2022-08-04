@@ -42,14 +42,14 @@ jobs:
     - name: Compile TypeScript code
       run: yarn build
 
-    - name: Cache TypeScript build output
+    - name: Cache TypeScript build output (step 1)
+      run: tar -cvzf built.tgz packages/*/build packages/*/src packages/*/*.tsbuildinfo
+
+    - name: Cache TypeScript build output (step 2)
       uses: actions/upload-artifact@v3
       with:
         name: built
-        path: |
-          packages/*/src
-          packages/*/build
-          packages/*/*.tsbuildinfo
+        path: built.tgz
 
   lint:
     needs: [build]
@@ -72,11 +72,13 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Download cached TypeScript build output
+    - name: Download cached TypeScript build output (step 1)
       uses: actions/download-artifact@v3
       with:
         name: built
-        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
+
+    - name: Download cached TypeScript build output (step 2)
+      run: tar -xvzf built.tgz && rm built.tgz
 
     - name: Run linters
       run: yarn run lint
@@ -134,11 +136,13 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Download cached TypeScript build output
+    - name: Download cached TypeScript build output (step 1)
       uses: actions/download-artifact@v3
       with:
         name: built
-        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
+
+    - name: Download cached TypeScript build output (step 2)
+      run: tar -xvzf built.tgz && rm built.tgz
 
     - name: Lint config files
       run: yarn run lint:config
@@ -170,11 +174,13 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Download cached TypeScript build output
+    - name: Download cached TypeScript build output (step 1)
       uses: actions/download-artifact@v3
       with:
         name: built
-        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
+
+    - name: Download cached TypeScript build output (step 2)
+      run: tar -xvzf built.tgz && rm built.tgz
 
     # Test that the generated packages are ok
     - name: Import main entry points for each package
@@ -291,11 +297,13 @@ jobs:
     - name: Install dependencies
       run: yarn install --immutable
 
-    - name: Download cached TypeScript build output
+    - name: Download cached TypeScript build output (step 1)
       uses: actions/download-artifact@v3
       with:
         name: built
-        path: packages # If a wildcard pattern is used, the path hierarchy will be preserved after the first wildcard pattern
+
+    - name: Download cached TypeScript build output (step 2)
+      run: tar -xvzf built.tgz && rm built.tgz
 
     - name: Publish packages to npm
       env:
