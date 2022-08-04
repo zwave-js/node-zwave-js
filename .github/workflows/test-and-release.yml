@@ -226,7 +226,7 @@ jobs:
   gh-cc-table:
     name: Update CC implementation status
     # Only run for master branch
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     needs: [build]
 
@@ -260,7 +260,7 @@ jobs:
   generate-overview:
     name: Update toLogEntry overview
     # Only run for master branch
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
     needs: [build]
 
