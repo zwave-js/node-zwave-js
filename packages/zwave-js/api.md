@@ -79,6 +79,7 @@ import { NodeStatus } from '@zwave-js/core/safe';
 import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
+import { NodeUpdatePayload } from '@zwave-js/core';
 import { num2hex } from '@zwave-js/shared/safe';
 import { parseQRCodeString } from '@zwave-js/core';
 import { Powerlevel } from '@zwave-js/cc';
@@ -1084,6 +1085,7 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     get interviewAttempts(): number;
     interviewCC(cc: CommandClasses_2): Promise<void>;
     protected interviewCCs(): Promise<boolean>;
+    protected interviewNodeInfo(): Promise<void>;
     get interviewStage(): InterviewStage;
     set interviewStage(value: InterviewStage);
     get isControllerNode(): boolean;
@@ -1113,12 +1115,13 @@ export class ZWaveNode extends Endpoint implements SecurityClassOwner, IZWaveNod
     // (undocumented)
     get productType(): number | undefined;
     get protocolVersion(): ProtocolVersion_2 | undefined;
-    protected queryNodeInfo(): Promise<void>;
     protected queryProtocolInfo(): Promise<void>;
     get ready(): boolean;
     refreshCCValues(cc: CommandClasses_2): Promise<void>;
     refreshInfo(options?: RefreshInfoOptions): Promise<void>;
     refreshValues(): Promise<void>;
+    // (undocumented)
+    requestNodeInfo(): Promise<NodeUpdatePayload>;
     requiresManualValueRefresh(): boolean;
     // (undocumented)
     get sdkVersion(): string | undefined;
