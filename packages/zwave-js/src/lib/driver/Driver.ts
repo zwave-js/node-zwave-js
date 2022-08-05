@@ -82,6 +82,7 @@ import {
 	INodeQuery,
 	isNodeQuery,
 	isSuccessIndicator,
+	isZWaveSerialPortImplementation,
 	Message,
 	MessageHeaders,
 	MessageType,
@@ -408,10 +409,21 @@ export class Driver
 	implements ZWaveApplicationHost
 {
 	public constructor(
-		private port: string|ZWaveSerialPortImplementation,
+		private port: string | ZWaveSerialPortImplementation,
 		options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
+
+		// Ensure the given serial port is valid
+		if (
+			typeof port !== "string" &&
+			!isZWaveSerialPortImplementation(port)
+		) {
+			throw new ZWaveError(
+				`The port must be a string or a valid custom serial port implementation!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 
 		// merge given options with defaults
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
@@ -809,7 +821,7 @@ export class Driver
 		this.sendThread.start();
 
 		// Open the serial port
-		if (typeof this.port == 'string') {
+		if (typeof this.port === "string") {
 			if (this.port.startsWith("tcp://")) {
 				const url = new URL(this.port);
 				this.driverLog.print(`opening serial port ${this.port}`);
@@ -829,10 +841,12 @@ export class Driver
 				);
 			}
 		} else {
-			this.driverLog.print("using the provided serial port implementation");
+			this.driverLog.print(
+				"opening serial port using the provided custom implementation",
+			);
 			this.serial = new ZWaveSerialPortBase(
 				this.port,
-				this._logContainer
+				this._logContainer,
 			);
 		}
 		this.serial
