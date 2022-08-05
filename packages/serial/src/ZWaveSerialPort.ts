@@ -28,6 +28,8 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 					}),
 				open: (serial: SerialPort) =>
 					new Promise((resolve, reject) => {
+						let wasOpened = false;
+
 						const onClose = (err?: DisconnectError) => {
 							// detect serial disconnection errors
 							if (err?.disconnected === true) {
@@ -39,6 +41,15 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 										ZWaveErrorCodes.Driver_Failed,
 									),
 								);
+							} else if (!wasOpened) {
+								removeListeners(true);
+								reject(
+									err ??
+										new ZWaveError(
+											`Unknown error while opening the serial port`,
+											ZWaveErrorCodes.Driver_Failed,
+										),
+								);
 							}
 						};
 						const onError = (err: Error) => {
@@ -46,6 +57,7 @@ export class ZWaveSerialPort extends ZWaveSerialPortBase {
 							reject(err);
 						};
 						const onOpen = () => {
+							wasOpened = true;
 							removeListeners(false);
 							resolve();
 						};
