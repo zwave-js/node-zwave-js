@@ -82,11 +82,13 @@ import {
 	INodeQuery,
 	isNodeQuery,
 	isSuccessIndicator,
+	isZWaveSerialPortImplementation,
 	Message,
 	MessageHeaders,
 	MessageType,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
+	ZWaveSerialPortImplementation,
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
@@ -407,10 +409,21 @@ export class Driver
 	implements ZWaveApplicationHost
 {
 	public constructor(
-		private port: string,
+		private port: string | ZWaveSerialPortImplementation,
 		options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
+
+		// Ensure the given serial port is valid
+		if (
+			typeof port !== "string" &&
+			!isZWaveSerialPortImplementation(port)
+		) {
+			throw new ZWaveError(
+				`The port must be a string or a valid custom serial port implementation!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 
 		// merge given options with defaults
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
@@ -808,22 +821,32 @@ export class Driver
 		this.sendThread.start();
 
 		// Open the serial port
-		if (this.port.startsWith("tcp://")) {
-			const url = new URL(this.port);
-			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSocket(
-				{
-					host: url.hostname,
-					port: parseInt(url.port),
-				},
-				this._logContainer,
-			);
+		if (typeof this.port === "string") {
+			if (this.port.startsWith("tcp://")) {
+				const url = new URL(this.port);
+				this.driverLog.print(`opening serial port ${this.port}`);
+				this.serial = new ZWaveSocket(
+					{
+						host: url.hostname,
+						port: parseInt(url.port),
+					},
+					this._logContainer,
+				);
+			} else {
+				this.driverLog.print(`opening serial port ${this.port}`);
+				this.serial = new ZWaveSerialPort(
+					this.port,
+					this._logContainer,
+					this.options.testingHooks?.serialPortBinding,
+				);
+			}
 		} else {
-			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(
+			this.driverLog.print(
+				"opening serial port using the provided custom implementation",
+			);
+			this.serial = new ZWaveSerialPortBase(
 				this.port,
 				this._logContainer,
-				this.options.testingHooks?.serialPortBinding,
 			);
 		}
 		this.serial

@@ -147,6 +147,7 @@ import type { ZWaveNotificationCallbackParams_NotificationCC } from '@zwave-js/c
 import type { ZWaveNotificationCallbackParams_PowerlevelCC } from '@zwave-js/cc';
 import { ZWavePlusNodeType } from '@zwave-js/cc';
 import { ZWavePlusRoleType } from '@zwave-js/cc';
+import { ZWaveSerialPortImplementation } from '@zwave-js/serial';
 
 export { buffer2hex }
 
@@ -224,7 +225,7 @@ export class DeviceClass {
 export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements ZWaveApplicationHost {
     // (undocumented)
     [util.inspect.custom](): string;
-    constructor(port: string, options?: DeepPartial<ZWaveOptions>);
+    constructor(port: string | ZWaveSerialPortImplementation, options?: DeepPartial<ZWaveOptions>);
     get allNodesReady(): boolean;
     // (undocumented)
     readonly cacheDir: string;

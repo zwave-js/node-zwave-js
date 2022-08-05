@@ -385,6 +385,11 @@ export function isNodeQuery<T extends Message>(msg: T): msg is T & INodeQuery;
 // @public (undocumented)
 export function isSuccessIndicator<T extends Message>(msg: T): msg is T & SuccessIndicator;
 
+// Warning: (ae-missing-release-tag) "isZWaveSerialPortImplementation" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export function isZWaveSerialPortImplementation(obj: unknown): obj is ZWaveSerialPortImplementation;
+
 // Warning: (ae-missing-release-tag) "Message" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
