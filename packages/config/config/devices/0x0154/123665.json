@@ -84,7 +84,7 @@
 		},
 		{
 			"#": "11",
-			"label": "Disable Switching Funktion",
+			"label": "Disable Switching Function",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

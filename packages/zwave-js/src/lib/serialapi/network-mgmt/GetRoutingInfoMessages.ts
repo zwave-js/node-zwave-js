@@ -1,4 +1,8 @@
-import { MessageOrCCLogEntry, NUM_NODEMASK_BYTES } from "@zwave-js/core";
+import {
+	MessageOrCCLogEntry,
+	MessagePriority,
+	NUM_NODEMASK_BYTES,
+} from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	expectedResponse,
@@ -6,12 +10,10 @@ import {
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import type { JSONObject } from "@zwave-js/shared";
 import { parseNodeBitMask } from "../../controller/NodeBitMask";
 
 interface GetRoutingInfoRequestOptions extends MessageBaseOptions {
@@ -43,14 +45,6 @@ export class GetRoutingInfoRequest extends Message {
 			0, // callbackId - this must be 0 as per the docs
 		]);
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			nodeId: this.sourceNodeId,
-			removeNonRepeaters: this.removeNonRepeaters,
-			removeBadLinks: this.removeBadLinks,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

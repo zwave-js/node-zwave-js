@@ -9,7 +9,7 @@ import { install as installSourceMapSupport } from "source-map-support";
 installSourceMapSupport();
 
 // Export some frequently-used things and types - this also loads all CC files including metadata
-export * from "./CommandClass";
+export * from "@zwave-js/cc";
 export * from "./Controller";
 export * from "./Driver";
 export * from "./Error";

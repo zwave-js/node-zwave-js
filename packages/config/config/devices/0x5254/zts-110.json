@@ -45,7 +45,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Differntial",
+			"label": "Differential",
 			"description": "Set Differential value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
 			"valueSize": 1,
 			"minValue": 1,

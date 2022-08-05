@@ -1,6 +1,7 @@
+import { BasicCCSet } from "@zwave-js/cc";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import { BasicCCSet } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createAndStartDriver } from "../utils";
@@ -36,7 +37,10 @@ describe("regression tests", () => {
 			isFunctionSupported_NoBridge;
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
@@ -92,14 +96,17 @@ describe("regression tests", () => {
 		driver["_controller"]!.isFunctionSupported = isFunctionSupported_All;
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node2["_isListening"] = true;
-		node2["_isFrequentListening"] = false;
+		node2["isListening"] = true;
+		node2["isFrequentListening"] = false;
 		node2.markAsAlive();
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);

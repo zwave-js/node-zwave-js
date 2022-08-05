@@ -1,9 +1,10 @@
 import type { LogConfig } from "@zwave-js/core";
-import type { FileSystem } from "@zwave-js/host";
+import type { FileSystem, ZWaveHostOptions } from "@zwave-js/host";
 import type { ZWaveSerialPortBase } from "@zwave-js/serial";
 import type { SerialPort } from "serialport";
+import type { InclusionUserCallbacks } from "../controller/Inclusion";
 
-export interface ZWaveOptions {
+export interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
@@ -117,12 +118,6 @@ export interface ZWaveOptions {
 	};
 
 	/**
-	 * @deprecated Use `securityKeys.S0_Legacy` instead
-	 * Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes.
-	 */
-	networkKey?: Buffer;
-
-	/**
 	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
 	 */
 	securityKeys?: {
@@ -131,6 +126,12 @@ export interface ZWaveOptions {
 		S2_AccessControl?: Buffer;
 		S0_Legacy?: Buffer;
 	};
+
+	/**
+	 * Defines the callbacks that are necessary to trigger user interaction during S2 inclusion.
+	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
+	 */
+	inclusionUserCallbacks?: InclusionUserCallbacks;
 
 	/**
 	 * Some Command Classes support reporting that a value is unknown.
@@ -198,6 +199,11 @@ export interface ZWaveOptions {
 		 * ```
 		 */
 		scales: Partial<Record<string | number, string | number>>;
+	};
+
+	apiKeys?: {
+		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
+		firmwareUpdateService?: string;
 	};
 
 	/** @internal Used for testing internally */

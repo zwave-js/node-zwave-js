@@ -30,16 +30,19 @@ export function parseBoolean(val: number): boolean | undefined {
 	return val === 0 ? false : val === 0xff ? true : undefined;
 }
 
+/** Encodes a boolean that is encoded as a single byte */
+export function encodeBoolean(val: boolean): number {
+	return val ? 0xff : 0;
+}
+
+/** Encodes a boolean that is encoded as a single byte and might also be "unknown" */
+export function encodeMaybeBoolean(val: Maybe<boolean>): number {
+	return val === "unknown" ? 0xfe : val ? 0xff : 0;
+}
+
 /** Parses a single-byte number from 0 to 99, which might also be "unknown" */
-export function parseMaybeNumber(
-	val: number,
-	preserveUnknown: boolean = true,
-): Maybe<number> | undefined {
-	return val === 0xfe
-		? preserveUnknown
-			? unknownNumber
-			: undefined
-		: parseNumber(val);
+export function parseMaybeNumber(val: number): Maybe<number> | undefined {
+	return val === 0xfe ? unknownNumber : parseNumber(val);
 }
 
 /** Parses a single-byte number from 0 to 99 */

@@ -1,5 +1,7 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
+	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -14,13 +16,11 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import { TransmitStatus } from "../../controller/_Types";
+import { getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.AssignReturnRoute)
 @priority(MessagePriority.Normal)
@@ -104,12 +104,6 @@ export class AssignReturnRouteResponse
 
 	public readonly hasStarted: boolean;
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			hasStarted: this.hasStarted,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -139,13 +133,6 @@ export class AssignReturnRouteRequestTransmitReport
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

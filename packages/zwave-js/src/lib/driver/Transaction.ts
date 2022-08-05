@@ -1,6 +1,5 @@
-import { highResTimestamp } from "@zwave-js/core";
+import { highResTimestamp, MessagePriority } from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
-import { MessagePriority } from "@zwave-js/serial";
 import {
 	Comparable,
 	compareNumberOrString,
@@ -35,11 +34,11 @@ export interface TransactionOptions {
 }
 
 /**
- * Transactions are used to track and correllate messages with their responses.
+ * Transactions are used to track and correlate messages with their responses.
  */
 export class Transaction implements Comparable<Transaction> {
 	public constructor(
-		private readonly driver: Driver,
+		public readonly driver: Driver,
 		private readonly options: TransactionOptions,
 	) {
 		// Give the message generator a reference to this transaction
@@ -109,12 +108,12 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {
-		function compareWakeUpPriority(
+		const compareWakeUpPriority = (
 			_this: Transaction,
 			_other: Transaction,
-		): CompareResult | undefined {
-			const thisNode = _this.message.getNodeUnsafe();
-			const otherNode = _other.message.getNodeUnsafe();
+		): CompareResult | undefined => {
+			const thisNode = _this.message.getNodeUnsafe(this.driver);
+			const otherNode = _other.message.getNodeUnsafe(this.driver);
 
 			// We don't require existence of the node object
 			// If any transaction is not for a node, it targets the controller
@@ -126,7 +125,7 @@ export class Transaction implements Comparable<Transaction> {
 			// Asleep nodes always have the lowest priority
 			if (thisIsAsleep && !otherIsAsleep) return 1;
 			if (otherIsAsleep && !thisIsAsleep) return -1;
-		}
+		};
 
 		// delay messages for sleeping nodes
 		if (this.priority === MessagePriority.WakeUp) {
@@ -137,12 +136,12 @@ export class Transaction implements Comparable<Transaction> {
 			if (result != undefined) return -result as CompareResult;
 		}
 
-		function compareNodeQueryPriority(
+		const compareNodeQueryPriority = (
 			_this: Transaction,
 			_other: Transaction,
-		): CompareResult | undefined {
-			const thisNode = _this.message.getNodeUnsafe();
-			const otherNode = _other.message.getNodeUnsafe();
+		): CompareResult | undefined => {
+			const thisNode = _this.message.getNodeUnsafe(this.driver);
+			const otherNode = _other.message.getNodeUnsafe(this.driver);
 			if (thisNode && otherNode) {
 				// Both nodes exist
 				const thisListening =
@@ -153,7 +152,7 @@ export class Transaction implements Comparable<Transaction> {
 				if (thisListening && !otherListening) return -1;
 				if (!thisListening && otherListening) return 1;
 			}
-		}
+		};
 
 		// delay NodeQuery messages for non-listening nodes
 		if (this.priority === MessagePriority.NodeQuery) {

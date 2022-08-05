@@ -108,7 +108,7 @@
 		{
 			"#": "8",
 			"label": "Switch type",
-			"description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim",
+			"description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switches operate the device(S1 to brighter, S2 to dim",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -123,7 +123,7 @@
 					"value": 1
 				},
 				{
-					"label": "roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim)",
+					"label": "roller blind switch-two switches operate the device(S1 to brighter, S2 to dim)",
 					"value": 2
 				}
 			]
@@ -131,7 +131,7 @@
 		{
 			"#": "9",
 			"label": "Switch functionality of S1 and S2",
-			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
+			"description": "Set the desired value from 0 to 1 to turn on/off the memory function. Setting this value to 0 turns off the dimmer's Memory function. Setting this value to 1 turns on the dimmer's Memory function.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

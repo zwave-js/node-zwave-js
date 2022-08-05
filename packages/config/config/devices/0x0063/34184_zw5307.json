@@ -17,24 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Adjust Refresh",
-			"description": "Adjusts refresh time from 1-55 seconds",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 55,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Default - 10 seconds",
-					"value": 0
-				},
-				{
-					"label": "Seconds",
-					"value": 55
-				}
-			]
+			"$import": "templates/jasco_template.json#adjust_refresh"
 		}
 	],
 	"metadata": {

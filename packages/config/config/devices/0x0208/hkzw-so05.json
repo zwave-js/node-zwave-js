@@ -80,7 +80,7 @@
 		{
 			"#": "151",
 			"label": "Power Report Threshold",
-			"description": "Power threashold for when to send reports to associated devices",
+			"description": "Power threshold for when to send reports to associated devices",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,

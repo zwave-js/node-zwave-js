@@ -39,7 +39,7 @@ The options parameter is used to specify the inclusion strategy and provide call
     **Not recommended**, because S2 should be used where possible.
 
 -   `InclusionStrategy.Security_S0`: Use _Security S0_, even if a higher security mode is supported. Issues a warning if _Security S0_ is not supported or the secure bootstrapping fails.  
-    **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+    **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 
 -   `InclusionStrategy.Security_S2`: Use _Security S2_ and issue a warning if it is not supported or the secure bootstrapping fails.  
     **Not recommended** because `Default` is more versatile and less complicated for the user.
@@ -57,7 +57,6 @@ Depending on the chosen inclusion strategy, the options object requires addition
 type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
-			userCallbacks: InclusionUserCallbacks;
 			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
@@ -66,11 +65,12 @@ type InclusionOptions =
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
-	  }
-	| {
-			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			/**
+			 * The optional provisioning entry for the device to be included.
+			 * If not given, the inclusion user callbacks of the driver options
+			 * will be used.
+			 */
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -79,7 +79,7 @@ type InclusionOptions =
 	  };
 ```
 
-For inclusion with _Security S2_, this includes callbacks into the application which are defined as follows:
+For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They are defined as follows:
 
 <!-- #import InclusionUserCallbacks from "zwave-js" -->
 
@@ -144,6 +144,8 @@ enum SecurityClass {
 }
 ```
 
+> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI must not be linked to an application-initiated inclusion.
+
 Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
 
 ```ts
@@ -169,12 +171,40 @@ Stops the inclusion process for a new node. The returned promise resolves to `tr
 ### `beginExclusion`
 
 ```ts
-async beginExclusion(unprovision?: boolean | "inactive"): Promise<boolean>
+async beginExclusion(options?: ExclusionOptions): Promise<boolean>
 ```
 
 Starts the exclusion process to remove a node from the network. The returned promise resolves to `true` if starting the exclusion was successful, `false` if it failed or if it was already active.
 
-The optional parameter `unprovision` specifies whether the removed node should be removed from the Smart Start provisioning list as well. A value of `"inactive"` will keep the provisioning entry, but disable it, preventing automatic inclusion of the corresponding nodes.
+The optional `options` parameter specifies further actions like removing or disabling the node's Smart Start provisioning entries:
+
+<!-- #import ExclusionOptions from "zwave-js" -->
+
+```ts
+type ExclusionOptions = {
+	strategy:
+		| ExclusionStrategy.ExcludeOnly
+		| ExclusionStrategy.DisableProvisioningEntry
+		| ExclusionStrategy.Unprovision;
+};
+```
+
+where the strategy is one of the following values:
+
+<!-- #import ExclusionStrategy from "zwave-js" with comments -->
+
+```ts
+enum ExclusionStrategy {
+	/** Exclude the node, keep the provisioning entry untouched */
+	ExcludeOnly,
+	/** Disable the node's Smart Start provisioning entry, but do not remove it */
+	DisableProvisioningEntry,
+	/** Remove the node from the Smart Start provisioning list  */
+	Unprovision,
+}
+```
+
+> [!NOTE] The default behavior is disabling the provisioning entry.
 
 ### `stopExclusion`
 
@@ -709,6 +739,59 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 
 > [!WARNING] A failure during this process may brick your controller. Use at your own risk!
 
+### `getAvailableFirmwareUpdates`
+
+```ts
+getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>
+```
+
+Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
+
+<!-- #import FirmwareUpdateInfo from "zwave-js" -->
+
+```ts
+type FirmwareUpdateInfo = {
+	version: string;
+	changelog: string;
+	files: FirmwareUpdateFileInfo[];
+};
+```
+
+where each entry in `files` looks like this:
+
+<!-- #import FirmwareUpdateFileInfo from "zwave-js" -->
+
+```ts
+interface FirmwareUpdateFileInfo {
+	target: number;
+	url: string;
+	integrity: `sha256:${string}`;
+}
+```
+
+The `version` and `changelog` are meant to be presented to the user prior to choosing an update.
+
+Many Z-Wave devices only have a single upgradeable firmware target (chip), so the `files` array will usually contain a single entry. If there are more, the user needs to select one.
+
+> [!WARNING] This method **does not** rely on cached data to identify a node, so sleeping nodes need to be woken up for this to work. If a sleeping node is not woken up within a minute after calling this, the method will throw.
+
+> [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
+
+> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+
+### `beginOTAFirmwareUpdate`
+
+```ts
+beginOTAFirmwareUpdate(nodeId: number, update: FirmwareUpdateFileInfo): Promise<void>
+```
+
+> [!WARNING] We don't take any responsibility if devices upgraded using Z-Wave JS don't work after an update. Always double-check that the correct update is about to be installed.
+
+Downloads the desired firmware update from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/) and starts an over-the-air (OTA) firmware update for the given node.  
+This is very similar to [`ZWaveNode.beginFirmwareUpdate`](api/node#beginfirmwareupdate), except that the updates are officially provided by manufacturers and downloaded in the background.
+
+> [!NOTE] Calling this will result in an HTTP request to the URL contained in the `update` parameter.
+
 ### `isAnyOTAFirmwareUpdateInProgress`
 
 ```ts
@@ -841,7 +924,7 @@ enum InclusionState {
 
 ## Controller events
 
-The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are available:
 
 ### `"inclusion started"`
 
@@ -873,7 +956,18 @@ A node has successfully been added to the network.
 > [!NOTE] At this point, the initial setup and the node interview is still pending, so the node is **not yet operational**.
 
 ```ts
-(node: ZWaveNode) => void
+(node: FoundNode) => void
+```
+
+<!-- #import FoundNode from "zwave-js" -->
+
+```ts
+interface FoundNode {
+	id: number;
+	deviceClass?: DeviceClass;
+	supportedCCs?: CommandClasses[];
+	controlledCCs?: CommandClasses[];
+}
 ```
 
 ### `"node added"`

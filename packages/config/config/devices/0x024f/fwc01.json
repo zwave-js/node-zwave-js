@@ -382,7 +382,7 @@
 		},
 		{
 			"#": "64",
-			"label": "Temperature Report Inteval",
+			"label": "Temperature Report Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

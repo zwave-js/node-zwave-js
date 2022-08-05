@@ -16,22 +16,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when switch is OFF",
-					"value": 1
-				},
-				{
-					"label": "LED Light Always ON",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	]
 }

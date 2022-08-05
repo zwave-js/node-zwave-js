@@ -32,13 +32,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Auto-Off Timer",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 36000,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/minoston_template.json#auto_off_timer_36000s"
 		}
 	],
 	"metadata": {

@@ -34,30 +34,11 @@
 		},
 		{
 			"#": "4",
-			"label": "Switch Orientation",
-			"description": "Invert on & off on the physical switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Up=ON, Down=OFF",
-					"value": 0
-				},
-				{
-					"label": "Up=OFF, Down=ON",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "5",
-			"label": "Shutoff Timer",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 0,
-			"maxValue": 32767,
-			"defaultValue": 0
+			"$import": "templates/minoston_template.json#auto_off_timer_32767s"
 		}
 	]
 }

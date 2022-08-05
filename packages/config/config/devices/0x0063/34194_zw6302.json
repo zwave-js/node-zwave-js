@@ -17,86 +17,19 @@
 	"paramInformation": [
 		{
 			"#": "13",
-			"label": "Pir Sensitiivity Setting",
-			"description": "You can modify the sensitivity of PIR if changing the value in parameter 13",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Medium sensitivity",
-					"value": 2
-				},
-				{
-					"label": "High sensitivity",
-					"value": 3
-				},
-				{
-					"label": "Low sensitivity",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#pir_sensitivity"
 		},
 		{
 			"#": "18",
-			"label": "Pir Timeout Duration",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 4,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "1 min to 60 min",
-					"value": 60
-				},
-				{
-					"label": "5 seconds",
-					"value": 255
-				}
-			]
+			"$import": "templates/jasco_template.json#pir_timeout_duration"
 		},
 		{
 			"#": "20",
-			"label": "Basic Set, Notification And Basic Report",
-			"description": "Changing parameter 20 can let the motion sensor send out \"Basic Set\" command or \"basic report\" command or \"notification\" report to Z-Wave devices",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Motion sensor will send out notification",
-					"value": 1
-				},
-				{
-					"label": "Motion sensor will send out Basic Set",
-					"value": 2
-				},
-				{
-					"label": "Motion sensor will sendout basic report",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#report_method"
 		},
 		{
 			"#": "28",
-			"label": "LED Indication When PIR Is Triggered",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#led_indication"
 		}
 	],
 	"metadata": {

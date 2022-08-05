@@ -1,14 +1,10 @@
 import {
 	createDefaultTransportFormat,
 	getDirectionPrefix,
+	MessagePriority,
 	ZWaveLogContainer,
 } from "@zwave-js/core";
-import {
-	FunctionType,
-	Message,
-	MessagePriority,
-	MessageType,
-} from "@zwave-js/serial";
+import { FunctionType, Message, MessageType } from "@zwave-js/serial";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
@@ -79,6 +75,7 @@ describe("lib/log/Driver =>", () => {
 		spyTransport = new SpyTransport();
 		spyTransport.format = createDefaultTransportFormat(true, true);
 		driverLogger = new DriverLogger(
+			driver,
 			new ZWaveLogContainer({
 				transports: [spyTransport],
 			}),

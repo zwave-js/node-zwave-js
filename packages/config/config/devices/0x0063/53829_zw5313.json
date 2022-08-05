@@ -33,22 +33,7 @@
 	"paramInformation": [
 		{
 			"#": "2",
-			"label": "Control Groups 2 & 3",
-			"description": "Determines whether Groups 2 & 3 are operational.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal operation",
-					"value": 0
-				},
-				{
-					"label": "Disable Groups 2 and 3",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#control_groups"
 		}
 	],
 	"compat": {

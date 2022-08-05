@@ -128,6 +128,8 @@ export enum CommandClasses {
 	"Z/IP ND" = 0x58,
 	"Z/IP Portal" = 0x61,
 	"Z-Wave Plus Info" = 0x5e,
+	// Internal CC which is not used directly by applications
+	"Z-Wave Protocol" = 0x01,
 }
 
 export function getCCName(cc: number): string {
@@ -141,7 +143,7 @@ export const allCCs: readonly CommandClasses[] = Object.freeze(
 	Object.keys(CommandClasses)
 		.filter((key) => /^\d+$/.test(key))
 		.map((key) => parseInt(key))
-		.filter((key) => key >= 0),
+		.filter((key) => key >= 0 && key !== CommandClasses["Z-Wave Protocol"]),
 );
 
 /**

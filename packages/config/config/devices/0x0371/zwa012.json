@@ -92,7 +92,7 @@
 		},
 		{
 			"#": "3",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "State when magnet is close to sensor",
 			"options": [
 				{
@@ -168,7 +168,7 @@
 		},
 		{
 			"#": "16",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Tilt sensor polarity when sensor is vertical",
 			"options": [
 				{

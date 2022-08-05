@@ -17,191 +17,43 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Timeout Duration",
-			"description": "Amount of time the light stays on after motion stops",
-			"valueSize": 1,
-			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Test (5s)",
-					"value": 0
-				},
-				{
-					"label": "1 minute",
-					"value": 1
-				},
-				{
-					"label": "5 minutes",
-					"value": 5
-				},
-				{
-					"label": "15 minutes",
-					"value": 15
-				},
-				{
-					"label": "30 minutes",
-					"value": 30
-				},
-				{
-					"label": "Disable timeout",
-					"value": 255
-				}
-			]
+			"$import": "templates/jasco_template.json#timeout_duration"
 		},
 		{
 			"#": "2",
-			"label": "Change Brightness of Associated Light Bulb(s)",
-			"description": "255 = last dimming level",
-			"valueSize": 1,
-			"minValue": 255,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#dim_level"
 		},
 		{
 			"#": "3",
-			"label": "Operation Mode",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Manual",
-					"value": 1
-				},
-				{
-					"label": "Vacancy",
-					"value": 2
-				},
-				{
-					"label": "Occupancy",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#operation_mode"
 		},
 		{
 			"#": "4",
-			"label": "Enable/Disable Association Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#association_mode"
 		},
 		{
 			"#": "5",
-			"label": "Invert Switch",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal orientation",
-					"value": 0
-				},
-				{
-					"label": "Inverted switch",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "6",
-			"label": "Enable/Disable Motion Sensor",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#motion_sensor"
 		},
 		{
 			"#": "13",
-			"label": "Motion Sensor Sensitivity",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High",
-					"value": 1
-				},
-				{
-					"label": "Medium",
-					"value": 2
-				},
-				{
-					"label": "Low",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#motion_sensitivity"
 		},
 		{
 			"#": "14",
-			"label": "Enable/Disable Light Sensing",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#light_sensor"
 		},
 		{
 			"#": "15",
-			"label": "Reset Cycle",
-			"valueSize": 1,
-			"unit": "15 seconds",
-			"minValue": 0,
-			"maxValue": 110,
-			"defaultValue": 2,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#reset_cycle"
 		},
 		{
 			"#": "19",
-			"label": "Exclusion Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal exclusion",
-					"value": 0
-				},
-				{
-					"label": "Press and release 'x', then 'on'",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#alternate_exclusion_m"
 		}
 	],
 	"metadata": {

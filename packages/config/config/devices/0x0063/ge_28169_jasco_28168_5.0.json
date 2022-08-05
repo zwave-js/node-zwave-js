@@ -20,26 +20,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"description": "Set the state of the LED Light",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "LED Light on when Z-Wave turned OFF",
-					"value": 0
-				},
-				{
-					"label": "LED Light on when Z-Wave turned On",
-					"value": 1
-				},
-				{
-					"label": "LED Light Always Off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	]
 }

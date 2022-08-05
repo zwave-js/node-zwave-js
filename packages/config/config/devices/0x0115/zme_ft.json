@@ -110,7 +110,7 @@
 		{
 			"#": "10",
 			"label": "Typical click timeout",
-			"description": "Typical time used to differenciate click from hold",
+			"description": "Typical time used to differentiate click from hold",
 			"unit": "in 10ms",
 			"valueSize": 1,
 			"minValue": 1,

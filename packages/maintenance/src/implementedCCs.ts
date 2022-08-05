@@ -39,11 +39,7 @@ interface CCInfo {
 }
 
 (async () => {
-	const ccDir = path.join(
-		__dirname,
-		"../..",
-		"zwave-js/src/lib/commandclass",
-	);
+	const ccDir = path.join(__dirname, "../..", "cc/src/cc");
 	const ccFiles = (await fs.readdir(ccDir))
 		.filter((file) => file.endsWith(".ts") && !file.endsWith("test.ts"))
 		.map((file) => path.join(ccDir, file));

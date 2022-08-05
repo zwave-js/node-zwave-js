@@ -256,7 +256,7 @@
 		{
 			"#": "24",
 			"label": "Metering Heartbeat",
-			"description": "Reporting intervall for power and energy to lifeline.",
+			"description": "Reporting interval for power and energy to lifeline.",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,

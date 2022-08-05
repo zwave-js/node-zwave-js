@@ -1,0 +1,201 @@
+{
+	"manufacturer": "SmartDHOME",
+	"manufacturerId": "0x044c",
+	"label": "MyOT v2",
+	"description": "OpenTherm Actuator v2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Boiler: Maximum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "2",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Boiler: Minimum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "30",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Domestic Hot Water"
+		},
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Domestic Hot Water: Maximum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Domestic Hot Water: Minimum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Cool: Maximum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#base_0-100_nounit",
+			"label": "Cool: Minimum Setpoint",
+			"unit": "°C",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "10",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Flag",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "11",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Code",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "12",
+			"$import": "~/templates/master_template.json#base_0-255_nounit",
+			"label": "Current Error Sub Code",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "20",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Pump State",
+			"readOnly": true
+		},
+		{
+			"#": "21",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Compressor State",
+			"readOnly": true
+		},
+		{
+			"#": "22",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Operation Mode",
+			"readOnly": true
+		},
+		{
+			"#": "31",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Summer Mode"
+		},
+		{
+			"#": "50",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Load Power",
+			"unit": "0.01 W",
+			"readOnly": true
+		},
+		{
+			"#": "51",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Battery Voltage Output",
+			"unit": "0.01 V",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "52",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Battery Current Output",
+			"unit": "0.01 A",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "53",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Battery Power Output",
+			"unit": "0.01 W",
+			"readOnly": true
+		},
+		{
+			"#": "61",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "PV Voltage Output",
+			"unit": "0.01 V",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "62",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "PV Current Output",
+			"unit": "0.01 A",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "63",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "PV Power Output",
+			"unit": "0.01 W",
+			"readOnly": true
+		},
+		{
+			"#": "90",
+			"label": "ID",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4294967295,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true
+		},
+		{
+			"#": "91",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Version",
+			"valueSize": 2,
+			"readOnly": true
+		},
+		{
+			"#": "92",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Modbus Address",
+			"valueSize": 2
+		},
+		{
+			"#": "93",
+			"$import": "~/templates/master_template.json#base_0-65535",
+			"label": "Modbus Library",
+			"valueSize": 2
+		}
+	],
+	"metadata": {
+		"inclusion": "By pressing the FUNCTIONS button for 8 seconds",
+		"exclusion": "By pressing the FUNCTIONS button for 8 seconds"
+	}
+}

@@ -5,6 +5,12 @@ export enum Protocols {
 	ZWaveLongRange = 1,
 }
 
+export enum ZWaveDataRate {
+	"9k6" = 0x01,
+	"40k" = 0x02,
+	"100k" = 0x03,
+}
+
 export enum ProtocolDataRate {
 	ZWave_9k6 = 0x01,
 	ZWave_40k = 0x02,

@@ -312,7 +312,7 @@ Templates defined in the manufacturer-specific template should be built on top o
 	"enable_deadbolt_alarm": {
 		"$import": "../../templates/master_template.json#base_enable_disable",
 		"label": "Deadbolt Alarm",
-		"defaultValue": 1 // Note that ordinarily 0 is the default value for the base, but this paramter requires a default of 1.
+		"defaultValue": 1 // Note that ordinarily 0 is the default value for the base, but this parameter requires a default of 1.
 	},
 ```
 

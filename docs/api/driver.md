@@ -10,7 +10,7 @@ new (port: string, options?: ZWaveOptions) => Driver
 
 The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility), see [Connect to a hosted serial port over TCP](usage/tcp-connection.md).
 
-For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desription.
+For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed description.
 
 ## Driver methods
 
@@ -179,7 +179,7 @@ The behavior of this method strongly depends on the message that should be sent:
 ### `sendCommand`
 
 ```ts
-async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOptions): Promise<TResponse | undefined>
+async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOptions): Promise<SendCommandReturnType<TResponse>>
 ```
 
 This method sends a command to a Z-Wave node. It takes two arguments:
@@ -187,26 +187,15 @@ This method sends a command to a Z-Wave node. It takes two arguments:
 -   `command` - An instance of the command class that should be sent
 -   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendCommandOptions`](#SendCommandOptions) for a detailed description.
 
-If it is known in advance which type the response will have, you can optionally pass the desired return type.
+The return value depends on several factors:
+
+-   If the node returns a command in response, that command will be the return value.
+-   If the command is a SET-type command and `Supervision CC` can and should be used, the command will be sent using supervision and a [`SupervisionResult`](#SupervisionResult) will be returned.
+-   If the command expects no response **or** the response times out, `undefined` will be returned.
+
+If it is known in advance which type the response will have, you can optionally pass the desired response type to help TypeScript infer the return type of the method.
 
 Internally, it wraps the command in a `SendDataRequest` and calls `sendMessage` with it. Anything that applies to `sendMethod` is therefore true for `sendCommand`.
-
-### `sendSupervisedCommand / trySendCommandSupervised`
-
-```ts
-async sendSupervisedCommand(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult>
-```
-
-Sends a supervised command to a Z-Wave node. When status updates are requested (default: `false`), the passed callback will be executed for every non-final update.
-Internally, it wraps the command in a `Supervision CC` and calls `sendCommand` with it.
-
-For convenience you can use `trySendCommandSupervised` if you don't want to check if `Supervision CC` is supported before each command. It has the following signature:
-
-```ts
-trySendCommandSupervised(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult | undefined>
-```
-
-If `Supervision CC` is not supported, the returned promise resolves to `undefined`.
 
 ### `waitForMessage`
 
@@ -454,7 +443,7 @@ interface SendMessageOptions {
 
 The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
-<!-- #import MessagePriority from "@zwave-js/serial" with comments -->
+<!-- #import MessagePriority from "@zwave-js/core" with comments -->
 
 ```ts
 enum MessagePriority {
@@ -542,13 +531,13 @@ The RSSI is either a number indicating the value in dBm or one of the special va
 <!-- #import RSSI from "zwave-js" -->
 
 ```ts
-type RSSI = number | RssiError;
+declare type RSSI = number | RssiError;
 ```
 
 <!-- #import RssiError from "zwave-js" -->
 
 ```ts
-enum RssiError {
+declare enum RssiError {
 	NotAvailable = 127,
 	ReceiverSaturated = 126,
 	NoSignalDetected = 125,
@@ -568,43 +557,38 @@ declare enum ProtocolDataRate {
 
 ### `SendCommandOptions`
 
-Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
+Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) and [`SupervisionOptions`](#SupervisionOptions) plus the following:
 
 -   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
 -   `autoEncapsulate: boolean` - _(optional)_ Whether the driver should automatically handle the encapsulation. Defaults to `true` and should be kept that way unless there is a good reason not to.
 -   `transmitOptions: TransmitOptions` - _(optional)_ Override the default transmit options, e.g. turning off routing. Should be kept on default unless there is a good reason not to.
 
-### `SendSupervisedCommandOptions`
+### `SupervisionOptions`
 
-Influences the behavior of `driver.sendSupervisedCommand`. Has all the properties of [`SendCommandOptions`](#SendCommandOptions) plus the following:
+Configures how `driver.sendCommand` deals with supervised commands. It is an object with the following properties:
 
--   `requestStatusUpdates: boolean` - Whether status updates should be requested.
--   `onUpdate: SupervisionUpdateHandler` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
+-   `useSupervision: "auto" | false` - _(optional)_ Whether supervision may be used. `false` disables supervision. The default `"auto"` lets the driver decide.
 
-The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?: Duration) => void` where `SupervisionStatus` is defined as follows:
-
-<!-- #import SupervisionStatus from "zwave-js" -->
-
-```ts
-enum SupervisionStatus {
-	NoSupport = 0x00,
-	Working = 0x01,
-	Fail = 0x02,
-	Success = 0xff,
-}
-```
+-   `requestStatusUpdates: boolean` - _(optional, only if `useSupervision` is not `false`)_ Whether status updates for long-running commands should be requested.
+-   `onUpdate: (update: SupervisionResult) => void` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
 
 ### `SupervisionResult`
 
-Is used to report the status of a supervised command execution.
-
-<!-- #import SupervisionResult from "zwave-js" -->
+<!-- #import SupervisionResult from "@zwave-js/core" -->
 
 ```ts
-interface SupervisionResult {
-	status: SupervisionStatus;
-	remainingDuration?: Duration;
-}
+type SupervisionResult =
+	| {
+			status:
+				| SupervisionStatus.NoSupport
+				| SupervisionStatus.Fail
+				| SupervisionStatus.Success;
+			remainingDuration?: undefined;
+	  }
+	| {
+			status: SupervisionStatus.Working;
+			remainingDuration: Duration;
+	  };
 ```
 
 ### `ZWaveOptions`
@@ -614,7 +598,7 @@ This interface specifies the optional options object that is passed to the `Driv
 <!-- #import ZWaveOptions from "zwave-js" with comments -->
 
 ````ts
-interface ZWaveOptions {
+interface ZWaveOptions extends ZWaveHostOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
@@ -707,6 +691,7 @@ interface ZWaveOptions {
 		 */
 		throttle: "fast" | "normal" | "slow";
 	};
+
 	/**
 	 * Specify the security keys to use for encryption. Each one must be a Buffer of exactly 16 bytes.
 	 */
@@ -716,6 +701,12 @@ interface ZWaveOptions {
 		S2_AccessControl?: Buffer;
 		S0_Legacy?: Buffer;
 	};
+
+	/**
+	 * Defines the callbacks that are necessary to trigger user interaction during S2 inclusion.
+	 * If not given, nodes won't be included using S2, unless matching provisioning entries exists.
+	 */
+	inclusionUserCallbacks?: InclusionUserCallbacks;
 
 	/**
 	 * Some Command Classes support reporting that a value is unknown.
@@ -784,6 +775,11 @@ interface ZWaveOptions {
 		 */
 		scales: Partial<Record<string | number, string | number>>;
 	};
+
+	apiKeys?: {
+		/** API key for the Z-Wave JS Firmware Update Service (https://github.com/zwave-js/firmware-updates/) */
+		firmwareUpdateService?: string;
+	};
 }
 ````
 
@@ -795,5 +791,5 @@ For more control over writing the cache files, you can use the `storage` options
 The `throttle` option allows you to fine-tune the filesystem. The default value is `"normal"`.
 Note that the lockfiles to avoid concurrent cache accesses are updated every couple of seconds. If you have concerns regarding SD card wear, you can change the `lockDir` option to point a directory that resides in a RAM filesystem.
 
-For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
+For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more information.
 The logging options can be changed on the fly using the [`updateLogConfig`](#updateLogConfig) method.

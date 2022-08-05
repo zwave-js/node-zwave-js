@@ -1,11 +1,17 @@
+import { CommandClass, ICommandClassContainer } from "@zwave-js/cc";
 import {
 	MAX_NODES,
 	MessageOrCCLogEntry,
+	MessagePriority,
+	MulticastCC,
+	SinglecastCC,
+	TransmitOptions,
+	TransmitStatus,
+	TXReport,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
-import type { SuccessIndicator } from "@zwave-js/serial";
 import {
 	expectedCallback,
 	expectedResponse,
@@ -15,24 +21,14 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
+	MessageOrigin,
 	MessageType,
 	messageTypes,
 	priority,
+	SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
-import type {
-	CommandClass,
-	MulticastCC,
-	SinglecastCC,
-} from "../../commandclass/CommandClass";
-import type { ICommandClassContainer } from "../../commandclass/ICommandClassContainer";
-import {
-	TransmitOptions,
-	TransmitStatus,
-	TXReport,
-} from "../../controller/_Types";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
 import { parseTXReport, txReportToMessageRecord } from "./SendDataShared";
@@ -43,11 +39,18 @@ export const MAX_SEND_ATTEMPTS = 5;
 @priority(MessagePriority.Normal)
 export class SendDataRequestBase extends Message {
 	public constructor(host: ZWaveHost, options: MessageOptions) {
-		if (
-			gotDeserializationOptions(options) &&
-			(new.target as any) !== SendDataRequestTransmitReport
-		) {
-			return new SendDataRequestTransmitReport(host, options);
+		if (gotDeserializationOptions(options)) {
+			if (
+				options.origin === MessageOrigin.Host &&
+				(new.target as any) !== SendDataRequest
+			) {
+				return new SendDataRequest(host, options);
+			} else if (
+				options.origin !== MessageOrigin.Host &&
+				(new.target as any) !== SendDataRequestTransmitReport
+			) {
+				return new SendDataRequestTransmitReport(host, options);
+			}
 		}
 		super(host, options);
 	}
@@ -68,22 +71,36 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 {
 	public constructor(
 		host: ZWaveHost,
-		options: SendDataRequestOptions<CCType>,
+		options: MessageDeserializationOptions | SendDataRequestOptions<CCType>,
 	) {
 		super(host, options);
 
-		if (!options.command.isSinglecast()) {
-			throw new ZWaveError(
-				`SendDataRequest can only be used for singlecast and broadcast CCs`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		}
+		if (gotDeserializationOptions(options)) {
+			const nodeId = this.payload[0];
+			const serializedCCLength = this.payload[1];
+			const ccBuffer = this.payload.slice(2, 2 + serializedCCLength);
+			this.command = CommandClass.from(host, {
+				nodeId,
+				data: ccBuffer,
+				origin: options.origin,
+			}) as SinglecastCC<CCType>;
+			this.transmitOptions = this.payload[2 + serializedCCLength];
+			this.callbackId = this.payload[3 + serializedCCLength];
+		} else {
+			if (!options.command.isSinglecast()) {
+				throw new ZWaveError(
+					`SendDataRequest can only be used for singlecast and broadcast CCs`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 
-		this.command = options.command;
-		this.transmitOptions =
-			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+			this.command = options.command;
+			this.transmitOptions =
+				options.transmitOptions ?? TransmitOptions.DEFAULT;
+			if (options.maxSendAttempts != undefined) {
+				this.maxSendAttempts = options.maxSendAttempts;
+			}
+		}
 	}
 
 	/** The command this message contains */
@@ -113,14 +130,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -157,6 +166,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 interface SendDataRequestTransmitReportOptions extends MessageBaseOptions {
 	transmitStatus: TransmitStatus;
 	callbackId: number;
+	txReport?: TXReport;
 }
 
 export class SendDataRequestTransmitReport
@@ -184,18 +194,21 @@ export class SendDataRequestTransmitReport
 		}
 	}
 
-	public readonly transmitStatus: TransmitStatus;
-	public readonly txReport: TXReport | undefined;
+	public transmitStatus: TransmitStatus;
+	public txReport: TXReport | undefined;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			this.callbackId,
+			this.transmitStatus,
+			// TODO: Serialize TXReport
+		]);
+
+		return super.serialize();
+	}
 
 	public isOK(): boolean {
 		return this.transmitStatus === TransmitStatus.OK;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -216,36 +229,33 @@ export class SendDataRequestTransmitReport
 	}
 }
 
+export interface SendDataResponseOptions extends MessageBaseOptions {
+	wasSent: boolean;
+}
+
 @messageTypes(MessageType.Response, FunctionType.SendData)
 export class SendDataResponse extends Message implements SuccessIndicator {
 	public constructor(
 		host: ZWaveHost,
-		options: MessageDeserializationOptions,
+		options: MessageDeserializationOptions | SendDataResponseOptions,
 	) {
 		super(host, options);
-		this._wasSent = this.payload[0] !== 0;
-		// if (!this._wasSent) this._errorCode = this.payload[0];
+		if (gotDeserializationOptions(options)) {
+			this.wasSent = this.payload[0] !== 0;
+		} else {
+			this.wasSent = options.wasSent;
+		}
+	}
+
+	public wasSent: boolean;
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.wasSent ? 1 : 0]);
+		return super.serialize();
 	}
 
 	isOK(): boolean {
-		return this._wasSent;
-	}
-
-	private _wasSent: boolean;
-	public get wasSent(): boolean {
-		return this._wasSent;
-	}
-
-	// private _errorCode: number;
-	// public get errorCode(): number {
-	// 	return this._errorCode;
-	// }
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-			// errorCode: this.errorCode,
-		});
+		return this.wasSent;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -311,8 +321,9 @@ export class SendDataMulticastRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this.maxSendAttempts =
-			options.maxSendAttempts ?? host.options.attempts.sendData;
+		if (options.maxSendAttempts != undefined) {
+			this.maxSendAttempts = options.maxSendAttempts;
+		}
 	}
 
 	/** The command this message contains */
@@ -350,14 +361,6 @@ export class SendDataMulticastRequest<
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -410,13 +413,6 @@ export class SendDataMulticastRequestTransmitReport
 		return this._transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -452,12 +448,6 @@ export class SendDataMulticastResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

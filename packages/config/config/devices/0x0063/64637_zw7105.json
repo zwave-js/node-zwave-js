@@ -24,12 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Default Dim Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#default_dim_level"
 		},
 		{
 			"#": "10",

@@ -13,7 +13,10 @@ async get(): Promise<Pick<ThermostatFanModeCCReport, "mode" | "off"> | undefined
 ### `set`
 
 ```ts
-async set(mode: ThermostatFanMode, off?: boolean): Promise<void>;
+async set(
+	mode: ThermostatFanMode,
+	off?: boolean,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getSupportedModes`
@@ -23,3 +26,43 @@ async getSupportedModes(): Promise<
 	readonly ThermostatFanMode[] | undefined
 >;
 ```
+
+## Thermostat Fan Mode CC values
+
+### `fanMode`
+
+```ts
+{
+	commandClass: CommandClasses["Thermostat Fan Mode"],
+	endpoint: number,
+	property: "mode",
+}
+```
+
+-   **label:** Thermostat fan mode
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255
+
+### `turnedOff`
+
+```ts
+{
+	commandClass: CommandClasses["Thermostat Fan Mode"],
+	endpoint: number,
+	property: "off",
+}
+```
+
+-   **label:** Thermostat fan turned off
+-   **min. CC version:** 3
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"boolean"`

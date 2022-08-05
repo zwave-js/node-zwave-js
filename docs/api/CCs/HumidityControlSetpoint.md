@@ -19,7 +19,7 @@ async set(
 	setpointType: HumidityControlSetpointType,
 	value: number,
 	scale: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getCapabilities`
@@ -45,3 +45,45 @@ async getSupportedScales(
 	setpointType: HumidityControlSetpointType,
 ): Promise<readonly Scale[] | undefined>;
 ```
+
+## Humidity Control Setpoint CC values
+
+### `setpoint(setpointType: number)`
+
+```ts
+{
+	commandClass: CommandClasses["Humidity Control Setpoint"],
+	endpoint: number,
+	property: "setpoint",
+	propertyKey: number,
+}
+```
+
+-   **label:** `Setpoint (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+
+### `setpointScale(setpointType: number)`
+
+```ts
+{
+	commandClass: CommandClasses["Humidity Control Setpoint"],
+	endpoint: number,
+	property: "setpointScale",
+	propertyKey: number,
+}
+```
+
+-   **label:** `Setpoint scale (${string})`
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 255

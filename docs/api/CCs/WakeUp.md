@@ -30,3 +30,43 @@ async setInterval(
 ```ts
 async sendNoMoreInformation(): Promise<void>;
 ```
+
+## Wake Up CC values
+
+### `controllerNodeId`
+
+```ts
+{
+	commandClass: CommandClasses["Wake Up"],
+	endpoint: number,
+	property: "controllerNodeId",
+}
+```
+
+-   **label:** Node ID of the controller
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"any"`
+
+### `wakeUpInterval`
+
+```ts
+{
+	commandClass: CommandClasses["Wake Up"],
+	endpoint: number,
+	property: "wakeUpInterval",
+}
+```
+
+-   **label:** Wake Up interval
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`
+-   **min. value:** 0
+-   **max. value:** 16777215
