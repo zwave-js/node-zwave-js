@@ -20,7 +20,7 @@
         "label": "Restores state after power failure",
         "description": "The state before a power outage",
         "valueSize": 1,
-        "defaultValue": 00,
+        "defaultValue": 01,
         "options": [
             {
                 "label": "outlet on",
