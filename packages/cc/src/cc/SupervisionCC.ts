@@ -128,7 +128,8 @@ export class SupervisionCC extends CommandClass {
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision) &&
-			!(cc instanceof SupervisionCCGet)
+			!(cc instanceof SupervisionCCGet) &&
+			!(cc instanceof SupervisionCCReport)
 		);
 	}
 
