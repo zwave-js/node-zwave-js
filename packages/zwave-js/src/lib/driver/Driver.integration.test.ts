@@ -86,7 +86,7 @@ describe("lib/driver/Driver", () => {
 			driver.removeAllListeners();
 		});
 
-		it("the automatically created callback ID should be incremented and wrap from 0xff back to 10", () => {
+		it("the automatically created callback ID should be incremented and wrap from 0xff back to 1", () => {
 			let lastCallbackId: number | undefined;
 			for (let i = 0; i <= 300; i++) {
 				if (i === 300) {

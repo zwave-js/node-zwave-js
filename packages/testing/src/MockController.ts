@@ -1,4 +1,4 @@
-import type { ICommandClass } from "@zwave-js/core";
+import { ICommandClass, MAX_SUPERVISION_SESSION_ID } from "@zwave-js/core";
 import type { ZWaveHost } from "@zwave-js/host";
 import {
 	Message,
@@ -7,7 +7,7 @@ import {
 	SerialAPIParser,
 } from "@zwave-js/serial";
 import type { MockPortBinding } from "@zwave-js/serial/mock";
-import { TimedExpectation } from "@zwave-js/shared/safe";
+import { createWrappingCounter, TimedExpectation } from "@zwave-js/shared/safe";
 import {
 	getDefaultMockControllerCapabilities,
 	MockControllerCapabilities,
@@ -52,9 +52,11 @@ export class MockController {
 			securityManager2: undefined,
 			// nodes: this.nodes as any,
 			getNextCallbackId: () => 1,
+			getNextSupervisionSessionId: createWrappingCounter(
+				MAX_SUPERVISION_SESSION_ID,
+			),
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
-
 			// TODO: We don't care about security classes yet
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
