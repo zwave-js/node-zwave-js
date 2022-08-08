@@ -106,7 +106,7 @@
 			"label": "Gateway Check",
 			"description": "External Control disabled: Lamp signalizes failure to reach the gateway. External Control enabled: Lamp falls back to normal mode after gateway could not be reached repeatedly.",
 			"valueSize": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
