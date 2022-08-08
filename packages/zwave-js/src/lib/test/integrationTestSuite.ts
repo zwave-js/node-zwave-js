@@ -88,36 +88,39 @@ function prepareMocks(
 	return { mockController, mockNode };
 }
 
-/** Performs an integration test with a real driver using a mock controller and one mock node */
-export function integrationTest(
-	name: string,
-	options: {
-		/** Enable debugging for this integration tests. When enabled, a driver logfile will be written and the test directory will not be deleted after each test. Default: false */
-		debug?: boolean;
+interface IntegrationTestOptions {
+	/** Enable debugging for this integration tests. When enabled, a driver logfile will be written and the test directory will not be deleted after each test. Default: false */
+	debug?: boolean;
+	/** If given, the files from this directory will be copied into the test cache directory prior to starting the driver. */
+	provisioningDirectory?: string;
+	/** Whether the recorded messages and frames should be cleared before executing the test body. Default: true. */
+	clearMessageStatsBeforeTest?: boolean;
+	nodeCapabilities?: MockNodeOptions["capabilities"];
+	customSetup?: (
+		driver: Driver,
+		mockController: MockController,
+		mockNode: MockNode,
+	) => Promise<void>;
+	testBody: (
+		driver: Driver,
+		node: ZWaveNode,
+		mockController: MockController,
+		mockNode: MockNode,
+	) => Promise<void>;
+	additionalDriverOptions?: Partial<ZWaveOptions>;
+}
 
-		/** If given, the files from this directory will be copied into the test cache directory prior to starting the driver. */
-		provisioningDirectory?: string;
+export interface IntegrationTestFn {
+	(name: string, options: IntegrationTestOptions): void;
+}
+export interface IntegrationTest extends IntegrationTestFn {
+	/** Only runs the tests inside this `integrationTest` suite for the current file */
+	only: IntegrationTestFn;
+	/** Skips running the tests inside this `integrationTest` suite for the current file */
+	skip: IntegrationTestFn;
+}
 
-		/** Whether the recorded messages and frames should be cleared before executing the test body. Default: true. */
-		clearMessageStatsBeforeTest?: boolean;
-
-		nodeCapabilities?: MockNodeOptions["capabilities"];
-
-		customSetup?: (
-			driver: Driver,
-			mockController: MockController,
-			mockNode: MockNode,
-		) => Promise<void>;
-		testBody: (
-			driver: Driver,
-			node: ZWaveNode,
-			mockController: MockController,
-			mockNode: MockNode,
-		) => Promise<void>;
-
-		additionalDriverOptions?: Partial<ZWaveOptions>;
-	},
-): void {
+function suite(options: IntegrationTestOptions) {
 	const {
 		nodeCapabilities,
 		customSetup,
@@ -128,75 +131,87 @@ export function integrationTest(
 		additionalDriverOptions,
 	} = options;
 
-	describe(name, () => {
-		let driver: Driver;
-		let node: ZWaveNode;
-		let mockPort: MockPortBinding;
-		let continueStartup: () => void;
-		let mockController: MockController;
-		let mockNode: MockNode;
+	let driver: Driver;
+	let node: ZWaveNode;
+	let mockPort: MockPortBinding;
+	let continueStartup: () => void;
+	let mockController: MockController;
+	let mockNode: MockNode;
 
-		const cacheDir = path.join(
-			os.tmpdir(),
-			`zjs_test_cache_${crypto.randomBytes(4).toString("hex")}`,
-		);
+	const cacheDir = path.join(
+		os.tmpdir(),
+		`zjs_test_cache_${crypto.randomBytes(4).toString("hex")}`,
+	);
 
-		beforeEach(async () => {
-			if (debug) {
-				console.log(
-					`Running integration test in directory ${cacheDir}`,
-				);
-			}
+	beforeEach(async () => {
+		if (debug) {
+			console.log(`Running integration test in directory ${cacheDir}`);
+		}
 
-			// Make sure every test is starting fresh
-			await fs.emptyDir(cacheDir).catch(() => {});
+		// Make sure every test is starting fresh
+		await fs.emptyDir(cacheDir).catch(() => {});
 
-			// And potentially provision the cache
-			if (provisioningDirectory) {
-				await fs.copy(provisioningDirectory, cacheDir);
-			}
+		// And potentially provision the cache
+		if (provisioningDirectory) {
+			await fs.copy(provisioningDirectory, cacheDir);
+		}
 
-			({ driver, continueStartup, mockPort } = await prepareDriver(
-				cacheDir,
-				debug,
-				additionalDriverOptions,
-			));
-			({ mockController, mockNode } = prepareMocks(
-				mockPort,
-				nodeCapabilities,
-			));
+		({ driver, continueStartup, mockPort } = await prepareDriver(
+			cacheDir,
+			debug,
+			additionalDriverOptions,
+		));
+		({ mockController, mockNode } = prepareMocks(
+			mockPort,
+			nodeCapabilities,
+		));
 
-			if (customSetup) {
-				await customSetup(driver, mockController, mockNode);
-			}
+		if (customSetup) {
+			await customSetup(driver, mockController, mockNode);
+		}
 
-			return new Promise<void>((resolve) => {
-				driver.once("driver ready", () => {
-					// Test code goes here
+		return new Promise<void>((resolve) => {
+			driver.once("driver ready", () => {
+				// Test code goes here
 
-					node = driver.controller.nodes.getOrThrow(mockNode.id);
-					node.once("ready", () => {
-						if (clearMessageStatsBeforeTest) {
-							mockNode.clearReceivedControllerFrames();
-							mockNode.clearSentControllerFrames();
-							mockController.clearReceivedHostMessages();
-						}
+				node = driver.controller.nodes.getOrThrow(mockNode.id);
+				node.once("ready", () => {
+					if (clearMessageStatsBeforeTest) {
+						mockNode.clearReceivedControllerFrames();
+						mockNode.clearSentControllerFrames();
+						mockController.clearReceivedHostMessages();
+					}
 
-						process.nextTick(resolve);
-					});
+					process.nextTick(resolve);
 				});
-
-				continueStartup();
 			});
-		}, 30000);
 
-		afterEach(async () => {
-			await driver.destroy();
-			if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
+			continueStartup();
 		});
+	}, 30000);
 
-		it("Test body", async () => {
-			await testBody(driver, node, mockController, mockNode);
-		}, 30000);
+	afterEach(async () => {
+		await driver.destroy();
+		if (!debug) await fs.emptyDir(cacheDir).catch(() => {});
 	});
+
+	it("Test body", async () => {
+		await testBody(driver, node, mockController, mockNode);
+	}, 30000);
 }
+
+/** Performs an integration test with a real driver using a mock controller and one mock node */
+export const integrationTest = ((
+	name: string,
+	options: IntegrationTestOptions,
+): void => {
+	describe(name, suite.bind(suite, options));
+}) as IntegrationTest;
+
+integrationTest.only = (name: string, options: IntegrationTestOptions) => {
+	describe.only(name, suite.bind(suite, options));
+};
+
+integrationTest.skip = (name: string, options: IntegrationTestOptions) => {
+	describe.skip(name, suite.bind(suite, options));
+};
