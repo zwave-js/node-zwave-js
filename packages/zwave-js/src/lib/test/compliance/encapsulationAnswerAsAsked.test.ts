@@ -173,3 +173,68 @@ integrationTest(
 		},
 	},
 );
+
+integrationTest(
+	"Responses to encapsulated requests use the same encapsulation (Supervision + Multi Channel)",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/encapsulationAnswerAsAsked",
+		),
+
+		nodeCapabilities: {
+			commandClasses: [
+				{
+					ccId: CommandClasses["Multi Channel"],
+					version: 4,
+					isSupported: true,
+				},
+				{
+					ccId: CommandClasses.Supervision,
+					version: 2,
+					isSupported: true,
+				},
+				{
+					ccId: CommandClasses["Z-Wave Plus Info"],
+					isSupported: true,
+					version: 2,
+				},
+			],
+		},
+
+		testBody: async (driver, node, mockController, mockNode) => {
+			const basicReport = new BasicCCReport(mockController.host, {
+				nodeId: mockNode.id,
+				currentValue: 0,
+			});
+			const supervised = SupervisionCC.encapsulate(
+				mockController.host,
+				basicReport,
+			);
+			const cc = MultiChannelCC.encapsulate(
+				mockController.host,
+				supervised,
+			);
+			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
+
+			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
+
+			const { payload: response } =
+				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
+					1000,
+					(msg): msg is MockZWaveRequestFrame =>
+						msg.type === MockZWaveFrameType.Request,
+				);
+
+			expect(response).toBeInstanceOf(MultiChannelCCCommandEncapsulation);
+			const mcc = response as MultiChannelCCCommandEncapsulation;
+			expect(mcc.destination).toBe(2);
+			const inner = mcc.encapsulated;
+			expect(inner).toBeInstanceOf(SupervisionCCReport);
+
+			// Allow for everything to settle
+			await wait(100);
+		},
+	},
+);
