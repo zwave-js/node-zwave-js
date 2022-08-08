@@ -1,7 +1,7 @@
 {
 	"manufacturer": "Minoston",
 	"manufacturerId": "0x0312",
-	"label": "MP21ZP",
+	"label": "MP21ZP / MP31ZP",
 	"description": "Mini Plug with Power Meter",
 	"devices": [
 		{
