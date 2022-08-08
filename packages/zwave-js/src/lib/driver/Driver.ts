@@ -2362,7 +2362,11 @@ export class Driver
 								// If it was, we need to notify the sender that we couldn't decode the command
 								const node = this.getNodeUnsafe(msg);
 								if (node) {
-									await node
+									const endpoint =
+										node.getEndpoint(
+											msg.command.endpointIndex,
+										) ?? node;
+									await endpoint
 										.createAPI(
 											CommandClasses.Supervision,
 											false,
@@ -3217,7 +3221,10 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node
+							const endpoint =
+								node.getEndpoint(msg.command.endpointIndex) ??
+								node;
+							await endpoint
 								.createAPI(CommandClasses.Supervision, false)
 								.sendReport({
 									sessionId: supervisionSessionId,
@@ -3235,10 +3242,12 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				if (supervisionSessionId !== undefined) {
 					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
 					try {
 						await node.handleCommand(msg.command);
 
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
@@ -3249,7 +3258,7 @@ ${handlers.length} left`,
 								encapsulationFlags,
 							});
 					} catch (e) {
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,

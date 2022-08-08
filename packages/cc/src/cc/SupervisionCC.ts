@@ -88,6 +88,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...cmdOptions,
 		});
 
