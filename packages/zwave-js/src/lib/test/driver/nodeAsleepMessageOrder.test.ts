@@ -55,7 +55,8 @@ describe("regression tests", () => {
 		node10.markAsAwake();
 		expect(node10.status).toBe(NodeStatus.Awake);
 
-		driver["lastCallbackId"] = 2;
+		// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
+		(driver.getNextCallbackId as any).value = 2;
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const pingPromise10 = node10.ping();

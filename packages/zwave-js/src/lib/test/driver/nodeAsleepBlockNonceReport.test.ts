@@ -53,7 +53,8 @@ describe("regression tests", () => {
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);
 		}
-		driver["lastCallbackId"] = 2;
+		// TODO: remove hack in packages/shared/src/wrappingCounter.ts when reworking this test to the new testing setup
+		(driver.getNextCallbackId as any).value = 2;
 
 		node44["isListening"] = false;
 		node44["isFrequentListening"] = false;
