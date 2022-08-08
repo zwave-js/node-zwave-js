@@ -5,253 +5,247 @@
 	"description": "Z-Wave Plug with Energy Monitor",
 	"devices": [
 		{
-			"productType": "0xFF00",
-			"productId": "0xFF0E",
-			"zwaveAllianceId": "4626"
+			"productType": "0xff00",
+			"productId": "0xff0e",
+			"zwaveAllianceId": 4626
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"isLifeline": true,
+			"maxNodes": 1
+		},
+		"2": {
+			"label": "Basic Set (Endpoint 1)",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic Set (Endpoint 2)",
+			"maxNodes": 5
+		}
+	},
 	"paramInformation": [
 		{
-        "#": "1",
-        "label": "Restores state after power failure",
-        "description": "The state before a power outage",
-        "valueSize": "1",
-        "defaultValue": "01",
-        "options": [
-            {
-                "label": "outlet on",
-                "value": "01"
-            },
-            {
-                "label": "outlet off",
-                "value": "02"
-            }            
-                  ]
-        },
+			"#": "1",
+			"label": "Restores state after power failure",
+			"description": "The state before a power outage",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "outlet on",
+					"value": 1
+				},
+				{
+					"label": "outlet off",
+					"value": 2
+				}
+			]
+		},
 		{
-        "#": "2",
-        "label": "Power Wattage Report Value Threshold(Wattage)",
-        "valueSize": "4",
-        "unit": "wattage",
-        "defaultValue": "10",
-        "minValue": "0",
-		"maxValue": "65535"
-  		},
+			"#": "2",
+			"label": "Power Wattage Report Value Threshold(Wattage)",
+			"valueSize": 4,
+			"unit": "wattage",
+			"defaultValue": 10,
+			"minValue": 0,
+			"maxValue": 65535
+		},
 		{
-        "#": "3",
-        "label": "Power Wattage Report Frequency (Timer)",
-        "valueSize": "4",
-        "unit": "seconds",
-        "defaultValue": "30",
-        "minValue": "30",
-		"maxValue": "2678400"
-    	},
+			"#": "3",
+			"label": "Power Wattage Report Frequency (Timer)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"defaultValue": 30,
+			"minValue": 30,
+			"maxValue": 2678400
+		},
 		{
-        "#": "4",
-        "label": "Energy (kWh) Report Frequency (Timer) ",
-        "valueSize": "4",
-        "unit": "seconds",
-        "defaultValue": "300",
-        "minValue": "30",
-		"maxValue": "2678400"
-  		},	
+			"#": "4",
+			"label": "Energy (kWh) Report Frequency (Timer) ",
+			"valueSize": 4,
+			"unit": "seconds",
+			"defaultValue": 300,
+			"minValue": 30,
+			"maxValue": 2678400
+		},
 		{
-        "#": "5",
-        "label": "Voltage (V) Report Frequency (Timer)",
-        "valueSize": "4",
-        "unit": "seconds",
-        "defaultValue": "300",
-        "minValue": "30",
-		"maxValue": "2678400"
-    	},
+			"#": "5",
+			"label": "Voltage (V) Report Frequency (Timer)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"defaultValue": 300,
+			"minValue": 30,
+			"maxValue": 2678400
+		},
 		{
-        "#": "6",
-        "label": "Electricity (A) Report Frequency (Timer)",
-        "valueSize": "4",
-        "unit": "seconds",
-        "defaultValue": "300",
-        "minValue": "30",
-		"maxValue": "2678400"
-  		},
+			"#": "6",
+			"label": "Electricity (A) Report Frequency (Timer)",
+			"valueSize": 4,
+			"unit": "seconds",
+			"defaultValue": 300,
+			"minValue": 30,
+			"maxValue": 2678400
+		},
 		{
-        "#": "7",
-        "label": "Overload Protection (Current)",
-        "valueSize": "1",
-        "unit": "amps",
-        "defaultValue": "13",
-        "minValue": "1",
-		"maxValue": "16"
-    	},
+			"#": "7",
+			"label": "Overload Protection (Current)",
+			"valueSize": 1,
+			"unit": "amps",
+			"defaultValue": 13,
+			"minValue": 1,
+			"maxValue": 16
+		},
 		{
-        "#": "8",
-        "label": "Endpoint1 Enable Auto Turn-OFF Timer",
-        "valueSize": "4",
-        "defaultValue": "0",
-        "options": [
-			{
-				"label": "Auto Turn-OFF Timer Disabled (default)",
-				"value": "0"
-			},
-			{
-				"label": "Auto Turn-OFF Timer Enabled",
-				"value": "1"
-			}            
-		          ]
-  		},		
-			{
-        "#": "9",
-        "label": "Endpoint1 Count Down Configuration(Turn off the output by time)",
-        "valueSize": "4",
-        "unit": "minutes",
-        "defaultValue": "60",
-        "minValue": "1",
-		"maxValue": "65535"
-    	},
+			"#": "8",
+			"label": "Endpoint1 Enable Auto Turn-OFF Timer",
+			"valueSize": 4,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Auto Turn-OFF Timer Disabled (default)",
+					"value": 0
+				},
+				{
+					"label": "Auto Turn-OFF Timer Enabled",
+					"value": 1
+				}
+			]
+		},
 		{
-        "#": "10",
-        "label": "Endpoint1 Enable Auto Turn-ON Timer",
-        "valueSize": "1",
-        "defaultValue": "0",
-        "options": [
-			{
-				"label": "Auto Turn-ON Timer Disabled (default)",
-				"value": "0"
-			},
-			{
-				"label": " Auto Turn-ON Timer Enabled",
-				"value": "1"
-			}           
-		          ]
-  		},
+			"#": "9",
+			"label": "Endpoint1 Count Down Configuration(Turn off the output by time)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"defaultValue": 60,
+			"minValue": 1,
+			"maxValue": 65535
+		},
 		{
-        "#": "11",
-        "label": "Endpoint1 Count Down Configuration(Turn on the output by time)",
-        "valueSize": "4",
-        "unit": "minutes",
-        "defaultValue": "60",
-        "minValue": "1",
-		"maxValue": "65535"
-    	},
+			"#": "10",
+			"label": "Endpoint1 Enable Auto Turn-ON Timer",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Auto Turn-ON Timer Disabled (default)",
+					"value": 0
+				},
+				{
+					"label": " Auto Turn-ON Timer Enabled",
+					"value": 1
+				}
+			]
+		},
 		{
-        "#": "12",
-        "label": ":Endpoint2 Enable Auto Turn-OFF Timer",
-        "valueSize": "1",
-        "defaultValue": "0",
-        "options": [
-			{
-				"label": "Auto Turn-OFF Timer Disabled (default)",
-				"value": "0"
-			},
-			{
-				"label": "Auto Turn-OFF Timer Enabled",
-				"value": "1"
-			}           
-		          ]
-  		},
-			{
-        "#": "13",
-        "label": ":Endpoint2 Count Down Configuration(Turn off the output by time)",
-        "valueSize": "4",
-        "unit": "minutes",
-        "defaultValue": "60",
-        "minValue": "1",
-		"maxValue": "65535"
-    	},
+			"#": "11",
+			"label": "Endpoint1 Count Down Configuration(Turn on the output by time)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"defaultValue": 60,
+			"minValue": 1,
+			"maxValue": 65535
+		},
 		{
-        "#": "14",
-        "label": ":Endpoint2 Enable Auto Turn-ON Timer",
-        "valueSize": "1",
-        "defaultValue": "0",
-        "options": [
-			{
-				"label": "Auto Turn-ON Timer Disabled (default)",
-				"value": "0"
-			},
-			{
-				"label": "Auto Turn-ON Timer Enabled",
-				"value": "1"
-			}        
-		          ]
-  		},
+			"#": "12",
+			"label": ":Endpoint2 Enable Auto Turn-OFF Timer",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Auto Turn-OFF Timer Disabled (default)",
+					"value": 0
+				},
+				{
+					"label": "Auto Turn-OFF Timer Enabled",
+					"value": 1
+				}
+			]
+		},
 		{
-        "#": "15",
-        "label": ":Endpoint2 Count Down Configuration(Turn on the output by time)",
-        "valueSize": "4",
-        "unit": "minutes",
-        "defaultValue": "60",
-        "minValue": "1",
-		"maxValue": "65535"
-    	},
+			"#": "13",
+			"label": ":Endpoint2 Count Down Configuration(Turn off the output by time)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"defaultValue": 60,
+			"minValue": 1,
+			"maxValue": 65535
+		},
 		{
-        "#": "16",
-        "label": "Manual Control",
-        "valueSize": "1",
-        "defaultValue": "1",
-        "options": [
-			{
-				"label": "Manual Control Disabled",
-				"value": "0"
-			},
-			{
-				"label": "Manual Control Enabled (default)",
-				"value": "1"
-			}            
-		          ]
-  		},
+			"#": "14",
+			"label": ":Endpoint2 Enable Auto Turn-ON Timer",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"options": [
+				{
+					"label": "Auto Turn-ON Timer Disabled (default)",
+					"value": 0
+				},
+				{
+					"label": "Auto Turn-ON Timer Enabled",
+					"value": 1
+				}
+			]
+		},
 		{
-        "#": "17",
-        "label": ":Status LED Configuration",
-        "valueSize": "1",
-        "defaultValue": "01",
-        "options": [
-			{
-				"label": "LED indicator will display power consumption whenever the device is plugged in",
-				"value": "00"
-			},
-			{
-				"label": "LED indicator will display power consumption whenever the device is ON in and will turn off when the plug is OFF",
-				"value": "01"
-			},
-			{
-				"label": "LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off",
-				"value": "02"
-			},
-			{
-				"label": "Always OFF",
-				"value": "03"
-			}                                      
-		          ]
-    	}
+			"#": "15",
+			"label": ":Endpoint2 Count Down Configuration(Turn on the output by time)",
+			"valueSize": 4,
+			"unit": "minutes",
+			"defaultValue": 60,
+			"minValue": 1,
+			"maxValue": 65535
+		},
+		{
+			"#": "16",
+			"label": "Manual Control",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Manual Control Disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual Control Enabled (default)",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "17",
+			"label": ":Status LED Configuration",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "LED indicator will display power consumption whenever the device is plugged in",
+					"value": 0
+				},
+				{
+					"label": "LED indicator will display power consumption whenever the device is ON in and will turn off when the plug is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off",
+					"value": 2
+				},
+				{
+					"label": "Always OFF",
+					"value": 3
+				}
+			]
+		}
 	],
 	"metadata": {
 		"inclusion": "ADD or Remove the MP31ZP from the existing Z-Wave™ home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second\n---Include MP31ZP to/from a Z-Wave™ Gateway with supporting Security.The MP31ZP can support the Primary Controller that implemented the security S2.",
 		"exclusion": "ADD or Remove the MP31ZP from the existing Z-Wave™ home control network with your primary controller.\n---Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n---When prompted by your primary controller, click the PROG button Three times in one second\n---Include MP31ZP to/from a Z-Wave™ Gateway with supporting Security.The MP31ZP can support the Primary Controller that implemented the security S2.",
 		"reset": "Press the button twice quickly and then press and hold the button 10S.device will reset\n---(Node:Please use this procedure only when the network primary controller is missing or otherwise inoperable)",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4626/MP31ZPmanual-20220428.pdf"
-	},
-    "associations": {
-        "1": {
-            "label": ":Z-Wave Plus™ Lifeline",
-            "description": "Association group_1 is default to associate with the primary controller (Gateway/Hub/Controller) for MP31ZP Status change report, 1. MP31ZP will trigger AUTO report function if the Switch status had been changed.",
-            "isLifeline": "true",
-            "maxNodes": "1",
-            "multiChannel": "false"
-        },
-        "2": {
-            "label": "Basic set from Endpoint1",
-            "description": "When the output of the MP31ZP Endpoint1 socket is changed, On (0xFF) or Off (0x00)orOverload, The MP31ZP will automatically send out a related basic set command. On (0xFF) or Off (0x00) to its associated group.",
-            "maxNodes": "5",
-            "multiChannel": "false"
-        },
-        "3": {
-            "label": "Basic set from Endpoint2",
-            "description": "When the output of the MP31ZP Endpoint2 socket is changed, On (0xFF) or Off (0x00)orOverload, The MP31ZP will automatically send out a related basic set command. On (0xFF) or Off (0x00) to its associated group.",
-            "maxNodes": "5",
-            "multiChannel": "false"
-        }
 	}
 }
