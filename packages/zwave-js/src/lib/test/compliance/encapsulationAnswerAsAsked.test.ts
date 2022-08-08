@@ -1,8 +1,11 @@
 import {
+	BasicCCReport,
 	CRC16CC,
 	CRC16CCCommandEncapsulation,
 	MultiChannelCC,
 	MultiChannelCCCommandEncapsulation,
+	SupervisionCC,
+	SupervisionCCReport,
 	ZWavePlusCCGet,
 	ZWavePlusCCReport,
 } from "@zwave-js/cc";
@@ -113,6 +116,57 @@ integrationTest(
 			expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
 			expect(inner).toBeInstanceOf(ZWavePlusCCReport);
+
+			// Allow for everything to settle
+			await wait(100);
+		},
+	},
+);
+
+integrationTest(
+	"Responses to encapsulated requests use the same encapsulation (Supervision)",
+	{
+		// debug: true,
+		provisioningDirectory: path.join(
+			__dirname,
+			"fixtures/encapsulationAnswerAsAsked",
+		),
+
+		nodeCapabilities: {
+			commandClasses: [
+				{
+					ccId: CommandClasses.Supervision,
+					version: 2,
+					isSupported: true,
+				},
+				{
+					ccId: CommandClasses["Z-Wave Plus Info"],
+					isSupported: true,
+					version: 2,
+				},
+			],
+		},
+
+		testBody: async (driver, node, mockController, mockNode) => {
+			const basicReport = new BasicCCReport(mockController.host, {
+				nodeId: mockNode.id,
+				currentValue: 0,
+			});
+			const cc = SupervisionCC.encapsulate(
+				mockController.host,
+				basicReport,
+			);
+
+			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
+
+			const { payload: response } =
+				await mockNode.expectControllerFrame<MockZWaveRequestFrame>(
+					1000,
+					(msg): msg is MockZWaveRequestFrame =>
+						msg.type === MockZWaveFrameType.Request,
+				);
+
+			expect(response).toBeInstanceOf(SupervisionCCReport);
 
 			// Allow for everything to settle
 			await wait(100);
