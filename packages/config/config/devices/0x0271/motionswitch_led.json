@@ -75,13 +75,40 @@
 			"defaultValue": 1
 		},
 		{
-			"#": "9",
-			"label": "SLAVE_MODE",
-			"description": "Disable local control",
+			"#": "9[0x01]",
+			"label": "Gateway Check",
+			"description": "Lamp signalizes failure to reach the gateway.",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 2
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "9[0x02]",
+			"label": "Permanently On",
+			"description": "When enabled, overrides the Gateway Check parameter",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "10",
