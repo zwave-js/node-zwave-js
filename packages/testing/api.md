@@ -10,7 +10,7 @@
 import { CommandClasses } from '@zwave-js/core';
 import { CommandClassInfo } from '@zwave-js/core';
 import { FunctionType } from '@zwave-js/serial/safe';
-import type { ICommandClass } from '@zwave-js/core';
+import { ICommandClass } from '@zwave-js/core';
 import { Message } from '@zwave-js/serial';
 import type { MockPortBinding } from '@zwave-js/serial/mock';
 import { NodeProtocolInfoAndDeviceClass } from '@zwave-js/core';
