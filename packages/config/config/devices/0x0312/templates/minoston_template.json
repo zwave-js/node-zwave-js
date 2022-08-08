@@ -73,6 +73,18 @@
 		"minValue": 0,
 		"maxValue": 32767
 	},
+	"auto_off_timer_1-65535": {
+		"$import": "~/templates/master_template.json#base_1-65535",
+		"label": "Auto-Off Timer",
+		"unit": "minutes",
+		"defaultValue": 60
+	},
+	"auto_on_timer_1-65535": {
+		"$import": "~/templates/master_template.json#base_1-65535",
+		"label": "Auto-On Timer",
+		"unit": "minutes",
+		"defaultValue": 60
+	},
 	"single_tap_function": {
 		"label": "Single Tap Function",
 		"valueSize": 1,
@@ -172,8 +184,6 @@
 	"led_indicator_four_options_inverted": {
 		"label": "LED Indicator",
 		"valueSize": 1,
-		"minValue": 0,
-		"maxValue": 3,
 		"defaultValue": 0,
 		"unsigned": true,
 		"allowManualEntry": false,

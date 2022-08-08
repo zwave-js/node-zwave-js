@@ -32,33 +32,20 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Restores state after power failure",
-			"description": "The state before a power outage",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "outlet on",
-					"value": 1
-				},
-				{
-					"label": "outlet off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_on_off"
 		},
 		{
 			"#": "2",
-			"label": "Power Wattage Report Value Threshold(Wattage)",
+			"label": "Power Reporting Threshold",
 			"valueSize": 4,
-			"unit": "wattage",
+			"unit": "W",
 			"defaultValue": 10,
 			"minValue": 0,
 			"maxValue": 65535
 		},
 		{
 			"#": "3",
-			"label": "Power Wattage Report Frequency (Timer)",
+			"label": "Power (W) Reporting Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"defaultValue": 30,
@@ -67,7 +54,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Energy (kWh) Report Frequency (Timer) ",
+			"label": "Energy (kWh) Reporting Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"defaultValue": 300,
@@ -76,7 +63,7 @@
 		},
 		{
 			"#": "5",
-			"label": "Voltage (V) Report Frequency (Timer)",
+			"label": "Voltage (V) Reporting Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"defaultValue": 300,
@@ -85,7 +72,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Electricity (A) Report Frequency (Timer)",
+			"label": "Current (A) Reporting Interval",
 			"valueSize": 4,
 			"unit": "seconds",
 			"defaultValue": 300,
@@ -94,149 +81,80 @@
 		},
 		{
 			"#": "7",
-			"label": "Overload Protection (Current)",
+			"label": "Overload Protection",
 			"valueSize": 1,
-			"unit": "amps",
+			"unit": "A",
 			"defaultValue": 13,
 			"minValue": 1,
 			"maxValue": 16
 		},
 		{
 			"#": "8",
-			"label": "Endpoint1 Enable Auto Turn-OFF Timer",
-			"valueSize": 4,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Auto Turn-OFF Timer Disabled (default)",
-					"value": 0
-				},
-				{
-					"label": "Auto Turn-OFF Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Outlet 1: Enable Auto Off Timer"
 		},
 		{
 			"#": "9",
-			"label": "Endpoint1 Count Down Configuration(Turn off the output by time)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"defaultValue": 60,
-			"minValue": 1,
-			"maxValue": 65535
+			"$import": "templates/minoston_template.json#auto_off_timer_1-65535",
+			"label": "Outlet 1: Auto Off Timer"
 		},
 		{
 			"#": "10",
-			"label": "Endpoint1 Enable Auto Turn-ON Timer",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Auto Turn-ON Timer Disabled (default)",
-					"value": 0
-				},
-				{
-					"label": " Auto Turn-ON Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Outlet 1: Enable Auto On Timer"
 		},
 		{
 			"#": "11",
-			"label": "Endpoint1 Count Down Configuration(Turn on the output by time)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"defaultValue": 60,
-			"minValue": 1,
-			"maxValue": 65535
+			"$import": "templates/minoston_template.json#auto_on_timer_1-65535",
+			"label": "Outlet 1: Auto On Timer"
 		},
 		{
 			"#": "12",
-			"label": ":Endpoint2 Enable Auto Turn-OFF Timer",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Auto Turn-OFF Timer Disabled (default)",
-					"value": 0
-				},
-				{
-					"label": "Auto Turn-OFF Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Outlet 2: Enable Auto Off Timer"
 		},
 		{
 			"#": "13",
-			"label": ":Endpoint2 Count Down Configuration(Turn off the output by time)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"defaultValue": 60,
-			"minValue": 1,
-			"maxValue": 65535
+			"$import": "templates/minoston_template.json#auto_off_timer_1-65535",
+			"label": "Outlet 2: Auto Off Timer"
 		},
 		{
 			"#": "14",
-			"label": ":Endpoint2 Enable Auto Turn-ON Timer",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Auto Turn-ON Timer Disabled (default)",
-					"value": 0
-				},
-				{
-					"label": "Auto Turn-ON Timer Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Outlet 2: Enable Auto On Timer"
 		},
 		{
 			"#": "15",
-			"label": ":Endpoint2 Count Down Configuration(Turn on the output by time)",
-			"valueSize": 4,
-			"unit": "minutes",
-			"defaultValue": 60,
-			"minValue": 1,
-			"maxValue": 65535
+			"$import": "templates/minoston_template.json#auto_on_timer_1-65535",
+			"label": "Outlet 2: Auto On Timer"
 		},
 		{
 			"#": "16",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Manual Control",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"options": [
-				{
-					"label": "Manual Control Disabled",
-					"value": 0
-				},
-				{
-					"label": "Manual Control Enabled (default)",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "17",
-			"label": ":Status LED Configuration",
+			"label": "LED Indicator",
 			"valueSize": 1,
 			"defaultValue": 1,
+			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indicator will display power consumption whenever the device is plugged in",
+					"label": "When device is plugged in",
 					"value": 0
 				},
 				{
-					"label": "LED indicator will display power consumption whenever the device is ON in and will turn off when the plug is OFF",
+					"label": "When device is on",
 					"value": 1
 				},
 				{
-					"label": "LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off",
+					"label": "When device is toggled on or off",
 					"value": 2
 				},
 				{
-					"label": "Always OFF",
+					"label": "Always off",
 					"value": 3
 				}
 			]
