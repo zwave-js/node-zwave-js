@@ -47,6 +47,7 @@ import {
 	ICommandClass,
 	isZWaveError,
 	LogConfig,
+	MAX_SUPERVISION_SESSION_ID,
 	Maybe,
 	MessagePriority,
 	nwiHomeIdFromDSK,
@@ -92,6 +93,7 @@ import {
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
+	createWrappingCounter,
 	DeepPartial,
 	getErrorMessage,
 	isDocker,
@@ -3406,16 +3408,19 @@ ${handlers.length} left`,
 		}
 	}
 
-	private lastCallbackId = 0xff;
 	/**
 	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
-	public getNextCallbackId(): number {
-		this.lastCallbackId = (this.lastCallbackId + 1) & 0xff;
-		if (this.lastCallbackId < 1) this.lastCallbackId = 1;
-		return this.lastCallbackId;
-	}
+	public readonly getNextCallbackId = createWrappingCounter(0xff);
+
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
+	 * to the controller/nodes with its response
+	 */
+	public readonly getNextSupervisionSessionId = createWrappingCounter(
+		MAX_SUPERVISION_SESSION_ID,
+	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
 		// The encapsulation order (from outside to inside) is as follows:
