@@ -88,6 +88,7 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 			options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...cmdOptions,
 		});
 
@@ -128,7 +129,8 @@ export class SupervisionCC extends CommandClass {
 	public static requiresEncapsulation(cc: CommandClass): boolean {
 		return (
 			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision) &&
-			!(cc instanceof SupervisionCCGet)
+			!(cc instanceof SupervisionCCGet) &&
+			!(cc instanceof SupervisionCCReport)
 		);
 	}
 
