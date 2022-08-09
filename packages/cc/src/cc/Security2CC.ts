@@ -928,9 +928,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public serialize(): Buffer {
 		// TODO: Support Multicast
 		// Include Sender EI in the command if we only have the receiver's EI
-		const spanState = this.host.securityManager2.getSPANState(
-			this.peerNodeId,
-		);
+		const receiverNodeId = this.getDestinationIDTX();
+		const spanState =
+			this.host.securityManager2.getSPANState(receiverNodeId);
 		if (
 			spanState.type === SPANState.None ||
 			spanState.type === SPANState.LocalEI
@@ -949,16 +949,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			// While bootstrapping a node, the controller only sends commands encrypted
 			// with the temporary key
-			if (this.host.securityManager2.tempKeys.has(this.peerNodeId)) {
+			if (this.host.securityManager2.tempKeys.has(receiverNodeId)) {
 				this.host.securityManager2.initializeTempSPAN(
-					this.peerNodeId,
+					receiverNodeId,
 					senderEI,
 					receiverEI,
 				);
 			} else {
 				const securityClass =
 					this._securityClass ??
-					this.host.getHighestSecurityClass(this.peerNodeId);
+					this.host.getHighestSecurityClass(receiverNodeId);
 
 				if (securityClass == undefined) {
 					throw new ZWaveError(
@@ -967,7 +967,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					);
 				}
 				this.host.securityManager2.initializeSPAN(
-					this.peerNodeId,
+					receiverNodeId,
 					securityClass,
 					senderEI,
 					receiverEI,
@@ -1016,20 +1016,20 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			this.computeEncapsulationOverhead() + serializedCC.length;
 		const authData = getAuthenticationData(
 			this.host.ownNodeId,
-			this.getDestinationIDTX(),
+			receiverNodeId,
 			this.host.homeId,
 			messageLength,
 			unencryptedPayload,
 		);
 
-		const iv = this.host.securityManager2.nextNonce(this.peerNodeId);
+		const iv = this.host.securityManager2.nextNonce(receiverNodeId);
 		const { keyCCM: key } =
 			// Prefer the overridden security class if it was given
 			this._securityClass != undefined
 				? this.host.securityManager2.getKeysForSecurityClass(
 						this._securityClass,
 				  )
-				: this.host.securityManager2.getKeysForNode(this.peerNodeId);
+				: this.host.securityManager2.getKeysForNode(receiverNodeId);
 
 		const { ciphertext: ciphertextPayload, authTag } = encryptAES128CCM(
 			key,

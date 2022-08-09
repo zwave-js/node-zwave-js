@@ -16,16 +16,13 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 			frame.type === MockZWaveFrameType.Request &&
 			frame.payload instanceof ZWaveProtocolCCRequestNodeInformationFrame
 		) {
-			const cc = new ZWaveProtocolCCNodeInformationFrame(
-				controller.host,
-				{
-					nodeId: self.id,
-					...self.capabilities,
-					supportedCCs: [...self.implementedCCs]
-						.filter(([, info]) => info.isSupported)
-						.map(([ccId]) => ccId),
-				},
-			);
+			const cc = new ZWaveProtocolCCNodeInformationFrame(self.host, {
+				nodeId: controller.host.ownNodeId,
+				...self.capabilities,
+				supportedCCs: [...self.implementedCCs]
+					.filter(([, info]) => info.isSupported)
+					.map(([ccId]) => ccId),
+			});
 			await self.sendToController(
 				createMockZWaveRequestFrame(cc, {
 					ackRequested: false,
@@ -42,8 +39,8 @@ const respondToZWavePlusCCGet: MockNodeBehavior = {
 			frame.type === MockZWaveFrameType.Request &&
 			frame.payload instanceof ZWavePlusCCGet
 		) {
-			const cc = new ZWavePlusCCReport(controller.host, {
-				nodeId: self.id,
+			const cc = new ZWavePlusCCReport(self.host, {
+				nodeId: controller.host.ownNodeId,
 				zwavePlusVersion: 2,
 				nodeType: ZWavePlusNodeType.Node,
 				roleType: self.capabilities.isListening

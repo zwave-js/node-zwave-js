@@ -205,13 +205,13 @@ export const integrationTest = ((
 	name: string,
 	options: IntegrationTestOptions,
 ): void => {
-	describe(name, suite.bind(suite, options));
+	describe(name, () => suite(options));
 }) as IntegrationTest;
 
 integrationTest.only = (name: string, options: IntegrationTestOptions) => {
-	describe.only(name, suite.bind(suite, options));
+	describe.only(name, () => suite(options));
 };
 
 integrationTest.skip = (name: string, options: IntegrationTestOptions) => {
-	describe.skip(name, suite.bind(suite, options));
+	describe.skip(name, () => suite(options));
 };

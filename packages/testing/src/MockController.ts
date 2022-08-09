@@ -57,7 +57,8 @@ export class MockController {
 			),
 			getSafeCCVersionForNode: () => 100,
 			isCCSecure: () => false,
-			// TODO: We don't care about security classes yet
+			// TODO: We don't care about security classes on the controller
+			// This is handled by the nodes hosts
 			getHighestSecurityClass: () => undefined,
 			hasSecurityClass: () => false,
 			// eslint-disable-next-line @typescript-eslint/no-empty-function
