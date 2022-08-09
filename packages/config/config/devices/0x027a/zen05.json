@@ -51,24 +51,7 @@
 		},
 		{
 			"#": "7",
-			"label": "Set the brightness level of the LED indicator",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "high",
-					"value": 0
-				},
-				{
-					"label": "medium",
-					"value": 1
-				},
-				{
-					"label": "low",
-					"value": 2
-				}
-			]
+			"$import": "templates/zooz_template.json#led_indicator_brightness"
 		},
 		{
 			"#": "8",
