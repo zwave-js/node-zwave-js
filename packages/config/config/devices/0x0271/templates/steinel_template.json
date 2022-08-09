@@ -85,21 +85,38 @@
 		"description": "Measurements from associated Z-Wave light sensors are preferred if not older than 30 minutes.",
 		"defaultValue": 1
 	},
-	"lamp_external_control": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Lamp: External Control",
-		"description": "Lamp is controlled via Z-Wave and internal sensors are not used."
+	"light_behavior": {
+		// Meant to be used with the bitmask 0x07
+		"label": "Light Behavior",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal mode",
+				"value": 0
+			},
+			{
+				"label": "External control",
+				"value": 1
+			},
+			{
+				"label": "Normal mode + gateway check",
+				"value": 2
+			},
+			{
+				"label": "External control + gateway check",
+				"value": 3
+			},
+			{
+				"label": "Permanently on",
+				"value": 4
+			}
+		]
 	},
-	"lamp_gateway_check": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Lamp: Gateway Check",
-		"defaultValue": 1
-	},
-	"lamp_permanently_on": {
-		"$import": "~/templates/master_template.json#base_enable_disable",
-		"label": "Lamp: Permanently On"
-	},
-
 	"off_command_duration": {
 		"label": "Z-Wave Off Command: Turn Off Duration",
 		"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",

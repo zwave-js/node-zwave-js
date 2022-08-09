@@ -35,16 +35,8 @@
 			"$import": "templates/steinel_template.json#external_light_sensor"
 		},
 		{
-			"#": "9[0x01]",
-			"$import": "templates/steinel_template.json#lamp_external_control"
-		},
-		{
-			"#": "9[0x02]",
-			"$import": "templates/steinel_template.json#lamp_gateway_check"
-		},
-		{
-			"#": "9[0x04]",
-			"$import": "templates/steinel_template.json#lamp_permanently_on"
+			"#": "9[0x07]",
+			"$import": "templates/steinel_template.json#light_behavior"
 		},
 		{
 			"#": "10",
