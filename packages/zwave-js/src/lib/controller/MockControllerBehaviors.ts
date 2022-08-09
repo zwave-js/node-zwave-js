@@ -447,6 +447,8 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 			!(frame.payload instanceof ZWaveProtocolCC)
 		) {
 			// This is a CC that is meant for the host application
+			// Nodes send commands TO the controller, so we need to fix the node ID before forwarding
+			frame.payload.nodeId = node.id;
 			const msg = new ApplicationCommandRequest(host, {
 				command: frame.payload,
 			});

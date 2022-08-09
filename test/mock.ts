@@ -56,7 +56,7 @@ void (async () => {
 	driver.on("error", console.error);
 
 	const controller = new MockController({
-		homeId: 0x7e370001,
+		homeId: 0x7e570001,
 		ownNodeId: 1,
 		serial: mockPort,
 	});
