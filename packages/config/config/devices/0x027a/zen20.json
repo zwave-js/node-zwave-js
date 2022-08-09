@@ -162,6 +162,143 @@
 			"#": "27",
 			"$import": "~/templates/master_template.json#led_indicator_three_options",
 			"defaultValue": 1
+		},
+		{
+			"#": "28",
+			"label": "Enable/Disable All Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable all power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable all power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "29",
+			"label": "Enable/Disable CH1 Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable CH1 power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable CH1 power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "30",
+			"label": "Enable/Disable CH2 Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable CH2 power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable CH2 power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "31",
+			"label": "Enable/Disable CH3 Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable CH3 power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable CH3 power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "32",
+			"label": "Enable/Disable CH4 Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable CH4 power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable CH4 power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "33",
+			"label": "Enable/Disable CH5 Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable CH5 power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable CH5 power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "34",
+			"label": "Enable/Disable USB Ports Power Reports",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable USB Ports power monitoring and reporting",
+					"value": 0
+				},
+				{
+					"label": "Enable USB Ports power monitoring and reporting",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "35",
+			"label": "Current Report (A) Frequency",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 30
+		},
+		{
+			"#": "36",
+			"label": "Voltage Report (V) Frequency",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 30
 		}
 	],
 	"compat": {
