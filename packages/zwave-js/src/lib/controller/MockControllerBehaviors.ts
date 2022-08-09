@@ -11,6 +11,7 @@ import {
 	TransmitStatus,
 	ZWaveDataRate,
 } from "@zwave-js/core";
+import { MessageOrigin } from "@zwave-js/serial";
 import {
 	createMockZWaveRequestFrame,
 	MockControllerBehavior,
@@ -231,11 +232,20 @@ const handleSendData: MockControllerBehavior = {
 				MockControllerCommunicationState.Sending,
 			);
 
+			// We deferred parsing of the CC because it requires the node's host to do so.
+			// Now we can do that. Also set the CC node ID to the controller's own node ID,
+			// so CC knows it came from the controller's node ID.
+			const node = controller.nodes.get(msg.getNodeId()!)!;
+			msg.command = CommandClass.from(node.host, {
+				nodeId: controller.host.ownNodeId,
+				data: msg.payload,
+				origin: MessageOrigin.Host,
+			});
+
 			// Send the data to the node
 			const frame = createMockZWaveRequestFrame(msg.command, {
 				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
 			});
-			const node = controller.nodes.get(msg.getNodeId()!)!;
 			const ackPromise = controller.sendToNode(node, frame);
 
 			// Notify the host that the message was sent

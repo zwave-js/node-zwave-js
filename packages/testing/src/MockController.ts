@@ -152,9 +152,11 @@ export class MockController {
 
 		let msg: Message;
 		try {
-			// Parse the message while remembering potential decoding errors in embedded CCs
-			// This way we can log the invalid CC contents
-			msg = Message.from(this.host, data, MessageOrigin.Host);
+			msg = Message.from(this.host, {
+				data,
+				origin: MessageOrigin.Host,
+				parseCCs: false,
+			});
 			this.receivedHostMessages.push(msg);
 			// all good, respond with ACK
 			this.sendHeaderToHost(MessageHeaders.ACK);

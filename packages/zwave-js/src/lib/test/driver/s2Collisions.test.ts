@@ -167,7 +167,7 @@ integrationTest("Test S2 Collisions", {
 		await wait(2000);
 
 		// Delete the SPAN state on the node
-		mockController.host.securityManager2!.deleteNonce(1);
+		mockNode.host.securityManager2!.deleteNonce(1);
 
 		const basicGetPromise = node.commandClasses.Basic.get();
 
@@ -190,7 +190,7 @@ integrationTest("Test S2 Collisions", {
 			currentValue: 1,
 		});
 		const secureResponse = Security2CC.encapsulate(
-			mockController.host,
+			mockNode.host,
 			basicReport,
 		);
 

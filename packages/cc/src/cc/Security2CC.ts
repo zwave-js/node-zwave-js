@@ -26,11 +26,11 @@ import {
 } from "@zwave-js/core";
 import { EncapsulationFlags } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { gotDeserializationOptions, MessageOrigin } from "@zwave-js/serial";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
 import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 	type CommandClassOptions,
@@ -89,13 +89,13 @@ function getAuthenticationData(
 function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
 	validatePayload.withReason("Duplicate command")(
 		!this.host.securityManager2!.isDuplicateSinglecast(
-			this.peerNodeId,
+			this.nodeId as number,
 			sequenceNumber,
 		),
 	);
 	// Not a duplicate, store it
 	this.host.securityManager2!.storeSequenceNumber(
-		this.peerNodeId,
+		this.nodeId as number,
 		sequenceNumber,
 	);
 }
@@ -352,19 +352,6 @@ export class Security2CCAPI extends CCAPI {
 @implementedVersion(1)
 export class Security2CC extends CommandClass {
 	declare ccCommand: Security2Command;
-
-	protected get peerNodeId(): number {
-		if (this.origin === MessageOrigin.Host) {
-			return this.host.ownNodeId;
-		} else if (typeof this.nodeId === "number") {
-			return this.nodeId;
-		} else {
-			throw new ZWaveError(
-				"Cannot access peer node ID for multicast",
-				ZWaveErrorCodes.CC_NoNodeID,
-			);
-		}
-	}
 
 	public async interview(applHost: ZWaveApplicationHost): Promise<void> {
 		const node = this.getNode(applHost)!;
@@ -632,15 +619,16 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			// Check the sequence number to avoid duplicates
 			// TODO: distinguish between multicast and singlecast
 			this._sequenceNumber = this.payload[0];
+			const sendingNodeId = this.nodeId as number;
+
 			// Don't accept duplicate commands
 			validateSequenceNumber.call(this, this._sequenceNumber);
 
 			// Ensure the node has a security class
 			// const node = this.getNode()!;
 			// validatePayload.withReason("The node is not included")(!!node);
-			const securityClass = this.host.getHighestSecurityClass(
-				this.peerNodeId,
-			);
+			const securityClass =
+				this.host.getHighestSecurityClass(sendingNodeId);
 			validatePayload.withReason("No security class granted")(
 				securityClass !== SecurityClass.None,
 			);
@@ -681,7 +669,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				super.computeEncapsulationOverhead() + this.payload.length;
 
 			const authData = getAuthenticationData(
-				this.peerNodeId,
+				sendingNodeId,
 				this.getDestinationIDRX(),
 				this.host.homeId,
 				messageLength,
@@ -689,9 +677,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			);
 
 			// Decrypt payload and verify integrity
-			const spanState = this.host.securityManager2.getSPANState(
-				this.peerNodeId,
-			);
+			const spanState =
+				this.host.securityManager2.getSPANState(sendingNodeId);
 			const failNoSPAN = () => {
 				return validatePayload.fail(ZWaveErrorCodes.Security2CC_NoSPAN);
 			};
@@ -711,12 +698,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 				decryptionKey?: Buffer;
 			} => {
 				const getNonceAndDecrypt = () => {
-					const iv = this.host.securityManager2.nextNonce(
-						this.peerNodeId,
-					);
+					const iv =
+						this.host.securityManager2.nextNonce(sendingNodeId);
 					const { keyCCM: key } =
 						this.host.securityManager2.getKeysForNode(
-							this.peerNodeId,
+							sendingNodeId,
 						);
 
 					return {
@@ -743,11 +729,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 					// How we do this depends on whether we know the security class of the other node
 					if (
-						this.host.securityManager2.tempKeys.has(this.peerNodeId)
+						this.host.securityManager2.tempKeys.has(sendingNodeId)
 					) {
 						// We're currently bootstrapping the node, it might be using a temporary key
 						this.host.securityManager2.initializeTempSPAN(
-							this.peerNodeId,
+							sendingNodeId,
 							senderEI,
 							receiverEI,
 						);
@@ -757,14 +743,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 						// Reset the SPAN state and try with the recently granted security class
 						this.host.securityManager2.setSPANState(
-							this.peerNodeId,
+							sendingNodeId,
 							spanState,
 						);
 					}
 
 					if (securityClass != undefined) {
 						this.host.securityManager2.initializeSPAN(
-							this.peerNodeId,
+							sendingNodeId,
 							securityClass,
 							senderEI,
 							receiverEI,
@@ -779,14 +765,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 							.filter(
 								(s) =>
 									this.host.hasSecurityClass(
-										this.peerNodeId,
+										sendingNodeId,
 										s,
 									) !== false,
 							);
 						for (const secClass of possibleSecurityClasses) {
 							// Initialize an SPAN with that security class
 							this.host.securityManager2.initializeSPAN(
-								this.peerNodeId,
+								sendingNodeId,
 								secClass,
 								senderEI,
 								receiverEI,
@@ -796,7 +782,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 							// It worked, return the result and remember the security class
 							if (ret.authOK) {
 								this.host.setSecurityClass(
-									this.peerNodeId,
+									sendingNodeId,
 									secClass,
 									true,
 								);
@@ -804,7 +790,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 							}
 							// Reset the SPAN state and try with the next security class
 							this.host.securityManager2.setSPANState(
-								this.peerNodeId,
+								sendingNodeId,
 								spanState,
 							);
 						}
@@ -881,7 +867,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.host.securityManager2.nextSequenceNumber(this.peerNodeId);
+				this.host.securityManager2.nextSequenceNumber(
+					this.nodeId as number,
+				);
 		}
 		return this._sequenceNumber;
 	}
@@ -912,9 +900,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		);
 		if (mgrpExtension) return mgrpExtension.groupId;
 
-		return this.origin === MessageOrigin.Controller
-			? this.host.ownNodeId
-			: (this.nodeId as number);
+		return this.host.ownNodeId;
 	}
 
 	/** Returns the Sender's Entropy Input if this command contains an SPAN extension */
@@ -1130,7 +1116,7 @@ export class Security2CCNonceReport extends Security2CC {
 				// In that case we also need to store it, so the next sent command
 				// can use it for encryption
 				this.host.securityManager2.storeRemoteEI(
-					this.peerNodeId,
+					this.nodeId as number,
 					this.receiverEI,
 				);
 			}
@@ -1151,7 +1137,9 @@ export class Security2CCNonceReport extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.host.securityManager2.nextSequenceNumber(this.peerNodeId);
+				this.host.securityManager2.nextSequenceNumber(
+					this.nodeId as number,
+				);
 		}
 		return this._sequenceNumber;
 	}
@@ -1225,7 +1213,9 @@ export class Security2CCNonceGet extends Security2CC {
 	public get sequenceNumber(): number {
 		if (this._sequenceNumber == undefined) {
 			this._sequenceNumber =
-				this.host.securityManager2.nextSequenceNumber(this.peerNodeId);
+				this.host.securityManager2.nextSequenceNumber(
+					this.nodeId as number,
+				);
 		}
 		return this._sequenceNumber;
 	}

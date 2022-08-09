@@ -11,7 +11,7 @@ describe("SerialAPISetupMessages", () => {
 			"hex",
 		);
 
-		const msg = Message.from(host, data);
+		const msg = Message.from(host, { data });
 		expect(msg).toBeInstanceOf(SerialAPISetup_GetSupportedCommandsResponse);
 		const supported = (msg as SerialAPISetup_GetSupportedCommandsResponse)
 			.supportedCommands;

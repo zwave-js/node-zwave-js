@@ -21,12 +21,12 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { gotDeserializationOptions } from "@zwave-js/serial";
 import { buffer2hex, num2hex, pick } from "@zwave-js/shared/safe";
 import { randomBytes } from "crypto";
 import { CCAPI, PhysicalCCAPI } from "../lib/API";
 import {
 	CommandClass,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";
