@@ -16,250 +16,63 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Light Duration After Motion",
-			"valueSize": 2,
-			"unit": "seconds",
-			"minValue": 5,
-			"maxValue": 900,
-			"defaultValue": 180
+			"$import": "templates/steinel_template.json#motion_light_duration"
 		},
 		{
 			"#": "2",
-			"label": "Light Threshold",
-			"description": "Allowable Range: 2-2000. Moving the potentiometer overwrites the current setting.",
-			"valueSize": 2,
-			"unit": "lux",
-			"minValue": 0,
-			"maxValue": 2000,
-			"defaultValue": 2000,
-			"options": [
-				{
-					"label": "Execute learn sequence",
-					"value": 0
-				}
-			]
+			"$import": "templates/steinel_template.json#light_threshold"
 		},
 		{
 			"#": "5",
-			"label": "Motion Sensor Sensitivity",
-			"description": "Moving the potentiometer overwrites the current setting.",
-			"valueSize": 1,
-			"unit": "%",
-			"minValue": 2,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "templates/steinel_template.json#motion_sensor_sensitivity"
 		},
 		{
 			"#": "6",
-			"label": "Brightness Measuring Interval",
-			"description": "Lamp switches off shortly and measures the ambient light.",
-			"valueSize": 1,
-			"unit": "minutes",
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				}
-			]
+			"$import": "templates/steinel_template.json#brightness_measuring_interval"
 		},
 		{
 			"#": "8",
-			"label": "External Ambient Light Sensor",
-			"description": "Measurements from associated Z-Wave light sensors are preferred if not older than 30 minutes.",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/steinel_template.json#external_light_sensor"
 		},
 		{
 			"#": "9[0x01]",
-			"label": "External Control",
-			"description": "Lamp is controlled via Z-Wave and internal sensors are not used.",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/steinel_template.json#lamp_external_control"
 		},
 		{
 			"#": "9[0x02]",
-			"label": "Gateway Check",
-			"description": "",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/steinel_template.json#lamp_gateway_check"
 		},
 		{
 			"#": "9[0x04]",
-			"label": "Permanently On",
-			"description": "",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/steinel_template.json#lamp_permanently_on"
 		},
 		{
 			"#": "10",
-			"label": "Z-Wave Off Command: Turn Off Duration",
-			"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"options": [
-				{
-					"label": "Turn off immediately, until motion detected",
-					"value": 0
-				},
-				{
-					"label": "Turn off immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#off_command_duration"
 		},
 		{
 			"#": "11",
-			"label": "Z-Wave On Command: Turn On Duration",
-			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"options": [
-				{
-					"label": "Turn on, wait for motion immediately",
-					"value": 0
-				},
-				{
-					"label": "Turn on immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#on_command_duration"
 		},
 		{
 			"#": "12",
-			"label": "Z-Wave On / Off-On: Motion Wait Time Limit",
-			"description": "How long to wait for motion after the configured duration before returning to normal operation to prevent staying on forever: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204,
-			"options": [
-				{
-					"label": "Do not wait for motion",
-					"value": 0
-				},
-				{
-					"label": "Wait for motion indefinitely",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#motion_wait_limit"
 		},
 		{
 			"#": "13",
-			"label": "Z-Wave On-Off Sequence: Turn Off Duration",
-			"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204,
-			"options": [
-				{
-					"label": "Immediately, until motion detected",
-					"value": 0
-				},
-				{
-					"label": "Ignore sequence, treat like off command",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#on_off_sequence_off_duration"
 		},
 		{
 			"#": "14",
-			"label": "Z-Wave Off-On Sequence: Turn On Duration",
-			"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204,
-			"options": [
-				{
-					"label": "Turn on, wait for motion immediately",
-					"value": 0
-				},
-				{
-					"label": "Ignore sequence, treat like on command",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#off_on_sequence_on_duration"
 		},
 		{
 			"#": "15",
-			"label": "Sequence Timing",
-			"description": "Maximum delay between on-off or off-on commands to treat as a sequence",
-			"valueSize": 1,
-			"unit": "0.1 s",
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 10
+			"$import": "templates/steinel_template.json#sequence_timing"
 		},
 		{
 			"#": "16",
-			"label": "Motion Sensor Disable Timeout",
-			"description": "How long to disable internal motion sensor after Basic Set command to motion endpoint: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"options": [
-				{
-					"label": "Ignore command, sensor permanently enabled",
-					"value": 0
-				},
-				{
-					"label": "Ignore command, sensor permanently disabled",
-					"value": 255
-				}
-			]
+			"$import": "templates/steinel_template.json#command_motion_disable_timeout"
 		}
 	]
 }

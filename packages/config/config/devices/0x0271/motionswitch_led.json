@@ -16,186 +16,150 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "TIME",
-			"description": "Duration of light after motion detection [s]",
-			"unit": "s",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 900,
-			"defaultValue": 180,
-			"options": [
-				{
-					"label": "Duration of light after motion detection [s]",
-					"value": 0
-				}
-			]
+			"$import": "templates/steinel_template.json#motion_light_duration"
 		},
 		{
 			"#": "2",
-			"label": "LIGHT",
-			"description": "Light threshold [lx]",
-			"unit": "lx",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 2000,
-			"defaultValue": 2000,
-			"options": [
-				{
-					"label": "Light threshold [lx]",
-					"value": 0
-				}
-			]
+			"$import": "templates/steinel_template.json#light_threshold"
 		},
 		{
 			"#": "5",
-			"label": "SENSITIVITY",
-			"description": "Motion Radar Sensitivity [%]",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 2,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "templates/steinel_template.json#motion_sensor_sensitivity"
 		},
 		{
 			"#": "6",
-			"label": "Brightness measuring interval",
-			"unit": "minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 0
+			"$import": "templates/steinel_template.json#brightness_measuring_interval"
 		},
 		{
 			"#": "8",
-			"label": "GLOBAL_LIGHT",
-			"description": "Use external Ambient Light Value",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1
+			"$import": "templates/steinel_template.json#external_light_sensor"
 		},
 		{
 			"#": "9[0x01]",
-			"label": "Gateway Check",
-			"description": "",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"$import": "templates/steinel_template.json#lamp_external_control"
 		},
 		{
 			"#": "9[0x02]",
-			"label": "Permanently On",
-			"description": "",
+			"$import": "templates/steinel_template.json#lamp_gateway_check"
+		},
+		{
+			"#": "9[0x04]",
+			"$import": "templates/steinel_template.json#lamp_permanently_on"
+		},
+		{
+			"#": "10",
+			"$import": "templates/steinel_template.json#off_command_duration"
+		},
+		{
+			"#": "11",
+			"$import": "templates/steinel_template.json#on_command_duration"
+		},
+		{
+			"#": "12",
+			"$import": "templates/steinel_template.json#motion_wait_limit"
+		},
+		{
+			"#": "13",
+			"$import": "templates/steinel_template.json#on_off_sequence_off_duration"
+		},
+		{
+			"#": "14",
+			"$import": "templates/steinel_template.json#off_on_sequence_on_duration"
+		},
+		{
+			"#": "15",
+			"$import": "templates/steinel_template.json#sequence_timing"
+		},
+		{
+			"#": "16",
+			"$import": "templates/steinel_template.json#command_motion_disable_timeout"
+		},
+		{
+			"#": "17[0x01]",
+			"label": "Button: Long Press",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Lower brightness",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Increase brightness",
 					"value": 1
 				}
 			]
 		},
 		{
-			"#": "10",
-			"label": "OFF_BEHAVIOUR",
-			"description": "Off behaviour ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 10
-		},
-		{
-			"#": "11",
-			"label": "ON_BEHAVIOUR",
-			"description": "On behaviour ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255
-		},
-		{
-			"#": "12",
-			"label": "ON_TIME_OVER",
-			"description": "On behaviour time over ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
-		},
-		{
-			"#": "13",
-			"label": "ON_OFF_BEHAVIOUR",
-			"description": "Sequence On-Off behaviour ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
-		},
-		{
-			"#": "14",
-			"label": "OFF_ON_BEHAVIOUR",
-			"description": "Sequence Off-On behaviour ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 204
-		},
-		{
-			"#": "15",
-			"label": "SEQUENCE_TIME",
-			"description": "Sequence Off-On behaviour ( timeout )",
-			"unit": "100 ms",
+			"#": "17[0x02]",
+			"label": "Button: Short Press",
 			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 10
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle",
+					"value": 0
+				},
+				{
+					"label": "Control scene (parameter 18)",
+					"value": 1
+				}
+			]
 		},
 		{
-			"#": "16",
-			"label": "MOTION_DISABLE",
-			"description": "Motion Off behaviour ( timeout )",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 209,
-			"defaultValue": 0
-		},
-		{
-			"#": "17",
-			"label": "BUTTON_BEHAVIOUR",
-			"description": "Toggle button behaviour",
+			"#": "17[0x04]",
+			"label": "Button: Override Sensors (Standalone Mode)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 31,
-			"defaultValue": 8
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "According to parameter 19 (legacy behavior)",
+					"value": 0
+				},
+				{
+					"label": "According to parameters 10-14",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "17[0x08]",
+			"label": "Button: Override Sensors (Network Mode)",
+			"valueSize": 1,
+			"defaultValue": 1,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "According to parameter 19 (legacy behavior)",
+					"value": 0
+				},
+				{
+					"label": "According to parameters 10-14",
+					"value": 1
+				}
+			]
 		},
 		{
 			"#": "18",
-			"label": "BUTTON_SCENES",
-			"description": "Toggle button Scene 1-4",
+			"label": "Button: Scene Number",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
-			"defaultValue": 1
+			"defaultValue": 1,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
 		},
 		{
 			"#": "19",
-			"label": "LEGACY_INACTIVITY_TIME )",
-			"description": "Toggle button inactivity time in \"legacy\" mode ( timeout )",
+			"label": "Sensor Override Duration (Legacy Behavior)",
+			"description": "After motion ends, wait for the specified duration, then return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 209,
