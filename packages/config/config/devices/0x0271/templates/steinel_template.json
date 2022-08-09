@@ -1,0 +1,237 @@
+{
+	"motion_light_duration": {
+		"label": "Light Duration After Motion",
+		"valueSize": 2,
+		"unit": "seconds",
+		"minValue": 5,
+		"maxValue": 900,
+		"defaultValue": 180
+	},
+	"light_threshold": {
+		"label": "Light Threshold",
+		"description": "Allowable range: 0, 2-2000. Moving the potentiometer overwrites the current setting.",
+		"valueSize": 2,
+		"unit": "lux",
+		"minValue": 0,
+		"maxValue": 2000,
+		"defaultValue": 2000,
+		"options": [
+			{
+				"label": "Execute learn sequence",
+				"value": 0
+			},
+			{
+				"label": "Disable threshold (always night)",
+				"value": 2000
+			}
+		]
+	},
+	"night_dim_mode": {
+		"label": "Night Dim Mode Duration",
+		"description": "Allowable range: 0-60, 255. External control overrides this setting.",
+		"valueSize": 1,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Disable, light off completely",
+				"value": 0
+			},
+			{
+				"label": "Whole night",
+				"value": 255
+			}
+		]
+	},
+	"motion_sensor_range": {
+		"label": "Motion Sensor Range",
+		"description": "Moving the potentiometer overwrites the current setting.",
+		"unit": "cm",
+		"valueSize": 2,
+		"minValue": 100,
+		"maxValue": 500,
+		"defaultValue": 500
+	},
+	"motion_sensor_sensitivity": {
+		"label": "Motion Sensor Sensitivity",
+		"description": "Moving the potentiometer overwrites the current setting.",
+		"valueSize": 1,
+		"unit": "%",
+		"minValue": 2,
+		"maxValue": 100,
+		"defaultValue": 100
+	},
+	"brightness_measuring_interval": {
+		"label": "Brightness Measuring Interval",
+		"description": "Lamp switches off briefly and measures the ambient light. Allowable range: 5-120.",
+		"valueSize": 1,
+		"unit": "minutes",
+		"minValue": 0,
+		"maxValue": 120,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Disable",
+				"value": 0
+			}
+		]
+	},
+	"external_light_sensor": {
+		"$import": "~/templates/master_template.json#base_enable_disable",
+		"label": "External Ambient Light Sensor",
+		"description": "Measurements from associated Z-Wave light sensors are preferred if not older than 30 minutes.",
+		"defaultValue": 1
+	},
+	"light_behavior": {
+		// Meant to be used with the bitmask 0x07
+		"label": "Light Behavior",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 4,
+		"defaultValue": 2,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Normal mode",
+				"value": 0
+			},
+			{
+				"label": "External control",
+				"value": 1
+			},
+			{
+				"label": "Normal mode + gateway check",
+				"value": 2
+			},
+			{
+				"label": "External control + gateway check",
+				"value": 3
+			},
+			{
+				"label": "Permanently on",
+				"value": 4
+			}
+		]
+	},
+	"off_command_duration": {
+		"label": "Z-Wave Off Command: Turn Off Duration",
+		"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 10,
+		"options": [
+			{
+				"label": "Turn off immediately, until motion detected",
+				"value": 0
+			},
+			{
+				"label": "Turn off immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
+				"value": 255
+			}
+		]
+	},
+	"on_command_duration": {
+		"label": "Z-Wave On Command: Turn On Duration",
+		"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 255,
+		"options": [
+			{
+				"label": "Turn on, wait for motion immediately",
+				"value": 0
+			},
+			{
+				"label": "Turn on immediately for duration of param 1 (Light Duration After Motion) or until motion detected",
+				"value": 255
+			}
+		]
+	},
+	"motion_wait_limit": {
+		"label": "Z-Wave On / Off-On: Motion Wait Time Limit",
+		"description": "How long to wait for motion after the configured duration before returning to normal operation to prevent staying on forever: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 204,
+		"options": [
+			{
+				"label": "Do not wait for motion",
+				"value": 0
+			},
+			{
+				"label": "Wait for motion indefinitely",
+				"value": 255
+			}
+		]
+	},
+	"on_off_sequence_off_duration": {
+		"label": "Z-Wave On-Off Sequence: Turn Off Duration",
+		"description": "On motion detection, light turns off for the configured duration: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 204,
+		"options": [
+			{
+				"label": "Immediately, until motion detected",
+				"value": 0
+			},
+			{
+				"label": "Ignore sequence, treat like off command",
+				"value": 255
+			}
+		]
+	},
+	"off_on_sequence_on_duration": {
+		"label": "Z-Wave Off-On Sequence: Turn On Duration",
+		"description": "Light turns on for the configured duration, then waits for motion to return to normal operation: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 204,
+		"options": [
+			{
+				"label": "Turn on, wait for motion immediately",
+				"value": 0
+			},
+			{
+				"label": "Ignore sequence, treat like on command",
+				"value": 255
+			}
+		]
+	},
+	"sequence_timing": {
+		"label": "Sequence Timing",
+		"description": "Maximum delay between on-off or off-on commands to treat as a sequence",
+		"valueSize": 1,
+		"unit": "0.1 s",
+		"minValue": 10,
+		"maxValue": 50,
+		"defaultValue": 10
+	},
+	"command_motion_disable_timeout": {
+		"label": "Motion Sensor Disable Timeout",
+		"description": "How long to disable internal motion sensor after Basic Set command to motion endpoint: 1...100 = seconds, 101...200 = minutes (minus 100), 201...209 = hours (minus 200)",
+		"valueSize": 2,
+		"minValue": 0,
+		"maxValue": 255,
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Ignore command, sensor permanently enabled",
+				"value": 0
+			},
+			{
+				"label": "Ignore command, sensor permanently disabled",
+				"value": 255
+			}
+		]
+	}
+}
