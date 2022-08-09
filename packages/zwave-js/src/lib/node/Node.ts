@@ -857,7 +857,10 @@ export class ZWaveNode
 				this._valueDB.setValue(
 					valueId,
 					value,
-					!!this.driver.options.emitValueUpdateAfterSetValue
+					// We need to emit an event if applications opted in, or if this was a supervised call
+					// because in this case there won't be a verification query which would result in an update
+					!!result ||
+						!!this.driver.options.emitValueUpdateAfterSetValue
 						? { source: "driver" }
 						: { noEvent: true },
 				);
