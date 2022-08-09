@@ -38,7 +38,7 @@
 		{
 			"#": "2",
 			"$import": "templates/zooz_template.json#auto_off_timer_duration",
-			"label": "Auto Turn-Off Timer Duration "
+			"label": "Auto Turn-Off Timer Duration"
 		},
 		{
 			"#": "4",
