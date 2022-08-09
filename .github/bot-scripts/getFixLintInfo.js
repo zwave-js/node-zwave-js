@@ -39,11 +39,12 @@ async function main(param) {
 		run_id: job.run_id,
 	});
 
-	if (!artifacts.length) return undefined;
+	const fixLintArtifact = artifacts.find((a) => a.name === "fix-lint");
+	if (!fixLintArtifact) return undefined;
 
 	const { url } = await github.rest.actions.downloadArtifact({
 		...options,
-		artifact_id: artifacts[0].id,
+		artifact_id: fixLintArtifact.id,
 		archive_format: "zip",
 	});
 
