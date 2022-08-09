@@ -60,7 +60,7 @@
 		{
 			"#": "9[0x01]",
 			"label": "External Control",
-			"description": "When enabled, the lamp is controlled externally via Z-Wave and internal sensors are not used.",
+			"description": "Lamp is controlled via Z-Wave and internal sensors are not used.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
@@ -78,7 +78,7 @@
 		{
 			"#": "9[0x02]",
 			"label": "Gateway Check",
-			"description": "External Control disabled: Lamp signalizes failure to reach the gateway. External Control enabled: Lamp falls back to normal mode after gateway could not be reached repeatedly.",
+			"description": "",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
@@ -96,7 +96,7 @@
 		{
 			"#": "9[0x04]",
 			"label": "Permanently On",
-			"description": "When enabled, overrides the External Control and Gateway Check parameters",
+			"description": "",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
