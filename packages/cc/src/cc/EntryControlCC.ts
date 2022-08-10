@@ -413,10 +413,19 @@ export class EntryControlCCNotification extends EntryControlCC {
 			"event type": this.eventType,
 		};
 		if (this.eventData) {
-			message["event data"] =
-				typeof this.eventData === "string"
-					? this.eventData
-					: buffer2hex(this.eventData);
+			switch (this.eventType) {
+				case EntryControlEventTypes.CachedKeys:
+				case EntryControlEventTypes.Enter:
+					// The event data is likely the user's PIN code, hide it from logs
+					message["event data"] = "*".repeat(this.eventData.length);
+					break;
+
+				default:
+					message["event data"] =
+						typeof this.eventData === "string"
+							? this.eventData
+							: buffer2hex(this.eventData);
+			}
 		}
 		return {
 			...super.toLogEntry(applHost),
