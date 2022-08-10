@@ -274,7 +274,8 @@
 		},
 		{
 			"#": "35",
-			"label": "Current Report (A) Frequency",
+			"$if": "firmwareVersion >= 2.3",
+			"label": "Current (A) Report Frequency",
 			"unit": "seconds",
 			"valueSize": 4,
 			"minValue": 5,
