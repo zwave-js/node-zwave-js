@@ -1080,8 +1080,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_EntryControlCC from "zwave-js" -->
 
 ```ts
-declare type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: IZWaveNode,
+type ZWaveNotificationCallbackParams_EntryControlCC = [
+	node: ZWaveNode,
 	ccId: typeof CommandClasses["Entry Control"],
 	args: ZWaveNotificationCallbackArgs_EntryControlCC,
 ];
@@ -1110,8 +1110,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_MultilevelSwitchCC from "zwave-js" -->
 
 ```ts
-declare type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: IZWaveNode,
+type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+	node: ZWaveNode,
 	ccId: typeof CommandClasses["Multilevel Switch"],
 	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
 ];
@@ -1141,8 +1141,8 @@ uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_NotificationCC from "zwave-js" -->
 
 ```ts
-declare type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: IZWaveNode,
+type ZWaveNotificationCallbackParams_NotificationCC = [
+	node: ZWaveNode,
 	ccId: CommandClasses.Notification,
 	args: ZWaveNotificationCallbackArgs_NotificationCC,
 ];
@@ -1175,8 +1175,8 @@ It uses the following signature
 <!-- #import ZWaveNotificationCallbackParams_PowerlevelCC from "zwave-js" -->
 
 ```ts
-declare type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: IZWaveNode,
+type ZWaveNotificationCallbackParams_PowerlevelCC = [
+	node: ZWaveNode,
 	ccId: CommandClasses.Powerlevel,
 	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
 ];
