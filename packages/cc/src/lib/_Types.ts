@@ -3,12 +3,10 @@ import {
 	CommandClasses,
 	DataRate,
 	FLiRS,
-	IZWaveNode,
 	Maybe,
 	ValueMetadata,
 	ZWaveDataRate,
 } from "@zwave-js/core/safe";
-import type { NotificationCCReport } from "../cc/NotificationCC";
 
 /** @publicAPI */
 export enum AlarmSensorCommand {
@@ -680,27 +678,6 @@ export enum EntryControlDataTypes {
 }
 
 /** @publicAPI */
-export interface ZWaveNotificationCallbackArgs_EntryControlCC {
-	eventType: EntryControlEventTypes;
-	/** A human-readable label for the event type */
-	eventTypeLabel: string;
-	dataType: EntryControlDataTypes;
-	/** A human-readable label for the data type */
-	dataTypeLabel: string;
-	eventData?: Buffer | string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Entry Control CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_EntryControlCC = [
-	node: IZWaveNode,
-	ccId: typeof CommandClasses["Entry Control"],
-	args: ZWaveNotificationCallbackArgs_EntryControlCC,
-];
-
-/** @publicAPI */
 export enum FirmwareUpdateMetaDataCommand {
 	MetaDataGet = 0x01,
 	MetaDataReport = 0x02,
@@ -1082,31 +1059,6 @@ export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	};
 };
 
-/**
- * @publicAPI
- * This is emitted when a start or stop event is received
- */
-export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
-	/** The numeric identifier for the event type */
-	eventType:
-		| MultilevelSwitchCommand.StartLevelChange
-		| MultilevelSwitchCommand.StopLevelChange;
-	/** A human-readable label for the event type */
-	eventTypeLabel: string;
-	/** The direction of the level change */
-	direction?: string;
-}
-
-/**
- * @publicAPI
- * Parameter types for the MultilevelSwitch CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
-	node: IZWaveNode,
-	ccId: typeof CommandClasses["Multilevel Switch"],
-	args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC,
-];
-
 /** @publicAPI */
 export enum NodeNamingAndLocationCommand {
 	NameSet = 0x01,
@@ -1134,30 +1086,6 @@ export type NotificationMetadata = ValueMetadata & {
 		notificationType: number;
 	};
 };
-
-/** @publicAPI */
-export interface ZWaveNotificationCallbackArgs_NotificationCC {
-	/** The numeric identifier for the notification type */
-	type: number;
-	/** The human-readable label for the notification type */
-	label: string;
-	/** The numeric identifier for the notification event */
-	event: number;
-	/** The human-readable label for the notification event */
-	eventLabel: string;
-	/** Additional information related to the event */
-	parameters?: NotificationCCReport["eventParameters"];
-}
-
-/**
- * @publicAPI
- * Parameter types for the Notification CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_NotificationCC = [
-	node: IZWaveNode,
-	ccId: CommandClasses.Notification,
-	args: ZWaveNotificationCallbackArgs_NotificationCC,
-];
 
 /** @publicAPI */
 export enum PowerlevelCommand {
@@ -1189,26 +1117,6 @@ export enum PowerlevelTestStatus {
 	Success = 0x01,
 	"In Progress" = 0x02,
 }
-
-/**
- * @publicAPI
- * This is emitted when an unsolicited powerlevel test report is received
- */
-export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
-	testNodeId: number;
-	status: PowerlevelTestStatus;
-	acknowledgedFrames: number;
-}
-
-/**
- * @publicAPI
- * Parameter types for the Powerlevel CC specific version of ZWaveNotificationCallback
- */
-export type ZWaveNotificationCallbackParams_PowerlevelCC = [
-	node: IZWaveNode,
-	ccId: CommandClasses.Powerlevel,
-	args: ZWaveNotificationCallbackArgs_PowerlevelCC,
-];
 
 /** @publicAPI */
 export enum ProtectionCommand {
