@@ -1,5 +1,6 @@
 import {
-	BasicCCSet,
+	BasicCCReport,
+	BasicCCValues,
 	InvalidCC,
 	Security2CC,
 	Security2CCNonceGet,
@@ -15,11 +16,10 @@ import {
 	MockZWaveFrameType,
 	type MockNodeBehavior,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
-integrationTest("Test S2 Collisions", {
+integrationTest("S2 Collisions: Both nodes send at the same time", {
 	debug: true,
 	// We need the cache to skip the CC interviews and mark S2 as supported
 	provisioningDirectory: path.join(__dirname, "fixtures/s2Collisions"),
@@ -177,12 +177,12 @@ integrationTest("Test S2 Collisions", {
 		driver.driverLog.print("START TEST");
 		driver.driverLog.print("----------");
 
-		// Now create a collision
+		// Now create a collision by having both parties send at the same time
 		const nodeToHost = Security2CC.encapsulate(
 			mockNode.host,
-			new BasicCCSet(mockNode.host, {
+			new BasicCCReport(mockNode.host, {
 				nodeId: mockController.host.ownNodeId,
-				targetValue: 0,
+				currentValue: 99,
 			}),
 		);
 		const p1 = mockNode.sendToController(
@@ -194,7 +194,8 @@ integrationTest("Test S2 Collisions", {
 
 		await Promise.all([p1, p2]);
 
-		// Give everything a second to settle
-		await wait(1000);
+		// If the collision was handled gracefully, we should now have the value reported by the node
+		const currentValue = node.getValue(BasicCCValues.currentValue.id);
+		expect(currentValue).toBe(99);
 	},
 });

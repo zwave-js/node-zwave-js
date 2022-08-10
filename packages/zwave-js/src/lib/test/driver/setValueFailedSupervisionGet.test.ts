@@ -85,8 +85,6 @@ integrationTest(
 		testBody: async (driver, node, mockController, mockNode) => {
 			await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
-			await wait(1000);
-
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
 					frame.type === MockZWaveFrameType.Request &&
@@ -97,6 +95,9 @@ integrationTest(
 						"Node should have received a supervised BinarySwitchCCSet",
 				},
 			);
+
+			await wait(1500);
+
 			mockNode.assertReceivedControllerFrame(
 				(frame) =>
 					frame.type === MockZWaveFrameType.Request &&

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import type { MockPortBinding } from "@zwave-js/serial/mock";
 import { MockController, MockNode, MockNodeOptions } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import crypto from "crypto";
 import fs from "fs-extra";
 import os from "os";
@@ -196,7 +197,12 @@ function suite(options: IntegrationTestOptions) {
 	});
 
 	it("Test body", async () => {
-		await testBody(driver, node, mockController, mockNode);
+		try {
+			await testBody(driver, node, mockController, mockNode);
+		} finally {
+			// Give everything a chance to settle before destroying the driver.
+			await wait(100);
+		}
 	}, 30000);
 }
 

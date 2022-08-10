@@ -9,7 +9,6 @@ import {
 	MockZWaveFrameType,
 	MockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -52,8 +51,5 @@ integrationTest("Response to Z-Wave Plus Info Get", {
 		expect(response.roleType).toBe(
 			ZWavePlusRoleType.CentralStaticController,
 		);
-
-		// Allow for everything to settle
-		await wait(100);
 	},
 });

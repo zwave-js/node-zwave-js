@@ -55,8 +55,6 @@ integrationTest("setValue without supervision: expect validation GET", {
 	testBody: async (driver, node, mockController, mockNode) => {
 		await node.setValue(BinarySwitchCCValues.targetValue.id, true);
 
-		await wait(1000);
-
 		mockNode.assertReceivedControllerFrame(
 			(frame) =>
 				frame.type === MockZWaveFrameType.Request &&
@@ -66,6 +64,9 @@ integrationTest("setValue without supervision: expect validation GET", {
 					"Node should have received a non-supervised BinarySwitchCCSet",
 			},
 		);
+
+		await wait(1500);
+
 		mockNode.assertReceivedControllerFrame(
 			(frame) =>
 				frame.type === MockZWaveFrameType.Request &&

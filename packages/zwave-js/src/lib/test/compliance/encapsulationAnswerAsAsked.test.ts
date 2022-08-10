@@ -15,7 +15,6 @@ import {
 	MockZWaveFrameType,
 	MockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -59,9 +58,6 @@ integrationTest(
 			expect(
 				(response as CRC16CCCommandEncapsulation).encapsulated,
 			).toBeInstanceOf(ZWavePlusCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -113,9 +109,6 @@ integrationTest(
 			expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
 			expect(inner).toBeInstanceOf(ZWavePlusCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -161,9 +154,6 @@ integrationTest(
 				);
 
 			expect(response).toBeInstanceOf(SupervisionCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -223,9 +213,6 @@ integrationTest(
 			expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
 			expect(inner).toBeInstanceOf(SupervisionCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
