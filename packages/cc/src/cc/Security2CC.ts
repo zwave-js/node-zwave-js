@@ -855,7 +855,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	}
 
 	private _securityClass?: SecurityClass;
-	public readonly decryptionKey?: Buffer;
+
+	// Only used for testing/debugging purposes
+	private decryptionKey?: Buffer;
+	private encryptionKey?: Buffer;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -1025,6 +1028,7 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			SECURITY_S2_AUTH_TAG_LENGTH,
 		);
 
+		this.encryptionKey = key;
 		this.payload = Buffer.concat([
 			unencryptedPayload,
 			ciphertextPayload,
@@ -1059,6 +1063,15 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			message.extensions = this.extensions
 				.map((e) => e.toLogEntry())
 				.join("");
+		}
+		// Log the used keys in integration tests
+		if (process.env.NODE_ENV === "test") {
+			if (this.decryptionKey) {
+				message["decryption key"] = buffer2hex(this.decryptionKey);
+			}
+			if (this.encryptionKey) {
+				message["encryption key"] = buffer2hex(this.encryptionKey);
+			}
 		}
 		return {
 			...super.toLogEntry(applHost),

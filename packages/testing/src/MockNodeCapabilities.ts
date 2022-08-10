@@ -16,6 +16,9 @@ export interface MockNodeCapabilities extends NodeProtocolInfoAndDeviceClass {
 	manufacturerId: number;
 	productType: number;
 	productId: number;
+
+	/** How long it takes to send a command to or from the node */
+	txDelay: number;
 }
 
 export interface MockEndpointCapabilities {
@@ -42,6 +45,8 @@ export function getDefaultMockNodeCapabilities(): MockNodeCapabilities {
 		basicDeviceClass: 0x04, // Routing End Node
 		genericDeviceClass: 0x06, // Appliance
 		specificDeviceClass: 0x01, // General Appliance
+
+		txDelay: 10,
 	};
 }
 

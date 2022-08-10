@@ -18,6 +18,7 @@ import {
 	MockZWaveFrameType,
 	MOCK_FRAME_ACK_TIMEOUT,
 } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -236,17 +237,22 @@ const handleSendData: MockControllerBehavior = {
 			// Now we can do that. Also set the CC node ID to the controller's own node ID,
 			// so CC knows it came from the controller's node ID.
 			const node = controller.nodes.get(msg.getNodeId()!)!;
-			msg.command = CommandClass.from(node.host, {
-				nodeId: controller.host.ownNodeId,
-				data: msg.payload,
-				origin: MessageOrigin.Host,
-			});
+			// Simulate the frame being transmitted via radio
+			const ackPromise = wait(node.capabilities.txDelay).then(() => {
+				// Deserialize on the node after a short delay
+				msg.command = CommandClass.from(node.host, {
+					nodeId: controller.host.ownNodeId,
+					data: msg.payload,
+					origin: MessageOrigin.Host,
+				});
 
-			// Send the data to the node
-			const frame = createMockZWaveRequestFrame(msg.command, {
-				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+				// Send the data to the node
+				const frame = createMockZWaveRequestFrame(msg.command, {
+					ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+				});
+
+				return controller.sendToNode(node, frame);
 			});
-			const ackPromise = controller.sendToNode(node, frame);
 
 			// Notify the host that the message was sent
 			const res = new SendDataResponse(host, {
@@ -462,7 +468,11 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 			});
 			// Nodes send commands TO the controller, so we need to fix the node ID before forwarding
 			msg.getNodeId = () => node.id;
-			await controller.sendToHost(msg.serialize());
+			// Simulate a serialized frame being transmitted via radio
+			const data = msg.serialize();
+			await wait(node.capabilities.txDelay);
+			// Then receive it
+			await controller.sendToHost(data);
 			return true;
 		}
 	},
