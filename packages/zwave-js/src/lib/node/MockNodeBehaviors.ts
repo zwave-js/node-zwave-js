@@ -17,7 +17,7 @@ const respondToRequestNodeInfo: MockNodeBehavior = {
 			frame.payload instanceof ZWaveProtocolCCRequestNodeInformationFrame
 		) {
 			const cc = new ZWaveProtocolCCNodeInformationFrame(self.host, {
-				nodeId: controller.host.ownNodeId,
+				nodeId: self.id,
 				...self.capabilities,
 				supportedCCs: [...self.implementedCCs]
 					.filter(([, info]) => info.isSupported)

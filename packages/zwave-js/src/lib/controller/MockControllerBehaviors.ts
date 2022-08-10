@@ -319,8 +319,8 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			// Send the data to the node
 			const node = controller.nodes.get(msg.getNodeId()!)!;
 			const command = new ZWaveProtocolCCRequestNodeInformationFrame(
-				host,
-				{ nodeId: node.id },
+				node.host,
+				{ nodeId: controller.host.ownNodeId },
 			);
 			const frame = createMockZWaveRequestFrame(command, {
 				ackRequested: false,
@@ -395,8 +395,8 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 			// Send the command to the node
 			const node = controller.nodes.get(msg.getNodeId()!)!;
-			const command = new ZWaveProtocolCCAssignSUCReturnRoute(host, {
-				nodeId: host.ownNodeId,
+			const command = new ZWaveProtocolCCAssignSUCReturnRoute(node.host, {
+				nodeId: controller.host.ownNodeId,
 				repeaters: [], // don't care
 				routeIndex: 0, // don't care
 				destinationSpeed: ZWaveDataRate["100k"],
