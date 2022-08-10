@@ -165,20 +165,10 @@
 		},
 		{
 			"#": "28",
-			"label": "Enable/Disable All Power Reports",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable all power monitoring and reporting",
-					"value": 0
-				},
-				{
-					"label": "Enable all power monitoring and reporting",
-					"value": 1
-				}
-			]
+			"$if": "firmwareVersion >= 2.2",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Power/Energy Monitoring",
+			"defaultValue": 1
 		},
 		{
 			"#": "29",
