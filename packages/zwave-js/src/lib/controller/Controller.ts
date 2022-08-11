@@ -253,6 +253,7 @@ import { protocolVersionToSDKVersion } from "./ZWaveSDKVersions";
 import type {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
+	GetFirmwareUpdatesOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./_Types";
@@ -4446,10 +4447,11 @@ ${associatedNodes.join(", ")}`,
 	 * **Note:** Sleeping nodes need to be woken up for this to work. This method will throw when called for a sleeping node
 	 * which did not wake up within a minute.
 	 *
-	 * **Note:** This requires an API key to be set in the driver options.
+	 * **Note:** This requires an API key to be set in the driver options, or passed .
 	 */
 	public async getAvailableFirmwareUpdates(
 		nodeId: number,
+		options?: GetFirmwareUpdatesOptions,
 	): Promise<FirmwareUpdateInfo[]> {
 		const node = this.nodes.getOrThrow(nodeId);
 
@@ -4497,7 +4499,8 @@ ${associatedNodes.join(", ")}`,
 				productType,
 				productId,
 				firmwareVersion,
-				this.driver.options.apiKeys?.firmwareUpdateService,
+				options?.apiKey ??
+					this.driver.options.apiKeys?.firmwareUpdateService,
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;

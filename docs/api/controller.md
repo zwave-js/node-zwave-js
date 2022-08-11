@@ -742,7 +742,7 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 ### `getAvailableFirmwareUpdates`
 
 ```ts
-getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>
+getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>
 ```
 
 Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
@@ -777,7 +777,16 @@ Many Z-Wave devices only have a single upgradeable firmware target (chip), so th
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
-> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects and non-commercial use). The API key can also be passed via the `options` argument:
+
+<!-- #import GetFirmwareUpdatesOptions from "zwave-js" -->
+
+```ts
+interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+}
+```
 
 ### `beginOTAFirmwareUpdate`
 
