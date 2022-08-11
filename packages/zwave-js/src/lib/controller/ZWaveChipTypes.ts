@@ -5,6 +5,7 @@ const chipTypes = Object.freeze({
 	[0x0401]: "ZM0401 / ZM4102 / SD3402",
 	[0x0500]: "ZW050x",
 	[0x0700]: "EFR32ZG14 / ZGM130S",
+	[0x0800]: "EFR32ZG23 / ZGM230S",
 });
 
 export interface UnknownZWaveChipType {
