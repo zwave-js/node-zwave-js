@@ -481,7 +481,11 @@ export interface InclusionGrant {
 // @public
 export type InclusionOptions = {
     strategy: InclusionStrategy.Default;
+    userCallbacks?: InclusionUserCallbacks;
     forceSecurity?: boolean;
+} | {
+    strategy: InclusionStrategy.Security_S2;
+    userCallbacks?: InclusionUserCallbacks;
 } | {
     strategy: InclusionStrategy.Security_S2;
     provisioning?: PlannedProvisioningEntry;
@@ -671,6 +675,9 @@ export interface RefreshInfoOptions {
 //
 // @public
 export type ReplaceNodeOptions = {
+    strategy: InclusionStrategy.Security_S2;
+    userCallbacks?: InclusionUserCallbacks;
+} | {
     strategy: InclusionStrategy.Security_S2;
     provisioning?: PlannedProvisioningEntry;
 } | {
