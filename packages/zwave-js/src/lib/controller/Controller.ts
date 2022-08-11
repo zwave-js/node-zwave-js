@@ -1758,7 +1758,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 				| InclusionStrategy.Security_S2
 				| InclusionStrategy.SmartStart;
 		};
-		if (inclusionOptions.provisioning) {
+		if (
+			"provisioning" in inclusionOptions &&
+			!!inclusionOptions.provisioning
+		) {
 			const grantedSecurityClasses =
 				inclusionOptions.provisioning.securityClasses;
 			const fullDSK = inclusionOptions.provisioning.dsk;
@@ -1781,8 +1784,14 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					return Promise.resolve(pin);
 				},
 			};
+		} else if (
+			"userCallbacks" in inclusionOptions &&
+			!!inclusionOptions.userCallbacks
+		) {
+			// Use the callbacks provided to this inclusion attempt
+			userCallbacks = inclusionOptions.userCallbacks;
 		} else if (this.driver.options.inclusionUserCallbacks) {
-			// Use the provided callbacks
+			// Use the callbacks defined in the driver options as fallback
 			userCallbacks = this.driver.options.inclusionUserCallbacks;
 		} else {
 			// Cannot bootstrap S2 without user callbacks, abort.
