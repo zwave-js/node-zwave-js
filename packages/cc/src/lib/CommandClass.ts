@@ -102,7 +102,6 @@ export class CommandClass implements ICommandClass {
 	// empty constructor to parse messages
 	public constructor(host: ZWaveHost, options: CommandClassOptions) {
 		this.host = host;
-		this.origin = options.origin ?? MessageOrigin.Controller;
 		// Extract the cc from declared metadata if not provided by the CC constructor
 		this.ccId =
 			("ccId" in options && options.ccId) || getCommandClass(this);
@@ -191,7 +190,6 @@ export class CommandClass implements ICommandClass {
 	}
 
 	protected host: ZWaveHost;
-	protected origin: MessageOrigin;
 
 	/** This CC's identifier */
 	public ccId: CommandClasses;
