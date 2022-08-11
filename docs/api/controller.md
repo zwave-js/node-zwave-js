@@ -58,6 +58,11 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
 			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
+			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
 			 */
@@ -66,9 +71,16 @@ type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Security_S2;
 			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
+	  }
+	| {
+			strategy: InclusionStrategy.Security_S2;
+			/**
 			 * The optional provisioning entry for the device to be included.
-			 * If not given, the inclusion user callbacks of the driver options
-			 * will be used.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
 			 */
 			provisioning?: PlannedProvisioningEntry;
 	  }
@@ -79,7 +91,7 @@ type InclusionOptions =
 	  };
 ```
 
-For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They are defined as follows:
+For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
 
 <!-- #import InclusionUserCallbacks from "zwave-js" -->
 
@@ -144,7 +156,7 @@ enum SecurityClass {
 }
 ```
 
-> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI must not be linked to an application-initiated inclusion.
+> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI flow must be supported outside of application-initiated inclusion.
 
 Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
 
