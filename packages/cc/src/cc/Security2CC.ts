@@ -4,6 +4,7 @@ import {
 	encodeBitMask,
 	encryptAES128CCM,
 	getCCName,
+	highResTimestamp,
 	isTransmissionError,
 	isZWaveError,
 	Maybe,
@@ -85,8 +86,11 @@ function getAuthenticationData(
 	return ret;
 }
 
-/** Validates that a sequence number is not a duplicate and updates the SPAN table if it is accepted */
-function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
+/** Validates that a sequence number is not a duplicate and updates the SPAN table if it is accepted. Returns the previous sequence number if there is one. */
+function validateSequenceNumber(
+	this: Security2CC,
+	sequenceNumber: number,
+): number | undefined {
 	validatePayload.withReason("Duplicate command")(
 		!this.host.securityManager2!.isDuplicateSinglecast(
 			this.nodeId as number,
@@ -94,7 +98,7 @@ function validateSequenceNumber(this: Security2CC, sequenceNumber: number) {
 		),
 	);
 	// Not a duplicate, store it
-	this.host.securityManager2!.storeSequenceNumber(
+	return this.host.securityManager2!.storeSequenceNumber(
 		this.nodeId as number,
 		sequenceNumber,
 	);
@@ -622,7 +626,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const sendingNodeId = this.nodeId as number;
 
 			// Don't accept duplicate commands
-			validateSequenceNumber.call(this, this._sequenceNumber);
+			const prevSequenceNumber = validateSequenceNumber.call(
+				this,
+				this._sequenceNumber,
+			);
 
 			// Ensure the node has a security class
 			// const node = this.getNode()!;
@@ -695,18 +702,19 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			const decrypt = (): {
 				plaintext: Buffer;
 				authOK: boolean;
-				decryptionKey?: Buffer;
+				key?: Buffer;
+				iv?: Buffer;
 			} => {
-				const getNonceAndDecrypt = () => {
-					const iv =
-						this.host.securityManager2.nextNonce(sendingNodeId);
+				const decryptWithNonce = (nonce: Buffer) => {
 					const { keyCCM: key } =
 						this.host.securityManager2.getKeysForNode(
 							sendingNodeId,
 						);
 
+					const iv = nonce;
 					return {
-						decryptionKey: key,
+						key,
+						iv,
 						...decryptAES128CCM(
 							key,
 							iv,
@@ -716,8 +724,37 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 						),
 					};
 				};
+				const getNonceAndDecrypt = () => {
+					const iv =
+						this.host.securityManager2.nextNonce(sendingNodeId);
+					return decryptWithNonce(iv);
+				};
 
 				if (spanState.type === SPANState.SPAN) {
+					// There SHOULD be a shared SPAN between both parties. But experience has shown that both could have
+					// sent a command at roughly the same time, using the same SPAN for encryption.
+					// To avoid a nasty desync and both nodes trying to resync at the same time, causing message loss,
+					// we accept commands encrypted with the previous SPAN under very specific circumstances:
+					if (
+						// The previous SPAN is still known, i.e. the node didn't send another command that was successfully decrypted
+						!!spanState.currentSPAN &&
+						// it is still valid
+						spanState.currentSPAN.expires > highResTimestamp() &&
+						// The received command is exactly the next, expected one
+						prevSequenceNumber != undefined &&
+						this._sequenceNumber ===
+							((prevSequenceNumber + 1) & 0xff) &&
+						// And in case of a mock-based test, do this only on the controller
+						!this.host.__internalIsMockNode
+					) {
+						const nonce = spanState.currentSPAN.nonce;
+						spanState.currentSPAN = undefined;
+						return decryptWithNonce(nonce);
+					} else {
+						// forgetting the current SPAN shouldn't be necessary but better be safe than sorry
+						spanState.currentSPAN = undefined;
+					}
+
 					// This can only happen if the security class is known
 					return getNonceAndDecrypt();
 				} else if (spanState.type === SPANState.LocalEI) {
@@ -803,13 +840,14 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 
 			let plaintext: Buffer | undefined;
 			let authOK = false;
-			let decryptionKey: Buffer | undefined;
+			let key: Buffer | undefined;
+			let iv: Buffer | undefined;
 
 			// If the Receiver is unable to authenticate the singlecast message with the current SPAN,
 			// the Receiver SHOULD try decrypting the message with one or more of the following SPAN values,
 			// stopping when decryption is successful or the maximum number of iterations is reached.
 			for (let i = 0; i < DECRYPT_ATTEMPTS; i++) {
-				({ plaintext, authOK, decryptionKey } = decrypt());
+				({ plaintext, authOK, key, iv } = decrypt());
 				if (!!authOK && !!plaintext) break;
 			}
 			// If authentication fails, do so with an error code that instructs the
@@ -835,7 +873,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 					encapCC: this,
 				});
 			}
-			this.decryptionKey = decryptionKey;
+			this.key = key;
+			this.iv = iv;
 		} else {
 			this._securityClass = options.securityClass;
 			this.encapsulated = options.encapsulated;
@@ -857,8 +896,8 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 	private _securityClass?: SecurityClass;
 
 	// Only used for testing/debugging purposes
-	private decryptionKey?: Buffer;
-	private encryptionKey?: Buffer;
+	private key?: Buffer;
+	private iv?: Buffer;
 
 	private _sequenceNumber: number | undefined;
 	/**
@@ -1011,7 +1050,9 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			unencryptedPayload,
 		);
 
-		const iv = this.host.securityManager2.nextNonce(receiverNodeId);
+		// Generate a nonce for encryption, and remember it to attempt decryption
+		// of potential in-flight messages from the target node.
+		const iv = this.host.securityManager2.nextNonce(receiverNodeId, true);
 		const { keyCCM: key } =
 			// Prefer the overridden security class if it was given
 			this._securityClass != undefined
@@ -1028,7 +1069,10 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 			SECURITY_S2_AUTH_TAG_LENGTH,
 		);
 
-		this.encryptionKey = key;
+		// Remember key and IV for debugging purposes
+		this.key = key;
+		this.iv = iv;
+
 		this.payload = Buffer.concat([
 			unencryptedPayload,
 			ciphertextPayload,
@@ -1066,11 +1110,11 @@ export class Security2CCMessageEncapsulation extends Security2CC {
 		}
 		// Log the used keys in integration tests
 		if (process.env.NODE_ENV === "test") {
-			if (this.decryptionKey) {
-				message["decryption key"] = buffer2hex(this.decryptionKey);
+			if (this.key) {
+				message.key = buffer2hex(this.key);
 			}
-			if (this.encryptionKey) {
-				message["encryption key"] = buffer2hex(this.encryptionKey);
+			if (this.iv) {
+				message.IV = buffer2hex(this.iv);
 			}
 		}
 		return {

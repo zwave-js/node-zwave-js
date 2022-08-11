@@ -112,6 +112,7 @@ export class MockNode {
 		this.host = {
 			...this.controller.host,
 			ownNodeId: this.id,
+			__internalIsMockNode: true,
 
 			// Mimic the behavior of ZWaveNode, but for arbitrary node IDs
 			hasSecurityClass(
