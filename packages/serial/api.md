@@ -407,7 +407,7 @@ export class Message {
     expectsNodeUpdate(): boolean;
     expectsResponse(): boolean;
     static extractPayload(data: Buffer): Buffer;
-    static from(host: ZWaveHost, data: Buffer, origin?: MessageOrigin): Message;
+    static from(host: ZWaveHost, options: MessageDeserializationOptions): Message;
     // (undocumented)
     functionType: FunctionType;
     getCallbackTimeout(): number | undefined;
@@ -473,6 +473,7 @@ export interface MessageDeserializationOptions {
     data: Buffer;
     // (undocumented)
     origin?: MessageOrigin;
+    parseCCs?: boolean;
 }
 
 // Warning: (ae-missing-release-tag) "MessageHeaders" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
