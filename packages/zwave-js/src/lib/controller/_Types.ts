@@ -14,3 +14,8 @@ export type FirmwareUpdateInfo = {
 	changelog: string;
 	files: FirmwareUpdateFileInfo[];
 };
+
+export interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+}

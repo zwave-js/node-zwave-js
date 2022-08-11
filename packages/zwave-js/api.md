@@ -448,6 +448,13 @@ export { FunctionType }
 
 export { getEnumMemberName }
 
+// Warning: (ae-missing-release-tag) "GetFirmwareUpdatesOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetFirmwareUpdatesOptions {
+    apiKey?: string;
+}
+
 export { guessFirmwareFileFormat }
 
 // Warning: (ae-missing-release-tag) "HealNodeStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -912,7 +919,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<AssociationAddress, ReadonlyMap<number, readonly AssociationAddress[]>>;
     getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
     getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
-    getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>;
+    getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>;
     getBackgroundRSSI(): Promise<{
         rssiChannel0: RSSI_2;
         rssiChannel1: RSSI_2;
