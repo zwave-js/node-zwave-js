@@ -395,5 +395,72 @@
 				"value": 2
 			}
 		]
+	},
+	"3way_setup": {
+		"label": "3-Way Setup",
+		"description": "Set the 3-way switch configuration as add-on or standard.",
+		"valueSize": 1,
+		"defaultValue": 0,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Add-on",
+				"value": 0
+			},
+			{
+				"label": "Standard",
+				"value": 1
+			}
+		]
+	},
+	"led_light_color": {
+		"label": "LED Light Color",
+		"valueSize": 1,
+		"defaultValue": 5,
+		"unsigned": true,
+		"allowManualEntry": false,
+		"options": [
+			{
+				"label": "Red",
+				"value": 1
+			},
+			{
+				"label": "Orange",
+				"value": 2
+			},
+			{
+				"label": "Yellow",
+				"value": 3
+			},
+			{
+				"label": "Green",
+				"value": 4
+			},
+			{
+				"label": "Blue",
+				"value": 5
+			},
+			{
+				"label": "Pink",
+				"value": 6
+			},
+			{
+				"label": "Purple",
+				"value": 7
+			},
+			{
+				"label": "White",
+				"value": 8
+			}
+		]
+	},
+	"led_light_intensity": {
+		"label": "LED Light Intensity",
+		"valueSize": 1,
+		"minValue": 0,
+		"maxValue": 7,
+		"defaultValue": 4,
+		"unsigned": true
 	}
 }
