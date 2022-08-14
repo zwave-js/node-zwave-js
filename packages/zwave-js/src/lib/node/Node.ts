@@ -657,11 +657,23 @@ export class ZWaveNode
 	}
 
 	public get firmwareVersion(): string | undefined {
-		// On supporting nodes, use the applicationVersion, which is the
+		// On supporting nodes, use the applicationVersion, which MUST be
 		// same as the first (main) firmware, plus the patch version.
-		const ret =
-			this.getValue<string>(VersionCCValues.applicationVersion.id) ??
-			this.getValue<string[]>(VersionCCValues.firmwareVersions.id)?.[0];
+		const firmware0Version = this.getValue<string[]>(
+			VersionCCValues.firmwareVersions.id,
+		)?.[0];
+		const applicationVersion = this.getValue<string>(
+			VersionCCValues.applicationVersion.id,
+		);
+
+		let ret: string | undefined = firmware0Version;
+		if (applicationVersion) {
+			// If the application version is set, we cannot blindly trust that it is the firmware version.
+			// Some nodes incorrectly set this field to the Z-Wave Application Framework API Version
+			if (!ret || applicationVersion.startsWith(`${ret}.`)) {
+				ret = applicationVersion;
+			}
+		}
 
 		// Special case for the official 700 series firmwares which are aligned with the SDK version
 		// We want to work with the full x.y.z firmware version here.
@@ -857,7 +869,10 @@ export class ZWaveNode
 				this._valueDB.setValue(
 					valueId,
 					value,
-					!!this.driver.options.emitValueUpdateAfterSetValue
+					// We need to emit an event if applications opted in, or if this was a supervised call
+					// because in this case there won't be a verification query which would result in an update
+					!!result ||
+						!!this.driver.options.emitValueUpdateAfterSetValue
 						? { source: "driver" }
 						: { noEvent: true },
 				);

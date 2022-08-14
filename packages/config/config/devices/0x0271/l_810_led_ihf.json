@@ -16,137 +16,63 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Time",
-			"description": "Duration of light after motion detection.",
-			"valueSize": 2,
-			"minValue": 5,
-			"maxValue": 900,
-			"defaultValue": 180
+			"$import": "templates/steinel_template.json#motion_light_duration"
 		},
 		{
 			"#": "2",
-			"label": "Light",
-			"description": "Light threshold [lx]",
-			"valueSize": 2,
-			"minValue": 2,
-			"maxValue": 2000,
-			"defaultValue": 2000
+			"$import": "templates/steinel_template.json#light_threshold"
 		},
 		{
 			"#": "3",
-			"label": "Dim",
-			"description": "Night dim mode and time [min]: (only for SLAMP with DIM ability)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 60,
-			"defaultValue": 0
+			"$import": "templates/steinel_template.json#night_dim_mode"
 		},
 		{
 			"#": "4",
-			"label": "Range",
-			"description": "Motion Radar Range [cm]: (only for iHF sensor)",
-			"valueSize": 2,
-			"minValue": 100,
-			"maxValue": 500,
-			"defaultValue": 500
+			"$import": "templates/steinel_template.json#motion_sensor_range"
 		},
 		{
 			"#": "5",
-			"label": "Sensity",
-			"description": "Motion Radar Sensitivity [%]: (SLAMP+SPIR)",
-			"valueSize": 1,
-			"minValue": 2,
-			"maxValue": 100,
-			"defaultValue": 100
+			"$import": "templates/steinel_template.json#motion_sensor_sensitivity"
 		},
 		{
 			"#": "6",
-			"label": "Brighntes Meas Interval",
-			"description": "Brightness measuring interval [min]: (only SLAMP)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 120,
-			"defaultValue": 0
+			"$import": "templates/steinel_template.json#brightness_measuring_interval"
 		},
 		{
 			"#": "8",
-			"label": "Global_Light",
-			"description": "Use external Ambient Light value",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1
+			"$import": "templates/steinel_template.json#external_light_sensor"
 		},
 		{
-			"#": "9",
-			"label": "Slave_Mode",
-			"description": "Disable local control",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 4,
-			"defaultValue": 2
+			"#": "9[0x07]",
+			"$import": "templates/steinel_template.json#light_behavior"
 		},
 		{
 			"#": "10",
-			"label": "Off_Behaviour",
-			"description": "Off behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10
+			"$import": "templates/steinel_template.json#off_command_duration"
 		},
 		{
 			"#": "11",
-			"label": "On_Behaviour",
-			"description": "On behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255
+			"$import": "templates/steinel_template.json#on_command_duration"
 		},
 		{
 			"#": "12",
-			"label": "On_Time_Over",
-			"description": "On behaviour time over (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204
+			"$import": "templates/steinel_template.json#motion_wait_limit"
 		},
 		{
 			"#": "13",
-			"label": "On_Off_Behaviour",
-			"description": "Sequence On-Off behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204
+			"$import": "templates/steinel_template.json#on_off_sequence_off_duration"
 		},
 		{
 			"#": "14",
-			"label": "Off_On_Behaviour",
-			"description": "Sequence Off-On behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 204
+			"$import": "templates/steinel_template.json#off_on_sequence_on_duration"
 		},
 		{
 			"#": "15",
-			"label": "Sequence_Time",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 50,
-			"defaultValue": 10
+			"$import": "templates/steinel_template.json#sequence_timing"
 		},
 		{
 			"#": "16",
-			"label": "Motion_Disable",
-			"description": "Motion Off behaviour (timeout)",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 209
+			"$import": "templates/steinel_template.json#command_motion_disable_timeout"
 		}
 	]
 }

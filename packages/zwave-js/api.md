@@ -32,6 +32,8 @@ import type { DeferredPromise } from 'alcalzone-shared/deferred-promise';
 import type { DeviceConfig } from '@zwave-js/config';
 import { Duration } from '@zwave-js/core/safe';
 import { DurationUnit } from '@zwave-js/core/safe';
+import type { EntryControlDataTypes } from '@zwave-js/cc';
+import type { EntryControlEventTypes } from '@zwave-js/cc';
 import { extractFirmware } from '@zwave-js/core';
 import { FileSystem } from '@zwave-js/host/safe';
 import type { FileSystem as FileSystem_2 } from '@zwave-js/host';
@@ -73,15 +75,18 @@ import { MockNodeBehavior } from '@zwave-js/testing';
 import { MockPortBinding } from '@zwave-js/serial/mock';
 import { MulticastCC } from '@zwave-js/core';
 import { MulticastDestination } from '@zwave-js/core/safe';
+import type { MultilevelSwitchCommand } from '@zwave-js/cc';
 import { NODE_ID_BROADCAST } from '@zwave-js/core/safe';
 import { NODE_ID_MAX } from '@zwave-js/core/safe';
 import { NodeStatus } from '@zwave-js/core/safe';
 import type { NodeStatus as NodeStatus_2 } from '@zwave-js/core';
 import { NodeType } from '@zwave-js/core/safe';
 import { NodeType as NodeType_2 } from '@zwave-js/core';
+import type { NotificationCCReport } from '@zwave-js/cc';
 import { num2hex } from '@zwave-js/shared/safe';
 import { parseQRCodeString } from '@zwave-js/core';
 import { Powerlevel } from '@zwave-js/cc';
+import type { PowerlevelTestStatus } from '@zwave-js/cc';
 import { ProtocolDataRate } from '@zwave-js/core/safe';
 import type { ProtocolDataRate as ProtocolDataRate_2 } from '@zwave-js/core';
 import { protocolDataRateToString } from '@zwave-js/core';
@@ -141,10 +146,6 @@ import { ZWaveErrorCodes } from '@zwave-js/core/safe';
 import type { ZWaveHost } from '@zwave-js/host';
 import type { ZWaveHostOptions } from '@zwave-js/host';
 import { ZWaveLibraryTypes } from '@zwave-js/core/safe';
-import type { ZWaveNotificationCallbackParams_EntryControlCC } from '@zwave-js/cc';
-import type { ZWaveNotificationCallbackParams_MultilevelSwitchCC } from '@zwave-js/cc';
-import type { ZWaveNotificationCallbackParams_NotificationCC } from '@zwave-js/cc';
-import type { ZWaveNotificationCallbackParams_PowerlevelCC } from '@zwave-js/cc';
 import { ZWavePlusNodeType } from '@zwave-js/cc';
 import { ZWavePlusRoleType } from '@zwave-js/cc';
 import { ZWaveSerialPortImplementation } from '@zwave-js/serial';
@@ -247,7 +248,8 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
     static enumerateSerialPorts(): Promise<string[]>;
     getLogConfig(): LogConfig;
-    getNextCallbackId(): number;
+    readonly getNextCallbackId: () => number;
+    readonly getNextSupervisionSessionId: () => number;
     // (undocumented)
     getNodeUnsafe(msg: Message): ZWaveNode | undefined;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
@@ -446,6 +448,13 @@ export { FunctionType }
 
 export { getEnumMemberName }
 
+// Warning: (ae-missing-release-tag) "GetFirmwareUpdatesOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface GetFirmwareUpdatesOptions {
+    apiKey?: string;
+}
+
 export { guessFirmwareFileFormat }
 
 // Warning: (ae-missing-release-tag) "HealNodeStatus" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
@@ -479,7 +488,11 @@ export interface InclusionGrant {
 // @public
 export type InclusionOptions = {
     strategy: InclusionStrategy.Default;
+    userCallbacks?: InclusionUserCallbacks;
     forceSecurity?: boolean;
+} | {
+    strategy: InclusionStrategy.Security_S2;
+    userCallbacks?: InclusionUserCallbacks;
 } | {
     strategy: InclusionStrategy.Security_S2;
     provisioning?: PlannedProvisioningEntry;
@@ -669,6 +682,9 @@ export interface RefreshInfoOptions {
 //
 // @public
 export type ReplaceNodeOptions = {
+    strategy: InclusionStrategy.Security_S2;
+    userCallbacks?: InclusionUserCallbacks;
+} | {
     strategy: InclusionStrategy.Security_S2;
     provisioning?: PlannedProvisioningEntry;
 } | {
@@ -903,7 +919,7 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
     getAllAssociations(nodeId: number): ReadonlyObjectKeyMap<AssociationAddress, ReadonlyMap<number, readonly AssociationAddress[]>>;
     getAssociationGroups(source: AssociationAddress): ReadonlyMap<number, AssociationGroup>;
     getAssociations(source: AssociationAddress): ReadonlyMap<number, readonly AssociationAddress[]>;
-    getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>;
+    getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>;
     getBackgroundRSSI(): Promise<{
         rssiChannel0: RSSI_2;
         rssiChannel1: RSSI_2;
@@ -1262,6 +1278,88 @@ export type ZWaveNodeValueUpdatedCallback = (node: ZWaveNode, args: ZWaveNodeVal
 //
 // @public (undocumented)
 export type ZWaveNotificationCallback = (...args: ZWaveNotificationCallbackParams_NotificationCC | ZWaveNotificationCallbackParams_EntryControlCC | ZWaveNotificationCallbackParams_PowerlevelCC | ZWaveNotificationCallbackParams_MultilevelSwitchCC) => void;
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveNotificationCallbackArgs_EntryControlCC {
+    // (undocumented)
+    dataType: EntryControlDataTypes;
+    dataTypeLabel: string;
+    // (undocumented)
+    eventData?: Buffer | string;
+    // (undocumented)
+    eventType: EntryControlEventTypes;
+    eventTypeLabel: string;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
+    direction?: string;
+    eventType: MultilevelSwitchCommand.StartLevelChange | MultilevelSwitchCommand.StopLevelChange;
+    eventTypeLabel: string;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export interface ZWaveNotificationCallbackArgs_NotificationCC {
+    event: number;
+    eventLabel: string;
+    label: string;
+    parameters?: NotificationCCReport["eventParameters"];
+    type: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackArgs_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export interface ZWaveNotificationCallbackArgs_PowerlevelCC {
+    // (undocumented)
+    acknowledgedFrames: number;
+    // (undocumented)
+    status: PowerlevelTestStatus;
+    // (undocumented)
+    testNodeId: number;
+}
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_EntryControlCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type ZWaveNotificationCallbackParams_EntryControlCC = [
+node: ZWaveNode,
+ccId: typeof CommandClasses_2["Entry Control"],
+args: ZWaveNotificationCallbackArgs_EntryControlCC
+];
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_MultilevelSwitchCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type ZWaveNotificationCallbackParams_MultilevelSwitchCC = [
+node: ZWaveNode,
+ccId: typeof CommandClasses_2["Multilevel Switch"],
+args: ZWaveNotificationCallbackArgs_MultilevelSwitchCC
+];
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_NotificationCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type ZWaveNotificationCallbackParams_NotificationCC = [
+node: ZWaveNode,
+ccId: CommandClasses_2.Notification,
+args: ZWaveNotificationCallbackArgs_NotificationCC
+];
+
+// Warning: (ae-missing-release-tag) "ZWaveNotificationCallbackParams_PowerlevelCC" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public
+export type ZWaveNotificationCallbackParams_PowerlevelCC = [
+node: ZWaveNode,
+ccId: CommandClasses_2.Powerlevel,
+args: ZWaveNotificationCallbackArgs_PowerlevelCC
+];
 
 // Warning: (ae-missing-release-tag) "ZWaveOptions" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

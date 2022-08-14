@@ -223,7 +223,7 @@ interface FoundNode {
 
 In order to support inclusion controllers (which is required for certification), the inclusion user callbacks had to be decoupled from application-initiated inclusion, since inclusion controllers will tell Z-Wave JS when to bootstrap S2 capable nodes.
 
-Instead of passing them via the `userCallbacks` property of the `InclusionOptions`, they are now passed directly to the driver via the `inclusionUserCallbacks` property of the `ZWaveOptions`.
+Instead of having to pass them via the `userCallbacks` property of the `InclusionOptions`, they are now passed directly to the driver via the `inclusionUserCallbacks` property of the `ZWaveOptions`. The `InclusionOptions` still allow passing the user callbacks via the `userCallbacks` property to override the statically defined ones. This can be useful in scenarios where the driver instance is shared between multiple UIs.
 
 ## Node `firmwareVersion` supports `major.minor.patch` format
 

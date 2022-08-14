@@ -11,7 +11,7 @@ import type { ConfigManager } from '@zwave-js/config';
 import type { ControllerLogger } from '@zwave-js/core';
 import type { DeviceConfig } from '@zwave-js/config';
 import type { ICommandClass } from '@zwave-js/core';
-import type { IZWaveNode } from '@zwave-js/core';
+import { IZWaveNode } from '@zwave-js/core';
 import type { Maybe } from '@zwave-js/core';
 import type { Overwrite } from 'alcalzone-shared/types';
 import type { ReadonlyThrowingMap } from '@zwave-js/shared';
@@ -102,6 +102,7 @@ export interface ZWaveHost {
     // (undocumented)
     getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
     getNextCallbackId(): number;
+    getNextSupervisionSessionId(): number;
     getSafeCCVersionForNode(cc: CommandClasses, nodeId: number, endpointIndex?: number): number;
     // (undocumented)
     hasSecurityClass(nodeId: number, securityClass: SecurityClass): Maybe<boolean>;

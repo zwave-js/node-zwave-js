@@ -67,6 +67,11 @@ export interface ZWaveHost {
 	 */
 	getNextCallbackId(): number;
 
+	/**
+	 * Returns the next session ID for supervised communication
+	 */
+	getNextSupervisionSessionId(): number;
+
 	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
 }
 

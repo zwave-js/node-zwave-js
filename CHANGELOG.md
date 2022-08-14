@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.4 (2022-07-26) · _„Woo-Hoo!”_
+## 10.0.0-beta.7 (2022-08-10) · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -20,9 +20,11 @@
 
 ### Features
 * Implement Z-Wave Protocol CC, for internal use (#4691)
-* Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697)
+* Implemented mock controller and mock nodes to vastly improve how integration tests are written (#4697, #4892)
 * Add values to `Basic CC` and `Multilevel Switch CC` to restore previous non-zero level (#4732)
 * Answer incoming requests with the same encapsulation (#4832)
+* Allow passing a custom serial port implementation in `port` param of the Driver class (#4885)
+* Support sending `TimeCC` reports and automatically respond to requests (#4858)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -31,10 +33,25 @@
 * Add missing `reflect-metadata` dependency to some packages that were meant to be used standalone (#4846)
 * Fixed an off-by-one error while parsing the `supportedOperationTypes` bitmask of `User Code CC` (#4848)
 * Query user codes 1-by-1 if bulk reading is not supported (#4849)
+* Include both V1 values and V2+ values in `Notification CC` logs (#4904)
+* Obfuscate keys in `Entry Control CC` logs (#4905)
+
+### Bugfixes (broken and fixed in v10 beta)
+* Emit value event after successful supervised `setValue` (#4899)
+* Correct nested encapsulation of Supervision CC Reports (#4890)
+* Ensure the `major.minor.patch` firmware version matches the legacy `major.minor` field before using it (#4906)
+* Move `"notification"` event args types back into `zwave-js` package (#4907)
 
 ### Config file changes
 * Corrected manufacturer and device labels for Heatit devices (#4838)
 * Slightly clean up the Fibaro Motion Sensor config (#4790)
+* Update Zooz ZEN17 to firmware 1.10 (#4809)
+* Add NewOne N4003, template more in the Minoston directory (#4834)
+* Add Fibaro Wall Plug UK - FGWPG-111 (#4865)
+* Correct param 9 for STEINEL devices, rework to templates (#4895)
+* Add Zooz Zen05 Outdoor Smart Plug (#4896)
+* Add MP31ZP (rebranded MP21ZP) (#4894)
+* Update Zooz ZEN20 with additional parameters 28 - 36 (#4898)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
@@ -42,6 +59,11 @@
 * Make several reflection decorators generic and untangle `Manufacturer Proprietary CC` implementations (#4701)
 * Fixed typos throughout the project (#4837, #4842)
 * Added compliance tests for Z-Wave certification (#4832)
+* Removed a polyfill for `Object.entries` (#4859)
+* Added best practices for a reliable mesh to the docs (#4875)
+* Changes to the public API surface are now tracked using `@microsoft/api-extractor` (#4860)
+* Reorganized the CI jobs to only compile TypeScript once and reuse the build output during subsequent jobs (#4880)
+* Move Supervision Session ID onto `ZWaveHost` interface (#4891)
 
 ## 9.6.2 (2022-07-20)
 ### Bugfixes

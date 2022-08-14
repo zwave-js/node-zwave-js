@@ -47,6 +47,7 @@ import {
 	ICommandClass,
 	isZWaveError,
 	LogConfig,
+	MAX_SUPERVISION_SESSION_ID,
 	Maybe,
 	MessagePriority,
 	nwiHomeIdFromDSK,
@@ -92,6 +93,7 @@ import {
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
+	createWrappingCounter,
 	DeepPartial,
 	getErrorMessage,
 	isDocker,
@@ -2362,7 +2364,11 @@ export class Driver
 								// If it was, we need to notify the sender that we couldn't decode the command
 								const node = this.getNodeUnsafe(msg);
 								if (node) {
-									await node
+									const endpoint =
+										node.getEndpoint(
+											msg.command.endpointIndex,
+										) ?? node;
+									await endpoint
 										.createAPI(
 											CommandClasses.Supervision,
 											false,
@@ -3217,7 +3223,10 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node
+							const endpoint =
+								node.getEndpoint(msg.command.endpointIndex) ??
+								node;
+							await endpoint
 								.createAPI(CommandClasses.Supervision, false)
 								.sendReport({
 									sessionId: supervisionSessionId,
@@ -3235,10 +3244,12 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				if (supervisionSessionId !== undefined) {
 					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
 					try {
 						await node.handleCommand(msg.command);
 
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
@@ -3249,7 +3260,7 @@ ${handlers.length} left`,
 								encapsulationFlags,
 							});
 					} catch (e) {
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
@@ -3397,16 +3408,19 @@ ${handlers.length} left`,
 		}
 	}
 
-	private lastCallbackId = 0xff;
 	/**
 	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
-	public getNextCallbackId(): number {
-		this.lastCallbackId = (this.lastCallbackId + 1) & 0xff;
-		if (this.lastCallbackId < 1) this.lastCallbackId = 1;
-		return this.lastCallbackId;
-	}
+	public readonly getNextCallbackId = createWrappingCounter(0xff);
+
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
+	 * to the controller/nodes with its response
+	 */
+	public readonly getNextSupervisionSessionId = createWrappingCounter(
+		MAX_SUPERVISION_SESSION_ID,
+	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
 		// The encapsulation order (from outside to inside) is as follows:
