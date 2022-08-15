@@ -13013,8 +13013,6 @@ export class Security2CCMessageEncapsulation extends Security2CC {
     // (undocumented)
     protected computeEncapsulationOverhead(): number;
     // (undocumented)
-    readonly decryptionKey?: Buffer;
-    // (undocumented)
     encapsulated?: CommandClass;
     // (undocumented)
     extensions: Security2Extension[];

@@ -15,7 +15,6 @@ import {
 	MockZWaveFrameType,
 	MockZWaveRequestFrame,
 } from "@zwave-js/testing";
-import { wait } from "alcalzone-shared/async";
 import path from "path";
 import { integrationTest } from "../integrationTestSuite";
 
@@ -42,10 +41,10 @@ integrationTest(
 		testBody: async (driver, node, mockController, mockNode) => {
 			// We know that the driver must respond to Z-Wave Plus Info Get
 			// so we can use that to test
-			const zwpRequest = new ZWavePlusCCGet(mockController.host, {
-				nodeId: mockNode.id,
+			const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
 			});
-			const cc = CRC16CC.encapsulate(mockController.host, zwpRequest);
+			const cc = CRC16CC.encapsulate(mockNode.host, zwpRequest);
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
 			const { payload: response } =
@@ -59,9 +58,6 @@ integrationTest(
 			expect(
 				(response as CRC16CCCommandEncapsulation).encapsulated,
 			).toBeInstanceOf(ZWavePlusCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -93,13 +89,10 @@ integrationTest(
 		testBody: async (driver, node, mockController, mockNode) => {
 			// We know that the driver must respond to Z-Wave Plus Info Get
 			// so we can use that to test
-			const zwpRequest = new ZWavePlusCCGet(mockController.host, {
-				nodeId: mockNode.id,
+			const zwpRequest = new ZWavePlusCCGet(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
 			});
-			const cc = MultiChannelCC.encapsulate(
-				mockController.host,
-				zwpRequest,
-			);
+			const cc = MultiChannelCC.encapsulate(mockNode.host, zwpRequest);
 			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
@@ -116,9 +109,6 @@ integrationTest(
 			expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
 			expect(inner).toBeInstanceOf(ZWavePlusCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -148,14 +138,11 @@ integrationTest(
 		},
 
 		testBody: async (driver, node, mockController, mockNode) => {
-			const basicReport = new BasicCCReport(mockController.host, {
-				nodeId: mockNode.id,
+			const basicReport = new BasicCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
 				currentValue: 0,
 			});
-			const cc = SupervisionCC.encapsulate(
-				mockController.host,
-				basicReport,
-			);
+			const cc = SupervisionCC.encapsulate(mockNode.host, basicReport);
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
 
@@ -167,9 +154,6 @@ integrationTest(
 				);
 
 			expect(response).toBeInstanceOf(SupervisionCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );
@@ -204,18 +188,15 @@ integrationTest(
 		},
 
 		testBody: async (driver, node, mockController, mockNode) => {
-			const basicReport = new BasicCCReport(mockController.host, {
-				nodeId: mockNode.id,
+			const basicReport = new BasicCCReport(mockNode.host, {
+				nodeId: mockController.host.ownNodeId,
 				currentValue: 0,
 			});
 			const supervised = SupervisionCC.encapsulate(
-				mockController.host,
+				mockNode.host,
 				basicReport,
 			);
-			const cc = MultiChannelCC.encapsulate(
-				mockController.host,
-				supervised,
-			);
+			const cc = MultiChannelCC.encapsulate(mockNode.host, supervised);
 			(cc as MultiChannelCCCommandEncapsulation).endpointIndex = 2;
 
 			await mockNode.sendToController(createMockZWaveRequestFrame(cc));
@@ -232,9 +213,6 @@ integrationTest(
 			expect(mcc.destination).toBe(2);
 			const inner = mcc.encapsulated;
 			expect(inner).toBeInstanceOf(SupervisionCCReport);
-
-			// Allow for everything to settle
-			await wait(100);
 		},
 	},
 );

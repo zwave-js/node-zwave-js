@@ -14,7 +14,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
-import { gotDeserializationOptions } from "@zwave-js/serial";
 import {
 	getEnumMemberName,
 	isPrintableASCII,
@@ -37,6 +36,7 @@ import {
 } from "../lib/API";
 import {
 	CommandClass,
+	gotDeserializationOptions,
 	type CCCommandOptions,
 	type CommandClassDeserializationOptions,
 } from "../lib/CommandClass";

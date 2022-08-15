@@ -11,12 +11,14 @@ import {
 	TransmitStatus,
 	ZWaveDataRate,
 } from "@zwave-js/core";
+import { MessageOrigin } from "@zwave-js/serial";
 import {
 	createMockZWaveRequestFrame,
 	MockControllerBehavior,
 	MockZWaveFrameType,
 	MOCK_FRAME_ACK_TIMEOUT,
 } from "@zwave-js/testing";
+import { wait } from "alcalzone-shared/async";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -231,12 +233,26 @@ const handleSendData: MockControllerBehavior = {
 				MockControllerCommunicationState.Sending,
 			);
 
-			// Send the data to the node
-			const frame = createMockZWaveRequestFrame(msg.command, {
-				ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
-			});
+			// We deferred parsing of the CC because it requires the node's host to do so.
+			// Now we can do that. Also set the CC node ID to the controller's own node ID,
+			// so CC knows it came from the controller's node ID.
 			const node = controller.nodes.get(msg.getNodeId()!)!;
-			const ackPromise = controller.sendToNode(node, frame);
+			// Simulate the frame being transmitted via radio
+			const ackPromise = wait(node.capabilities.txDelay).then(() => {
+				// Deserialize on the node after a short delay
+				msg.command = CommandClass.from(node.host, {
+					nodeId: controller.host.ownNodeId,
+					data: msg.payload,
+					origin: MessageOrigin.Host,
+				});
+
+				// Send the data to the node
+				const frame = createMockZWaveRequestFrame(msg.command, {
+					ackRequested: !!(msg.transmitOptions & TransmitOptions.ACK),
+				});
+
+				return controller.sendToNode(node, frame);
+			});
 
 			// Notify the host that the message was sent
 			const res = new SendDataResponse(host, {
@@ -309,8 +325,8 @@ const handleRequestNodeInfo: MockControllerBehavior = {
 			// Send the data to the node
 			const node = controller.nodes.get(msg.getNodeId()!)!;
 			const command = new ZWaveProtocolCCRequestNodeInformationFrame(
-				host,
-				{ nodeId: node.id },
+				node.host,
+				{ nodeId: controller.host.ownNodeId },
 			);
 			const frame = createMockZWaveRequestFrame(command, {
 				ackRequested: false,
@@ -385,8 +401,8 @@ const handleAssignSUCReturnRoute: MockControllerBehavior = {
 
 			// Send the command to the node
 			const node = controller.nodes.get(msg.getNodeId()!)!;
-			const command = new ZWaveProtocolCCAssignSUCReturnRoute(host, {
-				nodeId: host.ownNodeId,
+			const command = new ZWaveProtocolCCAssignSUCReturnRoute(node.host, {
+				nodeId: controller.host.ownNodeId,
 				repeaters: [], // don't care
 				routeIndex: 0, // don't care
 				destinationSpeed: ZWaveDataRate["100k"],
@@ -450,7 +466,13 @@ const forwardCommandClassesToHost: MockControllerBehavior = {
 			const msg = new ApplicationCommandRequest(host, {
 				command: frame.payload,
 			});
-			await controller.sendToHost(msg.serialize());
+			// Nodes send commands TO the controller, so we need to fix the node ID before forwarding
+			msg.getNodeId = () => node.id;
+			// Simulate a serialized frame being transmitted via radio
+			const data = msg.serialize();
+			await wait(node.capabilities.txDelay);
+			// Then receive it
+			await controller.sendToHost(data);
 			return true;
 		}
 	},

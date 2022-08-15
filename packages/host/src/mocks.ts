@@ -22,7 +22,7 @@ export interface CreateTestingHostOptions {
 }
 
 export type TestingHost = Overwrite<
-	ZWaveApplicationHost,
+	Omit<ZWaveApplicationHost, "__internalIsMockNode">,
 	{ nodes: ThrowingMap<number, IZWaveNode> }
 >;
 

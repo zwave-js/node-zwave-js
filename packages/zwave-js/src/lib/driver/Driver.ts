@@ -2328,7 +2328,7 @@ export class Driver
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this, data);
+			msg = Message.from(this, { data });
 			// Ensure there are no errors
 			if (isCommandClassContainer(msg)) assertValidCCs(msg);
 			// And update statistics

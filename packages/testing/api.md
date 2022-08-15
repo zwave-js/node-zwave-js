@@ -188,6 +188,8 @@ export class MockNode {
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     expectControllerFrame<T extends MockZWaveFrame = MockZWaveFrame>(timeout: number, predicate: (msg: MockZWaveFrame) => msg is T): Promise<T>;
     // (undocumented)
+    readonly host: ZWaveHost;
+    // (undocumented)
     readonly id: number;
     // (undocumented)
     readonly implementedCCs: Map<CommandClasses, CommandClassInfo>;
@@ -271,7 +273,7 @@ export class SpyTransport extends Transport {
 
 // Warnings were encountered during analysis:
 //
-// src/MockNode.ts:46:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
+// src/MockNode.ts:54:3 - (ae-forgotten-export) The symbol "PartialCCCapabilities" needs to be exported by the entry point index.d.ts
 
 // (No @packageDocumentation comment for this package)
 
