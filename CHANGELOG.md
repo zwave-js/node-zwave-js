@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.7 (2022-08-10) · _„Woo-Hoo!”_
+## **WORK IN PROGRESS** · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -15,7 +15,7 @@
 * Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
 * `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
 * Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
-* S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856)
+* S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856) with the possibility to override them for individual inclusion attempts (#4911)
 * Node firmware versions are now exposed as `major.minor.patch` where supported (#4857)
 
 ### Features
@@ -25,6 +25,7 @@
 * Answer incoming requests with the same encapsulation (#4832)
 * Allow passing a custom serial port implementation in `port` param of the Driver class (#4885)
 * Support sending `TimeCC` reports and automatically respond to requests (#4858)
+* Allow overriding API key for the FW update service per call (#4912)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -35,6 +36,7 @@
 * Query user codes 1-by-1 if bulk reading is not supported (#4849)
 * Include both V1 values and V2+ values in `Notification CC` logs (#4904)
 * Obfuscate keys in `Entry Control CC` logs (#4905)
+* Improved command flow for S2-encrypted communication when both parties transmit at the same time (#4900)
 
 ### Bugfixes (broken and fixed in v10 beta)
 * Emit value event after successful supervised `setValue` (#4899)
@@ -52,6 +54,7 @@
 * Add Zooz Zen05 Outdoor Smart Plug (#4896)
 * Add MP31ZP (rebranded MP21ZP) (#4894)
 * Update Zooz ZEN20 with additional parameters 28 - 36 (#4898)
+* Clean up branding of Jasco devices (#4873)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
