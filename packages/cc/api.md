@@ -1665,7 +1665,6 @@ export const BasicCCValues: Readonly<{
         readonly is: (valueId: ValueID_2) => boolean;
         readonly meta: {
             readonly label: "Target value";
-            readonly forceCreation: boolean;
             readonly min: 0;
             readonly max: 255;
             readonly type: "number";
