@@ -194,6 +194,25 @@
 					"value": 1
 				}
 			]
+		},
+		{
+			"#": "15",
+			"label": "Inverted output",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
 		}
 	]
 }
