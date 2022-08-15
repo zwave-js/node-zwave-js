@@ -1,0 +1,17 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12734 / ZW3007",
+	"description": "In-Wall Toggle Dimmer, No Ntrl, 300S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3036",
+			"zwaveAllianceId": 1205
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

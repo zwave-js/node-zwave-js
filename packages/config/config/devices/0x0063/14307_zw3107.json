@@ -1,0 +1,53 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14307 / ZW3107",
+	"description": "Plug-in 2-Outlet Dimmer, Simultaneous, 500S",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3035",
+			"zwaveAllianceId": 1401
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "7",
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
+		},
+		{
+			"#": "8",
+			"$import": "templates/jasco_template.json#dimmer_times_z"
+		},
+		{
+			"#": "9",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "10",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		},
+		{
+			"#": "11",
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
+		},
+		{
+			"#": "12",
+			"$import": "templates/jasco_template.json#dimmer_times_a"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network.",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1401/14307%20QSG.pdf"
+	}
+}

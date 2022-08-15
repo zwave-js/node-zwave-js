@@ -1,0 +1,29 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "14293 / ZW4009",
+	"description": "In-Wall Toggle Switch, Lt Almd, QFSW, 500S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3038",
+			"zwaveAllianceId": 2055
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to include a device to the Z-Wave network.\n2. Once the controller is ready to add your device,\npress toggle up and release to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device,\npress toggle up or down to exclude it from the network",
+		"reset": "1. Quickly press ON (up) button three (3) times then\nimmediately press the OFF (down) button three\n(3) times. \nNote: This should only be used in the event your\nnetwork’s primary controller is missing or otherwise\ninoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2055/Binder2.pdf"
+	}
+}

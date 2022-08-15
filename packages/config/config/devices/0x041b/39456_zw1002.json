@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39456 / ZW1002",
-	"description": "In-Wall Tamper Resistant Outlet",
+	"description": "In-Wall Smart Outlet, Tamper Resistant, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",

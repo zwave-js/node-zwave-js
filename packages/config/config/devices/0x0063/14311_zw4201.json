@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14311/ZW4201",
-	"description": "Plug-in Outdoor Smart Switch",
+	"label": "14311 / ZW4201",
+	"description": "Plug-in Outdoor Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x4f50",

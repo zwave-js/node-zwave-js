@@ -1,0 +1,44 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39337 / 39444 / ZW4103",
+	"description": "Plug-in 1-Outlet Switch, 500S",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3038",
+			"zwaveAllianceId": [2686, 3744]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "Led Light",
+			"description": "Led light off when device is turned off (default)",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led light on when device is on",
+					"value": 1
+				},
+				{
+					"label": "Led light always on",
+					"value": 2
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include the device to the Z-Wave network. \n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-Wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to exclude your device, press and release the manual/program button on the smart switch to exclude it from the network.",
+		"reset": "1. If plugged in, unplug the device from the receptacle.\n2. Press and hold the top button, plug the device in, and continue to hold for at least 3 seconds.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2686/39337-HQSG_v1.pdf"
+	}
+}

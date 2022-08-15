@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39446 / ZW3107",
-	"description": "Plug-in Dimmer (Dual Plug Simultaneous Control)",
+	"description": "Plug-in 2-Outlet Smart Dimmer, Simultaneous, 500S",
 	"devices": [
 		{
 			"productType": "0x5044",

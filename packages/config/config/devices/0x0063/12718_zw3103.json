@@ -1,0 +1,31 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12718 / ZW3103",
+	"description": "Plug-in 2-Outlet Dimmer, 1 Controlled, 300S",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3031",
+			"zwaveAllianceId": 1191
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "7",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "8",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		},
+		{
+			"#": "29",
+			"$import": "templates/jasco_template.json#load_sensing"
+		}
+	]
+}

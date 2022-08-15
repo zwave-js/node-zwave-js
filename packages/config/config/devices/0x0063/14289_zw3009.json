@@ -1,0 +1,61 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "14289 / ZW3009",
+	"description": "In-Wall Capacitive Touch Dimmer, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3233"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "7",
+			"$import": "templates/jasco_template.json#dimmer_steps_z"
+		},
+		{
+			"#": "8",
+			"$import": "templates/jasco_template.json#dimmer_times_z"
+		},
+		{
+			"#": "9",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "10",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		},
+		{
+			"#": "11",
+			"$import": "templates/jasco_template.json#dimmer_steps_a"
+		},
+		{
+			"#": "12",
+			"$import": "templates/jasco_template.json#dimmer_times_a"
+		}
+	]
+}

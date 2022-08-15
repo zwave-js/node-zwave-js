@@ -1,0 +1,30 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "35931 / ZW7101",
+	"description": "LED A19 Bulb, 500S",
+	"devices": [
+		{
+			"productType": "0x4c42",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/jasco_template.json#default_dim_level"
+		},
+		{
+			"#": "9",
+			"$import": "templates/jasco_template.json#dimmer_steps"
+		},
+		{
+			"#": "10",
+			"$import": "templates/jasco_template.json#dimmer_times"
+		}
+	]
+}
