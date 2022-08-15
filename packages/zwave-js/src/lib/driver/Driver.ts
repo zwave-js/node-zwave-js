@@ -408,6 +408,7 @@ export interface DriverEventCallbacks {
 	"node wake up": ZWaveNodeStatusChangeCallback;
 	"node dead": ZWaveNodeStatusChangeCallback;
 	"node alive": ZWaveNodeStatusChangeCallback;
+	"node ready": (node: ZWaveNode) => void;
 	"node value added": ZWaveNodeValueAddedCallback;
 	"node value updated": ZWaveNodeValueUpdatedCallback;
 	"node value removed": ZWaveNodeValueRemovedCallback;

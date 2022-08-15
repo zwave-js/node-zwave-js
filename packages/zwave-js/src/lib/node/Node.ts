@@ -510,7 +510,10 @@ export class ZWaveNode
 		if (ready === this._ready) return;
 
 		this._ready = ready;
-		if (ready) this.emit("ready", this);
+		if (ready) {
+			this.emit("ready", this);
+			this.driver.emit("node ready", this);
+		}
 	}
 
 	/**
