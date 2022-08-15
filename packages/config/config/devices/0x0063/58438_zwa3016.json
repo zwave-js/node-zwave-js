@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco/Enbrighten",
+	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
-	"label": "58438/ZWA3016",
-	"description": "Enbrighten Z-Wave Plus In-Wall Smart Dimmer, White and Light Almond Paddles, 700S",
+	"label": "58438 / ZWA3016",
+	"description": "In-Wall Paddle Dimmer, 700S",
 	"devices": [
 		{
 			"productType": "0x4944",
