@@ -403,6 +403,11 @@ export class ZWaveNode
 		}
 		// And pass the translated event to our listeners
 		this.emit(eventName, this, outArg as any);
+		this.driver.emit(
+			("node " + eventName) as "node value added",
+			this,
+			outArg as any,
+		);
 	}
 
 	private statusMachine: Extended<NodeStatusInterpreter>;
@@ -416,12 +421,16 @@ export class ZWaveNode
 		this._status = newStatus;
 		if (this._status === NodeStatus.Asleep) {
 			this.emit("sleep", this, oldStatus);
+			this.driver.emit("node sleep", this, oldStatus);
 		} else if (this._status === NodeStatus.Awake) {
 			this.emit("wake up", this, oldStatus);
+			this.driver.emit("node wake up", this, oldStatus);
 		} else if (this._status === NodeStatus.Dead) {
 			this.emit("dead", this, oldStatus);
+			this.driver.emit("node dead", this, oldStatus);
 		} else if (this._status === NodeStatus.Alive) {
 			this.emit("alive", this, oldStatus);
+			this.driver.emit("node alive", this, oldStatus);
 		}
 
 		// To be marked ready, a node must be known to be not dead.
