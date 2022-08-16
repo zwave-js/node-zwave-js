@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.8 (2022-08-15) · _„Woo-Hoo!”_
+## **WORK IN PROGRESS** · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -37,12 +37,16 @@
 * Include both V1 values and V2+ values in `Notification CC` logs (#4904)
 * Obfuscate keys in `Entry Control CC` logs (#4905)
 * Improved command flow for S2-encrypted communication when both parties transmit at the same time (#4900)
+* Fixed a bug where commands that should be discarded because of a lower than expected security level would still store their values into the value DB (#4924)
+* Fixed looking up a node's provisioning entry using its node ID. This didn't work previously and would cause excluded SmartStart nodes to be included again immediately. (#4925)
+* No longer overwrite the security classes of a node when they are known for certain, and retry querying securely supported CCs during the interview (#4923)
 
 ### Bugfixes (broken and fixed in v10 beta)
 * Emit value event after successful supervised `setValue` (#4899)
 * Correct nested encapsulation of Supervision CC Reports (#4890)
 * Ensure the `major.minor.patch` firmware version matches the legacy `major.minor` field before using it (#4906)
 * Move `"notification"` event args types back into `zwave-js` package (#4907)
+* Fixed a typo in `AddNodeStatusContext`, which would result in an `UNKNOWN` device class of newly included nodes (#4922)
 
 ### Config file changes
 * Corrected manufacturer and device labels for Heatit devices (#4838)
