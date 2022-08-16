@@ -2384,9 +2384,9 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 					this.driver,
 					new DeviceClass(
 						this.driver.configManager,
-						msg.statusContext!.basic!,
-						msg.statusContext!.generic!,
-						msg.statusContext!.specific!,
+						msg.statusContext!.basicDeviceClass!,
+						msg.statusContext!.genericDeviceClass!,
+						msg.statusContext!.specificDeviceClass!,
 					),
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,

@@ -28,6 +28,7 @@ import {
 import { EncapsulationFlags } from "@zwave-js/core/safe";
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host/safe";
 import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared/safe";
+import { wait } from "alcalzone-shared/async";
 import { CCAPI } from "../lib/API";
 import {
 	CommandClass,
@@ -431,23 +432,63 @@ export class Security2CC extends CommandClass {
 
 			// Query the supported commands but avoid remembering the wrong security class in case of a failure
 			let supportedCCs: CommandClasses[] | undefined;
-			try {
-				supportedCCs = await api.getSupportedCommands(secClass);
-			} catch (e) {
+			// Try up to 3 times. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
+			for (let attempts = 1; attempts <= 3; attempts++) {
+				try {
+					supportedCCs = await api.getSupportedCommands(secClass);
+				} catch (e) {
+					if (
+						isZWaveError(e) &&
+						e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+					) {
+						// Either we were using a non-granted security class,
+						// or querying with the known highest security class had an issue
+						supportedCCs = undefined;
+					} else {
+						throw e;
+					}
+				}
+
 				if (
-					isZWaveError(e) &&
-					e.code === ZWaveErrorCodes.Security2CC_CannotDecode
+					supportedCCs == undefined &&
+					possibleSecurityClasses.length === 1
 				) {
-					// This has to be expected when we're using a non-granted security class
-					supportedCCs = undefined;
+					if (attempts < 3) {
+						// We definitely know the highest security class
+						applHost.controllerLog.logNode(node.id, {
+							endpoint: endpoint.index,
+							message: `Querying securely supported commands (${getEnumMemberName(
+								SecurityClass,
+								secClass,
+							)}), attempt ${attempts}/3 failed. Retrying in 500ms...`,
+							level: "warn",
+						});
+						await wait(500);
+						continue;
+					} else {
+						applHost.controllerLog.logNode(node.id, {
+							endpoint: endpoint.index,
+							message: `Querying securely supported commands (${getEnumMemberName(
+								SecurityClass,
+								secClass,
+							)}) failed. Let's hope for the best...`,
+							level: "warn",
+						});
+						break;
+					}
 				} else {
-					throw e;
+					// In any other case, we can stop trying
+					break;
 				}
 			}
 
 			if (supportedCCs == undefined) {
-				if (endpoint.index === 0) {
+				if (
+					endpoint.index === 0 &&
+					possibleSecurityClasses.length > 1
+				) {
 					// No supported commands found, mark the security class as not granted
+					// unless we were sure about the security class
 					node.setSecurityClass(secClass, false);
 
 					applHost.controllerLog.logNode(node.id, {
@@ -461,8 +502,8 @@ export class Security2CC extends CommandClass {
 				continue;
 			}
 
-			if (endpoint.index === 0) {
-				// Mark the security class as granted
+			if (endpoint.index === 0 && possibleSecurityClasses.length > 1) {
+				// Mark the security class as granted unless we were sure about the security class
 				node.setSecurityClass(secClass, true);
 
 				applHost.controllerLog.logNode(node.id, {
