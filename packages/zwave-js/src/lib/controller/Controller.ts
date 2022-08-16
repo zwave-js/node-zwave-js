@@ -594,13 +594,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
 		const provisioningList = [...this.provisioningList];
 
-		const index = provisioningList.findIndex(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		const entry = this.getProvisioningEntryInternal(dskOrNodeId);
+		if (!entry) return;
+
+		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
@@ -611,13 +608,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private getProvisioningEntryInternal(
 		dskOrNodeId: string | number,
 	): SmartStartProvisioningEntry | undefined {
-		return this.provisioningList.find(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		if (typeof dskOrNodeId === "string") {
+			return this.provisioningList.find((e) => e.dsk === dskOrNodeId);
+		} else {
+			// The provisioning list may or may not contain the node ID for an entry, even if the node is already included.
+			let ret = this.provisioningList.find(
+				(e) => "nodeId" in e && e.nodeId === dskOrNodeId,
+			);
+			if (!ret) {
+				// Try to get the DSK from the node instance
+				const dsk = this.nodes.get(dskOrNodeId)?.dsk;
+				if (dsk) {
+					ret = this.provisioningList.find(
+						(e) => e.dsk === dskToString(dsk),
+					);
+				}
+			}
+			return ret;
+		}
 	}
 
 	/**
