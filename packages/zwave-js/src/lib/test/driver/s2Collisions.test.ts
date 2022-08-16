@@ -52,12 +52,11 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			// To simulate multiple nodes, we'd need a host/security manager per node, not one for the controller
 			mockNode.host.securityManager2 = smNode;
 			mockNode.host.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
-			// Create a security manager for the node
+			// Create a security manager for the controller
 			const smCtrlr = new SecurityManager2();
 			// Copy keys from the driver
 			smCtrlr.setKey(
@@ -72,7 +71,6 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			// To simulate multiple nodes, we'd need a host/security manager per node, not one for the controller
 			controller.host.securityManager2 = smCtrlr;
 			controller.host.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
@@ -241,12 +239,11 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			// To simulate multiple nodes, we'd need a host/security manager per node, not one for the controller
 			mockNode.host.securityManager2 = smNode;
 			mockNode.host.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
 
-			// Create a security manager for the node
+			// Create a security manager for the controller
 			const smCtrlr = new SecurityManager2();
 			// Copy keys from the driver
 			smCtrlr.setKey(
@@ -261,7 +258,6 @@ integrationTest(
 				SecurityClass.S2_Unauthenticated,
 				driver.options.securityKeys!.S2_Unauthenticated!,
 			);
-			// To simulate multiple nodes, we'd need a host/security manager per node, not one for the controller
 			controller.host.securityManager2 = smCtrlr;
 			controller.host.getHighestSecurityClass = () =>
 				SecurityClass.S2_Unauthenticated;
