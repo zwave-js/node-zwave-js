@@ -396,9 +396,8 @@
 			}
 		]
 	},
-	"3way_setup": {
+	"three_way_setup": {
 		"label": "3-Way Setup",
-		"description": "Set the 3-way switch configuration as add-on or standard.",
 		"valueSize": 1,
 		"defaultValue": 0,
 		"unsigned": true,
