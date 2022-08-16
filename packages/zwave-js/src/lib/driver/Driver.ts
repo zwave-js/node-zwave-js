@@ -2441,6 +2441,18 @@ export class Driver
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
+
+				// Make sure we are allowed to handle this command
+				if (this.shouldDiscardCC(msg.command)) {
+					if (!wasMessageLogged) {
+						this.driverLog.logMessage(msg, {
+							direction: "inbound",
+							secondaryTags: ["discarded"],
+						});
+					}
+					return;
+				}
+
 				// When we have a complete CC, save its values
 				this.persistCCValues(msg.command);
 
@@ -3058,6 +3070,67 @@ ${handlers.length} left`,
 	 * Checks whether a CC may be handled or should be ignored.
 	 * This method expects `cc` to be unwrapped.
 	 */
+	private shouldDiscardCC(cc: CommandClass): boolean {
+		// For Command Classes supported securely, a controlling node MUST discard
+		// the command from a supporting node if not received at the highest common
+		// security level between the controlling node and the sending S2 node.
+
+		const node = this.controller.nodes.get(cc.nodeId as number);
+		if (!node) {
+			// Node does not exist, don't accept the CC
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`is unknown - discarding received command...`,
+				"warn",
+			);
+			return true;
+		}
+
+		switch (node.getHighestSecurityClass()) {
+			case SecurityClass.None:
+			case SecurityClass.Temporary:
+				return false;
+		}
+
+		let isSecure = false;
+		let requiresSecurity = false;
+		while (true) {
+			if (isEncapsulatingCommandClass(cc)) {
+				if (
+					cc.ccId === CommandClasses.Security ||
+					cc.ccId === CommandClasses["Security 2"]
+				) {
+					isSecure = true;
+				}
+				cc = cc.encapsulated;
+			} else if (isMultiEncapsulatingCommandClass(cc)) {
+				requiresSecurity = cc.encapsulated.some((cmd) =>
+					node.isCCSecure(cmd.ccId),
+				);
+				break;
+			} else {
+				requiresSecurity =
+					node.isCCSecure(cc.ccId) &&
+					cc.ccId !== CommandClasses.Security &&
+					cc.ccId !== CommandClasses["Security 2"];
+				break;
+			}
+		}
+		if (requiresSecurity && !isSecure) {
+			// none found, don't accept the CC
+			this.controllerLog.logNode(
+				cc.nodeId as number,
+				`command must be encrypted but was received without Security encapsulation - discarding it...`,
+				"warn",
+			);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether a CC may be handled or should be ignored.
+	 */
 	private mayHandleUnsolicitedCommand(cc: CommandClass): boolean {
 		// This should only be necessary for unsolicited commands, since the response matching
 		// is pretty strict and looks at the encapsulation order
@@ -3135,9 +3208,6 @@ ${handlers.length} left`,
 				// Force a new interview
 				void node.refreshInfo();
 			}
-
-			// Check if we may even handle the command
-			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
 
 		// Otherwise go through the static handlers
