@@ -1,0 +1,180 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN14",
+	"description": "700 Series Outdoor Double Plug",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xb003",
+			"zwaveAllianceId": 4674
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 2
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 2
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "Led Indicator",
+			"description": "Decide how the LED indicator behaves depending on the on/off status of the plug. the LED indicator will flash twice to confirm a setting has been changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Led indicator is on when the plug is on, LED indicator is off when the plug is off",
+					"value": 0
+				},
+				{
+					"label": "Led indicator is on when the plug is off, LED indicator is off when the plug is on",
+					"value": 1
+				},
+				{
+					"label": "Led indicator is always off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "2",
+			"label": "Auto-off Timer Outlet 1",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "3",
+			"label": "Auto-off Timer Outlet 2",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "4",
+			"label": "Auto-on Timer Outlet 1",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "5",
+			"label": "Auto-on Timer Outlet 2",
+			"description": "Minutes",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "On/Off Status Recovery After Power Failure",
+			"description": "Choose the recovery state for your double outdoor plug if a power outage occurs",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Both outlets on the plug automatically turn off once power is restored (it ignores the status prior to power outage)",
+					"value": 0
+				},
+				{
+					"label": "Both outlets on the plug automatically turn on once power is restored (it ignores the status prior to the power outage)",
+					"value": 1
+				},
+				{
+					"label": "Both outlets on the plug remember and restore the status prior to the power outage",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "7",
+			"label": "Brightness of LED Indicator",
+			"description": "Set the brightness level of the LED indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 0
+				},
+				{
+					"label": "Medium",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "8",
+			"label": "Z-Wave Button Control",
+			"description": "Choose if you want to use the physical Z-Wave button on the plug to turn the outlets on or off manually or if you want to disable this function. if this parameter is set to 0 (disabled), you will only be able to turn the outlet on or off remotely using your Z-Wave hub",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Initiate inclusion (pairing) in the app (or web interface).\nWhile the hub is looking for new devices, click the ZWave™ button 3 times as quickly as possible. The LED indicator will start flashing blue to confirm inclusion. mode and turn green for 1 second once inclusion is completed.",
+		"exclusion": "1. Bring the plug within direct range of your Z-Wave™ gateway (hub).\n2. Put the Z-Wave™ hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Press and release the Z-Wave™ button 3 times quickly.\n4. Your hub will confirm exclusion and the plug will disappear from your controller's device list",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the plug is powered, then click the Z-Wave™ button twice and hold it the third time for 10 seconds. The LED indicator will flash green 3 times to confirm a successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4674/zooz-outdoor-double-plug-zen14-manual.pdf"
+	}
+}
