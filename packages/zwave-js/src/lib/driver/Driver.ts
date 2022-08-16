@@ -3129,46 +3129,6 @@ ${handlers.length} left`,
 	}
 
 	/**
-	 * Checks whether a CC may be handled or should be ignored.
-	 */
-	private mayHandleUnsolicitedCommand(cc: CommandClass): boolean {
-		// This should only be necessary for unsolicited commands, since the response matching
-		// is pretty strict and looks at the encapsulation order
-
-		// From SDS11847:
-		// A controlling node MUST discard a received Report/Notification type command if it is
-		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
-
-		if (
-			cc.encapsulationFlags & EncapsulationFlags.Security &&
-			cc.ccId !== CommandClasses.Security &&
-			cc.ccId !== CommandClasses["Security 2"]
-		) {
-			const commandName = cc.constructor.name;
-			if (
-				commandName.endsWith("Report") ||
-				commandName.endsWith("Notification")
-			) {
-				// Check whether there was a security encapsulation
-				if (
-					cc.isEncapsulatedWith(CommandClasses.Security) ||
-					cc.isEncapsulatedWith(CommandClasses["Security 2"])
-				) {
-					return true;
-				}
-				// none found, don't accept the CC
-				this.controllerLog.logNode(
-					cc.nodeId as number,
-					`command must be encrypted but was received without Security encapsulation - discarding it...`,
-					"warn",
-				);
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
 	 * Is called when a Request-type message was received
 	 */
 	private async handleRequest(msg: Message): Promise<void> {
