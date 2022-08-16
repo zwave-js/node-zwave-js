@@ -41,7 +41,7 @@
 		},
 		{
 			"#": "5",
-			"$import": "templates/jasco_template.json#3way_setup"
+			"$import": "templates/jasco_template.json#three_way_setup"
 		},
 		{
 			"#": "16",

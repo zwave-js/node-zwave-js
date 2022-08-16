@@ -414,7 +414,7 @@
 		]
 	},
 	"led_light_color": {
-		"label": "LED Light Color",
+		"label": "LED Indicator Color",
 		"valueSize": 1,
 		"defaultValue": 5,
 		"unsigned": true,
@@ -455,11 +455,17 @@
 		]
 	},
 	"led_light_intensity": {
-		"label": "LED Light Intensity",
+		"label": "LED Indicator Intensity",
 		"valueSize": 1,
 		"minValue": 0,
 		"maxValue": 7,
 		"defaultValue": 4,
-		"unsigned": true
+		"unsigned": true,
+		"options": [
+			{
+				"label": "Off",
+				"value": 0
+			}
+		]
 	}
 }
