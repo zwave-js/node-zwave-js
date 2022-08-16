@@ -545,7 +545,7 @@
 			"$if": "firmwareVersion >= 3.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene: Holding",
-			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"description": "Only available if Operations Mode (parameter 1) is set to external button",
 			"valueSize": 2
 		},
 		{
@@ -553,7 +553,7 @@
 			"$if": "firmwareVersion >= 3.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene: Releasing",
-			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"description": "Only available if Operations Mode (parameter 1) is set to external button",
 			"valueSize": 2
 		},
 		{
@@ -561,7 +561,7 @@
 			"$if": "firmwareVersion >= 3.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene: Double Click",
-			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"description": "Only available if Operations Mode (parameter 1) is set to external button",
 			"valueSize": 2
 		},
 		{
@@ -569,7 +569,7 @@
 			"$if": "firmwareVersion >= 3.2",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Scene: Triple Click",
-			"description": "Only available if Operations Mode (paramater 1) is set to external button",
+			"description": "Only available if Operations Mode (parameter 1) is set to external button",
 			"valueSize": 2
 		},
 		{

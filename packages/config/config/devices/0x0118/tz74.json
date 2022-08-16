@@ -35,7 +35,7 @@
 		{
 			"#": "2",
 			"label": "Memory Function",
-			"description": "Default with memory: the socket staus is same as before when power is on",
+			"description": "Default with memory: the socket status is same as before when power is on",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,

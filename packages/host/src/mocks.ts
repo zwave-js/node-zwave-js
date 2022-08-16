@@ -1,8 +1,17 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
-import type { IZWaveNode } from "@zwave-js/core";
-import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
+import {
+	IZWaveNode,
+	MAX_SUPERVISION_SESSION_ID,
+	ValueDB,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import {
+	createThrowingMap,
+	createWrappingCounter,
+	type ThrowingMap,
+} from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
 import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 
@@ -13,7 +22,7 @@ export interface CreateTestingHostOptions {
 }
 
 export type TestingHost = Overwrite<
-	ZWaveApplicationHost,
+	Omit<ZWaveApplicationHost, "__internalIsMockNode">,
 	{ nodes: ThrowingMap<number, IZWaveNode> }
 >;
 
@@ -21,13 +30,6 @@ export type TestingHost = Overwrite<
 export function createTestingHost(
 	options: Partial<CreateTestingHostOptions> = {},
 ): TestingHost {
-	let callbackId = 0xff;
-	const getNextCallbackId = () => {
-		callbackId = (callbackId + 1) & 0xff;
-		if (callbackId < 1) callbackId = 1;
-		return callbackId;
-	};
-
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
@@ -66,7 +68,10 @@ export function createTestingHost(
 			);
 		}),
 		getSafeCCVersionForNode: options.getSafeCCVersionForNode ?? (() => 100),
-		getNextCallbackId,
+		getNextCallbackId: createWrappingCounter(0xff),
+		getNextSupervisionSessionId: createWrappingCounter(
+			MAX_SUPERVISION_SESSION_ID,
+		),
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(

@@ -74,7 +74,7 @@
 		{
 			"#": "4",
 			"label": "Switching type",
-			"description": "Edge or toogle switch mode.",
+			"description": "Edge or toggle switch mode.",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -85,7 +85,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toogle Mode",
+					"label": "Toggle Mode",
 					"value": 1
 				}
 			]

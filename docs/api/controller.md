@@ -57,7 +57,11 @@ Depending on the chosen inclusion strategy, the options object requires addition
 type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
-			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
 			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
@@ -66,11 +70,19 @@ type InclusionOptions =
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			/**
+			 * The optional provisioning entry for the device to be included.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -79,7 +91,7 @@ type InclusionOptions =
 	  };
 ```
 
-For inclusion with _Security S2_, this includes callbacks into the application which are defined as follows:
+For inclusion with _Security S2_, callbacks into the application must be defined as part of the [driver options](#ZWaveOptions) (`inclusionUserCallbacks`). They can optionally be overridden for individual inclusion attempts by setting the `userCallbacks` property in the `InclusionOptions`. The callbacks are defined as follows:
 
 <!-- #import InclusionUserCallbacks from "zwave-js" -->
 
@@ -143,6 +155,8 @@ enum SecurityClass {
 	S0_Legacy = 7,
 }
 ```
+
+> [!NOTE] These callbacks will also be called when inclusion is initiated by an inclusion controller. As such, the corresponding UI flow must be supported outside of application-initiated inclusion.
 
 Alternatively, the node can be pre-provisioned by providing the full DSK and the granted security classes instead of the user callbacks:
 
@@ -740,7 +754,7 @@ Restores an NVM backup that was created with `backupNVMRaw`. The optional 2nd ar
 ### `getAvailableFirmwareUpdates`
 
 ```ts
-getAvailableFirmwareUpdates(nodeId: number): Promise<FirmwareUpdateInfo[]>
+getAvailableFirmwareUpdates(nodeId: number, options?: GetFirmwareUpdatesOptions): Promise<FirmwareUpdateInfo[]>
 ```
 
 Retrieves the available firmware updates for the given node from the [Z-Wave JS firmware update service](https://github.com/zwave-js/firmware-updates/). Returns an array with all available firmware updates for the given node. The entries of the array have the following form:
@@ -775,7 +789,16 @@ Many Z-Wave devices only have a single upgradeable firmware target (chip), so th
 
 > [!NOTE] Calling this will result in an HTTP request to the firmware update service at https://firmware.zwave-js.io
 
-> [!NOTE] This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects).
+This method requires an API key to be set in the [driver options](#ZWaveOptions) under `apiKeys`. Refer to https://github.com/zwave-js/firmware-updates/ to request a key (free for open source projects and non-commercial use). The API key can also be passed via the `options` argument:
+
+<!-- #import GetFirmwareUpdatesOptions from "zwave-js" -->
+
+```ts
+interface GetFirmwareUpdatesOptions {
+	/** Allows overriding the API key for the firmware update service */
+	apiKey?: string;
+}
+```
 
 ### `beginOTAFirmwareUpdate`
 

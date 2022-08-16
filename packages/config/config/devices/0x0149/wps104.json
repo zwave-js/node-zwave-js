@@ -85,7 +85,7 @@
 		{
 			"#": "32",
 			"label": "Next State",
-			"description": "Defines the next state if an overcurrent event occurr",
+			"description": "Defines the next state if an overcurrent event occur",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,

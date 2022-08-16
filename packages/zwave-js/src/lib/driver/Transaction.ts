@@ -34,7 +34,7 @@ export interface TransactionOptions {
 }
 
 /**
- * Transactions are used to track and correllate messages with their responses.
+ * Transactions are used to track and correlate messages with their responses.
  */
 export class Transaction implements Comparable<Transaction> {
 	public constructor(

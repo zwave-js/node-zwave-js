@@ -1,0 +1,68 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "43105 / ZW3010DV",
+	"description": "In-Wall Paddle Dimmer, 120+277, 500S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3330",
+			"zwaveAllianceId": [4002, 4162]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "6",
+			"$import": "templates/jasco_template.json#dim_rate"
+		},
+		{
+			"#": "16",
+			"$import": "templates/jasco_template.json#switch_mode"
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion"
+		},
+		{
+			"#": "20",
+			"$import": "templates/jasco_template.json#dim_threshold_min"
+		},
+		{
+			"#": "32",
+			"$import": "templates/jasco_template.json#default_brightness_level"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the top or bottom of the rocker.\n3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
+		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4162/43105%20QSG%20v1.pdf"
+	}
+}

@@ -15,6 +15,9 @@ import {
 	Powerlevel,
 	PowerlevelTestStatus,
 	SetValueAPIOptions,
+	TimeCCDateGet,
+	TimeCCTimeGet,
+	TimeCCTimeOffsetGet,
 	ZWavePlusNodeType,
 	ZWavePlusRoleType,
 } from "@zwave-js/cc";
@@ -87,6 +90,7 @@ import {
 	DataRate,
 	FLiRS,
 	getCCName,
+	getDSTInfo,
 	isRssiError,
 	isTransmissionError,
 	isUnsupervisedOrSucceeded,
@@ -653,10 +657,23 @@ export class ZWaveNode
 	}
 
 	public get firmwareVersion(): string | undefined {
-		// We're only interested in the first (main) firmware
-		const ret = this.getValue<string[]>(
+		// On supporting nodes, use the applicationVersion, which MUST be
+		// same as the first (main) firmware, plus the patch version.
+		const firmware0Version = this.getValue<string[]>(
 			VersionCCValues.firmwareVersions.id,
 		)?.[0];
+		const applicationVersion = this.getValue<string>(
+			VersionCCValues.applicationVersion.id,
+		);
+
+		let ret: string | undefined = firmware0Version;
+		if (applicationVersion) {
+			// If the application version is set, we cannot blindly trust that it is the firmware version.
+			// Some nodes incorrectly set this field to the Z-Wave Application Framework API Version
+			if (!ret || applicationVersion.startsWith(`${ret}.`)) {
+				ret = applicationVersion;
+			}
+		}
 
 		// Special case for the official 700 series firmwares which are aligned with the SDK version
 		// We want to work with the full x.y.z firmware version here.
@@ -852,7 +869,10 @@ export class ZWaveNode
 				this._valueDB.setValue(
 					valueId,
 					value,
-					!!this.driver.options.emitValueUpdateAfterSetValue
+					// We need to emit an event if applications opted in, or if this was a supervised call
+					// because in this case there won't be a verification query which would result in an update
+					!!result ||
+						!!this.driver.options.emitValueUpdateAfterSetValue
 						? { source: "driver" }
 						: { noEvent: true },
 				);
@@ -1426,7 +1446,7 @@ protocol version:      ${this.protocolVersion}`;
 		// Assume that sleeping nodes start asleep
 		if (this.canSleep) {
 			if (this.status === NodeStatus.Alive) {
-				// unless it was just inluded and is currently communicating with us
+				// unless it was just included and is currently communicating with us
 				// In that case we need to switch from alive/dead to awake/asleep
 				this.markAsAwake();
 			} else {
@@ -2233,6 +2253,12 @@ protocol version:      ${this.protocolVersion}`;
 			return this.handleEntryControlNotification(command);
 		} else if (command instanceof PowerlevelCCTestNodeReport) {
 			return this.handlePowerlevelTestNodeReport(command);
+		} else if (command instanceof TimeCCTimeGet) {
+			return this.handleTimeGet(command);
+		} else if (command instanceof TimeCCDateGet) {
+			return this.handleDateGet(command);
+		} else if (command instanceof TimeCCTimeOffsetGet) {
+			return this.handleTimeOffsetGet(command);
 		} else if (command instanceof ZWavePlusCCGet) {
 			return this.handleZWavePlusGet(command);
 		}
@@ -2857,17 +2883,24 @@ protocol version:      ${this.protocolVersion}`;
 		}
 	}
 
-	private async handleZWavePlusGet(_command: ZWavePlusCCGet): Promise<void> {
+	private async handleZWavePlusGet(command: ZWavePlusCCGet): Promise<void> {
 		// treat this as a sign that the node is awake
 		this.markAsAwake();
 
-		await this.commandClasses["Z-Wave Plus Info"].sendReport({
-			zwavePlusVersion: 2,
-			roleType: ZWavePlusRoleType.CentralStaticController,
-			nodeType: ZWavePlusNodeType.Node,
-			installerIcon: 0x0500, // Generic Gateway
-			userIcon: 0x0500, // Generic Gateway
-		});
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		await endpoint.commandClasses["Z-Wave Plus Info"]
+			.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			})
+			.sendReport({
+				zwavePlusVersion: 2,
+				roleType: ZWavePlusRoleType.CentralStaticController,
+				nodeType: ZWavePlusNodeType.Node,
+				installerIcon: 0x0500, // Generic Gateway
+				userIcon: 0x0500, // Generic Gateway
+			});
 	}
 
 	/**
@@ -3149,6 +3182,68 @@ protocol version:      ${this.protocolVersion}`;
 				// ignore
 			}
 			this.busySettingClock = false;
+		}
+	}
+
+	private async handleTimeGet(command: TimeCCTimeGet): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const now = new Date();
+		const hours = now.getHours();
+		const minutes = now.getMinutes();
+		const seconds = now.getSeconds();
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportTime(hours, minutes, seconds);
+		} catch (e) {
+			// ignore
+		}
+	}
+
+	private async handleDateGet(command: TimeCCDateGet): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const now = new Date();
+		const year = now.getFullYear();
+		const month = now.getMonth() + 1;
+		const day = now.getDate();
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportDate(year, month, day);
+		} catch (e) {
+			// ignore
+		}
+	}
+
+	private async handleTimeOffsetGet(
+		command: TimeCCTimeOffsetGet,
+	): Promise<void> {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		const endpoint = this.getEndpoint(command.endpointIndex) ?? this;
+
+		const timezone = getDSTInfo(new Date());
+
+		try {
+			await endpoint.commandClasses.Time.withOptions({
+				// Answer with the same encapsulation as asked
+				encapsulationFlags: command.encapsulationFlags,
+			}).reportTimezone(timezone);
+		} catch (e) {
+			// ignore
 		}
 	}
 

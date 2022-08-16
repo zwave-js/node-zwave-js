@@ -1,0 +1,24 @@
+{"k":"cacheFormat","v":1}
+{"k":"node.1.isListening","v":true}
+{"k":"node.1.isFrequentListening","v":false}
+{"k":"node.1.isRouting","v":true}
+{"k":"node.1.supportedDataRates","v":[40000,9600,100000]}
+{"k":"node.1.protocolVersion","v":3}
+{"k":"node.1.nodeType","v":"Controller"}
+{"k":"node.1.supportsSecurity","v":false}
+{"k":"node.1.supportsBeaming","v":true}
+{"k":"node.1.deviceClass","v":{"basic":2,"generic":2,"specific":7}}
+{"k":"node.1.endpoint.0.commandClass.0x72","v":{"isSupported":true,"isControlled":false,"secure":false,"version":0}}
+{"k":"node.1.endpoint.0.commandClass.0x86","v":{"isSupported":true,"isControlled":false,"secure":false,"version":0}}
+{"k":"node.1.endpoint.0.commandClass.0x20","v":{"isSupported":false,"isControlled":true,"secure":false,"version":0}}
+{"k":"node.1.endpoint.0.commandClass.0x60","v":{"isSupported":false,"isControlled":true,"secure":false,"version":0}}
+{"k":"node.1.interviewStage","v":"Complete"}
+{"k":"node.2.hasSUCReturnRoute","v":true}
+
+// Define some base functionality for node 2 so we can skip the interview of these CCs
+{"k":"node.2.endpoint.0.commandClass.0x60","v":{"isSupported":true,"isControlled":false,"secure":false,"version":4}}
+{"k":"node.2.endpoint.0.commandClass.0x5e","v":{"isSupported":true,"isControlled":false,"secure":false,"version":2}}
+{"k":"node.2.endpoint.1.commandClass.0x5e","v":{"isSupported":true,"isControlled":false,"secure":false,"version":2}}
+{"k":"node.2.endpoint.2.commandClass.0x5e","v":{"isSupported":true,"isControlled":false,"secure":false,"version":2}}
+{"k":"node.2.endpoint.3.commandClass.0x5e","v":{"isSupported":true,"isControlled":false,"secure":false,"version":2}}
+{"k":"node.2.endpoint.0.commandClass.0x56","v":{"isSupported":true,"isControlled":false,"secure":false,"version":1}}

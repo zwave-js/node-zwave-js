@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "10974 / ZW4002",
-	"description": "Fan Control",
+	"description": "In-Wall Fan Speed Control, 300S",
 	"devices": [
 		{
 			"productType": "0x0507",

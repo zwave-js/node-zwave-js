@@ -11,7 +11,7 @@ The implementations of serial messages and Command Classes have been decoupled f
 -   `IVirtualEndpoint` - A barebones abstraction of an endpoint on a virtual (multicast, broadcast) node
 -   `IVirtualNode` - A barebones abstraction of a virtual (multicast, broadcast) node. Similar to how `VirtualNode` is a `VirtualEndpoint`, an `IVirtualNode` is an `IVirtualEndpoint`
 
-These abstractions are mainly used internally. Object instances exposed to applications throught the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
+These abstractions are mainly used internally. Object instances exposed to applications through the `Driver` will still be `ZWaveNode`s and `Endpoint`s.
 
 For many use cases, these changes should not affect applications, unless they are using some CC methods directly. The `commandClasses` APIs are unchanged.
 
@@ -218,3 +218,15 @@ interface FoundNode {
 	controlledCCs?: CommandClasses[];
 }
 ```
+
+## Moved user callbacks for S2 inclusion into the driver options
+
+In order to support inclusion controllers (which is required for certification), the inclusion user callbacks had to be decoupled from application-initiated inclusion, since inclusion controllers will tell Z-Wave JS when to bootstrap S2 capable nodes.
+
+Instead of having to pass them via the `userCallbacks` property of the `InclusionOptions`, they are now passed directly to the driver via the `inclusionUserCallbacks` property of the `ZWaveOptions`. The `InclusionOptions` still allow passing the user callbacks via the `userCallbacks` property to override the statically defined ones. This can be useful in scenarios where the driver instance is shared between multiple UIs.
+
+## Node `firmwareVersion` supports `major.minor.patch` format
+
+Some newer devices can report their primary firmware version in the `major.minor.patch` format instead of just `major.minor`. These versions will now be exposed through the `firmwareVersion` property of the `ZWaveNode` class.
+
+Internally, Z-Wave JS pads the old versions to `major.minor.0` and compares them according to `semver`, so applications that operate on the versions should likely do the same.

@@ -34,7 +34,7 @@
 		},
 		{
 			"#": "3",
-			"label": "Treshold of watt for load caution",
+			"label": "Threshold of watt for load caution",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 10,
@@ -43,7 +43,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Treshold of KWH for load caution",
+			"label": "Threshold of KWH for load caution",
 			"unit": "KWH",
 			"valueSize": 2,
 			"minValue": 0,

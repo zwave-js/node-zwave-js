@@ -29,7 +29,7 @@
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "Buttom Button set On/Off",
+			"label": "Bottom Button set On/Off",
 			"maxNodes": 5
 		},
 		"5": {
@@ -163,7 +163,7 @@
 	"metadata": {
 		"inclusion": "1. Turn your Z-Wave gateway/ controller into adding mode.\n2. Tap once the top/ bottom button, then the device will enter pairing mode",
 		"exclusion": "1. Turn your Z-Wave gateway/ controller into removing mode.\n2. Tap 6 times the top/ bottom button, then the device will enter exclusion mode",
-		"reset": "Press and hold the top/buttom button for 20s",
+		"reset": "Press and hold the top/bottom button for 20s",
 		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4253/Aeotec%20WallMote%207%20manual.pdf"
 	}
 }

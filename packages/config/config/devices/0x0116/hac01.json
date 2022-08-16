@@ -2,7 +2,7 @@
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
 	"label": "HAC01",
-	"description": "Chromagic Z-Wave Remote Botton (EU)",
+	"description": "Chromagic Z-Wave Remote Button (EU)",
 	"devices": [
 		{
 			"productType": "0x0010",

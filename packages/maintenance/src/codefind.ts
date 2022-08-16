@@ -290,7 +290,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 		for (const [, node] of searchNodes) {
 			const text = node.getText(sourceFile);
 			if (typeof query.search === "string") {
-				// Find all occurences of simple strings in the node
+				// Find all occurrences of simple strings in the node
 				let startIndex = 0;
 				let foundIndex = -1;
 				while (
@@ -324,7 +324,7 @@ export function codefind(query: CodeFindQuery): Result[] {
 					startIndex = foundIndex + query.search.length;
 				}
 			} else {
-				// Find all occurences of regex in the node
+				// Find all occurrences of regex in the node
 				const matches = text.matchAll(query.search);
 				for (const match of matches) {
 					const matchPosition =

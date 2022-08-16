@@ -2,7 +2,7 @@
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "LHC5020",
-	"description": "DIN-rail module with 10 digital ouputs and 4 digital inputs",
+	"description": "DIN-rail module with 10 digital outputs and 4 digital inputs",
 	"devices": [
 		{
 			"productType": "0x0003",

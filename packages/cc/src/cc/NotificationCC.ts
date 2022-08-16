@@ -854,26 +854,29 @@ export class NotificationCCReport extends NotificationCC {
 	public sequenceNumber: number | undefined;
 
 	public toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry {
-		let message: MessageRecord;
+		let message: MessageRecord = {};
 		if (this.alarmType) {
 			message = {
 				"V1 alarm type": this.alarmType,
 				"V1 alarm level": this.alarmLevel,
 			};
-		} else {
+		}
+
+		if (this.notificationType) {
 			let valueConfig: NotificationValueDefinition | undefined;
 			try {
 				valueConfig = applHost.configManager
-					.lookupNotification(this.notificationType!)
+					.lookupNotification(this.notificationType)
 					?.lookupValue(this.notificationEvent!);
 			} catch {
 				/* ignore */
 			}
 			if (valueConfig) {
 				message = {
+					...message,
 					"notification type":
 						applHost.configManager.getNotificationName(
-							this.notificationType!,
+							this.notificationType,
 						),
 					"notification status": this.notificationStatus,
 					[`notification ${valueConfig.type}`]:
@@ -882,12 +885,14 @@ export class NotificationCCReport extends NotificationCC {
 				};
 			} else if (this.notificationEvent === 0x00) {
 				message = {
+					...message,
 					"notification type": this.notificationType,
 					"notification status": this.notificationStatus,
 					"notification state": "idle",
 				};
 			} else {
 				message = {
+					...message,
 					"notification type": this.notificationType,
 					"notification status": this.notificationStatus,
 					"notification event": num2hex(this.notificationEvent),

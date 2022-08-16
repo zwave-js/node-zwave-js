@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "45631 / ZW5301",
-	"description": "Battery Operated Keypad Secondary Controller, 4 Groups/Scenes",
+	"description": "On-Wall Keypad Secondary Controller, 300S",
 	"devices": [
 		{
 			"productType": "0x8008",

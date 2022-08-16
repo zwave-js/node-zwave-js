@@ -10,7 +10,6 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import type { JSONObject } from "@zwave-js/shared";
 
 interface SetSerialApiTimeoutsRequestOptions extends MessageBaseOptions {
 	ackTimeout: number;
@@ -40,13 +39,6 @@ export class SetSerialApiTimeoutsRequest extends Message {
 		]);
 		return super.serialize();
 	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			ackTimeout: this.ackTimeout,
-			byteTimeout: this.byteTimeout,
-		});
-	}
 }
 
 @messageTypes(MessageType.Response, FunctionType.SetSerialApiTimeouts)
@@ -68,12 +60,5 @@ export class SetSerialApiTimeoutsResponse extends Message {
 	private _oldByteTimeout: number;
 	public get oldByteTimeout(): number {
 		return this._oldByteTimeout;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			oldAckTimeout: this.oldAckTimeout,
-			oldByteTimeout: this.oldByteTimeout,
-		});
 	}
 }

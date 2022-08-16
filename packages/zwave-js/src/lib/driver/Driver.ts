@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/node";
 import {
 	assertValidCCs,
 	CommandClass,
+	CRC16CC,
 	DeviceResetLocallyCCNotification,
 	FirmwareUpdateStatus,
 	getImplementedVersion,
@@ -41,10 +42,12 @@ import {
 	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
+	EncapsulationFlags,
 	highResTimestamp,
 	ICommandClass,
 	isZWaveError,
 	LogConfig,
+	MAX_SUPERVISION_SESSION_ID,
 	Maybe,
 	MessagePriority,
 	nwiHomeIdFromDSK,
@@ -80,14 +83,17 @@ import {
 	INodeQuery,
 	isNodeQuery,
 	isSuccessIndicator,
+	isZWaveSerialPortImplementation,
 	Message,
 	MessageHeaders,
 	MessageType,
 	ZWaveSerialPort,
 	ZWaveSerialPortBase,
+	ZWaveSerialPortImplementation,
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
+	createWrappingCounter,
 	DeepPartial,
 	getErrorMessage,
 	isDocker,
@@ -327,6 +333,26 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
+
+	if (options.inclusionUserCallbacks) {
+		if (!isObject(options.inclusionUserCallbacks)) {
+			throw new ZWaveError(
+				`The inclusionUserCallbacks must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		} else if (
+			typeof options.inclusionUserCallbacks.grantSecurityClasses !==
+				"function" ||
+			typeof options.inclusionUserCallbacks.validateDSKAndEnterPIN !==
+				"function" ||
+			typeof options.inclusionUserCallbacks.abort !== "function"
+		) {
+			throw new ZWaveError(
+				`The inclusionUserCallbacks must contain the following functions: grantSecurityClasses, validateDSKAndEnterPIN, abort!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+	}
 }
 
 /**
@@ -385,10 +411,21 @@ export class Driver
 	implements ZWaveApplicationHost
 {
 	public constructor(
-		private port: string,
+		private port: string | ZWaveSerialPortImplementation,
 		options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
+
+		// Ensure the given serial port is valid
+		if (
+			typeof port !== "string" &&
+			!isZWaveSerialPortImplementation(port)
+		) {
+			throw new ZWaveError(
+				`The port must be a string or a valid custom serial port implementation!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
 
 		// merge given options with defaults
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
@@ -786,22 +823,32 @@ export class Driver
 		this.sendThread.start();
 
 		// Open the serial port
-		if (this.port.startsWith("tcp://")) {
-			const url = new URL(this.port);
-			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSocket(
-				{
-					host: url.hostname,
-					port: parseInt(url.port),
-				},
-				this._logContainer,
-			);
+		if (typeof this.port === "string") {
+			if (this.port.startsWith("tcp://")) {
+				const url = new URL(this.port);
+				this.driverLog.print(`opening serial port ${this.port}`);
+				this.serial = new ZWaveSocket(
+					{
+						host: url.hostname,
+						port: parseInt(url.port),
+					},
+					this._logContainer,
+				);
+			} else {
+				this.driverLog.print(`opening serial port ${this.port}`);
+				this.serial = new ZWaveSerialPort(
+					this.port,
+					this._logContainer,
+					this.options.testingHooks?.serialPortBinding,
+				);
+			}
 		} else {
-			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(
+			this.driverLog.print(
+				"opening serial port using the provided custom implementation",
+			);
+			this.serial = new ZWaveSerialPortBase(
 				this.port,
 				this._logContainer,
-				this.options.testingHooks?.serialPortBinding,
 			);
 		}
 		this.serial
@@ -830,7 +877,7 @@ export class Driver
 		if (this.serial.isOpen) await this.serial.close();
 
 		// IMPORTANT: Test code expects the open promise to be created and returned synchronously
-		// Everything async (inluding opening the serial port) must happen in the setImmediate callback
+		// Everything async (including opening the serial port) must happen in the setImmediate callback
 
 		// asynchronously open the serial port
 		setImmediate(async () => {
@@ -2281,7 +2328,7 @@ export class Driver
 		try {
 			// Parse the message while remembering potential decoding errors in embedded CCs
 			// This way we can log the invalid CC contents
-			msg = Message.from(this, data);
+			msg = Message.from(this, { data });
 			// Ensure there are no errors
 			if (isCommandClassContainer(msg)) assertValidCCs(msg);
 			// And update statistics
@@ -2317,7 +2364,11 @@ export class Driver
 								// If it was, we need to notify the sender that we couldn't decode the command
 								const node = this.getNodeUnsafe(msg);
 								if (node) {
-									await node
+									const endpoint =
+										node.getEndpoint(
+											msg.command.endpointIndex,
+										) ?? node;
+									await endpoint
 										.createAPI(
 											CommandClasses.Supervision,
 											false,
@@ -2326,11 +2377,12 @@ export class Driver
 											sessionId: supervisionSessionId,
 											moreUpdatesFollow: false,
 											status: SupervisionStatus.NoSupport,
-											secure: msg.command.secure,
 											requestWakeUpOnDemand:
 												this.shouldRequestWakeupOnDemand(
 													node,
 												),
+											encapsulationFlags:
+												msg.command.encapsulationFlags,
 										});
 								}
 								return;
@@ -3015,7 +3067,7 @@ ${handlers.length} left`,
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
 		if (
-			cc.secure &&
+			cc.encapsulationFlags & EncapsulationFlags.Security &&
 			cc.ccId !== CommandClasses.Security &&
 			cc.ccId !== CommandClasses["Security 2"]
 		) {
@@ -3158,7 +3210,7 @@ ${handlers.length} left`,
 				const supervisionSessionId = SupervisionCC.getSessionId(
 					msg.command,
 				);
-				const secure = msg.command.secure;
+				const encapsulationFlags = msg.command.encapsulationFlags;
 
 				// DO NOT force-add support for the Supervision CC here. Some devices only support Supervision when sending,
 				// so we need to trust the information we already have.
@@ -3171,15 +3223,18 @@ ${handlers.length} left`,
 
 						// send back a Supervision Report if the command was received via Supervision Get
 						if (supervisionSessionId !== undefined) {
-							await node
+							const endpoint =
+								node.getEndpoint(msg.command.endpointIndex) ??
+								node;
+							await endpoint
 								.createAPI(CommandClasses.Supervision, false)
 								.sendReport({
 									sessionId: supervisionSessionId,
 									moreUpdatesFollow: false,
 									status: SupervisionStatus.Success,
-									secure,
 									requestWakeUpOnDemand:
 										this.shouldRequestWakeupOnDemand(node),
+									encapsulationFlags,
 								});
 						}
 						return;
@@ -3189,29 +3244,31 @@ ${handlers.length} left`,
 				// No one is waiting, dispatch the command to the node itself
 				if (supervisionSessionId !== undefined) {
 					// Wrap the handleCommand in try-catch so we can notify the node that we weren't able to handle the command
+					const endpoint =
+						node.getEndpoint(msg.command.endpointIndex) ?? node;
 					try {
 						await node.handleCommand(msg.command);
 
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Success,
-								secure,
 								requestWakeUpOnDemand:
 									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
 							});
 					} catch (e) {
-						await node
+						await endpoint
 							.createAPI(CommandClasses.Supervision, false)
 							.sendReport({
 								sessionId: supervisionSessionId,
 								moreUpdatesFollow: false,
 								status: SupervisionStatus.Fail,
-								secure,
 								requestWakeUpOnDemand:
 									this.shouldRequestWakeupOnDemand(node),
+								encapsulationFlags,
 							});
 
 						// In any case we don't want to swallow the error
@@ -3351,16 +3408,19 @@ ${handlers.length} left`,
 		}
 	}
 
-	private lastCallbackId = 0xff;
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correllate requests
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
-	public getNextCallbackId(): number {
-		this.lastCallbackId = (this.lastCallbackId + 1) & 0xff;
-		if (this.lastCallbackId < 1) this.lastCallbackId = 1;
-		return this.lastCallbackId;
-	}
+	public readonly getNextCallbackId = createWrappingCounter(0xff);
+
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
+	 * to the controller/nodes with its response
+	 */
+	public readonly getNextSupervisionSessionId = createWrappingCounter(
+		MAX_SUPERVISION_SESSION_ID,
+	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
 		// The encapsulation order (from outside to inside) is as follows:
@@ -3389,23 +3449,27 @@ ${handlers.length} left`,
 
 		// 5.
 
-		// When a node supports S2 and has a valid security class, the command
-		// must be S2-encapsulated
-		const node = msg.command.getNode(this);
-		if (node?.supportsCC(CommandClasses["Security 2"])) {
-			const securityClass = node.getHighestSecurityClass();
-			if (
-				((securityClass != undefined &&
-					securityClass !== SecurityClass.S0_Legacy) ||
-					this.securityManager2?.tempKeys.has(node.id)) &&
-				Security2CC.requiresEncapsulation(msg.command)
-			) {
-				msg.command = Security2CC.encapsulate(this, msg.command);
+		if (CRC16CC.requiresEncapsulation(msg.command)) {
+			msg.command = CRC16CC.encapsulate(this, msg.command);
+		} else {
+			// When a node supports S2 and has a valid security class, the command
+			// must be S2-encapsulated
+			const node = msg.command.getNode(this);
+			if (node?.supportsCC(CommandClasses["Security 2"])) {
+				const securityClass = node.getHighestSecurityClass();
+				if (
+					((securityClass != undefined &&
+						securityClass !== SecurityClass.S0_Legacy) ||
+						this.securityManager2?.tempKeys.has(node.id)) &&
+					Security2CC.requiresEncapsulation(msg.command)
+				) {
+					msg.command = Security2CC.encapsulate(this, msg.command);
+				}
 			}
-		}
-		// This check will return false for S2-encapsulated commands
-		if (SecurityCC.requiresEncapsulation(msg.command)) {
-			msg.command = SecurityCC.encapsulate(this, msg.command);
+			// This check will return false for S2-encapsulated commands
+			if (SecurityCC.requiresEncapsulation(msg.command)) {
+				msg.command = SecurityCC.encapsulate(this, msg.command);
+			}
 		}
 	}
 
@@ -3423,6 +3487,31 @@ ${handlers.length} left`,
 				);
 				return;
 			}
+
+			// Copy the encapsulation flags and add the current encapsulation
+			unwrapped.encapsulationFlags = msg.command.encapsulationFlags;
+			switch (msg.command.ccId) {
+				case CommandClasses.Supervision:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.Supervision,
+						true,
+					);
+					break;
+				case CommandClasses["Security 2"]:
+				case CommandClasses.Security:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.Security,
+						true,
+					);
+					break;
+				case CommandClasses["CRC-16 Encapsulation"]:
+					unwrapped.setEncapsulationFlag(
+						EncapsulationFlags.CRC16,
+						true,
+					);
+					break;
+			}
+
 			msg.command = unwrapped;
 		}
 	}
@@ -3864,6 +3953,10 @@ ${handlers.length} left`,
 		command: CommandClass,
 		options?: SendCommandOptions,
 	): Promise<SendCommandReturnType<TResponse>> {
+		if (options?.encapsulationFlags != undefined) {
+			command.encapsulationFlags = options.encapsulationFlags;
+		}
+
 		// Only use supervision if...
 		if (
 			// ... not disabled

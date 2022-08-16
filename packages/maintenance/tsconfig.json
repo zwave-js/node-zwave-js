@@ -3,7 +3,8 @@
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"lib": ["ES2020"],
-		"newLine": "lf"
+		"newLine": "lf",
+		"resolveJsonModule": true
 	},
 	"references": [
 		{
@@ -13,6 +14,6 @@
 			"path": "../shared/tsconfig.build.json"
 		}
 	],
-	"include": ["src/**/*.ts"],
+	"include": ["src/**/*.ts", "src/**/*.json"],
 	"exclude": ["build/**", "node_modules/**"]
 }

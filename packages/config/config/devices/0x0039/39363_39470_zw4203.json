@@ -1,0 +1,85 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39363 / 39470 / ZW4203",
+	"description": "Plug-in Outdoor Switch V2, 500S",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3034",
+			"zwaveAllianceId": 3476
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Loads",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "19",
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press the button once to exclude",
+					"value": 0
+				},
+				{
+					"label": "Press the button twice and hold on the third press",
+					"value": 1
+				}
+			]
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. \n\n2. Once the controller is ready to add your device, press and the manual/program button on the smart switch.\n\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the box or the QR code label on the product. Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the manual/program button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3476/39363-QSG-1.pdf"
+	}
+}

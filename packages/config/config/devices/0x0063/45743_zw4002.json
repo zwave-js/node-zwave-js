@@ -1,0 +1,56 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "45743 / ZW4002",
+	"description": "In-Wall Fan Speed Control, 300S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3232",
+			"zwaveAllianceId": 2557
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true,
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device does not support supervision although it is mandatory for the device type
+					"endpoints": "*"
+				}
+			}
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2557/Binder2.pdf"
+	}
+}

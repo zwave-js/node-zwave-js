@@ -83,7 +83,7 @@ function getImports(
 	ts.forEachChild(sourceFile, (node) => {
 		// Vist top-level import nodes
 		const moduleNameExpr = getExternalModuleName(node);
-		// if they have a name, that is a string, i.e. not alias defition `import x = y`
+		// if they have a name, that is a string, i.e. not alias definition `import x = y`
 		if (
 			moduleNameExpr &&
 			moduleNameExpr.kind === ts.SyntaxKind.StringLiteral

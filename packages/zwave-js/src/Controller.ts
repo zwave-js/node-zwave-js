@@ -20,6 +20,7 @@ export * from "./lib/controller/Inclusion";
 export {
 	FirmwareUpdateFileInfo,
 	FirmwareUpdateInfo,
+	GetFirmwareUpdatesOptions,
 	HealNodeStatus,
 	SDKVersion,
 } from "./lib/controller/_Types";

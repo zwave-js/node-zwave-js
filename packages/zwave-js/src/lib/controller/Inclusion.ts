@@ -35,7 +35,7 @@ export enum InclusionStrategy {
 	 *
 	 * Issues a warning if Security S0 is not supported or the secure bootstrapping fails.
 	 *
-	 * **Not recommended** because S0 should be used sparingly and S2 preferred whereever possible.
+	 * **Not recommended** because S0 should be used sparingly and S2 preferred wherever possible.
 	 */
 	Security_S0,
 	/**
@@ -93,7 +93,11 @@ export interface InclusionUserCallbacks {
 export type InclusionOptions =
 	| {
 			strategy: InclusionStrategy.Default;
-			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
 			/**
 			 * Force secure communication (S0) even when S2 is not supported and S0 is supported but not necessary.
 			 * This is not recommended due to the overhead caused by S0.
@@ -102,11 +106,19 @@ export type InclusionOptions =
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			/**
+			 * The optional provisioning entry for the device to be included.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:
@@ -138,11 +150,19 @@ export type ReplaceNodeOptions =
 	// Therefore we need the user to specify how the node should be included
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			userCallbacks: InclusionUserCallbacks;
+			/**
+			 * Allows overriding the user callbacks for this inclusion.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			userCallbacks?: InclusionUserCallbacks;
 	  }
 	| {
 			strategy: InclusionStrategy.Security_S2;
-			provisioning: PlannedProvisioningEntry;
+			/**
+			 * The optional provisioning entry for the device to be included.
+			 * If not given, the inclusion user callbacks of the driver options will be used.
+			 */
+			provisioning?: PlannedProvisioningEntry;
 	  }
 	| {
 			strategy:

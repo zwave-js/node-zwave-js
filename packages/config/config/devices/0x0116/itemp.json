@@ -50,7 +50,7 @@
 		{
 			"#": "2",
 			"label": "Command sent on external dry contact",
-			"description": "Configure what te external contact sends when trigger",
+			"description": "Configure what the external contact sends when triggered",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"unsigned": true,

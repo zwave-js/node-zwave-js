@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Duration,
+	EncapsulationFlags,
 	isTransmissionError,
 	IZWaveEndpoint,
 	Maybe,
@@ -53,15 +54,6 @@ export const SupervisionCCValues = Object.freeze({
 // @noSetValueAPI - This CC has no values to set
 // @noInterview - This CC is only used for encapsulation
 
-let sessionId = 0;
-/** Returns the next session ID to be used for supervision */
-export function getNextSessionId(): number {
-	// TODO: Check if this needs to be on the applHost for Security 2
-	sessionId = (sessionId + 1) & 0b111111;
-	if (sessionId === 0) sessionId++;
-	return sessionId;
-}
-
 // @noValidateArgs - Encapsulation CCs are used internally and too frequently that we
 // want to pay the cost of validating each call
 @API(CommandClasses.Supervision)
@@ -75,35 +67,24 @@ export class SupervisionCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async sendEncapsulated(
-		encapsulated: CommandClass,
-		// If possible, keep us updated about the progress
-		requestStatusUpdates: boolean = true,
-	): Promise<void> {
-		this.assertSupportsCommand(SupervisionCommand, SupervisionCommand.Get);
-
-		const cc = new SupervisionCCGet(this.applHost, {
-			nodeId: this.endpoint.nodeId,
-			requestStatusUpdates,
-			encapsulated,
-		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
-	}
-
 	public async sendReport(
-		options: SupervisionCCReportOptions & { secure?: boolean },
+		options: SupervisionCCReportOptions & {
+			encapsulationFlags?: EncapsulationFlags;
+		},
 	): Promise<void> {
 		// Here we don't assert support - some devices only half-support Supervision, so we treat them
 		// as if they don't support it. We still need to be able to respond to the Get command though.
 
-		const { secure = false, ...cmdOptions } = options;
+		const { encapsulationFlags = EncapsulationFlags.None, ...cmdOptions } =
+			options;
 		const cc = new SupervisionCCReport(this.applHost, {
 			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
 			...cmdOptions,
 		});
 
-		// The report should be sent back with security if the received command was secure
-		cc.secure = secure;
+		// The report must be sent back with the same encapsulation order
+		cc.encapsulationFlags = encapsulationFlags;
 
 		try {
 			await this.applHost.sendCommand(cc, {
@@ -137,7 +118,11 @@ export class SupervisionCC extends CommandClass {
 
 	/** Tests if a command should be supervised and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
-		return cc.supervised && !(cc instanceof SupervisionCCGet);
+		return (
+			!!(cc.encapsulationFlags & EncapsulationFlags.Supervision) &&
+			!(cc instanceof SupervisionCCGet) &&
+			!(cc instanceof SupervisionCCReport)
+		);
 	}
 
 	/** Encapsulates a command that targets a specific endpoint */
@@ -153,13 +138,20 @@ export class SupervisionCC extends CommandClass {
 			);
 		}
 
-		return new SupervisionCCGet(host, {
+		const ret = new SupervisionCCGet(host, {
 			nodeId: cc.nodeId,
 			// Supervision CC is wrapped inside MultiChannel CCs, so the endpoint must be copied
 			endpoint: cc.endpointIndex,
 			encapsulated: cc,
 			requestStatusUpdates,
 		});
+
+		// Copy the encapsulation flags from the encapsulated command
+		// but omit Supervision, since we're doing that right now
+		ret.encapsulationFlags =
+			cc.encapsulationFlags & ~EncapsulationFlags.Supervision;
+
+		return ret;
 	}
 
 	/**
@@ -371,12 +363,10 @@ export class SupervisionCCGet extends SupervisionCC {
 				origin: options.origin,
 			});
 		} else {
-			this.sessionId = getNextSessionId();
+			this.sessionId = host.getNextSupervisionSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
-			// If the encapsulated command requires security, so does this one
-			if (this.encapsulated.secure) this.secure = true;
 		}
 	}
 

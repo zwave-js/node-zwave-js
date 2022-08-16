@@ -26,7 +26,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
@@ -121,15 +121,6 @@ export class SendDataBridgeRequest<CCType extends CommandClass = CommandClass>
 		return super.serialize();
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			sourceNodeId: this.sourceNodeId,
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -200,13 +191,6 @@ export class SendDataBridgeRequestTransmitReport
 		return this.transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -245,12 +229,6 @@ export class SendDataBridgeResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -367,15 +345,6 @@ export class SendDataMulticastBridgeRequest<
 		return super.serialize();
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			sourceNodeId: this.sourceNodeId,
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -425,13 +394,6 @@ export class SendDataMulticastBridgeRequestTransmitReport
 		return this._transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -466,12 +428,6 @@ export class SendDataMulticastBridgeResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

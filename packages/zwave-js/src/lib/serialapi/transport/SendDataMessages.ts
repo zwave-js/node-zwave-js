@@ -27,7 +27,7 @@ import {
 	priority,
 	SuccessIndicator,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { ApplicationCommandRequest } from "../application/ApplicationCommandRequest";
 import { BridgeApplicationCommandRequest } from "../application/BridgeApplicationCommandRequest";
@@ -76,16 +76,22 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		super(host, options);
 
 		if (gotDeserializationOptions(options)) {
-			const nodeId = this.payload[0];
+			this._nodeId = this.payload[0];
 			const serializedCCLength = this.payload[1];
-			const ccBuffer = this.payload.slice(2, 2 + serializedCCLength);
-			this.command = CommandClass.from(host, {
-				nodeId,
-				data: ccBuffer,
-				origin: options.origin,
-			}) as SinglecastCC<CCType>;
 			this.transmitOptions = this.payload[2 + serializedCCLength];
 			this.callbackId = this.payload[3 + serializedCCLength];
+			this.payload = this.payload.slice(2, 2 + serializedCCLength);
+
+			if (options.parseCCs !== false) {
+				this.command = CommandClass.from(host, {
+					nodeId: this._nodeId,
+					data: this.payload,
+					origin: options.origin,
+				}) as SinglecastCC<CCType>;
+			} else {
+				// Little hack for testing with a network mock. This will be parsed in the next step.
+				this.command = undefined as any;
+			}
 		} else {
 			if (!options.command.isSinglecast()) {
 				throw new ZWaveError(
@@ -95,6 +101,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 			}
 
 			this.command = options.command;
+			this._nodeId = this.command.nodeId;
 			this.transmitOptions =
 				options.transmitOptions ?? TransmitOptions.DEFAULT;
 			if (options.maxSendAttempts != undefined) {
@@ -117,8 +124,9 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this._maxSendAttempts = clamp(value, 1, MAX_SEND_ATTEMPTS);
 	}
 
+	private _nodeId: number;
 	public override getNodeId(): number | undefined {
-		return this.command.nodeId;
+		return this._nodeId;
 	}
 
 	public serialize(): Buffer {
@@ -130,14 +138,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		]);
 
 		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -371,14 +371,6 @@ export class SendDataMulticastRequest<
 		return super.serialize();
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			transmitOptions: this.transmitOptions,
-			callbackId: this.callbackId,
-			command: this.command,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -429,13 +421,6 @@ export class SendDataMulticastRequestTransmitReport
 		return this._transmitStatus === TransmitStatus.OK;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -471,12 +456,6 @@ export class SendDataMulticastResponse
 	private _wasSent: boolean;
 	public get wasSent(): boolean {
 		return this._wasSent;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasSent: this.wasSent,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

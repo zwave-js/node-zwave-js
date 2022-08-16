@@ -1,6 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { clamp } from "alcalzone-shared/math";
-import { entries } from "alcalzone-shared/objects";
 import type {
 	SetbackSpecialState,
 	SetbackState,
@@ -31,7 +30,7 @@ export function encodeSetbackState(state: SetbackState): number {
 export function decodeSetbackState(val: number): SetbackState | undefined {
 	if (val > 120) {
 		// Special state, try to look it up
-		const foundEntry = entries(setbackSpecialStateValues).find(
+		const foundEntry = Object.entries(setbackSpecialStateValues).find(
 			([, v]) => val === v,
 		);
 		if (!foundEntry) return;

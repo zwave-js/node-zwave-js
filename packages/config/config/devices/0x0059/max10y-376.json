@@ -25,7 +25,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Diable fail safe timer",
+					"label": "Disable fail safe timer",
 					"value": 0
 				},
 				{

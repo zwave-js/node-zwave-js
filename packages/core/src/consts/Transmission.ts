@@ -162,6 +162,14 @@ export interface SendMessageOptions {
 	onTXReport?: (report: TXReport) => void;
 }
 
+export enum EncapsulationFlags {
+	None = 0,
+	Supervision = 1 << 0,
+	// Multi Channel is tracked through the endpoint index
+	Security = 1 << 1,
+	CRC16 = 1 << 2,
+}
+
 export type SupervisionOptions =
 	| ({
 			/** Whether supervision may be used. `false` disables supervision. Default: `"auto"`. */
@@ -185,6 +193,8 @@ export type SendCommandOptions = SendMessageOptions &
 		maxSendAttempts?: number;
 		/** Whether the driver should automatically handle the encapsulation. Default: true */
 		autoEncapsulate?: boolean;
+		/** Used to send a response with the same encapsulation flags as the corresponding request. */
+		encapsulationFlags?: EncapsulationFlags;
 		/** Overwrite the default transmit options */
 		transmitOptions?: TransmitOptions;
 	};

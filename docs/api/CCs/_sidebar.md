@@ -94,6 +94,7 @@
 
     -   [Overview](troubleshooting/index.md)
     -   [Connectivity issues](troubleshooting/connectivity-issues.md)
+    -   [Improving the network health](troubleshooting/network-health.md)
     -   [Missing updates from a device](troubleshooting/no-updates.md)
     -   [Configuration parameters are missing or wrong](troubleshooting/missing-config-params.md)
     -   [A device is not identified (unknown product)](troubleshooting/unidentified-device.md)

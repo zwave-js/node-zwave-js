@@ -7,7 +7,6 @@ import {
 	ReadonlyObjectKeyMap,
 	stringify,
 } from "@zwave-js/shared";
-import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
@@ -348,7 +347,7 @@ function isHexKeyWith4Digits(val: any): val is string {
 	return typeof val === "string" && hexKeyRegex4Digits.test(val);
 }
 
-const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}$/;
+const firmwareVersionRegex = /^\d{1,3}\.\d{1,3}(\.\d{1,3})?$/;
 function isFirmwareVersion(val: any): val is string {
 	return (
 		typeof val === "string" &&
@@ -435,7 +434,7 @@ devices is malformed (not an object or type/id that is not a lowercase 4-digit h
 			throwInvalidConfig(
 				`device`,
 				`packages/config/config/devices/${filename}:
-firmwareVersion is malformed or invalid`,
+firmwareVersion is malformed or invalid. Must be x.y or x.y.z where x, y, and z are integers between 0 and 255`,
 			);
 		} else {
 			const { min, max } = definition.firmwareVersion;
@@ -451,7 +450,7 @@ firmwareVersion is malformed or invalid`,
 endpoints is not an object`,
 				);
 			}
-			for (const [key, ep] of entries(definition.endpoints)) {
+			for (const [key, ep] of Object.entries(definition.endpoints)) {
 				if (!/^\d+$/.test(key)) {
 					throwInvalidConfig(
 						`device`,
@@ -463,7 +462,7 @@ found non-numeric endpoint index "${key}" in endpoints`,
 				const epIndex = parseInt(key, 10);
 				endpoints.set(
 					epIndex,
-					new ConditionalEndpointConfig(filename, epIndex, ep),
+					new ConditionalEndpointConfig(filename, epIndex, ep as any),
 				);
 			}
 			this.endpoints = endpoints;
@@ -481,7 +480,7 @@ found non-numeric endpoint index "${key}" in endpoints`,
 associations is not an object`,
 				);
 			}
-			for (const [key, assocDefinition] of entries(
+			for (const [key, assocDefinition] of Object.entries(
 				definition.associations,
 			)) {
 				if (!/^[1-9][0-9]*$/.test(key)) {
@@ -498,7 +497,7 @@ found non-numeric group id "${key}" in associations`,
 					new ConditionalAssociationConfig(
 						filename,
 						keyNum,
-						assocDefinition,
+						assocDefinition as any,
 					),
 				);
 			}
@@ -577,7 +576,7 @@ found invalid param number "${paramNo}" in paramInformation`,
 				// We need to support parsing legacy files because users might have custom configs
 				// However, we don't allow this on CI or during tests/lint
 
-				for (const [key, paramDefinition] of entries(
+				for (const [key, paramDefinition] of Object.entries(
 					definition.paramInformation,
 				)) {
 					const match = /^(\d+)(?:\[0x([0-9a-fA-F]+)\])?$/.exec(key);

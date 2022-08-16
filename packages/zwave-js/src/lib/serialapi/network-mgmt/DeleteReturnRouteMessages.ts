@@ -20,7 +20,7 @@ import {
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteReturnRoute)
 @priority(MessagePriority.Normal)
@@ -91,12 +91,6 @@ export class DeleteReturnRouteResponse
 
 	public readonly hasStarted: boolean;
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			hasStarted: this.hasStarted,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -126,13 +120,6 @@ export class DeleteReturnRouteRequestTransmitReport
 
 	public isOK(): boolean {
 		return this._transmitStatus === TransmitStatus.OK;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

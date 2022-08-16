@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import * as utils from "./lib/utils";
 
 export * from "./cc/index";
 export * from "./lib/API";
@@ -17,5 +18,5 @@ export {
 	SPANExtension,
 } from "./lib/Security2/Extension";
 export * from "./lib/Security2/shared";
-export * as utils from "./lib/utils";
 export * from "./lib/_Types";
+export { utils };

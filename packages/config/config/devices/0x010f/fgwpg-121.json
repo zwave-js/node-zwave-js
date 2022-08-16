@@ -21,28 +21,30 @@
 		{
 			"#": "3",
 			"label": "Overload",
-			"description": "Overload safety switch",
+			"description": "Turn off the controlled device in case of exceeding the defined power.",
 			"valueSize": 2,
+			"unit": "0.1 W",
 			"minValue": 0,
 			"maxValue": 30000,
 			"defaultValue": 0,
 			"options": [
 				{
-					"label": "Overload Disabled",
+					"label": "Disable",
 					"value": 0
 				}
 			]
 		},
 		{
 			"#": "11",
-			"label": "Power Reporting",
+			"label": "Power Reporting Threshold",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 15,
 			"options": [
 				{
-					"label": "Disables power reporting",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -51,12 +53,13 @@
 			"#": "12",
 			"label": "Energy Reporting Threshold",
 			"valueSize": 2,
+			"unit": "0.01 kWh",
 			"minValue": 0,
 			"maxValue": 500,
 			"defaultValue": 10,
 			"options": [
 				{
-					"label": "Disables energy reporting",
+					"label": "Disable",
 					"value": 0
 				}
 			]
@@ -65,6 +68,7 @@
 			"#": "13",
 			"label": "Power Reporting Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
@@ -79,6 +83,7 @@
 			"#": "14",
 			"label": "Energy Reporting Interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32400,
 			"defaultValue": 3600,
@@ -108,49 +113,8 @@
 			]
 		},
 		{
-			"#": "21",
-			"label": "Up Value",
-			"description": "Upper power threshold",
-			"valueSize": 2,
-			"minValue": 100,
-			"maxValue": 30000,
-			"defaultValue": 500
-		},
-		{
-			"#": "22",
-			"label": "Down value",
-			"description": "Lower power threshold",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 29900,
-			"defaultValue": 300
-		},
-		{
-			"#": "23",
-			"label": "Controlling",
-			"description": "Controlling 3rd association group devices",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Power Exceeded",
-					"value": 1
-				},
-				{
-					"label": "Power Dropped",
-					"value": 2
-				},
-				{
-					"label": "Power Dropped or Exceeded",
-					"value": 3
-				}
-			]
-		},
-		{
 			"#": "24",
-			"label": "Switch On",
-			"description": "Command frame sent to devices in 2nd group",
+			"label": "Group 2: Switch On Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -168,8 +132,7 @@
 		},
 		{
 			"#": "25",
-			"label": "Switch Off",
-			"description": "Command frame sent to devices in 2nd group",
+			"label": "Group 2: Switch Off Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -186,9 +149,47 @@
 			]
 		},
 		{
+			"#": "23",
+			"label": "Group 3: Control Mode",
+			"description": "When to send a command to devices in the association group 3.",
+			"valueSize": 1,
+			"defaultValue": 3,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power usage above upper threshold",
+					"value": 1
+				},
+				{
+					"label": "Power usage below lower threshold",
+					"value": 2
+				},
+				{
+					"label": "Both",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "21",
+			"label": "Group 3: Upper Power Threshold",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 500
+		},
+		{
+			"#": "22",
+			"label": "Group 3: Lower Power Threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 29900,
+			"defaultValue": 300
+		},
+		{
 			"#": "26",
-			"label": "Threshold Up",
-			"description": "Command frame sent to the devices in 3rd group",
+			"label": "Group 3: Upper Threshold Command Value",
+			"description": "Which value to send when the power usage is above the upper threshold.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -206,8 +207,8 @@
 		},
 		{
 			"#": "27",
-			"label": "Threshold Down",
-			"description": "Command frame sent to the devices in 3rd group",
+			"label": "Group 3: Lower Threshold Command Value",
+			"description": "Which value to send when the power usage is below the lower threshold.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -224,42 +225,40 @@
 			]
 		},
 		{
-			"#": "30",
-			"label": "Active Alarms",
-			"description": "Network alarms to which the Wall Plug will respond",
-			"valueSize": 1,
-			"defaultValue": 63,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "General",
-					"value": 1
-				},
-				{
-					"label": "Smoke",
-					"value": 2
-				},
-				{
-					"label": "Carbon Monoxide",
-					"value": 4
-				},
-				{
-					"label": "Carbon Dioxide",
-					"value": 8
-				},
-				{
-					"label": "High Temperature",
-					"value": 16
-				},
-				{
-					"label": "Flood",
-					"value": 32
-				},
-				{
-					"label": "All Alarms (default)",
-					"value": 63
-				}
-			]
+			"#": "30[0x01]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: General",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x02]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Smoke",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x04]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Carbon Monoxide",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x08]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Carbon Dioxide",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x10]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: High Temperature",
+			"defaultValue": 1
+		},
+		{
+			"#": "30[0x20]",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Respond To Alarms: Flood",
+			"defaultValue": 1
 		},
 		{
 			"#": "31",
@@ -286,32 +285,31 @@
 		},
 		{
 			"#": "32",
-			"label": "Alarm state duration",
-			"description": "Specifies the duration of the alarm state",
+			"label": "Alarm Duration",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32400,
 			"defaultValue": 600
 		},
 		{
 			"#": "40",
-			"label": "Power load for violet color",
-			"description": "Maximum active power to flash the LED frame Violet",
+			"label": "LED Indicator: Power Threshold For Violet Color",
 			"valueSize": 2,
+			"unit": "0.1 W",
 			"minValue": 1000,
 			"maxValue": 30000,
 			"defaultValue": 30000
 		},
 		{
 			"#": "41",
-			"label": "LED frame color On",
-			"description": "LED frame color when controlled device is on",
+			"label": "LED Indicator: Color When Load On",
 			"valueSize": 1,
 			"defaultValue": 1,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "LED Off",
 					"value": 0
 				},
 				{
@@ -354,14 +352,13 @@
 		},
 		{
 			"#": "42",
-			"label": "LED frame color Off",
-			"description": "LED frame color when controlled device is off",
+			"label": "LED Indicator: Color When Load Off",
 			"valueSize": 1,
 			"defaultValue": 0,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "LED Off",
 					"value": 0
 				},
 				{
@@ -400,14 +397,13 @@
 		},
 		{
 			"#": "43",
-			"label": "LED frame color Z-Wave",
-			"description": "Z-Wave alarm illumination",
+			"label": "LED Indicator: Color During Alarm",
 			"valueSize": 1,
 			"defaultValue": 2,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Illumination",
+					"label": "LED Off",
 					"value": 0
 				},
 				{

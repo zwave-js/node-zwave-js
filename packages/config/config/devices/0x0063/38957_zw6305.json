@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
-	"label": "38957/ZW6305",
-	"description": "Slim Smart Door/Window Sensor",
+	"label": "38957 / ZW6305",
+	"description": "Slim Door+Window Sensor, 500S",
 	"devices": [
 		{
 			"productType": "0x4953",

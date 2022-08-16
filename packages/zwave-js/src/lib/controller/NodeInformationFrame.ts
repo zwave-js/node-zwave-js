@@ -37,6 +37,7 @@ export function determineNIF(): {
 		CommandClasses["Z-Wave Plus Info"],
 		// TODO: Z-Wave Plus v2 Device Type Specification
 		// Gateway device type MUST **support** Inclusion Controller and Time CC
+		CommandClasses.Time,
 		...implementedEncapsulationCCs,
 	];
 

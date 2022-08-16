@@ -1,5 +1,3 @@
-/// <reference types="reflect-metadata" />
-
 import {
 	createReflectionDecorator,
 	getNodeTag,
@@ -13,7 +11,6 @@ import {
 import type { ZWaveApplicationHost, ZWaveHost } from "@zwave-js/host";
 import type { JSONObject, TypedClassDecorator } from "@zwave-js/shared/safe";
 import { num2hex, staticExtends } from "@zwave-js/shared/safe";
-import { entries } from "alcalzone-shared/objects";
 import { MessageHeaders } from "../MessageHeaders";
 import { FunctionType, MessageType } from "./Constants";
 import { isNodeQuery } from "./INodeQuery";
@@ -37,6 +34,8 @@ export enum MessageOrigin {
 export interface MessageDeserializationOptions {
 	data: Buffer;
 	origin?: MessageOrigin;
+	/** Whether CCs should be parsed immediately (only affects messages that contain CCs). Default: `true` */
+	parseCCs?: boolean;
 }
 
 /**
@@ -242,11 +241,10 @@ export class Message {
 	/** Creates an instance of the message that is serialized in the given buffer */
 	public static from(
 		host: ZWaveHost,
-		data: Buffer,
-		origin?: MessageOrigin,
+		options: MessageDeserializationOptions,
 	): Message {
-		const Constructor = Message.getConstructor(data);
-		const ret = new Constructor(host, { data, origin });
+		const Constructor = Message.getConstructor(options.data);
+		const ret = new Constructor(host, options);
 		return ret;
 	}
 
@@ -290,15 +288,6 @@ export class Message {
 		if (this.expectedResponse != null)
 			ret.expectedResponse = FunctionType[this.functionType];
 		ret.payload = this.payload.toString("hex");
-		return ret;
-	}
-
-	protected toJSONInherited(props: JSONObject): JSONObject {
-		const ret = this.toJSONInternal();
-		delete ret.payload;
-		for (const [key, value] of entries(props)) {
-			if (value !== undefined) ret[key] = value;
-		}
 		return ret;
 	}
 
