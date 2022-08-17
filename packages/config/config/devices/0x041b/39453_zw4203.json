@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39453 / ZW4203",
-	"description": "Plug-in Outdoor Smart Switch V2, 500S",
+	"description": "Plug-in Outdoor Switch V2, 500S",
 	"devices": [
 		{
 			"productType": "0x4f50",
