@@ -301,7 +301,7 @@ describe("cloneDeep()", () => {
 describe("mergeDeep()", () => {
 	it("can delete keys when undefined is passed", () => {
 		const target = { a: 1, b: 2, c: 3 };
-		const result = mergeDeep(target, { a: undefined });
+		const result = mergeDeep(target, { a: undefined }, true);
 		expect(result).toEqual({ b: 2, c: 3 });
 	});
 
