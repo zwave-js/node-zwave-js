@@ -65,15 +65,15 @@
 		},
 		{
 			"#": "34",
-			"$import": "templates/jasco_template.json#led_light_color"
+			"$import": "templates/jasco_template.json#led_indicator_color"
 		},
 		{
 			"#": "35",
-			"$import": "templates/jasco_template.json#led_light_intensity"
+			"$import": "templates/jasco_template.json#led_indicator_intensity"
 		},
 		{
 			"#": "36",
-			"$import": "templates/jasco_template.json#led_light_intensity",
+			"$import": "templates/jasco_template.json#led_indicator_intensity",
 			"label": "Guidelight Mode Intensity"
 		},
 		{
@@ -82,6 +82,7 @@
 		}
 	],
 	"compat": {
+		// Needed for double-tap support
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
