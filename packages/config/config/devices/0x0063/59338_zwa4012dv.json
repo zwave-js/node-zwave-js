@@ -1,0 +1,17 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "59338 / ZWA4012DV",
+	"description": "In-Wall Toggle Switch, 120+277, QFSW, 700S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3332"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+	// TODO: Add configuration parameters
+}
