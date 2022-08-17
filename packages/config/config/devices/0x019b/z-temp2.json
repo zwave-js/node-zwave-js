@@ -197,7 +197,7 @@
 		},
 		{
 			"#": "15",
-			"label": "Inverted output",
+			"label": "Invert Output",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
