@@ -69,7 +69,8 @@
 			"#": "4",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Auto Turn-On Timer (Outlet 1)"
-		},		{
+		},
+		{
 			"#": "5",
 			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Auto Turn-On Timer (Outlet 2)"
