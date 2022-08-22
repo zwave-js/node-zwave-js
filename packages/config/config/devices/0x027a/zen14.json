@@ -1,0 +1,79 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN14",
+	"description": "700 Series Outdoor Double Plug",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xb003",
+			"zwaveAllianceId": 4674
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 2
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 2
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration (Outlet 1)"
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration (Outlet 2)"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer (Outlet 1)"
+		},
+		{
+			"#": "5",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Auto Turn-On Timer (Outlet 2)"
+		},
+		{
+			"#": "6",
+			"$import": "~/templates/master_template.json#state_after_power_failure_off_on_prev"
+		},
+
+		{
+			"#": "7",
+			"$import": "templates/zooz_template.json#led_indicator_brightness"
+		},
+		{
+			"#": "8",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Manual Control",
+			"defaultValue": 1
+		}
+	],
+	"metadata": {
+		"inclusion": "Initiate inclusion (pairing) in the app (or web interface).\nWhile the hub is looking for new devices, click the ZWave™ button 3 times as quickly as possible. The LED indicator will start flashing blue to confirm inclusion. mode and turn green for 1 second once inclusion is completed.",
+		"exclusion": "1. Bring the plug within direct range of your Z-Wave™ gateway (hub).\n2. Put the Z-Wave™ hub into exclusion mode (not sure how to do that? ask@getzooz.com).\n3. Press and release the Z-Wave™ button 3 times quickly.\n4. Your hub will confirm exclusion and the plug will disappear from your controller's device list",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the plug is powered, then click the Z-Wave™ button twice and hold it the third time for 10 seconds. The LED indicator will flash green 3 times to confirm a successful reset",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4674/zooz-outdoor-double-plug-zen14-manual.pdf"
+	}
+}
