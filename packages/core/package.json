@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/core",
-  "version": "10.0.0-beta.8",
+  "version": "10.0.0-beta.10",
   "description": "zwave-js: core components",
   "publishConfig": {
     "access": "public"
