@@ -41,5 +41,59 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		"alarmMapping": [
+			{
+				"from": {
+					"alarmType": 1,
+					"alarmLevel": 255
+				},
+				"to": {
+					"notificationType": 1,
+					"notificationEvent": 2
+				}
+			},
+			{
+				"from": {
+					"alarmType": 1,
+					"alarmLevel": 0
+				},
+				"to": {
+					"notificationType": 1,
+					"notificationEvent": 0
+				}
+			},
+			{
+				"from": {
+					"alarmType": 12,
+					"alarmLevel": 255
+				},
+				"to": {
+					"notificationType": 1,
+					"notificationEvent": 3
+				}
+			},
+			{
+				"from": {
+					"alarmType": 12,
+					"alarmLevel": 0
+				},
+				"to": {
+					"notificationType": 1,
+					"notificationEvent": 0
+				}
+			},
+			{
+				"from": {
+					"alarmType": 13,
+					"alarmLevel": 255
+				},
+				"to": {
+					"notificationType": 1,
+					"notificationEvent": 0
+				}
+			}
+		]
+	}
 }
