@@ -231,3 +231,14 @@ export interface ZWaveOptions extends ZWaveHostOptions {
 		loadConfiguration?: boolean;
 	};
 }
+
+export type EditableZWaveOptions = Pick<
+	ZWaveOptions,
+	| "disableOptimisticValueUpdate"
+	| "emitValueUpdateAfterSetValue"
+	| "inclusionUserCallbacks"
+	| "interview"
+	| "logConfig"
+	| "preferences"
+	| "preserveUnknownValues"
+>;
