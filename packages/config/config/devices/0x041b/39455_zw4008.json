@@ -2,7 +2,7 @@
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39455 / ZW4008",
-	"description": "In-Wall Smart Paddle Switch, Quick-fit Simple Wire, 500S",
+	"description": "In-Wall Paddle Switch, QFSW, 500S",
 	"devices": [
 		{
 			"productType": "0x4952",
