@@ -1,8 +1,8 @@
 {
 	"manufacturer": "Enbrighten",
 	"manufacturerId": "0x0063",
-	"label": "58438 / ZWA3016",
-	"description": "In-Wall Paddle Dimmer, 700S",
+	"label": "58438 / 59346 / ZWA3016",
+	"description": "In-Wall Paddle Dimmer, QFSW, 700S",
 	"devices": [
 		{
 			"productType": "0x4944",
