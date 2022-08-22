@@ -32,28 +32,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Led Indicator",
-			"description": "Decide how the LED indicator behaves depending on the on/off status of the plug. the LED indicator will flash twice to confirm a setting has been changed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Led indicator is on when the plug is on, LED indicator is off when the plug is off",
-					"value": 0
-				},
-				{
-					"label": "Led indicator is on when the plug is off, LED indicator is off when the plug is on",
-					"value": 1
-				},
-				{
-					"label": "Led indicator is always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options_inverted"
 		},
 		{
 			"#": "2",
