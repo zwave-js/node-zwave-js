@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.9 (2022-08-16) · _„Woo-Hoo!”_
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -26,6 +26,7 @@
 * Allow passing a custom serial port implementation in `port` param of the Driver class (#4885)
 * Support sending `TimeCC` reports and automatically respond to requests (#4858)
 * Allow overriding API key for the FW update service per call (#4912)
+* Support updating some driver options on the fly (#4930)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -59,6 +60,12 @@
 * Add MP31ZP (rebranded MP21ZP) (#4894)
 * Update Zooz ZEN20 with additional parameters 28 - 36 (#4898)
 * Clean up branding of Jasco devices (#4873)
+* Add new 700 series Jasco devices (#4928)
+* Update description on several Jasco manufactured devices (#4927)
+* Apply compat flag to GreenWave PowerNode 5 (#4934)
+* Add wakeup instruction to Zooz ZEN34 (#4932)
+* Add parameter 15 Invert Output to Heatit Z-Temp2 (#4915)
+* Add Enbrighten 58438 / ZWA3016 (#4913)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
