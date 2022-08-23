@@ -222,7 +222,9 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	 * Removes nodes from all association groups
 	 */
 	@validateArgs()
-	public async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void> {
+	public async removeNodeIdsFromAllGroups(
+		nodeIds: number[],
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.Remove,
@@ -230,7 +232,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 
 		if (this.version >= 2) {
 			// The node supports bulk removal
-			await this.removeNodeIds({ nodeIds, groupId: 0 });
+			return this.removeNodeIds({ nodeIds, groupId: 0 });
 		} else {
 			// We have to remove the node manually from all groups
 			const groupCount =
@@ -240,6 +242,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 					),
 				) ?? 0;
 			for (let groupId = 1; groupId <= groupCount; groupId++) {
+				// TODO: evaluate intermediate supervision results
 				await this.removeNodeIds({ nodeIds, groupId });
 			}
 		}

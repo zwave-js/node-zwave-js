@@ -1,9 +1,11 @@
 import {
+	AssociationCC,
 	ECDHProfiles,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
+	MultiChannelAssociationCC,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -3444,8 +3446,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		const tasks: Promise<any>[] = [];
+		// Check each endpoint of each node if they have an association to this node
 		for (const node of this.nodes.values()) {
 			if (node.id === this._ownNodeId || node.id === nodeId) continue;
+			if (node.interviewStage !== InterviewStage.Complete) continue;
+
 			for (const endpoint of node.getAllEndpoints()) {
 				// Prefer multi channel associations if that is available
 				if (
@@ -3453,15 +3458,40 @@ ${associatedNodes.join(", ")}`,
 						"Multi Channel Association"
 					].isSupported()
 				) {
-					return endpoint.commandClasses[
-						"Multi Channel Association"
-					].removeDestinations({
-						nodeIds: [nodeId],
-					});
+					const existing =
+						MultiChannelAssociationCC.getAllDestinationsCached(
+							this.driver,
+							endpoint,
+						);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses[
+								"Multi Channel Association"
+							].removeDestinations({
+								nodeIds: [nodeId],
+							}),
+						);
+					}
 				} else if (endpoint.commandClasses.Association.isSupported()) {
-					return endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
-						[nodeId],
+					const existing = AssociationCC.getAllDestinationsCached(
+						this.driver,
+						endpoint,
 					);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
+								[nodeId],
+							),
+						);
+					}
 				}
 			}
 		}
