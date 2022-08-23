@@ -4,6 +4,7 @@ import {
 	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -36,6 +37,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { SceneActuatorConfigurationCommand } from "../lib/_Types";
@@ -118,7 +120,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 						propertyKey,
 					).endpoint(this.endpoint.index),
 				);
-			await this.set(propertyKey, dimmingDuration, value);
+			return this.set(propertyKey, dimmingDuration, value);
 		} else if (property === "dimmingDuration") {
 			if (typeof value !== "string" && !(value instanceof Duration)) {
 				throwWrongValueType(
@@ -150,12 +152,10 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 				),
 			);
 
-			await this.set(propertyKey, dimmingDuration, level);
+			return this.set(propertyKey, dimmingDuration, level);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
-
-		return undefined;
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -186,7 +186,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 		sceneId: number,
 		dimmingDuration?: Duration | string,
 		level?: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SceneActuatorConfigurationCommand,
 			SceneActuatorConfigurationCommand.Set,
@@ -204,7 +204,7 @@ export class SceneActuatorConfigurationCCAPI extends CCAPI {
 			level,
 		});
 
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getActive(): Promise<
@@ -328,6 +328,7 @@ interface SceneActuatorConfigurationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SceneActuatorConfigurationCommand.Set)
+@useSupervision()
 export class SceneActuatorConfigurationCCSet extends SceneActuatorConfigurationCC {
 	public constructor(
 		host: ZWaveHost,
