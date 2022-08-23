@@ -1828,8 +1828,17 @@ export class Driver
 		// Don't do this for non-successful updates
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
 
-		// Wait at least 5 seconds
-		if (!waitTime) waitTime = 5;
+		// Wait the specified time plus a bit, so the device is actually ready to use
+		if (!waitTime) {
+			// Wait at least 5 seconds
+			waitTime = 5;
+		} else if (waitTime < 20) {
+			waitTime += 5;
+		} else if (waitTime < 60) {
+			waitTime += 10;
+		} else {
+			waitTime += 30;
+		}
 		this.controllerLog.logNode(
 			node.id,
 			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
@@ -1845,6 +1854,10 @@ export class Driver
 				});
 			}, waitTime * 1000).unref(),
 		);
+
+		// Reset nonces etc. to prevent false-positive duplicates after the update
+		this.securityManager?.deleteAllNoncesForReceiver(node.id);
+		this.securityManager2?.deleteNonce(node.id);
 	}
 
 	/** Checks if there are any pending messages for the given node */
