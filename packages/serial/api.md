@@ -427,6 +427,7 @@ export class Message {
     needsCallbackId(): boolean;
     // (undocumented)
     payload: Buffer;
+    prematureNodeUpdate: Message | undefined;
     get rtt(): number | undefined;
     serialize(): Buffer;
     toJSON(): JSONObject;
