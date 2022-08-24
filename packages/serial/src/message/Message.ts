@@ -361,6 +361,9 @@ export class Message {
 		return false;
 	}
 
+	/** Gets set by the driver to remember an expected node update for this message that arrived before the Serial API command has finished. */
+	public prematureNodeUpdate: Message | undefined;
+
 	/** Finds the ID of the target or source node in a message, if it contains that information */
 	public getNodeId(): number | undefined {
 		if (isNodeQuery(this)) return this.nodeId;
