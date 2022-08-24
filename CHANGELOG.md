@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.10 (2022-08-22) · _„Woo-Hoo!”_
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -13,7 +13,7 @@
 * CC implementations were moved into their own package (#4668)
 * CC code can now be used mostly without a driver instance (#4651)
 * Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
-* `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
+* `Supervision CC` is now used automatically for almost all CCs when supported (#4761, #4945)
 * Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
 * S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856) with the possibility to override them for individual inclusion attempts (#4911)
 * Node firmware versions are now exposed as `major.minor.patch` where supported (#4857)
@@ -27,6 +27,7 @@
 * Support sending `TimeCC` reports and automatically respond to requests (#4858)
 * Allow overriding API key for the FW update service per call (#4912)
 * Support updating some driver options on the fly (#4930)
+* Support correlating node responses to requests for which the ACK hasn't been received yet (#4946)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -41,6 +42,7 @@
 * Fixed a bug where commands that should be discarded because of a lower than expected security level would still store their values into the value DB (#4924)
 * Fixed looking up a node's provisioning entry using its node ID. This didn't work previously and would cause excluded SmartStart nodes to be included again immediately. (#4925)
 * No longer overwrite the security classes of a node when they are known for certain, and retry querying securely supported CCs during the interview (#4923)
+* Increase wait time after firmware update and reset nonces before attempting communication (#4944)
 
 ### Bugfixes (broken and fixed in v10 beta)
 * Emit value event after successful supervised `setValue` (#4899)
@@ -66,6 +68,8 @@
 * Add wakeup instruction to Zooz ZEN34 (#4932)
 * Add parameter 15 Invert Output to Heatit Z-Temp2 (#4915)
 * Add Enbrighten 58438 / ZWA3016 (#4913)
+* Add alarm mappings to ZSMOKE (#4942)
+* Add Zooz ZEN14 (#4921)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
