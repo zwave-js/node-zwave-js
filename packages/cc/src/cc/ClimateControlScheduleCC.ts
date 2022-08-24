@@ -3,6 +3,7 @@ import {
 	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ZWaveError,
@@ -27,6 +28,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import {
 	decodeSetbackState,
@@ -95,7 +97,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	public async set(
 		weekday: Weekday,
 		switchPoints: Switchpoint[],
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Set,
@@ -107,7 +109,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			weekday,
 			switchPoints,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs({ strictEnums: true })
@@ -178,7 +180,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	public async setOverride(
 		type: ScheduleOverrideType,
 		state: SetbackState,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.OverrideSet,
@@ -190,7 +192,7 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			overrideType: type,
 			overrideState: state,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -207,6 +209,7 @@ interface ClimateControlScheduleCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ClimateControlScheduleCommand.Set)
+@useSupervision()
 export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public constructor(
 		host: ZWaveHost,
@@ -422,6 +425,7 @@ interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ClimateControlScheduleCommand.OverrideSet)
+@useSupervision()
 export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleCC {
 	public constructor(
 		host: ZWaveHost,

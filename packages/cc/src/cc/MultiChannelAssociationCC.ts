@@ -1,4 +1,8 @@
-import type { IZWaveEndpoint, MessageRecord } from "@zwave-js/core/safe";
+import type {
+	IZWaveEndpoint,
+	MessageRecord,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -29,6 +33,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import * as ccUtils from "../lib/utils";
 import { V } from "../lib/Values";
@@ -239,7 +244,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async addDestinations(
 		options: MultiChannelAssociationCCSetOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.Set,
@@ -250,7 +255,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -259,7 +264,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async removeDestinations(
 		options: MultiChannelAssociationCCRemoveOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.Remove,
@@ -286,6 +291,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 							!!d.endpoint,
 					),
 				});
+				// TODO: evaluate intermediate supervision results
 				await this.applHost.sendCommand(cc, this.commandOptions);
 			}
 		} else {
@@ -294,7 +300,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 				...options,
 			});
-			await this.applHost.sendCommand(cc, this.commandOptions);
+			return this.applHost.sendCommand(cc, this.commandOptions);
 		}
 	}
 }
@@ -562,6 +568,7 @@ type MultiChannelAssociationCCSetOptions = {
 );
 
 @CCCommand(MultiChannelAssociationCommand.Set)
+@useSupervision()
 export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public constructor(
 		host: ZWaveHost,

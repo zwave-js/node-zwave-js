@@ -15,6 +15,7 @@ import {
 	MessagePriority,
 	MessageRecord,
 	parseBitMask,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 	ValueMetadataNumeric,
@@ -41,6 +42,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { isNotificationEventPayload } from "../lib/NotificationEventPayload";
 import * as ccUtils from "../lib/utils";
@@ -192,7 +194,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	@validateArgs()
 	public async sendReport(
 		options: NotificationCCReportOptions,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Report,
@@ -203,7 +205,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
@@ -226,7 +228,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	public async set(
 		notificationType: number,
 		notificationStatus: boolean,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Set,
@@ -238,7 +240,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			notificationType,
 			notificationStatus,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -626,6 +628,7 @@ interface NotificationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(NotificationCommand.Set)
+@useSupervision()
 export class NotificationCCSet extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
@@ -680,6 +683,7 @@ export type NotificationCCReportOptions =
 	  };
 
 @CCCommand(NotificationCommand.Report)
+@useSupervision()
 export class NotificationCCReport extends NotificationCC {
 	public constructor(
 		host: ZWaveHost,
