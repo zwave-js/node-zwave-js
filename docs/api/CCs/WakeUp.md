@@ -22,7 +22,7 @@ async getIntervalCapabilities(): Promise<Pick<WakeUpCCIntervalCapabilitiesReport
 async setInterval(
 	wakeUpInterval: number,
 	controllerNodeId: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `sendNoMoreInformation`

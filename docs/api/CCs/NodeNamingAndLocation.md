@@ -13,7 +13,7 @@ async getName(): Promise<string | undefined>;
 ### `setName`
 
 ```ts
-async setName(name: string): Promise<void>;
+async setName(name: string): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getLocation`
@@ -25,7 +25,9 @@ async getLocation(): Promise<string | undefined>;
 ### `setLocation`
 
 ```ts
-async setLocation(location: string): Promise<void>;
+async setLocation(
+	location: string,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Node Naming and Location CC values

@@ -44,7 +44,7 @@ async sendReport(
 	sensorType: number,
 	scale: number | Scale,
 	value: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Multilevel Sensor CC values

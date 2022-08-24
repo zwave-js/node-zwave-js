@@ -40,7 +40,7 @@ async getEventSignaling(
 async setEventSignaling(
 	subsystemType: SubsystemType,
 	subsystemState: SubsystemState,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Barrier Operator CC values

@@ -36,7 +36,7 @@ async set(
 		UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 	>,
 	userCode: string | Buffer,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Configures a single user code.
@@ -44,7 +44,9 @@ Configures a single user code.
 ### `setMany`
 
 ```ts
-async setMany(codes: UserCodeCCSetOptions[]): Promise<void>;
+async setMany(
+	codes: UserCodeCCSetOptions[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 Configures multiple user codes.
@@ -52,7 +54,9 @@ Configures multiple user codes.
 ### `clear`
 
 ```ts
-async clear(userId: number = 0): Promise<void>;
+async clear(
+	userId: number = 0,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Clears one or all user code.
@@ -76,7 +80,9 @@ async getKeypadMode(): Promise<KeypadMode | undefined>;
 ### `setKeypadMode`
 
 ```ts
-async setKeypadMode(keypadMode: KeypadMode): Promise<void>;
+async setKeypadMode(
+	keypadMode: KeypadMode,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getMasterCode`
@@ -88,7 +94,9 @@ async getMasterCode(): Promise<string | undefined>;
 ### `setMasterCode`
 
 ```ts
-async setMasterCode(masterCode: string): Promise<void>;
+async setMasterCode(
+	masterCode: string,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getUserCodeChecksum`

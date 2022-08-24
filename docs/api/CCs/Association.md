@@ -27,7 +27,7 @@ Returns information about an association group.
 async addNodeIds(
 	groupId: number,
 	...nodeIds: number[]
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Adds new nodes to an association group.
@@ -37,7 +37,7 @@ Adds new nodes to an association group.
 ```ts
 async removeNodeIds(
 	options: AssociationCCRemoveOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Removes nodes from an association group.
@@ -45,7 +45,9 @@ Removes nodes from an association group.
 ### `removeNodeIdsFromAllGroups`
 
 ```ts
-async removeNodeIdsFromAllGroups(nodeIds: number[]): Promise<void>;
+async removeNodeIdsFromAllGroups(
+	nodeIds: number[],
+): Promise<SupervisionResult | undefined>;
 ```
 
 Removes nodes from all association groups.
