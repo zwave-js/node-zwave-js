@@ -2974,6 +2974,11 @@ protocol version:      ${this.protocolVersion}`;
 			// This is a known notification (status or event)
 			const notificationName = notificationConfig.name;
 
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[handleNotificationReport] notificationName: ${notificationName}`,
+				level: "silly",
+			});
+
 			/** Returns a single notification state to idle */
 			const setStateIdle = (prevValue: number): void => {
 				const valueConfig = notificationConfig.lookupValue(prevValue);
@@ -3023,6 +3028,25 @@ protocol version:      ${this.protocolVersion}`;
 
 			// Find out which property we need to update
 			const valueConfig = notificationConfig.lookupValue(value);
+
+			if (valueConfig) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] valueConfig:
+  label: ${valueConfig.label}
+  ${
+		valueConfig.type === "event"
+			? "type: event"
+			: `type: state
+  variableName: ${valueConfig.variableName}`
+  }`,
+					level: "silly",
+				});
+			} else {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] valueConfig: undefined`,
+					level: "silly",
+				});
+			}
 
 			// Perform some heuristics on the known notification
 			this.handleKnownNotification(command);
@@ -3078,6 +3102,10 @@ protocol version:      ${this.protocolVersion}`;
 				allowIdleReset &&
 				!!this._deviceConfig?.compat?.forceNotificationIdleReset
 			) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[handleNotificationReport] scheduling idle reset`,
+					level: "silly",
+				});
 				this.scheduleNotificationIdleReset(valueId, () =>
 					setStateIdle(value),
 				);
