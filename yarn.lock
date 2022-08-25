@@ -5,12 +5,13 @@ __metadata:
   version: 6
   cacheKey: 8
 
-"@actions/core@npm:^1.9.0":
-  version: 1.9.0
-  resolution: "@actions/core@npm:1.9.0"
+"@actions/core@npm:^1.9.1":
+  version: 1.9.1
+  resolution: "@actions/core@npm:1.9.1"
   dependencies:
     "@actions/http-client": ^2.0.1
-  checksum: 801dde1da9012a0c7d40a3e4cc55dc0756892c3e5476cfdc4fc54eb9f0fa8e5c4936d152d723a5b0b999694af401e53e03dd62335b24ad3bbb1931d122aa6288
+    uuid: ^8.3.2
+  checksum: 8f9823bed2e172fcabb65a63e136f98bbd0614bf37b5012caff4d3216471de19956e6bc0ed2767c52bccc3d02a7450a3b902a83f56bfa255477858c6341d1e2e
   languageName: node
   linkType: hard
 
@@ -4197,7 +4198,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@zwave-js/repo@workspace:."
   dependencies:
-    "@actions/core": ^1.9.0
+    "@actions/core": ^1.9.1
     "@actions/exec": ^1.1.1
     "@actions/github": ^5.0.3
     "@alcalzone/jsonl-db": ^2.5.2
@@ -10937,6 +10938,15 @@ __metadata:
   version: 1.0.2
   resolution: "util-deprecate@npm:1.0.2"
   checksum: 474acf1146cb2701fe3b074892217553dfcf9a031280919ba1b8d651a068c9b15d863b7303cb15bd00a862b498e6cf4ad7b4a08fb134edd5a6f7641681cb54a2
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^8.3.2":
+  version: 8.3.2
+  resolution: "uuid@npm:8.3.2"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
   languageName: node
   linkType: hard
 
