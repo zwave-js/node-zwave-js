@@ -42,6 +42,7 @@ import {
 	ControllerLogger,
 	deserializeCacheValue,
 	dskFromString,
+	Duration,
 	EncapsulationFlags,
 	highResTimestamp,
 	ICommandClass,
@@ -50,6 +51,8 @@ import {
 	MAX_SUPERVISION_SESSION_ID,
 	Maybe,
 	MessagePriority,
+	MessageRecord,
+	messageRecordToLines,
 	nwiHomeIdFromDSK,
 	SecurityClass,
 	securityClassIsS2,
@@ -93,6 +96,7 @@ import {
 	ZWaveSocket,
 } from "@zwave-js/serial";
 import {
+	buffer2hex,
 	cloneDeep,
 	createWrappingCounter,
 	DeepPartial,
@@ -128,7 +132,11 @@ import {
 import { DriverLogger } from "../log/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/_Types";
+import {
+	InterviewStage,
+	NodeStatus,
+	ZWaveNotificationCallback,
+} from "../node/_Types";
 import { ApplicationCommandRequest } from "../serialapi/application/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -1493,7 +1501,8 @@ export class Driver
 			.on(
 				"firmware update finished",
 				this.onNodeFirmwareUpdated.bind(this),
-			);
+			)
+			.on("notification", this.onNodeNotification.bind(this));
 	}
 
 	/** Removes a node's event handlers that were added with addNodeEventHandlers */
@@ -1504,7 +1513,8 @@ export class Driver
 			.removeAllListeners("dead")
 			.removeAllListeners("interview completed")
 			.removeAllListeners("ready")
-			.removeAllListeners("firmware update finished");
+			.removeAllListeners("firmware update finished")
+			.removeAllListeners("notification");
 	}
 
 	/** Is called when a node wakes up */
@@ -1859,6 +1869,52 @@ export class Driver
 		this.securityManager?.deleteAllNoncesForReceiver(node.id);
 		this.securityManager2?.deleteNonce(node.id);
 	}
+
+	/** This is called when a node emits a `"notification"` event */
+	private onNodeNotification: ZWaveNotificationCallback = (
+		node,
+		ccId,
+		ccArgs,
+	) => {
+		let prefix: string;
+		let details: string[];
+		if (ccId === CommandClasses.Notification) {
+			const msg: MessageRecord = {
+				type: ccArgs.label,
+				event: ccArgs.eventLabel,
+			};
+			if (ccArgs.parameters) {
+				if (Buffer.isBuffer(ccArgs.parameters)) {
+					msg.parameters = buffer2hex(ccArgs.parameters);
+				} else if (ccArgs.parameters instanceof Duration) {
+					msg.duration = ccArgs.parameters.toString();
+				} else if (isObject(ccArgs.parameters)) {
+					Object.assign(msg, ccArgs.parameters);
+				}
+			}
+			prefix = "[Notification]";
+			details = messageRecordToLines(msg);
+		} else if (ccId === CommandClasses["Entry Control"]) {
+			prefix = "[Notification] Entry Control";
+			details = messageRecordToLines({
+				"event type": ccArgs.eventTypeLabel,
+				"data type": ccArgs.dataTypeLabel,
+			});
+		} else if (ccId === CommandClasses["Multilevel Switch"]) {
+			prefix = "[Notification] Multilevel Switch";
+			details = messageRecordToLines({
+				"event type": ccArgs.eventTypeLabel,
+				direction: ccArgs.direction,
+			});
+		} /*if (ccId === CommandClasses.Powerlevel)*/ else {
+			// Don't bother logging this
+			return;
+		}
+
+		this.controllerLog.logNode(node.id, {
+			message: [prefix, ...details.map((d) => `  ${d}`)].join("\n"),
+		});
+	};
 
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
