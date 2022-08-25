@@ -283,6 +283,22 @@ setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void
 
 Configures a new set of preferred sensor scales without having to restart the driver. The `scales` argument has the same type as `preferences.scales` in [`ZWaveOptions`](#ZWaveOptions).
 
+### `updateOptions`
+
+```ts
+updateOptions(options: DeepPartial<EditableZWaveOptions>): void
+```
+
+Updates a subset of the driver options without having to restart the driver. The following properties from [`ZWaveOptions`](#ZWaveOptions) are supported:
+
+-   `disableOptimisticValueUpdate`
+-   `emitValueUpdateAfterSetValue`
+-   `inclusionUserCallbacks`
+-   `interview`
+-   `logConfig`
+-   `preferences`
+-   `preserveUnknownValues`
+
 ### `checkForConfigUpdates`
 
 ```ts

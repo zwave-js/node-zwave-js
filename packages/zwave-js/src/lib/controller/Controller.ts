@@ -1,9 +1,11 @@
 import {
+	AssociationCC,
 	ECDHProfiles,
 	inclusionTimeouts,
 	KEXFailType,
 	KEXSchemes,
 	ManufacturerSpecificCCValues,
+	MultiChannelAssociationCC,
 	Security2CCKEXFail,
 	Security2CCKEXSet,
 	Security2CCNetworkKeyGet,
@@ -594,13 +596,10 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	public unprovisionSmartStartNode(dskOrNodeId: string | number): void {
 		const provisioningList = [...this.provisioningList];
 
-		const index = provisioningList.findIndex(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		const entry = this.getProvisioningEntryInternal(dskOrNodeId);
+		if (!entry) return;
+
+		const index = provisioningList.indexOf(entry);
 		if (index >= 0) {
 			provisioningList.splice(index, 1);
 			this.autoProvisionSmartStart();
@@ -611,13 +610,24 @@ export class ZWaveController extends TypedEventEmitter<ControllerEventCallbacks>
 	private getProvisioningEntryInternal(
 		dskOrNodeId: string | number,
 	): SmartStartProvisioningEntry | undefined {
-		return this.provisioningList.find(
-			(e) =>
-				e.dsk === dskOrNodeId ||
-				(typeof dskOrNodeId === "number" &&
-					"nodeId" in e &&
-					e.nodeId === dskOrNodeId),
-		);
+		if (typeof dskOrNodeId === "string") {
+			return this.provisioningList.find((e) => e.dsk === dskOrNodeId);
+		} else {
+			// The provisioning list may or may not contain the node ID for an entry, even if the node is already included.
+			let ret = this.provisioningList.find(
+				(e) => "nodeId" in e && e.nodeId === dskOrNodeId,
+			);
+			if (!ret) {
+				// Try to get the DSK from the node instance
+				const dsk = this.nodes.get(dskOrNodeId)?.dsk;
+				if (dsk) {
+					ret = this.provisioningList.find(
+						(e) => e.dsk === dskToString(dsk),
+					);
+				}
+			}
+			return ret;
+		}
 	}
 
 	/**
@@ -3436,8 +3446,11 @@ ${associatedNodes.join(", ")}`,
 	 */
 	public async removeNodeFromAllAssociations(nodeId: number): Promise<void> {
 		const tasks: Promise<any>[] = [];
+		// Check each endpoint of each node if they have an association to this node
 		for (const node of this.nodes.values()) {
 			if (node.id === this._ownNodeId || node.id === nodeId) continue;
+			if (node.interviewStage !== InterviewStage.Complete) continue;
+
 			for (const endpoint of node.getAllEndpoints()) {
 				// Prefer multi channel associations if that is available
 				if (
@@ -3445,15 +3458,40 @@ ${associatedNodes.join(", ")}`,
 						"Multi Channel Association"
 					].isSupported()
 				) {
-					return endpoint.commandClasses[
-						"Multi Channel Association"
-					].removeDestinations({
-						nodeIds: [nodeId],
-					});
+					const existing =
+						MultiChannelAssociationCC.getAllDestinationsCached(
+							this.driver,
+							endpoint,
+						);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses[
+								"Multi Channel Association"
+							].removeDestinations({
+								nodeIds: [nodeId],
+							}),
+						);
+					}
 				} else if (endpoint.commandClasses.Association.isSupported()) {
-					return endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
-						[nodeId],
+					const existing = AssociationCC.getAllDestinationsCached(
+						this.driver,
+						endpoint,
 					);
+					if (
+						[...existing.values()].some((dests) =>
+							dests.some((a) => a.nodeId === nodeId),
+						)
+					) {
+						tasks.push(
+							endpoint.commandClasses.Association.removeNodeIdsFromAllGroups(
+								[nodeId],
+							),
+						);
+					}
 				}
 			}
 		}

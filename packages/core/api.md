@@ -515,7 +515,7 @@ export class ControllerLogger extends ZWaveLoggerBase<ControllerLogContext> {
     interviewStart(node: Interviewable): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
-    logNode(nodeId: number, message: string, level?: "debug" | "verbose" | "warn" | "error"): void;
+    logNode(nodeId: number, message: string, level?: LogNodeOptions["level"]): void;
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
     logNode(nodeId: number, options: LogNodeOptions): void;
@@ -1290,7 +1290,7 @@ export interface LogNodeOptions {
     // (undocumented)
     endpoint?: number;
     // (undocumented)
-    level?: "debug" | "verbose" | "warn" | "error";
+    level?: "silly" | "debug" | "verbose" | "warn" | "error";
     // (undocumented)
     message: string;
 }

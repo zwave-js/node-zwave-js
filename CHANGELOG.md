@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.8 (2022-08-15) · _„Woo-Hoo!”_
+## 10.0.0 (2022-08-25) · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -13,7 +13,7 @@
 * CC implementations were moved into their own package (#4668)
 * CC code can now be used mostly without a driver instance (#4651)
 * Implement discoverable and transparently-typed CC value definitions instead of `getXYZValueId` methods (#4704)
-* `Supervision CC` is now used automatically when supported and for more CCs than just `Multilevel Switch CC` (#4761)
+* `Supervision CC` is now used automatically for almost all CCs when supported (#4761, #4945)
 * Updated the argument type of the `"node found"` event to indicate that it is not an operational node (#4825)
 * S2 inclusion user callbacks were moved into `ZWaveOptions` (#4856) with the possibility to override them for individual inclusion attempts (#4911)
 * Node firmware versions are now exposed as `major.minor.patch` where supported (#4857)
@@ -26,6 +26,9 @@
 * Allow passing a custom serial port implementation in `port` param of the Driver class (#4885)
 * Support sending `TimeCC` reports and automatically respond to requests (#4858)
 * Allow overriding API key for the FW update service per call (#4912)
+* Support updating some driver options on the fly (#4930)
+* Support correlating node responses to requests for which the ACK hasn't been received yet (#4946)
+* `"notification"` events are now logged (#4948)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -37,12 +40,17 @@
 * Include both V1 values and V2+ values in `Notification CC` logs (#4904)
 * Obfuscate keys in `Entry Control CC` logs (#4905)
 * Improved command flow for S2-encrypted communication when both parties transmit at the same time (#4900)
+* Fixed a bug where commands that should be discarded because of a lower than expected security level would still store their values into the value DB (#4924)
+* Fixed looking up a node's provisioning entry using its node ID. This didn't work previously and would cause excluded SmartStart nodes to be included again immediately. (#4925)
+* No longer overwrite the security classes of a node when they are known for certain, and retry querying securely supported CCs during the interview (#4923)
+* Increase wait time after firmware update and reset nonces before attempting communication (#4944)
 
 ### Bugfixes (broken and fixed in v10 beta)
 * Emit value event after successful supervised `setValue` (#4899)
 * Correct nested encapsulation of Supervision CC Reports (#4890)
 * Ensure the `major.minor.patch` firmware version matches the legacy `major.minor` field before using it (#4906)
 * Move `"notification"` event args types back into `zwave-js` package (#4907)
+* Fixed a typo in `AddNodeStatusContext`, which would result in an `UNKNOWN` device class of newly included nodes (#4922)
 
 ### Config file changes
 * Corrected manufacturer and device labels for Heatit devices (#4838)
@@ -55,6 +63,14 @@
 * Add MP31ZP (rebranded MP21ZP) (#4894)
 * Update Zooz ZEN20 with additional parameters 28 - 36 (#4898)
 * Clean up branding of Jasco devices (#4873)
+* Add new 700 series Jasco devices (#4928)
+* Update description on several Jasco manufactured devices (#4927)
+* Apply compat flag to GreenWave PowerNode 5 (#4934)
+* Add wakeup instruction to Zooz ZEN34 (#4932)
+* Add parameter 15 Invert Output to Heatit Z-Temp2 (#4915)
+* Add Enbrighten 58438 / ZWA3016 (#4913)
+* Add alarm mappings to ZSMOKE (#4942)
+* Add Zooz ZEN14 (#4921)
 
 ### Changes under the hood
 * Patch `tsserver` after install to allow displaying large types
@@ -67,6 +83,7 @@
 * Changes to the public API surface are now tracked using `@microsoft/api-extractor` (#4860)
 * Reorganized the CI jobs to only compile TypeScript once and reuse the build output during subsequent jobs (#4880)
 * Move Supervision Session ID onto `ZWaveHost` interface (#4891)
+* Add some `"silly"` logging to `handleNotificationReport` (#4949)
 
 ## 9.6.2 (2022-07-20)
 ### Bugfixes

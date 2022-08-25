@@ -72,6 +72,9 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
 		let commandTimeMs: number;
+		// At this point we can't have received a premature update
+		msg.prematureNodeUpdate = undefined;
+
 		try {
 			// The yield can throw and must be handled here
 			result = yield msg;
@@ -98,6 +101,9 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 		// If the sent message expects an update from the node, wait for it
 		if (msg.expectsNodeUpdate()) {
+			// We might have received the update prematurely. In that case, return it.
+			if (msg.prematureNodeUpdate) return msg.prematureNodeUpdate;
+
 			// CommandTime is measured by the application
 			// ReportTime timeout SHOULD be set to CommandTime + 1 second.
 			const timeout =

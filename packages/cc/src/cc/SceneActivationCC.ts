@@ -2,6 +2,7 @@ import type {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessageRecord,
+	SupervisionResult,
 } from "@zwave-js/core/safe";
 import {
 	CommandClasses,
@@ -31,6 +32,7 @@ import {
 	ccValues,
 	commandClass,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { SceneActivationCommand } from "../lib/_Types";
@@ -76,9 +78,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		const duration = Duration.from(options?.transitionDuration);
-		await this.set(value, duration);
-
-		return undefined;
+		return this.set(value, duration);
 	};
 
 	/**
@@ -89,7 +89,7 @@ export class SceneActivationCCAPI extends CCAPI {
 	public async set(
 		sceneId: number,
 		dimmingDuration?: Duration | string,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			SceneActivationCommand,
 			SceneActivationCommand.Set,
@@ -101,7 +101,7 @@ export class SceneActivationCCAPI extends CCAPI {
 			sceneId,
 			dimmingDuration,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -118,6 +118,7 @@ interface SceneActivationCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SceneActivationCommand.Set)
+@useSupervision()
 export class SceneActivationCCSet extends SceneActivationCC {
 	public constructor(
 		host: ZWaveHost,

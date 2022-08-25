@@ -27,7 +27,7 @@ async getSystemConfig(): Promise<Pick<IrrigationCCSystemConfigReport, "masterVal
 ```ts
 async setSystemConfig(
 	config: IrrigationCCSystemConfigSetOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getValveInfo`
@@ -41,7 +41,7 @@ async getValveInfo(valveId: ValveId): Promise<Pick<IrrigationCCValveInfoReport, 
 ```ts
 async setValveConfig(
 	options: IrrigationCCValveConfigSetOptions,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getValveConfig`
@@ -73,7 +73,7 @@ shutoffValve(
 async setValveTable(
 	tableId: number,
 	entries: ValveTableEntry[],
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getValveTable`

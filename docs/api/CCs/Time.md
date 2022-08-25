@@ -17,7 +17,7 @@ async reportTime(
 	hour: number,
 	minute: number,
 	second: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getDate`
@@ -33,13 +33,15 @@ async reportDate(
 	year: number,
 	month: number,
 	day: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `setTimezone`
 
 ```ts
-async setTimezone(timezone: DSTInfo): Promise<void>;
+async setTimezone(
+	timezone: DSTInfo,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getTimezone`
@@ -51,5 +53,7 @@ async getTimezone(): Promise<DSTInfo | undefined>;
 ### `reportTimezone`
 
 ```ts
-async reportTimezone(timezone: DSTInfo): Promise<void>;
+async reportTimezone(
+	timezone: DSTInfo,
+): Promise<SupervisionResult | undefined>;
 ```

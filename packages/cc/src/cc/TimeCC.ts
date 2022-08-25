@@ -6,6 +6,7 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	SupervisionResult,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -27,6 +28,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { TimeCommand } from "../lib/_Types";
@@ -73,7 +75,7 @@ export class TimeCCAPI extends CCAPI {
 		hour: number,
 		minute: number,
 		second: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeReport);
 
 		const cc = new TimeCCTimeReport(this.applHost, {
@@ -83,7 +85,7 @@ export class TimeCCAPI extends CCAPI {
 			minute,
 			second,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -107,7 +109,7 @@ export class TimeCCAPI extends CCAPI {
 		year: number,
 		month: number,
 		day: number,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.DateReport);
 
 		const cc = new TimeCCDateReport(this.applHost, {
@@ -117,11 +119,13 @@ export class TimeCCAPI extends CCAPI {
 			month,
 			day,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	@validateArgs()
-	public async setTimezone(timezone: DSTInfo): Promise<void> {
+	public async setTimezone(
+		timezone: DSTInfo,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetSet);
 
 		const cc = new TimeCCTimeOffsetSet(this.applHost, {
@@ -132,7 +136,7 @@ export class TimeCCAPI extends CCAPI {
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getTimezone(): Promise<DSTInfo | undefined> {
@@ -158,7 +162,9 @@ export class TimeCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async reportTimezone(timezone: DSTInfo): Promise<void> {
+	public async reportTimezone(
+		timezone: DSTInfo,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetReport);
 
 		const cc = new TimeCCTimeOffsetReport(this.applHost, {
@@ -169,7 +175,7 @@ export class TimeCCAPI extends CCAPI {
 			dstStart: timezone.startDate,
 			dstEnd: timezone.endDate,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -219,6 +225,7 @@ interface TimeCCTimeReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeReport)
+@useSupervision()
 export class TimeCCTimeReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -278,6 +285,7 @@ interface TimeCCDateReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.DateReport)
+@useSupervision()
 export class TimeCCDateReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -338,6 +346,7 @@ interface TimeCCTimeOffsetSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeOffsetSet)
+@useSupervision()
 export class TimeCCTimeOffsetSet extends TimeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -404,6 +413,7 @@ interface TimeCCTimeOffsetReportOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeCommand.TimeOffsetReport)
+@useSupervision()
 export class TimeCCTimeOffsetReport extends TimeCC {
 	public constructor(
 		host: ZWaveHost,

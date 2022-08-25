@@ -5,6 +5,7 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	MessagePriority,
+	SupervisionResult,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
@@ -33,6 +34,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { V } from "../lib/Values";
 import { TimeParametersCommand } from "../lib/_Types";
@@ -132,9 +134,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		if (!(value instanceof Date)) {
 			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
-		await this.set(value);
-
-		return undefined;
+		return this.set(value);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -167,7 +167,9 @@ export class TimeParametersCCAPI extends CCAPI {
 	}
 
 	@validateArgs()
-	public async set(dateAndTime: Date): Promise<void> {
+	public async set(
+		dateAndTime: Date,
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Set,
@@ -187,7 +189,7 @@ export class TimeParametersCCAPI extends CCAPI {
 			dateAndTime,
 			useLocalTime,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -295,6 +297,7 @@ interface TimeParametersCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(TimeParametersCommand.Set)
+@useSupervision()
 export class TimeParametersCCSet extends TimeParametersCC {
 	public constructor(
 		host: ZWaveHost,

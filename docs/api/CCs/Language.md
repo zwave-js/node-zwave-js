@@ -13,7 +13,10 @@ async get(): Promise<Pick<LanguageCCReport, "language" | "country"> | undefined>
 ### `set`
 
 ```ts
-async set(language: string, country?: string): Promise<void>;
+async set(
+	language: string,
+	country?: string,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Language CC values

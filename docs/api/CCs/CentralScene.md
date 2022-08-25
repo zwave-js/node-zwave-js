@@ -19,7 +19,9 @@ async getConfiguration(): Promise<Pick<CentralSceneCCConfigurationReport, "slowR
 ### `setConfiguration`
 
 ```ts
-async setConfiguration(slowRefresh: boolean): Promise<void>;
+async setConfiguration(
+	slowRefresh: boolean,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Central Scene CC values

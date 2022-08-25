@@ -10,7 +10,7 @@
 async set(
 	sceneId: number,
 	dimmingDuration?: Duration | string,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Activates the Scene with the given ID.

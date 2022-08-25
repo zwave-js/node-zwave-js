@@ -1,4 +1,8 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type {
+	Maybe,
+	MessageOrCCLogEntry,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -30,6 +34,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { decodeSetbackState, encodeSetbackState } from "../lib/serializers";
 import { V } from "../lib/Values";
@@ -109,7 +114,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	public async set(
 		setbackType: SetbackType,
 		setbackState: SetbackState,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(
 			ThermostatSetbackCommand,
 			ThermostatSetbackCommand.Get,
@@ -121,7 +126,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			setbackType,
 			setbackState,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -183,6 +188,7 @@ interface ThermostatSetbackCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ThermostatSetbackCommand.Set)
+@useSupervision()
 export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 	public constructor(
 		host: ZWaveHost,

@@ -13,7 +13,9 @@ async get(): Promise<Date | undefined>;
 ### `set`
 
 ```ts
-async set(dateAndTime: Date): Promise<void>;
+async set(
+	dateAndTime: Date,
+): Promise<SupervisionResult | undefined>;
 ```
 
 ## Time Parameters CC values

@@ -145,7 +145,7 @@ export function keysOf<T>(obj: T): (keyof T)[];
 // Warning: (ae-missing-release-tag) "mergeDeep" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //
 // @public
-export function mergeDeep(target: Record<string, any> | undefined, source: Record<string, any>): Record<string, any>;
+export function mergeDeep(target: Record<string, any> | undefined, source: Record<string, any>, overwrite?: boolean): Record<string, any>;
 
 // Warning: (ae-missing-release-tag) "MethodsNamesOf" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
 //

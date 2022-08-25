@@ -1,4 +1,8 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core/safe";
+import type {
+	Maybe,
+	MessageOrCCLogEntry,
+	SupervisionResult,
+} from "@zwave-js/core/safe";
 import {
 	CommandClasses,
 	MessagePriority,
@@ -23,6 +27,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { ClockCommand, Weekday } from "../lib/_Types";
 
@@ -62,7 +67,7 @@ export class ClockCCAPI extends CCAPI {
 		hour: number,
 		minute: number,
 		weekday?: Weekday,
-	): Promise<void> {
+	): Promise<SupervisionResult | undefined> {
 		this.assertSupportsCommand(ClockCommand, ClockCommand.Set);
 
 		const cc = new ClockCCSet(this.applHost, {
@@ -72,7 +77,7 @@ export class ClockCCAPI extends CCAPI {
 			minute,
 			weekday: weekday ?? Weekday.Unknown,
 		});
-		await this.applHost.sendCommand(cc, this.commandOptions);
+		return this.applHost.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -135,6 +140,7 @@ interface ClockCCSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ClockCommand.Set)
+@useSupervision()
 export class ClockCCSet extends ClockCC {
 	public constructor(
 		host: ZWaveHost,
