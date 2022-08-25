@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## 10.0.0-beta.11 (2022-08-24) · _„Woo-Hoo!”_
+## __WORK IN PROGRESS__ · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
 * Moved `Driver.interviewNode` method to the `ZWaveNode` class (#4823)
@@ -28,6 +28,7 @@
 * Allow overriding API key for the FW update service per call (#4912)
 * Support updating some driver options on the fly (#4930)
 * Support correlating node responses to requests for which the ACK hasn't been received yet (#4946)
+* `"notification"` events are now logged (#4948)
 
 ### Bugfixes
 * Swap order of `destroy()` call and `Driver_Failed` error after restoring NVM (#4661)
@@ -82,6 +83,7 @@
 * Changes to the public API surface are now tracked using `@microsoft/api-extractor` (#4860)
 * Reorganized the CI jobs to only compile TypeScript once and reuse the build output during subsequent jobs (#4880)
 * Move Supervision Session ID onto `ZWaveHost` interface (#4891)
+* Add some `"silly"` logging to `handleNotificationReport` (#4949)
 
 ## 9.6.2 (2022-07-20)
 ### Bugfixes
