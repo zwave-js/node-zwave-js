@@ -4,6 +4,10 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.0.1 (2022-08-27)
+### Bugfixes
+* Corrected missing and incorrect dependencies
+
 ## 10.0.0 (2022-08-25) · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)
