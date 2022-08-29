@@ -145,7 +145,6 @@ export class MockController {
 					throw new Error(
 						"Mock controller received a CAN from the host. This is illegal!",
 					);
-					return;
 				}
 			}
 		}

@@ -819,53 +819,54 @@ function visitNumericEnumType(
 		);
 	});
 
-	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-		return VisitorUtils.createAssertionFunction(
-			f.createStrictInequality(
-				VisitorUtils.objectIdentifier,
-				f.createTrue(),
-			),
-			{ type: "boolean-literal", value: true },
-			name,
-			visitorContext,
-			VisitorUtils.createStrictNullCheckStatement(
-				VisitorUtils.objectIdentifier,
-				visitorContext,
-			),
-		);
-	});
+	// Earlier revisions of this:
+	// return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+	// 	return VisitorUtils.createAssertionFunction(
+	// 		f.createStrictInequality(
+	// 			VisitorUtils.objectIdentifier,
+	// 			f.createTrue(),
+	// 		),
+	// 		{ type: "boolean-literal", value: true },
+	// 		name,
+	// 		visitorContext,
+	// 		VisitorUtils.createStrictNullCheckStatement(
+	// 			VisitorUtils.objectIdentifier,
+	// 			visitorContext,
+	// 		),
+	// 	);
+	// });
 
-	const typeUnion = type;
-	if (tsutils.isUnionType(typeUnion)) {
-		const name = VisitorTypeName.visitType(type, visitorContext, {
-			type: "type-check",
-		});
-		const functionNames = typeUnion.types.map((type) =>
-			visitType(type, visitorContext),
-		);
-		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-			return VisitorUtils.createDisjunctionFunction(
-				functionNames,
-				name,
-				visitorContext,
-			);
-		});
-	}
-	const intersectionType = type;
-	if (tsutils.isIntersectionType(intersectionType)) {
-		const name = VisitorTypeName.visitType(type, visitorContext, {
-			type: "type-check",
-		});
-		return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
-			const functionNames = intersectionType.types.map((type) =>
-				visitType(type, { ...visitorContext }),
-			);
-			return VisitorUtils.createConjunctionFunction(functionNames, name);
-		});
-	}
-	throw new Error(
-		"UnionOrIntersectionType type was neither a union nor an intersection.",
-	);
+	// const typeUnion = type;
+	// if (tsutils.isUnionType(typeUnion)) {
+	// 	const name = VisitorTypeName.visitType(type, visitorContext, {
+	// 		type: "type-check",
+	// 	});
+	// 	const functionNames = typeUnion.types.map((type) =>
+	// 		visitType(type, visitorContext),
+	// 	);
+	// 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+	// 		return VisitorUtils.createDisjunctionFunction(
+	// 			functionNames,
+	// 			name,
+	// 			visitorContext,
+	// 		);
+	// 	});
+	// }
+	// const intersectionType = type;
+	// if (tsutils.isIntersectionType(intersectionType)) {
+	// 	const name = VisitorTypeName.visitType(type, visitorContext, {
+	// 		type: "type-check",
+	// 	});
+	// 	return VisitorUtils.setFunctionIfNotExists(name, visitorContext, () => {
+	// 		const functionNames = intersectionType.types.map((type) =>
+	// 			visitType(type, { ...visitorContext }),
+	// 		);
+	// 		return VisitorUtils.createConjunctionFunction(functionNames, name);
+	// 	});
+	// }
+	// throw new Error(
+	// 	"UnionOrIntersectionType type was neither a union nor an intersection.",
+	// );
 }
 
 function visitUnionOrIntersectionType(
