@@ -6,10 +6,12 @@ import {
 	ZWaveProtocolCCRequestNodeInformationFrame,
 } from "@zwave-js/cc/ZWaveProtocolCC";
 import {
+	isZWaveError,
 	NodeType,
 	TransmitOptions,
 	TransmitStatus,
 	ZWaveDataRate,
+	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageOrigin } from "@zwave-js/serial";
 import {
@@ -272,8 +274,18 @@ const handleSendData: MockControllerBehavior = {
 				try {
 					const ackResult = await ackPromise;
 					ack = !!ackResult?.ack;
-				} catch {
-					// No response
+				} catch (e) {
+					// We want to know when we're using a command in tests that cannot be decoded yet
+					if (
+						isZWaveError(e) &&
+						e.code ===
+							ZWaveErrorCodes.Deserialization_NotImplemented
+					) {
+						console.error(e.message);
+						throw e;
+					}
+
+					// Treat all other errors as no response
 				}
 				controller.state.set(
 					MockControllerStateKeys.CommunicationState,

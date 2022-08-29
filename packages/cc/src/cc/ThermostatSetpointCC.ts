@@ -582,11 +582,12 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	) {
 		super(host, options);
 		if (gotDeserializationOptions(options)) {
-			// TODO: Deserialize payload
-			throw new ZWaveError(
-				`${this.constructor.name}: deserialization not implemented`,
-				ZWaveErrorCodes.Deserialization_NotImplemented,
-			);
+			validatePayload(this.payload.length >= 1);
+			this.setpointType = this.payload[0] & 0b1111;
+			// parseFloatWithScale does its own validation
+			const { value, scale } = parseFloatWithScale(this.payload.slice(1));
+			this.value = value;
+			this.scale = scale;
 		} else {
 			this.setpointType = options.setpointType;
 			this.value = options.value;
