@@ -29,6 +29,7 @@ import {
 	TransportServiceCCSegmentWait,
 	TransportServiceCCSubsequentSegment,
 	TransportServiceTimeouts,
+	VersionCommand,
 	WakeUpCCNoMoreInformation,
 	WakeUpCCValues,
 } from "@zwave-js/cc";
@@ -1830,13 +1831,15 @@ export class Driver
 	}
 
 	/** This is called when a node's firmware was updated */
-	private onNodeFirmwareUpdated(
+	private async onNodeFirmwareUpdated(
 		node: ZWaveNode,
 		status: FirmwareUpdateStatus,
 		waitTime?: number,
-	): void {
+	): Promise<void> {
 		// Don't do this for non-successful updates
 		if (status < FirmwareUpdateStatus.OK_WaitingForActivation) return;
+
+		// TODO: Add support for delayed activation
 
 		// Wait the specified time plus a bit, so the device is actually ready to use
 		if (!waitTime) {
@@ -1849,6 +1852,38 @@ export class Driver
 		} else {
 			waitTime += 30;
 		}
+
+		if (status === FirmwareUpdateStatus.OK_NoRestart) {
+			// This status MUST not be advertised for target 0.
+			// Other chips should probably advertise this if they aren't mission critical.
+
+			// Treat this as a sign that the device continues working as before
+			this.controllerLog.logNode(
+				node.id,
+				`Firmware updated. No restart or re-interview required. Refreshing version information in ${waitTime} seconds...`,
+			);
+
+			await wait(waitTime * 1000, true);
+			try {
+				const versionAPI = node.commandClasses.Version;
+				await versionAPI.get();
+				if (
+					versionAPI.supportsCommand(VersionCommand.CapabilitiesGet)
+				) {
+					await versionAPI.getCapabilities();
+				}
+				if (
+					versionAPI.supportsCommand(VersionCommand.ZWaveSoftwareGet)
+				) {
+					await versionAPI.getZWaveSoftware();
+				}
+			} catch {
+				// ignore
+			}
+
+			return;
+		}
+
 		this.controllerLog.logNode(
 			node.id,
 			`Firmware updated, scheduling interview in ${waitTime} seconds...`,
