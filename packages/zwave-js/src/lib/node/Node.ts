@@ -113,6 +113,7 @@ import {
 	SecurityClassOwner,
 	SendCommandOptions,
 	sensorCCs,
+	SupervisionStatus,
 	timespan,
 	topologicalSort,
 	TXReport,
@@ -878,7 +879,7 @@ export class ZWaveNode
 				if (result) {
 					if (isSupervisionResult(result)) {
 						message += ` (SupervisionResult)
-  status:   ${getEnumMemberName(isSupervisionResult, result.status)}`;
+  status:   ${getEnumMemberName(SupervisionStatus, result.status)}`;
 						if (result.remainingDuration) {
 							message += `
   duration: ${result.remainingDuration.toString()}`;
