@@ -640,6 +640,7 @@ interface MultiChannelAssociationCCRemoveOptions {
 }
 
 @CCCommand(MultiChannelAssociationCommand.Remove)
+@useSupervision()
 export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public constructor(
 		host: ZWaveHost,

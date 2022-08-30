@@ -4,6 +4,20 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.0.2 (2022-08-30)
+### Bugfixes
+* Some CCs were incorrectly not marked to use Supervision (#4956)
+* Use highest CC version implemented by the driver when node's CC version is unknown (#4971)
+* Randomize Supervision session ID on startup (#4969)
+* Commands that can be decoded but contain invalid data no longer cause errors when attempting to save their values (#4972)
+
+### Changes under the hood
+* Add additional `silly` logging to `Node.setValue` (#4968)
+
+## 10.0.1 (2022-08-27)
+### Bugfixes
+* Corrected missing and incorrect dependencies
+
 ## 10.0.0 (2022-08-25) · _„Woo-Hoo!”_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v10)
 * Dropped support for Node.js 12 (#4824, #4491)

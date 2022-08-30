@@ -50,6 +50,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import type { NotificationEventPayload } from "../lib/NotificationEventPayload";
 import { V } from "../lib/Values";
@@ -1115,6 +1116,7 @@ type UserCodeCCSetOptions =
 	  };
 
 @CCCommand(UserCodeCommand.Set)
+@useSupervision()
 export class UserCodeCCSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1464,6 +1466,7 @@ interface UserCodeCCKeypadModeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(UserCodeCommand.KeypadModeSet)
+@useSupervision()
 export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1552,6 +1555,7 @@ interface UserCodeCCMasterCodeSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(UserCodeCommand.MasterCodeSet)
+@useSupervision()
 export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1656,6 +1660,7 @@ export interface UserCode {
 }
 
 @CCCommand(UserCodeCommand.ExtendedUserCodeSet)
+@useSupervision()
 export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 	public constructor(
 		host: ZWaveHost,
