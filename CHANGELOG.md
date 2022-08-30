@@ -4,6 +4,16 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* Some CCs were incorrectly not marked to use Supervision (#4956)
+* Use highest CC version implemented by the driver when node's CC version is unknown (#4971)
+* Randomize Supervision session ID on startup (#4969)
+* Commands that can be decoded but contain invalid data no longer cause errors when attempting to save their values (#4972)
+
+### Changes under the hood
+* Add additional `silly` logging to `Node.setValue` (#4968)
+
 ## 10.0.1 (2022-08-27)
 ### Bugfixes
 * Corrected missing and incorrect dependencies
