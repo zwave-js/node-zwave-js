@@ -1,0 +1,5 @@
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":96,\"endpoint\":0,\"property\":\"endpointIndizes\"}","v":[1,2]}
+{"k":"{\"nodeId\":2,\"commandClass\":37,\"endpoint\":1,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":37,\"endpoint\":2,\"property\":\"interviewComplete\"}","v":true}
+{"k":"{\"nodeId\":2,\"commandClass\":37,\"endpoint\":0,\"property\":\"interviewComplete\"}","v":true}

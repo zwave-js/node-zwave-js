@@ -1970,7 +1970,7 @@ export class Driver
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
-	 * Returns 1 if the node claims that it does not support a CC.
+	 * Returns the highest implemented version if the node's CC version is unknown.
 	 * Throws if the CC is not implemented in this library yet.
 	 *
 	 * @param cc The command class whose version should be retrieved
@@ -1988,8 +1988,14 @@ export class Driver
 			endpointIndex,
 		);
 		if (supportedVersion === 0) {
-			// For unsupported CCs use version 1, no matter what
-			return 1;
+			// Unknown, use the highest implemented version
+			const implementedVersion = getImplementedVersion(cc);
+			if (
+				implementedVersion !== 0 &&
+				implementedVersion !== Number.POSITIVE_INFINITY
+			) {
+				return implementedVersion;
+			}
 		} else {
 			// For supported versions find the maximum version supported by both the
 			// node and this library
@@ -2000,11 +2006,11 @@ export class Driver
 			) {
 				return Math.min(supportedVersion, implementedVersion);
 			}
-			throw new ZWaveError(
-				"Cannot retrieve the version of a CC that is not implemented",
-				ZWaveErrorCodes.CC_NotSupported,
-			);
 		}
+		throw new ZWaveError(
+			"Cannot retrieve the version of a CC that is not implemented",
+			ZWaveErrorCodes.CC_NotSupported,
+		);
 	}
 
 	/**
