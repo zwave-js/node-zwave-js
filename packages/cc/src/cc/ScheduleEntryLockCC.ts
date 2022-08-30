@@ -28,6 +28,7 @@ import {
 	commandClass,
 	expectedCCResponse,
 	implementedVersion,
+	useSupervision,
 } from "../lib/CommandClassDecorators";
 import { encodeTimezone, parseTimezone } from "../lib/serializers";
 import { V } from "../lib/Values";
@@ -539,6 +540,7 @@ interface ScheduleEntryLockCCEnableSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ScheduleEntryLockCommand.EnableSet)
+@useSupervision()
 export class ScheduleEntryLockCCEnableSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -571,6 +573,7 @@ interface ScheduleEntryLockCCEnableAllSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ScheduleEntryLockCommand.EnableAllSet)
+@useSupervision()
 export class ScheduleEntryLockCCEnableAllSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -663,6 +666,7 @@ export type ScheduleEntryLockCCWeekDayScheduleSetOptions = CCCommandOptions &
 	);
 
 @CCCommand(ScheduleEntryLockCommand.WeekDayScheduleSet)
+@useSupervision()
 export class ScheduleEntryLockCCWeekDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -843,6 +847,7 @@ export type ScheduleEntryLockCCYearDayScheduleSetOptions = CCCommandOptions &
 	);
 
 @CCCommand(ScheduleEntryLockCommand.YearDayScheduleSet)
+@useSupervision()
 export class ScheduleEntryLockCCYearDayScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1066,6 +1071,7 @@ interface ScheduleEntryLockCCTimeOffsetSetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ScheduleEntryLockCommand.TimeOffsetSet)
+@useSupervision()
 export class ScheduleEntryLockCCTimeOffsetSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
@@ -1150,6 +1156,7 @@ export type ScheduleEntryLockCCDailyRepeatingScheduleSetOptions =
 		);
 
 @CCCommand(ScheduleEntryLockCommand.DailyRepeatingScheduleSet)
+@useSupervision()
 export class ScheduleEntryLockCCDailyRepeatingScheduleSet extends ScheduleEntryLockCC {
 	public constructor(
 		host: ZWaveHost,
