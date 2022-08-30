@@ -3575,6 +3575,7 @@ ${handlers.length} left`,
 	 */
 	public readonly getNextSupervisionSessionId = createWrappingCounter(
 		MAX_SUPERVISION_SESSION_ID,
+		true,
 	);
 
 	private encapsulateCommands(msg: Message & ICommandClassContainer): void {
