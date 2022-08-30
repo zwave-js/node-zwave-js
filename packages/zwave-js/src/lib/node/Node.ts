@@ -92,6 +92,7 @@ import {
 	getCCName,
 	getDSTInfo,
 	isRssiError,
+	isSupervisionResult,
 	isTransmissionError,
 	isUnsupervisedOrSucceeded,
 	isZWaveError,
@@ -849,6 +850,19 @@ export class ZWaveNode
 			] as CCAPI;
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
+
+			if (this.driver.controllerLog.logger.level === "silly") {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[setValue] calling SET_VALUE API ${
+						api.constructor.name
+					}:
+  property:     ${valueId.property}
+  property key: ${valueId.propertyKey}
+  optimistic:   ${api.isSetValueOptimistic(valueId)}`,
+					level: "silly",
+				});
+			}
+
 			// And call it
 			const result = await api.setValue(
 				{
@@ -859,6 +873,29 @@ export class ZWaveNode
 				options,
 			);
 
+			if (this.driver.controllerLog.logger.level === "silly") {
+				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
+				if (result) {
+					if (isSupervisionResult(result)) {
+						message += ` (SupervisionResult)
+  status:   ${getEnumMemberName(isSupervisionResult, result.status)}`;
+						if (result.remainingDuration) {
+							message += `
+  duration: ${result.remainingDuration.toString()}`;
+						}
+					} else {
+						message +=
+							" (other) " + JSON.stringify(result, null, 2);
+					}
+				} else {
+					message += " undefined";
+				}
+				this.driver.controllerLog.logNode(this.id, {
+					message,
+					level: "silly",
+				});
+			}
+
 			// Remember the new value if...
 			// ... the call did not throw (assume that the call was successful)
 			// ... the call was supervised and successful
@@ -866,16 +903,32 @@ export class ZWaveNode
 				api.isSetValueOptimistic(valueId) &&
 				isUnsupervisedOrSucceeded(result)
 			) {
+				const emitEvent =
+					!!result ||
+					!!this.driver.options.emitValueUpdateAfterSetValue;
+
+				if (this.driver.controllerLog.logger.level === "silly") {
+					const message = emitEvent
+						? "updating value with event"
+						: "updating value without event";
+					this.driver.controllerLog.logNode(this.id, {
+						message: `[setValue] ${message}`,
+						level: "silly",
+					});
+				}
+
 				this._valueDB.setValue(
 					valueId,
 					value,
 					// We need to emit an event if applications opted in, or if this was a supervised call
 					// because in this case there won't be a verification query which would result in an update
-					!!result ||
-						!!this.driver.options.emitValueUpdateAfterSetValue
-						? { source: "driver" }
-						: { noEvent: true },
+					emitEvent ? { source: "driver" } : { noEvent: true },
 				);
+			} else if (this.driver.controllerLog.logger.level === "silly") {
+				this.driver.controllerLog.logNode(this.id, {
+					message: `[setValue] not updating value`,
+					level: "silly",
+				});
 			}
 
 			return true;
@@ -897,6 +950,19 @@ export class ZWaveNode
 						emitErrorEvent = true;
 						break;
 				}
+
+				if (this.driver.controllerLog.logger.level === "silly") {
+					this.driver.controllerLog.logNode(this.id, {
+						message: `[setValue] raised ZWaveError (${
+							handled ? "handled" : "not handled"
+						}, code ${getEnumMemberName(
+							ZWaveErrorCodes,
+							e.code,
+						)}): ${e.message}`,
+						level: "silly",
+					});
+				}
+
 				if (emitErrorEvent) this.driver.emit("error", e);
 				if (handled) return false;
 			}
