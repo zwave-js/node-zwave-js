@@ -14,7 +14,7 @@ import { wait } from "alcalzone-shared/async";
 import { integrationTest } from "../integrationTestSuite";
 
 integrationTest(
-	"Regression test for #4957: Value update after supervised Thermostat Setpoint Set",
+	`Regression test for #4957: Treat Supervision Report with Success but "more updates follow" as final`,
 	{
 		debug: true,
 		// provisioningDirectory: path.join(
@@ -30,7 +30,7 @@ integrationTest(
 		},
 
 		customSetup: async (_driver, _controller, mockNode) => {
-			// Just have the node respond to all Supervision Get positively
+			// Just have the node respond to all Supervision Get positively, but claim that more updates follow
 			const respondToSupervisionGet: MockNodeBehavior = {
 				async onControllerFrame(controller, self, frame) {
 					if (
@@ -40,9 +40,10 @@ integrationTest(
 						const cc = new SupervisionCCReport(self.host, {
 							nodeId: controller.host.ownNodeId,
 							sessionId: frame.payload.sessionId,
-							moreUpdatesFollow: false,
+							moreUpdatesFollow: true, // <-- this is the important part
 							status: SupervisionStatus.Success,
 						});
+						await wait(500);
 						await self.sendToController(
 							createMockZWaveRequestFrame(cc, {
 								ackRequested: false,
