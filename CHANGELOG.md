@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.0.2 (2022-08-30)
 ### Bugfixes
 * Some CCs were incorrectly not marked to use Supervision (#4956)
 * Use highest CC version implemented by the driver when node's CC version is unknown (#4971)
