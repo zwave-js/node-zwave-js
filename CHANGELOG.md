@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.0.3 (2022-08-31)
 ### Bugfixes
 * Only refresh versions after FW update instead of a full interview when no restart is required (#4973)
 * For securely included nodes, attempt endpoint communication with S0, even if S0 is not listed in the endpoint capabilities (#4978)
