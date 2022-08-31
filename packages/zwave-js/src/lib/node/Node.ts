@@ -1947,7 +1947,6 @@ protocol version:      ${this.protocolVersion}`;
 
 				// If S2 is the highest security class, interview it for the endpoint
 				if (
-					securityClass != undefined &&
 					securityClassIsS2(securityClass) &&
 					!!this.driver.securityManager2
 				) {
@@ -1985,6 +1984,63 @@ protocol version:      ${this.protocolVersion}`;
 						CommandClasses.Security,
 					);
 					if (typeof action === "boolean") return action;
+				}
+			}
+
+			// It has been found that legacy nodes do not always advertise the S0 Command Class in their Multi
+			// Channel Capability Report and still accept all their Command Class using S0 encapsulation.
+			// A controlling node SHOULD try to control End Points with S0 encapsulation even if S0 is not
+			// listed in the Multi Channel Capability Report.
+
+			const endpointMissingS0 =
+				securityClass === SecurityClass.S0_Legacy &&
+				this.supportsCC(CommandClasses.Security) &&
+				!endpoint.supportsCC(CommandClasses.Security);
+
+			if (endpointMissingS0) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
+					level: "silly",
+				});
+
+				// TODO: Figure out which other commands we can use to test if the endpoint accepts secure commands
+				if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+					// Temporarily mark Z-Wave+ CC as secure so we can use it to test
+
+					endpoint.addCC(CommandClasses["Z-Wave Plus Info"], {
+						secure: true,
+					});
+
+					let success = false;
+					try {
+						success = !!(await endpoint.commandClasses[
+							"Z-Wave Plus Info"
+						].get());
+					} catch {
+						// Ignore
+					}
+
+					if (success) {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} accepts/expects secure commands`,
+							level: "silly",
+						});
+						// Mark all endpoint CCs as secure
+						for (const [ccId] of endpoint.getCCs()) {
+							endpoint.addCC(ccId, { secure: true });
+						}
+					} else {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} is actually not using S0`,
+							level: "silly",
+						});
+						endpoint.addCC(CommandClasses["Z-Wave Plus Info"], {
+							secure: false,
+						});
+					}
 				}
 			}
 
