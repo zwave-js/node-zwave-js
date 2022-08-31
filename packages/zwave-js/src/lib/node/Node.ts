@@ -1726,6 +1726,12 @@ protocol version:      ${this.protocolVersion}`;
 				securityClass == undefined ||
 				securityClassIsS2(securityClass)
 			) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S2",
+					"silly",
+				);
+
 				if (!this.driver.securityManager2) {
 					if (!this._hasEmittedNoS2NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1771,6 +1777,12 @@ protocol version:      ${this.protocolVersion}`;
 
 			// Query supported CCs unless we know for sure that the node wasn't assigned the S0 security class
 			if (this.hasSecurityClass(SecurityClass.S0_Legacy) !== false) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S0",
+					"silly",
+				);
+
 				if (!this.driver.securityManager) {
 					if (!this._hasEmittedNoS0NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1810,6 +1822,12 @@ protocol version:      ${this.protocolVersion}`;
 		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
 		// identify the device and apply device configurations
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Manufacturer Specific",
+				"silly",
+			);
+
 			await interviewEndpoint(
 				this,
 				CommandClasses["Manufacturer Specific"],
@@ -1817,6 +1835,12 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		if (this.supportsCC(CommandClasses.Version)) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Version",
+				"silly",
+			);
+
 			await interviewEndpoint(this, CommandClasses.Version);
 
 			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
@@ -1875,8 +1899,30 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews before endpoints: ${rootInterviewOrderBeforeEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews after endpoints: ${rootInterviewOrderAfterEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of rootInterviewOrderBeforeEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
@@ -1905,6 +1951,12 @@ protocol version:      ${this.protocolVersion}`;
 					securityClassIsS2(securityClass) &&
 					!!this.driver.securityManager2
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S2`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses["Security 2"],
@@ -1922,6 +1974,12 @@ protocol version:      ${this.protocolVersion}`;
 					securityClass === SecurityClass.S0_Legacy &&
 					!!this.driver.securityManager
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S0`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses.Security,
@@ -1930,16 +1988,16 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 
-			if (
-				endpoint.supportsCC(CommandClasses.Security) &&
-				// The root endpoint has been interviewed, so we know if the device supports security
-				this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
-				// Only interview SecurityCC if the network key was set
-				this.driver.securityManager
-			) {
-				// Security is always supported *securely*
-				endpoint.addCC(CommandClasses.Security, { secure: true });
-			}
+			// if (
+			// 	endpoint.supportsCC(CommandClasses.Security) &&
+			// 	// The root endpoint has been interviewed, so we know if the device supports security
+			// 	this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
+			// 	// Only interview SecurityCC if the network key was set
+			// 	this.driver.securityManager
+			// ) {
+			// 	// Security is always supported *securely*
+			// 	endpoint.addCC(CommandClasses.Security, { secure: true });
+			// }
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
 			// that aren't actually properly supported by the device.
@@ -1968,8 +2026,26 @@ protocol version:      ${this.protocolVersion}`;
 				);
 			}
 
+			this.driver.controllerLog.logNode(this.nodeId, {
+				endpoint: endpoint.index,
+				message: `Endpoint ${
+					endpoint.index
+				} interview order: ${endpointInterviewOrder
+					.map((cc) => `\n· ${getCCName(cc)}`)
+					.join("")}`,
+				level: "silly",
+			});
+
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of endpointInterviewOrder) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						cc,
+					)}`,
+					level: "silly",
+				});
+
 				const action = await interviewEndpoint(endpoint, cc);
 				if (action === "continue") continue;
 				else if (typeof action === "boolean") return action;
@@ -1978,6 +2054,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Continue with the application CCs for the root endpoint
 		for (const cc of rootInterviewOrderAfterEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
