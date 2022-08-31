@@ -160,9 +160,9 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				this.endpoint,
 			);
 
-			if (slot.slotId < 0 || slot.slotId >= numSlots) {
+			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 0 and the number of supported day-of-week slots ${numSlots}.`,
+					`The schedule slot ID must be between 1 and the number of supported day-of-week slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -232,9 +232,9 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 				this.endpoint,
 			);
 
-			if (slot.slotId < 0 || slot.slotId >= numSlots) {
+			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 0 and the number of supported day-of-year slots ${numSlots}.`,
+					`The schedule slot ID must be between 1 and the number of supported day-of-year slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -310,9 +310,9 @@ export class ScheduleEntryLockCCAPI extends CCAPI {
 					this.endpoint,
 				);
 
-			if (slot.slotId < 0 || slot.slotId >= numSlots) {
+			if (slot.slotId < 1 || slot.slotId > numSlots) {
 				throw new ZWaveError(
-					`The schedule slot ID must be between 0 and the number of supported daily repeating slots ${numSlots}.`,
+					`The schedule slot ID must be between 1 and the number of supported daily repeating slots ${numSlots}.`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
