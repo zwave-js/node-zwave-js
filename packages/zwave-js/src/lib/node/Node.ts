@@ -2063,9 +2063,8 @@ protocol version:      ${this.protocolVersion}`;
 							message: `Endpoint ${endpoint.index} is actually not using S0`,
 							level: "silly",
 						});
-						endpoint.addCC(CommandClasses["Z-Wave Plus Info"], {
-							secure: false,
-						});
+						// Mark the CC as not secure again
+						endpoint.addCC(ccId, { secure: false });
 					}
 				}
 			}
