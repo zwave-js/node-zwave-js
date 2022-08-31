@@ -1726,6 +1726,12 @@ protocol version:      ${this.protocolVersion}`;
 				securityClass == undefined ||
 				securityClassIsS2(securityClass)
 			) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S2",
+					"silly",
+				);
+
 				if (!this.driver.securityManager2) {
 					if (!this._hasEmittedNoS2NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1771,6 +1777,12 @@ protocol version:      ${this.protocolVersion}`;
 
 			// Query supported CCs unless we know for sure that the node wasn't assigned the S0 security class
 			if (this.hasSecurityClass(SecurityClass.S0_Legacy) !== false) {
+				this.driver.controllerLog.logNode(
+					this.nodeId,
+					"Root device interview: Security S0",
+					"silly",
+				);
+
 				if (!this.driver.securityManager) {
 					if (!this._hasEmittedNoS0NetworkKeyError) {
 						// Cannot interview a secure device securely without a network key
@@ -1810,6 +1822,12 @@ protocol version:      ${this.protocolVersion}`;
 		// Manufacturer Specific and Version CC need to be handled before the other CCs because they are needed to
 		// identify the device and apply device configurations
 		if (this.supportsCC(CommandClasses["Manufacturer Specific"])) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Manufacturer Specific",
+				"silly",
+			);
+
 			await interviewEndpoint(
 				this,
 				CommandClasses["Manufacturer Specific"],
@@ -1817,6 +1835,12 @@ protocol version:      ${this.protocolVersion}`;
 		}
 
 		if (this.supportsCC(CommandClasses.Version)) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				"Root device interview: Version",
+				"silly",
+			);
+
 			await interviewEndpoint(this, CommandClasses.Version);
 
 			// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
@@ -1875,8 +1899,30 @@ protocol version:      ${this.protocolVersion}`;
 			);
 		}
 
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews before endpoints: ${rootInterviewOrderBeforeEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
+		this.driver.controllerLog.logNode(
+			this.nodeId,
+			`Root device interviews after endpoints: ${rootInterviewOrderAfterEndpoints
+				.map((cc) => `\n· ${getCCName(cc)}`)
+				.join("")}`,
+			"silly",
+		);
+
 		// Now that we know the correct order, do the interview in sequence
 		for (const cc of rootInterviewOrderBeforeEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
@@ -1901,10 +1947,15 @@ protocol version:      ${this.protocolVersion}`;
 
 				// If S2 is the highest security class, interview it for the endpoint
 				if (
-					securityClass != undefined &&
 					securityClassIsS2(securityClass) &&
 					!!this.driver.securityManager2
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S2`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses["Security 2"],
@@ -1922,6 +1973,12 @@ protocol version:      ${this.protocolVersion}`;
 					securityClass === SecurityClass.S0_Legacy &&
 					!!this.driver.securityManager
 				) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `Endpoint ${endpoint.index} interview: Security S0`,
+						level: "silly",
+					});
+
 					const action = await interviewEndpoint(
 						endpoint,
 						CommandClasses.Security,
@@ -1930,16 +1987,98 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 
-			if (
-				endpoint.supportsCC(CommandClasses.Security) &&
-				// The root endpoint has been interviewed, so we know if the device supports security
-				this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
-				// Only interview SecurityCC if the network key was set
-				this.driver.securityManager
-			) {
-				// Security is always supported *securely*
-				endpoint.addCC(CommandClasses.Security, { secure: true });
+			// It has been found that legacy nodes do not always advertise the S0 Command Class in their Multi
+			// Channel Capability Report and still accept all their Command Class using S0 encapsulation.
+			// A controlling node SHOULD try to control End Points with S0 encapsulation even if S0 is not
+			// listed in the Multi Channel Capability Report.
+
+			const endpointMissingS0 =
+				securityClass === SecurityClass.S0_Legacy &&
+				this.supportsCC(CommandClasses.Security) &&
+				!endpoint.supportsCC(CommandClasses.Security);
+
+			if (endpointMissingS0) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
+					level: "silly",
+				});
+
+				// Define which CCs we can use to test this - and if supported, how
+				const tests: {
+					ccId: CommandClasses;
+					// The test must return a truthy value if the check was successful
+					test: () => Promise<unknown>;
+				}[] = [
+					{
+						ccId: CommandClasses["Z-Wave Plus Info"],
+						test: () =>
+							endpoint.commandClasses["Z-Wave Plus Info"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Switch"],
+						test: () =>
+							endpoint.commandClasses["Binary Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Sensor"],
+						test: () =>
+							endpoint.commandClasses["Binary Sensor"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Switch"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Sensor"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Sensor"].get(),
+					},
+					// TODO: add other tests if necessary
+				];
+
+				for (const { ccId, test } of tests) {
+					if (!endpoint.supportsCC(ccId)) continue;
+
+					// Temporarily mark the CC as secure so we can use it to test
+					endpoint.addCC(ccId, { secure: true });
+
+					// Perform the test and treat errors as negative results
+					const success = !!(await test().catch(() => false));
+
+					if (success) {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} accepts/expects secure commands`,
+							level: "silly",
+						});
+						// Mark all endpoint CCs as secure
+						for (const [ccId] of endpoint.getCCs()) {
+							endpoint.addCC(ccId, { secure: true });
+						}
+					} else {
+						this.driver.controllerLog.logNode(this.nodeId, {
+							endpoint: endpoint.index,
+							message: `Endpoint ${endpoint.index} is actually not using S0`,
+							level: "silly",
+						});
+						// Mark the CC as not secure again
+						endpoint.addCC(ccId, { secure: false });
+					}
+				}
 			}
+
+			// if (
+			// 	endpoint.supportsCC(CommandClasses.Security) &&
+			// 	// The root endpoint has been interviewed, so we know if the device supports security
+			// 	this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
+			// 	// Only interview SecurityCC if the network key was set
+			// 	this.driver.securityManager
+			// ) {
+			// 	// Security is always supported *securely*
+			// 	endpoint.addCC(CommandClasses.Security, { secure: true });
+			// }
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
 			// that aren't actually properly supported by the device.
@@ -1968,8 +2107,26 @@ protocol version:      ${this.protocolVersion}`;
 				);
 			}
 
+			this.driver.controllerLog.logNode(this.nodeId, {
+				endpoint: endpoint.index,
+				message: `Endpoint ${
+					endpoint.index
+				} interview order: ${endpointInterviewOrder
+					.map((cc) => `\n· ${getCCName(cc)}`)
+					.join("")}`,
+				level: "silly",
+			});
+
 			// Now that we know the correct order, do the interview in sequence
 			for (const cc of endpointInterviewOrder) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						cc,
+					)}`,
+					level: "silly",
+				});
+
 				const action = await interviewEndpoint(endpoint, cc);
 				if (action === "continue") continue;
 				else if (typeof action === "boolean") return action;
@@ -1978,6 +2135,12 @@ protocol version:      ${this.protocolVersion}`;
 
 		// Continue with the application CCs for the root endpoint
 		for (const cc of rootInterviewOrderAfterEndpoints) {
+			this.driver.controllerLog.logNode(
+				this.nodeId,
+				`Root device interview: ${getCCName(cc)}`,
+				"silly",
+			);
+
 			const action = await interviewEndpoint(this, cc);
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;

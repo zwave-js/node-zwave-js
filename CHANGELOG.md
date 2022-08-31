@@ -4,6 +4,14 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
+## 10.0.3 (2022-08-31)
+### Bugfixes
+* Only refresh versions after FW update instead of a full interview when no restart is required (#4973)
+* For securely included nodes, attempt endpoint communication with S0, even if S0 is not listed in the endpoint capabilities (#4978)
+
+### Config file changes
+* Correct reset instructions for HomeSeer HS-WD200 wall dimmer (#4958)
+
 ## 10.0.2 (2022-08-30)
 ### Bugfixes
 * Some CCs were incorrectly not marked to use Supervision (#4956)
