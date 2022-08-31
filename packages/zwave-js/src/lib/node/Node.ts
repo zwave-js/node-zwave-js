@@ -2004,22 +2004,48 @@ protocol version:      ${this.protocolVersion}`;
 					level: "silly",
 				});
 
-				// TODO: Figure out which other commands we can use to test if the endpoint accepts secure commands
-				if (endpoint.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
-					// Temporarily mark Z-Wave+ CC as secure so we can use it to test
+				// Define which CCs we can use to test this - and if supported, how
+				const tests: {
+					ccId: CommandClasses;
+					// The test must return a truthy value if the check was successful
+					test: () => Promise<unknown>;
+				}[] = [
+					{
+						ccId: CommandClasses["Z-Wave Plus Info"],
+						test: () =>
+							endpoint.commandClasses["Z-Wave Plus Info"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Switch"],
+						test: () =>
+							endpoint.commandClasses["Binary Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Binary Sensor"],
+						test: () =>
+							endpoint.commandClasses["Binary Sensor"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Switch"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Switch"].get(),
+					},
+					{
+						ccId: CommandClasses["Multilevel Sensor"],
+						test: () =>
+							endpoint.commandClasses["Multilevel Sensor"].get(),
+					},
+					// TODO: add other tests if necessary
+				];
 
-					endpoint.addCC(CommandClasses["Z-Wave Plus Info"], {
-						secure: true,
-					});
+				for (const { ccId, test } of tests) {
+					if (!endpoint.supportsCC(ccId)) continue;
 
-					let success = false;
-					try {
-						success = !!(await endpoint.commandClasses[
-							"Z-Wave Plus Info"
-						].get());
-					} catch {
-						// Ignore
-					}
+					// Temporarily mark the CC as secure so we can use it to test
+					endpoint.addCC(ccId, { secure: true });
+
+					// Perform the test and treat errors as negative results
+					const success = !!(await test().catch(() => false));
 
 					if (success) {
 						this.driver.controllerLog.logNode(this.nodeId, {
