@@ -3902,12 +3902,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/source-map-support@npm:^0.5.4":
-  version: 0.5.4
-  resolution: "@types/source-map-support@npm:0.5.4"
+"@types/source-map-support@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "@types/source-map-support@npm:0.5.6"
   dependencies:
     source-map: ^0.6.0
-  checksum: 160ff77e8a101b18d9915cb5320fd73d484679aef8518ce007b9b5988e333631778730196c4bb15517ff881bee805663fd8640c0ce2ebfab65f061103c452369
+  checksum: b2b52b3e4901e52df30ebd23056885a352462c0d6fd73418e793684665a7602168e7c337241f0391562e8c1051ff37cbcb9b7d775990ee1f2a0d8a6ffa2cb22a
   languageName: node
   linkType: hard
 
@@ -4281,7 +4281,7 @@ __metadata:
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.26
     "@types/semver": ^7.3.12
-    "@types/source-map-support": ^0.5.4
+    "@types/source-map-support": ^0.5.6
     "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.31.0
     "@typescript-eslint/parser": ^5.31.0
@@ -11326,7 +11326,7 @@ __metadata:
     "@types/node": ^14.18.26
     "@types/proper-lockfile": ^4.1.2
     "@types/semver": ^7.3.12
-    "@types/source-map-support": ^0.5.4
+    "@types/source-map-support": ^0.5.6
     "@xstate/test": ^0.5.1
     "@zwave-js/cc": "workspace:*"
     "@zwave-js/config": "workspace:*"
