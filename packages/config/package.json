@@ -76,7 +76,7 @@
     "@types/yargs": "^17.0.10",
     "@zwave-js/maintenance": "workspace:*",
     "axios": "^0.27.2",
-    "comment-json": "^4.2.2",
+    "comment-json": "^4.2.3",
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",
