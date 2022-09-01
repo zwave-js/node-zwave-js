@@ -4078,7 +4078,7 @@ __metadata:
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.3
     axios: ^0.27.2
-    comment-json: ^4.2.2
+    comment-json: ^4.2.3
     esbuild: 0.14.51
     esbuild-register: ^3.3.3
     fs-extra: ^10.1.0
@@ -4235,7 +4235,7 @@ __metadata:
     "@zwave-js/testing": "workspace:*"
     alcalzone-shared: ^4.0.1
     ansi-colors: ^4.1.3
-    comment-json: ^4.2.2
+    comment-json: ^4.2.3
     commitizen: ^4.2.5
     cz-conventional-changelog: ^3.3.0
     esbuild: 0.14.51
@@ -5314,16 +5314,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"comment-json@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "comment-json@npm:4.2.2"
+"comment-json@npm:^4.2.3":
+  version: 4.2.3
+  resolution: "comment-json@npm:4.2.3"
   dependencies:
     array-timsort: ^1.0.3
     core-util-is: ^1.0.3
     esprima: ^4.0.1
     has-own-prop: ^2.0.0
     repeat-string: ^1.6.1
-  checksum: eb77124bf048c69384ef3df4ae03ab01229118232527476411580ae5f101292849807f937da59efdcbf05945e10f4392837f66bb82f7d69cc85240e762b76805
+  checksum: 7f8d26266b0d49de9661f6365cbcc373fee4f4d0f422a203dfb17ad8f3d84c5be5ded444874935a197cd03cff297c53fe48910256cb4171cb2e52a3e6b9d317c
   languageName: node
   linkType: hard
 
