@@ -3837,10 +3837,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.18.23":
-  version: 14.18.23
-  resolution: "@types/node@npm:14.18.23"
-  checksum: 119d5ab18426694ade0d3feefbdb42afc5a47b9144e523293f1554f9d34b41c7f21eafc9d0f1295db5700d134aa74e7fd37556e9438f6d64dbeddf791527e1e4
+"@types/node@npm:^14.18.26":
+  version: 14.18.26
+  resolution: "@types/node@npm:14.18.26"
+  checksum: c6ac3f9d4f6f77c0fa5ac17757779ad4d9835abfe3af5708b7552597cb5c7c1103e83499ccaf767a1cfa70040990bcf3f58761c547051dc8d5077f3c419091b1
   languageName: node
   linkType: hard
 
@@ -4102,7 +4102,7 @@ __metadata:
     "@microsoft/api-extractor": "*"
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/maintenance": "workspace:*"
@@ -4128,7 +4128,7 @@ __metadata:
     "@types/jest": ^27.5.2
     "@types/js-levenshtein": ^1.1.1
     "@types/json-logic-js": ^2.0.1
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/pegjs": ^0.10.3
     "@types/semver": ^7.3.12
     "@types/xml2js": ^0.4.11
@@ -4164,7 +4164,7 @@ __metadata:
     "@alcalzone/jsonl-db": ^2.5.2
     "@microsoft/api-extractor": "*"
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/triple-beam": ^1.3.2
     "@zwave-js/shared": "workspace:*"
     alcalzone-shared: ^4.0.1
@@ -4190,7 +4190,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": "*"
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@zwave-js/config": "workspace:*"
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -4208,7 +4208,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/globrex": ^0.1.2
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/prettier": ^2.6.4
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
@@ -4237,7 +4237,7 @@ __metadata:
     "@microsoft/api-extractor": "*"
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/semver": ^7.3.12
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
@@ -4279,7 +4279,7 @@ __metadata:
     "@tsconfig/node14": ^1.0.3
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/semver": ^7.3.12
     "@types/source-map-support": ^0.5.4
     "@types/ts-nameof": ^4.2.1
@@ -4330,7 +4330,7 @@ __metadata:
     "@serialport/bindings-interface": "*"
     "@serialport/stream": ^10.3.0
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -4353,7 +4353,7 @@ __metadata:
     "@microsoft/api-extractor": "*"
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     alcalzone-shared: ^4.0.1
     esbuild: 0.14.51
     esbuild-register: ^3.3.3
@@ -4369,7 +4369,7 @@ __metadata:
   dependencies:
     "@microsoft/api-extractor": "*"
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/triple-beam": ^1.3.2
     "@zwave-js/core": "workspace:*"
     "@zwave-js/host": "workspace:*"
@@ -11323,7 +11323,7 @@ __metadata:
     "@sentry/node": ^7.8.1
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
-    "@types/node": ^14.18.23
+    "@types/node": ^14.18.26
     "@types/proper-lockfile": ^4.1.2
     "@types/semver": ^7.3.12
     "@types/source-map-support": ^0.5.4
