@@ -3895,10 +3895,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/semver@npm:^7.3.10":
-  version: 7.3.10
-  resolution: "@types/semver@npm:7.3.10"
-  checksum: 7047c2822b1759b2b950f39cfcf261f2b9dca47b4b55bdebba0905a8553631f1531eb0f59264ffe4834d1198c8331c8e0010a4cd742f4e0b60abbf399d134364
+"@types/semver@npm:^7.3.12":
+  version: 7.3.12
+  resolution: "@types/semver@npm:7.3.12"
+  checksum: 35536b2fc5602904f21cae681f6c9498e177dab3f54ae37c92f9a1b7e43c35f18bcd81e1c98c1cf0d33ee046bb06c771e9928c1c00a401d56a03f56549252a15
   languageName: node
   linkType: hard
 
@@ -4130,7 +4130,7 @@ __metadata:
     "@types/json-logic-js": ^2.0.1
     "@types/node": ^14.18.23
     "@types/pegjs": ^0.10.3
-    "@types/semver": ^7.3.10
+    "@types/semver": ^7.3.12
     "@types/xml2js": ^0.4.11
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
@@ -4238,7 +4238,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.23
-    "@types/semver": ^7.3.10
+    "@types/semver": ^7.3.12
     "@types/yargs": ^17.0.10
     "@zwave-js/core": "workspace:*"
     "@zwave-js/shared": "workspace:*"
@@ -4280,7 +4280,7 @@ __metadata:
     "@types/fs-extra": ^9.0.13
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.23
-    "@types/semver": ^7.3.10
+    "@types/semver": ^7.3.12
     "@types/source-map-support": ^0.5.4
     "@types/ts-nameof": ^4.2.1
     "@typescript-eslint/eslint-plugin": ^5.31.0
@@ -11325,7 +11325,7 @@ __metadata:
     "@types/jest": ^27.5.2
     "@types/node": ^14.18.23
     "@types/proper-lockfile": ^4.1.2
-    "@types/semver": ^7.3.10
+    "@types/semver": ^7.3.12
     "@types/source-map-support": ^0.5.4
     "@xstate/test": ^0.5.1
     "@zwave-js/cc": "workspace:*"
