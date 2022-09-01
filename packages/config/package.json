@@ -73,7 +73,7 @@
     "@types/pegjs": "^0.10.3",
     "@types/semver": "^7.3.12",
     "@types/xml2js": "^0.4.11",
-    "@types/yargs": "^17.0.10",
+    "@types/yargs": "^17.0.12",
     "@zwave-js/maintenance": "workspace:*",
     "axios": "^0.27.2",
     "comment-json": "^4.2.3",
