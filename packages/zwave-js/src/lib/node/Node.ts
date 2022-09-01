@@ -1998,14 +1998,8 @@ protocol version:      ${this.protocolVersion}`;
 				!endpoint.supportsCC(CommandClasses.Security);
 
 			if (endpointMissingS0) {
-				this.driver.controllerLog.logNode(this.nodeId, {
-					endpoint: endpoint.index,
-					message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
-					level: "silly",
-				});
-
 				// Define which CCs we can use to test this - and if supported, how
-				const tests: {
+				const possibleTests: {
 					ccId: CommandClasses;
 					// The test must return a truthy value if the check was successful
 					test: () => Promise<unknown>;
@@ -2038,8 +2032,17 @@ protocol version:      ${this.protocolVersion}`;
 					// TODO: add other tests if necessary
 				];
 
-				for (const { ccId, test } of tests) {
-					if (!endpoint.supportsCC(ccId)) continue;
+				const foundTest = possibleTests.find((t) =>
+					endpoint.supportsCC(t.ccId),
+				);
+				if (foundTest) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
+						level: "silly",
+					});
+
+					const { ccId, test } = foundTest;
 
 					// Temporarily mark the CC as secure so we can use it to test
 					endpoint.addCC(ccId, { secure: true });
@@ -2066,6 +2069,12 @@ protocol version:      ${this.protocolVersion}`;
 						// Mark the CC as not secure again
 						endpoint.addCC(ccId, { secure: false });
 					}
+				} else {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Found no way to test if accepts secure commands anyways.`,
+						level: "silly",
+					});
 				}
 			}
 
