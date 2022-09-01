@@ -40,7 +40,7 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.26",
     "@types/prettier": "^2.6.4",
-    "@types/yargs": "^17.0.10",
+    "@types/yargs": "^17.0.12",
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "ansi-colors": "^4.1.3",
