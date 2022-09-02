@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "Jasco",
 	"manufacturerId": "0x0063",
-	"label": "64637/ZW7105",
-	"description": "LED Bulb",
+	"label": "64637 / ZW7105",
+	"description": "LED A19 Bulb, 500S",
 	"devices": [
 		{
 			"productType": "0x4c42",
@@ -24,12 +24,7 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Default Dim Level",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true
+			"$import": "templates/jasco_template.json#default_dim_level"
 		},
 		{
 			"#": "10",

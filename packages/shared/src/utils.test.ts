@@ -2,6 +2,7 @@ import {
 	cloneDeep,
 	discreteBinarySearch,
 	discreteLinearSearch,
+	mergeDeep,
 	throttle,
 } from "./utils";
 
@@ -294,5 +295,32 @@ describe("cloneDeep()", () => {
 		expect(target).toEqual(source);
 		expect(target).not.toBe(source);
 		expect(target.a).not.toBe(source.a);
+	});
+});
+
+describe("mergeDeep()", () => {
+	it("can delete keys when undefined is passed", () => {
+		const target = { a: 1, b: 2, c: 3 };
+		const result = mergeDeep(target, { a: undefined }, true);
+		expect(result).toEqual({ b: 2, c: 3 });
+	});
+
+	it("sanity check with overwrite: true", () => {
+		const target = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
+		const source = { b: { c: undefined }, e: "foo" };
+		const result = mergeDeep(target, source, true);
+		expect(result).toEqual({ a: 1, b: { d: 4 }, e: "foo" });
+	});
+
+	it("sanity check with overwrite: false", () => {
+		const target = { a: 1, b: { c: 3, d: 4 }, e: [5, 6, 7] };
+		const source = { b: { c: undefined }, e: "foo", f: "bar" };
+		const result = mergeDeep(target, source, false);
+		expect(result).toEqual({
+			a: 1,
+			b: { c: 3, d: 4 },
+			e: [5, 6, 7],
+			f: "bar",
+		});
 	});
 });

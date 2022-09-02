@@ -1,0 +1,45 @@
+{
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ARF Z-Wave Solar",
+	"description": "Roller Blind",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0012"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Repeat",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Multilevel Switch Repeat",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "13",
+			"$import": "templates/fakro_template.json#shutter_response_to_basic_set_0xff"
+		},
+		{
+			"#": "99",
+			"$import": "templates/fakro_template.json#factory_reset"
+		},
+		{
+			"#": "100",
+			"$import": "templates/fakro_template.json#autoexclude"
+		}
+	]
+}

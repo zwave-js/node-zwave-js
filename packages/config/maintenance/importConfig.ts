@@ -590,7 +590,7 @@ async function parseOZWProduct(
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
-		description: existingDevice?.description ?? productName, // don't override the descrition
+		description: existingDevice?.description ?? productName, // don't override the description
 		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
@@ -1049,7 +1049,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 					);
 				}
 				// Show an error if the device parameters should match, but they don't
-				// TODO add erorr handling if a FW changes parameters
+				// TODO add error handling if a FW changes parameters
 				else if (
 					test_file.ProductId === file.ProductId &&
 					test_file.ProductTypeId === file.ProductTypeId &&
@@ -1060,7 +1060,7 @@ function combineDeviceFiles(json: Record<string, any>[]) {
 					) == false
 				) {
 					console.log(
-						`WARNING - Detected possible firmware parameter change ${file.Identifer} -- ${file.Id} and ${test_file.Id}`,
+						`WARNING - Detected possible firmware parameter change ${file.Identifier} -- ${file.Id} and ${test_file.Id}`,
 					);
 				}
 				// We were wrong to change the identifier because the params don't match, restore the tested file as it is different
@@ -1289,7 +1289,7 @@ async function parseZWAProduct(
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
-		description: existingDevice?.description ?? productName, // don't override the descrition
+		description: existingDevice?.description ?? productName, // don't override the description
 		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",

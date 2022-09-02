@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "2",
-			"label": "Humidity Change Report Threshhold",
+			"label": "Humidity Change Report Threshold",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
@@ -110,7 +110,7 @@
 		},
 		{
 			"#": "5",
-			"label": "High Temperature Basic Set Threshhold",
+			"label": "High Temperature Basic Set Threshold",
 			"unit": "0.1 °(C/F)",
 			"unsigned": true,
 			"valueSize": 2,
@@ -136,7 +136,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Low Temperature Basic Set Threshhold",
+			"label": "Low Temperature Basic Set Threshold",
 			"description": "Allowable Range: 200-1000.",
 			"unit": "0.1 °(C/F)",
 			"unsigned": true,
@@ -163,7 +163,7 @@
 		},
 		{
 			"#": "7",
-			"label": "High Humidity Basic Set Threshhold",
+			"label": "High Humidity Basic Set Threshold",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,
@@ -199,7 +199,7 @@
 		},
 		{
 			"#": "8",
-			"label": "Low Humidity Basic Set Threshhold",
+			"label": "Low Humidity Basic Set Threshold",
 			"unit": "%",
 			"unsigned": true,
 			"valueSize": 1,

@@ -1,0 +1,245 @@
+{
+	"manufacturer": "AiBase Smart Technology",
+	"manufacturerId": "0x0384",
+	"label": "HA-ZW-5SAB",
+	"description": "4-in-1 Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0009",
+			"zwaveAllianceId": 2943
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "10",
+			"label": "Low Battery Power Level",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "100",
+			"label": "Set Reporting Intervals to Default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true
+		},
+		{
+			"#": "101",
+			"label": "Temperature Reporting Interval",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "102",
+			"label": "Humidity Reporting Interval",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "103",
+			"label": "Luminance Reporting Interval",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 7200,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "104",
+			"label": "Battery Level Reporting Interval",
+			"valueSize": 4,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 86400,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "110",
+			"label": "Status Change (Temperature/Humidity/Luminance/Battery) Reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "111",
+			"label": "Temperature Change Threshold",
+			"valueSize": 2,
+			"unit": "0.1 °C",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "112",
+			"label": "Humidity Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "113",
+			"label": "Luminance Change Threshold",
+			"valueSize": 2,
+			"unit": "lux",
+			"minValue": 1,
+			"maxValue": 65528,
+			"defaultValue": 150,
+			"unsigned": true
+		},
+		{
+			"#": "114",
+			"label": "Battery Level Change Threshold",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true
+		},
+		{
+			"#": "12",
+			"label": "Motion Sensor Sensitivity",
+			"description": "1 = lowest sensitivity, 10 = highest sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		{
+			"#": "13",
+			"label": "Motion Re-trigger Wait Time",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 5,
+			"maxValue": 15300,
+			"defaultValue": 30,
+			"unsigned": true
+		},
+		{
+			"#": "14",
+			"label": "Send Basic Set On Motion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		{
+			"#": "15",
+			"label": "Motion: Basic Set Value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0xff on triggered, 0x00 on cleared",
+					"value": 0
+				},
+				{
+					"label": "0x00 on triggered, 0xff on cleared",
+					"value": 1
+				}
+			]
+		}
+	],
+	"metadata": {
+		"inclusion": "Add 4-in-1 Motion Sensor into a Z-Wave network: \na. Let the primary controller go into inclusion mode (If you don’t know how to do this, refer to its manual).\nb. Short Press one time this Z-Button.\nc. The 4-in-1 Motion Sensor LED will blink, If the inclusion is successful, then LED will keep on 2 seconds. Otherwise, the LED will blink until timeout, in which case you need to repeat the process from step b.",
+		"exclusion": "Remove 4-in-1 Motion Sensor from a Z-Wave network: \na. Let the primary controller go into exclusion mode (If you don’t know how to do this, refer to its manual).\nb. Short Press one time this Z-Button.\nc. The 4-in-1 Motion Sensor LED will keep on, If the remove is successful, then LED will blink 2 seconds. Otherwise, the LED will keep on until timeout, in which case you need to repeat the process from step b.\n\nNote: 4-in-1 Motion Sensor will go away “Z-Wave SmartStart” Inclusion when it is removed from a Z-Wave network.",
+		"reset": "Reset 4-in-1 Motion Sensor to factory Default:\n1. Press and hold the Z-Button for 5 seconds.\n2. If holding time is more than 5 seconds, the LED will blink fast at acceleration. If reset success 4-in-1 Motion Sensor LED will turn off. When the Z-Button is released, it will send “Device Reset Locally Command”. Otherwise please repeat step 2.\n\nNote:\n1, This procedure should only be used when the primary controller is inoperable.\n2, Reset 4-in-1 Motion Sensor to factory default settings. It will set the 4-in-1 Motion Sensor to not in Z-Wave network state; delete the Association setting and restore the Configuration setting to the default.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2943/AIBASE%20Z-Wave%20Multi-Sensor%20UserGuide%2020180606.pdf"
+	}
+}

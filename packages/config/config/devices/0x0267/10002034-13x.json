@@ -67,7 +67,7 @@
 		},
 		{
 			"#": "12",
-			"label": "Behavior of LED in Reponse",
+			"label": "Behavior of LED in Response",
 			"description": "Configuration of Main LED as identification at 20%.",
 			"valueSize": 1,
 			"defaultValue": 0,

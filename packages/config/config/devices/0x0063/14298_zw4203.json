@@ -1,0 +1,52 @@
+{
+	"manufacturer": "GE/Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "14298 / ZW4203",
+	"description": "Plug-in Outdoor Switch V2, 500S",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3034",
+			"zwaveAllianceId": 3408
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\nto remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the button for at least 3 seconds\nwhile you plug the switch into a receptacle.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3408/14298%20EnFrSp%20QSG%20v1.pdf"
+	}
+}

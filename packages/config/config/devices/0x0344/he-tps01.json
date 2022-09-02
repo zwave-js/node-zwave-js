@@ -49,6 +49,11 @@
 			"label": "Relay 1: Output Mode"
 		},
 		{
+			"#": "12",
+			"$import": "templates/heltun_template.json#relay_load_power",
+			"label": "Relay 1: Load Power"
+		},
+		{
 			"#": "17",
 			"$import": "templates/heltun_template.json#temp_sensor_calibration",
 			"label": "Air Temperature Calibration"

@@ -80,7 +80,7 @@ The `options` bag contains options that influence the resulting commands, for ex
 <!-- #import SetValueAPIOptions from "zwave-js" -->
 
 ```ts
-type SetValueAPIOptions = Partial<ValueChangeOptions>;
+declare type SetValueAPIOptions = Partial<ValueChangeOptions>;
 ```
 
 ### `pollValue`
@@ -222,10 +222,22 @@ getFirmwareUpdateCapabilities(): Promise<FirmwareUpdateCapabilities>
 
 Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
 
+> [!NOTE] This variant communicates with the node to retrieve fresh information.
+
+### `getFirmwareUpdateCapabilitiesCached`
+
+```ts
+getFirmwareUpdateCapabilitiesCached(): FirmwareUpdateCapabilities
+```
+
+Retrieves the firmware update capabilities of a node to decide which options (e.g. firmware targets) to offer a user prior to the update.
+
+> [!NOTE] This method uses cached information from the most recent interview.
+
 <!-- #import FirmwareUpdateCapabilities from "zwave-js" -->
 
 ```ts
-type FirmwareUpdateCapabilities =
+declare type FirmwareUpdateCapabilities =
 	| {
 			/** Indicates whether the node's firmware can be upgraded */
 			readonly firmwareUpgradable: false;
@@ -527,6 +539,14 @@ The health rating expressed as a number from 0 (not working at all) to 10 (perfe
 
 > [!NOTE] The test results are also printed to the driver logs. If you want to format the results in the same way in your application, you can use the `formatRouteHealthCheckSummary` and/or `formatRouteHealthCheckRound` methods which are exposed from `zwave-js/Utils`.
 
+### `isFirmwareUpdateInProgress`
+
+```ts
+isFirmwareUpdateInProgress(): boolean;
+```
+
+Return whether a firmware update is in progress for this node.
+
 ## ZWaveNode properties
 
 ### `id`
@@ -696,9 +716,9 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 <!-- #import ZWavePlusNodeType from "zwave-js" -->
 
 ```ts
-enum ZWavePlusNodeType {
-	Node = 0x00, // ZWave+ Node
-	IPGateway = 0x02, // ZWave+ for IP Gateway
+declare enum ZWavePlusNodeType {
+	Node = 0,
+	IPGateway = 2,
 }
 ```
 
@@ -718,7 +738,7 @@ readonly zwavePlusRoleType: ZWavePlusRoleType | undefined
 
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
 
-<!-- #import ZWavePlusRoleType from "zwave-js" -->
+<!-- #import ZWavePlusRoleType from "@zwave-js/cc" -->
 
 ```ts
 enum ZWavePlusRoleType {
@@ -730,6 +750,7 @@ enum ZWavePlusRoleType {
 	AlwaysOnSlave = 0x05,
 	SleepingReportingSlave = 0x06,
 	SleepingListeningSlave = 0x07,
+	NetworkAwareSlave = 0x08,
 }
 ```
 
@@ -879,7 +900,7 @@ When configuring devices or during longer message exchanges, this behavior may b
 
 ## ZWaveNode events
 
-The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+The `Node` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are available:
 
 ### `"wake up"` / `"sleep"`
 
@@ -1073,7 +1094,11 @@ where the argument object has the type
 ```ts
 interface ZWaveNotificationCallbackArgs_EntryControlCC {
 	eventType: EntryControlEventTypes;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
 	dataType: EntryControlDataTypes;
+	/** A human-readable label for the data type */
+	dataTypeLabel: string;
 	eventData?: Buffer | string;
 }
 ```
@@ -1102,6 +1127,8 @@ interface ZWaveNotificationCallbackArgs_MultilevelSwitchCC {
 	eventType:
 		| MultilevelSwitchCommand.StartLevelChange
 		| MultilevelSwitchCommand.StopLevelChange;
+	/** A human-readable label for the event type */
+	eventTypeLabel: string;
 	/** The direction of the level change */
 	direction?: string;
 }
@@ -1172,10 +1199,10 @@ with
 <!-- #import PowerlevelTestStatus from "zwave-js" -->
 
 ```ts
-enum PowerlevelTestStatus {
-	Failed = 0x00,
-	Success = 0x01,
-	"In Progress" = 0x02,
+declare enum PowerlevelTestStatus {
+	Failed = 0,
+	Success = 1,
+	"In Progress" = 2,
 }
 ```
 

@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE/Enbrighten",
 	"manufacturerId": "0x0063",
 	"label": "26931 / ZW4006",
-	"description": "In-Wall Smart Motion Switch",
+	"description": "In-Wall Motion Switch, 500S",
 	"devices": [
 		{
 			"productType": "0x494d",
@@ -32,220 +32,43 @@
 	"paramInformation": [
 		{
 			"#": "1",
-			"label": "Timeout Duration",
-			"description": "Amount of time the light stays on after motion stops",
-			"valueSize": 1,
-			"defaultValue": 5,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Test (5s)",
-					"value": 0
-				},
-				{
-					"label": "One minute",
-					"value": 1
-				},
-				{
-					"label": "Five minutes",
-					"value": 5
-				},
-				{
-					"label": "Fifteen minutes",
-					"value": 15
-				},
-				{
-					"label": "Thirty minutes",
-					"value": 30
-				},
-				{
-					"label": "Disable timeout",
-					"value": 255
-				}
-			]
+			"$import": "templates/jasco_template.json#timeout_duration"
 		},
 		{
 			"#": "2",
-			"label": "Dim level",
-			"description": "Change brightness of associated light bulb(s)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Default",
-					"value": 255
-				}
-			]
+			"$import": "templates/jasco_template.json#dim_level"
 		},
 		{
 			"#": "3",
-			"label": "Operation Mode",
-			"valueSize": 1,
-			"defaultValue": 3,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Manual",
-					"value": 1
-				},
-				{
-					"label": "Vacancy",
-					"value": 2
-				},
-				{
-					"label": "Occupancy",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#operation_mode"
 		},
 		{
 			"#": "4",
-			"label": "Association Mode",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#association_mode"
 		},
 		{
 			"#": "5",
-			"label": "Invert Switch",
-			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
 			"#": "6",
-			"label": "Motion Sensor",
-			"description": "Enable/Disable Motion Sensor",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#motion_sensor"
 		},
 		{
 			"#": "13",
-			"label": "Motion Sensor Sensitivity",
-			"description": "Amount of motion required to turn on the light",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "High",
-					"value": 1
-				},
-				{
-					"label": "Medium",
-					"value": 2
-				},
-				{
-					"label": "Low",
-					"value": 3
-				}
-			]
+			"$import": "templates/jasco_template.json#motion_sensitivity"
 		},
 		{
 			"#": "14",
-			"label": "Light Sensing",
-			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#light_sensor"
 		},
 		{
 			"#": "15",
-			"label": "Reset Cycle",
-			"description": "15 second intervals, starting from 60 seconds: Duration = (value-1) · 15s.",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 110,
-			"defaultValue": 2,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "10 seconds",
-					"value": 1
-				},
-				{
-					"label": "20 seconds",
-					"value": 2
-				},
-				{
-					"label": "30 seconds",
-					"value": 3
-				},
-				{
-					"label": "45 seconds",
-					"value": 4
-				},
-				{
-					"label": "27 minutes, 15 seconds",
-					"value": 110
-				}
-			]
+			"$import": "templates/jasco_template.json#reset_cycle"
 		},
 		{
 			"#": "19",
-			"label": "Exclusion Mode",
-			"valueSize": 1,
-			"defaultValue": 0,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal",
-					"value": 0
-				},
-				{
-					"label": "Alternate",
-					"value": 1
-				}
-			]
+			"$import": "templates/jasco_template.json#alternate_exclusion"
 		}
 	],
 	"compat": {

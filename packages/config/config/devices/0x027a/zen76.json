@@ -93,6 +93,11 @@
 		{
 			"#": "16",
 			"$import": "templates/zooz_template.json#association_reports"
+		},
+		{
+			"#": "17",
+			"$if": "firmwareVersion >= 10.0",
+			"$import": "templates/zooz_template.json#local_programming"
 		}
 	],
 	"compat": {

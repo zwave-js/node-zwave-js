@@ -1,14 +1,16 @@
 import * as Sentry from "@sentry/node";
+import { AssociationGroupInfoCC, ConfigurationCC } from "@zwave-js/cc";
 import { CommandClasses } from "@zwave-js/core";
+import type { ZWaveApplicationHost } from "@zwave-js/host";
 import { formatId } from "@zwave-js/shared";
 import { isObject } from "alcalzone-shared/typeguards";
 import axios from "axios";
-import { AssociationGroupInfoCC, ConfigurationCC } from "../commandclass";
 import type { ZWaveNode } from "../node/Node";
 
 const missingDeviceConfigCache = new Set<string>();
 
 export async function reportMissingDeviceConfig(
+	applHost: ZWaveApplicationHost,
 	node: ZWaveNode & {
 		manufacturerId: number;
 		productType: number;
@@ -61,18 +63,18 @@ export async function reportMissingDeviceConfig(
 		if (deviceInfo.supportsConfigCCV3) {
 			// Try to collect all info about config params we can get
 			const instance = node.createCCInstanceUnsafe(ConfigurationCC)!;
-			deviceInfo.parameters = instance.getQueriedParamInfos();
+			deviceInfo.parameters = instance.getQueriedParamInfos(applHost);
 		}
 		if (deviceInfo.supportsAGI) {
 			// Try to collect all info about association groups we can get
 			const associationGroupCount = AssociationGroupInfoCC[
 				"getAssociationGroupCountCached"
-			](node["driver"], node);
+			](applHost, node);
 			const names: string[] = [];
 			for (let group = 1; group <= associationGroupCount; group++) {
 				names.push(
 					AssociationGroupInfoCC.getGroupNameCached(
-						node["driver"],
+						applHost,
 						node,
 						group,
 					) ?? "",

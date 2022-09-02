@@ -32,11 +32,11 @@
 		},
 		{
 			"#": "4",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "6",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+			"$import": "templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "7",

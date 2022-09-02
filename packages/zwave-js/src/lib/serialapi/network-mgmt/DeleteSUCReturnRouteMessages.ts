@@ -1,5 +1,7 @@
 import {
 	MessageOrCCLogEntry,
+	MessagePriority,
+	TransmitStatus,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -14,13 +16,11 @@ import {
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	MessageOptions,
-	MessagePriority,
 	MessageType,
 	messageTypes,
 	priority,
 } from "@zwave-js/serial";
-import { getEnumMemberName, JSONObject } from "@zwave-js/shared";
-import { TransmitStatus } from "../../controller/_Types";
+import { getEnumMemberName } from "@zwave-js/shared";
 
 @messageTypes(MessageType.Request, FunctionType.DeleteSUCReturnRoute)
 @priority(MessagePriority.Normal)
@@ -91,12 +91,6 @@ export class DeleteSUCReturnRouteResponse
 
 	public readonly wasExecuted: boolean;
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			wasExecuted: this.wasExecuted,
-		});
-	}
-
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -126,13 +120,6 @@ export class DeleteSUCReturnRouteRequestTransmitReport
 
 	public isOK(): boolean {
 		return this._transmitStatus === TransmitStatus.OK;
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			callbackId: this.callbackId,
-			transmitStatus: this.transmitStatus,
-		});
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {

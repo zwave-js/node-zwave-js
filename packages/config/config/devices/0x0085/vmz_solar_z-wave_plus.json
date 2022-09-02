@@ -102,20 +102,7 @@
 		},
 		{
 			"#": "13",
-			"label": "Restore last position",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "go down",
-					"value": 1
-				},
-				{
-					"label": "restore last position",
-					"value": 2
-				}
-			]
+			"$import": "templates/fakro_template.json#shutter_response_to_basic_set_0xff"
 		},
 		{
 			"#": "17",
@@ -177,37 +164,11 @@
 		},
 		{
 			"#": "99",
-			"label": "Restore default config values",
-			"valueSize": 1,
-			"defaultValue": 2,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "restore default config values",
-					"value": 1
-				},
-				{
-					"label": "user values",
-					"value": 2
-				}
-			]
+			"$import": "templates/fakro_template.json#factory_reset"
 		},
 		{
 			"#": "100",
-			"label": "Autoexclude",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "off",
-					"value": 1
-				},
-				{
-					"label": "on",
-					"value": 2
-				}
-			]
+			"$import": "templates/fakro_template.json#autoexclude"
 		}
 	]
 }

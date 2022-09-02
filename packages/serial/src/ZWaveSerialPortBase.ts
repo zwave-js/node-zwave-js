@@ -1,5 +1,6 @@
 import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
+import { isObject } from "alcalzone-shared/typeguards";
 import { EventEmitter } from "events";
 import { Duplex, PassThrough, Readable, Writable } from "stream";
 import { SerialLogger } from "./Logger";
@@ -49,6 +50,17 @@ export interface ZWaveSerialPortBase {
 		event: TEvent,
 		...args: Parameters<ZWaveSerialPortEventCallbacks[TEvent]>
 	): boolean;
+}
+
+export function isZWaveSerialPortImplementation(
+	obj: unknown,
+): obj is ZWaveSerialPortImplementation {
+	return (
+		isObject(obj) &&
+		typeof obj.create === "function" &&
+		typeof obj.open === "function" &&
+		typeof obj.close === "function"
+	);
 }
 
 export interface ZWaveSerialPortImplementation {

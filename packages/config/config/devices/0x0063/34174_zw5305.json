@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "34174 / ZW5305",
-	"description": "2 Scene Z-Wave controller",
+	"description": "Portable 2-Scene Controller, 500S",
 	"devices": [
 		{
 			"productType": "0x4843",

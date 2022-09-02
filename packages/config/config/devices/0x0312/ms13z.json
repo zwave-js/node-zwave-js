@@ -35,27 +35,27 @@
 		},
 		{
 			"#": "3",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_off_timer"
+			"$import": "templates/minoston_template.json#auto_off_timer"
 		},
 		{
 			"#": "5",
-			"$import": "~/0x0312/templates/minoston_template.json#auto_on_timer"
+			"$import": "templates/minoston_template.json#auto_on_timer"
 		},
 		{
 			"#": "7[0x01]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_local_control"
+			"$import": "templates/minoston_template.json#status_change_report_local_control"
 		},
 		{
 			"#": "7[0x02]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_three_way"
+			"$import": "templates/minoston_template.json#status_change_report_three_way"
 		},
 		{
 			"#": "7[0x04]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_zwave"
+			"$import": "templates/minoston_template.json#status_change_report_zwave"
 		},
 		{
 			"#": "7[0x08]",
-			"$import": "~/0x0312/templates/minoston_template.json#status_change_report_timer"
+			"$import": "templates/minoston_template.json#status_change_report_timer"
 		},
 		{
 			"#": "8",
@@ -81,7 +81,7 @@
 		},
 		{
 			"#": "12",
-			"$import": "~/0x0312/templates/minoston_template.json#double_tap_function"
+			"$import": "templates/minoston_template.json#double_tap_function"
 		},
 		{
 			"#": "15",
@@ -89,7 +89,7 @@
 		},
 		{
 			"#": "21",
-			"$import": "~/0x0312/templates/minoston_template.json#report_state_when_local_control_disabled"
+			"$import": "templates/minoston_template.json#report_state_when_local_control_disabled"
 		},
 		{
 			"#": "16",
@@ -101,27 +101,27 @@
 		},
 		{
 			"#": "19",
-			"$import": "~/0x0312/templates/minoston_template.json#external_switch_type_four_options"
+			"$import": "templates/minoston_template.json#external_switch_type_four_options"
 		},
 		{
 			"#": "20",
-			"$import": "~/0x0312/templates/minoston_template.json#association_reports"
+			"$import": "templates/minoston_template.json#association_reports_basic_multilevel"
 		},
 		{
 			"#": "22",
-			"$import": "~/0x0312/templates/minoston_template.json#night_mode_brightness"
+			"$import": "templates/minoston_template.json#night_mode_brightness"
 		},
 		{
 			"#": "23",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_color"
+			"$import": "templates/minoston_template.json#led_indicator_color"
 		},
 		{
 			"#": "24",
-			"$import": "~/0x0312/templates/minoston_template.json#led_indicator_brightness"
+			"$import": "templates/minoston_template.json#led_indicator_brightness"
 		},
 		{
 			"#": "25",
-			"$import": "~/0x0312/templates/minoston_template.json#single_tap_function"
+			"$import": "templates/minoston_template.json#single_tap_function"
 		}
 	],
 	"metadata": {

@@ -1,0 +1,80 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "52252 / ZW3012",
+	"description": "In-Wall Paddle Dimmer, No Ntrl, 700S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3333",
+			"zwaveAllianceId": 3987
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_four_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		},
+		{
+			"#": "6",
+			"$import": "templates/jasco_template.json#dim_rate"
+		},
+		{
+			"#": "16",
+			"$import": "templates/jasco_template.json#switch_mode"
+		},
+		{
+			"#": "19",
+			"$import": "templates/jasco_template.json#alternate_exclusion"
+		},
+		{
+			"#": "30",
+			"$import": "templates/jasco_template.json#dim_threshold_min"
+		},
+		{
+			"#": "31",
+			"$import": "templates/jasco_template.json#dim_threshold_max"
+		},
+		{
+			"#": "32",
+			"$import": "templates/jasco_template.json#default_brightness_level"
+		},
+		{
+			"#": "84",
+			"$import": "templates/jasco_template.json#factory_default"
+		}
+	],
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"reset": "1. Quickly press ON (top) button three times, then immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3987/52252_QSG_v1[1].pdf"
+	}
+}

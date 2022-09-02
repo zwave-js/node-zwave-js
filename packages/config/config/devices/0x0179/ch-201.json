@@ -164,8 +164,8 @@
 		},
 		{
 			"#": "12",
-			"label": "Temprature threshold to send data",
-			"description": "The value that temprature should be changed to send data",
+			"label": "Temperature threshold to send data",
+			"description": "The value that temperature should be changed to send data",
 			"unit": "Δ°С",
 			"valueSize": 1,
 			"minValue": 1,
@@ -234,7 +234,7 @@
 		},
 		{
 			"#": "40",
-			"label": "Adjusment of a temperature sensor",
+			"label": "Adjustment of a temperature sensor",
 			"description": "Adjust temperature sensor if required.",
 			"valueSize": 1,
 			"defaultValue": 0,

@@ -1,5 +1,5 @@
 {
-	"manufacturer": "ThermoFloor AS",
+	"manufacturer": "Heatit",
 	"manufacturerId": "0x019b",
 	"label": "Z-Temp2",
 	"description": "Battery operated thermostat",
@@ -17,18 +17,18 @@
 		{
 			"#": "1",
 			"label": "Temperature / Humidity Report Interval",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 30,
 			"maxValue": 32767,
 			"defaultValue": 900,
-			"unit": "seconds",
 			"unsigned": true
 		},
 		{
 			"#": "2",
 			"label": "Temperature Change Report Threshold",
 			"description": "Allowable range: 5-50",
-			"unit": "1/10 °C",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 50,
@@ -60,8 +60,7 @@
 		},
 		{
 			"#": "4",
-			"label": "Temperature sensor offset settings",
-			"description": "Calibrate the internal temperature sensor.",
+			"label": "Temperature Sensor Calibration",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": -100,
@@ -71,9 +70,8 @@
 		},
 		{
 			"#": "5",
-			"label": "Humidity sensor offset settings",
-			"description": "Calibrate the internal humidity sensor. 1 = 1/10%",
-			"unit": "1/10 %",
+			"label": "Humidity Sensor Calibration",
+			"unit": "0.1 %",
 			"valueSize": 2,
 			"minValue": -100,
 			"maxValue": 100,
@@ -82,7 +80,7 @@
 		},
 		{
 			"#": "6",
-			"label": "Proximity sensor re-trigger interval",
+			"label": "Proximity Sensor Re-trigger Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 2,
@@ -92,22 +90,10 @@
 		},
 		{
 			"#": "7",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Proximity Sensor",
 			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Enable",
-					"value": 0
-				},
-				{
-					"label": "Disable",
-					"value": 1
-				}
-			]
+			"defaultValue": 1
 		},
 		{
 			"#": "8",
@@ -133,22 +119,22 @@
 		{
 			"#": "10",
 			"label": "Temperature Control Hysteresis",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 30,
 			"defaultValue": 5,
-			"unsigned": true,
-			"unit": "0.1 °C"
+			"unsigned": true
 		},
 		{
 			"#": "11",
 			"label": "Minimum Temperature Limit",
+			"unit": "0.1 °C",
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
 			"defaultValue": 50,
-			"unsigned": true,
-			"unit": "0.1 °C"
+			"unsigned": true
 		},
 		{
 			"#": "12",
@@ -178,22 +164,15 @@
 		},
 		{
 			"#": "14",
+			"$import": "~/templates/master_template.json#base_enable_disable",
 			"label": "Send Report When Presence is Detected",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
+			"valueSize": 2
+		},
+		{
+			"#": "15",
+			"$import": "~/templates/master_template.json#base_enable_disable",
+			"label": "Invert Output",
+			"valueSize": 2
 		}
 	]
 }

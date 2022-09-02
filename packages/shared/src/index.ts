@@ -10,3 +10,4 @@ export * from "./ThrowingMap";
 export * from "./TimedExpectation";
 export * from "./types";
 export * from "./utils";
+export * from "./wrappingCounter";

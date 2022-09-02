@@ -11,7 +11,7 @@ const { formatWithPrettier } = require("./utils");
  * @param {{github: Github, context: Context}} param
  */
 async function main(param) {
-	const { github, context } = param;
+	// const { github, context } = param;
 
 	const cm = new ConfigManager();
 	await cm.loadDeviceIndex();

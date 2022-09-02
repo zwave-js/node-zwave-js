@@ -18,6 +18,14 @@ export type TypedClassDecorator<TTarget extends Object> = <
 	apiClass: TConstructor,
 ) => TConstructor | void;
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TypedPropertyDecorator<TTarget extends Object> = <
+	T extends TTarget,
+>(
+	target: T,
+	propertyKey: string | symbol,
+) => void;
+
 export type UnionToIntersection<T> = (
 	T extends any ? (x: T) => any : never
 ) extends (x: infer R) => any

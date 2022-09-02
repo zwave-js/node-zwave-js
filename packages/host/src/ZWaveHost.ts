@@ -1,65 +1,32 @@
-import type { ConfigManager } from "@zwave-js/config";
+import type { ConfigManager, DeviceConfig } from "@zwave-js/config";
 import type {
 	CommandClasses,
 	ControllerLogger,
+	ICommandClass,
+	IZWaveNode,
+	Maybe,
+	SecurityClass,
 	SecurityManager,
 	SecurityManager2,
+	SendCommandOptions,
+	SendCommandReturnType,
 	ValueDB,
+	ValueID,
 } from "@zwave-js/core";
 import type { ReadonlyThrowingMap } from "@zwave-js/shared";
-import type { ZWaveNodeBase } from "./ZWaveNodeBase";
+import type { ZWaveHostOptions } from "./ZWaveHostOptions";
 
-export interface ZWaveHostOptions {
-	/**
-	 * Some Command Classes support reporting that a value is unknown.
-	 * When this flag is `false`, unknown values are exposed as `undefined`.
-	 * When it is `true`, unknown values are exposed as the literal string "unknown" (even if the value is normally numeric).
-	 * Default: `false`
-	 */
-	preserveUnknownValues?: boolean;
-
-	attempts: {
-		/**
-		 * @internal
-		 * How often to attempt opening the serial port
-		 */
-		openSerialPort: number;
-
-		/** How often the driver should try communication with the controller before giving up */
-		controller: number; // [1...3], default: 3
-
-		/** How often the driver should try sending SendData commands before giving up */
-		sendData: number; // [1...5], default: 3
-
-		/**
-		 * How many attempts should be made for each node interview before giving up
-		 */
-		nodeInterview: number; // [1...10], default: 5
-	};
-}
-
-/** Host application abstractions to be used in Serial API and CC implemenations */
+/** Host application abstractions to be used in Serial API and CC implementations */
 export interface ZWaveHost {
-	// TODO: There's probably a better fitting name for this now
-	controllerLog: ControllerLogger;
-
-	/** Gives access to the configuration files */
-	configManager: ConfigManager;
-
-	/** Management of Security S0 keys and nonces */
-	securityManager: SecurityManager | undefined;
-	/** Management of Security S2 keys and nonces */
-	securityManager2: SecurityManager2 | undefined;
-
 	/** The ID of this node in the current network */
 	ownNodeId: number;
 	/** The Home ID of the current network */
 	homeId: number;
 
-	/** Readonly access to all node instances known to the host */
-	nodes: ReadonlyThrowingMap<number, ZWaveNodeBase>;
-
-	options: ZWaveHostOptions;
+	/** Management of Security S0 keys and nonces */
+	securityManager: SecurityManager | undefined;
+	/** Management of Security S2 keys and nonces */
+	securityManager2: SecurityManager2 | undefined;
 
 	/**
 	 * Retrieves the maximum version of a command class that can be used to communicate with a node.
@@ -73,11 +40,88 @@ export interface ZWaveHost {
 	): number;
 
 	/**
-	 * Returns the next callback ID. Callback IDs are used to correllate requests
+	 * Determines whether a CC must be secure for a given node and endpoint.
+	 */
+	isCCSecure(
+		cc: CommandClasses,
+		nodeId: number,
+		endpointIndex?: number,
+	): boolean;
+
+	getHighestSecurityClass(nodeId: number): SecurityClass | undefined;
+
+	hasSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+	): Maybe<boolean>;
+
+	setSecurityClass(
+		nodeId: number,
+		securityClass: SecurityClass,
+		granted: boolean,
+	): void;
+
+	/**
+	 * Returns the next callback ID. Callback IDs are used to correlate requests
 	 * to the controller/nodes with its response
 	 */
 	getNextCallbackId(): number;
 
-	/** Returns the value DB which belongs to the node with the given ID */
+	/**
+	 * Returns the next session ID for supervised communication
+	 */
+	getNextSupervisionSessionId(): number;
+
+	getDeviceConfig?: (nodeId: number) => DeviceConfig | undefined;
+
+	__internalIsMockNode?: boolean;
+}
+
+/** A more featureful version of the ZWaveHost interface, which is meant to be used on the controller application side. */
+export interface ZWaveApplicationHost extends ZWaveHost {
+	/** Gives access to the configuration files */
+	configManager: ConfigManager;
+
+	options: ZWaveHostOptions;
+
+	// TODO: There's probably a better fitting name for this now
+	controllerLog: ControllerLogger;
+
+	/** Returns the value DB which belongs to the node with the given ID, or throws if the Value DB cannot be accessed */
 	getValueDB(nodeId: number): ValueDB;
+
+	/** Returns the value DB which belongs to the node with the given ID, or `undefined` if the Value DB cannot be accessed */
+	tryGetValueDB(nodeId: number): ValueDB | undefined;
+
+	/** Readonly access to all node instances known to the host */
+	nodes: ReadonlyThrowingMap<number, IZWaveNode>;
+
+	/** Whether the node with the given ID is the controller */
+	isControllerNode(nodeId: number): boolean;
+
+	sendCommand<TResponse extends ICommandClass | undefined = undefined>(
+		command: ICommandClass,
+		options?: SendCommandOptions,
+	): Promise<SendCommandReturnType<TResponse>>;
+
+	waitForCommand<T extends ICommandClass>(
+		predicate: (cc: ICommandClass) => boolean,
+		timeout: number,
+	): Promise<T>;
+
+	schedulePoll(
+		nodeId: number,
+		valueId: ValueID,
+		options: NodeSchedulePollOptions,
+	): boolean;
+}
+
+export interface NodeSchedulePollOptions {
+	/** The timeout after which the poll is to be scheduled */
+	timeoutMs?: number;
+	/**
+	 * The expected value that's should be verified with this poll.
+	 * When this value is received in the meantime, the poll will be cancelled.
+	 */
+	expectedValue?: unknown;
 }

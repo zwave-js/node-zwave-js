@@ -44,5 +44,25 @@ async sendReport(
 	sensorType: number,
 	scale: number | Scale,
 	value: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
+
+## Multilevel Sensor CC values
+
+### `value(sensorTypeName: string)`
+
+```ts
+{
+	commandClass: CommandClasses["Multilevel Sensor"],
+	endpoint: number,
+	property: string,
+}
+```
+
+-   **label:** _(dynamic)_
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** false
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"number"`

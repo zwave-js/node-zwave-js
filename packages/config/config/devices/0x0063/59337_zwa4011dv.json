@@ -1,0 +1,17 @@
+{
+	"manufacturer": "Enbrighten",
+	"manufacturerId": "0x0063",
+	"label": "59337 / ZWA4011DV",
+	"description": "In-Wall Paddle Switch, 120+277, QFSW, 700S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3331"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+	// TODO: Add configuration parameters
+}

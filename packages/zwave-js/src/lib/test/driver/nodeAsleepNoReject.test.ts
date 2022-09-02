@@ -1,10 +1,8 @@
-import {
-	MessageHeaders,
-	MessagePriority,
-	MockSerialPort,
-} from "@zwave-js/serial";
+import { BasicCCSet } from "@zwave-js/cc";
+import { MessagePriority } from "@zwave-js/core";
+import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
+import type { ThrowingMap } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
-import { BasicCCSet } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/_Types";
@@ -38,7 +36,10 @@ describe("regression tests", () => {
 		// Repro from #1078
 
 		const node2 = new ZWaveNode(2, driver);
-		(driver.controller.nodes as Map<number, ZWaveNode>).set(2, node2);
+		(driver.controller.nodes as ThrowingMap<number, ZWaveNode>).set(
+			2,
+			node2,
+		);
 		// Add event handlers for the nodes
 		for (const node of driver.controller.nodes.values()) {
 			driver["addNodeEventHandlers"](node);

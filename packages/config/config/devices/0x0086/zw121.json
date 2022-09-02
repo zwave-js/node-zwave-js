@@ -77,7 +77,7 @@
 		},
 		{
 			"#": "35",
-			"$import": "~/templates/master_template.json#base_0-1_options_nounit",
+			"$import": "~/templates/master_template.json#base_options_nounit",
 			"label": "Cold/Warm White Display Mode",
 			"defaultValue": 1,
 			"options": [

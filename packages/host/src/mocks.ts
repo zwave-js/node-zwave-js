@@ -1,9 +1,19 @@
+/* eslint-disable @typescript-eslint/require-await */
 import { ConfigManager } from "@zwave-js/config";
-import { ValueDB, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { createThrowingMap, type ThrowingMap } from "@zwave-js/shared";
+import {
+	IZWaveNode,
+	MAX_SUPERVISION_SESSION_ID,
+	ValueDB,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import {
+	createThrowingMap,
+	createWrappingCounter,
+	type ThrowingMap,
+} from "@zwave-js/shared";
 import type { Overwrite } from "alcalzone-shared/types";
-import type { ZWaveHost } from "./ZWaveHost";
-import type { ZWaveNodeBase } from "./ZWaveNodeBase";
+import type { ZWaveApplicationHost, ZWaveHost } from "./ZWaveHost";
 
 export interface CreateTestingHostOptions {
 	homeId: ZWaveHost["homeId"];
@@ -12,21 +22,14 @@ export interface CreateTestingHostOptions {
 }
 
 export type TestingHost = Overwrite<
-	ZWaveHost,
-	{ nodes: ThrowingMap<number, ZWaveNodeBase> }
+	Omit<ZWaveApplicationHost, "__internalIsMockNode">,
+	{ nodes: ThrowingMap<number, IZWaveNode> }
 >;
 
-/** Creates a {@link ZWaveHost} that can be used for testing */
+/** Creates a {@link ZWaveApplicationHost} that can be used for testing */
 export function createTestingHost(
 	options: Partial<CreateTestingHostOptions> = {},
 ): TestingHost {
-	let callbackId = 0xff;
-	const getNextCallbackId = () => {
-		callbackId = (callbackId + 1) & 0xff;
-		if (callbackId < 1) callbackId = 1;
-		return callbackId;
-	};
-
 	const valuesStorage = new Map();
 	const metadataStorage = new Map();
 	const valueDBCache = new Map<number, ValueDB>();
@@ -34,16 +37,10 @@ export function createTestingHost(
 	const ret: TestingHost = {
 		homeId: options.homeId ?? 0x7e570001,
 		ownNodeId: options.ownNodeId ?? 1,
+		isControllerNode: (nodeId) => nodeId === ret.ownNodeId,
 		securityManager: undefined,
 		securityManager2: undefined,
-		options: {
-			attempts: {
-				nodeInterview: 1,
-				openSerialPort: 1,
-				sendData: 3,
-				controller: 3,
-			},
-		},
+		getDeviceConfig: undefined,
 		controllerLog: new Proxy({} as any, {
 			get() {
 				return () => {
@@ -52,6 +49,18 @@ export function createTestingHost(
 			},
 		}),
 		configManager: new ConfigManager(),
+		options: {
+			attempts: {
+				nodeInterview: 1,
+				// openSerialPort: 1,
+				sendData: 3,
+				controller: 3,
+			},
+			timeouts: {
+				refreshValue: 5000,
+				refreshValueAfterTransition: 1000,
+			},
+		},
 		nodes: createThrowingMap((nodeId) => {
 			throw new ZWaveError(
 				`Node ${nodeId} was not found!`,
@@ -59,7 +68,10 @@ export function createTestingHost(
 			);
 		}),
 		getSafeCCVersionForNode: options.getSafeCCVersionForNode ?? (() => 100),
-		getNextCallbackId,
+		getNextCallbackId: createWrappingCounter(0xff),
+		getNextSupervisionSessionId: createWrappingCounter(
+			MAX_SUPERVISION_SESSION_ID,
+		),
 		getValueDB: (nodeId) => {
 			if (!valueDBCache.has(nodeId)) {
 				valueDBCache.set(
@@ -72,6 +84,39 @@ export function createTestingHost(
 				);
 			}
 			return valueDBCache.get(nodeId)!;
+		},
+		tryGetValueDB: (nodeId) => {
+			return ret.getValueDB(nodeId);
+		},
+		isCCSecure: (ccId, nodeId, endpointIndex = 0) => {
+			const node = ret.nodes.get(nodeId);
+			const endpoint = node?.getEndpoint(endpointIndex);
+			return (
+				node?.isSecure !== false &&
+				!!(endpoint ?? node)?.isCCSecure(ccId) &&
+				!!(ret.securityManager || ret.securityManager2)
+			);
+		},
+		getHighestSecurityClass: (nodeId) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.getHighestSecurityClass();
+		},
+		hasSecurityClass: (nodeId, securityClass) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			return node.hasSecurityClass(securityClass);
+		},
+		setSecurityClass: (nodeId, securityClass, granted) => {
+			const node = ret.nodes.getOrThrow(nodeId);
+			node.setSecurityClass(securityClass, granted);
+		},
+		sendCommand: async (_command, _options) => {
+			return undefined as any;
+		},
+		waitForCommand: async (_predicate, _timeout) => {
+			return undefined as any;
+		},
+		schedulePoll: (_nodeId, _valueId, _options) => {
+			return false;
 		},
 	};
 	return ret;

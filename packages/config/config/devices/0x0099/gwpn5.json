@@ -146,5 +146,9 @@
 				}
 			]
 		}
-	]
+	],
+	"compat": {
+		// This device incorrectly uses the destination endpoint to indicate which endpoint sent the command
+		"treatDestinationEndpointAsSource": true
+	}
 }

@@ -1,26 +1,31 @@
-import { SPANState, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	CommandClass,
+	isCommandClassContainer,
+	Security2CCMessageEncapsulation,
+	Security2CCNonceGet,
+	Security2CCNonceReport,
+} from "@zwave-js/cc";
+import {
+	SecurityCCCommandEncapsulation,
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "@zwave-js/cc/SecurityCC";
+import {
+	SendCommandOptions,
+	SPANState,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { Message } from "@zwave-js/serial";
 import {
 	createDeferredPromise,
 	DeferredPromise,
 } from "alcalzone-shared/deferred-promise";
 import {
-	CommandClass,
-	Security2CCMessageEncapsulation,
-	Security2CCNonceGet,
-	Security2CCNonceReport,
-} from "../commandclass";
-import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
-import {
-	SecurityCCCommandEncapsulation,
-	SecurityCCNonceGet,
-	SecurityCCNonceReport,
-} from "../commandclass/SecurityCC";
-import {
 	isSendData,
 	isTransmitReport,
 } from "../serialapi/transport/SendDataShared";
-import type { Driver, SendCommandOptions } from "./Driver";
+import type { Driver } from "./Driver";
 import { sendDataErrorToZWaveError } from "./StateMachineShared";
 import type { MessageGenerator } from "./Transaction";
 
@@ -67,6 +72,9 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 		// Pass this message to the send thread and wait for it to be sent
 		let result: Message;
 		let commandTimeMs: number;
+		// At this point we can't have received a premature update
+		msg.prematureNodeUpdate = undefined;
+
 		try {
 			// The yield can throw and must be handled here
 			result = yield msg;
@@ -93,6 +101,9 @@ export const simpleMessageGenerator: MessageGeneratorImplementation =
 
 		// If the sent message expects an update from the node, wait for it
 		if (msg.expectsNodeUpdate()) {
+			// We might have received the update prematurely. In that case, return it.
+			if (msg.prematureNodeUpdate) return msg.prematureNodeUpdate;
+
 			// CommandTime is measured by the application
 			// ReportTime timeout SHOULD be set to CommandTime + 1 second.
 			const timeout =
@@ -268,7 +279,7 @@ export const secureMessageGeneratorS2: MessageGeneratorImplementation =
 				message: `failed to decode the message, retrying with SPAN extension...`,
 				direction: "none",
 			});
-			// Prepare the messsage for re-transmission
+			// Prepare the message for re-transmission
 			msg.callbackId = undefined;
 			msg.command.unsetSequenceNumber();
 
@@ -320,7 +331,7 @@ export function createMessageGenerator<TResponse extends Message = Message>(
 			};
 
 			async function* gen() {
-				// Determine which message generator implemenation should be used
+				// Determine which message generator implementation should be used
 				let implementation: MessageGeneratorImplementation =
 					simpleMessageGenerator;
 				if (isSendData(msg)) {

@@ -1,4 +1,18 @@
 import {
+	BasicCommand,
+	BinarySwitchCommand,
+	EntryControlCommand,
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	getCCConstructor,
+	WakeUpCommand,
+} from "@zwave-js/cc";
+import { BasicCC, BasicCCValues } from "@zwave-js/cc/BasicCC";
+import { BinarySwitchCCReport } from "@zwave-js/cc/BinarySwitchCC";
+import { EntryControlCCNotification } from "@zwave-js/cc/EntryControlCC";
+import { NoOperationCC } from "@zwave-js/cc/NoOperationCC";
+import { WakeUpCC } from "@zwave-js/cc/WakeUpCC";
+import {
 	applicationCCs,
 	assertZWaveError,
 	CommandClasses,
@@ -17,20 +31,6 @@ import type { ThrowingMap } from "@zwave-js/shared";
 import { MockController } from "@zwave-js/testing";
 import { wait } from "alcalzone-shared/async";
 import { createDefaultMockControllerBehaviors } from "../../Utils";
-import { BasicCC } from "../commandclass/BasicCC";
-import { BinarySwitchCCReport } from "../commandclass/BinarySwitchCC";
-import { getCCConstructor } from "../commandclass/CommandClass";
-import { EntryControlCCNotification } from "../commandclass/EntryControlCC";
-import { NoOperationCC } from "../commandclass/NoOperationCC";
-import { WakeUpCC } from "../commandclass/WakeUpCC";
-import {
-	BasicCommand,
-	BinarySwitchCommand,
-	EntryControlCommand,
-	EntryControlDataTypes,
-	EntryControlEventTypes,
-	WakeUpCommand,
-} from "../commandclass/_Types";
 import type { Driver } from "../driver/Driver";
 import { createAndStartTestingDriver } from "../driver/DriverMock";
 import {
@@ -76,9 +76,9 @@ class TestNode extends ZWaveNode {
 describe("lib/node/Node", () => {
 	beforeAll(async () => {
 		// Load all CCs manually to populate the metadata
-		await import("../commandclass/BatteryCC");
-		await import("../commandclass/ThermostatSetpointCC");
-		await import("../commandclass/VersionCC");
+		await import("@zwave-js/cc/BatteryCC");
+		await import("@zwave-js/cc/ThermostatSetpointCC");
+		await import("@zwave-js/cc/VersionCC");
 	});
 
 	describe("constructor", () => {
@@ -425,7 +425,7 @@ describe("lib/node/Node", () => {
 			it.todo("test that the CC interview methods are called");
 
 			it("the CC interviews happen in the correct order", () => {
-				require("../commandclass/index");
+				require("@zwave-js/cc/index");
 				expect(getCCConstructor(49)).not.toBeUndefined();
 
 				const node = new ZWaveNode(2, fakeDriver as any);
@@ -642,7 +642,7 @@ describe("lib/node/Node", () => {
 
 			it("should execute all the interview methods", async () => {
 				node.interviewStage = InterviewStage.None;
-				await node.interview();
+				await node.interviewInternal();
 				for (const method of Object.keys(originalMethods)) {
 					expect((node as any)[method]).toBeCalled();
 				}
@@ -650,7 +650,7 @@ describe("lib/node/Node", () => {
 
 			it("should not execute any interview method if the interview is completed", async () => {
 				node.interviewStage = InterviewStage.Complete;
-				await node.interview();
+				await node.interviewInternal();
 				for (const method of Object.keys(originalMethods)) {
 					expect((node as any)[method]).not.toBeCalled();
 				}
@@ -658,7 +658,7 @@ describe("lib/node/Node", () => {
 
 			it("should skip all methods that belong to an earlier stage", async () => {
 				node.interviewStage = InterviewStage.NodeInfo;
-				await node.interview();
+				await node.interviewInternal();
 
 				const expectCalled = [
 					"interviewCCs",
@@ -805,15 +805,17 @@ describe("lib/node/Node", () => {
 				isControlled: true,
 			});
 			node.addCC(CommandClasses.Configuration, {
-				isSupported: true,
+				isControlled: true,
 			});
 
 			node.updateNodeInfo({
-				controlledCCs: [CommandClasses.Configuration],
-				supportedCCs: [CommandClasses.Battery],
+				supportedCCs: [
+					CommandClasses.Battery,
+					CommandClasses.Configuration,
+				],
 			} as any);
 			expect(node.supportsCC(CommandClasses.Battery)).toBeTrue();
-			expect(node.controlsCC(CommandClasses.Configuration)).toBeTrue();
+			expect(node.supportsCC(CommandClasses.Configuration)).toBeTrue();
 			node.destroy();
 		});
 
@@ -1008,7 +1010,7 @@ describe("lib/node/Node", () => {
 
 			const cc = node.createCCInstance(BasicCC)!;
 			expect(cc).toBeInstanceOf(BasicCC);
-			expect(cc.getNode()).toBe(node);
+			expect(cc.getNode(driver)).toBe(node);
 			node.destroy();
 		});
 	});
@@ -1778,10 +1780,7 @@ describe("lib/node/Node", () => {
 		});
 
 		let node: ZWaveNode;
-		const valueId: ValueID = {
-			commandClass: CommandClasses.Basic,
-			property: "currentValue",
-		};
+		const valueId = BasicCCValues.currentValue.id;
 
 		beforeEach(() => {
 			node = new ZWaveNode(1, driver);
@@ -1807,26 +1806,14 @@ describe("lib/node/Node", () => {
 			});
 		});
 
-		it("dynamic metadata is merged with static metadata", () => {
+		it("writing to the value DB overwrites the statically defined metadata", () => {
 			// Create dynamic metadata
 			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
 
 			const currentValueMeta = node.getValueMetadata(valueId);
 
 			// The label should be preserved from the static metadata
-			expect(currentValueMeta).toMatchObject({ label: "Current value" });
-		});
-
-		it("dynamic metadata is prioritized", () => {
-			// Update the dynamic metadata
-			node.valueDB.setMetadata(valueId, ValueMetadata.WriteOnlyInt32);
-
-			const currentValueMeta = node.getValueMetadata(valueId);
-
-			// But the dynamic metadata properties are preferred over statically defined ones
-			expect(currentValueMeta).toMatchObject(
-				ValueMetadata.WriteOnlyInt32,
-			);
+			expect(currentValueMeta).toEqual(ValueMetadata.WriteOnlyInt32);
 		});
 	});
 
@@ -1869,7 +1856,7 @@ describe("lib/node/Node", () => {
 				},
 				true,
 			);
-			// The endpoint suppports Binary Switch
+			// The endpoint supports Binary Switch
 			node.getEndpoint(1)?.addCC(CommandClasses["Binary Switch"], {
 				isSupported: true,
 			});
@@ -1951,7 +1938,9 @@ describe("lib/node/Node", () => {
 			expect(call[1]).toBe(CommandClasses["Entry Control"]);
 			expect(call[2]).toEqual({
 				dataType: EntryControlDataTypes.ASCII,
+				dataTypeLabel: "ASCII",
 				eventType: EntryControlEventTypes.DisarmAll,
+				eventTypeLabel: "Disarm all",
 				eventData: "1234",
 			});
 

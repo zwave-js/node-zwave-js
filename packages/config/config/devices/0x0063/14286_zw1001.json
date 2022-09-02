@@ -1,8 +1,8 @@
 {
-	"manufacturer": "GE/Jasco",
+	"manufacturer": "GE",
 	"manufacturerId": "0x0063",
 	"label": "14286 / ZW1001",
-	"description": "In-Wall Smart Outlet",
+	"description": "In-Wall Outlet, 300S",
 	"devices": [
 		{
 			"productType": "0x4952",
@@ -17,25 +17,7 @@
 	"paramInformation": [
 		{
 			"#": "3",
-			"label": "LED Light",
-			"valueSize": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED on when light off",
-					"value": 0
-				},
-				{
-					"label": "LED on when light on",
-					"value": 1
-				},
-				{
-					"label": "LED always off",
-					"value": 2
-				}
-			]
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
 		}
 	],
 	"metadata": {

@@ -7,7 +7,7 @@
 ### `setNormalPowerlevel`
 
 ```ts
-async setNormalPowerlevel(): Promise<void>;
+async setNormalPowerlevel(): Promise<SupervisionResult | undefined>;
 ```
 
 ### `setCustomPowerlevel`
@@ -16,7 +16,7 @@ async setNormalPowerlevel(): Promise<void>;
 async setCustomPowerlevel(
 	powerlevel: Powerlevel,
 	timeout: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getPowerlevel`
@@ -34,7 +34,7 @@ async startNodeTest(
 	testNodeId: number,
 	powerlevel: Powerlevel,
 	testFrameCount: number,
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 ### `getNodeTestStatus`

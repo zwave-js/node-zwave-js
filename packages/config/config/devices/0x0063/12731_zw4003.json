@@ -1,0 +1,17 @@
+{
+	"manufacturer": "GE",
+	"manufacturerId": "0x0063",
+	"label": "12731 / ZW4003",
+	"description": "In-Wall Toggle Switch, Lt Almd, 300S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3034",
+			"zwaveAllianceId": 1203
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

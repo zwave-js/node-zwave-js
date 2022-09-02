@@ -1,0 +1,36 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14318 / ZW4005",
+	"description": "In-Wall Paddle Switch, 500S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3130"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#orientation"
+		}
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// Removes the Z-Wave Plus CC as this device fails to send state updates. It sends NIFs, which are only refreshed for non-plus devices
+				"0x5e": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
+}

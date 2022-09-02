@@ -45,13 +45,8 @@ When the node does not respond due to a timeout, the `value` in the returned arr
 
 ```ts
 async set(
-	parameter: number,
-	value: ConfigValue,
-	valueSize: 1 | 2 | 4,
-	valueFormat?: ConfigValueFormat,
-): Promise<void>;
-
-async set(options: ConfigurationCCAPISetOptions): Promise<void>;
+	options: ConfigurationCCAPISetOptions,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets a new value for a given config parameter of the device.
@@ -61,7 +56,7 @@ Sets a new value for a given config parameter of the device.
 ```ts
 async setBulk(
 	values: ConfigurationCCAPISetOptions[],
-): Promise<void>;
+): Promise<SupervisionResult | undefined>;
 ```
 
 Sets new values for multiple config parameters of the device. Uses the `BulkSet` command if supported, otherwise falls back to individual `Set` commands.
@@ -69,7 +64,9 @@ Sets new values for multiple config parameters of the device. Uses the `BulkSet`
 ### `reset`
 
 ```ts
-async reset(parameter: number): Promise<void>;
+async reset(
+	parameter: number,
+): Promise<SupervisionResult | undefined>;
 ```
 
 Resets a configuration parameter to its default value.
@@ -131,3 +128,23 @@ WARNING: On nodes implementing V1 and V2, this process may take
 **up to an hour**, depending on the configured timeout.
 
 WARNING: On nodes implementing V2, all parameters after 255 will be ignored.
+
+## Configuration CC values
+
+### `paramInformation(parameter: number, bitMask?: number | undefined)`
+
+```ts
+{
+	commandClass: CommandClasses.Configuration,
+	endpoint: number,
+	property: number,
+	propertyKey: number | undefined,
+}
+```
+
+-   **min. CC version:** 1
+-   **readable:** true
+-   **writeable:** true
+-   **stateful:** true
+-   **secret:** false
+-   **value type:** `"any"`

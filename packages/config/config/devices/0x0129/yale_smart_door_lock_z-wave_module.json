@@ -44,6 +44,28 @@
 			"$import": "templates/yale_template.json#remote_relock_time"
 		}
 	],
+	"compat": {
+		"alarmMapping": [
+			{
+				"$import": "templates/yale_template.json#alarm_map_rfid_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_keypad_unlock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_deadbolt_jammed"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_auto_relock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_lock"
+			},
+			{
+				"$import": "templates/yale_template.json#alarm_map_rf_unlock"
+			}
+		]
+	},
 	"metadata": {
 		"inclusion": "Put the Z-Wave controller into add mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 1 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the add/inclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
 		"exclusion": "Put the Z-Wave controller into remove mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 3 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the remove/exclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",

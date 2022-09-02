@@ -1,0 +1,29 @@
+{
+	"manufacturer": "Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14315 / ZW1002",
+	"description": "In-Wall Outlet, TR, 500S",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3134",
+			"zwaveAllianceId": [2236, 2372]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "3",
+			"$import": "~/templates/master_template.json#led_indicator_three_options"
+		}
+	],
+	"metadata": {
+		"inclusion": "Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and\nrelease the Program Button to add it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button to remove it from the\nnetwork",
+		"reset": "Press the button 3 times, then press and hold the button for at least 3\nseconds. The LED will blink 5 times to confirm.\nNOTE: This should only be used in the event your network’s primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2236/14288%20QSG%20v1.pdf"
+	}
+}

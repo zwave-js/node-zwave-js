@@ -1,0 +1,55 @@
+{
+	"manufacturer": "NewOne",
+	"manufacturerId": "0x0312",
+	"label": "N4003",
+	"description": "SmartPlug with Energy Monitor",
+	"devices": [
+		{
+			"productType": "0xac01",
+			"productId": "0x4003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"$import": "templates/minoston_template.json#led_indicator_four_options_inverted"
+		},
+		{
+			"#": "2",
+			"$import": "templates/minoston_template.json#auto_off_timer"
+		},
+		{
+			"#": "3",
+			"$import": "templates/minoston_template.json#auto_on_timer"
+		},
+		{
+			"#": "4",
+			"$import": "~/templates/master_template.json#state_after_power_failure_prev_off_on"
+		},
+		{
+			"#": "5",
+			"$import": "templates/minoston_template.json#power_reporting_threshold"
+		},
+		{
+			"#": "6",
+			"$import": "templates/minoston_template.json#power_reporting_interval"
+		},
+		{
+			"#": "7",
+			"$import": "templates/minoston_template.json#current_reporting_threshold"
+		},
+		{
+			"#": "8",
+			"$import": "templates/minoston_template.json#energy_reporting_threshold"
+		}
+	],
+	"metadata": {
+		"inclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"exclusion": "1. Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.\n2. When prompted by your primary controller, click the button three times in one second",
+		"reset": "Click the button 2 twice quickly, and hold for at least 10 seconds. (Light flashes once when reset successful.)"
+	}
+}

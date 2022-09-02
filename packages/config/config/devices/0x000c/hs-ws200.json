@@ -24,6 +24,11 @@
 			"$import": "~/templates/master_template.json#orientation"
 		},
 		{
+			"#": "6",
+			"$if": "firmwareVersion >= 5.12",
+			"$import": "templates/homeseer_template.json#scene_control"
+		},
+		{
 			"#": "13",
 			"$import": "templates/homeseer_template.json#status_mode"
 		},
