@@ -215,6 +215,54 @@
 			}
 		]
 	},
+	"dimmer_on_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer on ramp rate (fade-in effect for on  operation) when operated manually",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			}
+		]
+	},
+	"dimmer_off_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Dimmer off ramp rate (fade-out effect for on  operation) when operated manually",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant off",
+				"value": 0
+			}
+		]
+	},
+	"zwave_on_dimmer_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Z-Wave Dimmer on ramp rate (fade-in effect for on zwave operation)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant on",
+				"value": 0
+			}
+		]
+	},
+	"zwave_off_dimmer_ramp_rate": {
+		"$import": "~/templates/master_template.json#base_0-99_nounit",
+		"label": "Z-Wave Dimmer off ramp rate (fade-out effect for on zwave operation)",
+		"unit": "seconds",
+		"defaultValue": 0,
+		"options": [
+			{
+				"label": "Instant off",
+				"value": 0
+			}
+		]
+	},
 	"min_brightness": {
 		"$import": "~/templates/master_template.json#base_1-99_nounit",
 		"label": "Minimum Brightness",
