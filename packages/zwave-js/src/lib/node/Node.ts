@@ -1663,13 +1663,25 @@ protocol version:      ${this.protocolVersion}`;
 			return true;
 		}
 
+		/**
+		 * @param force When this is `true`, the interview will be attempted even when the CC is not supported by the endpoint.
+		 */
 		const interviewEndpoint = async (
 			endpoint: Endpoint,
 			cc: CommandClasses,
+			force: boolean = false,
 		): Promise<"continue" | false | void> => {
 			let instance: CommandClass;
 			try {
-				instance = endpoint.createCCInstance(cc)!;
+				if (force) {
+					instance = CommandClass.createInstanceUnchecked(
+						this.driver,
+						this,
+						cc,
+					)!;
+				} else {
+					instance = endpoint.createCCInstance(cc)!;
+				}
 			} catch (e) {
 				if (
 					isZWaveError(e) &&
@@ -2078,16 +2090,20 @@ protocol version:      ${this.protocolVersion}`;
 				}
 			}
 
-			// if (
-			// 	endpoint.supportsCC(CommandClasses.Security) &&
-			// 	// The root endpoint has been interviewed, so we know if the device supports security
-			// 	this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
-			// 	// Only interview SecurityCC if the network key was set
-			// 	this.driver.securityManager
-			// ) {
-			// 	// Security is always supported *securely*
-			// 	endpoint.addCC(CommandClasses.Security, { secure: true });
-			// }
+			// This intentionally checks for Version CC support on the root device.
+			// Endpoints SHOULD not support this CC, but we still need to query their
+			// CCs that the root device may or may not support
+			if (this.supportsCC(CommandClasses.Version)) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						CommandClasses.Version,
+					)}`,
+					level: "silly",
+				});
+
+				await interviewEndpoint(endpoint, CommandClasses.Version, true);
+			}
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
 			// that aren't actually properly supported by the device.
@@ -2102,6 +2118,7 @@ protocol version:      ${this.protocolVersion}`;
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
 				CommandClasses.Security,
 				CommandClasses["Security 2"],
+				CommandClasses.Version,
 			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
