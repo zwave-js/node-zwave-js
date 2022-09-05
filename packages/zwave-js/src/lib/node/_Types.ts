@@ -3,10 +3,10 @@ import type {
 	EntryControlEventTypes,
 	FirmwareUpdateStatus,
 	MultilevelSwitchCommand,
-	NotificationCCReport,
 	Powerlevel,
 	PowerlevelTestStatus,
-} from "@zwave-js/cc";
+} from "@zwave-js/cc/safe";
+import type { NotificationCCReport } from "@zwave-js/cc/src";
 import type {
 	CommandClasses,
 	MetadataUpdatedArgs,
@@ -19,6 +19,16 @@ import type {
 } from "@zwave-js/core";
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
+
+export {
+	EntryControlDataTypes,
+	EntryControlEventTypes,
+	FirmwareUpdateStatus,
+	MultilevelSwitchCommand,
+	Powerlevel,
+	PowerlevelTestStatus,
+} from "@zwave-js/cc/safe";
+export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
@@ -201,8 +211,6 @@ export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 }
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
-
-export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 /** Represents the result of one health check round of a node's lifeline */
 export interface LifelineHealthCheckResult {
