@@ -40,5 +40,15 @@
 			"maxValue": 99,
 			"defaultValue": 0
 		}
-	]
+	],
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				// Supervised commands always result in a status of "Fail"
+				"0x6c": {
+					"endpoints": "*"
+				}
+			}
+		}
+	}
 }
