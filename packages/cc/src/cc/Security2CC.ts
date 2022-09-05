@@ -52,6 +52,7 @@ import {
 import { ECDHProfiles, KEXFailType, KEXSchemes } from "../lib/Security2/shared";
 import { Security2Command } from "../lib/_Types";
 import { MultiChannelCC } from "./MultiChannelCC";
+import { SecurityCC } from "./SecurityCC";
 
 function securityClassToBitMask(key: SecurityClass): Buffer {
 	return encodeBitMask(
@@ -550,39 +551,47 @@ export class Security2CC extends CommandClass {
 
 	/** Tests if a command should be sent secure and thus requires encapsulation */
 	public static requiresEncapsulation(cc: CommandClass): boolean {
-		// Everything that's not an S2 CC needs to be encapsulated if the CC is secure
+		// No security flag -> no encapsulation
 		if (!(cc.encapsulationFlags & EncapsulationFlags.Security)) {
 			return false;
 		}
-		if (!(cc instanceof Security2CC)) return true;
-		// These S2 commands need additional encapsulation
-		switch (cc.ccCommand) {
-			case Security2Command.CommandsSupportedGet:
-			case Security2Command.CommandsSupportedReport:
-			case Security2Command.NetworkKeyGet:
-			case Security2Command.NetworkKeyReport:
-			case Security2Command.NetworkKeyVerify:
-			case Security2Command.TransferEnd:
-				return true;
+		// S0 -> no S2 encapsulation
+		if (cc instanceof SecurityCC) return false;
+		// S2: check command
+		if (cc instanceof Security2CC) {
+			// These S2 commands need additional encapsulation
+			switch (cc.ccCommand) {
+				case Security2Command.CommandsSupportedGet:
+				case Security2Command.CommandsSupportedReport:
+				case Security2Command.NetworkKeyGet:
+				case Security2Command.NetworkKeyReport:
+				case Security2Command.NetworkKeyVerify:
+				case Security2Command.TransferEnd:
+					return true;
 
-			case Security2Command.KEXSet:
-			case Security2Command.KEXReport:
-				// KEXSet/Report need to be encrypted for the confirmation only
-				return (cc as Security2CCKEXSet | Security2CCKEXReport).echo;
+				case Security2Command.KEXSet:
+				case Security2Command.KEXReport:
+					// KEXSet/Report need to be encrypted for the confirmation only
+					return (cc as Security2CCKEXSet | Security2CCKEXReport)
+						.echo;
 
-			case Security2Command.KEXFail: {
-				switch ((cc as Security2CCKEXFail).failType) {
-					case KEXFailType.Decrypt:
-					case KEXFailType.WrongSecurityLevel:
-					case KEXFailType.KeyNotGranted:
-					case KEXFailType.NoVerify:
-						return true;
-					default:
-						return false;
+				case Security2Command.KEXFail: {
+					switch ((cc as Security2CCKEXFail).failType) {
+						case KEXFailType.Decrypt:
+						case KEXFailType.WrongSecurityLevel:
+						case KEXFailType.KeyNotGranted:
+						case KEXFailType.NoVerify:
+							return true;
+						default:
+							return false;
+					}
 				}
 			}
+			return false;
 		}
-		return false;
+
+		// Everything that's not an S0 or S2 CC needs to be encapsulated if the CC is secure
+		return true;
 	}
 
 	/** Encapsulates a command that should be sent encrypted */
