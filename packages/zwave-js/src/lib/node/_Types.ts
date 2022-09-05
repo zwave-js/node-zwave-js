@@ -20,7 +20,6 @@ import type {
 import type { ZWaveNode } from "./Node";
 import type { RouteStatistics } from "./NodeStatistics";
 
-export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 export {
 	EntryControlDataTypes,
 	EntryControlEventTypes,
@@ -28,7 +27,8 @@ export {
 	MultilevelSwitchCommand,
 	Powerlevel,
 	PowerlevelTestStatus,
-};
+} from "@zwave-js/cc/safe";
+export { InterviewStage, NodeStatus } from "@zwave-js/core/safe";
 
 export interface TranslatedValueID extends ValueID {
 	commandClassName: string;
