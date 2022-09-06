@@ -11,7 +11,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	"Correctly capture node updates that arrive before the SendData callback",
 	{
-		debug: true,
+		// debug: true,
 		provisioningDirectory: path.join(__dirname, "fixtures/base_2_nodes"),
 
 		// nodeCapabilities: {
