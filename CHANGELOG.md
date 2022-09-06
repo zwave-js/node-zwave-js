@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.0.4 (2022-09-06)
 ### Bugfixes
 * Always query versions of CCs supported on endpoints, regardless of CC support (#5009)
 * Avoid unnecessarily repeating tests for S0 support on endpoints (#4993)
