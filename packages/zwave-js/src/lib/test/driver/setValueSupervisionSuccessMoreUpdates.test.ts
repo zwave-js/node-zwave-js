@@ -58,12 +58,15 @@ integrationTest(
 		},
 		testBody: async (_driver, node, _mockController, _mockNode) => {
 			const onValueChange = jest.fn();
-			node.on("value added", onValueChange);
+			// node.on("value added", onValueChange);
 			node.on("value updated", onValueChange);
 
 			const setpointValueId = ThermostatSetpointCCValues.setpoint(
 				ThermostatSetpointType.Cooling,
 			).id;
+			// Ensure we get a "value updated" event
+			node.valueDB.setValue(setpointValueId, 0, { noEvent: true });
+
 			await node.setValue(setpointValueId, 20);
 
 			await wait(500);
