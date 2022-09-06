@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "10.0.2",
+  "version": "10.0.4",
   "description": "zwave-js: shared utilities",
   "publishConfig": {
     "access": "public"
@@ -56,7 +56,7 @@
     "@microsoft/api-extractor": "*",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27.5.2",
-    "@types/node": "^14.18.23",
+    "@types/node": "^14.18.26",
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",
     "jest-extended": "^2.0.0",

@@ -298,17 +298,18 @@ export class SecurityCC extends CommandClass {
 		let supportedCCs: CommandClasses[] | undefined;
 		let controlledCCs: CommandClasses[] | undefined;
 
-		// Try up to 3 times. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
-		for (let attempts = 1; attempts <= 3; attempts++) {
+		// Try up to 3 times on the root device. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
+		const MAX_ATTEMPTS = this.endpointIndex === 0 ? 3 : 1;
+		for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
 			const resp = await api.getSupportedCommands();
 			if (resp) {
 				supportedCCs = resp.supportedCCs;
 				controlledCCs = resp.controlledCCs;
 				break;
-			} else if (attempts < 3) {
+			} else if (attempts < MAX_ATTEMPTS) {
 				applHost.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `Querying securely supported commands (S0), attempt ${attempts}/3 failed. Retrying in 500ms...`,
+					message: `Querying securely supported commands (S0), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
 					level: "warn",
 				});
 				await wait(500);

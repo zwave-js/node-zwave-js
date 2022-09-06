@@ -344,6 +344,8 @@ export class ZWaveNode
 		// @ts-expect-error This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
+		const loglevel = this.driver.getLogConfig().level;
+
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			(outArg as unknown as MetadataUpdatedArgs).metadata =
@@ -355,9 +357,24 @@ export class ZWaveNode
 			this,
 			arg.commandClass,
 		);
-		const isInternalValue = ccInstance?.isInternalValue(arg);
+		const isInternalValue = !!ccInstance?.isInternalValue(arg);
 		// Check whether this value change may be logged
 		const isSecretValue = !!ccInstance?.isSecretValue(arg);
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  commandClass: ${getCCName(arg.commandClass)}
+  endpoint:     ${arg.endpoint}
+  property:     ${arg.property}
+  propertyKey:  ${arg.propertyKey}
+  internal:     ${isInternalValue}
+  secret:       ${isSecretValue}
+  event source: ${(arg as any as ValueUpdatedArgs).source}`,
+				level: "silly",
+			});
+		}
+
 		if (
 			!isSecretValue &&
 			(arg as any as ValueUpdatedArgs).source !== "driver"
@@ -382,6 +399,20 @@ export class ZWaveNode
 
 		//Don't expose value events for internal value IDs...
 		if (isInternalValue) return;
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  is root endpoint:        ${!arg.endpoint}
+  is application CC:       ${applicationCCs.includes(arg.commandClass)}
+  should hide root values: ${nodeUtils.shouldHideRootApplicationCCValues(
+		this.driver,
+		this,
+  )}`,
+				level: "silly",
+			});
+		}
+
 		// ... and root values ID that mirrors endpoint functionality
 		if (
 			// Only root endpoint values need to be filtered
@@ -400,7 +431,20 @@ export class ZWaveNode
 					// but different endpoint
 					endpoint,
 				};
-				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) {
+					if (loglevel === "silly") {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `[translateValueEvent: ${eventName}] found mirrored value ID on different endpoint, ignoring event:
+  commandClass: ${getCCName(possiblyMirroredValueID.commandClass)}
+  endpoint:     ${possiblyMirroredValueID.endpoint}
+  property:     ${possiblyMirroredValueID.property}
+  propertyKey:  ${possiblyMirroredValueID.propertyKey}`,
+							level: "silly",
+						});
+					}
+
+					return;
+				}
 			}
 		}
 		// And pass the translated event to our listeners
@@ -842,6 +886,8 @@ export class ZWaveNode
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
+		const loglevel = this.driver.getLogConfig().level;
+
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
@@ -852,7 +898,7 @@ export class ZWaveNode
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 
-			if (this.driver.controllerLog.logger.level === "silly") {
+			if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] calling SET_VALUE API ${
 						api.constructor.name
@@ -874,7 +920,7 @@ export class ZWaveNode
 				options,
 			);
 
-			if (this.driver.controllerLog.logger.level === "silly") {
+			if (loglevel === "silly") {
 				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
 				if (result) {
 					if (isSupervisionResult(result)) {
@@ -908,7 +954,7 @@ export class ZWaveNode
 					!!result ||
 					!!this.driver.options.emitValueUpdateAfterSetValue;
 
-				if (this.driver.controllerLog.logger.level === "silly") {
+				if (loglevel === "silly") {
 					const message = emitEvent
 						? "updating value with event"
 						: "updating value without event";
@@ -925,7 +971,7 @@ export class ZWaveNode
 					// because in this case there won't be a verification query which would result in an update
 					emitEvent ? { source: "driver" } : { noEvent: true },
 				);
-			} else if (this.driver.controllerLog.logger.level === "silly") {
+			} else if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] not updating value`,
 					level: "silly",
@@ -952,7 +998,7 @@ export class ZWaveNode
 						break;
 				}
 
-				if (this.driver.controllerLog.logger.level === "silly") {
+				if (loglevel === "silly") {
 					this.driver.controllerLog.logNode(this.id, {
 						message: `[setValue] raised ZWaveError (${
 							handled ? "handled" : "not handled"
@@ -1663,13 +1709,25 @@ protocol version:      ${this.protocolVersion}`;
 			return true;
 		}
 
+		/**
+		 * @param force When this is `true`, the interview will be attempted even when the CC is not supported by the endpoint.
+		 */
 		const interviewEndpoint = async (
 			endpoint: Endpoint,
 			cc: CommandClasses,
+			force: boolean = false,
 		): Promise<"continue" | false | void> => {
 			let instance: CommandClass;
 			try {
-				instance = endpoint.createCCInstance(cc)!;
+				if (force) {
+					instance = CommandClass.createInstanceUnchecked(
+						this.driver,
+						this,
+						cc,
+					)!;
+				} else {
+					instance = endpoint.createCCInstance(cc)!;
+				}
 			} catch (e) {
 				if (
 					isZWaveError(e) &&
@@ -1998,14 +2056,8 @@ protocol version:      ${this.protocolVersion}`;
 				!endpoint.supportsCC(CommandClasses.Security);
 
 			if (endpointMissingS0) {
-				this.driver.controllerLog.logNode(this.nodeId, {
-					endpoint: endpoint.index,
-					message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
-					level: "silly",
-				});
-
 				// Define which CCs we can use to test this - and if supported, how
-				const tests: {
+				const possibleTests: {
 					ccId: CommandClasses;
 					// The test must return a truthy value if the check was successful
 					test: () => Promise<unknown>;
@@ -2038,8 +2090,17 @@ protocol version:      ${this.protocolVersion}`;
 					// TODO: add other tests if necessary
 				];
 
-				for (const { ccId, test } of tests) {
-					if (!endpoint.supportsCC(ccId)) continue;
+				const foundTest = possibleTests.find((t) =>
+					endpoint.supportsCC(t.ccId),
+				);
+				if (foundTest) {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Testing if it accepts secure commands anyways.`,
+						level: "silly",
+					});
+
+					const { ccId, test } = foundTest;
 
 					// Temporarily mark the CC as secure so we can use it to test
 					endpoint.addCC(ccId, { secure: true });
@@ -2066,19 +2127,29 @@ protocol version:      ${this.protocolVersion}`;
 						// Mark the CC as not secure again
 						endpoint.addCC(ccId, { secure: false });
 					}
+				} else {
+					this.driver.controllerLog.logNode(this.nodeId, {
+						endpoint: endpoint.index,
+						message: `is included using Security S0, but endpoint ${endpoint.index} does not list the CC. Found no way to test if accepts secure commands anyways.`,
+						level: "silly",
+					});
 				}
 			}
 
-			// if (
-			// 	endpoint.supportsCC(CommandClasses.Security) &&
-			// 	// The root endpoint has been interviewed, so we know if the device supports security
-			// 	this.hasSecurityClass(SecurityClass.S0_Legacy) === true &&
-			// 	// Only interview SecurityCC if the network key was set
-			// 	this.driver.securityManager
-			// ) {
-			// 	// Security is always supported *securely*
-			// 	endpoint.addCC(CommandClasses.Security, { secure: true });
-			// }
+			// This intentionally checks for Version CC support on the root device.
+			// Endpoints SHOULD not support this CC, but we still need to query their
+			// CCs that the root device may or may not support
+			if (this.supportsCC(CommandClasses.Version)) {
+				this.driver.controllerLog.logNode(this.nodeId, {
+					endpoint: endpoint.index,
+					message: `Endpoint ${endpoint.index} interview: ${getCCName(
+						CommandClasses.Version,
+					)}`,
+					level: "silly",
+				});
+
+				await interviewEndpoint(endpoint, CommandClasses.Version, true);
+			}
 
 			// The Security S0/S2 CC adds new CCs to the endpoint, so we need to once more remove those
 			// that aren't actually properly supported by the device.
@@ -2093,6 +2164,7 @@ protocol version:      ${this.protocolVersion}`;
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph([
 				CommandClasses.Security,
 				CommandClasses["Security 2"],
+				CommandClasses.Version,
 			]);
 			let endpointInterviewOrder: CommandClasses[];
 			try {
