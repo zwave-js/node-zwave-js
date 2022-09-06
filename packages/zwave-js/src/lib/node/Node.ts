@@ -344,6 +344,8 @@ export class ZWaveNode
 		// @ts-expect-error This can happen for value updated events
 		if ("source" in outArg) delete outArg.source;
 
+		const loglevel = this.driver.getLogConfig().level;
+
 		// If this is a metadata event, make sure we return the merged metadata
 		if ("metadata" in outArg) {
 			(outArg as unknown as MetadataUpdatedArgs).metadata =
@@ -355,9 +357,24 @@ export class ZWaveNode
 			this,
 			arg.commandClass,
 		);
-		const isInternalValue = ccInstance?.isInternalValue(arg);
+		const isInternalValue = !!ccInstance?.isInternalValue(arg);
 		// Check whether this value change may be logged
 		const isSecretValue = !!ccInstance?.isSecretValue(arg);
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  commandClass: ${getCCName(arg.commandClass)}
+  endpoint:     ${arg.endpoint}
+  property:     ${arg.property}
+  propertyKey:  ${arg.propertyKey}
+  internal:     ${isInternalValue}
+  secret:       ${isSecretValue}
+  event source: ${(arg as any as ValueUpdatedArgs).source}`,
+				level: "silly",
+			});
+		}
+
 		if (
 			!isSecretValue &&
 			(arg as any as ValueUpdatedArgs).source !== "driver"
@@ -382,6 +399,20 @@ export class ZWaveNode
 
 		//Don't expose value events for internal value IDs...
 		if (isInternalValue) return;
+
+		if (loglevel === "silly") {
+			this.driver.controllerLog.logNode(this.id, {
+				message: `[translateValueEvent: ${eventName}]
+  is root endpoint:        ${!arg.endpoint}
+  is application CC:       ${applicationCCs.includes(arg.commandClass)}
+  should hide root values: ${nodeUtils.shouldHideRootApplicationCCValues(
+		this.driver,
+		this,
+  )}`,
+				level: "silly",
+			});
+		}
+
 		// ... and root values ID that mirrors endpoint functionality
 		if (
 			// Only root endpoint values need to be filtered
@@ -400,7 +431,20 @@ export class ZWaveNode
 					// but different endpoint
 					endpoint,
 				};
-				if (this.valueDB.hasValue(possiblyMirroredValueID)) return;
+				if (this.valueDB.hasValue(possiblyMirroredValueID)) {
+					if (loglevel === "silly") {
+						this.driver.controllerLog.logNode(this.id, {
+							message: `[translateValueEvent: ${eventName}] found mirrored value ID on different endpoint, ignoring event:
+  commandClass: ${getCCName(possiblyMirroredValueID.commandClass)}
+  endpoint:     ${possiblyMirroredValueID.endpoint}
+  property:     ${possiblyMirroredValueID.property}
+  propertyKey:  ${possiblyMirroredValueID.propertyKey}`,
+							level: "silly",
+						});
+					}
+
+					return;
+				}
 			}
 		}
 		// And pass the translated event to our listeners
@@ -842,6 +886,8 @@ export class ZWaveNode
 		options?: SetValueAPIOptions,
 	): Promise<boolean> {
 		// Try to retrieve the corresponding CC API
+		const loglevel = this.driver.getLogConfig().level;
+
 		try {
 			// Access the CC API by name
 			const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
@@ -852,7 +898,7 @@ export class ZWaveNode
 			// Check if the setValue method is implemented
 			if (!api.setValue) return false;
 
-			if (this.driver.controllerLog.logger.level === "silly") {
+			if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] calling SET_VALUE API ${
 						api.constructor.name
@@ -874,7 +920,7 @@ export class ZWaveNode
 				options,
 			);
 
-			if (this.driver.controllerLog.logger.level === "silly") {
+			if (loglevel === "silly") {
 				let message = `[setValue] result of SET_VALUE API call for ${api.constructor.name}:`;
 				if (result) {
 					if (isSupervisionResult(result)) {
@@ -908,7 +954,7 @@ export class ZWaveNode
 					!!result ||
 					!!this.driver.options.emitValueUpdateAfterSetValue;
 
-				if (this.driver.controllerLog.logger.level === "silly") {
+				if (loglevel === "silly") {
 					const message = emitEvent
 						? "updating value with event"
 						: "updating value without event";
@@ -925,7 +971,7 @@ export class ZWaveNode
 					// because in this case there won't be a verification query which would result in an update
 					emitEvent ? { source: "driver" } : { noEvent: true },
 				);
-			} else if (this.driver.controllerLog.logger.level === "silly") {
+			} else if (loglevel === "silly") {
 				this.driver.controllerLog.logNode(this.id, {
 					message: `[setValue] not updating value`,
 					level: "silly",
@@ -952,7 +998,7 @@ export class ZWaveNode
 						break;
 				}
 
-				if (this.driver.controllerLog.logger.level === "silly") {
+				if (loglevel === "silly") {
 					this.driver.controllerLog.logNode(this.id, {
 						message: `[setValue] raised ZWaveError (${
 							handled ? "handled" : "not handled"
