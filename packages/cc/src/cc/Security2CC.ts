@@ -433,8 +433,9 @@ export class Security2CC extends CommandClass {
 
 			// Query the supported commands but avoid remembering the wrong security class in case of a failure
 			let supportedCCs: CommandClasses[] | undefined;
-			// Try up to 3 times. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
-			for (let attempts = 1; attempts <= 3; attempts++) {
+			// Try up to 3 times on the root device. We REALLY don't want a spurious timeout or collision to cause us to discard a known good security class
+			const MAX_ATTEMPTS = this.endpointIndex === 0 ? 3 : 1;
+			for (let attempts = 1; attempts <= MAX_ATTEMPTS; attempts++) {
 				try {
 					supportedCCs = await api.getSupportedCommands(secClass);
 				} catch (e) {
@@ -454,18 +455,35 @@ export class Security2CC extends CommandClass {
 					supportedCCs == undefined &&
 					possibleSecurityClasses.length === 1
 				) {
-					if (attempts < 3) {
+					if (attempts < MAX_ATTEMPTS) {
 						// We definitely know the highest security class
 						applHost.controllerLog.logNode(node.id, {
 							endpoint: endpoint.index,
 							message: `Querying securely supported commands (${getEnumMemberName(
 								SecurityClass,
 								secClass,
-							)}), attempt ${attempts}/3 failed. Retrying in 500ms...`,
+							)}), attempt ${attempts}/${MAX_ATTEMPTS} failed. Retrying in 500ms...`,
 							level: "warn",
 						});
 						await wait(500);
 						continue;
+					} else if (endpoint.index > 0) {
+						applHost.controllerLog.logNode(node.id, {
+							endpoint: endpoint.index,
+							message: `Querying securely supported commands (${getEnumMemberName(
+								SecurityClass,
+								secClass,
+							)}) failed. Assuming the endpoint supports all its mandatory CCs securely...`,
+							level: "warn",
+						});
+
+						// Just mark all endpoint CCs as secure. Without this we would attempt
+						// unencrypted communication with the endpoint, which will likely fail.
+						for (const [ccId] of endpoint.getCCs()) {
+							endpoint.addCC(ccId, { secure: true });
+						}
+
+						break;
 					} else {
 						applHost.controllerLog.logNode(node.id, {
 							endpoint: endpoint.index,
