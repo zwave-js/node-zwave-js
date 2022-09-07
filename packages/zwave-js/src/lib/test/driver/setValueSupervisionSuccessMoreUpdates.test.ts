@@ -16,7 +16,7 @@ import { integrationTest } from "../integrationTestSuite";
 integrationTest(
 	`Regression test for #4957: Treat Supervision Report with Success but "more updates follow" as final`,
 	{
-		debug: true,
+		// debug: true,
 		// provisioningDirectory: path.join(
 		// 	__dirname,
 		// 	"__fixtures/supervision_binary_switch",
