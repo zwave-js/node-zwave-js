@@ -76,6 +76,6 @@
     "@zwave-js/transformers": "workspace:*",
     "fs-extra": "^10.1.0",
     "jest-extended": "^2.0.0",
-    "typescript": "4.7.4"
+    "typescript": "4.8.2"
   }
 }
