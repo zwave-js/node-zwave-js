@@ -47,7 +47,7 @@
   "dependencies": {
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.1",
+    "alcalzone-shared": "^4.0.7",
     "fs-extra": "^10.1.0",
     "reflect-metadata": "^0.1.13",
     "semver": "^7.3.7",

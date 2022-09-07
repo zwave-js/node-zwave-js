@@ -43,7 +43,7 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "dependencies": {
-    "alcalzone-shared": "^4.0.1",
+    "alcalzone-shared": "^4.0.7",
     "fs-extra": "^10.1.0"
   },
   "scripts": {

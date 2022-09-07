@@ -128,15 +128,16 @@ function createArrowFunction(
 // }
 
 function isValidateArgsDecorator(
-	decorator: ts.Decorator,
+	modifier: ts.ModifierLike,
 	visitorContext: FileSpecificVisitorContext,
-): boolean {
-	if (ts.isCallExpression(decorator.expression)) {
+): modifier is ts.Decorator {
+	if (!ts.isDecorator(modifier)) return false;
+	if (ts.isCallExpression(modifier.expression)) {
 		const signature = visitorContext.checker.getResolvedSignature(
-			decorator.expression,
+			modifier.expression,
 		);
-		const decoratorName = decorator.expression.expression.getText(
-			decorator.getSourceFile(),
+		const decoratorName = modifier.expression.expression.getText(
+			modifier.getSourceFile(),
 		);
 
 		if (
@@ -290,14 +291,15 @@ function transformDecoratedMethod(
 		}
 	}
 	body = f.updateBlock(body, [...newStatements, ...body.statements]);
-	const decorators = method.decorators?.filter(
-		(d) => d !== validateArgsDecorator,
+	const modifiers = method.modifiers?.filter(
+		(m) =>
+			ts.isModifier(m) ||
+			(ts.isDecorator(m) && m !== validateArgsDecorator),
 	);
 
 	return f.updateMethodDeclaration(
 		method,
-		decorators && decorators.length > 0 ? decorators : undefined,
-		method.modifiers,
+		modifiers?.length ? modifiers : undefined,
 		method.asteriskToken,
 		method.name,
 		method.questionToken,
@@ -525,9 +527,9 @@ export function transformNode(
 	visitorContext: FileSpecificVisitorContext,
 ): ts.Node {
 	const f = visitorContext.factory;
-	if (ts.isMethodDeclaration(node) && node.decorators?.length) {
+	if (ts.isMethodDeclaration(node) && node.modifiers?.length) {
 		// @validateArgs()
-		const validateArgsDecorator = node.decorators.find(
+		const validateArgsDecorator = node.modifiers.find(
 			(d): d is ts.Decorator & { expression: ts.CallExpression } =>
 				isValidateArgsDecorator(d, visitorContext),
 		);

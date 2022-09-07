@@ -62,7 +62,7 @@
     "@zwave-js/serial": "workspace:*",
     "@zwave-js/shared": "workspace:*",
     "@zwave-js/testing": "workspace:*",
-    "alcalzone-shared": "^4.0.1",
+    "alcalzone-shared": "^4.0.7",
     "ansi-colors": "^4.1.3",
     "comment-json": "^4.2.3",
     "commitizen": "^4.2.5",

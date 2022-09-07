@@ -89,9 +89,10 @@ export function getCommandClassFromClassDeclaration(
 	sourceFile: ts.SourceFile,
 	node: ts.ClassDeclaration,
 ): CommandClasses | undefined {
-	if (node.decorators && node.decorators.length > 0) {
-		for (const decorator of node.decorators) {
-			const ccId = getCommandClassFromDecorator(sourceFile, decorator);
+	if (node.modifiers?.length) {
+		for (const mod of node.modifiers) {
+			if (!ts.isDecorator(mod)) continue;
+			const ccId = getCommandClassFromDecorator(sourceFile, mod);
 			if (ccId != undefined) return ccId;
 		}
 	}

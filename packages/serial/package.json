@@ -58,7 +58,7 @@
     "@zwave-js/core": "workspace:*",
     "@zwave-js/host": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.1",
+    "alcalzone-shared": "^4.0.7",
     "serialport": "^10.4.0",
     "winston": "^3.8.1"
   },
