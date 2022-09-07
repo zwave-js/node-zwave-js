@@ -36,7 +36,7 @@ function prepareDriver(
 						),
 						logToFile: true,
 						enabled: true,
-						level: "debug",
+						level: "silly",
 					},
 			  }
 			: {}),
