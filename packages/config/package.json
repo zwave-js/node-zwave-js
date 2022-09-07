@@ -55,7 +55,7 @@
   "dependencies": {
     "@zwave-js/core": "workspace:*",
     "@zwave-js/shared": "workspace:*",
-    "alcalzone-shared": "^4.0.7",
+    "alcalzone-shared": "^4.0.8",
     "ansi-colors": "^4.1.3",
     "fs-extra": "^10.1.0",
     "json-logic-js": "^2.0.2",

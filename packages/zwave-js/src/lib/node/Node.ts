@@ -2985,7 +2985,6 @@ protocol version:      ${this.protocolVersion}`;
 				if (isObject(arg)) {
 					const valueId = {
 						commandClass: API.ccId,
-						// @ts-expect-error TS 4.8 broke narrowing unions to Records
 						...arg,
 					};
 					return this.getValue(valueId);
