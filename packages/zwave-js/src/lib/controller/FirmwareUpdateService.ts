@@ -1,3 +1,4 @@
+import got, { OptionsOfTextResponseBody } from "@esm2cjs/got";
 import {
 	extractFirmware,
 	Firmware,
@@ -6,33 +7,37 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { formatId } from "@zwave-js/shared";
-import axios, { AxiosRequestConfig } from "axios";
 import crypto from "crypto";
 import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 
 const serviceURL = "https://firmware.zwave-js.io";
 const DOWNLOAD_TIMEOUT = 60000;
-const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
+// const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
+const requestCache = new Map();
 
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
-export async function getAvailableFirmwareUpdates(
+export function getAvailableFirmwareUpdates(
 	manufacturerId: number,
 	productType: number,
 	productId: number,
 	firmwareVersion: string,
 	apiKey?: string,
 ): Promise<FirmwareUpdateInfo[]> {
-	const config: AxiosRequestConfig = {
-		method: "post",
+	const config: OptionsOfTextResponseBody = {
+		method: "POST",
 		url: `${serviceURL}/api/v1/updates`,
-		data: {
+		json: {
 			manufacturerId: formatId(manufacturerId),
 			productType: formatId(productType),
 			productId: formatId(productId),
 			firmwareVersion,
+		},
+		cache: requestCache,
+		cacheOptions: {
+			shared: false,
 		},
 	};
 	if (apiKey) {
@@ -40,9 +45,8 @@ export async function getAvailableFirmwareUpdates(
 			"X-API-Key": apiKey,
 		};
 	}
-	const response: FirmwareUpdateInfo[] = (await axios(config)).data;
 
-	return response;
+	return got(config).json();
 }
 
 export async function downloadFirmwareUpdate(
@@ -59,12 +63,13 @@ export async function downloadFirmwareUpdate(
 	// TODO: Make request abort-able (requires AbortController, Node 14.17+ / Node 16)
 
 	// Download the firmware file
-	const downloadResponse = await axios.get<Buffer>(file.url, {
-		timeout: DOWNLOAD_TIMEOUT,
-		maxContentLength: MAX_FIRMWARE_SIZE,
-		responseType: "arraybuffer",
+	const downloadResponse = await got.get(file.url, {
+		timeout: { request: DOWNLOAD_TIMEOUT },
+		responseType: "buffer",
+		// TODO: figure out how to do maxContentLength: MAX_FIRMWARE_SIZE,
 	});
-	const rawData = downloadResponse.data;
+
+	const rawData = downloadResponse.body;
 
 	// Infer the file type from the content-disposition header or the filename
 	let filename: string;
