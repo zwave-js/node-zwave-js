@@ -1,4 +1,5 @@
 import got, { OptionsOfTextResponseBody } from "@esm2cjs/got";
+import PQueue from "@esm2cjs/p-queue";
 import {
 	extractFirmware,
 	Firmware,
@@ -14,6 +15,9 @@ const serviceURL = "https://firmware.zwave-js.io";
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
 const requestCache = new Map();
+
+// Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
+const requestQueue = new PQueue({ concurrency: 2 });
 
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
@@ -46,7 +50,7 @@ export function getAvailableFirmwareUpdates(
 		};
 	}
 
-	return got(config).json();
+	return requestQueue.add(() => got(config).json());
 }
 
 export async function downloadFirmwareUpdate(
