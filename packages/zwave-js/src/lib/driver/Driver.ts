@@ -441,6 +441,16 @@ export class Driver
 		this.options = mergeDeep(options, defaultOptions) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+		if (options?.userAgent) {
+			if (!isObject(options.userAgent)) {
+				throw new ZWaveError(
+					`The userAgent property must be an object!`,
+					ZWaveErrorCodes.Driver_InvalidOptions,
+				);
+			}
+
+			this.updateUserAgent(options.userAgent);
+		}
 
 		// Initialize logging
 		this._logContainer = new ZWaveLogContainer(this.options.logConfig);
@@ -815,11 +825,22 @@ export class Driver
 		) as ZWaveOptions;
 		checkOptions(newOptions);
 
+		if (options.userAgent && !isObject(options.userAgent)) {
+			throw new ZWaveError(
+				`The userAgent property must be an object!`,
+				ZWaveErrorCodes.Driver_InvalidOptions,
+			);
+		}
+
 		// All good, update the options
 		this.options = newOptions;
 
 		if (options.logConfig) {
 			this.updateLogConfig(options.logConfig);
+		}
+
+		if (options.userAgent) {
+			this.updateUserAgent(options.userAgent);
 		}
 	}
 
@@ -1646,22 +1667,55 @@ export class Driver
 		return this._statisticsEnabled;
 	}
 
-	private _statisticsAppInfo:
+	private statisticsAppInfo:
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
-	public get statisticsAppInfo():
-		| Pick<AppInfo, "applicationName" | "applicationVersion">
-		| undefined {
-		return this._statisticsAppInfo;
+
+	private userAgentComponents = new Map<string, string>();
+
+	/**
+	 * Updates individual components of the user agent. Versions for individual applications can be added or removed.
+	 * @param components An object with application/module/component names and their versions. Set a version to `null` or `undefined` explicitly to remove it from the user agent.
+	 */
+	public updateUserAgent(
+		components: Record<string, string | null | undefined>,
+	): void {
+		// Remove everything that's not a letter, number, . or -
+		function normalize(str: string): string {
+			return str.replace(/[^a-zA-Z0-9\.\-]/g, "");
+		}
+		for (let [name, version] of Object.entries(components)) {
+			if (name === "node-zwave-js") continue;
+
+			name = normalize(name);
+
+			if (version == undefined) {
+				this.userAgentComponents.delete(name);
+			} else {
+				version = normalize(version);
+				this.userAgentComponents.set(name, version);
+			}
+		}
+
+		this._userAgent = `node-zwave-js/${libVersion}`;
+		// Augment the user agent string with information passed by the application(s)
+		for (const [name, version] of this.userAgentComponents) {
+			this._userAgent += ` ${name}/${version}`;
+		}
+		// Default to the information for statistics if they are enabled but no user agent was configured
+		if (
+			this.userAgentComponents.size === 0 &&
+			this.statisticsAppInfo &&
+			this.statisticsAppInfo.applicationName !== "node-zwave-js"
+		) {
+			this._userAgent += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+		}
 	}
 
-	/** Returns the user agent used for service requests */
+	private _userAgent: string = `node-zwave-js/${libVersion}`;
+	/** Returns the user agent string used for service requests */
 	public get userAgent(): string {
-		let ret = `node-zwave-js/${libVersion}`;
-		if (this.statisticsEnabled && this.statisticsAppInfo) {
-			ret += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
-		}
-		return ret;
+		return this._userAgent;
 	}
 
 	/**
@@ -1695,7 +1749,7 @@ export class Driver
 		}
 
 		this._statisticsEnabled = true;
-		this._statisticsAppInfo = appInfo;
+		this.statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
 		if (this._nodesReadyEventEmitted) {
@@ -1710,7 +1764,7 @@ export class Driver
 	 */
 	public disableStatistics(): void {
 		this._statisticsEnabled = false;
-		this._statisticsAppInfo = undefined;
+		this.statisticsAppInfo = undefined;
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
 			this.statisticsTimeout = undefined;
@@ -1731,7 +1785,7 @@ export class Driver
 	private statisticsTimeout: NodeJS.Timeout | undefined;
 	private async compileAndSendStatistics(): Promise<void> {
 		// Don't send anything if statistics are not enabled
-		if (!this.statisticsEnabled || !this._statisticsAppInfo) return;
+		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
 
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
@@ -1742,7 +1796,7 @@ export class Driver
 		try {
 			const statistics = await compileStatistics(this, {
 				driverVersion: libVersion,
-				...this._statisticsAppInfo,
+				...this.statisticsAppInfo,
 				nodeVersion: process.versions.node,
 				os: process.platform,
 				arch: process.arch,
