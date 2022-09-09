@@ -14,10 +14,105 @@ import type { FirmwareUpdateFileInfo, FirmwareUpdateInfo } from "./_Types";
 const serviceURL = "https://firmware.zwave-js.io";
 const DOWNLOAD_TIMEOUT = 60000;
 // const MAX_FIRMWARE_SIZE = 10 * 1024 * 1024; // 10MB should be enough for any conceivable Z-Wave chip
-const requestCache = new Map();
+
+const MAX_CACHE_SECONDS = 60 * 60 * 24; // Cache for a day at max
+const CLEAN_CACHE_INTERVAL_MS = 60 * 60 * 1000; // Remove stale entries from the cache every hour
+
+const requestCache = new Map<string, CachedRequest<unknown>>();
+interface CachedRequest<T> {
+	response: T;
+	staleDate: number;
+}
 
 // Queue requests to the firmware update service. Only allow few parallel requests so we can make some use of the cache.
 const requestQueue = new PQueue({ concurrency: 2 });
+
+let cleanCacheTimeout: NodeJS.Timeout | undefined;
+function cleanCache() {
+	if (cleanCacheTimeout) {
+		clearTimeout(cleanCacheTimeout);
+		cleanCacheTimeout = undefined;
+	}
+
+	const now = Date.now();
+	for (const [key, cached] of requestCache) {
+		if (cached.staleDate < now) {
+			requestCache.delete(key);
+		}
+	}
+
+	if (requestCache.size > 0) {
+		cleanCacheTimeout = setTimeout(
+			cleanCache,
+			CLEAN_CACHE_INTERVAL_MS,
+		).unref();
+	}
+}
+
+async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
+	// Replaces got's built-in cache functionality because it depends on an outdated version of
+	// cacheable-request (<8.3.1), which does not distinguish between POSTs with different bodies
+
+	const hash = crypto
+		.createHash("sha256")
+		.update(JSON.stringify(config.json))
+		.digest("hex");
+	const cacheKey = `${config.method}:${config.url!.toString()}:${hash}`;
+
+	// Return cached requests if they are not stale yet
+	if (requestCache.has(cacheKey)) {
+		const cached = requestCache.get(cacheKey)!;
+		if (cached.staleDate > Date.now()) {
+			return cached.response as T;
+		}
+	}
+
+	const response = await got(config);
+	const responseJson = JSON.parse(response.body) as T;
+
+	// Check if we can cache the response
+	if (response.statusCode === 200 && response.headers["cache-control"]) {
+		const cacheControl = response.headers["cache-control"]!;
+
+		let maxAge: number | undefined;
+		const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
+		if (maxAgeMatch) {
+			maxAge = Math.max(0, parseInt(maxAgeMatch[1], 10));
+		}
+
+		if (maxAge) {
+			let currentAge: number;
+			if (response.headers.age) {
+				currentAge = parseInt(response.headers.age, 10);
+			} else if (response.headers.date) {
+				currentAge =
+					(Date.now() - Date.parse(response.headers.date)) / 1000;
+			} else {
+				currentAge = 0;
+			}
+			currentAge = Math.max(0, currentAge);
+
+			if (maxAge > currentAge) {
+				requestCache.set(cacheKey, {
+					response: responseJson,
+					staleDate:
+						Date.now() +
+						Math.min(MAX_CACHE_SECONDS, maxAge - currentAge) * 1000,
+				});
+			}
+		}
+	}
+
+	// Regularly clean the cache
+	if (!cleanCacheTimeout) {
+		cleanCacheTimeout = setTimeout(
+			cleanCache,
+			CLEAN_CACHE_INTERVAL_MS,
+		).unref();
+	}
+
+	return responseJson;
+}
 
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
@@ -39,10 +134,11 @@ export function getAvailableFirmwareUpdates(
 			productId: formatId(productId),
 			firmwareVersion,
 		},
-		cache: requestCache,
-		cacheOptions: {
-			shared: false,
-		},
+		// TODO: Re-enable this in favor of cachedGot when fixed
+		// cache: requestCache,
+		// cacheOptions: {
+		// 	shared: false,
+		// },
 	};
 	if (apiKey) {
 		config.headers = {
@@ -50,7 +146,7 @@ export function getAvailableFirmwareUpdates(
 		};
 	}
 
-	return requestQueue.add(() => got(config).json());
+	return requestQueue.add(() => cachedGot(config));
 }
 
 export async function downloadFirmwareUpdate(
