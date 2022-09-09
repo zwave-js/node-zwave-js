@@ -396,8 +396,7 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 			});
 			this.setValue(applHost, supportedModesValue, supportedModes);
 		}
-
-		return super.persistValues(applHost);
+		return true;
 	}
 
 	@ccValue(ThermostatModeCCValues.thermostatMode)
