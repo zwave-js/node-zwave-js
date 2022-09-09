@@ -245,7 +245,6 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     destroy(): Promise<void>;
     disableStatistics(): void;
     enableErrorReporting(): void;
-    // Warning: (ae-forgotten-export) The symbol "AppInfo" needs to be exported by the entry point index.d.ts
     enableStatistics(appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">): void;
     static enumerateSerialPorts(): Promise<string[]>;
     getLogConfig(): LogConfig;
@@ -290,6 +289,10 @@ export class Driver extends TypedEventEmitter<DriverEventCallbacks> implements Z
     setPreferredScales(scales: ZWaveOptions["preferences"]["scales"]): void;
     softReset(): Promise<void>;
     start(): Promise<void>;
+    // Warning: (ae-forgotten-export) The symbol "AppInfo" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    get statisticsAppInfo(): Pick<AppInfo, "applicationName" | "applicationVersion"> | undefined;
     get statisticsEnabled(): boolean;
     // (undocumented)
     tryGetEndpoint(cc: CommandClass): Endpoint | undefined;

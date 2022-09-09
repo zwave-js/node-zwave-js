@@ -1646,9 +1646,14 @@ export class Driver
 		return this._statisticsEnabled;
 	}
 
-	private statisticsAppInfo:
+	private _statisticsAppInfo:
 		| Pick<AppInfo, "applicationName" | "applicationVersion">
 		| undefined;
+	public get statisticsAppInfo():
+		| Pick<AppInfo, "applicationName" | "applicationVersion">
+		| undefined {
+		return this._statisticsAppInfo;
+	}
 
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
@@ -1658,7 +1663,6 @@ export class Driver
 		appInfo: Pick<AppInfo, "applicationName" | "applicationVersion">,
 	): void {
 		if (this._statisticsEnabled) return;
-		this._statisticsEnabled = true;
 
 		if (
 			!isObject(appInfo) ||
@@ -1681,7 +1685,8 @@ export class Driver
 			);
 		}
 
-		this.statisticsAppInfo = appInfo;
+		this._statisticsEnabled = true;
+		this._statisticsAppInfo = appInfo;
 
 		// If we're already ready, send statistics
 		if (this._nodesReadyEventEmitted) {
@@ -1696,7 +1701,7 @@ export class Driver
 	 */
 	public disableStatistics(): void {
 		this._statisticsEnabled = false;
-		this.statisticsAppInfo = undefined;
+		this._statisticsAppInfo = undefined;
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
 			this.statisticsTimeout = undefined;
@@ -1717,7 +1722,7 @@ export class Driver
 	private statisticsTimeout: NodeJS.Timeout | undefined;
 	private async compileAndSendStatistics(): Promise<void> {
 		// Don't send anything if statistics are not enabled
-		if (!this.statisticsEnabled || !this.statisticsAppInfo) return;
+		if (!this.statisticsEnabled || !this._statisticsAppInfo) return;
 
 		if (this.statisticsTimeout) {
 			clearTimeout(this.statisticsTimeout);
@@ -1728,7 +1733,7 @@ export class Driver
 		try {
 			const statistics = await compileStatistics(this, {
 				driverVersion: libVersion,
-				...this.statisticsAppInfo,
+				...this._statisticsAppInfo,
 				nodeVersion: process.versions.node,
 				os: process.platform,
 				arch: process.arch,

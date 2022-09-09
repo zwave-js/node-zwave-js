@@ -1,4 +1,4 @@
-import got, { OptionsOfTextResponseBody } from "@esm2cjs/got";
+import got, { Headers, OptionsOfTextResponseBody } from "@esm2cjs/got";
 import PQueue from "@esm2cjs/p-queue";
 import {
 	extractFirmware,
@@ -124,7 +124,9 @@ export function getAvailableFirmwareUpdates(
 	productId: number,
 	firmwareVersion: string,
 	apiKey?: string,
+	userAgent?: string,
 ): Promise<FirmwareUpdateInfo[]> {
+	const headers: Headers = {};
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
 		url: `${serviceURL}/api/v1/updates`,
@@ -139,11 +141,13 @@ export function getAvailableFirmwareUpdates(
 		// cacheOptions: {
 		// 	shared: false,
 		// },
+		headers,
 	};
 	if (apiKey) {
-		config.headers = {
-			"X-API-Key": apiKey,
-		};
+		headers["X-API-Key"] = apiKey;
+	}
+	if (userAgent) {
+		headers["User-Agent"] = userAgent;
 	}
 
 	return requestQueue.add(() => cachedGot(config));
