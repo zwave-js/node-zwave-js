@@ -11545,13 +11545,16 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 //
 // @public (undocumented)
 export class NotificationCCEventSupportedReport extends NotificationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "NotificationCCEventSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions | NotificationCCEventSupportedReportOptions);
     // (undocumented)
-    get notificationType(): number;
+    notificationType: number;
     // (undocumented)
     persistValues(applHost: ZWaveApplicationHost): boolean;
     // (undocumented)
-    get supportedEvents(): readonly number[];
+    serialize(): Buffer;
+    // (undocumented)
+    supportedEvents: number[];
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
@@ -11628,11 +11631,14 @@ export class NotificationCCSupportedGet extends NotificationCC {
 //
 // @public (undocumented)
 export class NotificationCCSupportedReport extends NotificationCC {
-    constructor(host: ZWaveHost_2, options: CommandClassDeserializationOptions);
+    // Warning: (ae-forgotten-export) The symbol "NotificationCCSupportedReportOptions" needs to be exported by the entry point index.d.ts
+    constructor(host: ZWaveHost_2, options: NotificationCCSupportedReportOptions | CommandClassDeserializationOptions);
     // (undocumented)
-    readonly supportedNotificationTypes: readonly number[];
+    serialize(): Buffer;
     // (undocumented)
-    readonly supportsV1Alarm: boolean;
+    supportedNotificationTypes: number[];
+    // (undocumented)
+    supportsV1Alarm: boolean;
     // (undocumented)
     toLogEntry(applHost: ZWaveApplicationHost): MessageOrCCLogEntry_2;
 }
