@@ -1,5 +1,6 @@
 import got, { Headers, OptionsOfTextResponseBody } from "@esm2cjs/got";
 import PQueue from "@esm2cjs/p-queue";
+import type { DeviceID } from "@zwave-js/config";
 import {
 	extractFirmware,
 	Firmware,
@@ -114,27 +115,34 @@ async function cachedGot<T>(config: OptionsOfTextResponseBody): Promise<T> {
 	return responseJson;
 }
 
+export interface GetAvailableFirmwareUpdateOptions {
+	userAgent: string;
+	apiKey?: string;
+}
+
 /**
  * Retrieves the available firmware updates for the node with the given fingerprint.
  * Returns the service response or `undefined` in case of an error.
  */
 export function getAvailableFirmwareUpdates(
-	manufacturerId: number,
-	productType: number,
-	productId: number,
-	firmwareVersion: string,
-	apiKey?: string,
-	userAgent?: string,
+	deviceId: DeviceID & { firmwareVersion: string },
+	options: GetAvailableFirmwareUpdateOptions,
 ): Promise<FirmwareUpdateInfo[]> {
-	const headers: Headers = {};
+	const headers: Headers = {
+		"User-Agent": options.userAgent,
+	};
+	if (options.apiKey) {
+		headers["X-API-Key"] = options.apiKey;
+	}
+
 	const config: OptionsOfTextResponseBody = {
 		method: "POST",
 		url: `${serviceURL}/api/v1/updates`,
 		json: {
-			manufacturerId: formatId(manufacturerId),
-			productType: formatId(productType),
-			productId: formatId(productId),
-			firmwareVersion,
+			manufacturerId: formatId(deviceId.manufacturerId),
+			productType: formatId(deviceId.productType),
+			productId: formatId(deviceId.productId),
+			firmwareVersion: deviceId.firmwareVersion,
 		},
 		// TODO: Re-enable this in favor of cachedGot when fixed
 		// cache: requestCache,
@@ -143,12 +151,6 @@ export function getAvailableFirmwareUpdates(
 		// },
 		headers,
 	};
-	if (apiKey) {
-		headers["X-API-Key"] = apiKey;
-	}
-	if (userAgent) {
-		headers["User-Agent"] = userAgent;
-	}
 
 	return requestQueue.add(() => cachedGot(config));
 }

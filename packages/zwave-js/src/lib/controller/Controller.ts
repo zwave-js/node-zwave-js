@@ -71,7 +71,7 @@ import { isObject } from "alcalzone-shared/typeguards";
 import crypto from "crypto";
 import semver from "semver";
 import util from "util";
-import { Driver, libVersion } from "../driver/Driver";
+import type { Driver } from "../driver/Driver";
 import { cacheKeys, cacheKeyUtils } from "../driver/NetworkCache";
 import type { StatisticsEventCallbacks } from "../driver/Statistics";
 import { DeviceClass } from "../node/DeviceClass";
@@ -4539,21 +4539,21 @@ ${associatedNodes.join(", ")}`,
 		}
 		const firmwareVersion = versionResponse.firmwareVersions[0];
 
-		let userAgent = `node-zwave-js v${libVersion}`;
-		if (this.driver.statisticsEnabled && this.driver.statisticsAppInfo) {
-			userAgent += ` (${this.driver.statisticsAppInfo.applicationName} ${this.driver.statisticsAppInfo.applicationVersion})`;
-		}
-
 		// Now invoke the service
 		try {
 			return await getAvailableFirmwareUpdates(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-				options?.apiKey ??
-					this.driver.options.apiKeys?.firmwareUpdateService,
-				userAgent,
+				{
+					manufacturerId,
+					productType,
+					productId,
+					firmwareVersion,
+				},
+				{
+					userAgent: this.driver.userAgent,
+					apiKey:
+						options?.apiKey ??
+						this.driver.options.apiKeys?.firmwareUpdateService,
+				},
 			);
 		} catch (e: any) {
 			let message = `Cannot check for firmware updates for node ${nodeId}: `;

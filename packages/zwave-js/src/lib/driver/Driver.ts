@@ -1655,6 +1655,15 @@ export class Driver
 		return this._statisticsAppInfo;
 	}
 
+	/** Returns the user agent used for service requests */
+	public get userAgent(): string {
+		let ret = `node-zwave-js/${libVersion}`;
+		if (this.statisticsEnabled && this.statisticsAppInfo) {
+			ret += ` ${this.statisticsAppInfo.applicationName}/${this.statisticsAppInfo.applicationVersion}`;
+		}
+		return ret;
+	}
+
 	/**
 	 * Enable sending usage statistics. Although this does not include any sensitive information, we expect that you
 	 * inform your users before enabling statistics.
