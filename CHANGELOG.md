@@ -4,7 +4,7 @@
 <!--
 	Add placeholder for next release with `wip` snippet
 -->
-## __WORK IN PROGRESS__
+## 10.1.0 (2022-09-09)
 ### Features
 * Cache responses from firmware update service and queue requests (#5030)
 * Make user agent configurable and pass it to firmware update service (#5031)
