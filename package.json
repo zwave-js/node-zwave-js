@@ -130,7 +130,8 @@
     "nvmedit": "yarn ts packages/nvmedit/src/cli.ts",
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
-    "codefind": "yarn ts packages/maintenance/src/codefind.ts"
+    "codefind": "yarn ts packages/maintenance/src/codefind.ts",
+    "accept-api": "yarn clean && yarn build && yarn extract-api --local"
   },
   "readme": "README.md",
   "config": {
