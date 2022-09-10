@@ -1,0 +1,110 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN04",
+	"description": "Indoor Smart Plug",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xb002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": [
+		{
+			"#": "1",
+			"label": "LED Indicator Mode",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Follow Outlet",
+					"value": 0
+				},
+				{
+					"label": "Opposite of Outlet",
+					"value": 1
+				},
+				{
+					"label": "Always Off",
+					"value": 2
+				},
+				{
+					"label": "Always On",
+					"value": 3
+				}
+			]
+		},
+		{
+			"#": "2",
+			"$import": "templates/zooz_template.json#auto_off_timer_duration",
+			"label": "Auto Turn-Off Timer Duration"
+		},
+		{
+			"#": "3",
+			"$import": "templates/zooz_template.json#auto_on_timer_duration",
+			"label": "Auto Turn-On Timer Duration"
+		},
+		{
+			"#": "4",
+			"label": "On/Off Status Recovery After Power Failure",
+			"valueSize": 1,
+			"defaultValue": 0,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Previous status",
+					"value": 0
+				},
+				{
+					"label": "Always Off",
+					"value": 1
+				},
+				{
+					"label": "Always On",
+					"value": 2
+				}
+			]
+		},
+		{
+			"#": "5",
+			"label": "Power Wattage Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "6",
+			"label": "Power Wattage Reporting Frequency",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 5,
+			"unsigned": true
+		},
+		{
+			"#": "7",
+			"label": "Electrical Current Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 1,
+			"unsigned": true
+		},
+		{
+			"#": "8",
+			"label": "Energy Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 1,
+			"unsigned": true
+		}
+	]
+}
