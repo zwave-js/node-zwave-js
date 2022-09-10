@@ -8,23 +8,26 @@
 		"build": {
 			"dependsOn": ["prebuild", "^build"]
 		},
-		"lint": {},
-		"test": {},
+		"lint": {
+			"outputs": []
+		},
+		// "test": {},
 
 		// Don't forget to run test in root:
 		"//#test": {
-			"dependsOn": [],
+			"dependsOn": ["build"],
 			"outputs": []
 		}
 	},
 	"globalDependencies": [
 		// Build fresh when build configuration changes:
-		"tsconfig.json",
 		".eslintrc.js",
 		".eslintignore",
 		".prettierrc.js",
 		".prettierignore",
-		// Build fresh on Github
-		"$GITHUB_TOKEN"
+		// Build fresh when TS related stuff changes
+		"tsconfig.json",
+		"tsconfig.build.json",
+		"*.tsbuildinfo"
 	]
 }

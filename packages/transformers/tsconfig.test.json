@@ -12,13 +12,5 @@
 		"incremental": false,
 		"experimentalDecorators": true
 	},
-	"references": [
-		{
-			"path": "../maintenance/tsconfig.build.json"
-		},
-		{
-			"path": "./tsconfig.build.json"
-		}
-	],
 	"include": ["test/fixtures/**/*.ts"]
 }
