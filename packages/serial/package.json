@@ -3,27 +3,45 @@
   "version": "10.1.0",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "main": "build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./package.json": "./package.json",
+      "./mock": "./build/index_mock.js",
+      "./safe": "./build/index_safe.js"
+    },
+    "types": "build/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "mock": [
+          "build/index_mock.d.ts"
+        ],
+        "safe": [
+          "build/index_safe.d.ts"
+        ]
+      }
+    }
   },
-  "keywords": [],
-  "main": "build/index.js",
+  "main": "src/index.ts",
   "exports": {
-    ".": "./build/index.js",
+    ".": "./src/index.ts",
     "./package.json": "./package.json",
-    "./mock": "./build/index_mock.js",
-    "./safe": "./build/index_safe.js"
+    "./mock": "./src/index_mock.ts",
+    "./safe": "./src/index_safe.ts"
   },
-  "types": "build/index.d.ts",
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "mock": [
-        "build/index_mock.d.ts"
+        "src/index_mock.ts"
       ],
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ]
     }
   },
+  "keywords": [],
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -47,10 +65,10 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
     "@sentry/node": "^7.8.1",
@@ -68,7 +86,6 @@
     "@serialport/bindings-interface": "*",
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.26",
-    "@zwave-js/testing": "workspace:*",
     "ansi-colors": "^4.1.3",
     "esbuild": "0.14.51",
     "esbuild-register": "^3.3.3",

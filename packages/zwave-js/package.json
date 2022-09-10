@@ -3,41 +3,81 @@
   "version": "10.1.0",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
-  "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./Controller": "./build/Controller.js",
-    "./Driver": "./build/Driver.js",
-    "./Error": "./build/Error.js",
-    "./Node": "./build/Node.js",
-    "./Utils": "./build/Utils.js",
-    "./Values": "./build/Values.js",
-    "./safe": "./build/index_safe.js"
+  "publishConfig": {
+    "main": "build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./package.json": "./package.json",
+      "./Controller": "./build/Controller.js",
+      "./Driver": "./build/Driver.js",
+      "./Error": "./build/Error.js",
+      "./Node": "./build/Node.js",
+      "./Utils": "./build/Utils.js",
+      "./Values": "./build/Values.js",
+      "./safe": "./build/index_safe.js"
+    },
+    "types": "build/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "Controller": [
+          "./build/Controller.d.ts"
+        ],
+        "Driver": [
+          "./build/Driver.d.ts"
+        ],
+        "Error": [
+          "./build/Error.d.ts"
+        ],
+        "Node": [
+          "./build/Node.d.ts"
+        ],
+        "Utils": [
+          "./build/Utils.d.ts"
+        ],
+        "Values": [
+          "./build/Values.d.ts"
+        ],
+        "safe": [
+          "./build/index_safe.d.ts"
+        ]
+      }
+    }
   },
-  "types": "build/index.d.ts",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json",
+    "./Controller": "./src/Controller.ts",
+    "./Driver": "./src/Driver.ts",
+    "./Error": "./src/Error.ts",
+    "./Node": "./src/Node.ts",
+    "./Utils": "./src/Utils.ts",
+    "./Values": "./src/Values.ts",
+    "./safe": "./src/index_safe.ts"
+  },
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "Controller": [
-        "./build/Controller.d.ts"
+        "./src/Controller.ts"
       ],
       "Driver": [
-        "./build/Driver.d.ts"
+        "./src/Driver.ts"
       ],
       "Error": [
-        "./build/Error.d.ts"
+        "./src/Error.ts"
       ],
       "Node": [
-        "./build/Node.d.ts"
+        "./src/Node.ts"
       ],
       "Utils": [
-        "./build/Utils.d.ts"
+        "./src/Utils.ts"
       ],
       "Values": [
-        "./build/Values.d.ts"
+        "./src/Values.ts"
       ],
       "safe": [
-        "./build/index_safe.d.ts"
+        "./src/index_safe.ts"
       ]
     }
   },
@@ -64,10 +104,10 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "yarn run build --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "yarn run build --clean",
+    "//watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^2.5.2",

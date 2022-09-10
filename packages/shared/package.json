@@ -2,21 +2,35 @@
   "name": "@zwave-js/shared",
   "version": "10.0.4",
   "description": "zwave-js: shared utilities",
-  "publishConfig": {
-    "access": "public"
-  },
   "keywords": [],
-  "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
+  "publishConfig": {
+    "access": "public",
+    "main": "build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./package.json": "./package.json",
+      "./safe": "./build/index_safe.js"
+    },
+    "types": "build/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "safe": [
+          "build/index_safe.d.ts"
+        ]
+      }
+    }
   },
-  "types": "build/index.d.ts",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json",
+    "./safe": "./src/index_safe.ts"
+  },
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ]
     }
   },
@@ -47,10 +61,10 @@
     "fs-extra": "^10.1.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "*",

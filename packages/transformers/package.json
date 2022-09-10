@@ -29,9 +29,9 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty",
+    "build": "tsc -p tsconfig.build.json",
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty",
     "pretest": "yarn run build && tsc -p tsconfig.test.json"
   },
   "devDependencies": {

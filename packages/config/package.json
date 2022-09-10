@@ -3,23 +3,37 @@
   "version": "10.1.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "main": "build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./package.json": "./package.json",
+      "./safe": "./build/index_safe.js"
+    },
+    "types": "build/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "safe": [
+          "build/index_safe.d.ts"
+        ]
+      }
+    }
   },
-  "keywords": [],
-  "main": "build/index.js",
+  "main": "src/index.ts",
   "exports": {
-    ".": "./build/index.js",
+    ".": "./src/index.ts",
     "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js"
+    "./safe": "./src/index_safe.ts"
   },
-  "types": "build/index.d.ts",
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ]
     }
   },
+  "keywords": [],
   "files": [
     "build/**/*.{js,d.ts,map}",
     "config/"
@@ -45,10 +59,10 @@
   },
   "scripts": {
     "prebuild": "yarn ts maintenance/prebuild.ts",
-    "build": "yarn prebuild && tsc -b tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty",
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty",
     "lint_config": "yarn ts maintenance/lintConfigFiles.ts",
     "ts": "node -r esbuild-register"
   },

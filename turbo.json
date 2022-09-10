@@ -1,0 +1,30 @@
+{
+	"$schema": "https://turborepo.org/schema.json",
+	"pipeline": {
+		"prebuild": {
+			// Prebuild requires the dependencies to be built
+			"dependsOn": ["^build"]
+		},
+		"build": {
+			"dependsOn": ["prebuild", "^build"]
+		},
+		"lint": {},
+		"test": {},
+
+		// Don't forget to run test in root:
+		"//#test": {
+			"dependsOn": [],
+			"outputs": []
+		}
+	},
+	"globalDependencies": [
+		// Build fresh when build configuration changes:
+		"tsconfig.json",
+		".eslintrc.js",
+		".eslintignore",
+		".prettierrc.js",
+		".prettierignore",
+		// Build fresh on Github
+		"$GITHUB_TOKEN"
+	]
+}

@@ -2,12 +2,14 @@
   "name": "@zwave-js/testing",
   "version": "10.1.0",
   "description": "zwave-js: testing utilities",
-  "publishConfig": {
-    "access": "public"
-  },
   "keywords": [],
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "main": "build/index.js",
+    "types": "build/index.d.ts"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "files": [
     "build/**/*.{js,d.ts,map}"
   ],
@@ -31,10 +33,10 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "build": "tsc -b tsconfig.build.json --verbose",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run build --watch --pretty"
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run build --watch --pretty"
   },
   "dependencies": {
     "@zwave-js/core": "workspace:*",

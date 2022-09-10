@@ -10,7 +10,7 @@
 			"path": "../host/tsconfig.build.json"
 		},
 		{
-			"path": "../testing/tsconfig.build.json"
+			"path": "../shared/tsconfig.build.json"
 		}
 	],
 	"include": ["src/**/*.ts"],

@@ -2,26 +2,45 @@
   "name": "@zwave-js/cc",
   "version": "10.1.0",
   "description": "zwave-js: Command Classes",
-  "publishConfig": {
-    "access": "public"
-  },
   "keywords": [],
-  "main": "build/index.js",
-  "exports": {
-    ".": "./build/index.js",
-    "./package.json": "./package.json",
-    "./safe": "./build/index_safe.js",
-    "./*": "./build/cc/*.js"
+  "publishConfig": {
+    "access": "public",
+    "main": "build/index.js",
+    "exports": {
+      ".": "./build/index.js",
+      "./package.json": "./package.json",
+      "./safe": "./build/index_safe.js",
+      "./*": "./build/cc/*.js"
+    },
+    "types": "build/index.d.ts",
+    "typesVersions": {
+      "*": {
+        "safe": [
+          "build/index_safe.d.ts"
+        ],
+        "*": [
+          "build/cc/*.d.ts",
+          "build/index.d.ts"
+        ]
+      }
+    }
   },
-  "types": "build/index.d.ts",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json",
+    "./safe": "./src/index_safe.ts",
+    "./*": "./src/cc/*.ts"
+  },
+  "types": "src/index.ts",
   "typesVersions": {
     "*": {
       "safe": [
-        "build/index_safe.d.ts"
+        "src/index_safe.ts"
       ],
       "*": [
-        "build/cc/*.d.ts",
-        "build/index.d.ts"
+        "src/cc/*.ts",
+        "src/index.ts"
       ]
     }
   },
@@ -48,13 +67,13 @@
     "node": ">=14.13.0 <15 || >= 16 <16.9.0 || >16.9.0"
   },
   "scripts": {
-    "b": "yarn ts maintenance/_build.ts",
-    "prebuild": "yarn b prebuild",
-    "build": "yarn run prebuild && tsc -b tsconfig.build.json --verbose",
+    "task": "yarn ts maintenance/_tasks.ts",
+    "prebuild": "yarn task prebuild",
+    "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
-    "clean": "tsc -b tsconfig.build.json --clean",
-    "watch": "yarn run prebuild && tsc -b tsconfig.build.json --watch --pretty",
-    "lint_zwave": "yarn b lint",
+    "//clean": "tsc -b tsconfig.build.json --clean",
+    "//watch": "yarn run prebuild && tsc -b tsconfig.build.json --watch --pretty",
+    "lint_zwave": "yarn task lint",
     "ts": "node -r esbuild-register"
   },
   "dependencies": {
