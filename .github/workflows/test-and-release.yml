@@ -39,9 +39,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Compile TypeScript code
       run: yarn build
@@ -72,9 +74,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Run linters
       run: yarn run lint
@@ -132,9 +136,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Lint config files
       run: yarn run lint:config
@@ -166,9 +172,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     # # Test that the generated packages are ok
     # - name: Import main entry points for each package
@@ -224,9 +232,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Generate API report
       run: yarn run extract-api
@@ -277,9 +287,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Compile TypeScript code
       run: yarn build
@@ -319,9 +331,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Compile TypeScript code
       run: yarn build
@@ -403,9 +417,11 @@ jobs:
       uses: actions/cache@v3
       with:
         path: node_modules/.cache/turbo
-        key: turbo-${{ github.job }}-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
         restore-keys: |
-          turbo-${{ github.job }}-${{ github.ref_name }}-
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
 
     - name: Compile TypeScript code
       run: yarn build
