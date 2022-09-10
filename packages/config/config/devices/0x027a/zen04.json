@@ -103,7 +103,7 @@
 		{
 			"#": "8",
 			"label": "Energy Reporting Threshold",
-			"unit": "0.1 kWh",
+			"unit": "0.01 kWh",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
