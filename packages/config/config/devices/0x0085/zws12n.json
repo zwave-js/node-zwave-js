@@ -18,44 +18,22 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"maxNodes": 1
-		},
-		"2": {
-			"label": "Group 2",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "Group 3",
-			"maxNodes": 5
-		},
-		"4": {
-			"label": "Group 4",
-			"maxNodes": 5
-		}
-	},
 	"paramInformation": [
 		{
 			"#": "7",
 			"label": "Motor Speed I",
-			"description": "1- the lowest speed, 4 - the higest speed, 2- default",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2
 		},
 		{
 			"#": "8",
-			"label": "Motor Speed Ii (rain Sensor)",
-			"description": "1- the lowest speed, 4 - the higest speed, 2- default",
+			"label": "Motor Speed II (Rain Sensor)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 2,
-			"unsigned": true
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2
 		},
 		{
 			"#": "12",
@@ -68,13 +46,11 @@
 		{
 			"#": "15",
 			"label": "Close After Time",
-			"description": "0-120 minutes",
 			"valueSize": 1,
 			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
-			"defaultValue": 0,
-			"unsigned": true
+			"defaultValue": 0
 		}
 	],
 	"metadata": {
