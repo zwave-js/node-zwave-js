@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "--concurrency=2 --cache-dir=.turbo/cache"
+  TURBO_FLAGS: "-vv --concurrency=2 --cache-dir=.turbo/cache"
 
 jobs:
   build:
