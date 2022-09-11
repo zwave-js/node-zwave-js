@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "-vv --concurrency=2 --api=http://127.0.0.1:9080 --token=${{ secrets.GH_TURBO_CACHE_TOKEN }} --team=zwave-js"
+  TURBO_FLAGS: "-vv --concurrency=2 --api=${{ secrets.TURBO_CACHE_SERVER }} --token=${{ secrets.TURBO_CACHE_TOKEN }} --team=zwave-js"
 
 jobs:
   build:
@@ -37,12 +37,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -66,12 +60,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -129,12 +117,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
-
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
 
@@ -188,12 +170,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
-
     - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave
 
@@ -216,12 +192,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Run component tests
       run: yarn run test:ci
@@ -250,12 +220,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Generate API report
       run: yarn run extract-api $TURBO_FLAGS
@@ -300,12 +264,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
-
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
 
@@ -339,12 +297,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -421,12 +373,6 @@ jobs:
       uses: ./.github/actions/install-dependencies
       with:
         node-version: ${{ matrix.node-version }}
-
-    - name: Turbo Cache
-      uses: felixmosh/turborepo-gh-artifacts@v1
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
