@@ -14,8 +14,8 @@
 		// "test": {},
 
 		// Don't forget to run test in root:
-		"//#test": {
-			"dependsOn": ["build"],
+		"//#test:ts": {
+			"dependsOn": ["zwave-js#build"],
 			"outputs": []
 		}
 	},

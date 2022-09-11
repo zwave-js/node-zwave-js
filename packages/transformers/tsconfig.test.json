@@ -3,8 +3,7 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"composite": false,
-		"rootDir": "test/fixtures",
-		"outDir": "test/fixtures",
+		"outDir": "test/build",
 		"declaration": false,
 		"declarationMap": false,
 		"sourceMap": false,
