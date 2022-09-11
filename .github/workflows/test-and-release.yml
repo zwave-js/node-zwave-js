@@ -42,9 +42,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -75,9 +75,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -141,9 +141,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -204,9 +204,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -237,9 +237,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -275,9 +275,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -328,9 +328,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -372,9 +372,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
@@ -458,9 +458,9 @@ jobs:
       uses: actions/cache@v3
       with:
         path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
         restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-${{ github.sha }}-
           turbo-${{ github.ref_name }}-
           turbo-
 
