@@ -171,7 +171,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Lint config files and Z-Wave specifics
-      run: yarn run lint:zwave
+      run: yarn run lint:zwave $TURBO_FLAGS
 
   # ===================
   # Runs unit tests on all supported node versions and OSes
@@ -194,7 +194,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Run component tests
-      run: yarn run test:ci
+      run: yarn run test:ci $TURBO_FLAGS
       env:
         CI: true
 
