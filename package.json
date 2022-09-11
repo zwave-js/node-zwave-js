@@ -100,7 +100,6 @@
     "build": "yarn turbo run build",
     "watch": "yarn w \"yarn build\"",
     "clean": "del-cli packages/*/{build,*.tsbuildinfo}",
-    "extract-api": "yarn workspaces foreach -vp --exclude @zwave-js/repo run extract-api",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
     "test:once": "yarn turbo run test:ts --",
@@ -136,7 +135,8 @@
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
-    "accept-api": "yarn clean && yarn build && yarn extract-api --local"
+    "extract-api": "yarn turbo run extract-api --",
+    "accept-api": "yarn clean && yarn extract-api --local"
   },
   "readme": "README.md",
   "config": {

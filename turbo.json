@@ -56,6 +56,11 @@
 		},
 		// "test": {},
 
+		"extract-api": {
+			"dependsOn": ["build"],
+			"outputs": ["api.md"]
+		},
+
 		// For now, run tests in the root:
 		"//#test:ts": {
 			"dependsOn": ["zwave-js#build"],
