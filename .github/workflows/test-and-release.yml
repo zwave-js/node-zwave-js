@@ -46,22 +46,56 @@ jobs:
           turbo-
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: yarn build --concurrency=2
+
+  # ===================
+
+  # Makes sure that the published packages can be require'd without issues in a production environment
+  test-packages:
+    needs: [build]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x] # This should be LTS
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Prepare testing environment
+      uses: ./.github/actions/install-dependencies
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Turbo Cache
+      uses: actions/cache@v3
+      with:
+        path: node_modules/.cache/turbo
+        key: turbo-${{ github.ref_name }}-${{ github.sha }}
+        restore-keys: |
+          turbo-${{ github.ref_name }}-${{ github.sha }}
+          turbo-${{ github.ref_name }}-
+          turbo-
+
+    - name: Compile TypeScript code
+      run: yarn build --concurrency=2
 
     # Test that the generated packages are ok
     # I'd love to use yalc or something for this, but it doesn't use yarn pack to pack the tarballs
     # so we need to fake the install
     - name: Import main entry points for each package
       run: |
-        CUR_DIR=$(pwd)
         TMP_DIR=$(mktemp -d)
 
+        echo "Re-creating a production environment..."
         yarn prodpack "$TMP_DIR/.tarballs"
         cd $TMP_DIR
 
         npm init -y
         npm i .tarballs/zwave-js.tgz
 
+        echo "Testing entry points..."
         # Now all entrypoints should work
         node -e 'require("zwave-js")'
         node -e 'require("@zwave-js/cc")'
@@ -80,9 +114,6 @@ jobs:
         node -e 'require("@zwave-js/nvmedit/safe")'
         node -e 'require("@zwave-js/serial/safe")'
         node -e 'require("@zwave-js/shared/safe")'
-
-        # Back to the repo
-        cd $CUR_DIR
 
   # ===================
 
@@ -114,7 +145,7 @@ jobs:
           turbo-
 
     - name: Run linters
-      run: yarn run lint
+      run: yarn run lint --concurrency=2
 
     - name: Prepare lint auto-fix patch
       if: |
@@ -123,9 +154,9 @@ jobs:
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
-        yarn run lint:ts:fix
-        yarn run lint:prettier:fix
-        yarn run lint:configjson:fix
+        yarn run lint:ts:fix --concurrency=2
+        yarn run lint:prettier:fix --concurrency=2
+        yarn run lint:configjson:fix --concurrency=2
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -248,7 +279,7 @@ jobs:
           turbo-
 
     - name: Generate API report
-      run: yarn run extract-api
+      run: yarn run extract-api --concurrency=2
 
     - name: Show changes
       if: failure()
@@ -301,7 +332,7 @@ jobs:
           turbo-
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: yarn build --concurrency=2
 
     - name: Update CC table # (maybe)
       uses: ./.github/actions/gh-cc-table
@@ -345,7 +376,7 @@ jobs:
           turbo-
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: yarn build --concurrency=2
 
     - name: Update overview
       uses: ./.github/actions/toLogEntry
@@ -404,7 +435,7 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, lint-zwave, unit-tests]
+    needs: [lint, lint-zwave, unit-tests, test-packages]
 
     runs-on: ubuntu-latest
     strategy:
@@ -431,7 +462,7 @@ jobs:
           turbo-
 
     - name: Compile TypeScript code
-      run: yarn build
+      run: yarn build --concurrency=2
 
     - name: Extract the version and commit body from the tag
       id: extract_release
