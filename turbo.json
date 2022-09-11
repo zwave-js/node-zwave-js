@@ -64,10 +64,17 @@
 		// For now, run tests in the root:
 		"//#test:ts": {
 			"dependsOn": ["zwave-js#build"],
+			"inputs": [
+				"jest.config.js",
+				"test/jest.*.{js,ts}",
+				"packages/*/src/**/*.ts"
+			],
 			"outputs": []
 		}
 	},
 	"globalDependencies": [
+		// Build fresh when dependencies change
+		"yarn.lock",
 		// Build fresh when TS related stuff changes
 		"tsconfig.json",
 		"tsconfig.build.json",
