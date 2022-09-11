@@ -139,8 +139,8 @@
     "ls-changed": "yarn changed list --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0) --json | cut -d'\"' -f4",
     "for-changed": "yarn changed foreach --exclude \"@zwave-js/repo\" --git-range=$(git describe --abbrev=0)",
     "codefind": "yarn ts packages/maintenance/src/codefind.ts",
-    "extract-api": "yarn turbo run extract-api --",
-    "accept-api": "yarn clean && yarn extract-api --local",
+    "extract-api": "yarn turbo run extract-api",
+    "accept-api": "yarn clean && yarn extract-api -- --local",
     "prodpack": "yarn ts maintenance/prodpack.ts"
   },
   "readme": "README.md",
