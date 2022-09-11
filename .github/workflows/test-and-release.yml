@@ -48,8 +48,43 @@ jobs:
     - name: Compile TypeScript code
       run: yarn build
 
-    # - name: Cache build output
-    #   uses: ./.github/actions/build-cache-upload
+    # Test that the generated packages are ok
+    # I'd love to use yalc or something for this, but it doesn't use yarn pack to pack the tarballs
+    # so we need to fake the install
+    - name: Import main entry points for each package
+      run: |
+        CUR_DIR=$(pwd)
+        TMP_DIR=$(mktemp -d)
+
+        yarn prodpack "$TMP_DIR/.tarballs"
+        cd $TMP_DIR
+
+        npm init -y
+        # The maintenance module isn't used in production, so we install it separately
+        npm i .tarballs/zwave-js.tgz .tarballs/@zwave-js-maintenance.tgz
+
+        # Now all entrypoints should work
+        node -e 'require("zwave-js")'
+        node -e 'require("@zwave-js/cc")'
+        node -e 'require("@zwave-js/config")'
+        node -e 'require("@zwave-js/core")'
+        node -e 'require("@zwave-js/host")'
+        node -e 'require("@zwave-js/maintenance")'
+        node -e 'require("@zwave-js/nvmedit")'
+        node -e 'require("@zwave-js/serial")'
+        node -e 'require("@zwave-js/shared")'
+        node -e 'require("@zwave-js/testing")'
+        node -e 'require("zwave-js/safe")'
+        node -e 'require("@zwave-js/cc/safe")'
+        node -e 'require("@zwave-js/config/safe")'
+        node -e 'require("@zwave-js/core/safe")'
+        node -e 'require("@zwave-js/host/safe")'
+        node -e 'require("@zwave-js/nvmedit/safe")'
+        node -e 'require("@zwave-js/serial/safe")'
+        node -e 'require("@zwave-js/shared/safe")'
+
+        # Back to the repo
+        cd $CUR_DIR
 
   # ===================
 
@@ -175,28 +210,6 @@ jobs:
           turbo-${{ github.ref_name }}-${{ github.sha }}
           turbo-${{ github.ref_name }}-
           turbo-
-
-    # # Test that the generated packages are ok
-    # - name: Import main entry points for each package
-    #   run: |
-    #     node -e 'require("zwave-js")'
-    #     node -e 'require("@zwave-js/cc")'
-    #     node -e 'require("@zwave-js/config")'
-    #     node -e 'require("@zwave-js/core")'
-    #     node -e 'require("@zwave-js/host")'
-    #     node -e 'require("@zwave-js/maintenance")'
-    #     node -e 'require("@zwave-js/nvmedit")'
-    #     node -e 'require("@zwave-js/serial")'
-    #     node -e 'require("@zwave-js/shared")'
-    #     node -e 'require("@zwave-js/testing")'
-    #     node -e 'require("zwave-js/safe")'
-    #     node -e 'require("@zwave-js/cc/safe")'
-    #     node -e 'require("@zwave-js/config/safe")'
-    #     node -e 'require("@zwave-js/core/safe")'
-    #     node -e 'require("@zwave-js/host/safe")'
-    #     node -e 'require("@zwave-js/nvmedit/safe")'
-    #     node -e 'require("@zwave-js/serial/safe")'
-    #     node -e 'require("@zwave-js/shared/safe")'
 
     - name: Run component tests
       run: yarn run test:ci

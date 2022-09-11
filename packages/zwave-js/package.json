@@ -4,8 +4,8 @@
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "publishConfig": {
-    "types": "build/index.d.ts",
-    "typesVersions": {
+    "$types": "build/index.d.ts",
+    "$typesVersions": {
       "*": {
         "Controller": [
           "./build/Controller.d.ts"

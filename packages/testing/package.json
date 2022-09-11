@@ -5,7 +5,7 @@
   "keywords": [],
   "publishConfig": {
     "access": "public",
-    "types": "build/index.d.ts"
+    "$types": "build/index.d.ts"
   },
   "main": "build/index.js",
   "types": "src/index.ts",

@@ -5,8 +5,8 @@
   "keywords": [],
   "publishConfig": {
     "access": "public",
-    "types": "build/index.d.ts",
-    "typesVersions": {
+    "$types": "build/index.d.ts",
+    "$typesVersions": {
       "*": {
         "safe": [
           "build/index_safe.d.ts"
