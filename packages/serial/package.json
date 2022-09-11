@@ -4,13 +4,6 @@
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
     "access": "public",
-    "main": "build/index.js",
-    "exports": {
-      ".": "./build/index.js",
-      "./package.json": "./package.json",
-      "./mock": "./build/index_mock.js",
-      "./safe": "./build/index_safe.js"
-    },
     "types": "build/index.d.ts",
     "typesVersions": {
       "*": {
@@ -23,12 +16,12 @@
       }
     }
   },
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./mock": "./src/index_mock.ts",
-    "./safe": "./src/index_safe.ts"
+    "./mock": "./build/index_mock.js",
+    "./safe": "./build/index_safe.js"
   },
   "types": "src/index.ts",
   "typesVersions": {

@@ -4,18 +4,6 @@
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "publishConfig": {
-    "main": "build/index.js",
-    "exports": {
-      ".": "./build/index.js",
-      "./package.json": "./package.json",
-      "./Controller": "./build/Controller.js",
-      "./Driver": "./build/Driver.js",
-      "./Error": "./build/Error.js",
-      "./Node": "./build/Node.js",
-      "./Utils": "./build/Utils.js",
-      "./Values": "./build/Values.js",
-      "./safe": "./build/index_safe.js"
-    },
     "types": "build/index.d.ts",
     "typesVersions": {
       "*": {
@@ -43,17 +31,17 @@
       }
     }
   },
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./Controller": "./src/Controller.ts",
-    "./Driver": "./src/Driver.ts",
-    "./Error": "./src/Error.ts",
-    "./Node": "./src/Node.ts",
-    "./Utils": "./src/Utils.ts",
-    "./Values": "./src/Values.ts",
-    "./safe": "./src/index_safe.ts"
+    "./Controller": "./build/Controller.js",
+    "./Driver": "./build/Driver.js",
+    "./Error": "./build/Error.js",
+    "./Node": "./build/Node.js",
+    "./Utils": "./build/Utils.js",
+    "./Values": "./build/Values.js",
+    "./safe": "./build/index_safe.js"
   },
   "types": "src/index.ts",
   "typesVersions": {

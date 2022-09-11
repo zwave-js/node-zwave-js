@@ -5,13 +5,6 @@
   "keywords": [],
   "publishConfig": {
     "access": "public",
-    "main": "build/index.js",
-    "exports": {
-      ".": "./build/index.js",
-      "./package.json": "./package.json",
-      "./safe": "./build/index_safe.js",
-      "./*": "./build/cc/*.js"
-    },
     "types": "build/index.d.ts",
     "typesVersions": {
       "*": {
@@ -25,12 +18,12 @@
       }
     }
   },
-  "main": "src/index.ts",
+  "main": "build/index.js",
   "exports": {
-    ".": "./src/index.ts",
+    ".": "./build/index.js",
     "./package.json": "./package.json",
-    "./safe": "./src/index_safe.ts",
-    "./*": "./src/cc/*.ts"
+    "./safe": "./build/index_safe.js",
+    "./*": "./build/cc/*.js"
   },
   "types": "src/index.ts",
   "typesVersions": {
