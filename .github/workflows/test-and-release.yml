@@ -20,7 +20,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TURBO_FLAGS: "-vv --concurrency=2 --cache-dir=.turbo/cache"
+  TURBO_FLAGS: "-vv --concurrency=2 --api=http://127.0.0.1:9080 --token=${{ secrets.GH_TURBO_CACHE_TOKEN }} --team=zwave-js"
 
 jobs:
   build:
@@ -39,14 +39,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -72,14 +68,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -138,14 +130,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
@@ -201,14 +189,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave
@@ -234,14 +218,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Run component tests
       run: yarn run test:ci
@@ -272,14 +252,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Generate API report
       run: yarn run extract-api $TURBO_FLAGS
@@ -325,14 +301,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -369,14 +341,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -455,14 +423,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Turbo Cache
-      uses: actions/cache@v3
+      uses: felixmosh/turborepo-gh-artifacts@v1
       with:
-        path: .turbo/cache
-        key: turbo-${{ github.ref_name }}-${{ github.sha }}-${{ github.job }}
-        restore-keys: |
-          turbo-${{ github.ref_name }}-${{ github.sha }}-
-          turbo-${{ github.ref_name }}-
-          turbo-
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        server-token: ${{ secrets.GH_TURBO_CACHE_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
