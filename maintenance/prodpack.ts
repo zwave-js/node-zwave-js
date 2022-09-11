@@ -44,6 +44,8 @@ async function main() {
 		const packageJson = await fs.readJson(
 			path.join(workspaceDirFull, "package.json"),
 		);
+		if (packageJson.private) continue;
+
 		const { name, version } = packageJson;
 
 		workspaces.push({

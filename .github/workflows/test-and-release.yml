@@ -60,8 +60,7 @@ jobs:
         cd $TMP_DIR
 
         npm init -y
-        # The maintenance module isn't used in production, so we install it separately
-        npm i .tarballs/zwave-js.tgz .tarballs/@zwave-js-maintenance.tgz
+        npm i .tarballs/zwave-js.tgz
 
         # Now all entrypoints should work
         node -e 'require("zwave-js")'
@@ -69,7 +68,6 @@ jobs:
         node -e 'require("@zwave-js/config")'
         node -e 'require("@zwave-js/core")'
         node -e 'require("@zwave-js/host")'
-        node -e 'require("@zwave-js/maintenance")'
         node -e 'require("@zwave-js/nvmedit")'
         node -e 'require("@zwave-js/serial")'
         node -e 'require("@zwave-js/shared")'
