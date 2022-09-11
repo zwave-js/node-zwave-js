@@ -90,8 +90,9 @@ jobs:
       id: lint
       run: |
         # Run all lint commands and abort if one has unfixable errors
-        yarn run lint:ts --fix
-        yarn run lint:configjson -w
+        yarn run lint:ts:fix
+        yarn run lint:prettier:fix
+        yarn run lint:configjson:fix
 
         git diff --name-only || true
         if ! git diff --quiet ; then
@@ -142,10 +143,7 @@ jobs:
           turbo-${{ github.ref_name }}-
           turbo-
 
-    - name: Lint config files
-      run: yarn run lint:config
-
-    - name: Lint Z-Wave specifics
+    - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave
 
   # ===================

@@ -54,7 +54,11 @@
     "build": "tsc -p tsconfig.build.json",
     "extract-api": "yarn api-extractor run",
     "//clean": "tsc -b tsconfig.build.json --clean",
-    "//watch": "yarn run build --watch --pretty"
+    "//watch": "yarn run build --watch --pretty",
+    "lint:ts": "eslint --ext .ts --rule \"prettier/prettier: off\" \"src/**/*.ts\"",
+    "lint:ts:fix": "yarn run lint:ts --fix",
+    "lint:prettier": "prettier -c \"src/**/*.ts\"",
+    "lint:prettier:fix": "yarn run lint:prettier -w"
   },
   "dependencies": {
     "@zwave-js/config": "workspace:*",
@@ -66,7 +70,9 @@
     "@microsoft/api-extractor": "*",
     "@types/jest": "^27.5.2",
     "@types/node": "^14.18.26",
+    "@types/prettier": "^2",
     "jest-extended": "^2.0.0",
+    "prettier": "^2.7.1",
     "typescript": "4.7.4"
   }
 }
