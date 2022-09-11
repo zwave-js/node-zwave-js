@@ -598,7 +598,6 @@ export type ResponseRole = "unexpected" | "confirmation" | "final" | "fatal_cont
 //
 // @public (undocumented)
 export class SerialAPIParser extends Transform {
-    // Warning: (ae-forgotten-export) The symbol "SerialLogger" needs to be exported by the entry point index.d.ts
     constructor(logger?: SerialLogger | undefined);
     // (undocumented)
     _transform(chunk: any, encoding: string, callback: TransformCallback): void;
@@ -612,6 +611,25 @@ export interface SerialLogContext extends LogContext<"serial"> {
     direction: DataDirection;
     // (undocumented)
     header?: string;
+}
+
+// Warning: (ae-missing-release-tag) "SerialLogger" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
+//
+// @public (undocumented)
+export class SerialLogger extends ZWaveLoggerBase<SerialLogContext> {
+    constructor(loggers: ZWaveLogContainer);
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    ACK(direction: DataDirection_2): void;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    CAN(direction: DataDirection_2): void;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    data(direction: DataDirection_2, data: Buffer): void;
+    discarded(data: Buffer): void;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    message(message: string): void;
+    // Warning: (tsdoc-param-tag-missing-hyphen) The @param block should be followed by a parameter name and then a hyphen
+    NAK(direction: DataDirection_2): void;
 }
 
 // Warning: (ae-missing-release-tag) "skipBytes" is exported by the package, but it is missing a release tag (@alpha, @beta, @public, or @internal)
