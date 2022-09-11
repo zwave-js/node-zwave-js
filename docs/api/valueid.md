@@ -142,7 +142,7 @@ The structure of the `ccSpecific` fields is shown here for each CC that provides
 <!-- #import AlarmSensorValueMetadata from "zwave-js" -->
 
 ```ts
-declare type AlarmSensorValueMetadata = ValueMetadata & {
+type AlarmSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: AlarmSensorType;
 	};
@@ -154,7 +154,7 @@ declare type AlarmSensorValueMetadata = ValueMetadata & {
 <!-- #import BinarySensorValueMetadata from "zwave-js" -->
 
 ```ts
-declare type BinarySensorValueMetadata = ValueMetadata & {
+type BinarySensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: BinarySensorType;
 	};
@@ -166,9 +166,10 @@ declare type BinarySensorValueMetadata = ValueMetadata & {
 <!-- #import IndicatorMetadata from "zwave-js" with comments -->
 
 ```ts
-declare type IndicatorMetadata = ValueMetadata & {
+type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
+		// only present on V2+ indicators:
 		propertyId?: number;
 	};
 };
@@ -181,7 +182,7 @@ The indicator and property IDs may change with newer Z-Wave specs. You can find 
 <!-- #import MeterMetadata from "zwave-js" -->
 
 ```ts
-declare type MeterMetadata = ValueMetadata & {
+type MeterMetadata = ValueMetadata & {
 	ccSpecific: {
 		meterType: number;
 		rateType?: RateType;
@@ -197,7 +198,7 @@ The meter type and scale keys may change with newer Z-Wave specs. You can find t
 <!-- #import MultilevelSensorValueMetadata from "zwave-js" -->
 
 ```ts
-declare type MultilevelSensorValueMetadata = ValueMetadata & {
+type MultilevelSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: number;
 		scale: number;
@@ -212,7 +213,7 @@ The multilevel sensor types may change with newer Z-Wave specs. You can find the
 <!-- #import MultilevelSwitchLevelChangeMetadata from "zwave-js" -->
 
 ```ts
-declare type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
+type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	ccSpecific: {
 		switchType: SwitchType;
 	};
@@ -224,7 +225,7 @@ declare type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 <!-- #import NotificationMetadata from "zwave-js" -->
 
 ```ts
-declare type NotificationMetadata = ValueMetadata & {
+type NotificationMetadata = ValueMetadata & {
 	ccSpecific: {
 		notificationType: number;
 	};
@@ -239,7 +240,7 @@ The notification variable is not included in this metadata, since there's curren
 <!-- #import ThermostatSetpointMetadata from "zwave-js" -->
 
 ```ts
-declare type ThermostatSetpointMetadata = ValueMetadata & {
+type ThermostatSetpointMetadata = ValueMetadata & {
 	ccSpecific: {
 		setpointType: ThermostatSetpointType;
 	};
