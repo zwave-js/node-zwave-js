@@ -1,25 +1,23 @@
 name: 'Upload Turbo Cache'
 description: 'Uploads the turborepo cache to be used in later jobs'
 author: 'AlCalzone'
-inputs:
-  cacheDir:
-    description: 'The parent directory of where the turbo-cache folder is located'
-    required: true
 
 runs:
   using: "composite"
   steps:
     - name: Compress turbo cache # Uploading or downloading many files takes ages
       shell: bash
+      working-directory: ${{ runner.temp }}
       run: |
-        cd "${{ inputs.cacheDir }}"
+        cd ${{ runner.temp }}
         tar -cvzf turbo-cache.tgz turbo-cache
         pwd
         ls -la
 
     - name: Upload as artifact
       uses: actions/upload-artifact@v3
+      working-directory: ${{ runner.temp }}
       with:
         name: turbo-cache
-        path: /home/runner/work/_temp/turbo-cache.tgz
+        path: turbo-cache.tgz
         retention-days: 1 # We don't need this any longer than the workflow takes, but 1 day is the minimum

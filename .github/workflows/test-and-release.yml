@@ -44,8 +44,6 @@ jobs:
 
     - name: Save Turbo Cache between jobs
       uses: ./.github/actions/build-cache-upload
-      with:
-        cacheDir: $RUNNER_TEMP
 
   # ===================
 
@@ -64,8 +62,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -126,8 +122,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -185,8 +179,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -214,8 +206,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -248,8 +238,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -297,8 +285,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -337,8 +323,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
@@ -419,8 +403,6 @@ jobs:
 
     - name: Restore Turbo Cache from previous jobs
       uses: ./.github/actions/build-cache-download
-      with:
-        cacheDir: $RUNNER_TEMP
 
     - name: Prepare testing environment
       uses: ./.github/actions/prepare-env
