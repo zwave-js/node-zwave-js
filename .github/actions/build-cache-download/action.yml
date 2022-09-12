@@ -1,0 +1,18 @@
+name: 'Download Build Cache'
+description: 'Downloads the previously stored turborepo cache'
+author: 'AlCalzone'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download turbo cache artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: turbo-cache
+        path: ${{ env.RUNNER_TEMP }}
+
+    - name: Extract turbo cache
+      shell: bash
+      run: |
+        cd $RUNNER_TEMP
+        tar -xvzf turbo-cache.tgz && rm turbo-cache.tgz

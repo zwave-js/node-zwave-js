@@ -23,7 +23,7 @@ runs:
       run: yarn install --immutable
 
     - name: TurboRepo local server
-      uses: AlCalzone/turborepo-gh-artifacts@master
+      uses: AlCalzone/turborepo-gh-artifacts@zwavejs-stable
       with:
         repo-token: ${{ inputs.githubToken }}
         server-token: foo
