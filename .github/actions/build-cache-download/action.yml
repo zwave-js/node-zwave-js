@@ -11,9 +11,11 @@ runs:
   steps:
     - name: Download turbo cache artifact
       uses: actions/download-artifact@v3
+      env:
+        DOWNLOAD_PATH: "${{ inputs.cacheDir }}/turbo-cache.tgz"
       with:
         name: turbo-cache
-        path: "${{ inputs.cacheDir }}/turbo-cache.tgz"
+        path: ${{ env.DOWNLOAD_PATH }}
 
     - name: Extract turbo cache
       shell: bash
