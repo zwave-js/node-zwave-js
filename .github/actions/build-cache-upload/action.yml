@@ -15,5 +15,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: turbo-cache
-        path: "${{ env.RUNNER_TEMP }}/turbo-cache.tgz"
+        path: "$RUNNER_TEMP/turbo-cache.tgz"
         retention-days: 1 # We don't need this any longer than the workflow takes, but 1 day is the minimum
