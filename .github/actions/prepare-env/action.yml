@@ -5,6 +5,9 @@ inputs:
   node-version:
     description: 'Node.js version'
     required: true
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
 
 runs:
   using: "composite"
@@ -18,3 +21,9 @@ runs:
     - name: Install dependencies
       shell: bash
       run: yarn install --immutable
+
+    - name: TurboRepo local server
+      uses: AlCalzone/turborepo-gh-artifacts@zwavejs-stable
+      with:
+        repo-token: ${{ inputs.githubToken }}
+        server-token: foo
