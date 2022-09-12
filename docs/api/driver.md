@@ -564,13 +564,13 @@ The RSSI is either a number indicating the value in dBm or one of the special va
 <!-- #import RSSI from "zwave-js" -->
 
 ```ts
-declare type RSSI = number | RssiError;
+type RSSI = number | RssiError;
 ```
 
 <!-- #import RssiError from "zwave-js" -->
 
 ```ts
-declare enum RssiError {
+enum RssiError {
 	NotAvailable = 127,
 	ReceiverSaturated = 126,
 	NoSignalDetected = 125,
@@ -580,11 +580,11 @@ declare enum RssiError {
 <!-- #import ProtocolDataRate from "zwave-js" -->
 
 ```ts
-declare enum ProtocolDataRate {
-	ZWave_9k6 = 1,
-	ZWave_40k = 2,
-	ZWave_100k = 3,
-	LongRange_100k = 4,
+enum ProtocolDataRate {
+	ZWave_9k6 = 0x01,
+	ZWave_40k = 0x02,
+	ZWave_100k = 0x03,
+	LongRange_100k = 0x04,
 }
 ```
 
