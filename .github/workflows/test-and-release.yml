@@ -37,6 +37,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -60,6 +61,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -116,6 +118,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run linters
       run: yarn run lint $TURBO_FLAGS
@@ -169,6 +172,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Lint config files and Z-Wave specifics
       run: yarn run lint:zwave $TURBO_FLAGS
@@ -192,6 +196,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Run component tests
       run: yarn run test:ci $TURBO_FLAGS
@@ -220,6 +225,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate API report
       run: yarn run extract-api $TURBO_FLAGS
@@ -263,6 +269,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -297,6 +304,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS
@@ -373,6 +381,7 @@ jobs:
       uses: ./.github/actions/prepare-env
       with:
         node-version: ${{ matrix.node-version }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Compile TypeScript code
       run: yarn build $TURBO_FLAGS

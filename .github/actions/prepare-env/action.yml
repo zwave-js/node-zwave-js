@@ -5,6 +5,9 @@ inputs:
   node-version:
     description: 'Node.js version'
     required: true
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
 
 runs:
   using: "composite"
@@ -22,5 +25,5 @@ runs:
     - name: TurboRepo local server
       uses: AlCalzone/turborepo-gh-artifacts@master
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token: ${{ inputs.githubToken }}
         server-token: foo
